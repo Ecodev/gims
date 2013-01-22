@@ -62,7 +62,7 @@
 			CodeGeneration
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Fri Jan 18 17:02:26 CET 2013'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Jan 22 17:33:21 CET 2013'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -1516,7 +1516,7 @@
           </UML:Comment.annotatedElement>
         </UML:Comment>
         <UML:Comment xmi.id = '127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B7B'
-          isSpecification = 'false' body = 'Every single table will have mandatory fields:&#10;* creation time&#10;* modification time&#10;* creator&#10;* modificator&#10;&#10;ou stocker le total de population ?&#10;&#9;questionaire ou reponse ? ou autre table ?&#10;&#10;La fonctionnalité de journal  est à compléter pour une version future. &#10;Elle est présente sur ce diagramme juste pour pas l&apos;oublier&#10;&#10;Comment gérer la visibilité des filtres pour les users pour éviter des noyer sous des tonnes de filtres _&#10;&#10;Comment gérer le processus de validation ? idem pour publication ?&#10;La validation devrait avoir au moins les états suivants:&#10;* rien&#10;* validé&#10;* invalidé + message explicatif&#10;&#10;Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP ?&#10;'/>
+          isSpecification = 'false' body = 'Every single table will have mandatory fields:&#10;* creation time&#10;* modification time&#10;* creator&#10;* modificator&#10;&#10;La fonctionnalité de journal  est à compléter pour une version future. &#10;Elle est présente sur ce diagramme juste pour pas l&apos;oublier&#10;&#10;Comment gérer la visibilité des filtres pour les users pour éviter des noyer sous des tonnes de filtres ?&#10;&#10;Comment gérer le processus de validation ? idem pour publication ?&#10;La validation devrait avoir au moins les états suivants:&#10;* rien&#10;* validé&#10;* invalidé + message explicatif&#10;&#10;Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP ?&#10;'/>
         <UML:Class xmi.id = '127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B7C'
           name = 'Issue' visibility = 'public' isSpecification = 'false' isRoot = 'false'
           isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
@@ -2038,6 +2038,125 @@
             </UML:AssociationEnd>
           </UML:Association.connection>
         </UML:Association>
+        <UML:Class xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE5'
+          name = 'Geoname' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+          isLeaf = 'false' isAbstract = 'false' isActive = 'false'>
+          <UML:Classifier.feature>
+            <UML:Attribute xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BED'
+              name = 'id' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+              changeability = 'changeable' targetScope = 'instance'>
+              <UML:StructuralFeature.multiplicity>
+                <UML:Multiplicity xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BEE'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BEF'
+                      lower = '1' upper = '1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:StructuralFeature.multiplicity>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BF0'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BF1'
+              name = 'geonameId' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+              changeability = 'changeable' targetScope = 'instance'>
+              <UML:StructuralFeature.multiplicity>
+                <UML:Multiplicity xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BF2'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BF3'
+                      lower = '1' upper = '1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:StructuralFeature.multiplicity>
+              <UML:StructuralFeature.type>
+                <UML:DataType href = 'http://argouml.org/profiles/uml14/default-uml14.xmi#-84-17--56-5-43645a83:11466542d86:-8000:000000000000087C'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BF4'
+              name = 'name' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+              changeability = 'changeable' targetScope = 'instance'>
+              <UML:StructuralFeature.multiplicity>
+                <UML:Multiplicity xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BF5'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BF6'
+                      lower = '1' upper = '1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:StructuralFeature.multiplicity>
+              <UML:StructuralFeature.type>
+                <UML:DataType href = 'http://argouml.org/profiles/uml14/default-uml14.xmi#-84-17--56-5-43645a83:11466542d86:-8000:000000000000087E'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BF7'
+              name = 'population' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+              changeability = 'changeable' targetScope = 'instance'>
+              <UML:StructuralFeature.multiplicity>
+                <UML:Multiplicity xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BF8'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BF9'
+                      lower = '1' upper = '1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:StructuralFeature.multiplicity>
+              <UML:StructuralFeature.type>
+                <UML:DataType href = 'http://argouml.org/profiles/uml14/default-uml14.xmi#-84-17--56-5-43645a83:11466542d86:-8000:000000000000087C'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BFA'
+              name = 'geometry' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+              changeability = 'changeable' targetScope = 'instance'>
+              <UML:StructuralFeature.multiplicity>
+                <UML:Multiplicity xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BFB'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BFC'
+                      lower = '1' upper = '1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:StructuralFeature.multiplicity>
+              <UML:StructuralFeature.type>
+                <UML:DataType href = 'http://argouml.org/profiles/uml14/default-uml14.xmi#-84-17--56-5-43645a83:11466542d86:-8000:000000000000087C'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Association xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE6'
+          name = '' isSpecification = 'false' isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+          <UML:Association.connection>
+            <UML:AssociationEnd xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE7'
+              visibility = 'public' isSpecification = 'false' isNavigable = 'true' ordering = 'unordered'
+              aggregation = 'none' targetScope = 'instance' changeability = 'changeable'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BEA'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE9'
+                      lower = '1' upper = '1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE5'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+            <UML:AssociationEnd xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE8'
+              visibility = 'public' isSpecification = 'false' isNavigable = 'true' ordering = 'unordered'
+              aggregation = 'none' targetScope = 'instance' changeability = 'changeable'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BEC'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BEB'
+                      lower = '0' upper = '-1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '10--55-37-111-3c447b67:13c1e4a423e:-8000:0000000000000883'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+          </UML:Association.connection>
+        </UML:Association>
+        <UML:Class xmi.id = '127-0-1-1-be796e5:13c629149da:-8000:0000000000000BF0'
+          name = 'integer' visibility = 'public' isSpecification = 'false' isRoot = 'false'
+          isLeaf = 'false' isAbstract = 'false' isActive = 'false'/>
       </UML:Namespace.ownedElement>
     </UML:Model>
   </XMI.content>
@@ -2046,7 +2165,7 @@
       name="GimsModel"
 >
   <group name="Fig0"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[104, 328, 192, 152]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[208, 320, 192, 152]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10--55-37-111-3c447b67:13c1e4a423e:-8000:0000000000000883"
        fill="1"
        fillcolor="white"
@@ -2057,8 +2176,8 @@
     </private>
     
     <rectangle name="Fig0.0"
-      x="104"
-      y="328"
+      x="208"
+      y="320"
       width="192"
       height="152"
       fill="1"
@@ -2067,8 +2186,8 @@
       strokecolor="black"
     />
     <text name="Fig0.1"
-      x="105"
-      y="329"
+      x="209"
+      y="321"
       width="190"
       height="24"
       fill="0"
@@ -2083,7 +2202,7 @@
       justification="Center"
     >Questionnaire</text>
     <group name="Fig0.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[105, 329, 190, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[209, 321, 190, 0]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:0000000000000883"
          fill="0"
          fillcolor="white"
@@ -2095,8 +2214,8 @@
       </private>
       
       <rectangle name="Fig0.2.0"
-        x="105"
-        y="329"
+        x="209"
+        y="321"
         width="190"
         height="0"
         fill="0"
@@ -2106,8 +2225,8 @@
       />
     </group>
     <rectangle name="Fig0.3"
-      x="104"
-      y="353"
+      x="208"
+      y="345"
       width="192"
       height="1"
       fill="1"
@@ -2116,7 +2235,7 @@
       strokecolor="black"
     />
     <group name="Fig0.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[105, 354, 190, 100]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[209, 346, 190, 100]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:0000000000000883"
          fill="0"
          fillcolor="white"
@@ -2127,8 +2246,8 @@
       </private>
       
       <rectangle name="Fig0.4.0"
-        x="105"
-        y="354"
+        x="209"
+        y="346"
         width="190"
         height="100"
         fill="0"
@@ -2137,8 +2256,8 @@
         strokecolor="black"
       />
       <text name="Fig0.4.1"
-        x="105"
-        y="354"
+        x="209"
+        y="346"
         width="190"
         height="18"
         fill="0"
@@ -2153,8 +2272,8 @@
         justification="Left"
       >observationYear : Integer</text>
       <text name="Fig0.4.2"
-        x="105"
-        y="372"
+        x="209"
+        y="364"
         width="190"
         height="18"
         fill="0"
@@ -2169,8 +2288,8 @@
         justification="Left"
       >observationMonth : Integer</text>
       <text name="Fig0.4.3"
-        x="105"
-        y="390"
+        x="209"
+        y="382"
         width="190"
         height="18"
         fill="0"
@@ -2185,8 +2304,8 @@
         justification="Left"
       >observationDay : Integer</text>
       <text name="Fig0.4.4"
-        x="105"
-        y="408"
+        x="209"
+        y="400"
         width="190"
         height="18"
         fill="0"
@@ -2200,26 +2319,10 @@
         textsize="13"
         justification="Left"
       >observationTime : Time</text>
-      <text name="Fig0.4.5"
-        x="105"
-        y="426"
-        width="190"
-        height="24"
-        fill="0"
-        fillcolor="white"
-        stroke="0"
-        strokecolor="black"
-        textcolor="black"
-        font="Dialog"
-        italic="false"
-        bold="false"
-        textsize="13"
-        justification="Left"
-      >geoname : Integer</text>
     </group>
     <rectangle name="Fig0.5"
-      x="104"
-      y="454"
+      x="208"
+      y="446"
       width="192"
       height="1"
       fill="1"
@@ -2228,7 +2331,7 @@
       strokecolor="black"
     />
     <group name="Fig0.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[105, 455, 190, 23]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[209, 447, 190, 23]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:0000000000000883"
          fill="0"
          fillcolor="white"
@@ -2239,8 +2342,8 @@
       </private>
       
       <rectangle name="Fig0.6.0"
-        x="105"
-        y="455"
+        x="209"
+        y="447"
         width="190"
         height="23"
         fill="0"
@@ -2251,7 +2354,7 @@
     </group>
   </group>
   <group name="Fig1"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[136, 32, 224, 144]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[160, 16, 224, 144]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10--55-37-111-3c447b67:13c1e4a423e:-8000:0000000000000886"
        fill="1"
        fillcolor="white"
@@ -2262,8 +2365,8 @@
     </private>
     
     <rectangle name="Fig1.0"
-      x="136"
-      y="32"
+      x="160"
+      y="16"
       width="224"
       height="144"
       fill="1"
@@ -2272,8 +2375,8 @@
       strokecolor="black"
     />
     <text name="Fig1.1"
-      x="137"
-      y="33"
+      x="161"
+      y="17"
       width="222"
       height="24"
       fill="0"
@@ -2288,7 +2391,7 @@
       justification="Center"
     >Survey</text>
     <group name="Fig1.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[137, 33, 222, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[161, 17, 222, 0]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:0000000000000886"
          fill="0"
          fillcolor="white"
@@ -2300,8 +2403,8 @@
       </private>
       
       <rectangle name="Fig1.2.0"
-        x="137"
-        y="33"
+        x="161"
+        y="17"
         width="222"
         height="0"
         fill="0"
@@ -2311,8 +2414,8 @@
       />
     </group>
     <rectangle name="Fig1.3"
-      x="136"
-      y="57"
+      x="160"
+      y="41"
       width="224"
       height="1"
       fill="1"
@@ -2321,7 +2424,7 @@
       strokecolor="black"
     />
     <group name="Fig1.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[137, 58, 222, 78]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[161, 42, 222, 78]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:0000000000000886"
          fill="0"
          fillcolor="white"
@@ -2332,8 +2435,8 @@
       </private>
       
       <rectangle name="Fig1.4.0"
-        x="137"
-        y="58"
+        x="161"
+        y="42"
         width="222"
         height="78"
         fill="0"
@@ -2342,8 +2445,8 @@
         strokecolor="black"
       />
       <text name="Fig1.4.1"
-        x="137"
-        y="58"
+        x="161"
+        y="42"
         width="222"
         height="18"
         fill="0"
@@ -2358,8 +2461,8 @@
         justification="Left"
       >year : Integer</text>
       <text name="Fig1.4.2"
-        x="137"
-        y="76"
+        x="161"
+        y="60"
         width="222"
         height="18"
         fill="0"
@@ -2374,8 +2477,8 @@
         justification="Left"
       >geoname : Integer</text>
       <text name="Fig1.4.3"
-        x="137"
-        y="94"
+        x="161"
+        y="78"
         width="222"
         height="24"
         fill="0"
@@ -2391,8 +2494,8 @@
       >name : String</text>
     </group>
     <rectangle name="Fig1.5"
-      x="136"
-      y="136"
+      x="160"
+      y="120"
       width="224"
       height="1"
       fill="1"
@@ -2401,7 +2504,7 @@
       strokecolor="black"
     />
     <group name="Fig1.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[137, 137, 222, 37]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[161, 121, 222, 37]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:0000000000000886"
          fill="0"
          fillcolor="white"
@@ -2412,8 +2515,8 @@
       </private>
       
       <rectangle name="Fig1.6.0"
-        x="137"
-        y="137"
+        x="161"
+        y="121"
         width="222"
         height="37"
         fill="0"
@@ -2424,7 +2527,7 @@
     </group>
   </group>
   <group name="Fig2"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[424, 336, 248, 184]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[448, 320, 248, 184]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10--55-37-111-3c447b67:13c1e4a423e:-8000:0000000000000887"
        fill="1"
        fillcolor="white"
@@ -2435,8 +2538,8 @@
     </private>
     
     <rectangle name="Fig2.0"
-      x="424"
-      y="336"
+      x="448"
+      y="320"
       width="248"
       height="184"
       fill="1"
@@ -2445,8 +2548,8 @@
       strokecolor="black"
     />
     <text name="Fig2.1"
-      x="425"
-      y="337"
+      x="449"
+      y="321"
       width="246"
       height="24"
       fill="0"
@@ -2461,7 +2564,7 @@
       justification="Center"
     >Question</text>
     <group name="Fig2.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[425, 337, 246, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[449, 321, 246, 0]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:0000000000000887"
          fill="0"
          fillcolor="white"
@@ -2473,8 +2576,8 @@
       </private>
       
       <rectangle name="Fig2.2.0"
-        x="425"
-        y="337"
+        x="449"
+        y="321"
         width="246"
         height="0"
         fill="0"
@@ -2484,8 +2587,8 @@
       />
     </group>
     <rectangle name="Fig2.3"
-      x="424"
-      y="361"
+      x="448"
+      y="345"
       width="248"
       height="1"
       fill="1"
@@ -2494,7 +2597,7 @@
       strokecolor="black"
     />
     <group name="Fig2.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[425, 362, 246, 98]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[449, 346, 246, 98]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:0000000000000887"
          fill="0"
          fillcolor="white"
@@ -2505,8 +2608,8 @@
       </private>
       
       <rectangle name="Fig2.4.0"
-        x="425"
-        y="362"
+        x="449"
+        y="346"
         width="246"
         height="98"
         fill="0"
@@ -2515,8 +2618,8 @@
         strokecolor="black"
       />
       <text name="Fig2.4.1"
-        x="425"
-        y="362"
+        x="449"
+        y="346"
         width="246"
         height="18"
         fill="0"
@@ -2531,8 +2634,8 @@
         justification="Left"
       >name : String</text>
       <text name="Fig2.4.2"
-        x="425"
-        y="380"
+        x="449"
+        y="364"
         width="246"
         height="18"
         fill="0"
@@ -2547,8 +2650,8 @@
         justification="Left"
       >type : QuestionType</text>
       <text name="Fig2.4.3"
-        x="425"
-        y="398"
+        x="449"
+        y="382"
         width="246"
         height="24"
         fill="0"
@@ -2564,8 +2667,8 @@
       >officialQuestion : Question</text>
     </group>
     <rectangle name="Fig2.5"
-      x="424"
-      y="460"
+      x="448"
+      y="444"
       width="248"
       height="1"
       fill="1"
@@ -2574,7 +2677,7 @@
       strokecolor="black"
     />
     <group name="Fig2.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[425, 461, 246, 57]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[449, 445, 246, 57]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:0000000000000887"
          fill="0"
          fillcolor="white"
@@ -2585,8 +2688,8 @@
       </private>
       
       <rectangle name="Fig2.6.0"
-        x="425"
-        y="461"
+        x="449"
+        y="445"
         width="246"
         height="57"
         fill="0"
@@ -2597,7 +2700,7 @@
     </group>
   </group>
   <group name="Fig3"
-       description="org.argouml.uml.diagram.static_structure.ui.FigEnumeration[552, 96, 160, 148]pathVisible=false;stereotypeView=0;operationsVisible=true;enumerationLiteralsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigEnumeration[576, 80, 160, 148]pathVisible=false;stereotypeView=0;operationsVisible=true;enumerationLiteralsVisible=true"
        href="10--55-37-111-3c447b67:13c1e4a423e:-8000:000000000000089A"
        fill="1"
        fillcolor="white"
@@ -2608,8 +2711,8 @@
     </private>
     
     <rectangle name="Fig3.0"
-      x="552"
-      y="96"
+      x="576"
+      y="80"
       width="160"
       height="148"
       fill="1"
@@ -2618,8 +2721,8 @@
       strokecolor="black"
     />
     <text name="Fig3.1"
-      x="553"
-      y="97"
+      x="577"
+      y="81"
       width="158"
       height="45"
       fill="0"
@@ -2634,7 +2737,7 @@
       justification="Center"
     >QuestionType</text>
     <group name="Fig3.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[553, 97, 158, 21]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[577, 81, 158, 21]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:000000000000089A"
          fill="0"
          fillcolor="white"
@@ -2645,8 +2748,8 @@
       </private>
       
       <rectangle name="Fig3.2.0"
-        x="553"
-        y="97"
+        x="577"
+        y="81"
         width="158"
         height="21"
         fill="0"
@@ -2655,8 +2758,8 @@
         strokecolor="black"
       />
       <text name="Fig3.2.1"
-        x="553"
-        y="97"
+        x="577"
+        y="81"
         width="158"
         height="19"
         fill="0"
@@ -2672,8 +2775,8 @@
       >&lt;&lt;enumeration&gt;&gt;</text>
     </group>
     <rectangle name="Fig3.3"
-      x="552"
-      y="142"
+      x="576"
+      y="126"
       width="160"
       height="1"
       fill="1"
@@ -2682,7 +2785,7 @@
       strokecolor="black"
     />
     <group name="Fig3.4"
-         description="org.argouml.uml.diagram.ui.FigEnumLiteralsCompartment[553, 143, 158, 80]"
+         description="org.argouml.uml.diagram.ui.FigEnumLiteralsCompartment[577, 127, 158, 80]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:000000000000089A"
          fill="0"
          fillcolor="white"
@@ -2693,8 +2796,8 @@
       </private>
       
       <rectangle name="Fig3.4.0"
-        x="553"
-        y="143"
+        x="577"
+        y="127"
         width="158"
         height="80"
         fill="0"
@@ -2703,8 +2806,8 @@
         strokecolor="black"
       />
       <text name="Fig3.4.1"
-        x="553"
-        y="143"
+        x="577"
+        y="127"
         width="158"
         height="18"
         fill="0"
@@ -2719,8 +2822,8 @@
         justification="Left"
       >numeric</text>
       <text name="Fig3.4.2"
-        x="553"
-        y="161"
+        x="577"
+        y="145"
         width="158"
         height="18"
         fill="0"
@@ -2735,8 +2838,8 @@
         justification="Left"
       >choice</text>
       <text name="Fig3.4.3"
-        x="553"
-        y="179"
+        x="577"
+        y="163"
         width="158"
         height="18"
         fill="0"
@@ -2751,8 +2854,8 @@
         justification="Left"
       >textual</text>
       <text name="Fig3.4.4"
-        x="553"
-        y="197"
+        x="577"
+        y="181"
         width="158"
         height="24"
         fill="0"
@@ -2768,8 +2871,8 @@
       >user</text>
     </group>
     <rectangle name="Fig3.5"
-      x="552"
-      y="222"
+      x="576"
+      y="206"
       width="160"
       height="1"
       fill="1"
@@ -2778,7 +2881,7 @@
       strokecolor="black"
     />
     <group name="Fig3.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[553, 223, 158, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[577, 207, 158, 21]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:000000000000089A"
          fill="0"
          fillcolor="white"
@@ -2789,8 +2892,8 @@
       </private>
       
       <rectangle name="Fig3.6.0"
-        x="553"
-        y="223"
+        x="577"
+        y="207"
         width="158"
         height="21"
         fill="0"
@@ -2851,14 +2954,14 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="359"
-              y="175" />
-      <lineto x="424"
-              y="336" />
+      <moveto x="383"
+              y="159" />
+      <lineto x="448"
+              y="320" />
     </path>
   </group>
   <group name="Fig5"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[200, 688, 288, 240]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[224, 672, 288, 240]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10--55-37-111-3c447b67:13c1e4a423e:-8000:00000000000008BA"
        fill="1"
        fillcolor="white"
@@ -2869,8 +2972,8 @@
     </private>
     
     <rectangle name="Fig5.0"
-      x="200"
-      y="688"
+      x="224"
+      y="672"
       width="288"
       height="240"
       fill="1"
@@ -2879,8 +2982,8 @@
       strokecolor="black"
     />
     <text name="Fig5.1"
-      x="201"
-      y="689"
+      x="225"
+      y="673"
       width="286"
       height="24"
       fill="0"
@@ -2895,7 +2998,7 @@
       justification="Center"
     >Answer</text>
     <group name="Fig5.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[201, 689, 286, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[225, 673, 286, 0]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:00000000000008BA"
          fill="0"
          fillcolor="white"
@@ -2907,8 +3010,8 @@
       </private>
       
       <rectangle name="Fig5.2.0"
-        x="201"
-        y="689"
+        x="225"
+        y="673"
         width="286"
         height="0"
         fill="0"
@@ -2918,8 +3021,8 @@
       />
     </group>
     <rectangle name="Fig5.3"
-      x="200"
-      y="713"
+      x="224"
+      y="697"
       width="288"
       height="1"
       fill="1"
@@ -2928,7 +3031,7 @@
       strokecolor="black"
     />
     <group name="Fig5.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[201, 714, 286, 180]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[225, 698, 286, 180]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:00000000000008BA"
          fill="0"
          fillcolor="white"
@@ -2939,8 +3042,8 @@
       </private>
       
       <rectangle name="Fig5.4.0"
-        x="201"
-        y="714"
+        x="225"
+        y="698"
         width="286"
         height="180"
         fill="0"
@@ -2949,8 +3052,8 @@
         strokecolor="black"
       />
       <text name="Fig5.4.1"
-        x="201"
-        y="714"
+        x="225"
+        y="698"
         width="286"
         height="18"
         fill="0"
@@ -2965,8 +3068,8 @@
         justification="Left"
       >valueAbsolute : Float</text>
       <text name="Fig5.4.2"
-        x="201"
-        y="732"
+        x="225"
+        y="716"
         width="286"
         height="18"
         fill="0"
@@ -2981,8 +3084,8 @@
         justification="Left"
       >valuePercent : Decimal</text>
       <text name="Fig5.4.3"
-        x="201"
-        y="750"
+        x="225"
+        y="734"
         width="286"
         height="18"
         fill="0"
@@ -2997,8 +3100,8 @@
         justification="Left"
       >valueTextual : String</text>
       <text name="Fig5.4.4"
-        x="201"
-        y="768"
+        x="225"
+        y="752"
         width="286"
         height="18"
         fill="0"
@@ -3013,8 +3116,8 @@
         justification="Left"
       >choice : Integer</text>
       <text name="Fig5.4.5"
-        x="201"
-        y="786"
+        x="225"
+        y="770"
         width="286"
         height="18"
         fill="0"
@@ -3029,8 +3132,8 @@
         justification="Left"
       >quality : Decimal</text>
       <text name="Fig5.4.6"
-        x="201"
-        y="804"
+        x="225"
+        y="788"
         width="286"
         height="18"
         fill="0"
@@ -3045,8 +3148,8 @@
         justification="Left"
       >relevance : Decimal</text>
       <text name="Fig5.4.7"
-        x="201"
-        y="822"
+        x="225"
+        y="806"
         width="286"
         height="18"
         fill="0"
@@ -3061,8 +3164,8 @@
         justification="Left"
       >source : String</text>
       <text name="Fig5.4.8"
-        x="201"
-        y="840"
+        x="225"
+        y="824"
         width="286"
         height="18"
         fill="0"
@@ -3077,8 +3180,8 @@
         justification="Left"
       >public : Boolean</text>
       <text name="Fig5.4.9"
-        x="201"
-        y="858"
+        x="225"
+        y="842"
         width="286"
         height="24"
         fill="0"
@@ -3094,8 +3197,8 @@
       >validated : Boolean</text>
     </group>
     <rectangle name="Fig5.5"
-      x="200"
-      y="894"
+      x="224"
+      y="878"
       width="288"
       height="1"
       fill="1"
@@ -3104,7 +3207,7 @@
       strokecolor="black"
     />
     <group name="Fig5.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[201, 895, 286, 31]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[225, 879, 286, 31]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:00000000000008BA"
          fill="0"
          fillcolor="white"
@@ -3115,8 +3218,8 @@
       </private>
       
       <rectangle name="Fig5.6.0"
-        x="201"
-        y="895"
+        x="225"
+        y="879"
         width="286"
         height="31"
         fill="0"
@@ -3177,10 +3280,10 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="240"
-              y="688" />
-      <lineto x="240"
-              y="479" />
+      <moveto x="264"
+              y="672" />
+      <lineto x="264"
+              y="471" />
     </path>
   </group>
   <group name="Fig7"
@@ -3234,10 +3337,10 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="456"
-              y="688" />
-      <lineto x="456"
-              y="519" />
+      <moveto x="480"
+              y="672" />
+      <lineto x="480"
+              y="503" />
     </path>
   </group>
   <group name="Fig8"
@@ -3291,14 +3394,14 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="216"
-              y="175" />
-      <lineto x="216"
-              y="328" />
+      <moveto x="240"
+              y="159" />
+      <lineto x="240"
+              y="320" />
     </path>
   </group>
   <group name="Fig9"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[648, 600, 192, 144]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[672, 584, 192, 144]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10--55-37-111-3c447b67:13c1e4a423e:-8000:00000000000008FC"
        fill="1"
        fillcolor="white"
@@ -3309,8 +3412,8 @@
     </private>
     
     <rectangle name="Fig9.0"
-      x="648"
-      y="600"
+      x="672"
+      y="584"
       width="192"
       height="144"
       fill="1"
@@ -3319,8 +3422,8 @@
       strokecolor="black"
     />
     <text name="Fig9.1"
-      x="649"
-      y="601"
+      x="673"
+      y="585"
       width="190"
       height="24"
       fill="0"
@@ -3335,7 +3438,7 @@
       justification="Center"
     >QuestionChoice</text>
     <group name="Fig9.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[649, 601, 190, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[673, 585, 190, 0]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:00000000000008FC"
          fill="0"
          fillcolor="white"
@@ -3347,8 +3450,8 @@
       </private>
       
       <rectangle name="Fig9.2.0"
-        x="649"
-        y="601"
+        x="673"
+        y="585"
         width="190"
         height="0"
         fill="0"
@@ -3358,8 +3461,8 @@
       />
     </group>
     <rectangle name="Fig9.3"
-      x="648"
-      y="625"
+      x="672"
+      y="609"
       width="192"
       height="1"
       fill="1"
@@ -3368,7 +3471,7 @@
       strokecolor="black"
     />
     <group name="Fig9.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[649, 626, 190, 69]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[673, 610, 190, 69]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:00000000000008FC"
          fill="0"
          fillcolor="white"
@@ -3379,8 +3482,8 @@
       </private>
       
       <rectangle name="Fig9.4.0"
-        x="649"
-        y="626"
+        x="673"
+        y="610"
         width="190"
         height="69"
         fill="0"
@@ -3389,8 +3492,8 @@
         strokecolor="black"
       />
       <text name="Fig9.4.1"
-        x="649"
-        y="626"
+        x="673"
+        y="610"
         width="190"
         height="18"
         fill="0"
@@ -3405,8 +3508,8 @@
         justification="Left"
       >name : Integer</text>
       <text name="Fig9.4.2"
-        x="649"
-        y="644"
+        x="673"
+        y="628"
         width="190"
         height="24"
         fill="0"
@@ -3422,8 +3525,8 @@
       >value : Decimal</text>
     </group>
     <rectangle name="Fig9.5"
-      x="648"
-      y="695"
+      x="672"
+      y="679"
       width="192"
       height="1"
       fill="1"
@@ -3432,7 +3535,7 @@
       strokecolor="black"
     />
     <group name="Fig9.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[649, 696, 190, 46]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[673, 680, 190, 46]"
          href="10--55-37-111-3c447b67:13c1e4a423e:-8000:00000000000008FC"
          fill="0"
          fillcolor="white"
@@ -3443,8 +3546,8 @@
       </private>
       
       <rectangle name="Fig9.6.0"
-        x="649"
-        y="696"
+        x="673"
+        y="680"
         width="190"
         height="46"
         fill="0"
@@ -3505,14 +3608,14 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="648"
-              y="519" />
-      <lineto x="648"
-              y="600" />
+      <moveto x="687"
+              y="503" />
+      <lineto x="687"
+              y="584" />
     </path>
   </group>
   <group name="Fig11"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[888, 248, 181, 144]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[912, 232, 181, 144]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000ABE"
        fill="1"
        fillcolor="white"
@@ -3523,8 +3626,8 @@
     </private>
     
     <rectangle name="Fig11.0"
-      x="888"
-      y="248"
+      x="912"
+      y="232"
       width="181"
       height="144"
       fill="1"
@@ -3533,8 +3636,8 @@
       strokecolor="black"
     />
     <text name="Fig11.1"
-      x="889"
-      y="249"
+      x="913"
+      y="233"
       width="179"
       height="24"
       fill="0"
@@ -3549,7 +3652,7 @@
       justification="Center"
     >Category</text>
     <group name="Fig11.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[889, 249, 176, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[913, 233, 179, 0]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000ABE"
          fill="0"
          fillcolor="white"
@@ -3561,9 +3664,9 @@
       </private>
       
       <rectangle name="Fig11.2.0"
-        x="889"
-        y="249"
-        width="176"
+        x="913"
+        y="233"
+        width="179"
         height="0"
         fill="0"
         fillcolor="white"
@@ -3572,8 +3675,8 @@
       />
     </group>
     <rectangle name="Fig11.3"
-      x="888"
-      y="273"
+      x="912"
+      y="257"
       width="181"
       height="1"
       fill="1"
@@ -3582,7 +3685,7 @@
       strokecolor="black"
     />
     <group name="Fig11.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[889, 274, 179, 78]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[913, 258, 179, 78]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000ABE"
          fill="0"
          fillcolor="white"
@@ -3593,8 +3696,8 @@
       </private>
       
       <rectangle name="Fig11.4.0"
-        x="889"
-        y="274"
+        x="913"
+        y="258"
         width="179"
         height="78"
         fill="0"
@@ -3603,8 +3706,8 @@
         strokecolor="black"
       />
       <text name="Fig11.4.1"
-        x="889"
-        y="274"
+        x="913"
+        y="258"
         width="179"
         height="18"
         fill="0"
@@ -3619,8 +3722,8 @@
         justification="Left"
       >name : String</text>
       <text name="Fig11.4.2"
-        x="889"
-        y="292"
+        x="913"
+        y="276"
         width="179"
         height="18"
         fill="0"
@@ -3635,8 +3738,8 @@
         justification="Left"
       >parentCategory : Category</text>
       <text name="Fig11.4.3"
-        x="889"
-        y="310"
+        x="913"
+        y="294"
         width="179"
         height="24"
         fill="0"
@@ -3652,8 +3755,8 @@
       >officialCategory : Category</text>
     </group>
     <rectangle name="Fig11.5"
-      x="888"
-      y="352"
+      x="912"
+      y="336"
       width="181"
       height="1"
       fill="1"
@@ -3662,7 +3765,7 @@
       strokecolor="black"
     />
     <group name="Fig11.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[889, 353, 179, 37]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[913, 337, 179, 37]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000ABE"
          fill="0"
          fillcolor="white"
@@ -3673,8 +3776,8 @@
       </private>
       
       <rectangle name="Fig11.6.0"
-        x="889"
-        y="353"
+        x="913"
+        y="337"
         width="179"
         height="37"
         fill="0"
@@ -3735,14 +3838,14 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="671"
-              y="336" />
-      <lineto x="888"
-              y="336" />
+      <moveto x="695"
+              y="352" />
+      <lineto x="912"
+              y="352" />
     </path>
   </group>
   <group name="Fig13"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[520, 1224, 168, 160]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[512, 1152, 168, 160]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000AD8"
        fill="1"
        fillcolor="white"
@@ -3753,8 +3856,8 @@
     </private>
     
     <rectangle name="Fig13.0"
-      x="520"
-      y="1224"
+      x="512"
+      y="1152"
       width="168"
       height="160"
       fill="1"
@@ -3763,8 +3866,8 @@
       strokecolor="black"
     />
     <text name="Fig13.1"
-      x="521"
-      y="1225"
+      x="513"
+      y="1153"
       width="166"
       height="24"
       fill="0"
@@ -3779,7 +3882,7 @@
       justification="Center"
     >User</text>
     <group name="Fig13.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[521, 1225, 166, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[513, 1153, 166, 0]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000AD8"
          fill="0"
          fillcolor="white"
@@ -3791,8 +3894,8 @@
       </private>
       
       <rectangle name="Fig13.2.0"
-        x="521"
-        y="1225"
+        x="513"
+        y="1153"
         width="166"
         height="0"
         fill="0"
@@ -3802,8 +3905,8 @@
       />
     </group>
     <rectangle name="Fig13.3"
-      x="520"
-      y="1249"
+      x="512"
+      y="1177"
       width="168"
       height="1"
       fill="1"
@@ -3812,7 +3915,7 @@
       strokecolor="black"
     />
     <group name="Fig13.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[521, 1250, 166, 86]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[513, 1178, 166, 86]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000AD8"
          fill="0"
          fillcolor="white"
@@ -3823,8 +3926,8 @@
       </private>
       
       <rectangle name="Fig13.4.0"
-        x="521"
-        y="1250"
+        x="513"
+        y="1178"
         width="166"
         height="86"
         fill="0"
@@ -3833,8 +3936,8 @@
         strokecolor="black"
       />
       <text name="Fig13.4.1"
-        x="521"
-        y="1250"
+        x="513"
+        y="1178"
         width="166"
         height="18"
         fill="0"
@@ -3849,8 +3952,8 @@
         justification="Left"
       >email : String</text>
       <text name="Fig13.4.2"
-        x="521"
-        y="1268"
+        x="513"
+        y="1196"
         width="166"
         height="18"
         fill="0"
@@ -3865,8 +3968,8 @@
         justification="Left"
       >name : String</text>
       <text name="Fig13.4.3"
-        x="521"
-        y="1286"
+        x="513"
+        y="1214"
         width="166"
         height="24"
         fill="0"
@@ -3882,8 +3985,8 @@
       >password : String</text>
     </group>
     <rectangle name="Fig13.5"
-      x="520"
-      y="1336"
+      x="512"
+      y="1264"
       width="168"
       height="1"
       fill="1"
@@ -3892,7 +3995,7 @@
       strokecolor="black"
     />
     <group name="Fig13.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[521, 1337, 166, 45]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[513, 1265, 166, 45]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000AD8"
          fill="0"
          fillcolor="white"
@@ -3903,8 +4006,8 @@
       </private>
       
       <rectangle name="Fig13.6.0"
-        x="521"
-        y="1337"
+        x="513"
+        y="1265"
         width="166"
         height="45"
         fill="0"
@@ -3965,14 +4068,14 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="487"
-              y="720" />
-      <lineto x="648"
-              y="720" />
+      <moveto x="511"
+              y="704" />
+      <lineto x="672"
+              y="704" />
     </path>
   </group>
   <group name="Fig15"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[528, 1464, 160, 144]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[520, 1392, 160, 144]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000AFC"
        fill="1"
        fillcolor="white"
@@ -3983,8 +4086,8 @@
     </private>
     
     <rectangle name="Fig15.0"
-      x="528"
-      y="1464"
+      x="520"
+      y="1392"
       width="160"
       height="144"
       fill="1"
@@ -3993,8 +4096,8 @@
       strokecolor="black"
     />
     <text name="Fig15.1"
-      x="529"
-      y="1465"
+      x="521"
+      y="1393"
       width="158"
       height="24"
       fill="0"
@@ -4009,7 +4112,7 @@
       justification="Center"
     >UserGroup</text>
     <group name="Fig15.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[529, 1465, 158, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[521, 1393, 158, 0]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000AFC"
          fill="0"
          fillcolor="white"
@@ -4021,8 +4124,8 @@
       </private>
       
       <rectangle name="Fig15.2.0"
-        x="529"
-        y="1465"
+        x="521"
+        y="1393"
         width="158"
         height="0"
         fill="0"
@@ -4032,8 +4135,8 @@
       />
     </group>
     <rectangle name="Fig15.3"
-      x="528"
-      y="1489"
+      x="520"
+      y="1417"
       width="160"
       height="1"
       fill="1"
@@ -4042,7 +4145,7 @@
       strokecolor="black"
     />
     <group name="Fig15.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[529, 1490, 158, 60]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[521, 1418, 158, 60]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000AFC"
          fill="0"
          fillcolor="white"
@@ -4053,8 +4156,8 @@
       </private>
       
       <rectangle name="Fig15.4.0"
-        x="529"
-        y="1490"
+        x="521"
+        y="1418"
         width="158"
         height="60"
         fill="0"
@@ -4063,8 +4166,8 @@
         strokecolor="black"
       />
       <text name="Fig15.4.1"
-        x="529"
-        y="1490"
+        x="521"
+        y="1418"
         width="158"
         height="24"
         fill="0"
@@ -4080,8 +4183,8 @@
       >name : String</text>
     </group>
     <rectangle name="Fig15.5"
-      x="528"
-      y="1550"
+      x="520"
+      y="1478"
       width="160"
       height="1"
       fill="1"
@@ -4090,7 +4193,7 @@
       strokecolor="black"
     />
     <group name="Fig15.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[529, 1551, 158, 55]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[521, 1479, 158, 55]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000AFC"
          fill="0"
          fillcolor="white"
@@ -4101,8 +4204,8 @@
       </private>
       
       <rectangle name="Fig15.6.0"
-        x="529"
-        y="1551"
+        x="521"
+        y="1479"
         width="158"
         height="55"
         fill="0"
@@ -4163,14 +4266,14 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="655"
-              y="1464" />
-      <lineto x="655"
-              y="1383" />
+      <moveto x="647"
+              y="1392" />
+      <lineto x="647"
+              y="1311" />
     </path>
   </group>
   <group name="Fig17"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[824, 1232, 217, 208]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[816, 1160, 217, 208]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000B06"
        fill="1"
        fillcolor="white"
@@ -4181,8 +4284,8 @@
     </private>
     
     <rectangle name="Fig17.0"
-      x="824"
-      y="1232"
+      x="816"
+      y="1160"
       width="217"
       height="208"
       fill="1"
@@ -4191,8 +4294,8 @@
       strokecolor="black"
     />
     <text name="Fig17.1"
-      x="825"
-      y="1233"
+      x="817"
+      y="1161"
       width="215"
       height="24"
       fill="0"
@@ -4207,7 +4310,7 @@
       justification="Center"
     >Access</text>
     <group name="Fig17.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[825, 1233, 215, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[817, 1161, 215, 0]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000B06"
          fill="0"
          fillcolor="white"
@@ -4219,8 +4322,8 @@
       </private>
       
       <rectangle name="Fig17.2.0"
-        x="825"
-        y="1233"
+        x="817"
+        y="1161"
         width="215"
         height="0"
         fill="0"
@@ -4230,8 +4333,8 @@
       />
     </group>
     <rectangle name="Fig17.3"
-      x="824"
-      y="1257"
+      x="816"
+      y="1185"
       width="217"
       height="1"
       fill="1"
@@ -4240,7 +4343,7 @@
       strokecolor="black"
     />
     <group name="Fig17.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[825, 1258, 215, 146]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[817, 1186, 215, 146]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000B06"
          fill="0"
          fillcolor="white"
@@ -4251,8 +4354,8 @@
       </private>
       
       <rectangle name="Fig17.4.0"
-        x="825"
-        y="1258"
+        x="817"
+        y="1186"
         width="215"
         height="146"
         fill="0"
@@ -4261,8 +4364,8 @@
         strokecolor="black"
       />
       <text name="Fig17.4.1"
-        x="825"
-        y="1258"
+        x="817"
+        y="1186"
         width="215"
         height="18"
         fill="0"
@@ -4277,8 +4380,8 @@
         justification="Left"
       >group : UserGroup</text>
       <text name="Fig17.4.2"
-        x="825"
-        y="1276"
+        x="817"
+        y="1204"
         width="215"
         height="18"
         fill="0"
@@ -4293,8 +4396,8 @@
         justification="Left"
       >canEdit : Boolean</text>
       <text name="Fig17.4.3"
-        x="825"
-        y="1294"
+        x="817"
+        y="1222"
         width="215"
         height="18"
         fill="0"
@@ -4309,8 +4412,8 @@
         justification="Left"
       >canCreate : Boolean</text>
       <text name="Fig17.4.4"
-        x="825"
-        y="1312"
+        x="817"
+        y="1240"
         width="215"
         height="18"
         fill="0"
@@ -4325,8 +4428,8 @@
         justification="Left"
       >canDelete : Boolean</text>
       <text name="Fig17.4.5"
-        x="825"
-        y="1330"
+        x="817"
+        y="1258"
         width="215"
         height="18"
         fill="0"
@@ -4341,8 +4444,8 @@
         justification="Left"
       >ressourceID : Integer</text>
       <text name="Fig17.4.6"
-        x="825"
-        y="1348"
+        x="817"
+        y="1276"
         width="215"
         height="18"
         fill="0"
@@ -4357,8 +4460,8 @@
         justification="Left"
       >ressourceType : String</text>
       <text name="Fig17.4.7"
-        x="825"
-        y="1366"
+        x="817"
+        y="1294"
         width="215"
         height="24"
         fill="0"
@@ -4374,8 +4477,8 @@
       >user : User</text>
     </group>
     <rectangle name="Fig17.5"
-      x="824"
-      y="1404"
+      x="816"
+      y="1332"
       width="217"
       height="1"
       fill="1"
@@ -4384,7 +4487,7 @@
       strokecolor="black"
     />
     <group name="Fig17.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[825, 1405, 215, 33]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[817, 1333, 215, 33]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000B06"
          fill="0"
          fillcolor="white"
@@ -4395,8 +4498,8 @@
       </private>
       
       <rectangle name="Fig17.6.0"
-        x="825"
-        y="1405"
+        x="817"
+        y="1333"
         width="215"
         height="33"
         fill="0"
@@ -4457,10 +4560,10 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="687"
-              y="1304" />
-      <lineto x="824"
-              y="1304" />
+      <moveto x="679"
+              y="1232" />
+      <lineto x="816"
+              y="1232" />
     </path>
   </group>
   <group name="Fig19"
@@ -4514,14 +4617,14 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="687"
-              y="1464" />
-      <lineto x="824"
-              y="1439" />
+      <moveto x="679"
+              y="1392" />
+      <lineto x="816"
+              y="1367" />
     </path>
   </group>
   <group name="Fig20"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1232, 1568, 224, 184]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1224, 1496, 224, 184]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000B2D"
        fill="1"
        fillcolor="white"
@@ -4532,8 +4635,8 @@
     </private>
     
     <rectangle name="Fig20.0"
-      x="1232"
-      y="1568"
+      x="1224"
+      y="1496"
       width="224"
       height="184"
       fill="1"
@@ -4542,8 +4645,8 @@
       strokecolor="black"
     />
     <text name="Fig20.1"
-      x="1233"
-      y="1569"
+      x="1225"
+      y="1497"
       width="222"
       height="24"
       fill="0"
@@ -4558,7 +4661,7 @@
       justification="Center"
     >WorkflowStep</text>
     <group name="Fig20.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1233, 1569, 222, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1225, 1497, 222, 0]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000B2D"
          fill="0"
          fillcolor="white"
@@ -4570,8 +4673,8 @@
       </private>
       
       <rectangle name="Fig20.2.0"
-        x="1233"
-        y="1569"
+        x="1225"
+        y="1497"
         width="222"
         height="0"
         fill="0"
@@ -4581,8 +4684,8 @@
       />
     </group>
     <rectangle name="Fig20.3"
-      x="1232"
-      y="1593"
+      x="1224"
+      y="1521"
       width="224"
       height="1"
       fill="1"
@@ -4591,7 +4694,7 @@
       strokecolor="black"
     />
     <group name="Fig20.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1233, 1594, 222, 116]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1225, 1522, 222, 116]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000B2D"
          fill="0"
          fillcolor="white"
@@ -4602,8 +4705,8 @@
       </private>
       
       <rectangle name="Fig20.4.0"
-        x="1233"
-        y="1594"
+        x="1225"
+        y="1522"
         width="222"
         height="116"
         fill="0"
@@ -4612,8 +4715,8 @@
         strokecolor="black"
       />
       <text name="Fig20.4.1"
-        x="1233"
-        y="1594"
+        x="1225"
+        y="1522"
         width="222"
         height="18"
         fill="0"
@@ -4628,8 +4731,8 @@
         justification="Left"
       >ressourceType : String</text>
       <text name="Fig20.4.2"
-        x="1233"
-        y="1612"
+        x="1225"
+        y="1540"
         width="222"
         height="18"
         fill="0"
@@ -4644,8 +4747,8 @@
         justification="Left"
       >ressourceID : String</text>
       <text name="Fig20.4.3"
-        x="1233"
-        y="1630"
+        x="1225"
+        y="1558"
         width="222"
         height="18"
         fill="0"
@@ -4660,8 +4763,8 @@
         justification="Left"
       >action : String</text>
       <text name="Fig20.4.4"
-        x="1233"
-        y="1648"
+        x="1225"
+        y="1576"
         width="222"
         height="18"
         fill="0"
@@ -4676,8 +4779,8 @@
         justification="Left"
       >nextStep : WorkflowStep</text>
       <text name="Fig20.4.5"
-        x="1233"
-        y="1666"
+        x="1225"
+        y="1594"
         width="222"
         height="24"
         fill="0"
@@ -4693,8 +4796,8 @@
       >name : String</text>
     </group>
     <rectangle name="Fig20.5"
-      x="1232"
-      y="1710"
+      x="1224"
+      y="1638"
       width="224"
       height="1"
       fill="1"
@@ -4703,7 +4806,7 @@
       strokecolor="black"
     />
     <group name="Fig20.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1233, 1711, 222, 39]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1225, 1639, 222, 39]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000B2D"
          fill="0"
          fillcolor="white"
@@ -4714,8 +4817,8 @@
       </private>
       
       <rectangle name="Fig20.6.0"
-        x="1233"
-        y="1711"
+        x="1225"
+        y="1639"
         width="222"
         height="39"
         fill="0"
@@ -4726,7 +4829,7 @@
     </group>
   </group>
   <group name="Fig21"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[920, 1568, 168, 184]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[912, 1496, 168, 184]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000B3F"
        fill="1"
        fillcolor="white"
@@ -4737,8 +4840,8 @@
     </private>
     
     <rectangle name="Fig21.0"
-      x="920"
-      y="1568"
+      x="912"
+      y="1496"
       width="168"
       height="184"
       fill="1"
@@ -4747,8 +4850,8 @@
       strokecolor="black"
     />
     <text name="Fig21.1"
-      x="921"
-      y="1569"
+      x="913"
+      y="1497"
       width="166"
       height="24"
       fill="0"
@@ -4763,7 +4866,7 @@
       justification="Center"
     >Workflow</text>
     <group name="Fig21.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[921, 1569, 166, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[913, 1497, 166, 0]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000B3F"
          fill="0"
          fillcolor="white"
@@ -4775,8 +4878,8 @@
       </private>
       
       <rectangle name="Fig21.2.0"
-        x="921"
-        y="1569"
+        x="913"
+        y="1497"
         width="166"
         height="0"
         fill="0"
@@ -4786,8 +4889,8 @@
       />
     </group>
     <rectangle name="Fig21.3"
-      x="920"
-      y="1593"
+      x="912"
+      y="1521"
       width="168"
       height="1"
       fill="1"
@@ -4796,7 +4899,7 @@
       strokecolor="black"
     />
     <group name="Fig21.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[921, 1594, 166, 80]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[913, 1522, 166, 80]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000B3F"
          fill="0"
          fillcolor="white"
@@ -4807,8 +4910,8 @@
       </private>
       
       <rectangle name="Fig21.4.0"
-        x="921"
-        y="1594"
+        x="913"
+        y="1522"
         width="166"
         height="80"
         fill="0"
@@ -4817,8 +4920,8 @@
         strokecolor="black"
       />
       <text name="Fig21.4.1"
-        x="921"
-        y="1594"
+        x="913"
+        y="1522"
         width="166"
         height="24"
         fill="0"
@@ -4834,8 +4937,8 @@
       >name : String</text>
     </group>
     <rectangle name="Fig21.5"
-      x="920"
-      y="1674"
+      x="912"
+      y="1602"
       width="168"
       height="1"
       fill="1"
@@ -4844,7 +4947,7 @@
       strokecolor="black"
     />
     <group name="Fig21.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[921, 1675, 166, 75]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[913, 1603, 166, 75]"
          href="10--56-32-5--479e9327:13c3ddc1907:-8000:0000000000000B3F"
          fill="0"
          fillcolor="white"
@@ -4855,8 +4958,8 @@
       </private>
       
       <rectangle name="Fig21.6.0"
-        x="921"
-        y="1675"
+        x="913"
+        y="1603"
         width="166"
         height="75"
         fill="0"
@@ -4917,14 +5020,14 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1232"
-              y="1640" />
-      <lineto x="1087"
-              y="1640" />
+      <moveto x="1224"
+              y="1568" />
+      <lineto x="1079"
+              y="1568" />
     </path>
   </group>
   <group name="Fig23"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1312, 200, 177, 88]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1336, 184, 177, 88]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B2A"
        fill="1"
        fillcolor="white"
@@ -4935,8 +5038,8 @@
     </private>
     
     <rectangle name="Fig23.0"
-      x="1312"
-      y="200"
+      x="1336"
+      y="184"
       width="177"
       height="88"
       fill="1"
@@ -4945,8 +5048,8 @@
       strokecolor="black"
     />
     <text name="Fig23.1"
-      x="1313"
-      y="201"
+      x="1337"
+      y="185"
       width="175"
       height="24"
       fill="0"
@@ -4961,7 +5064,7 @@
       justification="Center"
     >CategoryFilterComponent</text>
     <group name="Fig23.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1313, 201, 175, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1337, 185, 175, 0]"
          href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B2A"
          fill="0"
          fillcolor="white"
@@ -4973,8 +5076,8 @@
       </private>
       
       <rectangle name="Fig23.2.0"
-        x="1313"
-        y="201"
+        x="1337"
+        y="185"
         width="175"
         height="0"
         fill="0"
@@ -4984,8 +5087,8 @@
       />
     </group>
     <rectangle name="Fig23.3"
-      x="1312"
-      y="225"
+      x="1336"
+      y="209"
       width="177"
       height="1"
       fill="1"
@@ -4994,7 +5097,7 @@
       strokecolor="black"
     />
     <group name="Fig23.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1313, 226, 175, 32]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1337, 210, 175, 32]"
          href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B2A"
          fill="0"
          fillcolor="white"
@@ -5005,8 +5108,8 @@
       </private>
       
       <rectangle name="Fig23.4.0"
-        x="1313"
-        y="226"
+        x="1337"
+        y="210"
         width="175"
         height="32"
         fill="0"
@@ -5015,8 +5118,8 @@
         strokecolor="black"
       />
       <text name="Fig23.4.1"
-        x="1313"
-        y="226"
+        x="1337"
+        y="210"
         width="175"
         height="24"
         fill="0"
@@ -5032,8 +5135,8 @@
       >name : String</text>
     </group>
     <rectangle name="Fig23.5"
-      x="1312"
-      y="258"
+      x="1336"
+      y="242"
       width="177"
       height="1"
       fill="1"
@@ -5042,7 +5145,7 @@
       strokecolor="black"
     />
     <group name="Fig23.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1313, 259, 175, 27]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1337, 243, 175, 27]"
          href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B2A"
          fill="0"
          fillcolor="white"
@@ -5053,8 +5156,8 @@
       </private>
       
       <rectangle name="Fig23.6.0"
-        x="1313"
-        y="259"
+        x="1337"
+        y="243"
         width="175"
         height="27"
         fill="0"
@@ -5115,14 +5218,14 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1068"
-              y="272" />
-      <lineto x="1312"
-              y="272" />
+      <moveto x="1092"
+              y="256" />
+      <lineto x="1336"
+              y="256" />
     </path>
   </group>
   <group name="Fig25"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1568, 16, 114, 122]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1592, 0, 114, 122]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B38"
        fill="1"
        fillcolor="white"
@@ -5133,8 +5236,8 @@
     </private>
     
     <rectangle name="Fig25.0"
-      x="1568"
-      y="16"
+      x="1592"
+      y="0"
       width="114"
       height="122"
       fill="1"
@@ -5143,8 +5246,8 @@
       strokecolor="black"
     />
     <text name="Fig25.1"
-      x="1569"
-      y="17"
+      x="1593"
+      y="1"
       width="112"
       height="24"
       fill="0"
@@ -5159,7 +5262,7 @@
       justification="Center"
     >Filter</text>
     <group name="Fig25.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1569, 17, 112, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1593, 1, 112, 0]"
          href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B38"
          fill="0"
          fillcolor="white"
@@ -5171,8 +5274,8 @@
       </private>
       
       <rectangle name="Fig25.2.0"
-        x="1569"
-        y="17"
+        x="1593"
+        y="1"
         width="112"
         height="0"
         fill="0"
@@ -5182,8 +5285,8 @@
       />
     </group>
     <rectangle name="Fig25.3"
-      x="1568"
-      y="41"
+      x="1592"
+      y="25"
       width="114"
       height="1"
       fill="1"
@@ -5192,7 +5295,7 @@
       strokecolor="black"
     />
     <group name="Fig25.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1569, 42, 112, 49]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1593, 26, 112, 49]"
          href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B38"
          fill="0"
          fillcolor="white"
@@ -5203,8 +5306,8 @@
       </private>
       
       <rectangle name="Fig25.4.0"
-        x="1569"
-        y="42"
+        x="1593"
+        y="26"
         width="112"
         height="49"
         fill="0"
@@ -5213,8 +5316,8 @@
         strokecolor="black"
       />
       <text name="Fig25.4.1"
-        x="1569"
-        y="42"
+        x="1593"
+        y="26"
         width="112"
         height="24"
         fill="0"
@@ -5230,8 +5333,8 @@
       >name : String</text>
     </group>
     <rectangle name="Fig25.5"
-      x="1568"
-      y="91"
+      x="1592"
+      y="75"
       width="114"
       height="1"
       fill="1"
@@ -5240,7 +5343,7 @@
       strokecolor="black"
     />
     <group name="Fig25.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1569, 92, 112, 44]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1593, 76, 112, 44]"
          href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B38"
          fill="0"
          fillcolor="white"
@@ -5251,8 +5354,8 @@
       </private>
       
       <rectangle name="Fig25.6.0"
-        x="1569"
-        y="92"
+        x="1593"
+        y="76"
         width="112"
         height="44"
         fill="0"
@@ -5313,14 +5416,14 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1488"
-              y="200" />
-      <lineto x="1568"
-              y="137" />
+      <moveto x="1512"
+              y="184" />
+      <lineto x="1592"
+              y="121" />
     </path>
   </group>
   <group name="Fig27"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1576, 200, 150, 91]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1600, 184, 150, 91]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B4B"
        fill="1"
        fillcolor="white"
@@ -5331,8 +5434,8 @@
     </private>
     
     <rectangle name="Fig27.0"
-      x="1576"
-      y="200"
+      x="1600"
+      y="184"
       width="150"
       height="91"
       fill="1"
@@ -5341,8 +5444,8 @@
       strokecolor="black"
     />
     <text name="Fig27.1"
-      x="1577"
-      y="201"
+      x="1601"
+      y="185"
       width="148"
       height="24"
       fill="0"
@@ -5357,7 +5460,7 @@
       justification="Center"
     >TimeFilterComponent</text>
     <group name="Fig27.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1577, 201, 148, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1601, 185, 148, 0]"
          href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B4B"
          fill="0"
          fillcolor="white"
@@ -5369,8 +5472,8 @@
       </private>
       
       <rectangle name="Fig27.2.0"
-        x="1577"
-        y="201"
+        x="1601"
+        y="185"
         width="148"
         height="0"
         fill="0"
@@ -5380,8 +5483,8 @@
       />
     </group>
     <rectangle name="Fig27.3"
-      x="1576"
-      y="225"
+      x="1600"
+      y="209"
       width="150"
       height="1"
       fill="1"
@@ -5390,7 +5493,7 @@
       strokecolor="black"
     />
     <group name="Fig27.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1577, 226, 148, 44]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1601, 210, 148, 44]"
          href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B4B"
          fill="0"
          fillcolor="white"
@@ -5401,8 +5504,8 @@
       </private>
       
       <rectangle name="Fig27.4.0"
-        x="1577"
-        y="226"
+        x="1601"
+        y="210"
         width="148"
         height="44"
         fill="0"
@@ -5411,8 +5514,8 @@
         strokecolor="black"
       />
       <text name="Fig27.4.1"
-        x="1577"
-        y="226"
+        x="1601"
+        y="210"
         width="148"
         height="18"
         fill="0"
@@ -5427,8 +5530,8 @@
         justification="Left"
       >timeBegin : Date</text>
       <text name="Fig27.4.2"
-        x="1577"
-        y="244"
+        x="1601"
+        y="228"
         width="148"
         height="24"
         fill="0"
@@ -5444,8 +5547,8 @@
       >timeEnd : Date</text>
     </group>
     <rectangle name="Fig27.5"
-      x="1576"
-      y="269"
+      x="1600"
+      y="253"
       width="150"
       height="1"
       fill="1"
@@ -5454,7 +5557,7 @@
       strokecolor="black"
     />
     <group name="Fig27.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1577, 270, 148, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1601, 254, 148, 21]"
          href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B4B"
          fill="0"
          fillcolor="white"
@@ -5465,8 +5568,8 @@
       </private>
       
       <rectangle name="Fig27.6.0"
-        x="1577"
-        y="270"
+        x="1601"
+        y="254"
         width="148"
         height="21"
         fill="0"
@@ -5477,7 +5580,7 @@
     </group>
   </group>
   <group name="Fig28"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1832, 208, 163, 68]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1856, 192, 163, 68]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B5E"
        fill="1"
        fillcolor="white"
@@ -5488,8 +5591,8 @@
     </private>
     
     <rectangle name="Fig28.0"
-      x="1832"
-      y="208"
+      x="1856"
+      y="192"
       width="163"
       height="68"
       fill="1"
@@ -5498,8 +5601,8 @@
       strokecolor="black"
     />
     <text name="Fig28.1"
-      x="1833"
-      y="209"
+      x="1857"
+      y="193"
       width="161"
       height="24"
       fill="0"
@@ -5514,7 +5617,7 @@
       justification="Center"
     >RegionFilterComponent</text>
     <group name="Fig28.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1833, 209, 161, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1857, 193, 161, 0]"
          href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B5E"
          fill="0"
          fillcolor="white"
@@ -5526,8 +5629,8 @@
       </private>
       
       <rectangle name="Fig28.2.0"
-        x="1833"
-        y="209"
+        x="1857"
+        y="193"
         width="161"
         height="0"
         fill="0"
@@ -5537,8 +5640,8 @@
       />
     </group>
     <rectangle name="Fig28.3"
-      x="1832"
-      y="233"
+      x="1856"
+      y="217"
       width="163"
       height="1"
       fill="1"
@@ -5547,7 +5650,7 @@
       strokecolor="black"
     />
     <group name="Fig28.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1833, 234, 161, 21]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1857, 218, 161, 21]"
          href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B5E"
          fill="0"
          fillcolor="white"
@@ -5558,8 +5661,8 @@
       </private>
       
       <rectangle name="Fig28.4.0"
-        x="1833"
-        y="234"
+        x="1857"
+        y="218"
         width="161"
         height="21"
         fill="0"
@@ -5569,8 +5672,8 @@
       />
     </group>
     <rectangle name="Fig28.5"
-      x="1832"
-      y="254"
+      x="1856"
+      y="238"
       width="163"
       height="1"
       fill="1"
@@ -5579,7 +5682,7 @@
       strokecolor="black"
     />
     <group name="Fig28.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1833, 255, 161, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1857, 239, 161, 21]"
          href="10--56-32-5-6ab786b1:13c4326d2b3:-8000:0000000000000B5E"
          fill="0"
          fillcolor="white"
@@ -5590,8 +5693,8 @@
       </private>
       
       <rectangle name="Fig28.6.0"
-        x="1833"
-        y="255"
+        x="1857"
+        y="239"
         width="161"
         height="21"
         fill="0"
@@ -5652,10 +5755,10 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1593"
-              y="200" />
-      <lineto x="1593"
-              y="137" />
+      <moveto x="1617"
+              y="184" />
+      <lineto x="1617"
+              y="121" />
     </path>
   </group>
   <group name="Fig30"
@@ -5709,14 +5812,14 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1832"
-              y="208" />
-      <lineto x="1681"
-              y="137" />
+      <moveto x="1856"
+              y="192" />
+      <lineto x="1705"
+              y="121" />
     </path>
   </group>
   <group name="Fig31"
-       description="org.argouml.uml.diagram.static_structure.ui.FigComment[1408, 784, 666, 380]pathVisible=false;stereotypeView=0;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigComment[1432, 768, 696, 384]pathVisible=false;stereotypeView=0;"
        href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B7B"
        fill="1"
        fillcolor="white"
@@ -5727,10 +5830,10 @@
     </private>
     
     <rectangle name="Fig31.0"
-      x="1408"
-      y="784"
-      width="666"
-      height="380"
+      x="1432"
+      y="768"
+      width="696"
+      height="384"
       fill="0"
       fillcolor="white"
       stroke="0"
@@ -5743,18 +5846,18 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1408"
-              y="784" />
-      <lineto x="2063"
-              y="784" />
-      <lineto x="2073"
-              y="794" />
-      <lineto x="2073"
-              y="1163" />
-      <lineto x="1408"
-              y="1163" />
-      <lineto x="1408"
-              y="784" />
+      <moveto x="1432"
+              y="768" />
+      <lineto x="2117"
+              y="768" />
+      <lineto x="2127"
+              y="778" />
+      <lineto x="2127"
+              y="1151" />
+      <lineto x="1432"
+              y="1151" />
+      <lineto x="1432"
+              y="768" />
     </path>
     <path name="Fig31.2"
       description="org.tigris.gef.presentation.FigPoly"
@@ -5763,17 +5866,17 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="2063"
-              y="784" />
-      <lineto x="2073"
-              y="794" />
-      <lineto x="2063"
-              y="794" />
-      <lineto x="2063"
-              y="784" />
+      <moveto x="2117"
+              y="768" />
+      <lineto x="2127"
+              y="778" />
+      <lineto x="2117"
+              y="778" />
+      <lineto x="2117"
+              y="768" />
     </path>
     <group name="Fig31.3"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1410, 786, 652, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1434, 770, 682, 0]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B7B"
          fill="0"
          fillcolor="white"
@@ -5785,9 +5888,9 @@
       </private>
       
       <rectangle name="Fig31.3.0"
-        x="1410"
-        y="786"
-        width="652"
+        x="1434"
+        y="770"
+        width="682"
         height="0"
         fill="0"
         fillcolor="white"
@@ -5796,10 +5899,10 @@
       />
     </group>
     <text name="Fig31.4"
-      x="1410"
-      y="786"
-      width="652"
-      height="376"
+      x="1434"
+      y="770"
+      width="682"
+      height="380"
       fill="0"
       fillcolor="white"
       stroke="0"
@@ -5816,13 +5919,10 @@
 * creator
 * modificator
 
-ou stocker le total de population ?
-	questionaire ou reponse ? ou autre table ?
-
 La fonctionnalité de journal  est à compléter pour une version future. 
 Elle est présente sur ce diagramme juste pour pas l&apos;oublier
 
-Comment gérer la visibilité des filtres pour les users pour éviter des noyer sous des tonnes de filtres _
+Comment gérer la visibilité des filtres pour les users pour éviter des noyer sous des tonnes de filtres ?
 
 Comment gérer le processus de validation ? idem pour publication ?
 La validation devrait avoir au moins les états suivants:
@@ -5834,7 +5934,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
 </text>
   </group>
   <group name="Fig32"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[648, 848, 216, 192]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[672, 832, 216, 192]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B7C"
        fill="1"
        fillcolor="white"
@@ -5845,8 +5945,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
     </private>
     
     <rectangle name="Fig32.0"
-      x="648"
-      y="848"
+      x="672"
+      y="832"
       width="216"
       height="192"
       fill="1"
@@ -5855,8 +5955,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <text name="Fig32.1"
-      x="649"
-      y="849"
+      x="673"
+      y="833"
       width="214"
       height="24"
       fill="0"
@@ -5871,7 +5971,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       justification="Center"
     >Issue</text>
     <group name="Fig32.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[649, 849, 214, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[673, 833, 214, 0]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B7C"
          fill="0"
          fillcolor="white"
@@ -5883,8 +5983,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig32.2.0"
-        x="649"
-        y="849"
+        x="673"
+        y="833"
         width="214"
         height="0"
         fill="0"
@@ -5894,8 +5994,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       />
     </group>
     <rectangle name="Fig32.3"
-      x="648"
-      y="873"
+      x="672"
+      y="857"
       width="216"
       height="1"
       fill="1"
@@ -5904,7 +6004,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig32.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[649, 874, 214, 102]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[673, 858, 214, 102]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B7C"
          fill="0"
          fillcolor="white"
@@ -5915,8 +6015,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig32.4.0"
-        x="649"
-        y="874"
+        x="673"
+        y="858"
         width="214"
         height="102"
         fill="0"
@@ -5925,8 +6025,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         strokecolor="black"
       />
       <text name="Fig32.4.1"
-        x="649"
-        y="874"
+        x="673"
+        y="858"
         width="214"
         height="18"
         fill="0"
@@ -5941,8 +6041,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >name : String</text>
       <text name="Fig32.4.2"
-        x="649"
-        y="892"
+        x="673"
+        y="876"
         width="214"
         height="18"
         fill="0"
@@ -5957,8 +6057,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >description : String</text>
       <text name="Fig32.4.3"
-        x="649"
-        y="910"
+        x="673"
+        y="894"
         width="214"
         height="24"
         fill="0"
@@ -5974,8 +6074,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       >status : IssueStatus</text>
     </group>
     <rectangle name="Fig32.5"
-      x="648"
-      y="976"
+      x="672"
+      y="960"
       width="216"
       height="1"
       fill="1"
@@ -5984,7 +6084,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig32.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[649, 977, 214, 61]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[673, 961, 214, 61]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B7C"
          fill="0"
          fillcolor="white"
@@ -5995,8 +6095,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig32.6.0"
-        x="649"
-        y="977"
+        x="673"
+        y="961"
         width="214"
         height="61"
         fill="0"
@@ -6057,14 +6157,14 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="487"
-              y="872" />
-      <lineto x="648"
-              y="872" />
+      <moveto x="511"
+              y="856" />
+      <lineto x="672"
+              y="856" />
     </path>
   </group>
   <group name="Fig34"
-       description="org.argouml.uml.diagram.static_structure.ui.FigEnumeration[920, 848, 152, 192]pathVisible=false;stereotypeView=0;operationsVisible=true;enumerationLiteralsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigEnumeration[944, 832, 152, 192]pathVisible=false;stereotypeView=0;operationsVisible=true;enumerationLiteralsVisible=true"
        href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B81"
        fill="1"
        fillcolor="white"
@@ -6075,8 +6175,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
     </private>
     
     <rectangle name="Fig34.0"
-      x="920"
-      y="848"
+      x="944"
+      y="832"
       width="152"
       height="192"
       fill="1"
@@ -6085,8 +6185,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <text name="Fig34.1"
-      x="921"
-      y="849"
+      x="945"
+      y="833"
       width="150"
       height="45"
       fill="0"
@@ -6101,7 +6201,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       justification="Center"
     >IssueStatus</text>
     <group name="Fig34.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[921, 849, 150, 21]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[945, 833, 150, 21]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B81"
          fill="0"
          fillcolor="white"
@@ -6112,8 +6212,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig34.2.0"
-        x="921"
-        y="849"
+        x="945"
+        y="833"
         width="150"
         height="21"
         fill="0"
@@ -6122,8 +6222,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         strokecolor="black"
       />
       <text name="Fig34.2.1"
-        x="921"
-        y="849"
+        x="945"
+        y="833"
         width="150"
         height="19"
         fill="0"
@@ -6139,8 +6239,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       >&lt;&lt;enumeration&gt;&gt;</text>
     </group>
     <rectangle name="Fig34.3"
-      x="920"
-      y="894"
+      x="944"
+      y="878"
       width="152"
       height="1"
       fill="1"
@@ -6149,7 +6249,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig34.4"
-         description="org.argouml.uml.diagram.ui.FigEnumLiteralsCompartment[921, 895, 150, 98]"
+         description="org.argouml.uml.diagram.ui.FigEnumLiteralsCompartment[945, 879, 150, 98]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B81"
          fill="0"
          fillcolor="white"
@@ -6160,8 +6260,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig34.4.0"
-        x="921"
-        y="895"
+        x="945"
+        y="879"
         width="150"
         height="98"
         fill="0"
@@ -6170,8 +6270,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         strokecolor="black"
       />
       <text name="Fig34.4.1"
-        x="921"
-        y="895"
+        x="945"
+        y="879"
         width="150"
         height="18"
         fill="0"
@@ -6186,8 +6286,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >new</text>
       <text name="Fig34.4.2"
-        x="921"
-        y="913"
+        x="945"
+        y="897"
         width="150"
         height="18"
         fill="0"
@@ -6202,8 +6302,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >accepted</text>
       <text name="Fig34.4.3"
-        x="921"
-        y="931"
+        x="945"
+        y="915"
         width="150"
         height="18"
         fill="0"
@@ -6218,8 +6318,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >resolved</text>
       <text name="Fig34.4.4"
-        x="921"
-        y="949"
+        x="945"
+        y="933"
         width="150"
         height="24"
         fill="0"
@@ -6235,8 +6335,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       >rejected</text>
     </group>
     <rectangle name="Fig34.5"
-      x="920"
-      y="993"
+      x="944"
+      y="977"
       width="152"
       height="1"
       fill="1"
@@ -6245,7 +6345,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig34.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[921, 994, 150, 44]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[945, 978, 150, 44]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B81"
          fill="0"
          fillcolor="white"
@@ -6256,8 +6356,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig34.6.0"
-        x="921"
-        y="994"
+        x="945"
+        y="978"
         width="150"
         height="44"
         fill="0"
@@ -6265,10 +6365,26 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         stroke="0"
         strokecolor="black"
       />
+      <text name="Fig34.6.1"
+        x="945"
+        y="978"
+        width="150"
+        height="24"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="13"
+        justification="Left"
+      >newOperation()</text>
     </group>
   </group>
   <group name="Fig35"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[128, 1224, 208, 168]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[120, 1152, 208, 168]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B96"
        fill="1"
        fillcolor="white"
@@ -6279,8 +6395,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
     </private>
     
     <rectangle name="Fig35.0"
-      x="128"
-      y="1224"
+      x="120"
+      y="1152"
       width="208"
       height="168"
       fill="1"
@@ -6289,8 +6405,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <text name="Fig35.1"
-      x="129"
-      y="1225"
+      x="121"
+      y="1153"
       width="206"
       height="24"
       fill="0"
@@ -6305,7 +6421,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       justification="Center"
     >Organisation</text>
     <group name="Fig35.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[129, 1225, 278, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[121, 1153, 206, 0]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B96"
          fill="0"
          fillcolor="white"
@@ -6317,9 +6433,9 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig35.2.0"
-        x="129"
-        y="1225"
-        width="278"
+        x="121"
+        y="1153"
+        width="206"
         height="0"
         fill="0"
         fillcolor="white"
@@ -6328,8 +6444,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       />
     </group>
     <rectangle name="Fig35.3"
-      x="128"
-      y="1249"
+      x="120"
+      y="1177"
       width="208"
       height="1"
       fill="1"
@@ -6338,7 +6454,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig35.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[129, 1250, 206, 72]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[121, 1178, 206, 70]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B96"
          fill="0"
          fillcolor="white"
@@ -6349,18 +6465,18 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig35.4.0"
-        x="129"
-        y="1250"
+        x="121"
+        y="1178"
         width="206"
-        height="72"
+        height="70"
         fill="0"
         fillcolor="white"
         stroke="0"
         strokecolor="black"
       />
       <text name="Fig35.4.1"
-        x="129"
-        y="1250"
+        x="121"
+        y="1178"
         width="206"
         height="24"
         fill="0"
@@ -6376,8 +6492,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       >name : String</text>
     </group>
     <rectangle name="Fig35.5"
-      x="128"
-      y="1322"
+      x="120"
+      y="1248"
       width="208"
       height="1"
       fill="1"
@@ -6386,7 +6502,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig35.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[129, 1323, 206, 67]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[121, 1249, 206, 70]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B96"
          fill="0"
          fillcolor="white"
@@ -6397,19 +6513,35 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig35.6.0"
-        x="129"
-        y="1323"
+        x="121"
+        y="1249"
         width="206"
-        height="67"
+        height="70"
         fill="0"
         fillcolor="white"
         stroke="0"
         strokecolor="black"
       />
+      <text name="Fig35.6.1"
+        x="121"
+        y="1249"
+        width="206"
+        height="24"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="13"
+        justification="Left"
+      >newOperation()</text>
     </group>
   </group>
   <group name="Fig36"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1824, 448, 256, 264]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[1848, 432, 256, 264]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B9C"
        fill="1"
        fillcolor="white"
@@ -6420,8 +6552,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
     </private>
     
     <rectangle name="Fig36.0"
-      x="1824"
-      y="448"
+      x="1848"
+      y="432"
       width="256"
       height="264"
       fill="1"
@@ -6430,8 +6562,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <text name="Fig36.1"
-      x="1825"
-      y="449"
+      x="1849"
+      y="433"
       width="254"
       height="24"
       fill="0"
@@ -6446,7 +6578,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       justification="Center"
     >Journal</text>
     <group name="Fig36.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1825, 449, 254, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1849, 433, 254, 0]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B9C"
          fill="0"
          fillcolor="white"
@@ -6458,8 +6590,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig36.2.0"
-        x="1825"
-        y="449"
+        x="1849"
+        y="433"
         width="254"
         height="0"
         fill="0"
@@ -6469,8 +6601,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       />
     </group>
     <rectangle name="Fig36.3"
-      x="1824"
-      y="473"
+      x="1848"
+      y="457"
       width="256"
       height="1"
       fill="1"
@@ -6479,7 +6611,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig36.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1825, 474, 254, 147]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[1849, 458, 254, 147]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B9C"
          fill="0"
          fillcolor="white"
@@ -6490,8 +6622,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig36.4.0"
-        x="1825"
-        y="474"
+        x="1849"
+        y="458"
         width="254"
         height="147"
         fill="0"
@@ -6500,8 +6632,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         strokecolor="black"
       />
       <text name="Fig36.4.1"
-        x="1825"
-        y="474"
+        x="1849"
+        y="458"
         width="254"
         height="18"
         fill="0"
@@ -6516,8 +6648,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >user : User</text>
       <text name="Fig36.4.2"
-        x="1825"
-        y="492"
+        x="1849"
+        y="476"
         width="254"
         height="18"
         fill="0"
@@ -6532,8 +6664,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >before : String</text>
       <text name="Fig36.4.3"
-        x="1825"
-        y="510"
+        x="1849"
+        y="494"
         width="254"
         height="18"
         fill="0"
@@ -6548,8 +6680,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >after : String</text>
       <text name="Fig36.4.4"
-        x="1825"
-        y="528"
+        x="1849"
+        y="512"
         width="254"
         height="24"
         fill="0"
@@ -6565,8 +6697,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       >recordType : String</text>
     </group>
     <rectangle name="Fig36.5"
-      x="1824"
-      y="621"
+      x="1848"
+      y="605"
       width="256"
       height="1"
       fill="1"
@@ -6575,7 +6707,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig36.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1825, 622, 254, 88]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1849, 606, 254, 88]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000B9C"
          fill="0"
          fillcolor="white"
@@ -6586,8 +6718,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig36.6.0"
-        x="1825"
-        y="622"
+        x="1849"
+        y="606"
         width="254"
         height="88"
         fill="0"
@@ -6648,14 +6780,14 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="335"
-              y="1256" />
-      <lineto x="520"
-              y="1256" />
+      <moveto x="327"
+              y="1184" />
+      <lineto x="512"
+              y="1184" />
     </path>
   </group>
   <group name="Fig38"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[120, 1480, 208, 136]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[112, 1408, 208, 136]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000BB0"
        fill="1"
        fillcolor="white"
@@ -6666,8 +6798,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
     </private>
     
     <rectangle name="Fig38.0"
-      x="120"
-      y="1480"
+      x="112"
+      y="1408"
       width="208"
       height="136"
       fill="1"
@@ -6676,8 +6808,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <text name="Fig38.1"
-      x="121"
-      y="1481"
+      x="113"
+      y="1409"
       width="206"
       height="24"
       fill="0"
@@ -6692,7 +6824,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       justification="Center"
     >Communication</text>
     <group name="Fig38.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[121, 1481, 206, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[113, 1409, 206, 0]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000BB0"
          fill="0"
          fillcolor="white"
@@ -6704,8 +6836,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig38.2.0"
-        x="121"
-        y="1481"
+        x="113"
+        y="1409"
         width="206"
         height="0"
         fill="0"
@@ -6715,8 +6847,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       />
     </group>
     <rectangle name="Fig38.3"
-      x="120"
-      y="1505"
+      x="112"
+      y="1433"
       width="208"
       height="1"
       fill="1"
@@ -6725,7 +6857,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig38.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[121, 1506, 206, 74]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[113, 1434, 206, 74]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000BB0"
          fill="0"
          fillcolor="white"
@@ -6736,8 +6868,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig38.4.0"
-        x="121"
-        y="1506"
+        x="113"
+        y="1434"
         width="206"
         height="74"
         fill="0"
@@ -6746,8 +6878,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         strokecolor="black"
       />
       <text name="Fig38.4.1"
-        x="121"
-        y="1506"
+        x="113"
+        y="1434"
         width="206"
         height="18"
         fill="0"
@@ -6762,8 +6894,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >type : CommunicationType</text>
       <text name="Fig38.4.2"
-        x="121"
-        y="1524"
+        x="113"
+        y="1452"
         width="206"
         height="18"
         fill="0"
@@ -6778,8 +6910,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >name : String</text>
       <text name="Fig38.4.3"
-        x="121"
-        y="1542"
+        x="113"
+        y="1470"
         width="206"
         height="24"
         fill="0"
@@ -6795,8 +6927,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       >value : String</text>
     </group>
     <rectangle name="Fig38.5"
-      x="120"
-      y="1580"
+      x="112"
+      y="1508"
       width="208"
       height="1"
       fill="1"
@@ -6805,7 +6937,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig38.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[121, 1581, 206, 33]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[113, 1509, 206, 33]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000BB0"
          fill="0"
          fillcolor="white"
@@ -6816,8 +6948,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig38.6.0"
-        x="121"
-        y="1581"
+        x="113"
+        y="1509"
         width="206"
         height="33"
         fill="0"
@@ -6828,7 +6960,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
     </group>
   </group>
   <group name="Fig39"
-       description="org.argouml.uml.diagram.static_structure.ui.FigEnumeration[168, 1648, 160, 152]pathVisible=false;stereotypeView=0;operationsVisible=true;enumerationLiteralsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigEnumeration[160, 1576, 160, 152]pathVisible=false;stereotypeView=0;operationsVisible=true;enumerationLiteralsVisible=true"
        href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000BBA"
        fill="1"
        fillcolor="white"
@@ -6839,8 +6971,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
     </private>
     
     <rectangle name="Fig39.0"
-      x="168"
-      y="1648"
+      x="160"
+      y="1576"
       width="160"
       height="152"
       fill="1"
@@ -6849,8 +6981,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <text name="Fig39.1"
-      x="169"
-      y="1649"
+      x="161"
+      y="1577"
       width="158"
       height="45"
       fill="0"
@@ -6865,7 +6997,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       justification="Center"
     >CommunicationType</text>
     <group name="Fig39.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[169, 1649, 158, 21]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[161, 1577, 158, 21]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000BBA"
          fill="0"
          fillcolor="white"
@@ -6876,8 +7008,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig39.2.0"
-        x="169"
-        y="1649"
+        x="161"
+        y="1577"
         width="158"
         height="21"
         fill="0"
@@ -6886,8 +7018,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         strokecolor="black"
       />
       <text name="Fig39.2.1"
-        x="169"
-        y="1649"
+        x="161"
+        y="1577"
         width="158"
         height="19"
         fill="0"
@@ -6903,8 +7035,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       >&lt;&lt;enumeration&gt;&gt;</text>
     </group>
     <rectangle name="Fig39.3"
-      x="168"
-      y="1694"
+      x="160"
+      y="1622"
       width="160"
       height="1"
       fill="1"
@@ -6913,7 +7045,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig39.4"
-         description="org.argouml.uml.diagram.ui.FigEnumLiteralsCompartment[169, 1695, 158, 81]"
+         description="org.argouml.uml.diagram.ui.FigEnumLiteralsCompartment[161, 1623, 158, 81]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000BBA"
          fill="0"
          fillcolor="white"
@@ -6924,8 +7056,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig39.4.0"
-        x="169"
-        y="1695"
+        x="161"
+        y="1623"
         width="158"
         height="81"
         fill="0"
@@ -6934,8 +7066,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         strokecolor="black"
       />
       <text name="Fig39.4.1"
-        x="169"
-        y="1695"
+        x="161"
+        y="1623"
         width="158"
         height="18"
         fill="0"
@@ -6950,8 +7082,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >email</text>
       <text name="Fig39.4.2"
-        x="169"
-        y="1713"
+        x="161"
+        y="1641"
         width="158"
         height="18"
         fill="0"
@@ -6966,8 +7098,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >phone</text>
       <text name="Fig39.4.3"
-        x="169"
-        y="1731"
+        x="161"
+        y="1659"
         width="158"
         height="18"
         fill="0"
@@ -6982,8 +7114,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >address</text>
       <text name="Fig39.4.4"
-        x="169"
-        y="1749"
+        x="161"
+        y="1677"
         width="158"
         height="24"
         fill="0"
@@ -6999,8 +7131,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       >url</text>
     </group>
     <rectangle name="Fig39.5"
-      x="168"
-      y="1776"
+      x="160"
+      y="1704"
       width="160"
       height="1"
       fill="1"
@@ -7009,7 +7141,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig39.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[169, 1777, 158, 22]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[161, 1705, 158, 22]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000BBA"
          fill="0"
          fillcolor="white"
@@ -7020,8 +7152,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig39.6.0"
-        x="169"
-        y="1777"
+        x="161"
+        y="1705"
         width="158"
         height="22"
         fill="0"
@@ -7082,10 +7214,10 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="240"
-              y="1391" />
-      <lineto x="240"
-              y="1480" />
+      <moveto x="232"
+              y="1319" />
+      <lineto x="232"
+              y="1408" />
     </path>
   </group>
   <group name="Fig41"
@@ -7139,14 +7271,14 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="327"
-              y="1480" />
-      <lineto x="520"
-              y="1383" />
+      <moveto x="319"
+              y="1408" />
+      <lineto x="512"
+              y="1311" />
     </path>
   </group>
   <group name="Fig42"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[960, 624, 272, 184]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[984, 608, 272, 184]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000F31"
        fill="1"
        fillcolor="white"
@@ -7157,8 +7289,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
     </private>
     
     <rectangle name="Fig42.0"
-      x="960"
-      y="624"
+      x="984"
+      y="608"
       width="272"
       height="184"
       fill="1"
@@ -7167,8 +7299,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <text name="Fig42.1"
-      x="961"
-      y="625"
+      x="985"
+      y="609"
       width="270"
       height="24"
       fill="0"
@@ -7183,7 +7315,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       justification="Center"
     >Note</text>
     <group name="Fig42.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[961, 625, 64, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[985, 609, 270, 0]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000F31"
          fill="0"
          fillcolor="white"
@@ -7195,9 +7327,9 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig42.2.0"
-        x="961"
-        y="625"
-        width="64"
+        x="985"
+        y="609"
+        width="270"
         height="0"
         fill="0"
         fillcolor="white"
@@ -7206,8 +7338,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       />
     </group>
     <rectangle name="Fig42.3"
-      x="960"
-      y="649"
+      x="984"
+      y="633"
       width="272"
       height="1"
       fill="1"
@@ -7216,7 +7348,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig42.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[961, 650, 270, 98]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[985, 634, 270, 98]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000F31"
          fill="0"
          fillcolor="white"
@@ -7227,8 +7359,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig42.4.0"
-        x="961"
-        y="650"
+        x="985"
+        y="634"
         width="270"
         height="98"
         fill="0"
@@ -7237,8 +7369,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         strokecolor="black"
       />
       <text name="Fig42.4.1"
-        x="961"
-        y="650"
+        x="985"
+        y="634"
         width="270"
         height="18"
         fill="0"
@@ -7253,8 +7385,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >description : String</text>
       <text name="Fig42.4.2"
-        x="961"
-        y="668"
+        x="985"
+        y="652"
         width="270"
         height="18"
         fill="0"
@@ -7269,8 +7401,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >attachmentPath : String</text>
       <text name="Fig42.4.3"
-        x="961"
-        y="686"
+        x="985"
+        y="670"
         width="270"
         height="24"
         fill="0"
@@ -7286,8 +7418,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       >attachmentType : AttachmentType</text>
     </group>
     <rectangle name="Fig42.5"
-      x="960"
-      y="748"
+      x="984"
+      y="732"
       width="272"
       height="1"
       fill="1"
@@ -7296,7 +7428,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig42.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[961, 749, 270, 57]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[985, 733, 270, 57]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000F31"
          fill="0"
          fillcolor="white"
@@ -7307,8 +7439,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig42.6.0"
-        x="961"
-        y="749"
+        x="985"
+        y="733"
         width="270"
         height="57"
         fill="0"
@@ -7319,7 +7451,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
     </group>
   </group>
   <group name="Fig43"
-       description="org.argouml.uml.diagram.static_structure.ui.FigEnumeration[1104, 496, 135, 112]pathVisible=false;stereotypeView=0;operationsVisible=true;enumerationLiteralsVisible=true"
+       description="org.argouml.uml.diagram.static_structure.ui.FigEnumeration[1128, 480, 135, 112]pathVisible=false;stereotypeView=0;operationsVisible=true;enumerationLiteralsVisible=true"
        href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000F3B"
        fill="1"
        fillcolor="white"
@@ -7330,8 +7462,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
     </private>
     
     <rectangle name="Fig43.0"
-      x="1104"
-      y="496"
+      x="1128"
+      y="480"
       width="135"
       height="112"
       fill="1"
@@ -7340,8 +7472,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <text name="Fig43.1"
-      x="1105"
-      y="497"
+      x="1129"
+      y="481"
       width="133"
       height="45"
       fill="0"
@@ -7356,7 +7488,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       justification="Center"
     >AttachmentType</text>
     <group name="Fig43.2"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1105, 497, 133, 21]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[1129, 481, 133, 21]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000F3B"
          fill="0"
          fillcolor="white"
@@ -7367,8 +7499,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig43.2.0"
-        x="1105"
-        y="497"
+        x="1129"
+        y="481"
         width="133"
         height="21"
         fill="0"
@@ -7377,8 +7509,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         strokecolor="black"
       />
       <text name="Fig43.2.1"
-        x="1105"
-        y="497"
+        x="1129"
+        y="481"
         width="133"
         height="19"
         fill="0"
@@ -7394,8 +7526,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       >&lt;&lt;enumeration&gt;&gt;</text>
     </group>
     <rectangle name="Fig43.3"
-      x="1104"
-      y="542"
+      x="1128"
+      y="526"
       width="135"
       height="1"
       fill="1"
@@ -7404,7 +7536,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig43.4"
-         description="org.argouml.uml.diagram.ui.FigEnumLiteralsCompartment[1105, 543, 133, 44]"
+         description="org.argouml.uml.diagram.ui.FigEnumLiteralsCompartment[1129, 527, 133, 44]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000F3B"
          fill="0"
          fillcolor="white"
@@ -7415,8 +7547,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig43.4.0"
-        x="1105"
-        y="543"
+        x="1129"
+        y="527"
         width="133"
         height="44"
         fill="0"
@@ -7425,8 +7557,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         strokecolor="black"
       />
       <text name="Fig43.4.1"
-        x="1105"
-        y="543"
+        x="1129"
+        y="527"
         width="133"
         height="18"
         fill="0"
@@ -7441,8 +7573,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
         justification="Left"
       >image</text>
       <text name="Fig43.4.2"
-        x="1105"
-        y="561"
+        x="1129"
+        y="545"
         width="133"
         height="24"
         fill="0"
@@ -7458,8 +7590,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       >document</text>
     </group>
     <rectangle name="Fig43.5"
-      x="1104"
-      y="586"
+      x="1128"
+      y="570"
       width="135"
       height="1"
       fill="1"
@@ -7468,7 +7600,7 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       strokecolor="black"
     />
     <group name="Fig43.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1105, 587, 133, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[1129, 571, 133, 21]"
          href="127-0-1-1--376ef1fe:13c4cd0078a:-8000:0000000000000F3B"
          fill="0"
          fillcolor="white"
@@ -7479,8 +7611,8 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
       </private>
       
       <rectangle name="Fig43.6.0"
-        x="1105"
-        y="587"
+        x="1129"
+        y="571"
         width="133"
         height="21"
         fill="0"
@@ -7535,16 +7667,16 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
                         offset="5" />
     </private>
     <path name="Fig44.0"
-      description="org.tigris.gef.presentation.FigPoly"
+      description="org.argouml.gefext.ArgoFigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="960"
-              y="784" />
-      <lineto x="487"
-              y="784" />
+      <moveto x="984"
+              y="768" />
+      <lineto x="511"
+              y="768" />
     </path>
   </group>
   <group name="Fig45"
@@ -7592,15 +7724,277 @@ Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP
                         offset="5" />
     </private>
     <path name="Fig45.0"
+      description="org.argouml.gefext.ArgoFigPoly"
+      fill="0"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    >
+      <moveto x="1024"
+              y="608" />
+      <lineto x="1024"
+              y="375" />
+    </path>
+  </group>
+  <group name="Fig46"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[16, 320, 140, 176]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       href="127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE5"
+       fill="1"
+       fillcolor="white"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+    </private>
+    
+    <rectangle name="Fig46.0"
+      x="16"
+      y="320"
+      width="140"
+      height="176"
+      fill="1"
+      fillcolor="white"
+      stroke="1"
+      strokecolor="black"
+    />
+    <text name="Fig46.1"
+      x="17"
+      y="321"
+      width="138"
+      height="24"
+      fill="0"
+      fillcolor="white"
+      stroke="0"
+      strokecolor="black"
+      textcolor="black"
+      font="Dialog"
+      italic="false"
+      bold="false"
+      textsize="13"
+      justification="Center"
+    >Geoname</text>
+    <group name="Fig46.2"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[17, 321, 64, 0]"
+         href="127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE5"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+         visibility="0"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig46.2.0"
+        x="17"
+        y="321"
+        width="64"
+        height="0"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+    <rectangle name="Fig46.3"
+      x="16"
+      y="345"
+      width="140"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig46.4"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[17, 346, 138, 112]"
+         href="127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE5"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig46.4.0"
+        x="17"
+        y="346"
+        width="138"
+        height="112"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+      <text name="Fig46.4.1"
+        x="17"
+        y="346"
+        width="138"
+        height="18"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="13"
+        justification="Left"
+      >id : integer</text>
+      <text name="Fig46.4.2"
+        x="17"
+        y="364"
+        width="138"
+        height="18"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="13"
+        justification="Left"
+      >geonameId : Integer</text>
+      <text name="Fig46.4.3"
+        x="17"
+        y="382"
+        width="138"
+        height="18"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="13"
+        justification="Left"
+      >name : String</text>
+      <text name="Fig46.4.4"
+        x="17"
+        y="400"
+        width="138"
+        height="18"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="13"
+        justification="Left"
+      >population : Integer</text>
+      <text name="Fig46.4.5"
+        x="17"
+        y="418"
+        width="138"
+        height="24"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="13"
+        justification="Left"
+      >geometry : Integer</text>
+    </group>
+    <rectangle name="Fig46.5"
+      x="16"
+      y="458"
+      width="140"
+      height="1"
+      fill="1"
+      fillcolor="black"
+      stroke="1"
+      strokecolor="black"
+    />
+    <group name="Fig46.6"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[17, 459, 138, 35]"
+         href="127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE5"
+         fill="0"
+         fillcolor="white"
+         stroke="0"
+         strokecolor="black"
+    >
+      <private>
+      </private>
+      
+      <rectangle name="Fig46.6.0"
+        x="17"
+        y="459"
+        width="138"
+        height="35"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+      />
+    </group>
+  </group>
+  <group name="Fig47"
+       description="org.argouml.uml.diagram.ui.FigAssociation"
+       href="127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE6"
+       sourceConnector="127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE7"
+       destConnector="127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE8"
+       stroke="1"
+       strokecolor="black"
+  >
+    <private>
+      sourcePortFig="Fig46"
+      destPortFig="Fig0"
+      sourceFigNode="Fig46"
+      destFigNode="Fig0"
+      <argouml:pathitem figname="Fig47.1"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigTextGroup"
+                        ownerhref="127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE6"
+                        angle="270.0"
+                        offset="25" />
+      <argouml:pathitem figname="Fig47.2"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigMultiplicity"
+                        ownerhref="127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE7"
+                        angle="315.0"
+                        offset="5" />
+      <argouml:pathitem figname="Fig47.3"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigAssociationEndAnnotation"
+                        ownerhref="127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE7"
+                        angle="45.0"
+                        offset="5" />
+      <argouml:pathitem figname="Fig47.4"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigMultiplicity"
+                        ownerhref="127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE8"
+                        angle="225.0"
+                        offset="5" />
+      <argouml:pathitem figname="Fig47.5"
+                        classname="org.argouml.uml.diagram.ui.PathItemPlacement"
+                        figclassname="org.argouml.uml.diagram.ui.FigAssociationEndAnnotation"
+                        ownerhref="127-0-1-1-be796e5:13c629149da:-8000:0000000000000BE8"
+                        angle="135.0"
+                        offset="5" />
+    </private>
+    <path name="Fig47.0"
       description="org.tigris.gef.presentation.FigPoly"
       fill="0"
       fillcolor="white"
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="1000"
-              y="624" />
-      <lineto x="1000"
+      <moveto x="155"
+              y="391" />
+      <lineto x="208"
               y="391" />
     </path>
   </group>
