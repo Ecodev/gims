@@ -3,31 +3,20 @@ namespace Album\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Album\Model\Album;          // <-- Add this import
-use Album\Form\AlbumForm;       // <-- Add this import
+use Album\Model\Album;
+use Album\Form\AlbumForm;
 
 class AlbumController extends AbstractActionController
 {
-	protected $albumTable;
-
-	public function getAlbumTable()
-    {
-        if (!$this->albumTable) {
-            $sm = $this->getServiceLocator();
-            $this->albumTable = $sm->get('Album\Model\AlbumTable');
-        }
-        return $this->albumTable;
-    }
+    protected $albumTable;
 
     public function indexAction()
     {
-		return new ViewModel(array(
+        return new ViewModel(array(
             'albums' => $this->getAlbumTable()->fetchAll(),
         ));
-
     }
-	
-    // Add content to this method:
+
     public function addAction()
     {
         $form = new AlbumForm();
@@ -47,10 +36,8 @@ class AlbumController extends AbstractActionController
                 return $this->redirect()->toRoute('album');
             }
         }
-		
         return array('form' => $form);
     }
-
 
     public function editAction()
     {
@@ -109,6 +96,15 @@ class AlbumController extends AbstractActionController
             'id'    => $id,
             'album' => $this->getAlbumTable()->getAlbum($id)
         );
+    }
+
+    public function getAlbumTable()
+    {
+        if (!$this->albumTable) {
+            $sm = $this->getServiceLocator();
+            $this->albumTable = $sm->get('Album\Model\AlbumTable');
+        }
+        return $this->albumTable;
     }
 }
 

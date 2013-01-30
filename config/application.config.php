@@ -4,6 +4,8 @@ return array(
     'modules' => array(
         'Application',
         'Album',                  // <-- Add this line
+        'AlbumRest',              // <-- Add this line
+
     ),
 
     // These are various options for the listeners attached to the ModuleManager

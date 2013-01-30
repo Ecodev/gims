@@ -1,17 +1,17 @@
 <?php
 namespace Album\Model;
 
-use Zend\InputFilter\Factory as InputFactory;     // <-- Add this import
-use Zend\InputFilter\InputFilter;                 // <-- Add this import
-use Zend\InputFilter\InputFilterAwareInterface;   // <-- Add this import
-use Zend\InputFilter\InputFilterInterface;        // <-- Add this import
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
 
 class Album implements InputFilterAwareInterface
 {
     public $id;
     public $artist;
     public $title;
-    protected $inputFilter;                       // <-- Add this variable
+    protected $inputFilter;
 
     public function exchangeArray($data)
     {
