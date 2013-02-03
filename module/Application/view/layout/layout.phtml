@@ -1,6 +1,6 @@
 <?php echo $this->doctype(); ?>
 
-<html lang="en">
+<html lang="en" ng-app="albumcat">
     <head>
         <meta charset="utf-8">
         <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
@@ -14,9 +14,18 @@
                         ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
 
         <!-- Scripts -->
-        <?php echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
-                                      ->prependFile($this->basePath() . '/js/bootstrap.min.js')
-                                      ->prependFile($this->basePath() . '/js/jquery.min.js') ?>
+        <?php echo $this->headScript()
+//                                      ->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+//                                      ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+//                                      ->prependFile($this->basePath() . '/js/jquery.min.js')
+                                      ->prependFile($this->basePath() . '/lib/angular/angular-resource.js')
+                                      ->prependFile($this->basePath() . '/js/services.js')
+                                      ->prependFile($this->basePath() . '/js/filters.js')
+                                      ->prependFile($this->basePath() . '/js/controllers.js')
+                                      ->prependFile($this->basePath() . '/js/app.js')
+                                      ->prependFile($this->basePath() . '/lib/angular/angular.js')
+                
+                ?>
 
     </head>
     <body>
@@ -38,7 +47,9 @@
             </div>
         </div>
         <div class="container">
+            <div ng-view>assasa</div>
             <?php echo $this->content; ?>
+            
             <hr>
             <footer>
                 <p>&copy; 2005 - 2012 bycascasacLtd. <?php echo $this->translate('All rights reserved.') ?></p>

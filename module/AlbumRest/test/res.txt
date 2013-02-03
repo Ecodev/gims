@@ -1,0 +1,1410 @@
+PHPUnit 3.7.13 by Sebastian Bergmann.
+
+Configuration read from /sites/ZendSkeletonApplication/module/AlbumRest/test/phpunit.xml.dist
+
+.....class Zend\ServiceManager\ServiceManager#13 (15) {
+  protected $canonicalNames =>
+  array(55) {
+    'SharedEventManager' =>
+    string(18) "sharedeventmanager"
+    'EventManager' =>
+    string(12) "eventmanager"
+    'ModuleManager' =>
+    string(13) "modulemanager"
+    'Zend\EventManager\EventManagerInterface' =>
+    string(37) "zendeventmanagereventmanagerinterface"
+    'ServiceManager' =>
+    string(14) "servicemanager"
+    'servicemanager' =>
+    string(14) "servicemanager"
+    'Zend\ServiceManager\ServiceLocatorInterface' =>
+    string(41) "zendservicemanagerservicelocatorinterface"
+    'Zend\ServiceManager\ServiceManager' =>
+    string(32) "zendservicemanagerservicemanager"
+    'ApplicationConfig' =>
+    string(17) "applicationconfig"
+    'applicationconfig' =>
+    string(17) "applicationconfig"
+    'modulemanager' =>
+    string(13) "modulemanager"
+    'ServiceListener' =>
+    string(15) "servicelistener"
+    'servicelistener' =>
+    string(15) "servicelistener"
+    'ServiceListenerInterface' =>
+    string(24) "servicelistenerinterface"
+    'eventmanager' =>
+    string(12) "eventmanager"
+    'sharedeventmanager' =>
+    string(18) "sharedeventmanager"
+    'Application' =>
+    string(11) "application"
+    'Config' =>
+    string(6) "config"
+    'ControllerLoader' =>
+    string(16) "controllerloader"
+    'ControllerPluginManager' =>
+    string(23) "controllerpluginmanager"
+    'ConsoleAdapter' =>
+    string(14) "consoleadapter"
+    'ConsoleRouter' =>
+    string(13) "consolerouter"
+    'DependencyInjector' =>
+    string(18) "dependencyinjector"
+    'HttpRouter' =>
+    string(10) "httprouter"
+    'Request' =>
+    string(7) "request"
+    'Response' =>
+    string(8) "response"
+    'Router' =>
+    string(6) "router"
+    'ViewHelperManager' =>
+    string(17) "viewhelpermanager"
+    'ViewFeedRenderer' =>
+    string(16) "viewfeedrenderer"
+    'ViewFeedStrategy' =>
+    string(16) "viewfeedstrategy"
+    'ViewJsonRenderer' =>
+    string(16) "viewjsonrenderer"
+    'ViewJsonStrategy' =>
+    string(16) "viewjsonstrategy"
+    'ViewManager' =>
+    string(11) "viewmanager"
+    'ViewResolver' =>
+    string(12) "viewresolver"
+    'ViewTemplateMapResolver' =>
+    string(23) "viewtemplatemapresolver"
+    'ViewTemplatePathStack' =>
+    string(21) "viewtemplatepathstack"
+    'Zend\Db\Adapter\Adapter' =>
+    string(20) "zenddbadapteradapter"
+    'DispatchListener' =>
+    string(16) "dispatchlistener"
+    'RouteListener' =>
+    string(13) "routelistener"
+    'Configuration' =>
+    string(13) "configuration"
+    'Console' =>
+    string(7) "console"
+    'Di' =>
+    string(2) "di"
+    'Zend\Di\LocatorInterface' =>
+    string(22) "zenddilocatorinterface"
+    'Zend\Mvc\Controller\PluginManager' =>
+    string(30) "zendmvccontrollerpluginmanager"
+    'Zend\View\Resolver\TemplateMapResolver' =>
+    string(35) "zendviewresolvertemplatemapresolver"
+    'Zend\View\Resolver\TemplatePathStack' =>
+    string(33) "zendviewresolvertemplatepathstack"
+    'Zend\View\Resolver\AggregateResolver' =>
+    string(33) "zendviewresolveraggregateresolver"
+    'Zend\View\Resolver\ResolverInterface' =>
+    string(33) "zendviewresolverresolverinterface"
+    'controllerloader' =>
+    string(16) "controllerloader"
+    'config' =>
+    string(6) "config"
+    'AlbumRest\Controller\AlbumRest' =>
+    string(28) "albumrestcontrolleralbumrest"
+    'controllerpluginmanager' =>
+    string(23) "controllerpluginmanager"
+    'viewhelpermanager' =>
+    string(17) "viewhelpermanager"
+    'Album\Model\AlbumTable' =>
+    string(20) "albummodelalbumtable"
+    'albummodelalbumtable' =>
+    string(20) "albummodelalbumtable"
+  }
+  protected $allowOverride =>
+  bool(false)
+  protected $invokableClasses =>
+  array(3) {
+    'sharedeventmanager' =>
+    string(36) "Zend\EventManager\SharedEventManager"
+    'dispatchlistener' =>
+    string(25) "Zend\Mvc\DispatchListener"
+    'routelistener' =>
+    string(22) "Zend\Mvc\RouteListener"
+  }
+  protected $factories =>
+  array(24) {
+    'eventmanager' =>
+    class Zend\Mvc\Service\EventManagerFactory#24 (0) {
+    }
+    'modulemanager' =>
+    class Zend\Mvc\Service\ModuleManagerFactory#19 (0) {
+    }
+    'servicelistener' =>
+    class Zend\Mvc\Service\ServiceListenerFactory#22 (1) {
+      protected $defaultServiceConfig =>
+      array(3) {
+        'invokables' =>
+        array(2) {
+          'DispatchListener' =>
+          string(25) "Zend\Mvc\DispatchListener"
+          'RouteListener' =>
+          string(22) "Zend\Mvc\RouteListener"
+        }
+        'factories' =>
+        array(20) {
+          'Application' =>
+          string(35) "Zend\Mvc\Service\ApplicationFactory"
+          'Config' =>
+          string(30) "Zend\Mvc\Service\ConfigFactory"
+          'ControllerLoader' =>
+          string(40) "Zend\Mvc\Service\ControllerLoaderFactory"
+          'ControllerPluginManager' =>
+          string(47) "Zend\Mvc\Service\ControllerPluginManagerFactory"
+          'ConsoleAdapter' =>
+          string(38) "Zend\Mvc\Service\ConsoleAdapterFactory"
+          'ConsoleRouter' =>
+          string(30) "Zend\Mvc\Service\RouterFactory"
+          'DependencyInjector' =>
+          string(26) "Zend\Mvc\Service\DiFactory"
+          'HttpRouter' =>
+          string(30) "Zend\Mvc\Service\RouterFactory"
+          'Request' =>
+          string(31) "Zend\Mvc\Service\RequestFactory"
+          'Response' =>
+          string(32) "Zend\Mvc\Service\ResponseFactory"
+          'Router' =>
+          string(30) "Zend\Mvc\Service\RouterFactory"
+          'ViewHelperManager' =>
+          string(41) "Zend\Mvc\Service\ViewHelperManagerFactory"
+          'ViewFeedRenderer' =>
+          string(40) "Zend\Mvc\Service\ViewFeedRendererFactory"
+          'ViewFeedStrategy' =>
+          string(40) "Zend\Mvc\Service\ViewFeedStrategyFactory"
+          'ViewJsonRenderer' =>
+          string(40) "Zend\Mvc\Service\ViewJsonRendererFactory"
+          'ViewJsonStrategy' =>
+          string(40) "Zend\Mvc\Service\ViewJsonStrategyFactory"
+          'ViewManager' =>
+          string(35) "Zend\Mvc\Service\ViewManagerFactory"
+          'ViewResolver' =>
+          string(36) "Zend\Mvc\Service\ViewResolverFactory"
+          'ViewTemplateMapResolver' =>
+          string(47) "Zend\Mvc\Service\ViewTemplateMapResolverFactory"
+          'ViewTemplatePathStack' =>
+          string(45) "Zend\Mvc\Service\ViewTemplatePathStackFactory"
+        }
+        'aliases' =>
+        array(9) {
+          'Configuration' =>
+          string(6) "Config"
+          'Console' =>
+          string(14) "ConsoleAdapter"
+          'Di' =>
+          string(18) "DependencyInjector"
+          'Zend\Di\LocatorInterface' =>
+          string(18) "DependencyInjector"
+          'Zend\Mvc\Controller\PluginManager' =>
+          string(23) "ControllerPluginManager"
+          'Zend\View\Resolver\TemplateMapResolver' =>
+          string(23) "ViewTemplateMapResolver"
+          'Zend\View\Resolver\TemplatePathStack' =>
+          string(21) "ViewTemplatePathStack"
+          'Zend\View\Resolver\AggregateResolver' =>
+          string(12) "ViewResolver"
+          'Zend\View\Resolver\ResolverInterface' =>
+          string(12) "ViewResolver"
+        }
+      }
+    }
+    'application' =>
+    string(35) "Zend\Mvc\Service\ApplicationFactory"
+    'config' =>
+    class Zend\Mvc\Service\ConfigFactory#72 (0) {
+    }
+    'controllerloader' =>
+    class Zend\Mvc\Service\ControllerLoaderFactory#69 (0) {
+    }
+    'controllerpluginmanager' =>
+    class Zend\Mvc\Service\ControllerPluginManagerFactory#68 (0) {
+    }
+    'consoleadapter' =>
+    string(38) "Zend\Mvc\Service\ConsoleAdapterFactory"
+    'consolerouter' =>
+    string(30) "Zend\Mvc\Service\RouterFactory"
+    'dependencyinjector' =>
+    string(26) "Zend\Mvc\Service\DiFactory"
+    'httprouter' =>
+    string(30) "Zend\Mvc\Service\RouterFactory"
+    'request' =>
+    string(31) "Zend\Mvc\Service\RequestFactory"
+    'response' =>
+    string(32) "Zend\Mvc\Service\ResponseFactory"
+    'router' =>
+    string(30) "Zend\Mvc\Service\RouterFactory"
+    'viewhelpermanager' =>
+    class Zend\Mvc\Service\ViewHelperManagerFactory#73 (1) {
+      protected $defaultHelperMapClasses =>
+      array(3) {
+        [0] =>
+        string(27) "Zend\Form\View\HelperConfig"
+        [1] =>
+        string(27) "Zend\I18n\View\HelperConfig"
+        [2] =>
+        string(33) "Zend\Navigation\View\HelperConfig"
+      }
+    }
+    'viewfeedrenderer' =>
+    string(40) "Zend\Mvc\Service\ViewFeedRendererFactory"
+    'viewfeedstrategy' =>
+    string(40) "Zend\Mvc\Service\ViewFeedStrategyFactory"
+    'viewjsonrenderer' =>
+    string(40) "Zend\Mvc\Service\ViewJsonRendererFactory"
+    'viewjsonstrategy' =>
+    string(40) "Zend\Mvc\Service\ViewJsonStrategyFactory"
+    'viewmanager' =>
+    string(35) "Zend\Mvc\Service\ViewManagerFactory"
+    'viewresolver' =>
+    string(36) "Zend\Mvc\Service\ViewResolverFactory"
+    'viewtemplatemapresolver' =>
+    string(47) "Zend\Mvc\Service\ViewTemplateMapResolverFactory"
+    'viewtemplatepathstack' =>
+    string(45) "Zend\Mvc\Service\ViewTemplatePathStackFactory"
+    'zenddbadapteradapter' =>
+    string(37) "Zend\Db\Adapter\AdapterServiceFactory"
+  }
+  protected $abstractFactories =>
+  array(0) {
+  }
+  protected $pendingAbstractFactoryRequests =>
+  array(0) {
+  }
+  protected $shared =>
+  array(29) {
+    'sharedeventmanager' =>
+    bool(true)
+    'eventmanager' =>
+    bool(false)
+    'modulemanager' =>
+    bool(true)
+    'servicemanager' =>
+    bool(true)
+    'applicationconfig' =>
+    bool(true)
+    'servicelistener' =>
+    bool(true)
+    'application' =>
+    bool(true)
+    'config' =>
+    bool(true)
+    'controllerloader' =>
+    bool(true)
+    'controllerpluginmanager' =>
+    bool(true)
+    'consoleadapter' =>
+    bool(true)
+    'consolerouter' =>
+    bool(true)
+    'dependencyinjector' =>
+    bool(true)
+    'httprouter' =>
+    bool(true)
+    'request' =>
+    bool(true)
+    'response' =>
+    bool(true)
+    'router' =>
+    bool(true)
+    'viewhelpermanager' =>
+    bool(true)
+    'viewfeedrenderer' =>
+    bool(true)
+    'viewfeedstrategy' =>
+    bool(true)
+    'viewjsonrenderer' =>
+    bool(true)
+    'viewjsonstrategy' =>
+    bool(true)
+    'viewmanager' =>
+    bool(true)
+    'viewresolver' =>
+    bool(true)
+    'viewtemplatemapresolver' =>
+    bool(true)
+    'viewtemplatepathstack' =>
+    bool(true)
+    'zenddbadapteradapter' =>
+    bool(true)
+    'dispatchlistener' =>
+    bool(true)
+    'routelistener' =>
+    bool(true)
+  }
+  protected $instances =>
+  array(9) {
+    'servicemanager' =>
+          ...
+
+    'applicationconfig' =>
+    array(2) {
+      'module_listener_options' =>
+      array(2) {
+        'module_paths' =>
+        array(5) {
+          [0] =>
+          string(37) "/sites/ZendSkeletonApplication/module"
+          [1] =>
+          string(37) "/sites/ZendSkeletonApplication/vendor"
+          [2] =>
+          string(0) ""
+          [3] =>
+          string(6) "module"
+          [4] =>
+          string(6) "vendor"
+        }
+        'config_glob_paths' =>
+        array(1) {
+          [0] =>
+          string(48) "../../../config/autoload/{,*.}{global,local}.php"
+        }
+      }
+      'modules' =>
+      array(1) {
+        [0] =>
+        string(9) "AlbumRest"
+      }
+    }
+    'servicelistener' =>
+    class Zend\ModuleManager\Listener\ServiceListener#23 (4) {
+      protected $listeners =>
+      array(2) {
+        [0] =>
+        class Zend\Stdlib\CallbackHandler#51 (2) {
+          protected $callback =>
+          array(2) {
+            ...
+          }
+          protected $metadata =>
+          array(2) {
+            ...
+          }
+        }
+        [1] =>
+        class Zend\Stdlib\CallbackHandler#53 (2) {
+          protected $callback =>
+          array(2) {
+            ...
+          }
+          protected $metadata =>
+          array(2) {
+            ...
+          }
+        }
+      }
+      protected $defaultServiceManager =>
+              ...
+
+      protected $defaultServiceConfig =>
+      array(3) {
+        'invokables' =>
+        array(2) {
+          'DispatchListener' =>
+          string(25) "Zend\Mvc\DispatchListener"
+          'RouteListener' =>
+          string(22) "Zend\Mvc\RouteListener"
+        }
+        'factories' =>
+        array(20) {
+          'Application' =>
+          string(35) "Zend\Mvc\Service\ApplicationFactory"
+          'Config' =>
+          string(30) "Zend\Mvc\Service\ConfigFactory"
+          'ControllerLoader' =>
+          string(40) "Zend\Mvc\Service\ControllerLoaderFactory"
+          'ControllerPluginManager' =>
+          string(47) "Zend\Mvc\Service\ControllerPluginManagerFactory"
+          'ConsoleAdapter' =>
+          string(38) "Zend\Mvc\Service\ConsoleAdapterFactory"
+          'ConsoleRouter' =>
+          string(30) "Zend\Mvc\Service\RouterFactory"
+          'DependencyInjector' =>
+          string(26) "Zend\Mvc\Service\DiFactory"
+          'HttpRouter' =>
+          string(30) "Zend\Mvc\Service\RouterFactory"
+          'Request' =>
+          string(31) "Zend\Mvc\Service\RequestFactory"
+          'Response' =>
+          string(32) "Zend\Mvc\Service\ResponseFactory"
+          'Router' =>
+          string(30) "Zend\Mvc\Service\RouterFactory"
+          'ViewHelperManager' =>
+          string(41) "Zend\Mvc\Service\ViewHelperManagerFactory"
+          'ViewFeedRenderer' =>
+          string(40) "Zend\Mvc\Service\ViewFeedRendererFactory"
+          'ViewFeedStrategy' =>
+          string(40) "Zend\Mvc\Service\ViewFeedStrategyFactory"
+          'ViewJsonRenderer' =>
+          string(40) "Zend\Mvc\Service\ViewJsonRendererFactory"
+          'ViewJsonStrategy' =>
+          string(40) "Zend\Mvc\Service\ViewJsonStrategyFactory"
+          'ViewManager' =>
+          string(35) "Zend\Mvc\Service\ViewManagerFactory"
+          'ViewResolver' =>
+          string(36) "Zend\Mvc\Service\ViewResolverFactory"
+          'ViewTemplateMapResolver' =>
+          string(47) "Zend\Mvc\Service\ViewTemplateMapResolverFactory"
+          'ViewTemplatePathStack' =>
+          string(45) "Zend\Mvc\Service\ViewTemplatePathStackFactory"
+        }
+        'aliases' =>
+        array(9) {
+          'Configuration' =>
+          string(6) "Config"
+          'Console' =>
+          string(14) "ConsoleAdapter"
+          'Di' =>
+          string(18) "DependencyInjector"
+          'Zend\Di\LocatorInterface' =>
+          string(18) "DependencyInjector"
+          'Zend\Mvc\Controller\PluginManager' =>
+          string(23) "ControllerPluginManager"
+          'Zend\View\Resolver\TemplateMapResolver' =>
+          string(23) "ViewTemplateMapResolver"
+          'Zend\View\Resolver\TemplatePathStack' =>
+          string(21) "ViewTemplatePathStack"
+          'Zend\View\Resolver\AggregateResolver' =>
+          string(12) "ViewResolver"
+          'Zend\View\Resolver\ResolverInterface' =>
+          string(12) "ViewResolver"
+        }
+      }
+      protected $serviceManagers =>
+      array(4) {
+        '0000000051574b210000000074ca499c' =>
+        array(5) {
+          'service_manager' =>
+                      ...
+
+          'config_key' =>
+          string(15) "service_manager"
+          'module_class_interface' =>
+          string(51) "Zend\ModuleManager\Feature\ServiceProviderInterface"
+          'module_class_method' =>
+          string(16) "getServiceConfig"
+          'configuration' =>
+          array(2) {
+            ...
+          }
+        }
+        'ControllerLoader' =>
+        array(5) {
+          'service_manager' =>
+          string(16) "ControllerLoader"
+          'config_key' =>
+          string(11) "controllers"
+          'module_class_interface' =>
+          string(54) "Zend\ModuleManager\Feature\ControllerProviderInterface"
+          'module_class_method' =>
+          string(19) "getControllerConfig"
+          'configuration' =>
+          array(1) {
+            ...
+          }
+        }
+        'ControllerPluginManager' =>
+        array(5) {
+          'service_manager' =>
+          string(23) "ControllerPluginManager"
+          'config_key' =>
+          string(18) "controller_plugins"
+          'module_class_interface' =>
+          string(60) "Zend\ModuleManager\Feature\ControllerPluginProviderInterface"
+          'module_class_method' =>
+          string(25) "getControllerPluginConfig"
+          'configuration' =>
+          array(0) {
+            ...
+          }
+        }
+        'ViewHelperManager' =>
+        array(5) {
+          'service_manager' =>
+          string(17) "ViewHelperManager"
+          'config_key' =>
+          string(12) "view_helpers"
+          'module_class_interface' =>
+          string(54) "Zend\ModuleManager\Feature\ViewHelperProviderInterface"
+          'module_class_method' =>
+          string(19) "getViewHelperConfig"
+          'configuration' =>
+          array(0) {
+            ...
+          }
+        }
+      }
+    }
+    'sharedeventmanager' =>
+    class Zend\EventManager\SharedEventManager#26 (1) {
+      protected $identifiers =>
+      array(1) {
+        'Zend\Mvc\Application' =>
+        class Zend\EventManager\EventManager#61 (4) {
+          protected $events =>
+          array(1) {
+            ...
+          }
+          protected $eventClass =>
+          string(23) "Zend\EventManager\Event"
+          protected $identifiers =>
+          array(0) {
+            ...
+          }
+          protected $sharedManager =>
+          NULL
+        }
+      }
+    }
+    'modulemanager' =>
+    class Zend\ModuleManager\ModuleManager#56 (6) {
+      protected $loadedModules =>
+      array(1) {
+        'AlbumRest' =>
+        class AlbumRest\Module#66 (0) {
+        }
+      }
+      protected $events =>
+      class Zend\EventManager\EventManager#25 (4) {
+        protected $events =>
+        array(4) {
+          'loadModules' =>
+          class Zend\Stdlib\PriorityQueue#30 (3) {
+            ...
+          }
+          'loadModule.resolve' =>
+          class Zend\Stdlib\PriorityQueue#35 (3) {
+            ...
+          }
+          'loadModule' =>
+          class Zend\Stdlib\PriorityQueue#39 (3) {
+            ...
+          }
+          'loadModules.post' =>
+          class Zend\Stdlib\PriorityQueue#52 (3) {
+            ...
+          }
+        }
+        protected $eventClass =>
+        string(23) "Zend\EventManager\Event"
+        protected $identifiers =>
+        array(2) {
+          [0] =>
+          string(32) "Zend\ModuleManager\ModuleManager"
+          [2] =>
+          string(14) "module_manager"
+        }
+        protected $sharedManager =>
+        class Zend\EventManager\SharedEventManager#26 (1) {
+          protected $identifiers =>
+          array(1) {
+            ...
+          }
+        }
+      }
+      protected $event =>
+      class Zend\ModuleManager\ModuleEvent#55 (7) {
+        protected $module =>
+        class AlbumRest\Module#66 (0) {
+        }
+        protected $moduleName =>
+        string(9) "AlbumRest"
+        protected $configListener =>
+        class Zend\ModuleManager\Listener\ConfigListener#27 (7) {
+          protected $listeners =>
+          array(3) {
+            ...
+          }
+          protected $configs =>
+          array(3) {
+            ...
+          }
+          protected $mergedConfig =>
+          array(5) {
+            ...
+          }
+          protected $mergedConfigObject =>
+          NULL
+          protected $skipConfig =>
+          bool(false)
+          protected $paths =>
+          array(1) {
+            ...
+          }
+          protected $options =>
+          class Zend\ModuleManager\Listener\ListenerOptions#20 (8) {
+            ...
+          }
+        }
+        protected $name =>
+        string(16) "loadModules.post"
+        protected $target =>
+                  ...
+
+        protected $params =>
+        array(2) {
+          'ServiceManager' =>
+                      ...
+
+          'configListener' =>
+          class Zend\ModuleManager\Listener\ConfigListener#27 (7) {
+            ...
+          }
+        }
+        protected $stopPropagation =>
+        bool(false)
+      }
+      protected $loadFinished =>
+      bool(true)
+      protected $modules =>
+      array(1) {
+        [0] =>
+        string(9) "AlbumRest"
+      }
+      protected $modulesAreLoaded =>
+      bool(true)
+    }
+    'config' =>
+    array(5) {
+      'controllers' =>
+      array(1) {
+        'invokables' =>
+        array(1) {
+          'AlbumRest\Controller\AlbumRest' =>
+          string(40) "AlbumRest\Controller\AlbumRestController"
+        }
+      }
+      'router' =>
+      array(1) {
+        'routes' =>
+        array(1) {
+          'album-rest' =>
+          array(2) {
+            ...
+          }
+        }
+      }
+      'view_manager' =>
+      array(1) {
+        'strategies' =>
+        array(1) {
+          [0] =>
+          string(16) "ViewJsonStrategy"
+        }
+      }
+      'db' =>
+      array(5) {
+        'driver' =>
+        string(3) "Pdo"
+        'dsn' =>
+        string(39) "mysql:dbname=zf2tutorial;host=localhost"
+        'driver_options' =>
+        array(1) {
+          [1002] =>
+          string(16) "SET NAMES 'UTF8'"
+        }
+        'username' =>
+        string(11) "zf2tutorial"
+        'password' =>
+        string(11) "zf2tutorial"
+      }
+      'service_manager' =>
+      array(1) {
+        'factories' =>
+        array(1) {
+          'Zend\Db\Adapter\Adapter' =>
+          string(37) "Zend\Db\Adapter\AdapterServiceFactory"
+        }
+      }
+    }
+    'controllerloader' =>
+    class Zend\Mvc\Controller\ControllerManager#70 (18) {
+      protected $autoAddInvokableClass =>
+      bool(false)
+      protected $allowOverride =>
+      bool(true)
+      protected $creationOptions =>
+      NULL
+      protected $serviceLocator =>
+              ...
+
+      protected $canonicalNames =>
+      array(1) {
+        'AlbumRest\Controller\AlbumRest' =>
+        string(28) "albumrestcontrolleralbumrest"
+      }
+      protected $invokableClasses =>
+      array(1) {
+        'albumrestcontrolleralbumrest' =>
+        string(40) "AlbumRest\Controller\AlbumRestController"
+      }
+      protected $factories =>
+      array(0) {
+      }
+      protected $abstractFactories =>
+      array(0) {
+      }
+      protected $pendingAbstractFactoryRequests =>
+      array(0) {
+      }
+      protected $shared =>
+      array(1) {
+        'albumrestcontrolleralbumrest' =>
+        bool(true)
+      }
+      protected $instances =>
+      array(0) {
+      }
+      protected $aliases =>
+      array(0) {
+      }
+      protected $initializers =>
+      array(2) {
+        [0] =>
+        class Closure#71 (0) {
+        }
+        [1] =>
+        array(2) {
+          [0] =>
+                      ...
+
+          [1] =>
+          string(28) "injectControllerDependencies"
+        }
+      }
+      protected $peeringServiceManagers =>
+      array(1) {
+        [0] =>
+                  ...
+
+      }
+      protected $shareByDefault =>
+      bool(true)
+      protected $retrieveFromPeeringManagerFirst =>
+      bool(false)
+      protected $throwExceptionInCreate =>
+      bool(true)
+      protected $canonicalNamesReplacements =>
+      array(5) {
+        '-' =>
+        string(0) ""
+        '_' =>
+        string(0) ""
+        ' ' =>
+        string(0) ""
+        '\' =>
+        string(0) ""
+        '/' =>
+        string(0) ""
+      }
+    }
+    'controllerpluginmanager' =>
+    class Zend\Mvc\Controller\PluginManager#74 (19) {
+      protected $invokableClasses =>
+      array(7) {
+        'flashmessenger' =>
+        string(41) "Zend\Mvc\Controller\Plugin\FlashMessenger"
+        'forward' =>
+        string(34) "Zend\Mvc\Controller\Plugin\Forward"
+        'layout' =>
+        string(33) "Zend\Mvc\Controller\Plugin\Layout"
+        'params' =>
+        string(33) "Zend\Mvc\Controller\Plugin\Params"
+        'postredirectget' =>
+        string(42) "Zend\Mvc\Controller\Plugin\PostRedirectGet"
+        'redirect' =>
+        string(35) "Zend\Mvc\Controller\Plugin\Redirect"
+        'url' =>
+        string(30) "Zend\Mvc\Controller\Plugin\Url"
+      }
+      protected $aliases =>
+      array(1) {
+        'prg' =>
+        string(15) "postredirectget"
+      }
+      protected $controller =>
+      NULL
+      protected $allowOverride =>
+      bool(true)
+      protected $autoAddInvokableClass =>
+      bool(true)
+      protected $creationOptions =>
+      NULL
+      protected $serviceLocator =>
+              ...
+
+      protected $canonicalNames =>
+      array(0) {
+      }
+      protected $factories =>
+      array(0) {
+      }
+      protected $abstractFactories =>
+      array(0) {
+      }
+      protected $pendingAbstractFactoryRequests =>
+      array(0) {
+      }
+      protected $shared =>
+      array(0) {
+      }
+      protected $instances =>
+      array(0) {
+      }
+      protected $initializers =>
+      array(2) {
+        [0] =>
+        array(2) {
+          [0] =>
+                      ...
+
+          [1] =>
+          string(16) "injectController"
+        }
+        [1] =>
+        class Closure#75 (0) {
+        }
+      }
+      protected $peeringServiceManagers =>
+      array(0) {
+      }
+      protected $shareByDefault =>
+      bool(true)
+      protected $retrieveFromPeeringManagerFirst =>
+      bool(false)
+      protected $throwExceptionInCreate =>
+      bool(true)
+      protected $canonicalNamesReplacements =>
+      array(5) {
+        '-' =>
+        string(0) ""
+        '_' =>
+        string(0) ""
+        ' ' =>
+        string(0) ""
+        '\' =>
+        string(0) ""
+        '/' =>
+        string(0) ""
+      }
+    }
+    'viewhelpermanager' =>
+    class Zend\View\HelperPluginManager#77 (19) {
+      protected $invokableClasses =>
+      array(76) {
+        'cycle' =>
+        string(22) "Zend\View\Helper\Cycle"
+        'declarevars' =>
+        string(28) "Zend\View\Helper\DeclareVars"
+        'escapehtml' =>
+        string(27) "Zend\View\Helper\EscapeHtml"
+        'escapehtmlattr' =>
+        string(31) "Zend\View\Helper\EscapeHtmlAttr"
+        'escapejs' =>
+        string(25) "Zend\View\Helper\EscapeJs"
+        'escapecss' =>
+        string(26) "Zend\View\Helper\EscapeCss"
+        'escapeurl' =>
+        string(26) "Zend\View\Helper\EscapeUrl"
+        'gravatar' =>
+        string(25) "Zend\View\Helper\Gravatar"
+        'headlink' =>
+        string(25) "Zend\View\Helper\HeadLink"
+        'headmeta' =>
+        string(25) "Zend\View\Helper\HeadMeta"
+        'headscript' =>
+        string(27) "Zend\View\Helper\HeadScript"
+        'headstyle' =>
+        string(26) "Zend\View\Helper\HeadStyle"
+        'headtitle' =>
+        string(26) "Zend\View\Helper\HeadTitle"
+        'htmlflash' =>
+        string(26) "Zend\View\Helper\HtmlFlash"
+        'htmllist' =>
+        string(25) "Zend\View\Helper\HtmlList"
+        'htmlobject' =>
+        string(27) "Zend\View\Helper\HtmlObject"
+        'htmlpage' =>
+        string(25) "Zend\View\Helper\HtmlPage"
+        'htmlquicktime' =>
+        string(30) "Zend\View\Helper\HtmlQuicktime"
+        'inlinescript' =>
+        string(29) "Zend\View\Helper\InlineScript"
+        'json' =>
+        string(21) "Zend\View\Helper\Json"
+        'layout' =>
+        string(23) "Zend\View\Helper\Layout"
+        'paginationcontrol' =>
+        string(34) "Zend\View\Helper\PaginationControl"
+        'partialloop' =>
+        string(28) "Zend\View\Helper\PartialLoop"
+        'partial' =>
+        string(24) "Zend\View\Helper\Partial"
+        'placeholder' =>
+        string(28) "Zend\View\Helper\Placeholder"
+        'renderchildmodel' =>
+        string(33) "Zend\View\Helper\RenderChildModel"
+        'rendertoplaceholder' =>
+        string(36) "Zend\View\Helper\RenderToPlaceholder"
+        'serverurl' =>
+        string(26) "Zend\View\Helper\ServerUrl"
+        'viewmodel' =>
+        string(26) "Zend\View\Helper\ViewModel"
+        'form' =>
+        string(26) "Zend\Form\View\Helper\Form"
+        'formbutton' =>
+        string(32) "Zend\Form\View\Helper\FormButton"
+        'formcaptcha' =>
+        string(33) "Zend\Form\View\Helper\FormCaptcha"
+        'captchadumb' =>
+        string(34) "Zend\Form\View\Helper\Captcha\Dumb"
+        'formcaptchadumb' =>
+        string(34) "Zend\Form\View\Helper\Captcha\Dumb"
+        'captchafiglet' =>
+        string(36) "Zend\Form\View\Helper\Captcha\Figlet"
+        'formcaptchafiglet' =>
+        string(36) "Zend\Form\View\Helper\Captcha\Figlet"
+        'captchaimage' =>
+        string(35) "Zend\Form\View\Helper\Captcha\Image"
+        'formcaptchaimage' =>
+        string(35) "Zend\Form\View\Helper\Captcha\Image"
+        'captcharecaptcha' =>
+        string(39) "Zend\Form\View\Helper\Captcha\ReCaptcha"
+        'formcaptcharecaptcha' =>
+        string(39) "Zend\Form\View\Helper\Captcha\ReCaptcha"
+        'formcheckbox' =>
+        string(34) "Zend\Form\View\Helper\FormCheckbox"
+        'formcollection' =>
+        string(36) "Zend\Form\View\Helper\FormCollection"
+        'formcolor' =>
+        string(31) "Zend\Form\View\Helper\FormColor"
+        'formdate' =>
+        string(30) "Zend\Form\View\Helper\FormDate"
+        'formdatetime' =>
+        string(34) "Zend\Form\View\Helper\FormDateTime"
+        'formdatetimelocal' =>
+        string(39) "Zend\Form\View\Helper\FormDateTimeLocal"
+        'formelement' =>
+        string(33) "Zend\Form\View\Helper\FormElement"
+        'formelementerrors' =>
+        string(39) "Zend\Form\View\Helper\FormElementErrors"
+        'formemail' =>
+        string(31) "Zend\Form\View\Helper\FormEmail"
+        'formfile' =>
+        string(30) "Zend\Form\View\Helper\FormFile"
+        'formhidden' =>
+        string(32) "Zend\Form\View\Helper\FormHidden"
+        'formimage' =>
+        string(31) "Zend\Form\View\Helper\FormImage"
+        'forminput' =>
+        string(31) "Zend\Form\View\Helper\FormInput"
+        'formlabel' =>
+        string(31) "Zend\Form\View\Helper\FormLabel"
+        'formmonth' =>
+        string(31) "Zend\Form\View\Helper\FormMonth"
+        'formmulticheckbox' =>
+        string(39) "Zend\Form\View\Helper\FormMultiCheckbox"
+        'formnumber' =>
+        string(32) "Zend\Form\View\Helper\FormNumber"
+        'formpassword' =>
+        string(34) "Zend\Form\View\Helper\FormPassword"
+        'formradio' =>
+        string(31) "Zend\Form\View\Helper\FormRadio"
+        'formrange' =>
+        string(31) "Zend\Form\View\Helper\FormRange"
+        'formreset' =>
+        string(31) "Zend\Form\View\Helper\FormReset"
+        'formrow' =>
+        string(29) "Zend\Form\View\Helper\FormRow"
+        'formsearch' =>
+        string(32) "Zend\Form\View\Helper\FormSearch"
+        'formselect' =>
+        string(32) "Zend\Form\View\Helper\FormSelect"
+        'formsubmit' =>
+        string(32) "Zend\Form\View\Helper\FormSubmit"
+        'formtel' =>
+        string(29) "Zend\Form\View\Helper\FormTel"
+        'formtext' =>
+        string(30) "Zend\Form\View\Helper\FormText"
+        'formtextarea' =>
+        string(34) "Zend\Form\View\Helper\FormTextarea"
+        'formtime' =>
+        string(30) "Zend\Form\View\Helper\FormTime"
+        'formurl' =>
+        string(29) "Zend\Form\View\Helper\FormUrl"
+        'formweek' =>
+        string(30) "Zend\Form\View\Helper\FormWeek"
+        'currencyformat' =>
+        string(36) "Zend\I18n\View\Helper\CurrencyFormat"
+        'dateformat' =>
+        string(32) "Zend\I18n\View\Helper\DateFormat"
+        'numberformat' =>
+        string(34) "Zend\I18n\View\Helper\NumberFormat"
+        'translate' =>
+        string(31) "Zend\I18n\View\Helper\Translate"
+        'translateplural' =>
+        string(37) "Zend\I18n\View\Helper\TranslatePlural"
+      }
+      protected $renderer =>
+      NULL
+      protected $allowOverride =>
+      bool(true)
+      protected $autoAddInvokableClass =>
+      bool(true)
+      protected $creationOptions =>
+      NULL
+      protected $serviceLocator =>
+              ...
+
+      protected $canonicalNames =>
+      array(53) {
+        'form' =>
+        string(4) "form"
+        'formbutton' =>
+        string(10) "formbutton"
+        'formcaptcha' =>
+        string(11) "formcaptcha"
+        'captchadumb' =>
+        string(11) "captchadumb"
+        'formcaptchadumb' =>
+        string(15) "formcaptchadumb"
+        'captchafiglet' =>
+        string(13) "captchafiglet"
+        'formcaptchafiglet' =>
+        string(17) "formcaptchafiglet"
+        'captchaimage' =>
+        string(12) "captchaimage"
+        'formcaptchaimage' =>
+        string(16) "formcaptchaimage"
+        'captcharecaptcha' =>
+        string(16) "captcharecaptcha"
+        'formcaptcharecaptcha' =>
+        string(20) "formcaptcharecaptcha"
+        'formcheckbox' =>
+        string(12) "formcheckbox"
+        'formcollection' =>
+        string(14) "formcollection"
+        'formcolor' =>
+        string(9) "formcolor"
+        'formdate' =>
+        string(8) "formdate"
+        'formdatetime' =>
+        string(12) "formdatetime"
+        'formdatetimelocal' =>
+        string(17) "formdatetimelocal"
+        'formelement' =>
+        string(11) "formelement"
+        'formelementerrors' =>
+        string(17) "formelementerrors"
+        'formemail' =>
+        string(9) "formemail"
+        'formfile' =>
+        string(8) "formfile"
+        'formhidden' =>
+        string(10) "formhidden"
+        'formimage' =>
+        string(9) "formimage"
+        'forminput' =>
+        string(9) "forminput"
+        'formlabel' =>
+        string(9) "formlabel"
+        'formmonth' =>
+        string(9) "formmonth"
+        'formmulticheckbox' =>
+        string(17) "formmulticheckbox"
+        'formnumber' =>
+        string(10) "formnumber"
+        'formpassword' =>
+        string(12) "formpassword"
+        'formradio' =>
+        string(9) "formradio"
+        'formrange' =>
+        string(9) "formrange"
+        'formreset' =>
+        string(9) "formreset"
+        'form_reset' =>
+        string(9) "formreset"
+        'formrow' =>
+        string(7) "formrow"
+        'form_row' =>
+        string(7) "formrow"
+        'formsearch' =>
+        string(10) "formsearch"
+        'formselect' =>
+        string(10) "formselect"
+        'formsubmit' =>
+        string(10) "formsubmit"
+        'formtel' =>
+        string(7) "formtel"
+        'formtext' =>
+        string(8) "formtext"
+        'formtextarea' =>
+        string(12) "formtextarea"
+        'formtime' =>
+        string(8) "formtime"
+        'formurl' =>
+        string(7) "formurl"
+        'formweek' =>
+        string(8) "formweek"
+        'currencyformat' =>
+        string(14) "currencyformat"
+        'dateformat' =>
+        string(10) "dateformat"
+        'numberformat' =>
+        string(12) "numberformat"
+        'translate' =>
+        string(9) "translate"
+        'translateplural' =>
+        string(15) "translateplural"
+        'navigation' =>
+        string(10) "navigation"
+        'url' =>
+        string(3) "url"
+        'basepath' =>
+        string(8) "basepath"
+        'doctype' =>
+        string(7) "doctype"
+      }
+      protected $factories =>
+      array(4) {
+        'navigation' =>
+        class Closure#80 (0) {
+        }
+        'url' =>
+        class Closure#81 (0) {
+        }
+        'basepath' =>
+        class Closure#82 (0) {
+        }
+        'doctype' =>
+        class Closure#83 (0) {
+        }
+      }
+      protected $abstractFactories =>
+      array(0) {
+      }
+      protected $pendingAbstractFactoryRequests =>
+      array(0) {
+      }
+      protected $shared =>
+      array(51) {
+        'form' =>
+        bool(true)
+        'formbutton' =>
+        bool(true)
+        'formcaptcha' =>
+        bool(true)
+        'captchadumb' =>
+        bool(true)
+        'formcaptchadumb' =>
+        bool(true)
+        'captchafiglet' =>
+        bool(true)
+        'formcaptchafiglet' =>
+        bool(true)
+        'captchaimage' =>
+        bool(true)
+        'formcaptchaimage' =>
+        bool(true)
+        'captcharecaptcha' =>
+        bool(true)
+        'formcaptcharecaptcha' =>
+        bool(true)
+        'formcheckbox' =>
+        bool(true)
+        'formcollection' =>
+        bool(true)
+        'formcolor' =>
+        bool(true)
+        'formdate' =>
+        bool(true)
+        'formdatetime' =>
+        bool(true)
+        'formdatetimelocal' =>
+        bool(true)
+        'formelement' =>
+        bool(true)
+        'formelementerrors' =>
+        bool(true)
+        'formemail' =>
+        bool(true)
+        'formfile' =>
+        bool(true)
+        'formhidden' =>
+        bool(true)
+        'formimage' =>
+        bool(true)
+        'forminput' =>
+        bool(true)
+        'formlabel' =>
+        bool(true)
+        'formmonth' =>
+        bool(true)
+        'formmulticheckbox' =>
+        bool(true)
+        'formnumber' =>
+        bool(true)
+        'formpassword' =>
+        bool(true)
+        'formradio' =>
+        bool(true)
+        'formrange' =>
+        bool(true)
+        'formreset' =>
+        bool(true)
+        'formrow' =>
+        bool(true)
+        'formsearch' =>
+        bool(true)
+        'formselect' =>
+        bool(true)
+        'formsubmit' =>
+        bool(true)
+        'formtel' =>
+        bool(true)
+        'formtext' =>
+        bool(true)
+        'formtextarea' =>
+        bool(true)
+        'formtime' =>
+        bool(true)
+        'formurl' =>
+        bool(true)
+        'formweek' =>
+        bool(true)
+        'currencyformat' =>
+        bool(true)
+        'dateformat' =>
+        bool(true)
+        'numberformat' =>
+        bool(true)
+        'translate' =>
+        bool(true)
+        'translateplural' =>
+        bool(true)
+        'navigation' =>
+        bool(true)
+        'url' =>
+        bool(true)
+        'basepath' =>
+        bool(true)
+        'doctype' =>
+        bool(true)
+      }
+      protected $instances =>
+      array(0) {
+      }
+      protected $aliases =>
+      array(0) {
+      }
+      protected $initializers =>
+      array(3) {
+        [0] =>
+        array(2) {
+          [0] =>
+                      ...
+
+          [1] =>
+          string(16) "injectTranslator"
+        }
+        [1] =>
+        array(2) {
+          [0] =>
+                      ...
+
+          [1] =>
+          string(14) "injectRenderer"
+        }
+        [2] =>
+        class Closure#78 (0) {
+        }
+      }
+      protected $peeringServiceManagers =>
+      array(0) {
+      }
+      protected $shareByDefault =>
+      bool(true)
+      protected $retrieveFromPeeringManagerFirst =>
+      bool(false)
+      protected $throwExceptionInCreate =>
+      bool(true)
+      protected $canonicalNamesReplacements =>
+      array(5) {
+        '-' =>
+        string(0) ""
+        '_' =>
+        string(0) ""
+        ' ' =>
+        string(0) ""
+        '\' =>
+        string(0) ""
+        '/' =>
+        string(0) ""
+      }
+    }
+  }
+  protected $aliases =>
+  array(12) {
+    'zendeventmanagereventmanagerinterface' =>
+    string(12) "eventmanager"
+    'zendservicemanagerservicelocatorinterface' =>
+    string(14) "servicemanager"
+    'zendservicemanagerservicemanager' =>
+    string(14) "servicemanager"
+    'configuration' =>
+    string(6) "config"
+    'console' =>
+    string(14) "consoleadapter"
+    'di' =>
+    string(18) "dependencyinjector"
+    'zenddilocatorinterface' =>
+    string(18) "dependencyinjector"
+    'zendmvccontrollerpluginmanager' =>
+    string(23) "controllerpluginmanager"
+    'zendviewresolvertemplatemapresolver' =>
+    string(23) "viewtemplatemapresolver"
+    'zendviewresolvertemplatepathstack' =>
+    string(21) "viewtemplatepathstack"
+    'zendviewresolveraggregateresolver' =>
+    string(12) "viewresolver"
+    'zendviewresolverresolverinterface' =>
+    string(12) "viewresolver"
+  }
+  protected $initializers =>
+  array(3) {
+    [0] =>
+    class Closure#18 (0) {
+    }
+    [1] =>
+    class Closure#17 (0) {
+    }
+    [2] =>
+    class Closure#16 (0) {
+    }
+  }
+  protected $peeringServiceManagers =>
+  array(0) {
+  }
+  protected $shareByDefault =>
+  bool(true)
+  protected $retrieveFromPeeringManagerFirst =>
+  bool(false)
+  protected $throwExceptionInCreate =>
+  bool(true)
+  protected $canonicalNamesReplacements =>
+  array(5) {
+    '-' =>
+    string(0) ""
+    '_' =>
+    string(0) ""
+    ' ' =>
+    string(0) ""
+    '\' =>
+    string(0) ""
+    '/' =>
+    string(0) ""
+  }
+}
