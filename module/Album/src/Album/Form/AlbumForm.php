@@ -7,6 +7,8 @@ class AlbumForm extends Form
 {
     public function __construct($name = null)
     {
+        $this->setAttribute('data-ng-submit', 'submit()');
+        
         // we want to ignore the name passed
         parent::__construct('album');
         $this->setAttribute('method', 'post');
@@ -14,12 +16,15 @@ class AlbumForm extends Form
             'name' => 'id',
             'attributes' => array(
                 'type'  => 'hidden',
+                'data-ng-model' => 'album.id',
             ),
         ));
         $this->add(array(
             'name' => 'artist',
             'attributes' => array(
                 'type'  => 'text',
+                'data-ng-model' => 'album.artist',
+                'required' => true,
             ),
             'options' => array(
                 'label' => 'Artist',
@@ -29,6 +34,8 @@ class AlbumForm extends Form
             'name' => 'title',
             'attributes' => array(
                 'type'  => 'text',
+                'data-ng-model' => 'album.title',
+                'required' => true,
             ),
             'options' => array(
                 'label' => 'Title',
