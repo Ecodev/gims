@@ -1,2 +1,6 @@
 /nbproject/private/
+composer.lock
 *.uml~
+.DS_Store
+._*
+.~lock.*
