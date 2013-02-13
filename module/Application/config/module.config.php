@@ -69,7 +69,8 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController'
+            'Application\Controller\Index' => 'Application\Controller\IndexController',
+            'Application\Controller\Console' => 'Application\Controller\ConsoleController'
         ),
     ),
     'view_manager' => array(
@@ -86,6 +87,21 @@ return array(
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',
+        ),
+    ),
+    'console' => Array(
+        'router' => array(
+            'routes' => array(
+                'database-update' => array(
+                    'options' => array(
+                        'route'    => 'database update',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Console',
+                            'action'     => 'databaseUpdate'
+                        ),
+                    ),
+                ),
+            ),
         ),
     ),
 );
