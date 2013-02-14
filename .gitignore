@@ -5,3 +5,5 @@ composer.lock
 .DS_Store
 ._*
 .~lock.*
+htdocs/css/
+htdocs/js/min/

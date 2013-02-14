@@ -89,6 +89,19 @@ return array(
             __DIR__ . '/../view',
         ),
     ),
+    'view_helpers' => array(
+        'factories' => array(
+            'showmessages' => function($sm) {
+                $helper = new ModuleName\Helper\MessageShower();
+                // do stuff with $sm or the $helper
+                return $helper;           
+            },
+        ),
+        'invokables' => array(
+            'headLink' => 'Application\View\Helper\HeadLink',
+            'headScript' => 'Application\View\Helper\HeadScript',
+        ),  
+    ),
     'console' => Array(
         'router' => array(
             'routes' => array(
