@@ -2,8 +2,12 @@
 
 namespace Application\View\Helper;
 
-class HeadScript extends \Zend\View\Helper\HeadScript
+use Zend\ServiceManager\ServiceLocatorAwareInterface;  
+
+class HeadScript extends \Zend\View\Helper\HeadScript implements ServiceLocatorAwareInterface
 {
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
+    
 	/**
 	 * Inject the last modified time of file.
 	 * This avoid browser cache and force reloading when the file changed.
@@ -13,12 +17,12 @@ class HeadScript extends \Zend\View\Helper\HeadScript
 	protected function addCacheStamp($fileName) 
 	{
 		// In developent, use non minified version
-		if (APPLICATION_ENV == 'development')
+		if (!$this->getServiceLocator()->getServiceLocator()->get('Config')['compressJS'])
 		{
 			$fileName = str_replace('/js/min/', '/js/', $fileName);
 		}
 		
-		$fullPath = DOCUMENT_ROOT . $fileName;
+		$fullPath = 'htdocs/' . $fileName;
 		if (is_file($fullPath))
 		{
 			$fileName = $this->getView()->serverUrl() . $this->view->basePath($fileName) . '?' . filemtime($fullPath);
@@ -45,7 +49,7 @@ class HeadScript extends \Zend\View\Helper\HeadScript
 			if (is_array($fileName))
 			{
 				// If we are in development, actually don't concatenate anything
-				if (APPLICATION_ENV == 'development')
+				if (!$this->getServiceLocator()->getServiceLocator()->get('Config')['compressJS'])
 				{
 					foreach ($fileName[1] as $f)
 					{
@@ -67,4 +71,5 @@ class HeadScript extends \Zend\View\Helper\HeadScript
 		
 		return parent::__call($method, $args);
 	}
+
 }

@@ -12,6 +12,16 @@
  */
 
 return array(
+    'db' => array(
+        'username' => 'gims',
+        'password' => '',
+    ),
+    
+    // Suggested values for development
+    'compressJS' => false,
+    
+    
+    
     // Whether or not to enable a configuration cache.
     // If enabled, the merged configuration will be cached and used in
     // subsequent requests.

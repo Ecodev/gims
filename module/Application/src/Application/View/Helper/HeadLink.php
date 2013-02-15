@@ -16,7 +16,7 @@ class HeadLink extends \Zend\View\Helper\HeadLink
     {
         if (strpos($method, 'Stylesheet')) {
             $fileName = $args[0];
-            $fullPath = DOCUMENT_ROOT . $fileName;
+            $fullPath = 'htdocs/' . $fileName;
             if (is_file($fullPath)) {
                 $fileName .= '?' . filemtime($fullPath);
                 $args[0] = $fileName;

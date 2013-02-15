@@ -8,6 +8,7 @@
  */
 
 return array(
+    'compressJS' => true,
     'router' => array(
         'routes' => array(
             'home' => array(

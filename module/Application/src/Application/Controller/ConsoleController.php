@@ -138,6 +138,8 @@ class ConsoleController extends AbstractActionController
             echo "updating to version $v...\n";
             $this->executeBatchSql($sql, $v);
             echo "\nsuccessful update to version $v !\n";
+            $databaseVersion->value = $v;
+            $databaseVersion->save();
         }
     }
 }

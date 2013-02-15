@@ -24,7 +24,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
 
     public function getServiceConfig()
     {
-        // List of class name of models for which we will configure ModelTable 
+        // List of class name of models for which we will configure \Application\Mapper\*
         // (so we can receive \Application\Model\* object when querying database)
         $models = array(
             'Answer',
