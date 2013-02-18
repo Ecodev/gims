@@ -1,14 +1,14 @@
 {
-    "name": "zendframework/skeleton-application",
-    "description": "Skeleton Application for ZF2",
-    "license": "BSD-3-Clause",
-    "keywords": [
-        "framework",
-        "zf2"
-    ],
-    "homepage": "http://framework.zend.com/",
+    "name": "ecodev/gims",
+    "description": "GIMS",
+    "homepage": "http://www.gims.pro/",
     "require": {
-        "php": ">=5.3.3",
-        "zendframework/zendframework": "2.*"
+        "php": ">=5.4.0",
+        "ext-pgsql": "*",
+        "zendframework/zendframework": "2.*",
+        "phing/phing": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
     }
 }

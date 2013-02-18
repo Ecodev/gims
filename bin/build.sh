@@ -15,6 +15,8 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 cd $DIR/..
 
+echo "Updating database..."
+php htdocs/index.php database update
 
 echo "Compiling CSS..."
 compass compile -s compressed --force

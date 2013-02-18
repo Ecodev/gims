@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="GIMS" default="build">
+
+    <!-- Install all PHP dependencies via composer -->
+    <target name="composer-install" description="Installs dependencies via composer install">
+        <composer command="install">
+            <arg value="--dev" />
+            <arg value="--prefer-source" />
+        </composer>
+    </target>
+    
+    <!-- ============================================  -->
+    <!-- Target: build                                 -->
+    <!-- ============================================  -->
+    <target name="build" depends="composer-install">
+        
+        <exec command="./bin/build.sh" checkreturn="true" />
+    </target>
+
+    <!-- ============================================  -->
+    <!-- (DEFAULT)  Target: dist                       --> 
+    <!-- ============================================  -->
+    <target name="clean">
+        <echo msg="Clean..." />
+        <delete dir=".sass-cache/" includeemptydirs="true" verbose="true" failonerror="true" />
+        <delete dir="htdocs/css/" includeemptydirs="true" verbose="true" failonerror="true" />
+        <delete dir="htdocs/js/min/" includeemptydirs="true" verbose="true" failonerror="true" />
+    </target>
+    
+    <target name="test" depends="build">
+        <echo msg="Testing..." />
+        <exec command="cd module/Application/test/ ; ../../../vendor/bin/phpunit" logoutput="/dev/stdout" />
+    </target>
+</project>

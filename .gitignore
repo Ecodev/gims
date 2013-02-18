@@ -1,6 +1,5 @@
 /nbproject/private/
 .sass-cache/
-composer.lock
 *.uml~
 .DS_Store
 ._*
