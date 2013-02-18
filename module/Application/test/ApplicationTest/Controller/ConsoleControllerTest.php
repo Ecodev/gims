@@ -23,7 +23,8 @@ class ConsoleControllerTest extends \Zend\Test\PHPUnit\Controller\AbstractConsol
 
     public function testDatabaseUpdate()
     {
-        // @TODO find out how to test with database or mock it
+        // @TODO find out how to test with database or mock it. 
+        // For now it seems that the global configuration is not properly loaded for some reason
 //        $this->getApplicationServiceLocator()->setFactory( 'Zend\Db\Adapter\Adapter', 'Zend\Db\Adapter\AdapterServiceFactory');
 //        $this->dispatch('database update');
 //        $this->assertConsoleOutputContains('current version is:');
