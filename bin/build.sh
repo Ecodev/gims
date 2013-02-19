@@ -36,7 +36,7 @@ for file in *.js ; do
 	fi
 
 	echo "$file"
-	#java -jar ../../vendor/closure-compiler/compiler.jar --compilation_level SIMPLE_OPTIMIZATIONS  --js "$file" --js_output_file "min/$file" $thirdparty
+	java -jar ../../vendor/closure-compiler/compiler.jar --compilation_level SIMPLE_OPTIMIZATIONS  --js "$file" --js_output_file "min/$file" $thirdparty
 done
 
 

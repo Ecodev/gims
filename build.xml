@@ -15,21 +15,21 @@
     <!-- ============================================  -->
     <target name="build" depends="composer-install">
         
-        <exec command="./bin/build.sh" checkreturn="true" />
+        <exec command="./bin/build.sh" checkreturn="true" logoutput="/dev/stdout" />
     </target>
 
     <!-- ============================================  -->
-    <!-- (DEFAULT)  Target: dist                       --> 
+    <!-- (DEFAULT)  Target: dist                       -->
     <!-- ============================================  -->
     <target name="clean">
         <echo msg="Clean..." />
-        <delete dir=".sass-cache/" includeemptydirs="true" verbose="true" failonerror="true" />
-        <delete dir="htdocs/css/" includeemptydirs="true" verbose="true" failonerror="true" />
-        <delete dir="htdocs/js/min/" includeemptydirs="true" verbose="true" failonerror="true" />
+        <delete dir=".sass-cache/" includeemptydirs="true" verbose="true" />
+        <delete dir="htdocs/css/" includeemptydirs="true" verbose="true" />
+        <delete dir="htdocs/js/min/" includeemptydirs="true" verbose="true" />
     </target>
     
     <target name="test" depends="build">
         <echo msg="Testing..." />
-        <exec command="cd module/Application/test/ ; ../../../vendor/bin/phpunit" logoutput="/dev/stdout" />
+        <exec command="cd module/Application/test/ ; ../../../vendor/bin/phpunit" checkreturn="true" logoutput="/dev/stdout" />
     </target>
 </project>
