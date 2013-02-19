@@ -6,3 +6,4 @@
 .~lock.*
 htdocs/css/
 htdocs/js/min/
+data/logs/

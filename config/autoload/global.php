@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Global Configuration Override
  *
@@ -10,19 +11,34 @@
  * control, so do not include passwords or other sensitive information in this
  * file.
  */
-
 return array(
     'db' => array(
-        'driver'         => 'Pdo',
-        'dsn'            => 'pgsql:dbname=gims;host=localhost',
+        'driver' => 'Pdo',
+        'dsn' => 'pgsql:dbname=gims;host=localhost',
         'driver_options' => array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
         ),
     ),
     'service_manager' => array(
         'factories' => array(
-            'Zend\Db\Adapter\Adapter'
-                    => 'Zend\Db\Adapter\AdapterServiceFactory',
+            'Zend\Db\Adapter\Adapter' => 'Zend\Db\Adapter\AdapterServiceFactory',
+            'Zend\Log' => function ($sm) {
+
+                // Log to file
+                $logger = new Zend\Log\Logger();
+                $writer = new Zend\Log\Writer\Stream('data/logs/all.log');
+                $logger->addWriter($writer);
+
+                // Log to browser's console
+                $firePhpWriter = new Zend\Log\Writer\FirePhp();
+                $logger->addWriter($firePhpWriter);
+                $filter = new Application\Log\Filter\Headers();
+                $firePhpWriter->addFilter($filter);
+
+                Zend\Log\Logger::registerErrorHandler($logger, true);
+
+                return $logger;
+            },
         ),
     ),
 );

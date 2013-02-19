@@ -1,24 +1,60 @@
 {
-    "hash": "44449454704dbd15d534b07d8a590885",
+    "hash": "6846d82bf0d795c47806eb47f02ba395",
     "packages": [
+        {
+            "name": "firephp/firephp-core",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/firephp/firephp-core.git",
+                "reference": "f60753a8dd7817e4da6bc73e0e717387a9a0866a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/firephp/firephp-core/zipball/f60753a8dd7817e4da6bc73e0e717387a9a0866a",
+                "reference": "f60753a8dd7817e4da6bc73e0e717387a9a0866a",
+                "shasum": ""
+            },
+            "time": "2013-01-19 22:55:24",
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "lib/FirePHPCore/FirePHP.class.php",
+                    "lib/FirePHPCore/fb.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christoph Dorn",
+                    "email": "christoph@christophdorn.com",
+                    "homepage": "http://christophdorn.com"
+                }
+            ],
+            "description": "Traditional FirePHPCore library for sending PHP variables to the browser.",
+            "homepage": "https://github.com/firephp/firephp-core"
+        },
         {
             "name": "phing/phing",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "e9c9b3e1466f21b8731f1c84cab742fbff4e8a94"
+                "reference": "65ac961d9c52dc2c3f06fa120a97f25691d4b826"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/e9c9b3e1466f21b8731f1c84cab742fbff4e8a94",
-                "reference": "e9c9b3e1466f21b8731f1c84cab742fbff4e8a94",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/65ac961d9c52dc2c3f06fa120a97f25691d4b826",
+                "reference": "65ac961d9c52dc2c3f06fa120a97f25691d4b826",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.0"
             },
-            "time": "2013-02-16 16:17:46",
+            "time": "2013-02-18 15:53:36",
             "bin": [
                 "bin/phing"
             ],
@@ -566,6 +602,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "phing/phing": 20
+        "phing/phing": 20,
+        "firephp/firephp-core": 20
     }
 }
