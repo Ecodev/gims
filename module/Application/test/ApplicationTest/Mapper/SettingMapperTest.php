@@ -22,29 +22,6 @@ class SettingMapperTest extends AbstractMapper
         $this->assertSame($resultSet, $settingMapper->fetchAll());
     }
 
-    public function testCanRetrieveAnSettingByItsId()
-    {
-        $resultSet = $this->getResultSet();
-
-        $setting = clone $resultSet->getArrayObjectPrototype();
-        $setting->exchangeArray(array(
-            'id' => 123,
-            'value' => 'Interesting value of setting',
-        ));
-        $resultSet->initialize(array($setting));
-
-
-        $mockTableGateway = $this->getMock('Zend\Db\TableGateway\TableGateway', array('select'), array(), '', false);
-        $mockTableGateway->expects($this->once())
-                ->method('select')
-                ->with(array('id' => 123))
-                ->will($this->returnValue($resultSet));
-
-        $settingMapper = new SettingMapper($mockTableGateway);
-
-        $this->assertSame($setting, $settingMapper->fetch(123));
-    }
-
     public function testCanCRUDSetting()
     {
         $id = 'test id';
