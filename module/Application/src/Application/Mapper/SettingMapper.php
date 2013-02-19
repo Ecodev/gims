@@ -12,8 +12,16 @@ class SettingMapper extends AbstractMapper
      */
     public function fetch($id)
     {
-        $rowset = $this->tableGateway->select(array('id' => $id));
-        $setting = $rowset->current();
+        // Check if table exists
+        $sql = new \Zend\Db\Sql\Select('pg_tables');
+        $sql->where(array('tablename' => $this->tableGateway->getTable()));
+        $tables = $this->tableGateway->getAdapter()->query($sql->getSqlString($this->tableGateway->getAdapter()->getPlatform()), \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+
+        $setting = null;
+        if ($tables->count()) {
+            $rowset = $this->tableGateway->select(array('id' => $id));
+            $setting = $rowset->current();
+        }
 
         if (!$setting) {
             $setting = $this->createRow();
