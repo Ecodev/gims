@@ -3,6 +3,6 @@ php:
   - "5.4"
 
 before_script:
-  - ./bin/install_dependencies.sh testing
+  - ./bin/install_dependencies.sh travis
 
 script: ./vendor/bin/phing test
