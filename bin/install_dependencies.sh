@@ -18,4 +18,4 @@ else
 fi
 
 echo "Installing all PHP dependencies via composer..."
-./composer.phar install --dev --quiet
+./composer.phar install --dev
