@@ -15,7 +15,7 @@
     <!-- ============================================  -->
     <target name="build" depends="composer-install">
         
-        <exec command="./bin/build.sh" checkreturn="true" logoutput="/dev/stdout" />
+        <!--<exec command="./bin/build.sh" checkreturn="true" logoutput="/dev/stdout" />-->
     </target>
 
     <!-- ============================================  -->
@@ -28,8 +28,22 @@
         <delete dir="htdocs/js/min/" includeemptydirs="true" verbose="true" />
     </target>
     
-    <target name="test" depends="build">
-        <echo msg="Testing..." />
+    <target name="test" depends="phpunit,testacular-unit,testacular-e2e">
+        <echo msg="Testing done" />
+    </target>
+    
+    <target name="phpunit" depends="build">
+        <echo msg="Testing phpunit..." />
         <exec command="cd module/Application/test/ ; ../../../vendor/bin/phpunit" checkreturn="true" logoutput="/dev/stdout" />
+    </target>
+    
+    <target name="testacular-unit" depends="build">
+        <echo msg="Testing testacular-unit..." />
+        <exec command="testacular start config/testacular-travis-unit.conf.js" checkreturn="true" logoutput="/dev/stdout" />
+    </target>
+    
+    <target name="testacular-e2e" depends="build">
+        <echo msg="Testing testacular-e2e..." />
+        <exec command="testacular start config/testacular-travis-e2e.conf.js" checkreturn="true" logoutput="/dev/stdout" />
     </target>
 </project>

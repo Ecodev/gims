@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
-echo "Installing PostGIS..."
+echo "Installing PostGIS and other packages..."
 sudo add-apt-repository --yes ppa:ubuntugis/ubuntugis-unstable
+sudo add-apt-repository --yes ppa:chris-lea/node.js
 sudo apt-get -qq update
-sudo apt-get -qq install postgis postgresql-9.1-postgis rubygems
+sudo apt-get -qq install postgis postgresql-9.1-postgis rubygems nodejs
 
 echo "Installing Compass..."
 sudo gem install --quiet --no-rdoc --no-ri sass compass oily_png bootstrap-sass
 
+echo "Installing JS testing tools"
+sudo npm install phantomjs --global
+sudo npm install testacular --global
 
 if [[ "$1" = "travis" ]]; then
     echo "Init database..."
