@@ -14,8 +14,7 @@
     <!-- Target: build                                 -->
     <!-- ============================================  -->
     <target name="build" depends="composer-install">
-        
-        <!--<exec command="./bin/build.sh" checkreturn="true" logoutput="/dev/stdout" />-->
+        <exec command="./bin/build.sh" checkreturn="true" logoutput="/dev/stdout" />
     </target>
 
     <!-- ============================================  -->

@@ -15,21 +15,14 @@
         <?php echo $this->headScript()->prependFile('/js/min/html5shiv.js', 'text/javascript', array('conditional' => 'lt IE 9',))
                                     ->prependFile(array('/js/min/application.js',
                                         array(
-                                            
-                                            // CAUTION: This must be the exact same files in reverse order than in scripts/build.sh
-//                                            '/js/min/common.js',
-                                            '/js/min/bootstrap-alert.js',
-                                            '/js/min/bootstrap-button.js',
-                                            '/js/min/bootstrap-carousel.js',
-                                            '/js/min/bootstrap-collapse.js',
-                                            '/js/min/bootstrap-dropdown.js',
-                                            '/js/min/bootstrap-modal.js',
-                                            '/js/min/bootstrap-popover.js',
-                                            '/js/min/bootstrap-scrollspy.js',
-                                            '/js/min/bootstrap-tab.js',
-                                            '/js/min/bootstrap-tooltip.js',
-                                            '/js/min/bootstrap-transition.js',
-                                            '/js/min/bootstrap-typeahead.js',
+                                            // CAUTION: This must be the exact same files in reverse order than in bin/build.sh
+                                            '/js/min/directives.js',
+                                            '/js/min/filters.js',
+                                            '/js/min/controllers.js',
+                                            '/js/min/services.js',
+                                            '/js/min/app.js',
+                                            '/lib/angular/angular.min.js',
+                                            '/lib/bootstrap/bootstrap.min.js',
                                             '/js/min/jquery.js',
                                         )
                                     )) ?>

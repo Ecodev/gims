@@ -20,6 +20,7 @@ class HeadScript extends \Zend\View\Helper\HeadScript implements ServiceLocatorA
 		if (!$this->getServiceLocator()->getServiceLocator()->get('Config')['compressJS'])
 		{
 			$fileName = str_replace('/js/min/', '/js/', $fileName);
+			$fileName = str_replace('.min.js', '.js', $fileName);
 		}
 		
 		$fullPath = 'htdocs/' . $fileName;

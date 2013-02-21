@@ -43,24 +43,14 @@ done
 echo "Concatenate JavaScript..."
 cd min/
 
-# CAUTION: This must be the exact same files in reverse order than in application/layout/layout.phtml
+# CAUTION: This must be the exact same files in reverse order than in module/Application/view/layout/layout.phtml
 cat \
-bootstrap-typeahead.js \
-bootstrap-transition.js \
-bootstrap-tooltip.js \
-bootstrap-tab.js \
-bootstrap-scrollspy.js \
-bootstrap-popover.js \
-bootstrap-modal.js \
-bootstrap-dropdown.js \
-bootstrap-collapse.js \
-bootstrap-carousel.js \
-bootstrap-button.js \
-bootstrap-alert.js \
 jquery.js \
+../../lib/bootstrap/bootstrap.min.js \
+../../lib/angular/angular.min.js \
+app.js \
+services.js \
+controllers.js \
+filters.js \
+directives.js \
 > application.js
-
-
-
-
-
