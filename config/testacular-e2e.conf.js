@@ -6,8 +6,8 @@ files = [
   'module/Application/test/e2e/**/*.js'
 ];
 
-//autoWatch = true;
-singleRun = true;
+autoWatch = true;
+//singleRun = true;
 
 browsers = ['Chrome', 'PhantomJS'];
 

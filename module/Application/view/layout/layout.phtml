@@ -1,31 +1,34 @@
 <?php echo $this->doctype(); ?>
 
-<html lang="en">
+<html lang="en" ng-app="myApp">
     <head>
         <meta charset="utf-8">
-        <?php echo $this->headTitle('GIMS '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?php echo $this->headTitle('GIMS')->setSeparator(' - ')->setAutoEscape(false) ?>
 
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
 
         <!-- Le styles -->
         <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
-                        ->prependStylesheet('/css/application.css') ?>
+                ->prependStylesheet('/css/application.css')
+        ?>
 
         <!-- Scripts -->
-        <?php echo $this->headScript()->prependFile('/js/min/html5shiv.js', 'text/javascript', array('conditional' => 'lt IE 9',))
-                                    ->prependFile(array('/js/min/application.js',
-                                        array(
-                                            // CAUTION: This must be the exact same files in reverse order than in bin/build.sh
-                                            '/js/min/directives.js',
-                                            '/js/min/filters.js',
-                                            '/js/min/controllers.js',
-                                            '/js/min/services.js',
-                                            '/js/min/app.js',
-                                            '/lib/angular/angular.min.js',
-                                            '/lib/bootstrap/bootstrap.min.js',
-                                            '/js/min/jquery.js',
-                                        )
-                                    )) ?>
+        <?php
+        echo $this->headScript()->prependFile('/js/min/html5shiv.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                ->prependFile(array('/js/min/application.js',
+                    array(
+                        // CAUTION: This must be the exact same files in reverse order than in bin/build.sh
+                        '/js/min/directives.js',
+                        '/js/min/filters.js',
+                        '/js/min/controllers.js',
+                        '/js/min/services.js',
+                        '/js/min/app.js',
+                        '/lib/angular/angular.min.js',
+                        '/lib/bootstrap/bootstrap.min.js',
+                        '/js/min/jquery.js',
+                    )
+                ))
+        ?>
 
     </head>
     <body>
@@ -37,10 +40,12 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Skeleton Application') ?></a>
+                    <a class="brand" href="<?php echo $this->url('home') ?>">GIMS</a>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
-                            <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
+                            <li><a href="/about"><?php echo $this->translate('About') ?></a></li>
+                            <li><a href="/browse"><?php echo $this->translate('Browse') ?></a></li>
+                            <li><a href="/contribute"><?php echo $this->translate('Contribute') ?></a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
                 </div>
@@ -48,11 +53,14 @@
         </div>
         <div class="container">
             <?php echo $this->content; ?>
+            
+            <div ng-view></div>
+            
             <hr>
             <footer>
-                <p>&copy; 2005 - 2012 by Zend Technologies Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
+                <p><?php echo $this->translate('Designed and built by Ecodev for WHO') ?></p>
             </footer>
         </div> <!-- /container -->
-        <?php echo $this->inlineScript() ?>
+<?php echo $this->inlineScript() ?>
     </body>
 </html>

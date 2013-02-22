@@ -7,3 +7,7 @@
 
 
 @import "splash";
+
+html {
+	overflow-y: scroll; // Force vertical scrollbar
+}

@@ -2,47 +2,84 @@
 
 /* http://docs.angularjs.org/guide/dev_guide.e2e-testing */
 
+
+/**
+ * Common function to assert no xdebug error. Should be used at least after each browser().navigateTo()
+ */
+function noXdebugError() {
+    describe("any page", function() {
+        it('should not have any xdebug error at all', function() {
+            expect(element('.xdebug-error').count()).toBe(0);
+        });
+    });
+}
+
+
 describe('my app', function() {
- 
-  beforeEach(function() {
-    browser().navigateTo('../../index.html');
-    
-  });
-
-
-  it('should automatically redirect to /view1 when location hash/fragment is empty', function() {
-    
-      debugger;
-    expect(browser().location().url()).toBe("/view1");
-  });
-
-
-  describe('view1', function() {
 
     beforeEach(function() {
-      browser().navigateTo('#/view1');
+        browser().navigateTo('../../');
+
+    });
+    noXdebugError();
+
+
+    it('should automatically redirect to /home when location hash/fragment is empty', function() {
+
+        expect(browser().location().url()).toBe("/home");
     });
 
 
-    it('should render view1 when user navigates to /view1', function() {
-      expect(element('[ng-view] p:first').text()).
-        toMatch(/partial for view 1/);
+    describe('home', function() {
+
+        beforeEach(function() {
+            browser().navigateTo('/home');
+        });
+        noXdebugError();
+
+
+        it('should render home when user navigates to /home', function() {
+            expect(element('[ng-view] p:first').text()).
+                    toMatch(/Global Information Management System/);
+        });
+
     });
 
-  });
+
+    describe('about', function() {
+
+        beforeEach(function() {
+            browser().navigateTo('/about');
+        });
+        noXdebugError();
 
 
-  describe('view2', function() {
+        it('should render about when user navigates to /about', function() {
+            expect(element('[ng-view] p:first').text()).
+                    toMatch(/Learn where the project stems from and what are it’s goals./);
+        });
 
-    beforeEach(function() {
-      browser().navigateTo('#/view2');
     });
 
 
-    it('should render view2 when user navigates to /view2', function() {
-      expect(element('[ng-view] p:first').text()).
-        toMatch(/partial for view 2/);
-    });
+    describe('browse', function() {
 
-  });
+        beforeEach(function() {
+            browser().navigateTo('/browse');
+        });
+        noXdebugError();
+
+
+        it('should render about when user navigates to /browse', function() {
+            expect(element('[ng-view] .browse .span4:nth-child(1) h2').text()).
+                    toMatch(/Maps/);
+
+            expect(element('[ng-view] .browse .span4:nth-child(2) h2').text()).
+                    toMatch(/Charts/);
+
+            expect(element('[ng-view] .browse .span4:nth-child(3) h2').text()).
+                    toMatch(/Tables/);
+        });
+
+    });
 });
