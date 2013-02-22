@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Installing PostGIS and other packages..."
-sudo apt-get install -qq software-properties-common # to get following command add-apt-repository
+sudo apt-get install -qq software-properties-common # to get next command: add-apt-repository
 sudo add-apt-repository --yes ppa:ubuntugis/ubuntugis-unstable
 sudo add-apt-repository --yes ppa:chris-lea/node.js
 sudo apt-get -qq update
@@ -11,8 +11,7 @@ echo "Installing Compass..."
 sudo gem install --quiet --no-rdoc --no-ri sass compass oily_png bootstrap-sass
 
 echo "Installing JS testing tools..."
-sudo npm install phantomjs --global
-sudo npm install testacular --global
+sudo npm --global --quiet install testacular phantomjs
 
 # For Travis CI, we need more configuration (Apache and database)
 if [[ "$1" = "travis" ]]; then
