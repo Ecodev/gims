@@ -20,3 +20,16 @@ Installation
 3. Configure database in ``config/autoload/local.php``
 4. Set up a virtual host to point to ``htdocs/`` directory
 
+
+Testing
+-------
+
+Full testing (phpunit and testacular) can be executed via phing:
+
+    ./vendor/bin/phing test
+
+Light-weight testing, recommended for very frequent usage during development, is available directly via testacular:
+
+    testacular start config/testacular-unit.conf.js
+    testacular start config/testacular-e2e.conf.js
+
