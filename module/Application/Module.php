@@ -10,16 +10,19 @@
 
 namespace Application;
 
+use Locale;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 
-class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ConsoleUsageProviderInterface, ServiceProviderInterface
+class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ConsoleUsageProviderInterface, ServiceProviderInterface, BootstrapListenerInterface
 {
 
     public function getServiceConfig()
@@ -65,12 +68,49 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
         );
     }
 
-    public function onBootstrap(MvcEvent $e)
+    public function onBootstrap(EventInterface $e)
     {
-        $e->getApplication()->getServiceManager()->get('translator');
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+        $this->detectBrowserLocale($e);
+    }
+
+    /**
+     * Detect browser locale or allow user to switch locale
+     * @param \Zend\Mvc\MvcEvent $e
+     */
+    protected function detectBrowserLocale(MvcEvent $e)
+    {
+        $default = 'en';
+        $supported = array('en', 'fr');
+        
+        if ($e->getApplication()->getRequest() instanceof \Zend\Http\Request)
+            $requested = $e->getApplication()->getRequest()->getQuery('lang');
+        else
+            $requested = null;
+
+        // Language switch by user
+        if ($requested) {
+            $preference = $requested;
+        }
+        // Or keep session value
+        elseif (isset($_COOKIE['lang'])) {
+            $preference = $_COOKIE['lang'];
+        }
+        // If nothing else, read browser configuration
+        else {
+            $preference = Locale::acceptFromHttp(getenv('HTTP_ACCEPT_LANGUAGE'));
+        }
+
+        // Match preferred language to those available, defaulting to generic English
+        $locale = Locale::lookup($supported, $preference, false, $default);
+
+
+        $translator = $e->getApplication()->getServiceManager()->get('translator');
+        $translator->setLocale($locale);
+        Locale::setDefault($locale);
     }
 
     public function getConfig()
