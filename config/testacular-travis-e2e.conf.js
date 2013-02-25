@@ -9,7 +9,7 @@ files = [
 //autoWatch = true;
 singleRun = true;
 
-browsers = ['Chrome', 'PhantomJS'];
+browsers = ['PhantomJS'];
 
 
 junitReporter = {
