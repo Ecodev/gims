@@ -1,4 +1,4 @@
-[![Build Status](https://api.travis-ci.org/Ecodev/gims.png?branch=0.1.0-dev)](http://travis-ci.org/PowerKiKi/mqueue)
+[![Build Status](https://api.travis-ci.org/Ecodev/gims.png?branch=0.2.0-dev)](http://travis-ci.org/Ecodev/gims)
 
 GIMS
 =======================
