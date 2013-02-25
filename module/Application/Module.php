@@ -29,6 +29,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
         $models = array(
             'Answer',
             'Category',
+            'Country',
             'Geoname',
             'Question',
             'Questionnaire',

@@ -4,7 +4,7 @@ return array(
     'modules' => array(
         'Application',
         'Api',
-        'Admin'
+        'Admin',
         'Browse',
         'Contribute',
     ),
