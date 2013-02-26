@@ -8,4 +8,4 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
 
 #script: ./vendor/bin/phing test && testacular --version && curl http://gims.local/ && testacular start config/testacular-e2e.conf.js --no-auto-watch --single-run --browsers Firefox --log-level debug
-script: cat /etc/apache2/sites-available/default && cat /etc/hosts && curl -s http://gims.local/ -o tmp && cat tmp && sudo cat /var/log/apache2/error.log && sudo cat /var/log/apache2/access.log
+script: cat /etc/apache2/sites-available/default && cat /etc/hosts && curl --verbose http://gims.local/ -o tmp && cat tmp && sudo cat /var/log/apache2/error.log && sudo cat /var/log/apache2/access.log
