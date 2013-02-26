@@ -17,8 +17,8 @@ return array(
         'password' => '',
     ),
     
-    // Suggested values for development
-    'compressJS' => false,
+    // For development switch it to false, to use uncompressed JS
+    'compressJS' => true,
     
     
     
