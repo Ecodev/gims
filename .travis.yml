@@ -7,4 +7,5 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 
-script: ./vendor/bin/phing test && testacular --version && curl http://gims.local/ && testacular start config/testacular-e2e.conf.js --no-auto-watch --single-run --browsers Firefox --log-level debug
+#script: ./vendor/bin/phing test && testacular --version && curl http://gims.local/ && testacular start config/testacular-e2e.conf.js --no-auto-watch --single-run --browsers Firefox --log-level debug
+script: cat /etc/apache2/sites-available/default && cat /etc/hosts && dig gims.local && curl http://gims.local/
