@@ -1,4 +1,9 @@
 basePath = '../';
+autoWatch = true;
+browsers = ['Chrome'];
+proxies = {
+  '/': 'http://gims.local/'
+};
 
 files = [
   JASMINE,
@@ -10,15 +15,8 @@ files = [
   'module/Application/test/unit/**/*.js'
 ];
 
-autoWatch = true;
-
-browsers = ['Chrome'];
 
 junitReporter = {
   outputFile: 'data/logs/testacular-unit.xml',
   suite: 'unit'
-};
-
-proxies = {
-  '/': 'http://gims.local/'
 };
