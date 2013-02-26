@@ -5,4 +5,4 @@ php:
 before_script:
   - ./bin/install_dependencies.sh travis
 
-script: ./vendor/bin/phing test
+script: ./vendor/bin/phing test && testacular start config/testacular-travis-e2e.conf.js

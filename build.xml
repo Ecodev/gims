@@ -43,6 +43,6 @@
     
     <target name="testacular-e2e" depends="build">
         <echo msg="Testing testacular-e2e..." />
-        <exec command="testacular start config/testacular-travis-e2e.conf.js" checkreturn="true" logoutput="/dev/stdout" />
+<!--        <exec command="testacular start config/testacular-travis-e2e.conf.js" checkreturn="true" logoutput="/dev/stdout" />-->
     </target>
 </project>
