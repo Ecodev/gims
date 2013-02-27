@@ -21,7 +21,6 @@ php htdocs/index.php database update
 echo "Compiling CSS..."
 compass compile -s compressed --force
 
-exit
 echo "Compiling JavaScript..."
 cd htdocs/js
 mkdir -p min
