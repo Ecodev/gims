@@ -38,11 +38,11 @@
     
     <target name="testacular-unit" depends="build">
         <echo msg="Testing testacular-unit..." />
-        <exec command="testacular start --no-auto-watch --single-run --browsers PhantomJS config/testacular-unit.conf.js" checkreturn="true" logoutput="/dev/stdout" />
+        <exec command="testacular start --no-auto-watch --single-run --browsers PhantomJS,Firefox config/testacular-unit.conf.js" checkreturn="true" logoutput="/dev/stdout" />
     </target>
     
     <target name="testacular-e2e" depends="build">
         <echo msg="Testing testacular-e2e..." />
-        <exec command="testacular start --no-auto-watch --single-run --browsers PhantomJS config/testacular-e2e.conf.js" checkreturn="true" logoutput="/dev/stdout" />
+        <exec command="testacular start --no-auto-watch --single-run --browsers PhantomJS,Firefox config/testacular-e2e.conf.js" checkreturn="true" logoutput="/dev/stdout" />
     </target>
 </project>
