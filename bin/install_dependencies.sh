@@ -8,7 +8,7 @@ sudo apt-get -qq update
 sudo apt-get -qq install postgis postgresql-9.1-postgis rubygems npm apache2 php5-pgsql php5-cli php5-gd php5-mcrypt php5-intl
 
 echo "Installing Compass..."
-sudo gem install --quiet --no-rdoc --no-ri sass compass oily_png bootstrap-sass
+gem install --quiet --no-rdoc --no-ri sass compass oily_png bootstrap-sass
 
 echo "Installing JS testing tools..."
 sudo npm --global --quiet install testacular phantomjs
