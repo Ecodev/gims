@@ -8,16 +8,30 @@ namespace ApplicationTest\Traits;
 trait TestWithTransaction
 {
 
-    public function setUp()
+    /**
+     * Get EntityManager
+     * @return \Doctrine\ORM\EntityManager
+     */
+    public function getEntityManager()
     {
-        $dbAdapter = \ApplicationTest\Bootstrap::getServiceManager()->get('Zend\Db\Adapter\Adapter');
-        $dbAdapter->driver->getConnection()->beginTransaction();
+        return \ApplicationTest\Bootstrap::getServiceManager()->get('Doctrine\ORM\EntityManager');
     }
 
+    /**
+     * Start transaction
+     */
+    public function setUp()
+    {
+        $this->getEntityManager()->beginTransaction();
+    }
+
+    /**
+     * Cancel transaction, to undo all changes made
+     */
     public function tearDown()
     {
-        $dbAdapter = \ApplicationTest\Bootstrap::getServiceManager()->get('Zend\Db\Adapter\Adapter');
-        $dbAdapter->driver->getConnection()->rollback();
+        $this->getEntityManager()->rollback();
+        $this->getEntityManager()->clear();
     }
 
 }

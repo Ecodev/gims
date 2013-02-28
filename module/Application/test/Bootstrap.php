@@ -60,6 +60,9 @@ class Bootstrap
         static::$config = $config;
     }
 
+    /**
+     * @return Zend\ServiceManager\ServiceManager
+     */
     public static function getServiceManager()
     {
         return static::$serviceManager;

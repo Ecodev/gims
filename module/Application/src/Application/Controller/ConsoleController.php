@@ -9,6 +9,8 @@ use Zend\Db\Adapter\Adapter;
 class ConsoleController extends AbstractActionController
 {
 
+    use \Application\Traits\EntityManagerAware;
+
     protected $sqlPath = 'data/migrations/'; // This is the path where all SQL patches resides
 
     /**
@@ -91,7 +93,7 @@ class ConsoleController extends AbstractActionController
                     $affectedRows += $result->getAffectedRows();
                 }
             }
-            
+
             $db->driver->getConnection()->commit();
         } catch (\Exception $e) {
             $db->driver->getConnection()->rollback();
@@ -142,4 +144,5 @@ class ConsoleController extends AbstractActionController
             $databaseVersion->save();
         }
     }
+
 }

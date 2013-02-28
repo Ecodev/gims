@@ -7,6 +7,8 @@ use Zend\Mvc\MvcEvent;
 class AbstractAngularActionController extends \Zend\Mvc\Controller\AbstractActionController
 {
 
+    use \Application\Traits\EntityManagerAware;
+
     /**
      * Automatically disable layout rendering if the request is an ajax call
      *

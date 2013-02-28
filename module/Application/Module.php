@@ -27,44 +27,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
 
     public function getServiceConfig()
     {
-        // List of class name of models for which we will configure \Application\Mapper\*
-        // (so we can receive \Application\Model\* object when querying database)
-        $models = array(
-            'Answer',
-            'Category',
-            'Country',
-            'Geoname',
-            'Question',
-            'Questionnaire',
-            'Role',
-            'Setting',
-            'Survey',
-            'User',
-        );
-
-        $factories = array();
-        foreach ($models as $model) {
-            $factories['Application\Mapper\\' . $model . 'Mapper'] = function($sm) use ($model) {
-                        $tableGateway = $sm->get($model . 'TableGateway');
-                        $fullMapperName = '\Application\Mapper\\' . $model . 'Mapper';
-                        $mapper = new $fullMapperName($tableGateway);
-
-                        return $mapper;
-                    };
-
-            $factories[$model . 'TableGateway'] = function($sm) use ($model) {
-                        $tableName = lcfirst($model);
-                        $fullModelName = '\Application\Model\\' . $model;
-                        $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-                        $resultSetPrototype = new ResultSet();
-                        $resultSetPrototype->setArrayObjectPrototype(new $fullModelName(array('id'), $tableName, $dbAdapter));
-
-                        return new TableGateway($tableName, $dbAdapter, null, $resultSetPrototype);
-                    };
-        }
-
         return array(
-            'factories' => $factories
         );
     }
 
@@ -85,7 +48,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
     {
         $default = 'en';
         $supported = array('en', 'fr');
-        
+
         if ($e->getApplication()->getRequest() instanceof \Zend\Http\Request)
             $requested = $e->getApplication()->getRequest()->getQuery('lang');
         else
