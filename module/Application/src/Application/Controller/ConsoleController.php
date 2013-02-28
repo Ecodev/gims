@@ -108,6 +108,8 @@ class ConsoleController extends AbstractActionController
      */
     public function databaseUpdateAction()
     {
+        return "DEPRECATED: you should instead use: ./vendor/bin/doctrine-module migrations:migrate" . PHP_EOL;
+        
         /**
          * Enforce valid console request
          */

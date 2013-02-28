@@ -1,0 +1,5 @@
+name: GIMS Migrations
+migrations_namespace: DoctrineMigrations
+table_name: version
+migrations_directory: data/migrations
+
