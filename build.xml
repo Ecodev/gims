@@ -3,7 +3,7 @@
 <project name="GIMS" default="build">
 
     <!-- Install all PHP dependencies via composer -->
-    <target name="composer-install" description="Installs dependencies via composer install">
+    <target name="composer-install">
         <composer command="install">
             <arg value="--dev" />
             <arg value="--prefer-source" />
@@ -13,7 +13,7 @@
     <!-- ============================================  -->
     <!-- Target: build                                 -->
     <!-- ============================================  -->
-    <target name="build" depends="composer-install">
+    <target name="build" depends="composer-install" description="build all assets for a fully functionnal application (DB, CSS, JS)">
         <exec command="./bin/build.sh" checkreturn="true" logoutput="/dev/stdout" />
     </target>
 
@@ -27,8 +27,13 @@
         <delete dir="htdocs/js/min/" includeemptydirs="true" verbose="true" />
     </target>
     
-    <target name="test" depends="phpunit,testacular-unit,testacular-e2e">
+    <target name="test" depends="validate-schema,phpunit,testacular-unit,testacular-e2e" description="run all tests available">
         <echo msg="Testing done" />
+    </target>
+    
+    <target name="validate-schema" depends="build">
+        <echo msg="Validating schema..." />
+        <exec command="./vendor/bin/doctrine-module orm:validate-schema" checkreturn="true" logoutput="/dev/stdout" />
     </target>
     
     <target name="phpunit" depends="build">
