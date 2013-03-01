@@ -16,7 +16,7 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 cd $DIR/..
 
 echo "Updating database..."
-./vendor/bin/doctrine-module migrations:migrate --no-interaction
+./vendor/bin/doctrine-module migrations:migrate --no-interaction --quiet
 
 echo "Compiling CSS..."
 compass compile -s compressed --force

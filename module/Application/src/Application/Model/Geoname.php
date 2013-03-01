@@ -147,6 +147,13 @@ class Geoname
      * @ORM\Column(type="date", nullable=true)
      */
     private $moddate;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="geometry", nullable=true)
+     */
+    private $geometry;
 
     /**
      * Get id

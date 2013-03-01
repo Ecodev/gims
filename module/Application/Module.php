@@ -33,6 +33,13 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
 
     public function onBootstrap(EventInterface $e)
     {
+        // @TODO: This should be part of config file, but could not find a way to do it properly
+        $em = $e->getApplication()->getServiceManager()->get('Doctrine\ORM\EntityManager');
+        $em->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('geometry', 'geometry');
+        $em->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('point', 'point');
+        $em->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('polygon', 'polygon');
+        $em->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('linestring', 'linestring');
+
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);

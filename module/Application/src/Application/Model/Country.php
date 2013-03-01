@@ -149,7 +149,7 @@ class Country
      *   @ORM\JoinColumn(referencedColumnName="id")
      * })
      */
-    private $geonameid;
+    private $geoname;
 
     /**
      * Get id
@@ -553,26 +553,26 @@ class Country
     }
 
     /**
-     * Set geonameid
+     * Set geoname
      *
-     * @param \Geoname $geonameid
+     * @param \Geoname $geoname
      * @return Country
      */
-    public function setGeonameid(\Geoname $geonameid = null)
+    public function setGeoname(\Geoname $geoname = null)
     {
-        $this->geonameid = $geonameid;
+        $this->geoname = $geoname;
 
         return $this;
     }
 
     /**
-     * Get geonameid
+     * Get geoname
      *
      * @return \Geoname 
      */
-    public function getGeonameid()
+    public function getGeoname()
     {
-        return $this->geonameid;
+        return $this->geoname;
     }
 
 }

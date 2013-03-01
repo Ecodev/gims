@@ -1,6 +1,61 @@
 {
-    "hash": "8ea7832ce55a629e34b88145bfb38aee",
+    "hash": "fef2a6de8a9fc41266f457749c4fb9aa",
     "packages": [
+        {
+            "name": "creof/doctrine2-spatial",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tvogt/doctrine2-spatial",
+                "reference": "1bdad89bb1c109506b2ab64da5f71c39deb8823b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tvogt/doctrine2-spatial/zipball/1bdad89bb1c109506b2ab64da5f71c39deb8823b",
+                "reference": "1bdad89bb1c109506b2ab64da5f71c39deb8823b",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": ">=2.2"
+            },
+            "require-dev": {
+                "doctrine/common": "dev-master",
+                "doctrine/dbal": "dev-master"
+            },
+            "time": "2013-02-10 10:39:06",
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "CrEOF\\Spatial": "lib/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Derek Lambert",
+                    "email": "dlambert@dereklambert.com"
+                }
+            ],
+            "description": "Doctrine2 multi-platform support for spatial types and functions",
+            "keywords": [
+                "database",
+                "dbal",
+                "geography",
+                "geometry",
+                "gis",
+                "mysql",
+                "opengis",
+                "orm",
+                "postgis",
+                "postgresql",
+                "spatial"
+            ],
+            "support": {
+                "source": "https://github.com/tvogt/doctrine2-spatial/tree/master"
+            }
+        },
         {
             "name": "doctrine/common",
             "version": "2.3.0",
@@ -1266,6 +1321,7 @@
         "firephp/firephp-core": 20,
         "zf-commons/zfc-user-doctrine-orm": 20,
         "doctrine/migrations": 20,
+        "creof/doctrine2-spatial": 20,
         "zendframework/zend-developer-tools": 20
     }
 }

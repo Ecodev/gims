@@ -2,6 +2,11 @@
     "name": "ecodev/gims",
     "description": "GIMS",
     "homepage": "http://www.gims.pro/",
+    "repositories": [{
+            "type": "vcs",
+            "url": "https://github.com/tvogt/doctrine2-spatial"
+        }
+    ],
     "require": {
         "php": ">=5.4.0",
         "ext-pgsql": "*",
@@ -11,7 +16,8 @@
         "firephp/firephp-core": "dev-master",
         "zf-commons/zfc-user-doctrine-orm": "dev-master",
         "doctrine/doctrine-orm-module": "0.*",
-        "doctrine/migrations": "dev-master"
+        "doctrine/migrations": "dev-master",
+        "creof/doctrine2-spatial": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
