@@ -48,6 +48,35 @@
                             <li><a href="/contribute"><?php echo $this->translate('Contribute') ?></a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
+                    
+                    <div class="pull-right">
+                        <?php if ($this->zfcUserIdentity()): ?>
+                            <p class="navbar-text">
+                                <?php 
+                                echo $this->gravatar($this->zfcUserIdentity()->getEmail(), array('img_size' => 32)) . PHP_EOL;
+                                echo $this->zfcUserDisplayName();
+                                 ?>
+
+                                <a href="<?php echo $this->url('zfcuser/logout') ?>">[<?php echo $this->translate('Sign out') ?>]</a>
+                            </p>
+                        <?php else: ?>
+                            <?php
+                                $f = $this->zfcUserLoginWidget(array('render' => false));
+                                $form = $f->loginForm;
+                                $form->prepare();
+                                $form->setAttribute('action', $this->url('zfcuser/login'));
+                                $form->setAttribute('method', 'post');
+                                $form->setAttribute('class', 'navbar-form');
+
+                                echo $this->form()->openTag($form);
+                                echo $this->formInput($form->get('identity')->setAttribute('class', 'span2')->setAttribute('placeholder', $form->get('identity')->getLabel())) . PHP_EOL;
+                                echo $this->formInput($form->get('credential')->setAttribute('class', 'span2')->setAttribute('placeholder', $form->get('credential')->getLabel())) . PHP_EOL;
+                                echo $this->formButton($form->get('submit')) . PHP_EOL;
+                            ?>
+                            <a href="<?php echo $this->url('zfcuser/register') ?>"><?php echo $this->translate('Create account') ?></a>
+                            <?php echo $this->form()->closeTag(); ?>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>

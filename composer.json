@@ -5,6 +5,10 @@
     "repositories": [{
             "type": "vcs",
             "url": "https://github.com/tvogt/doctrine2-spatial"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/mwillbanks/ZfcTwitterBootstrap"
         }
     ],
     "require": {
@@ -17,7 +21,8 @@
         "zf-commons/zfc-user-doctrine-orm": "dev-master",
         "doctrine/doctrine-orm-module": "0.*",
         "doctrine/migrations": "dev-master",
-        "creof/doctrine2-spatial": "dev-master"
+        "creof/doctrine2-spatial": "dev-master",
+        "mwillbanks/zfc-twitter-bootstrap": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",

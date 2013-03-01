@@ -1,6 +1,11 @@
 // I gather this file is a starting point for the project.
 @import "bootstrap";
 
+// According to Twitter Bootstrap recommendation, add padding before responsive for .navbar-fixed-top
+body {
+    padding-top: 40px;
+}
+
 // Include responsive Bootstrap styles
 @import "bootstrap-responsive";
 @import "font-awesome";

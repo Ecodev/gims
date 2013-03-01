@@ -1,5 +1,5 @@
 {
-    "hash": "fef2a6de8a9fc41266f457749c4fb9aa",
+    "hash": "462a3435e3e41e81f854301d18a605ce",
     "packages": [
         {
             "name": "creof/doctrine2-spatial",
@@ -513,6 +513,53 @@
             "homepage": "https://github.com/firephp/firephp-core"
         },
         {
+            "name": "mwillbanks/zfc-twitter-bootstrap",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mwillbanks/ZfcTwitterBootstrap",
+                "reference": "a23b9b2bcfabf124da2caf86335e3bfdd9290a13"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mwillbanks/ZfcTwitterBootstrap/zipball/a23b9b2bcfabf124da2caf86335e3bfdd9290a13",
+                "reference": "a23b9b2bcfabf124da2caf86335e3bfdd9290a13",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "zendframework/zendframework": "2.*"
+            },
+            "time": "2013-02-07 18:55:00",
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "ZfcTwitterBootstrap": "src/"
+                },
+                "classmap": [
+                    "./"
+                ]
+            },
+            "authors": [
+                {
+                    "name": "Mike Willbanks",
+                    "email": "mike@digitalstruct.com",
+                    "homepage": "http://blog.digitalstruct.com/"
+                }
+            ],
+            "description": "A module that assists in implementing Twitter Bootstrap for ZF2",
+            "homepage": "https://github.com/mwillbanks/ZfcTwitterBootstrap",
+            "keywords": [
+                "Twitter Bootstrap",
+                "twBootstrap",
+                "zf2"
+            ],
+            "support": {
+                "source": "https://github.com/mwillbanks/ZfcTwitterBootstrap/tree/master",
+                "issues": "https://github.com/mwillbanks/ZfcTwitterBootstrap/issues"
+            }
+        },
+        {
             "name": "phing/phing",
             "version": "dev-master",
             "source": {
@@ -566,27 +613,32 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.1.8",
+            "version": "v2.2.0",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "v2.1.8"
+                "reference": "v2.2.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/v2.1.8",
-                "reference": "v2.1.8",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/v2.2.0",
+                "reference": "v2.2.0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2013-01-17 15:20:05",
+            "time": "2013-03-01 06:43:14",
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.2-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
-                    "Symfony\\Component\\Console": ""
+                    "Symfony\\Component\\Console\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1322,6 +1374,7 @@
         "zf-commons/zfc-user-doctrine-orm": 20,
         "doctrine/migrations": 20,
         "creof/doctrine2-spatial": 20,
+        "mwillbanks/zfc-twitter-bootstrap": 20,
         "zendframework/zend-developer-tools": 20
     }
 }

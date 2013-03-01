@@ -7,6 +7,7 @@ return array(
         'ZendDeveloperTools',
         'ZfcUser',
         'ZfcUserDoctrineORM',
+        'ZfcTwitterBootstrap',
         'Application',
         'Api',
         'Admin',
