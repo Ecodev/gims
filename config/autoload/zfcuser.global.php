@@ -22,6 +22,10 @@ $settings = array(
      * The entity class should implement ZfcUser\Entity\UserInterface
      */
     'user_entity_class' => 'Application\Model\User',
+    
+    // Deactivate default Doctrine entities from ZfcUserDoctrineORM 
+    // to avoid conflict with our entities
+    'enable_default_entities' => false,
 
     /**
      * Enable registration
