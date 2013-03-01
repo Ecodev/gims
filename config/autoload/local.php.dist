@@ -11,17 +11,24 @@
  * in ZendSkeletonApplication. This is a good practice, as it prevents sensitive
  * credentials from accidentally being committed into version control.
  */
+
+$database = 'gims';
+$username = 'postgres';
+$password = '';
+
 return array(
     'db' => array(
-        'username' => 'postgres',
-        'password' => '',
+        'dsn' => "pgsql:dbname=$database;host=localhost",
+        'username' => $username,
+        'password' => $password,
     ),
     'doctrine' => array(
         'connection' => array(
             'orm_default' => array(
                 'params' => array(
-                    'user' => 'postgres',
-                    'password' => '',
+                    'dbname' => $database,
+                    'user' => $username,
+                    'password' => $password,
                 ),
             ),
         ),
