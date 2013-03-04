@@ -18,7 +18,15 @@ return array(
                     'user' => 'postgres',
                     'dbname' => 'gims',
                     'port' => 5432,
-                ))),
+                ),
+                'doctrine_type_mappings' => array(
+                    'geometry' => 'geometry',
+                    'point' => 'point',
+                    'polygon' => 'polygon',
+                    'linestring' => 'linestring',
+                ),
+            ),
+        ),
         'driver' => array(
             'application_entities' => array(
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
