@@ -67,10 +67,55 @@ return array(
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
             // using the path /application/:controller/:action
+            //
+            // It will never be matched for incoming URL, but it will be used to assemble URL
             'application' => array(
                 'type' => 'Literal',
                 'options' => array(
                     'route' => '/application',
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'Application\Controller',
+                        'controller' => 'Index',
+                        'action' => 'index',
+                    ),
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'default' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/[:controller[/:action]]',
+                            'constraints' => array(
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ),
+                            'defaults' => array(
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            // Anything which is not API or template are redirected to Application\Controller\Index::indexAction()
+            'angularjs_layout' => array(
+                'type' => 'Regex',
+                'options' => array(
+                    'regex' => '^(?!/api)(?<anything>.*)',
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'Application\Controller',
+                        'controller' => 'Index',
+                        'action' => 'index',
+                    ),
+                    'spec' => '/%anything%',
+                ),
+            ),
+            // The following is a route to simplify getting started creating
+            // new controllers and actions without needing to create a new
+            // module. Simply drop new controllers in, and you can access them
+            // using the path /application/:controller/:action
+            'template' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route' => '/template/application',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller' => 'Index',

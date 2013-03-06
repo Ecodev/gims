@@ -1,0 +1,95 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en" ng-app="myApp">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle('GIMS')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+
+        <!-- Le styles -->
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/favicon.ico'))
+                ->prependStylesheet('/css/application.css')
+        ?>
+
+        <!-- Scripts -->
+        <?php
+        echo $this->headScript()->prependFile('/js/min/html5shiv.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                ->prependFile(array('/js/min/application.js',
+                    array(
+                        // CAUTION: This must be the exact same files in reverse order than in bin/build.sh
+                        '/js/min/directives.js',
+                        '/js/min/filters.js',
+                        '/js/min/controllers.js',
+                        '/js/min/services.js',
+                        '/js/min/app.js',
+                        '/lib/angular/angular.min.js',
+                        '/lib/bootstrap/bootstrap.min.js',
+                        '/js/min/jquery.js',
+                    )
+                ))
+        ?>
+
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="<?php echo $this->url('home') ?>">GIMS</a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                            <li><a href="/about"><?php echo $this->translate('About') ?></a></li>
+                            <li><a href="/browse"><?php echo $this->translate('Browse') ?></a></li>
+                            <li><a href="/contribute"><?php echo $this->translate('Contribute') ?></a></li>
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                    
+                    <div class="pull-right">
+                        <?php if ($this->zfcUserIdentity()): ?>
+                            <p class="navbar-text">
+                                <?php 
+                                echo $this->gravatar($this->zfcUserIdentity()->getEmail(), array('img_size' => 32)) . PHP_EOL;
+                                echo $this->zfcUserDisplayName();
+                                 ?>
+
+                                <a href="<?php echo $this->url('zfcuser/logout') ?>">[<?php echo $this->translate('Sign out') ?>]</a>
+                            </p>
+                        <?php else: ?>
+                            <?php
+                                $f = $this->zfcUserLoginWidget(array('render' => false));
+                                $form = $f->loginForm;
+                                $form->prepare();
+                                $form->setAttribute('action', $this->url('zfcuser/login'));
+                                $form->setAttribute('method', 'post');
+                                $form->setAttribute('class', 'navbar-form');
+
+                                echo $this->form()->openTag($form);
+                                echo $this->formInput($form->get('identity')->setAttribute('class', 'span2')->setAttribute('placeholder', $form->get('identity')->getLabel())) . PHP_EOL;
+                                echo $this->formInput($form->get('credential')->setAttribute('class', 'span2')->setAttribute('placeholder', $form->get('credential')->getLabel())) . PHP_EOL;
+                                echo $this->formButton($form->get('submit')) . PHP_EOL;
+                            ?>
+                            <a href="<?php echo $this->url('zfcuser/register') ?>"><?php echo $this->translate('Create account') ?></a>
+                            <?php echo $this->form()->closeTag(); ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <?php echo $this->content; ?>
+            
+            <div ng-view></div>
+            
+            <hr>
+            <footer>
+                <p><?php echo $this->translate('Designed and built by Ecodev for WHO') ?></p>
+            </footer>
+        </div> <!-- /container -->
+<?php echo $this->inlineScript() ?>
+    </body>
+</html>

@@ -38,6 +38,22 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
         $moduleRouteListener->attach($eventManager);
 
         $this->detectBrowserLocale($e);
+        $this->deactivateLayout($e);
+    }
+
+    /**
+     * Deactivate layout for everything
+     * @param \Zend\Mvc\MvcEvent $e
+     */
+    protected function deactivateLayout(MvcEvent $e)
+    {
+        $sharedEvents = $e->getApplication()->getEventManager()->getSharedManager();
+        $sharedEvents->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', function($e) {
+                    $result = $e->getResult();
+                    if ($result instanceof \Zend\View\Model\ViewModel) {
+                        $result->setTerminal(true);
+                    }
+                });
     }
 
     /**
