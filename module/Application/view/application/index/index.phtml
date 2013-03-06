@@ -23,9 +23,8 @@
                         '/js/min/controllers.js',
                         '/js/min/services.js',
                         '/js/min/app.js',
+                        '/lib/ui-bootstrap/ui-bootstrap-tpls-0.2.0.min.js',
                         '/lib/angular/angular.min.js',
-                        '/lib/bootstrap/bootstrap.min.js',
-                        '/js/min/jquery.js',
                     )
                 ))
         ?>
@@ -49,7 +48,7 @@
                         </ul>
                     </div><!--/.nav-collapse -->
                     
-                    <div class="pull-right">
+                    <div class="pull-right" ng-controller="UserCtrl">
                         <?php if ($this->zfcUserIdentity()): ?>
                             <p class="navbar-text">
                                 <?php 
@@ -60,22 +59,36 @@
                                 <a href="<?php echo $this->url('zfcuser/logout') ?>">[<?php echo $this->translate('Sign out') ?>]</a>
                             </p>
                         <?php else: ?>
-                            <?php
+                            <button class="btn small" ng-click="open()"><?php echo $this->translate('Sign in') ?></button>
+                            <a href="<?php echo $this->url('zfcuser/register') ?>"><?php echo $this->translate('Create account') ?></a>
+                        <?php endif; ?>
+                            
+                        <div modal="shouldBeOpen" close="close()" options="opts">
+                            <?php 
                                 $f = $this->zfcUserLoginWidget(array('render' => false));
                                 $form = $f->loginForm;
                                 $form->prepare();
                                 $form->setAttribute('action', $this->url('zfcuser/login'));
                                 $form->setAttribute('method', 'post');
-                                $form->setAttribute('class', 'navbar-form');
+                                $form->setAttribute('class', 'modal-form form-horizontal');
+                                $form->get('identity')->setAttribute('placeholder', $form->get('identity')->getLabel());
+                                $form->get('credential')->setAttribute('placeholder', $form->get('credential')->getLabel());
 
                                 echo $this->form()->openTag($form);
-                                echo $this->formInput($form->get('identity')->setAttribute('class', 'span2')->setAttribute('placeholder', $form->get('identity')->getLabel())) . PHP_EOL;
-                                echo $this->formInput($form->get('credential')->setAttribute('class', 'span2')->setAttribute('placeholder', $form->get('credential')->getLabel())) . PHP_EOL;
-                                echo $this->formButton($form->get('submit')) . PHP_EOL;
                             ?>
-                            <a href="<?php echo $this->url('zfcuser/register') ?>"><?php echo $this->translate('Create account') ?></a>
+                            <div class="modal-header">
+                                <h3><?php echo $this->translate('Sign in'); ?></h3>
+                            </div>
+                            <div class="modal-body">
+                                <?php echo $this->ztbFormElement($form->get('identity'))?>
+                                <?php echo $this->ztbFormElement($form->get('credential'))?>
+                            </div>
+                            <div class="modal-footer">
+                                <?php echo $this->formButton($form->get('submit')->setAttribute('class', 'btn btn-primary')) ?>
+                                <a class="btn cancel" ng-click="close()"><?php echo $this->translate('Cancel'); ?></a>
+                            </div>
                             <?php echo $this->form()->closeTag(); ?>
-                        <?php endif; ?>
+                        </div>
                     </div>
                 </div>
             </div>

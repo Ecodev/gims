@@ -44,9 +44,8 @@ cd min/
 
 # CAUTION: This must be the exact same files in reverse order than in module/Application/view/layout/layout.phtml
 cat \
-jquery.js \
-../../lib/bootstrap/bootstrap.min.js \
 ../../lib/angular/angular.min.js \
+../../lib/ui-bootstrap/ui-bootstrap-tpls-0.2.0.min.js \
 app.js \
 services.js \
 controllers.js \
