@@ -56,7 +56,7 @@ describe('my app', function() {
 
         it('should render about when user navigates to /about', function() {
             expect(element('[ng-view] p:first').text()).
-                    toMatch(/Learn where the project stems from and what are it’s goals./);
+                    toMatch(/Learn where the project stems from and what are its goals/);
         });
 
     });
@@ -79,6 +79,31 @@ describe('my app', function() {
 
             expect(element('[ng-view] .browse .span4:nth-child(3) h2').text()).
                     toMatch(/Tables/);
+        });
+
+    });
+    
+    describe('contribute', function() {
+
+        beforeEach(function() {
+            browser().navigateTo('/contribute');
+        });
+        noXdebugError();
+
+
+        it('should render contribute when user navigates to /contribute', function() {
+            expect(element('[ng-view] p:first').text()).
+                    toMatch(/Small streams make large rivers/);
+        });
+
+        it('should render sign in form', function() {
+            expect(element('.container button').text()).
+                    toMatch(/Sign in/);
+        });
+        
+        it('should render account creation form', function() {
+            expect(element('.container button').text()).
+                    toMatch(/Create account/);
         });
 
     });
