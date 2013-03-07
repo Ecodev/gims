@@ -39,7 +39,9 @@ class IndexController extends AbstractAngularActionController
 
     public function contributeAction()
     {
-        return new ViewModel();
+        return new ViewModel(array(
+            'registerForm' => $this->getServiceLocator()->get('zfcuser_register_form'),
+        ));
     }
 
 }

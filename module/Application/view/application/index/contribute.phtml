@@ -13,22 +13,49 @@
         <div class="span4">
             <h2>Access</h2>
             <p>Existing users can login here:</p>
-            <form class="">
-                <input type="text" placeholder="Email">
-                <div><input type="password" placeholder="Password"></div>
-                <button type="submit" class="btn">Sign in</button>
-            </form>
+
+            <?php
+            $f = $this->zfcUserLoginWidget(array('render' => false));
+            $form = $f->loginForm;
+            $form->prepare();
+            $form->setAttribute('action', $this->url('zfcuser/login'));
+            $form->setAttribute('method', 'post');
+
+            echo $this->form()->openTag($form);
+
+
+            foreach ($form as $element) {
+                if (!$element instanceof Zend\Form\Element\Button) {
+                    $element->setAttribute('placeholder', $element->getLabel());
+                    $element->setLabel('');
+                    echo $this->ztbFormElement($element);
+                }
+            }
+            echo $this->formButton($form->get('submit')->setAttribute('class', 'btn btn-primary'));
+            echo $this->form()->closeTag();
+            ?>
         </div>
         <div class="span4">
             <h2>Become</h2>
             <p>A contributor of new data or comment existing info: create an account !</p>
 
-            <form class="">
-                <div><input type="text" placeholder="Email"></div>
-                <div><input type="text" placeholder="First name"></div>
-                <div><input type="text" placeholder="Last name"></div>
-                <button type="submit" class="btn">Create account</button>
-            </form>
+            <?php
+            $this->registerForm->prepare();
+            $this->registerForm->setAttribute('action', $this->url('zfcuser/register'));
+            $this->registerForm->setAttribute('method', 'post');
+
+            echo $this->form()->openTag($this->registerForm);
+            foreach ($this->registerForm as $element) {
+
+                if (!$element instanceof Zend\Form\Element\Button) {
+                    $element->setAttribute('placeholder', $element->getLabel());
+                    $element->setLabel('');
+                    echo $this->ztbFormElement($element);
+                }
+            }
+            ?>
+            <?php echo $this->formButton($this->registerForm->get('submit')->setAttribute('class', 'btn btn-primary')) ?>
+            <?php echo $this->form()->closeTag(); ?>
         </div>
         <div class="span4">
             <h2>Contact us</h2>
