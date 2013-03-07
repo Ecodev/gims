@@ -37,7 +37,7 @@ for file in *.js ; do
     echo "$file"
     ngmin "$file" >(uglifyjs - -o "min/$file")
 done
-
+sleep 2
 
 echo "Concatenate JavaScript..."
 cd min/
