@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -13,28 +14,32 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractAngularActionController
 {
+
     public function indexAction()
     {
-        return new ViewModel();
+        return new ViewModel(array(
+            'registerForm' => $this->getServiceLocator()->get('zfcuser_register_form'),
+        ));
     }
-    
+
     public function homeAction()
     {
         return new ViewModel();
     }
-    
+
     public function aboutAction()
     {
         return new ViewModel();
     }
-    
+
     public function browseAction()
     {
         return new ViewModel();
     }
-    
+
     public function contributeAction()
     {
         return new ViewModel();
     }
+
 }
