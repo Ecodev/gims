@@ -3,17 +3,15 @@
 /* Controllers */
 
 
-function MyCtrl1() {
-}
-MyCtrl1.$inject = [];
+angular.module('myApp').controller('MyCtrl1', function () {
+    
+});
 
+angular.module('myApp').controller('MyCtrl2', function () {
+    
+});
 
-function MyCtrl2() {
-}
-MyCtrl2.$inject = [];
-
-
-var UserCtrl = function($scope) {
+angular.module('myApp').controller('UserCtrl', function($scope) {
 
     $scope.open = function() {
         $scope.shouldBeOpen = true;
@@ -30,4 +28,4 @@ var UserCtrl = function($scope) {
         backdropFade: true,
         dialogFade: true
     };
-};
+});

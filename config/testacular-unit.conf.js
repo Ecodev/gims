@@ -10,6 +10,7 @@ files = [
   JASMINE_ADAPTER,
   'htdocs/lib/angular/angular.js',
   'htdocs/lib/angular/angular-*.js',
+  'htdocs/lib/ui-bootstrap/ui-bootstrap-tpls*.js',
   'module/Application/test/lib/angular/angular-mocks.js',
   'htdocs/js/*.js',
   'module/Application/test/unit/**/*.js'

@@ -25,17 +25,17 @@ echo "Compiling JavaScript..."
 cd htdocs/js
 mkdir -p min
 for file in *.js ; do
-	
-	# Discard warnings for third party code
-	if [[ $file =~ jquery|bootstrap ]]
-	then
-		thirdparty="--third_party --warning_level QUIET"
-	else
-		thirdparty=""
-	fi
 
-	echo "$file"
-	java -jar ../../vendor/closure-compiler/compiler.jar --compilation_level SIMPLE_OPTIMIZATIONS  --js "$file" --js_output_file "min/$file" $thirdparty
+    # Discard warnings for third party code
+    if [[ $file =~ jquery|bootstrap ]]
+    then
+        thirdparty="--third_party --warning_level QUIET"
+    else
+        thirdparty=""
+    fi
+
+    echo "$file"
+    ngmin "$file" >(uglifyjs - -o "min/$file")
 done
 
 
