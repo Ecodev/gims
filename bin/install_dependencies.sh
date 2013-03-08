@@ -40,6 +40,7 @@ if [[ "$1" = "travis" ]]; then
 
     sudo a2enmod actions
     sudo a2enmod rewrite
+    sudo a2enmod headers
     sudo service apache2 restart
 
     echo "Configuring custom domain..."
