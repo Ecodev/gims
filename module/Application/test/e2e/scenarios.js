@@ -97,13 +97,13 @@ describe('my app', function() {
         });
 
         it('should render sign in form', function() {
-            expect(element('.container button').text()).
-                    toMatch(/Sign in/);
+            expect(element('body > .container form[action="/user/login"] button').text()).
+                    toMatch(/Sign In/);
         });
         
         it('should render account creation form', function() {
-            expect(element('.container button').text()).
-                    toMatch(/Create account/);
+            expect(element('body > .container form[action="/user/register"] button').text()).
+                    toMatch(/Register/);
         });
 
     });
