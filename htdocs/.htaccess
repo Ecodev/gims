@@ -15,3 +15,10 @@ RewriteRule ^.*$ - [NC,L]
 RewriteCond %{REQUEST_URI}::$1 ^(/.+)(.+)::\2$
 RewriteRule ^(.*) - [E=BASE:%1]
 RewriteRule ^(.*)$ %{ENV:BASE}index.php [NC,L]
+
+# Cache control for 1 year
+<IfModule mod_headers.c>
+	<FilesMatch "\.(svg|jpe?g|png|gif|js|css|otf|eot|ttf|woff)$">
+		Header set Cache-Control "max-age=31536000"
+	</FilesMatch>
+</IfModule>
