@@ -34,7 +34,7 @@ abstract class AbstractModel
     private $dateModified;
 
     /**
-     * @var \User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
@@ -44,7 +44,7 @@ abstract class AbstractModel
     private $creator;
 
     /**
-     * @var \User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
@@ -112,7 +112,7 @@ abstract class AbstractModel
     /**
      * Set creator
      *
-     * @param \User $creator
+     * @param User $creator
      * @return AbstractModel
      */
     public function setCreator(\User$creator)
@@ -125,7 +125,7 @@ abstract class AbstractModel
     /**
      * Get creator
      *
-     * @return \User 
+     * @return User 
      */
     public function getCreator()
     {
@@ -135,10 +135,10 @@ abstract class AbstractModel
     /**
      * Set modifier
      *
-     * @param \User $modifier
+     * @param User $modifier
      * @return AbstractModel
      */
-    public function setModifier(\User $modifier)
+    public function setModifier(User $modifier)
     {
         $this->modifier = $modifier;
 
@@ -148,7 +148,7 @@ abstract class AbstractModel
     /**
      * Get modifier
      *
-     * @return \User 
+     * @return User 
      */
     public function getModifier()
     {

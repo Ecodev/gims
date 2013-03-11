@@ -27,7 +27,7 @@ class Questionnaire extends AbstractModel
     private $dateObservationEnd;
 
     /**
-     * @var \Geoname
+     * @var Geoname
      *
      * @ORM\ManyToOne(targetEntity="Geoname")
      * @ORM\JoinColumns({
@@ -37,7 +37,7 @@ class Questionnaire extends AbstractModel
     private $geoname;
 
     /**
-     * @var \Survey
+     * @var Survey
      *
      * @ORM\ManyToOne(targetEntity="Survey")
      * @ORM\JoinColumns({
@@ -105,10 +105,10 @@ class Questionnaire extends AbstractModel
     /**
      * Set geoname
      *
-     * @param \Geoname $geoname
+     * @param Geoname $geoname
      * @return Questionnaire
      */
-    public function setGeoname(\Geoname $geoname = null)
+    public function setGeoname(Geoname $geoname = null)
     {
         $this->geoname = $geoname;
 
@@ -118,7 +118,7 @@ class Questionnaire extends AbstractModel
     /**
      * Get geoname
      *
-     * @return \Geoname 
+     * @return Geoname 
      */
     public function getGeoname()
     {
@@ -128,10 +128,10 @@ class Questionnaire extends AbstractModel
     /**
      * Set survey
      *
-     * @param \Survey $survey
+     * @param Survey $survey
      * @return Questionnaire
      */
-    public function setSurvey(\Survey $survey = null)
+    public function setSurvey(Survey $survey = null)
     {
         $this->survey = $survey;
 
@@ -141,7 +141,7 @@ class Questionnaire extends AbstractModel
     /**
      * Get survey
      *
-     * @return \Survey 
+     * @return Survey 
      */
     public function getSurvey()
     {

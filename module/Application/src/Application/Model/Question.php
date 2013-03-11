@@ -34,7 +34,7 @@ class Question extends AbstractModel
     private $name;
 
     /**
-     * @var \Category
+     * @var Category
      *
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumns({
@@ -44,7 +44,7 @@ class Question extends AbstractModel
     private $category;
 
     /**
-     * @var \Question
+     * @var Question
      *
      * @ORM\ManyToOne(targetEntity="Question")
      * @ORM\JoinColumns({
@@ -54,7 +54,7 @@ class Question extends AbstractModel
     private $officialQuestion;
 
     /**
-     * @var \Question
+     * @var Question
      *
      * @ORM\ManyToOne(targetEntity="Question")
      * @ORM\JoinColumns({
@@ -64,7 +64,7 @@ class Question extends AbstractModel
     private $parent;
 
     /**
-     * @var \Questionnaire
+     * @var Questionnaire
      *
      * @ORM\ManyToOne(targetEntity="Questionnaire")
      * @ORM\JoinColumns({
@@ -145,10 +145,10 @@ class Question extends AbstractModel
     /**
      * Set category
      *
-     * @param \Category $category
+     * @param Category $category
      * @return Question
      */
-    public function setCategory(\Category $category = null)
+    public function setCategory(Category $category = null)
     {
         $this->category = $category;
 
@@ -158,7 +158,7 @@ class Question extends AbstractModel
     /**
      * Get category
      *
-     * @return \Category 
+     * @return Category 
      */
     public function getCategory()
     {
@@ -168,10 +168,10 @@ class Question extends AbstractModel
     /**
      * Set officialQuestion
      *
-     * @param \Question $officialQuestion
+     * @param Question $officialQuestion
      * @return Question
      */
-    public function setOfficialQuestion(\Question $officialQuestion = null)
+    public function setOfficialQuestion(Question $officialQuestion = null)
     {
         $this->officialQuestion = $officialQuestion;
 
@@ -181,7 +181,7 @@ class Question extends AbstractModel
     /**
      * Get officialQuestion
      *
-     * @return \Question 
+     * @return Question 
      */
     public function getOfficialQuestion()
     {
@@ -191,10 +191,10 @@ class Question extends AbstractModel
     /**
      * Set parent
      *
-     * @param \Question $parent
+     * @param Question $parent
      * @return Question
      */
-    public function setParent(\Question $parent = null)
+    public function setParent(Question $parent = null)
     {
         $this->parent = $parent;
 
@@ -204,7 +204,7 @@ class Question extends AbstractModel
     /**
      * Get parent
      *
-     * @return \Question 
+     * @return Question 
      */
     public function getParent()
     {
@@ -214,10 +214,10 @@ class Question extends AbstractModel
     /**
      * Set questionnaire
      *
-     * @param \Questionnaire $questionnaire
+     * @param Questionnaire $questionnaire
      * @return Question
      */
-    public function setQuestionnaire(\Questionnaire $questionnaire = null)
+    public function setQuestionnaire(Questionnaire $questionnaire = null)
     {
         $this->questionnaire = $questionnaire;
 
@@ -227,7 +227,7 @@ class Question extends AbstractModel
     /**
      * Get questionnaire
      *
-     * @return \Questionnaire 
+     * @return Questionnaire 
      */
     public function getQuestionnaire()
     {

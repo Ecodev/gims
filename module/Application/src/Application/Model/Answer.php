@@ -62,7 +62,7 @@ class Answer extends AbstractModel
     private $status;
 
     /**
-     * @var \Question
+     * @var Question
      *
      * @ORM\ManyToOne(targetEntity="Question")
      * @ORM\JoinColumns({
@@ -72,7 +72,7 @@ class Answer extends AbstractModel
     private $question;
 
     /**
-     * @var \Questionnaire
+     * @var Questionnaire
      *
      * @ORM\ManyToOne(targetEntity="Questionnaire")
      * @ORM\JoinColumns({
@@ -82,7 +82,7 @@ class Answer extends AbstractModel
     private $questionnaire;
 
     /**
-     * @var \User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
@@ -255,10 +255,10 @@ class Answer extends AbstractModel
     /**
      * Set question
      *
-     * @param \Question $question
+     * @param Question $question
      * @return Answer
      */
-    public function setQuestion(\Question $question = null)
+    public function setQuestion(Question $question = null)
     {
         $this->question = $question;
 
@@ -268,7 +268,7 @@ class Answer extends AbstractModel
     /**
      * Get question
      *
-     * @return \Question 
+     * @return Question 
      */
     public function getQuestion()
     {
@@ -278,10 +278,10 @@ class Answer extends AbstractModel
     /**
      * Set questionnaire
      *
-     * @param \Questionnaire $questionnaire
+     * @param Questionnaire $questionnaire
      * @return Answer
      */
-    public function setQuestionnaire(\Questionnaire $questionnaire = null)
+    public function setQuestionnaire(Questionnaire $questionnaire = null)
     {
         $this->questionnaire = $questionnaire;
 
@@ -291,7 +291,7 @@ class Answer extends AbstractModel
     /**
      * Get questionnaire
      *
-     * @return \Questionnaire 
+     * @return Questionnaire 
      */
     public function getQuestionnaire()
     {
@@ -301,10 +301,10 @@ class Answer extends AbstractModel
     /**
      * Set valueUser
      *
-     * @param \User $valueUser
+     * @param User $valueUser
      * @return Answer
      */
-    public function setValueUser(\User $valueUser = null)
+    public function setValueUser(User $valueUser = null)
     {
         $this->valueUser = $valueUser;
 
@@ -314,7 +314,7 @@ class Answer extends AbstractModel
     /**
      * Get valueUser
      *
-     * @return \User 
+     * @return User 
      */
     public function getValueUser()
     {

@@ -13,7 +13,7 @@ class UserSurvey extends AbstractModel
 {
 
     /**
-     * @var \User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
@@ -23,7 +23,7 @@ class UserSurvey extends AbstractModel
     private $user;
 
     /**
-     * @var \Role
+     * @var Role
      *
      * @ORM\ManyToOne(targetEntity="Role")
      * @ORM\JoinColumns({
@@ -33,7 +33,7 @@ class UserSurvey extends AbstractModel
     private $role;
 
     /**
-     * @var \Survey
+     * @var Survey
      *
      * @ORM\ManyToOne(targetEntity="Survey")
      * @ORM\JoinColumns({
@@ -45,10 +45,10 @@ class UserSurvey extends AbstractModel
     /**
      * Set "user"
      *
-     * @param \User $"user"
+     * @param User $user
      * @return UserSurvey
      */
-    public function setUser(\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -58,7 +58,7 @@ class UserSurvey extends AbstractModel
     /**
      * Get user
      *
-     * @return \User
+     * @return User
      */
     public function getUser()
     {
@@ -68,10 +68,10 @@ class UserSurvey extends AbstractModel
     /**
      * Set role
      *
-     * @param \Role $role
+     * @param Role $role
      * @return UserSurvey
      */
-    public function setRole(\Role $role = null)
+    public function setRole(Role $role = null)
     {
         $this->role = $role;
 
@@ -81,7 +81,7 @@ class UserSurvey extends AbstractModel
     /**
      * Get role
      *
-     * @return \Role 
+     * @return Role 
      */
     public function getRole()
     {
@@ -91,10 +91,10 @@ class UserSurvey extends AbstractModel
     /**
      * Set survey
      *
-     * @param \Survey $survey
+     * @param Survey $survey
      * @return UserSurvey
      */
-    public function setSurvey(\Survey $survey = null)
+    public function setSurvey(Survey $survey = null)
     {
         $this->survey = $survey;
 
@@ -104,7 +104,7 @@ class UserSurvey extends AbstractModel
     /**
      * Get survey
      *
-     * @return \Survey 
+     * @return Survey 
      */
     public function getSurvey()
     {

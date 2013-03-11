@@ -142,7 +142,7 @@ class Country
     private $equivalentFipsCode;
 
     /**
-     * @var \Geoname
+     * @var Geoname
      *
      * @ORM\ManyToOne(targetEntity="Geoname")
      * @ORM\JoinColumns({
@@ -555,10 +555,10 @@ class Country
     /**
      * Set geoname
      *
-     * @param \Geoname $geoname
+     * @param Geoname $geoname
      * @return Country
      */
-    public function setGeoname(\Geoname $geoname = null)
+    public function setGeoname(Geoname $geoname = null)
     {
         $this->geoname = $geoname;
 
@@ -568,7 +568,7 @@ class Country
     /**
      * Get geoname
      *
-     * @return \Geoname 
+     * @return Geoname 
      */
     public function getGeoname()
     {

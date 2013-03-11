@@ -27,7 +27,7 @@ class Category extends AbstractModel
     private $official;
 
     /**
-     * @var \Category
+     * @var Category
      *
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumns({
@@ -37,7 +37,7 @@ class Category extends AbstractModel
     private $officialCategory;
 
     /**
-     * @var \Category
+     * @var Category
      *
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumns({
@@ -95,10 +95,10 @@ class Category extends AbstractModel
     /**
      * Set officialCategory
      *
-     * @param \Category $officialCategory
+     * @param Category $officialCategory
      * @return Category
      */
-    public function setOfficialCategory(\Category $officialCategory = null)
+    public function setOfficialCategory(Category $officialCategory = null)
     {
         $this->officialCategory = $officialCategory;
 
@@ -108,7 +108,7 @@ class Category extends AbstractModel
     /**
      * Get officialCategory
      *
-     * @return \Category 
+     * @return Category 
      */
     public function getOfficialCategory()
     {
@@ -118,10 +118,10 @@ class Category extends AbstractModel
     /**
      * Set parent
      *
-     * @param \Category $parent
+     * @param Category $parent
      * @return Category
      */
-    public function setParent(\Category $parent = null)
+    public function setParent(Category $parent = null)
     {
         $this->parent = $parent;
 
@@ -131,7 +131,7 @@ class Category extends AbstractModel
     /**
      * Get parent
      *
-     * @return \Category 
+     * @return Category 
      */
     public function getParent()
     {

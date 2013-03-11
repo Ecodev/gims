@@ -13,7 +13,7 @@ class UserQuestionnaire extends AbstractModel
 {
 
     /**
-     * @var \User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
@@ -23,7 +23,7 @@ class UserQuestionnaire extends AbstractModel
     private $user;
 
     /**
-     * @var \Questionnaire
+     * @var Questionnaire
      *
      * @ORM\ManyToOne(targetEntity="Questionnaire")
      * @ORM\JoinColumns({
@@ -33,7 +33,7 @@ class UserQuestionnaire extends AbstractModel
     private $questionnaire;
 
     /**
-     * @var \Role
+     * @var Role
      *
      * @ORM\ManyToOne(targetEntity="Role")
      * @ORM\JoinColumns({
@@ -45,10 +45,10 @@ class UserQuestionnaire extends AbstractModel
     /**
      * Set "user"
      *
-     * @param \User $"user"
+     * @param User $user
      * @return UserQuestionnaire
      */
-    public function setUser(\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -58,7 +58,7 @@ class UserQuestionnaire extends AbstractModel
     /**
      * Get "user"
      *
-     * @return \User 
+     * @return User 
      */
     public function getUser()
     {
@@ -68,10 +68,10 @@ class UserQuestionnaire extends AbstractModel
     /**
      * Set questionnaire
      *
-     * @param \Questionnaire $questionnaire
+     * @param Questionnaire $questionnaire
      * @return UserQuestionnaire
      */
-    public function setQuestionnaire(\Questionnaire $questionnaire = null)
+    public function setQuestionnaire(Questionnaire $questionnaire = null)
     {
         $this->questionnaire = $questionnaire;
 
@@ -81,7 +81,7 @@ class UserQuestionnaire extends AbstractModel
     /**
      * Get questionnaire
      *
-     * @return \Questionnaire 
+     * @return Questionnaire 
      */
     public function getQuestionnaire()
     {
@@ -91,10 +91,10 @@ class UserQuestionnaire extends AbstractModel
     /**
      * Set role
      *
-     * @param \Role $role
+     * @param Role $role
      * @return UserQuestionnaire
      */
-    public function setRole(\Role $role = null)
+    public function setRole(Role $role = null)
     {
         $this->role = $role;
 
@@ -104,7 +104,7 @@ class UserQuestionnaire extends AbstractModel
     /**
      * Get role
      *
-     * @return \Role 
+     * @return Role 
      */
     public function getRole()
     {
