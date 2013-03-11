@@ -22,7 +22,8 @@
         "doctrine/doctrine-orm-module": "0.*",
         "doctrine/migrations": "dev-master",
         "creof/doctrine2-spatial": "dev-master",
-        "mwillbanks/zfc-twitter-bootstrap": "dev-master"
+        "mwillbanks/zfc-twitter-bootstrap": "dev-master",
+        "CodePlex/PHPExcel": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",

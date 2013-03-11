@@ -113,7 +113,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
 
         return array(
             'Application module commands',
-            'database update' => "Update database schema based on data/migrations/",
+            'import jmp <file>' => "Import individual country file in JMP format",
         );
     }
 

@@ -4,147 +4,211 @@ namespace Application\Controller;
 
 use Zend\Console\Request as ConsoleRequest;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Db\Adapter\Adapter;
 
 class ConsoleController extends AbstractActionController
 {
 
     use \Application\Traits\EntityManagerAware;
 
-    protected $sqlPath = 'data/migrations/'; // This is the path where all SQL patches resides
-
     /**
-     * Returns the last version available in SQL file
-     * @return integer last version of patches
+     * Import data from file
      */
-
-    protected function getPatchVersion()
+    public function importJmpAction()
     {
-        $lastVersion = 0;
-        $d = dir($this->sqlPath);
-        while (false !== ($entry = $d->read())) {
-            if (preg_match('/^version\.(\d+)\.sql$/i', $entry, $a)) {
-                if ((int) $a[1] > $lastVersion)
-                    $lastVersion = (int) $a[1];
-            }
-        }
-        $d->close();
+        $filename = $this->getRequest()->getParam('file');
 
-        return $lastVersion;
-    }
+        // Here we cannot use readonly mode for PHPExcel because it would not read RichText data (as stated in documentation)
+        $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
+        $reader->setReadDataOnly(true);
 
-    /**
-     * Returns the whole SQL (enclosed in transaction) needed to update from 
-     * specified version to specified target version.
-     * @param integer $currentVersion the version currently found in database
-     * @param integer $targetVersion the target version to reach wich patches 
-     * @return string the SQL 
-     */
-    protected function buildSQL($currentVersion, $targetVersion)
-    {
+        $sheeNamesToImport = array('Tables_W', 'Tables_S');
+        $reader->setLoadSheetsOnly($sheeNamesToImport);
+        $workbook = $reader->load($filename);
 
-        if ($currentVersion > $targetVersion)
-            throw new \RuntimeException('Cannot downgrade versions. Target version must be higher than current version');
+        $questionnaireCount = 0;
+        foreach ($sheeNamesToImport as $i => $sheetName) {
+            $workbook->setActiveSheetIndex($i);
+            $sheet = $workbook->getSheet($i);
 
-        $missingVersions = array();
-        $sql = '';
-        for ($v = $currentVersion + 1; $v <= $targetVersion; $v++) {
-            $file = $this->sqlPath . 'version.' . str_pad($v, 3, '0', STR_PAD_LEFT) . '.sql';
-            if (is_file($file)) {
-                $sql .= "\n-- -------- VERSION $v BEGINS ------------------------\n";
-                $sql .= file_get_contents($file);
-                $sql .= "\n-- -------- VERSION $v ENDS --------------------------\n";
-            } else {
-                $missingVersions[] = $v;
+            // Import all questionnaire found, until no questionnaire code found
+            $col = 0;
+            while ($this->importQuestionnaire($sheet, $col)) {
+                $col += 6;
+                $questionnaireCount++;
+                echo PHP_EOL;
             }
         }
 
-        if (count($missingVersions))
-            throw new \RuntimeException('Missing SQL file for versions: ' . join(',', $missingVersions));
-
-        return $sql;
+        return "Total questionnaire: " . $questionnaireCount . PHP_EOL;
     }
 
     /**
-     * Executes a batch of SQL commands.
-     * @param string $sql to be executed
-     * @return string the error code returned by mysql 
+     * Import a questionnaire from the given column offset.
+     * Questionnaire and Answers will always be created new. All other objects will be retrieved from database if available.
+     * @param \PHPExcel_Worksheet $sheet
+     * @param integer $col
+     * @return boolean whether it imported something
      */
-    protected function executeBatchSql($sql, $version)
+    protected function importQuestionnaire(\PHPExcel_Worksheet $sheet, $col)
     {
-        /* @var $db \Zend\Db\Adapter\Adapter */
-        $db = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $code = $sheet->getCellByColumnAndRow($col + 2, 1)->getCalculatedValue();
 
-        $affectedRows = 0;
+        // If no code found, we assume end of survey
+        if (!$code) {
+            return false;
+        }
 
-        // Strip lines with comments starting at beginning of line
-        $sql = preg_replace('/^\s*--.*$/m', '', $sql);
+        // Load or create survey
+        $surveyRepository = $this->getEntityManager()->getRepository('Application\Model\Survey');
+        $survey = $surveyRepository->findOneBy(array('code' => $code));
+        if (!$survey) {
+            $survey = new \Application\Model\Survey();
+            $this->getEntityManager()->persist($survey);
 
-        // Split SQL queries with ';'
-        preg_match_all('/([^;"\']+|"([^"]*)"|\'([^\']*)\')+(;|\s*$)/', $sql, $m);
-        $queries = $m[0];
+            $survey->setActive(true);
+            $survey->setCode($code);
+            $survey->setName($sheet->getCellByColumnAndRow($col + 0, 2)->getCalculatedValue());
+            $survey->setYear($sheet->getCellByColumnAndRow($col + 3, 3)->getCalculatedValue());
 
-        try {
-            $db->driver->getConnection()->beginTransaction();
-            foreach ($queries as $query) {
-                if (strlen(trim($query)) > 0) {
-                    echo '.';
-                    $result = $db->query($query, Adapter::QUERY_MODE_EXECUTE);
-                    $affectedRows += $result->getAffectedRows();
+            if (!$survey->getName()) {
+                $survey->setName($survey->getCode());
+            }
+        }
+
+        // Create questionnaire
+        $questionnaire = new \Application\Model\Questionnaire();
+        $this->getEntityManager()->persist($questionnaire);
+        $questionnaire->setSurvey($survey);
+        $questionnaire->setDateObservationStart(new \DateTime($survey->getYear() . '-01-01'));
+        $questionnaire->setDateObservationEnd(new \DateTime($survey->getYear() . '-12-31T23:59:59'));
+
+        $countryName = $sheet->getCellByColumnAndRow($col + 3, 1)->getCalculatedValue();
+        $countryRepository = $this->getEntityManager()->getRepository('Application\Model\Country');
+        $country = $countryRepository->findOneBy(array('name' => $countryName));
+        $questionnaire->setGeoname($country->getGeoname());
+
+        echo 'Survey: ' . $survey->getCode() . PHP_EOL;
+        echo 'Country: ' . $country->getName() . PHP_EOL;
+
+        $this->importAnswers($sheet, $col, $questionnaire);
+
+
+        $this->getEntityManager()->flush();
+
+        return true;
+    }
+
+    /**
+     * Import all answers found at given column offset. 
+     * Questions will only be created if an answer exists.
+     * @param \PHPExcel_Worksheet $sheet
+     * @param integer $col
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @return void
+     */
+    protected function importAnswers(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire)
+    {
+        // Define the categories where we actually have answer data
+        $answerCategoryGetters = array(
+            $col + 3 => function($importer, $category, $parentCategory) {
+                return $importer->getCategory('Urban', $category);
+            },
+            $col + 4 => function($importer, $category, $parentCategory) {
+                return $importer->getCategory('Rural', $category);
+            },
+            $col + 5 => function($importer, $category, $parentCategory) {
+                // and total category is actually the current category itself
+                return $category ? : $parentCategory;
+            },
+        );
+
+        $answerCount = 0;
+
+        $parentCategory = null; // Tap water, Ground Water, etc...
+        $category = null; // House connection, piped water into dwelling, piped water to yard, etc...
+
+        for ($row = 5; $row < 77; $row++) {
+            $parentCategoryName = $sheet->getCellByColumnAndRow($col + 1, $row)->getCalculatedValue();
+            if ($parentCategoryName) {
+                $parentCategory = $this->getCategory($parentCategoryName);
+                $category = null;
+            }
+
+            $categoryName = $sheet->getCellByColumnAndRow($col + 2, $row)->getCalculatedValue();
+            if ($categoryName) {
+                $category = $this->getCategory($categoryName, $parentCategory);
+            }
+
+            foreach ($answerCategoryGetters as $c => $cateforyGetter) {
+                $answerCell = $sheet->getCellByColumnAndRow($c, $row);
+                if ($answerCell->getDataType() == \PHPExcel_Cell_DataType::TYPE_NUMERIC) {
+                    $question = $this->getQuestion($questionnaire, $cateforyGetter($this, $category, $parentCategory));
+
+                    $answer = new \Application\Model\Answer();
+                    $this->getEntityManager()->persist($answer);
+                    $answer->setQuestionnaire($questionnaire);
+                    $answer->setQuestion($question);
+                    $answer->setValuePercent($answerCell->getValue());
+
+                    $answerCount++;
                 }
             }
 
-            $db->driver->getConnection()->commit();
-        } catch (\Exception $e) {
-            $db->driver->getConnection()->rollback();
-            throw new \Exception("FAILED update to version $version ! see error above, the update have been rolled back", null, $e);
+            $this->getEntityManager()->flush();
         }
 
-        echo "\n" . 'affected rows count: ' . $affectedRows . "\n";
+        echo "Answers: " . $answerCount . PHP_EOL;
     }
 
     /**
-     * Do the actual update
+     * Returns a category either from database, or newly created
+     * @param string $name
+     * @param \Application\Model\Category $parent
+     * @param \Application\Model\Category $officialCategory
+     * @return \Application\Model\Category
      */
-    public function databaseUpdateAction()
+    protected function getCategory($name, \Application\Model\Category $parent = null, \Application\Model\Category $officialCategory = null)
     {
-        return "DEPRECATED: you should instead use: ./vendor/bin/doctrine-module migrations:migrate" . PHP_EOL;
-        
-        /**
-         * Enforce valid console request
-         */
-        $request = $this->getRequest();
-        if (!$request instanceof ConsoleRequest) {
-            throw new \RuntimeException('You can only use this action from a console!');
+        $categoryRepository = $this->getEntityManager()->getRepository('Application\Model\Category');
+        $criteria = array('name' => $name);
+        if ($parent)
+            $criteria['parent'] = $parent;
+        $category = $categoryRepository->findOneBy($criteria);
+
+        if (!$category) {
+            $category = new \Application\Model\Category();
+            $this->getEntityManager()->persist($category);
+            $category->setName($name);
+            $category->setOfficial(is_null($officialCategory));
+            $category->setParent($parent);
         }
 
-        $sm = $this->getServiceLocator();
-        $settingMapper = $sm->get('Application\Mapper\SettingMapper');
+        return $category;
+    }
 
+    /**
+     * Returns a question either from database, or newly created
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @param \Application\Model\Category $category
+     * @return \Application\Model\Question
+     */
+    protected function getQuestion(\Application\Model\Questionnaire $questionnaire, \Application\Model\Category $category)
+    {
+        $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question');
+        $question = $questionRepository->findOneBy(array('questionnaire' => $questionnaire, 'category' => $category));
+        if (!$question) {
+            $question = new \Application\Model\Question();
+            $this->getEntityManager()->persist($question);
 
-        $databaseVersion = $settingMapper->fetch('databaseVersion');
-        if ($databaseVersion->value == null)
-            $databaseVersion->value = -1;
-
-        $targetVersion = $this->getPatchVersion();
-
-        echo 'current version is: ' . $databaseVersion->value . "\n";
-        echo 'target version is : ' . $targetVersion . "\n";
-
-        if ($databaseVersion->value == $targetVersion) {
-            echo "already up-to-date\n";
-            return;
+            $question->setQuestionnaire($questionnaire);
+            $question->setCategory($category);
+            $question->setName('How many people ?');
+            $question->setSorting(0); // @TODO: find out better value
+            $question->setType('foo'); // @TODO: find out better value
+            $this->getEntityManager()->persist($question);
         }
 
-        for ($v = $databaseVersion->value + 1; $v <= $targetVersion; $v++) {
-            $sql = $this->buildSQL($v - 1, $v);
-            echo "\n_________________________________________________\n";
-            echo "updating to version $v...\n";
-            $this->executeBatchSql($sql, $v);
-            echo "\nsuccessful update to version $v !\n";
-            $databaseVersion->value = $v;
-            $databaseVersion->save();
-        }
+        return $question;
     }
 
 }

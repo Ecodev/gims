@@ -99,7 +99,7 @@ return array(
             'angularjs_layout' => array(
                 'type' => 'Regex',
                 'options' => array(
-                    'regex' => '^(?!/api)(?<anything>.*)',
+                    'regex' => '^(?!(/api|/ocra_service_manager_yuml))(?<anything>.*)',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller' => 'Index',
@@ -195,10 +195,10 @@ return array(
             'routes' => array(
                 'database-update' => array(
                     'options' => array(
-                        'route' => 'database update',
+                        'route' => 'import jmp <file>',
                         'defaults' => array(
                             'controller' => 'Application\Controller\Console',
-                            'action' => 'databaseUpdate'
+                            'action' => 'importJmp'
                         ),
                     ),
                 ),

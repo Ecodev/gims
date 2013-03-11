@@ -20,6 +20,13 @@ class Survey extends AbstractModel
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=false)
+     */
+    private $code;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(type="boolean", nullable=false)
@@ -54,6 +61,29 @@ class Survey extends AbstractModel
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     * @return Survey
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string 
+     */
+    public function getCode()
+    {
+        return $this->code;
     }
 
     /**

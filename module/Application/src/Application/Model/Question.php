@@ -17,7 +17,7 @@ class Question extends AbstractModel
      *
      * @ORM\Column(type="smallint", nullable=false)
      */
-    private $order;
+    private $sorting;
 
     /**
      * @var string
@@ -74,26 +74,26 @@ class Question extends AbstractModel
     private $questionnaire;
 
     /**
-     * Set order
+     * Set sorting
      *
-     * @param integer $order
+     * @param integer $sorting
      * @return Question
      */
-    public function setOrder($order)
+    public function setSorting($sorting)
     {
-        $this->order = $order;
+        $this->sorting = $sorting;
 
         return $this;
     }
 
     /**
-     * Get order
+     * Get sorting
      *
      * @return integer 
      */
-    public function getOrder()
+    public function getSorting()
     {
-        return $this->order;
+        return $this->sorting;
     }
 
     /**
