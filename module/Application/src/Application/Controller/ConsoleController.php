@@ -53,7 +53,7 @@ class ConsoleController extends AbstractActionController
     {
         $code = $sheet->getCellByColumnAndRow($col + 2, 1)->getCalculatedValue();
 
-        // If no code found, we assume end of survey
+        // If no code found, we assume no survey at all
         if (!$code) {
             return false;
         }
@@ -117,32 +117,54 @@ class ConsoleController extends AbstractActionController
                 return $importer->getCategory('Rural', $category);
             },
             $col + 5 => function($importer, $category, $parentCategory) {
-                // and total category is actually the current category itself
+                // Total category is actually the current category itself
                 return $category ? : $parentCategory;
             },
         );
 
-        $answerCount = 0;
+        // The survey category, the parent category of all other categories
+        $surveyCategoryName = $sheet->getCellByColumnAndRow($col, 1)->getCalculatedValue();
+        $surveyCategory = $this->getCategory($surveyCategoryName);
 
-        $parentCategory = null; // Tap water, Ground Water, etc...
-        $category = null; // House connection, piped water into dwelling, piped water to yard, etc...
+        $answerCount = 0;
+        $officialParentCategory = null; // Tap water, Ground Water, etc...
+        $officialCategory = null; // House connection, piped water into dwelling, piped water to yard, etc...
 
         for ($row = 5; $row < 77; $row++) {
-            $parentCategoryName = $sheet->getCellByColumnAndRow($col + 1, $row)->getCalculatedValue();
-            if ($parentCategoryName) {
-                $parentCategory = $this->getCategory($parentCategoryName);
-                $category = null;
+            $officialParentCategoryName = $sheet->getCellByColumnAndRow($col + 1, $row)->getCalculatedValue();
+            if ($officialParentCategoryName) {
+                $officialParentCategory = $this->getCategory($officialParentCategoryName, $surveyCategory);
+                $officialCategory = null;
             }
 
-            $categoryName = $sheet->getCellByColumnAndRow($col + 2, $row)->getCalculatedValue();
-            if ($categoryName) {
-                $category = $this->getCategory($categoryName, $parentCategory);
+            $officialCategoryName = $sheet->getCellByColumnAndRow($col + 2, $row)->getCalculatedValue();
+            if ($officialCategoryName) {
+                $officialCategory = $this->getCategory($officialCategoryName, $officialParentCategory);
             }
 
+            // If there is an alternate category, linked it to official
+            $alternateParentCategory = null;
+            $alternateCategory = null;
+            $alternateCategoryName = $sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
+            if ($alternateCategoryName) {
+                if ($officialCategory) {
+                    $alternateCategory = $this->getCategory($alternateCategoryName, $officialParentCategory, $officialCategory);
+                } else {
+                    $alternateParentCategory = $this->getCategory($alternateCategoryName, $surveyCategory, $officialParentCategory);
+                }
+            }
+
+            // Use alternate instead of official, if any
+            $category = $alternateCategory ? : $officialCategory;
+            $parentCategory = $alternateParentCategory ? : $officialParentCategory;
+
+            // Import answers
             foreach ($answerCategoryGetters as $c => $cateforyGetter) {
                 $answerCell = $sheet->getCellByColumnAndRow($c, $row);
+                
+                // Only import value which are numeric, and NOT formula
                 if ($answerCell->getDataType() == \PHPExcel_Cell_DataType::TYPE_NUMERIC) {
-                    $question = $this->getQuestion($questionnaire, $cateforyGetter($this, $category, $parentCategory));
+                    $question = $this->getQuestion($questionnaire, $cateforyGetter($this, $category, $parentCategory), $answerCount);
 
                     $answer = new \Application\Model\Answer();
                     $this->getEntityManager()->persist($answer);
@@ -180,6 +202,7 @@ class ConsoleController extends AbstractActionController
             $this->getEntityManager()->persist($category);
             $category->setName($name);
             $category->setOfficial(is_null($officialCategory));
+            $category->setOfficialCategory($officialCategory);
             $category->setParent($parent);
         }
 
@@ -190,9 +213,10 @@ class ConsoleController extends AbstractActionController
      * Returns a question either from database, or newly created
      * @param \Application\Model\Questionnaire $questionnaire
      * @param \Application\Model\Category $category
+     * @param integer $sorting Sorting of the question
      * @return \Application\Model\Question
      */
-    protected function getQuestion(\Application\Model\Questionnaire $questionnaire, \Application\Model\Category $category)
+    protected function getQuestion(\Application\Model\Questionnaire $questionnaire, \Application\Model\Category $category, $sorting)
     {
         $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question');
         $question = $questionRepository->findOneBy(array('questionnaire' => $questionnaire, 'category' => $category));
@@ -202,8 +226,8 @@ class ConsoleController extends AbstractActionController
 
             $question->setQuestionnaire($questionnaire);
             $question->setCategory($category);
-            $question->setName('How many people ?');
-            $question->setSorting(0); // @TODO: find out better value
+            $question->setName('Percentage of population?');
+            $question->setSorting($sorting);
             $question->setType('foo'); // @TODO: find out better value
             $this->getEntityManager()->persist($question);
         }
