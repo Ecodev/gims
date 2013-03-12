@@ -193,12 +193,21 @@ return array(
     'console' => Array(
         'router' => array(
             'routes' => array(
-                'database-update' => array(
+                'import-jmp' => array(
                     'options' => array(
                         'route' => 'import jmp <file>',
                         'defaults' => array(
                             'controller' => 'Application\Controller\Console',
                             'action' => 'importJmp'
+                        ),
+                    ),
+                ),
+                'import-population' => array(
+                    'options' => array(
+                        'route' => 'import population [<urbanFile>] [<ruralFile>] [<totalFile>]',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Console',
+                            'action' => 'importPopulation'
                         ),
                     ),
                 ),

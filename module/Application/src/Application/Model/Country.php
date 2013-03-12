@@ -65,13 +65,6 @@ class Country
     private $area;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $population;
-
-    /**
      * @var string
      *
      * @ORM\Column(type="string", nullable=true)
@@ -297,29 +290,6 @@ class Country
     public function getArea()
     {
         return $this->area;
-    }
-
-    /**
-     * Set population
-     *
-     * @param integer $population
-     * @return Country
-     */
-    public function setPopulation($population)
-    {
-        $this->population = $population;
-
-        return $this;
-    }
-
-    /**
-     * Get population
-     *
-     * @return integer 
-     */
-    public function getPopulation()
-    {
-        return $this->population;
     }
 
     /**
