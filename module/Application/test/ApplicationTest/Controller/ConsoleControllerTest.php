@@ -27,7 +27,7 @@ class ConsoleControllerTest extends \Zend\Test\PHPUnit\Controller\AbstractConsol
     {
         $this->dispatch('');
         $this->assertConsoleOutputContains('Usage:');
-        $this->assertConsoleOutputContains('Import individual country file in JMP format');
+        $this->assertConsoleOutputContains('phpunit import jmp');
     }
 
     public function testJmpImport()
