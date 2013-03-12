@@ -115,7 +115,7 @@ abstract class AbstractModel
      * @param User $creator
      * @return AbstractModel
      */
-    public function setCreator(\User$creator)
+    public function setCreator(User $creator)
     {
         $this->creator = $creator;
 
