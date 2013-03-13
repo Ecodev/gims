@@ -22,7 +22,7 @@ class Answer extends AbstractModel
     /**
      * @var float
      *
-     * @ORM\Column(type="decimal", nullable=true)
+     * @ORM\Column(type="decimal", precision=3, scale=2, nullable=true)
      */
     private $valuePercent;
 
@@ -43,14 +43,14 @@ class Answer extends AbstractModel
     /**
      * @var float
      *
-     * @ORM\Column(type="decimal", nullable=true)
+     * @ORM\Column(type="decimal", precision=3, scale=2, nullable=true)
      */
     private $quality;
 
     /**
      * @var float
      *
-     * @ORM\Column(type="decimal", nullable=true)
+     * @ORM\Column(type="decimal", precision=3, scale=2, nullable=true)
      */
     private $relevance;
 
@@ -115,7 +115,7 @@ class Answer extends AbstractModel
     }
 
     /**
-     * Set valuePercent
+     * Set valuePercent (between 0.0 and 1.0)
      *
      * @param float $valuePercent
      * @return Answer
@@ -128,7 +128,7 @@ class Answer extends AbstractModel
     }
 
     /**
-     * Get valuePercent
+     * Get valuePercent (between 0.0 and 1.0)
      *
      * @return float 
      */
@@ -184,7 +184,7 @@ class Answer extends AbstractModel
     }
 
     /**
-     * Set quality
+     * Set quality (between 0.0 and 1.0)
      *
      * @param float $quality
      * @return Answer
@@ -197,7 +197,7 @@ class Answer extends AbstractModel
     }
 
     /**
-     * Get quality
+     * Get quality (between 0.0 and 1.0)
      *
      * @return float 
      */
@@ -207,7 +207,7 @@ class Answer extends AbstractModel
     }
 
     /**
-     * Set relevance
+     * Set relevance (between 0.0 and 1.0)
      *
      * @param float $relevance
      * @return Answer
@@ -220,7 +220,7 @@ class Answer extends AbstractModel
     }
 
     /**
-     * Get relevance
+     * Get relevance (between 0.0 and 1.0)
      *
      * @return float 
      */

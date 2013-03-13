@@ -34,9 +34,9 @@ class Survey extends AbstractModel
     private $active;
 
     /**
-     * @var float
+     * @var integer
      *
-     * @ORM\Column(type="decimal", nullable=true)
+     * @ORM\Column(type="decimal", precision=4, scale=0, nullable=true)
      */
     private $year;
 
@@ -112,7 +112,7 @@ class Survey extends AbstractModel
     /**
      * Set year
      *
-     * @param float $year
+     * @param integer $year
      * @return Survey
      */
     public function setYear($year)
@@ -125,7 +125,7 @@ class Survey extends AbstractModel
     /**
      * Get year
      *
-     * @return float 
+     * @return integer
      */
     public function getYear()
     {

@@ -16,7 +16,7 @@ class Population extends AbstractModel
     /**
      * @var integer
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="decimal", precision=4, scale=0)
      */
     private $year;
 

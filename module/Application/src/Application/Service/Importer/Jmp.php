@@ -162,7 +162,7 @@ class Jmp extends AbstractImporter
                     $this->getEntityManager()->persist($answer);
                     $answer->setQuestionnaire($questionnaire);
                     $answer->setQuestion($question);
-                    $answer->setValuePercent($answerCell->getValue());
+                    $answer->setValuePercent($answerCell->getValue() / 100);
 
                     $answerCount++;
                 }
