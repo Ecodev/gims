@@ -6,9 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\MappedSuperclass
+ * @ORM\HasLifecycleCallbacks
  */
 abstract class AbstractModel
 {
+
+    private static $now;
 
     /**
      * @var integer
@@ -115,7 +118,7 @@ abstract class AbstractModel
      * @param User $creator
      * @return AbstractModel
      */
-    public function setCreator(User $creator)
+    public function setCreator(User $creator = null)
     {
         $this->creator = $creator;
 
@@ -138,7 +141,7 @@ abstract class AbstractModel
      * @param User $modifier
      * @return AbstractModel
      */
-    public function setModifier(User $modifier)
+    public function setModifier(User $modifier = null)
     {
         $this->modifier = $modifier;
 
@@ -153,6 +156,50 @@ abstract class AbstractModel
     public function getModifier()
     {
         return $this->modifier;
+    }
+
+    /**
+     * Returns now, always same value for a single PHP execution
+     * @return \DateTime
+     */
+    private static function getNow()
+    {
+        if (!self::$now)
+            self::$now = new \DateTime();
+
+        return self::$now;
+    }
+
+    /**
+     * Returns currently logged user
+     * @return User
+     */
+    private static function getCurrentUser()
+    {
+        $sm = \Application\Module::getServiceManager();
+        $auth = $sm->get('zfcuser_auth_service');
+
+        return $auth->getIdentity();
+    }
+
+    /**
+     * Automatically called by Doctrine when the object is saved for the first time
+     * @ORM\PrePersist
+     */
+    public function timestampCreation()
+    {
+        $this->setDateCreated(self::getNow());
+        $this->setCreator(self::getCurrentUser());
+    }
+
+    /**
+     * Automatically called by Doctrine when the object is updated
+     * @ORM\PreUpdate
+     */
+    public function timestampModification()
+    {
+        $this->setDateModified(self::getNow());
+        $this->setModifier(self::getCurrentUser());
     }
 
 }

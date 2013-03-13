@@ -25,6 +25,17 @@ use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ConsoleUsageProviderInterface, ServiceProviderInterface, BootstrapListenerInterface
 {
 
+    private static $serviceManager;
+
+    /**
+     * Extremely dirty way to retrieve ServiceManger. Highly discouraged to use it.
+     * @return \Zend\ServiceManager\ServiceLocatorInterface
+     */
+    public static function getServiceManager()
+    {
+        return self::$serviceManager;
+    }
+
     public function getServiceConfig()
     {
         return array(
@@ -33,6 +44,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
 
     public function onBootstrap(EventInterface $e)
     {
+        self::$serviceManager = $e->getApplication()->getServiceManager();
+        
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
