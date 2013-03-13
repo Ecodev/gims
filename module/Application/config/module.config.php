@@ -48,6 +48,7 @@ return array(
                     'polygon' => 'CrEOF\Spatial\DBAL\Types\Geometry\PolygonType',
                     'linestring' => 'CrEOF\Spatial\DBAL\Types\Geometry\LineStringType',
                 ),
+                'proxy_dir' => 'data/cache/DoctrineORMModule/Proxy',
             ),
         ),
     ),
