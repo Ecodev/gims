@@ -2,10 +2,7 @@
 
 namespace ApplicationTest\Repository;
 
-use Zend\Db\ResultSet\ResultSet;
-use PHPUnit_Framework_TestCase;
-
-abstract class AbstractRepository extends PHPUnit_Framework_TestCase
+abstract class AbstractRepository extends \ApplicationTest\Controller\AbstractController
 {
-    use \ApplicationTest\Traits\TestWithTransaction;
+    
 }

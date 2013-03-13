@@ -14,7 +14,7 @@ trait TestWithTransaction
      */
     public function getEntityManager()
     {
-        return \ApplicationTest\Bootstrap::getServiceManager()->get('Doctrine\ORM\EntityManager');
+        return $this->getApplicationServiceLocator()->get('Doctrine\ORM\EntityManager');
     }
 
     /**

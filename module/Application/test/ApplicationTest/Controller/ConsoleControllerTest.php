@@ -13,8 +13,10 @@ class ConsoleControllerTest extends \Zend\Test\PHPUnit\Controller\AbstractConsol
 
     public function setUp()
     {
+        // Everything is relative to the application root now.
+        chdir(__DIR__ . '/../../../../../');
         $this->setApplicationConfig(
-                include __DIR__ . '/../../../../../config/application.config.php'
+                include 'config/application.config.php'
         );
 
         parent::setUp();
@@ -32,12 +34,14 @@ class ConsoleControllerTest extends \Zend\Test\PHPUnit\Controller\AbstractConsol
 
     public function testJmpImport()
     {
-        // @TODO find out how to test with database or mock it. 
-        // For now it seems that the global configuration is not properly loaded for some reason
-//        $this->dispatch('import jmp ' . realpath(__DIR__ . '/../../data/import_jmp.xlsx'));
-//        $c = $this->getResponse()->getContent();
-//        var_dump($c);
-//        $this->assertConsoleOutputContains('Total questionnaire: 3');
+        $this->dispatch('import jmp ' . __DIR__ . '/../../data/import_jmp.xlsx');
+        $this->assertConsoleOutputContains('Total questionnaire: 3');
+    }
+    
+    public function testPopulationImport()
+    {
+        $this->dispatch('import population ' . __DIR__ . '/../../data/population_urban.xlsx ' . __DIR__ . '/../../data/population_rural.xlsx ' . __DIR__ . '/../../data/population_total.xlsx');
+        $this->assertConsoleOutputContains('18 population data imported');
     }
 
 }

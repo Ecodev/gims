@@ -2,7 +2,7 @@
 
 namespace ApplicationTest\Model;
 
-abstract class AbstractModel extends \PHPUnit_Framework_TestCase
+abstract class AbstractModel extends \ApplicationTest\Controller\AbstractController
 {
 
     public function testSomething()

@@ -22,6 +22,11 @@
     <!-- ============================================  -->
     <target name="clean">
         <echo msg="Clean..." />
+        <delete>
+            <fileset dir="data/cache">
+                <include name="*" />
+            </fileset>
+        </delete>
         <delete dir=".sass-cache/" includeemptydirs="true" verbose="true" />
         <delete dir="htdocs/css/" includeemptydirs="true" verbose="true" />
         <delete dir="htdocs/js/min/" includeemptydirs="true" verbose="true" />

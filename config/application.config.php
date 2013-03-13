@@ -4,7 +4,7 @@ return array(
     'modules' => array(
         'DoctrineModule',
         'DoctrineORMModule',
-        'ZendDeveloperTools',
+//        'ZendDeveloperTools',
         'ZfcUser',
         'ZfcUserDoctrineORM',
         'ZfcTwitterBootstrap',

@@ -38,9 +38,9 @@ class Population extends AbstractImporter
                     $total = $totalSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
 
                     $population = $this->getPopulation($year, $country);
-                    $population->setUrban($urban * 1000);
-                    $population->setRural($rural * 1000);
-                    $population->setTotal($total * 1000);
+                    $population->setUrban((int)($urban * 1000));
+                    $population->setRural((int)($rural * 1000));
+                    $population->setTotal((int)($total * 1000));
 
                     $col++;
                     $importedValueCount++;
@@ -50,11 +50,11 @@ class Population extends AbstractImporter
             $row++;
         }
 
-        echo "Persisting $importedValueCount population data in database..." . PHP_EOL;
+        echo "Flushing $importedValueCount population data in database..." . PHP_EOL;
 
         $this->getEntityManager()->flush();
 
-        return "Done" . PHP_EOL;
+        return "$importedValueCount population data imported" . PHP_EOL;
     }
 
     /**

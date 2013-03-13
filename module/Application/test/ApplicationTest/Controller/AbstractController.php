@@ -11,9 +11,12 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
 
     public function setUp()
     {
+        // Everything is relative to the application root now.
+        chdir(__DIR__ . '/../../../../../');
         $this->setApplicationConfig(
-                include __DIR__ . '/../../../../../config/application.config.php'
+                include 'config/application.config.php'
         );
+        
         parent::setUp();
       
         // Don't forget to call trait's method
