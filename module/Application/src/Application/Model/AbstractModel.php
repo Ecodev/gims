@@ -41,7 +41,7 @@ abstract class AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id")
+     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
      * })
      */
     private $creator;
@@ -51,7 +51,7 @@ abstract class AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id")
+     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $modifier;

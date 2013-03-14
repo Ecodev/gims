@@ -17,7 +17,7 @@ class UserQuestionnaire extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id")
+     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $user;
@@ -27,7 +27,7 @@ class UserQuestionnaire extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Questionnaire")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id")
+     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $questionnaire;
@@ -37,7 +37,7 @@ class UserQuestionnaire extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Role")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id")
+     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $role;

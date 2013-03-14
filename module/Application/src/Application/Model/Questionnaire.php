@@ -31,7 +31,7 @@ class Questionnaire extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Geoname")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id")
+     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
      * })
      */
     private $geoname;
@@ -41,7 +41,7 @@ class Questionnaire extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Survey")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id")
+     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $survey;

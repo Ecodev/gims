@@ -66,7 +66,7 @@ class Answer extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Question")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id")
+     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $question;
@@ -76,7 +76,7 @@ class Answer extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Questionnaire")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id")
+     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $questionnaire;

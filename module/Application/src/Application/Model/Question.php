@@ -38,7 +38,7 @@ class Question extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id")
+     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
      * })
      */
     private $category;
@@ -48,7 +48,7 @@ class Question extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Question")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id")
+     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
      * })
      */
     private $officialQuestion;
@@ -58,7 +58,7 @@ class Question extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Question")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id")
+     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
      * })
      */
     private $parent;
@@ -68,7 +68,7 @@ class Question extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Questionnaire")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id")
+     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $questionnaire;
