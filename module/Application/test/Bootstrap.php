@@ -7,4 +7,5 @@ use Zend\Loader\StandardAutoloader;
 
 $autoloader = new StandardAutoloader();
 $autoloader->registerNamespace('ApplicationTest', __DIR__ . '/ApplicationTest/');
+$autoloader->registerNamespace('ApiTest', __DIR__ . '/ApiTest/');
 $autoloader->register();

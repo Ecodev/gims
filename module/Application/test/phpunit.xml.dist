@@ -5,6 +5,9 @@
         <testsuite name="application">
             <directory>./ApplicationTest</directory>
         </testsuite>
+        <testsuite name="api">
+            <directory>./ApiTest</directory>
+        </testsuite>
     </testsuites>
 
     <filter>
