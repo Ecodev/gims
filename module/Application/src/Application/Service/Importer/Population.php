@@ -28,19 +28,29 @@ class Population extends AbstractImporter
         $row = $rowYear + 1;
         while ($countryIsoNumeric = $totalSheet->getCellByColumnAndRow($colIso, $row)->getValue()) {
 
+            if (($totalSheet->getCellByColumnAndRow($colIso, $row)->getValue() != $urbanSheet->getCellByColumnAndRow($colIso, $row)->getValue()) ||
+                    ($urbanSheet->getCellByColumnAndRow($colIso, $row)->getValue() != $ruralSheet->getCellByColumnAndRow($colIso, $row)->getValue())) {
+                throw new \Exception("Country ISO number is different in one on the three file at [$colIso, $row]");
+            }
+
             $country = $countryRepository->findOneBy(array('isoNumeric' => $countryIsoNumeric));
             if ($country) {
                 echo 'Country: ' . $country->getName() . PHP_EOL;
                 $col = $colIso + 1;
                 while ($year = $totalSheet->getCellByColumnAndRow($col, $rowYear)->getCalculatedValue()) {
+                    if (($totalSheet->getCellByColumnAndRow($col, $rowYear)->getValue() != $urbanSheet->getCellByColumnAndRow($col, $rowYear)->getValue()) ||
+                            ($urbanSheet->getCellByColumnAndRow($col, $rowYear)->getValue() != $ruralSheet->getCellByColumnAndRow($col, $rowYear)->getValue())) {
+                        throw new \Exception("Year is different in one on the three file at [$col, $rowYear]");
+                    }
+
                     $urban = $urbanSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
                     $rural = $ruralSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
                     $total = $totalSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
 
                     $population = $this->getPopulation($year, $country);
-                    $population->setUrban((int)($urban * 1000));
-                    $population->setRural((int)($rural * 1000));
-                    $population->setTotal((int)($total * 1000));
+                    $population->setUrban((int) ($urban * 1000));
+                    $population->setRural((int) ($rural * 1000));
+                    $population->setTotal((int) ($total * 1000));
 
                     $col++;
                     $importedValueCount++;

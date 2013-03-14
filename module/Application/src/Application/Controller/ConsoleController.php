@@ -57,9 +57,9 @@ class ConsoleController extends AbstractActionController
                 echo "Files not specifed. Downloading files from esa.un.org ..." . PHP_EOL;
 
                 foreach ($sources as $source) {
+                    echo $source['file'] . PHP_EOL;
                     $content = file_get_contents($source['url']);
                     file_put_contents($source['file'], $content);
-                    echo $source['file'] . PHP_EOL;
                 }
             }
 
