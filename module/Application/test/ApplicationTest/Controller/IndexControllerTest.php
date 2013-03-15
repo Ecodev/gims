@@ -60,7 +60,25 @@ class IndexControllerTest extends AbstractController
         $this->assertModuleName('application');
         $this->assertControllerName('application\controller\index');
         $this->assertControllerClass('IndexController');
-        $this->assertMatchedRouteName('template/default');
+        $this->assertMatchedRouteName('template_application/default');
+        $this->assertNotQuery('html > head');
+
+        // Template URL should return partial HTML fragment for AngularJS template system via ajax for Contribute module
+        $this->dispatch('/template/contribute');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('contribute');
+        $this->assertControllerName('contribute\controller\index');
+        $this->assertControllerClass('IndexController');
+        $this->assertMatchedRouteName('template_contribute');
+        $this->assertNotQuery('html > head');
+        
+        // Template URL should return partial HTML fragment for AngularJS template system via ajax for Browse module
+        $this->dispatch('/template/browse');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('browse');
+        $this->assertControllerName('browse\controller\index');
+        $this->assertControllerClass('IndexController');
+        $this->assertMatchedRouteName('template_browse');
         $this->assertNotQuery('html > head');
     }
 
@@ -78,9 +96,19 @@ class IndexControllerTest extends AbstractController
         $this->assertEquals('/application/index/about', $router->assemble(array('controller' => 'index', 'action' => 'about'), array('name' => 'application/default')), 'should return standard URL to specified controller/action');
 
         // Template URL
-        $this->assertEquals('/template/application', $router->assemble(array(), array('name' => 'template')), 'should return template URL');
-        $this->assertEquals('/template/application/', $router->assemble(array(), array('name' => 'template/default')), 'should return template URL');
-        $this->assertEquals('/template/application/index/about', $router->assemble(array('controller' => 'index', 'action' => 'about'), array('name' => 'template/default')), 'should return template URL to specified controller/action');
+        $this->assertEquals('/template/application', $router->assemble(array(), array('name' => 'template_application')), 'should return template URL');
+        $this->assertEquals('/template/application/', $router->assemble(array(), array('name' => 'template_application/default')), 'should return template URL');
+        $this->assertEquals('/template/application/index/about', $router->assemble(array('controller' => 'index', 'action' => 'about'), array('name' => 'template_application/default')), 'should return template URL to specified controller/action');
+        
+        // Template URL for Contribute module
+        $this->assertEquals('/template/contribute', $router->assemble(array(), array('name' => 'template_contribute')), 'should return template URL');
+        $this->assertEquals('/template/contribute/', $router->assemble(array(), array('name' => 'template_contribute/default')), 'should return template URL');
+        $this->assertEquals('/template/contribute/index/about', $router->assemble(array('controller' => 'index', 'action' => 'about'), array('name' => 'template_contribute/default')), 'should return template URL to specified controller/action');
+        
+        // Template URL for Browse module
+        $this->assertEquals('/template/browse', $router->assemble(array(), array('name' => 'template_browse')), 'should return template URL');
+        $this->assertEquals('/template/browse/', $router->assemble(array(), array('name' => 'template_browse/default')), 'should return template URL');
+        $this->assertEquals('/template/browse/index/about', $router->assemble(array('controller' => 'index', 'action' => 'about'), array('name' => 'template_browse/default')), 'should return template URL to specified controller/action');
     }
 
 }
