@@ -1,0 +1,9 @@
+[submodule "htdocs/lib/angular-ui"]
+	path = htdocs/lib/angular-ui
+	url = https://github.com/angular-ui/angular-ui.git
+[submodule "htdocs/lib/select2"]
+	path = htdocs/lib/select2
+	url = https://github.com/ivaynberg/select2.git
+[submodule "htdocs/lib/ng-grid"]
+	path = htdocs/lib/ng-grid
+	url = https://github.com/angular-ui/ng-grid.git

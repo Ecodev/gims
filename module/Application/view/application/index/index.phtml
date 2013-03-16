@@ -7,9 +7,10 @@
 
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
 
-        <!-- Le styles -->
+        <!-- Styles -->
         <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/favicon.ico'))
                 ->prependStylesheet('/css/application.css')
+                ->prependStylesheet('/lib/select2/select2.css')
         ?>
 
         <!-- Scripts -->
@@ -18,13 +19,24 @@
                 ->prependFile(array('/js/min/application.js',
                     array(
                         // CAUTION: This must be the exact same files in reverse order than in bin/build.sh
+                        
+                        // Our own scripts
                         '/js/min/directives.js',
                         '/js/min/filters.js',
                         '/js/min/controllers.js',
                         '/js/min/services.js',
                         '/js/min/app.js',
+                        
+                        // AngularJS core and libs
+                        '/lib/ng-grid/build/ng-grid.min.js',
                         '/lib/ui-bootstrap/ui-bootstrap-tpls-0.2.0.min.js',
+                        '/lib/angular-ui/build/angular-ui.min.js',
+                        '/lib/angular/angular-resource.min.js',
                         '/lib/angular/angular.min.js',
+                        
+                        // Non AngularJS stuff
+                        '/lib/select2/select2.min.js',
+                        '/lib/jquery/jquery-1.9.1.min.js',
                     )
                 ))
         ?>
