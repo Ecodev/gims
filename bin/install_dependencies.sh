@@ -3,7 +3,7 @@
 echo "Installing PostGIS and other packages..."
 sudo apt-get install -qq software-properties-common # to get next command: add-apt-repository
 sudo add-apt-repository --yes ppa:ubuntugis/ubuntugis-unstable
-sudo add-apt-repository --yes ppa:chris-lea/node.js
+sudo add-apt-repository --yes ppa:chris-lea/node.js-legacy
 sudo apt-get -qq update
 sudo apt-get -qq install postgis postgresql-9.1-postgis rubygems npm apache2 php5-pgsql php5-cli php5-gd php5-mcrypt php5-intl
 
