@@ -1,4 +1,5 @@
 basePath = '../';
+urlRoot = '/__karma/';
 autoWatch = true;
 browsers = ['Chrome'];
 proxies = {
