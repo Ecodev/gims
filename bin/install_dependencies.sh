@@ -11,7 +11,7 @@ echo "Installing Compass..."
 gem install --quiet --no-rdoc --no-ri sass compass oily_png bootstrap-sass
 
 echo "Installing JS testing tools..."
-sudo npm --global --quiet install testacular phantomjs uglify-js ngmin
+sudo npm --global --quiet install karma phantomjs uglify-js ngmin
 
 # For Travis CI, we need more configuration (Apache and database)
 if [[ "$1" = "travis" ]]; then

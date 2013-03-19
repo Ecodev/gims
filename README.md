@@ -25,12 +25,12 @@ Installation
 Testing
 -------
 
-Full testing (phpunit and testacular) can be executed via phing:
+Full testing (phpunit and karma) can be executed via phing:
 
     ./vendor/bin/phing test
 
-Light-weight testing, recommended for very frequent usage during development, is available directly via testacular:
+Light-weight testing, recommended for very frequent usage during development, is available directly via karma:
 
-    testacular start config/testacular-unit.conf.js
-    testacular start config/testacular-e2e.conf.js
+    karma start config/karma-unit.conf.js
+    karma start config/karma-e2e.conf.js
 

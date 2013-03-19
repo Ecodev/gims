@@ -22,6 +22,6 @@ files = [
 
 
 junitReporter = {
-  outputFile: 'data/logs/testacular-unit.xml',
+  outputFile: 'data/logs/karma-unit.xml',
   suite: 'unit'
 };

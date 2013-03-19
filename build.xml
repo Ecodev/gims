@@ -32,7 +32,7 @@
         <delete dir="htdocs/js/min/" includeemptydirs="true" verbose="true" />
     </target>
     
-    <target name="test" depends="validate-schema,phpunit,testacular-unit,testacular-e2e" description="run all tests available">
+    <target name="test" depends="validate-schema,phpunit,karma-unit,karma-e2e" description="run all tests available">
         <echo msg="Testing done" />
     </target>
     
@@ -46,13 +46,13 @@
         <exec command="cd module/Application/test/ ; ../../../vendor/bin/phpunit" checkreturn="true" logoutput="/dev/stdout" />
     </target>
     
-    <target name="testacular-unit" depends="build">
-        <echo msg="Testing testacular-unit..." />
-        <exec command="testacular start --no-auto-watch --single-run --browsers PhantomJS,Firefox config/testacular-unit.conf.js" checkreturn="true" logoutput="/dev/stdout" />
+    <target name="karma-unit" depends="build">
+        <echo msg="Testing karma-unit..." />
+        <exec command="karma start --no-auto-watch --single-run --browsers PhantomJS,Firefox config/karma-unit.conf.js" checkreturn="true" logoutput="/dev/stdout" />
     </target>
     
-    <target name="testacular-e2e" depends="build">
-        <echo msg="Testing testacular-e2e..." />
-        <exec command="testacular start --no-auto-watch --single-run --browsers PhantomJS,Firefox config/testacular-e2e.conf.js" checkreturn="true" logoutput="/dev/stdout" />
+    <target name="karma-e2e" depends="build">
+        <echo msg="Testing karma-e2e..." />
+        <exec command="karma start --no-auto-watch --single-run --browsers PhantomJS,Firefox config/karma-e2e.conf.js" checkreturn="true" logoutput="/dev/stdout" />
     </target>
 </project>

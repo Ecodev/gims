@@ -12,7 +12,7 @@ files = [
 ];
 
 junitReporter = {
-  outputFile: 'data/logs/testacular-e2e.xml',
+  outputFile: 'data/logs/karma-e2e.xml',
   suite: 'e2e'
 };
 
