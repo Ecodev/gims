@@ -1,4 +1,5 @@
-[![Build Status](https://api.travis-ci.org/Ecodev/gims.png?branch=0.2.0-dev)](http://travis-ci.org/Ecodev/gims)
+Master: [![Build Status](https://api.travis-ci.org/Ecodev/gims.png?branch=master)](http://travis-ci.org/Ecodev/gims)
+Develop: [![Build Status](https://api.travis-ci.org/Ecodev/gims.png?branch=develop)](http://travis-ci.org/Ecodev/gims)
 
 GIMS
 =======================
