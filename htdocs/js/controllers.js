@@ -46,16 +46,16 @@ angular.module('myApp').controller('UserCtrl', function($scope, $location) {
 
 angular.module('myApp').controller('QuestionnaireCtrl', function($scope, $resource, $routeParams, $location) {
 
-    var Question = $resource('/api/questionnaire/:idQuestionnaire/question');
+    var Answer = $resource('/api/questionnaire/:idQuestionnaire/answer');
     var Questionnaire = $resource('/api/questionnaire/:id');
 
     // If a questionnaire is specified in URL, load its data
-    $scope.questions = [];
+    $scope.answers = [];
     if ($routeParams.id)
     {
-        $scope.questions = Question.query({idQuestionnaire: $routeParams.id});
+        $scope.answers = Answer.query({idQuestionnaire: $routeParams.id});
 
-        // Here we use synchronous style affectation to be able to set initial 
+        // Here we use synchronous style affectation to be able to set initial
         // value of Select2 (after Select2 itself is initialized)
         Questionnaire.get({id: $routeParams.id}, function(questionnaire) {
             $scope.selectedQuestionnaire = questionnaire;
@@ -71,12 +71,12 @@ angular.module('myApp').controller('QuestionnaireCtrl', function($scope, $resour
 
     // Configure ng-grid
     $scope.gridOptions = {
-        data: 'questions',
+        data: 'answers',
         columnDefs: [
             {field: 'id', displayName: 'Id'},
-            {field: 'name', displayName: 'Name'},
-            {field: 'category.name', displayName: 'Category'},
-            {field: 'survey.name', displayName: 'Answer'}
+            {field: 'question.name', displayName: 'Name'},
+            {field: 'question.category.name', displayName: 'Category'},
+            {field: 'valuePercent', displayName: 'Answer', enableFocusedCellEdit: true}
         ]
     };
 
@@ -92,7 +92,7 @@ angular.module('myApp').controller('QuestionnaireCtrl', function($scope, $resour
         questionnaires = data;
     });
 
-    $scope.currencies = {
+    $scope.availableQuestionnaires = {
         query: function(query) {
             var data = {results: []};
 
