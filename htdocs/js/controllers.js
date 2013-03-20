@@ -43,17 +43,21 @@ angular.module('myApp').controller('UserCtrl', function($scope, $location) {
     });
 });
 
+//QuestionnaireCtrl.$inject = ['$scope', '$resource', '$routeParams', '$location', 'Answer', 'Questionnaire', 'QuestionnaireAnswer'];
+angular.module('myApp').controller('QuestionnaireCtrl', function($scope, $resource, $routeParams, $location, Answer, Questionnaire, QuestionnaireAnswer) {
 
-angular.module('myApp').controller('QuestionnaireCtrl', function($scope, $resource, $routeParams, $location) {
-
-    var Answer = $resource('/api/questionnaire/:idQuestionnaire/answer');
-    var Questionnaire = $resource('/api/questionnaire/:id');
+    // show case which update Answer id: 36
+    var answer = Answer.get({id: 36}, function() {
+        answer.valuePercent = 0.17;
+        answer.question.name = 'asdf';
+        answer.$update({id: answer.id});
+    })
 
     // If a questionnaire is specified in URL, load its data
     $scope.answers = [];
     if ($routeParams.id)
     {
-        $scope.answers = Answer.query({idQuestionnaire: $routeParams.id});
+        $scope.answers = QuestionnaireAnswer.query({idQuestionnaire: $routeParams.id});
 
         // Here we use synchronous style affectation to be able to set initial
         // value of Select2 (after Select2 itself is initialized)
@@ -72,11 +76,13 @@ angular.module('myApp').controller('QuestionnaireCtrl', function($scope, $resour
     // Configure ng-grid
     $scope.gridOptions = {
         data: 'answers',
+        enableCellSelection: true,
+        showFooter: true,
         columnDefs: [
             {field: 'id', displayName: 'Id'},
             {field: 'question.name', displayName: 'Name'},
             {field: 'question.category.name', displayName: 'Category'},
-            {field: 'valuePercent', displayName: 'Answer', enableFocusedCellEdit: true}
+            {field: 'valuePercent', displayName: 'Answer', enableCellEdit: true}
         ]
     };
 

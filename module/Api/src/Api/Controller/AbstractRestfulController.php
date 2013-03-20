@@ -88,10 +88,10 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             $this->getResponse()->setStatusCode(404);
             return;
         }
-        
+
         $this->getEntityManager()->remove($object);
         $this->getEntityManager()->flush();
-        
+
         return new JsonModel(array('message' => 'deleted successfully'));
     }
 
@@ -115,16 +115,17 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
 
     public function update($id, $data)
     {
+        /** @var $object AbstractModel */
         $object = $this->getRepository()->findOneBy(array('id' => $id));
         if (!$object) {
             $this->getResponse()->setStatusCode(404);
             return;
         }
-        
-        // TODO: do something clever ...
-        
-        
+
+        $object->updateProperties($data);
+        $this->getEntityManager()->persist($object);
+        $this->getEntityManager()->flush();
+
         return new JsonModel($this->objectToArray($object, $this->getJsonConfig()));
     }
-
 }

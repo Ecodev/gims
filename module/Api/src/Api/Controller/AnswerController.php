@@ -12,7 +12,7 @@ class AnswerController extends AbstractRestfulController
         return array(
             'valuePercent',
             'valueAbsolute',
-            'question' => array (
+            'question' => array(
                 'name',
                 'category' => array(
                     'name'
@@ -32,5 +32,4 @@ class AnswerController extends AbstractRestfulController
 
         return new JsonModel($this->arrayOfObjectsToArray($objects, $this->getJsonConfig()));
     }
-
 }

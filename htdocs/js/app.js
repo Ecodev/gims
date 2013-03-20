@@ -2,8 +2,19 @@
 
 
 // Declare app level module which depends on filters, and services
-angular.module('myApp', ['ngResource', 'ui', 'ui.bootstrap', 'ngGrid', 'myApp.filters', 'myApp.services', 'myApp.directives']).
-        config(function($routeProvider, $locationProvider) {
+angular.module('myApp', [
+        'ngResource',
+        'ui',
+        'ui.bootstrap',
+        'ngGrid',
+        'myApp.filters',
+        'myApp.services',
+        'myApp.directives',
+        'myApp.answerService',
+        'myApp.questionnaireService',
+        'myApp.questionnaireAnswerService'
+    ]).
+    config(function ($routeProvider, $locationProvider) {
         $routeProvider.when('/home', {templateUrl: '/template/application/index/home', controller: 'MyCtrl1'});
         $routeProvider.when('/about', {templateUrl: '/template/application/index/about', controller: 'MyCtrl2'});
         $routeProvider.when('/browse', {templateUrl: '/template/browse', controller: 'MyCtrl2'});

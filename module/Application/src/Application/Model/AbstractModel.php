@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  */
-abstract class AbstractModel
+abstract class AbstractModel implements PropertiesUpdatableInterface
 {
 
     private static $now;
@@ -59,7 +59,7 @@ abstract class AbstractModel
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -82,7 +82,7 @@ abstract class AbstractModel
     /**
      * Get dateCreated
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateCreated()
     {
@@ -105,7 +105,7 @@ abstract class AbstractModel
     /**
      * Get dateModified
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateModified()
     {
@@ -128,7 +128,7 @@ abstract class AbstractModel
     /**
      * Get creator
      *
-     * @return User 
+     * @return User
      */
     public function getCreator()
     {
@@ -151,7 +151,7 @@ abstract class AbstractModel
     /**
      * Get modifier
      *
-     * @return User 
+     * @return User
      */
     public function getModifier()
     {
@@ -200,6 +200,32 @@ abstract class AbstractModel
     {
         $this->setDateModified(self::getNow());
         $this->setModifier(self::getCurrentUser());
+    }
+
+    /**
+     * Update property of $this
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function updateProperties($data)
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $getter = 'get' . ucfirst($key);
+                if (method_exists($this, $getter)) {
+                    /** @var $object AbstractModel */
+                    $object = call_user_func(array($this, $getter));
+                    $value = $object->updateProperties($value);
+                }
+            }
+
+            $setter = 'set' . ucfirst($key);
+            if (method_exists($this, $setter)) {
+                call_user_func_array(array($this, $setter), array($value));
+            }
+        }
+        return $this;
     }
 
 }
