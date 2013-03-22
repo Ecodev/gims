@@ -64,14 +64,14 @@ class Question extends AbstractModel
     private $parent;
 
     /**
-     * @var Questionnaire
+     * @var Survey
      *
-     * @ORM\ManyToOne(targetEntity="Questionnaire")
+     * @ORM\ManyToOne(targetEntity="Survey")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
      */
-    private $questionnaire;
+    private $survey;
 
     /**
      * Set sorting
@@ -89,7 +89,7 @@ class Question extends AbstractModel
     /**
      * Get sorting
      *
-     * @return integer 
+     * @return integer
      */
     public function getSorting()
     {
@@ -112,7 +112,7 @@ class Question extends AbstractModel
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -135,7 +135,7 @@ class Question extends AbstractModel
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -158,7 +158,7 @@ class Question extends AbstractModel
     /**
      * Get category
      *
-     * @return Category 
+     * @return Category
      */
     public function getCategory()
     {
@@ -181,7 +181,7 @@ class Question extends AbstractModel
     /**
      * Get officialQuestion
      *
-     * @return Question 
+     * @return Question
      */
     public function getOfficialQuestion()
     {
@@ -204,7 +204,7 @@ class Question extends AbstractModel
     /**
      * Get parent
      *
-     * @return Question 
+     * @return Question
      */
     public function getParent()
     {
@@ -212,26 +212,26 @@ class Question extends AbstractModel
     }
 
     /**
-     * Set questionnaire
+     * Set survey
      *
-     * @param Questionnaire $questionnaire
+     * @param Survey $survey
      * @return Question
      */
-    public function setQuestionnaire(Questionnaire $questionnaire = null)
+    public function setSurvey(Survey $survey)
     {
-        $this->questionnaire = $questionnaire;
+        $this->survey = $survey;
 
         return $this;
     }
 
     /**
-     * Get questionnaire
+     * Get survey
      *
-     * @return Questionnaire 
+     * @return Survey
      */
-    public function getQuestionnaire()
+    public function getSurvey()
     {
-        return $this->questionnaire;
+        return $this->survey;
     }
 
 }

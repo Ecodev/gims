@@ -18,7 +18,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @ORM\Column(type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 

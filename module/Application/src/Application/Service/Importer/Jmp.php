@@ -5,6 +5,9 @@ namespace Application\Service\Importer;
 class Jmp extends AbstractImporter
 {
 
+    private $cacheCategories = array();
+    private $cacheQuestions = array();
+
     /**
      * Import data from file
      */
@@ -82,7 +85,7 @@ class Jmp extends AbstractImporter
         echo 'Survey: ' . $survey->getCode() . PHP_EOL;
         echo 'Country: ' . $country->getName() . PHP_EOL;
 
-        $this->importAnswers($sheet, $col, $questionnaire);
+        $this->importAnswers($sheet, $col, $survey, $questionnaire);
 
 
         $this->getEntityManager()->flush();
@@ -91,14 +94,14 @@ class Jmp extends AbstractImporter
     }
 
     /**
-     * Import all answers found at given column offset. 
+     * Import all answers found at given column offset.
      * Questions will only be created if an answer exists.
      * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
      * @param \Application\Model\Questionnaire $questionnaire
      * @return void
      */
-    protected function importAnswers(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire)
+    protected function importAnswers(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Survey $survey, \Application\Model\Questionnaire $questionnaire)
     {
         // Define the categories where we actually have answer data
         $answerCategoryGetters = array(
@@ -156,7 +159,7 @@ class Jmp extends AbstractImporter
 
                 // Only import value which are numeric, and NOT formula
                 if ($answerCell->getDataType() == \PHPExcel_Cell_DataType::TYPE_NUMERIC) {
-                    $question = $this->getQuestion($questionnaire, $cateforyGetter($this, $category, $parentCategory), $answerCount);
+                    $question = $this->getQuestion($survey, $cateforyGetter($this, $category, $parentCategory), $answerCount);
 
                     $answer = new \Application\Model\Answer();
                     $this->getEntityManager()->persist($answer);
@@ -167,8 +170,6 @@ class Jmp extends AbstractImporter
                     $answerCount++;
                 }
             }
-
-            $this->getEntityManager()->flush();
         }
 
         echo "Answers: " . $answerCount . PHP_EOL;
@@ -187,7 +188,14 @@ class Jmp extends AbstractImporter
         $criteria = array('name' => $name);
         if ($parent)
             $criteria['parent'] = $parent;
-        $category = $categoryRepository->findOneBy($criteria);
+
+        $key = $name . '::' . ($parent ? $parent->getName() : '[no parent]');
+        if (array_key_exists($key, $this->cacheCategories)) {
+            $category = $this->cacheCategories[$key];
+        } else {
+            $this->getEntityManager()->flush();
+            $category = $categoryRepository->findOneBy($criteria);
+        }
 
         if (!$category) {
             $category = new \Application\Model\Category();
@@ -198,31 +206,44 @@ class Jmp extends AbstractImporter
             $category->setParent($parent);
         }
 
+        $this->cacheCategories[$key] = $category;
+
         return $category;
     }
 
     /**
      * Returns a question either from database, or newly created
-     * @param \Application\Model\Questionnaire $questionnaire
+     * @param \Application\Model\Questionnaire $survey
      * @param \Application\Model\Category $category
      * @param integer $sorting Sorting of the question
      * @return \Application\Model\Question
      */
-    protected function getQuestion(\Application\Model\Questionnaire $questionnaire, \Application\Model\Category $category, $sorting)
+    protected function getQuestion(\Application\Model\Survey $survey, \Application\Model\Category $category, $sorting)
     {
         $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question');
-        $question = $questionRepository->findOneBy(array('questionnaire' => $questionnaire, 'category' => $category));
+
+        $key = $survey->getCode() . '::' . $category->getName() . '::' . $sorting;
+
+        if (array_key_exists($key, $this->cacheQuestions)) {
+            $question = $this->cacheQuestions[$key];
+        } else {
+            $this->getEntityManager()->flush();
+            $question = $questionRepository->findOneBy(array('survey' => $survey, 'category' => $category));
+        }
+
         if (!$question) {
             $question = new \Application\Model\Question();
             $this->getEntityManager()->persist($question);
 
-            $question->setQuestionnaire($questionnaire);
+            $question->setSurvey($survey);
             $question->setCategory($category);
             $question->setName('Percentage of population?');
             $question->setSorting($sorting);
             $question->setType('foo'); // @TODO: find out better value
             $this->getEntityManager()->persist($question);
         }
+
+        $this->cacheQuestions[$key] = $question;
 
         return $question;
     }
