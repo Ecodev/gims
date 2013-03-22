@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Role
  *
  * @ORM\Entity(repositoryClass="Application\Repository\RoleRepository")
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="role_unique", columns={"name"})})
  */
 class Role extends AbstractModel
 {
@@ -20,18 +21,29 @@ class Role extends AbstractModel
     private $name;
 
     /**
-     * @var boolean
+     * @var Role
      *
-     * @ORM\Column(type="boolean", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Role")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(onDelete="CASCADE")
+     * })
      */
-    private $canValidateQuestionnaire;
+    private $parent;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", nullable=false)
+     * @ORM\ManyToMany(targetEntity="Permission")
      */
-    private $canLinkOfficialQuestion;
+    private $permissions;
+
+    /**
+     * Constructor
+     * @param string $name
+     */
+    public function __construct($name = null)
+    {
+        $this->permissions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->setName($name);
+    }
 
     /**
      * Set name
@@ -49,7 +61,7 @@ class Role extends AbstractModel
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -57,59 +69,52 @@ class Role extends AbstractModel
     }
 
     /**
-     * Set canValidateQuestionnaire
+     * Set parent
      *
-     * @param boolean $canValidateQuestionnaire
+     * @param Role $parent
      * @return Role
      */
-    public function setCanValidateQuestionnaire($canValidateQuestionnaire)
+    public function setParent(Role $parent = null)
     {
-        $this->canValidateQuestionnaire = $canValidateQuestionnaire;
+        $this->parent = $parent;
 
         return $this;
     }
 
     /**
-     * Get canValidateQuestionnaire
+     * Get parent
      *
-     * @return boolean 
+     * @return Role
      */
-    public function getCanValidateQuestionnaire()
+    public function getParent()
     {
-        return $this->canValidateQuestionnaire;
+        return $this->parent;
     }
 
     /**
-     * Set canLinkOfficialQuestion
+     * Add permission
      *
-     * @param boolean $canLinkOfficialQuestion
+     * @param Permission $permission
      * @return Role
      */
-    public function setCanLinkOfficialQuestion($canLinkOfficialQuestion)
+    public function addPermission(Permission $permission)
     {
-        $this->canLinkOfficialQuestion = $canLinkOfficialQuestion;
+        $this->permissions->add($permission);
 
         return $this;
     }
 
     /**
-     * Get canLinkOfficialQuestion
+     * Remove permission
      *
-     * @return boolean 
+     * @param Permission $permission
+     * @return Role
      */
-    public function getCanLinkOfficialQuestion()
+    public function removePermission(Permission $permission)
     {
-        return $this->canLinkOfficialQuestion;
-    }
+        $this->permissions->removeElement($permission);
 
-    /**
-     * Get modifier
-     *
-     * @return integer 
-     */
-    public function getModifier()
-    {
-        return $this->modifier;
+        return $this;
     }
 
 }

@@ -19,6 +19,7 @@
         "phing/phing": "dev-master",
         "firephp/firephp-core": "dev-master",
         "zf-commons/zfc-user-doctrine-orm": "dev-master",
+        "zf-commons/zfc-rbac": "dev-master",
         "doctrine/doctrine-orm-module": "0.*",
         "doctrine/migrations": "dev-master",
         "creof/doctrine2-spatial": "dev-master",

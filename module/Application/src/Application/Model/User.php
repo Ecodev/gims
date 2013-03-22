@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`user`")
  * @ORM\Entity(repositoryClass="Application\Repository\UserRepository")
  */
-class User extends AbstractModel implements \ZfcUser\Entity\UserInterface
+class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcRbac\Identity\IdentityInterface
 {
 
     /**
@@ -42,6 +42,30 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface
     private $state;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="UserSurvey", mappedBy="user")
+     */
+    private $userSurveys;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="UserQuestionnaire", mappedBy="user")
+     */
+    private $userQuestionnaires;
+    private $roleContext;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->userSurveys = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userQuestionnaires = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Set name
      *
      * @param string $name
@@ -57,7 +81,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -80,7 +104,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -103,7 +127,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
@@ -126,7 +150,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface
     /**
      * Get state
      *
-     * @return integer 
+     * @return integer
      */
     public function getState()
     {
@@ -177,6 +201,97 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface
     public function setUsername($username)
     {
         return $this->setName($username);
+    }
+
+    /**
+     * Get userSurveys
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getUserSurveys()
+    {
+        return $this->userSurveys;
+    }
+
+    /**
+     * Notify the user that he was added to UserSurvey relation.
+     * This should only be called by UserSurvey::setUser()
+     * @param UserSurvey $userSurvey
+     * @return User
+     */
+    public function userSurveyAdded(UserSurvey $userSurvey)
+    {
+        $this->userSurveys->add($userSurvey);
+
+        return $this;
+    }
+
+    /**
+     * Get userQuestionnaires
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getUserQuestionnaires()
+    {
+        return $this->userQuestionnaires;
+    }
+
+    /**
+     * Notify the user that he was added to UserSurvey relation.
+     * This should only be called by UserQuestionnaire::setUser()
+     * @param UserQuestionnaire $userQuestionnaire
+     * @return User
+     */
+    public function userQuestionnaireAdded(UserQuestionnaire $userQuestionnaire)
+    {
+        $this->userQuestionnaires->add($userQuestionnaire);
+
+        return $this;
+    }
+
+    /**
+     * Set roles context to then query getRoles(). This MUST be followed by resetRolesContext() as soon as possible.
+     * @param \Application\Service\RoleContextInterface $context
+     */
+    public function setRolesContext(\Application\Service\RoleContextInterface $context)
+    {
+        if (!$context->getId()) {
+            throw new \InvalidArgumentException('Context must return a valid ID. To get a valid ID from Doctrine, use: $this->getEntityManager()->persist($context);');
+        }
+
+        $this->roleContext = array(get_class($context) => $context->getId());
+    }
+
+    /**
+     * Resets roles context
+     */
+    public function resetRolesContext()
+    {
+        $this->roleContext = null;
+    }
+
+    /**
+     * Return the roles currently active for this user and current role context (if any)
+     */
+    public function getRoles()
+    {
+        // If we are here, it means there is at least a logged in user,
+        // which means he has, at the very least, the hardcoded role of member
+        $roles = array('member');
+
+        // If there is no context, or the context matches, add roles from survey
+        foreach ($this->getUserSurveys() as $userSurvey) {
+            if (!$this->roleContext || @$this->roleContext['Application\Model\Survey'] == $userSurvey->getSurvey()->getId()) {
+                $roles [] = $userSurvey->getRole()->getName();
+            }
+        }
+
+        // If there is no context, or the context matches, add roles from questionnaire
+        foreach ($this->getUserQuestionnaires() as $userQuestionnaire) {
+            if (!$this->roleContext || @$this->roleContext['Application\Model\Questionnaire'] == $userQuestionnaire->getQuestionnaire()->getId()) {
+                $roles [] = $userQuestionnaire->getRole()->getName();
+            }
+        }
+
+        return $roles;
     }
 
 }

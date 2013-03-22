@@ -25,7 +25,7 @@ class Population extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Country")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE")
      * })
      */
     private $country;

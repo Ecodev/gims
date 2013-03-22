@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Application\Repository\QuestionnaireRepository")
  */
-class Questionnaire extends AbstractModel
+class Questionnaire extends AbstractModel implements \Application\Service\RoleContextInterface
 {
 
     /**
@@ -31,7 +31,7 @@ class Questionnaire extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Geoname")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
+     *   @ORM\JoinColumn(onDelete="SET NULL")
      * })
      */
     private $geoname;
@@ -41,7 +41,7 @@ class Questionnaire extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Survey")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable = false)
      * })
      */
     private $survey;
@@ -62,7 +62,7 @@ class Questionnaire extends AbstractModel
     /**
      * Get dateObservationStart
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateObservationStart()
     {
@@ -85,21 +85,11 @@ class Questionnaire extends AbstractModel
     /**
      * Get dateObservationEnd
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateObservationEnd()
     {
         return $this->dateObservationEnd;
-    }
-
-    /**
-     * Get modifier
-     *
-     * @return integer 
-     */
-    public function getModifier()
-    {
-        return $this->modifier;
     }
 
     /**
@@ -118,7 +108,7 @@ class Questionnaire extends AbstractModel
     /**
      * Get geoname
      *
-     * @return Geoname 
+     * @return Geoname
      */
     public function getGeoname()
     {
@@ -131,7 +121,7 @@ class Questionnaire extends AbstractModel
      * @param Survey $survey
      * @return Questionnaire
      */
-    public function setSurvey(Survey $survey = null)
+    public function setSurvey(Survey $survey)
     {
         $this->survey = $survey;
 
@@ -141,7 +131,7 @@ class Questionnaire extends AbstractModel
     /**
      * Get survey
      *
-     * @return Survey 
+     * @return Survey
      */
     public function getSurvey()
     {

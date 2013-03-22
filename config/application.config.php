@@ -4,15 +4,16 @@ return array(
     'modules' => array(
         'DoctrineModule',
         'DoctrineORMModule',
-//        'ZendDeveloperTools',
         'ZfcUser',
         'ZfcUserDoctrineORM',
+        'ZfcRbac',
         'ZfcTwitterBootstrap',
         'Application',
         'Api',
         'Admin',
         'Browse',
         'Contribute',
+        'ZendDeveloperTools',
     ),
 
     // These are various options for the listeners attached to the ModuleManager

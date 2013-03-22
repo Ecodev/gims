@@ -45,7 +45,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
     public function onBootstrap(EventInterface $e)
     {
         self::$serviceManager = $e->getApplication()->getServiceManager();
-        
+
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);

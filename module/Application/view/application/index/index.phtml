@@ -19,21 +19,21 @@
                 ->prependFile(array('/js/min/application.js',
                     array(
                         // CAUTION: This must be the exact same files in reverse order than in bin/build.sh
-                        
+
                         // Our own scripts
                         '/js/min/directives.js',
                         '/js/min/filters.js',
                         '/js/min/controllers.js',
                         '/js/min/services.js',
                         '/js/min/app.js',
-                        
+
                         // AngularJS core and libs
                         '/lib/ng-grid/build/ng-grid.min.js',
                         '/lib/ui-bootstrap/ui-bootstrap-tpls-0.2.0.min.js',
                         '/lib/angular-ui/build/angular-ui.min.js',
                         '/lib/angular/angular-resource.min.js',
                         '/lib/angular/angular.min.js',
-                        
+
                         // Non AngularJS stuff
                         '/lib/select2/select2.min.js',
                         '/lib/jquery/jquery-1.9.1.min.js',
@@ -59,10 +59,10 @@
                             <li><a href="/contribute"><?php echo $this->translate('Contribute') ?></a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
-                    
+
                     <div class="pull-right" ng-controller="UserCtrl">
                         <div modal="showLogin" close="cancelLogin()" options="opts">
-                            <?php 
+                            <?php
                                 $f = $this->zfcUserLoginWidget(array('render' => false));
                                 $form = $f->loginForm;
                                 $form->prepare();
@@ -86,9 +86,9 @@
                             </div>
                             <?php echo $this->form()->closeTag(); ?>
                         </div>
-                        
+
                         <div modal="showRegister" close="cancelRegister()" options="opts">
-                            <?php 
+                            <?php
                                 $this->registerForm->prepare();
                                 $this->registerForm->setAttribute('action', $this->url('zfcuser/register'));
                                 $this->registerForm->setAttribute('method', 'post');
@@ -113,10 +113,10 @@
                             </div>
                             <?php echo $this->form()->closeTag(); ?>
                         </div>
-                        
+
                         <?php if ($this->zfcUserIdentity()): ?>
                             <p class="navbar-text">
-                                <?php 
+                                <?php
                                     echo $this->gravatar($this->zfcUserIdentity()->getEmail(), array('img_size' => 32)) . PHP_EOL;
                                     echo $this->zfcUserDisplayName();
                                 ?>
@@ -137,15 +137,15 @@
                             <a href ng-click="promptRegister()"><?php echo $this->translate('Create account') ?></a>
                             <?php echo $this->form()->closeTag(); ?>
                         <?php endif; ?>
-                    </div>
                 </div>
             </div>
         </div>
+        </div>
         <div class="container">
             <?php echo $this->content; ?>
-            
+
             <div ng-view></div>
-            
+
             <hr>
             <footer>
                 <p><?php echo $this->translate('Designed and built by Ecodev for WHO') ?></p>

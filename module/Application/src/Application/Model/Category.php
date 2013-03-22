@@ -31,7 +31,7 @@ class Category extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
+     *   @ORM\JoinColumn(onDelete="SET NULL")
      * })
      */
     private $officialCategory;
@@ -41,7 +41,7 @@ class Category extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE")
      * })
      */
     private $parent;

@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * UserQuestionnaire
  *
  * @ORM\Entity(repositoryClass="Application\Repository\UserQuestionnaireRepository")
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="user_questionnaire_unique",columns={"user_id", "questionnaire_id", "role_id"})})
  */
 class UserQuestionnaire extends AbstractModel
 {
@@ -15,9 +16,9 @@ class UserQuestionnaire extends AbstractModel
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="userQuestionnaires")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE")
      * })
      */
     private $user;
@@ -27,7 +28,7 @@ class UserQuestionnaire extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Questionnaire")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE")
      * })
      */
     private $questionnaire;
@@ -37,7 +38,7 @@ class UserQuestionnaire extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Role")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE")
      * })
      */
     private $role;
@@ -48,9 +49,10 @@ class UserQuestionnaire extends AbstractModel
      * @param User $user
      * @return UserQuestionnaire
      */
-    public function setUser(User $user = null)
+    public function setUser(User $user)
     {
         $this->user = $user;
+        $user->userQuestionnaireAdded($this);
 
         return $this;
     }
@@ -58,7 +60,7 @@ class UserQuestionnaire extends AbstractModel
     /**
      * Get "user"
      *
-     * @return User 
+     * @return User
      */
     public function getUser()
     {
@@ -71,7 +73,7 @@ class UserQuestionnaire extends AbstractModel
      * @param Questionnaire $questionnaire
      * @return UserQuestionnaire
      */
-    public function setQuestionnaire(Questionnaire $questionnaire = null)
+    public function setQuestionnaire(Questionnaire $questionnaire)
     {
         $this->questionnaire = $questionnaire;
 
@@ -81,7 +83,7 @@ class UserQuestionnaire extends AbstractModel
     /**
      * Get questionnaire
      *
-     * @return Questionnaire 
+     * @return Questionnaire
      */
     public function getQuestionnaire()
     {
@@ -94,7 +96,7 @@ class UserQuestionnaire extends AbstractModel
      * @param Role $role
      * @return UserQuestionnaire
      */
-    public function setRole(Role $role = null)
+    public function setRole(Role $role)
     {
         $this->role = $role;
 
@@ -104,7 +106,7 @@ class UserQuestionnaire extends AbstractModel
     /**
      * Get role
      *
-     * @return Role 
+     * @return Role
      */
     public function getRole()
     {

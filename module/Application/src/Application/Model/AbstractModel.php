@@ -41,7 +41,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
+     *   @ORM\JoinColumn(onDelete="SET NULL")
      * })
      */
     private $creator;
@@ -51,7 +51,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE")
      * })
      */
     private $modifier;

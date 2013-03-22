@@ -138,16 +138,13 @@ class Country
      * @var Geoname
      *
      * @ORM\ManyToOne(targetEntity="Geoname")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id")
-     * })
      */
     private $geoname;
 
     /**
      * Get id
      *
-     * @return string 
+     * @return string
      */
     public function getId()
     {
@@ -170,7 +167,7 @@ class Country
     /**
      * Get iso3
      *
-     * @return string 
+     * @return string
      */
     public function getIso3()
     {
@@ -193,7 +190,7 @@ class Country
     /**
      * Get isoNumeric
      *
-     * @return integer 
+     * @return integer
      */
     public function getIsoNumeric()
     {
@@ -216,7 +213,7 @@ class Country
     /**
      * Get fips
      *
-     * @return string 
+     * @return string
      */
     public function getFips()
     {
@@ -239,7 +236,7 @@ class Country
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -262,7 +259,7 @@ class Country
     /**
      * Get capital
      *
-     * @return string 
+     * @return string
      */
     public function getCapital()
     {
@@ -285,7 +282,7 @@ class Country
     /**
      * Get area
      *
-     * @return float 
+     * @return float
      */
     public function getArea()
     {
@@ -308,7 +305,7 @@ class Country
     /**
      * Get continent
      *
-     * @return string 
+     * @return string
      */
     public function getContinent()
     {
@@ -331,7 +328,7 @@ class Country
     /**
      * Get tld
      *
-     * @return string 
+     * @return string
      */
     public function getTld()
     {
@@ -354,7 +351,7 @@ class Country
     /**
      * Get currencyCode
      *
-     * @return string 
+     * @return string
      */
     public function getCurrencyCode()
     {
@@ -377,7 +374,7 @@ class Country
     /**
      * Get currencyName
      *
-     * @return string 
+     * @return string
      */
     public function getCurrencyName()
     {
@@ -400,7 +397,7 @@ class Country
     /**
      * Get phone
      *
-     * @return string 
+     * @return string
      */
     public function getPhone()
     {
@@ -423,7 +420,7 @@ class Country
     /**
      * Get postalCodeFormat
      *
-     * @return string 
+     * @return string
      */
     public function getPostalCodeFormat()
     {
@@ -446,7 +443,7 @@ class Country
     /**
      * Get postalCodeRegexp
      *
-     * @return string 
+     * @return string
      */
     public function getPostalCodeRegexp()
     {
@@ -469,7 +466,7 @@ class Country
     /**
      * Get languages
      *
-     * @return string 
+     * @return string
      */
     public function getLanguages()
     {
@@ -492,7 +489,7 @@ class Country
     /**
      * Get neighbors
      *
-     * @return string 
+     * @return string
      */
     public function getNeighbors()
     {
@@ -515,7 +512,7 @@ class Country
     /**
      * Get equivalentFipsCode
      *
-     * @return string 
+     * @return string
      */
     public function getEquivalentFipsCode()
     {
@@ -538,7 +535,7 @@ class Country
     /**
      * Get geoname
      *
-     * @return Geoname 
+     * @return Geoname
      */
     public function getGeoname()
     {

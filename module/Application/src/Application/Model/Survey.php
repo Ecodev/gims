@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Application\Repository\SurveyRepository")
  */
-class Survey extends AbstractModel
+class Survey extends AbstractModel implements \Application\Service\RoleContextInterface
 {
 
     /**
@@ -56,7 +56,7 @@ class Survey extends AbstractModel
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -79,7 +79,7 @@ class Survey extends AbstractModel
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -102,7 +102,7 @@ class Survey extends AbstractModel
     /**
      * Get active
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActive()
     {

@@ -66,7 +66,7 @@ class Answer extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Question")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE")
      * })
      */
     private $question;
@@ -76,7 +76,7 @@ class Answer extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Questionnaire")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE")
      * })
      */
     private $questionnaire;
@@ -85,9 +85,6 @@ class Answer extends AbstractModel
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id")
-     * })
      */
     private $valueUser;
 
@@ -107,7 +104,7 @@ class Answer extends AbstractModel
     /**
      * Get valueChoice
      *
-     * @return integer 
+     * @return integer
      */
     public function getValueChoice()
     {
@@ -130,7 +127,7 @@ class Answer extends AbstractModel
     /**
      * Get valuePercent (between 0.0 and 1.0)
      *
-     * @return float 
+     * @return float
      */
     public function getValuePercent()
     {
@@ -153,7 +150,7 @@ class Answer extends AbstractModel
     /**
      * Get valueAbsolute
      *
-     * @return float 
+     * @return float
      */
     public function getValueAbsolute()
     {
@@ -176,7 +173,7 @@ class Answer extends AbstractModel
     /**
      * Get valueText
      *
-     * @return string 
+     * @return string
      */
     public function getValueText()
     {
@@ -199,7 +196,7 @@ class Answer extends AbstractModel
     /**
      * Get quality (between 0.0 and 1.0)
      *
-     * @return float 
+     * @return float
      */
     public function getQuality()
     {
@@ -222,7 +219,7 @@ class Answer extends AbstractModel
     /**
      * Get relevance (between 0.0 and 1.0)
      *
-     * @return float 
+     * @return float
      */
     public function getRelevance()
     {
@@ -245,7 +242,7 @@ class Answer extends AbstractModel
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
@@ -268,7 +265,7 @@ class Answer extends AbstractModel
     /**
      * Get question
      *
-     * @return Question 
+     * @return Question
      */
     public function getQuestion()
     {
@@ -291,7 +288,7 @@ class Answer extends AbstractModel
     /**
      * Get questionnaire
      *
-     * @return Questionnaire 
+     * @return Questionnaire
      */
     public function getQuestionnaire()
     {
@@ -314,7 +311,7 @@ class Answer extends AbstractModel
     /**
      * Get valueUser
      *
-     * @return User 
+     * @return User
      */
     public function getValueUser()
     {

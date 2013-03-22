@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * UserSurvey
  *
  * @ORM\Entity(repositoryClass="Application\Repository\UserSurveyRepository")
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="user_survey_unique",columns={"user_id", "survey_id", "role_id"})})
  */
 class UserSurvey extends AbstractModel
 {
@@ -15,9 +16,9 @@ class UserSurvey extends AbstractModel
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="userSurveys")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE")
      * })
      */
     private $user;
@@ -27,7 +28,7 @@ class UserSurvey extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Role")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE")
      * })
      */
     private $role;
@@ -37,7 +38,7 @@ class UserSurvey extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Survey")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE")
      * })
      */
     private $survey;
@@ -48,9 +49,10 @@ class UserSurvey extends AbstractModel
      * @param User $user
      * @return UserSurvey
      */
-    public function setUser(User $user = null)
+    public function setUser(User $user)
     {
         $this->user = $user;
+        $user->userSurveyAdded($this);
 
         return $this;
     }
@@ -71,7 +73,7 @@ class UserSurvey extends AbstractModel
      * @param Role $role
      * @return UserSurvey
      */
-    public function setRole(Role $role = null)
+    public function setRole(Role $role)
     {
         $this->role = $role;
 
@@ -81,7 +83,7 @@ class UserSurvey extends AbstractModel
     /**
      * Get role
      *
-     * @return Role 
+     * @return Role
      */
     public function getRole()
     {
@@ -94,7 +96,7 @@ class UserSurvey extends AbstractModel
      * @param Survey $survey
      * @return UserSurvey
      */
-    public function setSurvey(Survey $survey = null)
+    public function setSurvey(Survey $survey)
     {
         $this->survey = $survey;
 
@@ -104,7 +106,7 @@ class UserSurvey extends AbstractModel
     /**
      * Get survey
      *
-     * @return Survey 
+     * @return Survey
      */
     public function getSurvey()
     {
