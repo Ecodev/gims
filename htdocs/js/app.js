@@ -11,8 +11,7 @@ angular.module('myApp', [
         'myApp.services',
         'myApp.directives',
         'myApp.answerService',
-        'myApp.questionnaireService',
-        'myApp.questionnaireAnswerService'
+        'myApp.questionnaireService'
     ]).
     config(function ($routeProvider, $locationProvider) {
         $routeProvider.when('/home', {templateUrl: '/template/application/index/home', controller: 'MyCtrl1'});

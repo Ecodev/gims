@@ -43,25 +43,24 @@ angular.module('myApp').controller('UserCtrl', function($scope, $location) {
     });
 });
 
-//QuestionnaireCtrl.$inject = ['$scope', '$resource', '$routeParams', '$location', 'Answer', 'Questionnaire', 'QuestionnaireAnswer'];
-angular.module('myApp').controller('QuestionnaireCtrl', function($scope, $resource, $routeParams, $location, Answer, Questionnaire, QuestionnaireAnswer) {
+angular.module('myApp').controller('QuestionnaireCtrl', function($scope, $resource, $routeParams, $location, answerService, questionnaireService) {
 
-    // show case which update Answer id: 36
-    var answer = Answer.get({id: 36}, function() {
-        answer.valuePercent = 0.17;
+    // show case which update Answer id: 41
+    var answer = answerService.get({id: 41}, function () {
+        answer.valuePercent = 0.23;
         answer.question.name = 'asdf';
         answer.$update({id: answer.id});
-    })
+    });
 
     // If a questionnaire is specified in URL, load its data
     $scope.answers = [];
     if ($routeParams.id)
     {
-        $scope.answers = QuestionnaireAnswer.query({idQuestionnaire: $routeParams.id});
+        $scope.answers = answerService.query({idQuestionnaire: $routeParams.id});
 
         // Here we use synchronous style affectation to be able to set initial
         // value of Select2 (after Select2 itself is initialized)
-        Questionnaire.get({id: $routeParams.id}, function(questionnaire) {
+        questionnaireService.get({id: $routeParams.id}, function(questionnaire) {
             $scope.selectedQuestionnaire = questionnaire;
         });
     }
@@ -94,7 +93,7 @@ angular.module('myApp').controller('QuestionnaireCtrl', function($scope, $resour
     };
 
     var questionnaires;
-    Questionnaire.query(function(data) {
+    questionnaireService.query(function(data) {
         questionnaires = data;
     });
 

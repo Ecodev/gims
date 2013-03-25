@@ -2,41 +2,49 @@
 
 /* Services */
 
-
-// Demonstrate how to register services
-// In this case it is a simple value service.
+/**
+ * Simple service returning the version of the application
+ */
 angular.module('myApp.services', []).
-    value('version', '0.1');
+    value('version', '0.3');
 
-angular.module('myApp.answerService', ['ngResource']).
-    factory('Answer', function ($resource) {
-        return $resource('/api/answer/:id', {}, {
-            query: {method: 'GET', params: {id: ''}, isArray: true},
-            create: {method: 'PUT'},
-            update: {method: 'PUT'}
-        });
-    })
 
+/**
+ * Questionnaire service
+ */
 angular.module('myApp.questionnaireService', ['ngResource']).
-    factory('Questionnaire', function ($resource) {
+    factory('questionnaireService', function ($resource) {
         return $resource('/api/questionnaire/:id');
-    })
+    });
 
-// @todo try to merge me into answerService?
-angular.module('myApp.questionnaireAnswerService', ['ngResource']).
-    factory('QuestionnaireAnswer', function ($resource) {
-        return $resource('/api/questionnaire/:idQuestionnaire/answer');
-    })
+/**
+ * Answer service
+ */
+angular.module('myApp.answerService', ['ngResource']).
+    factory('answerService', function ($resource) {
+        var resource1, resource2;
 
-angular.module('myApp.services.Answer', ['ngResource']).
-    factory('Answer', function ($resource) {
-        return $resource('/cakephp/demo_comments/:action/:id/:page/:limit:format',
-            { id: '@id', 'page': '@page', 'limit': '@limit' },
-            {
-                'initialize': { method: 'GET', params: { action: 'initialize', format: '.json' }, isArray: true },
-                'save': { method: 'POST', params: { action: 'create', format: '.json' } },
-                'query': { method: 'GET', params: { action: 'read', format: '.json' }, isArray: true },
-                'update': { method: 'PUT', params: { action: 'update', format: '.json' } },
-                'remove': { method: 'DELETE', params: { action: 'delete', format: '.json' } }
-            });
-    })
+        // Define resource with first possible route
+        resource1 = $resource('/api/questionnaire/:idQuestionnaire/answer/:id', {}, {
+            query: {
+                method: 'GET',
+                params: {id: ''},
+                isArray: true
+            }
+        });
+
+        // Define resource with second possible route.
+        resource2 = $resource('/api/answer/:id', {}, {
+            create: {
+                method: 'POST'
+            },
+            update: {
+                method: 'PUT'
+            }
+        });
+
+        // Overwrite method
+        resource1.update = resource2.update.bind(null);
+        resource1.get = resource2.get.bind(null);
+        return resource1;
+    });
