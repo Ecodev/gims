@@ -11,6 +11,7 @@ angular.module('myApp', [
         'myApp.services',
         'myApp.directives',
         'myApp.answerService',
+        'myApp.questionService',
         'myApp.questionnaireService'
     ]).
     config(function ($routeProvider, $locationProvider) {

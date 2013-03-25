@@ -43,7 +43,7 @@ angular.module('myApp').controller('UserCtrl', function($scope, $location) {
     });
 });
 
-angular.module('myApp').controller('QuestionnaireCtrl', function($scope, $resource, $routeParams, $location, answerService, questionnaireService) {
+angular.module('myApp').controller('QuestionnaireCtrl', function($scope, $resource, $routeParams, $location, answerService, questionService, questionnaireService) {
 
     // show case which update Answer id: 41
     var answer = answerService.get({id: 41}, function () {
@@ -53,10 +53,10 @@ angular.module('myApp').controller('QuestionnaireCtrl', function($scope, $resour
     });
 
     // If a questionnaire is specified in URL, load its data
-    $scope.answers = [];
+    $scope.questions = [];
     if ($routeParams.id)
     {
-        $scope.answers = answerService.query({idQuestionnaire: $routeParams.id});
+        $scope.questions = questionService.query({idQuestionnaire: $routeParams.id});
 
         // Here we use synchronous style affectation to be able to set initial
         // value of Select2 (after Select2 itself is initialized)
@@ -74,14 +74,16 @@ angular.module('myApp').controller('QuestionnaireCtrl', function($scope, $resour
 
     // Configure ng-grid
     $scope.gridOptions = {
-        data: 'answers',
+        data: 'questions',
         enableCellSelection: true,
         showFooter: true,
         columnDefs: [
             {field: 'id', displayName: 'Id'},
-            {field: 'question.name', displayName: 'Name'},
-            {field: 'question.category.name', displayName: 'Category'},
-            {field: 'valuePercent', displayName: 'Answer', enableCellEdit: true}
+            {field: 'name', displayName: 'Name'},
+            {field: 'category.name', displayName: 'Category'},
+            {field: 'answers[1].valuePercent', displayName: 'Rural', enableCellEdit: true},
+            {field: 'answers[2].valuePercent', displayName: 'Urban', enableCellEdit: true},
+            {field: 'answers[0].valuePercent', displayName: 'Total', enableCellEdit: true}
         ]
     };
 

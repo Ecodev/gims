@@ -18,6 +18,14 @@ angular.module('myApp.questionnaireService', ['ngResource']).
     });
 
 /**
+ * Questionnaire service
+ */
+angular.module('myApp.questionService', ['ngResource']).
+    factory('questionService', function ($resource) {
+        return $resource('/api/questionnaire/:idQuestionnaire/question');
+    });
+
+/**
  * Answer service
  */
 angular.module('myApp.answerService', ['ngResource']).
