@@ -303,6 +303,29 @@ class Answer extends AbstractModel
     }
 
     /**
+     * Set valueUser
+     *
+     * @param User $valueUser
+     * @return Answer
+     */
+    public function setValueUser(User $valueUser = null)
+    {
+        $this->valueUser = $valueUser;
+
+        return $this;
+    }
+
+    /**
+     * Get valueUser
+     *
+     * @return User
+     */
+    public function getValueUser()
+    {
+        return $this->valueUser;
+    }
+
+    /**
      * Set part
      *
      * @param Part $part

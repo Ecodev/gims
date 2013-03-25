@@ -37,11 +37,11 @@ class ConsoleControllerTest extends \Zend\Test\PHPUnit\Controller\AbstractConsol
         $this->dispatch('import jmp ' . __DIR__ . '/../../data/import_jmp.xlsx');
         $this->assertConsoleOutputContains('Total questionnaire: 3');
     }
-    
+
     public function testPopulationImport()
     {
         $this->dispatch('import population ' . __DIR__ . '/../../data/population_urban.xlsx ' . __DIR__ . '/../../data/population_rural.xlsx ' . __DIR__ . '/../../data/population_total.xlsx');
-        $this->assertConsoleOutputContains('18 population data imported');
+        $this->assertConsoleOutputContains('54 population data imported');
     }
 
 }

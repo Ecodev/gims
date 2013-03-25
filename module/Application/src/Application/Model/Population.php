@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Population
  *
  * @ORM\Entity(repositoryClass="Application\Repository\PopulationRepository")
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="population_unique",columns={"year", "country_id"})})
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="population_unique",columns={"year", "country_id", "part_id"})})
  */
 class Population extends AbstractModel
 {
@@ -29,27 +29,20 @@ class Population extends AbstractModel
      * })
      */
     private $country;
-    
+
     /**
      * @var integer
      *
      * @ORM\Column(type="integer")
      */
-    private $urban;
-    
+    private $population;
+
     /**
-     * @var integer
+     * @var Part
      *
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="Part")
      */
-    private $rural;
-    
-    /**
-     * @var integer
-     *
-     * @ORM\Column(type="integer")
-     */
-    private $total;
+    private $part;
 
     /**
      * Set year
@@ -90,80 +83,57 @@ class Population extends AbstractModel
     /**
      * Get country
      *
-     * @return Country 
+     * @return Country
      */
     public function getCountry()
     {
         return $this->country;
     }
-    
+
     /**
-     * Set urban
+     * Set population
      *
-     * @param integer $urban
+     * @param integer $population
      * @return Population
      */
-    public function setUrban($urban)
+    public function setPopulation($population)
     {
-        $this->urban = $urban;
+        $this->population = $population;
 
         return $this;
     }
 
     /**
-     * Get urban
+     * Get population
      *
      * @return integer
      */
-    public function getUrban()
+    public function getPopulation()
     {
-        return $this->urban;
+        return $this->population;
     }
 
     /**
-     * Set rural
+     * Set part
      *
-     * @param integer $rural
-     * @return Population
+     * @param Part $part
+     * @return Answer
      */
-    public function setRural($rural)
+    public function setPart(Part $part = null)
     {
-        $this->rural = $rural;
+        $this->part = $part;
 
         return $this;
     }
 
     /**
-     * Get rural
+     * Get part
      *
-     * @return integer
+     * @return Part
      */
-    public function getRural()
+    public function getPart()
     {
-        return $this->rural;
-    }
-
-    /**
-     * Set total
-     *
-     * @param integer $total
-     * @return Population
-     */
-    public function setTotal($total)
-    {
-        $this->total = $total;
-
-        return $this;
-    }
-
-    /**
-     * Get total
-     *
-     * @return integer
-     */
-    public function getTotal()
-    {
-        return $this->total;
+        return $this->part;
     }
 
 }

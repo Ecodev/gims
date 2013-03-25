@@ -6,6 +6,16 @@ class Population extends AbstractImporter
 {
 
     /**
+     * @var \Application\Model\Part
+     */
+    private $partUrban;
+
+    /**
+     * @var \Application\Model\Part
+     */
+    private $partRural;
+
+    /**
      * Import populaion data from three files (urban, rural, total)
      * @param string $urbanFilename
      * @param string $ruralFilename
@@ -19,6 +29,10 @@ class Population extends AbstractImporter
         $urbanSheet = $this->loadSheet($urbanFilename);
         $ruralSheet = $this->loadSheet($ruralFilename);
         $totalSheet = $this->loadSheet($totalFilename);
+
+        $this->partUrban = $this->getPart('Urban');
+        $this->partRural = $this->getPart('Rural');
+        $this->getEntityManager()->flush(); // Flush to be sure that parts have ID
 
         $countryRepository = $this->getEntityManager()->getRepository('Application\Model\Country');
 
@@ -47,13 +61,12 @@ class Population extends AbstractImporter
                     $rural = $ruralSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
                     $total = $totalSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
 
-                    $population = $this->getPopulation($year, $country);
-                    $population->setUrban((int) ($urban * 1000));
-                    $population->setRural((int) ($rural * 1000));
-                    $population->setTotal((int) ($total * 1000));
+                    $this->getPopulation($year, $country, $this->partUrban)->setPopulation((int) ($urban * 1000));
+                    $this->getPopulation($year, $country, $this->partRural)->setPopulation((int) ($rural * 1000));
+                    $this->getPopulation($year, $country)->setPopulation((int) ($total * 1000));
 
                     $col++;
-                    $importedValueCount++;
+                    $importedValueCount += 3;
                 }
             }
 
@@ -87,10 +100,14 @@ class Population extends AbstractImporter
      * @param \Application\Model\Country $country
      * @return \Application\Model\Population
      */
-    protected function getPopulation($year, \Application\Model\Country $country)
+    protected function getPopulation($year, \Application\Model\Country $country, \Application\Model\Part $part = null)
     {
         $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
-        $population = $populationRepository->findOneBy(array('year' => $year, 'country' => $country));
+        $population = $populationRepository->findOneBy(array(
+            'year' => $year,
+            'country' => $country,
+            'part' => $part,
+        ));
 
         if (!$population) {
 
@@ -98,6 +115,7 @@ class Population extends AbstractImporter
             $this->getEntityManager()->persist($population);
             $population->setYear($year);
             $population->setCountry($country);
+            $population->setPart($part);
         }
 
         return $population;

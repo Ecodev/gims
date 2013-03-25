@@ -256,17 +256,4 @@ class Jmp extends AbstractImporter
         return $question;
     }
 
-    protected function getPart($name)
-    {
-        $partRepository = $this->getEntityManager()->getRepository('Application\Model\Part');
-        $part = $partRepository->findOneBy(array('name' => $name));
-
-        if (!$part) {
-            $part = new \Application\Model\Part($name);
-            $this->getEntityManager()->persist($part);
-        }
-
-        return $part;
-    }
-
 }
