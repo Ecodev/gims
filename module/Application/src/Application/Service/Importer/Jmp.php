@@ -9,6 +9,16 @@ class Jmp extends AbstractImporter
     private $cacheQuestions = array();
 
     /**
+     * @var \Application\Model\Part
+     */
+    private $partUrban;
+
+    /**
+     * @var \Application\Model\Part
+     */
+    private $partRural;
+
+    /**
      * Import data from file
      */
     public function import($filename)
@@ -19,6 +29,9 @@ class Jmp extends AbstractImporter
         $sheeNamesToImport = array('Tables_W', 'Tables_S');
         $reader->setLoadSheetsOnly($sheeNamesToImport);
         $workbook = $reader->load($filename);
+
+        $this->partUrban = $this->getPart('Urban');
+        $this->partRural = $this->getPart('Rural');
 
         $questionnaireCount = 0;
         foreach ($sheeNamesToImport as $i => $sheetName) {
@@ -104,17 +117,10 @@ class Jmp extends AbstractImporter
     protected function importAnswers(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Survey $survey, \Application\Model\Questionnaire $questionnaire)
     {
         // Define the categories where we actually have answer data
-        $answerCategoryGetters = array(
-            $col + 3 => function($importer, $category, $parentCategory) {
-                return $importer->getCategory('Urban', $category);
-            },
-            $col + 4 => function($importer, $category, $parentCategory) {
-                return $importer->getCategory('Rural', $category);
-            },
-            $col + 5 => function($importer, $category, $parentCategory) {
-                // Total category is actually the current category itself
-                return $category ? : $parentCategory;
-            },
+        $parts = array(
+            $col + 3 => $this->partUrban,
+            $col + 4 => $this->partRural,
+            $col + 5 => null, // total is not a part
         );
 
         // The survey category, the parent category of all other categories
@@ -138,34 +144,35 @@ class Jmp extends AbstractImporter
             }
 
             // If there is an alternate category, linked it to official
-            $alternateParentCategory = null;
             $alternateCategory = null;
             $alternateCategoryName = $sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
             if ($alternateCategoryName) {
                 if ($officialCategory) {
                     $alternateCategory = $this->getCategory($alternateCategoryName, $officialParentCategory, $officialCategory);
                 } else {
-                    $alternateParentCategory = $this->getCategory($alternateCategoryName, $surveyCategory, $officialParentCategory);
+                    $alternateCategory = $this->getCategory($alternateCategoryName, $surveyCategory, $officialParentCategory);
                 }
             }
 
             // Use alternate instead of official, if any
-            $category = $alternateCategory ? : $officialCategory;
-            $parentCategory = $alternateParentCategory ? : $officialParentCategory;
+            $officialCategory = $officialCategory ?: $officialParentCategory;
+            $category = $alternateCategory ?: $officialCategory;
 
             // Import answers
-            foreach ($answerCategoryGetters as $c => $cateforyGetter) {
+            foreach ($parts as $c => $part) {
                 $answerCell = $sheet->getCellByColumnAndRow($c, $row);
 
                 // Only import value which are numeric, and NOT formula
                 if ($answerCell->getDataType() == \PHPExcel_Cell_DataType::TYPE_NUMERIC) {
-                    $question = $this->getQuestion($survey, $cateforyGetter($this, $category, $parentCategory), $answerCount);
+
+                    $question = $this->getQuestion($survey, $category, $answerCount);
 
                     $answer = new \Application\Model\Answer();
                     $this->getEntityManager()->persist($answer);
                     $answer->setQuestionnaire($questionnaire);
                     $answer->setQuestion($question);
                     $answer->setValuePercent($answerCell->getValue() / 100);
+                    $answer->setPart($part);
 
                     $answerCount++;
                 }
@@ -237,8 +244,9 @@ class Jmp extends AbstractImporter
 
             $question->setSurvey($survey);
             $question->setCategory($category);
-            $question->setName('Percentage of population?');
             $question->setSorting($sorting);
+            $question->setName('Percentage of population?');
+            $question->setHasParts(true);
             $question->setType('foo'); // @TODO: find out better value
             $this->getEntityManager()->persist($question);
         }
@@ -246,6 +254,19 @@ class Jmp extends AbstractImporter
         $this->cacheQuestions[$key] = $question;
 
         return $question;
+    }
+
+    protected function getPart($name)
+    {
+        $partRepository = $this->getEntityManager()->getRepository('Application\Model\Part');
+        $part = $partRepository->findOneBy(array('name' => $name));
+
+        if (!$part) {
+            $part = new \Application\Model\Part($name);
+            $this->getEntityManager()->persist($part);
+        }
+
+        return $part;
     }
 
 }

@@ -74,6 +74,13 @@ class Question extends AbstractModel
     private $survey;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $hasParts = false;
+
+    /**
      * Set sorting
      *
      * @param integer $sorting
@@ -232,6 +239,29 @@ class Question extends AbstractModel
     public function getSurvey()
     {
         return $this->survey;
+    }
+
+    /**
+     * Get hasParts
+     *
+     * @return boolean
+     */
+    public function getHasParts()
+    {
+        return $this->hasParts;
+    }
+
+    /**
+     * Set hasParts
+     *
+     * @param boolean $hasParts
+     * @return Role
+     */
+    public function setHasParts($hasParts)
+    {
+        $this->hasParts = $hasParts;
+
+        return $this;
     }
 
 }

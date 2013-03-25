@@ -47,10 +47,16 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $result = array();
         foreach ($properties as $key => $value) {
 
-            if (is_string($key)) {
+            if ($value instanceof \Closure) {
+                if (!is_string($key)) {
+                    throw new \InvalidArgumentException('Cannot use Closure without a named key.');
+                }
+
+                $result[$key] = $value($this, $object);
+            } elseif (is_string($key)) {
                 $getter = 'get' . ucfirst($key);
                 $subObject = $object->$getter();
-                $result[$key] = $this->objectToArray($subObject, $value);
+                $result[$key] = $subObject ? $this->objectToArray($subObject, $value) : null;
             } else {
                 $getter = 'get' . ucfirst($value);
                 $scalarObject = $object->$getter();
@@ -88,10 +94,10 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             $this->getResponse()->setStatusCode(404);
             return;
         }
-        
+
         $this->getEntityManager()->remove($object);
         $this->getEntityManager()->flush();
-        
+
         return new JsonModel(array('message' => 'deleted successfully'));
     }
 
@@ -121,12 +127,12 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             $this->getResponse()->setStatusCode(404);
             return;
         }
-        
+
         $object->updateProperties($data);
         $this->getEntityManager()->persist($object);
         $this->getEntityManager()->flush();
-        
-        
+
+
         return new JsonModel($this->objectToArray($object, $this->getJsonConfig()));
     }
 

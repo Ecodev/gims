@@ -12,6 +12,9 @@ class AnswerController extends AbstractRestfulController
         return array(
             'valuePercent',
             'valueAbsolute',
+            'part' => array(
+                'name',
+            ),
             'question' => array(
                 'name',
                 'category' => array(

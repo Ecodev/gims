@@ -89,6 +89,13 @@ class Answer extends AbstractModel
     private $valueUser;
 
     /**
+     * @var Part
+     *
+     * @ORM\ManyToOne(targetEntity="Part")
+     */
+    private $part;
+
+    /**
      * Set valueChoice
      *
      * @param integer $valueChoice
@@ -296,26 +303,26 @@ class Answer extends AbstractModel
     }
 
     /**
-     * Set valueUser
+     * Set part
      *
-     * @param User $valueUser
+     * @param Part $part
      * @return Answer
      */
-    public function setValueUser(User $valueUser = null)
+    public function setPart(Part $part = null)
     {
-        $this->valueUser = $valueUser;
+        $this->part = $part;
 
         return $this;
     }
 
     /**
-     * Get valueUser
+     * Get part
      *
-     * @return User
+     * @return Part
      */
-    public function getValueUser()
+    public function getPart()
     {
-        return $this->valueUser;
+        return $this->part;
     }
 
 }
