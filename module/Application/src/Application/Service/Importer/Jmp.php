@@ -90,7 +90,63 @@ class Jmp extends AbstractImporter
         $questionnaire->setDateObservationStart(new \DateTime($survey->getYear() . '-01-01'));
         $questionnaire->setDateObservationEnd(new \DateTime($survey->getYear() . '-12-31T23:59:59'));
 
-        $countryName = $sheet->getCellByColumnAndRow($col + 3, 1)->getCalculatedValue();
+        // Mapping JMP country names to Geoname country names
+        $countryNameMapping = array(
+            'Syrian Arab Republic' => 'Syria',
+            'Occupied Palestinian Territory' => 'Palestinian Territory',
+            'Palestine' => 'Palestinian Territory',
+            "Dem. People's Republic of Korea" => 'North Korea',
+            'Republic of Korea' => 'South Korea',
+            'Iran (Islamic Republic of)' => 'Iran',
+            "Lao People's Democratic Republic" => 'Laos',
+            'Viet Nam' => 'Vietnam',
+            'Timor-Leste' => 'East Timor',
+            'United States Virgin Islands' => 'U.S. Virgin Islands',
+            'St. Vincent and Grenadines' => 'Saint Vincent and the Grenadines',
+            'St Vincent & grenadines' => 'Saint Vincent and the Grenadines',
+            'Bolivia (Plurinational State of)' => 'Bolivia',
+            'Venezuela (Bolivarian Republic of)' => 'Venezuela',
+            "Côte d'Ivoire" => 'Ivory Coast',
+            'United Republic of Tanzania' => 'Tanzania',
+            'Libyan Arab Jamahiriya' => 'Libya',
+            'Congo' => 'Republic of the Congo',
+            'Russian Federation' => 'Russia',
+            'Republic of Moldova' => 'Moldova',
+            'TFYR Macedonia' => '"Macedonia"',
+            'United States of America' => 'United States',
+
+            // Unusual spelling
+            'Antigua & Barbuda' => 'Antigua and Barbuda',
+            'Afganistan' => 'Afghanistan',
+            'Dominican Rep' => 'Dominican Republic',
+            'Micronesia (Fed. States of)' => 'Micronesia',
+            'Guinée' => 'Guinea',
+            'Senagal' => 'Senegal',
+            'Cap Verde' => 'Cape Verde',
+            'Congo DR' => 'Democratic Republic of the Congo',
+
+            // Case mistake
+            'ANGOLA' => 'Angola',
+            'Saint lucia' => 'Saint Lucia',
+        );
+
+        // Some files have a buggy self-referencing formula, so we need to fallback on cached result of formula
+        $countryCell = $sheet->getCellByColumnAndRow($col + 3, 1);
+        try {
+            $countryName = $countryCell->getCalculatedValue();
+        } catch (\PHPExcel_Exception $exception) {
+
+            // Fallback on cached result
+            if (strstr($exception->getMessage(), 'Cyclic Reference in Formula') !== false) {
+                $countryName = $countryCell->getOldCalculatedValue();
+            } else {
+                // Forward exception
+                throw $exception;
+            }
+        }
+
+        // Apply mapping if any
+        $countryName = trim(@$countryNameMapping[$countryName] ? : $countryName);
         $countryRepository = $this->getEntityManager()->getRepository('Application\Model\Country');
         $country = $countryRepository->findOneBy(array('name' => $countryName));
         $questionnaire->setGeoname($country->getGeoname());
@@ -155,8 +211,8 @@ class Jmp extends AbstractImporter
             }
 
             // Use alternate instead of official, if any
-            $officialCategory = $officialCategory ?: $officialParentCategory;
-            $category = $alternateCategory ?: $officialCategory;
+            $officialCategory = $officialCategory ? : $officialParentCategory;
+            $category = $alternateCategory ? : $officialCategory;
 
             // Import answers
             foreach ($parts as $c => $part) {
