@@ -47,6 +47,10 @@ class QuestionController extends AbstractRestfulController
         $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
         $questionnaire = $questionnaireRepository->find($idQuestionnaire);
 
+        if (!$questionnaire) {
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
 
         $questions = $this->getRepository()->findBy(array(
             'survey' => $questionnaire->getSurvey(),
