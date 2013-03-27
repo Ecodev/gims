@@ -1,11 +1,12 @@
-
 <div class="container">
 
     <h2>Questionnaire</h2>
-  <input ui-select2="availableQuestionnaires" ng-model="selectedQuestionnaire" style="width:100%" data-placeholder="Select a questionnaire" />
+    <input ui-select2="availableQuestionnaires" ng-model="selectedQuestionnaire" style="width:100%"
+           data-placeholder="Select a questionnaire"/>
 
-  <h2>Questions</h2>
-  <div ng-grid="gridOptions" style="height: 300px"></div>
+    <h2>Questions</h2>
+
+    <div ng-grid="gridOptions" style="height: 300px"></div>
 
     <p>debug stuff: selectedQuestionnaire</p>
     <pre>{{selectedQuestionnaire | json}}</pre>
