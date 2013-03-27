@@ -71,7 +71,6 @@ class Jmp extends AbstractImporter
         $survey = $surveyRepository->findOneBy(array('code' => $code));
         if (!$survey) {
             $survey = new \Application\Model\Survey();
-            $this->getEntityManager()->persist($survey);
 
             $survey->setActive(true);
             $survey->setCode($code);
@@ -81,11 +80,16 @@ class Jmp extends AbstractImporter
             if (!$survey->getName()) {
                 $survey->setName($survey->getCode());
             }
+
+            if (!$survey->getYear()) {
+                echo 'WARNING: skipped survey because there is no year. On sheet "' . $sheet->getTitle() . '" cell ' . $sheet->getCellByColumnAndRow($col + 3, 3)->getCoordinate();
+                return true;
+            }
+            $this->getEntityManager()->persist($survey);
         }
 
         // Create questionnaire
         $questionnaire = new \Application\Model\Questionnaire();
-        $this->getEntityManager()->persist($questionnaire);
         $questionnaire->setSurvey($survey);
         $questionnaire->setDateObservationStart(new \DateTime($survey->getYear() . '-01-01'));
         $questionnaire->setDateObservationEnd(new \DateTime($survey->getYear() . '-12-31T23:59:59'));
@@ -112,7 +116,7 @@ class Jmp extends AbstractImporter
             'Congo' => 'Republic of the Congo',
             'Russian Federation' => 'Russia',
             'Republic of Moldova' => 'Moldova',
-            'TFYR Macedonia' => '"Macedonia"',
+            'TFYR Macedonia' => 'Macedonia',
             'United States of America' => 'United States',
 
             // Unusual spelling
@@ -124,6 +128,7 @@ class Jmp extends AbstractImporter
             'Senagal' => 'Senegal',
             'Cap Verde' => 'Cape Verde',
             'Congo DR' => 'Democratic Republic of the Congo',
+            'Bosnia' => 'Bosnia and Herzegovina',
 
             // Case mistake
             'ANGOLA' => 'Angola',
@@ -147,8 +152,19 @@ class Jmp extends AbstractImporter
 
         // Apply mapping if any
         $countryName = trim(@$countryNameMapping[$countryName] ? : $countryName);
+
+        // Skip questionnaire if there is no country name
+        if (!$countryName) {
+            echo 'WARNING: skipped questionnaire because there is no country name. On sheet "' . $sheet->getTitle() . '" cell ' . $countryCell->getCoordinate();
+            return true;
+        }
+
+        $this->getEntityManager()->persist($questionnaire);
         $countryRepository = $this->getEntityManager()->getRepository('Application\Model\Country');
         $country = $countryRepository->findOneBy(array('name' => $countryName));
+        if (!$country) {
+            throw new \Exception('No country found for name "' . $countryName . '"');
+        }
         $questionnaire->setGeoname($country->getGeoname());
 
         echo 'Survey: ' . $survey->getCode() . PHP_EOL;
