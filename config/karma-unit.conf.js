@@ -16,9 +16,9 @@ files = [
   'htdocs/lib/angular-ui/build/angular-ui.min.js',
   'htdocs/lib/ui-bootstrap/ui-bootstrap-tpls*.js',
   'htdocs/lib/ng-grid/build/ng-grid.min.js',
-  'module/Application/test/lib/angular/angular-mocks.js',
+  'tests/lib/angular/angular-mocks.js',
   'htdocs/js/*.js',
-  'module/Application/test/unit/**/*.js'
+  'tests/unit/**/*.js'
 ];
 
 

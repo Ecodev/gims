@@ -9,7 +9,7 @@
             <arg value="--prefer-source" />
         </composer>
     </target>
-    
+
     <!-- ============================================  -->
     <!-- Target: build                                 -->
     <!-- ============================================  -->
@@ -31,26 +31,26 @@
         <delete dir="htdocs/css/" includeemptydirs="true" verbose="true" />
         <delete dir="htdocs/js/min/" includeemptydirs="true" verbose="true" />
     </target>
-    
+
     <target name="test" depends="validate-schema,phpunit,karma-unit,karma-e2e" description="run all tests available">
         <echo msg="Testing done" />
     </target>
-    
+
     <target name="validate-schema" depends="build">
         <echo msg="Validating schema..." />
         <exec command="./vendor/bin/doctrine-module orm:validate-schema" checkreturn="true" logoutput="/dev/stdout" />
     </target>
-    
+
     <target name="phpunit" depends="build">
         <echo msg="Testing phpunit..." />
-        <exec command="cd module/Application/test/ ; ../../../vendor/bin/phpunit" checkreturn="true" logoutput="/dev/stdout" />
+        <exec command="cd tests/ ; ../vendor/bin/phpunit" checkreturn="true" logoutput="/dev/stdout" />
     </target>
-    
+
     <target name="karma-unit" depends="build">
         <echo msg="Testing karma-unit..." />
         <exec command="karma start --no-auto-watch --single-run --browsers PhantomJS config/karma-unit.conf.js" checkreturn="true" logoutput="/dev/stdout" />
     </target>
-    
+
     <target name="karma-e2e" depends="build">
         <echo msg="Testing karma-e2e..." />
         <exec command="karma start --no-auto-watch --single-run --browsers PhantomJS config/karma-e2e.conf.js" checkreturn="true" logoutput="/dev/stdout" />

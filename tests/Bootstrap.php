@@ -1,7 +1,7 @@
 <?php
 
 // Setup autoloading
-require __DIR__ . '/../../../init_autoloader.php';
+require __DIR__ . '/../init_autoloader.php';
 
 use Zend\Loader\StandardAutoloader;
 

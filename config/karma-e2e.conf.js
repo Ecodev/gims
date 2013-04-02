@@ -9,7 +9,7 @@ proxies = {
 files = [
   ANGULAR_SCENARIO,
   ANGULAR_SCENARIO_ADAPTER,
-  'module/Application/test/e2e/**/*.js'
+  'tests/e2e/**/*.js'
 ];
 
 junitReporter = {
