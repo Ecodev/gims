@@ -12,8 +12,8 @@
 
     <filter>
         <blacklist>
-            <!--Exclude everything from vendor, so code coverage statistics takes only our own code --> 
-            <directory>../../../vendor</directory>
+            <!--Exclude everything from vendor, so code coverage statistics takes only our own code -->
+            <directory>../vendor</directory>
         </blacklist>
     </filter>
 </phpunit>
