@@ -31,7 +31,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      *
      * @ORM\ManyToOne(targetEntity="Geoname")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="SET NULL")
+     *   @ORM\JoinColumn(onDelete="SET NULL", nullable=false)
      * })
      */
     private $geoname;
@@ -41,7 +41,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      *
      * @ORM\ManyToOne(targetEntity="Survey")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE", nullable = false)
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
      */
     private $survey;

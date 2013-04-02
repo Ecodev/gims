@@ -38,7 +38,7 @@ class Question extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="SET NULL")
+     *   @ORM\JoinColumn(onDelete="SET NULL", nullable=false)
      * })
      */
     private $category;

@@ -18,7 +18,7 @@ class UserSurvey extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="userSurveys")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
      */
     private $user;
@@ -28,7 +28,7 @@ class UserSurvey extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Role")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
      */
     private $role;
@@ -38,7 +38,7 @@ class UserSurvey extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Survey")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
      */
     private $survey;

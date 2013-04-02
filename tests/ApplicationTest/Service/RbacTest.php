@@ -7,6 +7,8 @@ class RbacTest extends \ApplicationTest\Controller\AbstractController
 
     public function testRbac()
     {
+        $geoname = new \Application\Model\Geoname();
+
         $user = new \Application\Model\User();
         $user->setPassword('foo')->setName('test user');
 
@@ -17,10 +19,10 @@ class RbacTest extends \ApplicationTest\Controller\AbstractController
         $survey2->setName('test survey2')->setActive(true)->setCode('test code2');
 
         $questionnaire = new \Application\Model\Questionnaire();
-        $questionnaire->setDateObservationStart(new \DateTime())->setDateObservationEnd(new \DateTime())->setSurvey($survey);
+        $questionnaire->setDateObservationStart(new \DateTime())->setDateObservationEnd(new \DateTime())->setSurvey($survey)->setGeoname($geoname);
 
         $questionnaire2 = new \Application\Model\Questionnaire();
-        $questionnaire2->setDateObservationStart(new \DateTime())->setDateObservationEnd(new \DateTime())->setSurvey($survey2);
+        $questionnaire2->setDateObservationStart(new \DateTime())->setDateObservationEnd(new \DateTime())->setSurvey($survey2)->setGeoname($geoname);
 
         $role = new \Application\Model\Role('role global');
         $roleSurvey = new \Application\Model\Role('role survey');
@@ -47,6 +49,7 @@ class RbacTest extends \ApplicationTest\Controller\AbstractController
         $userQuestionnaire->setUser($user)->setQuestionnaire($questionnaire)->setRole($roleQuestionnaire);
 
 
+        $this->getEntityManager()->persist($geoname);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->persist($survey);
         $this->getEntityManager()->persist($survey2);

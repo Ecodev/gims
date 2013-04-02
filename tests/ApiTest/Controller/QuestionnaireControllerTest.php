@@ -19,6 +19,7 @@ class QuestionnaireControllerTest extends \ApplicationTest\Controller\AbstractCo
     {
         parent::setUp();
 
+        $geoname = new \Application\Model\Geoname();
         $this->survey = new \Application\Model\Survey();
         $this->survey->setActive(true);
         $this->survey->setName('test survey');
@@ -29,7 +30,9 @@ class QuestionnaireControllerTest extends \ApplicationTest\Controller\AbstractCo
         $this->questionnaire->setSurvey($this->survey);
         $this->questionnaire->setDateObservationStart(new \DateTime('2010-01-01T00:00:00+0100'));
         $this->questionnaire->setDateObservationEnd(new \DateTime('2011-01-01T00:00:00+0100'));
+        $this->questionnaire->setGeoname($geoname);
 
+        $this->getEntityManager()->persist($geoname);
         $this->getEntityManager()->persist($this->survey);
         $this->getEntityManager()->persist($this->questionnaire);
         $this->getEntityManager()->flush();
