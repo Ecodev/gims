@@ -7,8 +7,23 @@ use Zend\View\Model\JsonModel;
 class QuestionController extends AbstractRestfulController
 {
 
-    protected function getJsonConfig($questionnaire = null)
+    protected $questionnaire;
+
+    protected function getQuestionnaire()
     {
+        $idQuestionnaire = $this->params('idQuestionnaire');
+        if (!$this->questionnaire && $idQuestionnaire) {
+            $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
+            $this->questionnaire = $questionnaireRepository->find($idQuestionnaire);
+        }
+
+        return $this->questionnaire;
+    }
+
+    protected function getJsonConfig()
+    {
+        $questionnaire = $this->getQuestionnaire();
+
         return array(
             'name',
             'category' => array(
@@ -43,10 +58,9 @@ class QuestionController extends AbstractRestfulController
 
     public function getList()
     {
-        $idQuestionnaire = $this->params('idQuestionnaire');
-        $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
-        $questionnaire = $questionnaireRepository->find($idQuestionnaire);
+        $questionnaire = $this->getQuestionnaire();
 
+        // Cannot list all question, without specifying a questionnaire
         if (!$questionnaire) {
             $this->getResponse()->setStatusCode(404);
             return;
@@ -56,7 +70,7 @@ class QuestionController extends AbstractRestfulController
             'survey' => $questionnaire->getSurvey(),
         ));
 
-        return new JsonModel($this->arrayOfObjectsToArray($questions, $this->getJsonConfig($questionnaire)));
+        return new JsonModel($this->arrayOfObjectsToArray($questions, $this->getJsonConfig()));
     }
 
 }
