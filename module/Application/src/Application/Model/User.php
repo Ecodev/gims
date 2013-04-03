@@ -220,7 +220,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      */
     public function userSurveyAdded(UserSurvey $userSurvey)
     {
-        $this->userSurveys->add($userSurvey);
+        $this->getUserSurveys()->add($userSurvey);
 
         return $this;
     }
@@ -242,7 +242,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      */
     public function userQuestionnaireAdded(UserQuestionnaire $userQuestionnaire)
     {
-        $this->userQuestionnaires->add($userQuestionnaire);
+        $this->getUserQuestionnaires()->add($userQuestionnaire);
 
         return $this;
     }

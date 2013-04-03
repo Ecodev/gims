@@ -23,7 +23,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      * @param array $properties
      * @return array
      */
-    protected function arrayOfObjectsToArray(array $objects, array $properties)
+    protected function arrayOfObjectsToArray($objects, array $properties)
     {
         $result = array();
         foreach ($objects as $object) {
@@ -42,7 +42,9 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     protected function objectToArray(AbstractModel $object, array $properties)
     {
         // Always output id
-        array_unshift($properties, 'id');
+        if (!in_array('id', $properties)) {
+            array_unshift($properties, 'id');
+        }
 
         $result = array();
         foreach ($properties as $key => $value) {
@@ -52,18 +54,32 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
                     throw new \InvalidArgumentException('Cannot use Closure without a named key.');
                 }
 
-                $result[$key] = $value($this, $object);
+                $propertyName = $key;
+                $propertyValue = $value($this, $object);
             } elseif (is_string($key)) {
                 $getter = 'get' . ucfirst($key);
                 $subObject = $object->$getter();
-                $result[$key] = $subObject ? $this->objectToArray($subObject, $value) : null;
+
+                // Reuse same configuration if ask for recursivity
+                $jsonConfig = $value == '__recursive' ? $properties : $value;
+                if ($subObject instanceof \IteratorAggregate) {
+                    $propertyValue = $this->arrayOfObjectsToArray($subObject, $jsonConfig);
+                } else {
+                    $propertyValue = $subObject ? $this->objectToArray($subObject, $jsonConfig) : null;
+                }
+
+                $propertyName = $key;
             } else {
                 $getter = 'get' . ucfirst($value);
-                $scalarObject = $object->$getter();
-                if ($scalarObject instanceof \DateTime)
-                    $scalarObject = $scalarObject->format(\DateTime::ISO8601);
-                $result[$value] = $scalarObject;
+                $propertyValue = $object->$getter();
+                if ($propertyValue instanceof \DateTime) {
+                    $propertyValue = $propertyValue->format(\DateTime::ISO8601);
+                }
+
+                $propertyName = $value;
             }
+
+            $result[$propertyName] = $propertyValue;
         }
 
         return $result;

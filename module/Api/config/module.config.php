@@ -6,6 +6,7 @@ return array(
             'Api\Controller\Questionnaire' => 'Api\Controller\QuestionnaireController',
             'Api\Controller\Question' => 'Api\Controller\QuestionController',
             'Api\Controller\Answer' => 'Api\Controller\AnswerController',
+            'Api\Controller\Category' => 'Api\Controller\CategoryController',
         ),
     ),
     'router' => array(
