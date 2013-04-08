@@ -5,6 +5,188 @@ namespace Application\Service\Importer;
 class Jmp extends AbstractImporter
 {
 
+    /**
+     * sheet name =>
+     *      defintions =>
+     *          row => name, parent row, computing type, summands rows
+     * @var array
+     */
+    private $officialCategoriesDefinition = array(
+        'Tables_W' => array(
+            'definitions' => array(
+                4 => array("Access to drinking water sources", null, 0, null),
+                5 => array("Tap water", 4, 0, null),
+                6 => array("House connections", 5, 0, null),
+                7 => array("Piped water into dwelling", 6, 0, null),
+                8 => array("Piped water to yard/plot", 6, 0, null),
+                9 => array("Public tap, standpipe", 5, 0, null),
+                10 => array("Other", 5, 0, null),
+                11 => array("Ground water", 4, 0, null),
+                12 => array("Protected ground water", 11, 1, array(14, 15, 16, 17, 26, 27, 28, 29, 46, 47, 48, 49, 34, 35, 36, 37)),
+                13 => array("Unprotected ground water", 11, 1, array(18, 19, 20, 21, 38, 39, 40, 41, 50, 51, 52, 53)),
+                14 => array("Protected wells or springs", 11, 2, array(26, 34, 46)),
+                15 => array("Private", 14, 1, array(27, 35, 47)),
+                16 => array("Public", 14, 1, array(28, 36, 48)),
+                17 => array("Other", 14, 1, array(29, 37, 49)),
+                18 => array("Unprotected wells or springs", 11, 2, array(38, 50)),
+                19 => array("Private", 18, 1, array(39, 51)),
+                20 => array("Public", 18, 1, array(40, 52)),
+                21 => array("Other", 18, 1, array(41, 53)),
+                22 => array("All wells", 11, 0, null),
+                23 => array("Private", 22, 1, array(27, 31)),
+                24 => array("Public", 22, 1, array(28, 32)),
+                25 => array("Other", 22, 1, array(29, 33)),
+                26 => array("Tubewell, borehole", 22, 0, null),
+                27 => array("Private", 26, 0, null),
+                28 => array("Public", 26, 0, null),
+                29 => array("Other", 26, 0, null),
+                30 => array("Traditional wells", 22, 0, null),
+                31 => array("Private", 30, 1, array(35, 39)),
+                32 => array("Public", 30, 1, array(36, 40)),
+                33 => array("Other", 30, 1, array(37, 41)),
+                34 => array("Protected well", 30, 0, null),
+                35 => array("Private", 34, 0, null),
+                36 => array("Public", 34, 0, null),
+                37 => array("Other", 34, 0, null),
+                38 => array("Unprotected well", 30, 0, null),
+                39 => array("Private", 38, 0, null),
+                40 => array("Public", 38, 0, null),
+                41 => array("Other", 38, 0, null),
+                42 => array("All springs", 11, 0, null),
+                43 => array("Private", 42, 1, array(47, 51)),
+                44 => array("Public", 42, 1, array(48, 52)),
+                45 => array("Other", 42, 1, array(49, 53)),
+                46 => array("Protected spring", 42, 0, null),
+                47 => array("Private", 46, 0, null),
+                48 => array("Public", 46, 0, null),
+                49 => array("Other", 46, 0, null),
+                50 => array("Unprotected spring", 42, 0, null),
+                51 => array("Private", 50, 0, null),
+                52 => array("Public", 50, 0, null),
+                53 => array("Other", 50, 0, null),
+                54 => array("Rainwater", 4, 0, null),
+                55 => array("Covered cistern/tank", 54, 0, null),
+                56 => array("Uncovered cistern/tank", 54, 0, null),
+                57 => array("Bottled water", 4, 0, null),
+                58 => array("with other improved", 57, 0, null),
+                59 => array("without other improved", 57, 0, null),
+                60 => array("Surface water", 4, 0, null),
+                61 => array("River", 60, 0, null),
+                62 => array("Lake", 60, 0, null),
+                63 => array("Dam", 60, 0, null),
+                64 => array("Pond", 60, 0, null),
+                65 => array("Stream", 60, 0, null),
+                66 => array("Irrigation channel", 60, 0, null),
+                67 => array("Other", 60, 0, null),
+                68 => array("Other improved sources", 4, 0, null),
+                69 => array("Other 1", 68, 0, null),
+                70 => array("Other 2", 68, 0, null),
+                71 => array("Other non-improved", 4, 0, null),
+                72 => array("Cart with small tank/drum", 71, 0, null),
+                73 => array("Tanker truck provided", 71, 0, null),
+                74 => array("Other 1", 71, 0, null),
+                75 => array("Other 2", 71, 0, null),
+                76 => array("DK/missing", 4, 0, null),
+            ),
+            'replacements' => array(
+            // No replacements to make for water
+            ),
+        ),
+        'Tables_S' => array(
+            'definitions' => array(
+                4 => array("Use of sanitation facilities", null, 0, null),
+                5 => array("Flush and pour flush", 4, 2, array(11, 30)),
+                6 => array("to piped sewer system", 5, 1, array(12, 31)),
+                7 => array("to septic tank", 5, 1, array(13, 32)),
+                8 => array("to pit", 5, 1, array(14, 33)),
+                9 => array("to unknown place/ not sure/DK", 5, 1, array(15, 34)),
+                10 => array("to elsewhere", 5, 1, array(16, 35)),
+                11 => array("Flush/toilets", 4, 0, null),
+                12 => array("to piped sewer system", 11, 1, array(18, 24)),
+                13 => array("to septic tank", 11, 1, array(19, 25)),
+                14 => array("to pit", 11, 1, array(20, 26)),
+                15 => array("to unknown place/ not sure/DK", 11, 1, array(21, 27)),
+                16 => array("to elsewhere", 11, 1, array(22, 28)),
+                17 => array("Private flush/toilet", 11, 0, null),
+                18 => array("to piped sewer system", 17, 0, null),
+                19 => array("to septic tank", 17, 0, null),
+                20 => array("to pit", 17, 0, null),
+                21 => array("to unknown place/ not sure/DK", 17, 0, null),
+                22 => array("to elsewhere", 17, 0, null),
+                23 => array("Public/shared flush/toilet", 11, 0, null),
+                24 => array("to piped sewer system", 23, 0, null),
+                25 => array("to septic tank", 23, 0, null),
+                26 => array("to pit", 23, 0, null),
+                27 => array("to unknown place/ not sure/DK", 23, 0, null),
+                28 => array("to elsewhere", 23, 0, null),
+                29 => array("Latrines", 4, 0, null),
+                30 => array("Pour flush latrines", 29, 0, null),
+                31 => array("to piped sewer system", 30, 1, array(37, 43)),
+                32 => array("to septic tank", 30, 1, array(38, 44)),
+                33 => array("to pit", 30, 1, array(39, 45)),
+                34 => array("to unknown place/ not sure/DK", 30, 1, array(40, 46)),
+                35 => array("to elsewhere", 30, 1, array(41, 47)),
+                36 => array("Private pour flush latrine", 30, 0, null),
+                37 => array("to piped sewer system", 36, 0, null),
+                38 => array("to septic tank", 36, 0, null),
+                39 => array("to pit", 36, 0, null),
+                40 => array("to unknown place/ not sure/DK", 36, 0, null),
+                41 => array("to elsewhere", 36, 0, null),
+                42 => array("Public/shared pour flush latrine", 30, 0, null),
+                43 => array("to piped sewer system", 42, 0, null),
+                44 => array("to septic tank", 42, 0, null),
+                45 => array("to pit", 42, 0, null),
+                46 => array("to unknown place/ not sure/DK", 42, 0, null),
+                47 => array("to elsewhere", 42, 0, null),
+                48 => array("Dry latrines", 29, 0, null),
+                49 => array("Improved latrines", 48, 0, null),
+                50 => array("Ventilated Improved Pit latrine", 49, 1, array(58, 66)),
+                51 => array("Pit latrine with slab/covered latrine", 49, 1, array(59, 67)),
+                52 => array("Traditional latrine", 48, 1, array(60, 68)),
+                53 => array("Pit latrine without slab/open pit", 48, 1, array(61, 69)),
+                54 => array("Hanging toilet/hanging latrine", 48, 1, array(62, 70)),
+                55 => array("Bucket latrine", 48, 1, array(63, 71)),
+                56 => array("Other", 48, 1, array(64, 72)),
+                57 => array("Private Latrines", 48, 0, null),
+                58 => array("Ventilated Improved Pit latrine", 57, 0, null),
+                59 => array("Pit latrine with slab/covered latrine", 57, 0, null),
+                60 => array("Traditional latrine", 57, 0, null),
+                61 => array("Pit latrine without slab/open pit", 57, 0, null),
+                62 => array("Hanging toilet/hanging latrine", 57, 0, null),
+                63 => array("Bucket latrine", 57, 0, null),
+                64 => array("Other", 57, 0, null),
+                65 => array("Public/shared Latrines", 48, 0, null),
+                66 => array("Ventilated Improved Pit latrine", 65, 0, null),
+                67 => array("Pit latrine with slab/covered latrine", 65, 0, null),
+                68 => array("Traditional latrine", 65, 0, null),
+                69 => array("Pit latrine without slab/open pit", 65, 0, null),
+                70 => array("Hanging toilet/hanging latrine", 65, 0, null),
+                71 => array("Bucket latrine", 65, 0, null),
+                72 => array("Other", 65, 0, null),
+                73 => array("Composting toilets", 4, 0, null),
+                74 => array("Composting toilet (private)", 73, 0, null),
+                75 => array("Composting toilet (shared)", 73, 0, null),
+                76 => array("Other improved", 4, 0, null),
+                77 => array("Other 1", 76, 0, null),
+                78 => array("Other 2", 76, 0, null),
+                79 => array("No facility, bush, field ", 4, 0, null),
+                80 => array("Other unimproved", 4, 0, null),
+                81 => array("Other 1", 80, 0, null),
+                82 => array("Other 2", 80, 0, null),
+                83 => array("DK/missing information", 4, 0, null),
+            ),
+            'replacements' => array(
+                // For sanitation, we need to modify the category tree to introduce a new branch
+                -1 => array("Other flush and pour flush", 5, 0, null),
+                6 => array("to piped sewer system", -1, 0, null),
+                7 => array("to septic tank", -1, 0, null),
+                8 => array("to pit", -1, 0, null),
+                9 => array("to unknown place/ not sure/DK", -1, 0, null),
+                10 => array("to elsewhere", -1, 0, null),
+            ),
+        ),
+    );
+    private $cacheAlternateCategories = array();
     private $cacheCategories = array();
     private $cacheQuestions = array();
 
@@ -26,7 +208,7 @@ class Jmp extends AbstractImporter
         $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
         $reader->setReadDataOnly(true);
 
-        $sheeNamesToImport = array('Tables_W', 'Tables_S');
+        $sheeNamesToImport = array_keys($this->officialCategoriesDefinition);
         $reader->setLoadSheetsOnly($sheeNamesToImport);
         $workbook = $reader->load($filename);
 
@@ -35,6 +217,9 @@ class Jmp extends AbstractImporter
 
         $questionnaireCount = 0;
         foreach ($sheeNamesToImport as $i => $sheetName) {
+
+            $this->importCategories($this->officialCategoriesDefinition[$sheetName]);
+
             $workbook->setActiveSheetIndex($i);
             $sheet = $workbook->getSheet($i);
 
@@ -48,6 +233,69 @@ class Jmp extends AbstractImporter
         }
 
         return "Total questionnaire: " . $questionnaireCount . PHP_EOL;
+    }
+
+    protected function getCategory($definition)
+    {
+        $name = $definition[0];
+
+        $parent = @$this->cacheCategories[$definition[1]];
+        $parentName = $parent ? $parent->getName() : null;
+
+        $categoryRepository = $this->getEntityManager()->getRepository('Application\Model\Category');
+        $category = $categoryRepository->getOneByNames($name, $parentName);
+        if (!$category) {
+
+            $category = new \Application\Model\Category();
+            $this->getEntityManager()->persist($category);
+            $category->setName($name);
+            $category->setOfficial(true);
+            $category->setParent($parent);
+        }
+
+        return $category;
+    }
+
+    /**
+     *
+     * @param array $officialCategories
+     */
+    protected function importCategories(array $officialCategories)
+    {
+        // Import categories
+        $this->cacheCategories = array();
+        foreach ($officialCategories['definitions'] as $row => $definition) {
+            $category = $this->getCategory($definition);
+            $this->cacheCategories[$row] = $category;
+        }
+
+        // Add all summands to categories
+        foreach ($officialCategories['definitions'] as $row => $definition) {
+            $category = $this->cacheCategories[$row];
+            $summands = $definition[3];
+            if ($summands) {
+                foreach ($summands as $summand) {
+                    $s = $this->cacheCategories[$summand];
+                    $category->addSummand($s);
+                }
+            }
+        }
+
+        // Replace categories with their replacements, if any defined
+        // This is a dirty trick to solve inconsistency in first category of sanitation
+        foreach ($officialCategories['replacements'] as $row => $definition) {
+            $replacementCategory = $this->getCategory($definition);
+            $originalCategory = @$this->cacheCategories[$row];
+
+            // If original category actually exists, add the replacement as a summand, and replace it
+            if ($originalCategory) {
+                $originalCategory->addSummand($replacementCategory);
+            }
+                $this->cacheCategories[$row] = $replacementCategory;
+        }
+
+        $this->getEntityManager()->flush();
+        echo count($this->cacheCategories) . ' categories imported' . PHP_EOL;
     }
 
     /**
@@ -118,7 +366,6 @@ class Jmp extends AbstractImporter
             'Republic of Moldova' => 'Moldova',
             'TFYR Macedonia' => 'Macedonia',
             'United States of America' => 'United States',
-
             // Unusual spelling
             'Antigua & Barbuda' => 'Antigua and Barbuda',
             'Afganistan' => 'Afghanistan',
@@ -129,7 +376,6 @@ class Jmp extends AbstractImporter
             'Cap Verde' => 'Cape Verde',
             'Congo DR' => 'Democratic Republic of the Congo',
             'Bosnia' => 'Bosnia and Herzegovina',
-
             // Case mistake
             'ANGOLA' => 'Angola',
             'Saint lucia' => 'Saint Lucia',
@@ -195,40 +441,19 @@ class Jmp extends AbstractImporter
             $col + 5 => null, // total is not a part
         );
 
-        // The survey category, the parent category of all other categories
-        $surveyCategoryName = $sheet->getCellByColumnAndRow($col, 1)->getCalculatedValue();
-        $surveyCategory = $this->getCategory($surveyCategoryName);
+        $knownRows = array_keys($this->cacheCategories);
+        array_shift($knownRows); // Skip first categorie, since it's not an actual row, but the sheet topic (eg: "Access to drinking water sources")
 
         $answerCount = 0;
-        $officialParentCategory = null; // Tap water, Ground Water, etc...
-        $officialCategory = null; // House connection, piped water into dwelling, piped water to yard, etc...
+        foreach ($knownRows as $row) {
 
-        for ($row = 5; $row < 77; $row++) {
-            $officialParentCategoryName = $sheet->getCellByColumnAndRow($col + 1, $row)->getCalculatedValue();
-            if ($officialParentCategoryName) {
-                $officialParentCategory = $this->getCategory($officialParentCategoryName, $surveyCategory);
-                $officialCategory = null;
-            }
-
-            $officialCategoryName = $sheet->getCellByColumnAndRow($col + 2, $row)->getCalculatedValue();
-            if ($officialCategoryName) {
-                $officialCategory = $this->getCategory($officialCategoryName, $officialParentCategory);
-            }
-
-            // If there is an alternate category, linked it to official
-            $alternateCategory = null;
-            $alternateCategoryName = $sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
-            if ($alternateCategoryName) {
-                if ($officialCategory) {
-                    $alternateCategory = $this->getCategory($alternateCategoryName, $officialParentCategory, $officialCategory);
-                } else {
-                    $alternateCategory = $this->getCategory($alternateCategoryName, $surveyCategory, $officialParentCategory);
-                }
-            }
+            $category = $this->cacheCategories[$row];
 
             // Use alternate instead of official, if any
-            $officialCategory = $officialCategory ? : $officialParentCategory;
-            $category = $alternateCategory ? : $officialCategory;
+            $alternateCategoryName = $sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
+            if ($alternateCategoryName) {
+                $category = $this->getAlternateCategory($alternateCategoryName, $category);
+            }
 
             // Import answers
             foreach ($parts as $c => $part) {
@@ -255,24 +480,26 @@ class Jmp extends AbstractImporter
     }
 
     /**
-     * Returns a category either from database, or newly created
+     * Returns an alternate category linked to the official either from database, or newly created
      * @param string $name
-     * @param \Application\Model\Category $parent
      * @param \Application\Model\Category $officialCategory
      * @return \Application\Model\Category
      */
-    protected function getCategory($name, \Application\Model\Category $parent = null, \Application\Model\Category $officialCategory = null)
+    protected function getAlternateCategory($name, \Application\Model\Category $officialCategory)
     {
-        $categoryRepository = $this->getEntityManager()->getRepository('Application\Model\Category');
-        $criteria = array('name' => $name);
-        if ($parent)
-            $criteria['parent'] = $parent;
+        if ($name == $officialCategory->getName())
+            return $officialCategory;
 
-        $key = $name . '::' . ($parent ? $parent->getName() : '[no parent]');
-        if (array_key_exists($key, $this->cacheCategories)) {
-            $category = $this->cacheCategories[$key];
+        $key = $name . '::' . $officialCategory->getName();
+        if (array_key_exists($key, $this->cacheAlternateCategories)) {
+            $category = $this->cacheAlternateCategories[$key];
         } else {
             $this->getEntityManager()->flush();
+            $categoryRepository = $this->getEntityManager()->getRepository('Application\Model\Category');
+            $criteria = array(
+                'name' => $name,
+                'officialCategory' => $officialCategory,
+            );
             $category = $categoryRepository->findOneBy($criteria);
         }
 
@@ -280,12 +507,10 @@ class Jmp extends AbstractImporter
             $category = new \Application\Model\Category();
             $this->getEntityManager()->persist($category);
             $category->setName($name);
-            $category->setOfficial(is_null($officialCategory));
             $category->setOfficialCategory($officialCategory);
-            $category->setParent($parent);
         }
 
-        $this->cacheCategories[$key] = $category;
+        $this->cacheAlternateCategories[$key] = $category;
 
         return $category;
     }

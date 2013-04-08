@@ -12,7 +12,8 @@ class CategoryController extends AbstractRestfulController
         return array(
             'name',
             'official',
-            'children' => '__recursive'
+            'children' => '__recursive',
+            'summands' => array('name'),
         );
     }
 
