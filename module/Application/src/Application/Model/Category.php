@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
  * Category
  *
  * @ORM\Entity(repositoryClass="Application\Repository\CategoryRepository")
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="category_unique",columns={"name", "parent_id"})})
  */
 class Category extends AbstractModel
 {
@@ -54,9 +53,25 @@ class Category extends AbstractModel
      */
     private $children;
 
+    /**
+     * Summands are the categories which must be summed to compute this category value
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Category")
+     * @ORM\JoinTable(name="category_summand",
+     *      inverseJoinColumns={@ORM\JoinColumn(name="summand_category_id")}
+     *      )
+     */
+    private $summands;
+
+    /**
+     * Constructor
+     * @param string $name
+     */
     public function __construct($name = null)
     {
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->summands = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setName($name);
     }
 
@@ -114,6 +129,13 @@ class Category extends AbstractModel
      */
     public function setOfficialCategory(Category $officialCategory = null)
     {
+        // If there is an official category, then this category is not official,
+        //  but opposite may not be true, we could have a non-official category, not yet linked to official one
+        if ($officialCategory) {
+            $this->setOfficial(false);
+            $this->setParent($officialCategory->getParent());
+        }
+
         $this->officialCategory = $officialCategory;
 
         return $this;
@@ -191,6 +213,29 @@ class Category extends AbstractModel
     public function childRemoved(Category $category)
     {
         $this->getChildren()->removeElement($category);
+
+        return $this;
+    }
+
+    /**
+     * Get summands
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getSummands()
+    {
+        return $this->summands;
+    }
+
+    /**
+     * Add a summand
+     * @param Category $summand
+     * @return Category
+     */
+    public function addSummand(Category $summand)
+    {
+        if (!$this->getSummands()->contains($summand)) {
+            $this->getSummands()->add($summand);
+        }
 
         return $this;
     }
