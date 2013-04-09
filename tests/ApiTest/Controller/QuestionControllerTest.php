@@ -7,6 +7,7 @@ use Application\Model\Category;
 use Application\Model\Geoname;
 use Application\Model\Question;
 use Application\Model\Questionnaire;
+use Application\Model\Part;
 use Application\Model\Survey;
 use ApplicationTest\Controller\AbstractController;
 use Zend\Http\Request;
@@ -36,6 +37,11 @@ class QuestionControllerTest extends AbstractController
     private $category;
 
     /**
+     * @var Part
+     */
+    private $part;
+
+    /**
      * @var Answer
      */
     private $answerOne;
@@ -56,6 +62,9 @@ class QuestionControllerTest extends AbstractController
         $this->survey->setYear(2010);
 
         $geoName = new Geoname();
+
+        $this->part = new Part();
+        $this->part->setName('foo');
 
         $this->category = new Category();
         $this->category->setName('foo')
@@ -78,6 +87,7 @@ class QuestionControllerTest extends AbstractController
 
         $this->answerOne = new Answer();
         $this->answerOne
+            ->setPart($this->part) // question one has a part whereas question two not.
             ->setQuestion($this->question)
             ->setQuestionnaire($this->questionnaire);
 
@@ -86,6 +96,7 @@ class QuestionControllerTest extends AbstractController
             ->setQuestion($this->question)
             ->setQuestionnaire($this->questionnaire);
 
+        $this->getEntityManager()->persist($this->part);
         $this->getEntityManager()->persist($this->category);
         $this->getEntityManager()->persist($geoName);
         $this->getEntityManager()->persist($this->survey);
@@ -164,7 +175,7 @@ class QuestionControllerTest extends AbstractController
     /**
      * @test
      */
-    public function getFakeQuestionAndCheckWhetherItContainsTwoAnswers()
+    public function getTheFakeQuestionAndCheckWhetherItContainsTwoAnswers()
     {
         $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
         $actual = $this->getJsonResponse();
@@ -174,16 +185,16 @@ class QuestionControllerTest extends AbstractController
     /**
      * @test
      */
-    public function updateQuestionAndCheckWhetherModificationDateWasUpdated()
+    public function updateQuestionAndCheckWhetherOriginalNameIsChanged()
     {
-        $expected = $this->question->getDateModified();
+        $expected = $this->question->getName();
         $data = array(
             'name' => 'bar',
         );
 
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $actual = $this->getJsonResponse();
-        $this->assertNotEquals($expected, $actual['dateModified']);
+        $this->assertNotEquals($expected, $actual['name']);
     }
 
     /**

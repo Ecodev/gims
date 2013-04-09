@@ -49,7 +49,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     protected function objectToArray(AbstractModel $object, array $properties)
     {
         // Always output id
-        foreach (array('id', 'dateCreated', 'dateModified') as $value) {
+        foreach (array('id') as $value) {
             if (!in_array($value, $properties)) {
                 array_unshift($properties, $value);
             }

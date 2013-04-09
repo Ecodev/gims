@@ -68,8 +68,6 @@ class AnswerControllerTest extends AbstractController
         $this->questionnaire->setDateObservationEnd(new \DateTime('2011-01-01T00:00:00+0100'));
         $this->questionnaire->setGeoname($geoName);
 
-        $this->category = new Category();
-
         $this->question = new Question();
         $this->question->setSurvey($this->survey)
             ->setSorting(1)
@@ -163,16 +161,16 @@ class AnswerControllerTest extends AbstractController
      * @test
      * @group AnswerModel
      */
-    public function updateAnswerAndCheckWhetherModificationDateWasUpdated()
+    public function updateAnswerAndCheckWhetherValuePercentIsDifferentFromOriginalValue()
     {
-        $expected = $this->question->getDateModified();
+        $expected = $this->answer->getValuePercent();
         $data = array(
             'valuePercent' => 0.2,
         );
 
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $actual = $this->getJsonResponse();
-        $this->assertNotEquals($expected, $actual['dateModified']);
+        $this->assertNotEquals($expected, $actual['valuePercent']);
     }
 
     /**
