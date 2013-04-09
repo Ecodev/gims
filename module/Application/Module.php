@@ -36,6 +36,16 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
         return self::$serviceManager;
     }
 
+    /**
+     * Yet another extremely dirty way to retrieve Entity Manager. Highly discouraged to use it.
+     *
+     * @return \Doctrine\ORM\EntityManager
+     */
+    public static function getEntityManager()
+    {
+        return self::getServiceManager()->get('Doctrine\ORM\EntityManager');
+    }
+
     public function getServiceConfig()
     {
         return array(

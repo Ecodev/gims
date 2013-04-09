@@ -13,7 +13,7 @@ angular.module('myApp.services', []).
  * Questionnaire service
  */
 angular.module('myApp.questionnaireService', ['ngResource']).
-    factory('questionnaireService', function ($resource) {
+    factory('Questionnaire', function ($resource) {
         return $resource('/api/questionnaire/:id');
     });
 
@@ -21,28 +21,44 @@ angular.module('myApp.questionnaireService', ['ngResource']).
  * Questionnaire service
  */
 angular.module('myApp.questionService', ['ngResource']).
-    factory('questionService', function ($resource) {
-        return $resource('/api/questionnaire/:idQuestionnaire/question');
+    factory('Question', function ($resource) {
+        return $resource('/api/questionnaire/:idQuestionnaire/question/:id', {}, {
+            update: {
+                method: 'PUT'
+            }
+        });
     });
 
 /**
  * Answer service
  */
+//angular.module('myApp.answerService', ['ngResource']).
+//    factory('Answer', function ($resource) {
+//        var resource1, resource2;
+//
+//        // Define resource with first possible route
+//        resource1 = $resource('/api/questionnaire/:idQuestionnaire/answer/:id');
+//
+//        // Define resource with second possible route.
+//        resource2 = $resource('/api/answer/:id', {}, {
+//            create: {
+//                method: 'POST'
+//            },
+//            update: {
+//                method: 'PUT'
+//            }
+//        });
+//
+//        // Overwrite method
+//        resource1.update = resource2.update.bind(null);
+//        resource1.get = resource2.get.bind(null);
+//        return resource1;
+//    });
+
+
 angular.module('myApp.answerService', ['ngResource']).
-    factory('answerService', function ($resource) {
-        var resource1, resource2;
-
-        // Define resource with first possible route
-        resource1 = $resource('/api/questionnaire/:idQuestionnaire/answer/:id', {}, {
-            query: {
-                method: 'GET',
-                params: {id: ''},
-                isArray: true
-            }
-        });
-
-        // Define resource with second possible route.
-        resource2 = $resource('/api/answer/:id', {}, {
+    factory('Answer', function ($resource) {
+        return $resource('/api/answer/:id', {}, {
             create: {
                 method: 'POST'
             },
@@ -50,9 +66,4 @@ angular.module('myApp.answerService', ['ngResource']).
                 method: 'PUT'
             }
         });
-
-        // Overwrite method
-        resource1.update = resource2.update.bind(null);
-        resource1.get = resource2.get.bind(null);
-        return resource1;
     });

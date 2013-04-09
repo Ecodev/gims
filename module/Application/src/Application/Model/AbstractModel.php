@@ -2,7 +2,9 @@
 
 namespace Application\Model;
 
+use Application\Module;
 use Doctrine\ORM\Mapping as ORM;
+use Zend\Code\Reflection\MethodReflection;
 
 /**
  * @ORM\MappedSuperclass
@@ -41,7 +43,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="SET NULL")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      * })
      */
     private $creator;
@@ -51,7 +53,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * })
      */
     private $modifier;
@@ -70,6 +72,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      * Set dateCreated
      *
      * @param \DateTime $dateCreated
+     *
      * @return AbstractModel
      */
     public function setDateCreated($dateCreated)
@@ -93,6 +96,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      * Set dateModified
      *
      * @param \DateTime $dateModified
+     *
      * @return AbstractModel
      */
     public function setDateModified($dateModified)
@@ -116,6 +120,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      * Set creator
      *
      * @param User $creator
+     *
      * @return AbstractModel
      */
     public function setCreator(User $creator = null)
@@ -139,6 +144,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      * Set modifier
      *
      * @param User $modifier
+     *
      * @return AbstractModel
      */
     public function setModifier(User $modifier = null)
@@ -160,23 +166,26 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
 
     /**
      * Returns now, always same value for a single PHP execution
+     *
      * @return \DateTime
      */
     private static function getNow()
     {
-        if (!self::$now)
+        if (!self::$now) {
             self::$now = new \DateTime();
+        }
 
         return self::$now;
     }
 
     /**
      * Returns currently logged user
+     *
      * @return User
      */
     private static function getCurrentUser()
     {
-        $sm = \Application\Module::getServiceManager();
+        $sm = Module::getServiceManager();
         $auth = $sm->get('zfcuser_auth_service');
 
         return $auth->getIdentity();
@@ -184,6 +193,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
 
     /**
      * Automatically called by Doctrine when the object is saved for the first time
+     *
      * @ORM\PrePersist
      */
     public function timestampCreation()
@@ -194,6 +204,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
 
     /**
      * Automatically called by Doctrine when the object is updated
+     *
      * @ORM\PreUpdate
      */
     public function timestampModification()
@@ -203,24 +214,73 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
     }
 
     /**
+     * Sanitize data. We don't want to update certain properties.
+     *
+     * @todo move me somewhere else long term. Service?
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    protected function sanitizeData($data)
+    {
+        foreach (array('id', 'dateCreated', 'dateModified') as $value) {
+            unset($data[$value]);
+        }
+        return $data;
+    }
+
+    /**
      * Update property of $this
      *
      * @param array $data
+     *
      * @return $this
      */
     public function updateProperties($data)
     {
-        foreach ($data as $key => $value) {
+        $sanitizedData = $this->sanitizeData($data);
+
+        foreach ($sanitizedData as $key => $value) {
             if (is_array($value)) {
                 $getter = 'get' . ucfirst($key);
+
                 if (method_exists($this, $getter)) {
                     /** @var $object AbstractModel */
                     $object = call_user_func(array($this, $getter));
+
+                    if (is_null($object) && !empty($value['id'])) {
+
+                        // Check what kind of parameter type is taken by the setter as input.
+                        $modelName = $this->getModelName($getter);
+                        $object = $this->getObject($modelName, $value['id']);
+                    }
                     $value = $object->updateProperties($value);
+                } else {
+                    $logger = Module::getServiceManager()->get('Zend\Log');
+                    $logger->info('[WARNING] implement me! Can not persist data. Missing method ' . $getter);
+
+                    // Get or create object from the storage
+                    #$modelName = 'Application\Model\Answer' <-- do something better than that
+                    #$object = $this->getObject($modelName, $id);
+                    #$object->updateProperties($data);
                 }
             }
 
+            // Assemble setter method
             $setter = 'set' . ucfirst($key);
+
+            // Bonus: code below enabled a short hand "syntax" when assembling a request on the client side.
+            // e.g $data[question] = id instead of $data[question] = array('id' => id)
+
+            // Check what kind of parameter type is taken by the setter as input.
+            $modelName = $this->getModelName($setter);
+
+            // If model name is suitable and given $value is numerical, get one from the storage.
+            if (is_numeric($value) && preg_match('/Application\\\Model/is', $modelName)) {
+                $value = $this->getObject($modelName, $value);
+            }
+
             if (method_exists($this, $setter)) {
                 call_user_func_array(array($this, $setter), array($value));
             }
@@ -228,4 +288,60 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
         return $this;
     }
 
+    /**
+     * Get an object given a Model name and an id
+     *
+     * @todo move me somewhere else long term. Service?
+     *
+     * @param string $modelName
+     * @param int    $id
+     *
+     * @throws \Exception
+     * @return AbstractModel
+     */
+    protected function getObject($modelName, $id)
+    {
+
+        $repository = Module::getEntityManager()->getRepository($modelName);
+        $records = $repository->findById($id);
+
+        // raise exception if object does not exist in the DB.
+        if (empty($records[0])) {
+            $message = sprintf('No object "%s" found for id: %s', $modelName, $id);
+            throw new \Exception($message, 1365442789);
+        }
+        return $records[0];
+    }
+
+    /**
+     * Get input parameter type for a setter.
+     *
+     * @todo move me somewhere else long term. Service?
+     *
+     * @param string $methodName
+     *
+     * @return string
+     */
+    protected function getModelName($methodName)
+    {
+
+        // Get the class name by "consulting" the stack
+        $className = get_called_class();
+
+        // If the method is a getter transform it into a setter
+        // which makes it more straight forward retrieving the type using reflection.
+        if (preg_match('/^get/is', $methodName)) {
+            $methodName = preg_replace('/^get/is', 'set', $methodName);
+        }
+
+        $parameterType = null;
+
+        $methods = new MethodReflection($className, $methodName);
+        foreach ($methods->getParameters() as $parameter) {
+            $parameterType = $parameter->getType();
+            break; // should be only one parameter in context of setter
+        }
+
+        return $parameterType;
+    }
 }

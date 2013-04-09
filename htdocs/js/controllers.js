@@ -3,31 +3,31 @@
 /* Controllers */
 
 
-angular.module('myApp').controller('MyCtrl1', function() {
+angular.module('myApp').controller('MyCtrl1', function () {
 
 });
 
-angular.module('myApp').controller('MyCtrl2', function() {
+angular.module('myApp').controller('MyCtrl2', function () {
 
 });
 
-angular.module('myApp').controller('UserCtrl', function($scope, $location) {
+angular.module('myApp').controller('UserCtrl', function ($scope, $location) {
 
-    $scope.promptLogin = function() {
+    $scope.promptLogin = function () {
         $scope.showLogin = true;
         $scope.redirect = $location.absUrl();
     };
 
-    $scope.cancelLogin = function() {
+    $scope.cancelLogin = function () {
         $scope.showLogin = false;
     };
 
-    $scope.promptRegister = function() {
+    $scope.promptRegister = function () {
         $scope.showRegister = true;
         $scope.redirect = $location.absUrl();
     };
 
-    $scope.cancelRegister = function() {
+    $scope.cancelRegister = function () {
         $scope.showRegister = false;
     };
 
@@ -38,78 +38,180 @@ angular.module('myApp').controller('UserCtrl', function($scope, $location) {
 
     // Keep current URL up to date, so we can login and come back to current page
     $scope.redirect = $location.absUrl();
-    $scope.$on("$routeChangeSuccess", function(event, current, previous) {
+    $scope.$on("$routeChangeSuccess", function (event, current, previous) {
         $scope.redirect = $location.absUrl();
     });
 });
 
-angular.module('myApp').controller('QuestionnaireCtrl', function($scope, $resource, $routeParams, $location, answerService, questionService, questionnaireService) {
+angular.module('myApp').controller('QuestionnaireCtrl', function ($scope, $routeParams, $location, Question, Questionnaire, Answer) {
 
-    // show case which update Answer id: 41
-    var answer = answerService.get({id: 41}, function () {
-        answer.valuePercent = 0.23;
-        answer.question.name = 'asdf';
-        answer.$update({id: answer.id});
-    });
+    var numberOfAnswers, requiredNumberOfAnswers;
+
+    $scope.questions = [];
+    $scope.originalQuestions = []; // store original questions
 
     // If a questionnaire is specified in URL, load its data
-    $scope.questions = [];
-    if ($routeParams.id)
-    {
-        $scope.questions = questionService.query({idQuestionnaire: $routeParams.id});
+    if ($routeParams.id) {
+        // @todo improve me! Hardcoded value...
+        requiredNumberOfAnswers = 3;
+        $scope.questions = Question.query({idQuestionnaire: $routeParams.id}, function (questions) {
+
+            // Store copy of original object
+            angular.forEach($scope.questions, function (question) {
+
+                // Make sure we have the right number existing in the Model
+                numberOfAnswers = question.answers.length;
+                if (numberOfAnswers < requiredNumberOfAnswers) {
+
+                    // create an empty answer for the need of NgGrid
+                    for (var index = 0; index < requiredNumberOfAnswers - numberOfAnswers; index++) {
+                        question.answers.push(new Answer());
+                    }
+                }
+                $scope.originalQuestions.push(new Question(question));
+            });
+        });
 
         // Here we use synchronous style affectation to be able to set initial
         // value of Select2 (after Select2 itself is initialized)
-        questionnaireService.get({id: $routeParams.id}, function(questionnaire) {
+        Questionnaire.get({id: $routeParams.id}, function (questionnaire) {
             $scope.selectedQuestionnaire = questionnaire;
         });
     }
 
     // When questionnaire changes, navigate to its URL
-    $scope.$watch('selectedQuestionnaire', function(questionnaire) {
+    $scope.$watch('selectedQuestionnaire', function (questionnaire) {
         if (questionnaire && (questionnaire.id != $routeParams.id)) {
             $location.path('/contribute/questionnaire/' + questionnaire.id);
         }
     });
 
-    // Configure ng-grid
+    // Update Answer method
+    $scope.updateAnswer = function (column, row) {
+
+        // GUI display a loading icon
+        $('img', row.elm).toggle();
+        var reg = new RegExp('[0-9]+', "g");
+        var answerIndex = reg.exec(column.field)[0];
+        var question = row.entity;
+        var answer = new Answer(question.answers[answerIndex]);
+        if (answer.id > 0) {
+            answer.$update({id: answer.id}, function (data) {
+
+                // Update the question model in memory. Other way?
+                question.$get({idQuestionnaire: $routeParams.id, id: question.id});
+
+                // GUI remove the loading icon
+                $('img', row.elm).toggle();
+            });
+        } else {
+            // Convention:
+            // the answerIndex == part
+            // part with id 0 == the total part
+            if (answerIndex > 0) {
+                answer.part = answerIndex;
+            }
+            answer.question = question.id;
+            answer.questionnaire = $routeParams.id;
+            answer.$create(function (data) {
+
+                // Update the question model in memory. Other way?
+                question.$get({idQuestionnaire: $routeParams.id, id: question.id});
+
+                // GUI remove the loading icon
+                $('img', row.elm).toggle();
+            });
+        }
+    }
+
+    // Template for cell editing with input "number".
+    var cellEditableTemplate = "<input style=\"width: 90%\" step=\"any\" type=\"number\" ng-class=\"'colt' + col.index\" ng-input=\"COL_FIELD\" ng-blur=\"updateAnswer(col, row)\">";
+    // ng-model=\"row.entity[col.field]\" ng-pattern=\"/^0.1$/\"/
+
+//    var cellTemplate = '<input style="width:100%;height:100%;" class="ui-widget input" type="text" ng-model="COL_FIELD"/>';
+//    var cellTemplate = '<div class="ngCellText colt{{$index}}"><input class="input-mini" style="text-align: right" data-ng-model="COL_FIELD" data-ui-validate="{ paymentGreaterThanBalanceDue : \'paymentGreaterThanBalanceDue($value, 0)\'} "/></div>';
+//    var cellTemplate = '<div ng-class="{green: row.getProperty(col.field) > 30}"><div class="ngCellText">{{row.getProperty(col.field)}}</div></div>';
+    var cellTemplate = '<div class="ngCellText">{{row.getProperty(col.field)}}</div>';
+
+    // Keep track of the selected row.
+    $scope.selectedRow = [];
+
+    // Configure ng-grid.
     $scope.gridOptions = {
         data: 'questions',
         enableCellSelection: true,
         showFooter: true,
+        selectedItems: $scope.selectedRow,
+//        afterSelectionChange: function(rowItem, event) {
+//            console.log(rowItem);
+//            console.log(event);
+//        },
+        multiSelect: false,
         columnDefs: [
             {field: 'id', displayName: 'Id'},
+            {field: 'dateCreated', displayName: 'dateCreated'},
+            {field: 'dateModified', displayName: 'dateModified'},
             {field: 'name', displayName: 'Name'},
             {field: 'category.name', displayName: 'Category'},
-            {field: 'answers[1].valuePercent', displayName: 'Rural', enableCellEdit: true},
-            {field: 'answers[2].valuePercent', displayName: 'Urban', enableCellEdit: true},
-            {field: 'answers[0].valuePercent', displayName: 'Total', enableCellEdit: true}
+            {field: 'answers.1.valuePercent', displayName: 'Urban', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate}, //, cellTemplate: 'cellTemplate.html'
+            {field: 'answers.2.valuePercent', displayName: 'Rural', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
+            {field: 'answers.0.valuePercent', displayName: 'Total', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
+            {displayName: '', cellTemplate: '<img src="/img/loading.gif" alt="" class="hide" style="padding-left: 5px"/>', width: '28px'}
         ]
     };
 
-    var formatSelection = function(questionnaire) {
-        return  questionnaire.id + ' ' +  questionnaire.survey.name + " - (" + questionnaire.survey.code + ")";
+    // Counter of request being sent.
+    $scope.sending = 0;
+    $scope.sendLabel = 'Save';
+
+    // Update Data
+    $scope.updateAnswers = function () {
+        angular.forEach($scope.questions, function (question, key) {
+            var questionOriginal = $scope.originalQuestions[key];
+
+            // save the question only if it is different from the original
+            if (!angular.equals(question, questionOriginal)) {
+                $scope.sending = $scope.sending + question.answers.length;
+                $scope.sendLabel = 'Saving ' + $scope.sending + ' object(s) ...';
+
+                // create an answer
+                angular.forEach(question.answers, function (answerObject) {
+                    var answer = new Answer(answerObject);
+                    answer.$update({id: answer.id}, function (data) {
+                        $scope.sending--;
+                        $scope.sendLabel = 'Saving ' + $scope.sending + ' object(s) ...';
+                        if ($scope.sending === 0) {
+                            $scope.sendLabel = 'Save';
+                        }
+                    });
+                });
+            }
+        });
     };
-    var formatResult = function(questionnaire) {
+
+    var formatSelection = function (questionnaire) {
+        return  questionnaire.id + ' ' + questionnaire.survey.name + " - (" + questionnaire.survey.code + ")";
+    };
+
+    var formatResult = function (questionnaire) {
         return formatSelection(questionnaire);
     };
 
     var questionnaires;
-    questionnaireService.query(function(data) {
+    Questionnaire.query(function (data) {
         questionnaires = data;
     });
 
     $scope.availableQuestionnaires = {
-        query: function(query) {
+        query: function (query) {
             var data = {results: []};
 
             var searchTerm = query.term.toUpperCase();
             var regexp = new RegExp(searchTerm);
 
-            angular.forEach(questionnaires, function(questionnaire) {
+            angular.forEach(questionnaires, function (questionnaire) {
                 var blob = (questionnaire.id + ' ' + questionnaire.survey.name + ' ' + questionnaire.survey.code).toUpperCase();
-                if (regexp.test(blob))
-                {
+                if (regexp.test(blob)) {
                     data.results.push(questionnaire);
                 }
             });
