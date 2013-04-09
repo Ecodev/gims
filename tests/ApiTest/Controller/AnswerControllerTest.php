@@ -140,10 +140,23 @@ class AnswerControllerTest extends AbstractController
      * @test
      * @group AnswerModel
      */
-    public function dispatchAnswerRouteGetReturnsStatus200()
+    public function dispatchRouteForAnswerReturnsStatus200()
     {
         $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
         $this->assertResponseStatusCode(200);
+    }
+
+    /**
+     * @test
+     * @group AnswerModel
+     */
+    public function ensureOnlyAllowedFieldAreDisplayedInResponseForAnswer()
+    {
+        $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
+        $allowedFields = array('id', 'valuePercent', 'valueAbsolute', 'part', 'question');
+        foreach ($this->getJsonResponse() as $key => $value) {
+            $this->assertTrue(in_array($key, $allowedFields));
+        }
     }
 
     /**

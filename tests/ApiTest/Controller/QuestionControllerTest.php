@@ -164,6 +164,19 @@ class QuestionControllerTest extends AbstractController
 
     /**
      * @test
+     * @group AnswerModel
+     */
+    public function ensureOnlyAllowedFieldAreDisplayedInResponseForQuestion()
+    {
+        $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
+        $allowedFields = array('id', 'name', 'category', 'answers');
+        foreach ($this->getJsonResponse() as $key => $value) {
+            $this->assertTrue(in_array($key, $allowedFields));
+        }
+    }
+
+    /**
+     * @test
      */
     public function getFakeQuestionAndCheckWhetherIdAreCorresponding()
     {
