@@ -45,7 +45,7 @@ angular.module('myApp').controller('UserCtrl', function ($scope, $location) {
 
 angular.module('myApp').controller('QuestionnaireCtrl', function ($scope, $routeParams, $location, Question, Questionnaire, Answer) {
 
-    var numberOfAnswers, requiredNumberOfAnswers;
+    var cellEditableTemplate, numberOfAnswers, requiredNumberOfAnswers;
 
     $scope.questions = [];
     $scope.originalQuestions = []; // store original questions
@@ -87,51 +87,73 @@ angular.module('myApp').controller('QuestionnaireCtrl', function ($scope, $route
     });
 
     // Update Answer method
+    $scope.validateAnswer = function (column, row) {
+
+        var answerIndex = /[0-9]+/g.exec(column.field)[0];
+        var answer = new Answer(row.entity.answers[answerIndex]);
+
+
+        // Allowed value is between [0-1]
+        if (answer.valuePercent >= 0 && answer.valuePercent <= 1) {
+            $('.col' + column.index, row.elm).find('input').removeClass('error');
+        } else {
+            // Get the input field to wrap it with error div
+            $('.col' + column.index, row.elm).find('input').addClass('error');
+        }
+    }
+
+    // Update Answer method
     $scope.updateAnswer = function (column, row) {
 
-        // GUI display a loading icon
-        $('img', row.elm).toggle();
         var reg = new RegExp('[0-9]+', "g");
         var answerIndex = reg.exec(column.field)[0];
         var question = row.entity;
         var answer = new Answer(question.answers[answerIndex]);
-        if (answer.id > 0) {
-            answer.$update({id: answer.id}, function (data) {
 
-                // Update the question model in memory. Other way?
-                question.$get({idQuestionnaire: $routeParams.id, id: question.id});
+        // Get the field and check whether it has an error class
+        if (!$('.col' + column.index, row.elm).find('input').hasClass('error')) {
 
-                // GUI remove the loading icon
-                $('img', row.elm).toggle();
-            });
-        } else {
-            // Convention:
-            // the answerIndex == part
-            // part with id 0 == the total part
-            if (answerIndex > 0) {
-                answer.part = answerIndex;
+            $('.col' + column.index, row.elm).css('backgroundColor', 'inherit');
+
+            // GUI display a loading icon
+            $('img.loading', row.elm).toggle();
+
+            // True means the answer exists and must be updated. Otherwise, create a new answer
+            if (answer.id > 0) {
+                answer.$update({id: answer.id}, function (data) {
+
+                    // Update the question model in memory. Other way?
+                    question.$get({idQuestionnaire: $routeParams.id, id: question.id});
+
+                    // GUI remove the loading icon
+                    $('img.loading', row.elm).toggle();
+                });
+            } else {
+                // Convention:
+                // the answerIndex == part
+                // part with id 0 == the total part
+                if (answerIndex > 0) {
+                    answer.part = answerIndex;
+                }
+                answer.question = question.id;
+                answer.questionnaire = $routeParams.id;
+                answer.$create(function (data) {
+
+                    // Update the question model in memory. Other way?
+                    question.$get({idQuestionnaire: $routeParams.id, id: question.id});
+
+                    // GUI remove the loading icon
+                    $('img.loading', row.elm).toggle();
+                });
             }
-            answer.question = question.id;
-            answer.questionnaire = $routeParams.id;
-            answer.$create(function (data) {
 
-                // Update the question model in memory. Other way?
-                question.$get({idQuestionnaire: $routeParams.id, id: question.id});
-
-                // GUI remove the loading icon
-                $('img', row.elm).toggle();
-            });
+        } else {
+            $('.col' + column.index, row.elm).css('backgroundColor', '#FF6461');
         }
     }
 
     // Template for cell editing with input "number".
-    var cellEditableTemplate = "<input style=\"width: 90%\" step=\"any\" type=\"number\" ng-class=\"'colt' + col.index\" ng-input=\"COL_FIELD\" ng-blur=\"updateAnswer(col, row)\">";
-    // ng-model=\"row.entity[col.field]\" ng-pattern=\"/^0.1$/\"/
-
-//    var cellTemplate = '<input style="width:100%;height:100%;" class="ui-widget input" type="text" ng-model="COL_FIELD"/>';
-//    var cellTemplate = '<div class="ngCellText colt{{$index}}"><input class="input-mini" style="text-align: right" data-ng-model="COL_FIELD" data-ui-validate="{ paymentGreaterThanBalanceDue : \'paymentGreaterThanBalanceDue($value, 0)\'} "/></div>';
-//    var cellTemplate = '<div ng-class="{green: row.getProperty(col.field) > 30}"><div class="ngCellText">{{row.getProperty(col.field)}}</div></div>';
-    var cellTemplate = '<div class="ngCellText">{{row.getProperty(col.field)}}</div>';
+    cellEditableTemplate = '<input style="width: 90%" step="any" type="number" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-blur="updateAnswer(col, row)" ng-keyup="validateAnswer(col, row)">';
 
     // Keep track of the selected row.
     $scope.selectedRow = [];
@@ -142,21 +164,15 @@ angular.module('myApp').controller('QuestionnaireCtrl', function ($scope, $route
         enableCellSelection: true,
         showFooter: true,
         selectedItems: $scope.selectedRow,
-//        afterSelectionChange: function(rowItem, event) {
-//            console.log(rowItem);
-//            console.log(event);
-//        },
         multiSelect: false,
         columnDefs: [
             {field: 'id', displayName: 'Id'},
-            {field: 'dateCreated', displayName: 'dateCreated'},
-            {field: 'dateModified', displayName: 'dateModified'},
             {field: 'name', displayName: 'Name'},
             {field: 'category.name', displayName: 'Category'},
             {field: 'answers.1.valuePercent', displayName: 'Urban', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate}, //, cellTemplate: 'cellTemplate.html'
             {field: 'answers.2.valuePercent', displayName: 'Rural', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
             {field: 'answers.0.valuePercent', displayName: 'Total', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
-            {displayName: '', cellTemplate: '<img src="/img/loading.gif" alt="" class="hide" style="padding-left: 5px"/>', width: '28px'}
+            {displayName: '', cellTemplate: '<img src="/img/loading.gif" alt="" class="loading hide" style="padding-left: 5px"/>', width: '28px'}
         ]
     };
 

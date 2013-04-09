@@ -15,4 +15,11 @@ angular.module('myApp.directives', [])
                 scope.$apply(attrs.ngBlur);
             });
         };
+    })
+    .directive('ngKeyup', function () {
+        return function (scope, elem, attrs) {
+            elem.bind('keyup', function () {
+                scope.$apply(attrs.ngKeyup);
+            });
+        };
     });
