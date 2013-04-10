@@ -50,6 +50,21 @@ return array(
                             'defaults'    => array(),
                         ),
                     ),
+                    // This route allow to execute something on a questionnaire (eg:computing results)
+                    'questionnaire_actions' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/questionnaire/:idQuestionnaire/[:action]',
+                            'constraints' => array(
+                                'action' => '(compute)', // Define here allowed actions: (action1|action2|action3)
+                                'idQuestionnaire' => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                '__NAMESPACE__' => 'Api\Controller',
+                                'controller' => 'questionnaire',
+                            ),
+                        ),
+                    ),
                 ),
             ),
         ),

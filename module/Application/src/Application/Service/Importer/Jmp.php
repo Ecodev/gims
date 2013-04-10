@@ -22,8 +22,8 @@ class Jmp extends AbstractImporter
                 9 => array("Public tap, standpipe", 5, 0, null),
                 10 => array("Other", 5, 0, null),
                 11 => array("Ground water", 4, 0, null),
-                12 => array("Protected ground water", 11, 1, array(14, 15, 16, 17, 26, 27, 28, 29, 46, 47, 48, 49, 34, 35, 36, 37)),
-                13 => array("Unprotected ground water", 11, 1, array(18, 19, 20, 21, 38, 39, 40, 41, 50, 51, 52, 53)),
+                12 => array("Protected ground water", 11, 1, array(14, 26, 46, 34)),
+                13 => array("Unprotected ground water", 11, 1, array(18, 38, 50)),
                 14 => array("Protected wells or springs", 11, 2, array(26, 34, 46)),
                 15 => array("Private", 14, 1, array(27, 35, 47)),
                 16 => array("Public", 14, 1, array(28, 36, 48)),
@@ -291,7 +291,7 @@ class Jmp extends AbstractImporter
             if ($originalCategory) {
                 $originalCategory->addSummand($replacementCategory);
             }
-                $this->cacheCategories[$row] = $replacementCategory;
+            $this->cacheCategories[$row] = $replacementCategory;
         }
 
         $this->getEntityManager()->flush();
@@ -334,87 +334,19 @@ class Jmp extends AbstractImporter
                 return true;
             }
             $this->getEntityManager()->persist($survey);
+            $this->getEntityManager()->flush();
         }
 
         // Create questionnaire
-        $questionnaire = new \Application\Model\Questionnaire();
-        $questionnaire->setSurvey($survey);
-        $questionnaire->setDateObservationStart(new \DateTime($survey->getYear() . '-01-01'));
-        $questionnaire->setDateObservationEnd(new \DateTime($survey->getYear() . '-12-31T23:59:59'));
-
-        // Mapping JMP country names to Geoname country names
-        $countryNameMapping = array(
-            'Syrian Arab Republic' => 'Syria',
-            'Occupied Palestinian Territory' => 'Palestinian Territory',
-            'Palestine' => 'Palestinian Territory',
-            "Dem. People's Republic of Korea" => 'North Korea',
-            'Republic of Korea' => 'South Korea',
-            'Iran (Islamic Republic of)' => 'Iran',
-            "Lao People's Democratic Republic" => 'Laos',
-            'Viet Nam' => 'Vietnam',
-            'Timor-Leste' => 'East Timor',
-            'United States Virgin Islands' => 'U.S. Virgin Islands',
-            'St. Vincent and Grenadines' => 'Saint Vincent and the Grenadines',
-            'St Vincent & grenadines' => 'Saint Vincent and the Grenadines',
-            'Bolivia (Plurinational State of)' => 'Bolivia',
-            'Venezuela (Bolivarian Republic of)' => 'Venezuela',
-            "Côte d'Ivoire" => 'Ivory Coast',
-            'United Republic of Tanzania' => 'Tanzania',
-            'Libyan Arab Jamahiriya' => 'Libya',
-            'Congo' => 'Republic of the Congo',
-            'Russian Federation' => 'Russia',
-            'Republic of Moldova' => 'Moldova',
-            'TFYR Macedonia' => 'Macedonia',
-            'United States of America' => 'United States',
-            // Unusual spelling
-            'Antigua & Barbuda' => 'Antigua and Barbuda',
-            'Afganistan' => 'Afghanistan',
-            'Dominican Rep' => 'Dominican Republic',
-            'Micronesia (Fed. States of)' => 'Micronesia',
-            'Guinée' => 'Guinea',
-            'Senagal' => 'Senegal',
-            'Cap Verde' => 'Cape Verde',
-            'Congo DR' => 'Democratic Republic of the Congo',
-            'Bosnia' => 'Bosnia and Herzegovina',
-            // Case mistake
-            'ANGOLA' => 'Angola',
-            'Saint lucia' => 'Saint Lucia',
-        );
-
-        // Some files have a buggy self-referencing formula, so we need to fallback on cached result of formula
         $countryCell = $sheet->getCellByColumnAndRow($col + 3, 1);
-        try {
-            $countryName = $countryCell->getCalculatedValue();
-        } catch (\PHPExcel_Exception $exception) {
-
-            // Fallback on cached result
-            if (strstr($exception->getMessage(), 'Cyclic Reference in Formula') !== false) {
-                $countryName = $countryCell->getOldCalculatedValue();
-            } else {
-                // Forward exception
-                throw $exception;
-            }
-        }
-
-        // Apply mapping if any
-        $countryName = trim(@$countryNameMapping[$countryName] ? : $countryName);
-
-        // Skip questionnaire if there is no country name
-        if (!$countryName) {
+        $questionnaire = $this->getQuestionnaire($survey, $countryCell);
+        if (!$questionnaire) {
             echo 'WARNING: skipped questionnaire because there is no country name. On sheet "' . $sheet->getTitle() . '" cell ' . $countryCell->getCoordinate();
             return true;
         }
 
-        $this->getEntityManager()->persist($questionnaire);
-        $countryRepository = $this->getEntityManager()->getRepository('Application\Model\Country');
-        $country = $countryRepository->findOneBy(array('name' => $countryName));
-        if (!$country) {
-            throw new \Exception('No country found for name "' . $countryName . '"');
-        }
-        $questionnaire->setGeoname($country->getGeoname());
-
         echo 'Survey: ' . $survey->getCode() . PHP_EOL;
-        echo 'Country: ' . $country->getName() . PHP_EOL;
+        echo 'Country: ' . $questionnaire->getGeoname()->getName() . PHP_EOL;
 
         $this->importAnswers($sheet, $col, $survey, $questionnaire);
 
@@ -477,6 +409,97 @@ class Jmp extends AbstractImporter
         }
 
         echo "Answers: " . $answerCount . PHP_EOL;
+    }
+
+    protected function getQuestionnaire(\Application\Model\Survey $survey, \PHPExcel_Cell $countryCell)
+    {
+        // Mapping JMP country names to Geoname country names
+        $countryNameMapping = array(
+            'Syrian Arab Republic' => 'Syria',
+            'Occupied Palestinian Territory' => 'Palestinian Territory',
+            'Palestine' => 'Palestinian Territory',
+            "Dem. People's Republic of Korea" => 'North Korea',
+            'Republic of Korea' => 'South Korea',
+            'Iran (Islamic Republic of)' => 'Iran',
+            "Lao People's Democratic Republic" => 'Laos',
+            'Viet Nam' => 'Vietnam',
+            'Timor-Leste' => 'East Timor',
+            'United States Virgin Islands' => 'U.S. Virgin Islands',
+            'St. Vincent and Grenadines' => 'Saint Vincent and the Grenadines',
+            'St Vincent & grenadines' => 'Saint Vincent and the Grenadines',
+            'Bolivia (Plurinational State of)' => 'Bolivia',
+            'Venezuela (Bolivarian Republic of)' => 'Venezuela',
+            "Côte d'Ivoire" => 'Ivory Coast',
+            'United Republic of Tanzania' => 'Tanzania',
+            'Libyan Arab Jamahiriya' => 'Libya',
+            'Congo' => 'Republic of the Congo',
+            'Russian Federation' => 'Russia',
+            'Republic of Moldova' => 'Moldova',
+            'TFYR Macedonia' => 'Macedonia',
+            'United States of America' => 'United States',
+            // Unusual spelling
+            'Antigua & Barbuda' => 'Antigua and Barbuda',
+            'Afganistan' => 'Afghanistan',
+            'Dominican Rep' => 'Dominican Republic',
+            'Micronesia (Fed. States of)' => 'Micronesia',
+            'Guinée' => 'Guinea',
+            'Senagal' => 'Senegal',
+            'Cap Verde' => 'Cape Verde',
+            'Congo DR' => 'Democratic Republic of the Congo',
+            'Bosnia' => 'Bosnia and Herzegovina',
+            // Case mistake
+            'ANGOLA' => 'Angola',
+            'Saint lucia' => 'Saint Lucia',
+        );
+
+        // Some files have a buggy self-referencing formula, so we need to fallback on cached result of formula
+        try {
+            $countryName = $countryCell->getCalculatedValue();
+        } catch (\PHPExcel_Exception $exception) {
+
+            // Fallback on cached result
+            if (strstr($exception->getMessage(), 'Cyclic Reference in Formula') !== false) {
+                $countryName = $countryCell->getOldCalculatedValue();
+            } else {
+                // Forward exception
+                throw $exception;
+            }
+        }
+
+        // Apply mapping if any
+        $countryName = trim(@$countryNameMapping[$countryName] ? : $countryName);
+
+        // Skip questionnaire if there is no country name
+        if (!$countryName) {
+            return null;
+        }
+
+
+        $countryRepository = $this->getEntityManager()->getRepository('Application\Model\Country');
+        $country = $countryRepository->findOneBy(array('name' => $countryName));
+        if (!$country) {
+            throw new \Exception('No country found for name "' . $countryName . '"');
+        }
+        $geoname = $country->getGeoname();
+
+
+        $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
+        $questionnaire = $questionnaireRepository->findOneBy(array(
+            'survey' => $survey,
+            'geoname' => $geoname,
+        ));
+
+        if (!$questionnaire) {
+            $questionnaire = new \Application\Model\Questionnaire();
+            $questionnaire->setSurvey($survey);
+            $questionnaire->setDateObservationStart(new \DateTime($survey->getYear() . '-01-01'));
+            $questionnaire->setDateObservationEnd(new \DateTime($survey->getYear() . '-12-31T23:59:59'));
+            $questionnaire->setGeoname($geoname);
+
+            $this->getEntityManager()->persist($questionnaire);
+        }
+
+        return $questionnaire;
     }
 
     /**

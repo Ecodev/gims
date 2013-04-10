@@ -47,6 +47,21 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     private $survey;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Answer", mappedBy="questionnaire")
+     */
+    private $answers;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->answers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Set dateObservationStart
      *
      * @param \DateTime $dateObservationStart
@@ -138,4 +153,82 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         return $this->survey;
     }
 
+    /**
+     * Get answers
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getAnswers()
+    {
+        return $this->answers;
+    }
+
+    /**
+     * Notify the questionnaire that he has a new answer.
+     * This should only be called by Answer::setQuestionnaire()
+     * @param Answer $answer
+     * @return Questionnaire
+     */
+    public function answerAdded(Answer $answer)
+    {
+        $this->getAnswers()->add($answer);
+
+        return $this;
+    }
+
+    /**
+     * Returns the computed value of the given category, based on the questionnaire's available answers
+     * @param \Application\Model\Category $category
+     * @param \Application\Model\Part $part
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedCategories this should be null for first call, recursive calls will used to avoid duplicates
+     * @return float|null null if no answer at all, otherwise the value
+     */
+    public function compute(Category $category, Part $part = null, \Doctrine\Common\Collections\ArrayCollection $alreadySummedCategories = null)
+    {
+        if (!$alreadySummedCategories) {
+            $alreadySummedCategories = new \Doctrine\Common\Collections\ArrayCollection();
+        }
+
+        // Avoid duplicates
+        if ($alreadySummedCategories->contains($category)) {
+            return null;
+        } else {
+            $alreadySummedCategories->add($category);
+        }
+
+        // If the category have a specified answer, returns it (skip all computation)
+        foreach ($this->getAnswers() as $answer) {
+            $answerCategory = $answer->getQuestion()->getCategory()->getOfficialCategory() ? : $answer->getQuestion()->getCategory();
+            if ($answerCategory == $category && $answer->getPart() == $part) {
+
+                $alreadySummedCategories->add(true);
+                return $answer->getValuePercent();
+            }
+        }
+
+
+        // Summer to sum values of given categories, but only if non-null (to preserve null value if no answer at all)
+        $summer = function(\IteratorAggregate $categories) use ($part, $alreadySummedCategories) {
+                    $sum = null;
+                    foreach ($categories as $c) {
+                        $summandValue = $this->compute($c, $part, $alreadySummedCategories);
+                        if (!is_null($summandValue)) {
+                            $sum += $summandValue;
+                        }
+                    }
+
+                    return $sum;
+                };
+
+        // First, attempt to sum summands
+        $sum = $summer($category->getSummands());
+
+        // If no sum so far, we use children instead. This is "normal case"
+        if (is_null($sum)) {
+            $sum = $summer($category->getChildren());
+        }
+
+        return $sum;
+    }
+
 }
+

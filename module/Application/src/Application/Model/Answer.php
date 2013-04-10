@@ -74,7 +74,7 @@ class Answer extends AbstractModel
     /**
      * @var Questionnaire
      *
-     * @ORM\ManyToOne(targetEntity="Questionnaire")
+     * @ORM\ManyToOne(targetEntity="Questionnaire", inversedBy="answers")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
@@ -138,7 +138,7 @@ class Answer extends AbstractModel
      */
     public function getValuePercent()
     {
-        return $this->valuePercent;
+        return /*(float)*/$this->valuePercent;
     }
 
     /**
@@ -262,7 +262,7 @@ class Answer extends AbstractModel
      * @param Question $question
      * @return Answer
      */
-    public function setQuestion(Question $question = null)
+    public function setQuestion(Question $question)
     {
         $this->question = $question;
 
@@ -285,9 +285,10 @@ class Answer extends AbstractModel
      * @param Questionnaire $questionnaire
      * @return Answer
      */
-    public function setQuestionnaire(Questionnaire $questionnaire = null)
+    public function setQuestionnaire(Questionnaire $questionnaire)
     {
         $this->questionnaire = $questionnaire;
+        $questionnaire->answerAdded($this);
 
         return $this;
     }
