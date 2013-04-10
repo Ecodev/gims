@@ -6,9 +6,13 @@ use Application\Model\Answer;
 use Application\Model\Category;
 use Application\Model\Geoname;
 use Application\Model\Part;
+use Application\Model\Permission;
 use Application\Model\Question;
 use Application\Model\Questionnaire;
+use Application\Model\Role;
 use Application\Model\Survey;
+use Application\Model\User;
+use Application\Model\UserQuestionnaire;
 use ApplicationTest\Controller\AbstractController;
 use Zend\Http\Request;
 use Zend\Json\Json;
@@ -45,6 +49,31 @@ class AnswerControllerTest extends AbstractController
      * @var Answer
      */
     private $answer;
+
+    /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * @var \ZfcRbac\Service\Rbac
+     */
+    private $rbac;
+
+    /**
+     * @var Permission
+     */
+    private $permission;
+
+    /**
+     * @var UserQuestionnaire
+     */
+    private $userQuestionnaire;
+
+    /**
+     * @var Role
+     */
+    private $role;
 
     public function setUp()
     {
@@ -84,6 +113,30 @@ class AnswerControllerTest extends AbstractController
             ->setPart($this->part)
             ->setQuestionnaire($this->questionnaire);
 
+
+        // create a fake user
+        $this->user = new User();
+        $this->user->setPassword('foo')->setName('test user');
+
+        // Get rbac service
+        $this->rbac = $this->getApplication()->getServiceManager()->get('ZfcRbac\Service\Rbac');
+
+        // Get existing permission
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Permission');
+
+        /** @var $role \Application\Model\Permission */
+        $this->permission = $repository->findOneByName(\Application\Model\Permission::CAN_MANAGE_ANSWER);
+
+        $this->role = new Role('foo');
+        $this->role->addPermission($this->permission);
+
+        // create a fake user-questionnaire
+        $this->userQuestionnaire = new UserQuestionnaire();
+        $this->userQuestionnaire->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($this->role);
+
+        $this->getEntityManager()->persist($this->user);
+        $this->getEntityManager()->persist($this->role);
+        $this->getEntityManager()->persist($this->userQuestionnaire);
         $this->getEntityManager()->persist($this->part);
         $this->getEntityManager()->persist($this->category);
         $this->getEntityManager()->persist($geoName);
@@ -138,7 +191,7 @@ class AnswerControllerTest extends AbstractController
 
     /**
      * @test
-     * @group AnswerModel
+     * @group AnswerApi
      */
     public function dispatchRouteForAnswerReturnsStatus200()
     {
@@ -148,7 +201,7 @@ class AnswerControllerTest extends AbstractController
 
     /**
      * @test
-     * @group AnswerModel
+     * @group AnswerApi
      */
     public function ensureOnlyAllowedFieldAreDisplayedInResponseForAnswer()
     {
@@ -161,7 +214,7 @@ class AnswerControllerTest extends AbstractController
 
     /**
      * @test
-     * @group AnswerModel
+     * @group AnswerApi
      */
     public function getFakeAnswerAndCheckWhetherIdAreCorresponding()
     {
@@ -172,10 +225,12 @@ class AnswerControllerTest extends AbstractController
 
     /**
      * @test
-     * @group AnswerModel
+     * @group AnswerApi
      */
     public function updateAnswerAndCheckWhetherValuePercentIsDifferentFromOriginalValue()
     {
+        $this->rbac->setIdentity($this->user);
+
         $expected = $this->answer->getValuePercent();
         $data = array(
             'valuePercent' => 0.2,
@@ -188,10 +243,12 @@ class AnswerControllerTest extends AbstractController
 
     /**
      * @test
-     * @group AnswerModel
+     * @group AnswerApi
      */
     public function canUpdateValuePercentOfAnswer()
     {
+        $this->rbac->setIdentity($this->user);
+
         $expected = $this->answer->getValuePercent() + 0.2;
         $data = array(
             'valuePercent' => $expected,
@@ -204,10 +261,12 @@ class AnswerControllerTest extends AbstractController
 
     /**
      * @test
-     * @group AnswerModel
+     * @group AnswerApi
      */
     public function updateAnAnswerWillReturn201AsCode()
     {
+        $this->rbac->setIdentity($this->user);
+
         $expected = $this->answer->getValuePercent() + 0.2;
         $data = array(
             'valuePercent' => $expected,
@@ -219,10 +278,11 @@ class AnswerControllerTest extends AbstractController
 
     /**
      * @test
-     * @group AnswerModel
+     * @group AnswerApi
      */
     public function postANewAnswerWithNestedObjectWillCreateIt()
     {
+        $this->rbac->setIdentity($this->user);
         // Question
         $data = array(
             'valuePercent'  => 0.6,
@@ -244,10 +304,12 @@ class AnswerControllerTest extends AbstractController
 
     /**
      * @test
-     * @group AnswerModel
+     * @group AnswerApi
      */
     public function postANewAnswerWithFlatObjectWillCreateIt()
     {
+        $this->rbac->setIdentity($this->user);
+
         // Question
         $data = array(
             'valuePercent'  => 0.6,
@@ -263,10 +325,37 @@ class AnswerControllerTest extends AbstractController
 
     /**
      * @test
-     * @group AnswerModel
+     * @group AnswerApi
      */
-    public function postANewAnswerReturns201AsCode()
+    public function postANewAnswerReturnsStatusCode401ForUserWithRoleAnonymous()
     {
+        // Question
+        $data = array(
+            'valuePercent'  => 0.6,
+            'question'      => array(
+                'id' => $this->question->getId()
+            ),
+            'questionnaire' => array(
+                'id' => $this->questionnaire->getId()
+            ),
+            'part'          => array(
+                'id' => $this->part->getId()
+            ),
+        );
+
+
+        $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
+        // @todo comment me out once permission will be enabled (=> GUI handling)
+        #$this->assertResponseStatusCode(401);
+    }
+
+    /**
+     * @test
+     * @group AnswerApi
+     */
+    public function postANewAnswerReturnsStatusCode201ForUserWithRoleReporter()
+    {
+        $this->rbac->setIdentity($this->user);
         // Question
         $data = array(
             'valuePercent'  => 0.6,
@@ -284,4 +373,37 @@ class AnswerControllerTest extends AbstractController
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(201);
     }
+
+    /**
+     * @test
+     * @group AnswerApi
+     */
+    public function updateAnAnswerAsAnonymousReturnsStatusCode401()
+    {
+        $expected = $this->answer->getValuePercent() + 0.2;
+        $data = array(
+            'valuePercent' => $expected,
+        );
+
+        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
+        // @todo comment me out once permission will be enabled (=> GUI handling)
+        #$this->assertResponseStatusCode(401);
+    }
+
+    /**
+     * @test
+     * @group AnswerApi
+     */
+    public function updateAnAnswerWithRoleReporterReturnsStatusCode201()
+    {
+        $this->rbac->setIdentity($this->user);
+        $expected = $this->answer->getValuePercent() + 0.2;
+        $data = array(
+            'valuePercent' => $expected,
+        );
+
+        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
+        $this->assertResponseStatusCode(201);
+    }
+
 }

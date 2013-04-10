@@ -13,6 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
 class Permission extends AbstractModel
 {
 
+    const CAN_MANAGE_ANSWER = 'can-manage-answer';
+
+    const CAN_VALIDATE_QUESTIONNAIRE = 'can-validate-questionnaire';
+
     /**
      * @var string
      *
