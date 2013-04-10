@@ -3,7 +3,15 @@
 
 // According to Twitter Bootstrap recommendation, add padding before responsive for .navbar-fixed-top
 body {
-    padding-top: 40px;
+  padding-top: 40px;
+}
+
+input.error {
+  border-color: #b94a48 !important;
+  color: #b94a48 !important;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 // Include responsive Bootstrap styles
@@ -14,5 +22,6 @@ body {
 @import "splash";
 
 html {
-	overflow-y: scroll; // Force vertical scrollbar
+  overflow-y: scroll;
+  // Force vertical scrollbar
 }
