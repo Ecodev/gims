@@ -54,11 +54,19 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     private $answers;
 
     /**
+     * @var QuestionnaireStatus
+     *
+     * @ORM\Column(type="questionnaire_status")
+     */
+    private $status;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->answers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->status = QuestionnaireStatus::$NEW;
     }
 
     /**
@@ -113,7 +121,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      * @param Geoname $geoname
      * @return Questionnaire
      */
-    public function setGeoname(Geoname $geoname = null)
+    public function setGeoname(Geoname $geoname)
     {
         $this->geoname = $geoname;
 
@@ -160,6 +168,29 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function getAnswers()
     {
         return $this->answers;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     * @return Answer
+     */
+    public function setStatus(QuestionnaireStatus $status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return QuestionnaireStatus
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**

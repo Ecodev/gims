@@ -55,13 +55,6 @@ class Answer extends AbstractModel
     private $relevance;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $status;
-
-    /**
      * @var Question
      *
      * @ORM\ManyToOne(targetEntity="Question")
@@ -231,29 +224,6 @@ class Answer extends AbstractModel
     public function getRelevance()
     {
         return $this->relevance;
-    }
-
-    /**
-     * Set status
-     *
-     * @param string $status
-     * @return Answer
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get status
-     *
-     * @return string
-     */
-    public function getStatus()
-    {
-        return $this->status;
     }
 
     /**

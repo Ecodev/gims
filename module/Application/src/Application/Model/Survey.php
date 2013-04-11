@@ -31,7 +31,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @ORM\Column(type="boolean", nullable=false)
      */
-    private $active;
+    private $active = false;
 
     /**
      * @var integer
