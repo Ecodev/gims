@@ -15,8 +15,36 @@ angular.module('myApp').controller('AdminCtrl', function () {
 
 });
 
-angular.module('myApp').controller('Admin/SurveyCtrl', function () {
+angular.module('myApp').controller('Admin/Survey/EditCtrl', function ($scope, $routeParams, $location, Survey) {
+    console.log(123);
+});
 
+angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeParams, $location, Survey) {
+
+    $scope.surveys = Survey.query();
+
+    // Keep track of the selected row.
+    $scope.selectedRow = [];
+
+    // Configure ng-grid.
+    $scope.gridOptions = {
+        data: 'surveys',
+        enableCellSelection: true,
+        showFooter: true,
+        selectedItems: $scope.selectedRow,
+        multiSelect: false,
+        columnDefs: [
+            {field: 'id', displayName: 'Id'},
+            {field: 'name', displayName: 'Name'},
+            {field: 'active', displayName: 'Active'},
+            {field: 'year', displayName: 'Year'},
+            {displayName: '', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="edit(row)" ><i class="icon-pencil"></i></button>'}
+        ]
+    };
+
+    $scope.edit = function edit(row) {
+        $location.path('/admin/survey/edit/' + row.entity.id);
+    }
 });
 
 angular.module('myApp').controller('UserCtrl', function ($scope, $location) {
@@ -60,7 +88,8 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
 
     // If a questionnaire is specified in URL, load its data
     if ($routeParams.id) {
-        // @todo improve me! Hardcoded value...
+
+        // @todo improve me! Hardcoded value... (Urban, Rural, Total)
         requiredNumberOfAnswers = 3;
         $scope.questions = Question.query({idQuestionnaire: $routeParams.id}, function (questions) {
 

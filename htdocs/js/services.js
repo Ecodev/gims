@@ -15,6 +15,9 @@ angular.module('myApp.services', []).
 angular.module('myApp.questionnaireService', ['ngResource']).
     factory('Questionnaire', function ($resource) {
         return $resource('/api/questionnaire/:id');
+    }).
+    factory('Survey', function ($resource) {
+        return $resource('/api/survey');
     });
 
 /**

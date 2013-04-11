@@ -23,6 +23,7 @@ angular.module('myApp', [
         $routeProvider.when('/contribute/questionnaire/:id', {templateUrl: '/template/contribute/questionnaire', controller: 'Contribute/QuestionnaireCtrl'});
         $routeProvider.when('/admin', {templateUrl: '/template/admin', controller: 'AdminCtrl'});
         $routeProvider.when('/admin/survey', {templateUrl: '/template/admin/survey', controller: 'Admin/SurveyCtrl'});
+//        $routeProvider.when('/admin/survey/edit/:id', {templateUrl: '/template/admin/survey/edit', controller: 'Admin/Survey/EditCtrl'});
         $routeProvider.otherwise({redirectTo: '/home'});
 
         $locationProvider.html5Mode(true);
