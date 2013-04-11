@@ -82,7 +82,7 @@ describe('my app', function() {
         });
 
     });
-    
+
     describe('contribute', function() {
 
         beforeEach(function() {
@@ -100,11 +100,29 @@ describe('my app', function() {
             expect(element('body > .container form[action="/user/login"] button').text()).
                     toMatch(/Sign In/);
         });
-        
+
         it('should render account creation form', function() {
             expect(element('body > .container form[action="/user/register"] button').text()).
                     toMatch(/Register/);
         });
+    });
 
+    describe('admin', function () {
+
+        beforeEach(function () {
+            browser().navigateTo('/admin');
+        });
+
+        noXdebugError();
+
+        it('should render admin when user navigates to /admin', function () {
+            expect(element('[ng-view] p:first').text()).
+                toMatch(/Small streams make large rivers/);
+        });
+
+        it('should render module Survey', function () {
+            expect(element('body > .container caption:first h2').text()).
+                toMatch(/Survey/);
+        });
     });
 });

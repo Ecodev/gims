@@ -19,8 +19,10 @@ angular.module('myApp', [
         $routeProvider.when('/about', {templateUrl: '/template/application/index/about', controller: 'MyCtrl2'});
         $routeProvider.when('/browse', {templateUrl: '/template/browse', controller: 'MyCtrl2'});
         $routeProvider.when('/contribute', {templateUrl: '/template/contribute', controller: 'MyCtrl2'});
-        $routeProvider.when('/contribute/questionnaire', {templateUrl: '/template/contribute/questionnaire', controller: 'QuestionnaireCtrl'});
-        $routeProvider.when('/contribute/questionnaire/:id', {templateUrl: '/template/contribute/questionnaire', controller: 'QuestionnaireCtrl'});
+        $routeProvider.when('/contribute/questionnaire', {templateUrl: '/template/contribute/questionnaire', controller: 'Contribute/QuestionnaireCtrl'});
+        $routeProvider.when('/contribute/questionnaire/:id', {templateUrl: '/template/contribute/questionnaire', controller: 'Contribute/QuestionnaireCtrl'});
+        $routeProvider.when('/admin', {templateUrl: '/template/admin', controller: 'AdminCtrl'});
+        $routeProvider.when('/admin/survey', {templateUrl: '/template/admin/survey', controller: 'Admin/SurveyCtrl'});
         $routeProvider.otherwise({redirectTo: '/home'});
 
         $locationProvider.html5Mode(true);

@@ -25,7 +25,6 @@ return array(
                     'route' => '/template/contribute',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Contribute\Controller',
-                        'namespace' => 'Contribute',
                         'controller' => 'Index',
                         'action' => 'index',
                     ),

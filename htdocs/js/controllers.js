@@ -11,6 +11,14 @@ angular.module('myApp').controller('MyCtrl2', function () {
 
 });
 
+angular.module('myApp').controller('AdminCtrl', function () {
+
+});
+
+angular.module('myApp').controller('Admin/SurveyCtrl', function () {
+
+});
+
 angular.module('myApp').controller('UserCtrl', function ($scope, $location) {
 
     $scope.promptLogin = function () {
@@ -43,7 +51,7 @@ angular.module('myApp').controller('UserCtrl', function ($scope, $location) {
     });
 });
 
-angular.module('myApp').controller('QuestionnaireCtrl', function ($scope, $routeParams, $location, Question, Questionnaire, Answer) {
+angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($scope, $routeParams, $location, Question, Questionnaire, Answer) {
 
     var cellEditableTemplate, numberOfAnswers, requiredNumberOfAnswers;
 
