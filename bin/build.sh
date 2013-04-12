@@ -19,7 +19,7 @@ echo "Updating git submodules..."
 git submodule update --init --recursive --force
 
 echo "Updating database..."
-./vendor/bin/doctrine-module migrations:migrate --no-interaction
+./vendor/bin/doctrine-module migrations:migrate --no-interaction --quiet
 
 echo "Compiling CSS..."
 compass compile -s compressed --force
@@ -57,6 +57,7 @@ select2.js \
 ../../lib/ng-grid/build/ng-grid.min.js \
 app.js \
 services.js \
+controllers-admin.js \
 controllers.js \
 filters.js \
 directives.js \

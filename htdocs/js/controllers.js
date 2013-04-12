@@ -11,42 +11,6 @@ angular.module('myApp').controller('MyCtrl2', function () {
 
 });
 
-angular.module('myApp').controller('AdminCtrl', function () {
-
-});
-
-angular.module('myApp').controller('Admin/Survey/EditCtrl', function ($scope, $routeParams, $location, Survey) {
-    console.log(123);
-});
-
-angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeParams, $location, Survey) {
-
-    $scope.surveys = Survey.query();
-
-    // Keep track of the selected row.
-    $scope.selectedRow = [];
-
-    // Configure ng-grid.
-    $scope.gridOptions = {
-        data: 'surveys',
-        enableCellSelection: true,
-        showFooter: true,
-        selectedItems: $scope.selectedRow,
-        multiSelect: false,
-        columnDefs: [
-            {field: 'id', displayName: 'Id'},
-            {field: 'name', displayName: 'Name'},
-            {field: 'active', displayName: 'Active'},
-            {field: 'year', displayName: 'Year'},
-            {displayName: '', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="edit(row)" ><i class="icon-pencil"></i></button>'}
-        ]
-    };
-
-    $scope.edit = function edit(row) {
-        $location.path('/admin/survey/edit/' + row.entity.id);
-    }
-});
-
 angular.module('myApp').controller('UserCtrl', function ($scope, $location) {
 
     $scope.promptLogin = function () {
@@ -79,7 +43,7 @@ angular.module('myApp').controller('UserCtrl', function ($scope, $location) {
     });
 });
 
-angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($scope, $routeParams, $location, Question, Questionnaire, Answer) {
+angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($scope, $routeParams, $location, $timeout, $window, Question, Questionnaire, Answer) {
 
     var cellEditableTemplate, numberOfAnswers, requiredNumberOfAnswers;
 
@@ -107,6 +71,11 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
                 }
                 $scope.originalQuestions.push(new Question(question));
             });
+
+            // Trigger resize event informing elements to resize according to the height of the window.
+            $timeout(function () {
+                angular.element($window).resize();
+            }, 0)
         });
 
         // Here we use synchronous style affectation to be able to set initial
