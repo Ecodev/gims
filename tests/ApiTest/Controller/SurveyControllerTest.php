@@ -147,7 +147,7 @@ class SurveyControllerTest extends AbstractController
     {
         $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
         $actual = $this->getJsonResponse();
-        $this->assertSame($this->answer->getId(), $actual['id']);
+        $this->assertSame($this->survey->getId(), $actual['id']);
     }
 
 //    /**
