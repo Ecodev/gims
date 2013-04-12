@@ -6,7 +6,7 @@
 SOURCE="${BASH_SOURCE[0]}"
 DIR="$( dirname "$SOURCE" )"
 while [ -h "$SOURCE" ]
-do 
+do
   SOURCE="$(readlink "$SOURCE")"
   [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
   DIR="$( cd -P "$( dirname "$SOURCE"  )" && pwd )"
@@ -19,7 +19,7 @@ echo "Updating git submodules..."
 git submodule update --init --recursive --force
 
 echo "Updating database..."
-./vendor/bin/doctrine-module migrations:migrate --no-interaction --quiet
+./vendor/bin/doctrine-module migrations:migrate --no-interaction
 
 echo "Compiling CSS..."
 compass compile -s compressed --force
