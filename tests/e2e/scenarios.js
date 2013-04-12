@@ -121,8 +121,13 @@ describe('my app', function() {
         });
 
         it('should render module Survey', function () {
-            expect(element('body > .container caption:first h2').text()).
+            expect(element('body > .container .container-survey h2').text()).
                 toMatch(/Survey/);
+        });
+
+        it('should render module Questionnaire', function () {
+            expect(element('body > .container .container-questionnaire h2:nth-child(1)').text()).
+                toMatch(/Questionnaire/);
         });
     });
 });
