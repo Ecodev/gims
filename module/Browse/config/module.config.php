@@ -25,7 +25,6 @@ return array(
                     'route' => '/template/browse',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Browse\Controller',
-                        'namespace' => 'Browse',
                         'controller' => 'Index',
                         'action' => 'index',
                     ),
