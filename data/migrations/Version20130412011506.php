@@ -18,7 +18,10 @@ class Version20130412011506 extends AbstractMigration
 
         $this->addSql("CREATE TYPE questionnaire_status AS ENUM ('new', 'completed', 'validated', 'rejected');");
         $this->addSql("ALTER TABLE answer DROP status");
-        $this->addSql("ALTER TABLE questionnaire ADD status questionnaire_status NOT NULL");
+        
+        $this->addSql("ALTER TABLE questionnaire ADD status questionnaire_status");
+        $this->addSql("UPDATE questionnaire SET status = 'new'");
+        $this->addSql("ALTER TABLE questionnaire ALTER COLUMN status SET NOT NULL");
     }
 
     public function down(Schema $schema)
