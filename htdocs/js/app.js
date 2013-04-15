@@ -12,13 +12,14 @@ angular.module('myApp', [
         'myApp.directives',
         'myApp.answerService',
         'myApp.questionService',
-        'myApp.questionnaireService'
+        'myApp.questionnaireService',
+        'chartsExample.directives'
     ]).
     config(function ($routeProvider, $locationProvider) {
         $routeProvider.when('/home', {templateUrl: '/template/application/index/home', controller: 'MyCtrl1'});
         $routeProvider.when('/about', {templateUrl: '/template/application/index/about', controller: 'MyCtrl2'});
         $routeProvider.when('/browse', {templateUrl: '/template/browse', controller: 'MyCtrl2'});
-        $routeProvider.when('/browse/chart', {templateUrl: '/template/browse/chart', controller: 'MyCtrl2'});
+        $routeProvider.when('/browse/chart', {templateUrl: '/template/browse/chart', controller: 'Browse/ChartCtrl'});
         $routeProvider.when('/contribute', {templateUrl: '/template/contribute', controller: 'MyCtrl2'});
         $routeProvider.when('/contribute/questionnaire', {templateUrl: '/template/contribute/questionnaire', controller: 'Contribute/QuestionnaireCtrl'});
         $routeProvider.when('/contribute/questionnaire/:id', {templateUrl: '/template/contribute/questionnaire', controller: 'Contribute/QuestionnaireCtrl'});

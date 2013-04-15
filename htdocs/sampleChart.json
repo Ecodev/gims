@@ -1,0 +1,49 @@
+{
+  "title": {
+    "text": "Banana and Pear"
+  },
+  "subtitle": {
+    "text": "Comparative chart between Banana and Pear"
+  },
+  "xAxis": {
+    "labels": {}
+  },
+  "tooltip": {},
+  "plotOptions": {
+    "area": {
+      "pointStart": 1940,
+      "marker": {
+        "enabled": false,
+        "symbol": "circle",
+        "radius": 2,
+        "states": {
+          "hover": {
+            "enabled": true
+          }
+        }
+      }
+    }
+  },
+  "series": [
+    {
+      "name": "Banana",
+      "data": [
+        400,
+        194,
+        301,
+        130,
+        300
+      ]
+    },
+    {
+      "name": "Pear",
+      "data": [
+        123,
+        325,
+        120,
+        300,
+        300
+      ]
+    }
+    ]
+}

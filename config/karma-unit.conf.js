@@ -16,6 +16,7 @@ files = [
   'htdocs/lib/angular-ui/build/angular-ui.min.js',
   'htdocs/lib/ui-bootstrap/ui-bootstrap-tpls*.js',
   'htdocs/lib/ng-grid/build/ng-grid.min.js',
+  'htdocs/lib/angular-highcharts-directive/src/directives/highchart.js',
   'tests/lib/angular/angular-mocks.js',
   'htdocs/js/*.js',
   'tests/unit/**/*.js'

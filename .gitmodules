@@ -7,3 +7,6 @@
 [submodule "htdocs/lib/ng-grid"]
 	path = htdocs/lib/ng-grid
 	url = https://github.com/angular-ui/ng-grid.git
+[submodule "htdocs/lib/angular-highcharts-directive"]
+	path = htdocs/lib/angular-highcharts-directive
+	url = https://github.com/rootux/angular-highcharts-directive
