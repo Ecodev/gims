@@ -77,6 +77,10 @@ class Population extends AbstractImporter
 
         $this->getEntityManager()->flush();
 
+        echo "Compute absolute value, based on population...";
+        $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
+        $answerRepository->updateAbsoluteValueFromPercentageValue();
+
         return "$importedValueCount population data imported" . PHP_EOL;
     }
 

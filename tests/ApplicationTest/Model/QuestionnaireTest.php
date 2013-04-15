@@ -63,28 +63,28 @@ class QuestionaireTest extends AbstractModel
         $answer31 = new \Application\Model\Answer();
         $answer32 = new \Application\Model\Answer();
 
-        $answer131->setQuestionnaire($questionnaire)->setQuestion($question131)->setValuePercent(0.1);
-        $answer132->setQuestionnaire($questionnaire)->setQuestion($question132)->setValuePercent(0.01);
-        $answer141->setQuestionnaire($questionnaire)->setQuestion($question141)->setValuePercent(0.001);
-        $answer142->setQuestionnaire($questionnaire)->setQuestion($question142)->setValuePercent(0.0001);
-        $answer31->setQuestionnaire($questionnaire)->setQuestion($question31)->setValuePercent(0.00001);
-        $answer32->setQuestionnaire($questionnaire)->setQuestion($question32)->setValuePercent(0.000001);
+        $answer131->setQuestionnaire($questionnaire)->setQuestion($question131)->setValueAbsolute(0.1);
+        $answer132->setQuestionnaire($questionnaire)->setQuestion($question132)->setValueAbsolute(0.01);
+        $answer141->setQuestionnaire($questionnaire)->setQuestion($question141)->setValueAbsolute(0.001);
+        $answer142->setQuestionnaire($questionnaire)->setQuestion($question142)->setValueAbsolute(0.0001);
+        $answer31->setQuestionnaire($questionnaire)->setQuestion($question31)->setValueAbsolute(0.00001);
+        $answer32->setQuestionnaire($questionnaire)->setQuestion($question32)->setValueAbsolute(0.000001);
 
         // Assert computing for every single category
-        $this->assertEquals($answer131->getValuePercent() + $answer132->getValuePercent() + $answer141->getValuePercent() + $answer142->getValuePercent(), $questionnaire->compute($cat1), 'should be the sum of unique children (excluding duplicates via summands)');
-        $this->assertEquals($answer131->getValuePercent() + $answer141->getValuePercent(), $questionnaire->compute($cat11), 'should be the sum of summands');
-        $this->assertEquals($answer132->getValuePercent() + $answer142->getValuePercent(), $questionnaire->compute($cat12), 'should be the sum of summands');
-        $this->assertEquals($answer131->getValuePercent() + $answer132->getValuePercent(), $questionnaire->compute($cat13), 'should be the sum of children');
-        $this->assertEquals($answer131->getValuePercent(), $questionnaire->compute($cat131), 'should be the answer, when answer specified');
-        $this->assertEquals($answer132->getValuePercent(), $questionnaire->compute($cat132), 'should be the answer, when answer specified');
-        $this->assertEquals($answer141->getValuePercent() + $answer142->getValuePercent(), $questionnaire->compute($cat14), 'should be the sum of children');
-        $this->assertEquals($answer141->getValuePercent(), $questionnaire->compute($cat141), 'should be the answer, when answer specified');
-        $this->assertEquals($answer142->getValuePercent(), $questionnaire->compute($cat142), 'should be the answer, when answer specified');
+        $this->assertEquals($answer131->getValueAbsolute() + $answer132->getValueAbsolute() + $answer141->getValueAbsolute() + $answer142->getValueAbsolute(), $questionnaire->compute($cat1), 'should be the sum of unique children (excluding duplicates via summands)');
+        $this->assertEquals($answer131->getValueAbsolute() + $answer141->getValueAbsolute(), $questionnaire->compute($cat11), 'should be the sum of summands');
+        $this->assertEquals($answer132->getValueAbsolute() + $answer142->getValueAbsolute(), $questionnaire->compute($cat12), 'should be the sum of summands');
+        $this->assertEquals($answer131->getValueAbsolute() + $answer132->getValueAbsolute(), $questionnaire->compute($cat13), 'should be the sum of children');
+        $this->assertEquals($answer131->getValueAbsolute(), $questionnaire->compute($cat131), 'should be the answer, when answer specified');
+        $this->assertEquals($answer132->getValueAbsolute(), $questionnaire->compute($cat132), 'should be the answer, when answer specified');
+        $this->assertEquals($answer141->getValueAbsolute() + $answer142->getValueAbsolute(), $questionnaire->compute($cat14), 'should be the sum of children');
+        $this->assertEquals($answer141->getValueAbsolute(), $questionnaire->compute($cat141), 'should be the answer, when answer specified');
+        $this->assertEquals($answer142->getValueAbsolute(), $questionnaire->compute($cat142), 'should be the answer, when answer specified');
         $this->assertNull($questionnaire->compute($cat2), 'should be null, when no answer at all');
         $this->assertNull($questionnaire->compute($cat21), 'should be null, when no answer at all');
-        $this->assertEquals($answer31->getValuePercent() + $answer32->getValuePercent(), $questionnaire->compute($cat3), 'should be the sum of children, when summands have no answer');
-        $this->assertEquals($answer31->getValuePercent(), $questionnaire->compute($cat31), 'should be the answer, when answer specified');
-        $this->assertEquals($answer32->getValuePercent(), $questionnaire->compute($cat32), 'should be the answer, when answer specified');
+        $this->assertEquals($answer31->getValueAbsolute() + $answer32->getValueAbsolute(), $questionnaire->compute($cat3), 'should be the sum of children, when summands have no answer');
+        $this->assertEquals($answer31->getValueAbsolute(), $questionnaire->compute($cat31), 'should be the answer, when answer specified');
+        $this->assertEquals($answer32->getValueAbsolute(), $questionnaire->compute($cat32), 'should be the answer, when answer specified');
 
 
         // Overwrite computed categories with an answer
@@ -94,21 +94,21 @@ class QuestionaireTest extends AbstractModel
         $question13->setCategory($cat13);
         $answer11 = new \Application\Model\Answer();
         $answer13 = new \Application\Model\Answer();
-        $answer11->setQuestionnaire($questionnaire)->setQuestion($question11)->setValuePercent(0.0000001);
-        $answer13->setQuestionnaire($questionnaire)->setQuestion($question13)->setValuePercent(0.00000001);
+        $answer11->setQuestionnaire($questionnaire)->setQuestion($question11)->setValueAbsolute(0.0000001);
+        $answer13->setQuestionnaire($questionnaire)->setQuestion($question13)->setValueAbsolute(0.00000001);
 
         // Assert that manually specified answer override computed values
-        $this->assertEquals($answer11->getValuePercent(), $questionnaire->compute($cat11), 'should be the answer, when answer specified');
-        $this->assertEquals($answer13->getValuePercent(), $questionnaire->compute($cat13), 'should be the answer, when answer specified');
-        $this->assertEquals($answer11->getValuePercent() + $answer13->getValuePercent() + $answer132->getValuePercent() + $answer141->getValuePercent() + $answer142->getValuePercent(), $questionnaire->compute($cat1), 'should be the sum of children, but with overriden values instead of computed');
+        $this->assertEquals($answer11->getValueAbsolute(), $questionnaire->compute($cat11), 'should be the answer, when answer specified');
+        $this->assertEquals($answer13->getValueAbsolute(), $questionnaire->compute($cat13), 'should be the answer, when answer specified');
+        $this->assertEquals($answer11->getValueAbsolute() + $answer13->getValueAbsolute() + $answer132->getValueAbsolute() + $answer141->getValueAbsolute() + $answer142->getValueAbsolute(), $questionnaire->compute($cat1), 'should be the sum of children, but with overriden values instead of computed');
 
         // Add part to existing answer
         $part = new \Application\Model\Part('custom');
         $answer142->setPart($part);
 
         // Assert that we take part into consideration for filering answers
-        $this->assertEquals($answer141->getValuePercent(), $questionnaire->compute($cat14), 'should be the sum of children, but only for selected part');
-        $this->assertEquals($answer142->getValuePercent(), $questionnaire->compute($cat14, $part), 'should be the sum of children, but only for selected part');
+        $this->assertEquals($answer141->getValueAbsolute(), $questionnaire->compute($cat14), 'should be the sum of children, but only for selected part');
+        $this->assertEquals($answer142->getValueAbsolute(), $questionnaire->compute($cat14, $part), 'should be the sum of children, but only for selected part');
 
 
         // Add alternative (non-official) category to previously unexisting answer
@@ -117,17 +117,17 @@ class QuestionaireTest extends AbstractModel
         $question21bis = new \Application\Model\Question();
         $question21bis->setCategory($cat21bis);
         $answer21bis = new \Application\Model\Answer();
-        $answer21bis->setQuestionnaire($questionnaire)->setQuestion($question21bis)->setValuePercent(0.000000001);
+        $answer21bis->setQuestionnaire($questionnaire)->setQuestion($question21bis)->setValueAbsolute(0.000000001);
 
         // Assert that alternative category is used for computation
-        $this->assertEquals($answer21bis->getValuePercent(), $questionnaire->compute($cat2), 'should be the sum of children, including the answer which is specified with alternative category');
-        $this->assertEquals($answer21bis->getValuePercent(), $questionnaire->compute($cat21), 'should be the alternative answer, when answer is specified with alternative category');
-        $this->assertEquals($answer21bis->getValuePercent(), $questionnaire->compute($cat3), 'should be the sum of summands, when summands have answer');
+        $this->assertEquals($answer21bis->getValueAbsolute(), $questionnaire->compute($cat2), 'should be the sum of children, including the answer which is specified with alternative category');
+        $this->assertEquals($answer21bis->getValueAbsolute(), $questionnaire->compute($cat21), 'should be the alternative answer, when answer is specified with alternative category');
+        $this->assertEquals($answer21bis->getValueAbsolute(), $questionnaire->compute($cat3), 'should be the sum of summands, when summands have answer');
 
 
         // Define summands to use several time cat1.4.1 (once via cat1 and once via cat1.4)
         $cat3->addSummand($cat1)->addSummand($cat14);
-        $this->assertEquals($answer21bis->getValuePercent() + $answer11->getValuePercent() + $answer13->getValuePercent() + $answer132->getValuePercent() + $answer141->getValuePercent(), $questionnaire->compute($cat3), 'should not sum twice the same category');
+        $this->assertEquals($answer21bis->getValueAbsolute() + $answer11->getValueAbsolute() + $answer13->getValueAbsolute() + $answer132->getValueAbsolute() + $answer141->getValueAbsolute(), $questionnaire->compute($cat3), 'should not sum twice the same category');
     }
 
 }
