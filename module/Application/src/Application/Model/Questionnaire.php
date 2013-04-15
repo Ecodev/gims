@@ -232,7 +232,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
             if ($answerCategory == $category && $answer->getPart() == $part) {
 
                 $alreadySummedCategories->add(true);
-                return $answer->getValuePercent();
+                return $answer->getValueAbsolute();
             }
         }
 

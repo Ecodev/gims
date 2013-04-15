@@ -39,16 +39,31 @@ return array(
                         ),
                     ),
                     'question' => array(
-                        'type'    => 'Segment',
+                        'type' => 'Segment',
                         'options' => array(
-                            'route'       => '/questionnaire/:idQuestionnaire/[:controller[/:id]]',
+                            'route' => '/questionnaire/:idQuestionnaire/[:controller[/:id]]',
                             'constraints' => array(
-                                'controller'      => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'          => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'idQuestionnaire' => '[0-9]+',
                                 'id' => '[0-9]+',
                             ),
-                            'defaults'    => array(),
+                            'defaults' => array(),
+                        ),
+                    ),
+                    // This route allow to execute something on a questionnaire (eg:computing results)
+                    'questionnaire_actions' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/questionnaire/:idQuestionnaire/[:action]',
+                            'constraints' => array(
+                                'action' => '(compute)', // Define here allowed actions: (action1|action2|action3)
+                                'idQuestionnaire' => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                '__NAMESPACE__' => 'Api\Controller',
+                                'controller' => 'questionnaire',
+                            ),
                         ),
                     ),
                 ),

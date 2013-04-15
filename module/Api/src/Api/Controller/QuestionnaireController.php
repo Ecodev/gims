@@ -25,6 +25,7 @@ class QuestionnaireController extends AbstractRestfulController
         $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
         $questionnaire = $questionnaireRepository->find($idQuestionnaire);
         $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneBy(array('name' => $this->params()->fromQuery('part')));
+        $population = $this->getEntityManager()->getRepository('Application\Model\Population')->getOneByQuestionnaire($questionnaire, $part);
 
         if (!$questionnaire) {
             $this->getResponse()->setStatusCode(404);
@@ -41,21 +42,22 @@ class QuestionnaireController extends AbstractRestfulController
         $result = array();
         $result[] = $questionnaire->getSurvey()->getName() . ', ' . $questionnaire->getSurvey()->getCode() . ', ' . $questionnaire->getGeoname()->getName();
         foreach ($topCategories as $category) {
-            $result [] = $this->computeWithChildren($questionnaire, $category, $part);
+            $result [] = $this->computeWithChildren($questionnaire, $population, $category, $part);
         }
 
         return new JsonModel($result);
     }
 
-    private function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Category $category, \Application\Model\Part $part = null)
+    private function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Population $population, \Application\Model\Category $category, \Application\Model\Part $part = null)
     {
         $result = array();
-        $result[$category->getName()] = $questionnaire->compute($category, $part);
+        $computed = $questionnaire->compute($category, $part);
+        $result[$category->getName()] = $computed && $population->getPopulation() ? $computed / $population->getPopulation() : null;
 
         $children = array();
         foreach ($category->getChildren() as $child) {
             if ($child->getOfficial()) {
-                $children[] = $this->computeWithChildren($questionnaire, $child, $part);
+                $children[] = $this->computeWithChildren($questionnaire, $population, $child, $part);
             }
         }
 
