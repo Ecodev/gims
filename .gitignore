@@ -1,5 +1,4 @@
-/nbproject/private/
-.sass-cache/
+nbproject/private/
 *.uml~
 .DS_Store
 ._*

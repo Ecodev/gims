@@ -8,6 +8,7 @@ css_dir = "htdocs/css"
 sass_dir = "module/Application/sass"
 images_dir = "htdocs/img"
 javascripts_dir = "htdocs/js"
+cache_dir = "data/cache/sass"
 
 # You can select your preferred output style here (can be overridden via the command line):
 # output_style = :expanded or :nested or :compact or :compressed
