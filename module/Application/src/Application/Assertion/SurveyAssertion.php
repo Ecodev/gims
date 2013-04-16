@@ -28,9 +28,7 @@ class SurveyAssertion implements \ZfcRbac\Assertion\AssertionInterface
      */
     public function assert(Rbac $rbac)
     {
-        // @todo make sure the survey is not already validated
-        // pseud code:
-        // $validate = true; foreach ($questionnaire->getanswers) { $validdate &= $answer->getStatus() == VALIDATED}
+        // @todo define the rules and implement me!
         return true;
     }
 }

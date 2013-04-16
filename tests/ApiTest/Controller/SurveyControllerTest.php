@@ -93,6 +93,7 @@ class SurveyControllerTest extends AbstractController
     private function getRoute($method)
     {
         switch ($method) {
+            case 'delete':
             case 'get':
                 $route = sprintf(
                     '/api/survey/%s',
@@ -130,7 +131,7 @@ class SurveyControllerTest extends AbstractController
      * @test
      * @group SurveyApi
      */
-    public function ensureOnlyAllowedFieldAreDisplayedInResponseForAnswer()
+    public function ensureOnlyAllowedFieldAreDisplayedInResponseForSurvey()
     {
         $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
         $allowedFields = array('id', 'name', 'code', 'active', 'year');
@@ -150,186 +151,169 @@ class SurveyControllerTest extends AbstractController
         $this->assertSame($this->survey->getId(), $actual['id']);
     }
 
-//    /**
-//     * @test
-//     * @group SurveyApi
-//     */
-//    public function updateAnswerAndCheckWhetherValuePercentIsDifferentFromOriginalValue()
-//    {
-//        $this->rbac->setIdentity($this->user);
-//
-//        $expected = $this->answer->getValuePercent();
-//        $data = array(
-//            'valuePercent' => 0.2,
-//        );
-//
-//        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
-//        $actual = $this->getJsonResponse();
-//        $this->assertNotEquals($expected, $actual['valuePercent']);
-//    }
-//
-//    /**
-//     * @test
-//     * @group SurveyApi
-//     */
-//    public function canUpdateValuePercentOfAnswer()
-//    {
-//        $this->rbac->setIdentity($this->user);
-//
-//        $expected = $this->answer->getValuePercent() + 0.2;
-//        $data = array(
-//            'valuePercent' => $expected,
-//        );
-//
-//        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
-//        $actual = $this->getJsonResponse();
-//        $this->assertEquals($expected, $actual['valuePercent']);
-//    }
-//
-//    /**
-//     * @test
-//     * @group SurveyApi
-//     */
-//    public function updateAnAnswerWillReturn201AsCode()
-//    {
-//        $this->rbac->setIdentity($this->user);
-//
-//        $expected = $this->answer->getValuePercent() + 0.2;
-//        $data = array(
-//            'valuePercent' => $expected,
-//        );
-//
-//        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
-//        $this->assertResponseStatusCode(201);
-//    }
-//
-//    /**
-//     * @test
-//     * @group SurveyApi
-//     */
-//    public function postANewAnswerWithNestedObjectWillCreateIt()
-//    {
-//        $this->rbac->setIdentity($this->user);
-//        // Question
-//        $data = array(
-//            'valuePercent'  => 0.6,
-//            'question'      => array(
-//                'id' => $this->question->getId()
-//            ),
-//            'questionnaire' => array(
-//                'id' => $this->questionnaire->getId()
-//            ),
-//            'part'          => array(
-//                'id' => $this->part->getId()
-//            ),
-//        );
-//
-//        $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
-//        $actual = $this->getJsonResponse();
-//        $this->assertEquals($data['valuePercent'], $actual['valuePercent']);
-//    }
-//
-//    /**
-//     * @test
-//     * @group SurveyApi
-//     */
-//    public function postANewAnswerWithFlatObjectWillCreateIt()
-//    {
-//        $this->rbac->setIdentity($this->user);
-//
-//        // Question
-//        $data = array(
-//            'valuePercent'  => 0.6,
-//            'question'      => $this->question->getId(),
-//            'questionnaire' => $this->questionnaire->getId(),
-//            'part'          => $this->part->getId(),
-//        );
-//
-//        $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
-//        $actual = $this->getJsonResponse();
-//        $this->assertEquals($data['valuePercent'], $actual['valuePercent']);
-//    }
-//
-//    /**
-//     * @test
-//     * @group SurveyApi
-//     */
-//    public function postANewAnswerReturnsStatusCode401ForUserWithRoleAnonymous()
-//    {
-//        // Question
-//        $data = array(
-//            'valuePercent'  => 0.6,
-//            'question'      => array(
-//                'id' => $this->question->getId()
-//            ),
-//            'questionnaire' => array(
-//                'id' => $this->questionnaire->getId()
-//            ),
-//            'part'          => array(
-//                'id' => $this->part->getId()
-//            ),
-//        );
-//
-//
-//        $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
-//        // @todo comment me out once permission will be enabled (=> GUI handling)
-//        #$this->assertResponseStatusCode(401);
-//    }
-//
-//    /**
-//     * @test
-//     * @group SurveyApi
-//     */
-//    public function postANewAnswerReturnsStatusCode201ForUserWithRoleReporter()
-//    {
-//        $this->rbac->setIdentity($this->user);
-//        // Question
-//        $data = array(
-//            'valuePercent'  => 0.6,
-//            'question'      => array(
-//                'id' => $this->question->getId()
-//            ),
-//            'questionnaire' => array(
-//                'id' => $this->questionnaire->getId()
-//            ),
-//            'part'          => array(
-//                'id' => $this->part->getId()
-//            ),
-//        );
-//
-//        $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
-//        $this->assertResponseStatusCode(201);
-//    }
-//
-//    /**
-//     * @test
-//     * @group SurveyApi
-//     */
-//    public function updateAnAnswerAsAnonymousReturnsStatusCode401()
-//    {
-//        $expected = $this->answer->getValuePercent() + 0.2;
-//        $data = array(
-//            'valuePercent' => $expected,
-//        );
-//
-//        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
-//        // @todo comment me out once permission will be enabled (=> GUI handling)
-//        #$this->assertResponseStatusCode(401);
-//    }
-//
-//    /**
-//     * @test
-//     * @group SurveyApi
-//     */
-//    public function updateAnAnswerWithRoleReporterReturnsStatusCode201()
-//    {
-//        $this->rbac->setIdentity($this->user);
-//        $expected = $this->answer->getValuePercent() + 0.2;
-//        $data = array(
-//            'valuePercent' => $expected,
-//        );
-//
-//        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
-//        $this->assertResponseStatusCode(201);
-//    }
+    /**
+     * @test
+     * @group SurveyApi
+     */
+    public function updateNameOfSurveyAndCheckWhetherOriginalNameIsDifferentFromUpdatedValue()
+    {
+        $this->rbac->setIdentity($this->user);
+
+        $expected = $this->survey->getName();
+        $data = array(
+            'name' => $this->survey->getName() . 'foo',
+        );
+
+        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
+        $actual = $this->getJsonResponse();
+        $this->assertNotEquals($expected, $actual['name']);
+    }
+
+
+    /**
+     * @test
+     * @group SurveyApi
+     */
+    public function updateAnSurveyWillReturn201AsCode()
+    {
+        $this->rbac->setIdentity($this->user);
+
+        $expected = $this->survey->getName() . 'foo';
+        $data = array(
+            'name' => $expected,
+        );
+
+        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
+        $this->assertResponseStatusCode(201);
+    }
+
+    /**
+     * @test
+     * @group SurveyApi
+     */
+    public function postANewSurveyAndCheckResponseReturnsIt()
+    {
+        $this->rbac->setIdentity($this->user);
+
+        // Survey
+        $data = array(
+            'name' => 'new-survey',
+            'code' => 100,
+            'year' => 2013,
+        );
+
+        $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
+        $actual = $this->getJsonResponse();
+        $this->assertEquals($data['name'], $actual['name']);
+    }
+
+
+    /**
+     * @test
+     * @group SurveyApi
+     */
+    public function postANewSurveyReturnsStatusCode401ForUserWithRoleAnonymous()
+    {
+        // Question
+        $data = array(
+            'name'          => 0.6,
+            'question'      => array(
+                'id' => $this->question->getId()
+            ),
+            'questionnaire' => array(
+                'id' => $this->questionnaire->getId()
+            ),
+            'part'          => array(
+                'id' => $this->part->getId()
+            ),
+        );
+
+
+        $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
+        // @todo comment me out once permission will be enabled (=> GUI handling)
+        #$this->assertResponseStatusCode(401);
+    }
+
+    /**
+     * @test
+     * @group SurveyApi
+     */
+    public function postANewSurveyReturnsStatusCode201ForUserWithRoleReporter()
+    {
+        $this->rbac->setIdentity($this->user);
+        // Question
+        $data = array(
+            'name' => 'new-survey',
+            'code' => 100,
+            'year' => 2013,
+        );
+
+        $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
+        $this->assertResponseStatusCode(201);
+    }
+
+    /**
+     * @test
+     * @group SurveyApi
+     */
+    public function updateAnSurveyAsAnonymousReturnsStatusCode401()
+    {
+        $expected = $this->survey->getName() . 'foo';
+        $data = array(
+            'name' => $expected,
+        );
+
+        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
+        // @todo comment me out once permission will be enabled (=> GUI handling)
+        #$this->assertResponseStatusCode(401);
+    }
+
+    /**
+     * @test
+     * @group SurveyApi
+     */
+    public function updateAnSurveyWithRoleReporterReturnsStatusCode201()
+    {
+        $this->rbac->setIdentity($this->user);
+        $expected = $this->survey->getName() . 'foo';
+        $data = array(
+            'name' => $expected,
+        );
+
+        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
+        $this->assertResponseStatusCode(201);
+    }
+
+    /**
+     * @test
+     * @group SurveyApi
+     */
+    public function deleteSurveyMustReturnStatusCode200()
+    {
+        $this->rbac->setIdentity($this->user);
+        $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
+        $this->assertResponseStatusCode(200);
+    }
+
+    /**
+     * @test
+     * @group SurveyApi
+     */
+    public function deleteSurveyMustContainsMessageDeletedSuccessfully()
+    {
+        $this->rbac->setIdentity($this->user);
+        $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
+        $this->assertEquals($this->getJsonResponse()['message'], 'deleted successfully');
+    }
+
+    /**
+     * @test
+     * @group SurveyApi
+     */
+    public function deleteASurveyWhichDoesNotExistReturnsStatusCode404()
+    {
+        $this->rbac->setIdentity($this->user);
+        $this->dispatch('/api/survey/' . ($this->survey->getId() + 1), Request::METHOD_DELETE);
+        $this->assertResponseStatusCode(404);
+    }
 }

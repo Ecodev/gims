@@ -9,46 +9,9 @@ use Zend\View\Model\JsonModel;
 
 class AnswerController extends AbstractRestfulController
 {
-
-    protected function getJsonConfig()
-    {
-        return array(
-            'valuePercent',
-            'valueAbsolute',
-            'part'     => array(
-                'name',
-            ),
-            'question' => array(
-                'name',
-                'category' => array(
-                    'name'
-                ),
-            )
-        );
-    }
-
     /**
-     * Ask Rbac whether the User is allowed to update
-     *
-     * @param \Application\Model\Questionnaire $questionnaire
-     *
-     * @return bool
+     * @return mixed|JsonModel
      */
-    protected function isAllowed(Questionnaire $questionnaire)
-    {
-
-        // @todo remove me once login will be better handled GUI wise
-        return true;
-
-        /* @var $rbac \Application\Service\Rbac */
-        $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-        return $rbac->isGrantedWithContext(
-            $questionnaire,
-            Permission::CAN_MANAGE_ANSWER,
-            new QuestionnaireAssertion($questionnaire)
-        );
-    }
-
     public function getList()
     {
         $idQuestionnaire = $this->params('idQuestionnaire');
@@ -110,5 +73,47 @@ class AnswerController extends AbstractRestfulController
             $result = new JsonModel(array('message' => 'Authorization required'));
         }
         return $result;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getJsonConfig()
+    {
+        return array(
+            'valuePercent',
+            'valueAbsolute',
+            'part'     => array(
+                'name',
+            ),
+            'question' => array(
+                'name',
+                'category' => array(
+                    'name'
+                ),
+            )
+        );
+    }
+
+    /**
+     * Ask Rbac whether the User is allowed to update
+     *
+     * @param \Application\Model\Questionnaire $questionnaire
+     *
+     * @return bool
+     */
+    protected function isAllowed(Questionnaire $questionnaire)
+    {
+
+        // @todo remove me once login will be better handled GUI wise
+        return true;
+
+        /* @var $rbac \Application\Service\Rbac */
+        $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
+        return $rbac->isGrantedWithContext(
+            $questionnaire,
+            Permission::CAN_MANAGE_ANSWER,
+            new QuestionnaireAssertion($questionnaire)
+        );
     }
 }

@@ -4,6 +4,7 @@ return array(
     'controllers'  => array(
         'invokables' => array(
             'Admin\Controller\Index' => 'Admin\Controller\IndexController',
+            'Admin\Controller\Survey' => 'Admin\Controller\SurveyController',
         ),
     ),
     'view_manager' => array(
@@ -34,12 +35,16 @@ return array(
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'       => '/[:action]',
+                            'route'       => '/[:controller[/:action]]',
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
                             ),
-                            'defaults'    => array(),
+                            'defaults'    => array(
+                                #'__NAMESPACE__' => 'Admin\Controller',
+                                #'controller'    => 'Survey',
+                                #'action'        => 'index',
+                            ),
                         ),
                     ),
                 ),

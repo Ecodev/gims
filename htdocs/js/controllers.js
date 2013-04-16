@@ -114,6 +114,9 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
         var reg = new RegExp('[0-9]+', "g");
         var answerIndex = reg.exec(column.field)[0];
         var question = row.entity;
+
+        // @todo change me to take advantage of selected row (?)
+        // var answer = $scope.selectedRow
         var answer = new Answer(question.answers[answerIndex]);
 
         // Get the field and check whether it has an error class
@@ -172,9 +175,8 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
         selectedItems: $scope.selectedRow,
         multiSelect: false,
         columnDefs: [
-            {field: 'id', displayName: 'Id'},
-            {field: 'name', displayName: 'Name'},
             {field: 'category.name', displayName: 'Category'},
+            {field: 'name', displayName: 'Name', width: '500px'},
             {field: 'answers.1.valuePercent', displayName: 'Urban', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate}, //, cellTemplate: 'cellTemplate.html'
             {field: 'answers.2.valuePercent', displayName: 'Rural', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
             {field: 'answers.0.valuePercent', displayName: 'Total', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},

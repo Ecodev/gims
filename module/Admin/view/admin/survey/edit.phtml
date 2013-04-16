@@ -1,0 +1,39 @@
+<div class="container">
+
+    <form name="myForm">
+        <div class="control-group" ng-class="{error: myForm.code.$invalid}">
+            <label>Code</label>
+            <input type="text" name="code" ng-model="survey.code" required>
+            <span ng-show="myForm.code.$error.required" class="help-inline">Required</span>
+        </div>
+
+        <div class="control-group" ng-class="{error: myForm.name.$invalid}">
+            <label>Name</label>
+            <input type="text" name="name" ng-model="survey.name" required class="span6">
+            <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+        </div>
+
+        <div class="control-group" ng-class="{error: myForm.active.$invalid}">
+            <label>Active</label>
+            <select name="active" ng-model="survey.active" ng-options="c.value as c.text for c in actives" required></select>
+            <span ng-show="myForm.active.$error.required" class="help-inline">Required</span>
+        </div>
+
+        <div class="control-group" ng-class="{error: myForm.year.$invalid}">
+            <label>Year</label>
+            <input type="number" name="year" ng-model="survey.year" min="1970" max="2100" required>
+            <span ng-show="myForm.year.$error.number" class="help-inline">Not a valid year</span>
+            <span ng-show="myForm.year.$error.required" class="help-inline">Required</span>
+        </div>
+
+        <br>
+        <a href="/admin/survey" class="btn">Cancel</a>
+
+        <button ng-click="save()" ng-disabled="myForm.$invalid" class="btn btn-primary"
+                ng-class="{'disabled': sending}" ng-bind-template="{{sendLabel}}"></button>
+        <button ng-click="delete()"
+                ng-show="survey.id" class="btn btn-danger">Delete
+        </button>
+    </form>
+
+</div> <!-- /container -->
