@@ -1,6 +1,6 @@
 {
 	"chart": {
-		"height": 1000
+		"height": 700
 	},
 	"title": {
 		"text": "Bangladesh - Urban"
@@ -69,27 +69,174 @@
 				]
 	}, {
 		"type": "scatter",
-		"name": "Total Improved, Sources",
-		"showInLegend": false,
-		"color": "rgba(255, 0, 0, 1)",
+		"name": "World Health Survey, Piped onto premises",
+		"showInLegend": true,
+		"color": "rgb(0, 0, 255)",
 		"marker": {
 			"symbol": "diamond"
 		},
 		"dataLabels": {
-			"color": "rgb(255, 0, 0)"
+			"color": "rgb(0, 0, 255)"
 		},
-		"data": [ {"name": "DHS94", "x": 1994, "y": 86.7}, {"name": "MICS94", "x": 1994, "y": 87.2}, {"name": "MICS95", "x": 1995, "y": 86.4}, {"name": "MICS96", "x": 1996, "y": 88.0}, {"name": "DHS97", "x": 1997, "y": 87.3}, {"name": "SVRS98", "x": 1998, "y": 87.3}, {"name": "DHS00", "x": 2000, "y": 85.6}, {"name": "HIES00", "x": 2000, "y": 81.3}, {"name": "WHS03", "x": 2003, "y": 86.4}, {"name": "DHS04", "x": 2004, "y": 85.5}, {"name": "HIES05", "x": 2005, "y": 85.4}, {"name": "MICS06", "x": 2006, "y": 84.7}, {"name": "DHS07", "x": 2007, "y": 85.3}, {"name": "MICS09", "x": 2009, "y": 86.6}, {"name": "CEN11", "x": 2011, "y": 85.2}, {"name": "DHS11", "x": 2011, "y": 86.6} ]
+		"data": [ {"name": "WHS03", "x": 2003, "y": 25.3} ]
 	}, {
 		"type": "scatter",
-		"name": "Piped onto premises, Sources",
-		"showInLegend": false,
-		"color": "rgba(0, 0, 255, 1)",
+		"name": "World Health Survey, Total improved",
+		"showInLegend": true,
+		"color": "rgb(255, 0, 0)",
 		"marker": {
 			"symbol": "square"
 		},
 		"dataLabels": {
+			"color": "rgb(255, 0, 0)"
+		},
+		"data": [ {"name": "WHS03", "x": 2003, "y": 86.4} ]
+	}, {
+		"type": "scatter",
+		"name": "Multiple Indicator Cluster Survey, Piped onto premises",
+		"showInLegend": true,
+		"color": "rgb(0, 0, 255)",
+		"marker": {
+			"symbol": "diamond"
+		},
+		"dataLabels": {
 			"color": "rgb(0, 0, 255)"
 		},
-		"data": [ {"name": "DHS94", "x": 1994, "y": 26.7}, {"name": "MICS94", "x": 1994, "y": 26.0}, {"name": "MICS95", "x": 1995, "y": 25.5}, {"name": "MICS96", "x": 1996, "y": 29.6}, {"name": "DHS97", "x": 1997, "y": 32.1}, {"name": "SVRS98", "x": 1998, "y": 25.9}, {"name": "DHS00", "x": 2000, "y": 24.2}, {"name": "HIES00", "x": 2000, "y": 25.3}, {"name": "WHS03", "x": 2003, "y": 25.3}, {"name": "DHS04", "x": 2004, "y": 23.3}, {"name": "HIES05", "x": 2005, "y": 22.4}, {"name": "MICS06", "x": 2006, "y": 22.4}, {"name": "DHS07", "x": 2007, "y": 26.2}, {"name": "MICS09", "x": 2009, "y": 32.5}, {"name": "CEN11", "x": 2011, "y": 41.4}, {"name": "DHS11", "x": 2011, "y": 37.2} ]
-	} ]
+		"data": [ {"name": "MICS94", "x": 1994, "y": 26.0},
+					{"name": "MICS95", "x": 1995, "y": 25.5},
+					{"name": "MICS96", "x": 1996, "y": 29.6},
+					{"name": "MICS09", "x": 2009, "y": 32.5},
+					{"name": "MICS06", "x": 2006, "y": 22.4}
+				 ]
+	}, {
+		"type": "scatter",
+		"name": "Multiple Indicator Cluster Survey, Total improved",
+		"showInLegend": true,
+		"color": "rgb(255, 0, 0)",
+		"marker": {
+			"symbol": "square"
+		},
+		"dataLabels": {
+			"color": "rgb(255, 0, 0)"
+		},
+		"data": [ {"name": "MICS94", "x": 1994, "y": 87.2},
+					{"name": "MICS95", "x": 1995, "y": 86.4},
+					{"name": "MICS96", "x": 1996, "y": 88.0},
+					{"name": "MICS09", "x": 2009, "y": 86.6},
+					{"name": "MICS06", "x": 2006, "y": 84.7}
+				]
+	}, {
+		"type": "scatter",
+		"name": "Household Income Expenditure Survey, Piped onto premises",
+		"showInLegend": true,
+		"color": "rgb(0, 0, 255)",
+		"marker": {
+			"symbol": "diamond"
+		},
+		"dataLabels": {
+			"color": "rgb(0, 0, 255)"
+		},
+		"data": [ {"name": "HIES00", "x": 2000, "y": 25.3},
+					{"name": "HIES05", "x": 2005, "y": 22.4}
+				 ]
+	}, {
+		"type": "scatter",
+		"name": "Household Income Expenditure Survey, Total improved",
+		"showInLegend": true,
+		"color": "rgb(255, 0, 0)",
+		"marker": {
+			"symbol": "square"
+		},
+		"dataLabels": {
+			"color": "rgb(255, 0, 0)"
+		},
+		"data": [ {"name": "HIES00", "x": 2000, "y": 81.3},
+					{"name": "HIES05", "x": 2005, "y": 85.4}
+				]
+	}, {
+		"type": "scatter",
+		"name": "Demographic and Health Survey, Piped onto premises",
+		"showInLegend": true,
+		"color": "rgb(0, 0, 255)",
+		"marker": {
+			"symbol": "diamond"
+		},
+		"dataLabels": {
+			"color": "rgb(0, 0, 255)"
+		},
+		"data": [ {"name": "DHS94", "x": 1994, "y": 26.7},
+					{"name": "DHS97", "x": 1997, "y": 32.1},
+					{"name": "DHS00", "x": 2000, "y": 24.2},
+					{"name": "DHS04", "x": 2004, "y": 23.3},
+					{"name": "DHS07", "x": 2007, "y": 26.2},
+					{"name": "DHS11", "x": 2011, "y": 37.2}
+				]
+	}, {
+		"type": "scatter",
+		"name": "Demographic and Health Survey, Total improved",
+		"showInLegend": true,
+		"color": "rgb(255, 0, 0)",
+		"marker": {
+			"symbol": "square"
+		},
+		"dataLabels": {
+			"color": "rgb(255, 0, 0)"
+		},
+		"data": [ {"name": "DHS94", "x": 1994, "y": 86.7},
+					{"name": "DHS97", "x": 1997, "y": 87.3},
+					{"name": "DHS00", "x": 2000, "y": 85.6},
+					{"name": "DHS04", "x": 2004, "y": 85.5},
+					{"name": "DHS07", "x": 2007, "y": 85.3},
+					{"name": "DHS11", "x": 2011, "y": 86.6}
+				]
+	}, {
+		"type": "scatter",
+		"name": "Census and population survey, Piped onto premises",
+		"showInLegend": true,
+		"color": "rgb(0, 0, 255)",
+		"marker": {
+			"symbol": "diamond"
+		},
+		"dataLabels": {
+			"color": "rgb(0, 0, 255)"
+		},
+		"data": [ {"name": "CEN11", "x": 2011, "y": 41.4} ]
+	}, {
+		"type": "scatter",
+		"name": "Census and population survey, Total improved",
+		"showInLegend": true,
+		"color": "rgb(255, 0, 0)",
+		"marker": {
+			"symbol": "square"
+		},
+		"dataLabels": {
+			"color": "rgb(255, 0, 0)"
+		},
+		"data": [ {"name": "CEN11", "x": 2011, "y": 85.2} ]
+	}, {
+		"type": "scatter",
+		"name": "SVR, Piped onto premises",
+		"showInLegend": true,
+		"color": "rgb(0, 0, 255)",
+		"marker": {
+			"symbol": "diamond"
+		},
+		"dataLabels": {
+			"color": "rgb(0, 0, 255)"
+		},
+		"data": [ {"name": "SVRS98", "x": 1998, "y": 25.9} ]
+	}, {
+		"type": "scatter",
+		"name": "SVR, Total improved",
+		"showInLegend": true,
+		"color": "rgb(255, 0, 0)",
+		"marker": {
+			"symbol": "square"
+		},
+		"dataLabels": {
+			"color": "rgb(255, 0, 0)"
+		},
+		"data": [ {"name": "SVRS98", "x": 1998, "y": 87.3} ]
+	}
+	]
 }
