@@ -258,17 +258,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $http) {
 
     // This an example how to modify existing chart via JS only (when button is clicked)
     $scope.someTestFunction = function() {
-        $scope.basicAreaChart.series.push(
-                {
-                    name: "Super Banana",
-                    data: [
-                        800,
-                        394,
-                        361,
-                        430,
-                        380
-                    ]
-                });
+		$scope.basicAreaChart.plotOptions.scatter.dataLabels.format = '{point.name}';
     };
 
 });
