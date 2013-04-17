@@ -84,57 +84,31 @@ class IndexControllerTest extends AbstractController
 
     /**
      * @test
-     * @dataProvider indexProvider
+     * @dataProvider moduleProvider
      */
-    public function testRouteFromIndexProvider($module, $route, $template)
+    public function testModuleConfigurationFromModuleProvider($module, $controller, $route, $template)
     {
         // Template URL should return partial HTML fragment for AngularJS template system via ajax for Contribute module
-        $this->dispatch('/template/admin');
+        $this->dispatch($route);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName($module);
-        $this->assertControllerName($module . '\controller\index');
-        $this->assertControllerClass('IndexController');
+        $this->assertControllerName($module . '\controller\\' . $controller);
+        $this->assertControllerClass(ucfirst($controller) . 'Controller');
         $this->assertMatchedRouteName($template);
         $this->assertNotQuery('html > head');
     }
 
     /**
-     * indexProvider
+     * moduleProvider
      */
-    public function indexProvider()
+    public function moduleProvider()
     {
         return array(
-            //    module    route    template_admin
-            array('admin', 'admin', 'template_admin'),
+            //    $module  controller  route            template_admin
+            array('admin', 'index', '/template/admin', 'template_admin'),
+            array('admin', 'survey', '/template/admin/survey', 'template_admin/default'),
         );
     }
-
-    /**
-     * @test
-     * @dataProvider surveyProvider
-     */
-    public function testRouteFromSurveyProvider($module, $route, $template)
-    {
-        // Template URL should return partial HTML fragment for AngularJS template system via ajax for Contribute module
-        $this->dispatch('/template/admin/survey');
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName($module);
-        $this->assertControllerName($module . '\controller\survey');
-        $this->assertControllerClass('SurveyController');
-        $this->assertMatchedRouteName($template);
-        $this->assertNotQuery('html > head');
-    }
-
-    /**
-     * surveyProvider
-     */
-    public function surveyProvider()
-    {
-        return array(
-            array('admin', 'admin/survey', 'template_admin/default'),
-        );
-    }
-
 
     public function testAssemblingRoutes()
     {
