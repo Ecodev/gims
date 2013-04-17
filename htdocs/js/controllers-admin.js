@@ -5,8 +5,7 @@ angular.module('myApp').controller('AdminCtrl', function () {
 
 });
 
-
-angular.module('myApp').controller('Admin/Survey/EditCtrl', function ($scope, $routeParams, $location, $dialog, Survey) {
+angular.module('myApp').controller('Admin/Survey/EditCtrl', function ($scope, $routeParams, $location, Survey, ConfirmDelete) {
 
     $scope.actives = [
         {text: 'Yes', value: 'true'},
@@ -36,21 +35,7 @@ angular.module('myApp').controller('Admin/Survey/EditCtrl', function ($scope, $r
 
     // Delete a survey
     $scope.delete = function () {
-        var title = 'Confirmation delete';
-        var msg = 'You are going to delete survey "' + $scope.survey.code + '". Are you sure?';
-        var btns = [
-            {result: 'cancel', label: 'Cancel'},
-            {result: 'ok', label: 'OK', cssClass: 'btn-primary'}
-        ];
-        $dialog.messageBox(title, msg, btns)
-            .open()
-            .then(function (result) {
-                if (result === 'OK') {
-                    $scope.survey.$delete({id: $scope.survey.id}, function () {
-                        $location.path('/admin/survey');
-                    });
-                }
-            });
+        ConfirmDelete.show($scope.survey);
     };
 
     // Load survey if possible
@@ -65,9 +50,10 @@ angular.module('myApp').controller('Admin/Survey/EditCtrl', function ($scope, $r
     }
 });
 
-angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeParams, $location, $window, $timeout, ConfirmDelete, Survey) {
-
-    ConfirmDelete.test(123);
+/**
+ * Admin Survey Controller
+ */
+angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeParams, $location, $window, $timeout, Survey, ConfirmDelete) {
 
     // Initialize
     $scope.filteringText = '';
@@ -108,9 +94,9 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeP
 
     $scope.delete = function (row) {
 
-        // Add a little timeout to give time to the event "selectRow" to be propagated
+        // Add a little timeout to enabling the event "selectRow" to be propagated
         $timeout(function () {
-            console.log($scope.selectedRow[0].code);
+            ConfirmDelete.show($scope.selectedRow[0], $scope.surveys);
         }, 0)
     }
 

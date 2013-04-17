@@ -11,6 +11,7 @@ angular.module('myApp', [
         'myApp.services',
         'myApp.directives',
         'myApp.resourceServices',
+        'myApp.adminSurveyServices',
         'chartsExample.directives'
     ]).
     config(function ($routeProvider, $locationProvider) {

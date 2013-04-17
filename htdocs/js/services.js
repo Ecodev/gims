@@ -8,15 +8,14 @@
 angular.module('myApp.services', [])
     .value('version', '0.3');
 
-
 /**
- * Questionnaire service
+ * Resource service
  */
 angular.module('myApp.resourceServices', ['ngResource'])
-    .factory('Questionnaire',function ($resource) {
+    .factory('Questionnaire', function ($resource) {
         return $resource('/api/questionnaire/:id');
     })
-    .factory('Survey',function ($resource) {
+    .factory('Survey', function ($resource) {
         return $resource('/api/survey/:id', {}, {
             create: {
                 method: 'POST'
@@ -26,7 +25,7 @@ angular.module('myApp.resourceServices', ['ngResource'])
             }
         });
     })
-    .factory('Question',function ($resource) {
+    .factory('Question', function ($resource) {
         return $resource('/api/questionnaire/:idQuestionnaire/question/:id', {}, {
             update: {
                 method: 'PUT'
@@ -42,13 +41,55 @@ angular.module('myApp.resourceServices', ['ngResource'])
                 method: 'PUT'
             }
         });
-    })
-    .factory('ConfirmDelete', function ($rootScope) {
-        // @todo rename me
-        var foo = {
-            test: function(row) {
-                console.log(row);
+    });
+
+/**
+ * Admin Survey service
+ */
+angular.module('myApp.adminSurveyServices', [])
+    .factory('ConfirmDelete', function ($dialog, $location) {
+        return {
+            show: function (survey, surveys) {
+
+                var buttons, msg, title, index;
+
+                // index view would contains $scope.surveys but not in detail view
+                if (surveys !== undefined) {
+
+                    // IndexOf is only supported as of IE9... so find a work around for older browser.
+                    // index = surveys.indexOf(survey);
+
+                    // Fall back method for finding the index of survey
+                    angular.forEach(surveys, function (_survey, _index) {
+                        if (survey.id == _survey.id) {
+                            index = _index;
+                            return;
+                        }
+                    });
+                }
+
+
+                title = 'Confirmation delete';
+                msg = 'You are going to delete survey "' + survey.code + '". Are you sure?';
+                buttons = [
+                    {result: 'cancel', label: 'Cancel'},
+                    {result: 'ok', label: 'OK', cssClass: 'btn-primary'}
+                ];
+                $dialog.messageBox(title, msg, buttons)
+                    .open()
+                    .then(function (result) {
+                        if (result === 'ok') {
+
+                            survey.$delete({id: survey.id}, function () {
+
+                                // True means we are in index view where $scope.survey was available
+                                if (index >= 0) {
+                                    surveys.splice(index, 1); // remove from local storage
+                                }
+                                $location.path('/admin/survey');
+                            });
+                        }
+                    });
             }
         }
-        return foo;
     });
