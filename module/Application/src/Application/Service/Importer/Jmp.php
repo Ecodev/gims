@@ -213,6 +213,7 @@ class Jmp extends AbstractImporter
     private $cacheCategories = array();
     private $cacheQuestions = array();
     private $cacheFilterComponents = array();
+    private $answerCount;
 
     /**
      * @var \Application\Model\Part
@@ -238,6 +239,7 @@ class Jmp extends AbstractImporter
 
         $this->partUrban = $this->getPart('Urban');
         $this->partRural = $this->getPart('Rural');
+        $this->answerCount = 0;
 
         $questionnaireCount = 0;
         foreach ($sheeNamesToImport as $i => $sheetName) {
@@ -256,7 +258,7 @@ class Jmp extends AbstractImporter
             }
         }
 
-        return "Total questionnaire: " . $questionnaireCount . PHP_EOL;
+        return "Total imported: $questionnaireCount questionnaires, $this->answerCount answers" . PHP_EOL;
     }
 
     protected function getCategory($definition)
@@ -390,7 +392,7 @@ class Jmp extends AbstractImporter
      * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
      * @param \Application\Model\Questionnaire $questionnaire
-     * @return void
+     * @return integer imported answer count
      */
     protected function importAnswers(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Survey $survey, \Application\Model\Questionnaire $questionnaire)
     {
@@ -419,8 +421,15 @@ class Jmp extends AbstractImporter
             foreach ($parts as $c => $part) {
                 $answerCell = $sheet->getCellByColumnAndRow($c, $row);
 
-                // Only import value which are numeric, and NOT formula
-                if ($answerCell->getDataType() == \PHPExcel_Cell_DataType::TYPE_NUMERIC) {
+                // Only import value which are numeric, and NOT formula,
+                // unless an alternate category is defined, in this case we will import the formula result
+                if ($alternateCategoryName || $answerCell->getDataType() == \PHPExcel_Cell_DataType::TYPE_NUMERIC) {
+
+                    // If there is actually no value, skip it (need to be done after previous if to avoid formula exception within PHPExcel)
+                    $value = $this->getCalculatedValueSafely($answerCell);
+                    if (is_null($value)) {
+                        continue;
+                    }
 
                     $question = $this->getQuestion($survey, $category, $answerCount);
 
@@ -428,7 +437,7 @@ class Jmp extends AbstractImporter
                     $this->getEntityManager()->persist($answer);
                     $answer->setQuestionnaire($questionnaire);
                     $answer->setQuestion($question);
-                    $answer->setValuePercent($answerCell->getValue() / 100);
+                    $answer->setValuePercent($value / 100);
                     $answer->setPart($part);
 
                     $answerCount++;
@@ -436,7 +445,8 @@ class Jmp extends AbstractImporter
             }
         }
 
-        echo "Answers: " . $answerCount . PHP_EOL;
+        $this->answerCount += $answerCount;
+        echo "Answers: " . $answerCount . PHP_EOL . PHP_EOL;
     }
 
     protected function getQuestionnaire(\Application\Model\Survey $survey, \PHPExcel_Cell $countryCell)
@@ -532,7 +542,7 @@ class Jmp extends AbstractImporter
         } catch (\PHPExcel_Exception $exception) {
 
             // Fallback on cached result
-            if (strstr($exception->getMessage(), 'Cyclic Reference in Formula') !== false) {
+            if (strstr($exception->getMessage(), 'Formula Error') !== false) {
                 return $cell->getOldCalculatedValue();
             } else {
                 var_dump($cell->getValue());
