@@ -73,12 +73,12 @@ angular.module('myApp.adminSurveyServices', [])
                 msg = 'You are going to delete survey "' + survey.code + '". Are you sure?';
                 buttons = [
                     {result: 'cancel', label: 'Cancel'},
-                    {result: 'ok', label: 'OK', cssClass: 'btn-primary'}
+                    {result: 'delete', label: 'Delete', cssClass: 'btn-danger'}
                 ];
                 $dialog.messageBox(title, msg, buttons)
                     .open()
                     .then(function (result) {
-                        if (result === 'ok') {
+                        if (result === 'delete') {
 
                             survey.$delete({id: survey.id}, function () {
 
