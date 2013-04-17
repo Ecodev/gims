@@ -91,6 +91,17 @@ class Jmp extends AbstractImporter
             'replacements' => array(
             // No replacements to make for water
             ),
+            'estimations' => array(
+                'min' => 83,
+                'max' => 88,
+            ),
+            'filterComponents' => array(
+                "Total improved" => array(5, 12, 55, 58, 68),
+                "Piped onto premises" => array(6),
+                "Surface water" => array(60),
+                "Other Improved" => array(9, 10, 12, 55, 58, 68),
+                "Other Unimproved" => array(56, 59, 71),
+            ),
         ),
         'Tables_S' => array(
             'definitions' => array(
@@ -177,18 +188,31 @@ class Jmp extends AbstractImporter
             ),
             'replacements' => array(
                 // For sanitation, we need to modify the category tree to introduce a new branch
-                -1 => array("Other flush and pour flush", 5, 0, null),
+                999 => array("Other flush and pour flush", 5, 0, null),
                 6 => array("to piped sewer system", -1, 0, null),
                 7 => array("to septic tank", -1, 0, null),
                 8 => array("to pit", -1, 0, null),
                 9 => array("to unknown place/ not sure/DK", -1, 0, null),
                 10 => array("to elsewhere", -1, 0, null),
             ),
+            'estimations' => array(
+                'min' => 88,
+                'max' => 93,
+            ),
+            'filterComponents' => array(
+                "Improved + shared" => array(-6, -7, -8, -9, 49, 73, 76),
+                "Sewerage connections" => array(6),
+                "Improved" => array(), // based on ratio
+                "Shared" => array(), //based on ratio
+                "Other unimproved" => array(-10, 30, 52, 53, 54, 55, 56, 80),
+                "Open defecation" => array(79),
+            ),
         ),
     );
     private $cacheAlternateCategories = array();
     private $cacheCategories = array();
     private $cacheQuestions = array();
+    private $cacheFilterComponents = array();
 
     /**
      * @var \Application\Model\Part
@@ -219,6 +243,7 @@ class Jmp extends AbstractImporter
         foreach ($sheeNamesToImport as $i => $sheetName) {
 
             $this->importCategories($this->officialCategoriesDefinition[$sheetName]);
+            $this->importFilterComponents($sheetName == 'Tables_W' ? 'Water' : 'Sanitation', $this->officialCategoriesDefinition[$sheetName]['filterComponents']);
 
             $workbook->setActiveSheetIndex($i);
             $sheet = $workbook->getSheet($i);
@@ -228,7 +253,6 @@ class Jmp extends AbstractImporter
             while ($this->importQuestionnaire($sheet, $col)) {
                 $col += 6;
                 $questionnaireCount++;
-                echo PHP_EOL;
             }
         }
 
@@ -292,6 +316,9 @@ class Jmp extends AbstractImporter
                 $originalCategory->addSummand($replacementCategory);
             }
             $this->cacheCategories[$row] = $replacementCategory;
+
+            // Keep original category available on negative indexes
+            $this->cacheCategories[-$row] = $originalCategory;
         }
 
         $this->getEntityManager()->flush();
@@ -350,6 +377,7 @@ class Jmp extends AbstractImporter
 
         $this->importAnswers($sheet, $col, $survey, $questionnaire);
 
+//        $this->importRules($sheet, $col);
 
         $this->getEntityManager()->flush();
 
@@ -453,18 +481,7 @@ class Jmp extends AbstractImporter
         );
 
         // Some files have a buggy self-referencing formula, so we need to fallback on cached result of formula
-        try {
-            $countryName = $countryCell->getCalculatedValue();
-        } catch (\PHPExcel_Exception $exception) {
-
-            // Fallback on cached result
-            if (strstr($exception->getMessage(), 'Cyclic Reference in Formula') !== false) {
-                $countryName = $countryCell->getOldCalculatedValue();
-            } else {
-                // Forward exception
-                throw $exception;
-            }
-        }
+        $countryName = $this->getCalculatedValueSafely($countryCell);
 
         // Apply mapping if any
         $countryName = trim(@$countryNameMapping[$countryName] ? : $countryName);
@@ -500,6 +517,29 @@ class Jmp extends AbstractImporter
         }
 
         return $questionnaire;
+    }
+
+    /**
+     * Some files have a buggy self-referencing formula, so we need to fallback on cached result of formula
+     * @param \PHPExcel_Cell $cell
+     * @return type
+     * @throws \Application\Service\Importer\PHPExcel_Exception
+     */
+    private function getCalculatedValueSafely(\PHPExcel_Cell $cell)
+    {
+        try {
+            return $cell->getCalculatedValue();
+        } catch (\PHPExcel_Exception $exception) {
+
+            // Fallback on cached result
+            if (strstr($exception->getMessage(), 'Cyclic Reference in Formula') !== false) {
+                return $cell->getOldCalculatedValue();
+            } else {
+                var_dump($cell->getValue());
+                // Forward exception
+                throw $exception;
+            }
+        }
     }
 
     /**
@@ -574,6 +614,56 @@ class Jmp extends AbstractImporter
         $this->cacheQuestions[$key] = $question;
 
         return $question;
+    }
+
+    private $cacheRules = array();
+
+    public function importRules(\PHPExcel_Worksheet $sheet, $col)
+    {
+        $range = $this->officialCategoriesDefinition[$sheet->getTitle()]['estimations'];
+
+        for ($row = $range['min']; $row <= $range['max']; $row++) {
+            $ruleName = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
+            $ruleFormula = $sheet->getCellByColumnAndRow($col + 3, $row)->getValue();
+            if ($ruleName) {
+                if (!array_key_exists($ruleName, $this->cacheRules)) {
+                    $this->cacheRules[$ruleName] = $ruleFormula;
+//                    var_dump(array($ruleName, $ruleFormula));
+                }
+            }
+        }
+    }
+
+    public function importFilterComponents($name, array $filterComponents)
+    {
+        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
+        $filter = $filterRepository->getOrCreate($name);
+        $this->getEntityManager()->flush();
+
+        // Get or create all filterComponent
+        foreach ($filterComponents as $name => $categories) {
+
+            $filterComponent = null;
+            foreach ($filter->getCategoryFilterComponents() as $f) {
+                if ($f->getName() == $name) {
+                    $filterComponent = $f;
+                    break;
+                }
+            }
+
+            if (!$filterComponent) {
+                $filterComponent = new \Application\Model\CategoryFilterComponent($name);
+                $filter->addCategoryFilterComponent($filterComponent);
+                $this->getEntityManager()->persist($filterComponent);
+            }
+
+            // Affect categories
+            foreach ($categories as $category) {
+                $filterComponent->addCategory($this->cacheCategories[$category]);
+            }
+
+            $this->cacheFilterComponents[$name] = $filterComponent;
+        }
     }
 
 }

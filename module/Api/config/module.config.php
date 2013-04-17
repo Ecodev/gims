@@ -8,6 +8,7 @@ return array(
             'Api\Controller\Answer' => 'Api\Controller\AnswerController',
             'Api\Controller\Category' => 'Api\Controller\CategoryController',
             'Api\Controller\Survey' => 'Api\Controller\SurveyController',
+            'Api\Controller\Filter' => 'Api\Controller\FilterController',
         ),
     ),
     'router' => array(
