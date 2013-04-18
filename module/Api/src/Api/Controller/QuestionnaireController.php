@@ -67,4 +67,31 @@ class QuestionnaireController extends AbstractRestfulController
         return $result;
     }
 
+    public function aAction()
+    {
+        $questionnaires = $this->getRepository()->findBy(array('id' => 167));
+        $questionnaires = $this->getRepository()->findAll();
+        $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneBy(array('name' => $this->params()->fromQuery('filter', 'Water')));
+        $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneBy(array('name' => $this->params()->fromQuery('part')));
+
+        $calculator = new \Application\Service\Calculator\Jmp();
+        $calculator->setServiceLocator($this->getServiceLocator());
+
+        switch ($this->params()->fromQuery('c')) {
+            case 'flatten':
+                $result = $calculator->computeFlatten(1980, 2011, $questionnaires, $filter, $part);
+                break;
+            case 'regression':
+                $result = array();
+                foreach (range(1980, 2011) as $year) {
+                    $result[$year] = $calculator->computeRegression($year, $questionnaires, $filter, $part);
+                }
+                break;
+            default:
+                $result = $calculator->computeFilter($questionnaires, $filter->getCategoryFilterComponents()->get(1), $part);
+        }
+
+        return new JsonModel($result);
+    }
+
 }

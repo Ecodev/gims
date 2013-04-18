@@ -64,7 +64,7 @@ class Population extends AbstractModel
      */
     public function getYear()
     {
-        return $this->year;
+        return (int)$this->year;
     }
 
     /**

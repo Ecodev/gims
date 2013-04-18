@@ -114,4 +114,17 @@ class CategoryFilterComponent extends AbstractModel
         return $this;
     }
 
+    public function compute(Questionnaire $questionnaire, Part $part = null)
+    {
+        $result = null;
+        foreach ($this->getCategories() as $category) {
+            $computed = $questionnaire->compute($category, $part);
+            if (!is_null($computed)) {
+                $result += $computed;
+            }
+        }
+
+        return $result;
+    }
+
 }
