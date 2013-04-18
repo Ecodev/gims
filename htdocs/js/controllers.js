@@ -251,7 +251,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
 angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $http) {
 
     // Get chart data via Ajax
-    $http.get("/sampleChart.json").success(function(data) {
+    $http.get("/api/chart").success(function(data) {
         $scope.basicAreaChart = data;
     });
 

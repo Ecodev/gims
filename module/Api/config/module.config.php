@@ -9,6 +9,7 @@ return array(
             'Api\Controller\Category' => 'Api\Controller\CategoryController',
             'Api\Controller\Survey' => 'Api\Controller\SurveyController',
             'Api\Controller\Filter' => 'Api\Controller\FilterController',
+            'Api\Controller\Chart' => 'Api\Controller\ChartController',
         ),
     ),
     'router' => array(
@@ -36,6 +37,7 @@ return array(
                             ),
                             'defaults' => array(
                                 '__NAMESPACE__' => 'Api\Controller',
+                                'action' => 'index',
                             ),
                         ),
                     ),

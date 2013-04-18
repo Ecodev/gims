@@ -24,12 +24,12 @@ class Jmp extends AbstractCalculator
 
             $d = array();
             foreach ($years as $year) {
-                $d[$year] = $this->computeFlattenOne($year, $allRegressions);
+                $d[] = $this->computeFlattenOne($year, $allRegressions);
             }
 
-            $result[$filterComponent->getName()] = array(
-                'allRegressions' => $allRegressions,
-                'flatten' => $d,
+            $result[] = array(
+                'name' => $filterComponent->getName(),
+                'data' => $d,
             );
         }
 
