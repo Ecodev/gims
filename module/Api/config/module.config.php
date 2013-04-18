@@ -37,7 +37,6 @@ return array(
                             ),
                             'defaults' => array(
                                 '__NAMESPACE__' => 'Api\Controller',
-                                'action' => 'index',
                             ),
                         ),
                     ),
@@ -66,6 +65,21 @@ return array(
                             'defaults' => array(
                                 '__NAMESPACE__' => 'Api\Controller',
                                 'controller' => 'questionnaire',
+                            ),
+                        ),
+                    ),
+
+                    // This route allow to call a non REST controller with action
+                    'non_rest_controller' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/:controller[/:action]',
+                            'constraints' => array(
+                                'controller' => '(chart)', // Define here allowed controllers: (controller1|controller2|controller3)
+                            ),
+                            'defaults' => array(
+                                '__NAMESPACE__' => 'Api\Controller',
+                                'action' => 'index',
                             ),
                         ),
                     ),

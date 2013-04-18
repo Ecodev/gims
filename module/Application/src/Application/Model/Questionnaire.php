@@ -206,14 +206,36 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         return $this;
     }
 
+    private $cacheCompute = array();
+
     /**
      * Returns the computed value of the given category, based on the questionnaire's available answers
      * @param \Application\Model\Category $category
      * @param \Application\Model\Part $part
-     * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedCategories this should be null for first call, recursive calls will used to avoid duplicates
      * @return float|null null if no answer at all, otherwise the value
      */
-    public function compute(Category $category, Part $part = null, \Doctrine\Common\Collections\ArrayCollection $alreadySummedCategories = null)
+    public function compute(Category $category, Part $part = null, $useCache = true)
+    {
+        $key = spl_object_hash($category) . ($part ? spl_object_hash($part) : null);
+        if ($useCache && array_key_exists($key, $this->cacheCompute)) {
+            return $this->cacheCompute[$key];
+        }
+
+        $result = $this->computeInternal($category, new \Doctrine\Common\Collections\ArrayCollection(), $part);
+
+        $this->cacheCompute[$key] = $result;
+
+        return $result;
+    }
+
+    /**
+     * Returns the computed value of the given category, based on the questionnaire's available answers
+     * @param \Application\Model\Category $category
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedCategories will be used to avoid duplicates
+     * @param \Application\Model\Part $part
+     * @return float|null null if no answer at all, otherwise the value
+     */
+    private function computeInternal(Category $category, \Doctrine\Common\Collections\ArrayCollection $alreadySummedCategories, Part $part = null)
     {
         if (!$alreadySummedCategories) {
             $alreadySummedCategories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -241,7 +263,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         $summer = function(\IteratorAggregate $categories) use ($part, $alreadySummedCategories) {
                     $sum = null;
                     foreach ($categories as $c) {
-                        $summandValue = $this->compute($c, $part, $alreadySummedCategories);
+                        $summandValue = $this->computeInternal($c, $alreadySummedCategories, $part);
                         if (!is_null($summandValue)) {
                             $sum += $summandValue;
                         }

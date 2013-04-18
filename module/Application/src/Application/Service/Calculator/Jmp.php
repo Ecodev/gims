@@ -144,6 +144,8 @@ class Jmp extends AbstractCalculator
         return $result;
     }
 
+    private $cacheComputeFilter = array();
+
     /**
      * Implement computing on filter level, as seen on tab "GraphData_W"
      * @param type $questionnaires
@@ -153,6 +155,17 @@ class Jmp extends AbstractCalculator
      */
     public function computeFilter($questionnaires, CategoryFilterComponent $filterComponent, Part $part = null)
     {
+        $key = null;
+        foreach ($questionnaires as $questionnaire) {
+            $key .= spl_object_hash($questionnaire);
+        }
+        $key .= spl_object_hash($filterComponent) . ($part ? spl_object_hash($part) : null);
+
+        if (array_key_exists($key, $this->cacheComputeFilter)) {
+            return $this->cacheComputeFilter[$key];
+        }
+
+
         $totalPopulation = 0;
         $data = array();
         $years = array();
@@ -191,6 +204,9 @@ class Jmp extends AbstractCalculator
         $data['average%'] = \PHPExcel_Calculation_MathTrig::SUM($data['values%']) / $data['count'];
         $data['average%%'] = ($data['average']) / $totalPopulation;
         $data['population'] = $totalPopulation;
+
+
+        $this->cacheComputeFilter[$key] = $data;
 
         return $data;
     }
