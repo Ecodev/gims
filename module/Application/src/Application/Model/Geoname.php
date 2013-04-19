@@ -9,18 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Application\Repository\GeonameRepository")
  */
-class Geoname
+class Geoname extends AbstractModel
 {
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="geoname_id_seq", allocationSize=1, initialValue=1)
-     */
-    private $id;
 
     /**
      * @var string
@@ -147,23 +137,13 @@ class Geoname
      * @ORM\Column(type="date", nullable=true)
      */
     private $moddate;
-    
+
     /**
      * @var \DateTime
      *
      * @ORM\Column(type="geometry", nullable=true)
      */
     private $geometry;
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set name
@@ -181,7 +161,7 @@ class Geoname
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -204,7 +184,7 @@ class Geoname
     /**
      * Get asciiname
      *
-     * @return string 
+     * @return string
      */
     public function getAsciiname()
     {
@@ -227,7 +207,7 @@ class Geoname
     /**
      * Get alternatenames
      *
-     * @return string 
+     * @return string
      */
     public function getAlternatenames()
     {
@@ -250,7 +230,7 @@ class Geoname
     /**
      * Get latitude
      *
-     * @return float 
+     * @return float
      */
     public function getLatitude()
     {
@@ -273,7 +253,7 @@ class Geoname
     /**
      * Get longitude
      *
-     * @return float 
+     * @return float
      */
     public function getLongitude()
     {
@@ -296,7 +276,7 @@ class Geoname
     /**
      * Get fclass
      *
-     * @return string 
+     * @return string
      */
     public function getFclass()
     {
@@ -319,7 +299,7 @@ class Geoname
     /**
      * Get fcode
      *
-     * @return string 
+     * @return string
      */
     public function getFcode()
     {
@@ -342,7 +322,7 @@ class Geoname
     /**
      * Get country
      *
-     * @return string 
+     * @return string
      */
     public function getCountry()
     {
@@ -365,7 +345,7 @@ class Geoname
     /**
      * Get cc2
      *
-     * @return string 
+     * @return string
      */
     public function getCc2()
     {
@@ -388,7 +368,7 @@ class Geoname
     /**
      * Get admin1
      *
-     * @return string 
+     * @return string
      */
     public function getAdmin1()
     {
@@ -411,7 +391,7 @@ class Geoname
     /**
      * Get admin2
      *
-     * @return string 
+     * @return string
      */
     public function getAdmin2()
     {
@@ -434,7 +414,7 @@ class Geoname
     /**
      * Get admin3
      *
-     * @return string 
+     * @return string
      */
     public function getAdmin3()
     {
@@ -457,7 +437,7 @@ class Geoname
     /**
      * Get admin4
      *
-     * @return string 
+     * @return string
      */
     public function getAdmin4()
     {
@@ -480,7 +460,7 @@ class Geoname
     /**
      * Get population
      *
-     * @return float 
+     * @return float
      */
     public function getPopulation()
     {
@@ -503,7 +483,7 @@ class Geoname
     /**
      * Get elevation
      *
-     * @return integer 
+     * @return integer
      */
     public function getElevation()
     {
@@ -526,7 +506,7 @@ class Geoname
     /**
      * Get gtopo30
      *
-     * @return integer 
+     * @return integer
      */
     public function getGtopo30()
     {
@@ -549,7 +529,7 @@ class Geoname
     /**
      * Get timezone
      *
-     * @return string 
+     * @return string
      */
     public function getTimezone()
     {
@@ -572,7 +552,7 @@ class Geoname
     /**
      * Get moddate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getModdate()
     {

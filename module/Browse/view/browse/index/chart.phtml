@@ -2,8 +2,22 @@
 <!-- Main hero unit for a primary marketing message or call to action -->
 <div class="container">
 
-	<chart value='{{basicAreaChart}}' type="area" height="400">
-	</chart>
+    <form>
+        <div class="row">
+            <span class="span4">
+                <p><input name="country" ui-select2="select2.country.list" ng-model="select2.country.selected"  data-placeholder="Select a country"  style="width:100%;"/></p>
+            </span>
+        </div>
+        <div class="row">
+            <span class="span2">
+                <p><input name="part" ui-select2="select2.part.list" ng-model="select2.part.selected"  data-placeholder="Select a part"  style="width:100%;"/></p>
+            </span>
+            <span class="span2">
+                <p><input name="filter" ui-select2="select2.filter.list" ng-model="select2.filter.selected"  data-placeholder="Select a filter"  style="width:100%;"/></p>
+            </span>
+        </div>
+    </form>
+    <chart value='{{chart}}' type="area" height="400">
+    </chart>
 
-    <button ng-click="someTestFunction()">dynamically change chart data</button>
 </div>

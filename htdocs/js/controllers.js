@@ -75,7 +75,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
             // Trigger resize event informing elements to resize according to the height of the window.
             $timeout(function () {
                 angular.element($window).resize();
-            }, 0)
+            }, 0);
         });
 
         // Here we use synchronous style affectation to be able to set initial
@@ -106,7 +106,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
             // Get the input field to wrap it with error div
             $('.col' + column.index, row.elm).find('input').addClass('error');
         }
-    }
+    };
 
     // Update Answer method
     $scope.updateAnswer = function (column, row) {
@@ -159,7 +159,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
         } else {
             $('.col' + column.index, row.elm).css('backgroundColor', '#FF6461');
         }
-    }
+    };
 
     // Template for cell editing with input "number".
     cellEditableTemplate = '<input style="width: 90%" step="any" type="number" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-blur="updateAnswer(col, row)" ng-keyup="validateAnswer(col, row)">';
@@ -248,17 +248,36 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
 });
 
 
-angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $http) {
+angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $http, Country, Part, Filter, Select2Configurator, $timeout) {
 
-    // Get chart data via Ajax
-    $http.get("/api/chart").success(function(data) {
-        $scope.basicAreaChart = data;
+    // Configure select2 via our helper service
+    Select2Configurator.configure($scope, Country, 'country');
+    Select2Configurator.configure($scope, Part, 'part');
+    Select2Configurator.configure($scope, Filter, 'filter');
+
+    // Whenever one of the parameter is changed
+    var uniqueAjaxRequest;
+    $scope.$watch('select2.country.selected.id + select2.part.selected.id + select2.filter.selected.id', function (a) {
+
+        // If they are all available ...
+        if ($scope.select2.country.selected && $scope.select2.part.selected && $scope.select2.filter.selected) {
+            $timeout.cancel(uniqueAjaxRequest);
+            uniqueAjaxRequest = $timeout(function () {
+
+                // ... then, get chart data via Ajax, but only once per 300 milliseconds
+                // (this avoid sending several request on page loading)
+                $http.get('/api/chart',
+                        {
+                            params: {
+                                country: $scope.select2.country.selected.id,
+                                part: $scope.select2.part.selected.id,
+                                filter: $scope.select2.filter.selected.id
+                            }
+                        }).success(function (data) {
+                    $scope.chart = data;
+                });
+            }, 300);
+        }
     });
-
-
-    // This an example how to modify existing chart via JS only (when button is clicked)
-    $scope.someTestFunction = function() {
-		$scope.basicAreaChart.plotOptions.scatter.dataLabels.format = '{point.name}';
-    };
 
 });

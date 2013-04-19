@@ -8,19 +8,17 @@ use Doctrine\ORM\Mapping as ORM;
  * Country
  *
  * @ORM\Entity(repositoryClass="Application\Repository\CountryRepository")
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="country_code_unique",columns={"code"})})
  */
-class Country
+class Country extends AbstractModel
 {
 
     /**
      * @var string
      *
      * @ORM\Column(type="string", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="country_id_seq", allocationSize=1, initialValue=1)
      */
-    private $id;
+    private $code;
 
     /**
      * @var string
@@ -142,13 +140,13 @@ class Country
     private $geoname;
 
     /**
-     * Get id
+     * Get code
      *
      * @return string
      */
-    public function getId()
+    public function getCode()
     {
-        return $this->id;
+        return $this->code;
     }
 
     /**

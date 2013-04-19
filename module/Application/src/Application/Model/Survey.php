@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Survey
  *
  * @ORM\Entity(repositoryClass="Application\Repository\SurveyRepository")
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="survey_code_unique",columns={"code"})})
  */
 class Survey extends AbstractModel implements \Application\Service\RoleContextInterface
 {

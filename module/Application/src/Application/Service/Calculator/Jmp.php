@@ -12,8 +12,8 @@ class Jmp extends AbstractCalculator
 
     public function computeFlatten($yearStart, $yearEnd, $questionnaires, Filter $filter, Part $part = null)
     {
-        $years = range($yearStart, $yearEnd);
         $result = array();
+        $years = range($yearStart, $yearEnd);
         foreach ($filter->getCategoryFilterComponents() as $filterComponent) {
 
 
@@ -165,9 +165,13 @@ class Jmp extends AbstractCalculator
             return $this->cacheComputeFilter[$key];
         }
 
+        $result = array(
+            'values' => array(),
+            'values%' => array(),
+            'count' => 0,
+        );
 
         $totalPopulation = 0;
-        $data = array();
         $years = array();
         $yearsWithData = array();
         foreach ($questionnaires as $questionnaire) {
@@ -177,8 +181,8 @@ class Jmp extends AbstractCalculator
             $computed = $filterComponent->compute($questionnaire, $part);
             if (is_null($computed)) {
 
-                $data['values'][$questionnaire->getSurvey()->getCode()] = null;
-                $data['values%'][$questionnaire->getSurvey()->getCode()] = null;
+                $result['values'][$questionnaire->getSurvey()->getCode()] = null;
+                $result['values%'][$questionnaire->getSurvey()->getCode()] = null;
                 continue;
             }
 
@@ -186,29 +190,29 @@ class Jmp extends AbstractCalculator
 
             $population = $this->getEntityManager()->getRepository('Application\Model\Population')->getOneByQuestionnaire($questionnaire, $part);
             $totalPopulation += $population->getPopulation();
-            @$data['count']++;
+            $result['count']++;
 
-            $data['values'][$questionnaire->getSurvey()->getCode()] = $computed;
-            $data['values%'][$questionnaire->getSurvey()->getCode()] = $computed / $population->getPopulation();
+            $result['values'][$questionnaire->getSurvey()->getCode()] = $computed;
+            $result['values%'][$questionnaire->getSurvey()->getCode()] = $computed / $population->getPopulation();
         }
 
-        $data['years'] = $years;
-        $data['minYear'] = min($yearsWithData);
-        $data['maxYear'] = max($yearsWithData);
-        $data['period'] = $data['maxYear'] - $data['minYear'] ? : 1;
+        $result['years'] = $years;
+        $result['minYear'] = $yearsWithData ? min($yearsWithData) : null;
+        $result['maxYear'] = $yearsWithData ? max($yearsWithData) : null;
+        $result['period'] = $result['maxYear'] - $result['minYear'] ? : 1;
 
-        $data['slope'] = $data['count'] < 2 ? null : \PHPExcel_Calculation_Statistical::SLOPE($data['values'], $years);
-        $data['slope%'] = $data['count'] < 2 ? null : \PHPExcel_Calculation_Statistical::SLOPE($data['values%'], $years);
+        $result['slope'] = $result['count'] < 2 ? null : \PHPExcel_Calculation_Statistical::SLOPE($result['values'], $years);
+        $result['slope%'] = $result['count'] < 2 ? null : \PHPExcel_Calculation_Statistical::SLOPE($result['values%'], $years);
 
-        $data['average'] = \PHPExcel_Calculation_MathTrig::SUM($data['values']) / $data['count'];
-        $data['average%'] = \PHPExcel_Calculation_MathTrig::SUM($data['values%']) / $data['count'];
-        $data['average%%'] = ($data['average']) / $totalPopulation;
-        $data['population'] = $totalPopulation;
+        $result['average'] = $result['count'] ? \PHPExcel_Calculation_MathTrig::SUM($result['values']) / $result['count'] : null;
+        $result['average%'] = $result['count'] ? \PHPExcel_Calculation_MathTrig::SUM($result['values%']) / $result['count'] : null;
+        $result['average%%'] = $totalPopulation ? ($result['average']) / $totalPopulation : null;
+        $result['population'] = $totalPopulation;
 
 
-        $this->cacheComputeFilter[$key] = $data;
+        $this->cacheComputeFilter[$key] = $result;
 
-        return $data;
+        return $result;
     }
 
 }

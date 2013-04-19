@@ -9,9 +9,11 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     public function indexAction()
     {
-        $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findAll();
-        $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneBy(array('name' => $this->params()->fromQuery('filter', 'Water')));
-        $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneBy(array('name' => $this->params()->fromQuery('part', 'Urban')));
+        $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneById($this->params()->fromQuery('country'));
+        $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($this->params()->fromQuery('filter'));
+        $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
+
+        $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findBy(array('geoname' => $country ? $country->getGeoname() : -1));
 
         $calculator = new \Application\Service\Calculator\Jmp();
         $calculator->setServiceLocator($this->getServiceLocator());
@@ -64,10 +66,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             'colors' => array_slice(array('#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'), 0, $filter->getCategoryFilterComponents()->count()),
             'symbols' => array_slice(array('circle', 'diamond', 'square', 'triangle', 'triangle-down'), 0, $filter->getCategoryFilterComponents()->count()),
             'title' => array(
-                'text' => 'Bangladesh - ' . ($part ? $part->getName() : 'Total'),
+                'text' =>  ($country ? $country->getName() : 'Unknown country') . ' - ' . ($part ? $part->getName() : 'Total'),
             ),
             'subtitle' => array(
-                'text' => 'JMP - estimated proportion of the population using improved drinking water sources',
+                'text' => 'JMP - estimated proportion of the population for ' . $filter->getName(),
             ),
             'xAxis' => array(
                 'title' => array(

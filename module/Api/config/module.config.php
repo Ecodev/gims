@@ -9,6 +9,8 @@ return array(
             'Api\Controller\Category' => 'Api\Controller\CategoryController',
             'Api\Controller\Survey' => 'Api\Controller\SurveyController',
             'Api\Controller\Filter' => 'Api\Controller\FilterController',
+            'Api\Controller\Country' => 'Api\Controller\CountryController',
+            'Api\Controller\Part' => 'Api\Controller\PartController',
             'Api\Controller\Chart' => 'Api\Controller\ChartController',
         ),
     ),
