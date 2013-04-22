@@ -113,29 +113,4 @@ class CategoryFilterComponent extends AbstractModel
 
         return $this;
     }
-
-    private $cacheCompute = array();
-
-    public function compute(Questionnaire $questionnaire, Part $part = null)
-    {
-        $key = spl_object_hash($questionnaire) . ($part ? spl_object_hash($part) : null);
-
-        if (array_key_exists($key, $this->cacheCompute)) {
-            return $this->cacheCompute[$key];
-        }
-
-        $result = null;
-        foreach ($this->getCategories() as $category) {
-            $computed = $questionnaire->compute($category, $part);
-            if (!is_null($computed)) {
-                $result += $computed;
-            }
-        }
-
-
-        $this->cacheCompute[$key] = $result;
-        
-        return $result;
-    }
-
 }

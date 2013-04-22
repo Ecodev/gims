@@ -7,10 +7,12 @@ use Application\Model\Part;
 use Application\Model\Filter;
 use Application\Model\CategoryFilterComponent;
 
-class Jmp extends AbstractCalculator
+class Jmp extends Calculator
 {
 
-    public function computeFlatten($yearStart, $yearEnd, $questionnaires, Filter $filter, Part $part = null)
+    private $cacheComputeCategoryFilterComponentForAllQuestionnaires = array();
+
+    public function computeFlatten($yearStart, $yearEnd, Filter $filter, $questionnaires, Part $part = null)
     {
         $result = array();
         $years = range($yearStart, $yearEnd);
@@ -19,12 +21,12 @@ class Jmp extends AbstractCalculator
 
             $allRegressions = array();
             foreach ($years as $year) {
-                $allRegressions[$year] = $this->computeRegressionOne($year, $questionnaires, $filterComponent, $part);
+                $allRegressions[$year] = $this->computeRegression($year, $filterComponent, $questionnaires, $part);
             }
 
             $d = array();
             foreach ($years as $year) {
-                $d[] = $this->computeFlattenOne($year, $allRegressions);
+                $d[] = $this->computeFlattenCategoryFilterComponent($year, $allRegressions);
             }
 
             $result[] = array(
@@ -36,7 +38,7 @@ class Jmp extends AbstractCalculator
         return $result;
     }
 
-    public function computeFlattenOne($year, $allRegressions, array $usedYears = array())
+    protected function computeFlattenCategoryFilterComponent($year, $allRegressions, array $usedYears = array())
     {
         if (!array_key_exists($year, $allRegressions))
             return null;
@@ -63,7 +65,7 @@ class Jmp extends AbstractCalculator
 
         if (is_null($result)) {
             $yearEarlier = $year - 1;
-            $flattenYearEarlier = !in_array($yearEarlier, $usedYears) ? $this->computeFlattenOne($yearEarlier, $allRegressions, $usedYears) : null;
+            $flattenYearEarlier = !in_array($yearEarlier, $usedYears) ? $this->computeFlattenCategoryFilterComponent($yearEarlier, $allRegressions, $usedYears) : null;
 
             if ($flattenYearEarlier === $minRegression && $flattenYearEarlier < 0) {
                 $result = 0;
@@ -86,7 +88,7 @@ class Jmp extends AbstractCalculator
 
         if (is_null($result)) {
             $yearLater = $year + 1;
-            $flattenYearLater = !in_array($yearEarlier, $usedYears) ? $this->computeFlattenOne($yearLater, $allRegressions, $usedYears) : null;
+            $flattenYearLater = !in_array($yearEarlier, $usedYears) ? $this->computeFlattenCategoryFilterComponent($yearLater, $allRegressions, $usedYears) : null;
 
             if ($flattenYearLater == $minRegression && $flattenYearLater < 0) {
                 $result = 0;
@@ -110,25 +112,14 @@ class Jmp extends AbstractCalculator
         return $result;
     }
 
-    public function computeRegression($year, $questionnaires, Filter $filter, Part $part = null)
+    public function computeRegression($year, CategoryFilterComponent $filterComponent, $questionnaires, Part $part = null)
     {
-        $result = array();
-        foreach ($filter->getCategoryFilterComponents() as $filterComponent) {
-
-            $result[$filterComponent->getName()] = $this->computeRegressionOne($year, $questionnaires, $filterComponent, $part);
-        }
-
-        return $result;
-    }
-
-    public function computeRegressionOne($year, $questionnaires, CategoryFilterComponent $filterComponent, Part $part = null)
-    {
-        $d = $this->computeFilter($questionnaires, $filterComponent, $part);
+        $d = $this->computeCategoryFilterComponentForAllQuestionnaires($filterComponent, $questionnaires, $part);
 
         if ($year == $d['maxYear'] + 6) {
-            $result = $this->computeRegressionOne($year - 4, $questionnaires, $filterComponent, $part);
+            $result = $this->computeRegression($year - 4, $filterComponent, $questionnaires, $part);
         } elseif ($year == $d['minYear'] - 6) {
-            $result = $this->computeRegressionOne($year + 4, $questionnaires, $filterComponent, $part);
+            $result = $this->computeRegression($year + 4, $filterComponent, $questionnaires, $part);
         } elseif ($year < $d['maxYear'] + 3 && $year > $d['minYear'] - 3 && $d['count'] > 1 && $d['period'] > 4) {
             $result = \PHPExcel_Calculation_Statistical::FORECAST($year, $d['values%'], $d['years']);
         } elseif ($year < $d['maxYear'] + 7 && $year > $d['minYear'] - 7 && ($d['count'] < 2 || $d['period'] < 5)) {
@@ -144,16 +135,14 @@ class Jmp extends AbstractCalculator
         return $result;
     }
 
-    private $cacheComputeFilter = array();
-
     /**
      * Implement computing on filter level, as seen on tab "GraphData_W"
-     * @param type $questionnaires
      * @param \Application\Model\Filter $filter
+     * @param type $questionnaires
      * @param \Application\Model\Part $part
      * @return array
      */
-    public function computeFilter($questionnaires, CategoryFilterComponent $filterComponent, Part $part = null)
+    public function computeCategoryFilterComponentForAllQuestionnaires(CategoryFilterComponent $filterComponent, $questionnaires, Part $part = null)
     {
         $key = null;
         foreach ($questionnaires as $questionnaire) {
@@ -161,8 +150,8 @@ class Jmp extends AbstractCalculator
         }
         $key .= spl_object_hash($filterComponent) . ($part ? spl_object_hash($part) : null);
 
-        if (array_key_exists($key, $this->cacheComputeFilter)) {
-            return $this->cacheComputeFilter[$key];
+        if (array_key_exists($key, $this->cacheComputeCategoryFilterComponentForAllQuestionnaires)) {
+            return $this->cacheComputeCategoryFilterComponentForAllQuestionnaires[$key];
         }
 
         $result = array(
@@ -178,7 +167,7 @@ class Jmp extends AbstractCalculator
             $year = $questionnaire->getSurvey()->getYear();
             $years[] = $year;
 
-            $computed = $filterComponent->compute($questionnaire, $part);
+            $computed = $this->computeCategoryFilterComponent($filterComponent, $questionnaire, $part);
             if (is_null($computed)) {
 
                 $result['values'][$questionnaire->getSurvey()->getCode()] = null;
@@ -206,11 +195,10 @@ class Jmp extends AbstractCalculator
 
         $result['average'] = $result['count'] ? \PHPExcel_Calculation_MathTrig::SUM($result['values']) / $result['count'] : null;
         $result['average%'] = $result['count'] ? \PHPExcel_Calculation_MathTrig::SUM($result['values%']) / $result['count'] : null;
-        $result['average%%'] = $totalPopulation ? ($result['average']) / $totalPopulation : null;
         $result['population'] = $totalPopulation;
 
 
-        $this->cacheComputeFilter[$key] = $result;
+        $this->cacheComputeCategoryFilterComponentForAllQuestionnaires[$key] = $result;
 
         return $result;
     }

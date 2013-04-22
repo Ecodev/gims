@@ -22,7 +22,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $endYear = 2011;
 
         // First get series of flatten regression lines
-        $series = $calculator->computeFlatten($startYear, $endYear, $questionnaires, $filter, $part);
+        $series = $calculator->computeFlatten($startYear, $endYear, $filter, $questionnaires, $part);
         foreach ($series as &$serie) {
             $serie['type'] = 'spline';
             foreach ($serie['data'] as &$d) {
@@ -33,7 +33,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
         // Then add scatter points which are each questionnaire values
         foreach ($filter->getCategoryFilterComponents() as $filterComponent) {
-            $data = $calculator->computeFilter($questionnaires, $filterComponent, $part);
+            $data = $calculator->computeCategoryFilterComponentForAllQuestionnaires($filterComponent, $questionnaires, $part);
 
             $scatter = array(
                 'type' => 'scatter',

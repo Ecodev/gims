@@ -73,7 +73,7 @@ class Population extends AbstractModel
      * @param Country $country
      * @return Population
      */
-    public function setCountry(Country $country = null)
+    public function setCountry(Country $country)
     {
         $this->country = $country;
 

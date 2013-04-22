@@ -61,7 +61,7 @@ return array(
                         'options' => array(
                             'route' => '/questionnaire/:idQuestionnaire/[:action]',
                             'constraints' => array(
-                                'action' => '(compute|a)', // Define here allowed actions: (action1|action2|action3)
+                                'action' => '(compute)', // Define here allowed actions: (action1|action2|action3)
                                 'idQuestionnaire' => '[0-9]+',
                             ),
                             'defaults' => array(
