@@ -65,9 +65,10 @@ class JmpTest extends CalculatorTest
 
         $population2 = new \Application\Model\Population();
         $population2->setCountry($country)
-                ->setPopulation(10)
+                ->setPopulation(15)
                 ->setYear($questionnaire2->getSurvey()->getYear());
         $this->getEntityManager()->persist($population2);
+        $this->country = $country;
 
         // Link questionnaire to country, so we are able to find population data via geonames
         $this->questionnaire->setGeoname($country->getGeoname());
@@ -76,7 +77,7 @@ class JmpTest extends CalculatorTest
         $this->getEntityManager()->flush();
     }
 
-    public function testComputingCategoryFilterComponentForAllQuestionnairesIsCorrectt()
+    public function testComputeCategoryFilterComponentForAllQuestionnaires()
     {
         $this->assertEquals(array(
             'values' =>
@@ -87,7 +88,7 @@ class JmpTest extends CalculatorTest
             'values%' =>
             array(
                 'tst 1' => 0.01111,
-                'tst 2' => 0.01,
+                'tst 2' => 0.0066666666666667,
             ),
             'count' => 2,
             'years' =>
@@ -99,10 +100,10 @@ class JmpTest extends CalculatorTest
             'maxYear' => 2005,
             'period' => 5,
             'slope' => -0.00222,
-            'slope%' => -0.000222,
+            'slope%' => -0.00088866666666667,
             'average' => 0.10555,
-            'average%' => 0.010555,
-            'population' => 20,
+            'average%' => 0.0088883333333333,
+            'population' => 25,
                 ), $this->service->computeCategoryFilterComponentForAllQuestionnaires($this->categoryFilterComponent1, $this->questionnaires));
 
         $this->assertEquals(array(
@@ -129,21 +130,65 @@ class JmpTest extends CalculatorTest
     {
         return array(
             array(2000, 0.01111),
-            array(2001, 0.010888),
-            array(2002, 0.010666),
-            array(2003, 0.010444),
-            array(2004, 0.010222),
-            array(2005, 0.01),
+            array(2001, 0.010221333333333),
+            array(2002, 0.0093326666666669),
+            array(2003, 0.0084440000000001),
+            array(2004, 0.0075553333333336),
+            array(2005, 0.0066666666666668),
         );
     }
 
     /**
      * @dataProvider regressionProvider
      */
-    public function testComputingRegressionForUnknownYearsIsCorrect($year, $expected)
+    public function testComputeRegressionForUnknownYears($year, $expected)
     {
         $this->assertEquals($expected, $this->service->computeRegression($year, $this->categoryFilterComponent1, $this->questionnaires), 'regression between known years according');
         $this->assertNull($this->service->computeRegression($year, $this->categoryFilterComponent1, array()), 'no questionnaires should still return valid structure');
+    }
+
+    public function testComputeRegressionForShortPeriod()
+    {
+
+        $population = new \Application\Model\Population();
+        $population->setCountry($this->country)
+                ->setPopulation(10)
+                ->setYear(2003);
+        $this->getEntityManager()->persist($population);
+        $this->getEntityManager()->flush();
+
+        $this->questionnaire->getSurvey()->setYear(2003);
+        $this->assertEquals(0.0088889166666667, $this->service->computeRegression(2004, $this->categoryFilterComponent3, $this->questionnaires), 'regression between known years according');
+    }
+
+    public function computeFlattenOneYearProvider()
+    {
+        return array(
+            // Basic casses
+            array(array(2000 => 0, 2001 => 1, 2002 => 0.5, 1950 => null), array(2000 => -10, 2001 => 10, 2002 => 0.5)),
+            // Cases with undefined values, based on the year earlier
+            array(array(2001 => null, 2004 => 0.04, 2006 => 0.96), array(2000 => 0.5, 2001 => null, 2002 => 0.5, 2003 => 0.04, 2004 => null, 2005 => 0.96, 2006 => null)),
+            array(array(2002 => 0.04), array(2000 => 0.01, 2001 => 0.04, 2002 => null)),
+            array(array(2002 => 0.96), array(2000 => 0.99, 2001 => 0.96, 2002 => null)),
+            array(array(2001 => 1), array(2000 => 1, 2001 => null)),
+            array(array(2001 => 0), array(2000 => 0, 2001 => null)),
+            // Cases with undefined values, based on the year later
+            array(array(2000 => null, 2002 => 0.04, 2005 => 0.96), array(2000 => null, 2001 => 0.5, 2002 => null, 2003 => 0.04, /* NO 2004 ! */ 2005 => null, 2006 => 0.96)),
+            array(array(2000 => 0.04), array(2000 => null, 2001 => 0.04, 2002 => 0.01)),
+            array(array(2000 => 0.96), array(2000 => null, 2001 => 0.96, 2002 => 0.99)),
+            array(array(2000 => 1), array(2000 => null, 2001 => 1)),
+            array(array(2000 => 0), array(2000 => null, 2001 => 0)),
+        );
+    }
+
+    /**
+     * @dataProvider computeFlattenOneYearProvider
+     */
+    public function testComputeFlattenOneYear($stuff, $allRegressions)
+    {
+        foreach ($stuff as $year => $expected) {
+            $this->assertEquals($expected, $this->service->computeFlattenOneYear($year, $allRegressions));
+        }
     }
 
     public function flattenProvider()
@@ -155,8 +200,8 @@ class JmpTest extends CalculatorTest
                         'name' => 'improved',
                         'data' =>
                         array(
-                            0 => 0.009778,
-                            1 => 0.009556,
+                            0 => 0.0057780000000001,
+                            1 => 0.0048893333333335,
                         ),
                     ),
                     1 =>
@@ -173,8 +218,8 @@ class JmpTest extends CalculatorTest
                         'name' => 'total',
                         'data' =>
                         array(
-                            0 => 0.0097779,
-                            1 => 0.0095557,
+                            0 => 0.00577786,
+                            1 => 0.0048889866666666,
                         ),
                     ),
                 )),
@@ -218,24 +263,24 @@ class JmpTest extends CalculatorTest
                             1 => NULL,
                             2 => NULL,
                             3 => NULL,
-                            4 => 0.011554,
-                            5 => 0.012664,
-                            6 => 0.012442,
-                            7 => 0.01222,
-                            8 => 0.011554,
-                            9 => 0.011332,
+                            4 => 0.012887333333333,
+                            5 => 0.017330666666667,
+                            6 => 0.016442,
+                            7 => 0.015553333333334,
+                            8 => 0.012887333333333,
+                            9 => 0.011998666666667,
                             10 => 0.01111,
-                            11 => 0.010888,
-                            12 => 0.010666,
-                            13 => 0.010444,
-                            14 => 0.010222,
-                            15 => 0.01,
-                            16 => 0.009778,
-                            17 => 0.009556,
-                            18 => 0.00889,
-                            19 => 0.008668,
-                            20 => 0.008446,
-                            21 => 0.009556,
+                            11 => 0.010221333333333,
+                            12 => 0.0093326666666669,
+                            13 => 0.0084440000000001,
+                            14 => 0.0075553333333336,
+                            15 => 0.0066666666666668,
+                            16 => 0.0057780000000001,
+                            17 => 0.0048893333333335,
+                            18 => 0.0022233333333335,
+                            19 => 0.0013346666666667,
+                            20 => 0.00044600000000017,
+                            21 => 0.0048893333333335,
                             22 => NULL,
                             23 => NULL,
                             24 => NULL,
@@ -284,24 +329,24 @@ class JmpTest extends CalculatorTest
                             1 => NULL,
                             2 => NULL,
                             3 => NULL,
-                            4 => 0.0115555,
-                            5 => 0.0126665,
-                            6 => 0.0124443,
-                            7 => 0.0122221,
-                            8 => 0.0115555,
-                            9 => 0.0113333,
+                            4 => 0.012888846666667,
+                            5 => 0.017333213333333,
+                            6 => 0.01644434,
+                            7 => 0.015555466666667,
+                            8 => 0.012888846666667,
+                            9 => 0.011999973333333,
                             10 => 0.0111111,
-                            11 => 0.0108889,
-                            12 => 0.0106667,
-                            13 => 0.0104445,
-                            14 => 0.0102223,
-                            15 => 0.0100001,
-                            16 => 0.0097779,
-                            17 => 0.0095557,
-                            18 => 0.0088891,
-                            19 => 0.0086669,
-                            20 => 0.0084447,
-                            21 => 0.0095557,
+                            11 => 0.010222226666667,
+                            12 => 0.0093333533333333,
+                            13 => 0.0084444800000001,
+                            14 => 0.0075556066666667,
+                            15 => 0.0066667333333335,
+                            16 => 0.00577786,
+                            17 => 0.0048889866666666,
+                            18 => 0.0022223666666668,
+                            19 => 0.0013334933333333,
+                            20 => 0.00044462000000012,
+                            21 => 0.0048889866666666,
                             22 => NULL,
                             23 => NULL,
                             24 => NULL,
@@ -346,14 +391,15 @@ class JmpTest extends CalculatorTest
     /**
      * @dataProvider flattenProvider
      */
-    public function testComputingFlattenIsCorrect($yearStart, $yearEnd, $useQuestionnaires, $expected)
+    public function testComputeFlatten($yearStart, $yearEnd, $useQuestionnaires, $expected)
     {
         $this->assertEquals($expected, $this->service->computeFlatten($yearStart, $yearEnd, $this->filter, $useQuestionnaires ? $this->questionnaires : array()));
     }
 
-    public function testCacheOnFilterComponentLevelCanBeDisabled()
+    public function testCacheOnFilterComponentLevelIsWorking()
     {
-        $data = array_shift($this->flattenProvider());
+        $tmp = $this->flattenProvider();
+        $data = reset($tmp);
         $res1 = $this->service->computeFlatten($data[0], $data[1], $this->filter, $this->questionnaires);
 
         $this->answer131->setValueAbsolute((0.2));
@@ -372,8 +418,8 @@ class JmpTest extends CalculatorTest
                 'name' => 'improved',
                 'data' =>
                 array(
-                    0 => 0.0077780000000001,
-                    1 => 0.0055560000000003,
+                    0 => 0.0037780000000005,
+                    1 => 0.0008893333333333,
                 ),
             ),
             1 =>
@@ -390,8 +436,8 @@ class JmpTest extends CalculatorTest
                 'name' => 'total',
                 'data' =>
                 array(
-                    0 => 0.0077779000000007,
-                    1 => 0.0055557000000004,
+                    0 => 0.0037778600000005,
+                    1 => 0.00088898666666726,
                 ),
             ),
                 ), $res3, 'after clearing cache, result reflect new values');

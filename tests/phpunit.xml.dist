@@ -12,8 +12,14 @@
 
     <filter>
         <blacklist>
-            <!--Exclude everything from vendor, so code coverage statistics takes only our own code -->
+            <!--Exclude everything from vendor and data, so code coverage statistics takes only our own code -->
             <directory>../vendor</directory>
+            <directory>../data</directory>
         </blacklist>
     </filter>
+
+    <logging>
+        <!--<log type="coverage-html" target="../data/logs/report" charset="UTF-8" yui="true" hightlight="true" lowupperbound="50" highlowerbound="80"></log>-->
+    </logging>
+
 </phpunit>

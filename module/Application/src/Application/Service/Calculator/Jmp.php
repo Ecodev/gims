@@ -12,6 +12,16 @@ class Jmp extends Calculator
 
     private $cacheComputeCategoryFilterComponentForAllQuestionnaires = array();
 
+    /**
+     * Returns an array of all filterComponent data, which includes name and year-regression pairs
+     * This is the highest level of computation, the "main" computation method.
+     * @param integer $yearStart
+     * @param integer $yearEnd
+     * @param \Application\Model\Filter $filter
+     * @param array $questionnaires
+     * @param \Application\Model\Part $part
+     * @return array [[name => filterComponentName, data => [year => flattenedRegression]]]]
+     */
     public function computeFlatten($yearStart, $yearEnd, Filter $filter, $questionnaires, Part $part = null)
     {
         $result = array();
@@ -26,7 +36,7 @@ class Jmp extends Calculator
 
             $d = array();
             foreach ($years as $year) {
-                $d[] = $this->computeFlattenCategoryFilterComponent($year, $allRegressions);
+                $d[] = $this->computeFlattenOneYear($year, $allRegressions);
             }
 
             $result[] = array(
@@ -38,17 +48,27 @@ class Jmp extends Calculator
         return $result;
     }
 
-    protected function computeFlattenCategoryFilterComponent($year, $allRegressions, array $usedYears = array())
+    /**
+     * Compute the flatten regression value for the given year
+     * @param integer $year
+     * @param array $allRegressions [year => regression]
+     * @param array $usedYears [year] should be empty array for first call, then used for recursivity
+     * @return null|int
+     */
+    public function computeFlattenOneYear($year, array $allRegressions, array $usedYears = array())
     {
-        if (!array_key_exists($year, $allRegressions))
+        if (!array_key_exists($year, $allRegressions)) {
             return null;
+        }
 
+        $nonNullRegressions = array_filter($allRegressions, function($regression) {
+                    return !is_null($regression);
+                });
+        $minRegression = $nonNullRegressions ? min($nonNullRegressions) : null;
+        $maxRegression = $nonNullRegressions ? max($nonNullRegressions) : null;
         $regression = $allRegressions[$year];
-        $minRegression = min($allRegressions);
-        $maxRegression = max($allRegressions);
 
         array_push($usedYears, $year);
-
 
         // If regression value exists, make sure it's within our limits and returns it
         $result = null;
@@ -65,47 +85,31 @@ class Jmp extends Calculator
 
         if (is_null($result)) {
             $yearEarlier = $year - 1;
-            $flattenYearEarlier = !in_array($yearEarlier, $usedYears) ? $this->computeFlattenCategoryFilterComponent($yearEarlier, $allRegressions, $usedYears) : null;
+            $flattenYearEarlier = !in_array($yearEarlier, $usedYears) ? $this->computeFlattenOneYear($yearEarlier, $allRegressions, $usedYears) : null;
 
-            if ($flattenYearEarlier === $minRegression && $flattenYearEarlier < 0) {
-                $result = 0;
-            } elseif ($flattenYearEarlier === $minRegression && $flattenYearEarlier < 0.05) {
+            if ($flattenYearEarlier === $minRegression && $flattenYearEarlier < 0.05) {
                 $result = $flattenYearEarlier;
             } elseif ($flattenYearEarlier === $maxRegression && $flattenYearEarlier < 0.05) {
                 $result = $flattenYearEarlier;
-            } elseif ($flattenYearEarlier === $maxRegression && $flattenYearEarlier > 1) {
-                $result = 1;
             } elseif ($flattenYearEarlier === $maxRegression && $flattenYearEarlier > 0.95) {
                 $result = $flattenYearEarlier;
             } elseif ($flattenYearEarlier === $minRegression && $flattenYearEarlier > 0.95) {
                 $result = $flattenYearEarlier;
-            } elseif ($flattenYearEarlier === 1) {
-                $result = 1;
-            } elseif ($flattenYearEarlier === 0) {
-                $result = 0;
             }
         }
 
         if (is_null($result)) {
             $yearLater = $year + 1;
-            $flattenYearLater = !in_array($yearEarlier, $usedYears) ? $this->computeFlattenCategoryFilterComponent($yearLater, $allRegressions, $usedYears) : null;
+            $flattenYearLater = !in_array($yearEarlier, $usedYears) ? $this->computeFlattenOneYear($yearLater, $allRegressions, $usedYears) : null;
 
-            if ($flattenYearLater == $minRegression && $flattenYearLater < 0) {
-                $result = 0;
-            } elseif ($flattenYearLater === $minRegression && $flattenYearLater < 0.05) {
+            if ($flattenYearLater === $minRegression && $flattenYearLater < 0.05) {
                 $result = $flattenYearLater;
             } elseif ($flattenYearLater === $maxRegression && $flattenYearLater < 0.05) {
                 $result = $flattenYearLater;
-            } elseif ($flattenYearLater === $maxRegression && $flattenYearLater > 1) {
-                $result = 1;
             } elseif ($flattenYearLater === $maxRegression && $flattenYearLater > 0.95) {
                 $result = $flattenYearLater;
             } elseif ($flattenYearLater === $minRegression && $flattenYearLater > 0.95) {
                 $result = $flattenYearLater;
-            } elseif ($flattenYearLater === 1) {
-                $result = 1;
-            } elseif ($flattenYearLater === 0) {
-                $result = 0;
             }
         }
 
@@ -115,7 +119,7 @@ class Jmp extends Calculator
     public function computeRegression($year, CategoryFilterComponent $filterComponent, $questionnaires, Part $part = null)
     {
         $d = $this->computeCategoryFilterComponentForAllQuestionnaires($filterComponent, $questionnaires, $part);
-
+        
         if ($year == $d['maxYear'] + 6) {
             $result = $this->computeRegression($year - 4, $filterComponent, $questionnaires, $part);
         } elseif ($year == $d['minYear'] - 6) {
