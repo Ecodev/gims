@@ -20,6 +20,7 @@ git submodule update --init --recursive --force
 
 echo "Updating database..."
 ./vendor/bin/doctrine-module migrations:migrate --no-interaction
+./vendor/bin/doctrine-module orm:generate-proxies
 
 echo "Compiling CSS..."
 compass compile -s compressed --force
