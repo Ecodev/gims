@@ -1,4 +1,8 @@
 {
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
     "hash": "4de83ab678e8b7b40bb584187db03cf9",
     "packages": [
         {
@@ -532,12 +536,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/firephp/firephp-core.git",
-                "reference": "f60753a8dd7817e4da6bc73e0e717387a9a0866a"
+                "reference": "v0.4.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firephp/firephp-core/zipball/f60753a8dd7817e4da6bc73e0e717387a9a0866a",
-                "reference": "f60753a8dd7817e4da6bc73e0e717387a9a0866a",
+                "url": "https://api.github.com/repos/firephp/firephp-core/zipball/v0.4.0",
+                "reference": "v0.4.0",
                 "shasum": ""
             },
             "type": "library",
@@ -560,7 +564,7 @@
             ],
             "description": "Traditional FirePHPCore library for sending PHP variables to the browser.",
             "homepage": "https://github.com/firephp/firephp-core",
-            "time": "2013-01-19 22:55:24"
+            "time": "2013-04-23 15:28:20"
         },
         {
             "name": "mwillbanks/zfc-twitter-bootstrap",
@@ -621,12 +625,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "19356af0268ae713e27fcfbb3991d0cfc9556e43"
+                "reference": "b7a9d36e9ae6b2c3486795fb033cbed0769c2615"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/19356af0268ae713e27fcfbb3991d0cfc9556e43",
-                "reference": "19356af0268ae713e27fcfbb3991d0cfc9556e43",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/b7a9d36e9ae6b2c3486795fb033cbed0769c2615",
+                "reference": "b7a9d36e9ae6b2c3486795fb033cbed0769c2615",
                 "shasum": ""
             },
             "require": {
@@ -665,7 +669,7 @@
                 "task",
                 "tool"
             ],
-            "time": "2013-04-10 10:10:43"
+            "time": "2013-04-23 22:13:08"
         },
         {
             "name": "symfony/console",
@@ -720,12 +724,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/ZendDeveloperTools.git",
-                "reference": "01b9db1c217233d06f40cdf576be1f50d56aec97"
+                "reference": "3994622761f496b666a143156b4d21f19205aa66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/ZendDeveloperTools/zipball/01b9db1c217233d06f40cdf576be1f50d56aec97",
-                "reference": "01b9db1c217233d06f40cdf576be1f50d56aec97",
+                "url": "https://api.github.com/repos/zendframework/ZendDeveloperTools/zipball/3994622761f496b666a143156b4d21f19205aa66",
+                "reference": "3994622761f496b666a143156b4d21f19205aa66",
                 "shasum": ""
             },
             "require": {
@@ -771,20 +775,20 @@
                 "module",
                 "zf2"
             ],
-            "time": "2013-03-25 18:13:03"
+            "time": "2013-04-14 14:43:51"
         },
         {
             "name": "zendframework/zendframework",
-            "version": "2.1.4",
+            "version": "2.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zf2.git",
-                "reference": "release-2.1.4"
+                "reference": "release-2.1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zf2/zipball/release-2.1.4",
-                "reference": "release-2.1.4",
+                "url": "https://api.github.com/repos/zendframework/zf2/zipball/release-2.1.5",
+                "reference": "release-2.1.5",
                 "shasum": ""
             },
             "require": {
@@ -882,7 +886,7 @@
                 "framework",
                 "zf2"
             ],
-            "time": "2013-03-13 22:26:48"
+            "time": "2013-04-17 15:15:58"
         },
         {
             "name": "zf-commons/zfc-base",
