@@ -18,6 +18,9 @@ cd $DIR/..
 echo "Updating git submodules..."
 git submodule update --init --recursive --force
 
+echo "Updating all PHP dependencies via composer..."
+./composer.phar install --dev
+
 echo "Updating database..."
 ./vendor/bin/doctrine-module migrations:migrate --no-interaction
 ./vendor/bin/doctrine-module orm:generate-proxies

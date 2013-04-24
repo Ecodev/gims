@@ -50,6 +50,3 @@ if [[ "$1" = "travis" ]]; then
     cp config/autoload/local.php.dist config/autoload/local.php
     psql -c 'create database gims;' -U postgres
 fi
-
-echo "Installing all PHP dependencies via composer..."
-./composer.phar install --dev
