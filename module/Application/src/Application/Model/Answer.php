@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Answer
  *
  * @ORM\Entity(repositoryClass="Application\Repository\AnswerRepository")
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="answer_unique",columns={"question_id", "questionnaire_id", "part_id", "part_id"})})
  */
 class Answer extends AbstractModel
 {

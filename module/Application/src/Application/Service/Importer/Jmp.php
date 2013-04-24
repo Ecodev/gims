@@ -418,6 +418,7 @@ class Jmp extends AbstractImporter
             $col + 5 => null, // total is not a part
         );
 
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $knownRows = array_keys($this->cacheCategories);
         array_shift($knownRows); // Skip first categorie, since it's not an actual row, but the sheet topic (eg: "Access to drinking water sources")
 
@@ -448,12 +449,25 @@ class Jmp extends AbstractImporter
 
                     $question = $this->getQuestion($survey, $category, $answerCount);
 
-                    $answer = new \Application\Model\Answer();
-                    $this->getEntityManager()->persist($answer);
-                    $answer->setQuestionnaire($questionnaire);
-                    $answer->setQuestion($question);
+                    // If question already exists, maybe the answer also already exists, in that case we will overwrite its value
+                    $answer = null;
+                    if ($question->getId()) {
+                        $answer = $repository->findOneBy(array(
+                            'question' => $question,
+                            'questionnaire' => $questionnaire,
+                            'part' => $part,
+                        ));
+                    }
+
+                    if (!$answer) {
+                        $answer = new \Application\Model\Answer();
+                        $this->getEntityManager()->persist($answer);
+                        $answer->setQuestionnaire($questionnaire);
+                        $answer->setQuestion($question);
+                        $answer->setPart($part);
+                    }
+
                     $answer->setValuePercent($value / 100);
-                    $answer->setPart($part);
 
                     $answerCount++;
                 }
