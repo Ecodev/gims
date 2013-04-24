@@ -224,6 +224,7 @@ class Jmp extends AbstractImporter
     private $cacheCategories = array();
     private $cacheQuestions = array();
     private $cacheFilterComponents = array();
+    private $questionnaireCount = 0;
     private $answerCount = 0;
     private $excludesCount = 0;
 
@@ -253,9 +254,6 @@ class Jmp extends AbstractImporter
         $this->partUrban = $this->getPart('Urban');
         $this->partRural = $this->getPart('Rural');
 
-        $this->answerCount = 0;
-
-        $questionnaireCount = 0;
         foreach ($sheeNamesToImport as $i => $sheetName) {
 
             $this->importCategories($this->officialCategoriesDefinition[$sheetName]);
@@ -268,11 +266,10 @@ class Jmp extends AbstractImporter
             $col = 0;
             while ($this->importQuestionnaire($sheet, $col)) {
                 $col += 6;
-                $questionnaireCount++;
             }
         }
 
-        return "Total imported: $questionnaireCount questionnaires, $this->answerCount answers, $this->excludesCount exclude rules" . PHP_EOL;
+        return "Total imported: $this->questionnaireCount questionnaires, $this->answerCount answers, $this->excludesCount exclude rules" . PHP_EOL;
     }
 
     protected function getCategory($definition)
@@ -553,6 +550,7 @@ class Jmp extends AbstractImporter
             $questionnaire->setGeoname($geoname);
 
             $this->getEntityManager()->persist($questionnaire);
+            $this->questionnaireCount++;
         }
 
         return $questionnaire;
@@ -743,10 +741,10 @@ class Jmp extends AbstractImporter
                                 ->setRule($this->excludeRule)
                                 ->setPart($part)
                                 ->setCategoryFilterComponent($categoryFilterComponent);
-                        $this->getEntityManager()->persist($assoc);
-                    }
 
-                    $this->excludesCount++;
+                        $this->getEntityManager()->persist($assoc);
+                        $this->excludesCount++;
+                    }
                 }
             }
         }
