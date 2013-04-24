@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * Development Configuration Override
+ *
+ * This configuration is specific for development environmet and thus should
+ * never be used in production or staging.
+ *
+ * It basically deactivates all caches, and activates all logs.
+ */
+
+return array(
+    'doctrine' => array(
+        'configuration' => array(
+            'orm_default' => array(
+                // Log all SQL queries from Doctrine (to data/logs/all.log and FirePHP/FirePHP4Chrome)
+                'sqlLogger' => 'Application\DBAL\Logging\ForwardSQLLogger',
+            ),
+        ),
+    ),
+    // Use uncompressed JS
+    'compressJS' => false,
+        // Whether or not to enable a configuration cache.
+        // If enabled, the merged configuration will be cached and used in
+        // subsequent requests.
+        //'config_cache_enabled' => false,
+        // The key used to create the configuration cache file name.
+        //'config_cache_key' => 'module_config_cache',
+        // The path in which to cache merged configuration.
+        //'cache_dir' =>  './data/cache',
+        // ...
+);

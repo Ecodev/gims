@@ -27,14 +27,19 @@ return array(
 
                 // Log to browser's console
                 $firePhpWriter = new Zend\Log\Writer\FirePhp();
+                $firePhpWriter->getFirePhp()->getFirePhp()->setOption('includeLineNumbers', false);
+                $firePhpWriter->addFilter(new Application\Log\Filter\Headers());
                 $logger->addWriter($firePhpWriter);
-                $filter = new Application\Log\Filter\Headers();
-                $firePhpWriter->addFilter($filter);
 
                 Zend\Log\Logger::registerErrorHandler($logger, true);
 
                 return $logger;
             },
+            'Application\DBAL\Logging\ForwardSQLLogger' => function($sm) {
+                $logger = new \Application\DBAL\Logging\ForwardSQLLogger();
+                $logger->setLogger($sm->get('Zend\Log'));
+                return $logger;
+            }
         ),
     ),
 );
