@@ -40,8 +40,8 @@ class ForwardSQLLogger implements \Doctrine\DBAL\Logging\SQLLogger
     {
         // Here we cannot use debug() level, because it would produce a stacktrace for each call via FirePHP, thus producing gigantic HTTP headers
         $this->getLogger()->info($sql);
-        $this->getLogger()->info($params);
-        $this->getLogger()->info($types);
+        if ($params) $this->getLogger()->info($params);
+        if ($types) $this->getLogger()->info($types);
     }
 
     /**

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CategoryFilterComponentRule is used to link a CategoryFilterComponentRule, a Rule and a Questionnaire.
  *
  * @ORM\Entity(repositoryClass="Application\Repository\CategoryFilterComponentRuleRepository")
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="rule_unique",columns={"category_filter_component_id", "questionnaire_id", "part_id"})})
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="rule_unique",columns={"category_filter_component_id", "questionnaire_id", "part_id", "rule_id"})})
  */
 class CategoryFilterComponentRule extends \Application\Model\AbstractModel
 {
@@ -48,7 +48,7 @@ class CategoryFilterComponentRule extends \Application\Model\AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="AbstractRule")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
      */
     private $rule;
@@ -129,7 +129,7 @@ class CategoryFilterComponentRule extends \Application\Model\AbstractModel
      * @param AbstractRule $rule
      * @return CategoryFilterComponentRule
      */
-    public function setRule(AbstractRule $rule = null)
+    public function setRule(AbstractRule $rule)
     {
         $this->rule = $rule;
 

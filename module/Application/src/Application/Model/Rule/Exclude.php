@@ -5,7 +5,10 @@ namespace Application\Model\Rule;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Exclusion is a way to exclude some data from computing
+ * Exclusion is a way to exclude some data from computing.
+ *
+ * This entity is special, and there should be ONLY ONE in the entire system
+ * @see RuleRepository::getSingletonExclude()
  *
  * @ORM\Entity
  */

@@ -27,6 +27,7 @@ class Version20130419180133 extends AbstractMigration
         $this->addSql("ALTER TABLE country ADD date_created TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL");
         $this->addSql("ALTER TABLE country ADD date_modified TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL");
         $this->addSql("ALTER TABLE country RENAME id TO code");
+        $this->addSql("DROP SEQUENCE country_id_seq CASCADE;");
         $this->addSql("ALTER TABLE country ADD id SERIAL NOT NULL");
         $this->addSql("ALTER TABLE country ADD CONSTRAINT FK_5373C96661220EA6 FOREIGN KEY (creator_id) REFERENCES \"user\" (id) ON DELETE SET NULL NOT DEFERRABLE INITIALLY IMMEDIATE");
         $this->addSql("ALTER TABLE country ADD CONSTRAINT FK_5373C966D079F553 FOREIGN KEY (modifier_id) REFERENCES \"user\" (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE");

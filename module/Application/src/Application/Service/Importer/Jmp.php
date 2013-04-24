@@ -95,6 +95,11 @@ class Jmp extends AbstractImporter
                 'min' => 83,
                 'max' => 88,
             ),
+            'excludes' => array(
+                91 => "Total improved",
+                92 => "Piped onto premises",
+                93 => "Surface water",
+            ),
             'filterComponents' => array(
                 "Total improved" => array(5, 12, 55, 58, 68),
                 "Piped onto premises" => array(6),
@@ -199,11 +204,17 @@ class Jmp extends AbstractImporter
                 'min' => 88,
                 'max' => 93,
             ),
+            'excludes' => array(
+                96 => "Improved + shared",
+                97 => "Sewerage connections",
+                98 => "Open defecation",
+                99 => "Shared",
+            ),
             'filterComponents' => array(
                 "Improved + shared" => array(-6, -7, -8, -9, 49, 73, 76),
                 "Sewerage connections" => array(6),
                 "Improved" => array(), // based on ratio
-                "Shared" => array(), //based on ratio
+                "Shared" => array(), // based on ratio
                 "Other unimproved" => array(-10, 30, 52, 53, 54, 55, 56, 80),
                 "Open defecation" => array(79),
             ),
@@ -213,7 +224,8 @@ class Jmp extends AbstractImporter
     private $cacheCategories = array();
     private $cacheQuestions = array();
     private $cacheFilterComponents = array();
-    private $answerCount;
+    private $answerCount = 0;
+    private $excludesCount = 0;
 
     /**
      * @var \Application\Model\Part
@@ -237,8 +249,10 @@ class Jmp extends AbstractImporter
         $reader->setLoadSheetsOnly($sheeNamesToImport);
         $workbook = $reader->load($filename);
 
+        $this->excludeRule = $this->getEntityManager()->getRepository('Application\Model\Rule\AbstractRule')->getSingletonExclude();
         $this->partUrban = $this->getPart('Urban');
         $this->partRural = $this->getPart('Rural');
+
         $this->answerCount = 0;
 
         $questionnaireCount = 0;
@@ -258,7 +272,7 @@ class Jmp extends AbstractImporter
             }
         }
 
-        return "Total imported: $questionnaireCount questionnaires, $this->answerCount answers" . PHP_EOL;
+        return "Total imported: $questionnaireCount questionnaires, $this->answerCount answers, $this->excludesCount exclude rules" . PHP_EOL;
     }
 
     protected function getCategory($definition)
@@ -380,6 +394,7 @@ class Jmp extends AbstractImporter
         $this->importAnswers($sheet, $col, $survey, $questionnaire);
 
 //        $this->importRules($sheet, $col);
+        $this->importExcludes($sheet, $col, $questionnaire);
 
         $this->getEntityManager()->flush();
 
@@ -673,6 +688,53 @@ class Jmp extends AbstractImporter
             }
 
             $this->cacheFilterComponents[$name] = $filterComponent;
+        }
+    }
+
+    /**
+     * Import exclude rules based on Yes/No content on cells
+     * @param \PHPExcel_Worksheet $sheet
+     * @param integer $col
+     * @param \Application\Model\Questionnaire $questionnaire
+     */
+    public function importExcludes(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire)
+    {
+        $parts = array(
+            $col + 3 => $this->partUrban,
+            $col + 4 => $this->partRural,
+            $col + 5 => null, // total is not a part
+        );
+
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\CategoryFilterComponentRule');
+
+        foreach ($this->officialCategoriesDefinition[$sheet->getTitle()]['excludes'] as $row => $filterComponentName) {
+            $categoryFilterComponent = $this->cacheFilterComponents[$filterComponentName];
+
+            foreach ($parts as $c => $part) {
+                $includedValue = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($c, $row));
+
+                // If it is not included, then it means we need an exclude rule
+                if ($includedValue == 'No') {
+                    $assoc = $repository->findOneBy(array(
+                        'questionnaire' => $questionnaire,
+                        'rule' => $this->excludeRule,
+                        'part' => $part,
+                        'categoryFilterComponent' => $categoryFilterComponent,
+                    ));
+
+                    // If doesn't exist yet, create it
+                    if (!$assoc) {
+                        $assoc = new \Application\Model\Rule\CategoryFilterComponentRule();
+                        $assoc->setQuestionnaire($questionnaire)
+                                ->setRule($this->excludeRule)
+                                ->setPart($part)
+                                ->setCategoryFilterComponent($categoryFilterComponent);
+                        $this->getEntityManager()->persist($assoc);
+                    }
+
+                    $this->excludesCount++;
+                }
+            }
         }
     }
 
