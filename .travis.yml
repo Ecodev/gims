@@ -4,6 +4,7 @@ php:
 
 before_script:
   - ./bin/install_dependencies.sh travis
+  - ./bin/build.sh
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 
