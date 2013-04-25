@@ -15,13 +15,85 @@ use Application\Model\User;
 use Application\Model\UserQuestionnaire;
 use Zend\Json\Json;
 
-
-trait ControllerTrait
+abstract class AbstractController extends \ApplicationTest\Controller\AbstractController
 {
+
+    /**
+     * @var Survey
+     */
+    protected $survey;
+
+    /**
+     * @var Questionnaire
+     */
+    protected $questionnaire;
+
+    /**
+     * @var Question
+     */
+    protected $question;
+
+    /**
+     * @var Category
+     */
+    protected $category;
+
+    /**
+     * @var Part
+     */
+    protected $part;
+
+    /**
+     * @var Part
+     */
+    protected $part2;
+
+    /**
+     * @var Answer
+     */
+    protected $answer;
+
+    /**
+     * Answer without part
+     * @var Answer
+     */
+    private $answer2;
+
+    /**
+     * @var User
+     */
+    protected $user;
+
+    /**
+     * @var \ZfcRbac\Service\Rbac
+     */
+    protected $rbac;
+
+    /**
+     * @var Permission
+     */
+    protected $permission;
+
+    /**
+     * @var UserQuestionnaire
+     */
+    protected $userQuestionnaire;
+
+    /**
+     * @var Role
+     */
+    protected $role;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->populateStorage();
+    }
+
     /**
      * @return void
      */
-    private function populateStorage()
+    protected function populateStorage()
     {
         $this->survey = new Survey();
         $this->survey->setActive(true);
@@ -33,7 +105,7 @@ trait ControllerTrait
 
         $this->category = new Category();
         $this->category->setName('foo')
-            ->setOfficial(true);
+                ->setOfficial(true);
 
         $this->questionnaire = new Questionnaire();
         $this->questionnaire->setSurvey($this->survey);
@@ -43,11 +115,10 @@ trait ControllerTrait
 
         $this->question = new Question();
         $this->question->setSurvey($this->survey)
-            ->setSorting(1)
-            ->setType(1)
-            ->setCategory($this->category)
-            ->setName('foo');
-
+                ->setSorting(1)
+                ->setType(1)
+                ->setCategory($this->category)
+                ->setName('foo');
         $this->part = new Part();
         $this->part->setName('test part 1');
 
@@ -56,9 +127,15 @@ trait ControllerTrait
 
         $this->answer = new Answer();
         $this->answer
-            ->setQuestion($this->question)
-            ->setPart($this->part)
-            ->setQuestionnaire($this->questionnaire);
+                ->setQuestion($this->question)
+                ->setQuestionnaire($this->questionnaire)
+                ->setPart($this->part); // answer one has a part whereas question two not.
+
+        $this->answer2 = new Answer();
+        $this->answer2
+                ->setQuestion($this->question)
+                ->setQuestionnaire($this->questionnaire);
+
 
 
         // create a fake user
@@ -92,21 +169,20 @@ trait ControllerTrait
         $this->getEntityManager()->persist($this->questionnaire);
         $this->getEntityManager()->persist($this->question);
         $this->getEntityManager()->persist($this->answer);
+        $this->getEntityManager()->persist($this->answer2);
         $this->getEntityManager()->flush();
     }
 
     /**
      * @return mixed
      */
-    private function getJsonResponse()
+    protected function getJsonResponse()
     {
         $content = $this->getResponse()->getContent();
         try {
-        $json = Json::decode($content, Json::TYPE_ARRAY);
-        }
-        catch (\Zend\Json\Exception\RuntimeException $exception)
-        {
-            throw new \Zend\Json\Exception\RuntimeException($exception->getMessage() . PHP_EOL. PHP_EOL . $content . PHP_EOL, $exception->getCode(), $exception);
+            $json = Json::decode($content, Json::TYPE_ARRAY);
+        } catch (\Zend\Json\Exception\RuntimeException $exception) {
+            throw new \Zend\Json\Exception\RuntimeException($exception->getMessage() . PHP_EOL . PHP_EOL . $content . PHP_EOL, $exception->getCode(), $exception);
         }
 
         $this->assertTrue(is_array($json));

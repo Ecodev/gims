@@ -2,90 +2,11 @@
 
 namespace ApiTest\Controller;
 
-use Application\Model\Answer;
-use Application\Model\Category;
-use Application\Model\Geoname;
-use Application\Model\Part;
-use Application\Model\Permission;
-use Application\Model\Question;
-use Application\Model\Questionnaire;
-use Application\Model\Role;
-use Application\Model\Survey;
-use Application\Model\User;
-use Application\Model\UserQuestionnaire;
-use ApplicationTest\Controller\AbstractController;
 use Zend\Http\Request;
 
 class AnswerControllerTest extends AbstractController
 {
-    use ControllerTrait;
-
-    /**
-     * @var Survey
-     */
-    private $survey;
-
-    /**
-     * @var Questionnaire
-     */
-    private $questionnaire;
-
-    /**
-     * @var Question
-     */
-    private $question;
-
-    /**
-     * @var Category
-     */
-    private $category;
-
-    /**
-     * @var Part
-     */
-    private $part;
-
-    /**
-     * @var Part
-     */
-    private $part2;
-
-    /**
-     * @var Answer
-     */
-    private $answer;
-
-    /**
-     * @var User
-     */
-    private $user;
-
-    /**
-     * @var \ZfcRbac\Service\Rbac
-     */
-    private $rbac;
-
-    /**
-     * @var Permission
-     */
-    private $permission;
-
-    /**
-     * @var UserQuestionnaire
-     */
-    private $userQuestionnaire;
-
-    /**
-     * @var Role
-     */
-    private $role;
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->populateStorage();
-    }
-
+    
     /**
      * Get suitable route for GET method.
      *

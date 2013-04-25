@@ -4,51 +4,8 @@ namespace ApiTest\Controller;
 
 use Zend\Http\Request;
 
-class QuestionnaireControllerTest extends \ApplicationTest\Controller\AbstractController
+class QuestionnaireControllerTest extends AbstractController
 {
-
-    /**
-     * @var \Application\Model\Survey
-     */
-    private $survey;
-
-    /**
-     * @var \Application\Model\Questionnaire
-     */
-    private $questionnaire;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        $geoname = new \Application\Model\Geoname();
-        $this->survey = new \Application\Model\Survey();
-        $this->survey->setActive(true);
-        $this->survey->setName('test survey');
-        $this->survey->setCode('code test survey');
-        $this->survey->setYear(2010);
-
-        $this->questionnaire = new \Application\Model\Questionnaire();
-        $this->questionnaire->setSurvey($this->survey);
-        $this->questionnaire->setDateObservationStart(new \DateTime('2010-01-01T00:00:00+0100'));
-        $this->questionnaire->setDateObservationEnd(new \DateTime('2011-01-01T00:00:00+0100'));
-        $this->questionnaire->setGeoname($geoname);
-
-        $this->getEntityManager()->persist($geoname);
-        $this->getEntityManager()->persist($this->survey);
-        $this->getEntityManager()->persist($this->questionnaire);
-        $this->getEntityManager()->flush();
-    }
-
-    protected function getJsonResponse()
-    {
-        $content = $this->getResponse()->getContent();
-        $json = \Zend\Json\Json::decode($content, \Zend\Json\Json::TYPE_ARRAY);
-
-        $this->assertTrue(is_array($json));
-
-        return $json;
-    }
 
     protected function getExpectedJson()
     {

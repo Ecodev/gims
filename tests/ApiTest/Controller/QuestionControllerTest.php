@@ -2,108 +2,10 @@
 
 namespace ApiTest\Controller;
 
-use Application\Model\Answer;
-use Application\Model\Category;
-use Application\Model\Geoname;
-use Application\Model\Question;
-use Application\Model\Questionnaire;
-use Application\Model\Part;
-use Application\Model\Survey;
-use ApplicationTest\Controller\AbstractController;
 use Zend\Http\Request;
-use Zend\Json\Json;
 
 class QuestionControllerTest extends AbstractController
 {
-
-    /**
-     * @var Survey
-     */
-    private $survey;
-
-    /**
-     * @var Questionnaire
-     */
-    private $questionnaire;
-
-    /**
-     * @var Question
-     */
-    private $question;
-
-    /**
-     * @var Category
-     */
-    private $category;
-
-    /**
-     * @var Part
-     */
-    private $part;
-
-    /**
-     * @var Answer
-     */
-    private $answerOne;
-
-    /**
-     * @var Answer
-     */
-    private $answerTwo;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->survey = new Survey();
-        $this->survey->setActive(true);
-        $this->survey->setName('test survey');
-        $this->survey->setCode('code test survey');
-        $this->survey->setYear(2010);
-
-        $geoName = new Geoname();
-
-        $this->part = new Part();
-        $this->part->setName('foo');
-
-        $this->category = new Category();
-        $this->category->setName('foo')
-            ->setOfficial(true);
-
-        $this->questionnaire = new Questionnaire();
-        $this->questionnaire->setSurvey($this->survey);
-        $this->questionnaire->setDateObservationStart(new \DateTime('2010-01-01T00:00:00+0100'));
-        $this->questionnaire->setDateObservationEnd(new \DateTime('2011-01-01T00:00:00+0100'));
-        $this->questionnaire->setGeoname($geoName);
-
-        $this->question = new Question();
-        $this->question->setSurvey($this->survey)
-            ->setSorting(1)
-            ->setType(1)
-            ->setCategory($this->category)
-            ->setName('foo');
-
-        $this->answerOne = new Answer();
-        $this->answerOne
-            ->setPart($this->part) // question one has a part whereas question two not.
-            ->setQuestion($this->question)
-            ->setQuestionnaire($this->questionnaire);
-
-        $this->answerTwo = new Answer();
-        $this->answerTwo
-            ->setQuestion($this->question)
-            ->setQuestionnaire($this->questionnaire);
-
-        $this->getEntityManager()->persist($this->part);
-        $this->getEntityManager()->persist($this->category);
-        $this->getEntityManager()->persist($geoName);
-        $this->getEntityManager()->persist($this->survey);
-        $this->getEntityManager()->persist($this->questionnaire);
-        $this->getEntityManager()->persist($this->question);
-        $this->getEntityManager()->persist($this->answerOne);
-        $this->getEntityManager()->persist($this->answerTwo);
-        $this->getEntityManager()->flush();
-    }
 
     /**
      * Get suitable route for GET method.
@@ -140,15 +42,6 @@ class QuestionControllerTest extends AbstractController
 
         }
         return $route;
-    }
-
-    private function getJsonResponse()
-    {
-        $content = $this->getResponse()->getContent();
-        $json = Json::decode($content, Json::TYPE_ARRAY);
-
-        $this->assertTrue(is_array($json));
-        return $json;
     }
 
     /**
