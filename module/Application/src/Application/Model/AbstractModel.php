@@ -75,7 +75,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @return AbstractModel
      */
-    public function setDateCreated($dateCreated)
+    private function setDateCreated($dateCreated)
     {
         $this->dateCreated = $dateCreated;
 
@@ -99,7 +99,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @return AbstractModel
      */
-    public function setDateModified($dateModified)
+    private function setDateModified($dateModified)
     {
         $this->dateModified = $dateModified;
 
@@ -123,7 +123,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @return AbstractModel
      */
-    public function setCreator(User $creator = null)
+    private function setCreator(User $creator = null)
     {
         $this->creator = $creator;
 
@@ -147,7 +147,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @return AbstractModel
      */
-    public function setModifier(User $modifier = null)
+    private function setModifier(User $modifier = null)
     {
         $this->modifier = $modifier;
 
