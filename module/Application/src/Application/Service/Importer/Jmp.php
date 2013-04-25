@@ -550,6 +550,7 @@ class Jmp extends AbstractImporter
             $questionnaire->setGeoname($geoname);
 
             $this->getEntityManager()->persist($questionnaire);
+            $this->getEntityManager()->flush();
             $this->questionnaireCount++;
         }
 
