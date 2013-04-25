@@ -49,7 +49,10 @@ trait ControllerTrait
             ->setName('foo');
 
         $this->part = new Part();
-        $this->part->setName('foo');
+        $this->part->setName('test part 1');
+
+        $this->part2 = new Part();
+        $this->part2->setName('test part 2');
 
         $this->answer = new Answer();
         $this->answer
@@ -82,6 +85,7 @@ trait ControllerTrait
         $this->getEntityManager()->persist($this->role);
         $this->getEntityManager()->persist($this->userQuestionnaire);
         $this->getEntityManager()->persist($this->part);
+        $this->getEntityManager()->persist($this->part2);
         $this->getEntityManager()->persist($this->category);
         $this->getEntityManager()->persist($this->geoName);
         $this->getEntityManager()->persist($this->survey);
@@ -97,7 +101,13 @@ trait ControllerTrait
     private function getJsonResponse()
     {
         $content = $this->getResponse()->getContent();
+        try {
         $json = Json::decode($content, Json::TYPE_ARRAY);
+        }
+        catch (\Zend\Json\Exception\RuntimeException $exception)
+        {
+            throw new \Zend\Json\Exception\RuntimeException($exception->getMessage() . PHP_EOL. PHP_EOL . $content . PHP_EOL, $exception->getCode(), $exception);
+        }
 
         $this->assertTrue(is_array($json));
         return $json;

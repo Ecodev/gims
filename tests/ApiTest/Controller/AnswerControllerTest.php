@@ -46,6 +46,11 @@ class AnswerControllerTest extends AbstractController
     private $part;
 
     /**
+     * @var Part
+     */
+    private $part2;
+
+    /**
      * @var Answer
      */
     private $answer;
@@ -218,7 +223,7 @@ class AnswerControllerTest extends AbstractController
                 'id' => $this->questionnaire->getId()
             ),
             'part'          => array(
-                'id' => $this->part->getId()
+                'id' => $this->part2->getId()
             ),
         );
 
@@ -240,7 +245,7 @@ class AnswerControllerTest extends AbstractController
             'valuePercent'  => 0.6,
             'question'      => $this->question->getId(),
             'questionnaire' => $this->questionnaire->getId(),
-            'part'          => $this->part->getId(),
+            'part'          => $this->part2->getId(),
         );
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
@@ -291,7 +296,7 @@ class AnswerControllerTest extends AbstractController
                 'id' => $this->questionnaire->getId()
             ),
             'part'          => array(
-                'id' => $this->part->getId()
+                'id' => $this->part2->getId()
             ),
         );
 
