@@ -11,6 +11,32 @@ class Jmp extends Calculator
 {
 
     private $cacheComputeCategoryFilterComponentForAllQuestionnaires = array();
+    private $populationRepository;
+
+    /**
+     * Set the population repository
+     * @param \Application\Repository\PopulationRepository $populationRepository
+     * @return \Application\Service\Calculator\Jmp
+     */
+    public function setPopulationRepository(\Application\Repository\PopulationRepository $populationRepository)
+    {
+        $this->populationRepository = $populationRepository;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return \Application\Repository\PopulationRepository
+     */
+    public function getPopulationRepository()
+    {
+        if (!$this->populationRepository) {
+            $this->populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+        }
+        
+        return $this->populationRepository;
+    }
 
     /**
      * Returns an array of all filterComponent data, which includes name and year-regression pairs
@@ -195,7 +221,7 @@ class Jmp extends Calculator
 
             $yearsWithData[] = $year;
 
-            $population = $this->getEntityManager()->getRepository('Application\Model\Population')->getOneByQuestionnaire($questionnaire, $part);
+            $population = $this->getPopulationRepository()->getOneByQuestionnaire($questionnaire, $part);
             $totalPopulation += $population->getPopulation();
             $result['count']++;
 

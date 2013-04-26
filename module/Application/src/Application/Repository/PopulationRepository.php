@@ -13,13 +13,27 @@ class PopulationRepository extends AbstractRepository
      */
     public function getOneByQuestionnaire(\Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part = null)
     {
-        $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneByGeoname($questionnaire->getGeoname());
 
-        return $this->findOneBy(array(
-                    'part' => $part,
-                    'year' => $questionnaire->getSurvey()->getYear(),
-                    'country' => $country,
+        $query = $this->getEntityManager()->createQuery("SELECT p FROM Application\Model\Population p
+            JOIN p.country c
+            JOIN c.geoname g
+            JOIN Application\Model\Questionnaire q
+            WHERE
+            q.geoname = g
+            AND q = :questionnaire
+            AND p.year = :year
+            AND p.part = :part
+            ");
+
+        $query->setParameters(array(
+            'questionnaire' => $questionnaire,
+            'year' => $questionnaire->getSurvey()->getYear(),
+            'part' => $part,
         ));
+
+        $population = $query->getOneOrNullResult();
+
+        return $population;
     }
 
 }

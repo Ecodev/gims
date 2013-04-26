@@ -36,7 +36,7 @@ class Question extends AbstractModel
     /**
      * @var Category
      *
-     * @ORM\ManyToOne(targetEntity="Category")
+     * @ORM\ManyToOne(targetEntity="Category", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="SET NULL", nullable=false)
      * })

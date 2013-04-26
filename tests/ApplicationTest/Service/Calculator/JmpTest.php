@@ -15,6 +15,11 @@ class JmpTest extends CalculatorTest
      */
     private $service;
 
+    /**
+     * @var \Application\Service\Calculator\Jmp
+     */
+    private $service2;
+
     public function setUp()
     {
         parent::setUp();
@@ -49,9 +54,6 @@ class JmpTest extends CalculatorTest
                 ->addCategoryFilterComponent($this->categoryFilterComponent2)
                 ->addCategoryFilterComponent($this->categoryFilterComponent3);
 
-        $this->service = new \Application\Service\Calculator\Jmp();
-        $this->service->setServiceLocator($this->getApplicationServiceLocator());
-
         // Clean existing population data
         $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneByCode('CH');
         $this->getEntityManager()->getConnection()->delete('population', array('country_id' => $country->getId()));
@@ -61,20 +63,26 @@ class JmpTest extends CalculatorTest
         $population1->setCountry($country)
                 ->setPopulation(10)
                 ->setYear($this->questionnaire->getSurvey()->getYear());
-        $this->getEntityManager()->persist($population1);
 
         $population2 = new \Application\Model\Population();
         $population2->setCountry($country)
                 ->setPopulation(15)
                 ->setYear($questionnaire2->getSurvey()->getYear());
-        $this->getEntityManager()->persist($population2);
         $this->country = $country;
 
-        // Link questionnaire to country, so we are able to find population data via geonames
-        $this->questionnaire->setGeoname($country->getGeoname());
-        $questionnaire2->setGeoname($country->getGeoname());
 
-        $this->getEntityManager()->flush();
+        // Create a stub for the PopulationRepository class, so we don't have to mess with database
+        $stubPopulationRepository = $this->getMock('\Application\Repository\PopulationRepository', array('getOneByQuestionnaire'), array(), '', false);
+        $stubPopulationRepository->expects($this->any())
+                ->method('getOneByQuestionnaire')
+                ->will($this->returnValueMap(array(
+                            array($this->questionnaire, null, $population1),
+                            array($questionnaire2, null, $population2),
+        )));
+
+        $this->service = new \Application\Service\Calculator\Jmp();
+        $this->service->setPopulationRepository($stubPopulationRepository);
+        $this->service2 = clone $this->service;
     }
 
     public function testComputeCategoryFilterComponentForAllQuestionnaires()
@@ -149,14 +157,6 @@ class JmpTest extends CalculatorTest
 
     public function testComputeRegressionForShortPeriod()
     {
-
-        $population = new \Application\Model\Population();
-        $population->setCountry($this->country)
-                ->setPopulation(10)
-                ->setYear(2003);
-        $this->getEntityManager()->persist($population);
-        $this->getEntityManager()->flush();
-
         $this->questionnaire->getSurvey()->setYear(2003);
         $this->assertEquals(0.0088889166666667, $this->service->computeRegression(2004, $this->categoryFilterComponent3, $this->questionnaires), 'regression between known years according');
     }
@@ -407,9 +407,7 @@ class JmpTest extends CalculatorTest
         $this->assertEquals($res1, $res2, 'result should be cached and therefore be the same');
 
 
-        $service2 = new \Application\Service\Calculator\Jmp();
-        $service2->setServiceLocator($this->getApplicationServiceLocator());
-        $res3 = $service2->computeFlatten($data[0], $data[1], $this->filter, $this->questionnaires);
+        $res3 = $this->service2->computeFlatten($data[0], $data[1], $this->filter, $this->questionnaires);
 
         $this->assertNotEquals($res1, $res3, 'after clearing cache, result differs');
         $this->assertEquals(array(
