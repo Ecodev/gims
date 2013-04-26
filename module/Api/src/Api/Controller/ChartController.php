@@ -103,7 +103,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     'dataLabels' => array(
                         'enabled' => false,
                     ),
-                    'lineWidth' => 1,
                 ),
                 'scatter' => array(
                     'dataLabels' => array(

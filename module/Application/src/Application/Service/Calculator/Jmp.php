@@ -119,7 +119,7 @@ class Jmp extends Calculator
     public function computeRegression($year, CategoryFilterComponent $filterComponent, $questionnaires, Part $part = null)
     {
         $d = $this->computeCategoryFilterComponentForAllQuestionnaires($filterComponent, $questionnaires, $part);
-        
+
         if ($year == $d['maxYear'] + 6) {
             $result = $this->computeRegression($year - 4, $filterComponent, $questionnaires, $part);
         } elseif ($year == $d['minYear'] - 6) {
@@ -163,11 +163,25 @@ class Jmp extends Calculator
             'values%' => array(),
             'count' => 0,
         );
-
+        $rules = $filterComponent->getCategoryFilterComponentRules();
         $totalPopulation = 0;
         $years = array();
         $yearsWithData = array();
         foreach ($questionnaires as $questionnaire) {
+
+            // skip this questionnaire, if an exclude rule exists for him
+            $skipQuestionnaire = false;
+            foreach ($rules as $rule) {
+                if ($rule->getRule() instanceof \Application\Model\Rule\Exclude && $rule->getQuestionnaire() == $questionnaire && $rule->getPart() == $part) {
+                    $skipQuestionnaire = true;
+                    break;
+                }
+            }
+
+            if ($skipQuestionnaire) {
+                continue;
+            }
+
             $year = $questionnaire->getSurvey()->getYear();
             $years[] = $year;
 
