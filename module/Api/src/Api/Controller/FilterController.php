@@ -11,13 +11,19 @@ class FilterController extends AbstractRestfulController
     {
         return array(
             'name',
-            'categoryFilterComponents' => array(
+            'isOfficial',
+            'children' => '__recursive',
+            'summands' => array(
                 'name',
-                'categories' => array(
-                    'name',
-                ),
             ),
         );
+    }
+
+    public function getList()
+    {
+        $filters = $this->getRepository()->getOfficialRoots();
+
+        return new JsonModel($this->arrayOfObjectsToArray($filters, $this->getJsonConfig()));
     }
 
 }

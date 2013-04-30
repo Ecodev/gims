@@ -11,7 +11,7 @@ class Jmp extends AbstractImporter
      *          row => name, parent row, computing type, summands rows
      * @var array
      */
-    private $officialCategoriesDefinition = array(
+    private $definitions = array(
         'Tables_W' => array(
             'definitions' => array(
                 4 => array("Access to drinking water sources", null, 0, null),
@@ -100,7 +100,7 @@ class Jmp extends AbstractImporter
                 92 => "Piped onto premises",
                 93 => "Surface water",
             ),
-            'filterComponents' => array(
+            'highFilters' => array(
                 "Total improved" => array(5, 12, 55, 58, 68),
                 "Piped onto premises" => array(6),
                 "Surface water" => array(60),
@@ -192,13 +192,13 @@ class Jmp extends AbstractImporter
                 83 => array("DK/missing information", 4, 0, null),
             ),
             'replacements' => array(
-                // For sanitation, we need to modify the category tree to introduce a new branch
+                // For sanitation, we need to modify the filter tree to introduce a new branch
                 999 => array("Other flush and pour flush", 5, 0, null),
-                6 => array("to piped sewer system", -1, 0, null),
-                7 => array("to septic tank", -1, 0, null),
-                8 => array("to pit", -1, 0, null),
-                9 => array("to unknown place/ not sure/DK", -1, 0, null),
-                10 => array("to elsewhere", -1, 0, null),
+                6 => array("to piped sewer system", 999, 0, null),
+                7 => array("to septic tank", 999, 0, null),
+                8 => array("to pit", 999, 0, null),
+                9 => array("to unknown place/ not sure/DK", 999, 0, null),
+                10 => array("to elsewhere", 999, 0, null),
             ),
             'estimations' => array(
                 'min' => 88,
@@ -210,7 +210,7 @@ class Jmp extends AbstractImporter
                 98 => "Open defecation",
                 99 => "Shared",
             ),
-            'filterComponents' => array(
+            'highFilters' => array(
                 "Improved + shared" => array(-6, -7, -8, -9, 49, 73, 76),
                 "Sewerage connections" => array(6),
                 "Improved" => array(), // based on ratio
@@ -220,10 +220,10 @@ class Jmp extends AbstractImporter
             ),
         ),
     );
-    private $cacheAlternateCategories = array();
-    private $cacheCategories = array();
+    private $cacheAlternateFilters = array();
+    private $cacheFilters = array();
     private $cacheQuestions = array();
-    private $cacheFilterComponents = array();
+    private $cacheHighFilters = array();
     private $questionnaireCount = 0;
     private $answerCount = 0;
     private $excludesCount = 0;
@@ -246,7 +246,7 @@ class Jmp extends AbstractImporter
         $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
         $reader->setReadDataOnly(true);
 
-        $sheeNamesToImport = array_keys($this->officialCategoriesDefinition);
+        $sheeNamesToImport = array_keys($this->definitions);
         $reader->setLoadSheetsOnly($sheeNamesToImport);
         $workbook = $reader->load($filename);
 
@@ -256,8 +256,8 @@ class Jmp extends AbstractImporter
 
         foreach ($sheeNamesToImport as $i => $sheetName) {
 
-            $this->importCategories($this->officialCategoriesDefinition[$sheetName]);
-            $this->importFilterComponents($sheetName == 'Tables_W' ? 'Water' : 'Sanitation', $this->officialCategoriesDefinition[$sheetName]['filterComponents']);
+            $this->importOfficialFilters($this->definitions[$sheetName]);
+            $this->importHighFilters($sheetName == 'Tables_W' ? 'Water' : 'Sanitation', $this->definitions[$sheetName]['highFilters']);
 
             $workbook->setActiveSheetIndex($i);
             $sheet = $workbook->getSheet($i);
@@ -269,73 +269,78 @@ class Jmp extends AbstractImporter
             }
         }
 
+        $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
+        $answerRepository->updateAbsoluteValueFromPercentageValue();
+
         return "Total imported: $this->questionnaireCount questionnaires, $this->answerCount answers, $this->excludesCount exclude rules" . PHP_EOL;
     }
 
-    protected function getCategory($definition)
+    protected function getFilter($definition)
     {
         $name = $definition[0];
 
-        $parent = @$this->cacheCategories[$definition[1]];
+        $parent = @$this->cacheFilters[$definition[1]];
         $parentName = $parent ? $parent->getName() : null;
 
-        $categoryRepository = $this->getEntityManager()->getRepository('Application\Model\Category');
-        $category = $categoryRepository->getOneByNames($name, $parentName);
-        if (!$category) {
+        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
+        $filter = $filterRepository->getOneByNames($name, $parentName);
+        if (!$filter) {
 
-            $category = new \Application\Model\Category();
-            $this->getEntityManager()->persist($category);
-            $category->setName($name);
-            $category->setOfficial(true);
-            $category->setParent($parent);
+            $filter = new \Application\Model\Filter();
+            $this->getEntityManager()->persist($filter);
+            $filter->setName($name);
+            $filter->setIsOfficial(true);
+            if ($parent) {
+                $parent->addChild($filter);
+            }
         }
 
-        return $category;
+        return $filter;
     }
 
     /**
-     *
-     * @param array $officialCategories
+     * Import official filters
+     * @param array $officialFilters
      */
-    protected function importCategories(array $officialCategories)
+    protected function importOfficialFilters(array $officialFilters)
     {
-        // Import categories
-        $this->cacheCategories = array();
-        foreach ($officialCategories['definitions'] as $row => $definition) {
-            $category = $this->getCategory($definition);
-            $this->cacheCategories[$row] = $category;
+        // Import filters
+        $this->cacheFilters = array();
+        foreach ($officialFilters['definitions'] as $row => $definition) {
+            $filter = $this->getFilter($definition);
+            $this->cacheFilters[$row] = $filter;
         }
 
-        // Add all summands to categories
-        foreach ($officialCategories['definitions'] as $row => $definition) {
-            $category = $this->cacheCategories[$row];
+        // Add all summands to filters
+        foreach ($officialFilters['definitions'] as $row => $definition) {
+            $filter = $this->cacheFilters[$row];
             $summands = $definition[3];
             if ($summands) {
                 foreach ($summands as $summand) {
-                    $s = $this->cacheCategories[$summand];
-                    $category->addSummand($s);
+                    $s = $this->cacheFilters[$summand];
+                    $filter->addSummand($s);
                 }
             }
         }
 
-        // Replace categories with their replacements, if any defined
-        // This is a dirty trick to solve inconsistency in first category of sanitation
-        foreach ($officialCategories['replacements'] as $row => $definition) {
-            $replacementCategory = $this->getCategory($definition);
-            $originalCategory = @$this->cacheCategories[$row];
+        // Replace filters with their replacements, if any defined
+        // This is a dirty trick to solve inconsistency in first filter of sanitation
+        foreach ($officialFilters['replacements'] as $row => $definition) {
+            $replacementFilter = $this->getFilter($definition);
+            $originalFilter = @$this->cacheFilters[$row];
 
-            // If original category actually exists, add the replacement as a summand, and replace it
-            if ($originalCategory) {
-                $originalCategory->addSummand($replacementCategory);
+            // If original filter actually exists, add the replacement as a summand, and replace it
+            if ($originalFilter) {
+                $originalFilter->addSummand($replacementFilter);
             }
-            $this->cacheCategories[$row] = $replacementCategory;
+            $this->cacheFilters[$row] = $replacementFilter;
 
-            // Keep original category available on negative indexes
-            $this->cacheCategories[-$row] = $originalCategory;
+            // Keep original filter available on negative indexes
+            $this->cacheFilters[-$row] = $originalFilter;
         }
 
         $this->getEntityManager()->flush();
-        echo count($this->cacheCategories) . ' categories imported' . PHP_EOL;
+        echo count($this->cacheFilters) . ' filters imported' . PHP_EOL;
     }
 
     /**
@@ -408,7 +413,7 @@ class Jmp extends AbstractImporter
      */
     protected function importAnswers(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Survey $survey, \Application\Model\Questionnaire $questionnaire)
     {
-        // Define the categories where we actually have answer data
+        // Define the filters where we actually have answer data
         $parts = array(
             $col + 3 => $this->partUrban,
             $col + 4 => $this->partRural,
@@ -416,18 +421,18 @@ class Jmp extends AbstractImporter
         );
 
         $repository = $this->getEntityManager()->getRepository('Application\Model\Answer');
-        $knownRows = array_keys($this->cacheCategories);
-        array_shift($knownRows); // Skip first categorie, since it's not an actual row, but the sheet topic (eg: "Access to drinking water sources")
+        $knownRows = array_keys($this->cacheFilters);
+        array_shift($knownRows); // Skip first filter, since it's not an actual row, but the sheet topic (eg: "Access to drinking water sources")
 
         $answerCount = 0;
         foreach ($knownRows as $row) {
 
-            $category = $this->cacheCategories[$row];
+            $filter = $this->cacheFilters[$row];
 
             // Use alternate instead of official, if any
-            $alternateCategoryName = $sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
-            if ($alternateCategoryName) {
-                $category = $this->getAlternateCategory($alternateCategoryName, $category);
+            $alternateFilterName = $sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
+            if ($alternateFilterName) {
+                $filter = $this->getAlternateFilter($alternateFilterName, $filter);
             }
 
             // Import answers
@@ -435,8 +440,8 @@ class Jmp extends AbstractImporter
                 $answerCell = $sheet->getCellByColumnAndRow($c, $row);
 
                 // Only import value which are numeric, and NOT formula,
-                // unless an alternate category is defined, in this case we will import the formula result
-                if ($alternateCategoryName || $answerCell->getDataType() == \PHPExcel_Cell_DataType::TYPE_NUMERIC) {
+                // unless an alternate filter is defined, in this case we will import the formula result
+                if ($alternateFilterName || $answerCell->getDataType() == \PHPExcel_Cell_DataType::TYPE_NUMERIC) {
 
                     // If there is actually no value, skip it (need to be done after previous if to avoid formula exception within PHPExcel)
                     $value = $this->getCalculatedValueSafely($answerCell);
@@ -444,7 +449,7 @@ class Jmp extends AbstractImporter
                         continue;
                     }
 
-                    $question = $this->getQuestion($survey, $category, $answerCount);
+                    $question = $this->getQuestion($survey, $filter, $answerCount);
 
                     // If question already exists, maybe the answer also already exists, in that case we will overwrite its value
                     $answer = null;
@@ -581,59 +586,59 @@ class Jmp extends AbstractImporter
     }
 
     /**
-     * Returns an alternate category linked to the official either from database, or newly created
+     * Returns an alternate filter linked to the official either from database, or newly created
      * @param string $name
-     * @param \Application\Model\Category $officialCategory
-     * @return \Application\Model\Category
+     * @param \Application\Model\Filter $officialFilter
+     * @return \Application\Model\Filter
      */
-    protected function getAlternateCategory($name, \Application\Model\Category $officialCategory)
+    protected function getAlternateFilter($name, \Application\Model\Filter $officialFilter)
     {
-        if ($name == $officialCategory->getName())
-            return $officialCategory;
+        if ($name == $officialFilter->getName())
+            return $officialFilter;
 
-        $key = $name . '::' . $officialCategory->getName();
-        if (array_key_exists($key, $this->cacheAlternateCategories)) {
-            $category = $this->cacheAlternateCategories[$key];
+        $key = $name . '::' . $officialFilter->getName();
+        if (array_key_exists($key, $this->cacheAlternateFilters)) {
+            $filter = $this->cacheAlternateFilters[$key];
         } else {
             $this->getEntityManager()->flush();
-            $categoryRepository = $this->getEntityManager()->getRepository('Application\Model\Category');
+            $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
             $criteria = array(
                 'name' => $name,
-                'officialCategory' => $officialCategory,
+                'officialFilter' => $officialFilter,
             );
-            $category = $categoryRepository->findOneBy($criteria);
+            $filter = $filterRepository->findOneBy($criteria);
         }
 
-        if (!$category) {
-            $category = new \Application\Model\Category();
-            $this->getEntityManager()->persist($category);
-            $category->setName($name);
-            $category->setOfficialCategory($officialCategory);
+        if (!$filter) {
+            $filter = new \Application\Model\Filter();
+            $this->getEntityManager()->persist($filter);
+            $filter->setName($name);
+            $filter->setOfficialFilter($officialFilter);
         }
 
-        $this->cacheAlternateCategories[$key] = $category;
+        $this->cacheAlternateFilters[$key] = $filter;
 
-        return $category;
+        return $filter;
     }
 
     /**
      * Returns a question either from database, or newly created
      * @param \Application\Model\Questionnaire $survey
-     * @param \Application\Model\Category $category
+     * @param \Application\Model\Filter $filter
      * @param integer $sorting Sorting of the question
      * @return \Application\Model\Question
      */
-    protected function getQuestion(\Application\Model\Survey $survey, \Application\Model\Category $category, $sorting)
+    protected function getQuestion(\Application\Model\Survey $survey, \Application\Model\Filter $filter, $sorting)
     {
         $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question');
 
-        $key = $survey->getCode() . '::' . $category->getName() . '::' . $sorting;
+        $key = $survey->getCode() . '::' . $filter->getName() . '::' . $sorting;
 
         if (array_key_exists($key, $this->cacheQuestions)) {
             $question = $this->cacheQuestions[$key];
         } else {
             $this->getEntityManager()->flush();
-            $question = $questionRepository->findOneBy(array('survey' => $survey, 'category' => $category));
+            $question = $questionRepository->findOneBy(array('survey' => $survey, 'filter' => $filter));
         }
 
         if (!$question) {
@@ -641,7 +646,7 @@ class Jmp extends AbstractImporter
             $this->getEntityManager()->persist($question);
 
             $question->setSurvey($survey);
-            $question->setCategory($category);
+            $question->setFilter($filter);
             $question->setSorting($sorting);
             $question->setName('Percentage of population?');
             $question->setHasParts(true);
@@ -658,7 +663,7 @@ class Jmp extends AbstractImporter
 
     public function importRules(\PHPExcel_Worksheet $sheet, $col)
     {
-        $range = $this->officialCategoriesDefinition[$sheet->getTitle()]['estimations'];
+        $range = $this->definitions[$sheet->getTitle()]['estimations'];
 
         for ($row = $range['min']; $row <= $range['max']; $row++) {
             $ruleName = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
@@ -666,41 +671,40 @@ class Jmp extends AbstractImporter
             if ($ruleName) {
                 if (!array_key_exists($ruleName, $this->cacheRules)) {
                     $this->cacheRules[$ruleName] = $ruleFormula;
-//                    var_dump(array($ruleName, $ruleFormula));
                 }
             }
         }
     }
 
-    public function importFilterComponents($name, array $filterComponents)
+    public function importHighFilters($name, array $filters)
     {
-        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
-        $filter = $filterRepository->getOrCreate($name);
+        $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
+        $filterSet = $filterSetRepository->getOrCreate($name);
         $this->getEntityManager()->flush();
 
         // Get or create all filterComponent
-        foreach ($filterComponents as $name => $categories) {
+        foreach ($filters as $name => $children) {
 
-            $filterComponent = null;
-            foreach ($filter->getCategoryFilterComponents() as $f) {
+            $filter = null;
+            foreach ($filterSet->getFilters() as $f) {
                 if ($f->getName() == $name) {
-                    $filterComponent = $f;
+                    $filter = $f;
                     break;
                 }
             }
 
-            if (!$filterComponent) {
-                $filterComponent = new \Application\Model\CategoryFilterComponent($name);
-                $filter->addCategoryFilterComponent($filterComponent);
-                $this->getEntityManager()->persist($filterComponent);
+            if (!$filter) {
+                $filter = new \Application\Model\Filter($name);
+                $filterSet->addFilter($filter);
+                $this->getEntityManager()->persist($filter);
             }
 
-            // Affect categories
-            foreach ($categories as $category) {
-                $filterComponent->addCategory($this->cacheCategories[$category]);
+            // Affect children filters
+            foreach ($children as $child) {
+                $filter->addChild($this->cacheFilters[$child]);
             }
 
-            $this->cacheFilterComponents[$name] = $filterComponent;
+            $this->cacheHighFilters[$name] = $filter;
         }
     }
 
@@ -718,10 +722,10 @@ class Jmp extends AbstractImporter
             $col + 5 => null, // total is not a part
         );
 
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\CategoryFilterComponentRule');
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
 
-        foreach ($this->officialCategoriesDefinition[$sheet->getTitle()]['excludes'] as $row => $filterComponentName) {
-            $categoryFilterComponent = $this->cacheFilterComponents[$filterComponentName];
+        foreach ($this->definitions[$sheet->getTitle()]['excludes'] as $row => $filterComponentName) {
+            $filter = $this->cacheHighFilters[$filterComponentName];
 
             foreach ($parts as $c => $part) {
                 $includedValue = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($c, $row));
@@ -732,16 +736,16 @@ class Jmp extends AbstractImporter
                         'questionnaire' => $questionnaire,
                         'rule' => $this->excludeRule,
                         'part' => $part,
-                        'categoryFilterComponent' => $categoryFilterComponent,
+                        'filter' => $filter,
                     ));
 
                     // If doesn't exist yet, create it
                     if (!$assoc) {
-                        $assoc = new \Application\Model\Rule\CategoryFilterComponentRule();
+                        $assoc = new \Application\Model\Rule\FilterRule();
                         $assoc->setQuestionnaire($questionnaire)
                                 ->setRule($this->excludeRule)
                                 ->setPart($part)
-                                ->setCategoryFilterComponent($categoryFilterComponent);
+                                ->setFilter($filter);
 
                         $this->getEntityManager()->persist($assoc);
                         $this->excludesCount++;

@@ -22,14 +22,19 @@ class PopulationRepository extends AbstractRepository
             q.geoname = g
             AND q = :questionnaire
             AND p.year = :year
-            AND p.part = :part
-            ");
+            AND (p.part " . ($part ? "= :part" : "IS NULL") . ")"
+                )
+        ;
 
-        $query->setParameters(array(
+        $params = array(
             'questionnaire' => $questionnaire,
             'year' => $questionnaire->getSurvey()->getYear(),
-            'part' => $part,
-        ));
+        );
+
+        if ($part)
+            $params['part'] = $part;
+
+        $query->setParameters($params);
 
         $population = $query->getOneOrNullResult();
 

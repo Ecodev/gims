@@ -88,7 +88,7 @@ class AnswerController extends AbstractRestfulController
             ),
             'question' => array(
                 'name',
-                'category' => array(
+                'filter' => array(
                     'name'
                 ),
             )

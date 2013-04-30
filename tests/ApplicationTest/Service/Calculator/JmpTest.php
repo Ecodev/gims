@@ -6,9 +6,9 @@ class JmpTest extends CalculatorTest
 {
 
     /**
-     * @var \Application\Model\Filter
+     * @var \Application\Model\FilterSet
      */
-    private $filter;
+    private $filterSet;
 
     /**
      * @var \Application\Service\Calculator\Jmp
@@ -27,7 +27,7 @@ class JmpTest extends CalculatorTest
         $this->questionnaire2 = new \Application\Model\Questionnaire();
 
 
-        // Define a second questionnaire with answers for leaf categories only
+        // Define a second questionnaire with answers for leaf filters only
         $questionnaire2 = new \Application\Model\Questionnaire();
 
         $survey2 = new \Application\Model\Survey();
@@ -37,8 +37,8 @@ class JmpTest extends CalculatorTest
         $question131 = new \Application\Model\Question();
         $question32 = new \Application\Model\Question();
 
-        $question131->setCategory($this->category131);
-        $question32->setCategory($this->category32);
+        $question131->setFilter($this->filter131);
+        $question32->setFilter($this->filter32);
 
         $answer131 = new \Application\Model\Answer();
         $answer32 = new \Application\Model\Answer();
@@ -49,10 +49,10 @@ class JmpTest extends CalculatorTest
 
         $this->questionnaires = array($this->questionnaire, $questionnaire2);
 
-        $this->filter = new \Application\Model\Filter('water');
-        $this->filter->addCategoryFilterComponent($this->categoryFilterComponent1)
-                ->addCategoryFilterComponent($this->categoryFilterComponent2)
-                ->addCategoryFilterComponent($this->categoryFilterComponent3);
+        $this->highFilterSet = new \Application\Model\FilterSet('water');
+        $this->highFilterSet->addFilter($this->highFilter1)
+                ->addFilter($this->highFilter2)
+                ->addFilter($this->highFilter3);
 
         // Clean existing population data
         $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneByCode('CH');
@@ -85,7 +85,7 @@ class JmpTest extends CalculatorTest
         $this->service2 = clone $this->service;
     }
 
-    public function testComputeCategoryFilterComponentForAllQuestionnaires()
+    public function testComputeFilterForAllQuestionnaires()
     {
         $this->assertEquals(array(
             'values' =>
@@ -112,7 +112,7 @@ class JmpTest extends CalculatorTest
             'average' => 0.10555,
             'average%' => 0.0088883333333333,
             'population' => 25,
-                ), $this->service->computeCategoryFilterComponentForAllQuestionnaires($this->categoryFilterComponent1, $this->questionnaires));
+                ), $this->service->computeFilterForAllQuestionnaires($this->highFilter1, $this->questionnaires));
 
         $this->assertEquals(array(
             'values' => array(),
@@ -127,7 +127,7 @@ class JmpTest extends CalculatorTest
             'average' => null,
             'average%' => null,
             'population' => 0,
-                ), $this->service->computeCategoryFilterComponentForAllQuestionnaires($this->categoryFilterComponent1, array()), 'no questionnaires should still return valid structure');
+                ), $this->service->computeFilterForAllQuestionnaires($this->highFilter1, array()), 'no questionnaires should still return valid structure');
     }
 
     /**
@@ -151,14 +151,14 @@ class JmpTest extends CalculatorTest
      */
     public function testComputeRegressionForUnknownYears($year, $expected)
     {
-        $this->assertEquals($expected, $this->service->computeRegression($year, $this->categoryFilterComponent1, $this->questionnaires), 'regression between known years according');
-        $this->assertNull($this->service->computeRegression($year, $this->categoryFilterComponent1, array()), 'no questionnaires should still return valid structure');
+        $this->assertEquals($expected, $this->service->computeRegression($year, $this->highFilter1, $this->questionnaires), 'regression between known years according');
+        $this->assertNull($this->service->computeRegression($year, $this->highFilter1, array()), 'no questionnaires should still return valid structure');
     }
 
     public function testComputeRegressionForShortPeriod()
     {
         $this->questionnaire->getSurvey()->setYear(2003);
-        $this->assertEquals(0.0088889166666667, $this->service->computeRegression(2004, $this->categoryFilterComponent3, $this->questionnaires), 'regression between known years according');
+        $this->assertEquals(0.0088889166666667, $this->service->computeRegression(2004, $this->highFilter3, $this->questionnaires), 'regression between known years according');
     }
 
     public function computeFlattenOneYearProvider()
@@ -393,21 +393,21 @@ class JmpTest extends CalculatorTest
      */
     public function testComputeFlatten($yearStart, $yearEnd, $useQuestionnaires, $expected)
     {
-        $this->assertEquals($expected, $this->service->computeFlatten($yearStart, $yearEnd, $this->filter, $useQuestionnaires ? $this->questionnaires : array()));
+        $this->assertEquals($expected, $this->service->computeFlatten($yearStart, $yearEnd, $this->highFilterSet, $useQuestionnaires ? $this->questionnaires : array()));
     }
 
-    public function testCacheOnFilterComponentLevelIsWorking()
+    public function testCacheOnFilterLevelIsWorking()
     {
         $tmp = $this->flattenProvider();
         $data = reset($tmp);
-        $res1 = $this->service->computeFlatten($data[0], $data[1], $this->filter, $this->questionnaires);
+        $res1 = $this->service->computeFlatten($data[0], $data[1], $this->highFilterSet, $this->questionnaires);
 
         $this->answer131->setValueAbsolute((0.2));
-        $res2 = $this->service->computeFlatten($data[0], $data[1], $this->filter, $this->questionnaires);
+        $res2 = $this->service->computeFlatten($data[0], $data[1], $this->highFilterSet, $this->questionnaires);
         $this->assertEquals($res1, $res2, 'result should be cached and therefore be the same');
 
 
-        $res3 = $this->service2->computeFlatten($data[0], $data[1], $this->filter, $this->questionnaires);
+        $res3 = $this->service2->computeFlatten($data[0], $data[1], $this->highFilterSet, $this->questionnaires);
 
         $this->assertNotEquals($res1, $res3, 'after clearing cache, result differs');
         $this->assertEquals(array(

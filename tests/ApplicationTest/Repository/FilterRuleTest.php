@@ -2,7 +2,7 @@
 
 namespace ApplicationTest\Repository;
 
-class CategoryFilterComponentRuleRepositoryTest extends AbstractRepository
+class FilterRuleRepositoryTest extends AbstractRepository
 {
 
     public function testCanSaveConcreteRuleAndReload()
@@ -13,15 +13,15 @@ class CategoryFilterComponentRuleRepositoryTest extends AbstractRepository
         $geoname = new \Application\Model\Geoname();
         $questionnaire = new \Application\Model\Questionnaire();
         $questionnaire->setSurvey($survey)->setGeoname($geoname)->setDateObservationStart(new \DateTime())->setDateObservationEnd(new \DateTime());
-        $categoryfiltercomponent = new \Application\Model\CategoryFilterComponent('test category filter component');
-        $relation = new \Application\Model\Rule\CategoryFilterComponentRule();
+        $filter = new \Application\Model\Filter('test filter filter component');
+        $relation = new \Application\Model\Rule\FilterRule();
         $rule = new \Application\Model\Rule\Exclude();
-        $relation->setCategoryFilterComponent($categoryfiltercomponent)->setQuestionnaire($questionnaire)->setRule($rule);
+        $relation->setFilter($filter)->setQuestionnaire($questionnaire)->setRule($rule);
 
         $this->getEntityManager()->persist($survey);
         $this->getEntityManager()->persist($geoname);
         $this->getEntityManager()->persist($questionnaire);
-        $this->getEntityManager()->persist($categoryfiltercomponent);
+        $this->getEntityManager()->persist($filter);
         $this->getEntityManager()->persist($rule);
         $this->getEntityManager()->persist($relation);
 

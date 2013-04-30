@@ -60,7 +60,7 @@ class QuestionControllerTest extends AbstractController
     public function ensureOnlyAllowedFieldAreDisplayedInResponseForQuestion()
     {
         $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
-        $allowedFields = array('id', 'name', 'category', 'answers');
+        $allowedFields = array('id', 'name', 'filter', 'answers');
         foreach ($this->getJsonResponse() as $key => $value) {
             $this->assertTrue(in_array($key, $allowedFields));
         }
@@ -128,7 +128,7 @@ class QuestionControllerTest extends AbstractController
             'type'     => 1,
             'sorting'  => 1,
             'survey'   => $this->survey->getId(),
-            'category' => $this->category->getId(),
+            'filter' => $this->filter->getId(),
         );
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);

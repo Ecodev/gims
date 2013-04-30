@@ -175,7 +175,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
         selectedItems: $scope.selectedRow,
         multiSelect: false,
         columnDefs: [
-            {field: 'category.name', displayName: 'Category'},
+            {field: 'filter.name', displayName: 'Filter'},
             {field: 'name', displayName: 'Name', width: '500px'},
             {field: 'answers.1.valuePercent', displayName: 'Urban', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate}, //, cellTemplate: 'cellTemplate.html'
             {field: 'answers.2.valuePercent', displayName: 'Rural', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
@@ -248,19 +248,19 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
 });
 
 
-angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $http, Country, Part, Filter, Select2Configurator, $timeout) {
+angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $http, Country, Part, FilterSet, Select2Configurator, $timeout) {
 
     // Configure select2 via our helper service
     Select2Configurator.configure($scope, Country, 'country');
     Select2Configurator.configure($scope, Part, 'part');
-    Select2Configurator.configure($scope, Filter, 'filter');
+    Select2Configurator.configure($scope, FilterSet, 'filterSet');
 
     // Whenever one of the parameter is changed
     var uniqueAjaxRequest;
-    $scope.$watch('select2.country.selected.id + select2.part.selected.id + select2.filter.selected.id', function (a) {
+    $scope.$watch('select2.country.selected.id + select2.part.selected.id + select2.filterSet.selected.id', function (a) {
 
         // If they are all available ...
-        if ($scope.select2.country.selected && $scope.select2.part.selected && $scope.select2.filter.selected) {
+        if ($scope.select2.country.selected && $scope.select2.part.selected && $scope.select2.filterSet.selected) {
             $timeout.cancel(uniqueAjaxRequest);
             uniqueAjaxRequest = $timeout(function () {
 
@@ -271,7 +271,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $http, 
                             params: {
                                 country: $scope.select2.country.selected.id,
                                 part: $scope.select2.part.selected.id,
-                                filter: $scope.select2.filter.selected.id
+                                filterSet: $scope.select2.filterSet.selected.id
                             }
                         }).success(function (data) {
                     $scope.chart = data;

@@ -4,13 +4,13 @@ namespace Application\Service\Calculator;
 
 use Application\Model\Questionnaire;
 use Application\Model\Part;
+use Application\Model\FilterSet;
 use Application\Model\Filter;
-use Application\Model\CategoryFilterComponent;
 
 class Jmp extends Calculator
 {
 
-    private $cacheComputeCategoryFilterComponentForAllQuestionnaires = array();
+    private $cacheComputeFilterForAllQuestionnaires = array();
     private $populationRepository;
 
     /**
@@ -34,30 +34,30 @@ class Jmp extends Calculator
         if (!$this->populationRepository) {
             $this->populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
         }
-        
+
         return $this->populationRepository;
     }
 
     /**
-     * Returns an array of all filterComponent data, which includes name and year-regression pairs
+     * Returns an array of all filter data, which includes name and year-regression pairs
      * This is the highest level of computation, the "main" computation method.
      * @param integer $yearStart
      * @param integer $yearEnd
-     * @param \Application\Model\Filter $filter
+     * @param \Application\Model\FilterSet $filterSet
      * @param array $questionnaires
      * @param \Application\Model\Part $part
-     * @return array [[name => filterComponentName, data => [year => flattenedRegression]]]]
+     * @return array [[name => filterName, data => [year => flattenedRegression]]]]
      */
-    public function computeFlatten($yearStart, $yearEnd, Filter $filter, $questionnaires, Part $part = null)
+    public function computeFlatten($yearStart, $yearEnd, FilterSet $filterSet, $questionnaires, Part $part = null)
     {
         $result = array();
         $years = range($yearStart, $yearEnd);
-        foreach ($filter->getCategoryFilterComponents() as $filterComponent) {
+        foreach ($filterSet->getFilters() as $filter) {
 
 
             $allRegressions = array();
             foreach ($years as $year) {
-                $allRegressions[$year] = $this->computeRegression($year, $filterComponent, $questionnaires, $part);
+                $allRegressions[$year] = $this->computeRegression($year, $filter, $questionnaires, $part);
             }
 
             $d = array();
@@ -66,7 +66,7 @@ class Jmp extends Calculator
             }
 
             $result[] = array(
-                'name' => $filterComponent->getName(),
+                'name' => $filter->getName(),
                 'data' => $d,
             );
         }
@@ -142,14 +142,14 @@ class Jmp extends Calculator
         return $result;
     }
 
-    public function computeRegression($year, CategoryFilterComponent $filterComponent, $questionnaires, Part $part = null)
+    public function computeRegression($year, Filter $filter, $questionnaires, Part $part = null)
     {
-        $d = $this->computeCategoryFilterComponentForAllQuestionnaires($filterComponent, $questionnaires, $part);
+        $d = $this->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
 
         if ($year == $d['maxYear'] + 6) {
-            $result = $this->computeRegression($year - 4, $filterComponent, $questionnaires, $part);
+            $result = $this->computeRegression($year - 4, $filter, $questionnaires, $part);
         } elseif ($year == $d['minYear'] - 6) {
-            $result = $this->computeRegression($year + 4, $filterComponent, $questionnaires, $part);
+            $result = $this->computeRegression($year + 4, $filter, $questionnaires, $part);
         } elseif ($year < $d['maxYear'] + 3 && $year > $d['minYear'] - 3 && $d['count'] > 1 && $d['period'] > 4) {
             $result = \PHPExcel_Calculation_Statistical::FORECAST($year, $d['values%'], $d['years']);
         } elseif ($year < $d['maxYear'] + 7 && $year > $d['minYear'] - 7 && ($d['count'] < 2 || $d['period'] < 5)) {
@@ -168,20 +168,20 @@ class Jmp extends Calculator
     /**
      * Implement computing on filter level, as seen on tab "GraphData_W"
      * @param \Application\Model\Filter $filter
-     * @param type $questionnaires
+     * @param array $questionnaires
      * @param \Application\Model\Part $part
      * @return array
      */
-    public function computeCategoryFilterComponentForAllQuestionnaires(CategoryFilterComponent $filterComponent, $questionnaires, Part $part = null)
+    public function computeFilterForAllQuestionnaires(Filter $filter, $questionnaires, Part $part = null)
     {
         $key = null;
         foreach ($questionnaires as $questionnaire) {
             $key .= spl_object_hash($questionnaire);
         }
-        $key .= spl_object_hash($filterComponent) . ($part ? spl_object_hash($part) : null);
+        $key .= spl_object_hash($filter) . ($part ? spl_object_hash($part) : null);
 
-        if (array_key_exists($key, $this->cacheComputeCategoryFilterComponentForAllQuestionnaires)) {
-            return $this->cacheComputeCategoryFilterComponentForAllQuestionnaires[$key];
+        if (array_key_exists($key, $this->cacheComputeFilterForAllQuestionnaires)) {
+            return $this->cacheComputeFilterForAllQuestionnaires[$key];
         }
 
         $result = array(
@@ -189,7 +189,7 @@ class Jmp extends Calculator
             'values%' => array(),
             'count' => 0,
         );
-        $rules = $filterComponent->getCategoryFilterComponentRules();
+        $rules = $filter->getFilterRules();
         $totalPopulation = 0;
         $years = array();
         $yearsWithData = array();
@@ -211,7 +211,7 @@ class Jmp extends Calculator
             $year = $questionnaire->getSurvey()->getYear();
             $years[] = $year;
 
-            $computed = $this->computeCategoryFilterComponent($filterComponent, $questionnaire, $part);
+            $computed = $this->computeFilter($filter, $questionnaire, $part);
             if (is_null($computed)) {
 
                 $result['values'][$questionnaire->getSurvey()->getCode()] = null;
@@ -242,7 +242,7 @@ class Jmp extends Calculator
         $result['population'] = $totalPopulation;
 
 
-        $this->cacheComputeCategoryFilterComponentForAllQuestionnaires[$key] = $result;
+        $this->cacheComputeFilterForAllQuestionnaires[$key] = $result;
 
         return $result;
     }

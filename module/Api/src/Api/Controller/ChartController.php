@@ -10,7 +10,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     public function indexAction()
     {
         $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneById($this->params()->fromQuery('country'));
-        $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($this->params()->fromQuery('filter'));
+        $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
         $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
 
         $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findBy(array('geoname' => $country ? $country->getGeoname() : -1));
@@ -22,7 +22,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $endYear = 2011;
 
         // First get series of flatten regression lines
-        $series = $calculator->computeFlatten($startYear, $endYear, $filter, $questionnaires, $part);
+        $series = $calculator->computeFlatten($startYear, $endYear, $filterSet, $questionnaires, $part);
         foreach ($series as &$serie) {
             $serie['type'] = 'spline';
             foreach ($serie['data'] as &$d) {
@@ -32,12 +32,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         }
 
         // Then add scatter points which are each questionnaire values
-        foreach ($filter->getCategoryFilterComponents() as $filterComponent) {
-            $data = $calculator->computeCategoryFilterComponentForAllQuestionnaires($filterComponent, $questionnaires, $part);
+        foreach ($filterSet->getFilters() as $filter) {
+            $data = $calculator->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
 
             $scatter = array(
                 'type' => 'scatter',
-                'name' => $filterComponent->getName(),
+                'name' => $filter->getName(),
                 'data' => array(),
             );
             $i = 0;
@@ -63,13 +63,13 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             ),
             // Here we use default highchart colors and symbols, but truncated at the same number of series,
             // so it will get repeated for lines and scatter points
-            'colors' => array_slice(array('#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'), 0, $filter->getCategoryFilterComponents()->count()),
-            'symbols' => array_slice(array('circle', 'diamond', 'square', 'triangle', 'triangle-down'), 0, $filter->getCategoryFilterComponents()->count()),
+            'colors' => array_slice(array('#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'), 0, $filterSet->getFilters()->count()),
+            'symbols' => array_slice(array('circle', 'diamond', 'square', 'triangle', 'triangle-down'), 0, $filterSet->getFilters()->count()),
             'title' => array(
                 'text' =>  ($country ? $country->getName() : 'Unknown country') . ' - ' . ($part ? $part->getName() : 'Total'),
             ),
             'subtitle' => array(
-                'text' => 'JMP - estimated proportion of the population for ' . $filter->getName(),
+                'text' => 'JMP - estimated proportion of the population for ' . $filterSet->getName(),
             ),
             'xAxis' => array(
                 'title' => array(

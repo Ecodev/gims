@@ -3,7 +3,7 @@
 namespace ApiTest\Controller;
 
 use Application\Model\Answer;
-use Application\Model\Category;
+use Application\Model\Filter;
 use Application\Model\Geoname;
 use Application\Model\Part;
 use Application\Model\Permission;
@@ -34,9 +34,9 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
     protected $question;
 
     /**
-     * @var Category
+     * @var Filter
      */
-    protected $category;
+    protected $filter;
 
     /**
      * @var Part
@@ -103,9 +103,9 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
 
         $this->geoName = new Geoname();
 
-        $this->category = new Category();
-        $this->category->setName('foo')
-                ->setOfficial(true);
+        $this->filter = new Filter();
+        $this->filter->setName('foo')
+                ->setIsOfficial(true);
 
         $this->questionnaire = new Questionnaire();
         $this->questionnaire->setSurvey($this->survey);
@@ -117,7 +117,7 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
         $this->question->setSurvey($this->survey)
                 ->setSorting(1)
                 ->setType(1)
-                ->setCategory($this->category)
+                ->setFilter($this->filter)
                 ->setName('foo');
         $this->part = new Part();
         $this->part->setName('test part 1');
@@ -163,7 +163,7 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
         $this->getEntityManager()->persist($this->userQuestionnaire);
         $this->getEntityManager()->persist($this->part);
         $this->getEntityManager()->persist($this->part2);
-        $this->getEntityManager()->persist($this->category);
+        $this->getEntityManager()->persist($this->filter);
         $this->getEntityManager()->persist($this->geoName);
         $this->getEntityManager()->persist($this->survey);
         $this->getEntityManager()->persist($this->questionnaire);

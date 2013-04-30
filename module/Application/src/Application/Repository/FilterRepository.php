@@ -2,18 +2,51 @@
 
 namespace Application\Repository;
 
-use Application\Model\Filter;
-
 class FilterRepository extends AbstractRepository
 {
 
-    public function getOrCreate($name)
+    /**
+     * Returns a filter either from database, or newly created
+     * @param string $name
+     * @param string $parentName
+     * @return \Application\Model\Filter
+     */
+    public function getOneByNames($name, $parentName)
     {
-        $filter = $this->findOneByName($name);
-        if (!$filter) {
-            $filter = new Filter($name);
-            $this->getEntityManager()->persist($filter);
+        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
+
+        $qb = $filterRepository->createQueryBuilder('f')->where('f.name = :name');
+        $parameters = array('name' => $name);
+        if ($parentName) {
+            $parameters['parentName'] = $parentName;
+            $qb->join('f.parents', 'p', \Doctrine\ORM\Query\Expr\Join::WITH, 'p.name = :parentName');
+        } else {
+            $qb->leftJoin('f.parents', 'p')
+                    ->having('COUNT(p.id) = 0')
+                    ->groupBy('f.id');
         }
+
+        $q = $qb->getQuery();
+        $q->setParameters($parameters);
+
+        $filter = $q->getOneOrNullResult();
+
+        return $filter;
+    }
+
+    public function getOfficialRoots()
+    {
+
+        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
+
+        $qb = $filterRepository->createQueryBuilder('f')->where('f.isOfficial = true');
+            $qb->leftJoin('f.parents', 'p')
+                    ->having('COUNT(p.id) = 0')
+                    ->groupBy('f.id');
+
+        $q = $qb->getQuery();
+
+        $filter = $q->getResult();
 
         return $filter;
     }

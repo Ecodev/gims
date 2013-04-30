@@ -32,31 +32,31 @@ class QuestionnaireController extends AbstractRestfulController
             return;
         }
 
-        $categoryRepository = $this->getEntityManager()->getRepository('Application\Model\Category');
+        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
 
-        $topCategories = $categoryRepository->findBy(array(
-            'parent' => null,
-            'official' => true,
-        ));
+        $officialRootFilters = $filterRepository->getOfficialRoots();
 
         $result = array();
         $result[] = $questionnaire->getSurvey()->getName() . ', ' . $questionnaire->getSurvey()->getCode() . ', ' . $questionnaire->getGeoname()->getName();
-        foreach ($topCategories as $category) {
-            $result [] = $this->computeWithChildren($questionnaire, $population, $category, $part);
+        foreach ($officialRootFilters as $filter) {
+            $result [] = $this->computeWithChildren($questionnaire, $population, $filter, $part);
         }
 
         return new JsonModel($result);
     }
 
-    private function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Population $population, \Application\Model\Category $category, \Application\Model\Part $part = null)
+    private function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Population $population, \Application\Model\Filter $filter, \Application\Model\Part $part = null)
     {
+
+        $service = new \Application\Service\Calculator\Calculator();
+
         $result = array();
-        $computed = $questionnaire->compute($category, $part);
-        $result[$category->getName()] = $computed && $population->getPopulation() ? $computed / $population->getPopulation() : null;
+        $computed = $service->computeQuestionnaire($questionnaire, $filter, $part);
+        $result[$filter->getName()] = $computed && $population->getPopulation() ? $computed / $population->getPopulation() : null;
 
         $children = array();
-        foreach ($category->getChildren() as $child) {
-            if ($child->getOfficial()) {
+        foreach ($filter->getChildren() as $child) {
+            if ($child->isOfficial()) {
                 $children[] = $this->computeWithChildren($questionnaire, $population, $child, $part);
             }
         }

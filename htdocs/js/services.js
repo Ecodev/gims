@@ -51,6 +51,9 @@ angular.module('myApp.resourceServices', ['ngResource'])
     .factory('Filter', function ($resource) {
         return $resource('/api/filter/:id');
     })
+    .factory('FilterSet', function ($resource) {
+        return $resource('/api/filter-set/:id');
+    })
     .factory('Select2Configurator', function ($location) {
         return {configure: function($scope, Resource, key) {
 

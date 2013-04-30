@@ -5,23 +5,23 @@ namespace Application\Model\Rule;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CategoryFilterComponentRule is used to link a CategoryFilterComponentRule, a Rule and a Questionnaire.
+ * FilterRule is used to link a FilterRule, a Rule and a Questionnaire.
  *
- * @ORM\Entity(repositoryClass="Application\Repository\CategoryFilterComponentRuleRepository")
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="rule_unique",columns={"category_filter_component_id", "questionnaire_id", "part_id", "rule_id"})})
+ * @ORM\Entity(repositoryClass="Application\Repository\FilterRuleRepository")
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="filter_rule_unique",columns={"filter_id", "questionnaire_id", "part_id", "rule_id"})})
  */
-class CategoryFilterComponentRule extends \Application\Model\AbstractModel
+class FilterRule extends \Application\Model\AbstractModel
 {
 
     /**
-     * @var CategoryFilterComponent
+     * @var Filter
      *
-     * @ORM\ManyToOne(targetEntity="Application\Model\CategoryFilterComponent", inversedBy="categoryFilterComponentRules")
+     * @ORM\ManyToOne(targetEntity="Application\Model\Filter", inversedBy="filterRules")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
      */
-    private $categoryFilterComponent;
+    private $filter;
 
     /**
      * @var Questionnaire
@@ -54,34 +54,34 @@ class CategoryFilterComponentRule extends \Application\Model\AbstractModel
     private $rule;
 
     /**
-     * Set categoryfiltercomponent
+     * Set filter
      *
-     * @param CategoryFilterComponent $categoryfiltercomponent
-     * @return CategoryFilterComponentRule
+     * @param Filter $filter
+     * @return FilterRule
      */
-    public function setCategoryFilterComponent(\Application\Model\CategoryFilterComponent $categoryfiltercomponent)
+    public function setFilter(\Application\Model\Filter $filter)
     {
-        $this->categoryFilterComponent = $categoryfiltercomponent;
-        $categoryfiltercomponent->ruleAdded($this);
+        $this->filter = $filter;
+        $filter->ruleAdded($this);
 
         return $this;
     }
 
     /**
-     * Get categoryFilterComponent
+     * Get filter
      *
-     * @return \Application\Model\CategoryFilterComponent
+     * @return \Application\Model\Filter
      */
-    public function getCategoryFilterComponent()
+    public function getFilter()
     {
-        return $this->categoryFilterComponent;
+        return $this->filter;
     }
 
     /**
      * Set questionnaire
      *
      * @param \Application\Model\Questionnaire $questionnaire
-     * @return CategoryFilterComponentRule
+     * @return FilterRule
      */
     public function setQuestionnaire(\Application\Model\Questionnaire $questionnaire)
     {
@@ -104,7 +104,7 @@ class CategoryFilterComponentRule extends \Application\Model\AbstractModel
      * Set part
      *
      * @param \Application\Model\Part $part
-     * @return CategoryFilterComponentRule
+     * @return FilterRule
      */
     public function setPart(\Application\Model\Part $part = null)
     {
@@ -127,7 +127,7 @@ class CategoryFilterComponentRule extends \Application\Model\AbstractModel
      * Set rule
      *
      * @param AbstractRule $rule
-     * @return CategoryFilterComponentRule
+     * @return FilterRule
      */
     public function setRule(AbstractRule $rule)
     {

@@ -79,7 +79,11 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
 
                 $propertyName = $key;
             } else {
-                $getter = 'get' . ucfirst($value);
+                if (strpos($value, 'is') === 0) {
+                    $getter = $value;
+                } else {
+                    $getter = 'get' . ucfirst($value);
+                }
                 $propertyValue = $object->$getter();
                 if ($propertyValue instanceof \DateTime) {
                     $propertyValue = $propertyValue->format(\DateTime::ISO8601);

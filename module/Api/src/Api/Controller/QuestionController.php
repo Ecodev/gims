@@ -28,11 +28,11 @@ class QuestionController extends AbstractRestfulController
 
         return array(
             'name',
-            'category' => array(
+            'filter' => array(
                 'name',
-                'parent' => array(
+                'parents' => array(
                     'name',
-                    'parent' => array(
+                    'parents' => array(
                         'name',
                     ),
                 ),

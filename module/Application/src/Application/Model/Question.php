@@ -34,14 +34,14 @@ class Question extends AbstractModel
     private $name;
 
     /**
-     * @var Category
+     * @var Filter
      *
-     * @ORM\ManyToOne(targetEntity="Category", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Filter", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="SET NULL", nullable=false)
      * })
      */
-    private $category;
+    private $filter;
 
     /**
      * @var Question
@@ -150,26 +150,26 @@ class Question extends AbstractModel
     }
 
     /**
-     * Set category
+     * Set filter
      *
-     * @param Category $category
+     * @param Filter $filter
      * @return Question
      */
-    public function setCategory(Category $category = null)
+    public function setFilter(Filter $filter = null)
     {
-        $this->category = $category;
+        $this->filter = $filter;
 
         return $this;
     }
 
     /**
-     * Get category
+     * Get filter
      *
-     * @return Category
+     * @return Filter
      */
-    public function getCategory()
+    public function getFilter()
     {
-        return $this->category;
+        return $this->filter;
     }
 
     /**

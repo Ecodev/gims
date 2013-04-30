@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Rule is a way to exclude specify custom behavior during computing on filter level.
- * This is on a filterComponent-questionnaire-part basis.
+ * This is on a filter-questionnaire-part basis.
  *
  * @ORM\Entity(repositoryClass="Application\Repository\RuleRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")

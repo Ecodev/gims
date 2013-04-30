@@ -8,74 +8,74 @@ class CalculatorTest extends \ApplicationTest\Controller\AbstractController
 {
 
     /**
-     * @var \Application\Model\Category
+     * @var \Application\Model\Filter
      */
-    protected $category1;
+    protected $filter1;
 
     /**
-     * @var \Application\Model\Category
+     * @var \Application\Model\Filter
      */
-    protected $category11;
+    protected $filter11;
 
     /**
-     * @var \Application\Model\Category
+     * @var \Application\Model\Filter
      */
-    protected $category12;
+    protected $filter12;
 
     /**
-     * @var \Application\Model\Category
+     * @var \Application\Model\Filter
      */
-    protected $category13;
+    protected $filter13;
 
     /**
-     * @var \Application\Model\Category
+     * @var \Application\Model\Filter
      */
-    protected $category131;
+    protected $filter131;
 
     /**
-     * @var \Application\Model\Category
+     * @var \Application\Model\Filter
      */
-    protected $category132;
+    protected $filter132;
 
     /**
-     * @var \Application\Model\Category
+     * @var \Application\Model\Filter
      */
-    protected $category14;
+    protected $filter14;
 
     /**
-     * @var \Application\Model\Category
+     * @var \Application\Model\Filter
      */
-    protected $category141;
+    protected $filter141;
 
     /**
-     * @var \Application\Model\Category
+     * @var \Application\Model\Filter
      */
-    protected $category142;
+    protected $filter142;
 
     /**
-     * @var \Application\Model\Category
+     * @var \Application\Model\Filter
      */
-    protected $category2;
+    protected $filter2;
 
     /**
-     * @var \Application\Model\Category
+     * @var \Application\Model\Filter
      */
-    protected $category21;
+    protected $filter21;
 
     /**
-     * @var \Application\Model\Category
+     * @var \Application\Model\Filter
      */
-    protected $category3;
+    protected $filter3;
 
     /**
-     * @var \Application\Model\Category
+     * @var \Application\Model\Filter
      */
-    protected $category31;
+    protected $filter31;
 
     /**
-     * @var \Application\Model\Category
+     * @var \Application\Model\Filter
      */
-    protected $category32;
+    protected $filter32;
 
     /**
      * @var \Application\Model\Questionnaire
@@ -143,58 +143,52 @@ class CalculatorTest extends \ApplicationTest\Controller\AbstractController
     protected $answer32;
 
     /**
-     * @var \Application\Model\CategoryFilterComponent
+     * @var \Application\Model\Filter
      */
-    protected $categoryFilterComponent1;
+    protected $highFilter1;
 
     /**
-     * @var \Application\Model\CategoryFilterComponent
+     * @var \Application\Model\Filter
      */
-    protected $categoryFilterComponent2;
+    protected $highFilter2;
 
     /**
-     * @var \Application\Model\CategoryFilterComponent
+     * @var \Application\Model\Filter
      */
-    protected $categoryFilterComponent3;
+    protected $highFilter3;
 
     public function setUp()
     {
         parent::setUp();
 
-        $this->category1 = new \Application\Model\Category('cat 1');
-        $this->category11 = new \Application\Model\Category('cat 1.1 (sum of 1.*.1)');
-        $this->category12 = new \Application\Model\Category('cat 1.2 (sum of 1.*.2)');
-        $this->category13 = new \Application\Model\Category('cat 1.3');
-        $this->category131 = new \Application\Model\Category('cat 1.3.1');
-        $this->category132 = new \Application\Model\Category('cat 1.3.2');
-        $this->category14 = new \Application\Model\Category('cat 1.4');
-        $this->category141 = new \Application\Model\Category('cat 1.4.1');
-        $this->category142 = new \Application\Model\Category('cat 1.4.2');
-        $this->category2 = new \Application\Model\Category('cat 2');
-        $this->category21 = new \Application\Model\Category('cat 2.1');
-        $this->category3 = new \Application\Model\Category('cat 3 (sum of 2.* but with children as default to)');
-        $this->category31 = new \Application\Model\Category('cat 3.1');
-        $this->category32 = new \Application\Model\Category('cat 3.2');
+        $this->filter1 = new \Application\Model\Filter('cat 1');
+        $this->filter11 = new \Application\Model\Filter('cat 1.1 (sum of 1.*.1)');
+        $this->filter12 = new \Application\Model\Filter('cat 1.2 (sum of 1.*.2)');
+        $this->filter13 = new \Application\Model\Filter('cat 1.3');
+        $this->filter131 = new \Application\Model\Filter('cat 1.3.1');
+        $this->filter132 = new \Application\Model\Filter('cat 1.3.2');
+        $this->filter14 = new \Application\Model\Filter('cat 1.4');
+        $this->filter141 = new \Application\Model\Filter('cat 1.4.1');
+        $this->filter142 = new \Application\Model\Filter('cat 1.4.2');
+        $this->filter2 = new \Application\Model\Filter('cat 2');
+        $this->filter21 = new \Application\Model\Filter('cat 2.1');
+        $this->filter3 = new \Application\Model\Filter('cat 3 (sum of 2.* but with children as default to)');
+        $this->filter31 = new \Application\Model\Filter('cat 3.1');
+        $this->filter32 = new \Application\Model\Filter('cat 3.2');
 
         // Define tree structure
-        $this->category11->setParent($this->category1);
-        $this->category12->setParent($this->category1);
-        $this->category13->setParent($this->category1);
-        $this->category14->setParent($this->category1);
-        $this->category131->setParent($this->category13);
-        $this->category132->setParent($this->category13);
-        $this->category141->setParent($this->category14);
-        $this->category142->setParent($this->category14);
-        $this->category21->setParent($this->category2);
-        $this->category31->setParent($this->category3);
-        $this->category32->setParent($this->category3);
+        $this->filter1->addChild($this->filter11)->addChild($this->filter12)->addChild($this->filter13)->addChild($this->filter14);
+        $this->filter13->addChild($this->filter131)->addChild($this->filter132);
+        $this->filter14->addChild($this->filter141)->addChild($this->filter142);
+        $this->filter2->addChild($this->filter21);
+        $this->filter3->addChild($this->filter31)->addChild($this->filter32);
 
-        // Define categories with summands
-        $this->category11->addSummand($this->category131)->addSummand($this->category141);
-        $this->category12->addSummand($this->category132)->addSummand($this->category142);
-        $this->category3->addSummand($this->category21);
+        // Define filters with summands
+        $this->filter11->addSummand($this->filter131)->addSummand($this->filter141);
+        $this->filter12->addSummand($this->filter132)->addSummand($this->filter142);
+        $this->filter3->addSummand($this->filter21);
 
-        // Define questionnaire with answers for leaf categories only
+        // Define questionnaire with answers for leaf filters only
         $survey = new \Application\Model\Survey();
         $survey->setCode('tst 1')->setName('Test survey 1')->setYear(2000);
         $this->questionnaire = new \Application\Model\Questionnaire();
@@ -207,12 +201,12 @@ class CalculatorTest extends \ApplicationTest\Controller\AbstractController
         $this->question31 = new \Application\Model\Question();
         $this->question32 = new \Application\Model\Question();
 
-        $this->question131->setCategory($this->category131);
-        $this->question132->setCategory($this->category132);
-        $this->question141->setCategory($this->category141);
-        $this->question142->setCategory($this->category142);
-        $this->question31->setCategory($this->category31);
-        $this->question32->setCategory($this->category32);
+        $this->question131->setFilter($this->filter131);
+        $this->question132->setFilter($this->filter132);
+        $this->question141->setFilter($this->filter141);
+        $this->question142->setFilter($this->filter142);
+        $this->question31->setFilter($this->filter31);
+        $this->question32->setFilter($this->filter32);
 
         $this->answer131 = new \Application\Model\Answer();
         $this->answer132 = new \Application\Model\Answer();
@@ -228,116 +222,116 @@ class CalculatorTest extends \ApplicationTest\Controller\AbstractController
         $this->answer31->setQuestionnaire($this->questionnaire)->setQuestion($this->question31)->setValueAbsolute(0.00001);
         $this->answer32->setQuestionnaire($this->questionnaire)->setQuestion($this->question32)->setValueAbsolute(0.000001);
 
-        $this->categoryFilterComponent1 = new \Application\Model\CategoryFilterComponent('improved');
-        $this->categoryFilterComponent2 = new \Application\Model\CategoryFilterComponent('unimproved');
-        $this->categoryFilterComponent3 = new \Application\Model\CategoryFilterComponent('total');
+        $this->highFilter1 = new \Application\Model\Filter('improved');
+        $this->highFilter2 = new \Application\Model\Filter('unimproved');
+        $this->highFilter3 = new \Application\Model\Filter('total');
 
-        $this->categoryFilterComponent1->addCategory($this->category1);
-        $this->categoryFilterComponent2->addCategory($this->category2);
-        $this->categoryFilterComponent3->addCategory($this->category1)->addCategory($this->category2)->addCategory($this->category3);
+        $this->highFilter1->addChild($this->filter1);
+        $this->highFilter2->addChild($this->filter2);
+        $this->highFilter3->addChild($this->filter1)->addChild($this->filter2)->addChild($this->filter3);
     }
 
     /**
-     * In those test we use a new calculator each time to avoid cache, because we will chagne category structure on the fly
+     * In those test we use a new calculator each time to avoid cache, because we will chagne filter structure on the fly
      */
     public function testComputingQuestionnaireIsCorrectt()
     {
-        // Assert computing for every single category
-        $this->assertEquals($this->answer131->getValueAbsolute() + $this->answer132->getValueAbsolute() + $this->answer141->getValueAbsolute() + $this->answer142->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category1), 'should be the sum of unique children (excluding duplicates via summands)');
-        $this->assertEquals($this->answer131->getValueAbsolute() + $this->answer141->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category11), 'should be the sum of summands');
-        $this->assertEquals($this->answer132->getValueAbsolute() + $this->answer142->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category12), 'should be the sum of summands');
-        $this->assertEquals($this->answer131->getValueAbsolute() + $this->answer132->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category13), 'should be the sum of children');
-        $this->assertEquals($this->answer131->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category131), 'should be the answer, when answer specified');
-        $this->assertEquals($this->answer132->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category132), 'should be the answer, when answer specified');
-        $this->assertEquals($this->answer141->getValueAbsolute() + $this->answer142->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category14), 'should be the sum of children');
-        $this->assertEquals($this->answer141->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category141), 'should be the answer, when answer specified');
-        $this->assertEquals($this->answer142->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category142), 'should be the answer, when answer specified');
-        $this->assertNull((new Calculator())->computeQuestionnaire($this->questionnaire, $this->category2), 'should be null, when no answer at all');
-        $this->assertNull((new Calculator())->computeQuestionnaire($this->questionnaire, $this->category21), 'should be null, when no answer at all');
-        $this->assertEquals($this->answer31->getValueAbsolute() + $this->answer32->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category3), 'should be the sum of children, when summands have no answer');
-        $this->assertEquals($this->answer31->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category31), 'should be the answer, when answer specified');
-        $this->assertEquals($this->answer32->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category32), 'should be the answer, when answer specified');
+        // Assert computing for every single filter
+        $this->assertEquals($this->answer131->getValueAbsolute() + $this->answer132->getValueAbsolute() + $this->answer141->getValueAbsolute() + $this->answer142->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter1), 'should be the sum of unique children (excluding duplicates via summands)');
+        $this->assertEquals($this->answer131->getValueAbsolute() + $this->answer141->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter11), 'should be the sum of summands');
+        $this->assertEquals($this->answer132->getValueAbsolute() + $this->answer142->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter12), 'should be the sum of summands');
+        $this->assertEquals($this->answer131->getValueAbsolute() + $this->answer132->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter13), 'should be the sum of children');
+        $this->assertEquals($this->answer131->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter131), 'should be the answer, when answer specified');
+        $this->assertEquals($this->answer132->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter132), 'should be the answer, when answer specified');
+        $this->assertEquals($this->answer141->getValueAbsolute() + $this->answer142->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter14), 'should be the sum of children');
+        $this->assertEquals($this->answer141->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter141), 'should be the answer, when answer specified');
+        $this->assertEquals($this->answer142->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter142), 'should be the answer, when answer specified');
+        $this->assertNull((new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter2), 'should be null, when no answer at all');
+        $this->assertNull((new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter21), 'should be null, when no answer at all');
+        $this->assertEquals($this->answer31->getValueAbsolute() + $this->answer32->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter3), 'should be the sum of children, when summands have no answer');
+        $this->assertEquals($this->answer31->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter31), 'should be the answer, when answer specified');
+        $this->assertEquals($this->answer32->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter32), 'should be the answer, when answer specified');
 
 
-        // Overwrite computed categories with an answer
+        // Overwrite computed filters with an answer
         $this->question11 = new \Application\Model\Question();
         $this->question13 = new \Application\Model\Question();
-        $this->question11->setCategory($this->category11);
-        $this->question13->setCategory($this->category13);
+        $this->question11->setFilter($this->filter11);
+        $this->question13->setFilter($this->filter13);
         $this->answer11 = new \Application\Model\Answer();
         $this->answer13 = new \Application\Model\Answer();
         $this->answer11->setQuestionnaire($this->questionnaire)->setQuestion($this->question11)->setValueAbsolute(0.0000001);
         $this->answer13->setQuestionnaire($this->questionnaire)->setQuestion($this->question13)->setValueAbsolute(0.00000001);
 
         // Assert that manually specified answer override computed values
-        $this->assertEquals($this->answer11->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category11), 'should be the answer, when answer specified');
-        $this->assertEquals($this->answer13->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category13), 'should be the answer, when answer specified');
-        $this->assertEquals($this->answer11->getValueAbsolute() + $this->answer13->getValueAbsolute() + $this->answer132->getValueAbsolute() + $this->answer141->getValueAbsolute() + $this->answer142->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category1), 'should be the sum of children, but with overriden values instead of computed');
+        $this->assertEquals($this->answer11->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter11), 'should be the answer, when answer specified');
+        $this->assertEquals($this->answer13->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter13), 'should be the answer, when answer specified');
+        $this->assertEquals($this->answer11->getValueAbsolute() + $this->answer13->getValueAbsolute() + $this->answer132->getValueAbsolute() + $this->answer141->getValueAbsolute() + $this->answer142->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter1), 'should be the sum of children, but with overriden values instead of computed');
 
         // Add part to existing answer
         $part = new \Application\Model\Part('custom');
         $this->answer142->setPart($part);
 
         // Assert that we take part into consideration for filering answers
-        $this->assertEquals($this->answer141->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category14), 'should be the sum of children, but only for selected part');
-        $this->assertEquals($this->answer142->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category14, $part), 'should be the sum of children, but only for selected part');
+        $this->assertEquals($this->answer141->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter14), 'should be the sum of children, but only for selected part');
+        $this->assertEquals($this->answer142->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter14, $part), 'should be the sum of children, but only for selected part');
 
 
-        // Add alternative (non-official) category to previously unexisting answer
-        $this->category21bis = new \Application\Model\Category('cat 2.1 bis');
-        $this->category21bis->setOfficialCategory($this->category21);
+        // Add alternative (non-official) filter to previously unexisting answer
+        $this->filter21bis = new \Application\Model\Filter('cat 2.1 bis');
+        $this->filter21bis->setOfficialFilter($this->filter21);
         $this->question21bis = new \Application\Model\Question();
-        $this->question21bis->setCategory($this->category21bis);
+        $this->question21bis->setFilter($this->filter21bis);
         $this->answer21bis = new \Application\Model\Answer();
         $this->answer21bis->setQuestionnaire($this->questionnaire)->setQuestion($this->question21bis)->setValueAbsolute(0.000000001);
 
-        // Assert that alternative category is used for computation
-        $this->assertEquals($this->answer21bis->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category2), 'should be the sum of children, including the answer which is specified with alternative category');
-        $this->assertEquals($this->answer21bis->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category21), 'should be the alternative answer, when answer is specified with alternative category');
-        $this->assertEquals($this->answer21bis->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category3), 'should be the sum of summands, when summands have answer');
+        // Assert that alternative filter is used for computation
+        $this->assertEquals($this->answer21bis->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter2), 'should be the sum of children, including the answer which is specified with alternative filter');
+        $this->assertEquals($this->answer21bis->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter21), 'should be the alternative answer, when answer is specified with alternative filter');
+        $this->assertEquals($this->answer21bis->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter3), 'should be the sum of summands, when summands have answer');
 
 
         // Define summands to use several time cat1.4.1 (once via cat1 and once via cat1.4)
-        $this->category3->addSummand($this->category1)->addSummand($this->category14);
-        $this->assertEquals($this->answer21bis->getValueAbsolute() + $this->answer11->getValueAbsolute() + $this->answer13->getValueAbsolute() + $this->answer132->getValueAbsolute() + $this->answer141->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->category3), 'should not sum twice the same category');
+        $this->filter3->addSummand($this->filter1)->addSummand($this->filter14);
+        $this->assertEquals($this->answer21bis->getValueAbsolute() + $this->answer11->getValueAbsolute() + $this->answer13->getValueAbsolute() + $this->answer132->getValueAbsolute() + $this->answer141->getValueAbsolute(), (new Calculator())->computeQuestionnaire($this->questionnaire, $this->filter3), 'should not sum twice the same filter');
     }
 
-    public function testComputingCategoryFilterComponentIsCorrect()
+    public function testComputingFilterIsCorrect()
     {
         $service = new \Application\Service\Calculator\Calculator();
 
-        $this->assertNull($service->computeCategoryFilterComponent(new \Application\Model\CategoryFilterComponent(), $this->questionnaire), 'empty filter result is always null');
-        $this->assertEquals(0.1111, $service->computeCategoryFilterComponent($this->categoryFilterComponent1, $this->questionnaire), 'when only one category should be equal to that category');
-        $this->assertNull($service->computeCategoryFilterComponent($this->categoryFilterComponent2, $this->questionnaire), 'when only one category is null should also be null');
-        $this->assertEquals(0.111111, $service->computeCategoryFilterComponent($this->categoryFilterComponent3, $this->questionnaire), 'sum all categories');
+        $this->assertNull($service->computeFilter(new \Application\Model\Filter(), $this->questionnaire), 'empty filter result is always null');
+        $this->assertEquals(0.1111, $service->computeFilter($this->highFilter1, $this->questionnaire), 'when only one filter should be equal to that filter');
+        $this->assertNull($service->computeFilter($this->highFilter2, $this->questionnaire), 'when only one filter is null should also be null');
+        $this->assertEquals(0.111111, $service->computeFilter($this->highFilter3, $this->questionnaire), 'sum all filters');
     }
 
     public function testCacheOnQuestionnaireLevelIsWorking()
     {
         $service = new \Application\Service\Calculator\Calculator();
 
-        $res1 = $service->computeQuestionnaire($this->questionnaire, $this->category1);
+        $res1 = $service->computeQuestionnaire($this->questionnaire, $this->filter1);
         $this->answer131->setValueAbsolute((12345));
-        $res2 = $service->computeQuestionnaire($this->questionnaire, $this->category1);
+        $res2 = $service->computeQuestionnaire($this->questionnaire, $this->filter1);
         $this->assertEquals($res1, $res2, 'result should be cached and therefore be the same');
 
         $service2 = new \Application\Service\Calculator\Calculator();
-        $res3 = $service2->computeQuestionnaire($this->questionnaire, $this->category1);
+        $res3 = $service2->computeQuestionnaire($this->questionnaire, $this->filter1);
         $this->assertNotEquals($res1, $res3, 'after clearing cache, result differs');
         $this->assertEquals(12345.0111, $res3, 'after clearing cache, result reflect new values');
     }
 
-    public function testCacheOnFilterComponentLevelisWorking()
+    public function testCacheOnFilterLevelisWorking()
     {
         $service = new \Application\Service\Calculator\Calculator();
 
-        $res1 = $service->computeCategoryFilterComponent($this->categoryFilterComponent3, $this->questionnaire);
+        $res1 = $service->computeFilter($this->highFilter3, $this->questionnaire);
         $this->answer131->setValueAbsolute((12345));
-        $res2 = $service->computeCategoryFilterComponent($this->categoryFilterComponent3, $this->questionnaire);
+        $res2 = $service->computeFilter($this->highFilter3, $this->questionnaire);
         $this->assertEquals($res1, $res2, 'result should be cached and therefore be the same');
 
         $service2 = new \Application\Service\Calculator\Calculator();
-        $res3 = $service2->computeCategoryFilterComponent($this->categoryFilterComponent3, $this->questionnaire);
+        $res3 = $service2->computeFilter($this->highFilter3, $this->questionnaire);
         $this->assertNotEquals($res1, $res3, 'after clearing cache, result differs');
         $this->assertEquals(12345.011111, $res3, 'after clearing cache, result reflect new values');
     }
