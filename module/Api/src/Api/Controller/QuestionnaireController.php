@@ -51,7 +51,7 @@ class QuestionnaireController extends AbstractRestfulController
         $service = new \Application\Service\Calculator\Calculator();
 
         $result = array();
-        $computed = $service->computeQuestionnaire($questionnaire, $filter, $part);
+        $computed = $service->computeFilter($filter, $questionnaire, $part);
         $result[$filter->getName()] = $computed && $population->getPopulation() ? $computed / $population->getPopulation() : null;
 
         $children = array();

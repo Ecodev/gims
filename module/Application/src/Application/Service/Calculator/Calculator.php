@@ -22,31 +22,22 @@ class Calculator
     use \Application\Traits\EntityManagerAware;
 
     private $cacheComputeFilter = array();
-    private $cacheComputeQuestionnaire = array();
 
     /**
-     * Returns the computed value for the specified filter
+     * Returns the computed value of the given filter, based on the questionnaire's available answers
      * @param \Application\Model\Filter $filter
      * @param \Application\Model\Questionnaire $questionnaire
      * @param \Application\Model\Part $part
-     * @return type
+     * @return float|null null if no answer at all, otherwise the value
      */
     public function computeFilter(Filter $filter, Questionnaire $questionnaire, Part $part = null)
     {
         $key = spl_object_hash($filter) . spl_object_hash($questionnaire) . ($part ? spl_object_hash($part) : null);
-
         if (array_key_exists($key, $this->cacheComputeFilter)) {
             return $this->cacheComputeFilter[$key];
         }
 
-        $result = null;
-        foreach ($filter->getChildren() as $filter) {
-            $computed = $this->computeQuestionnaire($questionnaire, $filter, $part);
-            if (!is_null($computed)) {
-                $result += $computed;
-            }
-        }
-
+        $result = $this->computeFilterInternal($filter, $questionnaire, new \Doctrine\Common\Collections\ArrayCollection(), $part);
 
         $this->cacheComputeFilter[$key] = $result;
 
@@ -56,31 +47,12 @@ class Calculator
     /**
      * Returns the computed value of the given filter, based on the questionnaire's available answers
      * @param \Application\Model\Filter $filter
-     * @param \Application\Model\Part $part
-     * @return float|null null if no answer at all, otherwise the value
-     */
-    public function computeQuestionnaire(Questionnaire $questionnaire, Filter $filter, Part $part = null)
-    {
-        $key = spl_object_hash($questionnaire) . spl_object_hash($filter) . ($part ? spl_object_hash($part) : null);
-        if (array_key_exists($key, $this->cacheComputeQuestionnaire)) {
-            return $this->cacheComputeQuestionnaire[$key];
-        }
-
-        $result = $this->computeQuestionnaireInternal($questionnaire, $filter, new \Doctrine\Common\Collections\ArrayCollection(), $part);
-
-        $this->cacheComputeQuestionnaire[$key] = $result;
-
-        return $result;
-    }
-
-    /**
-     * Returns the computed value of the given filter, based on the questionnaire's available answers
-     * @param \Application\Model\Filter $filter
+     * @param \Application\Model\Questionnaire $questionnaire
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters will be used to avoid duplicates
      * @param \Application\Model\Part $part
      * @return float|null null if no answer at all, otherwise the value
      */
-    private function computeQuestionnaireInternal(Questionnaire $questionnaire, Filter $filter, \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters, Part $part = null)
+    private function computeFilterInternal(Filter $filter, Questionnaire $questionnaire, \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters, Part $part = null)
     {
         // Avoid duplicates
         if ($alreadySummedFilters->contains($filter)) {
@@ -104,7 +76,7 @@ class Calculator
         $summer = function(\IteratorAggregate $filters) use ($questionnaire, $part, $alreadySummedFilters) {
                     $sum = null;
                     foreach ($filters as $f) {
-                        $summandValue = $this->computeQuestionnaireInternal($questionnaire, $f, $alreadySummedFilters, $part);
+                        $summandValue = $this->computeFilterInternal($f, $questionnaire, $alreadySummedFilters, $part);
                         if (!is_null($summandValue)) {
                             $sum += $summandValue;
                         }

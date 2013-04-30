@@ -396,7 +396,7 @@ class JmpTest extends CalculatorTest
         $this->assertEquals($expected, $this->service->computeFlatten($yearStart, $yearEnd, $this->highFilterSet, $useQuestionnaires ? $this->questionnaires : array()));
     }
 
-    public function testCacheOnFilterLevelIsWorking()
+    public function testCacheOnFilterForAllQuestionnaire()
     {
         $tmp = $this->flattenProvider();
         $data = reset($tmp);
