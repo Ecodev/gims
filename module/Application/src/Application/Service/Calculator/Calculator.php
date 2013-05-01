@@ -19,7 +19,8 @@ class Calculator
 {
 
     use \Zend\ServiceManager\ServiceLocatorAwareTrait;
-    use \Application\Traits\EntityManagerAware;
+
+use \Application\Traits\EntityManagerAware;
 
     private $cacheComputeFilter = array();
 
@@ -71,6 +72,20 @@ class Calculator
             }
         }
 
+
+        // If filter is defined by a Ratio, returns it
+        foreach ($filter->getFilterRules() as $filterRule) {
+            $rule = $filterRule->getRule();
+            if ($rule instanceof \Application\Model\Rule\Ratio && $filterRule->getQuestionnaire() == $questionnaire && $filterRule->getPart() == $part) {
+                $value = $this->computeFilterInternal($rule->getFilter(), $questionnaire, $alreadySummedFilters, $part);
+
+                // Preserve null value while multiplying
+                if (!is_null($value))
+                    $value = $rule->getRatio() * $value;
+
+                return $value;
+            }
+        }
 
         // Summer to sum values of given filters, but only if non-null (to preserve null value if no answer at all)
         $summer = function(\IteratorAggregate $filters) use ($questionnaire, $part, $alreadySummedFilters) {

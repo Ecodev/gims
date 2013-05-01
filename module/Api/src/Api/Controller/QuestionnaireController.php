@@ -33,8 +33,8 @@ class QuestionnaireController extends AbstractRestfulController
         }
 
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
-
-        $officialRootFilters = $filterRepository->getOfficialRoots();
+        $filterId = $this->params()->fromQuery('filter');
+        $officialRootFilters = $filterId ? $filterRepository->findById($filterId) : $filterRepository->getOfficialRoots();
 
         $result = array();
         $result[] = $questionnaire->getSurvey()->getName() . ', ' . $questionnaire->getSurvey()->getCode() . ', ' . $questionnaire->getGeoname()->getName();

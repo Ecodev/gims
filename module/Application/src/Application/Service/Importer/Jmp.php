@@ -95,6 +95,10 @@ class Jmp extends AbstractImporter
                 'min' => 83,
                 'max' => 88,
             ),
+            'ratios' => array(
+                'min' => 94,
+                'max' => 103,
+            ),
             'excludes' => array(
                 91 => "Total improved",
                 92 => "Piped onto premises",
@@ -204,6 +208,10 @@ class Jmp extends AbstractImporter
                 'min' => 88,
                 'max' => 93,
             ),
+            'ratios' => array(
+                'min' => 100,
+                'max' => 107,
+            ),
             'excludes' => array(
                 96 => "Improved + shared",
                 97 => "Sewerage connections",
@@ -224,9 +232,11 @@ class Jmp extends AbstractImporter
     private $cacheFilters = array();
     private $cacheQuestions = array();
     private $cacheHighFilters = array();
+    private $cacheRatios = array();
     private $questionnaireCount = 0;
     private $answerCount = 0;
-    private $excludesCount = 0;
+    private $excludeCount = 0;
+    private $ratioCount = 0;
 
     /**
      * @var \Application\Model\Part
@@ -254,6 +264,13 @@ class Jmp extends AbstractImporter
         $this->partUrban = $this->getPart('Urban');
         $this->partRural = $this->getPart('Rural');
 
+
+        $this->partOffsets = array(
+            3 => $this->partUrban,
+            4 => $this->partRural,
+            5 => null, // total is not a part
+        );
+
         foreach ($sheeNamesToImport as $i => $sheetName) {
 
             $this->importOfficialFilters($this->definitions[$sheetName]);
@@ -272,7 +289,7 @@ class Jmp extends AbstractImporter
         $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $answerRepository->updateAbsoluteValueFromPercentageValue();
 
-        return "Total imported: $this->questionnaireCount questionnaires, $this->answerCount answers, $this->excludesCount exclude rules" . PHP_EOL;
+        return "Total imported: $this->questionnaireCount questionnaires, $this->answerCount answers, $this->excludeCount exclude rules, $this->ratioCount ratio rules" . PHP_EOL;
     }
 
     protected function getFilter($definition)
@@ -397,6 +414,7 @@ class Jmp extends AbstractImporter
 
 //        $this->importRules($sheet, $col);
         $this->importExcludes($sheet, $col, $questionnaire);
+        $this->importRatios($sheet, $col, $questionnaire);
 
         $this->getEntityManager()->flush();
 
@@ -413,13 +431,6 @@ class Jmp extends AbstractImporter
      */
     protected function importAnswers(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Survey $survey, \Application\Model\Questionnaire $questionnaire)
     {
-        // Define the filters where we actually have answer data
-        $parts = array(
-            $col + 3 => $this->partUrban,
-            $col + 4 => $this->partRural,
-            $col + 5 => null, // total is not a part
-        );
-
         $repository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $knownRows = array_keys($this->cacheFilters);
         array_shift($knownRows); // Skip first filter, since it's not an actual row, but the sheet topic (eg: "Access to drinking water sources")
@@ -436,8 +447,8 @@ class Jmp extends AbstractImporter
             }
 
             // Import answers
-            foreach ($parts as $c => $part) {
-                $answerCell = $sheet->getCellByColumnAndRow($c, $row);
+            foreach ($this->partOffsets as $offset => $part) {
+                $answerCell = $sheet->getCellByColumnAndRow($col + $offset, $row);
 
                 // Only import value which are numeric, and NOT formula,
                 // unless an alternate filter is defined, in this case we will import the formula result
@@ -695,6 +706,7 @@ class Jmp extends AbstractImporter
 
             if (!$filter) {
                 $filter = new \Application\Model\Filter($name);
+                $filter->setIsOfficial(true);
                 $filterSet->addFilter($filter);
                 $this->getEntityManager()->persist($filter);
             }
@@ -716,19 +728,13 @@ class Jmp extends AbstractImporter
      */
     public function importExcludes(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire)
     {
-        $parts = array(
-            $col + 3 => $this->partUrban,
-            $col + 4 => $this->partRural,
-            $col + 5 => null, // total is not a part
-        );
-
         $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
 
         foreach ($this->definitions[$sheet->getTitle()]['excludes'] as $row => $filterComponentName) {
             $filter = $this->cacheHighFilters[$filterComponentName];
 
-            foreach ($parts as $c => $part) {
-                $includedValue = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($c, $row));
+            foreach ($this->partOffsets as $offset => $part) {
+                $includedValue = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
 
                 // If it is not included, then it means we need an exclude rule
                 if ($includedValue == 'No') {
@@ -748,8 +754,76 @@ class Jmp extends AbstractImporter
                                 ->setFilter($filter);
 
                         $this->getEntityManager()->persist($assoc);
-                        $this->excludesCount++;
+                        $this->excludeCount++;
                     }
+                }
+            }
+        }
+    }
+
+    /**
+     * Import ratios, but only for two hardcoded filters: "Sanitation - Improved" and "Sanitation - Shared"
+     * @param \PHPExcel_Worksheet $sheet
+     * @param integer $col
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @return void
+     */
+    public function importRatios(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire)
+    {
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
+        $synonyms = array(
+            'Facilités améliorées partagées / Facilités améliorées',
+            'Shared facilities / All improved facilities',
+            'Shared improved facilities/all improved facilities',
+        );
+
+        $filterImprovedShared = @$this->cacheHighFilters['Improved + shared'];
+        $filterImproved = @$this->cacheHighFilters['Improved'];
+        $filterShared = @$this->cacheHighFilters['Shared'];
+
+        // SKip everything if we are not in Sanitation
+        if (!$filterImproved || !$filterImprovedShared || !$filterShared) {
+            return;
+        }
+
+        $range = $this->definitions[$sheet->getTitle()]['ratios'];
+
+        for ($row = $range['min']; $row <= $range['max']; $row++) {
+            $ratioName = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
+            if ($ratioName && in_array($ratioName, $synonyms)) {
+
+                foreach ($this->partOffsets as $offset => $part) {
+                    $ratioCell = $sheet->getCellByColumnAndRow($col + $offset, $row);
+                    $ratio = $this->getCalculatedValueSafely($ratioCell);
+
+                    // Skip if no value at all
+                    if (!is_numeric($ratio))
+                        continue;
+
+                    // Skip if ratios already exists in DB
+                    $existingRatios = $repository->getRatios($questionnaire, $filterImproved, $part);
+                    if ($existingRatios) {
+                        continue;
+                    }
+
+                    $ratioRuleImproved = new \Application\Model\Rule\Ratio();
+                    $ratioRuleImproved->setFilter($filterImprovedShared)->setRatio((1 - $ratio));
+
+                    $ratioRuleShared = new \Application\Model\Rule\Ratio();
+                    $ratioRuleShared->setFilter($filterImprovedShared)->setRatio($ratio);
+
+                    $assocImproved = new \Application\Model\Rule\FilterRule();
+                    $assocImproved->setFilter($filterImproved)->setPart($part)->setQuestionnaire($questionnaire)->setRule($ratioRuleImproved);
+
+                    $assocShared = new \Application\Model\Rule\FilterRule();
+                    $assocShared->setFilter($filterShared)->setPart($part)->setQuestionnaire($questionnaire)->setRule($ratioRuleShared);
+
+                    $this->getEntityManager()->persist($ratioRuleImproved);
+                    $this->getEntityManager()->persist($ratioRuleShared);
+                    $this->getEntityManager()->persist($assocImproved);
+                    $this->getEntityManager()->persist($assocShared);
+
+                    $this->ratioCount++;
                 }
             }
         }

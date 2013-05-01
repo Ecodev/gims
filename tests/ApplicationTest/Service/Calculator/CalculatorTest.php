@@ -321,4 +321,36 @@ class CalculatorTest extends \ApplicationTest\Controller\AbstractController
         $this->assertEquals(12345.011111, $res3, 'after clearing cache, result reflect new values');
     }
 
+    public function testRatios()
+    {
+        $service = new \Application\Service\Calculator\Calculator();
+
+        // Define filter1 to be 2/3 of filter131
+        $ratio = new \Application\Model\Rule\Ratio();
+        $ratio->setFilter($this->filter131)->setRatio(0.75);
+        $filterRule = new \Application\Model\Rule\FilterRule();
+        $filterRule->setFilter($this->filter1)->setQuestionnaire($this->questionnaire)->setRule($ratio);
+
+        $this->assertEquals(0.075, $service->computeFilter($this->filter1, $this->questionnaire));
+    }
+
+    public function testCyclicRatiosReturnsNull()
+    {
+        $service = new \Application\Service\Calculator\Calculator();
+
+        // Define filter1 to be a ratio fo filter2...
+        $ratio1 = new \Application\Model\Rule\Ratio();
+        $ratio1->setFilter($this->filter2)->setRatio(0.75);
+        $filterRule1 = new \Application\Model\Rule\FilterRule();
+        $filterRule1->setFilter($this->filter1)->setQuestionnaire($this->questionnaire)->setRule($ratio1);
+
+        // ... and filter2 to be a ratio fo filter1
+        $ratio2 = new \Application\Model\Rule\Ratio();
+        $ratio2->setFilter($this->filter1)->setRatio(0.75);
+        $filterRule2 = new \Application\Model\Rule\FilterRule();
+        $filterRule2->setFilter($this->filter2)->setQuestionnaire($this->questionnaire)->setRule($ratio2);
+
+        $this->assertNull($service->computeFilter($this->filter1, $this->questionnaire));
+    }
+
 }
