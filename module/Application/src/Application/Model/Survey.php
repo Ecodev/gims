@@ -5,7 +5,7 @@ namespace Application\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Survey
+ * Survey is a campaign to gather data for a specific year, so it's a group of questions.
  *
  * @ORM\Entity(repositoryClass="Application\Repository\SurveyRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="survey_code_unique",columns={"code"})})

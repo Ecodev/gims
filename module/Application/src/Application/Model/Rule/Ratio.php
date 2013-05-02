@@ -7,6 +7,7 @@ use Application\Model\Filter;
 
 /**
  * Ratio is a way to define a filter as a ratio of another one.
+ * Eg: "Shared" is 30% of "Improved + Shared"
  *
  * @ORM\Entity
  */

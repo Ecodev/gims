@@ -5,7 +5,7 @@ namespace Application\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Answer
+ * Answer is the raw data on which all computing/graph/table are based.
  *
  * @ORM\Entity(repositoryClass="Application\Repository\AnswerRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="answer_unique",columns={"question_id", "questionnaire_id", "part_id", "part_id"})})

@@ -5,7 +5,38 @@ namespace Application\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Filter
+ * A Filter is used to organise things. They are usually defined by the answer
+ * value if present, or else the sum of its sub-filters. But it can also have
+ * custom rules, such as a list of manually specified filters to sum (summands)
+ * or the use of a ratio.
+ *
+ * There are slightly different usage from the end-user point of view:
+ *
+ * "Low level" filters are used to organise questions in a tree-ish way. This is
+ * what used to be called categories in early versions:
+ *
+ * <pre>
+ * Water
+ *    Tap water
+ *       In house
+ *       Public place
+ *    Bottled water
+ *       Good quality
+ *       Bad quality
+ * </pre>
+ *
+ * "High level" filters are used to group other filters at a higher level, and
+ * often transversely across the tree above. This what use to be called
+ * filterComponent in early versions:
+ *
+ * <pre>
+ * Improved
+ *    In house
+ *    Good quality
+ * Unimproved
+ *    Public place
+ *    Bad quality
+ * </pre>
  *
  * @ORM\Entity(repositoryClass="Application\Repository\FilterRepository")
  */

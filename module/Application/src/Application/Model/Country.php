@@ -5,7 +5,7 @@ namespace Application\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Country
+ * Country. Data are imported from http://www.geonames.org
  *
  * @ORM\Entity(repositoryClass="Application\Repository\CountryRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="country_code_unique",columns={"code"})})

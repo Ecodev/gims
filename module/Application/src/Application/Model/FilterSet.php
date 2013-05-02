@@ -5,7 +5,10 @@ namespace Application\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Filter
+ * FilterSet is used to group filters together and make them available as
+ * a choice to plot graphs or output tables.
+ *
+ * It doesn't have any special meaning for computing.
  *
  * @ORM\Entity(repositoryClass="Application\Repository\FilterSetRepository")
  */

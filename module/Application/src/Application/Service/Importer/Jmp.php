@@ -693,7 +693,7 @@ class Jmp extends AbstractImporter
         $filterSet = $filterSetRepository->getOrCreate($name);
         $this->getEntityManager()->flush();
 
-        // Get or create all filterComponent
+        // Get or create all filter
         foreach ($filters as $name => $children) {
 
             $filter = null;
@@ -730,8 +730,8 @@ class Jmp extends AbstractImporter
     {
         $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
 
-        foreach ($this->definitions[$sheet->getTitle()]['excludes'] as $row => $filterComponentName) {
-            $filter = $this->cacheHighFilters[$filterComponentName];
+        foreach ($this->definitions[$sheet->getTitle()]['excludes'] as $row => $filterName) {
+            $filter = $this->cacheHighFilters[$filterName];
 
             foreach ($this->partOffsets as $offset => $part) {
                 $includedValue = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));

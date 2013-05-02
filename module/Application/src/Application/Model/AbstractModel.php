@@ -7,6 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Zend\Code\Reflection\MethodReflection;
 
 /**
+ * Base class for all objects stored in database.
+ *
+ * It includes an automatic mechanism to timestamp objects with date and user.
+ *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  */

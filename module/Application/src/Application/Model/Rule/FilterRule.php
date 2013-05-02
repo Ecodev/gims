@@ -5,7 +5,7 @@ namespace Application\Model\Rule;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FilterRule is used to link a FilterRule, a Rule and a Questionnaire.
+ * FilterRule allows us to "apply" a rule to a filter-questionnaire-part triple.
  *
  * @ORM\Entity(repositoryClass="Application\Repository\FilterRuleRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="filter_rule_unique",columns={"filter_id", "questionnaire_id", "part_id", "rule_id"})})

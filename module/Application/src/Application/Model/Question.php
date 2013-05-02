@@ -5,7 +5,7 @@ namespace Application\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Question
+ * Question defines a Survey (and NOT a questionnaire).
  *
  * @ORM\Entity(repositoryClass="Application\Repository\QuestionRepository")
  */

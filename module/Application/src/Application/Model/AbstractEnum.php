@@ -2,6 +2,20 @@
 
 namespace Application\Model;
 
+/**
+ * Base class for enum types, allowing for type hinting.
+ *
+ * Usage for inheriting classes is as follow:
+ *
+ * <code>
+ * function foo(ConcreteEnum $value)
+ * {
+ *    echo $value;
+ * }
+ *
+ * foo(ConcreteEnum::$VALUE1);
+ * </code>
+ */
 abstract class AbstractEnum
 {
 

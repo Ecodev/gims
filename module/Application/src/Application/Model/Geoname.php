@@ -5,7 +5,8 @@ namespace Application\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Geoname
+ * Geoname. Data are imported from http://www.geonames.org, but only partially for
+ * what we actually need.
  *
  * @ORM\Entity(repositoryClass="Application\Repository\GeonameRepository")
  */

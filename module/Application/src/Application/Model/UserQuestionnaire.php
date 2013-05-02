@@ -5,7 +5,8 @@ namespace Application\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserQuestionnaire
+ * UserQuestionnaire links a user and a questionnaire to give him a role
+ * for that questionnaire (hence permissions)
  *
  * @ORM\Entity(repositoryClass="Application\Repository\UserQuestionnaireRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="user_questionnaire_unique",columns={"user_id", "questionnaire_id", "role_id"})})

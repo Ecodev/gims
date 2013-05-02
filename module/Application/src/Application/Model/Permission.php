@@ -5,7 +5,7 @@ namespace Application\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Permission
+ * Permission is as defined in RBAC system: http://en.wikipedia.org/wiki/Role-based_access_control
  *
  * @ORM\Entity(repositoryClass="Application\Repository\PermissionRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="permission_unique", columns={"name"})})

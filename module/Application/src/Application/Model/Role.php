@@ -5,7 +5,7 @@ namespace Application\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Role
+ * Role is as defined in RBAC system: http://en.wikipedia.org/wiki/Role-based_access_control
  *
  * @ORM\Entity(repositoryClass="Application\Repository\RoleRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="role_unique", columns={"name"})})

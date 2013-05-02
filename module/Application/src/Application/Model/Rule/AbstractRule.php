@@ -5,7 +5,7 @@ namespace Application\Model\Rule;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Rule is a way to exclude specify custom behavior during computing on filter level.
+ * Rule is a way to exclude specify custom behavior during computing of filter.
  * This is on a filter-questionnaire-part basis.
  *
  * @ORM\Entity(repositoryClass="Application\Repository\RuleRepository")

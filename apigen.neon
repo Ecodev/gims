@@ -1,0 +1,27 @@
+# Configuration file for ApiGen
+
+destination: data/docs/api
+
+# Sources to be scanned, we select only the most important vendor libs
+source:
+   - bin
+   - config
+   - module
+   - tests
+   - vendor/CodePlex
+   - vendor/creof
+   - vendor/doctrine
+   - vendor/firephp
+   - vendor/zendframework
+   - vendor/zf-commons
+
+# Sources to be excluded from scan, all vendor tests are useless
+exclude:
+   - "*/vendor/*test*"
+   - "*/vendor/*Test*"
+   - "*/vendor/*/examples/*"
+
+# Do not generate any doc for vendors (but still scan it, so ApiGen is aware of their existence)
+skipDocPath:
+   - "*/vendor/*"
+

@@ -5,7 +5,7 @@ namespace Application\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Population
+ * Population data for each country-year-part triple. Imported from http://esa.un.org/unpd/wup/
  *
  * @ORM\Entity(repositoryClass="Application\Repository\PopulationRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="population_unique",columns={"year", "country_id", "part_id"})})

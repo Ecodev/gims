@@ -13,7 +13,7 @@ class FilterRuleRepositoryTest extends AbstractRepository
         $geoname = new \Application\Model\Geoname();
         $questionnaire = new \Application\Model\Questionnaire();
         $questionnaire->setSurvey($survey)->setGeoname($geoname)->setDateObservationStart(new \DateTime())->setDateObservationEnd(new \DateTime());
-        $filter = new \Application\Model\Filter('test filter filter component');
+        $filter = new \Application\Model\Filter('test filter');
         $relation = new \Application\Model\Rule\FilterRule();
         $rule = new \Application\Model\Rule\Exclude();
         $relation->setFilter($filter)->setQuestionnaire($questionnaire)->setRule($rule);
