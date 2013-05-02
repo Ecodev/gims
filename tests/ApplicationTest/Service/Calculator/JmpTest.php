@@ -441,4 +441,44 @@ class JmpTest extends AbstractCalculator
                 ), $res3, 'after clearing cache, result reflect new values');
     }
 
+    public function testPopulationRepositoryCanBeFound()
+    {
+        $service = new \Application\Service\Calculator\Jmp();
+        $service->setServiceLocator($this->getApplicationServiceLocator());
+
+        $this->assertInstanceOf('Application\Repository\PopulationRepository', $service->getPopulationRepository());
+    }
+
+    public function testExcludeRules()
+    {
+        $exclude = new \Application\Model\Rule\Exclude();
+
+        $filterRule = new \Application\Model\Rule\FilterRule();
+        $filterRule->setQuestionnaire($this->questionnaire)->setRule($exclude)->setFilter($this->filter1);
+
+        $this->assertEquals(array(
+            'values' =>
+            array(
+                'tst 2' => 0.1,
+            ),
+            'values%' =>
+            array(
+                'tst 2' => 0.0066666666666667,
+            ),
+            'count' => 1,
+            'years' =>
+            array(
+                0 => 2005,
+            ),
+            'minYear' => 2005,
+            'maxYear' => 2005,
+            'period' => 1,
+            'slope' => null,
+            'slope%' => null,
+            'average' => 0.1,
+            'average%' => 0.0066666666666667,
+            'population' => 15,
+                ), $this->service->computeFilterForAllQuestionnaires($this->filter1, $this->questionnaires));
+    }
+
 }
