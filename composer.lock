@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "4de83ab678e8b7b40bb584187db03cf9",
+    "hash": "2837565d25bfe98758b8adb862c68669",
     "packages": [
         {
             "name": "CodePlex/PHPExcel",
@@ -60,21 +60,21 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/tvogt/doctrine2-spatial.git",
-                "reference": "12e3a476782a6341eed15023eabbb6c4a0363522"
+                "url": "https://github.com/djlambert/doctrine2-spatial.git",
+                "reference": "c70cdfd8713181b40ac8d69b227be86404eb36c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tvogt/doctrine2-spatial/zipball/12e3a476782a6341eed15023eabbb6c4a0363522",
-                "reference": "12e3a476782a6341eed15023eabbb6c4a0363522",
+                "url": "https://api.github.com/repos/djlambert/doctrine2-spatial/zipball/c70cdfd8713181b40ac8d69b227be86404eb36c2",
+                "reference": "c70cdfd8713181b40ac8d69b227be86404eb36c2",
                 "shasum": ""
             },
             "require": {
-                "doctrine/orm": ">=2.2"
+                "doctrine/orm": ">=2.1"
             },
             "require-dev": {
-                "doctrine/common": "dev-master",
-                "doctrine/dbal": "dev-master"
+                "doctrine/common": ">=2.1",
+                "doctrine/dbal": ">=2.1"
             },
             "type": "library",
             "autoload": {
@@ -82,6 +82,7 @@
                     "CrEOF\\Spatial": "lib/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -105,10 +106,7 @@
                 "postgresql",
                 "spatial"
             ],
-            "support": {
-                "source": "https://github.com/tvogt/doctrine2-spatial/tree/master"
-            },
-            "time": "2013-03-12 13:50:39"
+            "time": "2013-04-29 21:58:51"
         },
         {
             "name": "doctrine/common",

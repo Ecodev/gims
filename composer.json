@@ -4,10 +4,6 @@
     "homepage": "http://www.gims.pro/",
     "repositories": [{
             "type": "vcs",
-            "url": "https://github.com/tvogt/doctrine2-spatial"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/mwillbanks/ZfcTwitterBootstrap"
         }
     ],
