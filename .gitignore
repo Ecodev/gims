@@ -1,6 +1,7 @@
 config/autoload/*.local.php
 config/autoload/local.php
 data/cache
+data/docs/api
 data/logs
 htdocs/css
 htdocs/js/min
