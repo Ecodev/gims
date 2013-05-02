@@ -2,7 +2,7 @@
 
 namespace ApplicationTest\Service\Calculator;
 
-class JmpTest extends CalculatorTest
+class JmpTest extends AbstractCalculator
 {
 
     /**
@@ -49,8 +49,8 @@ class JmpTest extends CalculatorTest
 
         $this->questionnaires = array($this->questionnaire, $questionnaire2);
 
-        $this->highFilterSet = new \Application\Model\FilterSet('water');
-        $this->highFilterSet->addFilter($this->highFilter1)
+        $this->filterSet = new \Application\Model\FilterSet('water');
+        $this->filterSet->addFilter($this->highFilter1)
                 ->addFilter($this->highFilter2)
                 ->addFilter($this->highFilter3);
 
@@ -393,21 +393,21 @@ class JmpTest extends CalculatorTest
      */
     public function testComputeFlatten($yearStart, $yearEnd, $useQuestionnaires, $expected)
     {
-        $this->assertEquals($expected, $this->service->computeFlatten($yearStart, $yearEnd, $this->highFilterSet, $useQuestionnaires ? $this->questionnaires : array()));
+        $this->assertEquals($expected, $this->service->computeFlatten($yearStart, $yearEnd, $this->filterSet, $useQuestionnaires ? $this->questionnaires : array()));
     }
 
     public function testCacheOnFilterForAllQuestionnaire()
     {
         $tmp = $this->flattenProvider();
         $data = reset($tmp);
-        $res1 = $this->service->computeFlatten($data[0], $data[1], $this->highFilterSet, $this->questionnaires);
+        $res1 = $this->service->computeFlatten($data[0], $data[1], $this->filterSet, $this->questionnaires);
 
         $this->answer131->setValueAbsolute((0.2));
-        $res2 = $this->service->computeFlatten($data[0], $data[1], $this->highFilterSet, $this->questionnaires);
+        $res2 = $this->service->computeFlatten($data[0], $data[1], $this->filterSet, $this->questionnaires);
         $this->assertEquals($res1, $res2, 'result should be cached and therefore be the same');
 
 
-        $res3 = $this->service2->computeFlatten($data[0], $data[1], $this->highFilterSet, $this->questionnaires);
+        $res3 = $this->service2->computeFlatten($data[0], $data[1], $this->filterSet, $this->questionnaires);
 
         $this->assertNotEquals($res1, $res3, 'after clearing cache, result differs');
         $this->assertEquals(array(
