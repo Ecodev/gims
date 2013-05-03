@@ -21,7 +21,7 @@ class Version20130430152001 extends AbstractMigration
         $this->addSql("COMMENT ON EXTENSION postgis IS 'PostGIS geometry, geography, and raster spatial types and functions';");
         $this->addSql("CREATE TYPE questionnaire_status AS ENUM ('new', 'completed', 'validated', 'rejected');");
 
-        
+
         $this->addSql("CREATE TABLE filter_rule (id SERIAL NOT NULL, creator_id INT DEFAULT NULL, modifier_id INT DEFAULT NULL, filter_id INT NOT NULL, questionnaire_id INT NOT NULL, part_id INT DEFAULT NULL, rule_id INT NOT NULL, date_created TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, date_modified TIMESTAMP(0) WITH TIME ZONE DEFAULT NULL, PRIMARY KEY(id))");
         $this->addSql("CREATE INDEX IDX_2EE2CBB561220EA6 ON filter_rule (creator_id)");
         $this->addSql("CREATE INDEX IDX_2EE2CBB5D079F553 ON filter_rule (modifier_id)");
@@ -186,6 +186,12 @@ class Version20130430152001 extends AbstractMigration
         $this->addSql("ALTER TABLE question ADD CONSTRAINT FK_B6F7494ECBEBC9B5 FOREIGN KEY (official_question_id) REFERENCES question (id) ON DELETE SET NULL NOT DEFERRABLE INITIALLY IMMEDIATE");
         $this->addSql("ALTER TABLE question ADD CONSTRAINT FK_B6F7494E727ACA70 FOREIGN KEY (parent_id) REFERENCES question (id) ON DELETE SET NULL NOT DEFERRABLE INITIALLY IMMEDIATE");
         $this->addSql("ALTER TABLE question ADD CONSTRAINT FK_B6F7494EB3FE509D FOREIGN KEY (survey_id) REFERENCES survey (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE");
+
+        $this->addSql("ALTER TABLE answer ADD CHECK (((value_percent >= (0)::numeric) AND (value_percent <= (1)::numeric)));");
+        $this->addSql("ALTER TABLE answer ADD CHECK (((quality >= (0)::numeric) AND (quality <= (1)::numeric)));");
+        $this->addSql("ALTER TABLE answer ADD CHECK (((relevance >= (0)::numeric) AND (relevance <= (1)::numeric)));");
+        $this->addSql("ALTER TABLE population ADD CHECK (((year >= (1900)::numeric) AND (year <= (3000)::numeric)));");
+        $this->addSql("ALTER TABLE survey ADD CHECK (((year >= (1900)::numeric) AND (year <= (3000)::numeric)));");
     }
 
     public function down(Schema $schema)
