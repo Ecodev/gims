@@ -5,7 +5,7 @@ angular.module('myApp').controller('AdminCtrl', function () {
 
 });
 
-angular.module('myApp').controller('Admin/Survey/EditCtrl', function ($scope, $routeParams, $location, Survey, ConfirmDelete) {
+angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, $resource, Survey, ConfirmDelete) {
 
     $scope.actives = [
         {text: 'Yes', value: 'true'},
@@ -40,7 +40,7 @@ angular.module('myApp').controller('Admin/Survey/EditCtrl', function ($scope, $r
 
     // Load survey if possible
     if ($routeParams.id > 0) {
-        Survey.get({id: $routeParams.id}, function (survey) {
+        $resource('/api/survey/:id?fields=metadata').get({id: $routeParams.id}, function (survey) {
 
             // cast a few variable
             survey.year -= 0; // int value
