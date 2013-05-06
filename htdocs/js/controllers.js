@@ -125,7 +125,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
             $('.col' + column.index, row.elm).css('backgroundColor', 'inherit');
 
             // GUI display a loading icon
-            $('img.loading', row.elm).toggle();
+            $('.icon-loading', row.elm).toggle();
 
             // True means the answer exists and must be updated. Otherwise, create a new answer
             if (answer.id > 0) {
@@ -135,7 +135,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
                     question.$get({idQuestionnaire: $routeParams.id, id: question.id});
 
                     // GUI remove the loading icon
-                    $('img.loading', row.elm).toggle();
+                    $('.icon-loading', row.elm).toggle();
                 });
             } else {
                 // Convention:
@@ -152,7 +152,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
                     question.$get({idQuestionnaire: $routeParams.id, id: question.id});
 
                     // GUI remove the loading icon
-                    $('img.loading', row.elm).toggle();
+                    $('.icon-loading', row.elm).toggle();
                 });
             }
 
@@ -180,7 +180,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
             {field: 'answers.1.valuePercent', displayName: 'Urban', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate}, //, cellTemplate: 'cellTemplate.html'
             {field: 'answers.2.valuePercent', displayName: 'Rural', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
             {field: 'answers.0.valuePercent', displayName: 'Total', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
-            {displayName: '', cellTemplate: '<img src="/img/loading.gif" alt="" class="loading hide" style="padding-left: 5px"/>', width: '28px'}
+            {displayName: '', cellTemplate: '<i class="icon-loading" style="display: none" />', cellClass: 'column-loading', width: '28px'}
         ]
     };
 

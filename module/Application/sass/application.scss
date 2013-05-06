@@ -25,3 +25,16 @@ html {
   overflow-y: scroll;
   // Force vertical scrollbar
 }
+
+.icon-loading {
+    &.hide {
+        display: none !important;
+    }
+
+    @extend .icon-refresh;
+    @extend .icon-spin;
+}
+
+.column-loading {
+    text-align: center;
+}
