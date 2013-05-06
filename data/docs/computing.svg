@@ -90,8 +90,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.2039145"
-     inkscape:cx="628.57553"
-     inkscape:cy="183.67831"
+     inkscape:cx="1576.9363"
+     inkscape:cy="270.06318"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -203,7 +203,7 @@
          sodipodi:role="line"
          id="tspan3216"
          x="-36.798008"
-         y="-90.350876"></tspan></text>
+         y="-90.350876" /></text>
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#050000;fill-opacity:1;stroke:none;font-family:Sans"
@@ -880,41 +880,6 @@
            id="tspan8272">Final result</tspan></tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="1311.5547"
-       y="-148.1371"
-       id="text7872"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         x="1311.5547"
-         y="-148.1371"
-         id="tspan7874"><tspan
-           x="1311.5547"
-           y="-148.1371"
-           id="tspan7876">Ensure that values are </tspan></tspan><tspan
-         sodipodi:role="line"
-         x="1311.5547"
-         y="-133.1371"
-         id="tspan7878"><tspan
-           x="1311.5547"
-           y="-133.1371"
-           id="tspan7880">constraint between 0.00 and </tspan></tspan><tspan
-         sodipodi:role="line"
-         x="1311.5547"
-         y="-118.1371"
-         id="tspan7882"><tspan
-           x="1311.5547"
-           y="-118.1371"
-           id="tspan7884">1.00 and complete missing </tspan></tspan><tspan
-         sodipodi:role="line"
-         x="1311.5547"
-         y="-103.1371"
-         id="tspan7886"><tspan
-           x="1311.5547"
-           y="-103.1371"
-           id="tspan7888">values for some edge cases</tspan></tspan></text>
-    <text
-       xml:space="preserve"
        style="font-size:28px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="266.92416"
        y="-260.93454"
@@ -1105,5 +1070,40 @@
        id="path4312-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="1273.4456"
+       y="-148.18631"
+       id="text3335"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3337"
+         x="1273.4456"
+         y="-148.18631">Ensure that values are constraint</tspan><tspan
+         sodipodi:role="line"
+         x="1273.4456"
+         y="-133.18631"
+         id="tspan3339">between 0.00 and 1.00 and complete</tspan><tspan
+         sodipodi:role="line"
+         x="1273.4456"
+         y="-118.18631"
+         id="tspan3341">missing values for some edge cases.</tspan><tspan
+         sodipodi:role="line"
+         x="1273.4456"
+         y="-103.18631"
+         id="tspan3343"></tspan><tspan
+         sodipodi:role="line"
+         x="1273.4456"
+         y="-88.18631"
+         id="tspan3345">Also if computing the total part and </tspan><tspan
+         sodipodi:role="line"
+         x="1273.4456"
+         y="-73.18631"
+         id="tspan3347">urban or rural exists, then we will sum</tspan><tspan
+         sodipodi:role="line"
+         x="1273.4456"
+         y="-58.18631"
+         id="tspan3349">those parts to get the total</tspan></text>
   </g>
 </svg>

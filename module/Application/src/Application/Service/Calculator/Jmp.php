@@ -11,7 +11,9 @@ class Jmp extends Calculator
 {
 
     private $cacheComputeFilterForAllQuestionnaires = array();
+    private $cacheComputeRegressionForAllYears = array();
     private $populationRepository;
+    private $partRepository;
 
     /**
      * Set the population repository
@@ -26,7 +28,7 @@ class Jmp extends Calculator
     }
 
     /**
-     *
+     * Get the population repository
      * @return \Application\Repository\PopulationRepository
      */
     public function getPopulationRepository()
@@ -36,6 +38,31 @@ class Jmp extends Calculator
         }
 
         return $this->populationRepository;
+    }
+
+    /**
+     * Set the part repository
+     * @param \Application\Repository\PartRepository $partRepository
+     * @return \Application\Service\Calculator\Jmp
+     */
+    public function setPartRepository(\Application\Repository\PartRepository $partRepository)
+    {
+        $this->partRepository = $partRepository;
+
+        return $this;
+    }
+
+    /**
+     * Get the part repository
+     * @return \Application\Repository\PartRepository
+     */
+    public function getPartRepository()
+    {
+        if (!$this->partRepository) {
+            $this->partRepository = $this->getEntityManager()->getRepository('Application\Model\Part');
+        }
+
+        return $this->partRepository;
     }
 
     /**
@@ -50,24 +77,47 @@ class Jmp extends Calculator
      */
     public function computeFlatten($yearStart, $yearEnd, FilterSet $filterSet, $questionnaires, Part $part = null)
     {
+        $parts = array();
+        if (!$part) {
+            $parts = $this->getPartRepository()->findAll();
+        }
+
         $result = array();
         $years = range($yearStart, $yearEnd);
         foreach ($filterSet->getFilters() as $filter) {
 
-
-            $allRegressions = array();
+            $data = array();
             foreach ($years as $year) {
-                $allRegressions[$year] = $this->computeRegression($year, $filter, $questionnaires, $part);
-            }
 
-            $d = array();
-            foreach ($years as $year) {
-                $d[] = $this->computeFlattenOneYear($year, $allRegressions);
+                // If we are computing the total (not a specific part), we will sum all parts to get it
+                $oneYearResult = null;
+                $totalPopulation = null;
+                foreach ($parts as $p) {
+                    $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $p);
+                    $resultPart = $this->computeFlattenOneYear($year, $allRegressions);
+                    if (!is_null($resultPart)) {
+                        $population = $allRegressions[$year]['population'];
+                        $totalPopulation += $population;
+                        $oneYearResult += $resultPart * $population;
+                    }
+                }
+
+                if ($totalPopulation) {
+                    $oneYearResult = $oneYearResult / $totalPopulation;
+                }
+
+                // If sum of parts yielded nothing, then fallback to normal computation
+                if (is_null($oneYearResult)) {
+                    $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $part);
+                    $oneYearResult = $this->computeFlattenOneYear($year, $allRegressions);
+                }
+
+                $data[] = $oneYearResult;
             }
 
             $result[] = array(
                 'name' => $filter->getName(),
-                'data' => $d,
+                'data' => $data,
             );
         }
 
@@ -77,7 +127,7 @@ class Jmp extends Calculator
     /**
      * Compute the flatten regression value for the given year
      * @param integer $year
-     * @param array $allRegressions [year => regression]
+     * @param array $allRegressions [year => [regresssion => value, population => value]]
      * @param array $usedYears [year] should be empty array for first call, then used for recursivity
      * @return null|int
      */
@@ -87,13 +137,16 @@ class Jmp extends Calculator
             return null;
         }
 
-        $nonNullRegressions = array_filter($allRegressions, function($regression) {
-                    return !is_null($regression);
-                });
+        $nonNullRegressions = array_reduce($allRegressions, function($result, $regression) {
+                    if (!is_null($regression['regression'])) {
+                        $result [] = $regression['regression'];
+                    }
+                    return $result;
+                }, array());
+
         $minRegression = $nonNullRegressions ? min($nonNullRegressions) : null;
         $maxRegression = $nonNullRegressions ? max($nonNullRegressions) : null;
-        $regression = $allRegressions[$year];
-
+        $regression = $allRegressions[$year]['regression'];
         array_push($usedYears, $year);
 
         // If regression value exists, make sure it's within our limits and returns it
@@ -142,14 +195,47 @@ class Jmp extends Calculator
         return $result;
     }
 
+    /**
+     * Returns regressions for each years specified
+     * @param array $years
+     * @param \Application\Model\Filter $filter
+     * @param array $questionnaires
+     * @param \Application\Model\Part $part
+     * @return array [year => [regresssion => value, population => value]]
+     */
+    public function computeRegressionForAllYears(array $years, Filter $filter, $questionnaires, Part $part = null)
+    {
+        $key = $this->getCacheKey(func_get_args());
+        if (array_key_exists($key, $this->cacheComputeRegressionForAllYears)) {
+            return $this->cacheComputeRegressionForAllYears[$key];
+        }
+
+        $allRegressions = array();
+        foreach ($years as $year) {
+            $allRegressions[$year] = $this->computeRegression($year, $filter, $questionnaires, $part);
+        }
+
+        $this->cacheComputeRegressionForAllYears[$key] = $allRegressions;
+
+        return $allRegressions;
+    }
+
+    /**
+     * Returns the regression and the total population concerned by it
+     * @param integer $year
+     * @param \Application\Model\Filter $filter
+     * @param array $questionnaires
+     * @param \Application\Model\Part $part
+     * @return array [regresssion => value, population => value]
+     */
     public function computeRegression($year, Filter $filter, $questionnaires, Part $part = null)
     {
         $d = $this->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
 
         if ($year == $d['maxYear'] + 6) {
-            $result = $this->computeRegression($year - 4, $filter, $questionnaires, $part);
+            $result = $this->computeRegression($year - 4, $filter, $questionnaires, $part)['regression'];
         } elseif ($year == $d['minYear'] - 6) {
-            $result = $this->computeRegression($year + 4, $filter, $questionnaires, $part);
+            $result = $this->computeRegression($year + 4, $filter, $questionnaires, $part)['regression'];
         } elseif ($year < $d['maxYear'] + 3 && $year > $d['minYear'] - 3 && $d['count'] > 1 && $d['period'] > 4) {
             $result = \PHPExcel_Calculation_Statistical::FORECAST($year, $d['values%'], $d['years']);
         } elseif ($year < $d['maxYear'] + 7 && $year > $d['minYear'] - 7 && ($d['count'] < 2 || $d['period'] < 5)) {
@@ -162,7 +248,10 @@ class Jmp extends Calculator
             $result = null;
         }
 
-        return $result;
+        return array(
+            'regression' => $result,
+            'population' => $d['population']
+        );
     }
 
     /**
@@ -174,11 +263,7 @@ class Jmp extends Calculator
      */
     public function computeFilterForAllQuestionnaires(Filter $filter, $questionnaires, Part $part = null)
     {
-        $key = null;
-        foreach ($questionnaires as $questionnaire) {
-            $key .= spl_object_hash($questionnaire);
-        }
-        $key .= spl_object_hash($filter) . ($part ? spl_object_hash($part) : null);
+        $key = $this->getCacheKey(func_get_args());
 
         if (array_key_exists($key, $this->cacheComputeFilterForAllQuestionnaires)) {
             return $this->cacheComputeFilterForAllQuestionnaires[$key];

@@ -25,6 +25,28 @@ use \Application\Traits\EntityManagerAware;
     private $cacheComputeFilter = array();
 
     /**
+     * Returns a unique identifying all arguments, so we can use the result as cache key
+     * @param array $args
+     * @return string
+     */
+    protected function getCacheKey(array $args)
+    {
+        $key = '';
+        foreach ($args as $arg) {
+            if (is_null($arg))
+                $key .= '[[NULL]]';
+            else if (is_object($arg))
+                $key .= spl_object_hash($arg);
+            else if (is_array($arg))
+                $key .= $this->getCacheKey($arg);
+            else
+                $key .= $arg;
+        }
+
+        return $key;
+    }
+
+    /**
      * Returns the computed value of the given filter, based on the questionnaire's available answers
      * @param \Application\Model\Filter $filter
      * @param \Application\Model\Questionnaire $questionnaire
@@ -33,7 +55,7 @@ use \Application\Traits\EntityManagerAware;
      */
     public function computeFilter(Filter $filter, Questionnaire $questionnaire, Part $part = null)
     {
-        $key = spl_object_hash($filter) . spl_object_hash($questionnaire) . ($part ? spl_object_hash($part) : null);
+        $key = $this->getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheComputeFilter)) {
             return $this->cacheComputeFilter[$key];
         }
