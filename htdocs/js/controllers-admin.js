@@ -87,8 +87,8 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeP
             {field: 'name', displayName: 'Name', width: '750px'},
             {field: 'active', displayName: 'Active', cellFilter: 'checkmark', width: '100px'},
             {field: 'year', displayName: 'Year', width: '100px'},
-            {displayName: '', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="edit(row)" ><i class="icon-pencil"></i></button>' +
-                '<button type="button" class="btn btn-mini" ng-click="delete(row)" ><i class="icon-trash"></i></button>'}
+            {displayName: '', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
+                '<button type="button" class="btn btn-mini" ng-click="delete(row)" ><i class="icon-trash icon-large"></i></button>'}
         ]
     };
 
