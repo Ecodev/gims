@@ -42,6 +42,27 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     private $year;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $comments;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetimetz", nullable=true)
+     */
+    private $dateStarted;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetimetz", nullable=true)
+     */
+    private $dateEnded;
+
+    /**
      * Set name
      *
      * @param string $name
@@ -131,6 +152,60 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     public function getYear()
     {
         return (int)$this->year;
+    }
+
+    /**
+     * @return string
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param string $comments
+     * @return Survey
+     */
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateStarted()
+    {
+        return $this->dateStarted;
+    }
+
+    /**
+     * @param \DateTime $dateStarted
+     * @return Survey
+     */
+    public function setDateStarted($dateStarted)
+    {
+        $this->dateStarted = $dateStarted;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateEnded()
+    {
+        return $this->dateEnded;
+    }
+
+    /**
+     * @param \DateTime $dateEnded
+     * @return Survey
+     */
+    public function setDateEnded($dateEnded)
+    {
+        $this->dateEnded = $dateEnded;
+        return $this;
     }
 
 }

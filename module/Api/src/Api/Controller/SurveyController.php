@@ -104,6 +104,9 @@ class SurveyController extends AbstractRestfulController
                 'code',
                 'active',
                 'year',
+                'comments',
+                'dateStarted',
+                'dateEnded',
             ),
             parent::getJsonConfig()
         );
