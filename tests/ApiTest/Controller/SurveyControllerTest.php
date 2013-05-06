@@ -68,11 +68,36 @@ class SurveyControllerTest extends AbstractController
      * @test
      * @group SurveyApi
      */
-    public function getFakeSurveyAndCheckWhetherIdsAreCorresponding()
+    public function getSurveyAndCheckWhetherIdFromResponseIsCorrespondingToFakeSurvey()
     {
         $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
         $actual = $this->getJsonResponse();
         $this->assertSame($this->survey->getId(), $actual['id']);
+    }
+
+    /**
+     * @test
+     * @group SurveyApi
+     */
+    public function getSurveyWithFieldsParametersEqualsToMetadataAndCheckWhetherResponseContainsMetadataFields()
+    {
+        $this->dispatch($this->getRoute('get') . '?fields=metadata', Request::METHOD_GET);
+        $actual = $this->getJsonResponse();
+        foreach ($this->metaModel->getMetadata() as $metadata) {
+            $this->assertArrayHasKey($metadata, $actual);
+        }
+    }
+
+    /**
+     * @test
+     * @group SurveyApi
+     */
+    public function getSurveyWithFieldsParametersEqualsToDateCreatedAndCheckWhetherResponseContainsField()
+    {
+        $expected = 'dateCreated';
+        $this->dispatch($this->getRoute('get') . '?fields=' . $expected, Request::METHOD_GET);
+        $actual = $this->getJsonResponse();
+        $this->assertArrayHasKey($expected, $actual);
     }
 
     /**

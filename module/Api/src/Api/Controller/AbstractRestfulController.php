@@ -2,6 +2,8 @@
 
 namespace Api\Controller;
 
+use Api\Service\MetaModel;
+use Api\Service\Permission;
 use Application\Traits\EntityManagerAware;
 use Zend\View\Model\JsonModel;
 use Application\Model\AbstractModel;
@@ -12,12 +14,55 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     use EntityManagerAware;
 
     /**
+     * @var Permission
+     */
+    protected $permissionService;
+
+    /**
+     * @var MetaModel
+     */
+    protected $metaModelService;
+
+
+    public function __construct()
+    {
+        $this->permissionService = new Permission();
+        $this->metaModelService = new MetaModel();
+    }
+
+    /**
      * Must return an array of properties that will be exposed publicly via JSON.
      * If a property is actually an object itself, it must have a sub-array of properties
      *
      * @return array JSON configuration
      */
-    protected abstract function getJsonConfig();
+    protected function getJsonConfig()
+    {
+
+        $result = array();
+        $fieldList = $this->params()->fromQuery('fields');
+        if (!empty($fieldList)) {
+            $fields = explode(',', $fieldList);
+
+            // metadata is just an alias to dateModified, dateCreated
+            if (in_array('metadata', $fields)) {
+                $key = array_search('metadata', $fields);
+                unset($fields[$key]);
+                foreach ($this->metaModelService->getMetadata() as $fieldName) {
+                    $fields[] = $fieldName;
+                }
+            }
+
+            // Check if fields is allowed to be printed out.
+            foreach ($fields as $fieldName) {
+                if ($this->permissionService->isFieldAllowed($fieldName)) {
+                    $result[] = $fieldName;
+                }
+            }
+        }
+
+        return $result;
+    }
 
     /**
      * Returns an array of array of property values of all given objects

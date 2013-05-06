@@ -2,6 +2,7 @@
 
 namespace ApiTest\Controller;
 
+use Api\Service\MetaModel;
 use Application\Model\Answer;
 use Application\Model\Filter;
 use Application\Model\Geoname;
@@ -84,6 +85,12 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
      */
     protected $role;
 
+    /**
+     * @var metaModel
+     */
+    protected $metaModel;
+
+
     public function setUp()
     {
         parent::setUp();
@@ -95,6 +102,8 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
      */
     protected function populateStorage()
     {
+        $this->metaModel = new MetaModel();
+
         $this->survey = new Survey();
         $this->survey->setActive(true);
         $this->survey->setName('test survey');

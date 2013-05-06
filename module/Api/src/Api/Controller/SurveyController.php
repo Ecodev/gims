@@ -98,11 +98,14 @@ class SurveyController extends AbstractRestfulController
      */
     protected function getJsonConfig()
     {
-        return array(
-            'name',
-            'code',
-            'active',
-            'year',
+        return array_merge(
+            array(
+                'name',
+                'code',
+                'active',
+                'year',
+            ),
+            parent::getJsonConfig()
         );
     }
 
