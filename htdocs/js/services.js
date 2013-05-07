@@ -55,102 +55,52 @@ angular.module('myApp.resourceServices', ['ngResource'])
         return $resource('/api/filter-set/:id');
     })
     .factory('Select2Configurator', function ($location) {
-        return {configure: function($scope, Resource, key) {
-
-            $scope.select2 = $scope.select2 || {};
-            $scope.select2[key] = $scope.select2[key] || {};
-
-            // When selected item changes, update URL
-            $scope.$watch('select2.' + key + '.selected.id', function(id) {
-                if (id)
-                    $location.search(key, id);
-            });
-
-
-            var items;
-            Resource.query(function(data) {
-                console.log(1);
-                items = data;
-                var fromUrl = $location.search()[key];
-                angular.forEach(items, function(item) {
-                    if (item.id == fromUrl) {
-                        $scope.select2[key].selected = item;
-                    }
-                });
-            });
-
-            var formatSelection = function(item) {
-                return item.name;
-            };
-
-            $scope.select2[key].list = {
-                query: function(query) {
-                    var data = {results: []};
-
-                    var searchTerm = query.term.toUpperCase();
-                    var regexp = new RegExp(searchTerm);
-
-                    angular.forEach(items, function(item) {
-                        var blob = (item.id + ' ' + item.name).toUpperCase();
-                        if (regexp.test(blob)) {
-                            data.results.push(item);
-                        }
-                    });
-                    query.callback(data);
-                },
-                formatResult: formatSelection,
-                formatSelection: formatSelection
-            };
-        }};
-    });
-
-/**
- * Admin Survey service
- */
-angular.module('myApp.adminSurveyServices', [])
-    .factory('ConfirmDelete', function ($dialog, $location) {
         return {
-            show: function (survey, surveys) {
+            configure: function ($scope, Resource, key) {
 
-                var buttons, msg, title, index;
+                $scope.select2 = $scope.select2 || {};
+                $scope.select2[key] = $scope.select2[key] || {};
 
-                // index view would contains $scope.surveys but not in detail view
-                if (surveys !== undefined) {
+                // When selected item changes, update URL
+                $scope.$watch('select2.' + key + '.selected.id', function (id) {
+                    if (id)
+                        $location.search(key, id);
+                });
 
-                    // IndexOf is only supported as of IE9... so find a work around for older browser.
-                    // index = surveys.indexOf(survey);
 
-                    // Fall back method for finding the index of survey
-                    angular.forEach(surveys, function (_survey, _index) {
-                        if (survey.id == _survey.id) {
-                            index = _index;
-                            return;
+                var items;
+                Resource.query(function (data) {
+                    console.log(1);
+                    items = data;
+                    var fromUrl = $location.search()[key];
+                    angular.forEach(items, function (item) {
+                        if (item.id == fromUrl) {
+                            $scope.select2[key].selected = item;
                         }
                     });
-                }
+                });
 
+                var formatSelection = function (item) {
+                    return item.name;
+                };
 
-                title = 'Confirmation delete';
-                msg = 'You are going to delete survey "' + survey.code + '". Are you sure?';
-                buttons = [
-                    {result: 'cancel', label: 'Cancel'},
-                    {result: 'delete', label: 'Delete', cssClass: 'btn-danger'}
-                ];
-                $dialog.messageBox(title, msg, buttons)
-                    .open()
-                    .then(function (result) {
-                        if (result === 'delete') {
+                $scope.select2[key].list = {
+                    query: function (query) {
+                        var data = {results: []};
 
-                            survey.$delete({id: survey.id}, function () {
+                        var searchTerm = query.term.toUpperCase();
+                        var regexp = new RegExp(searchTerm);
 
-                                // True means we are in index view where $scope.survey was available
-                                if (index >= 0) {
-                                    surveys.splice(index, 1); // remove from local storage
-                                }
-                                $location.path('/admin/survey');
-                            });
-                        }
-                    });
-            }
-        };
+                        angular.forEach(items, function (item) {
+                            var blob = (item.id + ' ' + item.name).toUpperCase();
+                            if (regexp.test(blob)) {
+                                data.results.push(item);
+                            }
+                        });
+                        query.callback(data);
+                    },
+                    formatResult: formatSelection,
+                    formatSelection: formatSelection
+                };
+            }};
     });

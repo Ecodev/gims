@@ -12,7 +12,8 @@ angular.module('myApp', [
         'myApp.directives',
         'myApp.resourceServices',
         'myApp.adminSurveyServices',
-        'chartsExample.directives'
+        'chartsExample.directives',
+        '$strap.directives'
     ]).
     config(function ($routeProvider, $locationProvider) {
         $routeProvider.when('/home', {templateUrl: '/template/application/index/home', controller: 'MyCtrl1'});

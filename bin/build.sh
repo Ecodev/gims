@@ -57,7 +57,11 @@ select2.js \
 ../../lib/ui-bootstrap/ui-bootstrap-tpls-0.2.0.min.js \
 ../../lib/ng-grid/build/ng-grid.min.js \
 angular-highcharts-directive.js \
+../../lib/bootstrap-js/bootstrap.min.js \
+../../lib/angular-strap/angular-strap.min.js \
+../../lib/angular-strap/bootstrap-datepicker.js \
 app.js \
+services-admin.js \
 services.js \
 controllers-admin.js \
 controllers.js \

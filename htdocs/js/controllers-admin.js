@@ -5,42 +5,55 @@ angular.module('myApp').controller('AdminCtrl', function () {
 
 });
 
-angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, $resource, Survey, ConfirmDelete) {
+angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, $resource, Survey, Modal, Gui) {
 
     $scope.actives = [
         {text: 'Yes', value: 'true'},
         {text: 'No', value: 'false'}
     ];
 
-    // Defining label for GUI.
-    $scope.sending = false;
-    $scope.sendLabel = 'Save';
+//    $scope.datepicker = {date: new Date("2012-09-01T00:00:00.000Z")};
 
-    $scope.save = function () {
+    Gui.resetSaveButton($scope);
+
+    $scope.saveAndClose = function () {
+        this.save('/admin/survey');
+    };
+
+    $scope.save = function (routeTo) {
         $scope.sending = true;
-        $scope.sendLabel = 'Saving...';
+        $scope.sendLabel = '<i class="icon-ok"></i> Saving...';
 
         // First case is for update a survey, second is for creating
         if ($scope.survey.id > 0) {
             $scope.survey.$update({id: $scope.survey.id}, function (survey) {
-                $location.path('/admin/survey');
+                Gui.resetSaveButton($scope);
+
+                if (routeTo) {
+                    $location.path(routeTo);
+                }
             });
         } else {
             $scope.survey = new Survey($scope.survey);
             $scope.survey.$create(function (survey) {
-                $location.path('/admin/survey');
+
+                Gui.resetSaveButton($scope);
+
+                if (routeTo) {
+                    $location.path(routeTo);
+                }
             });
         }
     };
 
     // Delete a survey
     $scope.delete = function () {
-        ConfirmDelete.show($scope.survey);
+        Modal.confirmDelete($scope.survey);
     };
 
     // Load survey if possible
     if ($routeParams.id > 0) {
-        $resource('/api/survey/:id?fields=metadata').get({id: $routeParams.id}, function (survey) {
+        $resource('/api/survey/:id?fields=metadata,comments').get({id: $routeParams.id}, function (survey) {
 
             // cast a few variable
             survey.year -= 0; // int value
@@ -53,7 +66,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
 /**
  * Admin Survey Controller
  */
-angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeParams, $location, $window, $timeout, Survey, ConfirmDelete) {
+angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeParams, $location, $window, $timeout, Survey, Modal) {
 
     // Initialize
     $scope.filteringText = '';
@@ -96,7 +109,7 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeP
 
         // Add a little timeout to enabling the event "selectRow" to be propagated
         $timeout(function () {
-            ConfirmDelete.show($scope.selectedRow[0], $scope.surveys);
+            Modal.confirmDelete($scope.selectedRow[0], $scope.surveys);
         }, 0)
     }
 

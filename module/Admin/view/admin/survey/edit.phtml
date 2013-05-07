@@ -1,44 +1,77 @@
 <div class="container">
 
-
     <form name="myForm">
-        <tabs>
+
+        <div class="btn-group">
+            <button ng-click="save()" ng-disabled="myForm.$invalid" class="btn btn-primary"
+                    ng-class="{'disabled': sending}" ng-bind-html-unsafe="sendLabel"></button>
+            <button class="btn btn-primary dropdown-toggle" ng-class="{'disabled': sending}" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a ng-click="saveAndClose()">Save and close</a>
+                </li>
+            </ul>
+        </div>
+
+        <a href="/admin/survey" class="btn"><i class="icon-minus-sign"></i> Cancel</a>
+
+        <button ng-click="delete()"
+                ng-show="survey.id" class="btn btn-danger"><i class="icon-trash"></i> Delete
+        </button>
+
+        <tabs style="margin-top: 20px">
             <pane heading="General info">
                 <div class="control-group" ng-class="{error: myForm.code.$invalid}">
-                    <label>Code</label>
-                    <input type="text" name="code" ng-model="survey.code" required />
+                    <label for="survey.code">Code</label>
+                    <input id="survey.code" type="text" name="code" ng-model="survey.code" required />
                     <span ng-show="myForm.code.$error.required" class="help-inline">Required</span>
                 </div>
 
                 <div class="control-group" ng-class="{error: myForm.name.$invalid}">
-                    <label>Name</label>
-                    <input type="text" name="name" ng-model="survey.name" required class="span6" />
+                    <label for="survey.name">Name</label>
+                    <input id="survey.name" type="text" name="name" ng-model="survey.name" required class="span6" />
                     <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
                 </div>
 
                 <div class="control-group" ng-class="{error: myForm.active.$invalid}">
-                    <label>Active</label>
-                    <select name="active" ng-model="survey.active" ng-options="c.value as c.text for c in actives"
+                    <label for="survey.active">Active</label>
+                    <select id="survey.active" name="active" ng-model="survey.active" ng-options="c.value as c.text for c in actives"
                             required></select>
                     <span ng-show="myForm.active.$error.required" class="help-inline">Required</span>
                 </div>
 
                 <div class="control-group" ng-class="{error: myForm.year.$invalid}">
-                    <label>Year</label>
-                    <input type="number" name="year" ng-model="survey.year" min="1970" max="2100" required />
+                    <label for="survey.year">Year</label>
+                    <input id="survey.year" type="number" name="year" ng-model="survey.year" min="1970" max="2100" required />
                     <span ng-show="myForm.year.$error.number" class="help-inline">Not a valid year</span>
                     <span ng-show="myForm.year.$error.required" class="help-inline">Required</span>
                 </div>
 
                 <div class="control-group">
-                    <label>Comments</label>
-                    <textarea type="text" name="comments" ng-model="survey.comments" required class="span6"></textarea>
+                    <label for="survey.comments">Comments</label>
+                    <textarea id="survey.comments" type="text" name="comments" ng-model="survey.comments" class="span6"></textarea>
                 </div>
 
-                <div class="control-group">
-                    <label>Date start</label>
-                    <input ui-date ui-date-format="DD, d MM, yy" ng-model="survey.dateStarted" />
+                <div class="control-group input-append">
+
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <label for="survey.dateStarted">Date started</label>
+                            <input id="survey.dateStarted" class="input-small" type="text" ng-model="survey.dateStarted" data-date-format="dd/mm/yyyy" bs-datepicker />
+                            <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+                        </div>
+                        <div class="span6">
+                            <label for="survey.dateEnded">Date ended</label>
+                            <input id="survey.dateEnded" class="input-small" type="text" ng-model="survey.dateEnded"
+                                   data-date-format="dd/mm/yyyy" bs-datepicker/>
+                            <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
+
             </pane>
 
             <pane heading="Question">
@@ -52,13 +85,6 @@
                 1234
             </pane>
         </tabs>
-
-        <a href="/admin/survey" class="btn"><i class="icon-minus-sign"></i> Cancel</a>
-
-        <button ng-click="save()" ng-disabled="myForm.$invalid" class="btn btn-primary"
-                ng-class="{'disabled': sending}" ng-bind-template="{{sendLabel}}"></button>
-        <button ng-click="delete()"
-                ng-show="survey.id" class="btn btn-danger"><i class="icon-trash"></i> Delete</button>
     </form>
 
     <div class="row-fluid form-metadata">
