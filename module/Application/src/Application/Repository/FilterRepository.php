@@ -4,6 +4,7 @@ namespace Application\Repository;
 
 class FilterRepository extends AbstractRepository
 {
+    use Traits\OrderedByName;
 
     /**
      * Returns a filter either from database, or newly created

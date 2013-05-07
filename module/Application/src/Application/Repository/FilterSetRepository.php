@@ -7,6 +7,8 @@ use Application\Model\FilterSet;
 class FilterSetRepository extends AbstractRepository
 {
 
+    use Traits\OrderedByName;
+
     public function getOrCreate($name)
     {
         $filterSet = $this->findOneByName($name);
