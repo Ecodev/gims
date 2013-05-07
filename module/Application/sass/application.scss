@@ -42,3 +42,7 @@ html {
 .column-loading {
     text-align: center;
 }
+
+.container > .content {
+    min-height: 480px;
+}

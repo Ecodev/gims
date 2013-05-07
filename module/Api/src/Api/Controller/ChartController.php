@@ -22,37 +22,42 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $endYear = 2011;
 
         // First get series of flatten regression lines
-        $series = $calculator->computeFlatten($startYear, $endYear, $filterSet, $questionnaires, $part);
-        foreach ($series as &$serie) {
-            $serie['type'] = 'spline';
-            foreach ($serie['data'] as &$d) {
-                if (!is_null($d))
-                    $d = round($d * 100);
-            }
-        }
-
-        // Then add scatter points which are each questionnaire values
-        foreach ($filterSet->getFilters() as $filter) {
-            $data = $calculator->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
-
-            $scatter = array(
-                'type' => 'scatter',
-                'name' => $filter->getName(),
-                'data' => array(),
-            );
-            $i = 0;
-            foreach ($data['values%'] as $surveyCode => $value) {
-
-                if (!is_null($value)) {
-                    $scatter['data'][] = array(
-                        'name' => $surveyCode,
-                        'x' => $data['years'][$i],
-                        'y' => round($value * 100, 1),
-                    );
+        $series = array();
+        $filterCount = 0;
+        if ($filterSet) {
+            $filterCount = $filterSet->getFilters()->count();
+            $series = $calculator->computeFlatten($startYear, $endYear, $filterSet, $questionnaires, $part);
+            foreach ($series as &$serie) {
+                $serie['type'] = 'spline';
+                foreach ($serie['data'] as &$d) {
+                    if (!is_null($d))
+                        $d = round($d * 100);
                 }
-                $i++;
             }
-            $series[] = $scatter;
+
+            // Then add scatter points which are each questionnaire values
+            foreach ($filterSet->getFilters() as $filter) {
+                $data = $calculator->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
+
+                $scatter = array(
+                    'type' => 'scatter',
+                    'name' => $filter->getName(),
+                    'data' => array(),
+                );
+                $i = 0;
+                foreach ($data['values%'] as $surveyCode => $value) {
+
+                    if (!is_null($value)) {
+                        $scatter['data'][] = array(
+                            'name' => $surveyCode,
+                            'x' => $data['years'][$i],
+                            'y' => round($value * 100, 1),
+                        );
+                    }
+                    $i++;
+                }
+                $series[] = $scatter;
+            }
         }
 
 
@@ -63,13 +68,13 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             ),
             // Here we use default highchart colors and symbols, but truncated at the same number of series,
             // so it will get repeated for lines and scatter points
-            'colors' => array_slice(array('#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'), 0, $filterSet->getFilters()->count()),
-            'symbols' => array_slice(array('circle', 'diamond', 'square', 'triangle', 'triangle-down'), 0, $filterSet->getFilters()->count()),
+            'colors' => array_slice(array('#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'), 0, $filterCount),
+            'symbols' => array_slice(array('circle', 'diamond', 'square', 'triangle', 'triangle-down'), 0, $filterCount),
             'title' => array(
-                'text' =>  ($country ? $country->getName() : 'Unknown country') . ' - ' . ($part ? $part->getName() : 'Total'),
+                'text' => ($country ? $country->getName() : 'Unknown country') . ' - ' . ($part ? $part->getName() : 'Total'),
             ),
             'subtitle' => array(
-                'text' => 'JMP - estimated proportion of the population for ' . $filterSet->getName(),
+                'text' => 'Estimated proportion of the population for ' . ($filterSet ? $filterSet->getName() : 'Unkown filterSet'),
             ),
             'xAxis' => array(
                 'title' => array(

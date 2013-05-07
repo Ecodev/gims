@@ -261,10 +261,11 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $http, 
 
         // If they are all available ...
         if ($scope.select2.country.selected && $scope.select2.part.selected && $scope.select2.filterSet.selected) {
+            $scope.isLoading = true;
             $timeout.cancel(uniqueAjaxRequest);
             uniqueAjaxRequest = $timeout(function () {
 
-                // ... then, get chart data via Ajax, but only once per 300 milliseconds
+                // ... then, get chart data via Ajax, but only once per 200 milliseconds
                 // (this avoid sending several request on page loading)
                 $http.get('/api/chart',
                         {
@@ -275,8 +276,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $http, 
                             }
                         }).success(function (data) {
                     $scope.chart = data;
+                    $scope.isLoading = false;
                 });
-            }, 300);
+            }, 200);
         }
     });
 

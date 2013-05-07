@@ -146,13 +146,11 @@
         </div>
         </div>
         <div class="container">
-            <?php echo $this->content; ?>
-
-            <div ng-view></div>
+            <div class="content" ng-view></div>
 
             <hr>
             <footer>
-                <p><?php echo $this->translate('Designed and built by Ecodev for WHO') ?></p>
+                <p class="muted"><?php echo $this->translate('Designed and built by Ecodev for WHO') ?></p>
             </footer>
         </div> <!-- /container -->
 <?php echo $this->inlineScript() ?>
