@@ -53,13 +53,12 @@
             </pane>
         </tabs>
 
-        <a href="/admin/survey" class="btn">Cancel</a>
+        <a href="/admin/survey" class="btn"><i class="icon-minus-sign"></i> Cancel</a>
 
         <button ng-click="save()" ng-disabled="myForm.$invalid" class="btn btn-primary"
                 ng-class="{'disabled': sending}" ng-bind-template="{{sendLabel}}"></button>
         <button ng-click="delete()"
-                ng-show="survey.id" class="btn btn-danger">Delete
-        </button>
+                ng-show="survey.id" class="btn btn-danger"><i class="icon-trash"></i> Delete</button>
     </form>
 
     <div class="row-fluid form-metadata">
