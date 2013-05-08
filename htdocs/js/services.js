@@ -70,7 +70,6 @@ angular.module('myApp.resourceServices', ['ngResource'])
 
                 var items;
                 Resource.query(function (data) {
-                    console.log(1);
                     items = data;
                     var fromUrl = $location.search()[key];
                     angular.forEach(items, function (item) {

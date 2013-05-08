@@ -144,9 +144,9 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     }
 
     /**
-     * Returns the repository for the current controller
+     * Returns the Model class name for the current controller
      *
-     * @return \Application\Repository\AbstractRepository
+     * @return string for instance "Application\Model\User"
      */
     protected function getModel()
     {
