@@ -9,6 +9,9 @@ use Zend\View\Model\JsonModel;
 class QuestionController extends AbstractRestfulController
 {
 
+    /**
+     * @var \Application\Model\Questionnaire
+     */
     protected $questionnaire;
 
     protected function getQuestionnaire()

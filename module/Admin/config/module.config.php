@@ -5,6 +5,7 @@ return array(
         'invokables' => array(
             'Admin\Controller\Index' => 'Admin\Controller\IndexController',
             'Admin\Controller\Survey' => 'Admin\Controller\SurveyController',
+            'Admin\Controller\User' => 'Admin\Controller\UserController',
         ),
     ),
     'view_manager' => array(

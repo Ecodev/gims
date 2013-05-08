@@ -11,6 +11,9 @@ return array(
             'Api\Controller\FilterSet' => 'Api\Controller\FilterSetController',
             'Api\Controller\Country' => 'Api\Controller\CountryController',
             'Api\Controller\Part' => 'Api\Controller\PartController',
+            'Api\Controller\User' => 'Api\Controller\UserController',
+            'Api\Controller\UserSurvey' => 'Api\Controller\UserSurveyController',
+            'Api\Controller\UserQuestionnaire' => 'Api\Controller\UserQuestionnaireController',
             'Api\Controller\Chart' => 'Api\Controller\ChartController',
         ),
     ),
@@ -68,6 +71,19 @@ return array(
                                 '__NAMESPACE__' => 'Api\Controller',
                                 'controller' => 'questionnaire',
                             ),
+                        ),
+                    ),
+                    'user-survey' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/user/:idUser/[:controller[/:id]]',
+                            'constraints' => array(
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'idQuestionnaire' => '[0-9]+',
+                                'id' => '[0-9]+',
+                            ),
+                            'defaults' => array(),
                         ),
                     ),
 

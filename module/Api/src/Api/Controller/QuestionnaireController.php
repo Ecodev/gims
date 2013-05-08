@@ -10,6 +10,7 @@ class QuestionnaireController extends AbstractRestfulController
     protected function getJsonConfig()
     {
         return array(
+            'name',
             'dateObservationStart',
             'dateObservationEnd',
             'survey' => array(

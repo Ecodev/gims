@@ -110,7 +110,7 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
         $this->survey->setCode('code test survey');
         $this->survey->setYear(2010);
 
-        $this->geoName = new Geoname();
+        $this->geoName = new Geoname('test geoname');
 
         $this->filter = new Filter();
         $this->filter->setName('foo')

@@ -9,13 +9,13 @@ class QuestionnaireControllerTest extends AbstractController
 
     protected function getExpectedJson()
     {
-        return '{"id":' . $this->questionnaire->getId() . ',"dateObservationStart":"2010-01-01T00:00:00+0100","dateObservationEnd":"2011-01-01T00:00:00+0100","survey":{"id":' . $this->survey->getId() . ',"code":"code test survey","name":"test survey"}}';
+        return '{"id":' . $this->questionnaire->getId() . ',"name":"code test survey - test geoname","dateObservationStart":"2010-01-01T00:00:00+0100","dateObservationEnd":"2011-01-01T00:00:00+0100","survey":{"id":' . $this->survey->getId() . ',"code":"code test survey","name":"test survey"}}';
     }
 
     public function testEnsureOnlyAllowedFieldAreDisplayedInResponseForQuestionnaire()
     {
         $this->dispatch('/api/questionnaire/' . $this->questionnaire->getId(), Request::METHOD_GET);
-        $allowedFields = array('id', 'dateObservationStart', 'dateObservationEnd', 'survey');
+        $allowedFields = array('id', 'dateObservationStart', 'dateObservationEnd', 'survey', 'name');
         foreach ($this->getJsonResponse() as $key => $value) {
             $this->assertTrue(in_array($key, $allowedFields));
         }

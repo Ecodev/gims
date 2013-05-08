@@ -63,6 +63,7 @@ angular-highcharts-directive.js \
 app.js \
 services-admin.js \
 services.js \
+controllers-admin-user.js \
 controllers-admin.js \
 controllers.js \
 filters.js \

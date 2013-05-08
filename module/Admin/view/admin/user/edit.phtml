@@ -1,0 +1,77 @@
+<div class="container">
+    <h2>Users > {{user.name}}</h2>
+    <form name="myForm">
+
+        <div class="btn-group">
+            <button ng-click="save()" ng-disabled="myForm.$invalid" class="btn btn-primary"
+                    ng-class="{'disabled': sending}" ng-bind-html-unsafe="sendLabel"></button>
+            <button class="btn btn-primary dropdown-toggle" ng-class="{'disabled': sending}" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a ng-click="saveAndClose()">Save and close</a>
+                </li>
+            </ul>
+        </div>
+
+        <a href="/admin/user" class="btn"><i class="icon-minus-sign"></i> Cancel</a>
+
+        <button ng-click="delete()"
+                ng-show="user.id" class="btn btn-danger"><i class="icon-trash"></i> Delete
+        </button>
+
+        <tabs style="margin-top: 20px">
+            <pane heading="General info">
+
+                <div class="control-group" ng-class="{error: myForm.name.$invalid}">
+                    <label for="user.name">Name</label>
+                    <input id="user.name" type="text" name="name" ng-model="user.name" required class="span6" />
+                    <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+                </div>
+
+                <div class="control-group" ng-class="{error: myForm.name.$invalid}">
+                    <label for="user.email">Email</label>
+                    <input id="user.email" type="email" name="name" ng-model="user.email" required class="span6" />
+                    <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+                </div>
+
+                <div class="control-group" ng-class="{error: myForm.state.$invalid}">
+                    <label for="user.state">State</label>
+                    <select id="user.state" name="state" ng-model="user.state" ng-options="c.value as c.text for c in states"
+                            required></select>
+                    <span ng-show="myForm.state.$error.required" class="help-inline">Required</span>
+                </div>
+            </pane>
+
+            <pane heading="Surveys">
+
+                <div class="row-fluid">
+                    <div class="span9">
+                        <input type="text" ng-model="filteringText" placeholder="Search..." class="search" style="width: 400px"/>
+                    </div>
+                    <div class="span3" style="text-align: right">
+                        <a href="/admin/user/new"><i class="icon-plus-sign"></i> new user</a>
+                    </div>
+                </div>
+
+                <div ng-grid="gridSurveyOptions" style="" class="gridStyle" style="height: 100%"></div>
+            </pane>
+
+            <pane heading="Questionnaires">
+
+                <div class="row-fluid">
+                    <div class="span9">
+                        <input type="text" ng-model="filteringText" placeholder="Search..." class="search" style="width: 400px"/>
+                    </div>
+                    <div class="span3" style="text-align: right">
+                        <a href="/admin/user/new"><i class="icon-plus-sign"></i> new user</a>
+                    </div>
+                </div>
+
+                <div ng-grid="gridQuestionnaireOptions" style="" class="gridStyle" style="height: 100%"></div>
+            </pane>
+        </tabs>
+    </form>
+<?php echo $this->metadata('user'); ?>
+</div> <!-- /container -->

@@ -147,6 +147,15 @@ class Geoname extends AbstractModel
     private $geometry;
 
     /**
+     * Constructor
+     * @param string $name
+     */
+    public function __construct($name = null)
+    {
+        $this->setName($name);
+    }
+
+    /**
      * Set name
      *
      * @param string $name
