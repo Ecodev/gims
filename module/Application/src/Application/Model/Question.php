@@ -66,7 +66,7 @@ class Question extends AbstractModel
     /**
      * @var Survey
      *
-     * @ORM\ManyToOne(targetEntity="Survey")
+     * @ORM\ManyToOne(targetEntity="Survey", inversedBy="questions")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })

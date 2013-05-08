@@ -48,8 +48,6 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
         {text: 'No', value: 'false'}
     ];
 
-//    $scope.datepicker = {date: new Date("2012-09-01T00:00:00.000Z")};
-
     Gui.resetSaveButton($scope);
 
     $scope.saveAndClose = function() {

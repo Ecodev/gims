@@ -28,6 +28,13 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     private $code;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="survey")
+     */
+    private $questions;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(type="boolean", nullable=false)
@@ -53,14 +60,22 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @ORM\Column(type="datetimetz", nullable=true)
      */
-    private $dateStarted;
+    private $dateStart;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetimetz", nullable=true)
      */
-    private $dateEnded;
+    private $dateEnd;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set name
@@ -175,36 +190,59 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * @return \DateTime
      */
-    public function getDateStarted()
+    public function getDateStart()
     {
-        return $this->dateStarted;
+        return $this->dateStart;
     }
 
     /**
-     * @param \DateTime $dateStarted
+     * @param \DateTime $dateStart
      * @return Survey
      */
-    public function setDateStarted($dateStarted)
+    public function setDateStart($dateStart)
     {
-        $this->dateStarted = $dateStarted;
+        if ($dateStart) {
+            $dateStart = new \DateTime($dateStart);
+        }
+        $this->dateStart = $dateStart;
         return $this;
     }
 
     /**
      * @return \DateTime
      */
-    public function getDateEnded()
+    public function getDateEnd()
     {
-        return $this->dateEnded;
+        return $this->dateEnd;
     }
 
     /**
-     * @param \DateTime $dateEnded
+     * @param \DateTime $dateEnd
      * @return Survey
      */
-    public function setDateEnded($dateEnded)
+    public function setDateEnd($dateEnd)
     {
-        $this->dateEnded = $dateEnded;
+        if ($dateEnd) {
+            $dateEnd = new \DateTime($dateEnd);
+        }
+        $this->dateEnd = $dateEnd;
+        return $this;
+    }
+
+    /**
+     * @return \Application\Model\ArrayCollection
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
+    }
+
+    /**
+     * @param \Application\Model\ArrayCollection $questions
+     */
+    public function setQuestions($questions)
+    {
+        $this->questions = $questions;
         return $this;
     }
 

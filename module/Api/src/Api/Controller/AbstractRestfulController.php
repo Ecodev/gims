@@ -26,7 +26,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
 
     public function __construct()
     {
-        $this->permissionService = new Permission();
+        $this->permissionService = new Permission($this->getModel());
         $this->metaModelService = new MetaModel();
     }
 
