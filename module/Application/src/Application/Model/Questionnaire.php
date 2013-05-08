@@ -77,7 +77,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      * @param \DateTime $dateObservationStart
      * @return Questionnaire
      */
-    public function setDateObservationStart($dateObservationStart)
+    public function setDateObservationStart(\DateTime $dateObservationStart)
     {
         $this->dateObservationStart = $dateObservationStart;
 
@@ -100,7 +100,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      * @param \DateTime $dateObservationEnd
      * @return Questionnaire
      */
-    public function setDateObservationEnd($dateObservationEnd)
+    public function setDateObservationEnd(\DateTime $dateObservationEnd)
     {
         $this->dateObservationEnd = $dateObservationEnd;
 
@@ -204,8 +204,17 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function answerAdded(Answer $answer)
     {
         $this->getAnswers()->add($answer);
-        
+
         return $this;
+    }
+
+    /**
+     * Return the computed name based on geoname and survey
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getSurvey()->getCode() . ' - ' . $this->getGeoname()->getName();
     }
 
 }

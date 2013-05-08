@@ -83,7 +83,8 @@ class SurveyControllerTest extends AbstractController
     {
         $this->dispatch($this->getRoute('get') . '?fields=metadata', Request::METHOD_GET);
         $actual = $this->getJsonResponse();
-        foreach ($this->metaModel->getMetadata() as $metadata) {
+        foreach ($this->metaModel->getMetadata() as $key => $val) {
+            $metadata = is_string($key) ? $key : $val;
             $this->assertArrayHasKey($metadata, $actual);
         }
     }

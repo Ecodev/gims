@@ -27,6 +27,9 @@ angular.module('myApp', [
         $routeProvider.when('/admin/survey', {templateUrl: '/template/admin/survey', controller: 'Admin/SurveyCtrl'});
         $routeProvider.when('/admin/survey/edit/:id', {templateUrl: '/template/admin/survey/edit', controller: 'Admin/Survey/CrudCtrl'});
         $routeProvider.when('/admin/survey/new', {templateUrl: '/template/admin/survey/edit', controller: 'Admin/Survey/CrudCtrl'});
+        $routeProvider.when('/admin/user', {templateUrl: '/template/admin/user', controller: 'Admin/UserCtrl'});
+        $routeProvider.when('/admin/user/edit/:id', {templateUrl: '/template/admin/user/edit', controller: 'Admin/User/CrudCtrl'});
+        $routeProvider.when('/admin/user/new', {templateUrl: '/template/admin/user/edit', controller: 'Admin/User/CrudCtrl'});
         $routeProvider.otherwise({redirectTo: '/home'});
 
         $locationProvider.html5Mode(true);

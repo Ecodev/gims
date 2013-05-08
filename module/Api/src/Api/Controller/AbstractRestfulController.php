@@ -48,15 +48,14 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             if (in_array('metadata', $fields)) {
                 $key = array_search('metadata', $fields);
                 unset($fields[$key]);
-                foreach ($this->metaModelService->getMetadata() as $fieldName) {
-                    $fields[] = $fieldName;
-                }
+                $fields = array_merge($fields, $this->metaModelService->getMetadata());
             }
 
             // Check if fields is allowed to be printed out.
-            foreach ($fields as $fieldName) {
+            foreach ($fields as $key => $val) {
+                $fieldName = is_string($key) ? $key : $val;
                 if ($this->permissionService->isFieldAllowed($fieldName)) {
-                    $result[] = $fieldName;
+                    $result[$key] = $val;
                 }
             }
         }
@@ -144,9 +143,9 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     }
 
     /**
-     * Returns the repository for the current controller
+     * Returns the Model class name for the current controller
      *
-     * @return \Application\Repository\AbstractRepository
+     * @return string for instance "Application\Model\User"
      */
     protected function getModel()
     {

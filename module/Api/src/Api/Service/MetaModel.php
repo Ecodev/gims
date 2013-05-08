@@ -2,14 +2,18 @@
 
 namespace Api\Service;
 
-
 class MetaModel
 {
 
     /**
      * @var array
      */
-    protected $metadata = array('dateCreated', 'dateModified', 'creator', 'modifier');
+    protected $metadata = array(
+        'dateCreated',
+        'dateModified',
+        'creator' => array('name'),
+        'modifier' => array('name'),
+    );
 
     /**
      * @return array
@@ -18,6 +22,5 @@ class MetaModel
     {
         return $this->metadata;
     }
-
 
 }

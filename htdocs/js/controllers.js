@@ -214,7 +214,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
     };
 
     var formatSelection = function (questionnaire) {
-        return  questionnaire.id + ' ' + questionnaire.survey.name + " - (" + questionnaire.survey.code + ")";
+        return questionnaire.name;
     };
 
     var formatResult = function (questionnaire) {
@@ -234,7 +234,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
             var regexp = new RegExp(searchTerm);
 
             angular.forEach(questionnaires, function (questionnaire) {
-                var blob = (questionnaire.id + ' ' + questionnaire.survey.name + ' ' + questionnaire.survey.code).toUpperCase();
+                var blob = (questionnaire.id + ' ' + questionnaire.name + ' ' + questionnaire.survey.name).toUpperCase();
                 if (regexp.test(blob)) {
                     data.results.push(questionnaire);
                 }

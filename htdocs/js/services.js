@@ -25,6 +25,30 @@ angular.module('myApp.resourceServices', ['ngResource'])
             }
         });
     })
+    .factory('User', function ($resource) {
+        return $resource('/api/user/:id', {}, {
+            create: {
+                method: 'POST'
+            },
+            update: {
+                method: 'PUT'
+            }
+        });
+    })
+    .factory('UserSurvey', function ($resource) {
+        return $resource('/api/user/:idUser/user-survey/:id', {}, {
+            update: {
+                method: 'PUT'
+            }
+        });
+    })
+    .factory('UserQuestionnaire', function ($resource) {
+        return $resource('/api/user/:idUser/user-questionnaire/:id', {}, {
+            update: {
+                method: 'PUT'
+            }
+        });
+    })
     .factory('Question', function ($resource) {
         return $resource('/api/questionnaire/:idQuestionnaire/question/:id', {}, {
             update: {
@@ -70,7 +94,6 @@ angular.module('myApp.resourceServices', ['ngResource'])
 
                 var items;
                 Resource.query(function (data) {
-                    console.log(1);
                     items = data;
                     var fromUrl = $location.search()[key];
                     angular.forEach(items, function (item) {
