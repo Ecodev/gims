@@ -15,7 +15,7 @@ angular.module('myApp').controller('ContributeCtrl', function($scope, $http) {
     });
 });
 
-angular.module('myApp').controller('UserCtrl', function ($scope, $location) {
+angular.module('myApp').controller('UserCtrl', function ($scope, $location, $http) {
 
     $scope.promptLogin = function () {
         $scope.showLogin = true;
@@ -26,25 +26,30 @@ angular.module('myApp').controller('UserCtrl', function ($scope, $location) {
         $scope.showLogin = false;
     };
 
-    $scope.promptRegister = function () {
-        $scope.showRegister = true;
-        $scope.redirect = $location.absUrl();
-    };
-
-    $scope.cancelRegister = function () {
-        $scope.showRegister = false;
-    };
-
     $scope.opts = {
         backdropFade: true,
         dialogFade: true
     };
+
+    $scope.login = {};
+    $scope.register = {};
 
     // Keep current URL up to date, so we can login and come back to current page
     $scope.redirect = $location.absUrl();
     $scope.$on("$routeChangeSuccess", function (event, current, previous) {
         $scope.redirect = $location.absUrl();
     });
+
+    $scope.sendLogin = function () {
+        $http.post('/user/login', {data: $scope.data}).success(function (data) {
+            console.log('Success', data);
+            return false;
+        }).error(function (data, status, headers) {
+            console.log('Error', status);
+            return false;
+        });
+    };
+
 });
 
 angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($scope, $routeParams, $location, $timeout, $window, Question, Questionnaire, Answer) {
@@ -258,6 +263,14 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $http, 
     Select2Configurator.configure($scope, Country, 'country');
     Select2Configurator.configure($scope, Part, 'part');
     Select2Configurator.configure($scope, FilterSet, 'filterSet');
+
+    // Demo using static data
+    /*
+    $http.get('/sampleChart.json').success(function(data) {
+        $scope.chart = data;
+    });
+    return true;
+    */
 
     // Whenever one of the parameter is changed
     var uniqueAjaxRequest;

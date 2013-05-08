@@ -31,4 +31,18 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
         return new ViewModel();
     }
 
+	/**
+	 * @return ViewModel
+	 */
+	public function loginAction()
+	{
+		if ($this->getRequest()->isPost())
+		{
+			$this->getResponse()->setStatusCode(401);
+		}
+
+		return new ViewModel();
+		
+	}
+
 }

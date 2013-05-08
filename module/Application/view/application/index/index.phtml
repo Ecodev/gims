@@ -37,6 +37,7 @@
                         '/lib/bootstrap-js/bootstrap.min.js',
 
                         // AngularJS core and libs
+                        '/lib/angular-http-auth/src/http-auth-interceptor.js',
                         '/lib/angular-highcharts-directive/src/directives/highchart.js',
                         '/lib/ng-grid/build/ng-grid.min.js',
                         '/lib/ui-bootstrap/ui-bootstrap-tpls-0.2.0.min.js',
@@ -73,55 +74,64 @@
                     </div><!--/.nav-collapse -->
 
                     <div class="pull-right" ng-controller="UserCtrl">
-                        <div modal="showLogin" close="cancelLogin()" options="opts">
-                            <?php
-                                $f = $this->zfcUserLoginWidget(array('render' => false));
-                                $form = $f->loginForm;
-                                $form->prepare();
-                                $form->setAttribute('action', $this->url('zfcuser/login'));
-                                $form->setAttribute('method', 'post');
-                                $form->setAttribute('class', 'modal-form form-horizontal');
 
-                                echo $this->form()->openTag($form);
-                            ?>
-                            <div class="modal-header">
-                                <h3><?php echo $this->translate('Sign in'); ?></h3>
-                            </div>
-                            <div class="modal-body">
-                                <?php echo $this->ztbFormElement($form->get('identity')) ?>
-                                <?php echo $this->ztbFormElement($form->get('credential')) ?>
-                                <input type="hidden" name="redirect" value="{{redirect}}" />
-                            </div>
-                            <div class="modal-footer">
-                                <?php echo $this->formButton($form->get('submit')->setAttribute('class', 'btn btn-primary')) ?>
-                                <a class="btn cancel" ng-click="cancelLogin()"><?php echo $this->translate('Cancel'); ?></a>
-                            </div>
-                            <?php echo $this->form()->closeTag(); ?>
-                        </div>
-
-                        <div modal="showRegister" close="cancelRegister()" options="opts">
+                        <!-- Modal Login Window !-->
+                        <div modal="showLogin" close="cancelLogin()" options="{dialogClass: 'modal loginWindow'}">
                             <?php
+                                $loginForm = $this->zfcUserLoginWidget(array('render' => false))->loginForm;
+                                $loginForm->prepare();
+                                $loginForm->setAttribute('action', $this->url('zfcuser/login'));
+                                $loginForm->setAttribute('method', 'post');
+                                $loginForm->setAttribute('class', 'modal-form ng-submit: sendLogin()');
+
                                 $this->registerForm->prepare();
                                 $this->registerForm->setAttribute('action', $this->url('zfcuser/register'));
                                 $this->registerForm->setAttribute('method', 'post');
-                                $this->registerForm->setAttribute('class', 'modal-form form-horizontal');
-
-                                echo $this->form()->openTag($this->registerForm);
+                                $this->registerForm->setAttribute('class', 'modal-form');
                             ?>
-                            <div class="modal-header">
-                                <h3><?php echo $this->translate('Create account'); ?></h3>
-                            </div>
                             <div class="modal-body">
-                                <?php foreach ($this->registerForm as $element):
-                                    if (!$element instanceof Zend\Form\Element\Button)
-                                    {
-                                        echo $this->ztbFormElement($element);
-                                    }
-                                endforeach; ?>
-                                <input type="hidden" name="redirect" value="{{redirect}}" />
+                                <div class="row-fluid">
+                                    <div class="span6">
+                                        <h3 class="modal-header"><?php echo $this->translate('Sign in'); ?></h3>
+                                            <form class="modal-form" ng-submit="sendLogin()">
+
+                                                <div class="control-group" id="control-group-identity">
+                                                    <label for="identity" class="control-label"><?php echo $this->translate('Email'); ?></label>
+                                                </div>
+                                                <div class="control" id="controls-identity">
+                                                    <input type="text" name="identity" ng-model="login.identity">
+                                                </div>
+
+                                                <div class="control-group" id="control-group-credential">
+                                                    <label for="identity" class="control-label"><?php echo $this->translate('Password'); ?></label>
+                                                </div>
+                                                <div class="control" id="controls-credential">
+                                                    <input type="password" name="credential" ng-model="login.credential">
+                                                </div>
+
+                                                <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Sign In'); ?></button>
+
+                                                <input type="hidden" name="redirect" value="{{redirect}}">
+
+                                        </form>
+                                    </div>
+                                    <div class="span6">
+                                        <h3 class="modal-header"><?php echo $this->translate('Register'); ?></h3>
+                                        <?php echo $this->form()->openTag($this->registerForm); ?>
+                                        <?php foreach ($this->registerForm as $element):
+                                            if (!$element instanceof Zend\Form\Element\Button)
+                                            {
+                                                echo $this->ztbFormElement($element);
+                                            }
+                                        endforeach; ?>
+                                        <?php echo $this->formButton($this->registerForm->get('submit')->setAttribute('class', 'btn btn-primary')) ?>
+                                        <input type="hidden" name="redirect" value="{{redirect}}" />
+                                        <?php echo $this->form()->closeTag(); ?>
+                                    </div>
+                                </div>
                             </div>
                             <div class="modal-footer">
-                                <?php echo $this->formButton($this->registerForm->get('submit')->setAttribute('class', 'btn btn-primary')) ?>
+                                <a class="btn cancel" ng-click="cancelLogin()"><?php echo $this->translate('Cancel'); ?></a>
                             </div>
                             <?php echo $this->form()->closeTag(); ?>
                         </div>
@@ -135,20 +145,9 @@
                                 <a target="_self" href="<?php echo $this->url('zfcuser/logout') ?>">[<?php echo $this->translate('Sign out') ?>]</a>
                             </p>
                         <?php else: ?>
-                            <?php
-                                $form->setAttribute('class', 'navbar-form');
-                                $form->get('identity')->setAttribute('placeholder', $form->get('identity')->getLabel());
-                                $form->get('credential')->setAttribute('placeholder', $form->get('credential')->getLabel());
-
-                                echo $this->form()->openTag($form);
-                                echo $this->formInput($form->get('identity')->setAttribute('class', 'span2')) . PHP_EOL;
-                                echo $this->formInput($form->get('credential')->setAttribute('class', 'span2')) . PHP_EOL;
-                                echo $this->formButton($form->get('submit')) . PHP_EOL;
-                            ?>
-                            <input type="hidden" name="redirect" value="{{redirect}}" />
-                            <a href ng-click="promptRegister()"><?php echo $this->translate('Create account') ?></a>
-                            <?php echo $this->form()->closeTag(); ?>
+                            <a class="btn btn-primary" href ng-click="promptLogin()"><span class="icon-user" /> <?php echo $this->translate('User login') ?></a>
                         <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
