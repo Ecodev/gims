@@ -87,22 +87,5 @@
         </tabs>
     </form>
 
-    <div class="row-fluid form-metadata">
-        <div class="span6">
-            <span ng-class="{'hide': !survey.dateCreated}">
-                Created on {{survey.dateCreated | date:'dd of MMM yyyy @ HH:mm'}}
-            </span>
-            <span ng-class="{'hide': !survey.creator}">
-                by {{survey.creator}}
-            </span>
-        </div>
-        <div class="span6">
-            <span ng-class="{'hide': !survey.dateModified}">
-                Updated on {{survey.dateModified | date:'dd of MMM yyyy @ HH:mm'}}
-            </span>
-            <span ng-class="{'hide': !survey.modifier}">
-                by {{survey.modifier}}
-            </span>
-        </div>
-    </div>
+    <?php echo $this->metadata('survey'); ?>
 </div> <!-- /container -->
