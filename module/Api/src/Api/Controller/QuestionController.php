@@ -28,7 +28,7 @@ class QuestionController extends AbstractRestfulController
     protected function getJsonConfig()
     {
         $questionnaire = $this->getQuestionnaire();
-
+        $controller = $this;
         return array(
             'name',
             'filter' => array(
@@ -41,14 +41,14 @@ class QuestionController extends AbstractRestfulController
                 ),
             ),
             // Here we use a closure to get the questions' answers, but only for the current questionnaire
-            'answers' => function(AbstractRestfulController $controller, Question $question) use($questionnaire) {
+            'answers' => function(\Application\Service\Hydrator $hydrator, Question $question) use($questionnaire, $controller) {
                 $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
                 $answers = $answerRepository->findBy(array(
                     'question' => $question,
                     'questionnaire' => $questionnaire,
                 ));
 
-                $answers = $controller->arrayOfObjectsToArray($answers, array(
+                $answers = $hydrator->extractArray($answers, array(
                             'valuePercent',
                             'valueAbsolute',
                             'questionnaire' => array(),
@@ -93,7 +93,7 @@ class QuestionController extends AbstractRestfulController
             'survey' => $questionnaire->getSurvey(),
         ));
 
-        return new JsonModel($this->arrayOfObjectsToArray($questions, $this->getJsonConfig()));
+        return new JsonModel($this->hydrator->extractArray($questions, $this->getJsonConfig()));
     }
 
 //    public function update($id, $data)

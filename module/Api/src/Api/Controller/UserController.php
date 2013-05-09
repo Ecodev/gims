@@ -2,8 +2,8 @@
 
 namespace Api\Controller;
 
-use Application\Assertion\SurveyAssertion;
-use Application\Model\Survey;
+use Application\Assertion\UserAssertion;
+use Application\Model\User;
 use Zend\View\Model\JsonModel;
 
 class UserController extends AbstractRestfulController
@@ -31,11 +31,11 @@ class UserController extends AbstractRestfulController
     public function create($data)
     {
 
-        $survey = new Survey();
-        $survey->updateProperties($data);
+        $user = new User();
+        $this->hydrator->hydrate($data, $user);
 
         // Update object or not...
-        if ($this->isAllowed($survey)) {
+        if ($this->isAllowed($user)) {
             $result = parent::create($data);
         } else {
             $this->getResponse()->setStatusCode(401);
@@ -52,14 +52,14 @@ class UserController extends AbstractRestfulController
      */
     public function update($id, $data)
     {
-        // Retrieve survey since permissions apply against it.
-        $repository = $this->getEntityManager()->getRepository($this->getModel());
+        // Retrieve user since permissions apply against it.
+        $repository = $this->getRepository();
 
-        /** @var $survey \Application\Model\Answer */
-        $survey = $repository->findOneById($id);
+        /** @var $user \Application\Model\User */
+        $user = $repository->findOneById($id);
 
         // Update object or not...
-        if ($this->isAllowed($survey)) {
+        if ($this->isAllowed($user)) {
             $result = parent::update($id, $data);
         } else {
             $this->getResponse()->setStatusCode(401);
@@ -76,17 +76,17 @@ class UserController extends AbstractRestfulController
     public function delete($id)
     {
 
-        // Retrieve survey since permissions apply against it.
+        // Retrieve user since permissions apply against it.
         $repository = $this->getEntityManager()->getRepository($this->getModel());
 
-        /** @var $survey \Application\Model\Answer */
-        $survey = $repository->findOneById($id);
+        /** @var $user \Application\Model\User */
+        $user = $repository->findOneById($id);
 
         // Update object or not...
-        if (is_null($survey)) {
+        if (is_null($user)) {
             $this->getResponse()->setStatusCode(404);
             $result = new JsonModel(array('message' => 'No object found'));
-        } elseif ($this->isAllowed($survey)) {
+        } elseif ($this->isAllowed($user)) {
             $result = parent::delete($id);
         } else {
             $this->getResponse()->setStatusCode(401);
@@ -98,11 +98,11 @@ class UserController extends AbstractRestfulController
     /**
      * Ask Rbac whether the User is allowed to update
      *
-     * @param Survey $survey
+     * @param User $user
      *
      * @return bool
      */
-    protected function isAllowed(Survey $survey)
+    protected function isAllowed(User $user)
     {
         // @todo remove me once login will be better handled GUI wise
         return true;
@@ -110,7 +110,7 @@ class UserController extends AbstractRestfulController
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         return $rbac->isGrantedWithContext(
-                        $survey, Permission::CAN_MANAGE_ANSWER, new SurveyAssertion($survey)
+                        $user, Permission::CAN_MANAGE_ANSWER, new UserAssertion($user)
         );
     }
 

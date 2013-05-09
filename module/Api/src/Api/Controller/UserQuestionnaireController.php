@@ -63,7 +63,7 @@ class UserQuestionnaireController extends AbstractRestfulController
 
         $userQuestionnaires = $this->getRepository()->findByUser($user);
 
-        return new JsonModel($this->arrayOfObjectsToArray($userQuestionnaires, $this->getJsonConfig()));
+        return new JsonModel($this->hydrator->extractArray($userQuestionnaires, $this->getJsonConfig()));
     }
 
     /**
@@ -76,7 +76,7 @@ class UserQuestionnaireController extends AbstractRestfulController
     {
 
         $questionnaire = new Questionnaire();
-        $questionnaire->updateProperties($data);
+        $this->hydrator->hydrate($data, $questionnaire);
 
         // Update object or not...
         if ($this->isAllowed($questionnaire)) {

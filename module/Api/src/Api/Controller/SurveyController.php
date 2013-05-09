@@ -17,7 +17,7 @@ class SurveyController extends AbstractRestfulController
             array(),
             array('year' => 'DESC')
         );
-        return new JsonModel($this->arrayOfObjectsToArray($surveys, $this->getJsonConfig()));
+        return new JsonModel($this->hydrator->extractArray($surveys, $this->getJsonConfig()));
     }
 
     /**
@@ -30,7 +30,7 @@ class SurveyController extends AbstractRestfulController
     {
 
         $survey = new Survey();
-        $survey->updateProperties($data);
+        $this->hydrator->hydrate($data, $survey);
 
         // Update object or not...
         if ($this->isAllowed($survey)) {

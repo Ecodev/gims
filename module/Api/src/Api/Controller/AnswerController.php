@@ -20,7 +20,7 @@ class AnswerController extends AbstractRestfulController
         );
 
         $objects = $this->getRepository()->findBy($c);
-        return new JsonModel($this->arrayOfObjectsToArray($objects, $this->getJsonConfig()));
+        return new JsonModel($this->hydrator->extractArray($objects, $this->getJsonConfig()));
     }
 
 

@@ -23,7 +23,7 @@ class FilterController extends AbstractRestfulController
     {
         $filters = $this->getRepository()->getOfficialRoots();
 
-        return new JsonModel($this->arrayOfObjectsToArray($filters, $this->getJsonConfig()));
+        return new JsonModel($this->hydrator->extractArray($filters, $this->getJsonConfig()));
     }
 
 }

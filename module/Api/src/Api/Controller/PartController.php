@@ -21,7 +21,7 @@ class PartController extends AbstractRestfulController
     {
         $parts = $this->getRepository()->findAll();
 
-        $array = $this->arrayOfObjectsToArray($parts, $this->getJsonConfig());
+        $array = $this->hydrator->extractArray($parts, $this->getJsonConfig());
         array_unshift($array, array('id' => -1, 'name' => 'Total'));
 
         return new JsonModel($array);

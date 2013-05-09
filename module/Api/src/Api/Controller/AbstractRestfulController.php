@@ -23,10 +23,16 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      */
     protected $metaModelService;
 
+    /**
+     * @var \Application\Service\Hydrator
+     */
+    protected $hydrator;
+
     public function __construct()
     {
         $this->permissionService = new Permission($this->getModel());
         $this->metaModelService = new MetaModel();
+        $this->hydrator = new \Application\Service\Hydrator();
     }
 
     /**
@@ -56,97 +62,6 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
                     $result[$key] = $val;
                 }
             }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Returns an array of array of property values of all given objects
-     *
-     * @param array $objects
-     * @param array $properties
-     *
-     * @return array
-     */
-    protected function arrayOfObjectsToArray($objects, array $properties)
-    {
-        $result = array();
-        foreach ($objects as $object) {
-            $result[] = $this->objectToArray($object, $properties);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Return an array of property values of the given object
-     *
-     * @param \Application\Model\AbstractModel $object
-     * @param array                            $properties
-     *
-     * @throws \InvalidArgumentException
-     * @return array
-     */
-    protected function objectToArray(AbstractModel $object, array $properties)
-    {
-        // Always output id
-        foreach (array('id') as $value) {
-            if (!in_array($value, $properties)) {
-                array_unshift($properties, $value);
-            }
-        }
-
-        $result = array();
-        foreach ($properties as $key => $value) {
-
-            if ($value instanceof \Closure) {
-                if (!is_string($key)) {
-                    throw new \InvalidArgumentException('Cannot use Closure without a named key.');
-                }
-
-                $propertyName = $key;
-                $propertyValue = $value($this, $object);
-            } elseif (is_string($key)) {
-                $getter = 'get' . ucfirst($key);
-
-                // If method does not exist, skip it
-                if (!is_callable(array($object, $getter))) {
-                    continue;
-                }
-                
-                $subObject = $object->$getter();
-
-                // Reuse same configuration if ask for recursivity
-                $jsonConfig = $value == '__recursive' ? $properties : $value;
-                if ($subObject instanceof \IteratorAggregate) {
-                    $propertyValue = $this->arrayOfObjectsToArray($subObject, $jsonConfig);
-                } else {
-                    $propertyValue = $subObject ? $this->objectToArray($subObject, $jsonConfig) : null;
-                }
-
-                $propertyName = $key;
-            } else {
-                if (strpos($value, 'is') === 0) {
-                    $getter = $value;
-                } else {
-                    $getter = 'get' . ucfirst($value);
-                }
-
-                // If method does not exist, skip it
-                if (!is_callable(array($object, $getter))) {
-                    continue;
-                }
-
-                $propertyValue = $object->$getter();
-                if ($propertyValue instanceof \DateTime) {
-                    $propertyValue = $propertyValue->format(\DateTime::ISO8601);
-                }
-
-                $propertyName = $value;
-            }
-
-            $result[$propertyName] = $propertyValue;
         }
 
         return $result;
@@ -185,7 +100,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
 
         /** @var $object AbstractModel */
         $object = new $modelName();
-        $object->updateProperties($data, $modelName);
+        $this->hydrator->hydrate($data, $object);
 
 
         $this->getEntityManager()->persist($object);
@@ -196,7 +111,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         }
 
         $this->getResponse()->setStatusCode(201);
-        return new JsonModel($this->objectToArray($object, $this->getJsonConfig()));
+        return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
     }
 
     /**
@@ -231,7 +146,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             return;
         }
 
-        return new JsonModel($this->objectToArray($object, $this->getJsonConfig()));
+        return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
     }
 
     /**
@@ -241,7 +156,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     {
         $objects = $this->getRepository()->findAll();
 
-        return new JsonModel($this->arrayOfObjectsToArray($objects, $this->getJsonConfig()));
+        return new JsonModel($this->hydrator->extractArray($objects, $this->getJsonConfig()));
     }
 
     /**
@@ -252,19 +167,20 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      */
     public function update($id, $data)
     {
-        /** @var $object AbstractModel */
-        $object = $this->getRepository()->findOneBy(array('id' => $id));
+        /** @var $object \Application\Model\AbstractModel */
+        $object = $this->getRepository()->findOneById($id);
 
         if (!$object) {
             $this->getResponse()->setStatusCode(404);
             return;
         }
-
-        $object->updateProperties($data);
+//var_dump($object->getName());
+        $this->hydrator->hydrate($data, $object);
         $this->getEntityManager()->flush();
-
+//        var_dump($object->getName());
+//die('asdads');
         $this->getResponse()->setStatusCode(201);
-        return new JsonModel($this->objectToArray($object, $this->getJsonConfig()));
+        return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
     }
 
 }
