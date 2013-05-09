@@ -185,13 +185,12 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     }
 
     /**
-     * Not implemented
-     * @throws \Exception
+     * Not implemented. Do absolutely nothing.
      */
     public function setId($id)
     {
-        // @TODO: Is it really necessary to set the ID ?
-        throw new Exception("Not implemented, because Doctrine will set the ID automagically");
+        // This method must exists because of ZfcUser, but it must not do anything
+        // It must *NOT* set the id, or it would break Doctrine, and open security breach via REST API to manually define ID
     }
 
     /**
