@@ -58,7 +58,7 @@ class SurveyControllerTest extends AbstractController
     public function ensureOnlyAllowedFieldAreDisplayedInResponseForSurvey()
     {
         $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
-        $allowedFields = array('id', 'name', 'code', 'active', 'year', 'dateStarted', 'dateEnded');
+        $allowedFields = array('id', 'name', 'code', 'active', 'year', 'dateStart', 'dateEnd');
         foreach ($this->getJsonResponse() as $key => $value) {
             $this->assertTrue(in_array($key, $allowedFields));
         }
@@ -73,6 +73,17 @@ class SurveyControllerTest extends AbstractController
         $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
         $actual = $this->getJsonResponse();
         $this->assertSame($this->survey->getId(), $actual['id']);
+    }
+
+    /**
+     * @test
+     * @group SurveyApi
+     */
+    public function getSurveyWithUnkownFieldsAreIgnored()
+    {
+        $this->dispatch($this->getRoute('get') . '?fields=foo', Request::METHOD_GET);
+        $actual = $this->getJsonResponse();
+        $this->assertArrayNotHasKey('foo', $actual);
     }
 
     /**

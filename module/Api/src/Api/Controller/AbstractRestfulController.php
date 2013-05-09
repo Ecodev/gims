@@ -23,7 +23,6 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      */
     protected $metaModelService;
 
-
     public function __construct()
     {
         $this->permissionService = new Permission($this->getModel());
@@ -50,7 +49,6 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
                 unset($fields[$key]);
                 $fields = array_merge($fields, $this->metaModelService->getMetadata());
             }
-
             // Check if fields is allowed to be printed out.
             foreach ($fields as $key => $val) {
                 $fieldName = is_string($key) ? $key : $val;
@@ -111,6 +109,12 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
                 $propertyValue = $value($this, $object);
             } elseif (is_string($key)) {
                 $getter = 'get' . ucfirst($key);
+
+                // If method does not exist, skip it
+                if (!is_callable(array($object, $getter))) {
+                    continue;
+                }
+                
                 $subObject = $object->$getter();
 
                 // Reuse same configuration if ask for recursivity
@@ -128,6 +132,12 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
                 } else {
                     $getter = 'get' . ucfirst($value);
                 }
+
+                // If method does not exist, skip it
+                if (!is_callable(array($object, $getter))) {
+                    continue;
+                }
+
                 $propertyValue = $object->$getter();
                 if ($propertyValue instanceof \DateTime) {
                     $propertyValue = $propertyValue->format(\DateTime::ISO8601);

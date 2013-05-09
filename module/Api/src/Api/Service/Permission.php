@@ -28,13 +28,10 @@ class Permission
      */
     public function isFieldAllowed($fieldName)
     {
-        // First check if field exists.
-        $result = $this->metaModel->propertyExists($this->model, $fieldName);
-
         // @todo create a mechanism
         // class Permission would need to implement ServiceLocatorAwareInterface
         #$rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
 
-        return $result;
+        return true;
     }
 }

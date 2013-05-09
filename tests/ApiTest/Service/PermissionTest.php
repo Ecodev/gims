@@ -21,12 +21,4 @@ class PermissionTest extends \ApplicationTest\Controller\AbstractController
         $this->assertTrue($fixture->isFieldAllowed('id'));
     }
 
-    /**
-     * @test
-     */
-    public function methodIsFieldAllowedReturnsFalseForFieldFooOfModelSurvey()
-    {
-        $fixture = new Permission('Survey');
-        $this->assertFalse($fixture->isFieldAllowed('foo'));
-    }
 }

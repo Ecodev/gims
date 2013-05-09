@@ -26,21 +26,21 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $id;
+    private $id;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetimetz", nullable=true)
      */
-    protected $dateCreated;
+    private $dateCreated;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetimetz", nullable=true)
      */
-    protected $dateModified;
+    private $dateModified;
 
     /**
      * @var User
@@ -50,7 +50,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      * @ORM\JoinColumn(onDelete="SET NULL")
      * })
      */
-    protected $creator;
+    private $creator;
 
     /**
      * @var User
@@ -60,7 +60,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      * @ORM\JoinColumn(onDelete="CASCADE")
      * })
      */
-    protected $modifier;
+    private $modifier;
 
     /**
      * Get id
@@ -79,7 +79,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @return AbstractModel
      */
-    protected function setDateCreated($dateCreated)
+    private function setDateCreated($dateCreated)
     {
         $this->dateCreated = $dateCreated;
 
@@ -103,7 +103,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @return AbstractModel
      */
-    protected function setDateModified($dateModified)
+    private function setDateModified($dateModified)
     {
         $this->dateModified = $dateModified;
 
@@ -127,7 +127,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @return AbstractModel
      */
-    protected function setCreator(User $creator = null)
+    private function setCreator(User $creator = null)
     {
         $this->creator = $creator;
 
@@ -151,7 +151,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @return AbstractModel
      */
-    protected function setModifier(User $modifier = null)
+    private function setModifier(User $modifier = null)
     {
         $this->modifier = $modifier;
 
@@ -173,7 +173,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @return \DateTime
      */
-    protected static function getNow()
+    private static function getNow()
     {
         if (!self::$now) {
             self::$now = new \DateTime();
@@ -187,7 +187,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @return User
      */
-    protected static function getCurrentUser()
+    private static function getCurrentUser()
     {
         $sm = Module::getServiceManager();
         $auth = $sm->get('zfcuser_auth_service');
@@ -226,7 +226,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @return array
      */
-    protected function sanitizeData($data)
+    private function sanitizeData($data)
     {
         foreach (array('id', 'dateCreated', 'dateModified') as $value) {
             unset($data[$value]);
@@ -303,7 +303,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      * @throws \Exception
      * @return AbstractModel
      */
-    protected function getObject($modelName, $id)
+    private function getObject($modelName, $id)
     {
 
         $repository = Module::getEntityManager()->getRepository($modelName);
@@ -326,7 +326,7 @@ abstract class AbstractModel implements PropertiesUpdatableInterface
      *
      * @return string
      */
-    protected function getModelName($methodName)
+    private function getModelName($methodName)
     {
 
         // Get the class name by "consulting" the stack
