@@ -7,8 +7,12 @@ angular.module('myApp').controller('MyCtrl1', function () {
 
 });
 
-angular.module('myApp').controller('MyCtrl2', function () {
+angular.module('myApp').controller('ContributeCtrl', function($scope, $http) {
 
+    // TODO: replace with actual logged in user ID
+    $http.get('/api/user/1/statistics').success(function(data) {
+        $scope.statistics = data;
+    });
 });
 
 angular.module('myApp').controller('UserCtrl', function ($scope, $location) {

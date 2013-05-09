@@ -23,15 +23,15 @@ describe('MyCtrl1', function() {
 });
 
 
-describe('MyCtrl2', function() {
+describe('ContributeCtrl', function() {
     // load the controller's module
     beforeEach(module('myApp'));
-    
-    var myCtrl2, scope;
+
+    var ctrl, scope;
 
     beforeEach(inject(function($controller) {
         scope = {};
-        myCtrl2 = $controller('MyCtrl2', {
+        ctrl = $controller('ContributeCtrl', {
             $scope: scope
         });
     }));

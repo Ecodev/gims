@@ -3,20 +3,20 @@
 
 // According to Twitter Bootstrap recommendation, add padding before responsive for .navbar-fixed-top
 body {
-  padding-top: 40px;
+    padding-top: 40px;
 }
 
 input.error {
-  border-color: #b94a48 !important;
-  color: #b94a48 !important;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    border-color: #b94a48 !important;
+    color: #b94a48 !important;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .form-metadata {
-  color: #808080;
-  font-size: 80%;
+    color: #808080;
+    font-size: 80%;
 }
 
 // Include responsive Bootstrap styles
@@ -26,8 +26,8 @@ input.error {
 @import "splash";
 
 html {
-  overflow-y: scroll;
-  // Force vertical scrollbar
+    overflow-y: scroll;
+    // Force vertical scrollbar
 }
 
 .icon-loading {
@@ -39,6 +39,14 @@ html {
     @extend .icon-spin;
 }
 
+.icon-survey {
+    @extend .icon-folder-open-alt
+}
+
+.icon-questionnaire {
+    @extend .icon-file
+}
+
 .column-loading {
     text-align: center;
 }
@@ -46,3 +54,15 @@ html {
 .container > .content {
     min-height: 480px;
 }
+
+.nav-pills-icon {
+    text-align: center;
+}
+
+div.browse .span4 {
+    text-align: center;
+    .nav-pills-icon {
+        display: inline-block;
+    }
+}
+

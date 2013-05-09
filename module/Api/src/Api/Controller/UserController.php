@@ -14,13 +14,11 @@ class UserController extends AbstractRestfulController
      */
     protected function getJsonConfig()
     {
-        return array_merge(
-            array(
-                'name',
-                'email',
-                'state',
-            ),
-            parent::getJsonConfig()
+        return array_merge(array(
+            'name',
+            'email',
+            'state',
+                ), parent::getJsonConfig()
         );
     }
 
@@ -112,9 +110,23 @@ class UserController extends AbstractRestfulController
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         return $rbac->isGrantedWithContext(
-            $survey,
-            Permission::CAN_MANAGE_ANSWER,
-            new SurveyAssertion($survey)
+                        $survey, Permission::CAN_MANAGE_ANSWER, new SurveyAssertion($survey)
         );
     }
+
+    public function statisticsAction()
+    {
+// TODO: make the user mandatory and return stats based on actual roles (once we can pass the ID from angular)
+//        $user = $this->getRepository()->findOneById($this->params('idUser'));
+//
+//        if (!$user) {
+//            $this->getResponse()->setStatusCode(404);
+//            return new JsonModel(array('message' => 'No object found'));
+//        }
+
+        $stats = $this->getRepository()->getStatistics(/* $user */);
+
+        return new JsonModel($stats);
+    }
+
 }

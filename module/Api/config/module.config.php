@@ -86,6 +86,21 @@ return array(
                             'defaults' => array(),
                         ),
                     ),
+                    // This route allow to execute something on a user (eg:computing stats)
+                    'user_actions' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/user/:idUser/[:action]',
+                            'constraints' => array(
+                                'action' => '(statistics)', // Define here allowed actions: (action1|action2|action3)
+                                'idUser' => '[0-9]+',
+                            ),
+                            'defaults' => array(
+                                '__NAMESPACE__' => 'Api\Controller',
+                                'controller' => 'user',
+                            ),
+                        ),
+                    ),
 
                     // This route allow to call a non REST controller with action
                     'non_rest_controller' => array(

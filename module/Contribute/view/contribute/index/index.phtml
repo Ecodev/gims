@@ -11,56 +11,43 @@
     <!-- Example row of columns -->
     <div class="row">
         <div class="span4">
-            <h2>Access</h2>
-            <p>Existing users can login here:</p>
-
-            <?php
-            $f = $this->zfcUserLoginWidget(array('render' => false));
-            $form = $f->loginForm;
-            $form->prepare();
-            $form->setAttribute('action', $this->url('zfcuser/login'));
-            $form->setAttribute('method', 'post');
-
-            echo $this->form()->openTag($form);
-
-
-            foreach ($form as $element) {
-                if (!$element instanceof Zend\Form\Element\Button) {
-                    $element->setAttribute('placeholder', $element->getLabel());
-                    $element->setLabel('');
-                    echo $this->ztbFormElement($element);
-                }
-            }
-            echo $this->formButton($form->get('submit')->setAttribute('class', 'btn btn-primary'));
-            echo $this->form()->closeTag();
-            ?>
+            <h2>Administration</h2>
+            <ul class="nav nav-pills nav-pills-icon">
+                <li>
+                    <a href="/admin/survey">
+                        <p><i class="icon-survey icon-4x"></i></p>
+                        <p>Surveys</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/user">
+                        <p><i class="icon-user icon-4x"></i></p>
+                        <p>Users</p>
+                    </a>
+                </li>
+            </ul>
         </div>
         <div class="span4">
-            <h2>Become</h2>
-            <p>A contributor of new data or comment existing info: create an account !</p>
-
-            <?php
-            $this->registerForm->prepare();
-            $this->registerForm->setAttribute('action', $this->url('zfcuser/register'));
-            $this->registerForm->setAttribute('method', 'post');
-
-            echo $this->form()->openTag($this->registerForm);
-            foreach ($this->registerForm as $element) {
-
-                if (!$element instanceof Zend\Form\Element\Button) {
-                    $element->setAttribute('placeholder', $element->getLabel());
-                    $element->setLabel('');
-                    echo $this->ztbFormElement($element);
-                }
-            }
-            ?>
-            <?php echo $this->formButton($this->registerForm->get('submit')->setAttribute('class', 'btn btn-primary')) ?>
-            <?php echo $this->form()->closeTag(); ?>
+            <h2>Data</h2>
+            <ul class="nav nav-pills nav-pills-icon">
+                <li>
+                    <a href="/contribute/questionnaire">
+                        <p><i class="icon-questionnaire icon-4x"></i></p>
+                        <p>Questionnaires</p>
+                    </a>
+                </li>
+            </ul>
         </div>
         <div class="span4">
-            <h2>Contact us</h2>
+            <h2>Statistics</h2>
+            <p>Questionnaires</p>
+            <div class="progress">
+                <div class="bar bar-info" style="width: {{statistics.new / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.new}} / {{statistics.total}} new questionnaires"></div>
+                <div class="bar bar-warning" style="width: {{statistics.completed / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.completed}} / {{statistics.total}} completed questionnaires"></div>
+                <div class="bar bar-success" style="width: {{statistics.validated / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.validated}} / {{statistics.total}} validated questionnaires"></div>
+                <div class="bar bar-danger" style="width: {{statistics.rejected / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.rejected}} / {{statistics.total}} rejected questionnaires"></div>
+            </div>
 
-            <p>You can help us improve both the system and the data by sending us an email.</p>
         </div>
     </div>
 

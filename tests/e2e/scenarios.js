@@ -71,13 +71,13 @@ describe('my app', function() {
 
 
         it('should render about when user navigates to /browse', function() {
-            expect(element('[ng-view] .browse .span4:nth-child(1) h2').text()).
+            expect(element('[ng-view] .browse .span4:nth-child(1) p').text()).
                     toMatch(/Maps/);
 
-            expect(element('[ng-view] .browse .span4:nth-child(2) h2').text()).
+            expect(element('[ng-view] .browse .span4:nth-child(2) p').text()).
                     toMatch(/Charts/);
 
-            expect(element('[ng-view] .browse .span4:nth-child(3) h2').text()).
+            expect(element('[ng-view] .browse .span4:nth-child(3) p').text()).
                     toMatch(/Tables/);
         });
 
@@ -96,38 +96,43 @@ describe('my app', function() {
                     toMatch(/Small streams make large rivers/);
         });
 
-        it('should render sign in form', function() {
-            expect(element('body > .container form[action="/user/login"] button').text()).
-                    toMatch(/Sign In/);
+        it('should render admin buttons', function() {
+
+            expect(element('[ng-view] .span4:nth-child(1) li:nth-child(1) p').text()).
+                    toMatch(/Surveys/);
+
+            expect(element('[ng-view] .span4:nth-child(1) li:nth-child(2) p').text()).
+                    toMatch(/Users/);
         });
 
-        it('should render account creation form', function() {
-            expect(element('body > .container form[action="/user/register"] button').text()).
-                    toMatch(/Register/);
+        it('should render other buttons', function() {
+
+            expect(element('[ng-view] .span4:nth-child(2) li:nth-child(1) p').text()).
+                    toMatch(/Questionnaires/);
         });
     });
 
-    describe('admin', function () {
+    describe('admin', function() {
 
-        beforeEach(function () {
+        beforeEach(function() {
             browser().navigateTo('/admin');
         });
 
         noXdebugError();
 
-        it('should render admin when user navigates to /admin', function () {
+        it('should render admin when user navigates to /admin', function() {
             expect(element('[ng-view] p:first').text()).
-                toMatch(/Small streams make large rivers/);
+                    toMatch(/Small streams make large rivers/);
         });
 
-        it('should render module Survey', function () {
+        it('should render module Survey', function() {
             expect(element('body > .container .container-survey h2').text()).
-                toMatch(/Survey/);
+                    toMatch(/Survey/);
         });
 
-        it('should render module Questionnaire', function () {
+        it('should render module Questionnaire', function() {
             expect(element('body > .container .container-questionnaire h2:nth-child(1)').text()).
-                toMatch(/Questionnaire/);
+                    toMatch(/Questionnaire/);
         });
     });
 });
