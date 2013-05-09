@@ -1,10 +1,6 @@
 'use strict';
 
 /* Controllers */
-angular.module('myApp').controller('AdminCtrl', function() {
-
-});
-
 angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $routeParams, $location, $resource, User, UserSurvey, UserQuestionnaire, Modal, Gui) {
 
 

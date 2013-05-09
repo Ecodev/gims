@@ -120,19 +120,8 @@ describe('my app', function() {
 
         noXdebugError();
 
-        it('should render admin when user navigates to /admin', function() {
-            expect(element('[ng-view] p:first').text()).
-                    toMatch(/Small streams make large rivers/);
-        });
-
-        it('should render module Survey', function() {
-            expect(element('body > .container .container-survey h2').text()).
-                    toMatch(/Survey/);
-        });
-
-        it('should render module Questionnaire', function() {
-            expect(element('body > .container .container-questionnaire h2:nth-child(1)').text()).
-                    toMatch(/Questionnaire/);
+        it('should redirect to /contribute when user navigates to /admin', function() {
+            expect(browser().location().path()).toMatch('/contribute');
         });
     });
 });

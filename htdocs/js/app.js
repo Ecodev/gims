@@ -23,7 +23,7 @@ angular.module('myApp', [
         $routeProvider.when('/contribute', {templateUrl: '/template/contribute', controller: 'ContributeCtrl'});
         $routeProvider.when('/contribute/questionnaire', {templateUrl: '/template/contribute/questionnaire', controller: 'Contribute/QuestionnaireCtrl'});
         $routeProvider.when('/contribute/questionnaire/:id', {templateUrl: '/template/contribute/questionnaire', controller: 'Contribute/QuestionnaireCtrl'});
-        $routeProvider.when('/admin', {templateUrl: '/template/admin', controller: 'AdminCtrl'});
+        $routeProvider.when('/admin', {redirectTo: '/contribute'});
         $routeProvider.when('/admin/survey', {templateUrl: '/template/admin/survey', controller: 'Admin/SurveyCtrl'});
         $routeProvider.when('/admin/survey/edit/:id', {templateUrl: '/template/admin/survey/edit', controller: 'Admin/Survey/CrudCtrl'});
         $routeProvider.when('/admin/survey/new', {templateUrl: '/template/admin/survey/edit', controller: 'Admin/Survey/CrudCtrl'});

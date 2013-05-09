@@ -86,7 +86,7 @@ class IndexControllerTest extends AbstractController
      * @test
      * @dataProvider moduleProvider
      */
-    public function testModuleConfigurationFromModuleProvider($module, $controller, $route, $template)
+    public function testAngularTemplateCanBeRetrieved($module, $controller, $route, $template)
     {
         // Template URL should return partial HTML fragment for AngularJS template system via ajax for Contribute module
         $this->dispatch($route);
@@ -105,8 +105,12 @@ class IndexControllerTest extends AbstractController
     {
         return array(
             //    $module  controller  route            template_admin
-            array('admin', 'index', '/template/admin', 'template_admin'),
+            array('application', 'index', '/template/application/index/home', 'template_application/default'),
             array('admin', 'survey', '/template/admin/survey', 'template_admin/default'),
+            array('admin', 'survey', '/template/admin/survey/edit', 'template_admin/default'),
+            array('admin', 'user', '/template/admin/user', 'template_admin/default'),
+            array('admin', 'user', '/template/admin/user/edit', 'template_admin/default'),
+            array('contribute', 'index', '/template/contribute/questionnaire', 'template_contribute/default'),
         );
     }
 

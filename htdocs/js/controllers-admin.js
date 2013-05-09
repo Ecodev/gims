@@ -1,10 +1,6 @@
 'use strict';
 
 /* Controllers */
-angular.module('myApp').controller('AdminCtrl', function () {
-
-});
-
 angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, $resource, Survey, Modal, Gui) {
 
     $scope.actives = [
