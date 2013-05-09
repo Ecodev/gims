@@ -152,14 +152,10 @@
             </div>
         </div>
         </div>
-        <div class="container">
-            <div class="content" ng-view></div>
-
-            <hr>
-            <footer>
-                <p class="muted"><?php echo $this->translate('Designed and built by Ecodev for WHO') ?></p>
-            </footer>
-        </div> <!-- /container -->
+        <div class="container-angular" ng-view></div>
+        <footer>
+            <p class="muted"><small><?php echo $this->translate('Designed and built by <a href="http://www.ecodev.ch">Ecodev</a> for <a href="http://www.who.int">WHO</a>') ?></small></p>
+        </footer>
 <?php echo $this->inlineScript() ?>
     </body>
 </html>

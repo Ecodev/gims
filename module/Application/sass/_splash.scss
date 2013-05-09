@@ -50,21 +50,15 @@
 
 /* Link styles (used on .masthead-links as well) */
 
-.footer {
+footer {
   text-align: center;
-  padding: 30px 0;
-  margin-top: 70px;
+  padding-top: 1em;
   border-top: 1px solid #e5e5e5;
   background-color: #f5f5f5;
   p {
     margin-bottom: 0;
     color: #777;
   }
-}
-
-body > .container {
-  margin-top: 20px;
-  background-color: white;
 }
 
 /* Desktop large

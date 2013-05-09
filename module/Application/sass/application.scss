@@ -24,6 +24,7 @@ input.error {
 @import "font-awesome";
 @import "ng-grid";
 @import "splash";
+@import "sticky-footer";
 
 html {
     overflow-y: scroll;
@@ -51,9 +52,6 @@ html {
     text-align: center;
 }
 
-.container > .content {
-    min-height: 480px;
-}
 
 .nav-pills-icon {
     text-align: center;
@@ -64,6 +62,11 @@ div.browse .span4 {
     .nav-pills-icon {
         display: inline-block;
     }
+}
+
+
+.container-angular > .container {
+    margin-top: 2em;
 }
 
 .modal.loginWindow {
