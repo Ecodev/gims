@@ -107,7 +107,7 @@ class IndexControllerTest extends AbstractController
             //    $module  controller  route            template_admin
             array('application', 'index', '/template/application/index/home', 'template_application/default'),
             array('admin', 'survey', '/template/admin/survey', 'template_admin/default'),
-            array('admin', 'survey', '/template/admin/survey/edit', 'template_admin/default'),
+            array('admin', 'survey', '/template/admin/survey/crud', 'template_admin/default'),
             array('admin', 'user', '/template/admin/user', 'template_admin/default'),
             array('admin', 'user', '/template/admin/user/edit', 'template_admin/default'),
             array('contribute', 'index', '/template/contribute/questionnaire', 'template_contribute/default'),
