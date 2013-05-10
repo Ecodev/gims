@@ -20,6 +20,7 @@ files = [
   'htdocs/lib/bootstrap-js/bootstrap.min.js',
   'htdocs/lib/angular-strap/angular-strap.js',
   'htdocs/lib/angular-strap/bootstrap-datepicker.js',
+  'htdocs/lib/sprintf/sprintf.min.js',
   'tests/lib/angular/angular-mocks.js',
   'htdocs/js/*.js',
   'tests/unit/**/*.js'

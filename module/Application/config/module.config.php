@@ -192,6 +192,7 @@ return array(
             'headLink' => 'Application\View\Helper\HeadLink',
             'headScript' => 'Application\View\Helper\HeadScript',
             'metadata' => 'Application\View\Helper\Metadata',
+            'crudButtons' => 'Application\View\Helper\CrudButtons',
         ),
     ),
     'console' => Array(

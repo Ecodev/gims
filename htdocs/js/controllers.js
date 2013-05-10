@@ -52,7 +52,7 @@ angular.module('myApp').controller('UserCtrl', function ($scope, $location, $htt
 
 });
 
-angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($scope, $routeParams, $location, $timeout, $window, Question, Questionnaire, Answer) {
+angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($scope, $routeParams, $location, $timeout, $window, QuestionnaireQuestion, Questionnaire, Answer) {
 
     var cellEditableTemplate, numberOfAnswers, requiredNumberOfAnswers;
 
@@ -64,7 +64,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
 
         // @todo improve me! Hardcoded value... (Urban, Rural, Total)
         requiredNumberOfAnswers = 3;
-        $scope.questions = Question.query({idQuestionnaire: $routeParams.id}, function (questions) {
+        $scope.questions = QuestionnaireQuestion.query({idQuestionnaire: $routeParams.id}, function (questions) {
 
             // Store copy of original object
             angular.forEach($scope.questions, function (question) {
@@ -78,7 +78,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
                         question.answers.push(new Answer());
                     }
                 }
-                $scope.originalQuestions.push(new Question(question));
+                $scope.originalQuestions.push(new QuestionnaireQuestion(question));
             });
 
             // Trigger resize event informing elements to resize according to the height of the window.

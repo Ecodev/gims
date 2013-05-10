@@ -1,11 +1,7 @@
-'use strict';
-
 /* Directives */
-
-
 angular.module('myApp.directives', [])
     .directive('appVersion', ['version', function (version) {
-        return function (scope, elm, attrs) {
+        return function (scope, elm) {
             elm.text(version);
         };
     }])
@@ -24,13 +20,13 @@ angular.module('myApp.directives', [])
         };
     })
     .directive('resize', function ($window) {
-        return function (scope, element) {
+        return function (scope) {
 
             var w = angular.element($window);
             scope.getWindowDimensions = function () {
                 return { 'h': w.height(), 'w': w.width() };
             };
-            scope.$watch(scope.getWindowDimensions, function (newValue, oldValue) {
+            scope.$watch(scope.getWindowDimensions, function (newValue) {
 
                 // resize Grid to optimize height
                 $('.gridStyle').height(newValue.h - 250);
@@ -39,5 +35,5 @@ angular.module('myApp.directives', [])
             w.bind('resize', function () {
                 scope.$apply();
             });
-        }
+        };
     });

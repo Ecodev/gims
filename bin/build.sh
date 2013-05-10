@@ -60,6 +60,7 @@ angular-highcharts-directive.js \
 ../../lib/bootstrap-js/bootstrap.min.js \
 ../../lib/angular-strap/angular-strap.js \
 ../../lib/angular-strap/bootstrap-datepicker.js \
+../../lib/sprintf/sprintf.js \
 app.js \
 services-admin.js \
 services.js \
@@ -68,5 +69,6 @@ controllers-admin-survey.js \
 controllers-admin-question.js \
 controllers.js \
 filters.js \
+directives-admin-question.js \
 directives.js \
 > application.js

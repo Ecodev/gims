@@ -3,7 +3,15 @@
 /* Controllers */
 angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $routeParams, $location, $resource, User, UserSurvey, UserQuestionnaire, Modal, Gui) {
 
+    // Default redirect
+    var redirectTo = '/admin/user';
+    if ($routeParams.returnUrl) {
+        redirectTo = $routeParams.returnUrl;
+    }
 
+    $scope.cancel = function () {
+        $location.path(redirectTo).search('returnUrl', null);
+    };
 
     // Configure ng-grid.
     $scope.userSurvey = UserSurvey.query({idUser: $routeParams.id});
@@ -18,7 +26,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
         columnDefs: [
             {field: 'survey.name', displayName: 'Survey'},
             {field: 'role.name', displayName: 'Role', width: '250px'},
-            {cellTemplate: '<button type="button" class="btn btn-mini" ng-click="delete(row)"><i class="icon-trash icon-large"></i></button>'}
+            {cellTemplate: '<button type="button" class="btn btn-mini" ng-click="remove(row)"><i class="icon-trash icon-large"></i></button>'}
         ]
     };
 
@@ -35,7 +43,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
         columnDefs: [
             {field: 'questionnaire.name', displayName: 'Questionnaire'},
             {field: 'role.name', displayName: 'Role', width: '250px'},
-            {cellTemplate: '<button type="button" class="btn btn-mini" ng-click="delete(row)"><i class="icon-trash icon-large"></i></button>'}
+            {cellTemplate: '<button type="button" class="btn btn-mini" ng-click="remove(row)"><i class="icon-trash icon-large"></i></button>'}
         ]
     };
 
@@ -44,13 +52,11 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
         {text: 'No', value: 'false'}
     ];
 
-    Gui.resetSaveButton($scope);
-
     $scope.saveAndClose = function() {
-        this.save('/admin/user');
+        this.save(redirectTo);
     };
 
-    $scope.save = function(routeTo) {
+    $scope.save = function(redirectTo) {
         $scope.sending = true;
         $scope.sendLabel = '<i class="icon-ok"></i> Saving...';
 
@@ -59,8 +65,8 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
             $scope.user.$update({id: $scope.user.id}, function(user) {
                 Gui.resetSaveButton($scope);
 
-                if (routeTo) {
-                    $location.path(routeTo);
+                if (redirectTo) {
+                    $location.path(redirectTo);
                 }
             });
         } else {
@@ -69,15 +75,15 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
 
                 Gui.resetSaveButton($scope);
 
-                if (routeTo) {
-                    $location.path(routeTo);
+                if (redirectTo) {
+                    $location.path(redirectTo);
                 }
             });
         }
     };
 
     // Delete a user
-    $scope.delete = function() {
+    $scope.remove = function() {
         Modal.confirmDelete($scope.user);
     };
 
@@ -127,11 +133,11 @@ angular.module('myApp').controller('Admin/UserCtrl', function($scope, $routePara
             {field: 'email', displayName: 'Email', cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a href="mailto:{{row.entity[col.field]}}">{{row.entity[col.field]}}</a></div>'},
             {field: 'active', displayName: 'Active', cellFilter: 'checkmark', width: '100px'},
             {displayName: '', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
-                        '<button type="button" class="btn btn-mini" ng-click="delete(row)" ><i class="icon-trash icon-large"></i></button>'}
+                        '<button type="button" class="btn btn-mini" ng-click="remove(row)" ><i class="icon-trash icon-large"></i></button>'}
         ]
     };
 
-    $scope.delete = function(row) {
+    $scope.remove = function(row) {
 
         // Add a little timeout to enabling the event "selectRow" to be propagated
         $timeout(function() {

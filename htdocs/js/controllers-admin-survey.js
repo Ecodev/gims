@@ -2,18 +2,32 @@
 angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, $resource, Survey, Modal, Gui) {
     "use strict";
 
+    Gui.resetSaveButton($scope);
+
+    // Default redirect
+    var redirectTo = '/admin/survey';
+    if ($routeParams.returnUrl) {
+        redirectTo = $routeParams.returnUrl;
+    }
+
+    $scope.cancel = function () {
+        $location.path(redirectTo).search('returnUrl', null);
+    };
+
     $scope.actives = [
         {text: 'Yes', value: 'true'},
         {text: 'No', value: 'false'}
     ];
 
-    Gui.resetSaveButton($scope);
-
     $scope.saveAndClose = function () {
-        this.save('/admin/survey');
+        this.save(redirectTo);
     };
 
-    $scope.save = function (routeTo) {
+    $scope.cancel = function () {
+        $location.path(redirectTo).search('returnUrl', null);
+    };
+
+    $scope.save = function (redirectTo) {
 
         $scope.sending = true;
         $scope.sendLabel = '<i class="icon-ok"></i> Saving...';
@@ -23,8 +37,8 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
             $scope.survey.$update({id: $scope.survey.id}, function () {
                 Gui.resetSaveButton($scope);
 
-                if (routeTo) {
-                    $location.path(routeTo);
+                if (redirectTo) {
+                    $location.path(redirectTo);
                 }
             });
         } else {
@@ -33,8 +47,8 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
 
                 Gui.resetSaveButton($scope);
 
-                if (routeTo) {
-                    $location.path(routeTo);
+                if (redirectTo) {
+                    $location.path(redirectTo);
                 }
             });
         }
@@ -49,9 +63,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
     if ($routeParams.id > 0) {
         Survey.get({id: $routeParams.id}, function (survey) {
 
-            // cast a few variable
-            // @todo cast me in the PHP model!
-            survey.year -= 0; // int value
+            // Cast "active" to be string for the need of the select menu.
             survey.active += ''; // string value
             $scope.survey = new Survey(survey);
         });
@@ -103,7 +115,7 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeP
         useExternalFilter: false
     };
 
-    $scope.surveys = $resource('/api/survey?fields=metadata,comments').query(function () {
+    $scope.surveys = $resource('/api/survey?fields=metadata,comments,questions').query(function () {
 
         // Trigger resize event informing elements to resize according to the height of the window.
         $timeout(function () {

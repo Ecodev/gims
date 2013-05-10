@@ -50,8 +50,18 @@ angular.module('myApp.resourceServices', ['ngResource'])
             }
         });
     })
-    .factory('Question', function ($resource) {
+    .factory('QuestionnaireQuestion', function ($resource) {
         return $resource('/api/questionnaire/:idQuestionnaire/question/:id', {}, {
+            update: {
+                method: 'PUT'
+            }
+        });
+    })
+    .factory('Question', function ($resource) {
+        return $resource('/api/question/:id', {}, {
+            create: {
+                method: 'POST'
+            },
             update: {
                 method: 'PUT'
             }

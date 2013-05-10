@@ -2,24 +2,7 @@
     <h2>Users > {{user.name}}</h2>
     <form name="myForm">
 
-        <div class="btn-group">
-            <button ng-click="save()" ng-disabled="myForm.$invalid" class="btn btn-primary"
-                    ng-class="{'disabled': sending}" ng-bind-html-unsafe="sendLabel"></button>
-            <button class="btn btn-primary dropdown-toggle" ng-class="{'disabled': sending}" data-toggle="dropdown">
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li>
-                    <a ng-click="saveAndClose()">Save and close</a>
-                </li>
-            </ul>
-        </div>
-
-        <a href="/admin/user" class="btn"><i class="icon-minus-sign"></i> Cancel</a>
-
-        <button ng-click="delete()"
-                ng-show="user.id" class="btn btn-danger"><i class="icon-trash"></i> Delete
-        </button>
+        <?php echo $this->crudButtons('user'); ?>
 
         <tabs style="margin-top: 20px">
             <pane heading="General info">

@@ -1,6 +1,8 @@
 {
     "predef": [  // Custom globals.
         "angular",
+        "console",
+        "sprintf",
         "$"
     ],
     // On-line example https://gist.github.com/connor/1597131
@@ -14,7 +16,7 @@
     "nonew": true,      // Prohibit use of constructors for side-effects.
     "undef": true,      // Require all non-global variables be declared before they are used.
     "unused": true,
-    "strict": true,     // Require `use strict` pragma  in every file.
+    "strict": false,    // Require `use strict` pragma  in every file.
     "trailing": true,   // Prohibit trailing whitespaces.
     "browser": true,    // Standard browser globals e.g. `window`, `document`.
     "ident": 4          // Specify indentation spacing
