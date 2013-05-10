@@ -1,7 +1,9 @@
-'use strict';
+/*global angular*/
+/* jshint undef: true, unused: true, strict: true */
 
 /* Controllers */
 angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, $resource, Survey, Modal, Gui) {
+    "use strict";
 
     $scope.actives = [
         {text: 'Yes', value: 'true'},
@@ -20,7 +22,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
 
         // First case is for update a survey, second is for creating
         if ($scope.survey.id > 0) {
-            $scope.survey.$update({id: $scope.survey.id}, function (survey) {
+            $scope.survey.$update({id: $scope.survey.id}, function () {
                 Gui.resetSaveButton($scope);
 
                 if (routeTo) {
@@ -29,7 +31,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
             });
         } else {
             $scope.survey = new Survey($scope.survey);
-            $scope.survey.$create(function (survey) {
+            $scope.survey.$create(function () {
 
                 Gui.resetSaveButton($scope);
 
@@ -41,7 +43,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
     };
 
     // Delete a survey
-    $scope.delete = function () {
+    $scope.remove = function () {
         Modal.confirmDelete($scope.survey);
     };
 
@@ -62,6 +64,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
  * Admin Survey Controller
  */
 angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeParams, $location, $window, $timeout, $resource, Survey, Modal) {
+    "use strict";
 
     // Initialize
     $scope.filteringText = '';
@@ -71,7 +74,7 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeP
         useExternalFilter: false
     };
 
-    $scope.surveys = $resource('/api/survey?fields=metadata,comments').query(function (data) {
+    $scope.surveys = $resource('/api/survey?fields=metadata,comments').query(function () {
 
         // Trigger resize event informing elements to resize according to the height of the window.
         $timeout(function () {
@@ -100,7 +103,7 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeP
         ]
     };
 
-    $scope.delete = function (row) {
+    $scope.remove = function () {
 
         // Add a little timeout to enabling the event "selectRow" to be propagated
         $timeout(function () {
