@@ -115,22 +115,22 @@ class Hydrator
 
                 if (is_callable(array($object, $getter))) {
                     /** @var $object AbstractModel */
-                    $subobject = call_user_func(array($object, $getter));
+                    $subObject = call_user_func(array($object, $getter));
 
-                    if (is_null($subobject) && !empty($value['id'])) {
+                    if (is_null($subObject) && !empty($value['id'])) {
 
                         // Check what kind of parameter type is taken by the setter as input.
                         $modelName = $this->getFirstParameterType($object, $getter);
-                        $subobject = $this->getObject($modelName, $value['id']);
+                        $subObject = $this->getObject($modelName, $value['id']);
                     }
 
                     // Also hydrate subobject, but only if it's not ourself because it would
                     // overwrite the change we are trying to do. This is typically the case
                     // of user whose last modifier is himself, but could also happen in other cases.
-                    if ($object->getId() != $subobject->getId()) {
-                        $value = $this->hydrate($value, $subobject);
+                    if ($object !== $subObject) {
+                        $value = $this->hydrate($value, $subObject);
                     } else {
-                        $value = $subobject;
+                        $value = $subObject;
                     }
                 } else {
                     $logger = Module::getServiceManager()->get('Zend\Log');
