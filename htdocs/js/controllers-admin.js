@@ -58,6 +58,21 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
             $scope.survey = new Survey(survey);
         });
     }
+
+    // Keep track of the selected row.
+    $scope.selectedRow = [];
+
+    // Initialize
+    $scope.filteringText = '';
+    $scope.filterOptions = {
+        filterText: 'filteringText',
+        useExternalFilter: false
+    };
+
+    // initialize the panes model with hardcoded value
+    $scope.panes = [{},{},{}];
+    $scope.panes[1].active = true;
+
 });
 
 /**
@@ -68,7 +83,6 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeP
 
     // Initialize
     $scope.filteringText = '';
-
     $scope.filterOptions = {
         filterText: 'filteringText',
         useExternalFilter: false

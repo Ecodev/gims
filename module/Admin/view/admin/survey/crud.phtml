@@ -17,11 +17,11 @@
 
         <a href="/admin/survey" class="btn"><i class="icon-minus-sign"></i> Cancel</a>
 
-        <button ng-click="delete()"
+        <button ng-click="remove()"
                 ng-show="survey.id" class="btn btn-danger"><i class="icon-trash"></i> Delete
         </button>
 
-        <tabs style="margin-top: 20px">
+        <tabs style="margin-top: 20px" active="panes[0].active">
             <pane heading="General info">
                 <div class="control-group" ng-class="{error: myForm.code.$invalid}">
                     <label for="survey.code">Code</label>
@@ -73,17 +73,26 @@
                 </div>
             </pane>
 
-            <pane heading="Question">
+            <pane heading="Question" active="panes[1].active">
 
-                [SEARCH] [new]
-                <br>
-                [GRID]
+                <div class="row-fluid">
+                    <div class="span9">
+                        <input type="text" ng-model="filteringText" placeholder="Search..." class="search"
+                               style="width: 400px"/>
+                    </div>
+                    <div class="span3" style="text-align: right">
+                        <i class="icon-plus-sign"></i> <a href="/admin/question/new">new question</a>
+                    </div>
+                </div>
+                <div ng-grid="gridQuestions" style="" class="gridStyle" style="height: 100%"></div>
             </pane>
 
-            <pane heading="Questionnaire">
+            <pane heading="Questionnaire" active="panes[2].active">
                 1234
             </pane>
         </tabs>
+
+        {{ survey | json}}
     </form>
 
     <?php echo $this->metadata('survey'); ?>
