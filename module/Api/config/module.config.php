@@ -109,7 +109,7 @@ return array(
                         'options' => array(
                             'route' => '/:controller[/:action]',
                             'constraints' => array(
-                                'controller' => '(chart)', // Define here allowed controllers: (controller1|controller2|controller3)
+                                'controller' => '(chart|user)', // Define here allowed controllers: (controller1|controller2|controller3)
                             ),
                             'defaults' => array(
                                 '__NAMESPACE__' => 'Api\Controller',

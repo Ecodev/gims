@@ -5,6 +5,7 @@ namespace Api\Controller;
 use Application\Assertion\UserAssertion;
 use Application\Model\User;
 use Zend\View\Model\JsonModel;
+use ZfcUser\Controller\UserController as ZfcUser;
 
 class UserController extends AbstractRestfulController
 {
@@ -155,6 +156,39 @@ class UserController extends AbstractRestfulController
         $stats = $this->getRepository()->getStatistics(/* $user */);
 
         return new JsonModel($stats);
+    }
+
+    public function loginAction()
+    {
+        $request = $this->getRequest();
+        $form    = $this->getLoginForm();
+
+        if ($this->getOptions()->getUseRedirectParameterIfPresent() && $request->getQuery()->get('redirect')) {
+            $redirect = $request->getQuery()->get('redirect');
+        } else {
+            $redirect = false;
+        }
+
+        if (!$request->isPost()) {
+            return array(
+                'loginForm' => $form,
+                'redirect'  => $redirect,
+                'enableRegistration' => $this->getOptions()->getEnableRegistration(),
+            );
+        }
+
+        $form->setData($request->getPost());
+
+        if (!$form->isValid()) {
+            $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage($this->failedLoginMessage);
+            return $this->redirect()->toUrl($this->url()->fromRoute(static::ROUTE_LOGIN).($redirect ? '?redirect='.$redirect : ''));
+        }
+
+        // clear adapters
+        $this->zfcUserAuthentication()->getAuthAdapter()->resetAdapters();
+        $this->zfcUserAuthentication()->getAuthService()->clearIdentity();
+
+        return $this->forward()->dispatch(static::CONTROLLER_NAME, array('action' => 'authenticate'));
     }
 
 }
