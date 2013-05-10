@@ -403,7 +403,7 @@ class Jmp extends AbstractImporter
         $countryCell = $sheet->getCellByColumnAndRow($col + 3, 1);
         $questionnaire = $this->getQuestionnaire($survey, $countryCell);
         if (!$questionnaire) {
-            echo 'WARNING: skipped questionnaire because there is no country name. On sheet "' . $sheet->getTitle() . '" cell ' . $countryCell->getCoordinate();
+            echo 'WARNING: skipped questionnaire because there is no country name. On sheet "' . $sheet->getTitle() . '" cell ' . $countryCell->getCoordinate() . PHP_EOL;
             return true;
         }
 
@@ -586,10 +586,10 @@ class Jmp extends AbstractImporter
         } catch (\PHPExcel_Exception $exception) {
 
             // Fallback on cached result
-            if (strstr($exception->getMessage(), 'Formula Error') !== false) {
-                return $cell->getOldCalculatedValue();
+            if (preg_match('/(Cyclic Reference in Formula|Formula Error)/', $exception->getMessage())) {
+                $value = $cell->getOldCalculatedValue();
+                return $value == \PHPExcel_Calculation_Functions::NA() ? null : $value;
             } else {
-                var_dump($cell->getValue());
                 // Forward exception
                 throw $exception;
             }
