@@ -73,6 +73,23 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
     $scope.panes = [{},{},{}];
     $scope.panes[1].active = true;
 
+    // Configure ng-grid.
+    $scope.gridQuestions = {
+        data: 'survey.questions',
+        enableCellSelection: true,
+        showFooter: true,
+//        selectedItems: $scope.selectedQuestionRow,
+//        filterOptions: $scope.filterQuestionOptions,
+        multiSelect: false,
+        columnDefs: [
+            {field: 'code', displayName: 'Code', width: '150px'}
+//            {field: 'name', displayName: 'Name', width: '750px'},
+//            {field: 'active', displayName: 'Active', cellFilter: 'checkmark', width: '100px'},
+//            {field: 'year', displayName: 'Year', width: '100px'},
+//            {displayName: '', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
+//                '<button type="button" class="btn btn-mini" ng-click="delete(row)" ><i class="icon-trash icon-large"></i></button>'}
+        ]
+    };
 });
 
 /**
