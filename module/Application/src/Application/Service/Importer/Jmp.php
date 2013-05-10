@@ -300,7 +300,7 @@ class Jmp extends AbstractImporter
         $parentName = $parent ? $parent->getName() : null;
 
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
-        $filter = $filterRepository->getOneByNames($name, $parentName);
+        $filter = $filterRepository->getOneOfficialByNames($name, $parentName);
         if (!$filter) {
 
             $filter = new \Application\Model\Filter();

@@ -7,16 +7,16 @@ class FilterRepository extends AbstractRepository
     use Traits\OrderedByName;
 
     /**
-     * Returns a filter either from database, or newly created
+     * Returns one official filter
      * @param string $name
      * @param string $parentName
      * @return \Application\Model\Filter
      */
-    public function getOneByNames($name, $parentName)
+    public function getOneOfficialByNames($name, $parentName)
     {
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
 
-        $qb = $filterRepository->createQueryBuilder('f')->where('f.name = :name');
+        $qb = $filterRepository->createQueryBuilder('f')->where('f.name = :name AND f.isOfficial = TRUE');
         $parameters = array('name' => $name);
         if ($parentName) {
             $parameters['parentName'] = $parentName;
