@@ -1,6 +1,3 @@
-/*global angular*/
-/* jshint undef: true, unused: true, strict: true */
-
 /* Controllers */
 angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, $resource, Survey, Modal, Gui) {
     "use strict";
@@ -17,6 +14,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
     };
 
     $scope.save = function (routeTo) {
+
         $scope.sending = true;
         $scope.sendLabel = '<i class="icon-ok"></i> Saving...';
 

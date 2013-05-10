@@ -3,6 +3,7 @@
 return array(
     'controllers'  => array(
         'invokables' => array(
+            'Admin\Controller\Question' => 'Admin\Controller\QuestionController',
             'Admin\Controller\Survey' => 'Admin\Controller\SurveyController',
             'Admin\Controller\User' => 'Admin\Controller\UserController',
         ),

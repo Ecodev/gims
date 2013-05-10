@@ -65,6 +65,7 @@ services-admin.js \
 services.js \
 controllers-admin-user.js \
 controllers-admin-survey.js \
+controllers-admin-question.js \
 controllers.js \
 filters.js \
 directives.js \
