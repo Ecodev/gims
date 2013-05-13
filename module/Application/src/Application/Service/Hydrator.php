@@ -173,7 +173,7 @@ class Hydrator
      * @throws \Exception
      * @return AbstractModel
      */
-    private function getObject($modelName, $id)
+    protected function getObject($modelName, $id)
     {
 
         $repository = Module::getEntityManager()->getRepository($modelName);
