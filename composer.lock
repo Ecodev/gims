@@ -179,16 +179,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "2.3.3",
+            "version": "2.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "2.3.3"
+                "reference": "2.3.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/2.3.3",
-                "reference": "2.3.3",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/2.3.4",
+                "reference": "2.3.4",
                 "shasum": ""
             },
             "require": {
@@ -238,7 +238,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2013-03-24 19:16:29"
+            "time": "2013-05-11 07:45:37"
         },
         {
             "name": "doctrine/doctrine-module",
@@ -460,16 +460,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.3.3",
+            "version": "2.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "2.3.3"
+                "reference": "2.3.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/2.3.3",
-                "reference": "2.3.3",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/2.3.4",
+                "reference": "2.3.4",
                 "shasum": ""
             },
             "require": {
@@ -526,7 +526,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2013-03-24 20:43:58"
+            "time": "2013-05-11 07:51:12"
         },
         {
             "name": "firephp/firephp-core",
@@ -570,12 +570,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mwillbanks/ZfcTwitterBootstrap.git",
-                "reference": "596e9ab4d6f8afebdc52a7c2b9e54993069ad94f"
+                "reference": "46573d66f1a4810ae7da15a47a33937e73985cc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mwillbanks/ZfcTwitterBootstrap/zipball/596e9ab4d6f8afebdc52a7c2b9e54993069ad94f",
-                "reference": "596e9ab4d6f8afebdc52a7c2b9e54993069ad94f",
+                "url": "https://api.github.com/repos/mwillbanks/ZfcTwitterBootstrap/zipball/46573d66f1a4810ae7da15a47a33937e73985cc1",
+                "reference": "46573d66f1a4810ae7da15a47a33937e73985cc1",
                 "shasum": ""
             },
             "require": {
@@ -615,7 +615,7 @@
                 "source": "https://github.com/mwillbanks/ZfcTwitterBootstrap/tree/master",
                 "issues": "https://github.com/mwillbanks/ZfcTwitterBootstrap/issues"
             },
-            "time": "2013-04-10 15:38:58"
+            "time": "2013-05-06 03:58:13"
         },
         {
             "name": "phing/phing",
@@ -623,12 +623,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "b7a9d36e9ae6b2c3486795fb033cbed0769c2615"
+                "reference": "a26444d80c4091adaf70387b89322a98bdd728e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/b7a9d36e9ae6b2c3486795fb033cbed0769c2615",
-                "reference": "b7a9d36e9ae6b2c3486795fb033cbed0769c2615",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/a26444d80c4091adaf70387b89322a98bdd728e7",
+                "reference": "a26444d80c4091adaf70387b89322a98bdd728e7",
                 "shasum": ""
             },
             "require": {
@@ -667,7 +667,7 @@
                 "task",
                 "tool"
             ],
-            "time": "2013-04-23 22:13:08"
+            "time": "2013-05-09 14:43:11"
         },
         {
             "name": "symfony/console",
@@ -888,27 +888,27 @@
         },
         {
             "name": "zf-commons/zfc-base",
-            "version": "0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ZF-Commons/ZfcBase.git",
-                "reference": "0.1.1"
+                "reference": "v0.1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ZF-Commons/ZfcBase/zipball/0.1.1",
-                "reference": "0.1.1",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcBase/zipball/v0.1.2",
+                "reference": "v0.1.2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
-                "zendframework/zend-db": "2.1.*",
-                "zendframework/zend-eventmanager": "2.1.*",
-                "zendframework/zend-loader": "2.1.*",
-                "zendframework/zend-modulemanager": "2.1.*",
-                "zendframework/zend-mvc": "2.1.*",
-                "zendframework/zend-servicemanager": "2.1.*",
-                "zendframework/zend-stdlib": "2.1.*"
+                "zendframework/zend-db": ">=2.1,<3.0",
+                "zendframework/zend-eventmanager": ">=2.1,<3.0",
+                "zendframework/zend-loader": ">=2.1,<3.0",
+                "zendframework/zend-modulemanager": ">=2.1,<3.0",
+                "zendframework/zend-mvc": ">=2.1,<3.0",
+                "zendframework/zend-servicemanager": ">=2.1,<3.0",
+                "zendframework/zend-stdlib": ">=2.1,<3.0"
             },
             "type": "library",
             "autoload": {
@@ -937,7 +937,7 @@
             "keywords": [
                 "zf2"
             ],
-            "time": "2013-03-15 19:29:07"
+            "time": "2013-05-02 12:33:49"
         },
         {
             "name": "zf-commons/zfc-rbac",
@@ -945,12 +945,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ZF-Commons/ZfcRbac.git",
-                "reference": "d173028fdf09f35b8ffe3fc57d961ed9f77743bc"
+                "reference": "4263ce8883f5b452cac52bf0b5618ac745c99aad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ZF-Commons/ZfcRbac/zipball/d173028fdf09f35b8ffe3fc57d961ed9f77743bc",
-                "reference": "d173028fdf09f35b8ffe3fc57d961ed9f77743bc",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcRbac/zipball/4263ce8883f5b452cac52bf0b5618ac745c99aad",
+                "reference": "4263ce8883f5b452cac52bf0b5618ac745c99aad",
                 "shasum": ""
             },
             "require": {
@@ -980,35 +980,35 @@
                 "module",
                 "zf2"
             ],
-            "time": "2013-03-30 15:22:02"
+            "time": "2013-05-10 20:35:56"
         },
         {
             "name": "zf-commons/zfc-user",
-            "version": "0.1.1",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ZF-Commons/ZfcUser.git",
-                "reference": "0.1.1"
+                "reference": "0.1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ZF-Commons/ZfcUser/zipball/0.1.1",
-                "reference": "0.1.1",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcUser/zipball/0.1.2",
+                "reference": "0.1.2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
-                "zendframework/zend-authentication": "2.1.*",
-                "zendframework/zend-crypt": "2.1.*",
-                "zendframework/zend-form": "2.1.*",
-                "zendframework/zend-inputfilter": "2.1.*",
-                "zendframework/zend-loader": "2.1.*",
-                "zendframework/zend-modulemanager": "2.1.*",
-                "zendframework/zend-mvc": "2.1.*",
-                "zendframework/zend-servicemanager": "2.1.*",
-                "zendframework/zend-stdlib": "2.1.*",
-                "zendframework/zend-validator": "2.1.*",
-                "zendframework/zend-view": "2.1.*",
+                "zendframework/zend-authentication": ">=2.1,<3.0",
+                "zendframework/zend-crypt": ">=2.1,<3.0",
+                "zendframework/zend-form": ">=2.1,<3.0",
+                "zendframework/zend-inputfilter": ">=2.1,<3.0",
+                "zendframework/zend-loader": ">=2.1,<3.0",
+                "zendframework/zend-modulemanager": ">=2.1,<3.0",
+                "zendframework/zend-mvc": ">=2.1,<3.0",
+                "zendframework/zend-servicemanager": ">=2.1,<3.0",
+                "zendframework/zend-stdlib": ">=2.1,<3.0",
+                "zendframework/zend-validator": ">=2.1,<3.0",
+                "zendframework/zend-view": ">=2.1,<3.0",
                 "zf-commons/zfc-base": "0.*"
             },
             "suggest": {
@@ -1041,7 +1041,7 @@
             "keywords": [
                 "zf2"
             ],
-            "time": "2013-03-15 19:29:00"
+            "time": "2013-05-02 12:33:31"
         },
         {
             "name": "zf-commons/zfc-user-doctrine-orm",
