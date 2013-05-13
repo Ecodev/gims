@@ -2,6 +2,7 @@
 
 namespace Api\Controller;
 
+use Application\Model\Survey;
 use Application\Module;
 use Application\Model\Question;
 use Zend\View\Model\JsonModel;
@@ -96,9 +97,117 @@ class QuestionController extends AbstractRestfulController
         return new JsonModel($this->hydrator->extractArray($questions, $this->getJsonConfig()));
     }
 
-//    public function update($id, $data)
-//    {
-////        $rbac->isGrantedWithContext($questionnaire, 'permission name specific to the questionnaire');
-//    }
+    /**
+     * @param int   $id
+     * @param array $data
+     *
+     * @return mixed|JsonModel
+     */
+    public function update($id, $data)
+    {
+        // Retrieve question since permissions apply against it.
+        /** @var $question \Application\Model\Question */
+        $repository = $this->getEntityManager()->getRepository($this->getModel());
+        $question = $repository->findOneById($id);
+        $survey = $question->getSurvey();
 
+        // Update object or not...
+        if ($this->isAllowedSurvey($survey) && $this->isAllowedQuestion($question)) {
+            $result = parent::update($id, $data);
+        } else {
+            $this->getResponse()->setStatusCode(401);
+            $result = new JsonModel(array('message' => 'Authorization required'));
+        }
+        return $result;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return mixed|void|JsonModel
+     * @throws \Exception
+     */
+    public function create($data)
+    {
+        // Get the last sorting value from question
+        if (empty($data['survey']) && (int) $data['survey'] > 0) {
+            throw new \Exception('Missing or invalid survey value', 1368459230);
+        }
+
+        // Retrieve a questionnaire from the storage
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Survey');
+        /** @var Survey $survey */
+        $survey = $repository->findOneById((int) $data['survey']);
+
+        /** @var \Doctrine\Common\Collections\ArrayCollection $questions */
+        $questions = $survey->getQuestions();
+
+        if ($questions->isEmpty()) {
+            $data['sorting'] = 1;
+        } else {
+            /** @var Question $question */
+            $question = $questions->last();
+            $data['sorting'] = $question->getSorting() + 1;
+        }
+
+        // Check that all required properties are given by the GUI
+        $properties = $this->metaModelService->getMandatoryProperties();
+        foreach ($data as $propertyName => $value) {
+            if (! in_array($propertyName, $properties)) {
+                throw new \Exception('Missing property ' . $propertyName, 1368459231);
+            }
+        }
+
+        // Update object or not...
+        if ($this->isAllowedSurvey($survey)) {
+            $result = parent::create($data);
+        } else {
+            $this->getResponse()->setStatusCode(401);
+            $result = new JsonModel(array('message' => 'Authorization required'));
+        }
+        return $result;
+    }
+
+    /**
+     * Ask Rbac whether the User is allowed to update this survey
+     *
+     * @param Survey $survey
+     * @return bool
+     */
+    protected function isAllowedSurvey(Survey $survey)
+    {
+
+        // @todo remove me once login will be better handled GUI wise
+        return true;
+
+        /* @var $rbac \Application\Service\Rbac */
+        $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
+        return $rbac->isGrantedWithContext(
+            $survey,
+            Permission::CAN_MANAGE_SURVEY,
+            new SurveyAssertion($survey)
+        );
+    }
+
+    /**
+     * Ask Rbac whether the User is allowed to update this survey
+     *
+     * @param Question $question
+     *
+     * @return bool
+     */
+    protected function isAllowedQuestion(Question $question)
+    {
+
+        // @todo remove me once login will be better handled GUI wise
+        return true;
+
+        /* @var $rbac \Application\Service\Rbac */
+        $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
+        return $rbac->isGrantedWithContext(
+            $question,
+            Permission::CAN_CREATE_OR_UPDATE_QUESTION,
+            new QuestionAssertion($question)
+        );
+    }
 }

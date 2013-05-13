@@ -109,7 +109,7 @@ class IndexControllerTest extends AbstractController
             array('admin', 'survey', '/template/admin/survey', 'template_admin/default'),
             array('admin', 'survey', '/template/admin/survey/crud', 'template_admin/default'),
             array('admin', 'user', '/template/admin/user', 'template_admin/default'),
-            array('admin', 'user', '/template/admin/user/edit', 'template_admin/default'),
+            array('admin', 'user', '/template/admin/user/crud', 'template_admin/default'),
             array('contribute', 'index', '/template/contribute/questionnaire', 'template_contribute/default'),
         );
     }

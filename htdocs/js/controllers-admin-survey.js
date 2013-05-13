@@ -1,5 +1,5 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, $resource, Survey, Modal, Gui) {
+angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, $window, $timeout, $resource, Survey, Modal, Gui) {
     "use strict";
 
     Gui.resetSaveButton($scope);
@@ -65,8 +65,22 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
             // Cast "active" to be string for the need of the select menu.
             survey.active += ''; // string value
             $scope.survey = new Survey(survey);
+
+            // Trigger resize event informing elements to resize according to the height of the window.
+            $timeout(function () {
+                angular.element($window).resize();
+            }, 0);
         });
     }
+
+    // initialize the panes model with hardcoded value
+    $scope.panes = [{},{},{}];
+    $scope.panes[1].active = true;
+
+    $scope.edit = function (row) {
+        var currentUrl = $location.path();
+        $location.path('/admin/question/edit/' + row.entity.id).search({'returnUrl': currentUrl});
+    };
 
     // Keep track of the selected row.
     $scope.selectedRow = [];
@@ -78,27 +92,26 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
         useExternalFilter: false
     };
 
-    // initialize the panes model with hardcoded value
-    $scope.panes = [{},{},{}];
-    $scope.panes[1].active = true;
-
     // Configure ng-grid.
     $scope.gridQuestions = {
         data: 'survey.questions',
         enableCellSelection: true,
         showFooter: true,
-//        selectedItems: $scope.selectedQuestionRow,
-//        filterOptions: $scope.filterQuestionOptions,
+        selectedItems: $scope.selectedRow,
+        filterOptions: $scope.filterOptions,
         multiSelect: false,
         columnDefs: [
-            {field: 'code', displayName: 'Code', width: '150px'}
-//            {field: 'name', displayName: 'Name', width: '750px'},
-//            {field: 'active', displayName: 'Active', cellFilter: 'checkmark', width: '100px'},
-//            {field: 'year', displayName: 'Year', width: '100px'},
-//            {displayName: '', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
-//                '<button type="button" class="btn btn-mini" ng-click="delete(row)" ><i class="icon-trash icon-large"></i></button>'}
+            {field: 'sorting', displayName: '#', width: '50px'},
+            {field: 'name', displayName: 'Name'},
+            {displayName: '', width: '100px', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
+                '<button type="button" class="btn btn-mini" ng-click="delete(row)" ><i class="icon-trash icon-large"></i></button>'}
         ]
     };
+
+    $scope.$on('filterChanged', function (evt, text) {
+        console.log(text);
+        $scope.filteringText = text;
+    });
 });
 
 /**

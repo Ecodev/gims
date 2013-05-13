@@ -13,7 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
 class Permission extends AbstractModel
 {
 
-    const CAN_MANAGE_ANSWER = 'can-manage-answer';
+    const CAN_CREATE_OR_UPDATE_ANSWER = 'can-create-or-update-answer';
+
+    const CAN_CREATE_OR_UPDATE_SURVEY = 'can-create-or-update-survey';
+
+    const CAN_CREATE_OR_UPDATE_QUESTION = 'can-create-or-update-question';
 
     const CAN_VALIDATE_QUESTIONNAIRE = 'can-validate-questionnaire';
 

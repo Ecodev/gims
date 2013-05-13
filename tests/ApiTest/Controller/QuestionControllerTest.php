@@ -121,7 +121,6 @@ class QuestionControllerTest extends AbstractController
      */
     public function createANewQuestionWithPostMethod()
     {
-
         // Question
         $data = array(
             'name'     => 'name for test create a new question',

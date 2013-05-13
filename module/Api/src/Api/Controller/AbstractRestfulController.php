@@ -31,7 +31,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     public function __construct()
     {
         $this->permissionService = new Permission($this->getModel());
-        $this->metaModelService = new MetaModel();
+        $this->metaModelService = new MetaModel($this->getModel());
         $this->hydrator = new \Application\Service\Hydrator();
     }
 
@@ -174,11 +174,8 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             $this->getResponse()->setStatusCode(404);
             return;
         }
-//var_dump($object->getName());
         $this->hydrator->hydrate($data, $object);
         $this->getEntityManager()->flush();
-//        var_dump($object->getName());
-//die('asdads');
         $this->getResponse()->setStatusCode(201);
         return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
     }

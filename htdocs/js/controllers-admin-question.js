@@ -24,6 +24,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
         $scope.sending = true;
 
         // First case is for update a question, second is for creating
+        $scope.question.filter = $scope.question.filter.id;
         if ($scope.question.id > 0) {
             $scope.question.$update({id: $scope.question.id}, function () {
                 Gui.resetSaveButton($scope);
@@ -34,7 +35,6 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
             });
         } else {
             $scope.question.survey = $routeParams.survey;
-            $scope.question.filter = $scope.question.filter.id;
             $scope.question.$create(function () {
 
                 Gui.resetSaveButton($scope);

@@ -138,7 +138,7 @@ class UserController extends AbstractRestfulController
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         return $rbac->isGrantedWithContext(
-                        $user, Permission::CAN_MANAGE_ANSWER, new UserAssertion($user)
+                        $user, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new UserAssertion($user)
         );
     }
 

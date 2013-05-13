@@ -158,7 +158,7 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
         $repository = $this->getEntityManager()->getRepository('Application\Model\Permission');
 
         /** @var $role \Application\Model\Permission */
-        $this->permission = $repository->findOneByName(\Application\Model\Permission::CAN_MANAGE_ANSWER);
+        $this->permission = $repository->findOneByName(\Application\Model\Permission::CAN_CREATE_OR_UPDATE_ANSWER);
 
         $this->role = new Role('foo');
         $this->role->addPermission($this->permission);

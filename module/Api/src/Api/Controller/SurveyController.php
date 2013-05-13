@@ -104,6 +104,10 @@ class SurveyController extends AbstractRestfulController
                 'code',
                 'active',
                 'year',
+                'questions' => array (
+                    'name',
+                    'sorting',
+                ),
                 'dateStart',
                 'dateEnd',
             ),
@@ -127,7 +131,7 @@ class SurveyController extends AbstractRestfulController
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         return $rbac->isGrantedWithContext(
             $survey,
-            Permission::CAN_MANAGE_ANSWER,
+            Permission::CAN_CREATE_OR_UPDATE_ANSWER,
             new SurveyAssertion($survey)
         );
     }

@@ -12,9 +12,25 @@ class MetaModelTest extends \ApplicationTest\Controller\AbstractController
         parent::setUp();
     }
 
-    public function testSomethingUseful()
+    /**
+     * @test
+     * @dataProvider modelProvider
+     */
+    public function methodGetMandatoryPropertiesReturns($modelName, $mandatoryProperties)
     {
-        // find something useful to test
+        $fixture = new MetaModel($modelName);
+        $this->assertSame($mandatoryProperties, $fixture->getMandatoryProperties());
     }
 
+    /**
+     * Provider
+     */
+    public function modelProvider()
+    {
+        return array(
+            array('Application\Model\Question', array('sorting', 'type', 'name', 'filter', 'survey')),
+            array('Application\Model\Survey', array('name', 'code')),
+            // more models to add here...
+        );
+    }
 }

@@ -23,7 +23,6 @@ class AnswerController extends AbstractRestfulController
         return new JsonModel($this->hydrator->extractArray($objects, $this->getJsonConfig()));
     }
 
-
     /**
      * @param array $data
      *
@@ -112,7 +111,7 @@ class AnswerController extends AbstractRestfulController
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         return $rbac->isGrantedWithContext(
             $questionnaire,
-            Permission::CAN_MANAGE_ANSWER,
+            Permission::CAN_CREATE_OR_UPDATE_ANSWER,
             new QuestionnaireAssertion($questionnaire)
         );
     }
