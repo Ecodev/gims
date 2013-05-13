@@ -58,7 +58,6 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
 
     $scope.save = function(redirectTo) {
         $scope.sending = true;
-        $scope.sendLabel = '<i class="icon-ok"></i> Saving...';
 
         // First case is for update a user, second is for creating
         if ($scope.user.id) {

@@ -14,20 +14,31 @@ class CrudButtons extends \Zend\View\Helper\AbstractHtmlElement
     {
         $result = <<<STRING
 
-        <div class="btn-group">
-            <button ng-click="save()" ng-disabled="myForm.\$invalid" class="btn btn-primary"
-                    ng-class="{'disabled': sending}" ng-bind-html-unsafe="sendLabel"></button>
-            <button class="btn btn-primary dropdown-toggle" ng-class="{'disabled': sending}" data-toggle="dropdown">
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li>
-                    <a ng-click="saveAndClose()">Save and close</a>
-                </li>
-            </ul>
-        </div>
+        <span ng-switch="sending > 0">
+            <div class="btn-group" ng-switch-when="true">
+                <button class="btn btn-primary disabled">
+                    <i class="icon-loading"></i>
+                    <ng-pluralize count="sending + 0"when="{'one': 'Saving', 'other': 'Saving {} items'}" />
+                </button>
+                <button class="btn btn-primary dropdown-toggle disabled" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+            </div>
 
-        <a ng-click="cancel()" class="btn"><i class="icon-minus-sign"></i> Cancel</a>
+            <div class="btn-group" ng-switch-when="false">
+                <button class="btn btn-primary" ng-click="save()" ng-disabled="myForm.\$invalid"><i class="icon-ok"></i> Save</button>
+                <button class="btn btn-primary dropdown-toggle" ng-disabled="myForm.\$invalid" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a ng-click="saveAndClose()">Save and close</a>
+                    </li>
+                </ul>
+            </div>
+        </span>
+
+        <a ng-click="cancel()" class="btn">Cancel</a>
 
         <button ng-click="remove()"
                 ng-show="$objectName.id" class="btn btn-danger"><i class="icon-trash"></i> Delete

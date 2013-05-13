@@ -56,7 +56,6 @@ angular.module('myApp.adminSurveyServices', [])
             resetSaveButton: function (scope) {
                 // Defining label for GUI.
                 scope.sending = false;
-                scope.sendLabel = '<i class="icon-ok"></i> Save';
             }
         };
     });

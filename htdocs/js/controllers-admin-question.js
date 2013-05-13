@@ -22,7 +22,6 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     $scope.save = function (redirectTo) {
 
         $scope.sending = true;
-        $scope.sendLabel = '<i class="icon-ok"></i> Saving...';
 
         // First case is for update a question, second is for creating
         if ($scope.question.id > 0) {

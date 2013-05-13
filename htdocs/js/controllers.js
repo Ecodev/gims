@@ -195,7 +195,6 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
 
     // Counter of request being sent.
     $scope.sending = 0;
-    $scope.sendLabel = 'Save';
 
     // Update Data
     $scope.updateAnswers = function () {
@@ -205,17 +204,12 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
             // save the question only if it is different from the original
             if (!angular.equals(question, questionOriginal)) {
                 $scope.sending = $scope.sending + question.answers.length;
-                $scope.sendLabel = 'Saving ' + $scope.sending + ' object(s) ...';
 
                 // create an answer
                 angular.forEach(question.answers, function (answerObject) {
                     var answer = new Answer(answerObject);
                     answer.$update({id: answer.id}, function (data) {
                         $scope.sending--;
-                        $scope.sendLabel = 'Saving ' + $scope.sending + ' object(s) ...';
-                        if ($scope.sending === 0) {
-                            $scope.sendLabel = 'Save';
-                        }
                     });
                 });
             }

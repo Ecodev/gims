@@ -30,7 +30,6 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
     $scope.save = function (redirectTo) {
 
         $scope.sending = true;
-        $scope.sendLabel = '<i class="icon-ok"></i> Saving...';
 
         // First case is for update a survey, second is for creating
         if ($scope.survey.id > 0) {
