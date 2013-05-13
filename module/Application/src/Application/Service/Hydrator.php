@@ -38,15 +38,19 @@ class Hydrator
      */
     public function extract(AbstractModel $object, array $properties)
     {
+
         // Always output id
-        foreach (array('id') as $value) {
-            if (!in_array($value, $properties)) {
-                array_unshift($properties, $value);
-            }
+        if (!in_array('id', $properties)) {
+            array_unshift($properties, 'id');
         }
 
         $result = array();
         foreach ($properties as $key => $value) {
+
+            // Never output sensitive data
+            if ($value == 'password') {
+                continue;
+            }
 
             if ($value instanceof \Closure) {
                 if (!is_string($key)) {
@@ -109,6 +113,9 @@ class Hydrator
      */
     public function hydrate(array $data, \Application\Model\AbstractModel $object)
     {
+        // Remove sensitive data
+        unset($data['password']);
+
         foreach ($data as $key => $value) {
             if (is_array($value)) {
                 $getter = 'get' . ucfirst($key);

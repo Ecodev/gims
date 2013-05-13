@@ -71,14 +71,25 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->assertArrayNotHasKey('foo', $this->hydrator->extract($this->user, array('foo')));
     }
 
-    public function testIdCannotBeHydrated()
+    public function testSensitivePropertiesCannotBeHydrated()
     {
         $data = array(
             'id' => 12345,
+            'password' => 'foo',
         );
 
         $this->hydrator->hydrate($data, $this->user);
         $this->assertNull($this->user->getId());
+        $this->assertNull($this->user->getPassword());
+    }
+
+    public function testSensitivePropertiesCannotBeExtracted()
+    {
+        $data = array(
+            'password',
+        );
+
+        $this->assertArrayNotHasKey('password', $this->hydrator->extract($this->user, $data));
     }
 
     public function testExtractArray()
