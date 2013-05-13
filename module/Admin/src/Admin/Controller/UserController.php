@@ -20,7 +20,7 @@ class UserController extends \Application\Controller\AbstractAngularActionContro
         return new ViewModel();
     }
 
-    public function editAction()
+    public function crudAction()
     {
         return new ViewModel();
     }

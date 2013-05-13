@@ -9,12 +9,12 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
         redirectTo = $routeParams.returnUrl;
     }
 
-    $scope.cancel = function () {
+    $scope.cancel = function() {
         $location.path(redirectTo).search('returnUrl', null);
     };
 
     // Configure ng-grid.
-    $scope.userSurvey = UserSurvey.query({idUser: $routeParams.id});
+    $scope.userSurvey = $routeParams.id ? UserSurvey.query({idUser: $routeParams.id}) : [];
     $scope.gridSurveyOptions = {
         data: 'userSurvey',
         showFooter: true,
@@ -31,7 +31,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
     };
 
     // Configure ng-grid.
-    $scope.userQuestionnaire = UserQuestionnaire.query({idUser: $routeParams.id});
+    $scope.userQuestionnaire = $routeParams.id ? UserQuestionnaire.query({idUser: $routeParams.id}) : [];
     $scope.gridQuestionnaireOptions = {
         data: 'userQuestionnaire',
         showFooter: true,
@@ -61,7 +61,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
         $scope.sendLabel = '<i class="icon-ok"></i> Saving...';
 
         // First case is for update a user, second is for creating
-        if ($scope.user.id > 0) {
+        if ($scope.user.id) {
             $scope.user.$update({id: $scope.user.id}, function(user) {
                 Gui.resetSaveButton($scope);
 
@@ -70,14 +70,13 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
                 }
             });
         } else {
-            $scope.user = new User($scope.user);
             $scope.user.$create(function(user) {
-
                 Gui.resetSaveButton($scope);
 
-                if (redirectTo) {
-                    $location.path(redirectTo);
+                if (!redirectTo) {
+                    redirectTo = '/admin/user/edit/' + user.id;
                 }
+                $location.path(redirectTo);
             });
         }
     };
@@ -93,6 +92,8 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
 
             $scope.user = new User(user);
         });
+    } else {
+        $scope.user = new User();
     }
 });
 

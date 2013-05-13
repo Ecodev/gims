@@ -9,14 +9,25 @@
 
                 <div class="control-group" ng-class="{error: myForm.name.$invalid}">
                     <label for="user.name">Name</label>
-                    <input id="user.name" type="text" name="name" ng-model="user.name" required class="span6" />
+                    <input id="user.name" type="text" name="name" ng-model="user.name" required class="span6" ng-minlength="3"/>
                     <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+                    <span ng-show="myForm.name.$error.minlength" class="help-inline">It must be at least 3 character long</span>
                 </div>
 
-                <div class="control-group" ng-class="{error: myForm.name.$invalid}">
+                <div class="control-group" ng-class="{error: myForm.email.$invalid}">
                     <label for="user.email">Email</label>
-                    <input id="user.email" type="email" name="name" ng-model="user.email" required class="span6" />
-                    <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+                    <input id="user.email" type="email" name="email" ng-model="user.email" required class="span6"  />
+                    <span ng-show="myForm.email.$error.required" class="help-inline">Required</span>
+                </div>
+
+                <div class="control-group" ng-class="{error: myForm.password.$invalid || myForm.passwordVerify.$invalid}">
+                    <label for="user.password">Password</label>
+                    <input id="user.password" name="password" type="text" ng-model="user.password" placeholder="password" class="span6" ng-minlength="6">
+                    <span ng-show="myForm.password.$error.required" class="help-inline">Required</span>
+                    <span ng-show="myForm.password.$error.minlength" class="help-inline">It must be at least 6 character long</span>
+                    <br>
+                    <input name="passwordVerify" type="text" ng-model="user.passwordVerify" ui-validate=" '$value==user.password' " ui-validate-watch=" 'user.password' " placeholder="confirm password"  class="span6">
+                    <span ng-show="myForm.passwordVerify.$error.validator" class="help-inline">Passwords do not match!</span>
                 </div>
 
                 <!--
@@ -57,5 +68,5 @@
             </pane>
         </tabs>
     </form>
-<?php echo $this->metadata('user'); ?>
+    <?php echo $this->metadata('user'); ?>
 </div> <!-- /container -->

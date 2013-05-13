@@ -10,6 +10,36 @@ class UserController extends AbstractRestfulController
 {
 
     /**
+     * @var \ZfcUser\Service\User
+     */
+    protected $userService;
+
+    /**
+     * Get User Service
+     * @return \ZfcUser\Service\User
+     */
+    public function getUserService()
+    {
+        if (!$this->userService) {
+            $this->userService = $this->getServiceLocator()->get('zfcuser_user_service');
+        }
+
+        return $this->userService;
+    }
+
+    /**
+     * Set User Service
+     * @param \ZfcUser\Service\User $userService
+     * @return \Api\Controller\UserController
+     */
+    public function setUserService(\ZfcUser\Service\User $userService)
+    {
+        $this->userService = $userService;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     protected function getJsonConfig()
@@ -30,18 +60,16 @@ class UserController extends AbstractRestfulController
      */
     public function create($data)
     {
+        $data['display_name'] = $data['name'];
+        $user = $this->getUserService()->register($data);
 
-        $user = new User();
-        $this->hydrator->hydrate($data, $user);
-
-        // Update object or not...
-        if ($this->isAllowed($user)) {
-            $result = parent::create($data);
+        if ($user) {
+            $this->getResponse()->setStatusCode(201);
+            return new JsonModel($this->hydrator->extract($user, $this->getJsonConfig()));
         } else {
-            $this->getResponse()->setStatusCode(401);
-            $result = new JsonModel(array('message' => 'Authorization required'));
+            $this->getResponse()->setStatusCode(400);
+            return new JsonModel(array('message' => $this->getUserService()->getRegisterForm()->getMessages()));
         }
-        return $result;
     }
 
     /**
