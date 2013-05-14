@@ -2,23 +2,43 @@
 
 namespace Api\Controller;
 
+use Application\Model\Filter;
+use Application\Service\Hydrator;
 use Zend\View\Model\JsonModel;
 
 class FilterController extends AbstractRestfulController
 {
 
+    /**
+     * @return array
+     */
     protected function getJsonConfig()
     {
-        return array(
+        $config = array(
             'name',
             'isOfficial',
-            'children' => '__recursive',
             'summands' => array(
                 'name',
             ),
         );
+
+        $closure = function (Hydrator $hydrator, Filter $filter) use ($config) {
+            $result = array();
+            foreach ($filter->getChildren() as $child) {
+                if ($child->isOfficial()) {
+                    $result[] = $hydrator->extract($child, $config);
+                }
+            }
+            return $result;
+        };
+
+        $config['children'] = $closure;
+        return $config;
     }
 
+    /**
+     * @return mixed|JsonModel
+     */
     public function getList()
     {
         $filters = $this->getRepository()->getOfficialRoots();
