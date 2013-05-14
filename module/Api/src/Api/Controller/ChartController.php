@@ -96,7 +96,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'max' => 100,
             ),
             'plotOptions' => array(
-                'spline' => array(
+                'line' => array(
                     'marker' => array(
                         'enabled' => false,
                     ),
