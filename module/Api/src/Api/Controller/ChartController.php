@@ -28,7 +28,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $filterCount = $filterSet->getFilters()->count();
             $series = $calculator->computeFlatten($startYear, $endYear, $filterSet, $questionnaires, $part);
             foreach ($series as &$serie) {
-                $serie['type'] = 'spline';
+                $serie['type'] = 'line';
                 foreach ($serie['data'] as &$d) {
                     if (!is_null($d))
                         $d = round($d * 100);
