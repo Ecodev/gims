@@ -45,6 +45,9 @@ angular.module('myApp.resourceServices', ['ngResource'])
     })
     .factory('UserSurvey', function ($resource) {
         return $resource('/api/user/:idUser/user-survey/:id', {}, {
+            create: {
+                method: 'POST'
+            },
             update: {
                 method: 'PUT'
             }
@@ -96,18 +99,20 @@ angular.module('myApp.resourceServices', ['ngResource'])
     .factory('FilterSet', function ($resource) {
         return $resource('/api/filter-set/:id');
     })
-    .factory('Select2Configurator', function ($location) {
+    .factory('Select2Configurator', function ($location, $route) {
         return {
             configure: function ($scope, Resource, key) {
 
                 $scope.select2 = $scope.select2 || {};
                 $scope.select2[key] = $scope.select2[key] || {};
 
-                // When selected item changes, update URL
-                $scope.$watch('select2.' + key + '.selected.id', function (id) {
-                    if (id)
-                        $location.search(key, id);
-                });
+                // If current URL does not reload when url changes, then when selected item changes, update URL
+                if (!$route.current.$$route.reloadOnSearch) {
+                    $scope.$watch('select2.' + key + '.selected.id', function (id) {
+                        if (id)
+                            $location.search(key, id);
+                    });
+                }
 
 
                 var items;

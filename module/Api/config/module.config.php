@@ -14,6 +14,7 @@ return array(
             'Api\Controller\User' => 'Api\Controller\UserController',
             'Api\Controller\UserSurvey' => 'Api\Controller\UserSurveyController',
             'Api\Controller\UserQuestionnaire' => 'Api\Controller\UserQuestionnaireController',
+            'Api\Controller\Role' => 'Api\Controller\RoleController',
             'Api\Controller\Chart' => 'Api\Controller\ChartController',
         ),
     ),

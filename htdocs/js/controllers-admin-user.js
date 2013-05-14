@@ -3,6 +3,8 @@
 /* Controllers */
 angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $routeParams, $location, $resource, User, UserSurvey, UserQuestionnaire, Survey, Role, Modal, Gui, Select2Configurator) {
 
+    Select2Configurator.configure($scope, Survey, 'survey');
+    Select2Configurator.configure($scope, Role, 'role');
     // Default redirect
     var redirectTo = '/admin/user';
     if ($routeParams.returnUrl) {
@@ -16,8 +18,8 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
     // Configure ng-grid.
     $scope.userSurvey = $routeParams.id ? UserSurvey.query({idUser: $routeParams.id}) : [];
     $scope.gridSurveyOptions = {
+        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
         data: 'userSurvey',
-        showFooter: true,
         filterOptions: {
             filterText: 'filteringText',
             useExternalFilter: false
@@ -29,12 +31,22 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
             {cellTemplate: '<button type="button" class="btn btn-mini" ng-click="remove(row)"><i class="icon-trash icon-large"></i></button>'}
         ]
     };
-
+    $scope.addUserSurvey = function() {
+        var userSurvey = new UserSurvey({
+            user: $routeParams.id,
+            survey: $scope.select2.survey.selected.id,
+            role: $scope.select2.role.selected.id
+        });
+        $scope.isLoading = true;
+        userSurvey.$create({idUser: userSurvey.user}, function(userSurvey) {
+            $scope.userSurvey.push(userSurvey);
+            $scope.isLoading = false;
+        });
+    };
     // Configure ng-grid.
     $scope.userQuestionnaire = $routeParams.id ? UserQuestionnaire.query({idUser: $routeParams.id}) : [];
     $scope.gridQuestionnaireOptions = {
         data: 'userQuestionnaire',
-        showFooter: true,
         filterOptions: {
             filterText: 'filteringText',
             useExternalFilter: false
@@ -81,7 +93,8 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
     };
 
     // Delete a user
-    $scope.remove = function() {
+    $scope.remove = function(row) {
+        console.log(row);
         Modal.confirmDelete($scope.user);
     };
 
