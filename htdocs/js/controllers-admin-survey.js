@@ -1,5 +1,5 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, $window, $timeout, $resource, Survey, Modal, Gui) {
+angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, $window, $timeout, Survey, Modal, Gui) {
     "use strict";
 
     Gui.resetSaveButton($scope);
@@ -60,7 +60,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
 
     // Load survey if possible
     if ($routeParams.id > 0) {
-        Survey.get({id: $routeParams.id}, function (survey) {
+        Survey.get({id: $routeParams.id, fields: 'metadata,comments'}, function (survey) {
 
             // Cast "active" to be string for the need of the select menu.
             survey.active += ''; // string value
@@ -117,7 +117,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
 /**
  * Admin Survey Controller
  */
-angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeParams, $location, $window, $timeout, $resource, Survey, Modal) {
+angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeParams, $location, $window, $timeout, Survey, Modal) {
     "use strict";
 
     // Initialize
@@ -127,7 +127,7 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeP
         useExternalFilter: false
     };
 
-    $scope.surveys = $resource('/api/survey?fields=metadata,comments,questions').query(function () {
+    $scope.surveys = Survey.query({fields: 'metadata,comments,questions'}, function () {
 
         // Trigger resize event informing elements to resize according to the height of the window.
         $timeout(function () {

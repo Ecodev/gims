@@ -17,7 +17,7 @@ angular.module('myApp.resourceServices', ['ngResource'])
     })
     // @todo decide whether to rename me AdminSurvey
     .factory('Survey', function ($resource) {
-        return $resource('/api/survey/:id?fields=metadata,comments', {}, {
+        return $resource('/api/survey/:id', {}, {
             create: {
                 method: 'POST'
             },
@@ -31,6 +31,13 @@ angular.module('myApp.resourceServices', ['ngResource'])
             create: {
                 method: 'POST'
             },
+            update: {
+                method: 'PUT'
+            }
+        });
+    })
+    .factory('Role', function ($resource) {
+        return $resource('/api/role/:id', {}, {
             update: {
                 method: 'PUT'
             }

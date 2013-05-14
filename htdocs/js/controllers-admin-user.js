@@ -1,7 +1,7 @@
 'use strict';
 
 /* Controllers */
-angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $routeParams, $location, $resource, User, UserSurvey, UserQuestionnaire, Modal, Gui) {
+angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $routeParams, $location, $resource, User, UserSurvey, UserQuestionnaire, Survey, Role, Modal, Gui, Select2Configurator) {
 
     // Default redirect
     var redirectTo = '/admin/user';
@@ -87,7 +87,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
 
     // Load user if possible
     if ($routeParams.id > 0) {
-        $resource('/api/user/:id?fields=metadata').get({id: $routeParams.id}, function(user) {
+        User.get({id: $routeParams.id, fields: 'metadata'}, function(user) {
 
             $scope.user = new User(user);
         });

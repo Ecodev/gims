@@ -258,14 +258,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $http, 
     Select2Configurator.configure($scope, Part, 'part');
     Select2Configurator.configure($scope, FilterSet, 'filterSet');
 
-    // Demo using static data
-    /*
-    $http.get('/sampleChart.json').success(function(data) {
-        $scope.chart = data;
-    });
-    return true;
-    */
-
     // Whenever one of the parameter is changed
     var uniqueAjaxRequest;
     $scope.$watch('select2.country.selected.id + select2.part.selected.id + select2.filterSet.selected.id', function (a) {
