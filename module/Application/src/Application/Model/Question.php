@@ -228,6 +228,8 @@ class Question extends AbstractModel
     {
         $this->survey = $survey;
 
+        $this->survey->questionAdded($this);
+
         return $this;
     }
 
