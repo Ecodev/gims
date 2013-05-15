@@ -52,7 +52,7 @@ angular.module('myApp').controller('UserCtrl', function ($scope, $location, $htt
 
 });
 
-angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($scope, $routeParams, $location, $timeout, $window, QuestionnaireQuestion, Questionnaire, Answer) {
+angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($scope, $routeParams, $location, QuestionnaireQuestion, Questionnaire, Answer) {
 
     var cellEditableTemplate, numberOfAnswers, requiredNumberOfAnswers;
 
@@ -80,11 +80,6 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
                 }
                 $scope.originalQuestions.push(new QuestionnaireQuestion(question));
             });
-
-            // Trigger resize event informing elements to resize according to the height of the window.
-            $timeout(function () {
-                angular.element($window).resize();
-            }, 0);
         });
 
         // Here we use synchronous style affectation to be able to set initial

@@ -47,6 +47,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
     $scope.userQuestionnaire = $routeParams.id ? UserQuestionnaire.query({idUser: $routeParams.id}) : [];
     $scope.gridQuestionnaireOptions = {
         data: 'userQuestionnaire',
+        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
         filterOptions: {
             filterText: 'filteringText',
             useExternalFilter: false
@@ -116,7 +117,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
 /**
  * Admin User Controller
  */
-angular.module('myApp').controller('Admin/UserCtrl', function($scope, $routeParams, $location, $window, $timeout, User, Modal) {
+angular.module('myApp').controller('Admin/UserCtrl', function($scope, $location, User, Modal) {
 
     // Initialize
     $scope.filteringText = '';
@@ -126,13 +127,7 @@ angular.module('myApp').controller('Admin/UserCtrl', function($scope, $routePara
         useExternalFilter: false
     };
 
-    $scope.users = User.query(function(data) {
-
-        // Trigger resize event informing elements to resize according to the height of the window.
-        $timeout(function() {
-            angular.element($window).resize();
-        }, 0);
-    });
+    $scope.users = User.query();
 
     // Keep track of the selected row.
     $scope.selectedRow = [];
@@ -140,6 +135,7 @@ angular.module('myApp').controller('Admin/UserCtrl', function($scope, $routePara
     // Configure ng-grid.
     $scope.gridOptions = {
         data: 'users',
+        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
         enableCellSelection: true,
         showFooter: true,
         selectedItems: $scope.selectedRow,

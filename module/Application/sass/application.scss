@@ -73,3 +73,7 @@ div.browse .span4 {
     width: 60%;
     margin-left: -30%; /* -width/2 */
 }
+
+.gridStyle {
+    height: 1000px; // Use super big height, so the auto-resize works correctly
+}

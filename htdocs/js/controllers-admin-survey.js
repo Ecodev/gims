@@ -1,5 +1,5 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, $window, $timeout, Survey, Modal, Gui) {
+angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, Survey, Modal, Gui) {
     "use strict";
 
     Gui.resetSaveButton($scope);
@@ -70,11 +70,6 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
             // Cast "active" to be string for the need of the select menu.
             survey.active += ''; // string value
             $scope.survey = new Survey(survey);
-
-            // Trigger resize event informing elements to resize according to the height of the window.
-            $timeout(function () {
-                angular.element($window).resize();
-            }, 0);
         });
     }
 
@@ -99,6 +94,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
 
     // Configure ng-grid.
     $scope.gridQuestions = {
+        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
         data: 'survey.questions',
         enableCellSelection: true,
         showFooter: true,
@@ -122,7 +118,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
 /**
  * Admin Survey Controller
  */
-angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeParams, $location, $window, $timeout, Survey, Modal) {
+angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $location, Survey, Modal) {
     "use strict";
 
     // Initialize
@@ -132,19 +128,14 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeP
         useExternalFilter: false
     };
 
-    $scope.surveys = Survey.query({fields: 'metadata,comments,questions'}, function () {
-
-        // Trigger resize event informing elements to resize according to the height of the window.
-        $timeout(function () {
-            angular.element($window).resize();
-        }, 0);
-    });
+    $scope.surveys = Survey.query({fields: 'metadata,comments,questions'});
 
     // Keep track of the selected row.
     $scope.selectedRow = [];
 
     // Configure ng-grid.
     $scope.gridOptions = {
+        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
         data: 'surveys',
         enableCellSelection: true,
         showFooter: true,
