@@ -2,9 +2,11 @@
 
 namespace Api\Controller;
 
-use ZfcUser\Controller\UserController;
+use Zend\Http\Response;
+use Zend\View\Model\JsonModel;
+use Zend\Json\Json;
 
-class AuthController extends ZfcUser\Controller\UserController;
+class AuthController extends \ZfcUser\Controller\UserController
 {
     /**
      * Login form
@@ -21,28 +23,64 @@ class AuthController extends ZfcUser\Controller\UserController;
             $redirect = false;
         }
 
-        if (!$request->isPost()) {
-            return array(
-                'loginForm' => $form,
-                'redirect'  => $redirect,
-                'enableRegistration' => $this->getOptions()->getEnableRegistration(),
-            );
-        }
+        if ($request->isPost())
+        {
+            $data = Json::decode($request->getContent(), Json::TYPE_ARRAY);
+            var_dump($data);
+            $form->setData($data);
 
-        $form->setData($request->getPost());
+            if (!$form->isValid()) {
+                $response->setStatusCode(Response::STATUS_CODE_401); // Failed login attempt
+                return new JsonModel($form->getMessages());
+            }
 
-        if (!$form->isValid()) {
-            $reponse->setStatusCode(Response::STATUS_CODE_401); // Failed login attempt
-            return array(
-                'message' => $this->failedLoginMessage,
-            );
         }
 
         // clear adapters
         $this->zfcUserAuthentication()->getAuthAdapter()->resetAdapters();
         $this->zfcUserAuthentication()->getAuthService()->clearIdentity();
 
-        return $this->forward()->dispatch(static::CONTROLLER_NAME, array('action' => 'authenticate'));
+        return $this->authenticateAction();
+
+    }
+
+    /**
+     * General-purpose authentication action
+     */
+    public function authenticateAction()
+    {
+        $response = $this->getResponse();
+    
+        if ($this->zfcUserAuthentication()->getAuthService()->hasIdentity()) {
+            return new JsonModel(array(
+                'status' => 'success'
+            ));
+        }
+        $adapter = $this->zfcUserAuthentication()->getAuthAdapter();
+
+        $result = $adapter->prepareForAuthentication($this->getRequest());
+
+        // Return early if an adapter returned a response
+        if ($result instanceof Response) {
+            $response->setStatusCode(Response::STATUS_CODE_401);
+            return new JsonModel(array(
+                'status' => 'adapter failed'
+            ));
+        }
+
+        $auth = $this->zfcUserAuthentication()->getAuthService()->authenticate($adapter);
+
+        if (!$auth->isValid()) {
+            $response->setStatusCode(Response::STATUS_CODE_401);
+            return new JsonModel(array(
+                'status' => 'failed'
+            ));
+        }
+
+        return new JsonModel(array(
+            'status' => 'success'
+        ));
+
     }
 
 }

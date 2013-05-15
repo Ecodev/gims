@@ -41,7 +41,7 @@ angular.module('myApp').controller('UserCtrl', function ($scope, $location, $htt
     });
 
     $scope.sendLogin = function () {
-        $http.post('/user/login', {data: $scope.login}).success(function (data) {
+        $http.post('/user/login', $scope.login).success(function (data) {
             console.log('Success', data);
             return false;
         }).error(function (data, status, headers) {
