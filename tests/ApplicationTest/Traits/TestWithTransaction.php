@@ -32,6 +32,7 @@ trait TestWithTransaction
     {
         $this->getEntityManager()->rollback();
         $this->getEntityManager()->clear();
+        $this->getEntityManager()->getConnection()->close();
     }
 
 }
