@@ -63,7 +63,7 @@
                 </div>
             </pane>
 
-            <pane heading="Question" active="panes[1].active">
+            <pane heading="Questions" active="panes[1].active">
 
                 <div class="row-fluid">
                     <div class="span9">
@@ -80,8 +80,12 @@
                 <div ng-grid="gridQuestions" class="gridStyle"></div>
             </pane>
 
-            <pane heading="Questionnaire" active="panes[2].active">
+            <pane heading="Questionnaires" active="panes[2].active">
                 1234
+            </pane>
+
+            <pane heading="Users">
+                <div relations="{relation: 'UserSurvey', first: 'survey', second: 'user', third: 'role'}"></div>
             </pane>
         </tabs>
 

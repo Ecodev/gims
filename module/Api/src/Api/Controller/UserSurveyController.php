@@ -10,23 +10,23 @@ class UserSurveyController extends AbstractRestfulController
 {
 
     /**
-     * @var \Application\Model\User
+     * @var \Application\Model\AbstractModel
      */
-    protected $user;
+    protected $parent;
 
     /**
-     * Get the user
-     * @return \Application\Model\User
+     * Get the parent, either User, Survey, or Role
+     * @return \Application\Model\AbstractModel
      */
-    protected function getUser()
+    protected function getParent()
     {
-        $idUser = $this->params('idUser');
-        if (!$this->user && $idUser) {
-            $userRepository = $this->getEntityManager()->getRepository('Application\Model\User');
-            $this->user = $userRepository->find($idUser);
+        $id = $this->params('idParent');
+        if (!$this->parent && $id) {
+            $userRepository = $this->getEntityManager()->getRepository('Application\Model\\' . ucfirst($this->params('parent')));
+            $this->parent = $userRepository->find($id);
         }
 
-        return $this->user;
+        return $this->parent;
     }
 
     /**
@@ -51,15 +51,15 @@ class UserSurveyController extends AbstractRestfulController
 
     public function getList()
     {
-        $user = $this->getUser();
+        $parent = $this->getParent();
 
         // Cannot list all userSurvey, without specifying a user
-        if (!$user) {
+        if (!$parent) {
             $this->getResponse()->setStatusCode(404);
             return;
         }
 
-        $userSurveys = $this->getRepository()->findByUser($user);
+        $userSurveys = $this->getRepository()->findBy(array($this->params('parent') => $parent));
 
         return new JsonModel($this->hydrator->extractArray($userSurveys, $this->getJsonConfig()));
     }

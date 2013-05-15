@@ -74,14 +74,15 @@ return array(
                             ),
                         ),
                     ),
-                    'user-survey' => array(
+                    // This route allow to ask for subobjects of an object
+                    'subobject' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => '/user/:idUser/[:controller[/:id]]',
+                            'route' => '/:parent/:idParent/:controller[/:id]',
                             'constraints' => array(
+                                'parent' => '(user|survey|role)',
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'idQuestionnaire' => '[0-9]+',
+                                'idParent' => '[0-9]+',
                                 'id' => '[0-9]+',
                             ),
                             'defaults' => array(),
