@@ -54,8 +54,13 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
     };
 
     // Delete a survey
-    $scope.remove = function () {
-        Modal.confirmDelete($scope.survey);
+    $scope.delete = function () {
+        Modal.confirmDelete($scope.survey, {label: $scope.survey.code, returnUrl: '/admin/survey'});
+    };
+
+    // Delete a question
+    $scope.deleteQuestion = function (row) {
+        Modal.confirmDelete(row.entity, {objects: $scope.survey.questions, label: row.entity.name, returnUrl: '/admin/survey'});
     };
 
     // Load survey if possible
@@ -104,7 +109,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
             {field: 'sorting', displayName: '#', width: '50px'},
             {field: 'name', displayName: 'Name'},
             {displayName: '', width: '100px', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
-                '<button type="button" class="btn btn-mini" ng-click="delete(row)" ><i class="icon-trash icon-large"></i></button>'}
+                '<button type="button" class="btn btn-mini" ng-click="deleteQuestion(row)" ><i class="icon-trash icon-large"></i></button>'}
         ]
     };
 
@@ -156,12 +161,8 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $routeP
         ]
     };
 
-    $scope.remove = function () {
-
-        // Add a little timeout to enabling the event "selectRow" to be propagated
-        $timeout(function () {
-            Modal.confirmDelete($scope.selectedRow[0], $scope.surveys);
-        }, 0);
+    $scope.delete = function (row) {
+        Modal.confirmDelete(row.entity, {objects: $scope.surveys, label: row.entity.code, returnUrl: '/admin/survey'});
     };
 
     $scope.edit = function (row) {

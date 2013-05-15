@@ -54,7 +54,7 @@ select2.js \
 ../../lib/angular/angular.min.js \
 ../../lib/angular/angular-resource.min.js \
 ../../lib/angular-ui/build/angular-ui.min.js \
-../../lib/ui-bootstrap/ui-bootstrap-tpls-0.2.0.min.js \
+../../lib/ui-bootstrap/ui-bootstrap-tpls-0.3.0.min.js \
 ../../lib/ng-grid/build/ng-grid.min.js \
 ../../lib/ng-grid/plugins/ng-grid-flexible-height.js \
 angular-highcharts-directive.js \

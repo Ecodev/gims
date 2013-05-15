@@ -28,7 +28,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
         columnDefs: [
             {field: 'survey.name', displayName: 'Survey'},
             {field: 'role.name', displayName: 'Role', width: '250px'},
-            {cellTemplate: '<button type="button" class="btn btn-mini" ng-click="remove(row)"><i class="icon-trash icon-large"></i></button>'}
+            {cellTemplate: '<button type="button" class="btn btn-mini" ng-click="deleteUserSurvey(row)"><i class="icon-trash icon-large"></i></button>'}
         ]
     };
     $scope.addUserSurvey = function() {
@@ -55,7 +55,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
         columnDefs: [
             {field: 'questionnaire.name', displayName: 'Questionnaire'},
             {field: 'role.name', displayName: 'Role', width: '250px'},
-            {cellTemplate: '<button type="button" class="btn btn-mini" ng-click="remove(row)"><i class="icon-trash icon-large"></i></button>'}
+            {cellTemplate: '<button type="button" class="btn btn-mini" ng-click="delete(row)"><i class="icon-trash icon-large"></i></button>'}
         ]
     };
 
@@ -93,9 +93,13 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
     };
 
     // Delete a user
-    $scope.remove = function(row) {
-        console.log(row);
-        Modal.confirmDelete($scope.user);
+    $scope.delete = function() {
+        Modal.confirmDelete($scope.user, {label: $scope.user.name, returnUrl: '/admin/user'});
+    };
+
+    // Delete a userSurvey
+    $scope.deleteUserSurvey = function(row) {
+        Modal.confirmDelete(row.entity, {params: {idUser: $scope.user.id}, objects: $scope.userSurvey, label: row.entity.survey.name + ' - ' + row.entity.role.name});
     };
 
     // Load user if possible
@@ -146,16 +150,12 @@ angular.module('myApp').controller('Admin/UserCtrl', function($scope, $routePara
             {field: 'email', displayName: 'Email', cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a href="mailto:{{row.entity[col.field]}}">{{row.entity[col.field]}}</a></div>'},
             {field: 'active', displayName: 'Active', cellFilter: 'checkmark', width: '100px'},
             {displayName: '', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
-                        '<button type="button" class="btn btn-mini" ng-click="remove(row)" ><i class="icon-trash icon-large"></i></button>'}
+                        '<button type="button" class="btn btn-mini" ng-click="delete(row)" ><i class="icon-trash icon-large"></i></button>'}
         ]
     };
 
-    $scope.remove = function(row) {
-
-        // Add a little timeout to enabling the event "selectRow" to be propagated
-        $timeout(function() {
-            Modal.confirmDelete($scope.selectedRow[0], $scope.users);
-        }, 0);
+    $scope.delete = function(row) {
+        Modal.confirmDelete(row.entity, {objects: $scope.users, label: row.entity.name});
     };
 
     $scope.edit = function(row) {

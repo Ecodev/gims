@@ -5,46 +5,45 @@
 /**
  * Admin Survey service
  */
-angular.module('myApp.adminSurveyServices', [])
+angular.module('myApp.adminServices', [])
     .factory('Modal', function ($dialog, $location) {
         return {
-            confirmDelete: function (survey, surveys) {
+            confirmDelete: function (object, options) {
+                options = options || {};
 
-                var buttons, msg, title, index;
-
-                // index view would contains $scope.surveys but not in detail view
-                if (surveys !== undefined) {
-
-                    // IndexOf is only supported as of IE9... so find a work around for older browser.
-                    // index = surveys.indexOf(survey);
-
-                    // Fall back method for finding the index of survey
-                    angular.forEach(surveys, function (_survey, _index) {
-                        if (survey.id == _survey.id) {
-                            index = _index;
-                            return;
-                        }
-                    });
+                var msg, title, buttons;
+                if (options.label) {
+                    msg = 'Do you want to delete "' + options.label + '" ?';
+                } else {
+                    msg = 'Do you want to delete it ?';
                 }
-
-                title = 'Confirmation delete';
-                msg = 'You are going to delete survey "' + survey.code + '". Are you sure?';
+                title = 'Confirm deletion';
                 buttons = [
                     {result: 'cancel', label: 'Cancel'},
                     {result: 'delete', label: 'Delete', cssClass: 'btn-danger'}
                 ];
+
                 $dialog.messageBox(title, msg, buttons)
                     .open()
                     .then(function (result) {
                         if (result === 'delete') {
+                            var params = options.params || {};
+                            params.id = object.id;
+                            object.$delete(params, function () {
 
-                            survey.$delete({id: survey.id}, function () {
+                                // If we have an array, also remove from the array
+                                if (options.objects) {
 
-                                // True means we are in index view where $scope.survey was available
-                                if (index >= 0) {
-                                    surveys.splice(index, 1); // remove from local storage
+                                    angular.forEach(options.objects, function (o, i) {
+                                        if (object.id == o.id) {
+                                            options.objects.splice(i, 1); // remove from local storage
+                                        }
+                                    });
                                 }
-                                $location.path('/admin/survey');
+
+                                if (options.returnUrl) {
+                                    $location.path(options.returnUrl);
+                                }
                             });
                         }
                     });

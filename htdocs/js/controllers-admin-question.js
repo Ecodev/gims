@@ -47,8 +47,8 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     };
 
     // Delete a question
-    $scope.remove = function () {
-        Modal.confirmDelete($scope.question);
+    $scope.delete = function () {
+        Modal.confirmDelete($scope.question, {label: $scope.question.name, returnUrl: $location.search().returnUrl});
     };
 
     // Create object with default value

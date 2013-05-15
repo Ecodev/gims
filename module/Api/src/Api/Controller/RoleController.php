@@ -27,7 +27,7 @@ class RoleController extends AbstractRestfulController
      */
     public function create($data)
     {
-        throw new Exception('Not implemented');
+        throw new \Exception('Not implemented');
     }
 
     /**
@@ -38,7 +38,7 @@ class RoleController extends AbstractRestfulController
      */
     public function update($id, $data)
     {
-        throw new Exception('Not implemented');
+        throw new \Exception('Not implemented');
     }
 
     /**
@@ -48,7 +48,7 @@ class RoleController extends AbstractRestfulController
      */
     public function delete($id)
     {
-        throw new Exception('Not implemented');
+        throw new \Exception('Not implemented');
     }
 
 }

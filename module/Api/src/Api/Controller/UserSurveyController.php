@@ -3,7 +3,7 @@
 namespace Api\Controller;
 
 use Application\Assertion\SurveyAssertion;
-use Application\Model\Survey;
+use Application\Model\UserSurvey;
 use Zend\View\Model\JsonModel;
 
 class UserSurveyController extends AbstractRestfulController
@@ -35,21 +35,19 @@ class UserSurveyController extends AbstractRestfulController
     protected function getJsonConfig()
     {
         return array_merge(
-            array(
-                'survey' => array(
-                    'name',
-                ),
-                'role' => array(
-                    'name',
-                ),
-                'user' => array(
-                    'name',
-                ),
+                array(
+            'survey' => array(
+                'name',
             ),
-            parent::getJsonConfig()
+            'role' => array(
+                'name',
+            ),
+            'user' => array(
+                'name',
+            ),
+                ), parent::getJsonConfig()
         );
     }
-
 
     public function getList()
     {
@@ -74,17 +72,16 @@ class UserSurveyController extends AbstractRestfulController
      */
     public function create($data)
     {
-
-        $survey = new Survey();
-        $this->hydrator->hydrate($data, $survey);
+        $userSurvey = new UserSurvey();
 
         // Update object or not...
-        if ($this->isAllowed($survey)) {
+        if ($this->isAllowed($userSurvey)) {
             $result = parent::create($data);
         } else {
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));
         }
+
         return $result;
     }
 
@@ -96,20 +93,7 @@ class UserSurveyController extends AbstractRestfulController
      */
     public function update($id, $data)
     {
-        // Retrieve survey since permissions apply against it.
-        $repository = $this->getEntityManager()->getRepository($this->getModel());
-
-        /** @var $survey \Application\Model\Answer */
-        $survey = $repository->findOneById($id);
-
-        // Update object or not...
-        if ($this->isAllowed($survey)) {
-            $result = parent::update($id, $data);
-        } else {
-            $this->getResponse()->setStatusCode(401);
-            $result = new JsonModel(array('message' => 'Authorization required'));
-        }
-        return $result;
+        throw new \Exception('Not implemented');
     }
 
     /**
@@ -119,18 +103,13 @@ class UserSurveyController extends AbstractRestfulController
      */
     public function delete($id)
     {
-
-        // Retrieve survey since permissions apply against it.
-        $repository = $this->getEntityManager()->getRepository($this->getModel());
-
-        /** @var $survey \Application\Model\Answer */
-        $survey = $repository->findOneById($id);
+        $userSurvey =  $this->getRepository()->findOneById($id);
 
         // Update object or not...
-        if (is_null($survey)) {
+        if (is_null($userSurvey)) {
             $this->getResponse()->setStatusCode(404);
             $result = new JsonModel(array('message' => 'No object found'));
-        } elseif ($this->isAllowed($survey)) {
+        } elseif ($this->isAllowed($userSurvey)) {
             $result = parent::delete($id);
         } else {
             $this->getResponse()->setStatusCode(401);
@@ -142,21 +121,18 @@ class UserSurveyController extends AbstractRestfulController
     /**
      * Ask Rbac whether the User is allowed to update
      *
-     * @param Survey $survey
+     * @param UserSurvey $userSurvey
      *
      * @return bool
      */
-    protected function isAllowed(Survey $survey)
+    protected function isAllowed(UserSurvey $userSurvey)
     {
         // @todo remove me once login will be better handled GUI wise
         return true;
 
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-        return $rbac->isGrantedWithContext(
-            $survey,
-            Permission::CAN_CREATE_OR_UPDATE_ANSWER,
-            new SurveyAssertion($survey)
-        );
+        return $rbac->isGranted(Permission::CAN_CREATE_OR_UPDATE_ANSWER);
     }
+
 }

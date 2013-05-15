@@ -40,7 +40,7 @@ class CrudButtons extends \Zend\View\Helper\AbstractHtmlElement
 
         <a ng-click="cancel()" class="btn">Cancel</a>
 
-        <button ng-click="remove()"
+        <button ng-click="delete()"
                 ng-show="$objectName.id" class="btn btn-danger"><i class="icon-trash"></i> Delete
         </button>
 STRING;

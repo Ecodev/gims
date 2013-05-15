@@ -12,11 +12,11 @@ angular.module('myApp', [
         'myApp.directives',
         'myApp.adminQuestionDirectives',
         'myApp.resourceServices',
-        'myApp.adminSurveyServices',
+        'myApp.adminServices',
         'chartsExample.directives',
         '$strap.directives'
     ]).
-    config(function ($routeProvider, $locationProvider) {
+    config(function ($routeProvider, $locationProvider, $dialogProvider) {
         $routeProvider.when('/home', {templateUrl: '/template/application/index/home', controller: 'MyCtrl1'});
         $routeProvider.when('/about', {templateUrl: '/template/application/index/about', controller: 'MyCtrl1'});
         $routeProvider.when('/browse', {templateUrl: '/template/browse', controller: 'MyCtrl1'});
@@ -36,4 +36,6 @@ angular.module('myApp', [
         $routeProvider.otherwise({redirectTo: '/home'});
 
         $locationProvider.html5Mode(true);
+
+        $dialogProvider.options({backdropFade: true, dialogFade:true});
     });
