@@ -43,7 +43,7 @@ angular.module('myApp.resourceServices', ['ngResource'])
         });
     })
     .factory('UserSurvey', function ($resource) {
-        return $resource('/api/user/:idUser/user-survey/:id', {}, {
+        return $resource('/api/:parent/:idParent/user-survey/:id', {}, {
             create: {
                 method: 'POST'
             },
@@ -53,7 +53,7 @@ angular.module('myApp.resourceServices', ['ngResource'])
         });
     })
     .factory('UserQuestionnaire', function ($resource) {
-        return $resource('/api/user/:idUser/user-questionnaire/:id', {}, {
+        return $resource('/api/:parent/:idParent/user-questionnaire/:id', {}, {
             create: {
                 method: 'POST'
             },

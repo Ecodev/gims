@@ -34,7 +34,7 @@ angular.module('myApp.adminServices', [])
                                 // If we have an array, also remove from the array
                                 if (options.objects) {
                                     angular.forEach(options.objects, function (o, i) {
-                                        if (params.id === o.id) {
+                                        if (object === o) {
                                             options.objects.splice(i, 1); // remove from local storage
                                         }
                                     });

@@ -36,7 +36,7 @@ angular.module('myApp.directives', [])
                 '<input name="third" ui-select2="select2.third.list" ng-model="select2.third.selected" data-placeholder="Select a {{third}}" style="width:100%;"/>' +
                 '</span>' +
                 '<span class="span1">' +
-                '<button class="btn" ng-click="add()">Add</button> <i class="icon-loading" ng-show="isLoading"></i>' +
+                '<button class="btn" ng-click="add()" ng-class="{disabled: !select2.second.selected || !select2.third.list}">Add</button> <i class="icon-loading" ng-show="isLoading"></i>' +
                 '</span>' +
                 '</div>' +
                 '</div>',
@@ -66,7 +66,7 @@ angular.module('myApp.directives', [])
             Select2Configurator.configure($scope, Third, 'third');
 
             // Configure ng-grid
-            $scope.relations = $routeParams.id ? Relation.query({idUser: $routeParams.id}) : [];
+            $scope.relations = $routeParams.id ? Relation.query({parent: options.first, idParent: $routeParams.id}) : [];
             $scope.gridOptions = {
                 plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
                 data: 'relations',
@@ -78,12 +78,17 @@ angular.module('myApp.directives', [])
                 columnDefs: [
                     {field: options.second + '.name', displayName: capitaliseFirstLetter(options.second)},
                     {field: options.third + '.name', displayName: capitaliseFirstLetter(options.third), width: '250px'},
-                    {cellTemplate: '<button type="button" class="btn btn-mini" ng-click="delete(row)"><i class="icon-trash icon-large"></i></button>'}
+                    {width: '90px', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="delete(row)"><i class="icon-trash icon-large"></i></button>'}
                 ]
             };
 
             // Add a relation
             $scope.add = function() {
+
+                if (!$scope.select2.second.selected || !$scope.select2.third.selected) {
+                    return;
+                }
+
                 $scope.isLoading = true;
                 var data = {};
                 data[options.first] = $routeParams.id;
@@ -91,7 +96,7 @@ angular.module('myApp.directives', [])
                 data[options.third] = $scope.select2.third.selected.id;
 
                 var relation = new Relation(data);
-                relation.$create({idUser: relation.user}, function(newRelation) {
+                relation.$create(function(newRelation) {
                     $scope.relations.push(newRelation);
                     $scope.isLoading = false;
                 });
@@ -99,7 +104,7 @@ angular.module('myApp.directives', [])
 
             // Delete a relation
             $scope.delete = function(row) {
-                Modal.confirmDelete(row.entity, {params: {idUser: $routeParams.id}, objects: $scope.relations, label: row.entity[options.second].name + ' - ' + row.entity[options.third].name});
+                Modal.confirmDelete(row.entity, {objects: $scope.relations, label: row.entity[options.second].name + ' - ' + row.entity[options.third].name});
             };
 
         }
