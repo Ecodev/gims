@@ -32,6 +32,7 @@ class QuestionController extends AbstractRestfulController
         $controller = $this;
         return array(
             'name',
+            'sorting',
             'filter' => array(
                 'name',
                 'parents' => array(

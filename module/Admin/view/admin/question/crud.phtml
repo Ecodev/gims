@@ -26,7 +26,11 @@
             <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
         </div>
 
-        {{question | json}}
+        <div class="control-group" ng-class="{error: myForm.sorting.$invalid}" ng-show="question.id">
+            <label for="question.sorting">Sorting</label>
+            <input id="question.sorting" type="text" name="sorting" ng-model="question.sorting" class="span6"/>
+        </div>
+
     </form>
 
     <?php echo $this->metadata('question'); ?>

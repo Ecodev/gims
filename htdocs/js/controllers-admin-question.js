@@ -35,12 +35,18 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
             });
         } else {
             $scope.question.survey = $routeParams.survey;
-            $scope.question.$create(function () {
+            delete $scope.question.sorting; // let the server define the sorting value
+            $scope.question.$create(function (question) {
 
                 Gui.resetSaveButton($scope);
 
                 if (redirectTo) {
                     $location.path(redirectTo).search({});
+                } else {
+                    // redirect to edit URL
+                    redirectTo = sprintf('admin/question/edit/%s', question.id);
+                    $location.path(redirectTo);
+
                 }
             });
         }
