@@ -77,3 +77,14 @@ div.browse .span4 {
 .gridStyle {
     height: 1000px; // Use super big height, so the auto-resize works correctly
 }
+
+// Automatically insert '>' between breadcrumbs
+.breadcrumb {
+    li:after {
+        content: ' > ';
+        color: #ccc;
+    }
+    li:last-child:after {
+        content: '';
+    }
+}

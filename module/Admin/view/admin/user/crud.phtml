@@ -1,5 +1,11 @@
 <div class="container">
-    <h2>Users > {{user.name}}</h2>
+
+    <h2>
+        <ul class="breadcrumb">
+            <li><a href="/admin/user">Users</a></li>
+            <li class="active">{{user.name}}</li>
+        </ul>
+    </h2>
     <form name="myForm">
 
         <?php echo $this->crudButtons('user'); ?>
@@ -22,11 +28,11 @@
 
                 <div class="control-group" ng-class="{error: myForm.password.$invalid || myForm.passwordVerify.$invalid}">
                     <label for="user.password">Password</label>
-                    <input id="user.password" name="password" type="text" ng-model="user.password" placeholder="password" class="span6" ng-minlength="6">
+                    <input id="user.password" name="password" type="password" ng-model="user.password" placeholder="password" class="span6" ng-minlength="6">
                     <span ng-show="myForm.password.$error.required" class="help-inline">Required</span>
                     <span ng-show="myForm.password.$error.minlength" class="help-inline">It must be at least 6 character long</span>
                     <br>
-                    <input name="passwordVerify" type="text" ng-model="user.passwordVerify" ui-validate=" '$value==user.password' " ui-validate-watch=" 'user.password' " placeholder="confirm password"  class="span6">
+                    <input name="passwordVerify" type="password" ng-model="user.passwordVerify" ui-validate=" '$value==user.password' " ui-validate-watch=" 'user.password' " placeholder="confirm password"  class="span6">
                     <span ng-show="myForm.passwordVerify.$error.validator" class="help-inline">Passwords do not match!</span>
                 </div>
 
