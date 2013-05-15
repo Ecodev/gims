@@ -1,6 +1,7 @@
 {
     "predef": [  // Custom globals.
         "angular",
+        "ngGridFlexibleHeightPlugin",
         "console",
         "sprintf",
         "$"
