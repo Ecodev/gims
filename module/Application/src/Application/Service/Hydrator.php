@@ -184,14 +184,15 @@ class Hydrator
     {
 
         $repository = Module::getEntityManager()->getRepository($modelName);
-        $records = $repository->findById($id);
+        $record = $repository->findOneById($id);
 
         // raise exception if object does not exist in the DB.
-        if (empty($records[0])) {
+        if (!$record) {
             $message = sprintf('No object "%s" found for id: %s', $modelName, $id);
             throw new \Exception($message, 1365442789);
         }
-        return $records[0];
+
+        return $record;
     }
 
     /**

@@ -1,63 +1,16 @@
 'use strict';
 
 /* Controllers */
-angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $routeParams, $location, $resource, User, UserSurvey, UserQuestionnaire, Survey, Role, Modal, Gui, Select2Configurator) {
+angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $routeParams, $location, $resource, User, Modal, Gui, Select2Configurator) {
 
-    Select2Configurator.configure($scope, Survey, 'survey');
-    Select2Configurator.configure($scope, Role, 'role');
     // Default redirect
-    var redirectTo = '/admin/user';
+    var returnUrl = '/admin/user';
     if ($routeParams.returnUrl) {
-        redirectTo = $routeParams.returnUrl;
+        returnUrl = $routeParams.returnUrl;
     }
 
     $scope.cancel = function() {
-        $location.path(redirectTo).search('returnUrl', null);
-    };
-
-    // Configure ng-grid.
-    $scope.userSurvey = $routeParams.id ? UserSurvey.query({idUser: $routeParams.id}) : [];
-    $scope.gridSurveyOptions = {
-        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
-        data: 'userSurvey',
-        filterOptions: {
-            filterText: 'filteringText',
-            useExternalFilter: false
-        },
-        multiSelect: false,
-        columnDefs: [
-            {field: 'survey.name', displayName: 'Survey'},
-            {field: 'role.name', displayName: 'Role', width: '250px'},
-            {cellTemplate: '<button type="button" class="btn btn-mini" ng-click="deleteUserSurvey(row)"><i class="icon-trash icon-large"></i></button>'}
-        ]
-    };
-    $scope.addUserSurvey = function() {
-        var userSurvey = new UserSurvey({
-            user: $routeParams.id,
-            survey: $scope.select2.survey.selected.id,
-            role: $scope.select2.role.selected.id
-        });
-        $scope.isLoading = true;
-        userSurvey.$create({idUser: userSurvey.user}, function(userSurvey) {
-            $scope.userSurvey.push(userSurvey);
-            $scope.isLoading = false;
-        });
-    };
-    // Configure ng-grid.
-    $scope.userQuestionnaire = $routeParams.id ? UserQuestionnaire.query({idUser: $routeParams.id}) : [];
-    $scope.gridQuestionnaireOptions = {
-        data: 'userQuestionnaire',
-        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
-        filterOptions: {
-            filterText: 'filteringText',
-            useExternalFilter: false
-        },
-        multiSelect: false,
-        columnDefs: [
-            {field: 'questionnaire.name', displayName: 'Questionnaire'},
-            {field: 'role.name', displayName: 'Role', width: '250px'},
-            {cellTemplate: '<button type="button" class="btn btn-mini" ng-click="delete(row)"><i class="icon-trash icon-large"></i></button>'}
-        ]
+        $location.path(returnUrl).search('returnUrl', null);
     };
 
     $scope.actives = [
@@ -66,7 +19,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
     ];
 
     $scope.saveAndClose = function() {
-        this.save(redirectTo);
+        this.save(returnUrl);
     };
 
     $scope.save = function(redirectTo) {
@@ -95,12 +48,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
 
     // Delete a user
     $scope.delete = function() {
-        Modal.confirmDelete($scope.user, {label: $scope.user.name, returnUrl: '/admin/user'});
-    };
-
-    // Delete a userSurvey
-    $scope.deleteUserSurvey = function(row) {
-        Modal.confirmDelete(row.entity, {params: {idUser: $scope.user.id}, objects: $scope.userSurvey, label: row.entity.survey.name + ' - ' + row.entity.role.name});
+        Modal.confirmDelete($scope.user, {label: $scope.user.name, returnUrl: returnUrl});
     };
 
     // Load user if possible

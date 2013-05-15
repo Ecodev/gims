@@ -46,42 +46,11 @@
             </pane>
 
             <pane heading="Surveys">
-
-                <div class="row-fluid">
-                    <div class="span9">
-                        <input type="text" ng-model="filteringText" placeholder="Search..." class="search" style="width: 400px"/>
-                    </div>
-                </div>
-
-                <div ng-grid="gridSurveyOptions" class="gridStyle"></div>
-
-                <div class="well" ng-show="user.id">
-                    <span class="span4">
-                        <input name="survey" ui-select2="select2.survey.list" ng-model="select2.survey.selected" data-placeholder="<?php echo $this->translate('Select a survey') ?>"  style="width:100%;"/>
-                    </span>
-                    <span class="span4">
-                        <input name="role" ui-select2="select2.role.list" ng-model="select2.role.selected" data-placeholder="<?php echo $this->translate('Select a role') ?>"  style="width:100%;"/>
-                    </span>
-                    <span class="span1">
-                        <button class="btn" ng-click="addUserSurvey()"><?php echo $this->translate('Add') ?></button>
-                        <i class="icon-loading" ng-show="isLoading"></i>
-                    </span>
-                </div>
-
+                <div relations="{relation: 'UserSurvey', first: 'user', second: 'survey', third: 'role'}"></div>
             </pane>
 
             <pane heading="Questionnaires">
-
-                <div class="row-fluid">
-                    <div class="span9">
-                        <input type="text" ng-model="filteringText" placeholder="Search..." class="search" style="width: 400px"/>
-                    </div>
-                    <div class="span3" style="text-align: right">
-                        <a href="/admin/user/new"><i class="icon-plus-sign"></i> new user</a>
-                    </div>
-                </div>
-
-                <div ng-grid="gridQuestionnaireOptions" class="gridStyle"></div>
+                <div relations="{relation: 'UserQuestionnaire', first: 'user', second: 'questionnaire', third: 'role'}"></div>
             </pane>
         </tabs>
     </form>

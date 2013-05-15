@@ -54,6 +54,9 @@ angular.module('myApp.resourceServices', ['ngResource'])
     })
     .factory('UserQuestionnaire', function ($resource) {
         return $resource('/api/user/:idUser/user-questionnaire/:id', {}, {
+            create: {
+                method: 'POST'
+            },
             update: {
                 method: 'PUT'
             }
