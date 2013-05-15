@@ -1,4 +1,3 @@
-'use strict';
 
 /* Services */
 
@@ -7,6 +6,7 @@
  */
 angular.module('myApp.adminServices', [])
     .factory('Modal', function ($dialog, $location) {
+        'use strict';
         return {
             confirmDelete: function (object, options) {
                 options = options || {};
@@ -33,9 +33,8 @@ angular.module('myApp.adminServices', [])
 
                                 // If we have an array, also remove from the array
                                 if (options.objects) {
-
                                     angular.forEach(options.objects, function (o, i) {
-                                        if (object.id == o.id) {
+                                        if (params.id === o.id) {
                                             options.objects.splice(i, 1); // remove from local storage
                                         }
                                     });
@@ -50,7 +49,8 @@ angular.module('myApp.adminServices', [])
             }
         };
     })
-    .factory('Gui', function ($dialog, $location) {
+    .factory('Gui', function () {
+        'use strict';
         return {
             resetSaveButton: function (scope) {
                 // Defining label for GUI.

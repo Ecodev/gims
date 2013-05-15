@@ -1,5 +1,5 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, Survey, Modal, Gui) {
+angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, Survey, Question, Modal, Gui) {
     "use strict";
 
     Gui.resetSaveButton($scope);
@@ -60,7 +60,8 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
 
     // Delete a question
     $scope.deleteQuestion = function (row) {
-        Modal.confirmDelete(row.entity, {objects: $scope.survey.questions, label: row.entity.name, returnUrl: '/admin/survey'});
+        var question = new Question(row.entity);
+        Modal.confirmDelete(question, {objects: $scope.survey.questions, label: question.name, returnUrl: $location.path()});
     };
 
     // Load survey if possible
