@@ -98,45 +98,21 @@ class SurveyController extends AbstractRestfulController
      */
     protected function getJsonConfig()
     {
-        $controller = $this;
-
-        $config = array_merge(
+        return array_merge(
             array(
                  'name',
                  'code',
                  'active',
                  'year',
-                 'questions' => function (\Application\Service\Hydrator $hydrator, Survey $survey) use ($controller) {
-
-                     /** @var \Application\Repository\QuestionRepository $questionRepository */
-                     $questionRepository = $controller->getEntityManager()->getRepository('Application\Model\Question');
-                     $questions = $questionRepository->findBy(
-                         array(
-                              'survey' => $survey,
-                         ),
-                         array(
-                              'sorting' => 'ASC'
-                         )
-                     );
-
-                     $questions = $hydrator->extractArray(
-                         $questions, array(
-                                          'name',
-                                          'sorting',
-                                     )
-                     );
-
-                     return $questions;
-                 }
-                 ,
+                 'questions' => array(
+                     'name',
+                     'sorting',
+                 ),
                  'dateStart',
                  'dateEnd',
             ),
             parent::getJsonConfig()
         );
-
-
-        return $config;
     }
 
     /**

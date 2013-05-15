@@ -29,7 +29,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
 
     /**
      * @var ArrayCollection
-     *
+     * @ORM\OrderBy({"sorting" = "ASC"})
      * @ORM\OneToMany(targetEntity="Question", mappedBy="survey")
      */
     private $questions;

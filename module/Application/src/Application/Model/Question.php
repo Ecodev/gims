@@ -100,7 +100,7 @@ class Question extends AbstractModel
      */
     public function getSorting()
     {
-        return $this->sorting;
+        return (int) $this->sorting;
     }
 
     /**

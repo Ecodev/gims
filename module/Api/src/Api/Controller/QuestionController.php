@@ -108,12 +108,28 @@ class QuestionController extends AbstractRestfulController
     {
         // Retrieve question since permissions apply against it.
         /** @var $question \Application\Model\Question */
-        $repository = $this->getEntityManager()->getRepository($this->getModel());
-        $question = $repository->findOneById($id);
+        $questionRepository = $this->getEntityManager()->getRepository($this->getModel());
+        $question = $questionRepository->findOneById($id);
         $survey = $question->getSurvey();
 
         // Update object or not...
         if ($this->isAllowedSurvey($survey) && $this->isAllowedQuestion($question)) {
+
+            // true means we have to move sorting values up and down
+            if (!empty($data['sorting']) && $data['sorting'] < $question->getSorting()) {
+
+                foreach ($survey->getQuestions() as $_question) {
+                    if ($_question->getSorting() >= $data['sorting'] && $_question->getSorting() < $question->getSorting()) {
+                        $_question->setSorting($_question->getSorting() + 1);
+                    }
+                }
+            } elseif (!empty($data['sorting']) && $data['sorting'] > $question->getSorting()) {
+                foreach ($survey->getQuestions() as $_question) {
+                    if ($_question->getSorting() <= $data['sorting'] && $_question->getSorting() > $question->getSorting()) {
+                        $_question->setSorting($_question->getSorting() - 1);
+                    }
+                }
+            }
             $result = parent::update($id, $data);
         } else {
             $this->getResponse()->setStatusCode(401);

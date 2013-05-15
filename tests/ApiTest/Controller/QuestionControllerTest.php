@@ -2,6 +2,7 @@
 
 namespace ApiTest\Controller;
 
+use Application\Model\Question;
 use Zend\Http\Request;
 
 class QuestionControllerTest extends AbstractController
@@ -133,5 +134,86 @@ class QuestionControllerTest extends AbstractController
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $actual = $this->getJsonResponse();
         $this->assertEquals($data['name'], $actual['name']);
+    }
+
+    /**
+     * @test
+     */
+    public function countNumberOfQuestionsReturnsByMethodGetQuestionsReturnsOne()
+    {
+        $this->assertCount(1, $this->survey->getQuestions());
+    }
+
+    private function getMockQuestions(){
+
+        // create four additional questions next to the one created in the abstract
+        // -> they will be five questions connected to a survey
+        $questions[1] = $this->question;
+        foreach (array(2, 3, 4, 5) as $value) {
+
+            $question = new Question();
+            $question->setSurvey($this->survey)
+                ->setSorting($value)
+                ->setType(1)
+                ->setFilter($this->filter)
+                ->setName('bar');
+
+            $this->getEntityManager()->persist($question);
+            $questions[$value] = $question;
+        }
+        $this->getEntityManager()->flush();
+        $this->assertCount(5, $this->survey->getQuestions());
+
+        return $questions;
+    }
+
+    /**
+     * @test
+     */
+    public function moveSortingValueOfLastQuestionToFirstAndCheckWhetherSortingValueOfOtherQuestionsAreShifted()
+    {
+
+        $questions = $this->getMockQuestions();
+
+        $route = $route = sprintf(
+            '/api/question?id=%s',
+            $questions[5]->getId()
+        );
+
+        $data = array(
+            'sorting' => 1,
+        );
+
+        $this->dispatch($route, Request::METHOD_PUT, $data);
+
+        $sortingValues = array(2,3,4,5,1);
+        foreach ($this->survey->getQuestions() as $key => $question) {
+            $this->assertSame($sortingValues[$key], $question->getSorting());
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function moveSortingValueOfFirstQuestionToLastAndCheckWhetherSortingValueOfOtherQuestionsAreShifted()
+    {
+
+        $questions = $this->getMockQuestions();
+
+        $route = $route = sprintf(
+            '/api/question?id=%s',
+            $questions[1]->getId()
+        );
+
+        $data = array(
+            'sorting' => 5,
+        );
+
+        $this->dispatch($route, Request::METHOD_PUT, $data);
+
+        $sortingValues = array(5, 1, 2, 3, 4);
+        foreach ($this->survey->getQuestions() as $key => $question) {
+            $this->assertSame($sortingValues[$key], $question->getSorting());
+        }
     }
 }
