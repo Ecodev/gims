@@ -238,11 +238,15 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     }
 
     /**
-     * @param \Application\Model\ArrayCollection $questions
+     * Notify the survey that he was added to the question.
+     * This should only be called by Question::setSurvey()
+     * @param Question $question
+     * @return Survey
      */
-    public function setQuestions($questions)
+    public function questionAdded(Question $question)
     {
-        $this->questions = $questions;
+        $this->getQuestions()->add($question);
+
         return $this;
     }
 
