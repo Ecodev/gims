@@ -1,5 +1,5 @@
 /* Directives */
-angular.module('myApp.adminQuestionDirectives', [])
+angular.module('myApp.directives')
     .directive('linkNewQuestion', function ($compile, $routeParams) {
         return {
             restrict: "E",

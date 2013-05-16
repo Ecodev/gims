@@ -11,7 +11,7 @@ files = [
   JASMINE_ADAPTER,
   'htdocs/lib/autoload/*',
   'htdocs/lib/angular/angular-mocks.js',
-  'htdocs/js/*.js',
+  'htdocs/js/**/*.js',
   'tests/unit/**/*.js'
 ];
 

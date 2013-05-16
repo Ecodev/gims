@@ -2,11 +2,11 @@
 
 /* Filters */
 
-angular.module('myApp.filters', [])
+angular.module('myApp.filters')
     .filter('interpolate', ['version', function (version) {
         return function (text) {
             return String(text).replace(/\%VERSION\%/mg, version);
-        }
+        };
     }])
     .filter('percent', function () {
         return function (number) {
@@ -15,6 +15,6 @@ angular.module('myApp.filters', [])
             }
             var value = number * 100;
             return Math.round(value * 10) / 10 + '%';
-        }
+        };
     });
 

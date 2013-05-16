@@ -1,26 +1,7 @@
-/* Directives */
-angular.module('myApp.directives', [])
-        .directive('appVersion', ['version', function(version) {
-        return function(scope, elm) {
-            elm.text(version);
-        };
-    }])
-        .directive('ngBlur', function() {
-    return function(scope, elem, attrs) {
-        elem.bind('blur', function() {
-            scope.$apply(attrs.ngBlur);
-        });
-    };
-})
-        .directive('ngKeyup', function() {
-    return function(scope, elem, attrs) {
-        elem.bind('keyup', function() {
-            scope.$apply(attrs.ngKeyup);
-        });
-    };
-})
 
-        .directive('relations', function() {
+angular.module('myApp.directives').directive('relations', function() {
+    'use strict';
+
     return {
         restrict: 'A', // Only usage possible is with attribute
         // This HTML will replace the directive.

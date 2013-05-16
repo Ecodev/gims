@@ -10,9 +10,6 @@ angular.module('myApp', [
         'myApp.filters',
         'myApp.services',
         'myApp.directives',
-        'myApp.adminQuestionDirectives',
-        'myApp.resourceServices',
-        'myApp.adminServices',
         'chartsExample.directives',
         '$strap.directives'
     ]).
@@ -39,3 +36,8 @@ angular.module('myApp', [
 
         $dialogProvider.options({backdropFade: true, dialogFade:true});
     });
+
+// Here we declare all our modules, so we can get them back whenever we want
+angular.module('myApp.filters', []);
+angular.module('myApp.services', ['ngResource']);
+angular.module('myApp.directives', []);

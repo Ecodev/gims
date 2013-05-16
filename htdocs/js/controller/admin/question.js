@@ -1,8 +1,8 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, $routeParams, $location, $resource, Question, Filter, Modal, Gui) {
+angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, $routeParams, $location, $resource, Question, Filter, Modal) {
     "use strict";
 
-    Gui.resetSaveButton($scope);
+    $scope.sending = false;
 
     // Default redirect
     var redirectTo = '/';
@@ -27,7 +27,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
         $scope.question.filter = $scope.question.filter.id;
         if ($scope.question.id > 0) {
             $scope.question.$update({id: $scope.question.id}, function () {
-                Gui.resetSaveButton($scope);
+                $scope.sending = false;
 
                 if (redirectTo) {
                     $location.path(redirectTo).search({});
@@ -38,7 +38,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
             delete $scope.question.sorting; // let the server define the sorting value
             $scope.question.$create(function (question) {
 
-                Gui.resetSaveButton($scope);
+                $scope.sending = false;
 
                 if (redirectTo) {
                     $location.path(redirectTo).search({});

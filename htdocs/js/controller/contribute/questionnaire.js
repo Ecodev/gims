@@ -1,58 +1,6 @@
-'use strict';
-
-/* Controllers */
-
-
-angular.module('myApp').controller('MyCtrl1', function () {
-
-});
-
-angular.module('myApp').controller('ContributeCtrl', function($scope, $http) {
-
-    // TODO: replace with actual logged in user ID
-    $http.get('/api/user/1/statistics').success(function(data) {
-        $scope.statistics = data;
-    });
-});
-
-angular.module('myApp').controller('UserCtrl', function ($scope, $location, $http) {
-
-    $scope.promptLogin = function () {
-        $scope.showLogin = true;
-        $scope.redirect = $location.absUrl();
-    };
-
-    $scope.cancelLogin = function () {
-        $scope.showLogin = false;
-    };
-
-    $scope.opts = {
-        backdropFade: true,
-        dialogFade: true
-    };
-
-    $scope.login = {};
-    $scope.register = {};
-
-    // Keep current URL up to date, so we can login and come back to current page
-    $scope.redirect = $location.absUrl();
-    $scope.$on("$routeChangeSuccess", function (event, current, previous) {
-        $scope.redirect = $location.absUrl();
-    });
-
-    $scope.sendLogin = function () {
-        $http.post('/user/login', $scope.login).success(function (data) {
-            console.log('Success', data);
-            return false;
-        }).error(function (data, status, headers) {
-            console.log('Error', status);
-            return false;
-        });
-    };
-
-});
 
 angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($scope, $routeParams, $location, QuestionnaireQuestion, Questionnaire, Answer) {
+    'use strict';
 
     var cellEditableTemplate, numberOfAnswers, requiredNumberOfAnswers;
 
@@ -242,42 +190,5 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
         formatResult: formatResult,
         formatSelection: formatSelection
     };
-
-});
-
-
-angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $http, Country, Part, FilterSet, Select2Configurator, $timeout) {
-
-    // Configure select2 via our helper service
-    Select2Configurator.configure($scope, Country, 'country');
-    Select2Configurator.configure($scope, Part, 'part');
-    Select2Configurator.configure($scope, FilterSet, 'filterSet');
-
-    // Whenever one of the parameter is changed
-    var uniqueAjaxRequest;
-    $scope.$watch('select2.country.selected.id + select2.part.selected.id + select2.filterSet.selected.id', function (a) {
-
-        // If they are all available ...
-        if ($scope.select2.country.selected && $scope.select2.part.selected && $scope.select2.filterSet.selected) {
-            $scope.isLoading = true;
-            $timeout.cancel(uniqueAjaxRequest);
-            uniqueAjaxRequest = $timeout(function () {
-
-                // ... then, get chart data via Ajax, but only once per 200 milliseconds
-                // (this avoid sending several request on page loading)
-                $http.get('/api/chart',
-                        {
-                            params: {
-                                country: $scope.select2.country.selected.id,
-                                part: $scope.select2.part.selected.id,
-                                filterSet: $scope.select2.filterSet.selected.id
-                            }
-                        }).success(function (data) {
-                    $scope.chart = data;
-                    $scope.isLoading = false;
-                });
-            }, 200);
-        }
-    });
 
 });

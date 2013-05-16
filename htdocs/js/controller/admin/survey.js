@@ -1,8 +1,8 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, Survey, Question, Modal, Gui) {
+angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, Survey, Question, Modal) {
     "use strict";
 
-    Gui.resetSaveButton($scope);
+    $scope.sending = false;
 
     // Default redirect
     var redirectTo = '/admin/survey';
@@ -34,7 +34,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
         // First case is for update a survey, second is for creating
         if ($scope.survey.id > 0) {
             $scope.survey.$update({id: $scope.survey.id}, function () {
-                Gui.resetSaveButton($scope);
+                $scope.sending = false;
 
                 if (redirectTo) {
                     $location.path(redirectTo);
@@ -44,7 +44,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
             $scope.survey = new Survey($scope.survey);
             $scope.survey.$create(function () {
 
-                Gui.resetSaveButton($scope);
+                $scope.sending = false;
 
                 if (redirectTo) {
                     $location.path(redirectTo);

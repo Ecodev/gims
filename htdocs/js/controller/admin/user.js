@@ -1,7 +1,6 @@
-'use strict';
-
 /* Controllers */
-angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $routeParams, $location, $resource, User, Modal, Gui, Select2Configurator) {
+angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $routeParams, $location, User, Modal) {
+    'use strict';
 
     // Default redirect
     var returnUrl = '/admin/user';
@@ -28,7 +27,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
         // First case is for update a user, second is for creating
         if ($scope.user.id) {
             $scope.user.$update({id: $scope.user.id}, function(user) {
-                Gui.resetSaveButton($scope);
+                $scope.sending = false;
 
                 if (redirectTo) {
                     $location.path(redirectTo);
@@ -36,7 +35,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
             });
         } else {
             $scope.user.$create(function(user) {
-                Gui.resetSaveButton($scope);
+                $scope.sending = false;
 
                 if (!redirectTo) {
                     redirectTo = '/admin/user/edit/' + user.id;
@@ -66,6 +65,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
  * Admin User Controller
  */
 angular.module('myApp').controller('Admin/UserCtrl', function($scope, $location, User, Modal) {
+    'use strict';
 
     // Initialize
     $scope.filteringText = '';

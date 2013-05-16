@@ -4,7 +4,7 @@
 /**
  * Admin Survey service
  */
-angular.module('myApp.adminServices', [])
+angular.module('myApp.services')
     .factory('Modal', function ($dialog, $location) {
         'use strict';
         return {
@@ -46,15 +46,6 @@ angular.module('myApp.adminServices', [])
                             });
                         }
                     });
-            }
-        };
-    })
-    .factory('Gui', function () {
-        'use strict';
-        return {
-            resetSaveButton: function (scope) {
-                // Defining label for GUI.
-                scope.sending = false;
             }
         };
     });
