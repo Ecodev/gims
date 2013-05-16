@@ -9,19 +9,8 @@ proxies = {
 files = [
   JASMINE,
   JASMINE_ADAPTER,
-  'htdocs/lib/jquery/jquery-*.min.js',
-  'htdocs/lib/select2/select2.js',
-  'htdocs/lib/angular/angular.js',
-  'htdocs/lib/angular/angular-*.js',
-  'htdocs/lib/angular-ui/build/angular-ui.min.js',
-  'htdocs/lib/ui-bootstrap/ui-bootstrap-tpls*.js',
-  'htdocs/lib/ng-grid/build/ng-grid.min.js',
-  'htdocs/lib/angular-highcharts-directive/src/directives/highchart.js',
-  'htdocs/lib/bootstrap-js/bootstrap.min.js',
-  'htdocs/lib/angular-strap/angular-strap.js',
-  'htdocs/lib/angular-strap/bootstrap-datepicker.js',
-  'htdocs/lib/sprintf/sprintf.min.js',
-  'tests/lib/angular/angular-mocks.js',
+  'htdocs/lib/autoload/*',
+  'htdocs/lib/angular/angular-mocks.js',
   'htdocs/js/*.js',
   'tests/unit/**/*.js'
 ];

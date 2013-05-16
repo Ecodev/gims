@@ -27,9 +27,8 @@
                 <include name="*" />
             </fileset>
         </delete>
-        <delete dir=".sass-cache/" includeemptydirs="true" verbose="true" />
         <delete dir="htdocs/css/" includeemptydirs="true" verbose="true" />
-        <delete dir="htdocs/js/min/" includeemptydirs="true" verbose="true" />
+        <delete dir="htdocs/tmp/" includeemptydirs="true" verbose="true" />
     </target>
 
     <target name="test" depends="validate-schema,phpunit,karma-unit,karma-e2e" description="run all tests available">

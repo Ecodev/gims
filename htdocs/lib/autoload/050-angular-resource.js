@@ -1,0 +1,1 @@
+../angular/angular-resource.js

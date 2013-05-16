@@ -17,44 +17,10 @@
         <!-- Scripts -->
         <?php
         echo $this->headScript()->prependFile('/js/min/html5shiv.js', 'text/javascript', array('conditional' => 'lt IE 9',))
-                ->prependFile(array('/js/min/application.js',
+                ->appendFile(array('/tmp/application.js',
                     array(
-                        // CAUTION: This must be the exact same files in reverse order than in bin/build.sh
-
-                        // Our own scripts
-                        '/js/min/directives.js',
-                        '/js/min/directives-admin-question.js',
-                        '/js/min/filters.js',
-                        '/js/min/controllers.js',
-                        '/js/min/controllers-admin-question.js',
-                        '/js/min/controllers-admin-survey.js',
-                        '/js/min/controllers-admin-user.js',
-                        '/js/min/services.js',
-                        '/js/min/services-admin.js',
-                        '/js/min/app.js',
-
-                        '/lib/sprintf/sprintf.min.js',
-
-                        // Angular-strap lib
-                        '/lib/angular-strap/bootstrap-datepicker.js',
-                        '/lib/angular-strap/angular-strap.min.js',
-                        '/lib/bootstrap-js/bootstrap.min.js',
-
-                        // AngularJS core and libs
-                        '/lib/angular-http-auth/src/http-auth-interceptor.js',
-                        '/lib/angular-highcharts-directive/src/directives/highchart.js',
-                        '/lib/ng-grid/plugins/ng-grid-flexible-height.js',
-                        '/lib/ng-grid/build/ng-grid.min.js',
-                        '/lib/ui-bootstrap/ui-bootstrap-tpls-0.3.0.min.js',
-                        '/lib/angular-ui/build/angular-ui.min.js',
-                        '/lib/angular/angular-resource.min.js',
-                        '/lib/angular/angular.min.js',
-
-                        // Non AngularJS stuff
-                        '/lib/highcharts/highcharts-more.js',
-                        '/lib/highcharts/highcharts.js',
-                        '/lib/select2/select2.js',
-                        '/lib/jquery/jquery-1.9.1.min.js',
+                        '/lib/autoload',
+                        '/js',
                     )
                 ))
         ?>

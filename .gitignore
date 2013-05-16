@@ -4,7 +4,7 @@ data/cache
 data/docs/api
 data/logs
 htdocs/css
-htdocs/js/min
+htdocs/tmp
 nbproject/private
 vendor
 reset.sh

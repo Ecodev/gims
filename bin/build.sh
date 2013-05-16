@@ -29,47 +29,17 @@ echo "Compiling CSS..."
 compass compile -s compressed --force
 
 echo "Compiling JavaScript..."
-cd htdocs/js
-mkdir -p min
-for file in *.js ; do
-    echo "$file"
-    ngmin "$file" >(uglifyjs - -o "min/$file")
+TARGET="tmp/application.js"
+cd htdocs
+rm -f $TARGET
+
+# First do lib, then our own code
+for jsDir in lib/autoload/ js/ ; do
+    for file in `find -L $jsDir -type f -name '*.js' | sort` ; do
+        echo "$file"
+        D=`dirname $file`
+        mkdir -p "tmp/$D"
+        more "$file" | ngmin | uglifyjs - -o "tmp/$file" # uglify the code
+        cat "tmp/$file" >> $TARGET # concatenate in a single file
+    done
 done
-
-# Also compress libs which are not compressed
-ngmin "../lib/select2/select2.js" >(uglifyjs - -o "min/select2.js")
-ngmin "../lib/angular-highcharts-directive/src/directives/highchart.js" >(uglifyjs - -o "min/angular-highcharts-directive.js")
-
-sleep 2
-
-echo "Concatenate JavaScript..."
-cd min/
-
-# CAUTION: This must be the exact same files in reverse order than in module/Application/view/application/index/index.phtml
-cat \
-../../lib/jquery/jquery-1.9.1.min.js \
-select2.js \
-../../lib/highcharts/highcharts.js \
-../../lib/highcharts/highcharts-more.js \
-../../lib/angular/angular.min.js \
-../../lib/angular/angular-resource.min.js \
-../../lib/angular-ui/build/angular-ui.min.js \
-../../lib/ui-bootstrap/ui-bootstrap-tpls-0.3.0.min.js \
-../../lib/ng-grid/build/ng-grid.min.js \
-../../lib/ng-grid/plugins/ng-grid-flexible-height.js \
-angular-highcharts-directive.js \
-../../lib/bootstrap-js/bootstrap.min.js \
-../../lib/angular-strap/angular-strap.js \
-../../lib/angular-strap/bootstrap-datepicker.js \
-../../lib/sprintf/sprintf.js \
-app.js \
-services-admin.js \
-services.js \
-controllers-admin-user.js \
-controllers-admin-survey.js \
-controllers-admin-question.js \
-controllers.js \
-filters.js \
-directives-admin-question.js \
-directives.js \
-> application.js
