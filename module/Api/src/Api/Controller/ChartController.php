@@ -31,7 +31,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $serie['type'] = 'line';
                 foreach ($serie['data'] as &$d) {
                     if (!is_null($d))
-                        $d = round($d * 100);
+                        $d = round($d * 100, 1);
                 }
             }
 

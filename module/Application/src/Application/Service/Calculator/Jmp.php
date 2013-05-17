@@ -241,9 +241,9 @@ class Jmp extends Calculator
         } elseif ($year < $d['maxYear'] + 7 && $year > $d['minYear'] - 7 && ($d['count'] < 2 || $d['period'] < 5)) {
             $result = \PHPExcel_Calculation_Statistical::AVERAGE($d['values%']);
         } elseif ($year > $d['minYear'] - 7 && $year < $d['minYear'] - 1) {
-            $result = \PHPExcel_Calculation_Statistical::FORECAST($year - 2, $d['values%'], $d['years']);
+            $result = \PHPExcel_Calculation_Statistical::FORECAST($d['minYear'] - 2, $d['values%'], $d['years']);
         } elseif ($year > $d['maxYear'] + 1 && $year < $d['maxYear'] + 7) {
-            $result = \PHPExcel_Calculation_Statistical::FORECAST($year + 2, $d['values%'], $d['years']);
+            $result = \PHPExcel_Calculation_Statistical::FORECAST($d['maxYear'] + 2, $d['values%'], $d['years']);
         } else {
             $result = null;
         }
