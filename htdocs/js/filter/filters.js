@@ -10,7 +10,7 @@ angular.module('myApp.filters')
     }])
     .filter('percent', function () {
         return function (number) {
-            if (number == null) {
+            if (number === null) {
                 return "";
             }
             var value = number * 100;

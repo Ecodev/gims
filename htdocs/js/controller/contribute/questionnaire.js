@@ -12,7 +12,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
 
         // @todo improve me! Hardcoded value... (Urban, Rural, Total)
         requiredNumberOfAnswers = 3;
-        $scope.questions = QuestionnaireQuestion.query({idQuestionnaire: $routeParams.id}, function (questions) {
+        $scope.questions = QuestionnaireQuestion.query({idQuestionnaire: $routeParams.id}, function () {
 
             // Store copy of original object
             angular.forEach($scope.questions, function (question) {
@@ -39,7 +39,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
 
     // When questionnaire changes, navigate to its URL
     $scope.$watch('selectedQuestionnaire', function (questionnaire) {
-        if (questionnaire && (questionnaire.id != $routeParams.id)) {
+        if (questionnaire && (questionnaire.id !== $routeParams.id)) {
             $location.path('/contribute/questionnaire/' + questionnaire.id);
         }
     });
@@ -48,8 +48,19 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
     $scope.validateAnswer = function (column, row) {
 
         var answerIndex = /[0-9]+/g.exec(column.field)[0];
-        var answer = new Answer(row.entity.answers[answerIndex]);
+        var answer = row.entity.answers[answerIndex];
 
+        // Try detecting whether the user has typed .12 to be converted to 0.12
+        var result = answer.valuePercent + '';
+        if (result.charAt(0) === '.') {
+            result = '0' + result;
+            answer.valuePercent = result - 0;
+        }
+
+        // Set 0 value is user has entered fantasist values
+        if (isNaN(parseInt(answer.valuePercent, 10))) {
+            answer.valuePercent = 0;
+        }
 
         // Allowed value is between [0-1]
         if (answer.valuePercent >= 0 && answer.valuePercent <= 1) {
@@ -67,8 +78,6 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
         var answerIndex = reg.exec(column.field)[0];
         var question = row.entity;
 
-        // @todo change me to take advantage of selected row (?)
-        // var answer = $scope.selectedRow
         var answer = new Answer(question.answers[answerIndex]);
 
         // Get the field and check whether it has an error class
@@ -81,7 +90,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
 
             // True means the answer exists and must be updated. Otherwise, create a new answer
             if (answer.id > 0) {
-                answer.$update({id: answer.id}, function (data) {
+                answer.$update({id: answer.id}, function () {
 
                     // Update the question model in memory. Other way?
                     question.$get({idQuestionnaire: $routeParams.id, id: question.id});
@@ -98,7 +107,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
                 }
                 answer.question = question.id;
                 answer.questionnaire = $routeParams.id;
-                answer.$create(function (data) {
+                answer.$create(function () {
 
                     // Update the question model in memory. Other way?
                     question.$get({idQuestionnaire: $routeParams.id, id: question.id});
@@ -151,7 +160,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
                 // create an answer
                 angular.forEach(question.answers, function (answerObject) {
                     var answer = new Answer(answerObject);
-                    answer.$update({id: answer.id}, function (data) {
+                    answer.$update({id: answer.id}, function () {
                         $scope.sending--;
                     });
                 });
