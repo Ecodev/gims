@@ -9,7 +9,7 @@ angular.module('myApp.directives').directive('relations', function() {
         transclude: true,
         template: '<div>' +
                 '<div ng-grid="gridOptions" class="gridStyle"></div>' +
-                '<div class="well" ng-hide="isReadOnly">' +
+                '<div class="well control-group" ng-class="{error: exists}" ng-hide="isReadOnly">' +
                 '<span class="span4">' +
                 '<input name="second" ui-select2="select2.second.list" ng-model="select2.second.selected" data-placeholder="Select a {{second}}" style="width:100%;"/>' +
                 '</span>' +
@@ -17,8 +17,8 @@ angular.module('myApp.directives').directive('relations', function() {
                 '<input name="third" ui-select2="select2.third.list" ng-model="select2.third.selected" data-placeholder="Select a {{third}}" style="width:100%;"/>' +
                 '</span>' +
                 '<span class="span1">' +
-                '<button class="btn" ng-click="add()" ng-class="{disabled: !select2.second.selected || !select2.third.list}">Add</button> <i class="icon-loading" ng-show="isLoading"></i>' +
-                '</span>' +
+                '<button class="btn" ng-click="add()" ng-class="{disabled: !select2.second.selected || !select2.third.list || exists}">Add</button> <i class="icon-loading" ng-show="isLoading"></i>' +
+                '</span><span class="help-inline" ng-show="exists">This relation already exists</span>' +
                 '</div>' +
                 '</div>',
         // The linking function will add behavior to the template
@@ -66,7 +66,7 @@ angular.module('myApp.directives').directive('relations', function() {
             // Add a relation
             $scope.add = function() {
 
-                if (!$scope.select2.second.selected || !$scope.select2.third.selected) {
+                if (!$scope.select2.second.selected || !$scope.select2.third.selected || $scope.exists) {
                     return;
                 }
 
@@ -87,6 +87,18 @@ angular.module('myApp.directives').directive('relations', function() {
             $scope.delete = function(row) {
                 Modal.confirmDelete(row.entity, {objects: $scope.relations, label: row.entity[options.second].name + ' - ' + row.entity[options.third].name});
             };
+
+            // Prevent adding duplicated relations
+            $scope.$watch('select2.second.selected.id + ":" + select2.third.selected.id + ":" + relations.length', function() {
+                $scope.exists = false;
+                if ($scope.select2.second.selected && $scope.select2.third.selected) {
+                    angular.forEach($scope.relations, function(relation) {
+                        if (relation[options.second].id == $scope.select2.second.selected.id && relation[options.third].id == $scope.select2.third.selected.id) {
+                            $scope.exists = true;
+                        }
+                    });
+                }
+            });
 
         }
     };
