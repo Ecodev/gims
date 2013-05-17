@@ -460,7 +460,7 @@ class Jmp extends AbstractImporter
                         continue;
                     }
 
-                    $question = $this->getQuestion($survey, $filter, $answerCount);
+                    $question = $this->getQuestion($survey, $filter, $row);
 
                     // If question already exists, maybe the answer also already exists, in that case we will overwrite its value
                     $answer = null;
@@ -636,14 +636,14 @@ class Jmp extends AbstractImporter
      * Returns a question either from database, or newly created
      * @param \Application\Model\Questionnaire $survey
      * @param \Application\Model\Filter $filter
-     * @param integer $sorting Sorting of the question
+     * @param integer $row Sorting of the question
      * @return \Application\Model\Question
      */
-    protected function getQuestion(\Application\Model\Survey $survey, \Application\Model\Filter $filter, $sorting)
+    protected function getQuestion(\Application\Model\Survey $survey, \Application\Model\Filter $filter, $row)
     {
         $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question');
 
-        $key = $survey->getCode() . '::' . $filter->getName() . '::' . $sorting;
+        $key = $survey->getCode() . '::' . $filter->getName() . '::' . $row;
 
         if (array_key_exists($key, $this->cacheQuestions)) {
             $question = $this->cacheQuestions[$key];
@@ -658,7 +658,7 @@ class Jmp extends AbstractImporter
 
             $question->setSurvey($survey);
             $question->setFilter($filter);
-            $question->setSorting($sorting);
+            $question->setSorting($survey->getQuestions()->count());
             $question->setName('Percentage of population?');
             $question->setHasParts(true);
             $question->setType('foo'); // @TODO: find out better value

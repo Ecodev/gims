@@ -28,7 +28,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     private $code;
 
     /**
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OrderBy({"sorting" = "ASC"})
      * @ORM\OneToMany(targetEntity="Question", mappedBy="survey")
      */
@@ -230,7 +230,8 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     }
 
     /**
-     * @return \Application\Model\ArrayCollection
+     * Get questions
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getQuestions()
     {
