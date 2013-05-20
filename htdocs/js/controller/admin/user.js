@@ -1,6 +1,7 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $routeParams, $location, User, Modal) {
+angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $routeParams, $location, Modal, Restangular) {
     'use strict';
+$scope.s = 'assaas';
 
     // Default redirect
     var returnUrl = '/admin/user';
@@ -26,7 +27,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
 
         // First case is for update a user, second is for creating
         if ($scope.user.id) {
-            $scope.user.$update({id: $scope.user.id}, function(user) {
+            $scope.user.put().then(function() {
                 $scope.sending = false;
 
                 if (redirectTo) {
@@ -34,7 +35,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
                 }
             });
         } else {
-            $scope.user.$create(function(user) {
+            Restangular.all('user').post($scope.user).then(function(user) {
                 $scope.sending = false;
 
                 if (!redirectTo) {
@@ -50,21 +51,21 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
         Modal.confirmDelete($scope.user, {label: $scope.user.name, returnUrl: returnUrl});
     };
 
-    // Load user if possible
-    if ($routeParams.id > 0) {
-        User.get({id: $routeParams.id, fields: 'metadata'}, function(user) {
 
-            $scope.user = new User(user);
+    // Load user if possible
+    if ($routeParams.id) {
+        Restangular.one('user', $routeParams.id).get({fields: 'metadata'}).then(function(user) {
+            $scope.user = user;
         });
     } else {
-        $scope.user = new User();
+        $scope.user = {};
     }
 });
 
 /**
  * Admin User Controller
  */
-angular.module('myApp').controller('Admin/UserCtrl', function($scope, $location, User, Modal) {
+angular.module('myApp').controller('Admin/UserCtrl', function($scope, $location, Restangular, Modal) {
     'use strict';
 
     // Initialize
@@ -75,7 +76,7 @@ angular.module('myApp').controller('Admin/UserCtrl', function($scope, $location,
         useExternalFilter: false
     };
 
-    $scope.users = User.query();
+    $scope.users = Restangular.all('user').getList();
 
     // Keep track of the selected row.
     $scope.selectedRow = [];

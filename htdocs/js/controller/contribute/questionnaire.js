@@ -1,5 +1,5 @@
 
-angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($scope, $routeParams, $location, QuestionnaireQuestion, Questionnaire, Answer) {
+angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($scope, $routeParams, $location, Restangular) {
     'use strict';
 
     var cellEditableTemplate, numberOfAnswers, requiredNumberOfAnswers;
@@ -12,10 +12,10 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
 
         // @todo improve me! Hardcoded value... (Urban, Rural, Total)
         requiredNumberOfAnswers = 3;
-        $scope.questions = QuestionnaireQuestion.query({idQuestionnaire: $routeParams.id}, function () {
-
+        Restangular.one('questionnaire', $routeParams.id).all('question').getList().then(function(questions) {
+            $scope.questions = questions;
             // Store copy of original object
-            angular.forEach($scope.questions, function (question) {
+            angular.forEach(questions, function (question) {
 
                 // Make sure we have the right number existing in the Model
                 numberOfAnswers = question.answers.length;
@@ -23,16 +23,16 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
 
                     // create an empty answer for the need of NgGrid
                     for (var index = 0; index < requiredNumberOfAnswers - numberOfAnswers; index++) {
-                        question.answers.push(new Answer());
+                        question.answers.push({});
                     }
                 }
-                $scope.originalQuestions.push(new QuestionnaireQuestion(question));
+                $scope.originalQuestions.push(Restangular.copy(question));
             });
         });
 
         // Here we use synchronous style affectation to be able to set initial
         // value of Select2 (after Select2 itself is initialized)
-        Questionnaire.get({id: $routeParams.id}, function (questionnaire) {
+        Restangular.one('questionnaire', $routeParams.id).get().then(function(questionnaire) {
             $scope.selectedQuestionnaire = questionnaire;
         });
     }
@@ -177,7 +177,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
     };
 
     var questionnaires;
-    Questionnaire.query(function (data) {
+    Restangular.all('questionnaire').getList().then(function (data) {
         questionnaires = data;
     });
 

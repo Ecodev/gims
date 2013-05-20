@@ -1,11 +1,11 @@
 
-angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $http, Country, Part, FilterSet, Select2Configurator, $timeout) {
+angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $http, Select2Configurator, $timeout) {
     'use strict';
-    
+
     // Configure select2 via our helper service
-    Select2Configurator.configure($scope, Country, 'country');
-    Select2Configurator.configure($scope, Part, 'part');
-    Select2Configurator.configure($scope, FilterSet, 'filterSet');
+    Select2Configurator.configure($scope, 'country');
+    Select2Configurator.configure($scope, 'part');
+    Select2Configurator.configure($scope, 'filterSet');
 
     // Whenever one of the parameter is changed
     var uniqueAjaxRequest;

@@ -25,7 +25,7 @@ angular.module('myApp.directives').directive('relations', function() {
         link: function(scope, element, attrs) {
             // nothing to do ?
         },
-        controller: function($scope, $attrs, $routeParams, $injector, Modal, Select2Configurator) {
+        controller: function($scope, $attrs, $routeParams, Restangular, Modal, Select2Configurator) {
 
             function capitaliseFirstLetter(string)
             {
@@ -37,17 +37,21 @@ angular.module('myApp.directives').directive('relations', function() {
             $scope.third = options.third;
 
             // Get the REST services
-            var Relation = $injector.get(capitaliseFirstLetter(options.relation));
-            var Second = $injector.get(capitaliseFirstLetter(options.second));
-            var Third = $injector.get(capitaliseFirstLetter(options.third));
+            var Second = Restangular.all(options.second);
+            var Third = Restangular.all(options.third);
 
             // Configure select boxes for addition
             $scope.isReadOnly = !$routeParams.id;
-            Select2Configurator.configure($scope, Second, 'second');
-            Select2Configurator.configure($scope, Third, 'third');
+            Select2Configurator.configure($scope, options.second, 'second');
+            Select2Configurator.configure($scope, options.third, 'third');
 
             // Configure ng-grid
-            $scope.relations = $routeParams.id ? Relation.query({parent: options.first, idParent: $routeParams.id}) : [];
+            $scope.relations = [];
+            if ($routeParams.id) {
+                Restangular.one(options.first, $routeParams.id).all(options.relation).getList().then(function(relations) {
+                    $scope.relations = relations;
+                });
+            }
             $scope.gridOptions = {
                 plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
                 data: 'relations',
@@ -76,8 +80,7 @@ angular.module('myApp.directives').directive('relations', function() {
                 data[options.second] = $scope.select2.second.selected.id;
                 data[options.third] = $scope.select2.third.selected.id;
 
-                var relation = new Relation(data);
-                relation.$create(function(newRelation) {
+                Restangular.all(options.relation).post(data).then(function(newRelation) {
                     $scope.relations.push(newRelation);
                     $scope.isLoading = false;
                 });
@@ -92,6 +95,7 @@ angular.module('myApp.directives').directive('relations', function() {
             $scope.$watch('select2.second.selected.id + ":" + select2.third.selected.id + ":" + relations.length', function() {
                 $scope.exists = false;
                 if ($scope.select2.second.selected && $scope.select2.third.selected) {
+
                     angular.forEach($scope.relations, function(relation) {
                         if (relation[options.second].id == $scope.select2.second.selected.id && relation[options.third].id == $scope.select2.third.selected.id) {
                             $scope.exists = true;

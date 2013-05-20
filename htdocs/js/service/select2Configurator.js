@@ -1,9 +1,10 @@
 
-angular.module('myApp.services').factory('Select2Configurator', function($location, $route) {
+angular.module('myApp.services').factory('Select2Configurator', function($location, $route, Restangular) {
     'use strict';
 
     return {
-        configure: function($scope, Resource, key) {
+        configure: function($scope, route, key) {
+            key = key || route; // default key to same name as route
 
             $scope.select2 = $scope.select2 || {};
             $scope.select2[key] = $scope.select2[key] || {};
@@ -18,7 +19,7 @@ angular.module('myApp.services').factory('Select2Configurator', function($locati
 
 
             var items;
-            Resource.query(function(data) {
+            Restangular.all(route).getList().then(function(data) {
                 items = data;
                 var fromUrl = $location.search()[key];
                 angular.forEach(items, function(item) {

@@ -1,5 +1,5 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, Survey, Question, Modal) {
+angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, $resource, Modal, Restangular) {
     "use strict";
 
     $scope.sending = false;
@@ -32,8 +32,8 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
         $scope.sending = true;
 
         // First case is for update a survey, second is for creating
-        if ($scope.survey.id > 0) {
-            $scope.survey.$update({id: $scope.survey.id}, function () {
+        if ($scope.survey.id) {
+            $scope.survey.put().then(function () {
                 $scope.sending = false;
 
                 if (redirectTo) {
@@ -41,14 +41,13 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
                 }
             });
         } else {
-            $scope.survey = new Survey($scope.survey);
-            $scope.survey.$create(function () {
-
+            Restangular.all('survey').post($scope.survey).then(function(survey) {
                 $scope.sending = false;
 
-                if (redirectTo) {
-                    $location.path(redirectTo);
+                if (!redirectTo) {
+                    redirectTo = '/admin/survey/edit/' + survey.id;
                 }
+                $location.path(redirectTo);
             });
         }
     };
@@ -60,18 +59,21 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
 
     // Delete a question
     $scope.deleteQuestion = function (row) {
+        var Question = new $resource('/api/question'); // TODO: find out a way to it with restangular instead of $resource
         var question = new Question(row.entity);
         Modal.confirmDelete(question, {objects: $scope.survey.questions, label: question.name, returnUrl: $location.path()});
     };
 
     // Load survey if possible
-    if ($routeParams.id > 0) {
-        Survey.get({id: $routeParams.id, fields: 'metadata,comments'}, function (survey) {
+    if ($routeParams.id) {
+        Restangular.one('survey', $routeParams.id).get({fields: 'metadata'}).then(function(survey) {
 
             // Cast "active" to be string for the need of the select menu.
             survey.active += ''; // string value
-            $scope.survey = new Survey(survey);
+            $scope.survey = survey;
         });
+    } else {
+        $scope.survey = {};
     }
 
     // initialize the panes model with hardcoded value
@@ -119,7 +121,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
 /**
  * Admin Survey Controller
  */
-angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $location, Survey, Modal) {
+angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $location, Modal, Restangular) {
     "use strict";
 
     // Initialize
@@ -129,7 +131,7 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $locati
         useExternalFilter: false
     };
 
-    $scope.surveys = Survey.query({fields: 'metadata,comments,questions'});
+    $scope.surveys = Restangular.all('survey').getList();
 
     // Keep track of the selected row.
     $scope.selectedRow = [];

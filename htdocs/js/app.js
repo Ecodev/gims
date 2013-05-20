@@ -4,6 +4,7 @@
 // Declare app level module which depends on filters, and services
 angular.module('myApp', [
         'ngResource',
+        'restangular',
         'ui',
         'ui.bootstrap',
         'ngGrid',
@@ -13,7 +14,7 @@ angular.module('myApp', [
         'chartsExample.directives',
         '$strap.directives'
     ]).
-    config(function ($routeProvider, $locationProvider, $dialogProvider) {
+    config(function ($routeProvider, $locationProvider, $dialogProvider, RestangularProvider) {
         $routeProvider.when('/home', {templateUrl: '/template/application/index/home', controller: 'MyCtrl1'});
         $routeProvider.when('/about', {templateUrl: '/template/application/index/about', controller: 'MyCtrl1'});
         $routeProvider.when('/browse', {templateUrl: '/template/browse', controller: 'MyCtrl1'});
@@ -35,6 +36,9 @@ angular.module('myApp', [
         $locationProvider.html5Mode(true);
 
         $dialogProvider.options({backdropFade: true, dialogFade:true});
+
+        RestangularProvider.setBaseUrl('/api');
+
     });
 
 // Here we declare all our modules, so we can get them back whenever we want
