@@ -78,7 +78,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
 
     // initialize the panes model with hardcoded value
     $scope.panes = [{},{},{}];
-    $scope.panes[1].active = true;
+    $scope.panes[0].active = true;
 
     $scope.edit = function (row) {
         var currentUrl = $location.path();
@@ -107,8 +107,8 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
         columnDefs: [
             {field: 'sorting', displayName: '#', width: '50px'},
             {field: 'name', displayName: 'Name'},
-            {displayName: '', width: '100px', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
-                '<button type="button" class="btn btn-mini" ng-click="deleteQuestion(row)" ><i class="icon-trash icon-large"></i></button>'}
+            {displayName: '', width: '100px', cellTemplate: '<button type="button" class="btn btn-mini btn-edit" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
+                '<button type="button" class="btn btn-mini btn-remove" ng-click="deleteQuestion(row)" ><i class="icon-trash icon-large"></i></button>'}
         ]
     };
 

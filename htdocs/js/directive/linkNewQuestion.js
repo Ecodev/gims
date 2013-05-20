@@ -5,7 +5,7 @@ angular.module('myApp.directives')
             restrict: "E",
             replace: true,
             link: function (scope, element) {
-                var html = sprintf('<a href="/admin/question/new?returnUrl=/admin/survey/edit/%s&survey=%s">new question</a>',
+                var html = sprintf('<a class="link-new" href="/admin/question/new?returnUrl=/admin/survey/edit/%s&survey=%s">new question</a>',
                     $routeParams.id,
                     $routeParams.id
                 );

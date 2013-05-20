@@ -16,7 +16,7 @@ class CrudButtons extends \Zend\View\Helper\AbstractHtmlElement
 
         <span ng-switch="sending > 0">
             <div class="btn-group" ng-switch-when="true">
-                <button class="btn btn-primary disabled">
+                <button class="btn btn-primary disabled btn-saving">
                     <i class="icon-loading"></i>
                     <ng-pluralize count="sending + 0"when="{'one': 'Saving', 'other': 'Saving {} items'}" />
                 </button>
@@ -26,7 +26,7 @@ class CrudButtons extends \Zend\View\Helper\AbstractHtmlElement
             </div>
 
             <div class="btn-group" ng-switch-when="false">
-                <button class="btn btn-primary" ng-click="save()" ng-disabled="myForm.\$invalid"><i class="icon-ok"></i> Save</button>
+                <button class="btn btn-primary btn-save" ng-click="save()" ng-disabled="myForm.\$invalid"><i class="icon-ok"></i> Save</button>
                 <button class="btn btn-primary dropdown-toggle" ng-disabled="myForm.\$invalid" data-toggle="dropdown">
                     <span class="caret"></span>
                 </button>
