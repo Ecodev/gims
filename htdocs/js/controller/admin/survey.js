@@ -70,14 +70,9 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
     }
 
     // initialize the panes model with hardcoded value
-    $scope.panes = [{},{},{}];
-    $scope.panes[2].active = true;
-
-    $scope.edit = function (row) {
-        var currentUrl = $location.path();
-        $location.path('/admin/question/edit/' + row.entity.id).search({'returnUrl': currentUrl});
-    };
-
+    $scope.panes = [{},{},{},{}];
+    // @todo make last selected pan active
+    $scope.panes[0].active = true;
 });
 
 /**

@@ -63,15 +63,15 @@
                 </div>
             </pane>
 
-            <pane heading="Questions" active="panes[1].active">
+            <pane heading="Questions" active="panes[1].active" ui-if="survey.id">
                 <div gims-grid-question></div>
             </pane>
 
-            <pane heading="Questionnaires" active="panes[2].active">
+            <pane heading="Questionnaires" active="panes[2].active" ui-if="survey.id">
                 <div gims-grid-questionnaire></div>
             </pane>
 
-            <pane heading="Users">
+            <pane heading="Users" ui-if="survey.id">
                 <div relations="{relation: 'UserSurvey', first: 'survey', second: 'user', third: 'role'}"></div>
             </pane>
         </tabs>

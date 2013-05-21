@@ -12,8 +12,8 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
             '<input type="text" ng-model="filteringText" placeholder="Search..." class="search" style="width: 400px"/>' +
             '</div>' +
             '<div class="span3" style="text-align: right">' +
-            '<i class="icon-plus-sign"></i>' +
-            '<link-new-question/>' +
+            '<i class="icon-plus-sign"></i> ' +
+            '<gims-link-new origin="survey" target="question"/>' +
             '</div>' +
             '</div>' +
             '<div ng-grid="gridOptions" class="gridStyle"></div>' +
@@ -23,6 +23,12 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
             // nothing to do ?
         },
         controller: function ($scope, $location, $resource, Modal) {
+
+            // Edit a question
+            $scope.edit = function (row) {
+                var currentUrl = $location.path();
+                $location.path('/admin/question/edit/' + row.entity.id).search({'returnUrl': currentUrl});
+            };
 
             // Delete a question
             $scope.removeQuestion = function (row) {

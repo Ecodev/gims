@@ -12,8 +12,8 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
             '<input type="text" ng-model="filteringText" placeholder="Search..." class="search" style="width: 400px"/>' +
             '</div>' +
             '<div class="span3" style="text-align: right">' +
-            '<i class="icon-plus-sign"></i>' +
-            '<link-new-question/>' +
+            '<i class="icon-plus-sign"></i> ' +
+            '<gims-link-new origin="survey" target="questionnaire"/>' +
             '</div>' +
             '</div>' +
             '<div ng-grid="gridOptions" class="gridStyle"></div>' +
@@ -23,6 +23,12 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
             // nothing to do ?
         },
         controller: function ($scope, $location, $resource, Restangular, Modal) {
+
+            // Edit a questionnaire
+            $scope.edit = function (row) {
+                var currentUrl = $location.path();
+                $location.path('/admin/questionnaire/edit/' + row.entity.id).search({'returnUrl': currentUrl});
+            };
 
             // Delete a questionnaire
             $scope.removeQuestionnaire = function (row) {

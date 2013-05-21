@@ -24,7 +24,7 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
         $scope.sending = true;
 
         // First case is for update a questionnaire, second is for creating
-        $scope.questionnaire.filter = $scope.questionnaire.filter.id;
+        $scope.questionnaire.geoname = $scope.questionnaire.geoname.id;
         if ($scope.questionnaire.id) {
                 $scope.questionnaire.put().then(function() {
                 $scope.sending = false;
@@ -42,6 +42,7 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
                 if (redirectTo) {
                     $location.path(redirectTo).search({});
                 } else {
+
                     // redirect to edit URL
                     redirectTo = sprintf('admin/questionnaire/edit/%s', questionnaire.id);
                     $location.path(redirectTo);
@@ -66,6 +67,14 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
         });
     }
 
-    Select2Configurator.configure($scope, 'filter');
+    // Load survey if possible
+    var params = $location.search();
+    if (params.survey !== undefined) {
+        Restangular.one('survey', params.survey).get().then(function (survey) {
+            $scope.survey = survey;
+        });
+    }
+
+    Select2Configurator.configure($scope, 'country');
 });
 

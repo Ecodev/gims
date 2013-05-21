@@ -66,6 +66,14 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
         });
     }
 
+    // Load survey if possible
+    var params = $location.search();
+    if (params.survey !== undefined) {
+        Restangular.one('survey', params.survey).get().then(function (survey) {
+            $scope.survey = survey;
+        });
+    }
+
     Select2Configurator.configure($scope, 'filter');
 });
 
