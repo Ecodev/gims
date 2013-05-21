@@ -183,7 +183,7 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     protected function getJsonResponse()
     {
