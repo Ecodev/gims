@@ -1,4 +1,4 @@
-angular.module('myApp.directives').directive('gridQuestion', function () {
+angular.module('myApp.directives').directive('gimsGridQuestion', function () {
     'use strict';
 
     return {

@@ -1,4 +1,4 @@
-angular.module('myApp.directives').directive('gridQuestionnaire', function () {
+angular.module('myApp.directives').directive('gimsGridQuestionnaire', function () {
     'use strict';
 
     return {
