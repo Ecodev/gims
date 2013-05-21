@@ -19,6 +19,7 @@ angular.module('myApp', [
         $routeProvider.when('/about', {templateUrl: '/template/application/index/about', controller: 'MyCtrl1'});
         $routeProvider.when('/browse', {templateUrl: '/template/browse', controller: 'MyCtrl1'});
         $routeProvider.when('/browse/chart', {templateUrl: '/template/browse/chart', controller: 'Browse/ChartCtrl', reloadOnSearch: false});
+        $routeProvider.when('/browse/table', {templateUrl: '/template/browse/table', controller: 'Browse/TableCtrl', reloadOnSearch: false});
         $routeProvider.when('/contribute', {templateUrl: '/template/contribute', controller: 'ContributeCtrl'});
         $routeProvider.when('/contribute/questionnaire', {templateUrl: '/template/contribute/questionnaire', controller: 'Contribute/QuestionnaireCtrl'});
         $routeProvider.when('/contribute/questionnaire/:id', {templateUrl: '/template/contribute/questionnaire', controller: 'Contribute/QuestionnaireCtrl'});

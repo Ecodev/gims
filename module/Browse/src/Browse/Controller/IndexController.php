@@ -31,6 +31,14 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
         return new ViewModel();
     }
 
+    /**
+     * @return ViewModel
+     */
+    public function tableAction()
+    {
+        return new ViewModel();
+    }
+
 	/**
 	 * @return ViewModel
 	 */
@@ -42,7 +50,7 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
 		}
 
 		return new ViewModel();
-		
+
 	}
 
 }
