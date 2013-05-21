@@ -64,32 +64,17 @@
             </pane>
 
             <pane heading="Questions" active="panes[1].active">
-
-                <div class="row-fluid">
-                    <div class="span9">
-                        <input type="text" ng-model="filteringText" placeholder="Search..." class="search"
-                               style="width: 400px"/>
-                    </div>
-                    <div class="span3" style="text-align: right">
-
-                        <i class="icon-plus-sign"></i>
-                        <link-new-question/>
-                    </div>
-                </div>
-
-                <div ng-grid="gridQuestions" class="gridStyle"></div>
+                <div grid-question></div>
             </pane>
 
             <pane heading="Questionnaires" active="panes[2].active">
-                1234
+                <div grid-questionnaire></div>
             </pane>
 
             <pane heading="Users">
                 <div relations="{relation: 'UserSurvey', first: 'survey', second: 'user', third: 'role'}"></div>
             </pane>
         </tabs>
-
-        {{ survey | json}}
     </form>
 
     <?php echo $this->metadata('survey'); ?>

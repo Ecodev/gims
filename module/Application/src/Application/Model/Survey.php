@@ -35,6 +35,12 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     private $questions;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Questionnaire", mappedBy="survey")
+     */
+    private $questionnaires;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(type="boolean", nullable=false)
@@ -75,12 +81,14 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     public function __construct()
     {
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->questionnaires = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Set name
      *
      * @param string $name
+     *
      * @return Survey
      */
     public function setName($name)
@@ -104,6 +112,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      * Set code
      *
      * @param string $code
+     *
      * @return Survey
      */
     public function setCode($code)
@@ -127,6 +136,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      * Set active
      *
      * @param boolean $active
+     *
      * @return Survey
      */
     public function setActive($active)
@@ -150,6 +160,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      * Set year
      *
      * @param integer $year
+     *
      * @return Survey
      */
     public function setYear($year)
@@ -179,6 +190,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
 
     /**
      * @param string $comments
+     *
      * @return Survey
      */
     public function setComments($comments)
@@ -197,6 +209,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
 
     /**
      * @param \DateTime $dateStart
+     *
      * @return Survey
      */
     public function setDateStart($dateStart)
@@ -218,6 +231,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
 
     /**
      * @param \DateTime $dateEnd
+     *
      * @return Survey
      */
     public function setDateEnd($dateEnd)
@@ -231,6 +245,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
 
     /**
      * Get questions
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getQuestions()
@@ -241,12 +256,37 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * Notify the survey that he was added to the question.
      * This should only be called by Question::setSurvey()
+     *
      * @param Question $question
+     *
      * @return Survey
      */
     public function questionAdded(Question $question)
     {
         $this->getQuestions()->add($question);
+
+        return $this;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getQuestionnaires()
+    {
+        return $this->questionnaires;
+    }
+
+    /**
+     * Notify the survey that he was added to the questionnaire.
+     * This should only be called by Questionnaire::setSurvey()
+     *
+     * @param Questionnaire $questionnaire
+     *
+     * @return Survey
+     */
+    public function questionnaireAdded(Questionnaire $questionnaire)
+    {
+        $this->getQuestionnaires()->add($questionnaire);
 
         return $this;
     }

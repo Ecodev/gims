@@ -41,7 +41,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     /**
      * @var Survey
      *
-     * @ORM\ManyToOne(targetEntity="Survey")
+     * @ORM\ManyToOne(targetEntity="Survey", inversedBy="questionnaires")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
@@ -149,6 +149,8 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function setSurvey(Survey $survey)
     {
         $this->survey = $survey;
+
+        $this->survey->questionnaireAdded($this);
 
         return $this;
     }

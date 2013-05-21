@@ -108,6 +108,11 @@ class SurveyController extends AbstractRestfulController
                      'name',
                      'sorting',
                  ),
+                 'questionnaires' => array(
+                     'name',
+                     'dateObservationStart',
+                     'dateObservationEnd',
+                 ),
                  'dateStart',
                  'dateEnd',
             ),

@@ -187,12 +187,28 @@ describe('my app', function () {
 
             noXdebugError();
 
-            it('should be able to fill in required fields', function () {
-                expect(element('[ng-view] .btn-save[disabled]').count()).toBe(1);
-                expect(element('[ng-view] .btn-saving').count()).toBe(0);
+            it('should be able to fill-in required fields', function () {
+                expect(element('[ng-view] .btn-save[disabled]').count())
+                    .toBe(1);
+
+                expect(element('[ng-view] .btn-saving').count())
+                    .toBe(0);
+
                 fillSurveyForm();
-                expect(element('[ng-view] .btn-save[disabled]').count()).toBe(0);
+
+                expect(element('[ng-view] .btn-save[disabled]').count())
+                    .toBe(0);
             });
+
+            it('should be displayed tabs', function () {
+                var panes = new Array('General info', 'Question', 'Questionnaires', 'Users');
+                for (var index = 0; index < panes.length; index++) {
+                    var paneText = panes[index];
+                    expect(element('[ng-view] .nav-tabs li:eq(' + index + ')').text())
+                        .toMatch(paneText);
+                }
+            });
+
 
             it('should be able to save a new survey and delete it', function () {
 
@@ -203,10 +219,11 @@ describe('my app', function () {
 
                 // Check if the element was found in survey list
                 browser().navigateTo('/admin/survey');
-                expect(element('[ng-view] [ng-grid] span:contains("' + randomCode + '")').count()).toBe(1);
-
+                expect(element('[ng-view] [ng-grid] span:contains("' + randomCode + '")').count())
+                    .toBe(1);
                 // @todo delete is currently not implemented
             });
         });
     });
+
 });

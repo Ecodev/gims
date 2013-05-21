@@ -34,7 +34,7 @@ angular.module('myApp.services')
                                 // If we have an array, also remove from the array
                                 if (options.objects) {
                                     angular.forEach(options.objects, function (o, i) {
-                                        if (object === o) {
+                                        if (params.id === o.id) {
                                             options.objects.splice(i, 1); // remove from local storage
                                         }
                                     });

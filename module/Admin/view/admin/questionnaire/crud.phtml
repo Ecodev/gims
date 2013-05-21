@@ -1,0 +1,37 @@
+<div class="container">
+
+    <h2>
+        <ul class="breadcrumb">
+            <li><a href="/admin/survey">Surveys</a></li>
+            <li><a href="/admin/survey/edit">{{survey.code}}</a></li>
+            <li class="active">{{questionnaire.name}}</li>
+        </ul>
+    </h2>
+
+    <form name="myForm">
+
+        <?php echo $this->crudButtons('questionnaire'); ?>
+
+        <div class="control-group" ng-class="{error: myForm.filter.$invalid}">
+            <label for="questionnaire.filter">Thematic</label>
+
+            <input ui-select2="select2.filter.list" ng-model="questionnaire.filter" style="width: 556px"
+                   data-placeholder="Select a thematic" required/>
+            <span ng-show="myForm.filter.$error.required" class="help-inline">Required</span>
+        </div>
+
+        <div class="control-group" ng-class="{error: myForm.name.$invalid}">
+            <label for="questionnaire.name">Title</label>
+            <input id="questionnaire.name" type="text" name="name" ng-model="questionnaire.name" required class="span6"/>
+            <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+        </div>
+
+        <div class="control-group" ng-class="{error: myForm.sorting.$invalid}" ng-show="questionnaire.id">
+            <label for="questionnaire.sorting">Sorting</label>
+            <input id="questionnaire.sorting" type="text" name="sorting" ng-model="questionnaire.sorting" class="span6"/>
+        </div>
+
+    </form>
+
+    <?php echo $this->metadata('questionnaire'); ?>
+</div> <!-- /container -->
