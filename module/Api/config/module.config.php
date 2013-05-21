@@ -48,19 +48,6 @@ return array(
                             ),
                         ),
                     ),
-                    'question' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'route' => '/questionnaire/:idQuestionnaire/[:controller[/:id]]',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'idQuestionnaire' => '[0-9]+',
-                                'id' => '[0-9]+',
-                            ),
-                            'defaults' => array(),
-                        ),
-                    ),
                     // This route allow to ask for subobjects of an object
                     'subobject' => array(
                         'type' => 'Segment',

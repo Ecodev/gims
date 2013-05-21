@@ -17,7 +17,7 @@ class QuestionController extends AbstractRestfulController
 
     protected function getQuestionnaire()
     {
-        $idQuestionnaire = $this->params('idQuestionnaire');
+        $idQuestionnaire = $this->params('idParent');
         if (!$this->questionnaire && $idQuestionnaire) {
             $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
             $this->questionnaire = $questionnaireRepository->find($idQuestionnaire);
