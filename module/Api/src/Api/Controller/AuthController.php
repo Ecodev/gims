@@ -8,6 +8,7 @@ use Zend\Json\Json;
 
 class AuthController extends \ZfcUser\Controller\UserController
 {
+
     /**
      * Login form
      */
@@ -15,7 +16,7 @@ class AuthController extends \ZfcUser\Controller\UserController
     {
         $request = $this->getRequest();
         $response = $this->getResponse();
-        $form    = $this->getLoginForm();
+        $form = $this->getLoginForm();
 
         if ($this->getOptions()->getUseRedirectParameterIfPresent() && $request->getQuery()->get('redirect')) {
             $redirect = $request->getQuery()->get('redirect');
@@ -23,17 +24,20 @@ class AuthController extends \ZfcUser\Controller\UserController
             $redirect = false;
         }
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $data = Json::decode($request->getContent(), Json::TYPE_ARRAY);
-            var_dump($data);
+
+            // Copy data to POST values of request so ZfcUser authentification can found them
+            foreach ($data as $key => $value) {
+                $this->getRequest()->getPost()->set($key, $value);
+            }
+
             $form->setData($data);
 
             if (!$form->isValid()) {
                 $response->setStatusCode(Response::STATUS_CODE_401); // Failed login attempt
                 return new JsonModel($form->getMessages());
             }
-
         }
 
         // clear adapters
@@ -41,7 +45,6 @@ class AuthController extends \ZfcUser\Controller\UserController
         $this->zfcUserAuthentication()->getAuthService()->clearIdentity();
 
         return $this->authenticateAction();
-
     }
 
     /**
@@ -50,7 +53,7 @@ class AuthController extends \ZfcUser\Controller\UserController
     public function authenticateAction()
     {
         $response = $this->getResponse();
-    
+
         if ($this->zfcUserAuthentication()->getAuthService()->hasIdentity()) {
             return new JsonModel(array(
                 'status' => 'success'
@@ -80,7 +83,6 @@ class AuthController extends \ZfcUser\Controller\UserController
         return new JsonModel(array(
             'status' => 'success'
         ));
-
     }
 
 }
