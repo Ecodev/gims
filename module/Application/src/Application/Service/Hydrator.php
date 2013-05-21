@@ -162,6 +162,10 @@ class Hydrator
             if (is_numeric($value) && preg_match('/Application\\\Model/is', $modelName)) {
                 $value = $this->getObject($modelName, $value);
             }
+            // If model is Date time, instantiate it
+            elseif ($modelName == 'DateTime') {
+                $value = new \DateTime($value);
+            }
 
             if (is_callable(array($object, $setter))) {
                 call_user_func_array(array($object, $setter), array($value));

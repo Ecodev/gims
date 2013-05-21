@@ -3,7 +3,7 @@
 namespace Api\Controller;
 
 use Application\Assertion\QuestionnaireAssertion;
-use Application\Model\Questionnaire;
+use Application\Model\UserQuestionnaire;
 use Zend\View\Model\JsonModel;
 
 class UserQuestionnaireController extends AbstractRestfulController
@@ -148,7 +148,7 @@ class UserQuestionnaireController extends AbstractRestfulController
      *
      * @return bool
      */
-    protected function isAllowed(Questionnaire $questionnaire)
+    protected function isAllowed(UserQuestionnaire $userQuestionnaire)
     {
         // @todo remove me once login will be better handled GUI wise
         return true;

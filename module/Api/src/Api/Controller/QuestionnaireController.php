@@ -17,6 +17,7 @@ class QuestionnaireController extends AbstractRestfulController
                 'code',
                 'name'
             ),
+            'geoname' => array('name'),
         );
     }
 }

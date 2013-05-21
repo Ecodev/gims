@@ -212,12 +212,10 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @return Survey
      */
-    public function setDateStart($dateStart)
+    public function setDateStart(\DateTime $dateStart = null)
     {
-        if ($dateStart) {
-            $dateStart = new \DateTime($dateStart);
-        }
         $this->dateStart = $dateStart;
+
         return $this;
     }
 
@@ -234,12 +232,10 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @return Survey
      */
-    public function setDateEnd($dateEnd)
+    public function setDateEnd(\DateTime $dateEnd = null)
     {
-        if ($dateEnd) {
-            $dateEnd = new \DateTime($dateEnd);
-        }
         $this->dateEnd = $dateEnd;
+        
         return $this;
     }
 

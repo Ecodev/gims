@@ -75,6 +75,6 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
         });
     }
 
-    Select2Configurator.configure($scope, 'country');
+    Select2Configurator.configure($scope, 'geoname');
 });
 

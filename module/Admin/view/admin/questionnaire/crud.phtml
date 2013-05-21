@@ -17,7 +17,7 @@
             <pane heading="General info">
                 <div class="control-group" ng-class="{error: myForm.geoname.$invalid}">
                     <label for="questionnaire.geoname">Spatial</label>
-                    <input ui-select2="select2.country.list" ng-model="questionnaire.geoname"
+                    <input ui-select2="select2.geoname.list" ng-model="questionnaire.geoname"
                            data-placeholder="<?php echo $this->translate('Select a country') ?>" style="width: 556px"
                            required/>
                     <span ng-show="myForm.geoname.$error.required" class="help-inline">Required</span>
@@ -33,15 +33,15 @@
 
                     <div class="row-fluid">
                         <div class="span6">
-                            <label for="survey.dateObservationStart">Date observation time</label>
-                            <input id="survey.dateObservationStart" class="input-small" type="text" ng-model="survey.dateObservationStart"
+                            <label for="questionnaire.dateObservationStart">Date observation time</label>
+                            <input id="questionnaire.dateObservationStart" class="input-small" type="text" ng-model="questionnaire.dateObservationStart"
                                    data-date-format="dd/mm/yyyy" bs-datepicker/>
                             <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i>
                             </button>
                         </div>
                         <div class="span6">
-                            <label for="survey.dateObservationEnd">Date observation end</label>
-                            <input id="survey.dateObservationEnd" class="input-small" type="text" ng-model="survey.dateObservationEnd"
+                            <label for="questionnaire.dateObservationEnd">Date observation end</label>
+                            <input id="questionnaire.dateObservationEnd" class="input-small" type="text" ng-model="questionnaire.dateObservationEnd"
                                    data-date-format="dd/mm/yyyy" bs-datepicker/>
                             <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i>
                             </button>
@@ -54,7 +54,7 @@
             </pane>
         </tabs>
 
-        {{questionnaire | json}}
+        <pre>{{questionnaire | json}}</pre>
     </form>
 
     <?php echo $this->metadata('questionnaire'); ?>
