@@ -16,6 +16,7 @@ return array(
             'Api\Controller\UserQuestionnaire' => 'Api\Controller\UserQuestionnaireController',
             'Api\Controller\Role' => 'Api\Controller\RoleController',
             'Api\Controller\Chart' => 'Api\Controller\ChartController',
+            'Api\Controller\Table' => 'Api\Controller\TableController',
         ),
     ),
     'router' => array(
@@ -59,21 +60,6 @@ return array(
                             'defaults' => array(),
                         ),
                     ),
-                    // This route allow to execute something on a questionnaire (eg:computing results)
-                    'questionnaire_actions' => array(
-                        'type' => 'Segment',
-                        'options' => array(
-                            'route' => '/questionnaire/:idQuestionnaire/[:action]',
-                            'constraints' => array(
-                                'action' => '(compute)', // Define here allowed actions: (action1|action2|action3)
-                                'idQuestionnaire' => '[0-9]+',
-                            ),
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'Api\Controller',
-                                'controller' => 'questionnaire',
-                            ),
-                        ),
-                    ),
                     // This route allow to ask for subobjects of an object
                     'subobject' => array(
                         'type' => 'Segment',
@@ -110,7 +96,7 @@ return array(
                         'options' => array(
                             'route' => '/:controller[/:action]',
                             'constraints' => array(
-                                'controller' => '(chart)', // Define here allowed controllers: (controller1|controller2|controller3)
+                                'controller' => '(chart|table)', // Define here allowed controllers: (controller1|controller2|controller3)
                             ),
                             'defaults' => array(
                                 '__NAMESPACE__' => 'Api\Controller',

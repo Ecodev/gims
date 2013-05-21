@@ -14,7 +14,7 @@ class Jmp extends AbstractImporter
     private $definitions = array(
         'Tables_W' => array(
             'definitions' => array(
-                4 => array("Access to drinking water sources", null, 0, null),
+                4 => array("Access to drinking water", null, 0, null),
                 5 => array("Tap water", 4, 0, null),
                 6 => array("House connections", 5, 0, null),
                 7 => array("Piped water into dwelling", 6, 0, null),
@@ -274,7 +274,18 @@ class Jmp extends AbstractImporter
         foreach ($sheeNamesToImport as $i => $sheetName) {
 
             $this->importOfficialFilters($this->definitions[$sheetName]);
-            $this->importHighFilters($sheetName == 'Tables_W' ? 'Water' : 'Sanitation', $this->definitions[$sheetName]['highFilters']);
+
+            // Also create a filterSet with same name for the first filter
+            $firstFilter = reset($this->cacheFilters);
+            $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
+            $filterSet = $filterSetRepository->getOrCreate($firstFilter->getName());
+            foreach ($firstFilter->getChildren() as $child) {
+                if ($child->isOfficial()) {
+                    $filterSet->addFilter($child);
+                }
+            }
+
+            $this->importHighFilters($firstFilter->getName() . ' - Improved/Unimproved', $this->definitions[$sheetName]['highFilters']);
 
             $workbook->setActiveSheetIndex($i);
             $sheet = $workbook->getSheet($i);
