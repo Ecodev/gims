@@ -2,7 +2,6 @@
 
 namespace Api\Controller;
 
-use Application\Assertion\SurveyAssertion;
 use Application\Model\UserSurvey;
 use Zend\View\Model\JsonModel;
 

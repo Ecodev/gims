@@ -2,7 +2,6 @@
 
 namespace Api\Controller;
 
-use Application\Assertion\QuestionnaireAssertion;
 use Application\Model\UserQuestionnaire;
 use Zend\View\Model\JsonModel;
 
@@ -29,28 +28,25 @@ class UserQuestionnaireController extends AbstractRestfulController
         return $this->parent;
     }
 
-
     /**
      * @return array
      */
     protected function getJsonConfig()
     {
         return array_merge(
-            array(
-                'questionnaire' => array(
-                    'name',
-                ),
-                'role' => array(
-                    'name',
-                ),
-                'user' => array(
-                    'name',
-                ),
+                array(
+            'questionnaire' => array(
+                'name',
             ),
-            parent::getJsonConfig()
+            'role' => array(
+                'name',
+            ),
+            'user' => array(
+                'name',
+            ),
+                ), parent::getJsonConfig()
         );
     }
-
 
     public function getList()
     {
@@ -67,7 +63,6 @@ class UserQuestionnaireController extends AbstractRestfulController
         return new JsonModel($this->hydrator->extractArray($userQuestionnaires, $this->getJsonConfig()));
     }
 
-
     /**
      * @param array $data
      *
@@ -76,17 +71,16 @@ class UserQuestionnaireController extends AbstractRestfulController
      */
     public function create($data)
     {
-
-        $questionnaire = new Questionnaire();
-        $this->hydrator->hydrate($data, $questionnaire);
+        $userQuestionnaire = new UserQuestionnaire();
 
         // Update object or not...
-        if ($this->isAllowed($questionnaire)) {
+        if ($this->isAllowed($userQuestionnaire)) {
             $result = parent::create($data);
         } else {
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));
         }
+
         return $result;
     }
 
@@ -98,20 +92,7 @@ class UserQuestionnaireController extends AbstractRestfulController
      */
     public function update($id, $data)
     {
-        // Retrieve questionnaire since permissions apply against it.
-        $repository = $this->getEntityManager()->getRepository($this->getModel());
-
-        /** @var $questionnaire \Application\Model\Answer */
-        $questionnaire = $repository->findOneById($id);
-
-        // Update object or not...
-        if ($this->isAllowed($questionnaire)) {
-            $result = parent::update($id, $data);
-        } else {
-            $this->getResponse()->setStatusCode(401);
-            $result = new JsonModel(array('message' => 'Authorization required'));
-        }
-        return $result;
+        throw new \Exception('Not implemented');
     }
 
     /**
@@ -121,18 +102,13 @@ class UserQuestionnaireController extends AbstractRestfulController
      */
     public function delete($id)
     {
-
-        // Retrieve questionnaire since permissions apply against it.
-        $repository = $this->getEntityManager()->getRepository($this->getModel());
-
-        /** @var $questionnaire \Application\Model\Answer */
-        $questionnaire = $repository->findOneById($id);
+        $userQuestionnaire = $this->getRepository()->findOneById($id);
 
         // Update object or not...
-        if (is_null($questionnaire)) {
+        if (is_null($userQuestionnaire)) {
             $this->getResponse()->setStatusCode(404);
             $result = new JsonModel(array('message' => 'No object found'));
-        } elseif ($this->isAllowed($questionnaire)) {
+        } elseif ($this->isAllowed($userQuestionnaire)) {
             $result = parent::delete($id);
         } else {
             $this->getResponse()->setStatusCode(401);
@@ -144,7 +120,7 @@ class UserQuestionnaireController extends AbstractRestfulController
     /**
      * Ask Rbac whether the User is allowed to update
      *
-     * @param Questionnaire $questionnaire
+     * @param UserQuestionnaire $userQuestionnaire
      *
      * @return bool
      */
@@ -155,10 +131,7 @@ class UserQuestionnaireController extends AbstractRestfulController
 
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-        return $rbac->isGrantedWithContext(
-            $questionnaire,
-            Permission::CAN_CREATE_OR_UPDATE_ANSWER,
-            new QuestionnaireAssertion($questionnaire)
-        );
+        return $rbac->isGranted(Permission::CAN_CREATE_OR_UPDATE_ANSWER);
     }
+
 }
