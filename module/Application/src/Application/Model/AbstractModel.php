@@ -72,7 +72,7 @@ abstract class AbstractModel
      *
      * @return AbstractModel
      */
-    private function setDateCreated($dateCreated)
+    private function setDateCreated(\DateTime $dateCreated = null)
     {
         $this->dateCreated = $dateCreated;
 
@@ -96,7 +96,7 @@ abstract class AbstractModel
      *
      * @return AbstractModel
      */
-    private function setDateModified($dateModified)
+    private function setDateModified(\DateTime $dateModified = null)
     {
         $this->dateModified = $dateModified;
 

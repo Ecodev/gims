@@ -62,6 +62,10 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     private $status;
 
+    // @todo add property isValidated
+    // @todo add property canBeValidated
+    // @todo add property comments
+
     /**
      * Constructor
      */
@@ -219,4 +223,23 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         return $this->getSurvey()->getCode() . ' - ' . $this->getGeoname()->getName();
     }
 
+    /**
+     * Return the computed spatial name
+     *
+     * @return string
+     */
+    public function getSpatial()
+    {
+        return $this->getGeoname()->getName();
+    }
+
+    /**
+     * Return percentage of answered questions
+     *
+     * @return string
+     */
+    public function getCompleted()
+    {
+        return $this->getSurvey()->getQuestions()->count() / $this->getAnswers()->count();
+    }
 }

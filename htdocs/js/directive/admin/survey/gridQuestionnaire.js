@@ -22,7 +22,7 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
         link: function () {
             // nothing to do ?
         },
-        controller: function ($scope, $location, $resource, Restangular, Modal) {
+        controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal) {
 
             // Edit a questionnaire
             $scope.edit = function (row) {
@@ -55,22 +55,34 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
             // Configure ng-grid.
             $scope.gridOptions = {
                 plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
-                data: 'survey.questionnaires',
+                data: 'questionnaires',
                 enableCellSelection: true,
                 showFooter: true,
                 selectedItems: $scope.selectedRow,
                 filterOptions: $scope.filterOptions,
                 multiSelect: false,
                 columnDefs: [
-                    {field: 'name', displayName: 'Name', width: '500px'},
-                    {displayName: '', cellTemplate: '<button type="button" class="btn btn-mini btn-edit" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
-                        '<button type="button" class="btn btn-mini btn-remove" ng-click="removeQuestionnaire(row)" ><i class="icon-trash icon-large"></i></button>'}
+                    {field: 'spatial', displayName: 'Spatial'},
+                    {field: 'reporterNames', displayName: 'Filled by'},
+                    {field: 'dateLastAnswerModification', displayName: 'Modif.', cellFilter: 'date:"dd MMM yyyy"'},
+                    {field: 'validatorNames', displayName: 'Validation by'},
+                    {field: 'completed', displayName: 'Completed', cellTemplate: '<div class="progress" style="margin: 5px 5px 0 5px">' +
+                        '<div class="bar" ng-style="{width: row.entity[col.field] * 100}"></div>' +
+                        '</div>'},
+                    {displayName: '', cellTemplate: '<div style="margin: 5px 5px 0 5px ">' +
+                        '</div><button type="button" class="btn btn-mini btn-edit" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
+                        '<button type="button" class="btn btn-mini btn-remove" ng-click="removeQuestionnaire(row)" ><i class="icon-trash icon-large"></i></button>' +
+                        '</div>'}
                 ]
             };
 
             $scope.$on('filterChanged', function (evt, text) {
                 console.log(text);
                 $scope.filteringText = text;
+            });
+
+            Restangular.one('survey', $routeParams.id).all('questionnaire').getList().then(function (questionnaires) {
+                $scope.questionnaires = questionnaires
             });
         }
     };

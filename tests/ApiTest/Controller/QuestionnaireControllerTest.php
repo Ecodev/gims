@@ -7,15 +7,10 @@ use Zend\Http\Request;
 class QuestionnaireControllerTest extends AbstractController
 {
 
-    protected function getExpectedJson()
-    {
-        return '{"id":' . $this->questionnaire->getId() . ',"name":"code test survey - test geoname","dateObservationStart":"2010-01-01T00:00:00+0100","dateObservationEnd":"2011-01-01T00:00:00+0100","survey":{"id":' . $this->survey->getId() . ',"code":"code test survey","name":"test survey"},"geoname":{"id":' . $this->geoName->getId() . ',"name":"test geoname"}}';
-    }
-
     public function testEnsureOnlyAllowedFieldAreDisplayedInResponseForQuestionnaire()
     {
         $this->dispatch('/api/questionnaire/' . $this->questionnaire->getId(), Request::METHOD_GET);
-        $allowedFields = array('id', 'dateObservationStart', 'dateObservationEnd', 'survey', 'name', 'geoname');
+        $allowedFields = array('id', 'dateObservationStart', 'dateObservationEnd', 'survey', 'name', 'geoname', 'completed', 'spatial', 'dateLastAnswerModification', 'reporterNames', 'validatorNames');
         foreach ($this->getJsonResponse() as $key => $value) {
             $this->assertTrue(in_array($key, $allowedFields));
         }
@@ -30,10 +25,7 @@ class QuestionnaireControllerTest extends AbstractController
 
         // In the array of all questionnaires, we should at least found the test questionnaire
         foreach ($json as $questionnaire) {
-            if ($questionnaire['id'] == $this->questionnaire->getId()) {
-                $singleJson = \Zend\Json\Json::encode($questionnaire);
-                $this->assertJsonStringEqualsJsonString($this->getExpectedJson(), $singleJson);
-            }
+            $this->assertGreaterThan(0, $questionnaire['id']);
         }
     }
 
@@ -42,8 +34,8 @@ class QuestionnaireControllerTest extends AbstractController
         $this->dispatch('/api/questionnaire/' . $this->questionnaire->getId(), Request::METHOD_GET);
 
         $this->assertResponseStatusCode(200);
-        $this->getJsonResponse();
-        $this->assertJsonStringEqualsJsonString($this->getExpectedJson(), $this->getResponse()->getContent());
+        $json = $this->getJsonResponse();
+        $this->assertSame($this->questionnaire->getId(), $json['id']);
     }
 
     public function testCanDeleteQuestionnaire()
