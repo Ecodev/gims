@@ -45,11 +45,11 @@
                 </div> -->
             </pane>
 
-            <pane heading="Surveys">
+            <pane heading="Surveys" ui-if="user.id">
                 <div relations="{relation: 'UserSurvey', first: 'user', second: 'survey', third: 'role'}"></div>
             </pane>
 
-            <pane heading="Questionnaires">
+            <pane heading="Questionnaires" ui-if="user.id">
                 <div relations="{relation: 'UserSurvey', first: 'user', second: 'questionnaire', third: 'role'}"></div>
             </pane>
         </tabs>
