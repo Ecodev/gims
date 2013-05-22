@@ -29,15 +29,22 @@ angular.module('myApp.services')
                         if (result === 'delete') {
                             var params = options.params || {};
                             params.id = object.id;
+
+                            // If we have an array, look for the element before we delete it
+                            var toSplice = null;
+                            if (options.objects) {
+                                angular.forEach(options.objects, function (o, i) {
+                                    if (object.id === o.id) {
+                                        toSplice = i;
+                                    }
+                                });
+                            }
+
                             object.$delete(params, function () {
 
-                                // If we have an array, also remove from the array
-                                if (options.objects) {
-                                    angular.forEach(options.objects, function (o, i) {
-                                        if (params.id === o.id) {
-                                            options.objects.splice(i, 1); // remove from local storage
-                                        }
-                                    });
+                                // remove from local storage
+                                if (toSplice != null) {
+                                    options.objects.splice(toSplice, 1);
                                 }
 
                                 if (options.returnUrl) {
