@@ -13,7 +13,7 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
             '</div>' +
             '<div class="span3" style="text-align: right">' +
             '<i class="icon-plus-sign"></i> ' +
-            '<gims-link-new origin="survey" target="questionnaire"/>' +
+            '<gims-link-new origin="survey" target="questionnaire" return-tab="2"/>' +
             '</div>' +
             '</div>' +
             '<div ng-grid="gridOptions" class="gridStyle"></div>' +
@@ -26,8 +26,13 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
 
             // Edit a questionnaire
             $scope.edit = function (row) {
-                var currentUrl = $location.path();
-                $location.path('/admin/questionnaire/edit/' + row.entity.id).search({'returnUrl': currentUrl});
+                var returnUrl = $location.path();
+                $location.path('/admin/questionnaire/edit/' + row.entity.id)
+                    .search({
+                        'returnUrl': returnUrl,
+                        'returnTab': 2
+                    })
+                    .hash(null);
             };
 
             // Delete a questionnaire

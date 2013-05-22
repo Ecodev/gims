@@ -10,10 +10,6 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
         redirectTo = $routeParams.returnUrl;
     }
 
-    $scope.cancel = function () {
-        $location.path(redirectTo).search('returnUrl', null);
-    };
-
     $scope.actives = [
         {text: 'Yes', value: 'true'},
         {text: 'No', value: 'false'}
@@ -24,7 +20,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
     };
 
     $scope.cancel = function () {
-        $location.path(redirectTo).search('returnUrl', null);
+        $location.path(redirectTo).search('returnUrl', null).hash(null);
     };
 
     $scope.save = function (redirectTo) {
@@ -71,8 +67,10 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
 
     // initialize the panes model with hardcoded value
     $scope.panes = [{},{},{},{}];
-    // @todo make last selected pan active
-    $scope.panes[0].active = true;
+    var returnTab = parseInt($location.hash(), 10);
+    if (returnTab && $scope.panes[returnTab] !== undefined) {
+        $scope.panes[returnTab].active = true;
+    }
 });
 
 /**

@@ -71,7 +71,7 @@
                 <div gims-grid-questionnaire></div>
             </pane>
 
-            <pane heading="Users" ui-if="survey.id">
+            <pane heading="Users" active="panes[3].active" ui-if="survey.id">
                 <div relations="{relation: 'UserSurvey', first: 'survey', second: 'user', third: 'role'}"></div>
             </pane>
         </tabs>

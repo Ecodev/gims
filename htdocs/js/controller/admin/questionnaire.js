@@ -5,21 +5,27 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
     $scope.sending = false;
 
     // Default redirect
-    var redirectTo = '/';
+    var returnUrl = '/';
+    var returnTab = '';
 
     if ($routeParams.returnUrl) {
-        redirectTo = $routeParams.returnUrl;
+        returnUrl = $routeParams.returnUrl;
+        returnTab = $routeParams.returnTab;
     }
 
+    var redirect = function () {
+        $location.path(returnUrl).search({}).hash(returnTab);
+    };
+
     $scope.cancel = function () {
-        $location.path(redirectTo).search({});
+        redirect();
     };
 
     $scope.saveAndClose = function () {
-        this.save(redirectTo);
+        this.save(true);
     };
 
-    $scope.save = function (redirectTo) {
+    $scope.save = function (redirectAfterSave) {
 
         $scope.sending = true;
 
@@ -29,8 +35,8 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
                 $scope.questionnaire.put().then(function() {
                 $scope.sending = false;
 
-                if (redirectTo) {
-                    $location.path(redirectTo).search({});
+                if (redirectAfterSave) {
+                    redirect();
                 }
             });
         } else {
@@ -39,13 +45,11 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
             Restangular.all('questionnaire').post($scope.questionnaire).then(function(questionnaire) {
                 $scope.sending = false;
 
-                if (redirectTo) {
-                    $location.path(redirectTo).search({});
+                if (redirectAfterSave) {
+                    redirect();
                 } else {
-
                     // redirect to edit URL
-                    redirectTo = sprintf('admin/questionnaire/edit/%s', questionnaire.id);
-                    $location.path(redirectTo);
+                    $location.path(sprintf('admin/questionnaire/edit/%s', questionnaire.id));
 
                 }
             });
