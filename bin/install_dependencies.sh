@@ -8,13 +8,22 @@ sudo apt-get -qq update
 sudo apt-get -qq install postgis postgresql-9.1-postgis rubygems nodejs apache2 php5-pgsql php5-cli php5-gd php5-mcrypt php5-intl
 
 echo "Installing Compass..."
-gem install --quiet --no-rdoc --no-ri sass compass oily_png bootstrap-sass
+GEMS="gem install --quiet --no-rdoc --no-ri sass compass oily_png bootstrap-sass"
+if [[ -z $TRAVIS ]]; then # If not on Travis, need to use sudo
+   GEMS="sudo $GEMS"
+fi
+`$GEMS`
 
 echo "Installing JS testing tools..."
 sudo npm --global --quiet install karma phantomjs uglify-js ngmin
 
-# For Travis CI, we need more configuration (Apache and database)
-if [[ "$1" = "travis" ]]; then
+# For Travis, we replace pre-installed PhantomJS with npm version (more recent)
+if [[ ! -z $TRAVIS ]]; then # If not on Travis, need to use sudo
+   sudo ln -sf "`sudo npm bin -g`/phantomjs" `which phantomjs` 
+fi
+
+# For Travis CI, or full local install, we need more configuration (Apache and database)
+if [[ "$1" = "configure" ]]; then
     echo "Configuring Apache..."
     WEBROOT="$(pwd)/htdocs"
     CGIROOT=`dirname "$(which php-cgi)"`
@@ -48,5 +57,5 @@ if [[ "$1" = "travis" ]]; then
 
     echo "Init database..."
     cp config/autoload/local.php.dist config/autoload/local.php
-    psql -c 'create database gims;' -U postgres
+    sudo -u postgres psql -c 'create database gims;' -U postgres
 fi
