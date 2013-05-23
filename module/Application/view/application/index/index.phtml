@@ -113,7 +113,7 @@
                             <ng-switch on="user.gravatar==undefined">
                                 <img ng-switch-when="false" ng-src="{{user.gravatar}}?s=40" />
                             </ng-switch>
-                            <span>{{user.displayname}}</span>
+                            <span>{{user.displayName}}</span>
                             <a target="_self" href="<?php echo $this->url('zfcuser/logout') ?>">[<?php echo $this->translate('Sign out') ?>]</a>
                         </p>
                         <a class="btn btn-primary" href ng-click="promptLogin()" ng-hide="user"><span class="icon-user" /> <?php echo $this->translate('User login') ?></a>
