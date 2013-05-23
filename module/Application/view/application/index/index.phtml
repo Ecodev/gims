@@ -65,7 +65,9 @@
                                     <div class="span6">
                                         <h3 class="modal-header"><?php echo $this->translate('Sign in'); ?></h3>
                                             <form class="modal-form" ng-submit="sendLogin()">
-
+                                                <div class="alert alert-error" ng-show="invalidUsernamePassword">
+                                                    <span><?php echo $this->translate('Invalid username or password'); ?></span>
+                                                </div>
                                                 <div class="control-group" id="control-group-identity">
                                                     <label for="identity" class="control-label"><?php echo $this->translate('Email'); ?></label>
                                                 </div>
@@ -102,22 +104,19 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <a class="btn cancel" ng-click="cancelLogin()"><?php echo $this->translate('Cancel'); ?></a>
+                                <a class="btn cancel" ng-click="hideLogin()"><?php echo $this->translate('Cancel'); ?></a>
                             </div>
                             <?php echo $this->form()->closeTag(); ?>
                         </div>
-
-                        <?php if ($this->zfcUserIdentity()): ?>
-                            <p class="navbar-text">
-                                <?php
-                                    echo $this->gravatar($this->zfcUserIdentity()->getEmail(), array('img_size' => 32)) . PHP_EOL;
-                                    echo $this->zfcUserDisplayName();
-                                ?>
-                                <a target="_self" href="<?php echo $this->url('zfcuser/logout') ?>">[<?php echo $this->translate('Sign out') ?>]</a>
-                            </p>
-                        <?php else: ?>
-                            <a class="btn btn-primary" href ng-click="promptLogin()"><span class="icon-user" /> <?php echo $this->translate('User login') ?></a>
-                        <?php endif; ?>
+ 
+                        <p class="navbar-text" ng-show="user">
+                            <ng-switch on="user.gravatar==undefined">
+                                <img ng-switch-when="false" ng-src="{{user.gravatar}}?s=40" />
+                            </ng-switch>
+                            <span>{{user.displayname}}</span>
+                            <a target="_self" href="<?php echo $this->url('zfcuser/logout') ?>">[<?php echo $this->translate('Sign out') ?>]</a>
+                        </p>
+                        <a class="btn btn-primary" href ng-click="promptLogin()" ng-hide="user"><span class="icon-user" /> <?php echo $this->translate('User login') ?></a>
                     </div>
                 </div>
             </div>
