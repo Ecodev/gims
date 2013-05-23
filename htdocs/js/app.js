@@ -11,13 +11,14 @@ angular.module('myApp', [
         'myApp.filters',
         'myApp.services',
         'myApp.directives',
+        'http-auth-interceptor',
         'chartsExample.directives',
         '$strap.directives'
     ]).
     config(function ($routeProvider, $locationProvider, $dialogProvider, RestangularProvider) {
-        $routeProvider.when('/home', {templateUrl: '/template/application/index/home', controller: 'MyCtrl1'});
-        $routeProvider.when('/about', {templateUrl: '/template/application/index/about', controller: 'MyCtrl1'});
-        $routeProvider.when('/browse', {templateUrl: '/template/browse', controller: 'MyCtrl1'});
+        $routeProvider.when('/home', {templateUrl: '/template/application/index/home'});
+        $routeProvider.when('/about', {templateUrl: '/template/application/index/about'});
+        $routeProvider.when('/browse', {templateUrl: '/template/browse'});
         $routeProvider.when('/browse/chart', {templateUrl: '/template/browse/chart', controller: 'Browse/ChartCtrl', reloadOnSearch: false});
         $routeProvider.when('/browse/table', {templateUrl: '/template/browse/table', controller: 'Browse/TableCtrl', reloadOnSearch: false});
         $routeProvider.when('/contribute', {templateUrl: '/template/contribute', controller: 'ContributeCtrl'});

@@ -293,4 +293,12 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
         return $roles;
     }
 
+    /**
+     * Return a user gravatar
+     */
+    public function getGravatar()
+    {
+        return 'http://www.gravatar.com/avatar/' . md5( strtolower( trim( $this->getEmail() ) ) );
+    }
+
 }

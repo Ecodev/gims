@@ -1,42 +1,62 @@
-angular.module('myApp').controller('MyCtrl1', function () {
-
-});
-
-angular.module('myApp').controller('UserCtrl', function ($scope, $location, $http) {
+angular.module('myApp').controller('UserCtrl', function ($scope, $location, $http, authService) {
     'use strict';
-    
+
+    // Intercept the event broadcasted by http-auth-interceptor when a request get a HTTP 401 response
+    $scope.$on('event:auth-loginRequired', function() {
+        $scope.promptLogin();
+    });
+
+    // TODO: replace with actual logged in user ID
+    $http.get('/user/login').success(function(data) {
+        if (data.status == 'logged')
+        {
+            $scope.user = data
+        }
+    });
+
     $scope.promptLogin = function () {
         $scope.showLogin = true;
-        $scope.redirect = $location.absUrl();
+        $scope.login = {};
+        $scope.register = {};
+        $scope.invalidUsernamePassword = false;
     };
 
-    $scope.cancelLogin = function () {
+    $scope.hideLogin = function() {
         $scope.showLogin = false;
-    };
+    }
 
     $scope.opts = {
         backdropFade: true,
         dialogFade: true
     };
 
-    $scope.login = {};
-    $scope.register = {};
-
-    // Keep current URL up to date, so we can login and come back to current page
-    $scope.redirect = $location.absUrl();
     $scope.$on("$routeChangeSuccess", function (event, current, previous) {
         $scope.redirect = $location.absUrl();
     });
 
     $scope.sendLogin = function () {
         $http.post('/user/login', $scope.login).success(function (data) {
-            console.log('Success', data);
-            return false;
+            if (data.status == 'logged')
+            {
+                $scope.invalidUsernamePassword = false;
+                $scope.hideLogin();
+                authService.loginConfirmed();
+                $scope.user = data;
+            }
+            else if (data.status == 'failed')
+            {
+                $scope.invalidUsernamePassword = true;
+            }
         }).error(function (data, status, headers) {
-            console.log('Error', status);
-            return false;
+            console.log('Server error', data);
         });
     };
+
+    $scope.sendRegister = function() {
+        $http.post('/user/register', $scope.register).success(function (data) {
+            
+        });
+    }
 
 });
 
