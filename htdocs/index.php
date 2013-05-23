@@ -1,4 +1,10 @@
 <?php
+
+// Fallback to default timezone if none specified. This is required for Travis CI
+if (!ini_get('date.timezone')) {
+    date_default_timezone_set('UTC');
+}
+
 /**
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.
