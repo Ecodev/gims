@@ -169,8 +169,10 @@ class QuestionController extends AbstractRestfulController
 
         // Check that all required properties are given by the GUI
         $properties = $this->metaModelService->getMandatoryProperties();
-        foreach ($data as $propertyName => $value) {
-            if (! in_array($propertyName, $properties)) {
+        $dataKeys = array_keys($data);
+
+        foreach ($properties as $propertyName) {
+            if (! in_array($propertyName, $dataKeys)) {
                 throw new \Exception('Missing property ' . $propertyName, 1368459231);
             }
         }

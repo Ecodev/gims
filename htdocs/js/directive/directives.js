@@ -12,6 +12,13 @@ angular.module('myApp.directives')
             });
         };
     })
+    .directive('ngVisible', function () {
+        return function (scope, elem, attr) {
+            scope.$watch(attr.ngVisible, function (value) {
+                elem.css('visibility', value ? 'visible' : 'hidden');
+            });
+        };
+    })
     .directive('ngKeyup', function () {
         return function (scope, elem, attrs) {
             elem.bind('keyup', function () {

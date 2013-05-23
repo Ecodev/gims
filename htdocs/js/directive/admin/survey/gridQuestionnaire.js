@@ -70,8 +70,10 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
                         '<div class="bar" ng-style="{width: row.entity[col.field] * 100}"></div>' +
                         '</div>'},
                     {displayName: '', cellTemplate: '<div style="margin: 5px 5px 0 5px ">' +
-                        '</div><button type="button" class="btn btn-mini btn-edit" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
-                        '<button type="button" class="btn btn-mini btn-remove" ng-click="removeQuestionnaire(row)" ><i class="icon-trash icon-large"></i></button>' +
+                        '<i class="icon-bullhorn icon-grid" ng-visible="row.entity.comments" data-toggle="tooltip" title="{{row.entity.comments}}"></i>' +
+                        '<i class="icon-grid" ng-class="{\'icon-lock\': row.entity.permission.isLocked, \'icon-unlock\': !row.entity.permission.isLocked}"></i>' +
+                        '<button type="button" class="btn btn-mini btn-edit" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
+                        '<button ng-visible="row.entity.permission.canBeDeleted" type="button" class="btn btn-mini btn-remove" ng-click="removeQuestionnaire(row)" >' +
                         '</div>'}
                 ]
             };

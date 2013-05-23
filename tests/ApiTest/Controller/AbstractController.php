@@ -81,6 +81,11 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
     protected $userQuestionnaire;
 
     /**
+     * @var Geoname
+     */
+    protected $geoName;
+
+    /**
      * @var Role
      */
     protected $role;

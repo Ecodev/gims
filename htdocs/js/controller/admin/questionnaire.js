@@ -2,6 +2,10 @@
 angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($scope, $routeParams, $location, Restangular, Modal, Select2Configurator) {
     "use strict";
 
+    $scope.status = [
+        {text: 'New', value: 'new'}
+    ];
+
     $scope.sending = false;
 
     // Default redirect
@@ -41,7 +45,7 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
             });
         } else {
             $scope.questionnaire.survey = $routeParams.survey;
-            delete $scope.questionnaire.sorting; // let the server define the sorting value
+            $scope.questionnaire.status = 'new';
             Restangular.all('questionnaire').post($scope.questionnaire).then(function(questionnaire) {
                 $scope.sending = false;
 
@@ -62,7 +66,8 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
     };
 
     // Create object with default value
-    $scope.questionnaire = {sorting: 0, type: 'foo'};
+    $scope.statusDisabled = false;
+    $scope.questionnaire = {permission: null};
 
     // Try loading questionnaire if possible...
     if ($routeParams.id) {
@@ -70,6 +75,27 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
             $scope.questionnaire = questionnaire;
         });
     }
+
+    // @todo fetch user "me" for having current capability
+//    Restangular.one('me').then(function (user) {
+//        $scope.user = user;
+//    });
+
+    // When questionnaire changes, navigate to its URL
+    $scope.$watch('questionnaire', function (questionnaire) {
+        if (questionnaire.permission !== undefined) {
+
+            // @todo set select to disable if status is unreachable by the user.
+            // $scope.statusDisabled = false;
+            if (questionnaire.permission.canBeCompleted) {
+                $scope.status.push({text: 'Completed', value: 'completed'});
+            }
+
+            if (questionnaire.permission.canBeValidated) {
+                $scope.status.push({text: 'Validated', value: 'validated'});
+            }
+        }
+    });
 
     // Load survey if possible
     var params = $location.search();

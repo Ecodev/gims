@@ -3,7 +3,7 @@
     <h2>
         <ul class="breadcrumb">
             <li><a href="/admin/survey">Surveys</a></li>
-            <li><a href="/admin/survey/edit">{{survey.code}}</a></li>
+            <li><a href="/admin/survey/edit">{{questionnaire.code}}</a></li>
             <li class="active">{{questionnaire.name}}</li>
         </ul>
     </h2>
@@ -12,9 +12,15 @@
 
         <?php echo $this->crudButtons('questionnaire'); ?>
 
-
         <tabs style="margin-top: 20px" active="panes[0].active">
             <pane heading="General info">
+
+                <div class="control-group" ng-class="{error: myForm.status.$invalid}" ng-show="questionnaire.id">
+                    <label for="questionnaire.status">State</label>
+                    <select id="questionnaire.status" name="state" ng-model="questionnaire.status"
+                            ng-options="c.value as c.text for c in status" ng-disabled="statusDisabled"></select>
+                </div>
+
                 <div class="control-group" ng-class="{error: myForm.geoname.$invalid}">
                     <label for="questionnaire.geoname">Spatial</label>
                     <input ui-select2="select2.geoname.list" ng-model="questionnaire.geoname"
@@ -23,38 +29,53 @@
                     <span ng-show="myForm.geoname.$error.required" class="help-inline">Required</span>
                 </div>
 
-                <div class="control-group" ng-class="{error: myForm.name.$invalid}">
-                    <label for="questionnaire.name">Name</label>
-                    <input id="questionnaire.name" type="text" name="name" ng-model="questionnaire.name" required class="span6"/>
-                    <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
-                </div>
-
-                <div class="control-group input-append">
-
+                <div class="input-append span12" style="margin-left: 0">
                     <div class="row-fluid">
-                        <div class="span6">
-                            <label for="questionnaire.dateObservationStart">Date observation time</label>
-                            <input id="questionnaire.dateObservationStart" class="input-small" type="text" ng-model="questionnaire.dateObservationStart"
-                                   data-date-format="dd/mm/yyyy" bs-datepicker/>
-                            <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i>
-                            </button>
+                        <div class="span3">
+                            <div class="control-group" ng-class="{error: !questionnaire.dateObservationStart}">
+                                <label for="questionnaire.dateObservationStart">
+                                    <span>Date observation time</span>
+                                    <span ng-show="!questionnaire.dateObservationStart"
+                                          class="help-inline">Required</span>
+                                </label>
+                                <input id="questionnaire.dateObservationStart" class="input-small" type="text"
+                                       ng-model="questionnaire.dateObservationStart"
+                                       required
+                                       data-date-format="dd/mm/yyyy" bs-datepicker/>
+                                <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="span6">
-                            <label for="questionnaire.dateObservationEnd">Date observation end</label>
-                            <input id="questionnaire.dateObservationEnd" class="input-small" type="text" ng-model="questionnaire.dateObservationEnd"
-                                   data-date-format="dd/mm/yyyy" bs-datepicker/>
-                            <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i>
-                            </button>
+                        <div class="span9">
+                            <div class="control-group" ng-class="{error: !questionnaire.dateObservationEnd}">
+                                <label for="questionnaire.dateObservationEnd">
+                                    <span>Date observation end</span>
+                                    <span ng-show="!questionnaire.dateObservationEnd"
+                                          class="help-inline">Required</span>
+                                </label>
+                                <input id="questionnaire.dateObservationEnd" class="input-small" type="text"
+                                       ng-model="questionnaire.dateObservationEnd"
+                                       required
+                                       data-date-format="dd/mm/yyyy" bs-datepicker/>
+                                <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="control-group">
+                    <label for="questionnaire.comments">Comments</label>
+                    <textarea id="questionnaire.comments" type="text" name="comments" ng-model="questionnaire.comments"
+                              class="span6"></textarea>
+                </div>
+
             </pane>
             <pane heading="Users">
-                <div relations="{relation: 'UserQuestionnaire', first: 'questionnaire', second: 'user', third: 'role'}"></div>
+                <div
+                    relations="{relation: 'UserQuestionnaire', first: 'questionnaire', second: 'user', third: 'role'}"></div>
             </pane>
         </tabs>
-
-        <pre>{{questionnaire | json}}</pre>
     </form>
 
     <?php echo $this->metadata('questionnaire'); ?>

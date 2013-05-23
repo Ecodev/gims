@@ -62,9 +62,12 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     private $status;
 
-    // @todo add property isValidated
-    // @todo add property canBeValidated
-    // @todo add property comments
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $comments;
 
     /**
      * Constructor
@@ -198,7 +201,8 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     public function getStatus()
     {
-        return $this->status;
+        // cast value
+        return (string) $this->status;
     }
 
     /**
@@ -240,6 +244,30 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     public function getCompleted()
     {
-        return $this->getSurvey()->getQuestions()->count() / $this->getAnswers()->count();
+        $result = 0;
+        if ($this->getAnswers()->count() > 0) {
+            // @todo multiplie by getParts + 1
+            $this->getSurvey()->getQuestions()->count() / $this->getAnswers()->count();
+        }
+        return $result;
+    }
+
+    /**
+     * @return string
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param string $comments
+     *
+     * @return Survey
+     */
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+        return $this;
     }
 }

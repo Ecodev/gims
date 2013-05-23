@@ -12,6 +12,11 @@ class QuestionnaireAssertion implements \ZfcRbac\Assertion\AssertionInterface
     protected $questionnaire;
 
     /**
+     * @var \ZfcRbac\Service\Rbac
+     */
+    protected $rbac;
+
+    /**
      * @param \Application\Model\Questionnaire $questionnaire
      * @return \Application\Assertion\QuestionnaireAssertion
      */
@@ -32,5 +37,62 @@ class QuestionnaireAssertion implements \ZfcRbac\Assertion\AssertionInterface
         // pseud code:
         // $validate = true; foreach ($questionnaire->getanswers) { $validdate &= $answer->getStatus() == VALIDATED}
         return true;
+    }
+
+    /**
+     * Tell whether a questionnaire can be marked as completed.
+     *
+     * @return bool
+     */
+    public function canBeCompleted()
+    {
+        // Get roles
+        $roles = $this->rbac->getIdentity()->getRoles();
+
+        // if the user has role reporter
+        $assertion = false;
+        if (in_array('reporter', $roles)
+            && (string)$this->questionnaire->getStatus() !== \Application\Model\QuestionnaireStatus::$VALIDATED
+        ) {
+            $assertion = true;
+        }
+        return $assertion;
+    }
+
+    /**
+     * Tell whether a questionnaire can be marked as validated.
+     *
+     * @return bool
+     */
+    public function canBeValidated()
+    {
+        $roles = $this->rbac->getIdentity()->getRoles();
+
+        // if user has role validate
+        // if questionnaire was marked as completed
+        $assertion = false;
+        if (in_array('validator', $roles)) {
+            $assertion = true;
+        }
+        return $assertion;
+    }
+
+    /**
+     * Tell whether a questionnaire can be deleted
+     *
+     * @return bool
+     */
+    public function canBeDeleted()
+    {
+        // if the questionnaire has not answer
+        return $this->questionnaire->getAnswers()->isEmpty();
+    }
+
+    /**
+     * @param \ZfcRbac\Service\Rbac $rbac
+     */
+    public function setRbac($rbac)
+    {
+        $this->rbac = $rbac;
     }
 }
