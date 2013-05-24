@@ -94,6 +94,9 @@ class Hydrator
                 if ($propertyValue instanceof \DateTime) {
                     $propertyValue = $propertyValue->format(\DateTime::ISO8601);
                 }
+                elseif ($propertyValue instanceof \Application\Model\AbstractEnum) {
+                    $propertyValue = (string)$propertyValue;
+                }
 
                 $propertyName = $value;
             }
@@ -165,6 +168,10 @@ class Hydrator
             // If model is Date time, instantiate it
             elseif ($modelName == 'DateTime') {
                 $value = new \DateTime($value);
+            }
+            // If model is an AbstractEnum, built it
+            elseif (is_subclass_of($modelName, '\Application\Model\AbstractEnum')) {
+                $value = call_user_func_array(array($modelName, 'get'), array($value));
             }
 
             if (is_callable(array($object, $setter))) {

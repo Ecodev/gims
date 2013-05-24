@@ -110,7 +110,7 @@ class QuestionnaireControllerTest extends AbstractController
             'dateObservationEnd'    => '2014-05-22T00:00:00.000Z',
             'geoname' => $this->geoName->getId(),
             'survey'  => $this->survey->getId(),
-//            'status'  => 'new',
+            'status'  => 'new',
         );
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);

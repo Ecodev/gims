@@ -32,8 +32,7 @@ class QuestionnaireRepositoryTest extends AbstractRepository
         $this->getEntityManager()->clear();
         $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
         $loadedQuestionnaire = $questionnaireRepository->findOneById($questionnaire->getId());
-        // @todo fix me
-        //$this->assertSame(QuestionnaireStatus::$REJECTED, $loadedQuestionnaire->getStatus(), 'loaded questionnaire from database, should return an enum object (not a string)');
+        $this->assertSame(QuestionnaireStatus::$REJECTED, $loadedQuestionnaire->getStatus(), 'loaded questionnaire from database, should return an enum object (not a string)');
     }
 
 }

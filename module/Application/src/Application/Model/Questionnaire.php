@@ -202,7 +202,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function getStatus()
     {
         // cast value
-        return (string) $this->status;
+        return $this->status;
     }
 
     /**
@@ -245,10 +245,18 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function getCompleted()
     {
         $result = 0;
-        if ($this->getAnswers()->count() > 0) {
-            // @todo multiplie by getParts + 1
-            $this->getSurvey()->getQuestions()->count() / $this->getAnswers()->count();
+        if (!$this->getAnswers()->isEmpty()) {
+
+            $questionCount = 0;
+            foreach ($this->getSurvey()->getQuestions() as $q) {
+                if ($q->hasParts())
+                    $questionCount += 3; // TODO: get actual parts count instead of hardcoded
+                else
+                    $questionCount += 1;
+            }
+            $questionCount / $this->getAnswers()->count();
         }
+        
         return $result;
     }
 
@@ -270,4 +278,5 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         $this->comments = $comments;
         return $this;
     }
+
 }
