@@ -9,6 +9,7 @@ use Zend\View\Model\JsonModel;
 
 class QuestionnaireController extends AbstractRestfulController
 {
+
     /**
      * @var Survey
      */
@@ -42,8 +43,8 @@ class QuestionnaireController extends AbstractRestfulController
                 $answer = $answerRepository->findOneBy($criteria, $order);
                 if ($answer) {
                     $result = $answer->getDateModified() === null ?
-                        $answer->getDateCreated()->format(DATE_ISO8601) :
-                        $answer->getDateModified()->format(DATE_ISO8601);
+                            $answer->getDateCreated()->format(DATE_ISO8601) :
+                            $answer->getDateModified()->format(DATE_ISO8601);
                 }
                 return $result;
             },
@@ -104,7 +105,7 @@ class QuestionnaireController extends AbstractRestfulController
                     'canBeUpdated' => true, // @todo implement me
                     'isLocked' => false, // @todo implement me
                 );
-             },
+            },
             'survey' => array(
                 'code',
                 'name'
@@ -113,22 +114,18 @@ class QuestionnaireController extends AbstractRestfulController
         );
     }
 
-
     public function getList()
     {
         $survey = $this->getSurvey();
 
         // Cannot list all question, without specifying a questionnaire
-        if (!$survey) {
-            $this->getResponse()->setStatusCode(404);
-            return;
+        if ($survey) {
+            $questionnaires = $this->getRepository()->findBy(array(
+                    'survey' => $survey,
+                ));
+        } else {
+                $questionnaires = $this->getRepository()->findAll();
         }
-
-        $questionnaires = $this->getRepository()->findBy(
-            array(
-                 'survey' => $survey,
-            )
-        );
 
         return new JsonModel($this->hydrator->extractArray($questionnaires, $this->getJsonConfig()));
     }
@@ -161,7 +158,6 @@ class QuestionnaireController extends AbstractRestfulController
         return parent::delete($id);
     }
 
-
     /**
      * @param int $id
      * @param array $data
@@ -177,7 +173,6 @@ class QuestionnaireController extends AbstractRestfulController
         $survey = $questionnaire->getSurvey();
 
         // @todo check here or in assertion if status has changed
-
         // Update object or not...
         if ($this->isAllowedSurvey($survey) && $this->isAllowedQuestionnaire($questionnaire)) {
             $result = parent::update($id, $data);
@@ -250,9 +245,7 @@ class QuestionnaireController extends AbstractRestfulController
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         return $rbac->isGrantedWithContext(
-            $questionnaire,
-            Permission::CAN_CREATE_OR_UPDATE_ANSWER,
-            new SurveyAssertion($questionnaire)
+                        $questionnaire, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new SurveyAssertion($questionnaire)
         );
     }
 
@@ -271,9 +264,8 @@ class QuestionnaireController extends AbstractRestfulController
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         return $rbac->isGrantedWithContext(
-            $survey,
-            Permission::CAN_CREATE_OR_UPDATE_ANSWER,
-            new SurveyAssertion($survey)
+                        $survey, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new SurveyAssertion($survey)
         );
     }
+
 }
