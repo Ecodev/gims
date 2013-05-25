@@ -18,6 +18,7 @@ describe("any page", function () {
         );
         for (var index = 0; index < pages.length; index++) {
             browser().navigateTo(pages[index]);
+            loginUser();
             expect(element('.xdebug-error').count()).toBe(0);
         }
     });

@@ -5,6 +5,7 @@ describe('contribute', function () {
 
     beforeEach(function () {
         browser().navigateTo('/contribute');
+        loginUser();
     });
 
     it('should render contribute when user navigates to /contribute', function () {

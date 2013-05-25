@@ -1,0 +1,15 @@
+<h1>A <?php echo $statusCode; ?> error occured</h1>
+<p>
+    <?php if ($error == 'error-route-unauthorized') : ?>
+        Identity (with roles <?=implode(',', $identity->getRoles());?>) is not authorized to access <?=$route;?>.
+    <?php elseif ($error == 'error-controller-unauthorized') : ?>
+        Identity (with roles <?=implode(',', $identity->getRoles());?>) is not authorized to access <?=$controller;?>
+        <?php if ($action) : ?>
+            ::<?=$action;?>Action()
+        <?php endif; ?>
+        .
+    <?php endif; ?>
+</p>
+<?php if ($statusCode == 401): ?>
+    <p>Login and try again.</p>
+<?php endif; ?>

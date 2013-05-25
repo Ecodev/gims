@@ -12,10 +12,11 @@ angular.module('myApp').controller('UserCtrl', function ($scope, $http, authServ
         dialogFade: true
     };
 
+    // Reload existing logged in user (eg: when refreshing page)
     $http.get('/user/login').success(function(data) {
         if (data.status == 'logged')
         {
-            $scope.user = data
+            $scope.user = data;
         }
     });
 
@@ -30,16 +31,16 @@ angular.module('myApp').controller('UserCtrl', function ($scope, $http, authServ
 
     $scope.hideLogin = function() {
         $scope.showLogin = false;
-    }
+    };
 
     $scope.sendLogin = function () {
         $http.post('/user/login', $scope.login).success(function (data) {
             if (data.status == 'logged')
             {
                 $scope.invalidUsernamePassword = false;
+                $scope.user = data;
                 $scope.hideLogin();
                 authService.loginConfirmed();
-                $scope.user = data;
             }
             else if (data.status == 'failed')
             {
@@ -51,16 +52,16 @@ angular.module('myApp').controller('UserCtrl', function ($scope, $http, authServ
     };
 
     $scope.sendRegister = function() {
-        $http.post('/api/user', $scope.register).success(function (data, status) {
+        $http.post('/user/register', $scope.register).success(function (data, status) {
             // auto-login with the account we just created
-            $scope.login.identity = $scope.register.email;
-            $scope.login.credential = $scope.register.password;
-            $scope.sendLogin();
+            $scope.user = data;
+            $scope.hideLogin();
+            authService.loginConfirmed();
         }).error(function (data, status, headers) {
             if (data.message.email.recordFound)
                 $scope.userExisting = true;
         });
-    }
+    };
 
 });
 

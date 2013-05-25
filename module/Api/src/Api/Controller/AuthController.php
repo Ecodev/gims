@@ -11,32 +11,36 @@ class AuthController extends \ZfcUser\Controller\UserController
 
     /**
      * Return the user info if logged in
+     * @return array|false
      */
     protected function getUserInfo()
     {
-        if ($this->zfcUserAuthentication()->getAuthService()->hasIdentity()) {
-            return array(
-                'status' => 'logged',
-                'email' => $this->zfcUserAuthentication()->getIdentity()->getEmail(),
-                'id' => $this->zfcUserAuthentication()->getIdentity()->getId(),
-                'userName' => $this->zfcUserAuthentication()->getIdentity()->getUsername(),
-                'displayName' => $this->zfcUserAuthentication()->getIdentity()->getDisplayname(),
-                'gravatar' => $this->zfcUserAuthentication()->getIdentity()->getGravatar()
-            );
+        $user = $this->zfcUserAuthentication()->getIdentity();
+
+        if ($user) {
+            $hydrator = new \Application\Service\Hydrator();
+            $result = $hydrator->extract($user, array(
+                'name',
+                'email',
+                'gravatar',
+            ));
+            $result['status'] = 'logged';
+
+            return $result;
         }
+
         return false;
     }
 
     /**
      * Login form
      */
-    public function loginAction()
+    public function loginAction($data = null)
     {
         $request = $this->getRequest();
-        $response = $this->getResponse();
 
         if ($request->isPost()) {
-            $data = Json::decode($request->getContent(), Json::TYPE_ARRAY);
+            $data = $data ?: Json::decode($request->getContent(), Json::TYPE_ARRAY);
 
             // Copy data to POST values of request so ZfcUser authentication can found them
             foreach ($data as $key => $value) {
@@ -50,14 +54,13 @@ class AuthController extends \ZfcUser\Controller\UserController
                 return new JsonModel(array(
                     'status' => 'failed',
                     'messages' => $form->getMessages()
-                ));                
+                ));
             }
         }
 
         // check if the user is already logged in and return user info
         $userInfo = $this->getUserInfo();
-        if ($userInfo)
-        {
+        if ($userInfo) {
             return new JsonModel($userInfo);
         }
 
@@ -84,12 +87,36 @@ class AuthController extends \ZfcUser\Controller\UserController
                 'status' => 'failed',
                 'messages' => 'Invalid username or password'
             ));
+        } else {
+            return new JsonModel($this->getUserInfo());
         }
-        elseif ($userInfo = $this->getUserInfo())
-        {
-            return new JsonModel($userInfo);
-        }
+    }
 
+    /**
+     * Register new user
+     */
+    public function registerAction()
+    {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $data = Json::decode($request->getContent(), Json::TYPE_ARRAY);
+            $data['display_name'] = @$data['name'];
+
+            $user = $this->getUserService()->register($data);
+
+
+            if ($user) {
+                $data['identity'] = $data['email'];
+                $data['credential'] = $data['password'];
+
+                return $this->loginAction($data);
+            } else {
+                $this->getResponse()->setStatusCode(400);
+
+                return new JsonModel(array('message' => $this->getUserService()->getRegisterForm()->getMessages()));
+            }
+        }
     }
 
 }
