@@ -1,4 +1,4 @@
-angular.module('myApp').controller('UserCtrl', function ($scope, $location, $http, authService) {
+angular.module('myApp').controller('UserCtrl', function ($scope, $http, authService) {
     'use strict';
 
     // Intercept the event broadcasted by http-auth-interceptor when a request get a HTTP 401 response
@@ -6,7 +6,12 @@ angular.module('myApp').controller('UserCtrl', function ($scope, $location, $htt
         $scope.promptLogin();
     });
 
-    // TODO: replace with actual logged in user ID
+    $scope.showLogin = false;
+    $scope.opts = {
+        backdropFade: true,
+        dialogFade: true
+    };
+
     $http.get('/user/login').success(function(data) {
         if (data.status == 'logged')
         {
@@ -19,20 +24,13 @@ angular.module('myApp').controller('UserCtrl', function ($scope, $location, $htt
         $scope.login = {};
         $scope.register = {};
         $scope.invalidUsernamePassword = false;
+        $scope.userExisting = false;
+
     };
 
     $scope.hideLogin = function() {
         $scope.showLogin = false;
     }
-
-    $scope.opts = {
-        backdropFade: true,
-        dialogFade: true
-    };
-
-    $scope.$on("$routeChangeSuccess", function (event, current, previous) {
-        $scope.redirect = $location.absUrl();
-    });
 
     $scope.sendLogin = function () {
         $http.post('/user/login', $scope.login).success(function (data) {
@@ -53,8 +51,14 @@ angular.module('myApp').controller('UserCtrl', function ($scope, $location, $htt
     };
 
     $scope.sendRegister = function() {
-        $http.post('/user/register', $scope.register).success(function (data) {
-            
+        $http.post('/api/user', $scope.register).success(function (data, status) {
+            // auto-login with the account we just created
+            $scope.login.identity = $scope.register.email;
+            $scope.login.credential = $scope.register.password;
+            $scope.sendLogin();
+        }).error(function (data, status, headers) {
+            if (data.message.email.recordFound)
+                $scope.userExisting = true;
         });
     }
 

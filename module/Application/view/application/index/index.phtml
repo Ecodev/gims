@@ -47,7 +47,7 @@
                     <div class="pull-right" ng-controller="UserCtrl">
 
                         <!-- Modal Login Window !-->
-                        <div modal="showLogin" close="cancelLogin()" options="{dialogClass: 'modal loginWindow'}">
+                        <div modal="showLogin" close="hideLogin()" options="{dialogClass: 'modal loginWindow'}">
                             <?php
                                 $loginForm = $this->zfcUserLoginWidget(array('render' => false))->loginForm;
                                 $loginForm->prepare();
@@ -58,7 +58,6 @@
                                 $this->registerForm->prepare();
                                 $this->registerForm->setAttribute('action', $this->url('zfcuser/register'));
                                 $this->registerForm->setAttribute('method', 'post');
-                                $this->registerForm->setAttribute('class', 'modal-form');
                             ?>
                             <div class="modal-body">
                                 <div class="row-fluid">
@@ -69,17 +68,17 @@
                                                     <span><?php echo $this->translate('Invalid username or password'); ?></span>
                                                 </div>
                                                 <div class="control-group" id="control-group-identity">
-                                                    <label for="identity" class="control-label"><?php echo $this->translate('Email'); ?></label>
+                                                    <label for="login-email" class="control-label"><?php echo $this->translate('Email'); ?></label>
                                                 </div>
                                                 <div class="control" id="controls-identity">
-                                                    <input type="email" name="identity" ng-model="login.identity">
+                                                    <input type="email" gims-focus name="identity" id="login-email" ng-model="login.identity">
                                                 </div>
 
                                                 <div class="control-group" id="control-group-credential">
-                                                    <label for="identity" class="control-label"><?php echo $this->translate('Password'); ?></label>
+                                                    <label for="login-password" class="control-label"><?php echo $this->translate('Password'); ?></label>
                                                 </div>
                                                 <div class="control" id="controls-credential">
-                                                    <input type="password" name="credential" ng-model="login.credential">
+                                                    <input type="password" name="credential" id="login-password" ng-model="login.credential">
                                                 </div>
 
                                                 <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Sign In'); ?></button>
@@ -90,23 +89,35 @@
                                     </div>
                                     <div class="span6">
                                         <h3 class="modal-header"><?php echo $this->translate('Register'); ?></h3>
-                                        <?php echo $this->form()->openTag($this->registerForm); ?>
-                                        <?php foreach ($this->registerForm as $element):
-                                            if (!$element instanceof Zend\Form\Element\Button)
-                                            {
-                                                echo $this->ztbFormElement($element);
-                                            }
-                                        endforeach; ?>
-                                        <?php echo $this->formButton($this->registerForm->get('submit')->setAttribute('class', 'btn btn-primary')) ?>
-                                        <input type="hidden" name="redirect" value="{{redirect}}" />
-                                        <?php echo $this->form()->closeTag(); ?>
+                                        <form class="modal-form" name="registerForm" ng-submit="sendRegister()">
+                                            <div class="control-group" ng-class="{error: userExisting || (registerForm.email.$dirty && registerForm.email.$error.email)}">
+                                                <label for="register-email"><?php echo $this->translate('Email'); ?></label>
+                                                <input type="email" name="email" id="register-email" required ng-model="register.email">
+                                                <span ng-show="registerForm.email.$error.email" class="help-inline"><?php echo $this->translate('Enter a valid email address'); ?></span>
+                                                <span ng-show="userExisting" class="help-inline"><?php echo $this->translate('There is already an account with this email address'); ?></span>
+                                            </div>
+                                            <div class="control-group" ng-class="{error: registerForm.display_name.$dirty && registerForm.display_name.$invalid}">
+                                                <label for="register-name"><?php echo $this->translate('Display name'); ?></label>
+                                                <input id="register-name" type="text" name="display_name" ng-model="register.name" required ng-minlength="3"/>
+                                                <span ng-show="registerForm.display_name.$error.minlength" class="help-inline"><?php echo sprintf($this->translate("Minimum %u characters"), 3); ?></span>
+                                            </div>
+                                            <div class="control-group" ng-class="{error: registerForm.password.$dirty && registerForm.password.$invalid}">
+                                                <label for="register-password"><?php echo $this->translate('Password'); ?></label>
+                                                <input type="password" name="password" id="register-password" placeholder="password" ng-model="register.password" required ng-minlength="6"/>
+                                                <span ng-show="registerForm.password.$error.minlength" class="help-inline"><?php echo sprintf($this->translate("Minimum %u characters"), 6); ?></span>
+                                            </div>
+                                            <div class="control-group" ng-class="{error: registerForm.passwordVerify.$dirty && registerForm.passwordVerify.$invalid}">
+                                                <input type="password" name="passwordVerify" id="register-password-verify" placeholder="confirm password" required ui-validate=" '$value==register.password' " ui-validate-watch=" 'register.passwordVerify' " ng-model="register.passwordVerify">
+                                                <span ng-show="registerForm.passwordVerify.$error.validator" class="help-inline"><?php echo $this->translate("Passwords do not match!"); ?></span>
+                                            </div>
+                                            <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Register') ?></button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <a class="btn cancel" ng-click="hideLogin()"><?php echo $this->translate('Cancel'); ?></a>
                             </div>
-                            <?php echo $this->form()->closeTag(); ?>
                         </div>
  
                         <p class="navbar-text" ng-show="user">

@@ -46,4 +46,11 @@ angular.module('myApp.directives')
                 content: '='
             }
         };
+    })
+    .directive('gimsFocus', function($timeout) {
+        return {
+            link: function ( scope, element, attrs ) {
+                $timeout( function () { element.focus(); } );
+            }
+        };
     });
