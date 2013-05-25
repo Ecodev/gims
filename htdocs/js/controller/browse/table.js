@@ -4,7 +4,6 @@ angular.module('myApp').controller('Browse/TableCtrl', function($scope, $http, S
 
     // Configure select2 via our helper service
     Select2Configurator.configure($scope, 'questionnaire');
-    Select2Configurator.configure($scope, 'part');
     Select2Configurator.configure($scope, 'filterSet');
 
 
