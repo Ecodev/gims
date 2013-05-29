@@ -93,7 +93,7 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $locati
 
     // Configure ng-grid.
     $scope.gridOptions = {
-        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
+        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 800})],
         data: 'surveys',
         enableCellSelection: true,
         showFooter: true,
