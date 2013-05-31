@@ -194,6 +194,7 @@ return array(
             'headScript' => 'Application\View\Helper\HeadScript',
             'metadata' => 'Application\View\Helper\Metadata',
             'crudButtons' => 'Application\View\Helper\CrudButtons',
+            'api' => 'Application\View\Helper\Api',
         ),
     ),
     'console' => Array(
