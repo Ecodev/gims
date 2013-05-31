@@ -58,7 +58,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->assertEquals('original name', $filter->getName());
     }
 
-    public function testHydrateUnkownPropertiesFailSilently()
+    public function testHydrateUnknownPropertiesFailSilently()
     {
 
         $data = array(
