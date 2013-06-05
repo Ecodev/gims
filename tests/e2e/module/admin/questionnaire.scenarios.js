@@ -5,6 +5,7 @@ describe('admin/questionnaire/new', function () {
 
     beforeEach(function () {
         browser().navigateTo('/admin/questionnaire/new');
+        loginUser();
     });
 
     it('should be displayed tabs', function () {

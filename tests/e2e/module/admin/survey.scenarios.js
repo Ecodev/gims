@@ -5,6 +5,7 @@ describe('admin/survey', function() {
 
     beforeEach(function() {
         browser().navigateTo('/admin/survey');
+        loginUser();
     });
 
     it('should display a grid containing surveys', function() {
@@ -32,6 +33,7 @@ describe('admin/survey/new', function() {
 
     beforeEach(function() {
         browser().navigateTo('/admin/survey/new');
+        loginUser();
     });
 
     var randomCode;
@@ -123,6 +125,7 @@ describe('admin/survey/new', function() {
 //    beforeEach(function () {
 //        //@todo
 //        browser().navigateTo('/admin/survey/edit/1');
+//        loginUser();
 //    });
 //
 //    it('should have tabs "General info", "question", "questionnaires" and "users"', function () {

@@ -119,12 +119,12 @@
                                 <a class="btn cancel" ng-click="hideLogin()"><?php echo $this->translate('Cancel'); ?></a>
                             </div>
                         </div>
- 
+
                         <p class="navbar-text" ng-show="user">
                             <ng-switch on="user.gravatar==undefined">
                                 <img ng-switch-when="false" ng-src="{{user.gravatar}}?s=40" />
                             </ng-switch>
-                            <span>{{user.displayName}}</span>
+                            <span>{{user.name}}</span>
                             <a target="_self" href="<?php echo $this->url('zfcuser/logout') ?>">[<?php echo $this->translate('Sign out') ?>]</a>
                         </p>
                         <a class="btn btn-primary" href ng-click="promptLogin()" ng-hide="user"><span class="icon-user" /> <?php echo $this->translate('User login') ?></a>

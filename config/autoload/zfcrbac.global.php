@@ -4,16 +4,22 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'ZfcRbac\Service\Rbac' => 'Application\Service\RbacFactory',
+            'ZfcRbac\View\UnauthorizedStrategy' => 'Application\Service\UnauthorizedStrategyFactory',
         ),
     ),
     'zfcrbac' => array(
+        'firewall_route' => true,
+        'firewall_controller' => true,
         'firewalls' => array(
             'ZfcRbac\Firewall\Controller' => array(
-                array('controller' => 'index', 'actions' => 'index', 'roles' => 'guest')
+//                array('controller' => 'Contribute\Controller\Index', 'actions' => 'index', 'roles' => 'member'),
+//                array('controller' => 'Admin\Controller\Survey', 'actions' => 'index', 'roles' => 'member'),
             ),
             'ZfcRbac\Firewall\Route' => array(
-                array('route' => 'profiles/add', 'roles' => 'member'),
-                array('route' => 'admin/*', 'roles' => 'administrator')
+
+                // Only members can access admin and contribute angular templates
+                array('route' => 'template_admin', 'roles' => 'member'),
+                array('route' => 'template_contribute', 'roles' => 'member'),
             ),
         ),
         'providers' => array(

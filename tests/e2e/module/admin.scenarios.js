@@ -5,6 +5,7 @@ describe('admin', function () {
 
     beforeEach(function () {
         browser().navigateTo('/admin');
+        loginUser();
     });
 
     it('should redirect to /contribute when user navigates to /admin', function () {
