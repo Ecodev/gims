@@ -16,8 +16,32 @@ abstract class AbstractRule extends \Application\Model\AbstractModel
 {
 
     /**
-     * Return the name of this rule (for end-user)
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $name;
+
+    /**
+     * Set name
+     *
+     * @param string $name
      * @return string
      */
-    abstract public function getName();
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Return the name of this rule (for end-user)
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 }

@@ -54,6 +54,13 @@ class FilterRule extends \Application\Model\AbstractModel
     private $rule;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $justification;
+
+    /**
      * Set filter
      *
      * @param Filter $filter
@@ -144,6 +151,29 @@ class FilterRule extends \Application\Model\AbstractModel
     public function getRule()
     {
         return $this->rule;
+    }
+
+    /**
+     * Set justification
+     *
+     * @param string $justification
+     * @return FilterRule
+     */
+    public function setJustification($justification)
+    {
+        $this->justification = $justification;
+
+        return $this;
+    }
+
+    /**
+     * Get justification
+     *
+     * @return string
+     */
+    public function getJustification()
+    {
+        return $this->justification;
     }
 
 }

@@ -91,10 +91,6 @@ class Jmp extends AbstractImporter
             'replacements' => array(
             // No replacements to make for water
             ),
-            'estimations' => array(
-                'min' => 83,
-                'max' => 88,
-            ),
             'ratios' => array(
                 'min' => 94,
                 'max' => 103,
@@ -105,11 +101,26 @@ class Jmp extends AbstractImporter
                 93 => "Surface water",
             ),
             'highFilters' => array(
-                "Total improved" => array(5, 12, 55, 58, 68),
-                "Piped onto premises" => array(6),
-                "Surface water" => array(60),
-                "Other Improved" => array(9, 10, 12, 55, 58, 68),
-                "Other Unimproved" => array(56, 59, 71),
+                "Total improved" => array(
+                    'children' => array(5, 12, 55, 58, 68),
+                    'estimates' => array(83, 84, 85, 86),
+                ),
+                "Piped onto premises" => array(
+                    'children' => array(6),
+                    'estimates' => array(88),
+                ),
+                "Surface water" => array(
+                    'children' => array(60),
+                    'estimates' => array(87),
+                ),
+                "Other Improved" => array(
+                    'children' => array(9, 10, 12, 55, 58, 68),
+                    'estimates' => array(),
+                ),
+                "Other Unimproved" => array(
+                    'children' => array(56, 59, 71),
+                    'estimates' => array(),
+                ),
             ),
         ),
         'Tables_S' => array(
@@ -204,10 +215,6 @@ class Jmp extends AbstractImporter
                 9 => array("to unknown place/ not sure/DK", 999, 0, null),
                 10 => array("to elsewhere", 999, 0, null),
             ),
-            'estimations' => array(
-                'min' => 88,
-                'max' => 93,
-            ),
             'ratios' => array(
                 'min' => 100,
                 'max' => 107,
@@ -219,12 +226,30 @@ class Jmp extends AbstractImporter
                 99 => "Shared",
             ),
             'highFilters' => array(
-                "Improved + shared" => array(-6, -7, -8, -9, 49, 73, 76),
-                "Sewerage connections" => array(6),
-                "Improved" => array(), // based on ratio
-                "Shared" => array(), // based on ratio
-                "Other unimproved" => array(-10, 30, 52, 53, 54, 55, 56, 80),
-                "Open defecation" => array(79),
+                "Improved + shared" => array(
+                    'children' => array(-6, -7, -8, -9, 49, 73, 76),
+                    'estimates' => array(88, 89, 90, 91, 92),
+                ),
+                "Sewerage connections" => array(
+                    'children' => array(6),
+                    'estimates' => array(93),
+                ),
+                "Improved" => array(
+                    'children' => array(), // based on ratio
+                    'estimates' => array(),
+                ),
+                "Shared" => array(
+                    'children' => array(), // based on ratio
+                    'estimates' => array(),
+                ),
+                "Other unimproved" => array(
+                    'children' => array(-10, 30, 52, 53, 54, 55, 56, 80),
+                    'estimates' => array(),
+                ),
+                "Open defecation" => array(
+                    'children' => array(79),
+                    'estimates' => array(),
+                ),
             ),
         ),
     );
@@ -236,6 +261,7 @@ class Jmp extends AbstractImporter
     private $questionnaireCount = 0;
     private $answerCount = 0;
     private $excludeCount = 0;
+    private $estimateCount = 0;
     private $ratioCount = 0;
 
     /**
@@ -300,7 +326,7 @@ class Jmp extends AbstractImporter
         $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $answerRepository->updateAbsoluteValueFromPercentageValue();
 
-        return "Total imported: $this->questionnaireCount questionnaires, $this->answerCount answers, $this->excludeCount exclude rules, $this->ratioCount ratio rules" . PHP_EOL;
+        return "Total imported: $this->questionnaireCount questionnaires, $this->answerCount answers, $this->excludeCount exclude rules, $this->ratioCount ratio rules, $this->estimateCount estimate rules" . PHP_EOL;
     }
 
     protected function getFilter($definition)
@@ -423,7 +449,7 @@ class Jmp extends AbstractImporter
 
         $this->importAnswers($sheet, $col, $survey, $questionnaire);
 
-//        $this->importRules($sheet, $col);
+        $this->importEstimates($sheet, $col, $questionnaire);
         $this->importExcludes($sheet, $col, $questionnaire);
         $this->importRatios($sheet, $col, $questionnaire);
 
@@ -681,18 +707,67 @@ class Jmp extends AbstractImporter
         return $question;
     }
 
-    private $cacheRules = array();
-
-    public function importRules(\PHPExcel_Worksheet $sheet, $col)
+    /**
+     * Import estimates as rules and associate them to highFilters
+     * @param \PHPExcel_Worksheet $sheet
+     * @param integer $col
+     * @param \Application\Model\Questionnaire $questionnaire
+     */
+    public function importEstimates(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire)
     {
-        $range = $this->definitions[$sheet->getTitle()]['estimations'];
+        $filterRuleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
+        $formulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Formula');
 
-        for ($row = $range['min']; $row <= $range['max']; $row++) {
-            $ruleName = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
-            $ruleFormula = $sheet->getCellByColumnAndRow($col + 3, $row)->getValue();
-            if ($ruleName) {
-                if (!array_key_exists($ruleName, $this->cacheRules)) {
-                    $this->cacheRules[$ruleName] = $ruleFormula;
+        foreach ($this->definitions[$sheet->getTitle()]['highFilters'] as $filterName => $filterData) {
+            $filter = $this->cacheHighFilters[$filterName];
+
+            foreach ($filterData['estimates'] as $row) {
+
+                foreach ($this->partOffsets as $offset => $part) {
+                    $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
+                    $value = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
+
+                    // Truncate decimals to be sure to match PostgreSQL round value
+                    $valueTruncated = sprintf("%.3f", round($value / 100, 3));
+
+                    if ($name && !is_null($value)) {
+
+                        var_dump(array($value, $valueTruncated));
+                        // Look for existing formula (to prevent duplication if doing several import)
+                        $formula = $formulaRepository->findOneBy(array(
+                            'name' => $name,
+                            'value' => $valueTruncated,
+                        ));
+
+                        // If we had an existing formula, maybe we also have an existing association
+                        $assoc = null;
+                        if ($formula) {
+                            $assoc = $filterRuleRepository->findOneBy(array(
+                                'questionnaire' => $questionnaire,
+                                'part' => $part,
+                                'filter' => $filter,
+                                'rule' => $formula,
+                            ));
+                        } else {
+
+                            $formula = new \Application\Model\Rule\Formula();
+                            $formula->setName($name)->setValue($valueTruncated);
+                            $this->getEntityManager()->persist($formula);
+                        }
+
+                        // If association doesn't exist yet, create it
+                        if (!$assoc) {
+                            $assoc = new \Application\Model\Rule\FilterRule();
+                            $assoc->setJustification('Imported from country files')
+                                    ->setQuestionnaire($questionnaire)
+                                    ->setRule($formula)
+                                    ->setPart($part)
+                                    ->setFilter($filter);
+
+                            $this->getEntityManager()->persist($assoc);
+                            $this->estimateCount++;
+                        }
+                    }
                 }
             }
         }
@@ -705,7 +780,7 @@ class Jmp extends AbstractImporter
         $this->getEntityManager()->flush();
 
         // Get or create all filter
-        foreach ($filters as $name => $children) {
+        foreach ($filters as $name => $filterData) {
 
             $filter = null;
             foreach ($filterSet->getFilters() as $f) {
@@ -723,7 +798,7 @@ class Jmp extends AbstractImporter
             }
 
             // Affect children filters
-            foreach ($children as $child) {
+            foreach ($filterData['children'] as $child) {
                 $filter->addChild($this->cacheFilters[$child]);
             }
 
@@ -759,7 +834,8 @@ class Jmp extends AbstractImporter
                     // If doesn't exist yet, create it
                     if (!$assoc) {
                         $assoc = new \Application\Model\Rule\FilterRule();
-                        $assoc->setQuestionnaire($questionnaire)
+                        $assoc->setJustification('Imported from country files')
+                                ->setQuestionnaire($questionnaire)
                                 ->setRule($this->excludeRule)
                                 ->setPart($part)
                                 ->setFilter($filter);
@@ -818,16 +894,16 @@ class Jmp extends AbstractImporter
                     }
 
                     $ratioRuleImproved = new \Application\Model\Rule\Ratio();
-                    $ratioRuleImproved->setFilter($filterImprovedShared)->setRatio((1 - $ratio));
+                    $ratioRuleImproved->setName('Ratio improved sanitation')->setFilter($filterImprovedShared)->setRatio((1 - $ratio));
 
                     $ratioRuleShared = new \Application\Model\Rule\Ratio();
-                    $ratioRuleShared->setFilter($filterImprovedShared)->setRatio($ratio);
+                    $ratioRuleShared->setName('Ratio shared sanitation')->setFilter($filterImprovedShared)->setRatio($ratio);
 
                     $assocImproved = new \Application\Model\Rule\FilterRule();
-                    $assocImproved->setFilter($filterImproved)->setPart($part)->setQuestionnaire($questionnaire)->setRule($ratioRuleImproved);
+                    $assocImproved->setJustification('Imported from country files')->setFilter($filterImproved)->setPart($part)->setQuestionnaire($questionnaire)->setRule($ratioRuleImproved);
 
                     $assocShared = new \Application\Model\Rule\FilterRule();
-                    $assocShared->setFilter($filterShared)->setPart($part)->setQuestionnaire($questionnaire)->setRule($ratioRuleShared);
+                    $assocShared->setJustification('Imported from country files')->setFilter($filterShared)->setPart($part)->setQuestionnaire($questionnaire)->setRule($ratioRuleShared);
 
                     $this->getEntityManager()->persist($ratioRuleImproved);
                     $this->getEntityManager()->persist($ratioRuleShared);

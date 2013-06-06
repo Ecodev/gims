@@ -16,7 +16,7 @@ class FilterRuleRepositoryTest extends AbstractRepository
         $filter = new \Application\Model\Filter('test filter');
         $relation = new \Application\Model\Rule\FilterRule();
         $rule = new \Application\Model\Rule\Exclude();
-        $relation->setFilter($filter)->setQuestionnaire($questionnaire)->setRule($rule);
+        $relation->setJustification('unit tests')->setFilter($filter)->setQuestionnaire($questionnaire)->setRule($rule);
 
         $this->getEntityManager()->persist($survey);
         $this->getEntityManager()->persist($geoname);
