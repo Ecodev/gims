@@ -20,8 +20,7 @@ class Version20130605175428 extends AbstractMigration
         $this->addSql("ALTER TABLE rule ALTER COLUMN name SET NOT NULL");
 
         $this->addSql("ALTER TABLE rule ADD formula VARCHAR(255) DEFAULT NULL");
-        $this->addSql("ALTER TABLE rule ADD value NUMERIC(4, 3) DEFAULT NULL");
-        $this->addSql("ALTER TABLE rule ADD CHECK (((value >= (-1)::numeric) AND (value <= (1)::numeric)));");
+        $this->addSql("ALTER TABLE rule ADD value DOUBLE PRECISION DEFAULT NULL");
 
 
         // Add justification field

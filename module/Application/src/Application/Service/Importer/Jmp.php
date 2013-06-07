@@ -717,6 +717,7 @@ class Jmp extends AbstractImporter
     {
         $filterRuleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
         $formulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Formula');
+        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
 
         foreach ($this->definitions[$sheet->getTitle()]['highFilters'] as $filterName => $filterData) {
             $filter = $this->cacheHighFilters[$filterName];
@@ -727,16 +728,15 @@ class Jmp extends AbstractImporter
                     $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
                     $value = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
 
-                    // Truncate decimals to be sure to match PostgreSQL round value
-                    $valueTruncated = sprintf("%.3f", round($value / 100, 3));
-
                     if ($name && !is_null($value)) {
 
-                        var_dump(array($value, $valueTruncated));
+                        $population = $populationRepository->getOneByQuestionnaire($questionnaire, $part);
+                        $absoluteValue = $population->getPopulation() * $value / 100;
+
                         // Look for existing formula (to prevent duplication if doing several import)
                         $formula = $formulaRepository->findOneBy(array(
                             'name' => $name,
-                            'value' => $valueTruncated,
+                            'value' => $absoluteValue,
                         ));
 
                         // If we had an existing formula, maybe we also have an existing association
@@ -751,7 +751,9 @@ class Jmp extends AbstractImporter
                         } else {
 
                             $formula = new \Application\Model\Rule\Formula();
-                            $formula->setName($name)->setValue($valueTruncated);
+                            $formula->setName($name)
+                                    ->setValue($absoluteValue)
+                                    ->setFormula($sheet->getCellByColumnAndRow($col + $offset, $row)->getValue());
                             $this->getEntityManager()->persist($formula);
                         }
 

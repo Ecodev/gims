@@ -29,7 +29,7 @@ class Formula extends AbstractRule
      * TODO: it should be removed when real formula engine is implemented. See class header comment
      * @var float
      *
-     * @ORM\Column(type="decimal", precision=4, scale=3, nullable=true)
+     * @ORM\Column(type="float", nullable=true)
      */
     private $value;
 
@@ -57,7 +57,7 @@ class Formula extends AbstractRule
     }
 
     /**
-     * Set value (between 0.0 and 1.0)
+     * Set absolute value
      *
      * @param float $value
      * @return Formula
@@ -70,7 +70,7 @@ class Formula extends AbstractRule
     }
 
     /**
-     * Get value (between 0.0 and 1.0)
+     * Get absolute value
      *
      * @return float
      */

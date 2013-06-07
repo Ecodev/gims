@@ -26,7 +26,7 @@ abstract class AbstractRule extends \Application\Model\AbstractModel
      * Set name
      *
      * @param string $name
-     * @return string
+     * @return AbstractRule
      */
     public function setName($name)
     {
