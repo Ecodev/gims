@@ -1,5 +1,5 @@
 
-angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($scope, $routeParams, $location, Restangular) {
+angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($scope, $routeParams, $location, Restangular, Answer) {
     'use strict';
 
     var cellEditableTemplate, numberOfAnswers, requiredNumberOfAnswers;
@@ -12,7 +12,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
 
         // @todo improve me! Hardcoded value... (Urban, Rural, Total)
         requiredNumberOfAnswers = 3;
-        Restangular.one('questionnaire', $routeParams.id).all('question').getList().then(function(questions) {
+        Restangular.one('questionnaire', $routeParams.id).all('question').getList({fields: 'filter,answers,answers.part'}).then(function(questions) {
             $scope.questions = questions;
             // Store copy of original object
             angular.forEach(questions, function (question) {
@@ -189,7 +189,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
             var regexp = new RegExp(searchTerm);
 
             angular.forEach(questionnaires, function (questionnaire) {
-                var blob = (questionnaire.id + ' ' + questionnaire.name + ' ' + questionnaire.survey.name).toUpperCase();
+                var blob = (questionnaire.id + ' ' + questionnaire.name).toUpperCase();
                 if (regexp.test(blob)) {
                     data.results.push(questionnaire);
                 }

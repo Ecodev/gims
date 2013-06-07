@@ -7,13 +7,6 @@ use Zend\View\Model\JsonModel;
 class PartController extends AbstractRestfulController
 {
 
-    protected function getJsonConfig()
-    {
-        return array(
-            'name',
-        );
-    }
-
     /**
      * @return JsonModel
      */

@@ -94,7 +94,7 @@ class QuestionnaireControllerTest extends AbstractController
             'geoname' => $geoName->getId(),
         );
 
-        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
+        $this->dispatch($this->getRoute('put') . '&fields=geoname', Request::METHOD_PUT, $data);
         $actual = $this->getJsonResponse();
         $this->assertNotEquals($expected, $actual['geoname']['id']);
     }
@@ -113,7 +113,7 @@ class QuestionnaireControllerTest extends AbstractController
             'status'  => 'new',
         );
 
-        $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
+        $this->dispatch($this->getRoute('post') . '?fields=survey', Request::METHOD_POST, $data);
         $actual = $this->getJsonResponse();
         $this->assertEquals($data['survey'], $actual['survey']['id']);
     }

@@ -17,6 +17,20 @@ class Part extends AbstractModel
 {
 
     /**
+     * @var array
+     */
+    protected static $jsonConfig
+        = array(
+            'name'
+        );
+
+    /**
+     * @var array
+     */
+    protected static $relationProperties
+        = array();
+
+    /**
      * @var string
      *
      * @ORM\Column(type="text", nullable=false)

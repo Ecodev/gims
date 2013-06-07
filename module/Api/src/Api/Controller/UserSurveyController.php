@@ -28,26 +28,6 @@ class UserSurveyController extends AbstractRestfulController
         return $this->parent;
     }
 
-    /**
-     * @return array
-     */
-    protected function getJsonConfig()
-    {
-        return array_merge(
-                array(
-            'survey' => array(
-                'name',
-            ),
-            'role' => array(
-                'name',
-            ),
-            'user' => array(
-                'name',
-            ),
-                ), parent::getJsonConfig()
-        );
-    }
-
     public function getList()
     {
         $parent = $this->getParent();

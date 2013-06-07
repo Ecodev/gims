@@ -8,18 +8,6 @@ class RoleController extends AbstractRestfulController
 {
 
     /**
-     * @return array
-     */
-    protected function getJsonConfig()
-    {
-        return array_merge(array(
-            'name'
-                ), parent::getJsonConfig()
-        );
-    }
-
-
-    /**
      * @param array $data
      *
      * @return mixed|void|JsonModel

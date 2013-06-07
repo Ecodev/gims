@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Permission extends AbstractModel
 {
-
     const CAN_CREATE_OR_UPDATE_ANSWER = 'can-create-or-update-answer';
 
     const CAN_CREATE_OR_UPDATE_SURVEY = 'can-create-or-update-survey';
@@ -20,6 +19,18 @@ class Permission extends AbstractModel
     const CAN_CREATE_OR_UPDATE_QUESTION = 'can-create-or-update-question';
 
     const CAN_VALIDATE_QUESTIONNAIRE = 'can-validate-questionnaire';
+
+    /**
+     * @var array
+     */
+    protected static $jsonConfig
+        = array();
+
+    /**
+     * @var array
+     */
+    protected static $relationProperties
+        = array();
 
     /**
      * @var string

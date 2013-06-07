@@ -2,6 +2,7 @@
 
 namespace ApiTest\Controller;
 
+use Application\Model\Survey;
 use Zend\Http\Request;
 
 class SurveyControllerTest extends AbstractController
@@ -94,7 +95,7 @@ class SurveyControllerTest extends AbstractController
     {
         $this->dispatch($this->getRoute('get') . '?fields=metadata', Request::METHOD_GET);
         $actual = $this->getJsonResponse();
-        foreach ($this->metaModel->getMetadata() as $key => $val) {
+        foreach (Survey::getMetadata() as $key => $val) {
             $metadata = is_string($key) ? $key : $val;
             $this->assertArrayHasKey($metadata, $actual);
         }

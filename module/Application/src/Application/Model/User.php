@@ -12,6 +12,25 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcRbac\Identity\IdentityInterface
 {
+    /**
+     * @var array
+     */
+    protected static $jsonConfig
+        = array(
+            'name',
+            'email',
+            'state',
+        );
+
+    /**
+     * @var array
+     */
+    protected static $relationProperties
+        = array(
+            'userSurveys' => '\Application\Model\UserSurvey',
+            'userQuestionnaires' => '\Application\Model\UserQuestionnaire',
+            'roleContext' => '\Application\Model\RoleContext',
+        );
 
     /**
      * @var string

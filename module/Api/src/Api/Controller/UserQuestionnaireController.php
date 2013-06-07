@@ -28,26 +28,6 @@ class UserQuestionnaireController extends AbstractRestfulController
         return $this->parent;
     }
 
-    /**
-     * @return array
-     */
-    protected function getJsonConfig()
-    {
-        return array_merge(
-                array(
-            'questionnaire' => array(
-                'name',
-            ),
-            'role' => array(
-                'name',
-            ),
-            'user' => array(
-                'name',
-            ),
-                ), parent::getJsonConfig()
-        );
-    }
-
     public function getList()
     {
         $parent = $this->getParent();

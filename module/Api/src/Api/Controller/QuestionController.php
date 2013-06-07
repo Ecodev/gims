@@ -30,55 +30,51 @@ class QuestionController extends AbstractRestfulController
     {
         $questionnaire = $this->getQuestionnaire();
         $controller = $this;
-        return array(
-            'name',
-            'sorting',
-            'filter' => array(
-                'name',
-                'parents' => array(
-                    'name',
-                    'parents' => array(
-                        'name',
-                    ),
-                ),
-            ),
+        $config = array(
+            // @todo currently there is no recursion limitation
+//            'filter' => array(
+//                'name',
+//                'parents' => array(
+//                    'name',
+//                    'parents' => array(
+//                        'name',
+//                    ),
+//                ),
+//            ),
+
+            // @todo remove it has been proven to work
             // Here we use a closure to get the questions' answers, but only for the current questionnaire
-            'answers' => function(\Application\Service\Hydrator $hydrator, Question $question) use($questionnaire, $controller) {
-                $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
-                $answers = $answerRepository->findBy(array(
-                    'question' => $question,
-                    'questionnaire' => $questionnaire,
-                ));
-
-                $answers = $hydrator->extractArray($answers, array(
-                            'valuePercent',
-                            'valueAbsolute',
-                            'questionnaire' => array(),
-                            'part' => array(
-                                'name',
-                            )
-                ));
-
-                // special case for question, reorganize keys for the needs of NgGrid:
-                // Numerical key must correspond to the id of the part.
-                $output = array();
-                foreach ($answers as $answer) {
-
-                    if (! empty($answer['part']['id'])) {
-                        $output[$answer['part']['id']] = $answer;
-                    } else {
-                        // It is ok to have one answer in position 0 (= total) but not more!
-                        // should not be the case... so log it
-                        if (! empty($output[0])) {
-                            $logger = Module::getServiceManager()->get('Zend\Log');
-                            $logger->info(sprintf('[WARNING] Answer object "%s" has too many null Part. ', $answer['id']));
-                        }
-                        $output[0] = $answer;
-                    }
-                }
-                return $output;
-            }
+//            'answers' => function(\Application\Service\Hydrator $hydrator, Question $question) use($questionnaire, $controller) {
+//                $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
+//                $answers = $answerRepository->findBy(array(
+//                    'question' => $question,
+//                    'questionnaire' => $questionnaire,
+//                ));
+//
+//                $answers = $hydrator->extractArray($answers, \Application\Model\Answer::getJsonConfig());
+//
+//                // special case for question, reorganize keys for the needs of NgGrid:
+//                // Numerical key must correspond to the id of the part.
+//                $output = array();
+//                foreach ($answers as $answer) {
+//
+//                    if (! empty($answer['part']['id'])) {
+//                        $output[$answer['part']['id']] = $answer;
+//                    } else {
+//                        // It is ok to have one answer in position 0 (= total) but not more!
+//                        // should not be the case... so log it
+//                        if (! empty($output[0])) {
+//                            $logger = Module::getServiceManager()->get('Zend\Log');
+//                            $logger->info(sprintf('[WARNING] Answer object "%s" has too many null Part. ', $answer['id']));
+//                        }
+//                        $output[0] = $answer;
+//                    }
+//                }
+//                return $output;
+//            }
         );
+
+        return array_merge($config, parent::getJsonConfig());
     }
 
     public function getList()

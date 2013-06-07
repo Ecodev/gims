@@ -17,24 +17,6 @@ class MetaModel
     }
 
     /**
-     * @var array
-     */
-    protected $metadata = array(
-        'dateCreated',
-        'dateModified',
-        'creator' => array('name'),
-        'modifier' => array('name'),
-    );
-
-    /**
-     * @return array
-     */
-    public function getMetadata()
-    {
-        return $this->metadata;
-    }
-
-    /**
      * Returns mandatory properties for a model which is computed as follows:
      *
      * - nullable=false as property annotation

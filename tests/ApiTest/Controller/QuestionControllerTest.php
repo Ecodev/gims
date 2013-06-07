@@ -82,7 +82,7 @@ class QuestionControllerTest extends AbstractController
      */
     public function getTheFakeQuestionAndCheckWhetherItContainsTwoAnswers()
     {
-        $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
+        $this->dispatch($this->getRoute('get') . '?fields=answers', Request::METHOD_GET);
         $actual = $this->getJsonResponse();
         $this->assertCount(2, $actual['answers']);
     }

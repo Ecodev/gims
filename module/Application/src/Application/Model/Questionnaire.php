@@ -13,6 +13,29 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Questionnaire extends AbstractModel implements \Application\Service\RoleContextInterface
 {
+    /**
+     * @var array
+     */
+    protected static $jsonConfig
+        = array(
+            'name',
+            'dateObservationStart',
+            'dateObservationEnd',
+            'completed',
+            'spatial',
+            'comments',
+            'status',
+        );
+
+    /**
+     * @var array
+     */
+    protected static $relationProperties
+        = array(
+            'survey' => '\Application\Model\Survey',
+            'geoname' => '\Application\Model\Geoname',
+            'answers' => '\Application\Model\Answer',
+        );
 
     /**
      * @var \DateTime

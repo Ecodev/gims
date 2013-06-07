@@ -12,6 +12,25 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Answer extends AbstractModel
 {
+    /**
+     * @var array
+     */
+    protected static $jsonConfig
+        = array(
+            'valuePercent',
+            'valueAbsolute',
+        );
+
+    /**
+     * @var array
+     */
+    protected static $relationProperties
+        = array(
+            'part' => '\Application\Model\Part',
+            'question' => '\Application\Model\Question',
+            'questionnaire' => '\Application\Model\Questionnaire',
+            'valueUser' => '\Application\Model\ValueUser',
+        );
 
     /**
      * @var integer
@@ -236,6 +255,8 @@ class Answer extends AbstractModel
     public function setQuestion(Question $question)
     {
         $this->question = $question;
+
+        $this->question->answerAdded($this);
 
         return $this;
     }

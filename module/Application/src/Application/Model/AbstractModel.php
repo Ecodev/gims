@@ -19,6 +19,40 @@ abstract class AbstractModel
     private static $now;
 
     /**
+     * @var array
+     */
+    protected static $jsonConfig
+        = array(
+            'id'
+        );
+
+    /**
+     * @var array
+     */
+    protected static $relationProperties = array(
+        'creator'  => '\Application\Model\User',
+        'modifier' => '\Application\Model\User',
+    );
+
+    /**
+     * @var array
+     */
+    protected static $metadata = array(
+        'dateCreated',
+        'dateModified',
+        'creator',
+        'modifier',
+    );
+
+    /**
+     * @return array
+     */
+    public static function getMetadata()
+    {
+        return self::$metadata;
+    }
+
+    /**
      * @var integer
      *
      * @ORM\Column(type="integer", nullable=false)
@@ -210,4 +244,58 @@ abstract class AbstractModel
         $this->setModifier(self::getCurrentUser());
     }
 
+    /**
+     * @return array
+     */
+    public static function getJsonConfig()
+    {
+        $class = '\\' . get_called_class();
+        return array_merge(self::$jsonConfig, $class::$jsonConfig);
+    }
+
+    /**
+     * Tells whether the key is defined as possible.
+     *
+     * @param string $key
+     *
+     * @return array
+     */
+    public static function isPropertyInJsonConfig($key)
+    {
+        $class = '\\' . get_called_class();
+        return in_array($key, $class::$jsonConfig);
+    }
+
+    /**
+     * Tells whether the property has a relation.
+     *
+     * @param string $property
+     *
+     * @return array
+     */
+    public static function hasRelation($property)
+    {
+        $class = '\\' . get_called_class();
+        $relationProperties = array_merge(self::$relationProperties, $class::$relationProperties);
+        return isset($relationProperties[$property]);
+    }
+
+    /**
+     * Return the relation for a given property
+     *
+     * @param string $property
+     *
+     * @throws \Exception
+     * @return array
+     */
+    public static function getRelation($property)
+    {
+        $class = '\\' . get_called_class();
+
+        if (!self::hasRelation($property)) {
+            throw new \Exception('Missing relation definition for property "' . $property . '"', 1370256699);
+        }
+        $relationProperties = array_merge(self::$relationProperties, $class::$relationProperties);
+        return $relationProperties[$property];
+    }
 }

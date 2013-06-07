@@ -14,6 +14,23 @@ class Role extends AbstractModel
 {
 
     /**
+     * @var array
+     */
+    protected static $jsonConfig
+        = array(
+            'name',
+        );
+
+    /**
+     * @var array
+     */
+    protected static $relationProperties
+        = array(
+            'parent' => '\Application\Model\Role',
+            'permission' => '\Application\Model\Permission',
+        );
+
+    /**
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=true)
