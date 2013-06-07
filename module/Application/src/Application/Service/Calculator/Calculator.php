@@ -95,17 +95,28 @@ use \Application\Traits\EntityManagerAware;
         }
 
 
-        // If filter is defined by a Ratio, returns it
+        $formulaValue = null;
         foreach ($filter->getFilterRules() as $filterRule) {
             $rule = $filterRule->getRule();
-            if ($rule instanceof \Application\Model\Rule\Ratio && $filterRule->getQuestionnaire() == $questionnaire && $filterRule->getPart() == $part) {
-                $value = $this->computeFilterInternal($rule->getFilter(), $questionnaire, $alreadySummedFilters, $part);
+            if ($filterRule->getQuestionnaire() == $questionnaire && $filterRule->getPart() == $part) {
 
-                // Preserve null value while multiplying
-                if (!is_null($value))
-                    $value = $rule->getRatio() * $value;
+                // If filter is defined by a Ratio, returns it
+                if ($rule instanceof \Application\Model\Rule\Ratio) {
+                    $value = $this->computeFilterInternal($rule->getFilter(), $questionnaire, $alreadySummedFilters, $part);
 
-                return $value;
+                    // Preserve null value while multiplying
+                    if (!is_null($value))
+                        $value = $rule->getRatio() * $value;
+
+                    return $value;
+                }
+                // If we have a formula, cumulate their value to add them later to normal result
+                else if ($rule instanceof \Application\Model\Rule\Formula) {
+                    $value = $rule->getValue();
+                    if (!is_null($value)) {
+                        $formulaValue += $value;
+                    }
+                }
             }
         }
 
@@ -128,6 +139,12 @@ use \Application\Traits\EntityManagerAware;
         // If no sum so far, we use children instead. This is "normal case"
         if (is_null($sum)) {
             $sum = $summer($filter->getChildren());
+        }
+
+        // And finally add cumulated formula values (what is called "Estimates" in Excel)
+        // TODO: This probably will change once we implement real formula engine
+        if (!is_null($formulaValue)) {
+            $sum += $formulaValue;
         }
 
         return $sum;
