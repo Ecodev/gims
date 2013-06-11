@@ -30,8 +30,8 @@ class Population extends AbstractImporter
         $ruralSheet = $this->loadSheet($ruralFilename);
         $totalSheet = $this->loadSheet($totalFilename);
 
-        $this->partUrban = $this->getPart('Urban');
-        $this->partRural = $this->getPart('Rural');
+        $this->partUrban = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Urban');
+        $this->partRural = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Rural');
         $this->getEntityManager()->flush(); // Flush to be sure that parts have ID
 
         $countryRepository = $this->getEntityManager()->getRepository('Application\Model\Country');

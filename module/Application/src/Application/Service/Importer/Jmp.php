@@ -287,8 +287,8 @@ class Jmp extends AbstractImporter
         $workbook = $reader->load($filename);
 
         $this->excludeRule = $this->getEntityManager()->getRepository('Application\Model\Rule\AbstractRule')->getSingletonExclude();
-        $this->partUrban = $this->getPart('Urban');
-        $this->partRural = $this->getPart('Rural');
+        $this->partUrban = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Urban');
+        $this->partRural = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Rural');
 
 
         $this->partOffsets = array(
