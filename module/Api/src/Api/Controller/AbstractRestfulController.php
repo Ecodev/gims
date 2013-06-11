@@ -43,25 +43,10 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      */
     protected function getJsonConfig()
     {
-
         $result = array();
         $fieldList = $this->params()->fromQuery('fields');
         if (!empty($fieldList)) {
-            $fields = explode(',', $fieldList);
-
-            // metadata is just an alias to dateModified, dateCreated
-            if (in_array('metadata', $fields)) {
-                $key = array_search('metadata', $fields);
-                unset($fields[$key]);
-                $fields = array_merge($fields, $this->metaModelService->getMetadata());
-            }
-            // Check if fields is allowed to be printed out.
-            foreach ($fields as $key => $val) {
-                $fieldName = is_string($key) ? $key : $val;
-                if ($this->permissionService->isFieldAllowed($fieldName)) {
-                    $result[$key] = $val;
-                }
-            }
+            $result = explode(',', $fieldList);
         }
 
         return $result;

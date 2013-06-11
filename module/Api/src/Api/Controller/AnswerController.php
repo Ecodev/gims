@@ -75,26 +75,6 @@ class AnswerController extends AbstractRestfulController
     }
 
     /**
-     * @return array
-     */
-    protected function getJsonConfig()
-    {
-        return array(
-            'valuePercent',
-            'valueAbsolute',
-            'part'     => array(
-                'name',
-            ),
-            'question' => array(
-                'name',
-                'filter' => array(
-                    'name'
-                ),
-            )
-        );
-    }
-
-    /**
      * Ask Rbac whether the User is allowed to update
      *
      * @param \Application\Model\Questionnaire $questionnaire

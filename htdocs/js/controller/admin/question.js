@@ -65,7 +65,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
     // Try loading question if possible...
     if ($routeParams.id) {
-        Restangular.one('question', $routeParams.id).get({fields: 'metadata'}).then(function(question) {
+        Restangular.one('question', $routeParams.id).get({fields: 'metadata,filter'}).then(function(question) {
             $scope.question = question;
         });
     }

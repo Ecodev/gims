@@ -15,25 +15,18 @@ class FilterController extends AbstractRestfulController
     protected function getJsonConfig()
     {
         $config = array(
-            'name',
-            'isOfficial',
-            'summands' => array(
-                'name',
-            ),
+            'children' => $closure = function (Hydrator $hydrator, Filter $filter) {
+                $result = array();
+                foreach ($filter->getChildren() as $child) {
+                    if ($child->isOfficial()) {
+                        $result[] = $hydrator->extract($child, Filter::getJsonConfig());
+                    }
+                }
+                return $result;
+            }
         );
 
-        $closure = function (Hydrator $hydrator, Filter $filter) use ($config) {
-            $result = array();
-            foreach ($filter->getChildren() as $child) {
-                if ($child->isOfficial()) {
-                    $result[] = $hydrator->extract($child, $config);
-                }
-            }
-            return $result;
-        };
-
-        $config['children'] = $closure;
-        return $config;
+        return array_merge($config, parent::getJsonConfig());
     }
 
     /**

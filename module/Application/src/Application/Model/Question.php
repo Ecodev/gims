@@ -11,6 +11,25 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Question extends AbstractModel
 {
+    /**
+     * @var array
+     */
+    protected static $jsonConfig = array(
+        'name',
+        'sorting',
+    );
+
+    /**
+     * @var array
+     */
+    protected static $relationProperties
+        = array(
+            'filter' => '\Application\Model\Filter',
+            'parent' => '\Application\Model\Question',
+            'survey' => '\Application\Model\Survey',
+            'officialQuestion' => '\Application\Model\Question',
+            'answers' => '\Application\Model\Answer',
+        );
 
     /**
      * @var integer
@@ -79,6 +98,20 @@ class Question extends AbstractModel
      * @ORM\Column(type="boolean", nullable=false)
      */
     private $hasParts = false;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Answer", mappedBy="question")
+     */
+    private $answers;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->answers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set sorting
@@ -262,6 +295,29 @@ class Question extends AbstractModel
     public function setHasParts($hasParts)
     {
         $this->hasParts = $hasParts;
+
+        return $this;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getAnswers()
+    {
+        return $this->answers;
+    }
+
+    /**
+     * Notify the question that he was added to the answer.
+     * This should only be called by Answer::setQuestion()
+     *
+     * @param Answer $answer
+     *
+     * @return Question
+     */
+    public function answerAdded(Answer $answer)
+    {
+        $this->getAnswers()->add($answer);
 
         return $this;
     }

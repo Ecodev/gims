@@ -94,33 +94,6 @@ class SurveyController extends AbstractRestfulController
     }
 
     /**
-     * @return array
-     */
-    protected function getJsonConfig()
-    {
-        return array_merge(
-            array(
-                 'name',
-                 'code',
-                 'active',
-                 'year',
-                 'questions' => array(
-                     'name',
-                     'sorting',
-                 ),
-                 'questionnaires' => array(
-                     'name',
-                     'dateObservationStart',
-                     'dateObservationEnd',
-                 ),
-                 'dateStart',
-                 'dateEnd',
-            ),
-            parent::getJsonConfig()
-        );
-    }
-
-    /**
      * Ask Rbac whether the User is allowed to update
      *
      * @param Survey $survey

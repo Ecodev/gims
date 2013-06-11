@@ -13,6 +13,25 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserSurvey extends AbstractModel
 {
+    /**
+     * @var array
+     */
+    protected static $jsonConfig
+        = array(
+            'user',
+            'role',
+            'survey',
+        );
+
+    /**
+     * @var array
+     */
+    protected static $relationProperties
+        = array(
+            'user'   => '\Application\Model\User',
+            'role'   => '\Application\Model\Role',
+            'survey' => '\Application\Model\Survey',
+        );
 
     /**
      * @var User

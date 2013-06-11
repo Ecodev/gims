@@ -12,6 +12,27 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Survey extends AbstractModel implements \Application\Service\RoleContextInterface
 {
+    /**
+     * @var array
+     */
+    protected static $jsonConfig
+        = array(
+            'name',
+            'code',
+            'active',
+            'year',
+            'dateStart',
+            'dateEnd',
+        );
+
+    /**
+     * @var array
+     */
+    protected static $relationProperties
+        = array(
+            'questions' => '\Application\Model\Question',
+            'questionnaires' => '\Application\Model\Questionnaire',
+        );
 
     /**
      * @var string
@@ -235,7 +256,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     public function setDateEnd(\DateTime $dateEnd = null)
     {
         $this->dateEnd = $dateEnd;
-        
+
         return $this;
     }
 
@@ -286,5 +307,4 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
 
         return $this;
     }
-
 }

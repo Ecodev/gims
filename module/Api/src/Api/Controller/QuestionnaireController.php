@@ -19,16 +19,7 @@ class QuestionnaireController extends AbstractRestfulController
     {
         $controller = $this;
 
-        return array(
-            'name',
-            'dateObservationStart',
-            'dateObservationEnd',
-            'validatorNames',
-            'reporterNames',
-            'completed',
-            'spatial',
-            'comments',
-            'status',
+        $config = array(
             'dateLastAnswerModification' => function(\Application\Service\Hydrator $hydrator, Questionnaire $questionnaire) use($controller) {
                 $result = null;
 
@@ -106,12 +97,9 @@ class QuestionnaireController extends AbstractRestfulController
                     'isLocked' => false, // @todo implement me
                 );
             },
-            'survey' => array(
-                'code',
-                'name'
-            ),
-            'geoname' => array('name'),
         );
+
+        return array_merge($config, parent::getJsonConfig());
     }
 
     public function getList()

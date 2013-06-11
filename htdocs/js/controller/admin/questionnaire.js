@@ -71,7 +71,7 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
 
     // Try loading questionnaire if possible...
     if ($routeParams.id) {
-        Restangular.one('questionnaire', $routeParams.id).get({fields: 'metadata'}).then(function(questionnaire) {
+        Restangular.one('questionnaire', $routeParams.id).get({fields: 'metadata,geoname'}).then(function(questionnaire) {
             $scope.questionnaire = questionnaire;
         });
     }
