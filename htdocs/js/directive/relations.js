@@ -1,5 +1,5 @@
 
-angular.module('myApp.directives').directive('relations', function() {
+angular.module('myApp.directives').directive('gimsRelations', function() {
     'use strict';
 
     return {
@@ -32,7 +32,7 @@ angular.module('myApp.directives').directive('relations', function() {
                 return string.charAt(0).toUpperCase() + string.slice(1);
             }
 
-            var options = $scope.$eval($attrs.relations);
+            var options = $scope.$eval($attrs.gimsRelations);
             $scope.second = options.second;
             $scope.third = options.third;
 
