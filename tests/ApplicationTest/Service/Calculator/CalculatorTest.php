@@ -129,4 +129,23 @@ class CalculatorTest extends AbstractCalculator
         $this->assertNull($service->computeFilter($this->filter1, $this->questionnaire));
     }
 
+    public function testCumulatedFormulasAreSummed()
+    {
+        $service = new \Application\Service\Calculator\Calculator();
+
+        // Define filter1 to add 0.5
+        $formula = new \Application\Model\Rule\Formula();
+        $formula->setValue(0.5);
+        $filterRule = new \Application\Model\Rule\FilterRule();
+        $filterRule->setFilter($this->filter1)->setQuestionnaire($this->questionnaire)->setRule($formula);
+
+        // Define filter1 to also add 0.1
+        $formula2 = new \Application\Model\Rule\Formula();
+        $formula2->setValue(0.1);
+        $filterRule2 = new \Application\Model\Rule\FilterRule();
+        $filterRule2->setFilter($this->filter1)->setQuestionnaire($this->questionnaire)->setRule($formula2);
+
+        $this->assertEquals(0.7111, $service->computeFilter($this->filter1, $this->questionnaire));
+    }
+
 }
