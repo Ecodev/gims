@@ -2,6 +2,9 @@
 
 # This script build all assets for production environment
 
+# Exit script on any error
+set -e
+
 # Find out directory of this script, no matter from where we call it, even via symlinks
 SOURCE="${BASH_SOURCE[0]}"
 DIR="$( dirname "$SOURCE" )"

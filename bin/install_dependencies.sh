@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Exit script on any error
+set -e
+
 echo "Installing PostGIS and other packages..."
 sudo apt-get install -qq software-properties-common # to get next command: add-apt-repository
 sudo add-apt-repository --yes ppa:ubuntugis/ubuntugis-unstable
