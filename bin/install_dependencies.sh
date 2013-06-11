@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+echo "Installing Compass..."
+GEMS="gem install --quiet --no-rdoc --no-ri sass compass oily_png bootstrap-sass"
+if [[ -z $TRAVIS ]]; then # If not on Travis, need to use sudo
+   GEMS="sudo $GEMS"
+fi
+`$GEMS`
+
 # Exit script on any error
 set -e
 
@@ -10,19 +17,12 @@ sudo add-apt-repository --yes ppa:chris-lea/node.js
 sudo apt-get -qq update
 sudo apt-get -qq install postgis postgresql-9.1-postgis rubygems nodejs apache2 php5-pgsql php5-cli php5-gd php5-mcrypt php5-intl
 
-echo "Installing Compass..."
-GEMS="gem install --quiet --no-rdoc --no-ri sass compass oily_png bootstrap-sass"
-if [[ -z $TRAVIS ]]; then # If not on Travis, need to use sudo
-   GEMS="sudo $GEMS"
-fi
-`$GEMS`
-
 echo "Installing JS testing tools..."
 sudo npm --global --quiet install karma phantomjs uglify-js ngmin
 
 # For Travis, we replace pre-installed PhantomJS with npm version (more recent)
-if [[ ! -z $TRAVIS ]]; then # If not on Travis, need to use sudo
-   sudo ln -sf "`sudo npm bin -g`/phantomjs" `which phantomjs` 
+if [[ ! -z $TRAVIS ]]; then
+   sudo ln -sf "`sudo npm bin -g`/phantomjs" `which phantomjs`
 fi
 
 # For Travis CI, or full local install, we need more configuration (Apache and database)
