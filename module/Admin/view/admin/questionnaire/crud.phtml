@@ -3,7 +3,6 @@
     <h2>
         <ul class="breadcrumb">
             <li><a href="/admin/survey">Surveys</a></li>
-            <li><a href="/admin/survey/edit">{{questionnaire.code}}</a></li>
             <li class="active">{{questionnaire.name}}</li>
         </ul>
     </h2>
@@ -71,7 +70,7 @@
                 </div>
 
             </pane>
-            <pane heading="Users">
+            <pane heading="Users" ui-if="questionnaire.id">
                 <div
                     relations="{relation: 'UserQuestionnaire', first: 'questionnaire', second: 'user', third: 'role'}"></div>
             </pane>

@@ -67,21 +67,20 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
 
     // Create object with default value
     $scope.statusDisabled = false;
-    // @todo enable me somehow
-    //$scope.questionnaire = {permission: null};
+    $scope.questionnaire = {};
 
     // Try loading questionnaire if possible...
     if ($routeParams.id) {
         Restangular
             .one('questionnaire', $routeParams.id)
-            .get({fields: 'metadata,geoname,status,dateObservationStart,dateObservationEnd,comments'})
+            .get({fields: 'metadata,geoname,status,dateObservationStart,dateObservationEnd,comments,name'})
             .then(function (questionnaire) {
                 $scope.questionnaire = questionnaire;
             });
     }
 
-    // @todo fetch user "me" for having current capability
-//    Restangular.one('me').then(function (user) {
+    // @todo fetch user "login" for having current capability
+//    Restangular.one('login').then(function (user) {
 //        $scope.user = user;
 //    });
 
