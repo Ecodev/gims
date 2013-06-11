@@ -14,11 +14,6 @@ use Application\Model\Filter;
 class Ratio extends AbstractRule
 {
 
-    public function getName()
-    {
-        return 'Ratio from another filter';
-    }
-
     /**
      * @var float
      *
@@ -40,7 +35,7 @@ class Ratio extends AbstractRule
      * Set ratio (between 0.0 and 1.0)
      *
      * @param float $ratio
-     * @return Answer
+     * @return Ratio
      */
     public function setRatio($ratio)
     {
@@ -63,7 +58,7 @@ class Ratio extends AbstractRule
      * Set filter
      *
      * @param Filter $filter
-     * @return Question
+     * @return Ratio
      */
     public function setFilter(Filter $filter)
     {

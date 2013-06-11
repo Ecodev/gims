@@ -14,8 +14,21 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Exclude extends AbstractRule
 {
-    public function getName()
+    private $readonlyName = 'Exclude from computing';
+
+    public function __construct()
     {
-        return 'Exclude from computing';
+        // Define once the read-only name
+        parent::setName($this->readonlyName);
+    }
+
+    /**
+     * Forbids changing name. Will always raise exception
+     * @param string $name
+     * @throws \Exception
+     */
+    public function setName($name)
+    {
+        throw new \Exception('Exclude rule name is readonly and cannot be changed by end-user');
     }
 }
