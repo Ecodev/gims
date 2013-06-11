@@ -67,7 +67,8 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
 
     // Create object with default value
     $scope.statusDisabled = false;
-    $scope.questionnaire = {permission: null};
+    // @todo enable me somehow
+    //$scope.questionnaire = {permission: null};
 
     // Try loading questionnaire if possible...
     if ($routeParams.id) {
@@ -82,20 +83,20 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
 //    });
 
     // When questionnaire changes, navigate to its URL
-    $scope.$watch('questionnaire', function (questionnaire) {
-        if (questionnaire.permission !== undefined) {
-
-            // @todo set select to disable if status is unreachable by the user.
-            // $scope.statusDisabled = false;
-            if (questionnaire.permission.canBeCompleted) {
-                $scope.status.push({text: 'Completed', value: 'completed'});
-            }
-
-            if (questionnaire.permission.canBeValidated) {
-                $scope.status.push({text: 'Validated', value: 'validated'});
-            }
-        }
-    });
+//    $scope.$watch('questionnaire', function (questionnaire) {
+//
+//        if (questionnaire.permission !== undefined) {
+//            // @todo set select to disable if status is unreachable by the user.
+//            // $scope.statusDisabled = false;
+//            if (questionnaire.permission.canBeCompleted) {
+//                $scope.status.push({text: 'Completed', value: 'completed'});
+//            }
+//
+//            if (questionnaire.permission.canBeValidated) {
+//                $scope.status.push({text: 'Validated', value: 'validated'});
+//            }
+//        }
+//    });
 
     // Load survey if possible
     var params = $location.search();
