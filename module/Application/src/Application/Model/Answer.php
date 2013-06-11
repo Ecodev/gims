@@ -77,7 +77,7 @@ class Answer extends AbstractModel
     /**
      * @var Question
      *
-     * @ORM\ManyToOne(targetEntity="Question", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Question", inversedBy="answers", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
