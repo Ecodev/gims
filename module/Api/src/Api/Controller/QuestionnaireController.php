@@ -17,10 +17,20 @@ class QuestionnaireController extends AbstractRestfulController
 
     protected function getJsonConfig()
     {
+        $config = parent::getJsonConfig();
+
         $controller = $this;
 
-        $config = array(
-            'dateLastAnswerModification' => function(\Application\Service\Hydrator $hydrator, Questionnaire $questionnaire) use($controller) {
+        // Add "dateLastAnswerModification" key in json config only if requested
+        if (in_array('dateLastAnswerModification', $config)) {
+            // unset key
+            $key = array_search('dateLastAnswerModification', $config);
+            unset($config[$key]);
+
+            $config['dateLastAnswerModification'] = function (
+                \Application\Service\Hydrator $hydrator,
+                Questionnaire $questionnaire
+            ) use ($controller) {
                 $result = null;
 
                 $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
@@ -33,34 +43,59 @@ class QuestionnaireController extends AbstractRestfulController
                 /** @var \Application\Model\Answer $answer */
                 $answer = $answerRepository->findOneBy($criteria, $order);
                 if ($answer) {
-                    $result = $answer->getDateModified() === null ?
-                            $answer->getDateCreated()->format(DATE_ISO8601) :
-                            $answer->getDateModified()->format(DATE_ISO8601);
+                    $result = $answer->getDateModified() === null
+                        ?
+                        $answer->getDateCreated()->format(DATE_ISO8601)
+                        :
+                        $answer->getDateModified()->format(DATE_ISO8601);
                 }
                 return $result;
-            },
-            'reporterNames' => function(\Application\Service\Hydrator $hydrator, Questionnaire $questionnaire) use($controller) {
+            };
+        }
+
+        // Add "reporterNames" key in json config only if requested
+        if (in_array('reporterNames', $config)) {
+            // unset key
+            $key = array_search('reporterNames', $config);
+            unset($config[$key]);
+
+            $config['reporterNames'] = function (
+                \Application\Service\Hydrator $hydrator, Questionnaire $questionnaire
+            ) use ($controller) {
                 $roleRepository = $controller->getEntityManager()->getRepository('Application\Model\Role');
 
                 // @todo find a way making sure we have a role reporter
                 /** @var \Application\Model\Role $role */
                 $role = $roleRepository->findOneByName('reporter');
 
-                $userQuestionnaireRepository = $controller->getEntityManager()->getRepository('Application\Model\UserQuestionnaire');
+                $userQuestionnaireRepository = $controller->getEntityManager()->getRepository(
+                    'Application\Model\UserQuestionnaire'
+                );
                 $criteria = array(
                     'questionnaire' => $questionnaire,
-                    'role' => $role,
+                    'role'          => $role,
                 );
 
                 $results = array();
+
                 /** @var \Application\Model\UserQuestionnaire $userQuestionnaire */
                 foreach ($userQuestionnaireRepository->findBy($criteria) as $userQuestionnaire) {
                     $results[] = $userQuestionnaire->getUser()->getName();
                 }
 
                 return implode(',', $results);
-            },
-            'validatorNames' => function(\Application\Service\Hydrator $hydrator, Questionnaire $questionnaire) use($controller) {
+            };
+        }
+
+        // Add "validatorNames" key in json config only if requested
+        if (in_array('validatorNames', $config)) {
+            // unset key
+            $key = array_search('validatorNames', $config);
+            unset($config[$key]);
+
+            $config['validatorNames'] = function (
+                \Application\Service\Hydrator $hydrator, Questionnaire $questionnaire
+            ) use ($controller) {
                 $roleRepository = $controller->getEntityManager()->getRepository('Application\Model\Role');
 
                 // @todo find a way making sure we have a role reporter
@@ -80,26 +115,24 @@ class QuestionnaireController extends AbstractRestfulController
                 }
 
                 return implode(',', $results);
-            },
-            'permission' => function (\Application\Service\Hydrator $hydrator, Questionnaire $questionnaire) use ($controller) {
+            };
+        }
 
-                $questionnaireAssertion = new QuestionnaireAssertion($questionnaire);
-
-                /* @var $rbac \Application\Service\Rbac */
-                $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-                $questionnaireAssertion->setRbac($rbac); // @todo temporary code waiting questionnaire assertion to be able to get rbac service
-
-                return array(
-                    'canBeCompleted' => true, //$questionnaireAssertion->canBeCompleted(),
-                    'canBeValidated ' => $questionnaireAssertion->canBeValidated(),
-                    'canBeDeleted' => $questionnaireAssertion->canBeDeleted(),
-                    'canBeUpdated' => true, // @todo implement me
-                    'isLocked' => false, // @todo implement me
-                );
-            },
-        );
-
-        return array_merge($config, parent::getJsonConfig());
+        // Permission is not handled for now
+        #$config['permission'] = function (\Application\Service\Hydrator $hydrator, Questionnaire $questionnaire) use ($controller) {
+        #    $questionnaireAssertion = new QuestionnaireAssertion($questionnaire);
+        #    /* @var $rbac \Application\Service\Rbac */
+        #    $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
+        #    $questionnaireAssertion->setRbac($rbac); // @todo temporary code waiting questionnaire assertion to be able to get rbac service
+        #    return array(
+        #        'canBeCompleted' => true, //$questionnaireAssertion->canBeCompleted(),
+        #        'canBeValidated ' => $questionnaireAssertion->canBeValidated(),
+        #        'canBeDeleted' => $questionnaireAssertion->canBeDeleted(),
+        #        'canBeUpdated' => true, // @todo implement me
+        #        'isLocked' => false, // @todo implement me
+        #    );
+        #};
+        return $config;
     }
 
     public function getList()
@@ -108,11 +141,13 @@ class QuestionnaireController extends AbstractRestfulController
 
         // Cannot list all question, without specifying a questionnaire
         if ($survey) {
-            $questionnaires = $this->getRepository()->findBy(array(
-                    'survey' => $survey,
-                ));
+            $questionnaires = $this->getRepository()->findBy(
+                array(
+                     'survey' => $survey,
+                )
+            );
         } else {
-                $questionnaires = $this->getRepository()->findAll();
+            $questionnaires = $this->getRepository()->findAll();
         }
 
         return new JsonModel($this->hydrator->extractArray($questionnaires, $this->getJsonConfig()));
@@ -147,7 +182,7 @@ class QuestionnaireController extends AbstractRestfulController
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $data
      *
      * @return mixed|JsonModel
@@ -233,7 +268,7 @@ class QuestionnaireController extends AbstractRestfulController
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         return $rbac->isGrantedWithContext(
-                        $questionnaire, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new SurveyAssertion($questionnaire)
+            $questionnaire, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new SurveyAssertion($questionnaire)
         );
     }
 
@@ -252,7 +287,7 @@ class QuestionnaireController extends AbstractRestfulController
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         return $rbac->isGrantedWithContext(
-                        $survey, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new SurveyAssertion($survey)
+            $survey, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new SurveyAssertion($survey)
         );
     }
 

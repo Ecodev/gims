@@ -84,6 +84,8 @@ class QuestionnaireAssertion implements \ZfcRbac\Assertion\AssertionInterface
      */
     public function canBeDeleted()
     {
+        // @todo remove me when permission will be handled
+        return true;
         // if the questionnaire has not answer
         return $this->questionnaire->getAnswers()->isEmpty();
     }

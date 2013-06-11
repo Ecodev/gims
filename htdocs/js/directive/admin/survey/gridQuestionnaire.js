@@ -73,7 +73,8 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
                         '<i class="icon-bullhorn icon-grid" ng-visible="row.entity.comments" data-toggle="tooltip" title="{{row.entity.comments}}"></i>' +
                         '<i class="icon-grid" ng-class="{\'icon-lock\': row.entity.permission.isLocked, \'icon-unlock\': !row.entity.permission.isLocked}"></i>' +
                         '<button type="button" class="btn btn-mini btn-edit" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
-                        '<button ng-visible="row.entity.permission.canBeDeleted" type="button" class="btn btn-mini btn-remove" ng-click="removeQuestionnaire(row)" >' +
+                        '<button type="button" class="btn btn-mini btn-remove" ng-click="removeQuestionnaire(row)" ><i class="icon-trash icon-large"></i></button>' +
+                        // ng-visible="row.entity.permission.canBeDeleted" @todo add me back to line above when permission are implemented
                         '</div>'}
                 ]
             };
@@ -83,9 +84,13 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
                 $scope.filteringText = text;
             });
 
-            Restangular.one('survey', $routeParams.id).all('questionnaire').getList().then(function (questionnaires) {
-                $scope.questionnaires = questionnaires
-            });
+            Restangular
+                .one('survey', $routeParams.id)
+                .all('questionnaire')
+                .getList({fields: 'dateLastAnswerModification,reporterNames,validatorNames,completed,spatial,comments'})
+                .then(function (questionnaires) {
+                    $scope.questionnaires = questionnaires;
+                });
         }
     };
 });

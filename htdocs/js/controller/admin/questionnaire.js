@@ -36,7 +36,7 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
         // First case is for update a questionnaire, second is for creating
         $scope.questionnaire.geoname = $scope.questionnaire.geoname.id;
         if ($scope.questionnaire.id) {
-                $scope.questionnaire.put().then(function() {
+            $scope.questionnaire.put().then(function () {
                 $scope.sending = false;
 
                 if (redirectAfterSave) {
@@ -46,7 +46,7 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
         } else {
             $scope.questionnaire.survey = $routeParams.survey;
             $scope.questionnaire.status = 'new';
-            Restangular.all('questionnaire').post($scope.questionnaire).then(function(questionnaire) {
+            Restangular.all('questionnaire').post($scope.questionnaire).then(function (questionnaire) {
                 $scope.sending = false;
 
                 if (redirectAfterSave) {
@@ -72,9 +72,12 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
 
     // Try loading questionnaire if possible...
     if ($routeParams.id) {
-        Restangular.one('questionnaire', $routeParams.id).get({fields: 'metadata,geoname'}).then(function(questionnaire) {
-            $scope.questionnaire = questionnaire;
-        });
+        Restangular
+            .one('questionnaire', $routeParams.id)
+            .get({fields: 'metadata,geoname,status,dateObservationStart,dateObservationEnd,comments'})
+            .then(function (questionnaire) {
+                $scope.questionnaire = questionnaire;
+            });
     }
 
     // @todo fetch user "me" for having current capability

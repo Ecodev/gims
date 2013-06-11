@@ -19,12 +19,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     protected static $jsonConfig
         = array(
             'name',
-            'dateObservationStart',
-            'dateObservationEnd',
-            'completed',
-            'spatial',
-            'comments',
-            'status',
         );
 
     /**
