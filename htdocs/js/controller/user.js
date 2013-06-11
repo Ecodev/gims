@@ -34,7 +34,9 @@ angular.module('myApp').controller('UserCtrl', function ($scope, $http, authServ
     };
 
     $scope.sendLogin = function () {
+        $scope.signing = true;
         $http.post('/user/login', $scope.login).success(function (data) {
+            $scope.signing = false;
             if (data.status == 'logged')
             {
                 $scope.invalidUsernamePassword = false;
@@ -47,17 +49,22 @@ angular.module('myApp').controller('UserCtrl', function ($scope, $http, authServ
                 $scope.invalidUsernamePassword = true;
             }
         }).error(function (data, status, headers) {
+            $scope.signing = false;
             console.log('Server error', data);
         });
     };
 
     $scope.sendRegister = function() {
+        $scope.registering = true;
         $http.post('/user/register', $scope.register).success(function (data, status) {
+            $scope.registering = false;
+
             // auto-login with the account we just created
             $scope.user = data;
             $scope.hideLogin();
             authService.loginConfirmed();
         }).error(function (data, status, headers) {
+            $scope.registering = false;
             if (data.message.email.recordFound)
                 $scope.userExisting = true;
         });

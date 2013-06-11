@@ -81,7 +81,7 @@
                                                     <input type="password" name="credential" id="login-password" ng-model="login.credential">
                                                 </div>
 
-                                                <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Sign In'); ?></button>
+                                                <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Sign In'); ?></button>  <i ng-show="signing" class="icon-loading"></i>
 
                                                 <input type="hidden" name="redirect" value="{{redirect}}">
 
@@ -110,7 +110,7 @@
                                                 <input type="password" name="passwordVerify" id="register-password-verify" placeholder="confirm password" required ui-validate=" '$value==register.password' " ui-validate-watch=" 'register.passwordVerify' " ng-model="register.passwordVerify">
                                                 <span ng-show="registerForm.passwordVerify.$error.validator" class="help-inline"><?php echo $this->translate("Passwords do not match!"); ?></span>
                                             </div>
-                                            <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Register') ?></button>
+                                            <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Register') ?></button> <i ng-show="registering" class="icon-loading"></i>
                                         </form>
                                     </div>
                                 </div>
