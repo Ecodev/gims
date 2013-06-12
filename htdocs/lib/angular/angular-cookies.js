@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.1.5
+ * @license AngularJS v1.1.4
  * (c) 2010-2012 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -145,8 +145,7 @@ angular.module('ngCookies', ['ng']).
          * @returns {Object} Deserialized cookie value.
          */
         get: function(key) {
-          var value = $cookies[key];
-          return value ? angular.fromJson(value) : value;
+          return angular.fromJson($cookies[key]);
         },
 
         /**
