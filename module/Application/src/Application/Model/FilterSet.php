@@ -19,13 +19,13 @@ class FilterSet extends AbstractModel
      * @var array
      */
     protected static $jsonConfig
-        = array();
+        = array('name');
 
     /**
      * @var array
      */
     protected static $relationProperties
-        = array();
+        = array('filters' => '\Application\Model\Filter',);
 
     /**
      * @var string
