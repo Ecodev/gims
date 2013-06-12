@@ -22,9 +22,9 @@
 
                 <div class="control-group" ng-class="{error: myForm.geoname.$invalid}">
                     <label for="questionnaire.geoname">Spatial</label>
-                    <input ui-select2="select2.geoname.list" ng-model="questionnaire.geoname"
-                           data-placeholder="<?php echo $this->translate('Select a country') ?>" style="width: 556px"
-                           required/>
+                    <gims-select api="geoname" model="questionnaire.geoname"
+                           placeholder="<?php echo $this->translate('Select a country') ?>" style="width: 556px"
+                           required></gims-select>
                     <span ng-show="myForm.geoname.$error.required" class="help-inline">Required</span>
                 </div>
 
@@ -71,8 +71,7 @@
 
             </pane>
             <pane heading="Users" ui-if="questionnaire.id">
-                <div
-                    gims-relations="{relation: 'UserQuestionnaire', first: 'questionnaire', second: 'user', third: 'role'}"></div>
+                <gims-relations relation="UserQuestionnaire" first="questionnaire" second="user" third="role"></gims-relations>
             </pane>
         </tabs>
     </form>

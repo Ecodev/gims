@@ -1,5 +1,5 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($scope, $routeParams, $location, Restangular, Modal, Select2Configurator) {
+angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($scope, $routeParams, $location, Restangular, Modal) {
     "use strict";
 
     $scope.status = [
@@ -107,7 +107,5 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
             $scope.survey = survey;
         });
     }
-
-    Select2Configurator.configure($scope, 'geoname');
 });
 

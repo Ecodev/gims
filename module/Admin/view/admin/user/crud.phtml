@@ -46,11 +46,11 @@
             </pane>
 
             <pane heading="Surveys" ui-if="user.id">
-                <div gims-relations="{relation: 'UserSurvey', first: 'user', second: 'survey', third: 'role'}"></div>
+                <gims-relations relation="UserSurvey" first="user" second="survey" third="role"></gims-relations>
             </pane>
 
             <pane heading="Questionnaires" ui-if="user.id">
-                <div gims-relations="{relation: 'UserSurvey', first: 'user', second: 'questionnaire', third: 'role'}"></div>
+                <gims-relations relation="UserQuestionnaire" first="user" second="questionnaire" third="role"></gims-relations>
             </pane>
         </tabs>
     </form>

@@ -15,9 +15,7 @@
 
         <div class="control-group" ng-class="{error: myForm.filter.$invalid}">
             <label for="question.filter">Thematic</label>
-
-            <input ui-select2="select2.filter.list" ng-model="question.filter" style="width: 556px"
-                   data-placeholder="Select a thematic" required/>
+            <gims-select api="filter" model="question.filter" placeholder="Select a thematic" style="width: 556px;" required></gims-select>
             <span ng-show="myForm.filter.$error.required" class="help-inline">Required</span>
         </div>
 

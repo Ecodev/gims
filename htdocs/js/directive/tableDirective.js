@@ -11,12 +11,12 @@ angular.module('myApp.directives').directive('gimsTable', function () {
         '<form>'+
         '<div class="row">'+
         '    <span class="span6">'+
-        '        <p><input name="questionnaire" ui-select2="select2.questionnaire.list" ng-model="select2.questionnaire.selected" data-placeholder="Select a questionnaire"  style="width:100%;"/></p>'+
+        '        <p><gims-select api="questionnaire" model="questionnaire" placeholder="Select a questionnaire" style="width:100%;"></gims-select></p>'+
         '        </span>'+
         '       </div>'+
         '       <div class="row">'+
         '       <span class="span6">'+
-        '       <p><input name="filterSet" ui-select2="select2.filterSet.list" ng-model="select2.filterSet.selected" data-placeholder="Select a filter"  style="width:100%;"/></p>'+
+        '       <p><gims-select api="filterSet" model="filterSet" placeholder="Select a filter" style="width:100%;"></gims-select></p>'+
         '       </span>'+
         '       <span class="span2">'+
         '       <p>&nbsp;<i class="icon-loading" ng-show="isLoading"></i></p>'+
@@ -37,12 +37,7 @@ angular.module('myApp.directives').directive('gimsTable', function () {
         link: function () {
             // nothing to do ?
         },
-        controller: function ($scope, $http, Select2Configurator, $timeout) {
-
-        // Configure select2 via our helper service
-            Select2Configurator.configure($scope, 'questionnaire');
-            Select2Configurator.configure($scope, 'filterSet');
-
+        controller: function ($scope, $http, $timeout) {
 
             // Configure ng-grid.
             $scope.gridOptions = {
@@ -71,10 +66,10 @@ angular.module('myApp.directives').directive('gimsTable', function () {
 
             // Whenever one of the parameter is changed
             var uniqueAjaxRequest;
-            $scope.$watch('select2.questionnaire.selected.id + select2.filterSet.selected.id', function(a) {
+            $scope.$watch('questionnaire.id + filterSet.id', function(a) {
 
                 // If they are all available ...
-                if ($scope.select2.questionnaire.selected && $scope.select2.filterSet.selected) {
+                if ($scope.questionnaire && $scope.filterSet) {
                     $scope.isLoading = true;
                     $timeout.cancel(uniqueAjaxRequest);
                     uniqueAjaxRequest = $timeout(function() {
@@ -84,8 +79,8 @@ angular.module('myApp.directives').directive('gimsTable', function () {
                         $http.get('/api/table',
                                 {
                                     params: {
-                                        questionnaire: $scope.select2.questionnaire.selected.id,
-                                        filterSet: $scope.select2.filterSet.selected.id
+                                        questionnaire: $scope.questionnaire.id,
+                                        filterSet: $scope.filterSet.id
                                     }
                                 }).success(function(data) {
                             originalTable = data;

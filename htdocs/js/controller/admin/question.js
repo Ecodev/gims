@@ -1,5 +1,5 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, $routeParams, $location, Restangular, Modal, Select2Configurator) {
+angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, $routeParams, $location, Restangular, Modal) {
     "use strict";
 
     $scope.sending = false;
@@ -77,7 +77,5 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
             $scope.survey = survey;
         });
     }
-
-    Select2Configurator.configure($scope, 'filter');
 });
 
