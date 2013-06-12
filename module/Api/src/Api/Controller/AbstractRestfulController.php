@@ -49,7 +49,24 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             $result = explode(',', $fieldList);
         }
 
+        // Overwrite existing properties with closures, if any
+        $closure = $this->getClosures();
+        foreach ($result as $key => $property) {
+            if (isset($closure[$property])) {
+                unset($result[$key]);
+                $result[$property] = $closure[$property];
+            }
+        }
+
         return $result;
+    }
+
+    /**
+     * Optionnaly return closures to override json properties
+     * @return array
+     */
+    protected function getClosures() {
+        return array();
     }
 
     /**

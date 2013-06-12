@@ -15,108 +15,86 @@ class QuestionnaireController extends AbstractRestfulController
      */
     protected $survey;
 
-    protected function getJsonConfig()
+    protected function getClosures()
     {
-        $config = parent::getJsonConfig();
-
         $controller = $this;
 
-        // Add "dateLastAnswerModification" key in json config only if requested
-        if (in_array('dateLastAnswerModification', $config)) {
-            // unset key
-            $key = array_search('dateLastAnswerModification', $config);
-            unset($config[$key]);
-
-            $config['dateLastAnswerModification'] = function (
+        $config = array();
+        $config['dateLastAnswerModification'] = function (
                 \Application\Service\Hydrator $hydrator,
                 Questionnaire $questionnaire
-            ) use ($controller) {
-                $result = null;
+                ) use ($controller) {
+                    $result = null;
 
-                $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
-                $criteria = array(
-                    'questionnaire' => $questionnaire->getId(),
-                );
-                $order = array(
-                    'dateModified' => 'DESC',
-                );
-                /** @var \Application\Model\Answer $answer */
-                $answer = $answerRepository->findOneBy($criteria, $order);
-                if ($answer) {
-                    $result = $answer->getDateModified() === null
-                        ?
-                        $answer->getDateCreated()->format(DATE_ISO8601)
-                        :
-                        $answer->getDateModified()->format(DATE_ISO8601);
-                }
-                return $result;
-            };
-        }
+                    $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
+                    $criteria = array(
+                        'questionnaire' => $questionnaire->getId(),
+                    );
+                    $order = array(
+                        'dateModified' => 'DESC',
+                    );
+                    /** @var \Application\Model\Answer $answer */
+                    $answer = $answerRepository->findOneBy($criteria, $order);
+                    if ($answer) {
+                        $result = $answer->getDateModified() === null ?
+                                $answer->getDateCreated()->format(DATE_ISO8601) :
+                                $answer->getDateModified()->format(DATE_ISO8601);
+                    }
+                    return $result;
+                };
 
-        // Add "reporterNames" key in json config only if requested
-        if (in_array('reporterNames', $config)) {
-            // unset key
-            $key = array_search('reporterNames', $config);
-            unset($config[$key]);
 
-            $config['reporterNames'] = function (
+        $config['reporterNames'] = function (
                 \Application\Service\Hydrator $hydrator, Questionnaire $questionnaire
-            ) use ($controller) {
-                $roleRepository = $controller->getEntityManager()->getRepository('Application\Model\Role');
+                ) use ($controller) {
+                    $roleRepository = $controller->getEntityManager()->getRepository('Application\Model\Role');
 
-                // @todo find a way making sure we have a role reporter
-                /** @var \Application\Model\Role $role */
-                $role = $roleRepository->findOneByName('reporter');
+                    // @todo find a way making sure we have a role reporter
+                    /** @var \Application\Model\Role $role */
+                    $role = $roleRepository->findOneByName('reporter');
 
-                $userQuestionnaireRepository = $controller->getEntityManager()->getRepository(
-                    'Application\Model\UserQuestionnaire'
-                );
-                $criteria = array(
-                    'questionnaire' => $questionnaire,
-                    'role'          => $role,
-                );
+                    $userQuestionnaireRepository = $controller->getEntityManager()->getRepository(
+                            'Application\Model\UserQuestionnaire'
+                    );
+                    $criteria = array(
+                        'questionnaire' => $questionnaire,
+                        'role' => $role,
+                    );
 
-                $results = array();
+                    $results = array();
 
-                /** @var \Application\Model\UserQuestionnaire $userQuestionnaire */
-                foreach ($userQuestionnaireRepository->findBy($criteria) as $userQuestionnaire) {
-                    $results[] = $userQuestionnaire->getUser()->getName();
-                }
+                    /** @var \Application\Model\UserQuestionnaire $userQuestionnaire */
+                    foreach ($userQuestionnaireRepository->findBy($criteria) as $userQuestionnaire) {
+                        $results[] = $userQuestionnaire->getUser()->getName();
+                    }
 
-                return implode(',', $results);
-            };
-        }
+                    return implode(',', $results);
+                };
 
-        // Add "validatorNames" key in json config only if requested
-        if (in_array('validatorNames', $config)) {
-            // unset key
-            $key = array_search('validatorNames', $config);
-            unset($config[$key]);
 
-            $config['validatorNames'] = function (
+        $config['validatorNames'] = function (
                 \Application\Service\Hydrator $hydrator, Questionnaire $questionnaire
-            ) use ($controller) {
-                $roleRepository = $controller->getEntityManager()->getRepository('Application\Model\Role');
+                ) use ($controller) {
+                    $roleRepository = $controller->getEntityManager()->getRepository('Application\Model\Role');
 
-                // @todo find a way making sure we have a role reporter
-                /** @var \Application\Model\Role $role */
-                $role = $roleRepository->findOneByName('validator');
+                    // @todo find a way making sure we have a role reporter
+                    /** @var \Application\Model\Role $role */
+                    $role = $roleRepository->findOneByName('validator');
 
-                $userQuestionnaireRepository = $controller->getEntityManager()->getRepository('Application\Model\UserQuestionnaire');
-                $criteria = array(
-                    'questionnaire' => $questionnaire,
-                    'role' => $role,
-                );
+                    $userQuestionnaireRepository = $controller->getEntityManager()->getRepository('Application\Model\UserQuestionnaire');
+                    $criteria = array(
+                        'questionnaire' => $questionnaire,
+                        'role' => $role,
+                    );
 
-                $results = array();
-                /** @var \Application\Model\UserQuestionnaire $userQuestionnaire */
-                foreach ($userQuestionnaireRepository->findBy($criteria) as $userQuestionnaire) {
-                    $results[] = $userQuestionnaire->getUser()->getName();
-                }
+                    $results = array();
+                    /** @var \Application\Model\UserQuestionnaire $userQuestionnaire */
+                    foreach ($userQuestionnaireRepository->findBy($criteria) as $userQuestionnaire) {
+                        $results[] = $userQuestionnaire->getUser()->getName();
+                    }
 
-                return implode(',', $results);
-            };
-        }
+                    return implode(',', $results);
+                };
 
         // Permission is not handled for now
         #$config['permission'] = function (\Application\Service\Hydrator $hydrator, Questionnaire $questionnaire) use ($controller) {
@@ -132,6 +110,7 @@ class QuestionnaireController extends AbstractRestfulController
         #        'isLocked' => false, // @todo implement me
         #    );
         #};
+
         return $config;
     }
 
@@ -142,9 +121,9 @@ class QuestionnaireController extends AbstractRestfulController
         // Cannot list all question, without specifying a questionnaire
         if ($survey) {
             $questionnaires = $this->getRepository()->findBy(
-                array(
-                     'survey' => $survey,
-                )
+                    array(
+                        'survey' => $survey,
+                    )
             );
         } else {
             $questionnaires = $this->getRepository()->findAll();
@@ -268,7 +247,7 @@ class QuestionnaireController extends AbstractRestfulController
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         return $rbac->isGrantedWithContext(
-            $questionnaire, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new SurveyAssertion($questionnaire)
+                        $questionnaire, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new SurveyAssertion($questionnaire)
         );
     }
 
@@ -287,7 +266,7 @@ class QuestionnaireController extends AbstractRestfulController
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         return $rbac->isGrantedWithContext(
-            $survey, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new SurveyAssertion($survey)
+                        $survey, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new SurveyAssertion($survey)
         );
     }
 

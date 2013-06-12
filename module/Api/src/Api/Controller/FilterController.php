@@ -12,7 +12,7 @@ class FilterController extends AbstractRestfulController
     /**
      * @return array
      */
-    protected function getJsonConfig()
+    protected function getClosures()
     {
         $config = array(
             'children' => $closure = function (Hydrator $hydrator, Filter $filter) {
@@ -26,7 +26,7 @@ class FilterController extends AbstractRestfulController
             }
         );
 
-        return array_merge($config, parent::getJsonConfig());
+        return $config;
     }
 
     /**

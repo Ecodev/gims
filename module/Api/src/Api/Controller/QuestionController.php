@@ -26,55 +26,48 @@ class QuestionController extends AbstractRestfulController
         return $this->questionnaire;
     }
 
-    protected function getJsonConfig()
+    protected function getClosures()
     {
         $questionnaire = $this->getQuestionnaire();
         $controller = $this;
         $config = array(
-            // @todo currently there is no recursion limitation
-//            'filter' => array(
-//                'name',
-//                'parents' => array(
-//                    'name',
-//                    'parents' => array(
-//                        'name',
-//                    ),
-//                ),
-//            ),
-
             // @todo remove it has been proven to work
             // Here we use a closure to get the questions' answers, but only for the current questionnaire
-//            'answers' => function(\Application\Service\Hydrator $hydrator, Question $question) use($questionnaire, $controller) {
-//                $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
-//                $answers = $answerRepository->findBy(array(
-//                    'question' => $question,
-//                    'questionnaire' => $questionnaire,
-//                ));
-//
-//                $answers = $hydrator->extractArray($answers, \Application\Model\Answer::getJsonConfig());
-//
-//                // special case for question, reorganize keys for the needs of NgGrid:
-//                // Numerical key must correspond to the id of the part.
-//                $output = array();
-//                foreach ($answers as $answer) {
-//
-//                    if (! empty($answer['part']['id'])) {
-//                        $output[$answer['part']['id']] = $answer;
-//                    } else {
-//                        // It is ok to have one answer in position 0 (= total) but not more!
-//                        // should not be the case... so log it
-//                        if (! empty($output[0])) {
-//                            $logger = Module::getServiceManager()->get('Zend\Log');
-//                            $logger->info(sprintf('[WARNING] Answer object "%s" has too many null Part. ', $answer['id']));
-//                        }
-//                        $output[0] = $answer;
-//                    }
-//                }
-//                return $output;
-//            }
+            'answers' => function(\Application\Service\Hydrator $hydrator, Question $question) use($questionnaire, $controller) {
+                $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
+                $answers = $answerRepository->findBy(array(
+                    'question' => $question,
+                    'questionnaire' => $questionnaire,
+                ));
+
+                // special case for question, reorganize keys for the needs of NgGrid:
+                // Numerical key must correspond to the id of the part.
+                $output = array();
+                foreach ($answers as $answer) {
+                    $answerData = $hydrator->extract($answer, \Application\Model\Answer::getJsonConfig());
+
+                    $part = $answer->getPart();
+                    if ($part) {
+                        $answerData['part'] = $hydrator->extract($part, \Application\Model\Part::getJsonConfig());
+                    }
+
+                    if (!empty($answerData['part']['id'])) {
+                        $output[$answerData['part']['id']] = $answerData;
+                    } else {
+                        // It is ok to have one answer in position 0 (= total) but not more!
+                        // should not be the case... so log it
+                        if (!empty($output[0])) {
+                            $logger = Module::getServiceManager()->get('Zend\Log');
+                            $logger->info(sprintf('[WARNING] Answer object "%s" has too many null Part. ', $answerData['id']));
+                        }
+                        $output[0] = $answerData;
+                    }
+                }
+                return $output;
+            }
         );
 
-        return array_merge($config, parent::getJsonConfig());
+        return $config;
     }
 
     public function getList()
@@ -168,7 +161,7 @@ class QuestionController extends AbstractRestfulController
         $dataKeys = array_keys($data);
 
         foreach ($properties as $propertyName) {
-            if (! in_array($propertyName, $dataKeys)) {
+            if (!in_array($propertyName, $dataKeys)) {
                 throw new \Exception('Missing property ' . $propertyName, 1368459231);
             }
         }
@@ -198,9 +191,7 @@ class QuestionController extends AbstractRestfulController
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         return $rbac->isGrantedWithContext(
-            $survey,
-            Permission::CAN_MANAGE_SURVEY,
-            new SurveyAssertion($survey)
+                        $survey, Permission::CAN_MANAGE_SURVEY, new SurveyAssertion($survey)
         );
     }
 
@@ -220,9 +211,8 @@ class QuestionController extends AbstractRestfulController
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         return $rbac->isGrantedWithContext(
-            $question,
-            Permission::CAN_CREATE_OR_UPDATE_QUESTION,
-            new QuestionAssertion($question)
+                        $question, Permission::CAN_CREATE_OR_UPDATE_QUESTION, new QuestionAssertion($question)
         );
     }
+
 }

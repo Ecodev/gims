@@ -1,5 +1,5 @@
 
-angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($scope, $routeParams, $location, Restangular, Answer) {
+angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($scope, $routeParams, $location, Restangular, Answer) {
     'use strict';
 
     var cellEditableTemplate, numberOfAnswers, requiredNumberOfAnswers;
@@ -12,10 +12,10 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
 
         // @todo improve me! Hardcoded value... (Urban, Rural, Total)
         requiredNumberOfAnswers = 3;
-        Restangular.one('questionnaire', $routeParams.id).all('question').getList({fields: 'filter,answers,answers.part'}).then(function(questions) {
+        Restangular.one('questionnaire', $routeParams.id).all('question').getList({fields: 'filter,answers'}).then(function(questions) {
             $scope.questions = questions;
             // Store copy of original object
-            angular.forEach(questions, function (question) {
+            angular.forEach(questions, function(question) {
 
                 // Make sure we have the right number existing in the Model
                 numberOfAnswers = question.answers.length;
@@ -38,14 +38,14 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
     }
 
     // When questionnaire changes, navigate to its URL
-    $scope.$watch('selectedQuestionnaire', function (questionnaire) {
+    $scope.$watch('selectedQuestionnaire', function(questionnaire) {
         if (questionnaire && (questionnaire.id !== $routeParams.id)) {
             $location.path('/contribute/questionnaire/' + questionnaire.id);
         }
     });
 
     // Update Answer method
-    $scope.validateAnswer = function (column, row) {
+    $scope.validateAnswer = function(column, row) {
 
         var answerIndex = /[0-9]+/g.exec(column.field)[0];
         var answer = row.entity.answers[answerIndex];
@@ -72,13 +72,20 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
     };
 
     // Update Answer method
-    $scope.updateAnswer = function (column, row) {
+    $scope.updateAnswer = function(column, row) {
 
         var reg = new RegExp('[0-9]+', "g");
         var answerIndex = reg.exec(column.field)[0];
         var question = row.entity;
 
         var answer = new Answer(question.answers[answerIndex]);
+
+        var reloadQuestion = function() {
+            question = Restangular.one('question', question.id).get({fields: 'filter,answers'});
+
+            // GUI remove the loading icon
+            $('.icon-loading', row.elm).toggle();
+        };
 
         // Get the field and check whether it has an error class
         if (!$('.col' + column.index, row.elm).find('input').hasClass('error')) {
@@ -90,14 +97,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
 
             // True means the answer exists and must be updated. Otherwise, create a new answer
             if (answer.id > 0) {
-                answer.$update({id: answer.id}, function () {
-
-                    // Update the question model in memory. Other way?
-                    question.$get({idQuestionnaire: $routeParams.id, id: question.id});
-
-                    // GUI remove the loading icon
-                    $('.icon-loading', row.elm).toggle();
-                });
+                answer.$update({id: answer.id}, reloadQuestion);
             } else {
                 // Convention:
                 // the answerIndex == part
@@ -107,14 +107,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
                 }
                 answer.question = question.id;
                 answer.questionnaire = $routeParams.id;
-                answer.$create(function () {
-
-                    // Update the question model in memory. Other way?
-                    question.$get({idQuestionnaire: $routeParams.id, id: question.id});
-
-                    // GUI remove the loading icon
-                    $('.icon-loading', row.elm).toggle();
-                });
+                answer.$create(reloadQuestion);
             }
 
         } else {
@@ -149,8 +142,8 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
     $scope.sending = 0;
 
     // Update Data
-    $scope.updateAnswers = function () {
-        angular.forEach($scope.questions, function (question, key) {
+    $scope.updateAnswers = function() {
+        angular.forEach($scope.questions, function(question, key) {
             var questionOriginal = $scope.originalQuestions[key];
 
             // save the question only if it is different from the original
@@ -158,9 +151,9 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
                 $scope.sending = $scope.sending + question.answers.length;
 
                 // create an answer
-                angular.forEach(question.answers, function (answerObject) {
+                angular.forEach(question.answers, function(answerObject) {
                     var answer = new Answer(answerObject);
-                    answer.$update({id: answer.id}, function () {
+                    answer.$update({id: answer.id}, function() {
                         $scope.sending--;
                     });
                 });
@@ -168,27 +161,27 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function ($sc
         });
     };
 
-    var formatSelection = function (questionnaire) {
+    var formatSelection = function(questionnaire) {
         return questionnaire.name;
     };
 
-    var formatResult = function (questionnaire) {
+    var formatResult = function(questionnaire) {
         return formatSelection(questionnaire);
     };
 
     var questionnaires;
-    Restangular.all('questionnaire').getList().then(function (data) {
+    Restangular.all('questionnaire').getList().then(function(data) {
         questionnaires = data;
     });
 
     $scope.availableQuestionnaires = {
-        query: function (query) {
+        query: function(query) {
             var data = {results: []};
 
             var searchTerm = query.term.toUpperCase();
             var regexp = new RegExp(searchTerm);
 
-            angular.forEach(questionnaires, function (questionnaire) {
+            angular.forEach(questionnaires, function(questionnaire) {
                 var blob = (questionnaire.id + ' ' + questionnaire.name).toUpperCase();
                 if (regexp.test(blob)) {
                     data.results.push(questionnaire);
