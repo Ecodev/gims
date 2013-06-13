@@ -117,17 +117,8 @@ class QuestionnaireController extends AbstractRestfulController
     public function getList()
     {
         $survey = $this->getSurvey();
-
-        // Cannot list all question, without specifying a questionnaire
-        if ($survey) {
-            $questionnaires = $this->getRepository()->findBy(
-                    array(
-                        'survey' => $survey,
-                    )
-            );
-        } else {
-            $questionnaires = $this->getRepository()->findAll();
-        }
+        $q = $this->params()->fromQuery('q');
+        $questionnaires = $this->getRepository()->getAll($survey, $q);
 
         return new JsonModel($this->hydrator->extractArray($questionnaires, $this->getJsonConfig()));
     }
@@ -271,3 +262,4 @@ class QuestionnaireController extends AbstractRestfulController
     }
 
 }
+
