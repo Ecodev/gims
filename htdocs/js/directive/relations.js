@@ -76,6 +76,7 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                 Restangular.all($scope.relation).post(data).then(function(newRelation) {
                     $scope.relations.push(newRelation);
                     $scope.isLoading = false;
+                    $scope.thirdValue = null; // Reset last select2 option
                 });
             };
 
