@@ -31,7 +31,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($sco
         });
     }
 
-    // Update Answer method
+    // Validate Answer method
     $scope.validateAnswer = function(column, row) {
 
         var answerIndex = /[0-9]+/g.exec(column.field)[0];
@@ -103,7 +103,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($sco
     };
 
     // Template for cell editing with input "number".
-    cellEditableTemplate = '<input style="width: 90%" step="any" type="number" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-blur="updateAnswer(col, row)" ng-keyup="validateAnswer(col, row)">';
+    var cellEditableTemplate = '<input ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" step="any" type="number" style="width: 90%" ng-blur="updateAnswer(col, row)" ng-keyup="validateAnswer(col, row)" />';
 
     // Keep track of the selected row.
     $scope.selectedRow = [];
