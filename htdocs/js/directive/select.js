@@ -109,9 +109,12 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             var formatSelection = function(item) {
                 return item.name;
             };
-            
+
             $scope.options.formatResult = formatSelection;
             $scope.options.formatSelection = formatSelection;
+
+            // Required to be able to clear the selected value (used in directive gimsRelation)
+            $scope.options.initSelection = function() {};
         }
     };
 });
