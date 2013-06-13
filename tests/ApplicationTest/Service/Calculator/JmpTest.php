@@ -640,4 +640,20 @@ class JmpTest extends AbstractCalculator
                 ), $rt);
     }
 
+    public function testAllZeroValueShouldNotDivideByZero()
+    {
+        // Set everything to zero
+        foreach ($this->questionnaires as $questionnaire) {
+            foreach ($questionnaire->getAnswers() as $answer) {
+                $answer->setValueAbsolute(0);
+            }
+        }
+
+        // This call should NOT raise PHP warnings
+        $this->assertEquals(array(
+            'regression' => 0,
+            'population' => 25,
+                ), $this->service->computeRegression(2006, $this->filter1, $this->questionnaires));
+    }
+
 }

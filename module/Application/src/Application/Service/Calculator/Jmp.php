@@ -237,13 +237,20 @@ class Jmp extends Calculator
         } elseif ($year == $d['minYear'] - 6) {
             $result = $this->computeRegression($year + 4, $filter, $questionnaires, $part)['regression'];
         } elseif ($year < $d['maxYear'] + 3 && $year > $d['minYear'] - 3 && $d['count'] > 1 && $d['period'] > 4) {
-            $result = \PHPExcel_Calculation_Statistical::FORECAST($year, $d['values%'], $d['years']);
+            $result = $this->ifNonZeroValue($d['values%'], function() use($year, $d) {
+                        return \PHPExcel_Calculation_Statistical::FORECAST($year, $d['values%'], $d['years']);
+                    });
         } elseif ($year < $d['maxYear'] + 7 && $year > $d['minYear'] - 7 && ($d['count'] < 2 || $d['period'] < 5)) {
             $result = \PHPExcel_Calculation_Statistical::AVERAGE($d['values%']);
         } elseif ($year > $d['minYear'] - 7 && $year < $d['minYear'] - 1) {
-            $result = \PHPExcel_Calculation_Statistical::FORECAST($d['minYear'] - 2, $d['values%'], $d['years']);
+            $result = $this->ifNonZeroValue($d['values%'], function() use($d) {
+                        return \PHPExcel_Calculation_Statistical::FORECAST($d['minYear'] - 2, $d['values%'], $d['years']);
+                    });
         } elseif ($year > $d['maxYear'] + 1 && $year < $d['maxYear'] + 7) {
-            $result = \PHPExcel_Calculation_Statistical::FORECAST($d['maxYear'] + 2, $d['values%'], $d['years']);
+            $result = $this->ifNonZeroValue($d['values%'], function() use($d) {
+                        return \PHPExcel_Calculation_Statistical::FORECAST($d['maxYear'] + 2, $d['values%'], $d['years']);
+                    });
+            ;
         } else {
             $result = null;
         }
@@ -319,8 +326,13 @@ class Jmp extends Calculator
         $result['maxYear'] = $yearsWithData ? max($yearsWithData) : null;
         $result['period'] = $result['maxYear'] - $result['minYear'] ? : 1;
 
-        $result['slope'] = $result['count'] < 2 ? null : \PHPExcel_Calculation_Statistical::SLOPE($result['values'], $years);
-        $result['slope%'] = $result['count'] < 2 ? null : \PHPExcel_Calculation_Statistical::SLOPE($result['values%'], $years);
+
+        $result['slope'] = $result['count'] < 2 ? null : $this->ifNonZeroValue($result['values'], function() use($result, $years) {
+                            return \PHPExcel_Calculation_Statistical::SLOPE($result['values'], $years);
+                        });
+        $result['slope%'] = $result['count'] < 2 ? null : $this->ifNonZeroValue($result['values%'], function() use($result, $years) {
+                            return \PHPExcel_Calculation_Statistical::SLOPE($result['values%'], $years);
+                        });
 
         $result['average'] = $result['count'] ? \PHPExcel_Calculation_MathTrig::SUM($result['values']) / $result['count'] : null;
         $result['average%'] = $result['count'] ? \PHPExcel_Calculation_MathTrig::SUM($result['values%']) / $result['count'] : null;
@@ -332,5 +344,21 @@ class Jmp extends Calculator
         return $result;
     }
 
-}
+    /**
+     * PHPExcel divide by zero, so we need to wrap it to ensure that we have at least 1 non-zero value
+     * @param array $data
+     * @param Closure $phpExcelFunction
+     * @return float
+     */
+    private function ifNonZeroValue(array $data, \Closure $phpExcelFunction)
+    {
+        foreach ($data as $d) {
+            if ($d) {
+                return $phpExcelFunction();
+            }
+        }
 
+        return 0;
+    }
+
+}
