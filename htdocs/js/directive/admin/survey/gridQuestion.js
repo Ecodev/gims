@@ -9,7 +9,7 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
         template: '<div>' +
             '<div class="row-fluid">' +
             '<div class="span9">' +
-            '<input type="text" ng-model="filteringText" placeholder="Search..." class="search" style="width: 400px"/>' +
+            '<input type="text" ng-model="gridOptions.filterOptions.filterText" placeholder="Search..." class="search" style="width: 400px"/>' +
             '</div>' +
             '<div class="span3" style="text-align: right">' +
             '<i class="icon-plus-sign"></i> ' +
@@ -45,13 +45,6 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
             // Keep track of the selected row.
             $scope.selectedRow = [];
 
-            // Initialize
-            $scope.filteringText = '';
-            $scope.filterOptions = {
-                filterText: 'filteringText',
-                useExternalFilter: false
-            };
-
             // Configure ng-grid.
             $scope.gridOptions = {
                 plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
@@ -59,7 +52,7 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
                 enableCellSelection: true,
                 showFooter: true,
                 selectedItems: $scope.selectedRow,
-                filterOptions: $scope.filterOptions,
+                filterOptions: {},
                 multiSelect: false,
                 columnDefs: [
                     {field: 'sorting', displayName: '#', width: '50px'},
@@ -68,11 +61,6 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
                         '<button type="button" class="btn btn-mini btn-remove" ng-click="removeQuestion(row)" ><i class="icon-trash icon-large"></i></button>'}
                 ]
             };
-
-            $scope.$on('filterChanged', function (evt, text) {
-                console.log(text);
-                $scope.filteringText = text;
-            });
         }
     };
 });

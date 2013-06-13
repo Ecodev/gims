@@ -9,7 +9,7 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
         template: '<div>' +
             '<div class="row-fluid">' +
             '<div class="span9">' +
-            '<input type="text" ng-model="filteringText" placeholder="Search..." class="search" style="width: 400px"/>' +
+            '<input type="text" ng-model="gridOptions.filterOptions.filterText" placeholder="Search..." class="search" style="width: 400px"/>' +
             '</div>' +
             '<div class="span3" style="text-align: right">' +
             '<i class="icon-plus-sign"></i> ' +
@@ -45,13 +45,6 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
             // Keep track of the selected row.
             $scope.selectedRow = [];
 
-            // Initialize
-            $scope.filteringText = '';
-            $scope.filterOptions = {
-                filterText: 'filteringText',
-                useExternalFilter: false
-            };
-
             // Configure ng-grid.
             $scope.gridOptions = {
                 plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
@@ -59,7 +52,7 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
                 enableCellSelection: true,
                 showFooter: true,
                 selectedItems: $scope.selectedRow,
-                filterOptions: $scope.filterOptions,
+                filterOptions: {},
                 multiSelect: false,
                 columnDefs: [
                     {field: 'spatial', displayName: 'Spatial'},
@@ -78,11 +71,6 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
                         '</div>'}
                 ]
             };
-
-            $scope.$on('filterChanged', function (evt, text) {
-                console.log(text);
-                $scope.filteringText = text;
-            });
 
             Restangular
                 .one('survey', $routeParams.id)
