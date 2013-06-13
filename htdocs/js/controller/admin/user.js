@@ -69,13 +69,6 @@ angular.module('myApp').controller('Admin/UserCtrl', function($scope, $location,
     'use strict';
 
     // Initialize
-    $scope.filteringText = '';
-
-    $scope.filterOptions = {
-        filterText: 'filteringText',
-        useExternalFilter: false
-    };
-
     $scope.users = Restangular.all('user').getList();
 
     // Keep track of the selected row.
@@ -88,7 +81,7 @@ angular.module('myApp').controller('Admin/UserCtrl', function($scope, $location,
         enableCellSelection: true,
         showFooter: true,
         selectedItems: $scope.selectedRow,
-        filterOptions: $scope.filterOptions,
+        filterOptions: {},
         multiSelect: false,
         columnDefs: [
             {field: 'name', displayName: 'Name', width: '250px'},
@@ -106,8 +99,4 @@ angular.module('myApp').controller('Admin/UserCtrl', function($scope, $location,
     $scope.edit = function(row) {
         $location.path('/admin/user/edit/' + row.entity.id);
     };
-
-    $scope.$on('filterChanged', function(evt, text) {
-        $scope.filteringText = text;
-    });
 });

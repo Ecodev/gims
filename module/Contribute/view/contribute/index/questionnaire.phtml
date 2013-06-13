@@ -1,8 +1,7 @@
 <div class="container">
 
     <h2>Questionnaire</h2>
-    <input ui-select2="availableQuestionnaires" ng-model="selectedQuestionnaire" style="width:100%"
-           data-placeholder="Select a questionnaire"/>
+    <gims-select api="questionnaire" name="id" model="questionnaire" placeholder="<?php echo $this->translate('Select a questionnaire') ?>" style="width:100%;"/></gims-select>
 
     <h2>Questions</h2>
 

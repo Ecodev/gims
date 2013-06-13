@@ -49,10 +49,6 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
             $scope.gridOptions = {
                 plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
                 data: 'relations',
-                filterOptions: {
-                    filterText: 'filteringText',
-                    useExternalFilter: false
-                },
                 multiSelect: false,
                 columnDefs: [
                     {field: $scope.second + '.name', displayName: capitaliseFirstLetter($scope.second)},

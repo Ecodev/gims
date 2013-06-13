@@ -80,12 +80,6 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $locati
     "use strict";
 
     // Initialize
-    $scope.filteringText = '';
-    $scope.filterOptions = {
-        filterText: 'filteringText',
-        useExternalFilter: false
-    };
-
     $scope.surveys = Restangular.all('survey').getList();
 
     // Keep track of the selected row.
@@ -98,7 +92,7 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $locati
         enableCellSelection: true,
         showFooter: true,
         selectedItems: $scope.selectedRow,
-        filterOptions: $scope.filterOptions,
+        filterOptions: {},
         multiSelect: false,
         columnDefs: [
             {field: 'code', displayName: 'Code', width: '150px'},
@@ -106,7 +100,7 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $locati
             {field: 'active', displayName: 'Active', cellFilter: 'checkmark', width: '100px'},
             {field: 'year', displayName: 'Year', width: '100px'},
             {displayName: '', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
-                '<button type="button" class="btn btn-mini" ng-click="remove(row)" ><i class="icon-trash icon-large"></i></button>'}
+                        '<button type="button" class="btn btn-mini" ng-click="remove(row)" ><i class="icon-trash icon-large"></i></button>'}
         ]
     };
 
@@ -118,7 +112,4 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $locati
         $location.path('/admin/survey/edit/' + row.entity.id);
     };
 
-    $scope.$on('filterChanged', function (evt, text) {
-        $scope.filteringText = text;
-    });
 });
