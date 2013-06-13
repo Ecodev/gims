@@ -14,6 +14,8 @@ class CrudButtons extends \Zend\View\Helper\AbstractHtmlElement
     {
         $result = <<<STRING
 
+        <a ng-click="cancel()" class="btn">Back</a>
+
         <span ng-switch="sending > 0">
             <div class="btn-group" ng-switch-when="true">
                 <button class="btn btn-primary disabled btn-saving">
@@ -37,8 +39,6 @@ class CrudButtons extends \Zend\View\Helper\AbstractHtmlElement
                 </ul>
             </div>
         </span>
-
-        <a ng-click="cancel()" class="btn">Cancel</a>
 
         <button ng-click="delete()"
                 ng-show="$objectName.id" class="btn btn-danger"><i class="icon-trash"></i> Delete</button>
