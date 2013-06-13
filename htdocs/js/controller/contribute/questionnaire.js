@@ -1,5 +1,5 @@
 
-angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($scope, $routeParams, $location, Restangular, Answer) {
+angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($scope, $routeParams, Restangular, Answer) {
     'use strict';
 
     var cellEditableTemplate, numberOfAnswers, requiredNumberOfAnswers;
@@ -29,20 +29,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($sco
                 $scope.originalQuestions.push(Restangular.copy(question));
             });
         });
-
-        // Here we use synchronous style affectation to be able to set initial
-        // value of Select2 (after Select2 itself is initialized)
-        Restangular.one('questionnaire', $routeParams.id).get().then(function(questionnaire) {
-            $scope.selectedQuestionnaire = questionnaire;
-        });
     }
-
-    // When questionnaire changes, navigate to its URL
-    $scope.$watch('selectedQuestionnaire', function(questionnaire) {
-        if (questionnaire && (questionnaire.id !== $routeParams.id)) {
-            $location.path('/contribute/questionnaire/' + questionnaire.id);
-        }
-    });
 
     // Update Answer method
     $scope.validateAnswer = function(column, row) {
@@ -159,38 +146,6 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($sco
                 });
             }
         });
-    };
-
-    var formatSelection = function(questionnaire) {
-        return questionnaire.name;
-    };
-
-    var formatResult = function(questionnaire) {
-        return formatSelection(questionnaire);
-    };
-
-    var questionnaires;
-    Restangular.all('questionnaire').getList().then(function(data) {
-        questionnaires = data;
-    });
-
-    $scope.availableQuestionnaires = {
-        query: function(query) {
-            var data = {results: []};
-
-            var searchTerm = query.term.toUpperCase();
-            var regexp = new RegExp(searchTerm);
-
-            angular.forEach(questionnaires, function(questionnaire) {
-                var blob = (questionnaire.id + ' ' + questionnaire.name).toUpperCase();
-                if (regexp.test(blob)) {
-                    data.results.push(questionnaire);
-                }
-            });
-            query.callback(data);
-        },
-        formatResult: formatResult,
-        formatSelection: formatSelection
     };
 
 });

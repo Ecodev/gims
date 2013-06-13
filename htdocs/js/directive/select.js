@@ -5,6 +5,9 @@
  *
  * Or specify name attribute to change default behavior
  * <gims-select api="filterSet" model="mySelectedFilterSet" name="myFilterName" placeholder="Select a questionnaire" style="width:100%;"></gims-select>
+ *
+ * To enable "ID mode", specify name="id" in element. This will reload the current URL
+ * with the ID of the selected item instead of GET parameter (see for example: /contribute/questionnaire)
  */
 angular.module('myApp.directives').directive('gimsSelect', function() {
     'use strict';
@@ -25,15 +28,26 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
         link: function(scope, element, attr, ctrl) {
 
         },
-        controller: function($scope, $attrs, Restangular, $location, $route) {
+        controller: function($scope, $attrs, Restangular, $location, $route, $routeParams) {
             var api = $scope.api;
             var name = $scope.name || api; // default key to same name as route
+            var fromUrl = name == 'id' ? $routeParams.id : $location.search()[name];
 
-            // If current URL does not reload when url changes, then when selected item changes, update URL
-            if (!$route.current.$$route.reloadOnSearch) {
+            // Update URL when value changes
+            if (!$route.current.$$route.reloadOnSearch || name == 'id') {
                 $scope.$watch($attrs.ngModel + '.id', function(id) {
                     if (id) {
-                        $location.search(name, id);
+                        if (name == 'id') {
+                            if (id != $routeParams.id) {
+                                // If curent URL reload when url changes, but we are in 'id' mode, update the ID in the URL path
+                                var newPath = $location.path().replace(/\/?\d*$/, '/' + id);
+                                $location.path(newPath);
+                            }
+                        }
+                        else {
+                            // If current URL does not reload when url changes, then when selected item changes, update URL search part
+                            $location.search(name, id);
+                        }
                     }
                 });
             }
@@ -63,7 +77,6 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 };
 
                 // Reload a single item if we have its ID from URL
-                var fromUrl = $location.search()[name];
                 if (fromUrl) {
                     Restangular.one(api, fromUrl).get().then(function(item) {
                         $scope[$attrs.ngModel] = item;
@@ -78,7 +91,6 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 var items;
                 Restangular.all(api).getList().then(function(data) {
                     items = data;
-                    var fromUrl = $location.search()[name];
                     angular.forEach(items, function(item) {
                         if (item.id == fromUrl) {
                             $scope[$attrs.ngModel] = item;
@@ -114,7 +126,8 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             $scope.options.formatSelection = formatSelection;
 
             // Required to be able to clear the selected value (used in directive gimsRelation)
-            $scope.options.initSelection = function() {};
+            $scope.options.initSelection = function() {
+            };
         }
     };
 });
