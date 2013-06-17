@@ -19,13 +19,11 @@
             <span class="span2">
                 <p>&nbsp;<i class="icon-loading" ng-show="isLoading"></i></p>
             </span>
-            <input type="hidden" ng-model="exclude"/>
         </div>
-
     </form>
 
     <div class="alert alert-info" ng-hide="chart"><i class="icon-info-sign"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?></div>
-    <chart value="chart" type="area" height="400">
+    <chart value="chart" type="area" height="400" chart-obj="chartObj">
     </chart>
 
 </div>

@@ -13,12 +13,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
         $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
         $excludeStr = $this->params()->fromQuery('exclude');
-        $refresh = $this->params()->fromQuery('refresh');
-        $excluded = array();
-        if ($excludeStr && strlen($excludeStr))
-        {
-            $excluded = split(',', $excludeStr);
-        }
+        $excludedAnswers = is_string($excludeStr)&&strlen($excludeStr) ? split(',', $excludeStr) : array();
 
         $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findBy(array('geoname' => $country ? $country->getGeoname() : -1));
 
@@ -28,18 +23,27 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $startYear = 1980;
         $endYear = 2011;
 
-        // First get series of flatten regression lines
-        $series = array();
+        // First get series of flatten regression lines with excluded values (if any)
+        $series = $this->computeExcluded($excludedAnswers, $questionnaires, $startYear, $endYear, $part, $calculator);
+
+        // If we only want to refresh the lines with ignored values, we return a partial highcharts data with just those series (quicker to refresh)
+        if ($this->params()->fromQuery('onlyExcluded'))
+        {
+            return new JsonModel($series);
+        }
+
+        // Then get series of flatten regression lines
         $filterCount = 0;
         if ($filterSet) {
             $filterCount = $filterSet->getFilters()->count();
-            $series = $calculator->computeFlatten($startYear, $endYear, $filterSet, $questionnaires, $part);
-            foreach ($series as &$serie) {
+            $lines = $calculator->computeFlatten($startYear, $endYear, $filterSet, $questionnaires, $part);
+            foreach ($lines as &$serie) {
                 $serie['type'] = 'line';
                 foreach ($serie['data'] as &$d) {
                     if (!is_null($d))
                         $d = round($d * 100, 1);
                 }
+                $series[] = $serie;
             }
 
             // Then add scatter points which are each questionnaire values
@@ -49,25 +53,23 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $scatter = array(
                     'type' => 'scatter',
                     'name' => $filter->getName(),
-                    'allowPointSelect' => true,
+                    'allowPointSelect' => false, // because we will use our own click handler
                     'data' => array(),
                 );
                 $i = 0;
                 foreach ($data['values%'] as $surveyCode => $value) {
 
                     if (!is_null($value)) {
-                        $isExcluded = in_array($idFilter.':'.$surveyCode, $excluded);
                         $scatterData = array(
                             'name' => $surveyCode,
                             'id' => $idFilter.':'.$surveyCode,
                             'x' => $data['years'][$i],
                             'y' => round($value * 100, 1),
                         );
-                        // grey the ignored questionnaires scatter plots
-                        if (in_array($idFilter.':'.$surveyCode, $excluded))
+                        // select the ignored values
+                        if (in_array($idFilter.':'.$surveyCode, $excludedAnswers))
                         {
-                            $scatterData['dataLabels'] = array('color' => '#BBB');
-                            $scatterData['marker'] = array('fillColor' => '#BBB');
+                            $scatterData['selected'] = 'true';
                         }
                         $scatter['data'][] = $scatterData;
                     }
@@ -82,7 +84,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $chart = array(
             'chart' => array(
                 'height' => 600,
-                'animation' => $refresh ? false : true,
+                'animation' => false,
             ),
             // Here we use default highchart colors and symbols, but truncated at the same number of series,
             // so it will get repeated for lines and scatter points
@@ -113,6 +115,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'min' => 0,
                 'max' => 100,
             ),
+            'credits' => array('enabled' => false),
             'plotOptions' => array(
                 'line' => array(
                     'marker' => array(
@@ -130,13 +133,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'scatter' => array(
                     'dataLabels' => array(
                         'enabled' => true,
-                        'format' => '{point.name}',
                     ),
                     'marker' => array(
                         'states' => array(
                             'select' => array(
-                                'fillColor' => '#BBB',
-                                'lineColor' => '#BBB',
+                                'lineColor' => '#DDD',
+                                'fillColor' => '#DDD',
                             ),
                         ),
                     ),
@@ -146,6 +148,45 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         );
 
         return new JsonModel($chart);
+    }
+
+    protected function computeExcluded($excludedAnswers, $allQuestionnaires, $startYear, $endYear, $part, $calculator)
+    {
+        $filtersExcluded = array();
+        foreach($excludedAnswers as $r) {
+            list($idFilter, $surveyCode) = split(':', $r);
+            if (!array_key_exists($idFilter, $filtersExcluded))
+                $filtersExcluded[$idFilter] = array();
+            $filtersExcluded[$idFilter][] = $surveyCode;
+        }
+        // If there are excluded answers, compute an additional regression line for each filter they concern
+        $series = array();
+        foreach($filtersExcluded as $idFilter => $excludedSurveys)
+        {
+            $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($idFilter);
+            $filterSetSingle = new \Application\Model\FilterSet();
+            $filterSetSingle->addFilter($filter);
+            $questionnairesNotExcluded = array();
+            foreach($allQuestionnaires as $questionnaire)
+            {
+                if (!in_array($questionnaire->getSurvey()->getCode(), $excludedSurveys)) {
+                    $questionnairesNotExcluded[] = $questionnaire;
+                }
+            }
+            $serieWithExcluded = $calculator->computeFlatten($startYear, $endYear, $filterSetSingle, $questionnairesNotExcluded, $part);
+            foreach ($serieWithExcluded as &$serie) {
+                $serie['type'] = 'line';
+                $serie['name'] .= ' (ignored answers)';
+                $serie['idFilter'] = $idFilter;
+                $serie['dashStyle'] = 'ShortDash';
+                foreach ($serie['data'] as &$d) {
+                    if (!is_null($d))
+                        $d = round($d * 100, 1);
+                }
+                $series[] = $serie;
+            }
+        }
+        return $series;
     }
 
 }
