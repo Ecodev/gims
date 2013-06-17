@@ -95,31 +95,31 @@ class Jmp extends AbstractImporter
                 'min' => 94,
                 'max' => 103,
             ),
-            'excludes' => array(
-                91 => "Total improved",
-                92 => "Piped onto premises",
-                93 => "Surface water",
-            ),
             'highFilters' => array(
                 "Total improved" => array(
                     'children' => array(5, 12, 55, 58, 68),
                     'estimates' => array(83, 84, 85, 86),
+                    'excludes' => 91,
                 ),
                 "Piped onto premises" => array(
                     'children' => array(6),
                     'estimates' => array(88),
+                    'excludes' => 92,
                 ),
                 "Surface water" => array(
                     'children' => array(60),
                     'estimates' => array(), // TODO: When implementing formula engine, should use row 87, see: https://support.ecodev.ch/issues/2072#note-3
+                    'excludes' => 93,
                 ),
                 "Other Improved" => array(
                     'children' => array(9, 10, 12, 55, 58, 68),
                     'estimates' => array(),
+                    'excludes' => null,
                 ),
                 "Other Unimproved" => array(
                     'children' => array(56, 59, 71),
                     'estimates' => array(),
+                    'excludes' => null,
                 ),
             ),
         ),
@@ -219,36 +219,36 @@ class Jmp extends AbstractImporter
                 'min' => 100,
                 'max' => 107,
             ),
-            'excludes' => array(
-                96 => "Improved + shared",
-                97 => "Sewerage connections",
-                98 => "Open defecation",
-                99 => "Shared",
-            ),
             'highFilters' => array(
                 "Improved + shared" => array(
                     'children' => array(-6, -7, -8, -9, 49, 73, 76),
                     'estimates' => array(88, 89, 90, 91, 92),
+                    'excludes' => 96,
                 ),
                 "Sewerage connections" => array(
                     'children' => array(6),
                     'estimates' => array(93),
+                    'excludes' => 97,
                 ),
                 "Improved" => array(
                     'children' => array(), // based on ratio
                     'estimates' => array(),
+                    'excludes' => null,
                 ),
                 "Shared" => array(
                     'children' => array(), // based on ratio
                     'estimates' => array(),
+                    'excludes' => 99,
                 ),
                 "Other unimproved" => array(
                     'children' => array(-10, 30, 52, 53, 54, 55, 56, 80),
                     'estimates' => array(),
+                    'excludes' => null,
                 ),
                 "Open defecation" => array(
                     'children' => array(79),
                     'estimates' => array(),
+                    'excludes' => 98,
                 ),
             ),
         ),
@@ -818,7 +818,12 @@ class Jmp extends AbstractImporter
     {
         $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
 
-        foreach ($this->definitions[$sheet->getTitle()]['excludes'] as $row => $filterName) {
+        foreach ($this->definitions[$sheet->getTitle()]['highFilters'] as $filterName => $filterData) {
+            $row = $filterData['excludes'];
+            if (!$row) {
+                continue;
+            }
+
             $filter = $this->cacheHighFilters[$filterName];
 
             foreach ($this->partOffsets as $offset => $part) {
