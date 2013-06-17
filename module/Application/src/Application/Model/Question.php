@@ -300,6 +300,8 @@ class Question extends AbstractModel
     }
 
     /**
+     * Get all answers
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getAnswers()

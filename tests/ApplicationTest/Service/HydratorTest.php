@@ -74,7 +74,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->assertEquals($data, $actual, 'it must be exactly same as input, except the id');
     }
 
-    public function testCanHydrateRecursive()
+    public function testDoesNotModifySubobject()
     {
         $filter = new \Application\Model\Filter();
         $filter->setOfficialFilter($filter);
@@ -373,7 +373,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
                 )), 'should serialize DateTime');
     }
 
-    public function testHydrateSubObject()
+    public function testHydrateAssociationWithSuboject()
     {
         $filter1 = new \Application\Model\Filter('filter 1');
         $filter2 = new \Application\Model\Filter('filter 2');
@@ -387,13 +387,16 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $mockHydrator->hydrate(array(
             'officialFilter' => array(
                 'id' => 12345,
+                'name' => 'name that should not be hydrated'
             ),
                 ), $filter1);
         $this->assertEquals($filter2, $filter1->getOfficialFilter(), 'can set subobject');
 
         $filter1->setOfficialFilter(null);
+        $this->assertNull($filter1->getOfficialFilter());
         $mockHydrator->hydrate(array('officialFilter' => 12345), $filter1);
         $this->assertEquals($filter2, $filter1->getOfficialFilter(), 'can also use short syntax with only ID');
+        $this->assertEquals('filter 2', $filter1->getOfficialFilter()->getName(), 'properties of subobject should never be modified');
     }
 
     /**

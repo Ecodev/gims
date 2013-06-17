@@ -43,6 +43,11 @@ class AnswerController extends AbstractRestfulController
         // Update object or not...
         if ($this->isAllowed($questionnaire)) {
             $result = parent::create($data);
+
+            // Compute absolute values based on percentage values for all answer
+            // TODO: find a cleaner way to do that, especially not for all answers, but only one
+            $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
+            $answerRepository->updateAbsoluteValueFromPercentageValue();
         } else {
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));
@@ -67,6 +72,11 @@ class AnswerController extends AbstractRestfulController
         // Update object or not...
         if ($this->isAllowed($questionnaire)) {
             $result = parent::update($id, $data);
+
+            // Compute absolute values based on percentage values for all answer
+            // TODO: find a cleaner way to do that, especially not for all answers, but only one
+            $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
+            $answerRepository->updateAbsoluteValueFromPercentageValue();
         } else {
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));

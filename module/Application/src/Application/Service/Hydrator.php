@@ -365,14 +365,7 @@ class Hydrator
                         $subObject = $this->getObject($modelName, $value['id']);
                     }
 
-                    // Also hydrate subobject, but only if it's not ourself because it would
-                    // overwrite the change we are trying to do. This is typically the case
-                    // of user whose last modifier is himself, but could also happen in other cases.
-                    if ($object !== $subObject) {
-                        $value = $this->hydrate($value, $subObject);
-                    } else {
-                        $value = $subObject;
-                    }
+                    $value = $subObject;
                 } else {
                     $logger = Module::getServiceManager()->get('Zend\Log');
                     $logger->info('[WARNING] implement me! Can not persist data. Missing method ' . $getter);

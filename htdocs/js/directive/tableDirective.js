@@ -38,7 +38,8 @@ angular.module('myApp.directives').directive('gimsTable', function () {
             // nothing to do ?
         },
         controller: function ($scope, $http, $timeout) {
-
+            $scope.showOnlyTopLevel = true;
+            
             // Configure ng-grid.
             $scope.gridOptions = {
                 data: 'table',
