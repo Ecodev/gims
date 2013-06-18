@@ -76,7 +76,7 @@ class AnswerController extends AbstractRestfulController
             // Compute absolute values based on percentage values for all answer
             // TODO: find a cleaner way to do that, especially not for all answers, but only one
             $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
-            $answerRepository->updateAbsoluteValueFromPercentageValue();
+            $answerRepository->updateAbsoluteValueFromPercentageValue($answer);
         } else {
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));

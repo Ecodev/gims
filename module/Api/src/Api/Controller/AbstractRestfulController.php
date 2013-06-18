@@ -142,13 +142,23 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      */
     public function get($id)
     {
-        $object = $this->getRepository()->findOneBy(array('id' => $id));
-        if (!$object) {
-            $this->getResponse()->setStatusCode(404);
-            return;
+        $objects = array();
+        foreach (explode(',', $id) as $id) {
+            $object = $this->getRepository()->findOneBy(array('id' => $id));
+            if (!$object) {
+                $this->getResponse()->setStatusCode(404);
+                return;
+            }
+            $objects[] = $object;
         }
 
-        return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
+        // if we have multiple ids to output
+        if (count($objects) > 1) {
+            $result = new JsonModel($this->hydrator->extractArray($objects, $this->getJsonConfig()));
+        } else {
+            $result = new JsonModel($this->hydrator->extract($objects[0], $this->getJsonConfig()));
+        }
+        return $result;
     }
 
     /**

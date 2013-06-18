@@ -76,17 +76,22 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                     }
                 };
 
-                // Reload a single item if we have its ID from URL
+                // Reload a single or multiple items if we have its ID from URL
                 if (fromUrl) {
-                    Restangular.one(api, fromUrl).get().then(function(item) {
-                        $scope[$attrs.ngModel] = item;
-                    });
+                    if (fromUrl.split(',').length > 1) {
+                        Restangular.all(api).getList({id: fromUrl, returnType: 'list'}).then(function (items) {
+                            $scope[$attrs.ngModel] = items;
+                        });
+                    } else {
+                        Restangular.one(api, fromUrl).get().then(function (item) {
+                            $scope[$attrs.ngModel] = item;
+                        });
+                    }
                 }
             }
             // Otherwise, default to standard mode (list fully loaded)
             else
             {
-
                 // Load items and re-select item based on URL params (if any)
                 var items;
                 Restangular.all(api).getList().then(function(data) {
@@ -116,7 +121,6 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 };
             }
 
-
             // Configure formatting
             var formatSelection = function(item) {
                 return item.name;
@@ -126,7 +130,8 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             $scope.options.formatSelection = formatSelection;
 
             // Required to be able to clear the selected value (used in directive gimsRelation)
-            $scope.options.initSelection = function() {
+            $scope.options.initSelection = function(element, callback) {
+                callback($(element).data('$ngModelController').$modelValue);
             };
         }
     };

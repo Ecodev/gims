@@ -9,8 +9,12 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     public function indexAction()
     {
-        $idQuestionnaire = $this->params()->fromQuery('questionnaire');
+        $questionnaireParameter = $this->params()->fromQuery('questionnaire');
+        $idQuestionnaires = explode(',', $questionnaireParameter);
+        $idQuestionnaire = array_shift($idQuestionnaires); // this the first parameter
         $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
+
+
         $questionnaire = $questionnaireRepository->find($idQuestionnaire);
 
         $pp = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
@@ -35,6 +39,26 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             foreach ($filterSet->getFilters() as $filter) {
                 $result = array_merge($result, $this->computeWithChildren($questionnaire, $filter, $parts));
             }
+
+            $sideResults = array();
+            $_result = array();
+            foreach ($idQuestionnaires as $id) {
+                $sideQuestionnaire = $questionnaireRepository->find($id);
+                foreach ($filterSet->getFilters() as $filter) {
+                    $_result = array_merge($_result, $this->computeWithChildren($sideQuestionnaire, $filter, $parts));
+                }
+
+                // store result
+                $sideResults[$id] = $_result;
+            }
+
+            // merge back data with other questionnaires
+            foreach ($sideResults as $sideResult) {
+
+                foreach ($sideResult as $key => $data) {
+                    $result[$key]['values'][] = $data['values'][0];
+                }
+            }
         }
 
         return new JsonModel($result);
@@ -52,7 +76,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
         foreach ($parts as $p) {
             $computed = $service->computeFilter($filter, $questionnaire, $p['part']);
-            $current['values'][$p['part'] ? $p['part']->getName() : 'Total'] = $computed && $p['population']->getPopulation() ? $computed / $p['population']->getPopulation() : null;
+            $current['values'][0][$p['part'] ? $p['part']->getName() : 'Total'] = $computed && $p['population']->getPopulation() ? $computed / $p['population']->getPopulation() : null;
         }
 
         $result = array($current);
