@@ -1,10 +1,13 @@
-
 angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $location, $http, $timeout) {
     'use strict';
 
+    $scope.chartObj;
+    var fromUrl = $location.search()['exclude'];
+    $scope.exclude = fromUrl ? fromUrl.split(',') : new Array(); // this triggers watch(scope.exclude) on page load
+
     // Whenever one of the parameter is changed
     var uniqueAjaxRequest;
-    $scope.$watch('country.id + part.id + filterSet.id + exclude', function (a) {
+    $scope.$watch('country.id + part.id + filterSet.id', function (a) {
 
         // If they are all available ...
         if ($scope.country && $scope.part && $scope.filterSet) {
@@ -12,53 +15,105 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         }
     });
 
+    // Whenever the list of excluded values is changed
+    $scope.$watch('exclude', function (a){
+        if ($scope.exclude instanceof Array && typeof($scope.chartObj) != 'undefined') {
+            var excludedSeries = new Array();
+            for(var i=0; i<$scope.exclude.length; i++)
+            {
+                var serie = $scope.exclude[i].split(':')[0];
+                if (excludedSeries.indexOf(serie) == -1) {
+                    excludedSeries.push(serie);
+                }
+            }
+            var changed = false;
+            for(var i=0; i<$scope.chartObj.series.length; i++)
+            {
+                if ($scope.chartObj.series[i].name.indexOf('ignored answers') != -1)
+                {
+                    $scope.chartObj.series[i].destroy(false);
+                    changed = true;
+                }
+            }
+            if ($scope.exclude.length > 0) {
+                $http.get('/api/chart',
+                {
+                    params: {
+                        country: $scope.country.id,
+                        part: $scope.part.id,
+                        filterSet: $scope.filterSet.id,
+                        exclude: $scope.exclude.join(','),
+                        onlyExcluded: 1,
+                    }
+        
+                }).success(function (data) {
+                    if (typeof($scope.chartObj) != 'undefined') {
+                        // add/update from the chart line series with excluded values
+                        for(var i=0; i<data.length; i++)
+                        {
+                            // refresh the serie data on the graph
+                            $scope.chartObj.addSeries(data[i], false, false);
+                        }
+                        $scope.chartObj.redraw();
+                    }
+                });
+            } else if (changed) {
+                // force chart refresh when no more answers are excluded
+                $scope.chartObj.redraw();
+            }
+        }
+
+    }, true);
+
     $scope.refreshChart = function() {
         $scope.isLoading = true;
         $scope.plotColors = [];
         $timeout.cancel(uniqueAjaxRequest);
         uniqueAjaxRequest = $timeout(function () {
-
-            // ... then, get chart data via Ajax, but only once per 200 milliseconds
+            // get chart data via Ajax, but only once per 200 milliseconds
             // (this avoid sending several request on page loading)
             $http.get('/api/chart',
-                    {
-                        params: {
-                            country: $scope.country.id,
-                            part: $scope.part.id,
-                            filterSet: $scope.filterSet.id,
-                            exclude: $scope.exclude,
-                            refresh: 1
-                        }
-                    }).success(function (data) {
+                {
+                    params: {
+                        country: $scope.country.id,
+                        part: $scope.part.id,
+                        filterSet: $scope.filterSet.id,
+                        exclude: $scope.exclude.join(','),
+                    }
+                }).success(function (data) {
+
+
+                    data.plotOptions.scatter.dataLabels.formatter = function() {
+                        return $('<span/>').css({
+                            'color': this.point.selected ? '#DDD' : this.series.color
+                        }).text(this.point.name)[0].outerHTML;
+                    }
 
                     data.plotOptions.scatter.point = {events:
                         {
                             click: function(e) {
-                                var excluded = [];
-                                var fromUrl = $location.search()['exclude'];
-                                if (typeof (fromUrl) != 'undefined')
-                                {
-                                    excluded = _.without(fromUrl.split(','), '');
-                                }
                                 var questionnaire = e.currentTarget.id;
-                                if (_.indexOf(excluded, questionnaire) != -1)
+                                var point = $scope.chartObj.get(e.currentTarget.id);
+                                point.select(null, true); // toggle point selection
+                                if (_.indexOf($scope.exclude, questionnaire) != -1)
                                 {
-                                    excluded = _.without(excluded, questionnaire);
+                                    $scope.exclude = _.without($scope.exclude, questionnaire);
                                 }
                                 else
                                 {
-                                    excluded.push(questionnaire);
+                                    $scope.exclude.push(questionnaire);
                                 }
-                                $scope.exclude = excluded.join(',');
-                                $location.search('exclude', $scope.exclude);
+                                $location.search('exclude', $scope.exclude.join(','));
                                 $scope.$apply(); // this is needed because we are outside the AngularJS context (highcharts uses jQuery event handlers)
                             }
                         }
-                    }
+                    };
 
-                $scope.chart = data;
-                $scope.isLoading = false;
-            });
+                    $scope.chart = data;
+                    $scope.isLoading = false;
+
+                });
+            
         }, 200);
     };
 });
