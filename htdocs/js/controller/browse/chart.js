@@ -16,47 +16,43 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
     });
 
     // Whenever the list of excluded values is changed
-    $scope.$watch('exclude', function (a){
+    $scope.$watch('exclude', function (a) {
         if ($scope.exclude instanceof Array && typeof($scope.chartObj) != 'undefined') {
             var excludedSeries = new Array();
-            for(var i=0; i<$scope.exclude.length; i++)
-            {
+            for (var i = 0; i < $scope.exclude.length; i++) {
                 var serie = $scope.exclude[i].split(':')[0];
                 if (excludedSeries.indexOf(serie) == -1) {
                     excludedSeries.push(serie);
                 }
             }
             var changed = false;
-            for(var i=0; i<$scope.chartObj.series.length; i++)
-            {
-                if ($scope.chartObj.series[i].name.indexOf('ignored answers') != -1)
-                {
+            for (var i = 0; i < $scope.chartObj.series.length; i++) {
+                if ($scope.chartObj.series[i].name.indexOf('ignored answers') != -1) {
                     $scope.chartObj.series[i].destroy(false);
                     changed = true;
                 }
             }
             if ($scope.exclude.length > 0) {
                 $http.get('/api/chart',
-                {
-                    params: {
-                        country: $scope.country.id,
-                        part: $scope.part.id,
-                        filterSet: $scope.filterSet.id,
-                        exclude: $scope.exclude.join(','),
-                        onlyExcluded: 1,
-                    }
-        
-                }).success(function (data) {
-                    if (typeof($scope.chartObj) != 'undefined') {
-                        // add/update from the chart line series with excluded values
-                        for(var i=0; i<data.length; i++)
-                        {
-                            // refresh the serie data on the graph
-                            $scope.chartObj.addSeries(data[i], false, false);
+                    {
+                        params: {
+                            country: $scope.country.id,
+                            part: $scope.part.id,
+                            filterSet: $scope.filterSet.id,
+                            exclude: $scope.exclude.join(','),
+                            onlyExcluded: 1,
                         }
-                        $scope.chartObj.redraw();
-                    }
-                });
+
+                    }).success(function (data) {
+                        if (typeof($scope.chartObj) != 'undefined') {
+                            // add/update from the chart line series with excluded values
+                            for (var i = 0; i < data.length; i++) {
+                                // refresh the serie data on the graph
+                                $scope.chartObj.addSeries(data[i], false, false);
+                            }
+                            $scope.chartObj.redraw();
+                        }
+                    });
             } else if (changed) {
                 // force chart refresh when no more answers are excluded
                 $scope.chartObj.redraw();
@@ -65,7 +61,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
 
     }, true);
 
-    $scope.refreshChart = function() {
+    $scope.refreshChart = function () {
         $scope.isLoading = true;
         $scope.plotColors = [];
         $timeout.cancel(uniqueAjaxRequest);
@@ -82,38 +78,34 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                     }
                 }).success(function (data) {
 
-
-                    data.plotOptions.scatter.dataLabels.formatter = function() {
+                    data.plotOptions.scatter.dataLabels.formatter = function () {
                         return $('<span/>').css({
                             'color': this.point.selected ? '#DDD' : this.series.color
                         }).text(this.point.name)[0].outerHTML;
                     }
 
-                    data.plotOptions.scatter.point = {events:
-                        {
-                            click: function(e) {
-                                var questionnaire = e.currentTarget.id;
-                                var point = $scope.chartObj.get(e.currentTarget.id);
-                                point.select(null, true); // toggle point selection
-                                if (_.indexOf($scope.exclude, questionnaire) != -1)
-                                {
-                                    $scope.exclude = _.without($scope.exclude, questionnaire);
-                                }
-                                else
-                                {
-                                    $scope.exclude.push(questionnaire);
-                                }
-                                $location.search('exclude', $scope.exclude.join(','));
-                                $scope.$apply(); // this is needed because we are outside the AngularJS context (highcharts uses jQuery event handlers)
+                    data.plotOptions.scatter.point = {events: {
+                        click: function (e) {
+                            var questionnaire = e.currentTarget.id;
+                            var point = $scope.chartObj.get(e.currentTarget.id);
+                            point.select(null, true); // toggle point selection
+                            if (_.indexOf($scope.exclude, questionnaire) != -1) {
+                                $scope.exclude = _.without($scope.exclude, questionnaire);
                             }
+                            else {
+                                $scope.exclude.push(questionnaire);
+                            }
+                            $location.search('exclude', $scope.exclude.join(','));
+                            $scope.$apply(); // this is needed because we are outside the AngularJS context (highcharts uses jQuery event handlers)
                         }
+                    }
                     };
 
                     $scope.chart = data;
                     $scope.isLoading = false;
 
                 });
-            
+
         }, 200);
     };
 });
