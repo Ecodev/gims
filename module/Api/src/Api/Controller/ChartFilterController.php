@@ -60,6 +60,32 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
             foreach ($filters as $filter) {
                 $result = array_merge($result, $tableController->computeWithChildren($questionnaire, $filter, $parts));
             }
+
+            // Add information whether the filter is selectable or not
+            $resultNumber = count($result);
+            $partName = is_object($parts[0]['part']) ? $parts[0]['part']->getName() : 'Total';
+            for ($index = 0; $index < $resultNumber; $index++) {
+                $currentResult = &$result[$index];
+                $nextResult = null;
+                if (isset($result[$index + 1])) {
+                    $nextResult = $result[$index + 1];
+                }
+
+                // algorithm computing whether the raw is selectable
+                $filterValue = $currentResult['values'][0][$partName];
+                if ($filterValue === null) {
+                    $currentResult['selectable'] = false;
+                } elseif ($currentResult['filter']['level'] < $nextResult['filter']['level']
+                    && $nextResult !== null)
+                {
+                    $currentResult['selectable'] = false;
+                } else {
+                    $currentResult['selectable'] = true;
+                }
+
+//                if ($currentResult['values'][0][$partName])
+            }
+
         } else {
             $this->getResponse()->setStatusCode(404);
             return;

@@ -4,6 +4,7 @@
         "ngGridFlexibleHeightPlugin",
         "console",
         "sprintf",
+        "_",
         "$"
     ],
     // On-line example https://gist.github.com/connor/1597131

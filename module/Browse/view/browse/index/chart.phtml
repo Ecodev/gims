@@ -29,6 +29,9 @@
             <chart value="chart" type="area" height="400" chart-obj="chartObj" />
         </div>
         <div class="span4">
+            <div style="text-align: center; margin-bottom: 10px">
+                <button ng-click="updateChart()" ng-show="pointSelected" class="btn">Update chart</button>
+            </div>
             <div ng-grid="gridOptions" class="gridStyle" ng-show="pointSelected"></div>
         </div>
 

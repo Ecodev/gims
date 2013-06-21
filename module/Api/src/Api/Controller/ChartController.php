@@ -187,6 +187,28 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $series[] = $serie;
             }
         }
+
+        // @todo sylvain, can you continue this? $excludedFilters contains the excluded filters
+        $excludedFilters = explode(',', $this->params()->fromQuery('excludedFilters'));
+        if (! empty($series)) {
+
+            $series[] = array(
+                "type"             => "scatter",
+                "name"             => "Piped onto premises (ignored answers)",
+                "allowPointSelect" => false,
+                "data"             => array(
+                    array(
+                        "name"          => "SAGE08",
+                        "id"            => "75:SAGE08",
+                        "questionnaire" => 168,
+                        "x"             => 2008,
+                        "y"             => 85,
+                        "selected"      => "true"
+                    )
+                )
+            );
+        }
+        // Add scatter point
         return $series;
     }
 
