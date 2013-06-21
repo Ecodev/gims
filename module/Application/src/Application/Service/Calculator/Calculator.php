@@ -120,6 +120,7 @@ use \Application\Traits\EntityManagerAware;
             }
         }
 
+
         // Summer to sum values of given filters, but only if non-null (to preserve null value if no answer at all)
         $summer = function(\IteratorAggregate $filters) use ($questionnaire, $part, $alreadySummedFilters) {
                     $sum = null;

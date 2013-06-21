@@ -23,7 +23,16 @@
     </form>
 
     <div class="alert alert-info" ng-hide="chart"><i class="icon-info-sign"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?></div>
-    <chart value="chart" type="area" height="400" chart-obj="chartObj">
-    </chart>
+
+    <div class="row-fluid">
+        <div class="span8">
+            <chart value="chart" type="area" height="400" chart-obj="chartObj" />
+        </div>
+        <div class="span4">
+            <div ng-grid="gridOptions" class="gridStyle" ng-show="pointSelected"></div>
+        </div>
+
+    </div>
+
 
 </div>

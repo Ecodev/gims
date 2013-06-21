@@ -64,7 +64,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         return new JsonModel($result);
     }
 
-    private function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0)
+    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0)
     {
 
         $service = new \Application\Service\Calculator\Calculator();

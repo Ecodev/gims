@@ -1,4 +1,4 @@
-angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $location, $http, $timeout) {
+angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $location, $http, $timeout, Restangular) {
     'use strict';
 
     $scope.chartObj;
@@ -15,9 +15,54 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         }
     });
 
+    $scope.filters = [];
+    $scope.columnDefs = [];
+
+    $scope.mySelections = [];
+
+    // Configure ng-grid.
+    $scope.gridOptions = {
+        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 800})],
+        data: 'filters',
+        enableCellSelection: true,
+        multiSelect: true,
+        showSelectionCheckbox: true,
+        columnDefs: 'columnDefs',
+        selectedItems: $scope.mySelections
+    };
+
+    $scope.pointSelected = null;
+    // Whenever the list of excluded values is changed
+    $scope.$watch('pointSelected', function (a) {
+        if ($scope.pointSelected) {
+
+            console.log($scope.pointSelected);
+
+            var questionnaireName = $scope.pointSelected.name;
+
+            $scope.columnDefs = [];
+
+            var cellTemplateFilter = '<div class="ngCellText" ng-class="col.colIndex()">' +
+                '<span style="padding-left: {{row.entity.filter.level}}em;">{{row.entity.filter.name}}</span>' +
+                '</div>';
+            $scope.columnDefs.push({field: 'filter', displayName: 'Filter', width: 240, cellTemplate: cellTemplateFilter});
+            $scope.columnDefs.push({field: 'values[0].' + $scope.part.name, displayName: questionnaireName, cellFilter: 'percent'});
+
+            var parameters = {
+                questionnaire: $scope.pointSelected.questionnaire,
+                filter: $scope.pointSelected.filter,
+                part: $scope.part.id
+            };
+
+            $scope.filters = Restangular.all('chartFilter').getList(parameters).then(function (data) {
+                $scope.filters = data;
+            });
+        }
+    });
+
     // Whenever the list of excluded values is changed
     $scope.$watch('exclude', function (a) {
-        if ($scope.exclude instanceof Array && typeof($scope.chartObj) != 'undefined') {
+        if ($scope.exclude instanceof Array && typeof($scope.chartObj) !== 'undefined') {
             var excludedSeries = new Array();
             for (var i = 0; i < $scope.exclude.length; i++) {
                 var serie = $scope.exclude[i].split(':')[0];
@@ -32,6 +77,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                     changed = true;
                 }
             }
+
             if ($scope.exclude.length > 0) {
                 $http.get('/api/chart',
                     {
@@ -40,7 +86,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                             part: $scope.part.id,
                             filterSet: $scope.filterSet.id,
                             exclude: $scope.exclude.join(','),
-                            onlyExcluded: 1,
+                            onlyExcluded: 1
                         }
 
                     }).success(function (data) {
@@ -86,16 +132,22 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
 
                     data.plotOptions.scatter.point = {events: {
                         click: function (e) {
-                            var questionnaire = e.currentTarget.id;
-                            var point = $scope.chartObj.get(e.currentTarget.id);
-                            point.select(null, true); // toggle point selection
-                            if (_.indexOf($scope.exclude, questionnaire) != -1) {
-                                $scope.exclude = _.without($scope.exclude, questionnaire);
-                            }
-                            else {
-                                $scope.exclude.push(questionnaire);
-                            }
-                            $location.search('exclude', $scope.exclude.join(','));
+                            var idPart = e.currentTarget.id.split(':');
+                            $scope.pointSelected = {
+                                questionnaire: e.currentTarget.questionnaire,
+                                name: e.currentTarget.name,
+                                filter: idPart[0]
+                            };
+//                            var questionnaire = e.currentTarget.id;
+//                            var point = $scope.chartObj.get(e.currentTarget.id);
+//                            point.select(null, true); // toggle point selection
+//                            if (_.indexOf($scope.exclude, questionnaire) != -1) {
+//                                $scope.exclude = _.without($scope.exclude, questionnaire);
+//                            }
+//                            else {
+//                                $scope.exclude.push(questionnaire);
+//                            }
+//                            $location.search('exclude', $scope.exclude.join(','));
                             $scope.$apply(); // this is needed because we are outside the AngularJS context (highcharts uses jQuery event handlers)
                         }
                     }

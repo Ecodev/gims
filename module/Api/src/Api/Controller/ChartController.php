@@ -63,6 +63,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                         $scatterData = array(
                             'name' => $surveyCode,
                             'id' => $idFilter.':'.$surveyCode,
+                            'questionnaire' => $data['questionnaire'][$surveyCode],
                             'x' => $data['years'][$i],
                             'y' => round($value * 100, 1),
                         );

@@ -114,7 +114,7 @@ angular.module('myApp.directives').directive('gimsTable', function () {
                         // retrieve the questionnaire name.
                         for (var index2 in parts) {
                             var partName = parts[index2];
-                            columnDefs.push({sortable: false, field: 'values[' + index2 + '].' + partName, displayName: partName + ' - ' + questionnaireName, cellFilter: 'percent'});
+                            columnDefs.push({sortable: false, field: 'values[' + index + '].' + partName, displayName: partName + ' - ' + questionnaireName, cellFilter: 'percent'});
                         }
                     }
                     $scope.columnDefs = columnDefs;

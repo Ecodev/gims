@@ -305,9 +305,9 @@ class Jmp extends Calculator
 
             $computed = $this->computeFilter($filter, $questionnaire, $part);
             if (is_null($computed)) {
-
                 $result['values'][$questionnaire->getSurvey()->getCode()] = null;
                 $result['values%'][$questionnaire->getSurvey()->getCode()] = null;
+                $result['questionnaire'][$questionnaire->getSurvey()->getCode()] = $questionnaire->getId();
                 continue;
             }
 
@@ -317,6 +317,7 @@ class Jmp extends Calculator
             $totalPopulation += $population->getPopulation();
             $result['count']++;
 
+            $result['questionnaire'][$questionnaire->getSurvey()->getCode()] = $questionnaire->getId();
             $result['values'][$questionnaire->getSurvey()->getCode()] = $computed;
             $result['values%'][$questionnaire->getSurvey()->getCode()] = $computed / $population->getPopulation();
         }

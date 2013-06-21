@@ -16,6 +16,7 @@ return array(
             'Api\Controller\UserQuestionnaire' => 'Api\Controller\UserQuestionnaireController',
             'Api\Controller\Role' => 'Api\Controller\RoleController',
             'Api\Controller\Geoname' => 'Api\Controller\GeonameController',
+            'Api\Controller\ChartFilter' => 'Api\Controller\ChartFilterController',
             'Api\Controller\Chart' => 'Api\Controller\ChartController',
             'Api\Controller\Table' => 'Api\Controller\TableController',
         ),
@@ -84,7 +85,7 @@ return array(
                         'options' => array(
                             'route' => '/:controller[/:action]',
                             'constraints' => array(
-                                'controller' => '(chart|table)', // Define here allowed controllers: (controller1|controller2|controller3)
+                                'controller' => '(chartFilter|chart|table)', // Define here allowed controllers: (controller1|controller2|controller3)
                             ),
                             'defaults' => array(
                                 '__NAMESPACE__' => 'Api\Controller',

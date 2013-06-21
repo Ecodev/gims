@@ -136,9 +136,13 @@ class JmpTest extends AbstractCalculator
             'maxYear' => 2005,
             'period' => 5,
             'slope' => -0.00222,
-            'slope%' => -0.00088866666666667,
+            'slope%' => -0.0008886666666666666,
             'average' => 0.10555,
-            'average%' => 0.0088883333333333,
+            'average%' => 0.008888333333333333,
+            'questionnaire' => array(
+                'tst 1' => null,
+                'tst 2' => null,
+            ),
             'population' => 25,
                 ), $this->service->computeFilterForAllQuestionnaires($this->highFilter1, $this->questionnaires));
 
@@ -554,6 +558,9 @@ class JmpTest extends AbstractCalculator
             'slope%' => null,
             'average' => 0.1,
             'average%' => 0.0066666666666667,
+            'questionnaire' => array(
+                'tst 2' => null,
+            ),
             'population' => 15,
                 ), $this->service->computeFilterForAllQuestionnaires($this->filter1, $this->questionnaires));
     }

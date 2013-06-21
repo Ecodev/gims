@@ -8,8 +8,10 @@ class FilterRepository extends AbstractRepository
 
     /**
      * Returns one official filter
+     *
      * @param string $name
      * @param string $parentName
+     *
      * @return \Application\Model\Filter
      */
     public function getOneOfficialByNames($name, $parentName)
@@ -23,8 +25,8 @@ class FilterRepository extends AbstractRepository
             $qb->join('f.parents', 'p', \Doctrine\ORM\Query\Expr\Join::WITH, 'p.name = :parentName');
         } else {
             $qb->leftJoin('f.parents', 'p')
-                    ->having('COUNT(p.id) = 0')
-                    ->groupBy('f.id');
+                ->having('COUNT(p.id) = 0')
+                ->groupBy('f.id');
         }
 
         $q = $qb->getQuery();
@@ -41,9 +43,9 @@ class FilterRepository extends AbstractRepository
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
 
         $qb = $filterRepository->createQueryBuilder('f')->where('f.isOfficial = true');
-            $qb->leftJoin('f.parents', 'p')
-                    ->having('COUNT(p.id) = 0')
-                    ->groupBy('f.id');
+        $qb->leftJoin('f.parents', 'p')
+            ->having('COUNT(p.id) = 0')
+            ->groupBy('f.id');
 
         $q = $qb->getQuery();
 
@@ -51,5 +53,4 @@ class FilterRepository extends AbstractRepository
 
         return $filter;
     }
-
 }
