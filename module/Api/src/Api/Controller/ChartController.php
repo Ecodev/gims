@@ -7,6 +7,12 @@ use Zend\View\Model\JsonModel;
 class ChartController extends \Application\Controller\AbstractAngularActionController
 {
 
+    private $colors
+        = array('#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5',
+                '#c42525', '#a6c96a'); // not the best way but since the whole class is a mess it does not hurt. ;)
+
+    private $symbols = array('circle', 'diamond', 'square', 'triangle', 'triangle-down');
+
     public function indexAction()
     {
         $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneById($this->params()->fromQuery('country'));
@@ -24,7 +30,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $endYear = 2011;
 
         // First get series of flatten regression lines with excluded values (if any)
-        $series = $this->computeExcluded($excludedAnswers, $questionnaires, $startYear, $endYear, $part, $calculator);
+        $series = $this->computeExcluded($excludedAnswers, $questionnaires, $startYear, $endYear, $part, $calculator,
+            $filterSet);
 
         // If we only want to refresh the lines with ignored values, we return a partial highcharts data with just those series (quicker to refresh)
         if ($this->params()->fromQuery('onlyExcluded'))
@@ -33,11 +40,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         }
 
         // Then get series of flatten regression lines
-        $filterCount = 0;
         if ($filterSet) {
-            $filterCount = $filterSet->getFilters()->count();
             $lines = $calculator->computeFlatten($startYear, $endYear, $filterSet, $questionnaires, $part);
-            foreach ($lines as &$serie) {
+            foreach ($lines as $key => &$serie) {
+                $serie['color'] = $this->colors[$key];
                 $serie['type'] = 'line';
                 foreach ($serie['data'] as &$d) {
                     if (!is_null($d))
@@ -47,11 +53,13 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
 
             // Then add scatter points which are each questionnaire values
-            foreach ($filterSet->getFilters() as $filter) {
+            foreach ($filterSet->getFilters() as $key => $filter) {
                 $idFilter = $filter->getId();
                 $data = $calculator->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
                 $scatter = array(
                     'type' => 'scatter',
+                    'color' => $this->colors[$key],
+                    'marker' => array('symbol' => $this->symbols[$key]),
                     'name' => $filter->getName(),
                     'allowPointSelect' => false, // because we will use our own click handler
                     'data' => array(),
@@ -80,17 +88,11 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
         }
 
-
-
         $chart = array(
             'chart' => array(
                 'height' => 600,
                 'animation' => false,
             ),
-            // Here we use default highchart colors and symbols, but truncated at the same number of series,
-            // so it will get repeated for lines and scatter points
-            'colors' => array_slice(array('#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'), 0, $filterCount),
-            'symbols' => array_slice(array('circle', 'diamond', 'square', 'triangle', 'triangle-down'), 0, $filterCount),
             'title' => array(
                 'text' => ($country ? $country->getName() : 'Unknown country') . ' - ' . ($part ? $part->getName() : 'Total'),
             ),
@@ -151,8 +153,39 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         return new JsonModel($chart);
     }
 
-    protected function computeExcluded($excludedAnswers, $allQuestionnaires, $startYear, $endYear, $part, $calculator)
+    /**
+     * @param \Application\Model\Filter $filterSet
+     * @param int $currentFilterId
+     *
+     * @return int
+     */
+    protected function getPosition($filterSet, $currentFilterId) {
+        $key = 0;
+        if (is_object($filterSet)) {
+            foreach ($filterSet->getFilters() as $key => $filter) {
+                if ($filter->getId() == $currentFilterId) {
+                    break;
+                }
+            }
+        }
+        return $key;
+    }
+
+    /**
+     * @param array $excludedAnswers
+     * @param array $allQuestionnaires
+     * @param int $startYear
+     * @param int $endYear
+     * @param \Application\Model\Part $part
+     * @param \Application\Service\Calculator\Jmp $calculator
+     * @param \Application\Model\FilterSet $filterSet
+     *
+     * @return array
+     */
+    protected function computeExcluded($excludedAnswers, $allQuestionnaires, $startYear, $endYear, $part, $calculator, $filterSet)
     {
+
+        $idFilter = 0;
         $filtersExcluded = array();
         foreach($excludedAnswers as $r) {
             list($idFilter, $surveyCode) = split(':', $r);
@@ -160,6 +193,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $filtersExcluded[$idFilter] = array();
             $filtersExcluded[$idFilter][] = $surveyCode;
         }
+
+        $key = $this->getPosition($filterSet, $idFilter);
+
         // If there are excluded answers, compute an additional regression line for each filter they concern
         $series = array();
         foreach($filtersExcluded as $idFilter => $excludedSurveys)
@@ -167,16 +203,13 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($idFilter);
             $filterSetSingle = new \Application\Model\FilterSet();
             $filterSetSingle->addFilter($filter);
-            $questionnairesNotExcluded = array();
-            foreach($allQuestionnaires as $questionnaire)
-            {
-                if (!in_array($questionnaire->getSurvey()->getCode(), $excludedSurveys)) {
-                    $questionnairesNotExcluded[] = $questionnaire;
-                }
-            }
-            $serieWithExcluded = $calculator->computeFlatten($startYear, $endYear, $filterSetSingle, $questionnairesNotExcluded, $part);
+
+            $excludedFilters = explode(',', $this->params()->fromQuery('excludedFilters'));
+            $serieWithExcluded = $calculator->computeFlatten($startYear, $endYear, $filterSetSingle, $allQuestionnaires, $part, $excludedFilters);
+
             foreach ($serieWithExcluded as &$serie) {
                 $serie['type'] = 'line';
+                $serie['color'] = $this->colors[$key];
                 $serie['name'] .= ' (ignored answers)';
                 $serie['idFilter'] = $idFilter;
                 $serie['dashStyle'] = 'ShortDash';
@@ -188,25 +221,51 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
         }
 
-        // @todo sylvain, can you continue this? $excludedFilters contains the excluded filters
-        $excludedFilters = explode(',', $this->params()->fromQuery('excludedFilters'));
-        if (! empty($series)) {
+        // for now just add this condition
+        if (! empty($filtersExcluded)) {
 
-            $series[] = array(
-                "type"             => "scatter",
-                "name"             => "Piped onto premises (ignored answers)",
-                "allowPointSelect" => false,
-                "data"             => array(
-                    array(
-                        "name"          => "SAGE08",
-                        "id"            => "75:SAGE08",
-                        "questionnaire" => 168,
-                        "x"             => 2008,
-                        "y"             => 85,
-                        "selected"      => "true"
-                    )
-                )
-            );
+            $questionnaireId = explode(',', $this->params()->fromQuery('questionnaire'));
+            $filterSetId = explode(',', $this->params()->fromQuery('filterSet'));
+
+            $questionnaires[] = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($questionnaireId);
+            $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($filterSetId);
+
+            // Then add scatter points which are each questionnaire values
+            foreach ($filterSet->getFilters() as $filter) {
+                $idFilter = $filter->getId();
+                $data = $calculator->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
+                $scatter = array(
+                    'type'             => 'scatter',
+                    'name'             => $filter->getName()  . ' (ignored answers)',
+                    'allowPointSelect' => false, // because we will use our own click handler
+                    'color'            => $this->colors[$key],
+                    'marker'           => array('symbol' => $this->symbols[$key]),
+                    'data'             => array(),
+
+                );
+                $i = 0;
+                foreach ($data['values%'] as $surveyCode => $value) {
+
+                    if (!is_null($value)) {
+                        $scatterData = array(
+                            'name'          => $surveyCode,
+                            'id'            => $idFilter . ':' . $surveyCode,
+                            'questionnaire' => $data['questionnaire'][$surveyCode],
+                            'x'             => $data['years'][$i],
+                            'y'             => round(($value) * 100, 1),
+                        );
+                        // select the ignored values
+                        if (in_array($idFilter . ':' . $surveyCode, $excludedAnswers)) {
+                            $scatterData['selected'] = 'true';
+                        }
+                        $scatter['data'][] = $scatterData;
+                    }
+                    $i++;
+                }
+                if (isset($scatter['data'][0]['selected'])) {
+                    $series[] = $scatter;
+                }
+            }
         }
         // Add scatter point
         return $series;

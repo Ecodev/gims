@@ -24,6 +24,7 @@ use \Application\Traits\EntityManagerAware;
 
     private $cacheComputeFilter = array();
 
+    protected $excludedFilters = array();
     /**
      * Returns a unique identifying all arguments, so we can use the result as cache key
      * @param array $args
@@ -53,8 +54,10 @@ use \Application\Traits\EntityManagerAware;
      * @param \Application\Model\Part $part
      * @return float|null null if no answer at all, otherwise the value
      */
-    public function computeFilter(Filter $filter, Questionnaire $questionnaire, Part $part = null)
+    public function computeFilter(Filter $filter, Questionnaire $questionnaire, Part $part = null, $excludedFilters = array())
     {
+
+
         $key = $this->getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheComputeFilter)) {
             return $this->cacheComputeFilter[$key];
@@ -77,6 +80,9 @@ use \Application\Traits\EntityManagerAware;
      */
     private function computeFilterInternal(Filter $filter, Questionnaire $questionnaire, \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters, Part $part = null)
     {
+        if (in_array($filter->getId(), $this->excludedFilters)) {
+            return null;
+        }
         // Avoid duplicates
         if ($alreadySummedFilters->contains($filter)) {
             return null;

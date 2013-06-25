@@ -9,6 +9,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
     var uniqueAjaxRequest;
     $scope.$watch('country.id + part.id + filterSet.id', function (a) {
 
+        $scope.pointSelected = null;
+        $scope.exclude = [];
+
         // If they are all available ...
         if ($scope.country && $scope.part && $scope.filterSet) {
             $scope.refreshChart();
@@ -36,7 +39,22 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
     $scope.pointSelected = null;
 
     var excludedFilters = [];
+    var lastSelectedPoint = null;
+
+    var resetChart = function () {
+        // hardcoded value for now.
+        // By change there are two filter per filter-set. Each filter has two output... 2*2=4
+        var index = 4;
+        while($scope.chartObj.series[index]) {
+            $scope.chartObj.series[index].remove();
+        }
+    };
+
+    $scope.updateChartInProcess = false;
+
     $scope.updateChart = function() {
+
+        resetChart();
 
         excludedFilters = [];
         // Find the not selected filters
@@ -46,7 +64,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             }
         });
 
-        refreshPartial();
+        refreshChartPartial();
     };
 
     // Whenever the list of excluded values is changed
@@ -88,9 +106,10 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
     });
 
     // Whenever the list of excluded values is changed
-    var refreshPartial = function() {
+    var refreshChartPartial = function() {
 
         if ($scope.exclude instanceof Array && typeof($scope.chartObj) !== 'undefined') {
+            $scope.updateChartInProcess = true;
             var excludedSeries = new Array();
             for (var i = 0; i < $scope.exclude.length; i++) {
                 var serie = $scope.exclude[i].split(':')[0];
@@ -114,6 +133,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                             part: $scope.part.id,
                             filterSet: $scope.filterSet.id,
                             exclude: $scope.exclude.join(','),
+                            questionnaire: $scope.pointSelected.questionnaire,
                             excludedFilters: excludedFilters.join(','),
                             onlyExcluded: 1
                         }
@@ -126,6 +146,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                                 $scope.chartObj.addSeries(data[i], false, false);
                             }
                             $scope.chartObj.redraw();
+                            $scope.updateChartInProcess = false;
                         }
                     });
             } else if (changed) {
@@ -170,6 +191,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                             var questionnaire = e.currentTarget.id;
                             //var point = $scope.chartObj.get(e.currentTarget.id);
                             //point.select(null, true); // toggle point selection
+
+                            $scope.exclude = [];
                             if (_.indexOf($scope.exclude, questionnaire) !== -1) {
                                 $scope.exclude = _.without($scope.exclude, questionnaire);
                             }

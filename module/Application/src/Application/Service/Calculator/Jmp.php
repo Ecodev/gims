@@ -15,6 +15,7 @@ class Jmp extends Calculator
     private $populationRepository;
     private $partRepository;
 
+
     /**
      * Set the population repository
      * @param \Application\Repository\PopulationRepository $populationRepository
@@ -75,8 +76,10 @@ class Jmp extends Calculator
      * @param \Application\Model\Part $part
      * @return array [[name => filterName, data => [year => flattenedRegression]]]]
      */
-    public function computeFlatten($yearStart, $yearEnd, FilterSet $filterSet, $questionnaires, Part $part = null)
+    public function computeFlatten($yearStart, $yearEnd, FilterSet $filterSet, $questionnaires, Part $part = null,
+        $excludedFilters = array())
     {
+        $this->excludedFilters = $excludedFilters; // Can't believe I am writing that!
         $parts = array();
         if (!$part) {
             $parts = $this->getPartRepository()->findAll();
