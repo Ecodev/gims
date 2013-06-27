@@ -3,13 +3,18 @@
 <div class="container">
     <form>
         <div class="row">
-            <span class="span6">
+            <div class="span6">
                 <p><gims-select api="country" model="country" placeholder="<?php echo $this->translate('Select a country') ?>" style="width:100%;"/></p>
-            </span>
+            </div>
+            <div class="span6" style="text-align: right">
+                <img src="/img/jmp-logo-black" alt="Unicef logo" class="logo-chart"/>
+                <img src="/img/who-logo-black.png" alt="WHO logo" class="logo-chart"/>
+                <img src="/img/unicef-logo-black.png" alt="Unicef logo" class="logo-chart"/>
+            </div>
         </div>
         <div class="row">
             <span class="span6">
-                <p><gims-select api="filterSet" model="filterSet" placeholder="<?php echo $this->translate('Select a filter') ?>" style="width:100%;"/></p>
+                <p><gims-select api="filterSet" model="filterSet" placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/></p>
             </span>
         </div>
         <div class="row">
@@ -31,6 +36,7 @@
         <div class="span4">
             <div style="text-align: center; margin-bottom: 10px">
                 <button ng-click="updateChart()" ng-class="{disabled: updateChartInProcess}" ng-show="pointSelected" class="btn">Update chart</button>
+                <button id="btn-new-filter-set" class="btn">Create new filter set</button>
             </div>
             <div ng-grid="gridOptions" class="gridStyle" ng-show="pointSelected"></div>
         </div>
