@@ -38,20 +38,19 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
 
     $scope.pointSelected = null;
 
-    var lastSelectedPoint = null;
+    var serieLength = null;
 
     var resetChart = function () {
         // hardcoded value for now.
         // By change there are two filter per filter-set. Each filter has two output... 2*2=4
-        var index = 4;
-        while ($scope.chartObj.series[index]) {
-            $scope.chartObj.series[index].remove();
+        while ($scope.chartObj.series[serieLength]) {
+            $scope.chartObj.series[serieLength].remove();
         }
     };
 
     $scope.updateChartInProcess = false;
 
-    var getExcludedFilters = function() {
+    var getExcludedFilters = function () {
         var excludedFilters = [];
 
         // Find the not selected filters
@@ -73,7 +72,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
      * @param parameterName
      * @returns {string}
      */
-    var getParameterValue = function(parameterName) {
+    var getParameterValue = function (parameterName) {
         // parameterName is not used for now. This function is anyway hacky...
 
         var result = '';
@@ -109,11 +108,11 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             if ($('#filterSetTextField').val()) {
 
 
-                $http.post('/api/filterSet',{
-                        name: $('#filterSetTextField').val(),
-                        filterSetSource: getParameterValue('filterSet'),
-                        excludedFilters: getExcludedFilters()
-                    }).success(function (data) {
+                $http.post('/api/filterSet', {
+                    name: $('#filterSetTextField').val(),
+                    filterSetSource: getParameterValue('filterSet'),
+                    excludedFilters: getExcludedFilters()
+                }).success(function (data) {
                         $location.search('filterSet', data.id);
 
                         // reload page
@@ -155,7 +154,10 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                 $scope.filters = data;
 
                 $timeout(function () {
-                    $('.gridStyle .ngSelectionHeader').hide();
+                    $('.gridStyle .ngSelectionHeader')
+                        .after('<input type="checkbox" class="ngSelectionHeader" checked="checked"/>') // add custom checkbox
+                        .remove(); // remove default head checkbox
+
                     $('.gridStyle .ngSelectionCheckbox').each(function (index, element) {
                         if ($scope.filters[index].selectable === false) {
                             $(element).hide();
@@ -168,6 +170,20 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                 }, 0);
             });
         }
+    });
+
+    /**
+     * Add listener on top of checkbox
+     */
+    $('.gridStyle').delegate('.ngSelectionHeader', 'click', function () {
+        var self = this;
+        $('.gridStyle .ngSelectionCheckbox').each(function (index, element) {
+            if ($scope.filters[index].selectable === true) {
+                if ($(self).is(':checked') !== $(element).is(':checked')) {
+                    $(element).click();
+                }
+            }
+        });
     });
 
     // Whenever the list of excluded values is changed
@@ -239,6 +255,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                     }
                 }).success(function (data) {
 
+                    serieLength = data.series.length;
+
                     data.plotOptions.scatter.dataLabels.formatter = function () {
                         return $('<span/>').css({
                             'color': this.point.selected ? '#DDD' : this.series.color
@@ -256,6 +274,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                             var questionnaire = e.currentTarget.id;
                             //var point = $scope.chartObj.get(e.currentTarget.id);
                             //point.select(null, true); // toggle point selection
+
 
                             $scope.exclude = [];
                             if (_.indexOf($scope.exclude, questionnaire) !== -1) {
