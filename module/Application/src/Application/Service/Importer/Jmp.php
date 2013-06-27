@@ -311,7 +311,7 @@ class Jmp extends AbstractImporter
                 }
             }
 
-            $this->importHighFilters($firstFilter->getName() . ' - Improved/Unimproved', $this->definitions[$sheetName]['highFilters']);
+            #$this->importHighFilters($firstFilter->getName() . ' - Improved/Unimproved', $this->definitions[$sheetName]['highFilters']);
 
             $workbook->setActiveSheetIndex($i);
             $sheet = $workbook->getSheet($i);
