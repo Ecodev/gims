@@ -173,7 +173,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
     });
 
     /**
-     * Add listener on top of checkbox
+     * Add listener when toggling top checkbox
      */
     $('.gridStyle').delegate('.ngSelectionHeader', 'click', function () {
         var self = this;
