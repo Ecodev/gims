@@ -80,7 +80,7 @@ class SurveyControllerTest extends AbstractController
      * @test
      * @group SurveyApi
      */
-    public function getSurveyWithUnkownFieldsAreIgnored()
+    public function getSurveyWithUnknownFieldsAreIgnored()
     {
         $this->dispatch($this->getRoute('get') . '?fields=foo', Request::METHOD_GET);
         $actual = $this->getJsonResponse();

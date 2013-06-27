@@ -16,6 +16,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     public function indexAction()
     {
         $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneById($this->params()->fromQuery('country'));
+
+        /** @var \Application\Model\FilterSet $filterSet */
         $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
         $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
         $excludeStr = $this->params()->fromQuery('exclude');
@@ -41,7 +43,13 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
         // Then get series of flatten regression lines
         if ($filterSet) {
-            $lines = $calculator->computeFlatten($startYear, $endYear, $filterSet, $questionnaires, $part);
+
+            $excludedFilters = array();
+            /** @var \Application\Model\Filter $excludedFilter */
+            foreach ($filterSet->getExcludedFilters() as $excludedFilter) {
+                $excludedFilters[] = $excludedFilter->getId();
+            }
+            $lines = $calculator->computeFlatten($startYear, $endYear, $filterSet, $questionnaires, $part, $excludedFilters);
             foreach ($lines as $key => &$serie) {
                 $serie['color'] = $this->colors[$key];
                 $serie['type'] = 'line';

@@ -20,6 +20,17 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
         // fetch part
         $partId = $questionnaireId = $this->params()->fromQuery('part');
 
+        // fetch filter set
+        $filterSetId = $questionnaireId = $this->params()->fromQuery('filterSet');
+
+        /** @var \Application\Model\FilterSet $filterSet */
+        $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($filterSetId);
+        $excludedFilters = array();
+        foreach ($filterSet->getExcludedFilters() as $excludedFilter) {
+            $excludedFilters[] = $excludedFilter->getId();
+        }
+
+
         // fetch filter
         $filterId = $questionnaireId = $this->params()->fromQuery('filter');
 
@@ -55,7 +66,8 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
             }
 
             $result = array();
-            // @todo adrien, I let you check how you would like to implement this. For now I put the method "computeWithChildren" as public
+            // @todo adrien, I let you check how you would like to implement this. For now I put the method "computeWithChildren" of $tableController as public
+            // @todo It should be some kind of service but technical leader decides...
             $tableController = new TableController();
             foreach ($filters as $filter) {
                 $result = array_merge($result, $tableController->computeWithChildren($questionnaire, $filter, $parts));
@@ -71,6 +83,7 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
                     $nextResult = $result[$index + 1];
                 }
 
+                $currentResult['selected'] = false;
                 // algorithm computing whether the raw is selectable
                 $filterValue = $currentResult['values'][0][$partName];
                 if ($filterValue === null) {
@@ -81,9 +94,11 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
                     $currentResult['selectable'] = false;
                 } else {
                     $currentResult['selectable'] = true;
+                    $currentResult['selected'] = true;
+                    if (in_array($currentResult['filter']['id'], $excludedFilters)) {
+                        $currentResult['selected'] = false;
+                    }
                 }
-
-//                if ($currentResult['values'][0][$partName])
             }
 
         } else {

@@ -38,25 +38,22 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
 
     $scope.pointSelected = null;
 
-    var excludedFilters = [];
     var lastSelectedPoint = null;
 
     var resetChart = function () {
         // hardcoded value for now.
         // By change there are two filter per filter-set. Each filter has two output... 2*2=4
         var index = 4;
-        while($scope.chartObj.series[index]) {
+        while ($scope.chartObj.series[index]) {
             $scope.chartObj.series[index].remove();
         }
     };
 
     $scope.updateChartInProcess = false;
 
-    $scope.updateChart = function() {
+    var getExcludedFilters = function() {
+        var excludedFilters = [];
 
-        resetChart();
-
-        excludedFilters = [];
         // Find the not selected filters
         $('.gridStyle .ngSelectionCheckbox').each(function (index, element) {
             if ($(element).is(':checked') === false && $(element).is(':visible')) {
@@ -64,8 +61,73 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             }
         });
 
+        return excludedFilters;
+    };
+
+    /**
+     * Return a parameter value
+     *
+     * $location.search('filterSet') does not work and don't have the time to search why....
+     * Not enough in Angular context??
+     *
+     * @param parameterName
+     * @returns {string}
+     */
+    var getParameterValue = function(parameterName) {
+        // parameterName is not used for now. This function is anyway hacky...
+
+        var result = '';
+        var regexp = /filterSet=([0-9]+)/g;
+        var searches = regexp.exec(window.location.search);
+
+        if (searches[1] !== undefined) {
+            result = searches[1];
+        }
+        return result;
+    }
+
+    $scope.updateChart = function () {
+        resetChart();
         refreshChartPartial();
     };
+
+    // Using jQuery for being straight forward...
+    $('#btn-new-filter-set').popover({
+        html: true,
+        placement: 'bottom',
+        content: '<div class="span12" style="width: 450px">' +
+            '<form class="form-inline">' +
+            '<input id="filterSetTextField" type="text" class="span8" placeholder="Enter a filter set name...">' +
+            ' <button id="saveFilterSet" class="btn">Create</button>' +
+            ' <button id="closeFilterSet" class="btn">Cancel</button>' +
+            '</form>' +
+            '</div>'
+    })
+        .parent()
+        .delegate('button#saveFilterSet', 'click', function (e) {
+            e.preventDefault();
+            if ($('#filterSetTextField').val()) {
+
+
+                $http.post('/api/filterSet',{
+                        name: $('#filterSetTextField').val(),
+                        filterSetSource: getParameterValue('filterSet'),
+                        excludedFilters: getExcludedFilters()
+                    }).success(function (data) {
+                        $location.search('filterSet', data.id);
+
+                        // reload page
+                        $timeout(function () {
+                            window.location.reload();
+                        }, 0);
+                    });
+                $scope.$apply();
+            }
+        })
+        .delegate('button#closeFilterSet', 'click', function (e) {
+            e.preventDefault();
+            $('#btn-new-filter-set').popover('hide');
+        });
 
     // Whenever the list of excluded values is changed
     $scope.$watch('pointSelected', function (a) {
@@ -84,6 +146,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             var parameters = {
                 questionnaire: $scope.pointSelected.questionnaire,
                 filter: $scope.pointSelected.filter,
+                filterSet: getParameterValue('filterSet'),
                 part: $scope.part.id
             };
 
@@ -97,7 +160,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                         if ($scope.filters[index].selectable === false) {
                             $(element).hide();
                         } else {
-                            $(element).click();
+                            if ($scope.filters[index].selected) {
+                                $(element).click();
+                            }
                         }
                     });
                 }, 0);
@@ -106,7 +171,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
     });
 
     // Whenever the list of excluded values is changed
-    var refreshChartPartial = function() {
+    var refreshChartPartial = function () {
 
         if ($scope.exclude instanceof Array && typeof($scope.chartObj) !== 'undefined') {
             $scope.updateChartInProcess = true;
@@ -134,7 +199,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                             filterSet: $scope.filterSet.id,
                             exclude: $scope.exclude.join(','),
                             questionnaire: $scope.pointSelected.questionnaire,
-                            excludedFilters: excludedFilters.join(','),
+                            excludedFilters: getExcludedFilters().join(','),
                             onlyExcluded: 1
                         }
 
@@ -170,7 +235,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                         part: $scope.part.id,
                         filterSet: $scope.filterSet.id,
                         exclude: $scope.exclude.join(','),
-                        excludeFilter: excludedFilters.join(',')
+                        excludeFilter: getExcludedFilters().join(',')
                     }
                 }).success(function (data) {
 

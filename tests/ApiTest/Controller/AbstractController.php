@@ -5,6 +5,7 @@ namespace ApiTest\Controller;
 use Api\Service\MetaModel;
 use Application\Model\Answer;
 use Application\Model\Filter;
+use Application\Model\FilterSet;
 use Application\Model\Geoname;
 use Application\Model\Part;
 use Application\Model\Permission;
@@ -38,6 +39,11 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
      * @var Filter
      */
     protected $filter;
+
+    /**
+     * @var FilterSet
+     */
+    protected $filterSet;
 
     /**
      * @var Part
@@ -172,6 +178,10 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
         $this->userQuestionnaire = new UserQuestionnaire();
         $this->userQuestionnaire->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($this->role);
 
+        $this->filterSet = new FilterSet('foo');
+        $this->filterSet->addFilter($this->filter);
+
+        $this->getEntityManager()->persist($this->filterSet);
         $this->getEntityManager()->persist($this->user);
         $this->getEntityManager()->persist($this->role);
         $this->getEntityManager()->persist($this->userQuestionnaire);
