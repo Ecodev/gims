@@ -44,6 +44,10 @@ html {
     @extend .icon-folder-open-alt
 }
 
+.icon-filterset {
+    @extend .icon-tags
+}
+
 .icon-questionnaire {
     @extend .icon-file
 }
