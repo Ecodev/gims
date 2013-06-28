@@ -134,8 +134,23 @@
         </div>
         </div>
         <div class="container-angular" ng-view></div>
+
         <footer>
-            <p class="muted"><small><?php echo $this->translate('Designed and built by <a href="http://www.ecodev.ch">Ecodev</a> for <a href="http://www.who.int">WHO</a>') ?></small></p>
+            <div class="row-fluid" style="margin-bottom: 15px">
+                <p class="span4 muted">
+                    <small>A project by <a href="http://www.who.int/phe/en/" target="_blank">WHO - Public Health and Environment</a> - 2013</small>
+                </p>
+
+                <p class="span4 muted">
+                    <img src="/img/who-logo-black.png" alt="" style="height: 30px"/>
+                </p>
+                <p class="span4 muted">
+                    <small><?php echo $this->translate(
+                            'Designed and built by <a href="http://www.ecodev.ch" target="_blank">Ecodev</a>'
+                        ) ?></small>
+                </p>
+            </div>
+
         </footer>
 <?php echo $this->inlineScript() ?>
     </body>
