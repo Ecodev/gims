@@ -30,7 +30,6 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
             $excludedFilters[] = $excludedFilter->getId();
         }
 
-
         // fetch filter
         $filterId = $questionnaireId = $this->params()->fromQuery('filter');
 
@@ -65,7 +64,6 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
                 );
             }
 
-            $result = array();
             // @todo adrien, I let you check how you would like to implement this. For now I put the method "computeWithChildren" of $tableController as public
             // @todo It should be some kind of service but technical leader decides...
             $tableController = new TableController();

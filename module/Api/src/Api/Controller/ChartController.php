@@ -11,6 +11,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         = array('#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5',
                 '#c42525', '#a6c96a'); // not the best way but since the whole class is a mess it does not hurt. ;)
 
+    private $lightColors
+        = array('#d4e4f7', '#d3d3d3', '#ddf1b0', '#ffa5a5', '#b6eaf6', '#d4c3e9', '#fad1b1', '#dae5f8',
+                '#f2bbbb', '#dae8c0'); // not the best way but since the whole class is a mess it does not hurt. ;)
+
     private $symbols = array('circle', 'diamond', 'square', 'triangle', 'triangle-down');
 
     public function indexAction()
@@ -49,10 +53,91 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             foreach ($filterSet->getExcludedFilters() as $excludedFilter) {
                 $excludedFilters[] = $excludedFilter->getId();
             }
+
+            $shortDash = '';
+            /////////////////////////////////////////
+            // @todo clean me up! This trick was implemented a day before the launch. It must be cleaned up.
+            if ($filterSet->getId() > 6) {
+
+                // exchange value
+                $color = $this->colors;
+                $this->colors = $this->lightColors;
+                $this->lightColors = $color;
+
+                // Check the filter source
+                $filterId = $filterSet->getFilters()->first()->getId();
+
+                // true means this is filter set 1
+                if (in_array($filterId, array(2, 8, 51, 54, 57, 65, 68, 73))) {
+                    $filterSetAssumed = 1;
+                } elseif (in_array($filterId, array(121, 127, 145, 189, 192, 195, 196, 199))) {
+                    $filterSetAssumed = 3;
+                } elseif (in_array($filterId, array(74, 75))) {
+                    $filterSetAssumed = 5;
+                } else {
+                    $filterSetAssumed = 6;
+                }
+                $filterSetOfficial = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($filterSetAssumed);
+
+                $lines = $calculator->computeFlatten(
+                    $startYear, $endYear, $filterSetOfficial, $questionnaires, $part
+                );
+
+                foreach ($lines as $key => &$serie) {
+                    $serie['name'] = $serie['name'] . ' (official)';
+                    $serie['color'] = $this->lightColors[$key];
+                    $serie['type'] = 'line';
+                    foreach ($serie['data'] as &$d) {
+                        if (!is_null($d))
+                            $d = round($d * 100, 1);
+                    }
+                    $series[] = $serie;
+                }
+
+                // Then add scatter points which are each questionnaire values
+                foreach ($filterSetOfficial->getFilters() as $key => $filter) {
+                    $idFilter = $filter->getId();
+                    $data = $calculator->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
+                    $scatter = array(
+                        'type'             => 'scatter',
+                        'color'            => $this->lightColors[$key],
+                        'marker'           => array('symbol' => $this->symbols[$key]),
+                        'name'             => $filter->getName(),
+                        'allowPointSelect' => false, // because we will use our own click handler
+                        'data'             => array(),
+                    );
+                    $i = 0;
+                    foreach ($data['values%'] as $surveyCode => $value) {
+
+                        if (!is_null($value)) {
+                            $scatterData = array(
+                                'name'          => $surveyCode,
+                                'id'            => $idFilter . ':' . $surveyCode,
+                                'questionnaire' => $data['questionnaire'][$surveyCode],
+                                'x'             => $data['years'][$i],
+                                'y'             => round($value * 100, 1),
+                            );
+                            // select the ignored values
+                            if (in_array($idFilter . ':' . $surveyCode, $excludedAnswers)) {
+                                $scatterData['selected'] = 'true';
+                            }
+                            $scatter['data'][] = $scatterData;
+                        }
+                        $i++;
+                    }
+                    $series[] = $scatter;
+                }
+                $shortDash = 'ShortDash';
+            }
+
+            /////////////////////////////////////////
+            $calculator = new \Application\Service\Calculator\Jmp();
+            $calculator->setServiceLocator($this->getServiceLocator());
             $lines = $calculator->computeFlatten($startYear, $endYear, $filterSet, $questionnaires, $part, $excludedFilters);
             foreach ($lines as $key => &$serie) {
                 $serie['color'] = $this->colors[$key];
                 $serie['type'] = 'line';
+                $serie['dashStyle'] = $shortDash;
                 foreach ($serie['data'] as &$d) {
                     if (!is_null($d))
                         $d = round($d * 100, 1);
