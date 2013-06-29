@@ -43,9 +43,9 @@ class FilterRepository extends AbstractRepository
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
 
         $qb = $filterRepository->createQueryBuilder('f')->where('f.isOfficial = true');
-        $qb->leftJoin('f.parents', 'p')
-            ->having('COUNT(p.id) = 0')
-            ->groupBy('f.id');
+        $qb->leftJoin('f.parents', 'p');
+            #->having('COUNT(p.id) = 0')
+            #->groupBy('f.id');
 
         $q = $qb->getQuery();
 
