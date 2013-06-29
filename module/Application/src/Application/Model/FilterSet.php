@@ -41,6 +41,7 @@ class FilterSet extends AbstractModel
      * @var ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="Filter")
+     * ORM\OrderBy({"id" = "ASC"})
      */
     private $filters;
 
@@ -51,6 +52,7 @@ class FilterSet extends AbstractModel
      * @ORM\JoinTable(name="filter_set_excluded_filter",
      *      inverseJoinColumns={@ORM\JoinColumn(name="excluded_filter_id")}
      *      )
+     * ORM\OrderBy({"id" = "ASC"})
      */
     private $excludedFilters;
 
