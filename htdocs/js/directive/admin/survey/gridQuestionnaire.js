@@ -50,7 +50,7 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
                 plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
                 data: 'questionnaires',
                 enableCellSelection: true,
-                showFooter: true,
+                showFooter: false,
                 selectedItems: $scope.selectedRow,
                 filterOptions: {},
                 multiSelect: false,

@@ -50,13 +50,13 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
                 plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
                 data: 'survey.questions',
                 enableCellSelection: true,
-                showFooter: true,
+                showFooter: false,
                 selectedItems: $scope.selectedRow,
                 filterOptions: {},
                 multiSelect: false,
                 columnDefs: [
                     {field: 'sorting', displayName: '#', width: '50px'},
-                    {field: 'name', displayName: 'Name', width: '1000px'},
+                    {field: 'name', displayName: 'Question', width: '1000px'},
                     {displayName: '', cellTemplate: '<button type="button" class="btn btn-mini btn-edit" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
                         '<button type="button" class="btn btn-mini btn-remove" ng-click="removeQuestion(row)" ><i class="icon-trash icon-large"></i></button>'}
                 ]

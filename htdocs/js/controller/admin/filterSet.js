@@ -17,7 +17,7 @@ angular.module('myApp').controller('Admin/FilterSetCtrl', function ($scope, $loc
         plugins: [new ngGridFlexibleHeightPlugin({minHeight: 800})],
         data: 'filterSets',
         enableCellSelection: true,
-        showFooter: true,
+        showFooter: false,
         selectedItems: $scope.selectedRow,
         filterOptions: {},
         multiSelect: false,

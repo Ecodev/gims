@@ -112,7 +112,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($sco
     $scope.gridOptions = {
         data: 'questions',
         enableCellSelection: true,
-        showFooter: true,
+        showFooter: false,
         selectedItems: $scope.selectedRow,
         multiSelect: false,
         columnDefs: [

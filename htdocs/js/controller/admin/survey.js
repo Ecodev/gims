@@ -90,7 +90,7 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $locati
         plugins: [new ngGridFlexibleHeightPlugin({minHeight: 800})],
         data: 'surveys',
         enableCellSelection: true,
-        showFooter: true,
+        showFooter: false,
         selectedItems: $scope.selectedRow,
         filterOptions: {},
         multiSelect: false,
