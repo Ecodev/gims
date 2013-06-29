@@ -90,7 +90,6 @@ class Filter extends AbstractModel
      * @var ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="Filter", inversedBy="parents")
-     * @ORM\OrderBy({"name" = "ASC"})
      * @ORM\JoinTable(name="filter_children",
      *      inverseJoinColumns={@ORM\JoinColumn(name="child_filter_id")}
      *      )
