@@ -34,6 +34,7 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
         $scope.sending = true;
 
         // First case is for update a questionnaire, second is for creating
+        var geoname = $scope.questionnaire.geoname;
         $scope.questionnaire.geoname = $scope.questionnaire.geoname.id;
         if ($scope.questionnaire.id) {
             $scope.questionnaire.put().then(function () {
@@ -58,6 +59,7 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
                 }
             });
         }
+        $scope.questionnaire.geoname = geoname;
     };
 
     // Delete a questionnaire
