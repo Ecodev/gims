@@ -230,6 +230,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     'dataLabels' => array(
                         'enabled' => true,
                     ),
+                    "tooltip" => array(
+                        "headerFormat" => '',
+                        "pointFormat"  => '<b>{point.name}</b><br/>{point.y}% ({point.x})'
+                    ),
                     'marker' => array(
                         'states' => array(
                             'select' => array(
