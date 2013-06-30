@@ -116,8 +116,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($sco
         selectedItems: $scope.selectedRow,
         multiSelect: false,
         columnDefs: [
-            {field: 'filter.name', displayName: 'Filter'},
-            {field: 'name', displayName: 'Name', width: '500px'},
+            {field: 'name', displayName: 'Question', width: '500px'},
             {field: 'answers.1.valuePercent', displayName: 'Urban', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate}, //, cellTemplate: 'cellTemplate.html'
             {field: 'answers.2.valuePercent', displayName: 'Rural', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
             {field: 'answers.0.valuePercent', displayName: 'Total', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
