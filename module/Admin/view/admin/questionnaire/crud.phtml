@@ -15,7 +15,7 @@
             <pane heading="General info">
 
                 <div class="control-group" ng-class="{error: myForm.status.$invalid}" ng-show="questionnaire.id">
-                    <label for="questionnaire.status">State</label>
+                    <label for="questionnaire.status">Status</label>
                     <select id="questionnaire.status" name="state" ng-model="questionnaire.status"
                             ng-options="c.value as c.text for c in status" ng-disabled="statusDisabled"></select>
                 </div>
