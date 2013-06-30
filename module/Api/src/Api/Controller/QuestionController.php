@@ -33,12 +33,16 @@ class QuestionController extends AbstractRestfulController
         $config = array(
             // @todo remove it has been proven to work
             // Here we use a closure to get the questions' answers, but only for the current questionnaire
-            'answers' => function(\Application\Service\Hydrator $hydrator, Question $question) use($questionnaire, $controller) {
+            'answers' => function (\Application\Service\Hydrator $hydrator, Question $question) use (
+                $questionnaire, $controller
+            ) {
                 $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
-                $answers = $answerRepository->findBy(array(
-                    'question' => $question,
-                    'questionnaire' => $questionnaire,
-                ));
+                $answers = $answerRepository->findBy(
+                    array(
+                         'question'      => $question,
+                         'questionnaire' => $questionnaire,
+                    )
+                );
 
                 // special case for question, reorganize keys for the needs of NgGrid:
                 // Numerical key must correspond to the id of the part.
@@ -58,7 +62,9 @@ class QuestionController extends AbstractRestfulController
                         // should not be the case... so log it
                         if (!empty($output[0])) {
                             $logger = Module::getServiceManager()->get('Zend\Log');
-                            $logger->info(sprintf('[WARNING] Answer object "%s" has too many null Part. ', $answerData['id']));
+                            $logger->info(
+                                sprintf('[WARNING] Answer object "%s" has too many null Part. ', $answerData['id'])
+                            );
                         }
                         $output[0] = $answerData;
                     }
@@ -72,6 +78,18 @@ class QuestionController extends AbstractRestfulController
 
     public function getList()
     {
+
+//        $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question');
+//        $questions = $questionRepository->findAll();
+//
+//        /** @var Question $question */
+//        foreach ($questions as $question) {
+//            $newName = $question->getFilter()->getName();
+//            $question->setName($newName);
+//            $this->getEntityManager()->persist($question);
+//        }
+//            $this->getEntityManager()->flush();
+
         $questionnaire = $this->getQuestionnaire();
 
         // Cannot list all question, without specifying a questionnaire
@@ -80,9 +98,14 @@ class QuestionController extends AbstractRestfulController
             return;
         }
 
-        $questions = $this->getRepository()->findBy(array(
-            'survey' => $questionnaire->getSurvey(),
-        ));
+        $questions = $this->getRepository()->findBy(
+            array(
+                 'survey' => $questionnaire->getSurvey(),
+            ),
+            array(
+                 'sorting' => 'ASC'
+            )
+        );
 
         return new JsonModel($this->hydrator->extractArray($questions, $this->getJsonConfig()));
     }
@@ -108,13 +131,17 @@ class QuestionController extends AbstractRestfulController
             if (!empty($data['sorting']) && $data['sorting'] < $question->getSorting()) {
 
                 foreach ($survey->getQuestions() as $_question) {
-                    if ($_question->getSorting() >= $data['sorting'] && $_question->getSorting() < $question->getSorting()) {
+                    if ($_question->getSorting() >= $data['sorting']
+                        && $_question->getSorting() < $question->getSorting()
+                    ) {
                         $_question->setSorting($_question->getSorting() + 1);
                     }
                 }
             } elseif (!empty($data['sorting']) && $data['sorting'] > $question->getSorting()) {
                 foreach ($survey->getQuestions() as $_question) {
-                    if ($_question->getSorting() <= $data['sorting'] && $_question->getSorting() > $question->getSorting()) {
+                    if ($_question->getSorting() <= $data['sorting']
+                        && $_question->getSorting() > $question->getSorting()
+                    ) {
                         $_question->setSorting($_question->getSorting() - 1);
                     }
                 }
@@ -136,14 +163,14 @@ class QuestionController extends AbstractRestfulController
     public function create($data)
     {
         // Get the last sorting value from question
-        if (empty($data['survey']) && (int) $data['survey'] > 0) {
+        if (empty($data['survey']) && (int)$data['survey'] > 0) {
             throw new \Exception('Missing or invalid survey value', 1368459230);
         }
 
         // Retrieve a questionnaire from the storage
         $repository = $this->getEntityManager()->getRepository('Application\Model\Survey');
         /** @var Survey $survey */
-        $survey = $repository->findOneById((int) $data['survey']);
+        $survey = $repository->findOneById((int)$data['survey']);
 
         /** @var \Doctrine\Common\Collections\ArrayCollection $questions */
         $questions = $survey->getQuestions();
@@ -180,6 +207,7 @@ class QuestionController extends AbstractRestfulController
      * Ask Rbac whether the User is allowed to update this survey
      *
      * @param Survey $survey
+     *
      * @return bool
      */
     protected function isAllowedSurvey(Survey $survey)
@@ -191,7 +219,7 @@ class QuestionController extends AbstractRestfulController
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         return $rbac->isGrantedWithContext(
-                        $survey, Permission::CAN_MANAGE_SURVEY, new SurveyAssertion($survey)
+            $survey, Permission::CAN_MANAGE_SURVEY, new SurveyAssertion($survey)
         );
     }
 
@@ -211,7 +239,7 @@ class QuestionController extends AbstractRestfulController
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         return $rbac->isGrantedWithContext(
-                        $question, Permission::CAN_CREATE_OR_UPDATE_QUESTION, new QuestionAssertion($question)
+            $question, Permission::CAN_CREATE_OR_UPDATE_QUESTION, new QuestionAssertion($question)
         );
     }
 
