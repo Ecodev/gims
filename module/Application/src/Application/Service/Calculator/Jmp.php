@@ -79,6 +79,7 @@ class Jmp extends Calculator
     public function computeFlatten($yearStart, $yearEnd, FilterSet $filterSet, $questionnaires, Part $part = null,
         $excludedFilters = array())
     {
+        // @todo for sylvain. Property excluded filters is used in parent class. Check out @method computeFilterInternal
         $this->excludedFilters = $excludedFilters; // Can't believe I am writing that!
         $parts = array();
         if (!$part) {

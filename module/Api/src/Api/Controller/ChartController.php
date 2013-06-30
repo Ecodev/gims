@@ -317,6 +317,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
 
             $excludedFilters = explode(',', $this->params()->fromQuery('excludedFilters'));
+
+            // @todo for sylvain:  variable $excludedFilters was added by Fabien for excluded filters - as its name indicated.
             $serieWithExcluded = $calculator->computeFlatten($startYear, $endYear, $filterSetSingle,
                 $_questionnaires, $part, $excludedFilters);
 

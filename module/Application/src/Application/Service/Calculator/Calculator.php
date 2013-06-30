@@ -22,6 +22,7 @@ class Calculator
 
 use \Application\Traits\EntityManagerAware;
 
+    // @todo for sylvain: is the cache introducing some unwanted result in calculation?
     private $cacheComputeFilter = array();
 
     protected $excludedFilters = array();
@@ -54,10 +55,8 @@ use \Application\Traits\EntityManagerAware;
      * @param \Application\Model\Part $part
      * @return float|null null if no answer at all, otherwise the value
      */
-    public function computeFilter(Filter $filter, Questionnaire $questionnaire, Part $part = null, $excludedFilters = array())
+    public function computeFilter(Filter $filter, Questionnaire $questionnaire, Part $part = null)
     {
-
-
         $key = $this->getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheComputeFilter)) {
             return $this->cacheComputeFilter[$key];
@@ -80,6 +79,7 @@ use \Application\Traits\EntityManagerAware;
      */
     private function computeFilterInternal(Filter $filter, Questionnaire $questionnaire, \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters, Part $part = null)
     {
+        // @todo for sylvain: the logic goes as follows: if the filter id is contained within excludeFilers, skip calculation.
         if (in_array($filter->getId(), $this->excludedFilters)) {
             return null;
         }
