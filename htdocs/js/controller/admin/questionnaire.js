@@ -3,7 +3,10 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
     "use strict";
 
     $scope.status = [
-        {text: 'New', value: 'new'}
+        {text: 'New', value: 'new'},
+        {text: 'Ongoing', value: 'ongoing'},
+        {text: 'Completed', value: 'completed'},
+        {text: 'Validated', value: 'validated'}
     ];
 
     $scope.sending = false;
