@@ -271,7 +271,10 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
                 else
                     $questionCount += 1;
             }
-            $questionCount / $this->getAnswers()->count();
+
+            if ($questionCount > 0) {
+                $result = $this->getAnswers()->count() / $questionCount;
+            }
         }
 
         return $result;
