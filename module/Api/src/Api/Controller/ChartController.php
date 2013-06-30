@@ -301,8 +301,24 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $filterSetSingle = new \Application\Model\FilterSet();
             $filterSetSingle->addFilter($filter);
 
+            $questionnairesNotExcluded = array();
+            foreach ($allQuestionnaires as $questionnaire) {
+                if (!in_array($questionnaire->getSurvey()->getCode(), $excludedSurveys)) {
+                    $questionnairesNotExcluded[] = $questionnaire;
+                }
+            }
+
+            // @todo improve this. Code was added just before launch
+            $caseQuestionnaireExcluded = $this->params()->fromQuery('caseQuestionnaireExcluded');
+            if ($caseQuestionnaireExcluded) {
+                $_questionnaires = $questionnairesNotExcluded;
+            } else {
+                $_questionnaires = $allQuestionnaires;
+            }
+
             $excludedFilters = explode(',', $this->params()->fromQuery('excludedFilters'));
-            $serieWithExcluded = $calculator->computeFlatten($startYear, $endYear, $filterSetSingle, $allQuestionnaires, $part, $excludedFilters);
+            $serieWithExcluded = $calculator->computeFlatten($startYear, $endYear, $filterSetSingle,
+                $_questionnaires, $part, $excludedFilters);
 
             foreach ($serieWithExcluded as &$serie) {
                 $serie['type'] = 'line';

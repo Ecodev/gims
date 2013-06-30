@@ -39,6 +39,12 @@
                 <button id="btn-new-filter-set" ng-show="pointSelected" class="btn">Create new filter set</button>
             </div>
             <div ng-grid="gridOptions" class="gridStyle" ng-show="pointSelected" style="min-width: 400px"></div>
+            <div style="margin-top: 10px; text-align: center">
+                <button ng-click="ignoreQuestionnaire()" ng-class="{disabled: updateChartInProcess}"
+                        ng-show="pointSelected" class="btn">Ignore questionnaire
+                </button>
+            </div>
+
         </div>
 
     </div>

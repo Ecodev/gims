@@ -20,7 +20,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
 
     $scope.filters = [];
     $scope.columnDefs = [];
-
     $scope.selectedFilters = [];
 
     // Configure ng-grid.
@@ -83,9 +82,17 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             result = searches[1];
         }
         return result;
-    }
+    };
+
+
+    $scope.ignoreQuestionnaire = function () {
+        $scope.caseQuestionnaireExcluded = true;
+        resetChart();
+        refreshChartPartial();
+    };
 
     $scope.updateChart = function () {
+        $scope.caseQuestionnaireExcluded = false;
         resetChart();
         refreshChartPartial();
     };
@@ -216,6 +223,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                             exclude: $scope.exclude.join(','),
                             questionnaire: $scope.pointSelected.questionnaire,
                             excludedFilters: getExcludedFilters().join(','),
+                            caseQuestionnaireExcluded: $scope.caseQuestionnaireExcluded,
                             onlyExcluded: 1
                         }
 
@@ -274,7 +282,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                             var questionnaire = e.currentTarget.id;
                             //var point = $scope.chartObj.get(e.currentTarget.id);
                             //point.select(null, true); // toggle point selection
-
 
                             $scope.exclude = [];
                             if (_.indexOf($scope.exclude, questionnaire) !== -1) {
