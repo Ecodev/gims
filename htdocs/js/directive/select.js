@@ -95,6 +95,15 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 // Load items and re-select item based on URL params (if any)
                 var items;
                 Restangular.all(api).getList().then(function(data) {
+
+                    // @todo clean me up! For demo purposes role list must be filtered...
+                    if (api === 'role') {
+                        angular.forEach(data, function (item, index) {
+                            if (item.id !== 4 && item.id !== 3) {
+                                delete data[index];
+                            }
+                        });
+                    }
                     items = data;
                     angular.forEach(items, function(item) {
                         if (item.id == fromUrl) {
@@ -111,7 +120,13 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                         var regexp = new RegExp(searchTerm);
 
                         angular.forEach(items, function(item) {
-                            var blob = (item.id + ' ' + item.name).toUpperCase();
+
+                            var result = item.name;
+                            // @todo fix me! We should have a way to define the format key. Case added for survey.
+                            if (item.code !== undefined) {
+                                result = item.code;
+                            }
+                            var blob = (item.id + ' ' + result).toUpperCase();
                             if (regexp.test(blob)) {
                                 data.results.push(item);
                             }
@@ -123,7 +138,12 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
 
             // Configure formatting
             var formatSelection = function(item) {
-                return item.name;
+                var result = item.name;
+                // @todo fix me! We should have a way to define the format key. Case added for survey.
+                if (item.code !== undefined) {
+                    result = item.code;
+                }
+                return result;
             };
 
             $scope.options.formatResult = formatSelection;
