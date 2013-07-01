@@ -11,60 +11,46 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
     {
         $questionnaireParameter = $this->params()->fromQuery('questionnaire');
         $idQuestionnaires = explode(',', $questionnaireParameter);
-        $idQuestionnaire = array_shift($idQuestionnaires); // this the first parameter
         $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
 
-
-        $questionnaire = $questionnaireRepository->find($idQuestionnaire);
-
         $pp = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
-        array_unshift($pp, null);
+        array_unshift($pp, null); // null entry for Total part ?
         $parts = array();
         foreach ($pp as $part) {
             $parts[] = array(
                 'part' => $part,
-                'population' => $this->getEntityManager()->getRepository('Application\Model\Population')->getOneByQuestionnaire($questionnaire, $part),
+                'population' => null, // will be computed later for each questionnaire
             );
         }
 
-        if (!$questionnaire) {
-            $this->getResponse()->setStatusCode(404);
-            return;
-        }
-
+        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
         $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
 
         $result = array();
         if ($filterSet) {
-            foreach ($filterSet->getFilters() as $filter) {
-                $result = array_merge($result, $this->computeWithChildren($questionnaire, $filter, $parts));
-            }
-
-            $sideResults = array();
-            $_result = array();
-            foreach ($idQuestionnaires as $id) {
-                $sideQuestionnaire = $questionnaireRepository->find($id);
-                foreach ($filterSet->getFilters() as $filter) {
-                    $_result = array_merge($_result, $this->computeWithChildren($sideQuestionnaire, $filter, $parts));
-                }
-
-                // store result
-                $sideResults[$id] = $_result;
-            }
-
-            // merge back data with other questionnaires
-            foreach ($sideResults as $sideResult) {
-
-                foreach ($sideResult as $key => $data) {
-                    $result[$key]['values'][] = $data['values'][0];
+            foreach($idQuestionnaires as $indexQuestionnaire => $idQuestionnaire)
+            {
+                $questionnaire = $questionnaireRepository->find($idQuestionnaire);
+                if ($questionnaire)
+                {
+                    foreach($parts as $i => $p)
+                    {
+                        $parts[$i]['population'] = $populationRepository->getOneByQuestionnaire($questionnaire, $parts[$i]['part']);
+                    }
+                    foreach ($filterSet->getFilters() as $filter) {
+                        $this->computeWithChildren($questionnaire, $filter, $parts, 0, $result);
+                    }
                 }
             }
-        }
+      }
 
         return new JsonModel($result);
     }
 
-    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0)
+    /* 
+     * Compute the answers for a given questionnaire (hence country+survey) and filter
+     */
+    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0, &$result)
     {
 
         $service = new \Application\Service\Calculator\Calculator();
@@ -79,14 +65,28 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             $current['values'][0][$p['part'] ? $p['part']->getName() : 'Total'] = $computed && $p['population']->getPopulation() ? $computed / $p['population']->getPopulation() : null;
         }
 
-        $result = array($current);
-        foreach ($filter->getChildren() as $child) {
+        $filterExists = false;
+        foreach($result as $numRow => $data)
+        {
+            if ($data['filter']['id'] == $filter->getId())
+            {
+                $result[$numRow]['values'][] = $current['values'][0];
+                $filterExists = true;
+                break;
+            }
+        }
+        if (!$filterExists)
+        {
+            $result[] = $current;
+        }
+
+        foreach ($filter->getChildren() as $child)
+        {
             if ($child->isOfficial()) {
-                $result = array_merge($result, $this->computeWithChildren($questionnaire, $child, $parts, $level + 1));
+                $this->computeWithChildren($questionnaire, $child, $parts, $level + 1, $result);
             }
         }
 
-        return $result;
     }
 
 }
