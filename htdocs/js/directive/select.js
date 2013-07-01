@@ -22,6 +22,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             api: '@',
             name: '@',
             placeholder: '@',
+            format: '@',
             model: '=' // TODO: could not find a way to use real 'ng-model'. So for now we use custom 'model' attribute and bi-bind it to real ng-model. Ugly, but working
         },
         // The linking function will add behavior to the template
@@ -140,9 +141,10 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             var formatSelection = function(item) {
                 var result = item.name;
                 // @todo fix me! We should have a way to define the format key. Case added for survey.
-                if (item.code !== undefined) {
-                    result = item.code;
-                }
+				if ($scope.format == 'code')
+				{
+					result = item.code;
+				}
                 return result;
             };
 

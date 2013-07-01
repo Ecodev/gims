@@ -10,13 +10,14 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
             relation: '@',
             first: '@',
             second: '@',
-            third: '@'
+            third: '@',
+            format: '@'
         },
         template: '<div>' +
                 '<div ng-grid="gridOptions" class="gridStyle"></div>' +
                 '<div class="well control-group" ng-class="{error: exists}" ng-hide="isReadOnly">' +
                 '<span class="span4">' +
-                '<gims-select api="{{second}}" model="secondValue" placeholder="Select a {{second}}" style="width:100%;"></gims-select>' +
+                '<gims-select api="{{second}}" model="secondValue" placeholder="Select a {{second}}" style="width:100%;" format="{{format}}"></gims-select>' +
                 '</span>' +
                 '<span class="span4">' +
                 '<gims-select api="{{third}}" model="thirdValue" placeholder="Select a {{third}}" style="width:100%;"></gims-select>' +
