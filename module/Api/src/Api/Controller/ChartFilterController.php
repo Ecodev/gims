@@ -68,7 +68,7 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
             // @todo It should be some kind of service but technical leader decides...
             $tableController = new TableController();
             foreach ($filters as $filter) {
-                $result = array_merge($result, $tableController->computeWithChildren($questionnaire, $filter, $parts));
+                $tableController->computeWithChildren($questionnaire, $filter, $parts, 0, $result);
             }
 
             // Add information whether the filter is selectable or not

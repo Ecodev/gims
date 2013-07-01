@@ -127,7 +127,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                             if (item.code !== undefined) {
                                 result = item.code;
                             }
-                            var blob = (item.id + ' ' + result).toUpperCase();
+                            var blob = (item.id + ' ' + item.name).toUpperCase();
                             if (regexp.test(blob)) {
                                 data.results.push(item);
                             }
@@ -140,10 +140,9 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             // Configure formatting
             var formatSelection = function(item) {
                 var result = item.name;
-                // @todo fix me! We should have a way to define the format key. Case added for survey.
 				if ($scope.format == 'code')
 				{
-					result = item.code;
+					result = item.code || item.id || item.name;
 				}
                 return result;
             };
