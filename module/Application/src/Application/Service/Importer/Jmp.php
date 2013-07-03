@@ -830,7 +830,7 @@ class Jmp extends AbstractImporter
                 $includedValue = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
 
                 // If it is not included, then it means we need an exclude rule
-                if ($includedValue == 'No') {
+                if (strcasecmp($includedValue, 'No') == 0) {
                     $assoc = $repository->findOneBy(array(
                         'questionnaire' => $questionnaire,
                         'rule' => $this->excludeRule,
