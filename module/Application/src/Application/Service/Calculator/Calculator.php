@@ -79,7 +79,7 @@ use \Application\Traits\EntityManagerAware;
      */
     private function computeFilterInternal(Filter $filter, Questionnaire $questionnaire, \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters, Part $part = null)
     {
-        // @todo for sylvain: the logic goes as follows: if the filter id is contained within excludeFilers, skip calculation.
+        // @todo for sylvain: the logic goes as follows: if the filter id is contained within excludeFilters, skip calculation.
         if (in_array($filter->getId(), $this->excludedFilters)) {
             return null;
         }
@@ -90,13 +90,19 @@ use \Application\Traits\EntityManagerAware;
             $alreadySummedFilters->add($filter);
         }
 
+        $absoluteValue = null;
         // If the filter have a specified answer, returns it (skip all computation)
         foreach ($questionnaire->getAnswers() as $answer) {
             $answerFilter = $answer->getQuestion()->getFilter()->getOfficialFilter() ? : $answer->getQuestion()->getFilter();
             if ($answerFilter === $filter && $answer->getPart() == $part) {
 
                 $alreadySummedFilters->add(true);
-                return $answer->getValueAbsolute();
+                $absoluteValue = $answer->getValueAbsolute();
+                // If the filter of the answer has subfilters, then add the parent filter value and continue to compute subfilters
+                if ($answerFilter->getChildren()->count() == 0)
+                {
+                    return $absoluteValue;
+                }
             }
         }
 
@@ -152,6 +158,10 @@ use \Application\Traits\EntityManagerAware;
         // TODO: This probably will change once we implement real formula engine
         if (!is_null($formulaValue)) {
             $sum += $formulaValue;
+        }
+
+        if (!is_null($absoluteValue)) {
+            $sum += $absoluteValue;
         }
 
         return $sum;

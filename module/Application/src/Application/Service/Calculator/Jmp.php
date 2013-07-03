@@ -131,7 +131,7 @@ class Jmp extends Calculator
     /**
      * Compute the flatten regression value for the given year
      * @param integer $year
-     * @param array $allRegressions [year => [regresssion => value, population => value]]
+     * @param array $allRegressions [year => [regression => value, population => value]]
      * @param array $usedYears [year] should be empty array for first call, then used for recursivity
      * @return null|int
      */
