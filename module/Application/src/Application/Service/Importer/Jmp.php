@@ -728,9 +728,9 @@ class Jmp extends AbstractImporter
                     $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
                     $value = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
 
-                    if (!is_null($value)) {
+                    if ($name && !is_null($value) || $value<>0) {
 
-                        // Some countries like Yemen have estimates with values but without name (!)
+                        // Some countries have estimates with non-zero values but without name! (Yemen, Tables_W, DHS92, estimates line 88)
                         if (!$name)
                             $name = 'Other estimation';
 
