@@ -728,7 +728,11 @@ class Jmp extends AbstractImporter
                     $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
                     $value = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
 
-                    if ($name && !is_null($value)) {
+                    if (!is_null($value)) {
+
+                        // Some countries like Yemen have estimates with values but without name (!)
+                        if (!$name)
+                            $name = 'Other estimation';
 
                         $population = $populationRepository->getOneByQuestionnaire($questionnaire, $part);
                         $absoluteValue = $population->getPopulation() * $value / 100;
