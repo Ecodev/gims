@@ -23,6 +23,13 @@ abstract class AbstractRule extends \Application\Model\AbstractModel
     private $name;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $isFinal = false;
+
+    /**
      * Set name
      *
      * @param string $name
@@ -53,7 +60,7 @@ abstract class AbstractRule extends \Application\Model\AbstractModel
     public function setIsFinal($value)
     {
         $this->isFinal = $value;
-        
+
         return $this;
     }
 
