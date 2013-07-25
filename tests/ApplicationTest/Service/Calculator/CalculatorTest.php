@@ -10,7 +10,7 @@ class CalculatorTest extends AbstractCalculator
     /**
      * In those test we use a new calculator each time to avoid cache, because we will chagne filter structure on the fly
      */
-    public function testComputingQuestionnaireIsCorrectt()
+    public function testComputingQuestionnaireIsCorrect()
     {
         // Assert computing for every single filter
         $this->assertEquals($this->answer131->getValueAbsolute() + $this->answer132->getValueAbsolute() + $this->answer141->getValueAbsolute() + $this->answer142->getValueAbsolute(), (new Calculator())->computeFilter($this->filter1, $this->questionnaire), 'should be the sum of unique children (excluding duplicates via summands)');
@@ -41,8 +41,8 @@ class CalculatorTest extends AbstractCalculator
 
         // Assert that manually specified answer override computed values
         $this->assertEquals($this->answer11->getValueAbsolute(), (new Calculator())->computeFilter($this->filter11, $this->questionnaire), 'should be the answer, when answer specified');
-        $this->assertEquals($this->answer13->getValueAbsolute(), (new Calculator())->computeFilter($this->filter13, $this->questionnaire), 'should be the answer, when answer specified');
-        $this->assertEquals($this->answer11->getValueAbsolute() + $this->answer13->getValueAbsolute() + $this->answer132->getValueAbsolute() + $this->answer141->getValueAbsolute() + $this->answer142->getValueAbsolute(), (new Calculator())->computeFilter($this->filter1, $this->questionnaire), 'should be the sum of children, but with overriden values instead of computed');
+        $this->assertEquals($this->answer131->getValueAbsolute() + $this->answer132->getValueAbsolute() + $this->answer13->getValueAbsolute(), (new Calculator())->computeFilter($this->filter13, $this->questionnaire), 'should be the answer, when answer specified');
+        $this->assertEquals($this->answer11->getValueAbsolute() + $this->answer13->getValueAbsolute() + $this->answer131->getValueAbsolute() + $this->answer132->getValueAbsolute() + $this->answer141->getValueAbsolute() + $this->answer142->getValueAbsolute(), (new Calculator())->computeFilter($this->filter1, $this->questionnaire), 'should be the sum of children, but with overriden values instead of computed');
 
         // Add part to existing answer
         $part = new \Application\Model\Part('custom');
@@ -69,7 +69,7 @@ class CalculatorTest extends AbstractCalculator
 
         // Define summands to use several time cat1.4.1 (once via cat1 and once via cat1.4)
         $this->filter3->addSummand($this->filter1)->addSummand($this->filter14);
-        $this->assertEquals($this->answer21bis->getValueAbsolute() + $this->answer11->getValueAbsolute() + $this->answer13->getValueAbsolute() + $this->answer132->getValueAbsolute() + $this->answer141->getValueAbsolute(), (new Calculator())->computeFilter($this->filter3, $this->questionnaire), 'should not sum twice the same filter');
+        $this->assertEquals($this->answer21bis->getValueAbsolute() + $this->answer11->getValueAbsolute() + $this->answer13->getValueAbsolute() + $this->answer131->getValueAbsolute() + $this->answer132->getValueAbsolute() + $this->answer141->getValueAbsolute(), (new Calculator())->computeFilter($this->filter3, $this->questionnaire), 'should not sum twice the same filter');
     }
 
     public function testComputingFilterIsCorrect()
