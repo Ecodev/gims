@@ -3,58 +3,8 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "2837565d25bfe98758b8adb862c68669",
+    "hash": "c2f8ded179b559503a90b319c3c2a03a",
     "packages": [
-        {
-            "name": "CodePlex/PHPExcel",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/markushausammann/PHPExcel.git",
-                "reference": "9829bb66286e2b2c55b0dbdb4720b64794dacb87"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/markushausammann/PHPExcel/zipball/9829bb66286e2b2c55b0dbdb4720b64794dacb87",
-                "reference": "9829bb66286e2b2c55b0dbdb4720b64794dacb87",
-                "shasum": ""
-            },
-            "require": {
-                "ext-xml": "*",
-                "php": ">=5.2.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "PHPExcel": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL"
-            ],
-            "authors": [
-                {
-                    "name": "Maarten Balliauw",
-                    "homepage": "http://blog.maartenballiauw.be"
-                },
-                {
-                    "name": "Mark Baker"
-                },
-                {
-                    "name": "Erit Tilt"
-                }
-            ],
-            "description": "PHPExcel - OpenXML - Create Excel2007 documents in PHP - Spreadsheet engine",
-            "homepage": "http://phpexcel.codeplex.com",
-            "keywords": [
-                "OpenXML",
-                "excel",
-                "php",
-                "spreadsheet"
-            ],
-            "time": "2012-11-21 11:08:49"
-        },
         {
             "name": "creof/doctrine2-spatial",
             "version": "dev-master",
@@ -410,12 +360,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "e1f6efcd94993b493de5c6a413cbc327ea9c0caa"
+                "reference": "ced3b419252af47f29d6680f9ec74df00ee0c58e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/e1f6efcd94993b493de5c6a413cbc327ea9c0caa",
-                "reference": "e1f6efcd94993b493de5c6a413cbc327ea9c0caa",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/ced3b419252af47f29d6680f9ec74df00ee0c58e",
+                "reference": "ced3b419252af47f29d6680f9ec74df00ee0c58e",
                 "shasum": ""
             },
             "require": {
@@ -456,7 +406,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2012-12-27 16:39:29"
+            "time": "2013-06-27 19:46:00"
         },
         {
             "name": "doctrine/orm",
@@ -570,12 +520,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mwillbanks/ZfcTwitterBootstrap.git",
-                "reference": "95a81c7f6bf087c280d775f997840f889251d9c8"
+                "reference": "e3ee2072dfe6be0b862102a84dc0c26bba655cf4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mwillbanks/ZfcTwitterBootstrap/zipball/95a81c7f6bf087c280d775f997840f889251d9c8",
-                "reference": "95a81c7f6bf087c280d775f997840f889251d9c8",
+                "url": "https://api.github.com/repos/mwillbanks/ZfcTwitterBootstrap/zipball/e3ee2072dfe6be0b862102a84dc0c26bba655cf4",
+                "reference": "e3ee2072dfe6be0b862102a84dc0c26bba655cf4",
                 "shasum": ""
             },
             "require": {
@@ -616,7 +566,7 @@
                 "source": "https://github.com/mwillbanks/ZfcTwitterBootstrap/tree/master",
                 "issues": "https://github.com/mwillbanks/ZfcTwitterBootstrap/issues"
             },
-            "time": "2013-06-04 02:34:13"
+            "time": "2013-07-23 19:40:34"
         },
         {
             "name": "phing/phing",
@@ -624,12 +574,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "1d76a264e15eaad29c817a59adee0b4fa1c763f1"
+                "reference": "20efc3f604ed93d0cf334eacad088d76e754bda6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/1d76a264e15eaad29c817a59adee0b4fa1c763f1",
-                "reference": "1d76a264e15eaad29c817a59adee0b4fa1c763f1",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/20efc3f604ed93d0cf334eacad088d76e754bda6",
+                "reference": "20efc3f604ed93d0cf334eacad088d76e754bda6",
                 "shasum": ""
             },
             "require": {
@@ -668,28 +618,84 @@
                 "task",
                 "tool"
             ],
-            "time": "2013-06-05 08:25:51"
+            "time": "2013-07-25 20:40:30"
+        },
+        {
+            "name": "phpoffice/phpexcel",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHPOffice/PHPExcel.git",
+                "reference": "1.7.9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/1.7.9",
+                "reference": "1.7.9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-xml": "*",
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PHPExcel": "Classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Maarten Balliauw",
+                    "homepage": "http://blog.maartenballiauw.be"
+                },
+                {
+                    "name": "Mark Baker"
+                },
+                {
+                    "name": "Franck Lefevre",
+                    "homepage": "http://blog.rootslabs.net"
+                },
+                {
+                    "name": "Erik Tilt"
+                }
+            ],
+            "description": "PHPExcel - OpenXML - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
+            "homepage": "http://phpexcel.codeplex.com",
+            "keywords": [
+                "OpenXML",
+                "excel",
+                "php",
+                "spreadsheet",
+                "xls",
+                "xlsx"
+            ],
+            "time": "2013-05-24 11:57:42"
         },
         {
             "name": "symfony/console",
-            "version": "v2.3.0",
+            "version": "v2.3.2",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "v2.3.0"
+                "reference": "v2.3.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/v2.3.0",
-                "reference": "v2.3.0",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/v2.3.2",
+                "reference": "v2.3.2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "symfony/event-dispatcher": ">=2.1,<3.0"
+                "symfony/event-dispatcher": "~2.1"
             },
             "suggest": {
                 "symfony/event-dispatcher": ""
@@ -721,7 +727,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-05-30 05:11:26"
+            "time": "2013-07-11 19:36:36"
         },
         {
             "name": "zendframework/zend-developer-tools",
@@ -729,16 +735,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/ZendDeveloperTools.git",
-                "reference": "d5ec47c8e916a083fe2ef8a5711b859e8864b042"
+                "reference": "0.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/ZendDeveloperTools/zipball/d5ec47c8e916a083fe2ef8a5711b859e8864b042",
-                "reference": "d5ec47c8e916a083fe2ef8a5711b859e8864b042",
+                "url": "https://api.github.com/repos/zendframework/ZendDeveloperTools/zipball/0.0.2",
+                "reference": "0.0.2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
+                "zendframework/zend-debug": "2.*",
                 "zendframework/zend-eventmanager": "2.*",
                 "zendframework/zend-mvc": "2.*",
                 "zendframework/zend-servicemanager": "2.*",
@@ -746,7 +753,8 @@
                 "zendframework/zend-version": "2.*"
             },
             "suggest": {
-                "bjyoungblood/bjy-profiler": "Version: dev-master, allows the usage of the (Zend) Db collector."
+                "bjyoungblood/bjy-profiler": "Version: dev-master, allows the usage of the (Zend) Db collector.",
+                "ocramius/ocra-service-manager": "OcraServiceManager can help you track dependencies within your application."
             },
             "type": "zf-module",
             "autoload": {
@@ -780,20 +788,20 @@
                 "module",
                 "zf2"
             ],
-            "time": "2013-06-07 08:49:48"
+            "time": "2013-07-08 19:52:34"
         },
         {
             "name": "zendframework/zendframework",
-            "version": "2.2.0",
+            "version": "2.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zf2.git",
-                "reference": "release-2.2.0"
+                "reference": "release-2.2.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zf2/zipball/release-2.2.0",
-                "reference": "release-2.2.0",
+                "url": "https://api.github.com/repos/zendframework/zf2/zipball/release-2.2.2",
+                "reference": "release-2.2.2",
                 "shasum": ""
             },
             "require": {
@@ -836,6 +844,7 @@
                 "zendframework/zend-permissions-acl": "self.version",
                 "zendframework/zend-permissions-rbac": "self.version",
                 "zendframework/zend-progressbar": "self.version",
+                "zendframework/zend-resources": "self.version",
                 "zendframework/zend-serializer": "self.version",
                 "zendframework/zend-server": "self.version",
                 "zendframework/zend-servicemanager": "self.version",
@@ -855,7 +864,7 @@
                 "doctrine/annotations": ">=1.0",
                 "ircmaxell/random-lib": "dev-master",
                 "ircmaxell/security-lib": "dev-master",
-                "ocramius/proxy-manager": "0.3.*",
+                "ocramius/proxy-manager": "0.4.*",
                 "phpunit/phpunit": "3.7.*"
             },
             "suggest": {
@@ -867,7 +876,9 @@
                 "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha for rendering ReCaptchas in Zend\\Captcha and/or Zend\\Form"
             },
             "bin": [
-                "bin/classmap_generator.php"
+                "bin/classmap_generator.php",
+                "bin/pluginmap_generator.php",
+                "bin/templatemap_generator.php"
             ],
             "type": "library",
             "extra": {
@@ -878,8 +889,7 @@
             },
             "autoload": {
                 "psr-0": {
-                    "Zend\\": "library/",
-                    "ZendTest\\": "tests/"
+                    "Zend\\": "library/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -892,7 +902,7 @@
                 "framework",
                 "zf2"
             ],
-            "time": "2013-05-15 10:27:32"
+            "time": "2013-07-24 14:02:19"
         },
         {
             "name": "zf-commons/zfc-base",
@@ -953,12 +963,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ZF-Commons/ZfcRbac.git",
-                "reference": "4263ce8883f5b452cac52bf0b5618ac745c99aad"
+                "reference": "102aeee97449c2e995ae98f0478741a0543afa99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ZF-Commons/ZfcRbac/zipball/4263ce8883f5b452cac52bf0b5618ac745c99aad",
-                "reference": "4263ce8883f5b452cac52bf0b5618ac745c99aad",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcRbac/zipball/102aeee97449c2e995ae98f0478741a0543afa99",
+                "reference": "102aeee97449c2e995ae98f0478741a0543afa99",
                 "shasum": ""
             },
             "require": {
@@ -988,7 +998,7 @@
                 "module",
                 "zf2"
             ],
-            "time": "2013-05-10 20:35:56"
+            "time": "2013-07-28 08:50:57"
         },
         {
             "name": "zf-commons/zfc-user",
@@ -1103,16 +1113,16 @@
     "packages-dev": [
         {
             "name": "phpunit/php-code-coverage",
-            "version": "1.2.11",
+            "version": "1.2.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "1.2.11"
+                "reference": "1.2.12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/1.2.11",
-                "reference": "1.2.11",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/1.2.12",
+                "reference": "1.2.12",
                 "shasum": ""
             },
             "require": {
@@ -1122,13 +1132,18 @@
                 "phpunit/php-token-stream": ">=1.1.3@stable"
             },
             "require-dev": {
-                "phpunit/phpunit": "3.7.*"
+                "phpunit/phpunit": "3.7.*@dev"
             },
             "suggest": {
                 "ext-dom": "*",
                 "ext-xdebug": ">=2.0.5"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2.x-dev"
+                }
+            },
             "autoload": {
                 "classmap": [
                     "PHP/"
@@ -1155,7 +1170,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2013-05-23 18:23:24"
+            "time": "2013-07-06 06:26:16"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1337,16 +1352,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "3.7.21",
+            "version": "3.7.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3.7.21"
+                "reference": "3.7.22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3.7.21",
-                "reference": "3.7.21",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3.7.22",
+                "reference": "3.7.22",
                 "shasum": ""
             },
             "require": {
@@ -1355,12 +1370,12 @@
                 "ext-reflection": "*",
                 "ext-spl": "*",
                 "php": ">=5.3.3",
-                "phpunit/php-code-coverage": ">=1.2.1,<1.3.0",
+                "phpunit/php-code-coverage": "~1.2.1",
                 "phpunit/php-file-iterator": ">=1.3.1",
                 "phpunit/php-text-template": ">=1.1.1",
-                "phpunit/php-timer": ">=1.0.2,<1.1.0",
-                "phpunit/phpunit-mock-objects": ">=1.2.0,<1.3.0",
-                "symfony/yaml": ">=2.0,<3.0"
+                "phpunit/php-timer": "~1.0.2",
+                "phpunit/phpunit-mock-objects": "~1.2.0",
+                "symfony/yaml": "~2.0"
             },
             "require-dev": {
                 "pear-pear/pear": "1.9.4"
@@ -1407,7 +1422,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2013-05-23 18:54:29"
+            "time": "2013-07-06 06:29:15"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -1460,17 +1475,17 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.3.0",
+            "version": "v2.3.2",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "v2.3.0-RC1"
+                "reference": "v2.3.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.3.0-RC1",
-                "reference": "v2.3.0-RC1",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.3.2",
+                "reference": "v2.3.2",
                 "shasum": ""
             },
             "require": {
@@ -1503,7 +1518,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2013-05-10 18:12:13"
+            "time": "2013-07-11 19:36:36"
         }
     ],
     "aliases": [
@@ -1518,8 +1533,8 @@
         "doctrine/migrations": 20,
         "creof/doctrine2-spatial": 20,
         "mwillbanks/zfc-twitter-bootstrap": 20,
-        "codeplex/phpexcel": 20,
-        "zendframework/zend-developer-tools": 20
+        "zendframework/zend-developer-tools": 20,
+        "phpoffice/phpexcel": 20
     },
     "platform": {
         "php": ">=5.4.0",
