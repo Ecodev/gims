@@ -29,6 +29,7 @@ class Question extends AbstractModel
             'survey' => '\Application\Model\Survey',
             'officialQuestion' => '\Application\Model\Question',
             'answers' => '\Application\Model\Answer',
+            'choices' => '\Application\Model\QuestionChoice',
         );
 
     /**
@@ -106,11 +107,35 @@ class Question extends AbstractModel
     private $answers;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="QuestionChoice", mappedBy="question")
+     * @ORM\JoinColumns({
+     *  @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
+     * })
+     */
+    private $choices;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $compulsory;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $info;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->answers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->choices = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -321,6 +346,60 @@ class Question extends AbstractModel
     {
         $this->getAnswers()->add($answer);
 
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCompulsory()
+    {
+        return $this->compulsory;
+    }
+
+    /**
+     * @param int $compulsory
+     * @return $this
+     */
+    public function setCompulsory($compulsory)
+    {
+        $this->compulsory = $compulsory;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInfo()
+    {
+        return $this->info;
+    }
+
+    /**
+     * @param string $info
+     * @return $this
+     */
+    public function setInfo($info)
+    {
+        $this->info = $info;
+        return $this;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getChoices()
+    {
+        return $this->choices;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $choices
+     * @return $this
+     */
+    public function setChoices($choices)
+    {
+        $this->choices = $choices;
         return $this;
     }
 
