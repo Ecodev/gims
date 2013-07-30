@@ -2,6 +2,16 @@
 angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, $routeParams, $location, Restangular, Modal) {
     "use strict";
 
+
+    $scope.types = [
+        {text: 'Info', value: 'info'},
+        {text: 'Numerical (3 answers)', value: 'numerical'},
+        {text: 'Numerical (4 answers)', value: 'numerical'},
+        {text: 'Numerical (5 answers)', value: 'numerical'},
+        {text: 'Percentage', value: 'foo'}
+    ];
+
+
     $scope.sending = false;
 
     // Default redirect
@@ -30,11 +40,13 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
         $scope.sending = true;
 
+
         // First case is for update a question, second is for creating
         $scope.question.filter = $scope.question.filter.id;
         if ($scope.question.id) {
-                $scope.question.put().then(function() {
+                $scope.question.put({fields: 'metadata,filter,survey'}).then(function(question) {
                 $scope.sending = false;
+                $scope.question= question;
 
                 if (redirectAfterSave) {
                     redirect();
@@ -67,6 +79,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     // Try loading question if possible...
     if ($routeParams.id) {
         Restangular.one('question', $routeParams.id).get({fields: 'metadata,filter,survey'}).then(function(question) {
+
             $scope.question = question;
         });
     }
