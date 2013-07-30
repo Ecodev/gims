@@ -135,7 +135,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $calculator->setServiceLocator($this->getServiceLocator());
             $lines = $calculator->computeFlatten($startYear, $endYear, $filterSet, $questionnaires, $part, $excludedFilters);
             foreach ($lines as $key => &$serie) {
-                $serie['color'] = $this->colors[$key];
+                $serie['color'] = $this->colors[$key % count($this->colors)];
                 $serie['type'] = 'line';
                 $serie['dashStyle'] = $shortDash;
                 foreach ($serie['data'] as &$d) {
@@ -151,8 +151,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $data = $calculator->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
                 $scatter = array(
                     'type' => 'scatter',
-                    'color' => $this->colors[$key],
-                    'marker' => array('symbol' => $this->symbols[$key]),
+                    'color' => $this->colors[$key % count($this->colors)],
+                    'marker' => array('symbol' => $this->symbols[$key % count($this->symbols)]),
                     'name' => $filter->getName(),
                     'allowPointSelect' => false, // because we will use our own click handler
                     'data' => array(),
