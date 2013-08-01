@@ -91,34 +91,30 @@ class Jmp extends AbstractImporter
             'replacements' => array(
             // No replacements to make for water
             ),
-            'ratios' => array(
-                'min' => 94,
-                'max' => 103,
+            'questionnaireRules' => array(
+                'Calculation' => array(78, 79, 80, 81, 82),
+                'Estimate' => array(83, 84, 85, 86, 87, 88),
+                'Ratio' => array(94, 95, 96, 97, 98, 99, 100, 101, 102, 103),
             ),
             'highFilters' => array(
                 "Total improved" => array(
                     'children' => array(5, 12, 55, 58, 68),
-                    'estimates' => array(83, 84, 85, 86),
                     'excludes' => 91,
                 ),
                 "Piped onto premises" => array(
                     'children' => array(6),
-                    'estimates' => array(88),
                     'excludes' => 92,
                 ),
                 "Surface water" => array(
                     'children' => array(60),
-                    'estimates' => array(), // TODO: When implementing formula engine, should use row 87, see: https://support.ecodev.ch/issues/2072#note-3
                     'excludes' => 93,
                 ),
                 "Other Improved" => array(
                     'children' => array(9, 10, 12, 55, 58, 68),
-                    'estimates' => array(),
                     'excludes' => null,
                 ),
                 "Other Unimproved" => array(
                     'children' => array(56, 59, 71),
-                    'estimates' => array(),
                     'excludes' => null,
                 ),
             ),
@@ -215,6 +211,11 @@ class Jmp extends AbstractImporter
                 9 => array("to unknown place/ not sure/DK", 999, 0, null),
                 10 => array("to elsewhere", 999, 0, null),
             ),
+            'questionnaireRules' => array(
+                'Calculation' => array(85, 86, 87),
+                'Estimate' => array(88, 89, 90, 91, 92, 93),
+                'Ratio' => array(100, 101, 102, 103, 104, 105, 106, 107),
+            ),
             'ratios' => array(
                 'min' => 100,
                 'max' => 107,
@@ -222,42 +223,39 @@ class Jmp extends AbstractImporter
             'highFilters' => array(
                 "Improved + shared" => array(
                     'children' => array(-6, -7, -8, -9, 49, 73, 76),
-                    'estimates' => array(88, 89, 90, 91, 92),
                     'excludes' => 96,
                 ),
                 "Sewerage connections" => array(
                     'children' => array(6),
-                    'estimates' => array(93),
                     'excludes' => 97,
                 ),
                 "Improved" => array(
                     'children' => array(), // based on ratio
-                    'estimates' => array(),
                     'excludes' => null,
                 ),
                 "Shared" => array(
                     'children' => array(), // based on ratio
-                    'estimates' => array(),
                     'excludes' => 99,
                 ),
                 "Other unimproved" => array(
                     'children' => array(-10, 30, 52, 53, 54, 55, 56, 80),
-                    'estimates' => array(),
                     'excludes' => null,
                 ),
                 "Open defecation" => array(
                     'children' => array(79),
-                    'estimates' => array(),
                     'excludes' => 98,
                 ),
             ),
         ),
     );
+    private $partOffsets = array();
     private $cacheAlternateFilters = array();
     private $cacheFilters = array();
     private $cacheQuestions = array();
     private $cacheHighFilters = array();
     private $cacheRatios = array();
+    private $importedQuestionnaires = array();
+    private $colToParts = array();
     private $questionnaireCount = 0;
     private $answerCount = 0;
     private $excludeCount = 0;
@@ -318,8 +316,17 @@ class Jmp extends AbstractImporter
 
             // Import all questionnaire found, until no questionnaire code found
             $col = 0;
+            $this->importedQuestionnaires = array();
+            $this->colToParts = array();
             while ($this->importQuestionnaire($sheet, $col)) {
                 $col += 6;
+            }
+
+            // Second pass on imported questionnaires to process cross-questionnaire things
+            foreach ($this->importedQuestionnaires as $col => $questionnaire) {
+                $this->importQuestionnaireRules($sheet, $col, $questionnaire);
+                $this->importExcludes($sheet, $col, $questionnaire);
+                $this->importRatios($sheet, $col, $questionnaire);
             }
         }
 
@@ -449,11 +456,14 @@ class Jmp extends AbstractImporter
 
         $this->importAnswers($sheet, $col, $survey, $questionnaire);
 
-        $this->importEstimates($sheet, $col, $questionnaire);
-        $this->importExcludes($sheet, $col, $questionnaire);
-        $this->importRatios($sheet, $col, $questionnaire);
-
         $this->getEntityManager()->flush();
+
+        // Keep a trace of what column correspond to what questionnaire for second pass
+        $this->importedQuestionnaires[$col] = $questionnaire;
+        foreach ($this->partOffsets as $offset => $part) {
+            $this->colToParts[$col + $offset]['questionnaire'] = $questionnaire;
+            $this->colToParts[$col + $offset]['part'] = $part;
+        }
 
         return true;
     }
@@ -708,75 +718,159 @@ class Jmp extends AbstractImporter
     }
 
     /**
-     * Import estimates as rules and associate them to highFilters
+     * Import all rules on the questionnaire level (Calculations, Estimates and Ratios)
      * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
      * @param \Application\Model\Questionnaire $questionnaire
      */
-    public function importEstimates(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire)
+    public function importQuestionnaireRules(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire)
     {
-        $filterRuleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
-        $formulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Formula');
-        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
-
-        foreach ($this->definitions[$sheet->getTitle()]['highFilters'] as $filterName => $filterData) {
-            $filter = $this->cacheHighFilters[$filterName];
-
-            foreach ($filterData['estimates'] as $row) {
-
+        foreach ($this->definitions[$sheet->getTitle()]['questionnaireRules'] as $group) {
+            foreach ($group as $row) {
                 foreach ($this->partOffsets as $offset => $part) {
-                    $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
-                    $value = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
-
-                    if ($name && !is_null($value) || $value<>0) {
-
-                        // Some countries have estimates with non-zero values but without name! (Yemen, Tables_W, DHS92, estimates line 88)
-                        if (!$name)
-                            $name = 'Other estimation';
-
-                        $population = $populationRepository->getOneByQuestionnaire($questionnaire, $part);
-                        $absoluteValue = $population->getPopulation() * $value / 100;
-
-                        // Look for existing formula (to prevent duplication if doing several import)
-                        $formula = $formulaRepository->findOneBy(array(
-                            'name' => $name,
-                            'value' => $absoluteValue,
-                        ));
-
-                        // If we had an existing formula, maybe we also have an existing association
-                        $assoc = null;
-                        if ($formula) {
-                            $assoc = $filterRuleRepository->findOneBy(array(
-                                'questionnaire' => $questionnaire,
-                                'part' => $part,
-                                'filter' => $filter,
-                                'rule' => $formula,
-                            ));
-                        } else {
-
-                            $formula = new \Application\Model\Rule\Formula();
-                            $formula->setName($name)
-                                    ->setValue($absoluteValue)
-                                    ->setFormula($sheet->getCellByColumnAndRow($col + $offset, $row)->getValue());
-                            $this->getEntityManager()->persist($formula);
-                        }
-
-                        // If association doesn't exist yet, create it
-                        if (!$assoc) {
-                            $assoc = new \Application\Model\Rule\FilterRule();
-                            $assoc->setJustification('Imported from country files')
-                                    ->setQuestionnaire($questionnaire)
-                                    ->setRule($formula)
-                                    ->setPart($part)
-                                    ->setFilter($filter);
-
-                            $this->getEntityManager()->persist($assoc);
-                            $this->estimateCount++;
-                        }
-                    }
+                    $this->getQuestionnaireRule($sheet, $col, $row, $offset, $questionnaire, $part);
                 }
             }
         }
+    }
+
+    public function getQuestionnaireRule(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part = null)
+    {
+        $questionnaireRuleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireRule');
+        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+
+        $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
+        $value = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
+
+        if ($name && !is_null($value) || $value <> 0) {
+
+            $population = $populationRepository->getOneByQuestionnaire($questionnaire, $part);
+            $absoluteValue = $population->getPopulation() * $value / 100;
+
+            $formula = $this->getFormula($sheet, $col, $row, $offset, $questionnaire, $part);
+
+            // If we had an existing formula, maybe we also have an existing association
+            $assoc = null;
+            if ($formula && $formula->getId()) {
+                $assoc = $questionnaireRuleRepository->findOneBy(array(
+                    'questionnaire' => $questionnaire,
+                    'part' => $part,
+                    'rule' => $formula,
+                ));
+            }
+            v($sheet->getTitle(), $col, $row, $offset);
+            // If association doesn't exist yet, create it
+            if (!$assoc) {
+                $assoc = new \Application\Model\Rule\QuestionnaireRule();
+                $assoc->setJustification('Imported from country files')
+                        ->setQuestionnaire($questionnaire)
+                        ->setRule($formula)
+                        ->setPart($part);
+
+                $this->getEntityManager()->persist($assoc);
+                $this->estimateCount++;
+            }
+
+            return $assoc;
+        }
+
+        return null;
+    }
+
+    public function getFormula(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part = null)
+    {
+        $formulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Formula');
+
+        $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
+        $cell = $sheet->getCellByColumnAndRow($col + $offset, $row);
+
+        // Some countries have estimates with non-zero values but without name! (Yemen, Tables_W, DHS92, estimates line 88)
+        if (!$name)
+            $name = 'Unnamed estimation imported from country files';
+
+        $originalFormula = $cell->getValue();
+
+        // if we have nothing at all, cannot do anything
+        if (is_null($originalFormula)) {
+            return null;
+        // if the formula is actually not a formula, transform into formula
+        } elseif (@$originalFormula[0] != '=') {
+            $originalFormula = '=' . $originalFormula;
+        }
+
+
+        // Replace all cell reference with our own syntax
+        $filters = $this->cacheFilters;
+        $colToParts = $this->colToParts;
+        $importedQuestionnaires = $this->importedQuestionnaires;
+        $convertedFormula = preg_replace_callback('/\$?(([[:alpha:]]+)(\\d+))/', function($matches) use ($filters, $colToParts, $importedQuestionnaires, $sheet, $col, $row, $offset, $questionnaire, $part) {
+                    $refCol = \PHPExcel_Cell::columnIndexFromString($matches[2]) - 1;
+                    $refRow = $matches[3];
+
+                    // Find out referenced Questionnaire
+                    $refQuestionnaire = $colToParts[$refCol]['questionnaire'];
+                    if ($refQuestionnaire == $questionnaire)
+                        $refQuestionnaireId = 'current';
+                    else
+                        $refQuestionnaireId = $questionnaire->getId();
+
+                    // Find out referenced Part
+                    $refPart = $colToParts[$refCol]['part'];
+                    if ($refPart == $part)
+                        $refPartId = 'current';
+                    else
+                        $refPartId = $part ? $part->getId() : null;
+
+
+                    // Simple case is when we reference a filter
+                    $refFilter = @$filters[$refRow];
+                    if ($refFilter) {
+                        $refFilterId = $refFilter->getId();
+
+                        return "{Filter#$refFilterId,Questionnaire#$refQuestionnaireId" . ($refPartId ? ',Part#' . $refPartId : '') . "}";
+                        // More advanced case is when we reference another QuestionnaireRule (Calculation, Estimate or Ratio)
+                    } else {
+
+                        $refColQuestionnaire = array_search($questionnaire, $importedQuestionnaires);
+
+                        $refQuestionnaireRule = $this->getQuestionnaireRule($sheet, $refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart, "INDIRECT SHIT");
+
+                        if ($refQuestionnaireRule) {
+                            $this->getEntityManager()->flush();
+                            $refRuleId = $refQuestionnaireRule->getRule()->getId();
+
+                            return "{Rule#$refRuleId,Questionnaire#$refQuestionnaireId" . ($refPartId ? ',Part#' . $refPartId : '') . "}";
+                        } else {
+                            return 'NULL'; // if no formula found at all, return NULL string which will behave like an empty cell in PHPExcell
+                        }
+                    }
+                }, $originalFormula);
+
+
+        var_dump(array($originalFormula, $convertedFormula));
+
+        // Look for existing formula (to prevent duplication)
+        $this->getEntityManager()->flush();
+        $formula = $formulaRepository->findOneBy(array(
+            'formula' => $convertedFormula,
+        ));
+
+        if (!$formula) {
+            $prefix = '';
+            foreach ($this->definitions[$sheet->getTitle()]['questionnaireRules'] as $label => $rows) {
+                if (in_array($row, $rows)) {
+                    $prefix = $label . ': ';
+                }
+            }
+
+
+            $formula = new \Application\Model\Rule\Formula();
+            $formula->setName($prefix . $name)
+                    ->setFormula($convertedFormula);
+            $this->getEntityManager()->persist($formula);
+        }
+
+        return $formula;
     }
 
     public function importHighFilters($name, array $filters)
@@ -928,3 +1022,4 @@ class Jmp extends AbstractImporter
     }
 
 }
+
