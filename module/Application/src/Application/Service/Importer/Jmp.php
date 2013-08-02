@@ -98,22 +98,27 @@ class Jmp extends AbstractImporter
             ),
             'highFilters' => array(
                 "Total improved" => array(
+                    'row' => 89,
                     'children' => array(5, 12, 55, 58, 68),
                     'excludes' => 91,
                 ),
                 "Piped onto premises" => array(
+                    'row' => 90,
                     'children' => array(6),
                     'excludes' => 92,
                 ),
                 "Surface water" => array(
+                    'row' => 87,
                     'children' => array(60),
                     'excludes' => 93,
                 ),
                 "Other Improved" => array(
+                    'row' => null,
                     'children' => array(9, 10, 12, 55, 58, 68),
                     'excludes' => null,
                 ),
                 "Other Unimproved" => array(
+                    'row' => null,
                     'children' => array(56, 59, 71),
                     'excludes' => null,
                 ),
@@ -222,26 +227,32 @@ class Jmp extends AbstractImporter
             ),
             'highFilters' => array(
                 "Improved + shared" => array(
+                    'row' => 94,
                     'children' => array(-6, -7, -8, -9, 49, 73, 76),
                     'excludes' => 96,
                 ),
                 "Sewerage connections" => array(
+                    'row' => 95,
                     'children' => array(6),
                     'excludes' => 97,
                 ),
                 "Improved" => array(
+                    'row' => null,
                     'children' => array(), // based on ratio
                     'excludes' => null,
                 ),
                 "Shared" => array(
+                    'row' => null,
                     'children' => array(), // based on ratio
                     'excludes' => 99,
                 ),
                 "Other unimproved" => array(
+                    'row' => null,
                     'children' => array(-10, 30, 52, 53, 54, 55, 56, 80),
                     'excludes' => null,
                 ),
                 "Open defecation" => array(
+                    'row' => null,
                     'children' => array(79),
                     'excludes' => 98,
                 ),
@@ -259,8 +270,9 @@ class Jmp extends AbstractImporter
     private $questionnaireCount = 0;
     private $answerCount = 0;
     private $excludeCount = 0;
-    private $estimateCount = 0;
+    private $questionnaireRuleCount = 0;
     private $ratioCount = 0;
+    private $formulaCount = 0;
 
     /**
      * @var \Application\Model\Part
@@ -309,7 +321,6 @@ class Jmp extends AbstractImporter
                 }
             }
 
-            $this->importHighFilters($firstFilter->getName() . ' - Improved/Unimproved', $this->definitions[$sheetName]['highFilters']);
 
             $workbook->setActiveSheetIndex($i);
             $sheet = $workbook->getSheet($i);
@@ -325,15 +336,17 @@ class Jmp extends AbstractImporter
             // Second pass on imported questionnaires to process cross-questionnaire things
             foreach ($this->importedQuestionnaires as $col => $questionnaire) {
                 $this->importQuestionnaireRules($sheet, $col, $questionnaire);
-                $this->importExcludes($sheet, $col, $questionnaire);
                 $this->importRatios($sheet, $col, $questionnaire);
             }
+
+            // Third pass to import high filters and their formulas
+            $this->importHighFilters($firstFilter->getName() . ' - Improved/Unimproved', $this->definitions[$sheetName]['highFilters'], $sheet);
         }
 
         $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $answerRepository->updateAbsoluteValueFromPercentageValue();
 
-        return "Total imported: $this->questionnaireCount questionnaires, $this->answerCount answers, $this->excludeCount exclude rules, $this->ratioCount ratio rules, $this->estimateCount estimate rules" . PHP_EOL;
+        return "Total imported: $this->questionnaireCount questionnaires, $this->answerCount answers, $this->excludeCount exclude rules, $this->ratioCount ratio rules, $this->questionnaireRuleCount questionnaire rules, $this->formulaCount formulas" . PHP_EOL;
     }
 
     protected function getFilter($definition)
@@ -758,7 +771,7 @@ class Jmp extends AbstractImporter
                     'rule' => $formula,
                 ));
             }
-            v($sheet->getTitle(), $col, $row, $offset);
+
             // If association doesn't exist yet, create it
             if (!$assoc) {
                 $assoc = new \Application\Model\Rule\QuestionnaireRule();
@@ -768,7 +781,7 @@ class Jmp extends AbstractImporter
                         ->setPart($part);
 
                 $this->getEntityManager()->persist($assoc);
-                $this->estimateCount++;
+                $this->questionnaireRuleCount++;
             }
 
             return $assoc;
@@ -777,11 +790,11 @@ class Jmp extends AbstractImporter
         return null;
     }
 
-    public function getFormula(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part = null)
+    public function getFormula(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part = null, $forcedName = null)
     {
         $formulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Formula');
 
-        $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
+        $name = $forcedName ?: $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
         $cell = $sheet->getCellByColumnAndRow($col + $offset, $row);
 
         // Some countries have estimates with non-zero values but without name! (Yemen, Tables_W, DHS92, estimates line 88)
@@ -793,7 +806,7 @@ class Jmp extends AbstractImporter
         // if we have nothing at all, cannot do anything
         if (is_null($originalFormula)) {
             return null;
-        // if the formula is actually not a formula, transform into formula
+            // if the formula is actually not a formula, transform into formula
         } elseif (@$originalFormula[0] != '=') {
             $originalFormula = '=' . $originalFormula;
         }
@@ -847,8 +860,6 @@ class Jmp extends AbstractImporter
                 }, $originalFormula);
 
 
-        var_dump(array($originalFormula, $convertedFormula));
-
         // Look for existing formula (to prevent duplication)
         $this->getEntityManager()->flush();
         $formula = $formulaRepository->findOneBy(array(
@@ -868,12 +879,13 @@ class Jmp extends AbstractImporter
             $formula->setName($prefix . $name)
                     ->setFormula($convertedFormula);
             $this->getEntityManager()->persist($formula);
+            $this->formulaCount++;
         }
 
         return $formula;
     }
 
-    public function importHighFilters($name, array $filters)
+    public function importHighFilters($name, array $filters, \PHPExcel_Worksheet $sheet)
     {
         $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
         $filterSet = $filterSetRepository->getOrCreate($name);
@@ -882,28 +894,72 @@ class Jmp extends AbstractImporter
         // Get or create all filter
         foreach ($filters as $name => $filterData) {
 
-            $filter = null;
+            $highFilter = null;
             foreach ($filterSet->getFilters() as $f) {
                 if ($f->getName() == $name) {
-                    $filter = $f;
+                    $highFilter = $f;
                     break;
                 }
             }
 
-            if (!$filter) {
-                $filter = new \Application\Model\Filter($name);
-                $filter->setIsOfficial(true);
-                $filterSet->addFilter($filter);
-                $this->getEntityManager()->persist($filter);
+            if (!$highFilter) {
+                $highFilter = new \Application\Model\Filter($name);
+                $highFilter->setIsOfficial(true);
+                $filterSet->addFilter($highFilter);
+                $this->getEntityManager()->persist($highFilter);
             }
 
             // Affect children filters
             foreach ($filterData['children'] as $child) {
-                $filter->addChild($this->cacheFilters[$child]);
+                $highFilter->addChild($this->cacheFilters[$child]);
             }
 
-            $this->cacheHighFilters[$name] = $filter;
+
+            foreach ($this->importedQuestionnaires as $col => $questionnaire) {
+                $this->importExcludes($sheet, $col, $questionnaire, $highFilter, $filterData);
+
+                if ($filterData['row']) {
+                    foreach ($this->partOffsets as $offset => $part) {
+                        $formula = $this->getFormula($sheet, $col, $filterData['row'], $offset, $questionnaire, $part, $name);
+                        if ($formula) {
+                            $this->getFilterRule($highFilter, $questionnaire, $formula, $part);
+                        }
+                    }
+                }
+            }
+
+            $this->cacheHighFilters[$name] = $highFilter;
         }
+    }
+
+    protected function getFilterRule(\Application\Model\Filter $filter, \Application\Model\Questionnaire $questionnaire, \Application\Model\Rule\AbstractRule $rule, \Application\Model\Part $part = null)
+    {
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
+
+        $this->getEntityManager()->flush();
+        $filterRule = $repository->findOneBy(array(
+            'questionnaire' => $questionnaire,
+            'rule' => $rule,
+            'part' => $part,
+            'filter' => $filter,
+        ));
+
+        if (!$filterRule) {
+            $filterRule = new \Application\Model\Rule\FilterRule();
+            $filterRule->setJustification('Imported from country files')
+                    ->setQuestionnaire($questionnaire)
+                    ->setRule($rule)
+                    ->setPart($part)
+                    ->setFilter($filter);
+
+            $this->getEntityManager()->persist($filterRule);
+
+            if ($rule instanceof \Application\Model\Rule\Exclude) {
+                $this->excludeCount++;
+            }
+        }
+
+        return $filterRule;
     }
 
     /**
@@ -912,43 +968,19 @@ class Jmp extends AbstractImporter
      * @param integer $col
      * @param \Application\Model\Questionnaire $questionnaire
      */
-    public function importExcludes(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire)
+    public function importExcludes(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $filterData)
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
+        $row = $filterData['excludes'];
+        if (!$row) {
+            return;
+        }
 
-        foreach ($this->definitions[$sheet->getTitle()]['highFilters'] as $filterName => $filterData) {
-            $row = $filterData['excludes'];
-            if (!$row) {
-                continue;
-            }
+        foreach ($this->partOffsets as $offset => $part) {
+            $includedValue = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
 
-            $filter = $this->cacheHighFilters[$filterName];
-
-            foreach ($this->partOffsets as $offset => $part) {
-                $includedValue = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
-
-                // If it is not included, then it means we need an exclude rule
-                if (strcasecmp($includedValue, 'No') == 0) {
-                    $assoc = $repository->findOneBy(array(
-                        'questionnaire' => $questionnaire,
-                        'rule' => $this->excludeRule,
-                        'part' => $part,
-                        'filter' => $filter,
-                    ));
-
-                    // If doesn't exist yet, create it
-                    if (!$assoc) {
-                        $assoc = new \Application\Model\Rule\FilterRule();
-                        $assoc->setJustification('Imported from country files')
-                                ->setQuestionnaire($questionnaire)
-                                ->setRule($this->excludeRule)
-                                ->setPart($part)
-                                ->setFilter($filter);
-
-                        $this->getEntityManager()->persist($assoc);
-                        $this->excludeCount++;
-                    }
-                }
+            // If it is not included, then it means we need an exclude rule
+            if (strcasecmp($includedValue, 'No') == 0) {
+                $this->getFilterRule($filter, $questionnaire, $this->excludeRule, $part);
             }
         }
     }

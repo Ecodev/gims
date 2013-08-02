@@ -14,6 +14,14 @@ class FilterRule extends \Application\Model\AbstractModel
 {
 
     /**
+     * @var array
+     */
+    protected static $relationProperties
+        = array(
+            'rule' => '\Application\Model\Rule\AbstractRule',
+        );
+
+    /**
      * @var Filter
      *
      * @ORM\ManyToOne(targetEntity="Application\Model\Filter", inversedBy="filterRules")
