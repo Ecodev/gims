@@ -259,6 +259,7 @@ class Jmp extends AbstractImporter
             ),
         ),
     );
+    private $defaultJustification = 'Imported from country files';
     private $partOffsets = array();
     private $cacheAlternateFilters = array();
     private $cacheFilters = array();
@@ -336,12 +337,18 @@ class Jmp extends AbstractImporter
             // Second pass on imported questionnaires to process cross-questionnaire things
             foreach ($this->importedQuestionnaires as $col => $questionnaire) {
                 $this->importQuestionnaireRules($sheet, $col, $questionnaire);
-                $this->importRatios($sheet, $col, $questionnaire);
             }
 
             // Third pass to import high filters and their formulas
             $this->importHighFilters($firstFilter->getName() . ' - Improved/Unimproved', $this->definitions[$sheetName]['highFilters'], $sheet);
+
+            // Fourth pass to hardcode special cases of formulas
+            foreach ($this->importedQuestionnaires as $col => $questionnaire) {
+                $this->finishRatios($sheet, $col, $questionnaire);
+            }
         }
+
+        $this->getEntityManager()->flush();
 
         $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $answerRepository->updateAbsoluteValueFromPercentageValue();
@@ -639,7 +646,7 @@ class Jmp extends AbstractImporter
      * @return type
      * @throws \Application\Service\Importer\PHPExcel_Exception
      */
-    private function getCalculatedValueSafely(\PHPExcel_Cell $cell)
+    protected function getCalculatedValueSafely(\PHPExcel_Cell $cell)
     {
         try {
             return $cell->getCalculatedValue();
@@ -736,7 +743,7 @@ class Jmp extends AbstractImporter
      * @param integer $col
      * @param \Application\Model\Questionnaire $questionnaire
      */
-    public function importQuestionnaireRules(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire)
+    protected function importQuestionnaireRules(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire)
     {
         foreach ($this->definitions[$sheet->getTitle()]['questionnaireRules'] as $group) {
             foreach ($group as $row) {
@@ -747,7 +754,17 @@ class Jmp extends AbstractImporter
         }
     }
 
-    public function getQuestionnaireRule(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part = null)
+    /**
+     * Create or get a QuestionnaireRule and its Formula
+     * @param \PHPExcel_Worksheet $sheet
+     * @param integer $col
+     * @param integer $row
+     * @param integer $offset
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @param \Application\Model\Part $part
+     * @return \Application\Model\Rule\QuestionnaireRule|null
+     */
+    protected function getQuestionnaireRule(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part = null)
     {
         $questionnaireRuleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireRule');
         $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
@@ -775,7 +792,7 @@ class Jmp extends AbstractImporter
             // If association doesn't exist yet, create it
             if (!$assoc) {
                 $assoc = new \Application\Model\Rule\QuestionnaireRule();
-                $assoc->setJustification('Imported from country files')
+                $assoc->setJustification($this->defaultJustification)
                         ->setQuestionnaire($questionnaire)
                         ->setRule($formula)
                         ->setPart($part);
@@ -790,11 +807,22 @@ class Jmp extends AbstractImporter
         return null;
     }
 
-    public function getFormula(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part = null, $forcedName = null)
+    /**
+     * Create or get a formula by converting Excel syntax to our own syntax
+     * @param \PHPExcel_Worksheet $sheet
+     * @param integer $col
+     * @param integer $row
+     * @param integer $offset
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @param \Application\Model\Part $part
+     * @param string $forcedName
+     * @return null|\Application\Model\Rule\Formula
+     */
+    protected function getFormula(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part = null, $forcedName = null)
     {
         $formulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Formula');
 
-        $name = $forcedName ?: $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
+        $name = $forcedName ? : $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
         $cell = $sheet->getCellByColumnAndRow($col + $offset, $row);
 
         // Some countries have estimates with non-zero values but without name! (Yemen, Tables_W, DHS92, estimates line 88)
@@ -885,7 +913,13 @@ class Jmp extends AbstractImporter
         return $formula;
     }
 
-    public function importHighFilters($name, array $filters, \PHPExcel_Worksheet $sheet)
+    /**
+     * Import high filters, their exclude rules and their formulas (if any)
+     * @param string $name
+     * @param array $filters
+     * @param \PHPExcel_Worksheet $sheet
+     */
+    protected function importHighFilters($name, array $filters, \PHPExcel_Worksheet $sheet)
     {
         $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
         $filterSet = $filterSetRepository->getOrCreate($name);
@@ -920,7 +954,7 @@ class Jmp extends AbstractImporter
 
                 if ($filterData['row']) {
                     foreach ($this->partOffsets as $offset => $part) {
-                        $formula = $this->getFormula($sheet, $col, $filterData['row'], $offset, $questionnaire, $part, $name);
+                        $formula = $this->getFormula($sheet, $col, $filterData['row'], $offset, $questionnaire, $part, $name . ' (' . $questionnaire->getName() . ($part ? ', ' . $part->getName() : '') . ')');
                         if ($formula) {
                             $this->getFilterRule($highFilter, $questionnaire, $formula, $part);
                         }
@@ -932,6 +966,14 @@ class Jmp extends AbstractImporter
         }
     }
 
+    /**
+     * Create or get a filterRule
+     * @param \Application\Model\Filter $filter
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @param \Application\Model\Rule\AbstractRule $rule
+     * @param \Application\Model\Part $part
+     * @return \Application\Model\Rule\FilterRule
+     */
     protected function getFilterRule(\Application\Model\Filter $filter, \Application\Model\Questionnaire $questionnaire, \Application\Model\Rule\AbstractRule $rule, \Application\Model\Part $part = null)
     {
         $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
@@ -946,7 +988,7 @@ class Jmp extends AbstractImporter
 
         if (!$filterRule) {
             $filterRule = new \Application\Model\Rule\FilterRule();
-            $filterRule->setJustification('Imported from country files')
+            $filterRule->setJustification($this->defaultJustification)
                     ->setQuestionnaire($questionnaire)
                     ->setRule($rule)
                     ->setPart($part)
@@ -968,7 +1010,7 @@ class Jmp extends AbstractImporter
      * @param integer $col
      * @param \Application\Model\Questionnaire $questionnaire
      */
-    public function importExcludes(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $filterData)
+    protected function importExcludes(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $filterData)
     {
         $row = $filterData['excludes'];
         if (!$row) {
@@ -986,15 +1028,15 @@ class Jmp extends AbstractImporter
     }
 
     /**
-     * Import ratios, but only for two hardcoded filters: "Sanitation - Improved" and "Sanitation - Shared"
+     * Finish the special cases of ratio used for high filters: "Sanitation - Improved" and "Sanitation - Shared"
      * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
      * @param \Application\Model\Questionnaire $questionnaire
      * @return void
      */
-    public function importRatios(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire)
+    protected function finishRatios(\Application\Model\Questionnaire $questionnaire)
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireRule');
         $synonyms = array(
             'Facilités améliorées partagées / Facilités améliorées',
             'Shared facilities / All improved facilities',
@@ -1010,47 +1052,53 @@ class Jmp extends AbstractImporter
             return;
         }
 
-        $range = $this->definitions[$sheet->getTitle()]['ratios'];
 
-        for ($row = $range['min']; $row <= $range['max']; $row++) {
-            $ratioName = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
-            if ($ratioName && in_array($ratioName, $synonyms)) {
+        $filterImprovedSharedId = $filterImprovedShared->getId();
+        foreach ($synonyms as $synonym) {
+            foreach ($this->partOffsets as $offset => $part) {
+                $questionnaireRule = $repository->getOneByRuleName($synonym, $questionnaire, $part);
 
-                foreach ($this->partOffsets as $offset => $part) {
-                    $ratioCell = $sheet->getCellByColumnAndRow($col + $offset, $row);
-                    $ratio = $this->getCalculatedValueSafely($ratioCell);
+                if ($questionnaireRule) {
+                    $questionnaireRuleId = $questionnaireRule->getId();
 
-                    // Skip if no value at all
-                    if (!is_numeric($ratio))
-                        continue;
+                    $formulaImproved = "={Filter#$filterImprovedSharedId,Questionnaire#current,Part#current} * (1 - {QuestionnaireRule#$questionnaireRuleId,Questionnaire#current,Part#current})";
+                    $this->linkFormula($formulaImproved, $filterImproved, $questionnaire, $part);
 
-                    // Skip if ratios already exists in DB
-                    $existingRatios = $repository->getRatios($questionnaire, $filterImproved, $part);
-                    if ($existingRatios) {
-                        continue;
-                    }
-
-                    $ratioRuleImproved = new \Application\Model\Rule\Ratio();
-                    $ratioRuleImproved->setName('Ratio improved sanitation')->setFilter($filterImprovedShared)->setRatio((1 - $ratio));
-
-                    $ratioRuleShared = new \Application\Model\Rule\Ratio();
-                    $ratioRuleShared->setName('Ratio shared sanitation')->setFilter($filterImprovedShared)->setRatio($ratio);
-
-                    $assocImproved = new \Application\Model\Rule\FilterRule();
-                    $assocImproved->setJustification('Imported from country files')->setFilter($filterImproved)->setPart($part)->setQuestionnaire($questionnaire)->setRule($ratioRuleImproved);
-
-                    $assocShared = new \Application\Model\Rule\FilterRule();
-                    $assocShared->setJustification('Imported from country files')->setFilter($filterShared)->setPart($part)->setQuestionnaire($questionnaire)->setRule($ratioRuleShared);
-
-                    $this->getEntityManager()->persist($ratioRuleImproved);
-                    $this->getEntityManager()->persist($ratioRuleShared);
-                    $this->getEntityManager()->persist($assocImproved);
-                    $this->getEntityManager()->persist($assocShared);
-
-                    $this->ratioCount++;
+                    $formulaShared = "={Filter#$filterImprovedSharedId,Questionnaire#current,Part#current} * {QuestionnaireRule#$questionnaireRuleId,Questionnaire#current,Part#current}";
+                    $this->linkFormula($formulaShared, $filterShared, $questionnaire, $part);
                 }
             }
         }
+    }
+
+    /**
+     * Create (or get) a formula and link it to the given filter
+     * @param string $formulaText
+     * @param \Application\Model\Filter $filter
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @param \Application\Model\Part $part
+     */
+    protected function linkFormula($formulaText, \Application\Model\Filter $filter, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part = null)
+    {
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\Formula');
+        $formula = $repository->findOneBy(array('formula' => $formulaText));
+
+        if (!$formula) {
+            $formula = new \Application\Model\Rule\Formula();
+            $formula->setName($filter->getName() . ' (' . $questionnaire->getName() . ($part ? ', ' . $part->getName() : '') . ')')
+                    ->setFormula($formulaText);
+            $this->getEntityManager()->persist($formula);
+        }
+
+        $filterRule = new \Application\Model\Rule\FilterRule();
+        $filterRule->setFilter($filter)
+                ->setQuestionnaire($questionnaire)
+                ->setPart($part)
+                ->setRule($formula)
+                ->setJustification($this->defaultJustification);
+        $this->getEntityManager()->persist($filterRule);
+
+        $this->ratioCount++;
     }
 
 }
