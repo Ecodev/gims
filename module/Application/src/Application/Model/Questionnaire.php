@@ -22,16 +22,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         );
 
     /**
-     * @var array
-     */
-    protected static $relationProperties
-        = array(
-            'survey' => '\Application\Model\Survey',
-            'geoname' => '\Application\Model\Geoname',
-            'answers' => '\Application\Model\Answer',
-        );
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetimetz", nullable=false)

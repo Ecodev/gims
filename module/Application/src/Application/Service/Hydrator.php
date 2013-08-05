@@ -61,6 +61,7 @@ class Hydrator
      */
     public function parseProperties($className, array $properties)
     {
+        $classMetadata = Module::getEntityManager()->getClassMetadata($className);
         foreach ($properties as $key => $property) {
             if (is_string($property) && is_int(strpos($property, '.'))) {
 
@@ -73,17 +74,16 @@ class Hydrator
                 $subStructure = array(
                     implode('.', $structure)
                 );
-                $subClassName = call_user_func_array($className . '::getRelation', array($element));
+                $subClassName = $classMetadata->getAssociationTargetClass($element);
                 $this->parseProperties($subClassName, $subStructure);
             } elseif ($property instanceof \Closure) {
                 $this->propertyStructure[$className][$key] = $property;
             } else {
                 $this->propertyStructure[$className][] = $property;
 
-                // check whether the property returns a collection
-                // for performance reasons don't use reflection
-                if (call_user_func_array($className . '::hasRelation', array($property))) {
-                    $relationClassName = call_user_func_array($className . '::getRelation', array($property));
+                // check whether the property is an association
+                if (Module::getEntityManager()->getClassMetadata($className)->hasAssociation($property)) {
+                    $relationClassName = $classMetadata->getAssociationTargetClass($property);
                     if (!isset($this->propertyStructure[$relationClassName])) {
                         $this->propertyStructure[$relationClassName] = array();
                     }
@@ -103,7 +103,7 @@ class Hydrator
 
             // Merge with default properties
             $this->propertyStructure[$className] = array_merge(
-                $properties, call_user_func($className . '::getJsonConfig')
+                    $properties, call_user_func($className . '::getJsonConfig')
             );
         }
     }
@@ -125,8 +125,7 @@ class Hydrator
 
                 // If method does not exist, skip it
                 // Check if the property is callable or is defined as default
-                if ((is_string($property) && is_callable(array($className, $this->formatGetter($property))))
-                    || call_user_func_array($className . '::isPropertyInJsonConfig', array($property))
+                if ((is_string($property) && is_callable(array($className, $this->formatGetter($property)))) || call_user_func_array($className . '::isPropertyInJsonConfig', array($property))
                 ) {
                     $isAllowed = true;
                 }
@@ -134,7 +133,6 @@ class Hydrator
                 // @todo implement me!
                 // @todo encapsulate routine above into isFieldAllowed
                 //if ($this->permissionService->isFieldAllowed($properties))
-
                 // @todo remove me probably. Move closure as property of model?
                 if ($property instanceof \Closure) {
                     $_properties[$key] = $property;
@@ -157,7 +155,8 @@ class Hydrator
      *
      * @return array
      */
-    public function resolvePropertyAliases($className, array $properties) {
+    public function resolvePropertyAliases($className, array $properties)
+    {
 
         $_properties = array();
         foreach ($properties as $key => $property) {
@@ -201,7 +200,6 @@ class Hydrator
         return $_properties;
     }
 
-
     /**
      * Main method for initializing attribute "propertyStructure"
      *
@@ -238,8 +236,8 @@ class Hydrator
     {
         $result = array();
 
-        $this->initializePropertyStructure($this->getClassName($object), $properties);
-        $properties = $this->getJsonConfigForEntity($this->getClassName($object));
+        $this->initializePropertyStructure(get_class($object), $properties);
+        $properties = $this->getJsonConfigForEntity(get_class($object));
 
         foreach ($properties as $key => $value) {
 
@@ -289,19 +287,17 @@ class Hydrator
                 $propertyValue = $object->$getter();
                 if ($propertyValue instanceof \DateTime) {
                     $propertyValue = $propertyValue->format(\DateTime::ISO8601);
-                } elseif ($propertyValue instanceof \Doctrine\Common\Collections\ArrayCollection
-                    || $propertyValue instanceof \Doctrine\ORM\PersistentCollection)
-                {
+                } elseif ($propertyValue instanceof \Doctrine\Common\Collections\ArrayCollection || $propertyValue instanceof \Doctrine\ORM\PersistentCollection) {
 
-                    $className = call_user_func_array($this->getClassName($object) . '::getRelation', array($value));
+                    $className = Module::getEntityManager()->getClassMetadata(get_class($object))->getAssociationTargetClass($value);
                     $_properties = $this->getJsonConfigForEntity($className);
                     $propertyValue = $this->extractArray($propertyValue, $_properties);
                 } elseif ($propertyValue instanceof \Application\Model\AbstractModel) {
-                    $className = call_user_func_array($this->getClassName($object) . '::getRelation', array($value));
+                    $className = Module::getEntityManager()->getClassMetadata(get_class($object))->getAssociationTargetClass($value);
                     $_properties = $this->getJsonConfigForEntity($className);
                     $propertyValue = $this->extract($propertyValue, $_properties);
                 } elseif ($propertyValue instanceof \Application\Model\AbstractEnum) {
-                    $propertyValue = (string)$propertyValue;
+                    $propertyValue = (string) $propertyValue;
                 }
 
                 $propertyName = $value;
@@ -323,18 +319,6 @@ class Hydrator
     public function formatGetter($input)
     {
         return 'get' . ucfirst($input);
-    }
-
-    /**
-     * Return a canonical class name given an object
-     *
-     * @param object $object
-     *
-     * @return string
-     */
-    public function getClassName($object)
-    {
-        return '\\' . ltrim(get_class($object), '\\');
     }
 
     /**
@@ -464,4 +448,5 @@ class Hydrator
     {
         return $this->propertyStructure;
     }
+
 }

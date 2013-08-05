@@ -182,23 +182,13 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     /**
      * @test
      */
-    public function getCanonicalClassNameForObjectFilter()
-    {
-        $expected = '\Application\Model\Filter';
-        $filter1 = new \Application\Model\Filter('filter 1');
-        $actual = $this->fixture->getClassName($filter1);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @test
-     */
     public function parsePropertiesAndCheckReturnContainsRecursivePropertyStructureForFieldSet2()
     {
-        $this->fixture->parseProperties('\Application\Model\Survey', $this->fieldSet2);
+        $this->fixture->parseProperties('Application\Model\Survey', $this->fieldSet2);
         $actual = $this->fixture->getPropertyStructure();
-        $this->assertCount(2, $actual['\Application\Model\Survey']);
-        $this->assertCount(0, $actual['\Application\Model\Questionnaire']);
+
+        $this->assertCount(2, $actual['Application\Model\Survey']);
+        $this->assertCount(0, $actual['Application\Model\Questionnaire']);
     }
 
     /**
@@ -206,11 +196,11 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     public function parsePropertiesAndCheckReturnContainsRecursivePropertyStructureForFieldSet1()
     {
-        $this->fixture->parseProperties('\Application\Model\Survey', $this->fieldSet1);
+        $this->fixture->parseProperties('Application\Model\Survey', $this->fieldSet1);
         $actual = $this->fixture->getPropertyStructure();
-        $this->assertCount(4, $actual['\Application\Model\Survey']);
-        $this->assertCount(5, $actual['\Application\Model\Questionnaire']);
-        $this->assertCount(4, $actual['\Application\Model\Answer']);
+        $this->assertCount(4, $actual['Application\Model\Survey']);
+        $this->assertCount(5, $actual['Application\Model\Questionnaire']);
+        $this->assertCount(4, $actual['Application\Model\Answer']);
     }
 
     /**
@@ -218,12 +208,12 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     public function completePropertyStructureWithDefaultPropertiesAndCheckWhetherReturnContainsId()
     {
-        $this->fixture->parseProperties('\Application\Model\Survey', $this->fieldSet1);
+        $this->fixture->parseProperties('Application\Model\Survey', $this->fieldSet1);
         $this->fixture->completePropertyStructureWithDefaultProperties();
 
         $actual = $this->fixture->getPropertyStructure();
         foreach (array('Survey', 'Questionnaire', 'Answer') as $entity) {
-            $this->assertContains('id', $actual['\Application\Model\\' . $entity]);
+            $this->assertContains('id', $actual['Application\Model\\' . $entity]);
         }
     }
 
@@ -233,12 +223,12 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     public function completePropertyStructureWithDefaultPropertiesAndCheckWhetherReturnResolveFieldAliasMetadata()
     {
         $properties = $this->fixture->resolvePropertyAliases('\Application\Model\Survey', $this->fieldSet1);
-        $this->fixture->parseProperties('\Application\Model\Survey', $properties);
+        $this->fixture->parseProperties('Application\Model\Survey', $properties);
 
         $actual = $this->fixture->getPropertyStructure();
         foreach (array('Survey', 'Questionnaire', 'Answer') as $entity) {
             $this->assertContains(
-                'dateCreated', $actual['\Application\Model\\' . $entity], 'Can not resolve metadata property alias'
+                'dateCreated', $actual['Application\Model\\' . $entity], 'Can not resolve metadata property alias'
             );
         }
     }
@@ -248,7 +238,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     public function checkPropertyPermissionMethodShouldRemoveFieldFoo()
     {
-        $this->fixture->parseProperties('\Application\Model\Survey', $this->fieldSet1);
+        $this->fixture->parseProperties('Application\Model\Survey', $this->fieldSet1);
         $this->fixture->completePropertyStructureWithDefaultProperties();
         $this->fixture->checkPropertyPermission();
 
@@ -256,7 +246,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
 
         foreach (array('Survey', 'Questionnaire', 'Answer') as $entity) {
             $this->assertNotContains(
-                'foo', $actual['\Application\Model\\' . $entity], 'Can not resolve metadata property alias'
+                'foo', $actual['Application\Model\\' . $entity], 'Can not resolve metadata property alias'
             );
         }
     }
@@ -266,12 +256,12 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     public function getJsonConfigForEntityReturnsNotEmptyArray()
     {
-        $this->fixture->parseProperties('\Application\Model\Survey', $this->fieldSet1);
+        $this->fixture->parseProperties('Application\Model\Survey', $this->fieldSet1);
         $this->fixture->completePropertyStructureWithDefaultProperties();
         $this->fixture->checkPropertyPermission();
 
         foreach (array('Survey', 'Questionnaire', 'Answer') as $entity) {
-            $actual = $this->fixture->getJsonConfigForEntity('\Application\Model\\' . $entity);
+            $actual = $this->fixture->getJsonConfigForEntity('Application\Model\\' . $entity);
             $this->assertNotEmpty($actual);
         }
     }

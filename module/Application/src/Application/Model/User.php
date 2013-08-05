@@ -23,16 +23,6 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
         );
 
     /**
-     * @var array
-     */
-    protected static $relationProperties
-        = array(
-            'userSurveys' => '\Application\Model\UserSurvey',
-            'userQuestionnaires' => '\Application\Model\UserQuestionnaire',
-            'roleContext' => '\Application\Model\RoleContext',
-        );
-
-    /**
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=true)

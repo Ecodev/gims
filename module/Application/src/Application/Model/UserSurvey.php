@@ -24,16 +24,6 @@ class UserSurvey extends AbstractModel
         );
 
     /**
-     * @var array
-     */
-    protected static $relationProperties
-        = array(
-            'user'   => '\Application\Model\User',
-            'role'   => '\Application\Model\Role',
-            'survey' => '\Application\Model\Survey',
-        );
-
-    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="userSurveys")

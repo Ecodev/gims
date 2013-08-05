@@ -27,12 +27,6 @@ class Permission extends AbstractModel
         = array();
 
     /**
-     * @var array
-     */
-    protected static $relationProperties
-        = array();
-
-    /**
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=true)

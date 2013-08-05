@@ -20,19 +20,6 @@ class Question extends AbstractModel
     );
 
     /**
-     * @var array
-     */
-    protected static $relationProperties
-        = array(
-            'filter' => '\Application\Model\Filter',
-            'parent' => '\Application\Model\Question',
-            'survey' => '\Application\Model\Survey',
-            'officialQuestion' => '\Application\Model\Question',
-            'answers' => '\Application\Model\Answer',
-            'choices' => '\Application\Model\QuestionChoice',
-        );
-
-    /**
      * @var integer
      *
      * @ORM\Column(type="smallint", nullable=false)

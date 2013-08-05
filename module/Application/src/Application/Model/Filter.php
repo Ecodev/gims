@@ -53,16 +53,6 @@ class Filter extends AbstractModel
         );
 
     /**
-     * @var array
-     */
-    protected static $relationProperties
-        = array(
-            'children' => '\Application\Model\Filter',
-            'officialFilter' => '\Application\Model\Filter',
-            'parents' => '\Application\Model\Filter',
-        );
-
-    /**
      * @var string
      *
      * @ORM\Column(type="text", nullable=false)

@@ -23,12 +23,6 @@ class Country extends AbstractModel
         );
 
     /**
-     * @var array
-     */
-    protected static $relationProperties
-        = array();
-
-    /**
      * @var string
      *
      * @ORM\Column(type="string", nullable=false)

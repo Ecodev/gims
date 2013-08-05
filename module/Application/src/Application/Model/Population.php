@@ -20,12 +20,6 @@ class Population extends AbstractModel
         = array();
 
     /**
-     * @var array
-     */
-    protected static $relationProperties
-        = array();
-
-    /**
      * @var integer
      *
      * @ORM\Column(type="decimal", precision=4, scale=0)

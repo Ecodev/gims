@@ -26,15 +26,6 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
         );
 
     /**
-     * @var array
-     */
-    protected static $relationProperties
-        = array(
-            'questions' => '\Application\Model\Question',
-            'questionnaires' => '\Application\Model\Questionnaire',
-        );
-
-    /**
      * @var string
      *
      * @ORM\Column(type="text", nullable=false)

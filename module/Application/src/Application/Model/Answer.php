@@ -22,17 +22,6 @@ class Answer extends AbstractModel
         );
 
     /**
-     * @var array
-     */
-    protected static $relationProperties
-        = array(
-            'part' => '\Application\Model\Part',
-            'question' => '\Application\Model\Question',
-            'questionnaire' => '\Application\Model\Questionnaire',
-            'valueUser' => '\Application\Model\ValueUser',
-        );
-
-    /**
      * @var integer
      *
      * @ORM\Column(type="smallint", nullable=true)

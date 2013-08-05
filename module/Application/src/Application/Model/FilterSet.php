@@ -22,15 +22,6 @@ class FilterSet extends AbstractModel
         = array('name');
 
     /**
-     * @var array
-     */
-    protected static $relationProperties
-        = array(
-            'filters'         => '\Application\Model\Filter',
-            'excludedFilters' => '\Application\Model\Filter',
-        );
-
-    /**
      * @var string
      *
      * @ORM\Column(type="text", nullable=false)
