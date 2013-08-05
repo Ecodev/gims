@@ -20,18 +20,12 @@ class QuestionChoice extends AbstractModel
     );
 
     /**
-     * @var array
-     */
-    protected static $relationProperties
-        = array(
-            #'filter' => '\Application\Model\Filter',
-        );
-
-    /**
      * @var Question
-     * @todo test annotation fetch="EAGER"
      *
      * @ORM\ManyToOne(targetEntity="Question", inversedBy="choices")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
+     * })
      */
     private $question;
 
@@ -69,9 +63,11 @@ class QuestionChoice extends AbstractModel
      * @param \Application\Model\Question $question
      * @return $this
      */
-    public function setQuestion($question)
+    public function setQuestion(Question $question)
     {
         $this->question = $question;
+        $this->question->questionChoiceAdded($this);
+
         return $this;
     }
 

@@ -221,7 +221,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     }
 
     /**
-     * Notify the user that he was added to UserSurvey relation.
+     * Notify the user that it was added to UserSurvey relation.
      * This should only be called by UserSurvey::setUser()
      * @param UserSurvey $userSurvey
      * @return User
@@ -243,7 +243,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     }
 
     /**
-     * Notify the user that he was added to UserSurvey relation.
+     * Notify the user that it was added to UserSurvey relation.
      * This should only be called by UserQuestionnaire::setUser()
      * @param UserQuestionnaire $userQuestionnaire
      * @return User

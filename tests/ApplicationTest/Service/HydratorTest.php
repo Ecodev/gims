@@ -9,6 +9,15 @@ use Application\Service\Hydrator;
 
 class HydratorTest extends \ApplicationTest\Controller\AbstractController
 {
+    /**
+     * @var \Application\Model\QuestionChoice
+     */
+    private $questionChoice1;
+
+    /**
+     * @var \Application\Model\QuestionChoice
+     */
+    private $questionChoice2;
 
     /**
      * @var \Application\Model\User
@@ -18,7 +27,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     /**
      * @var Hydrator
      */
-    private $fixture;
+    private $hydrator;
 
     /**
      * @var array
@@ -53,7 +62,19 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
 
         $this->user = new \Application\Model\User();
         $this->user->setName('John');
-        $this->fixture = new Hydrator();
+        $this->questionChoice1 = new \Application\Model\QuestionChoice();
+        $this->questionChoice2 = new \Application\Model\QuestionChoice();
+
+
+        // Create a stub for the Hydrator class with predetermined values, so we don't have to mess with database
+        $this->hydrator = $this->getMock('\Application\Service\Hydrator', array('getObject'), array(), '', false);
+        $this->hydrator->expects($this->any())
+                ->method('getObject')
+                ->will($this->returnValueMap(array(
+                            array('Application\Model\QuestionChoice', 1, $this->questionChoice1),
+                            array('Application\Model\QuestionChoice', 2, $this->questionChoice2),
+        )));
+
     }
 
     public function testCanHydrateAndExtract()
@@ -64,12 +85,12 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'state' => null,
         );
 
-        $this->fixture->hydrate($data, $this->user);
+        $this->hydrator->hydrate($data, $this->user);
 
         $this->assertEquals($data['name'], $this->user->getName());
         $this->assertEquals($data['email'], $this->user->getEmail());
 
-        $actual = $this->fixture->extract($this->user, array('name', 'email'));
+        $actual = $this->hydrator->extract($this->user, array('name', 'email'));
         unset($actual['id']);
         $this->assertEquals($data, $actual, 'it must be exactly same as input, except the id');
     }
@@ -87,7 +108,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             ),
         );
 
-        $this->fixture->hydrate($data, $filter);
+        $this->hydrator->hydrate($data, $filter);
         $this->assertEquals('original name', $filter->getName());
     }
 
@@ -99,9 +120,9 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'name' => 'John Connor',
         );
 
-        $this->fixture->hydrate($data, $this->user);
+        $this->hydrator->hydrate($data, $this->user);
         $this->assertEquals($data['name'], $this->user->getName());
-        $this->assertArrayNotHasKey('foo', $this->fixture->extract($this->user, array('foo')));
+        $this->assertArrayNotHasKey('foo', $this->hydrator->extract($this->user, array('foo')));
     }
 
     public function testSensitivePropertiesCannotBeHydrated()
@@ -111,7 +132,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'password' => 'foo',
         );
 
-        $this->fixture->hydrate($data, $this->user);
+        $this->hydrator->hydrate($data, $this->user);
         $this->assertNull($this->user->getId());
         $this->assertNull($this->user->getPassword());
     }
@@ -122,7 +143,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'password',
         );
 
-        $this->assertArrayNotHasKey('password', $this->fixture->extract($this->user, $data));
+        $this->assertArrayNotHasKey('password', $this->hydrator->extract($this->user, $data));
     }
 
     public function testExtractArray()
@@ -146,9 +167,27 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
                 'state' => null,
             ),
                 )
-                , $this->fixture->extractArray(array($this->user, $user2), array('name')));
+                , $this->hydrator->extractArray(array($this->user, $user2), array('name')));
     }
 
+    public function testCanHydrateCollectionExistingInDatabase()
+    {
+        $choices = new \Doctrine\Common\Collections\ArrayCollection();
+        $choices->add($this->questionChoice1);
+        $choices->add($this->questionChoice2);
+        $question = new \Application\Model\Question();
+
+        $data = array(
+            'name' => 'What is your name ?',
+            'choices' => array(
+                1,
+                2,
+            )
+            );
+        $this->hydrator->hydrate($data, $question);
+
+        $this->assertEquals($choices, $question->getChoices(), 'question should have the two new choices');
+    }
 
     // @todo fix me or remove me
 //    public function testExtractSubObject()
@@ -175,7 +214,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      * @test
      */
     public function extractSurveyWithPropertyQuestionnairesAndCheckResultContainsKeyQuestionnaires() {
-        $actual = $this->fixture->extract($this->getFakeSurvey(), array('name', 'questionnaires'));
+        $actual = $this->hydrator->extract($this->getFakeSurvey(), array('name', 'questionnaires'));
         $this->assertArrayHasKey('questionnaires', $actual);
     }
 
@@ -184,8 +223,8 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     public function parsePropertiesAndCheckReturnContainsRecursivePropertyStructureForFieldSet2()
     {
-        $this->fixture->parseProperties('Application\Model\Survey', $this->fieldSet2);
-        $actual = $this->fixture->getPropertyStructure();
+        $this->hydrator->parseProperties('Application\Model\Survey', $this->fieldSet2);
+        $actual = $this->hydrator->getPropertyStructure();
 
         $this->assertCount(2, $actual['Application\Model\Survey']);
         $this->assertCount(0, $actual['Application\Model\Questionnaire']);
@@ -196,8 +235,8 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     public function parsePropertiesAndCheckReturnContainsRecursivePropertyStructureForFieldSet1()
     {
-        $this->fixture->parseProperties('Application\Model\Survey', $this->fieldSet1);
-        $actual = $this->fixture->getPropertyStructure();
+        $this->hydrator->parseProperties('Application\Model\Survey', $this->fieldSet1);
+        $actual = $this->hydrator->getPropertyStructure();
         $this->assertCount(4, $actual['Application\Model\Survey']);
         $this->assertCount(5, $actual['Application\Model\Questionnaire']);
         $this->assertCount(4, $actual['Application\Model\Answer']);
@@ -208,10 +247,10 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     public function completePropertyStructureWithDefaultPropertiesAndCheckWhetherReturnContainsId()
     {
-        $this->fixture->parseProperties('Application\Model\Survey', $this->fieldSet1);
-        $this->fixture->completePropertyStructureWithDefaultProperties();
+        $this->hydrator->parseProperties('Application\Model\Survey', $this->fieldSet1);
+        $this->hydrator->completePropertyStructureWithDefaultProperties();
 
-        $actual = $this->fixture->getPropertyStructure();
+        $actual = $this->hydrator->getPropertyStructure();
         foreach (array('Survey', 'Questionnaire', 'Answer') as $entity) {
             $this->assertContains('id', $actual['Application\Model\\' . $entity]);
         }
@@ -222,10 +261,10 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     public function completePropertyStructureWithDefaultPropertiesAndCheckWhetherReturnResolveFieldAliasMetadata()
     {
-        $properties = $this->fixture->resolvePropertyAliases('\Application\Model\Survey', $this->fieldSet1);
-        $this->fixture->parseProperties('Application\Model\Survey', $properties);
+        $properties = $this->hydrator->resolvePropertyAliases('\Application\Model\Survey', $this->fieldSet1);
+        $this->hydrator->parseProperties('Application\Model\Survey', $properties);
 
-        $actual = $this->fixture->getPropertyStructure();
+        $actual = $this->hydrator->getPropertyStructure();
         foreach (array('Survey', 'Questionnaire', 'Answer') as $entity) {
             $this->assertContains(
                 'dateCreated', $actual['Application\Model\\' . $entity], 'Can not resolve metadata property alias'
@@ -238,11 +277,11 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     public function checkPropertyPermissionMethodShouldRemoveFieldFoo()
     {
-        $this->fixture->parseProperties('Application\Model\Survey', $this->fieldSet1);
-        $this->fixture->completePropertyStructureWithDefaultProperties();
-        $this->fixture->checkPropertyPermission();
+        $this->hydrator->parseProperties('Application\Model\Survey', $this->fieldSet1);
+        $this->hydrator->completePropertyStructureWithDefaultProperties();
+        $this->hydrator->checkPropertyPermission();
 
-        $actual = $this->fixture->getPropertyStructure();
+        $actual = $this->hydrator->getPropertyStructure();
 
         foreach (array('Survey', 'Questionnaire', 'Answer') as $entity) {
             $this->assertNotContains(
@@ -256,12 +295,12 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     public function getJsonConfigForEntityReturnsNotEmptyArray()
     {
-        $this->fixture->parseProperties('Application\Model\Survey', $this->fieldSet1);
-        $this->fixture->completePropertyStructureWithDefaultProperties();
-        $this->fixture->checkPropertyPermission();
+        $this->hydrator->parseProperties('Application\Model\Survey', $this->fieldSet1);
+        $this->hydrator->completePropertyStructureWithDefaultProperties();
+        $this->hydrator->checkPropertyPermission();
 
         foreach (array('Survey', 'Questionnaire', 'Answer') as $entity) {
-            $actual = $this->fixture->getJsonConfigForEntity('Application\Model\\' . $entity);
+            $actual = $this->hydrator->getJsonConfigForEntity('Application\Model\\' . $entity);
             $this->assertNotEmpty($actual);
         }
     }
@@ -271,7 +310,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     public function extractSurveyWithPropertyQuestionnairesAndQuestionnairesNameAndCheckResultContainsKeyQuestionnairesName()
     {
-        $actual = $this->fixture->extract($this->getFakeSurvey(), array('name', 'questionnaires', 'questionnaires.name'));
+        $actual = $this->hydrator->extract($this->getFakeSurvey(), array('name', 'questionnaires', 'questionnaires.name'));
         $this->assertInternalType('array', $actual['questionnaires']);
         $this->assertNotEmpty($actual['questionnaires']);
     }
@@ -314,7 +353,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
 //                'name' => 'filter 2',
 //                'officialFilter' => null,
 //            ),
-                ), $this->fixture->extract($filter1, array(
+                ), $this->hydrator->extract($filter1, array(
                     'name',
                     'officialFilter' => '__recursive',
                 )), 'should return same properties for children and parent');
@@ -329,7 +368,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'id' => null,
             'name' => 'filter 1',
             'isOfficial' => true,
-                ), $this->fixture->extract($filter1, array(
+                ), $this->hydrator->extract($filter1, array(
                     'isOfficial',
                 )), 'should use correct getter for boolean properties');
     }
@@ -342,7 +381,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'email' => null,
             'state' => null,
             'custom name' => 'Mr. John Connor',
-                ), $this->fixture->extract($this->user, array(
+                ), $this->hydrator->extract($this->user, array(
                     'custom name' => function(Hydrator $hydrator, \Application\Model\User $user) {
                         return 'Mr. ' . $user->getName() . ' Connor';
                     },
@@ -358,7 +397,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'state' => null,
             'dateCreated' => $this->user->getDateCreated()->format(\DateTime::ISO8601),
             'name' => 'John',
-                ), $this->fixture->extract($this->user, array(
+                ), $this->hydrator->extract($this->user, array(
                     'dateCreated',
                 )), 'should serialize DateTime');
     }

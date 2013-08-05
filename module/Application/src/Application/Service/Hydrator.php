@@ -322,7 +322,22 @@ class Hydrator
     }
 
     /**
-     * Hydrate $object with the provided $data.
+     * Hydrate $object with the provided $data. This is NOT recursive.
+     *
+     * Supported format for $data is the following:
+     *
+     * <code>
+     * array(
+     *      'text' => 'some name',
+     *      'number' => 1234,
+     *      'date' => '2013-08-05T13:15:57+0900',
+     *      'enum' => 'completed',
+     *      'subObject' => 3 // Use single ID
+     *      'subObjectBis' => array('id' => 3, 'foo' => 'bar') // Use full object, including its ID. the subobject will NOT be hydrated
+     *      'subObjects' => array(3, 4, 5) // Use array of single IDs
+     *      'subObjectsBis' => array(array('id' => 3), array('id' => 4), array('id' => 5)) // Use array of full objects, including their IDs
+     * )
+     * </code>
      *
      * @param  array $data
      * @param  \Application\Model\AbstractModel $object
@@ -335,49 +350,33 @@ class Hydrator
         unset($data['password']);
 
         foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                $getter = 'get' . ucfirst($key);
-
-                if (is_callable(array($object, $getter))) {
-                    /** @var $object AbstractModel */
-                    $subObject = call_user_func(array($object, $getter));
-
-                    if (is_null($subObject) && !empty($value['id'])) {
-
-                        // Check what kind of parameter type is taken by the setter as input.
-                        $modelName = $this->getFirstParameterType($object, $getter);
-                        $subObject = $this->getObject($modelName, $value['id']);
-                    }
-
-                    $value = $subObject;
-                } else {
-                    $logger = Module::getServiceManager()->get('Zend\Log');
-                    $logger->info('[WARNING] implement me! Can not persist data. Missing method ' . $getter);
-
-                    // Get or create object from the storage
-                    #$modelName = 'Application\Model\Answer' <-- do something better than that
-                    #$object = $this->getObject($modelName, $id);
-                    #$this->hydrate($data, $object);
-                }
-            }
-
-            // Assemble setter method
-            $setter = 'set' . ucfirst($key);
-
-            // Bonus: code below enabled a short hand "syntax" when assembling a request on the client side.
-            // e.g $data[question] = id instead of $data[question] = array('id' => id)
             // Check what kind of parameter type is taken by the setter as input.
-            $modelName = $this->getFirstParameterType($object, $setter);
+            $setter = 'set' . ucfirst($key);
+            $parameterType = $this->getFirstParameterType($object, $setter);
 
-            // If model name is suitable and given $value is numerical, get one from the storage.
-            if (is_numeric($value) && preg_match('/Application\\\Model/is', $modelName)) {
-                $value = $this->getObject($modelName, $value);
-            } // If model is Date time, instantiate it
-            elseif ($modelName == 'DateTime') {
+            // If parameter is DateTime, instantiate it
+            if ($parameterType == 'DateTime') {
                 $value = new \DateTime($value);
-            } // If model is an AbstractEnum, built it
-            elseif (is_subclass_of($modelName, '\Application\Model\AbstractEnum')) {
-                $value = call_user_func_array(array($modelName, 'get'), array($value));
+            }
+            // If model is an AbstractEnum, built it
+            elseif (is_subclass_of($parameterType, 'Application\Model\AbstractEnum')) {
+                $value = call_user_func_array(array($parameterType, 'get'), array($value));
+            }
+            // If parameter is an object, get it from database, it can be either an ID, or an array with the key 'id'
+            elseif (is_subclass_of($parameterType, 'Application\Model\AbstractModel')) {
+                $id = is_array($value) ? $value['id'] : $value;
+                $value = $this->getObject($parameterType, $id);
+            }
+            // If parameter is a collection, then build the collection based on $value which must be an array of ID or an array of objects
+            elseif ($parameterType == 'Doctrine\Common\Collections\ArrayCollection') {
+                $collection = new \Doctrine\Common\Collections\ArrayCollection();
+                $modelInCollection = Module::getEntityManager()->getClassMetadata(get_class($object))->getAssociationTargetClass($key);
+                foreach ($value as $id) {
+                    $id = is_array($id) ? $id['id'] : $id;
+                    $collection->add($this->getObject($modelInCollection, $id));
+                }
+                
+                $value = $collection;
             }
 
             if (is_callable(array($object, $setter))) {

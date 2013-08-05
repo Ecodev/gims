@@ -322,7 +322,7 @@ class Question extends AbstractModel
     }
 
     /**
-     * Notify the question that he was added to the answer.
+     * Notify the question that it was added to the answer.
      * This should only be called by Answer::setQuestion()
      *
      * @param Answer $answer
@@ -384,9 +384,31 @@ class Question extends AbstractModel
      * @param \Doctrine\Common\Collections\ArrayCollection $choices
      * @return $this
      */
-    public function setChoices($choices)
+    public function setChoices(\Doctrine\Common\Collections\ArrayCollection $choices)
     {
-        $this->choices = $choices;
+        // Clear the existing collection
+        $this->getChoices()->clear();
+
+        // Affect this question to each choices given, which will automatically add themselve to our collection
+        foreach ($choices as $choice) {
+            $choice->setQuestion($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Notify the question that it was added to the choice.
+     * This should only be called by QuestionChoice::setQuestion()
+     *
+     * @param QuestionChoice $questionChoice
+     *
+     * @return Question
+     */
+    public function questionChoiceAdded(QuestionChoice $questionChoice)
+    {
+        $this->getChoices()->add($questionChoice);
+
         return $this;
     }
 

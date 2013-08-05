@@ -262,7 +262,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     }
 
     /**
-     * Notify the survey that he was added to the question.
+     * Notify the survey that it was added to the question.
      * This should only be called by Question::setSurvey()
      *
      * @param Question $question
@@ -285,7 +285,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     }
 
     /**
-     * Notify the survey that he was added to the questionnaire.
+     * Notify the survey that it was added to the questionnaire.
      * This should only be called by Questionnaire::setSurvey()
      *
      * @param Questionnaire $questionnaire
