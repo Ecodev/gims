@@ -182,7 +182,7 @@ class Hydrator
      *
      * @return array
      */
-    public function mergeWithDefaultProperties($className, array $properties)
+    private function mergeWithDefaultProperties($className, array $properties)
     {
         $defaultProperties = call_user_func($className . '::getJsonConfig');
         $properties = array_merge($defaultProperties, $properties);
@@ -208,7 +208,7 @@ class Hydrator
      *
      * @return array
      */
-    public function initializePropertyStructure($className, array $properties)
+    private function initializePropertyStructure($className, array $properties)
     {
         // instantiate property with default value
         $this->propertyStructure[$className] = array();
@@ -316,7 +316,7 @@ class Hydrator
      *
      * @return string
      */
-    public function formatGetter($input)
+    private function formatGetter($input)
     {
         return 'get' . ucfirst($input);
     }
@@ -375,7 +375,7 @@ class Hydrator
                     $id = is_array($id) ? $id['id'] : $id;
                     $collection->add($this->getObject($modelInCollection, $id));
                 }
-                
+
                 $value = $collection;
             }
 
@@ -396,7 +396,7 @@ class Hydrator
      * @throws \Exception
      * @return AbstractModel
      */
-    protected function getObject($modelName, $id)
+    private function getObject($modelName, $id)
     {
 
         $repository = Module::getEntityManager()->getRepository($modelName);
