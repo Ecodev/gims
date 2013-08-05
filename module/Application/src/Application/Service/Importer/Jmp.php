@@ -344,7 +344,7 @@ class Jmp extends AbstractImporter
 
             // Fourth pass to hardcode special cases of formulas
             foreach ($this->importedQuestionnaires as $col => $questionnaire) {
-                $this->finishRatios($sheet, $col, $questionnaire);
+                $this->finishRatios($questionnaire);
             }
         }
 

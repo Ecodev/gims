@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * A Filter is used to organise things. They are usually defined by the answer
  * value if present, or else the sum of its sub-filters. But it can also have
  * custom rules, such as a list of manually specified filters to sum (summands)
- * or the use of a ratio.
+ * or the use of formulas.
  *
  * There are slightly different usage from the end-user point of view:
  *

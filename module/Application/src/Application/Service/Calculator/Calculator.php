@@ -112,18 +112,8 @@ use \Application\Traits\EntityManagerAware;
             $rule = $filterRule->getRule();
             if ($filterRule->getQuestionnaire() == $questionnaire && $filterRule->getPart() == $part) {
 
-                // If filter is defined by a Ratio, returns it
-                if ($rule instanceof \Application\Model\Rule\Ratio) {
-                    $value = $this->computeFilterInternal($rule->getFilter(), $questionnaire, $alreadySummedFilters, $part);
-
-                    // Preserve null value while multiplying
-                    if (!is_null($value))
-                        $value = $rule->getRatio() * $value;
-
-                    return $value;
-                }
                 // If we have a formula, cumulate their value to add them later to normal result
-                else if ($rule instanceof \Application\Model\Rule\Formula) {
+                if ($rule instanceof \Application\Model\Rule\Formula) {
                     $value = $rule->getValue();
                     if (!is_null($value)) {
                         $formulaValue += $value;
