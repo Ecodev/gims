@@ -1,7 +1,7 @@
 /**
  * select2 wrapper for easier use within GIMS
  * Basic usage is:
- * <gims-select api="filterSet" nmodel="mySelectedFilterSet"></gims-select>
+ * <gims-select api="filterSet" model="mySelectedFilterSet"></gims-select>
  *
  * Or specify name attribute to change default behavior
  * <gims-select api="filterSet" model="mySelectedFilterSet" name="myFilterName" placeholder="Select a questionnaire" style="width:100%;"></gims-select>

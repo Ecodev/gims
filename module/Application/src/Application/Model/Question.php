@@ -19,6 +19,7 @@ class Question extends AbstractModel
         'sorting',
     );
 
+
     /**
      * @var integer
      *
@@ -102,6 +103,14 @@ class Question extends AbstractModel
      */
     private $choices;
 
+
+	/**
+	 * @var \Doctrine\Common\Collections\ArrayCollection
+	 * @ORM\ManyToMany(targetEntity="Part")
+	 * })
+	 */
+	private $parts;
+
     /**
      * @var int
      *
@@ -123,6 +132,7 @@ class Question extends AbstractModel
     {
         $this->answers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->choices = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->parts = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -411,5 +421,25 @@ class Question extends AbstractModel
 
         return $this;
     }
+
+	/**
+	 * @return \Doctrine\Common\Collections\ArrayCollection
+	 */
+	public function getParts()
+	{
+		return $this->parts;
+	}
+
+	/**
+	 * @param \Doctrine\Common\Collections\ArrayCollection $parts
+	 * @return $this
+	 */
+	public function setParts(\Doctrine\Common\Collections\ArrayCollection $parts)
+	{
+		//if(!$this->getParts()->contains($part))
+		//	$this->getParts()->add($part);
+		$this->parts = $parts;
+		return $this;
+	}
 
 }

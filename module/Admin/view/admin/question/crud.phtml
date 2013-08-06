@@ -13,10 +13,16 @@
 
         <?php echo $this->crudButtons('question'); ?>
 
+		<pre>{{question|json}}</pre>
+
         <div class="control-group">
             <label for="question.type">Type</label>
-            <select id="question.type" name="type" ng-model="question.type"
-                    ng-options="c.value as c.text for c in types"></select>
+            <select id="question.type"
+					name="type"
+					ng-model="question.type"
+					ng-change="updateNbQuestions()"
+                    ng-options="c.value as c.text for c in types">
+			</select>
         </div>
 
         <div class="control-group" ng-class="{error: myForm.filter.$invalid}">
@@ -25,11 +31,51 @@
             <span ng-show="myForm.filter.$error.required" class="help-inline">Required</span>
         </div>
 
-        <div class="control-group" ng-class="{error: myForm.name.$invalid}">
+
+		<div class="control-group" ng-class="{error: myForm.name.$invalid}">
+			<label for="question.part">Zone</label>
+			<gims-select required
+					class="input-medium"
+					id="question.parts"
+					name="type"
+					model="question.parts"
+					api="part"
+					multiple="multiple">
+			</gims-select>
+
+			<!--select required
+					class="input-small"
+					id="question.parts"
+					name="type"
+					ng-model="question.part"
+					ng-options="p.id as p.name for p in parts">
+			</select-->
+		</div>
+
+
+
+		<div class="control-group" ng-class="{error: myForm.name.$invalid}">
             <label for="question.name">Question</label>
             <input id="question.name" type="text" name="name" ng-model="question.name" required class="span6"/>
             <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
         </div>
+
+		<div class="control-group " ng-repeat="choice in question.choices" ng-class="{error: myForm.name.$invalid}">
+			<label for="choice.value">Answer {{$index+1}}</label>
+			<select required
+					class="input-small"
+					id="question.percentages"
+					name="type"
+					ng-model="choice.percentage"
+					ng-options="p.value as p.text for p in percentages">
+			</select>
+
+			<input id="choice.value" type="text" name="name" ng-model="choice.value" required class="span6"/>
+            <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+        </div>
+
+
+
 
         <div class="control-group" ng-class="{error: myForm.sorting.$invalid}" ng-show="question.id">
             <label for="question.sorting">Sorting</label>

@@ -19,10 +19,9 @@ class Part extends AbstractModel
     /**
      * @var array
      */
-    protected static $jsonConfig
-        = array(
-            'name'
-        );
+    protected static $jsonConfig = array(
+		'name'
+	);
 
     /**
      * @var string

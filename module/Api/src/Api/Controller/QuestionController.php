@@ -118,6 +118,7 @@ class QuestionController extends AbstractRestfulController
      */
     public function update($id, $data)
     {
+
         // Retrieve question since permissions apply against it.
         /** @var $question \Application\Model\Question */
         $questionRepository = $this->getEntityManager()->getRepository($this->getModel());
@@ -146,6 +147,13 @@ class QuestionController extends AbstractRestfulController
                     }
                 }
             }
+
+			if(isset($data['choices']))
+			{
+				$this->updateChoices($data['choices']);
+				unset($data['choices']);
+			}
+
             $result = parent::update($id, $data);
         } else {
             $this->getResponse()->setStatusCode(401);
@@ -153,6 +161,7 @@ class QuestionController extends AbstractRestfulController
         }
         return $result;
     }
+
 
     /**
      * @param array $data
@@ -202,6 +211,26 @@ class QuestionController extends AbstractRestfulController
         }
         return $result;
     }
+
+
+
+
+	public function updateChoices($choices)
+	{
+		foreach($choices as $key => $choice)
+		{
+			//$choice = new QuestionChoiceController();
+			$choiceController = $this->getServiceLocator()->get('Api\Controller\QuestionChoice');
+			if( isset($choice['id']) )
+				$choices[$key] = $choice->create( $choice );
+			else
+				$choices[$key] = $choice->update( $choice );
+		}
+	}
+
+
+
+
 
     /**
      * Ask Rbac whether the User is allowed to update this survey
