@@ -265,7 +265,6 @@ class Jmp extends AbstractImporter
     private $cacheFilters = array();
     private $cacheQuestions = array();
     private $cacheHighFilters = array();
-    private $cacheRatios = array();
     private $importedQuestionnaires = array();
     private $colToParts = array();
     private $questionnaireCount = 0;
@@ -335,17 +334,23 @@ class Jmp extends AbstractImporter
             }
 
             // Second pass on imported questionnaires to process cross-questionnaire things
+            echo 'Importing Calculations, Estimates and Ratios';
             foreach ($this->importedQuestionnaires as $col => $questionnaire) {
                 $this->importQuestionnaireRules($sheet, $col, $questionnaire);
+                echo '.';
             }
+            echo PHP_EOL;
 
             // Third pass to import high filters and their formulas
             $this->importHighFilters($firstFilter->getName() . ' - Improved/Unimproved', $this->definitions[$sheetName]['highFilters'], $sheet);
 
             // Fourth pass to hardcode special cases of formulas
+            echo 'Finishing special cases of Ratios';
             foreach ($this->importedQuestionnaires as $col => $questionnaire) {
                 $this->finishRatios($questionnaire);
+                echo '.';
             }
+            echo PHP_EOL;
         }
 
         $this->getEntityManager()->flush();
@@ -767,17 +772,22 @@ class Jmp extends AbstractImporter
     protected function getQuestionnaireRule(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part = null)
     {
         $questionnaireRuleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireRule');
-        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+//        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
 
         $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
         $value = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
 
         if ($name && !is_null($value) || $value <> 0) {
 
-            $population = $populationRepository->getOneByQuestionnaire($questionnaire, $part);
-            $absoluteValue = $population->getPopulation() * $value / 100;
+//            $population = $populationRepository->getOneByQuestionnaire($questionnaire, $part);
+//            $absoluteValue = $population->getPopulation() * $value / 100;
 
             $formula = $this->getFormula($sheet, $col, $row, $offset, $questionnaire, $part);
+
+            // If formula was non-existing, or invalid, cannot do anything more
+            if (!$formula) {
+                return null;
+            }
 
             // If we had an existing formula, maybe we also have an existing association
             $assoc = null;
@@ -832,31 +842,59 @@ class Jmp extends AbstractImporter
         $originalFormula = $cell->getValue();
 
         // if we have nothing at all, cannot do anything
-        if (is_null($originalFormula)) {
+        if (is_null($originalFormula) || $originalFormula == '') {
             return null;
             // if the formula is actually not a formula, transform into formula
         } elseif (@$originalFormula[0] != '=') {
             $originalFormula = '=' . $originalFormula;
         }
 
+        // Expand range syntax to enumerate each cell: "A1:A5" => "A1,A2,A3,A4,A5"
+        // WARNING: this only expand vertical ranges, not horizontal ranges (which probably never make any sense for JMP anyway)
+        $cellPattern = '\$?(([[:alpha:]]+)(\\d+))';
+        $expandedFormula = preg_replace_callback("/$cellPattern:$cellPattern/", function($matches) {
+            $expanded = array();
+            for ($i = $matches[3]; $i <= $matches[6]; $i++)
+            {
+                $expanded[] = $matches[2] . $i;
+            }
+            return join(',', $expanded);
+        }, $originalFormula);
 
         // Replace all cell reference with our own syntax
         $filters = $this->cacheFilters;
         $colToParts = $this->colToParts;
         $importedQuestionnaires = $this->importedQuestionnaires;
-        $convertedFormula = preg_replace_callback('/\$?(([[:alpha:]]+)(\\d+))/', function($matches) use ($filters, $colToParts, $importedQuestionnaires, $sheet, $col, $row, $offset, $questionnaire, $part) {
+        $referencedInvalidQuestionnaire = false;
+//        v($sheet->getTitle(), $row, $col, $offset, $originalFormula);
+        $convertedFormula = preg_replace_callback("/$cellPattern/", function($matches) use ($filters, $colToParts, $importedQuestionnaires, $sheet, $col, $row, $offset, $questionnaire, $part, &$referencedInvalidQuestionnaire) {
                     $refCol = \PHPExcel_Cell::columnIndexFromString($matches[2]) - 1;
                     $refRow = $matches[3];
 
+                    $refFilter = @$filters[$refRow];
+                    $refFilterId = $refFilter ? $refFilter->getId() : null;
+
+                    if (isset($importedQuestionnaires[$refCol])) {
+                        $refQuestionnaireId = $importedQuestionnaires[$refCol]->getId();
+                        return "{UF#$refFilterId,Q#$refQuestionnaireId}";
+                    }
+
                     // Find out referenced Questionnaire
-                    $refQuestionnaire = $colToParts[$refCol]['questionnaire'];
+                    $refData = @$colToParts[$refCol];
+                    if (!$refData) {
+                        $referencedInvalidQuestionnaire = true;
+
+                        return null;
+                    }
+
+                    $refQuestionnaire = $refData['questionnaire'];
                     if ($refQuestionnaire == $questionnaire)
                         $refQuestionnaireId = 'current';
                     else
                         $refQuestionnaireId = $questionnaire->getId();
 
                     // Find out referenced Part
-                    $refPart = $colToParts[$refCol]['part'];
+                    $refPart = $refData['part'];
                     if ($refPart == $part)
                         $refPartId = 'current';
                     else
@@ -864,11 +902,9 @@ class Jmp extends AbstractImporter
 
 
                     // Simple case is when we reference a filter
-                    $refFilter = @$filters[$refRow];
-                    if ($refFilter) {
-                        $refFilterId = $refFilter->getId();
+                    if ($refFilterId) {
 
-                        return "{Filter#$refFilterId,Questionnaire#$refQuestionnaireId" . ($refPartId ? ',Part#' . $refPartId : '') . "}";
+                        return "{F#$refFilterId,Q#$refQuestionnaireId" . ($refPartId ? ',P#' . $refPartId : '') . "}";
                         // More advanced case is when we reference another QuestionnaireRule (Calculation, Estimate or Ratio)
                     } else {
 
@@ -880,13 +916,17 @@ class Jmp extends AbstractImporter
                             $this->getEntityManager()->flush();
                             $refRuleId = $refQuestionnaireRule->getRule()->getId();
 
-                            return "{Rule#$refRuleId,Questionnaire#$refQuestionnaireId" . ($refPartId ? ',Part#' . $refPartId : '') . "}";
+                            return "{R#$refRuleId,Q#$refQuestionnaireId" . ($refPartId ? ',P#' . $refPartId : '') . "}";
                         } else {
                             return 'NULL'; // if no formula found at all, return NULL string which will behave like an empty cell in PHPExcell
                         }
                     }
-                }, $originalFormula);
+                }, $expandedFormula);
 
+        if ($referencedInvalidQuestionnaire) {
+            echo 'WARNING: skipped formula because it referenced non-existing questionnaire. On sheet "' . $sheet->getTitle() . '" cell ' . $cell->getCoordinate() . PHP_EOL;
+            return null;
+        }
 
         // Look for existing formula (to prevent duplication)
         $this->getEntityManager()->flush();
@@ -926,6 +966,7 @@ class Jmp extends AbstractImporter
         $this->getEntityManager()->flush();
 
         // Get or create all filter
+        echo 'Importing high filters';
         foreach ($filters as $name => $filterData) {
 
             $highFilter = null;
@@ -963,7 +1004,10 @@ class Jmp extends AbstractImporter
             }
 
             $this->cacheHighFilters[$name] = $highFilter;
+            echo '.';
         }
+
+        echo PHP_EOL;
     }
 
     /**
@@ -1061,10 +1105,10 @@ class Jmp extends AbstractImporter
                 if ($questionnaireRule) {
                     $questionnaireRuleId = $questionnaireRule->getId();
 
-                    $formulaImproved = "={Filter#$filterImprovedSharedId,Questionnaire#current,Part#current} * (1 - {QuestionnaireRule#$questionnaireRuleId,Questionnaire#current,Part#current})";
+                    $formulaImproved = "={F#$filterImprovedSharedId,Q#current,P#current} * (1 - {QR#$questionnaireRuleId,Q#current,P#current})";
                     $this->linkFormula($formulaImproved, $filterImproved, $questionnaire, $part);
 
-                    $formulaShared = "={Filter#$filterImprovedSharedId,Questionnaire#current,Part#current} * {QuestionnaireRule#$questionnaireRuleId,Questionnaire#current,Part#current}";
+                    $formulaShared = "={F#$filterImprovedSharedId,Q#current,P#current} * {QR#$questionnaireRuleId,Q#current,P#current}";
                     $this->linkFormula($formulaShared, $filterShared, $questionnaire, $part);
                 }
             }

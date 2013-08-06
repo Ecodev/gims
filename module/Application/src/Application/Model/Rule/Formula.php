@@ -20,7 +20,7 @@ class Formula extends AbstractRule
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=true, length=1024)
      */
     private $formula;
 
