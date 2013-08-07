@@ -256,10 +256,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
             $questionCount = 0;
             foreach ($this->getSurvey()->getQuestions() as $q) {
-                if ($q->getHasParts())
-                    $questionCount += 3; // TODO: get actual parts count instead of hardcoded
-                else
-                    $questionCount += 1;
+                $questionCount += $q->getParts() + 1;
             }
 
             if ($questionCount > 0) {
