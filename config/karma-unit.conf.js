@@ -1,22 +1,18 @@
-basePath = '../';
-urlRoot = '/__karma/';
-autoWatch = true;
-browsers = ['Chrome'];
-proxies = {
-  '/': 'http://gims.local/'
-};
+var sharedConfig = require('./karma-shared.conf');
 
-files = [
-  JASMINE,
-  JASMINE_ADAPTER,
-  'htdocs/lib/autoload/*',
-  'htdocs/lib/angular/angular-mocks.js',
-  'htdocs/js/**/*.js',
-  'tests/unit/**/*.js'
-];
+module.exports = function(config) {
+    sharedConfig(config);
 
-
-junitReporter = {
-  outputFile: 'data/logs/karma-unit.xml',
-  suite: 'unit'
+    config.set({
+        files: [
+            'htdocs/lib/autoload/*',
+            'htdocs/lib/angular/angular-mocks.js',
+            'htdocs/js/**/*.js',
+            'tests/unit/**/*.js'
+        ],
+        junitReporter: {
+            outputFile: 'data/logs/karma-unit.xml',
+            suite: 'unit'
+        }
+    });
 };
