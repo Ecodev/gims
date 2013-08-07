@@ -37,4 +37,41 @@ class QuestionTest extends AbstractModel
         $this->assertEquals($choices, $question->getChoices(), '... but their content is the same');
     }
 
+    public function testQuestionChoicesAreUnique()
+    {
+        $choices = new \Doctrine\Common\Collections\ArrayCollection();
+        $duplicatedChoice = new QuestionChoice();
+        $choices->add($duplicatedChoice);
+        $choices->add($duplicatedChoice);
+        $question = new Question();
+
+        $question->setChoices($choices);
+        $this->assertCount(1, $question->getChoices(), 'question must be notified when choice is added');
+    }
+
+    public function testQuestionChoicesAlreadyExistingAreKept()
+    {
+        $question = new Question();
+        $choices1 = new \Doctrine\Common\Collections\ArrayCollection();
+        $choices2 = new \Doctrine\Common\Collections\ArrayCollection();
+        $choice1 = new QuestionChoice();
+        $alreadyExistingChoice = new QuestionChoice();
+        $choice2 = new QuestionChoice();
+
+        $choices1->add($choice1);
+        $choices1->add($alreadyExistingChoice);
+
+        $choices2->add($choice2);
+        $choices2->add($alreadyExistingChoice);
+
+        $question->setChoices($choices1);
+        $this->assertCount(2, $question->getChoices());
+
+        $question->setChoices($choices2);
+        $this->assertCount(2, $question->getChoices());
+        $this->assertFalse($question->getChoices()->contains($choice1), 'non-common question choice must be removed');
+        $this->assertTrue($question->getChoices()->contains($alreadyExistingChoice), 'common question choice must be kept');
+        $this->assertTrue($question->getChoices()->contains($choice2), 'new question choice must be added');
+    }
+
 }

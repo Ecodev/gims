@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Question extends AbstractModel
 {
+
     /**
      * @var array
      */
@@ -18,7 +19,6 @@ class Question extends AbstractModel
         'name',
         'sorting',
     );
-
 
     /**
      * @var integer
@@ -103,13 +103,12 @@ class Question extends AbstractModel
      */
     private $choices;
 
-
-	/**
-	 * @var \Doctrine\Common\Collections\ArrayCollection
-	 * @ORM\ManyToMany(targetEntity="Part")
-	 * })
-	 */
-	private $parts;
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\ManyToMany(targetEntity="Part")
+     * })
+     */
+    private $parts;
 
     /**
      * @var int
@@ -132,7 +131,7 @@ class Question extends AbstractModel
     {
         $this->answers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->choices = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->parts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->parts = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -391,17 +390,23 @@ class Question extends AbstractModel
     }
 
     /**
+     * Set new choices, replacing entirely existing choices
      * @param \Doctrine\Common\Collections\ArrayCollection $choices
      * @return $this
      */
     public function setChoices(\Doctrine\Common\Collections\ArrayCollection $choices)
     {
-        // Clear the existing collection
-        $this->getChoices()->clear();
-
         // Affect this question to each choices given, which will automatically add themselve to our collection
         foreach ($choices as $choice) {
             $choice->setQuestion($this);
+        }
+
+        // Clean up the collection from old choices
+        foreach ($this->getChoices() as $choice) {
+            if (!$choices->contains($choice)) {
+                $this->getChoices()->removeElement($choice);
+                \Application\Module::getEntityManager()->remove($choice);
+            }
         }
 
         return $this;
@@ -417,29 +422,31 @@ class Question extends AbstractModel
      */
     public function questionChoiceAdded(QuestionChoice $questionChoice)
     {
-        $this->getChoices()->add($questionChoice);
+        if (!$this->getChoices()->contains($questionChoice)) {
+            $this->getChoices()->add($questionChoice);
+        }
 
         return $this;
     }
 
-	/**
-	 * @return \Doctrine\Common\Collections\ArrayCollection
-	 */
-	public function getParts()
-	{
-		return $this->parts;
-	}
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getParts()
+    {
+        return $this->parts;
+    }
 
-	/**
-	 * @param \Doctrine\Common\Collections\ArrayCollection $parts
-	 * @return $this
-	 */
-	public function setParts(\Doctrine\Common\Collections\ArrayCollection $parts)
-	{
-		//if(!$this->getParts()->contains($part))
-		//	$this->getParts()->add($part);
-		$this->parts = $parts;
-		return $this;
-	}
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $parts
+     * @return $this
+     */
+    public function setParts(\Doctrine\Common\Collections\ArrayCollection $parts)
+    {
+        //if(!$this->getParts()->contains($part))
+        //	$this->getParts()->add($part);
+        $this->parts = $parts;
+        return $this;
+    }
 
 }
