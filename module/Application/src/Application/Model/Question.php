@@ -362,21 +362,21 @@ class Question extends AbstractModel
     /**
      * Set new choices, replacing entirely existing choices
      * @param \Doctrine\Common\Collections\ArrayCollection $choices
-     * @return $this
-     */
+			* @return $this
+			*/
     public function setChoices(\Doctrine\Common\Collections\ArrayCollection $choices)
-    {
-        // Affect this question to each choices given, which will automatically add themselve to our collection
-        foreach ($choices as $choice) {
-            $choice->setQuestion($this);
-        }
+	{
+		// Affect this question to each choices given, which will automatically add themselve to our collection
+		foreach ($choices as $choice) {
+			$choice->setQuestion($this);
+		}
 
-        // Clean up the collection from old choices
-        foreach ($this->getChoices() as $choice) {
-            if (!$choices->contains($choice)) {
-                $this->getChoices()->removeElement($choice);
-                \Application\Module::getEntityManager()->remove($choice);
-            }
+		// Clean up the collection from old choices
+		foreach ($this->getChoices() as $choice) {
+			if (!$choices->contains($choice)) {
+				$this->getChoices()->removeElement($choice);
+				\Application\Module::getEntityManager()->remove($choice);
+			}
         }
 
         return $this;

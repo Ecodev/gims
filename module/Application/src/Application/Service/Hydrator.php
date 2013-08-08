@@ -363,7 +363,7 @@ class Hydrator
                 $value = call_user_func_array(array($parameterType, 'get'), array($value));
             }
             // If parameter is an object, get it from database, it can be either an ID, or an array with the key 'id'
-            elseif (is_subclass_of($parameterType, 'Application\Model\AbstractModel')) {
+            elseif (is_subclass_of($parameterType, 'Application\Model\AbstractModel') && !is_null($value) ) {
                 $id = is_array($value) ? $value['id'] : $value;
                 $value = $this->getObject($parameterType, $id);
             }

@@ -96,7 +96,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      *
      * @return mixed|JsonModel
      */
-    public function create($data)
+    public function create($data, \Closure $postAction = null)
     {
         $modelName = $this->getModel();
 
@@ -104,6 +104,9 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $object = new $modelName();
         $this->hydrator->hydrate($data, $object);
 
+        if( $postAction ){
+            $postAction($object);
+        }
 
         $this->getEntityManager()->persist($object);
         $this->getEntityManager()->flush();

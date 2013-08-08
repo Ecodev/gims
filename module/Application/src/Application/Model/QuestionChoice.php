@@ -16,8 +16,17 @@ class QuestionChoice extends AbstractModel
      */
     protected static $jsonConfig = array(
         'value',
-        'label'
+        'label',
+        'sorting'
     );
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(type="smallint", nullable=false, options={"default" = 0})
+     */
+    private $sorting = 0;
 
     /**
      * @var Question
@@ -70,6 +79,34 @@ class QuestionChoice extends AbstractModel
 
         return $this;
     }
+
+
+
+    /**
+     * Set sorting
+     *
+     * @param integer $sorting
+     * @return Question
+     */
+    public function setSorting($sorting)
+    {
+        $this->sorting = $sorting;
+
+        return $this;
+    }
+
+    /**
+     * Get sorting
+     *
+     * @return integer
+     */
+    public function getSorting()
+    {
+        return (int) $this->sorting;
+    }
+
+
+
 
     /**
      * @return float

@@ -5,6 +5,7 @@ namespace Api\Controller;
 use Application\Model\Survey;
 use Application\Module;
 use Application\Model\Question;
+use Application\Model\QuestionChoice;
 use Zend\View\Model\JsonModel;
 
 class QuestionController extends AbstractRestfulController
@@ -150,7 +151,7 @@ class QuestionController extends AbstractRestfulController
 
 			if(isset($data['choices']))
 			{
-				$this->updateChoices($data['choices']);
+				$this->setChoices( $data['choices'], $question );
 				unset($data['choices']);
 			}
 
@@ -161,6 +162,58 @@ class QuestionController extends AbstractRestfulController
         }
         return $result;
     }
+
+
+
+
+	protected function setChoices(array $newChoices, $question){
+        $i = 0;
+		foreach($newChoices as $key => $newChoice) {
+            $newChoice['sorting'] = $i;
+            // if no id -> create
+			if( !isset($newChoice['id']) ) {
+				$questionChoice = new QuestionChoice();
+				$this->getEntityManager()->persist($questionChoice);
+			}
+
+			// if id exists -> update
+			else {
+				$questionChoiceRepository = $this->getEntityManager()->getRepository('Application\Model\QuestionChoice');
+				$questionChoice = $questionChoiceRepository->findOneById((int)$newChoice['id']);
+			}
+			$questionChoice->setQuestion($question);
+			$this->hydrator->hydrate( $newChoice, $questionChoice );
+            $i++;
+		}
+
+        // no way to detect removed choices by looping on $newChoices
+        // its necessary to loop on $actualChoices and detect which are no more in $newChoices
+        $actualChoices =  $question->getChoices();
+        if( sizeof($actualChoices) > 0){
+            foreach( $actualChoices as $choice){
+                $exist=false;
+                foreach($newChoices as $newChoice){
+                    if($newChoice['id'] == $choice->getId()){
+                        $exist = true;
+                        break;
+                    }
+                }
+                if(!$exist){
+                    $question->getChoices()->removeElement($choice);
+                    \Application\Module::getEntityManager()->remove($choice);
+                }
+            }
+        }
+
+
+        //$this->getChoices()->add($questionChoice);
+		//$this->getEntityManager()->flush();
+	}
+
+
+
+
+
 
 
     /**
@@ -204,7 +257,18 @@ class QuestionController extends AbstractRestfulController
 
         // Update object or not...
         if ($this->isAllowedSurvey($survey)) {
-            $result = parent::create($data);
+
+            // unset ['choices'] to preserve $data from hydrator and backup in a variable
+            $newChoices = $data['choices'];
+            unset($data['choices']);
+
+            $self = $this;
+
+            $result = parent::create($data, function(\Application\Model\Question $question) use ($newChoices, $self){
+                                                    if ($newChoices)
+                                                        $self->setChoices($newChoices, $question);
+                                                });
+
         } else {
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));
@@ -213,20 +277,6 @@ class QuestionController extends AbstractRestfulController
     }
 
 
-
-
-	public function updateChoices($choices)
-	{
-		foreach($choices as $key => $choice)
-		{
-			//$choice = new QuestionChoiceController();
-			$choiceController = $this->getServiceLocator()->get('Api\Controller\QuestionChoice');
-			if( isset($choice['id']) )
-				$choices[$key] = $choice->create( $choice );
-			else
-				$choices[$key] = $choice->update( $choice );
-		}
-	}
 
 
 

@@ -6,50 +6,56 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 	var returnUrl = '/';
 	var returnTab = '';
 
-
 	$scope.sending = false;
-	//$scope.part = 'null'
+	$scope.addBtnChoice = false;
 
 	$scope.types = [
 		{text: 'Info', value: 'info'},
-		{text: 'Numerical (3 answers)', value: 'numerical3'},
-		{text: 'Numerical (4 answers)', value: 'numerical4'},
-		{text: 'Numerical (5 answers)', value: 'numerical5'},
-		{text: 'Percentage', value: 'percentage'}
+		{text: 'Multiple Choice Question', value: 'mcq'},
+		//{text: 'Percentage', value: 'percentage'}
 	];
 
-	/*
-	$scope.parts = [
-		{text:'Urban', value:'1'},
-		{text:'Rural', value:'2'},
-		{text:'Total', value:'null'}
-	];
-	*/
 
 	$scope.percentages = [
-		{text: '100%', value:'1'},
-		{text: '90%', value:'0.9'},
-		{text: '80%', value:'0.8'},
-		{text: '70%', value:'0.7'},
-		{text: '60%', value:'0.6'},
-		{text: '50%', value:'0.5'},
-		{text: '40%', value:'0.4'},
-		{text: '30%', value:'0.3'},
-		{text: '20%', value:'0.2'},
-		{text: '10%', value:'0.1'},
-		{text: '0%', value:'0'},
+		{text: '100%', value:'1.000'},
+		{text: '90%', value:'0.900'},
+		{text: '80%', value:'0.800'},
+		{text: '70%', value:'0.700'},
+		{text: '60%', value:'0.600'},
+		{text: '50%', value:'0.500'},
+		{text: '40%', value:'0.400'},
+		{text: '30%', value:'0.300'},
+		{text: '20%', value:'0.200'},
+		{text: '10%', value:'0.100'},
+		{text: '0%', value:'0.000'},
 		{text: 'Unknown', value:'null'},
 	];
 
 
-    $scope.updateNbQuestions = function()
-    {
-        var nbChoices = Number($scope.question.type.replace('numerical', ''));
-        $scope.question.choices = [];
-        if( !isNaN(nbChoices) )
-           for( var i=0; i < nbChoices; i++)
-               $scope.question.choices.push({});
+    $scope.initChoices = function(){
+
+		if($scope.question.type == 'info' || $scope.question.type == 'percentage'){
+			$scope.question.choices = [];
+			$scope.addBtnChoice = false;
+		}
+		else if($scope.question.type == 'mcq' && ( !$scope.question.choices || $scope.question.choices.length == 0) ){
+			$scope.question.choices = [{}];
+			$scope.addBtnChoice = true;
+		}
+		else if($scope.question.type == 'mcq' &&  $scope.question.choices.length > 0  ){
+			$scope.addBtnChoice = true;
+		}
     }
+
+
+	$scope.addChoice = function(){
+		$scope.question.choices.push({});
+	}
+
+
+	$scope.deleteChoice = function(index){
+		$scope.question.choices.splice(index,1);
+	}
 
 
 
@@ -77,16 +83,20 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
         // First case is for update a question, second is for creating
         $scope.question.filter = $scope.question.filter.id;
-        if ($scope.question.id) {
-                $scope.question.put({fields: 'metadata,filter,survey,type,choices,parts'}).then(function(question) {
-                $scope.sending = false;
-                $scope.question= question;
-				$scope.updateNbQuestions();
-                if (redirectAfterSave) {
-                    redirect();
-                }
-            });
-        } else {
+        if ($scope.question.id)
+		{
+                $scope.question.put({fields: 'metadata,filter,survey,type,choices,parts'}).then(function(question)
+				{
+					$scope.sending = false;
+					$scope.question= question;
+					$scope.initChoices();
+					if (redirectAfterSave) {
+						redirect();
+					}
+				});
+        }
+		else
+		{
             $scope.question.survey = $routeParams.survey;
 
             delete $scope.question.sorting; // let the server define the sorting value
@@ -108,14 +118,12 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
         Modal.confirmDelete($scope.question, {label: $scope.question.name, returnUrl: $location.search().returnUrl});
     };
 
-    // Create object with default value
-    $scope.question = {sorting: 0, type: 'numerical3', choices : [{name:'John', age:25}, {name:'Mary', age:28}]};
 
     // Try loading question if possible...
     if ($routeParams.id) {
         Restangular.one('question', $routeParams.id).get({fields: 'metadata,filter,survey,type,choices,parts'}).then(function(question) {
             $scope.question = question;
-			$scope.updateNbQuestions();
+			$scope.initChoices();
         });
 		Restangular.all('part', $routeParams.id).getList().then(function(parts) {
 			console.info(parts);

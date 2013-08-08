@@ -9,18 +9,16 @@
     </h2>
 
 
-    <form name="myForm">
+    <form novalidate name="myForm">
 
         <?php echo $this->crudButtons('question'); ?>
-
-		<pre>{{question|json}}</pre>
 
         <div class="control-group">
             <label for="question.type">Type</label>
             <select id="question.type"
 					name="type"
 					ng-model="question.type"
-					ng-change="updateNbQuestions()"
+					ng-change="initChoices()"
                     ng-options="c.value as c.text for c in types">
 			</select>
         </div>
@@ -30,6 +28,7 @@
             <gims-select api="filter" model="question.filter" placeholder="Select a thematic" style="width: 556px;" required></gims-select>
             <span ng-show="myForm.filter.$error.required" class="help-inline">Required</span>
         </div>
+
 
 
 		<div class="control-group" ng-class="{error: myForm.name.$invalid}">
@@ -42,16 +41,7 @@
 					api="part"
 					multiple="multiple">
 			</gims-select>
-
-			<!--select required
-					class="input-small"
-					id="question.parts"
-					name="type"
-					ng-model="question.part"
-					ng-options="p.id as p.name for p in parts">
-			</select-->
 		</div>
-
 
 
 		<div class="control-group" ng-class="{error: myForm.name.$invalid}">
@@ -61,19 +51,24 @@
         </div>
 
 		<div class="control-group " ng-repeat="choice in question.choices" ng-class="{error: myForm.name.$invalid}">
-			<label for="choice.value">Answer {{$index+1}}</label>
+
+			<label for="choice.label">Choice {{$index+1}}</label>
 			<select required
 					class="input-small"
-					id="question.percentages"
+					id="question.value"
 					name="type"
-					ng-model="choice.percentage"
+					ng-model="choice.value"
 					ng-options="p.value as p.text for p in percentages">
 			</select>
 
-			<input id="choice.value" type="text" name="name" ng-model="choice.value" required class="span6"/>
+			<input id="choice.value" type="text" name="name" ng-model="choice.label" required class="span6"/>
+			<button class="btn btn-danger btn-xs" ng-click="deleteChoice($index)" style='position:relative;top:-5px'><i class="icon-trash"></i> Delete</button>
             <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
         </div>
 
+		<p>
+			<button ng-show='addBtnChoice' class="btn btn-success btn-xs" ng-click="addChoice()"><i class="icon-plus"></i> Add choice</button>
+		</p>
 
 
 
