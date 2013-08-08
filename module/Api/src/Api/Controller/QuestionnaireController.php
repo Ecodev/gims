@@ -177,12 +177,14 @@ class QuestionnaireController extends AbstractRestfulController
     }
 
     /**
-     * @param array $data
+     * @param array    $data
      *
-     * @return mixed|void|JsonModel
+     * @param callable $postAction
+     *
      * @throws \Exception
+     * @return mixed|void|JsonModel
      */
-    public function create($data)
+    public function create($data, \Closure $postAction=null)
     {
         // Check that all required properties are given by the GUI
         $properties = $this->metaModelService->getMandatoryProperties();

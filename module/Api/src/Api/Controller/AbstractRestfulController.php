@@ -94,6 +94,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     /**
      * @param array $data
      *
+     * @param callable $postAction
      * @return mixed|JsonModel
      */
     public function create($data, \Closure $postAction = null)

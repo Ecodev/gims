@@ -8,12 +8,13 @@ class FilterSetController extends AbstractRestfulController
 {
 
     /**
-     * @param array $data
+     * @param array    $data
+     *
+     * @param callable $postAction
      *
      * @return mixed|void|JsonModel
-     * @throws \Exception
      */
-    public function create($data)
+    public function create($data, \Closure $postAction = null)
     {
         $filterSetId = empty($data['filterSetSource']) ? null : $data['filterSetSource'];
 

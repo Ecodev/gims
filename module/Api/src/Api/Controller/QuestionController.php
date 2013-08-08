@@ -19,7 +19,7 @@ class QuestionController extends AbstractRestfulController
     protected function getQuestionnaire()
     {
         $idQuestionnaire = $this->params('idParent');
-        if (!$this->questionnaire && $idQuestionnaire) {
+        if(!$this->questionnaire && $idQuestionnaire) {
             $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
             $this->questionnaire = $questionnaireRepository->find($idQuestionnaire);
         }
@@ -40,8 +40,8 @@ class QuestionController extends AbstractRestfulController
                 $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
                 $answers = $answerRepository->findBy(
                     array(
-                         'question'      => $question,
-                         'questionnaire' => $questionnaire,
+                        'question'      => $question,
+                        'questionnaire' => $questionnaire,
                     )
                 );
 
@@ -52,16 +52,16 @@ class QuestionController extends AbstractRestfulController
                     $answerData = $hydrator->extract($answer, \Application\Model\Answer::getJsonConfig());
 
                     $part = $answer->getPart();
-                    if ($part) {
+                    if($part) {
                         $answerData['part'] = $hydrator->extract($part, \Application\Model\Part::getJsonConfig());
                     }
 
-                    if (!empty($answerData['part']['id'])) {
+                    if(!empty($answerData['part']['id'])) {
                         $output[$answerData['part']['id']] = $answerData;
                     } else {
                         // It is ok to have one answer in position 0 (= total) but not more!
                         // should not be the case... so log it
-                        if (!empty($output[0])) {
+                        if(!empty($output[0])) {
                             $logger = Module::getServiceManager()->get('Zend\Log');
                             $logger->info(
                                 sprintf('[WARNING] Answer object "%s" has too many null Part. ', $answerData['id'])
@@ -80,31 +80,31 @@ class QuestionController extends AbstractRestfulController
     public function getList()
     {
 
-//        $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question');
-//        $questions = $questionRepository->findAll();
-//
-//        /** @var Question $question */
-//        foreach ($questions as $question) {
-//            $newName = $question->getFilter()->getName();
-//            $question->setName($newName);
-//            $this->getEntityManager()->persist($question);
-//        }
-//            $this->getEntityManager()->flush();
+        //        $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question');
+        //        $questions = $questionRepository->findAll();
+        //
+        //        /** @var Question $question */
+        //        foreach ($questions as $question) {
+        //            $newName = $question->getFilter()->getName();
+        //            $question->setName($newName);
+        //            $this->getEntityManager()->persist($question);
+        //        }
+        //            $this->getEntityManager()->flush();
 
         $questionnaire = $this->getQuestionnaire();
 
         // Cannot list all question, without specifying a questionnaire
-        if (!$questionnaire) {
+        if(!$questionnaire) {
             $this->getResponse()->setStatusCode(404);
             return;
         }
 
         $questions = $this->getRepository()->findBy(
             array(
-                 'survey' => $questionnaire->getSurvey(),
+                'survey' => $questionnaire->getSurvey(),
             ),
             array(
-                 'sorting' => 'ASC'
+                'sorting' => 'ASC'
             )
         );
 
@@ -112,7 +112,7 @@ class QuestionController extends AbstractRestfulController
     }
 
     /**
-     * @param int   $id
+     * @param int $id
      * @param array $data
      *
      * @return mixed|JsonModel
@@ -127,21 +127,21 @@ class QuestionController extends AbstractRestfulController
         $survey = $question->getSurvey();
 
         // Update object or not...
-        if ($this->isAllowedSurvey($survey) && $this->isAllowedQuestion($question)) {
+        if($this->isAllowedSurvey($survey) && $this->isAllowedQuestion($question)) {
 
             // true means we have to move sorting values up and down
-            if (!empty($data['sorting']) && $data['sorting'] < $question->getSorting()) {
+            if(!empty($data['sorting']) && $data['sorting'] < $question->getSorting()) {
 
                 foreach ($survey->getQuestions() as $_question) {
-                    if ($_question->getSorting() >= $data['sorting']
+                    if($_question->getSorting() >= $data['sorting']
                         && $_question->getSorting() < $question->getSorting()
                     ) {
                         $_question->setSorting($_question->getSorting() + 1);
                     }
                 }
-            } elseif (!empty($data['sorting']) && $data['sorting'] > $question->getSorting()) {
+            } elseif(!empty($data['sorting']) && $data['sorting'] > $question->getSorting()) {
                 foreach ($survey->getQuestions() as $_question) {
-                    if ($_question->getSorting() <= $data['sorting']
+                    if($_question->getSorting() <= $data['sorting']
                         && $_question->getSorting() > $question->getSorting()
                     ) {
                         $_question->setSorting($_question->getSorting() - 1);
@@ -149,11 +149,12 @@ class QuestionController extends AbstractRestfulController
                 }
             }
 
-			if(isset($data['choices']))
-			{
-				$this->setChoices( $data['choices'], $question );
-				unset($data['choices']);
-			}
+
+            if(isset($data['choices'])) {
+                $this->setChoices($data['choices'], $question);
+                unset($data['choices']);
+            }
+
 
             $result = parent::update($id, $data);
         } else {
@@ -165,67 +166,63 @@ class QuestionController extends AbstractRestfulController
 
 
 
-
-	protected function setChoices(array $newChoices, $question){
+    protected function setChoices(array $newChoices, $question)
+    {
         $i = 0;
-		foreach($newChoices as $key => $newChoice) {
+        foreach ($newChoices as $key => $newChoice) {
             $newChoice['sorting'] = $i;
             // if no id -> create
-			if( !isset($newChoice['id']) ) {
-				$questionChoice = new QuestionChoice();
-				$this->getEntityManager()->persist($questionChoice);
-			}
-
-			// if id exists -> update
-			else {
-				$questionChoiceRepository = $this->getEntityManager()->getRepository('Application\Model\QuestionChoice');
-				$questionChoice = $questionChoiceRepository->findOneById((int)$newChoice['id']);
-			}
-			$questionChoice->setQuestion($question);
-			$this->hydrator->hydrate( $newChoice, $questionChoice );
+            if(!isset($newChoice['id'])) {
+                $questionChoice = new QuestionChoice();
+                $this->getEntityManager()->persist($questionChoice);
+            } // if id exists -> update
+            else {
+                $questionChoiceRepository = $this->getEntityManager()->getRepository('Application\Model\QuestionChoice');
+                $questionChoice = $questionChoiceRepository->findOneById((int)$newChoice['id']);
+            }
+            $questionChoice->setQuestion($question);
+            $this->hydrator->hydrate($newChoice, $questionChoice);
             $i++;
-		}
+        }
 
         // no way to detect removed choices by looping on $newChoices
         // its necessary to loop on $actualChoices and detect which are no more in $newChoices
-        $actualChoices =  $question->getChoices();
-        if( sizeof($actualChoices) > 0){
-            foreach( $actualChoices as $choice){
-                $exist=false;
-                foreach($newChoices as $newChoice){
-                    if($newChoice['id'] == $choice->getId()){
+        $actualChoices = $question->getChoices();
+        if(sizeof($actualChoices) > 0) {
+            foreach ($actualChoices as $choice) {
+                $exist = false;
+                foreach ($newChoices as $newChoice) {
+                    if($newChoice['id'] == $choice->getId()) {
+
                         $exist = true;
                         break;
                     }
                 }
-                if(!$exist){
+
+
+                if(!$exist) {
+
                     $question->getChoices()->removeElement($choice);
                     \Application\Module::getEntityManager()->remove($choice);
                 }
             }
         }
 
-
-        //$this->getChoices()->add($questionChoice);
-		//$this->getEntityManager()->flush();
-	}
-
-
-
-
+    }
 
 
 
     /**
      * @param array $data
      *
-     * @return mixed|void|JsonModel
+     * @param callable $postAction
      * @throws \Exception
+     * @return mixed|void|JsonModel
      */
-    public function create($data)
+    public function create($data, \Closure $postAction=null)
     {
         // Get the last sorting value from question
-        if (empty($data['survey']) && (int)$data['survey'] > 0) {
+        if(empty($data['survey']) && (int)$data['survey'] > 0) {
             throw new \Exception('Missing or invalid survey value', 1368459230);
         }
 
@@ -237,7 +234,7 @@ class QuestionController extends AbstractRestfulController
         /** @var \Doctrine\Common\Collections\ArrayCollection $questions */
         $questions = $survey->getQuestions();
 
-        if ($questions->isEmpty()) {
+        if($questions->isEmpty()) {
             $data['sorting'] = 1;
         } else {
             /** @var Question $question */
@@ -250,24 +247,29 @@ class QuestionController extends AbstractRestfulController
         $dataKeys = array_keys($data);
 
         foreach ($properties as $propertyName) {
-            if (!in_array($propertyName, $dataKeys)) {
+            if(!in_array($propertyName, $dataKeys)) {
                 throw new \Exception('Missing property ' . $propertyName, 1368459231);
             }
         }
 
         // Update object or not...
-        if ($this->isAllowedSurvey($survey)) {
+
+        if($this->isAllowedSurvey($survey)) {
 
             // unset ['choices'] to preserve $data from hydrator and backup in a variable
-            $newChoices = $data['choices'];
-            unset($data['choices']);
-
+            $newChoices = null;
+            if(isset($data['choices']))
+            {
+                $newChoices = $data['choices'];
+                unset($data['choices']);
+            }
             $self = $this;
+            $result = parent::create($data, function (\Application\Model\Question $question)
+                                            use ($newChoices, $self) {
+                                                if($newChoices)
+                                                $self->setChoices($newChoices, $question);
+                                         });
 
-            $result = parent::create($data, function(\Application\Model\Question $question) use ($newChoices, $self){
-                                                    if ($newChoices)
-                                                        $self->setChoices($newChoices, $question);
-                                                });
 
         } else {
             $this->getResponse()->setStatusCode(401);
@@ -275,11 +277,6 @@ class QuestionController extends AbstractRestfulController
         }
         return $result;
     }
-
-
-
-
-
 
 
     /**

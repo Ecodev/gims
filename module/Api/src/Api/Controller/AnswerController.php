@@ -24,12 +24,14 @@ class AnswerController extends AbstractRestfulController
     }
 
     /**
-     * @param array $data
+     * @param array    $data
      *
-     * @return mixed|void|JsonModel
+     * @param callable $postAction
+     *
      * @throws \Exception
+     * @return mixed|void|JsonModel
      */
-    public function create($data)
+    public function create($data, \Closure $postAction = null)
     {
         // questionnaire value is mandatory
         if (empty($data['questionnaire'])) {
