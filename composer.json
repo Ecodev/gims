@@ -5,6 +5,10 @@
     "repositories": [{
             "type": "vcs",
             "url": "https://github.com/mwillbanks/ZfcTwitterBootstrap"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/PowerKiKi/PHPExcel"
         }
     ],
     "require": {
