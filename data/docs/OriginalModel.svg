@@ -1,0 +1,2171 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="1841.8191"
+   version="1.1"
+   width="2296.3784"
+   id="svg3689"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="GimsModel.svg">
+  <metadata
+     id="metadata4353">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs4351" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1600"
+     inkscape:window-height="845"
+     id="namedview4349"
+     showgrid="false"
+     inkscape:zoom="0.39519906"
+     inkscape:cx="1606.5892"
+     inkscape:cy="1000.1593"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3689"
+     fit-margin-top="20"
+     fit-margin-left="20"
+     fit-margin-right="20"
+     fit-margin-bottom="20" />
+  <rect
+     height="152"
+     width="264"
+     x="340.87851"
+     y="613.31915"
+     id="rect3691"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="152"
+     width="264"
+     x="340.87851"
+     y="613.31915"
+     id="rect3693"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="427.87851"
+     y="627.31915"
+     id="text3695"
+     style="font-size:13px;font-family:Dialog">Questionnaire</text>
+  <rect
+     height="1"
+     width="264"
+     x="340.87851"
+     y="638.31915"
+     id="rect3697"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="344.87851"
+     y="653.31915"
+     id="text3699"
+     style="font-size:13px;font-family:Dialog">observationYear : AnswerStatus</text>
+  <text
+     font-size="13"
+     x="344.87851"
+     y="671.31915"
+     id="text3701"
+     style="font-size:13px;font-family:Dialog">observationMonth : Integer</text>
+  <text
+     font-size="13"
+     x="344.87851"
+     y="689.31915"
+     id="text3703"
+     style="font-size:13px;font-family:Dialog">observationDay : Integer</text>
+  <text
+     font-size="13"
+     x="344.87851"
+     y="707.31915"
+     id="text3705"
+     style="font-size:13px;font-family:Dialog">observationTime : Time</text>
+  <rect
+     height="1"
+     width="264"
+     x="340.87851"
+     y="730.31915"
+     id="rect3707"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     height="122"
+     width="200"
+     x="268.87854"
+     y="357.31915"
+     id="rect3709"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="122"
+     width="200"
+     x="268.87854"
+     y="357.31915"
+     id="rect3711"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="346.87851"
+     y="371.31915"
+     id="text3713"
+     style="font-size:13px;font-family:Dialog">Survey</text>
+  <rect
+     height="1"
+     width="200"
+     x="268.87854"
+     y="382.31915"
+     id="rect3715"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="272.87854"
+     y="397.31915"
+     id="text3717"
+     style="font-size:13px;font-family:Dialog">year : Integer</text>
+  <text
+     font-size="13"
+     x="272.87854"
+     y="415.31915"
+     id="text3719"
+     style="font-size:13px;font-family:Dialog">name : String</text>
+  <text
+     font-size="13"
+     x="272.87854"
+     y="433.31915"
+     id="text3721"
+     style="font-size:13px;font-family:Dialog">active : Boolean</text>
+  <rect
+     height="1"
+     width="200"
+     x="268.87854"
+     y="450.31915"
+     id="rect3723"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     height="184"
+     width="248"
+     x="644.87854"
+     y="381.31915"
+     id="rect3725"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="184"
+     width="248"
+     x="644.87854"
+     y="381.31915"
+     id="rect3727"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="739.87854"
+     y="395.31915"
+     id="text3729"
+     style="font-size:13px;font-family:Dialog">Question</text>
+  <rect
+     height="1"
+     width="248"
+     x="644.87854"
+     y="406.31915"
+     id="rect3731"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="648.87854"
+     y="421.31915"
+     id="text3733"
+     style="font-size:13px;font-family:Dialog">name : String</text>
+  <text
+     font-size="13"
+     x="648.87854"
+     y="439.31915"
+     id="text3735"
+     style="font-size:13px;font-family:Dialog">type : QuestionType</text>
+  <text
+     font-size="13"
+     x="648.87854"
+     y="457.31915"
+     id="text3737"
+     style="font-size:13px;font-family:Dialog">officialQuestion : Question</text>
+  <text
+     font-size="13"
+     x="648.87854"
+     y="475.31915"
+     id="text3739"
+     style="font-size:13px;font-family:Dialog">parent : Question</text>
+  <rect
+     height="1"
+     width="248"
+     x="644.87854"
+     y="514.31915"
+     id="rect3741"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     height="184"
+     width="160"
+     x="972.87854"
+     y="565.31915"
+     id="rect3743"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="184"
+     width="160"
+     x="972.87854"
+     y="565.31915"
+     id="rect3745"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1008.8785"
+     y="600.31915"
+     id="text3747"
+     style="font-size:13px;font-family:Dialog">QuestionType</text>
+  <text
+     font-size="13"
+     x="989.87854"
+     y="580.31915"
+     id="text3749"
+     style="font-size:13px;font-family:Dialog">&lt;&lt;enumeration&gt;&gt;</text>
+  <rect
+     height="1"
+     width="160"
+     x="972.87854"
+     y="611.31915"
+     id="rect3751"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="976.87854"
+     y="626.31915"
+     id="text3753"
+     style="font-size:13px;font-family:Dialog">numeric</text>
+  <text
+     font-size="13"
+     x="976.87854"
+     y="644.31915"
+     id="text3755"
+     style="font-size:13px;font-family:Dialog">choice</text>
+  <text
+     font-size="13"
+     x="976.87854"
+     y="662.31915"
+     id="text3757"
+     style="font-size:13px;font-family:Dialog">textual</text>
+  <text
+     font-size="13"
+     x="976.87854"
+     y="680.31915"
+     id="text3759"
+     style="font-size:13px;font-family:Dialog">user</text>
+  <text
+     font-size="13"
+     x="976.87854"
+     y="698.31915"
+     id="text3761"
+     style="font-size:13px;font-family:Dialog">chapter</text>
+  <text
+     font-size="13"
+     x="976.87854"
+     y="716.31915"
+     id="text3763"
+     style="font-size:13px;font-family:Dialog">organisation</text>
+  <rect
+     height="1"
+     width="160"
+     x="972.87854"
+     y="727.31915"
+     id="rect3765"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     height="253"
+     width="288"
+     x="444.87851"
+     y="885.31915"
+     id="rect3767"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="253"
+     width="288"
+     x="444.87851"
+     y="885.31915"
+     id="rect3769"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="565.87854"
+     y="899.31915"
+     id="text3771"
+     style="font-size:13px;font-family:Dialog">Answer</text>
+  <rect
+     height="1"
+     width="288"
+     x="444.87851"
+     y="910.31915"
+     id="rect3773"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="448.87851"
+     y="925.31921"
+     id="text3775"
+     style="font-size:13px;font-family:Dialog">valueAbsolute : Float</text>
+  <text
+     font-size="13"
+     x="448.87851"
+     y="943.31921"
+     id="text3777"
+     style="font-size:13px;font-family:Dialog">valuePercent : Decimal</text>
+  <text
+     font-size="13"
+     x="448.87851"
+     y="961.31909"
+     id="text3779"
+     style="font-size:13px;font-family:Dialog">valueTextual : String</text>
+  <text
+     font-size="13"
+     x="448.87851"
+     y="979.31909"
+     id="text3781"
+     style="font-size:13px;font-family:Dialog">choice : Integer</text>
+  <text
+     font-size="13"
+     x="448.87851"
+     y="997.31909"
+     id="text3783"
+     style="font-size:13px;font-family:Dialog">quality : Decimal</text>
+  <text
+     font-size="13"
+     x="448.87851"
+     y="1015.3191"
+     id="text3785"
+     style="font-size:13px;font-family:Dialog">relevance : Decimal</text>
+  <text
+     font-size="13"
+     x="448.87851"
+     y="1033.3192"
+     id="text3787"
+     style="font-size:13px;font-family:Dialog">source : String</text>
+  <text
+     font-size="13"
+     x="448.87851"
+     y="1051.3191"
+     id="text3789"
+     style="font-size:13px;font-family:Dialog">public : Boolean</text>
+  <text
+     font-size="13"
+     x="448.87851"
+     y="1069.3191"
+     id="text3791"
+     style="font-size:13px;font-family:Dialog">validated : Boolean</text>
+  <text
+     font-size="13"
+     x="448.87851"
+     y="1087.3191"
+     id="text3793"
+     style="font-size:13px;font-family:Dialog">valuePerson : User</text>
+  <text
+     font-size="13"
+     x="448.87851"
+     y="1105.3191"
+     id="text3795"
+     style="font-size:13px;font-family:Dialog">status : AnswerStatus</text>
+  <rect
+     height="1"
+     width="288"
+     x="444.87851"
+     y="1116.3191"
+     id="rect3797"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <polyline
+     points="502,758 502,637"
+     id="polyline3799"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="377.87851"
+     y="830.31915"
+     id="text3801"
+     style="font-size:13px;font-family:Dialog">answerOfQuestionnaire</text>
+  <text
+     font-size="13"
+     x="530.87854"
+     y="856.31915"
+     id="text3803"
+     style="font-size:13px;font-family:Dialog">*</text>
+  <text
+     font-size="13"
+     x="530.87854"
+     y="783.31915"
+     id="text3805"
+     style="font-size:13px;font-family:Dialog">1</text>
+  <polyline
+     points="678,758 678,437"
+     id="polyline3807"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="637.87854"
+     y="787.31915"
+     id="text3809"
+     style="font-size:13px;font-family:Dialog">answerToQuestion</text>
+  <text
+     font-size="13"
+     x="706.87854"
+     y="856.31915"
+     id="text3811"
+     style="font-size:13px;font-family:Dialog">*</text>
+  <text
+     font-size="13"
+     x="706.87854"
+     y="583.31915"
+     id="text3813"
+     style="font-size:13px;font-family:Dialog">1</text>
+  <polyline
+     points="334,351 334,486"
+     id="polyline3815"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="356.87851"
+     y="550.31915"
+     id="text3817"
+     style="font-size:13px;font-family:Dialog">questionnaireOfSurvey</text>
+  <text
+     font-size="13"
+     x="361.87851"
+     y="504.31915"
+     id="text3819"
+     style="font-size:13px;font-family:Dialog">1</text>
+  <text
+     font-size="13"
+     x="361.87851"
+     y="596.31915"
+     id="text3821"
+     style="font-size:13px;font-family:Dialog">1</text>
+  <rect
+     height="144"
+     width="192"
+     x="924.87854"
+     y="797.31915"
+     id="rect3823"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="144"
+     width="192"
+     x="924.87854"
+     y="797.31915"
+     id="rect3825"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="970.87854"
+     y="811.31915"
+     id="text3827"
+     style="font-size:13px;font-family:Dialog">QuestionChoice</text>
+  <rect
+     height="1"
+     width="192"
+     x="924.87854"
+     y="822.31915"
+     id="rect3829"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="928.87854"
+     y="837.31915"
+     id="text3831"
+     style="font-size:13px;font-family:Dialog">name : Integer</text>
+  <text
+     font-size="13"
+     x="928.87854"
+     y="855.31915"
+     id="text3833"
+     style="font-size:13px;font-family:Dialog">value : Decimal</text>
+  <rect
+     height="1"
+     width="192"
+     x="924.87854"
+     y="892.31915"
+     id="rect3835"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <polyline
+     points="877,437 910,670"
+     id="polyline3837"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="787.87854"
+     y="691.31915"
+     id="text3839"
+     style="font-size:13px;font-family:Dialog">choicesOfQuestion</text>
+  <text
+     font-size="13"
+     x="908.87854"
+     y="589.31915"
+     id="text3841"
+     style="font-size:13px;font-family:Dialog">1</text>
+  <text
+     font-size="13"
+     x="837.87854"
+     y="598.31915"
+     id="text3843"
+     style="font-size:13px;font-family:Dialog">question</text>
+  <text
+     font-size="13"
+     x="927.87854"
+     y="776.31915"
+     id="text3845"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="875.87854"
+     y="769.31915"
+     id="text3847"
+     style="font-size:13px;font-family:Dialog">choice</text>
+  <rect
+     height="144"
+     width="181"
+     x="1172.8785"
+     y="477.31915"
+     id="rect3849"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="144"
+     width="181"
+     x="1172.8785"
+     y="477.31915"
+     id="rect3851"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1233.8785"
+     y="491.31915"
+     id="text3853"
+     style="font-size:13px;font-family:Dialog">Category</text>
+  <rect
+     height="1"
+     width="181"
+     x="1172.8785"
+     y="502.31915"
+     id="rect3855"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1176.8785"
+     y="517.31915"
+     id="text3857"
+     style="font-size:13px;font-family:Dialog">name : String</text>
+  <text
+     font-size="13"
+     x="1176.8785"
+     y="535.31915"
+     id="text3859"
+     style="font-size:13px;font-family:Dialog">parentCategory : Category</text>
+  <text
+     font-size="13"
+     x="1176.8785"
+     y="553.31915"
+     id="text3861"
+     style="font-size:13px;font-family:Dialog">officialCategory : Category</text>
+  <rect
+     height="1"
+     width="181"
+     x="1172.8785"
+     y="581.31915"
+     id="rect3863"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <polyline
+     points="877,389 1158,389"
+     id="polyline3865"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="968.87854"
+     y="496.31915"
+     id="text3867"
+     style="font-size:13px;font-family:Dialog">categoryOfQuestion</text>
+  <text
+     font-size="13"
+     x="900.87854"
+     y="509.31915"
+     id="text3869"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="906.87854"
+     y="531.31915"
+     id="text3871"
+     style="font-size:13px;font-family:Dialog">question</text>
+  <text
+     font-size="13"
+     x="1143.8785"
+     y="509.31915"
+     id="text3873"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="1107.8785"
+     y="532.31915"
+     id="text3875"
+     style="font-size:13px;font-family:Dialog">category</text>
+  <rect
+     height="160"
+     width="168"
+     x="556.87854"
+     y="1421.3191"
+     id="rect3877"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="160"
+     width="168"
+     x="556.87854"
+     y="1421.3191"
+     id="rect3879"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="625.87854"
+     y="1435.3191"
+     id="text3881"
+     style="font-size:13px;font-family:Dialog">User</text>
+  <rect
+     height="1"
+     width="168"
+     x="556.87854"
+     y="1446.3191"
+     id="rect3883"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="560.87854"
+     y="1461.3191"
+     id="text3885"
+     style="font-size:13px;font-family:Dialog">email : String</text>
+  <text
+     font-size="13"
+     x="560.87854"
+     y="1479.3191"
+     id="text3887"
+     style="font-size:13px;font-family:Dialog">name : String</text>
+  <text
+     font-size="13"
+     x="560.87854"
+     y="1497.3191"
+     id="text3889"
+     style="font-size:13px;font-family:Dialog">type : String</text>
+  <rect
+     height="1"
+     width="168"
+     x="556.87854"
+     y="1531.3191"
+     id="rect3891"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="560.87854"
+     y="1546.3191"
+     id="text3893"
+     style="font-size:13px;font-family:Dialog">notify()</text>
+  <polyline
+     points="717,813 910,813"
+     id="polyline3895"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="777.87854"
+     y="920.31921"
+     id="text3897"
+     style="font-size:13px;font-family:Dialog">choiceOfAnswer</text>
+  <text
+     font-size="13"
+     x="736.87854"
+     y="933.31921"
+     id="text3899"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="739.87854"
+     y="955.31909"
+     id="text3901"
+     style="font-size:13px;font-family:Dialog">answer</text>
+  <text
+     font-size="13"
+     x="895.87854"
+     y="933.31921"
+     id="text3903"
+     style="font-size:13px;font-family:Dialog">0..1</text>
+  <text
+     font-size="13"
+     x="877.87854"
+     y="955.31909"
+     id="text3905"
+     style="font-size:13px;font-family:Dialog">choice</text>
+  <rect
+     height="144"
+     width="168"
+     x="644.87854"
+     y="1677.3191"
+     id="rect3907"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="144"
+     width="168"
+     x="644.87854"
+     y="1677.3191"
+     id="rect3909"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="693.87854"
+     y="1691.3191"
+     id="text3911"
+     style="font-size:13px;font-family:Dialog">UserGroup</text>
+  <rect
+     height="1"
+     width="168"
+     x="644.87854"
+     y="1702.3191"
+     id="rect3913"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="648.87854"
+     y="1717.3191"
+     id="text3915"
+     style="font-size:13px;font-family:Dialog">name : String</text>
+  <rect
+     height="1"
+     width="168"
+     x="644.87854"
+     y="1763.3191"
+     id="rect3917"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <polyline
+     points="693,1550 693,1453"
+     id="polyline3919"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="713.87854"
+     y="1648.3191"
+     id="text3921"
+     style="font-size:13px;font-family:Dialog">1..*</text>
+  <text
+     font-size="13"
+     x="713.87854"
+     y="1599.3191"
+     id="text3923"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <rect
+     height="256"
+     width="216"
+     x="1052.8785"
+     y="1461.3191"
+     id="rect3925"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="256"
+     width="216"
+     x="1052.8785"
+     y="1461.3191"
+     id="rect3927"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1146.8785"
+     y="1475.3191"
+     id="text3929"
+     style="font-size:13px;font-family:Dialog">Role</text>
+  <rect
+     height="1"
+     width="216"
+     x="1052.8785"
+     y="1486.3191"
+     id="rect3931"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1056.8785"
+     y="1501.3191"
+     id="text3933"
+     style="font-size:13px;font-family:Dialog">canEdit : Boolean</text>
+  <text
+     font-size="13"
+     x="1056.8785"
+     y="1519.3191"
+     id="text3935"
+     style="font-size:13px;font-family:Dialog">canCreate : Boolean</text>
+  <text
+     font-size="13"
+     x="1056.8785"
+     y="1537.3191"
+     id="text3937"
+     style="font-size:13px;font-family:Dialog">canDelete : Boolean</text>
+  <text
+     font-size="13"
+     x="1056.8785"
+     y="1555.3191"
+     id="text3939"
+     style="font-size:13px;font-family:Dialog">ressourceID : Integer</text>
+  <text
+     font-size="13"
+     x="1056.8785"
+     y="1573.3191"
+     id="text3941"
+     style="font-size:13px;font-family:Dialog">ressourceType : String</text>
+  <text
+     font-size="13"
+     x="1056.8785"
+     y="1591.3191"
+     id="text3943"
+     style="font-size:13px;font-family:Dialog">canValidate : Boolean</text>
+  <text
+     font-size="13"
+     x="1056.8785"
+     y="1609.3191"
+     id="text3945"
+     style="font-size:13px;font-family:Dialog">canComment : Boolean</text>
+  <text
+     font-size="13"
+     x="1056.8785"
+     y="1627.3191"
+     id="text3947"
+     style="font-size:13px;font-family:Dialog">canView : Boolean</text>
+  <rect
+     height="1"
+     width="216"
+     x="1052.8785"
+     y="1666.3191"
+     id="rect3949"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <polyline
+     points="709,1350 1038,1350"
+     id="polyline3951"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="843.87854"
+     y="1465.3191"
+     id="text3953"
+     style="font-size:13px;font-family:Dialog">roleOfUser</text>
+  <text
+     font-size="13"
+     x="735.87854"
+     y="1471.3191"
+     id="text3955"
+     style="font-size:13px;font-family:Dialog">0..1</text>
+  <text
+     font-size="13"
+     x="733.87854"
+     y="1492.3191"
+     id="text3957"
+     style="font-size:13px;font-family:Dialog">user</text>
+  <text
+     font-size="13"
+     x="1017.8785"
+     y="1470.3191"
+     id="text3959"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="1014.8785"
+     y="1492.3191"
+     id="text3961"
+     style="font-size:13px;font-family:Dialog">role</text>
+  <polyline
+     points="797,1581 1038,1581"
+     id="polyline3963"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="887.87854"
+     y="1694.3191"
+     id="text3965"
+     style="font-size:13px;font-family:Dialog">roleOfGroup</text>
+  <text
+     font-size="13"
+     x="822.87854"
+     y="1702.3191"
+     id="text3967"
+     style="font-size:13px;font-family:Dialog">0..1</text>
+  <text
+     font-size="13"
+     x="818.87854"
+     y="1723.3191"
+     id="text3969"
+     style="font-size:13px;font-family:Dialog">group</text>
+  <text
+     font-size="13"
+     x="1023.8785"
+     y="1701.3191"
+     id="text3971"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="1014.8785"
+     y="1723.3191"
+     id="text3973"
+     style="font-size:13px;font-family:Dialog">role</text>
+  <rect
+     height="160"
+     width="216"
+     x="140.87851"
+     y="997.31909"
+     id="rect3975"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="160"
+     width="216"
+     x="140.87851"
+     y="997.31909"
+     id="rect3977"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="220.87852"
+     y="1011.3191"
+     id="text3979"
+     style="font-size:13px;font-family:Dialog">Workflow</text>
+  <rect
+     height="1"
+     width="216"
+     x="140.87851"
+     y="1022.3192"
+     id="rect3981"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="144.87851"
+     y="1037.3192"
+     id="text3983"
+     style="font-size:13px;font-family:Dialog">name : String</text>
+  <text
+     font-size="13"
+     x="144.87851"
+     y="1055.3191"
+     id="text3985"
+     style="font-size:13px;font-family:Dialog">before : AnswerStatus</text>
+  <text
+     font-size="13"
+     x="144.87851"
+     y="1073.3191"
+     id="text3987"
+     style="font-size:13px;font-family:Dialog">after : AnswerStatus</text>
+  <rect
+     height="1"
+     width="216"
+     x="140.87851"
+     y="1109.3191"
+     id="rect3989"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     height="88"
+     width="200"
+     x="1004.8785"
+     y="293.31915"
+     id="rect3991"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="88"
+     width="200"
+     x="1004.8785"
+     y="293.31915"
+     id="rect3993"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1022.8785"
+     y="307.31915"
+     id="text3995"
+     style="font-size:13px;font-family:Dialog">CategoryFilterComponent</text>
+  <rect
+     height="1"
+     width="200"
+     x="1004.8785"
+     y="318.31915"
+     id="rect3997"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1008.8785"
+     y="333.31915"
+     id="text3999"
+     style="font-size:13px;font-family:Dialog">name : String</text>
+  <rect
+     height="1"
+     width="200"
+     x="1004.8785"
+     y="351.31915"
+     id="rect4001"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <polyline
+     points="1158,350 1158,253"
+     id="polyline4003"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="1143.8785"
+     y="460.31915"
+     id="text4005"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="1143.8785"
+     y="407.31915"
+     id="text4007"
+     style="font-size:13px;font-family:Dialog">1..*</text>
+  <rect
+     height="144"
+     width="112"
+     x="644.87854"
+     y="165.31914"
+     id="rect4009"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="144"
+     width="112"
+     x="644.87854"
+     y="165.31914"
+     id="rect4011"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="684.87854"
+     y="179.31915"
+     id="text4013"
+     style="font-size:13px;font-family:Dialog">Filter</text>
+  <rect
+     height="1"
+     width="112"
+     x="644.87854"
+     y="190.31915"
+     id="rect4015"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="648.87854"
+     y="205.31915"
+     id="text4017"
+     style="font-size:13px;font-family:Dialog">name : String</text>
+  <rect
+     height="1"
+     width="112"
+     x="644.87854"
+     y="251.31915"
+     id="rect4019"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <polyline
+     points="990,167 741,167"
+     id="polyline4021"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="975.87854"
+     y="287.31915"
+     id="text4023"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="760.87854"
+     y="287.31915"
+     id="text4025"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <rect
+     height="91"
+     width="176"
+     x="1004.8785"
+     y="141.31914"
+     id="rect4027"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="91"
+     width="176"
+     x="1004.8785"
+     y="141.31914"
+     id="rect4029"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1023.8785"
+     y="155.31914"
+     id="text4031"
+     style="font-size:13px;font-family:Dialog">TimeFilterComponent</text>
+  <rect
+     height="1"
+     width="176"
+     x="1004.8785"
+     y="166.31914"
+     id="rect4033"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1008.8785"
+     y="181.31915"
+     id="text4035"
+     style="font-size:13px;font-family:Dialog">timeBegin : Date</text>
+  <text
+     font-size="13"
+     x="1008.8785"
+     y="199.31915"
+     id="text4037"
+     style="font-size:13px;font-family:Dialog">timeEnd : Date</text>
+  <rect
+     height="1"
+     width="176"
+     x="1004.8785"
+     y="210.31915"
+     id="rect4039"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     height="104"
+     width="192"
+     x="284.87851"
+     y="189.31915"
+     id="rect4041"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="104"
+     width="192"
+     x="284.87851"
+     y="189.31915"
+     id="rect4043"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="305.87851"
+     y="203.31915"
+     id="text4045"
+     style="font-size:13px;font-family:Dialog">RegionFilterComponent</text>
+  <rect
+     height="1"
+     width="192"
+     x="284.87851"
+     y="214.31915"
+     id="rect4047"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="288.87851"
+     y="229.31915"
+     id="text4049"
+     style="font-size:13px;font-family:Dialog">newAttr : Integer</text>
+  <rect
+     height="1"
+     width="192"
+     x="284.87851"
+     y="255.31915"
+     id="rect4051"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <polyline
+     points="990,79 741,79"
+     id="polyline4053"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="975.87854"
+     y="199.31915"
+     id="text4055"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="760.87854"
+     y="199.31915"
+     id="text4057"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <polyline
+     points="461,86 630,86"
+     id="polyline4059"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="480.87851"
+     y="206.31915"
+     id="text4061"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="606.87854"
+     y="228.31915"
+     id="text4063"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <polygon
+     points="2261,1269 1526,1269 1526,886 1526,886 2251,886 2261,896 "
+     id="polygon4065"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <polyline
+     points="1526,886 2251,886 2261,896 2261,1269 1526,1269 1526,886"
+     id="polyline4067"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <polygon
+     points="2261,896 2251,896 2251,886 2251,886 "
+     id="polygon4069"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <polyline
+     points="2251,886 2261,896 2251,896 2251,886"
+     id="polyline4071"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="1543.8785"
+     y="1029.3192"
+     id="text4073"
+     style="font-size:13px;font-family:Dialog">Every single table will have mandatory fields:</text>
+  <text
+     font-size="13"
+     x="1543.8785"
+     y="1046.3191"
+     id="text4075"
+     style="font-size:13px;font-family:Dialog">* creation time</text>
+  <text
+     font-size="13"
+     x="1543.8785"
+     y="1063.3191"
+     id="text4077"
+     style="font-size:13px;font-family:Dialog">* modification time</text>
+  <text
+     font-size="13"
+     x="1543.8785"
+     y="1080.3191"
+     id="text4079"
+     style="font-size:13px;font-family:Dialog">* creator</text>
+  <text
+     font-size="13"
+     x="1543.8785"
+     y="1097.3191"
+     id="text4081"
+     style="font-size:13px;font-family:Dialog">* modificator</text>
+  <text
+     font-size="13"
+     x="1543.8785"
+     y="1131.3191"
+     id="text4083"
+     style="font-size:13px;font-family:Dialog">La fonctionnalité de journal est à compléter pour une version future.</text>
+  <text
+     font-size="13"
+     x="1543.8785"
+     y="1148.3191"
+     id="text4085"
+     style="font-size:13px;font-family:Dialog">Elle est présente sur ce diagramme juste pour pas l'oublier</text>
+  <text
+     font-size="13"
+     x="1543.8785"
+     y="1182.3191"
+     id="text4087"
+     style="font-size:13px;font-family:Dialog">Comment gérer la visibilité des filtres pour les users pour éviter des noyer sous des tonnes de filtres ?</text>
+  <text
+     font-size="13"
+     x="1543.8785"
+     y="1216.3191"
+     id="text4089"
+     style="font-size:13px;font-family:Dialog">Comment gérer les calculs intermédiaire dépendant des survey, par exemple JMP ?aaa</text>
+  <rect
+     height="192"
+     width="216"
+     x="948.87854"
+     y="1069.3191"
+     id="rect4091"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="192"
+     width="216"
+     x="948.87854"
+     y="1069.3191"
+     id="rect4093"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1039.8784"
+     y="1083.3191"
+     id="text4095"
+     style="font-size:13px;font-family:Dialog">Issue</text>
+  <rect
+     height="1"
+     width="216"
+     x="948.87854"
+     y="1094.3191"
+     id="rect4097"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="952.87854"
+     y="1109.3191"
+     id="text4099"
+     style="font-size:13px;font-family:Dialog">name : String</text>
+  <text
+     font-size="13"
+     x="952.87854"
+     y="1127.3191"
+     id="text4101"
+     style="font-size:13px;font-family:Dialog">description : String</text>
+  <text
+     font-size="13"
+     x="952.87854"
+     y="1145.3191"
+     id="text4103"
+     style="font-size:13px;font-family:Dialog">status : IssueStatus</text>
+  <rect
+     height="1"
+     width="216"
+     x="948.87854"
+     y="1197.3191"
+     id="rect4105"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <polyline
+     points="717,990 934,990"
+     id="polyline4107"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="788.87854"
+     y="1097.3191"
+     id="text4109"
+     style="font-size:13px;font-family:Dialog">answerHasIssue</text>
+  <text
+     font-size="13"
+     x="744.87854"
+     y="1110.3191"
+     id="text4111"
+     style="font-size:13px;font-family:Dialog">1</text>
+  <text
+     font-size="13"
+     x="739.87854"
+     y="1132.3191"
+     id="text4113"
+     style="font-size:13px;font-family:Dialog">answer</text>
+  <text
+     font-size="13"
+     x="919.87854"
+     y="1110.3191"
+     id="text4115"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="907.87854"
+     y="1132.3191"
+     id="text4117"
+     style="font-size:13px;font-family:Dialog">issue</text>
+  <rect
+     height="192"
+     width="152"
+     x="1284.8785"
+     y="1133.3191"
+     id="rect4119"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="192"
+     width="152"
+     x="1284.8785"
+     y="1133.3191"
+     id="rect4121"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1322.8785"
+     y="1168.3191"
+     id="text4123"
+     style="font-size:13px;font-family:Dialog">IssueStatus</text>
+  <text
+     font-size="13"
+     x="1297.8785"
+     y="1148.3191"
+     id="text4125"
+     style="font-size:13px;font-family:Dialog">&lt;&lt;enumeration&gt;&gt;</text>
+  <rect
+     height="1"
+     width="152"
+     x="1284.8785"
+     y="1179.3191"
+     id="rect4127"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1288.8785"
+     y="1194.3191"
+     id="text4129"
+     style="font-size:13px;font-family:Dialog">new</text>
+  <text
+     font-size="13"
+     x="1288.8785"
+     y="1212.3191"
+     id="text4131"
+     style="font-size:13px;font-family:Dialog">accepted</text>
+  <text
+     font-size="13"
+     x="1288.8785"
+     y="1230.3191"
+     id="text4133"
+     style="font-size:13px;font-family:Dialog">resolved</text>
+  <text
+     font-size="13"
+     x="1288.8785"
+     y="1248.3191"
+     id="text4135"
+     style="font-size:13px;font-family:Dialog">rejected</text>
+  <rect
+     height="1"
+     width="152"
+     x="1284.8785"
+     y="1281.3191"
+     id="rect4137"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     height="264"
+     width="256"
+     x="1956.8785"
+     y="677.31915"
+     id="rect4139"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="264"
+     width="256"
+     x="1956.8785"
+     y="677.31915"
+     id="rect4141"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="2062.8784"
+     y="691.31915"
+     id="text4143"
+     style="font-size:13px;font-family:Dialog">Journal</text>
+  <rect
+     height="1"
+     width="256"
+     x="1956.8785"
+     y="702.31915"
+     id="rect4145"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1960.8785"
+     y="717.31915"
+     id="text4147"
+     style="font-size:13px;font-family:Dialog">user : User</text>
+  <text
+     font-size="13"
+     x="1960.8785"
+     y="735.31915"
+     id="text4149"
+     style="font-size:13px;font-family:Dialog">before : String</text>
+  <text
+     font-size="13"
+     x="1960.8785"
+     y="753.31915"
+     id="text4151"
+     style="font-size:13px;font-family:Dialog">after : String</text>
+  <text
+     font-size="13"
+     x="1960.8785"
+     y="771.31915"
+     id="text4153"
+     style="font-size:13px;font-family:Dialog">recordType : String</text>
+  <rect
+     height="1"
+     width="256"
+     x="1956.8785"
+     y="850.31915"
+     id="rect4155"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     height="136"
+     width="208"
+     x="220.87852"
+     y="1477.3191"
+     id="rect4157"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="136"
+     width="208"
+     x="220.87852"
+     y="1477.3191"
+     id="rect4159"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="273.87854"
+     y="1491.3191"
+     id="text4161"
+     style="font-size:13px;font-family:Dialog">Communication</text>
+  <rect
+     height="1"
+     width="208"
+     x="220.87852"
+     y="1502.3191"
+     id="rect4163"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="224.87852"
+     y="1517.3191"
+     id="text4165"
+     style="font-size:13px;font-family:Dialog">type : CommunicationType</text>
+  <text
+     font-size="13"
+     x="224.87852"
+     y="1535.3191"
+     id="text4167"
+     style="font-size:13px;font-family:Dialog">name : String</text>
+  <text
+     font-size="13"
+     x="224.87852"
+     y="1553.3191"
+     id="text4169"
+     style="font-size:13px;font-family:Dialog">value : String</text>
+  <rect
+     height="1"
+     width="208"
+     x="220.87852"
+     y="1577.3191"
+     id="rect4171"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     height="152"
+     width="160"
+     x="244.87852"
+     y="1661.3191"
+     id="rect4173"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="152"
+     width="160"
+     x="244.87852"
+     y="1661.3191"
+     id="rect4175"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="258.87854"
+     y="1696.3191"
+     id="text4177"
+     style="font-size:13px;font-family:Dialog">CommunicationType</text>
+  <text
+     font-size="13"
+     x="261.87854"
+     y="1676.3191"
+     id="text4179"
+     style="font-size:13px;font-family:Dialog">&lt;&lt;enumeration&gt;&gt;</text>
+  <rect
+     height="1"
+     width="160"
+     x="244.87852"
+     y="1707.3191"
+     id="rect4181"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="248.87852"
+     y="1722.3191"
+     id="text4183"
+     style="font-size:13px;font-family:Dialog">email</text>
+  <text
+     font-size="13"
+     x="248.87852"
+     y="1740.3191"
+     id="text4185"
+     style="font-size:13px;font-family:Dialog">phone</text>
+  <text
+     font-size="13"
+     x="248.87852"
+     y="1758.3191"
+     id="text4187"
+     style="font-size:13px;font-family:Dialog">address</text>
+  <text
+     font-size="13"
+     x="248.87852"
+     y="1776.3191"
+     id="text4189"
+     style="font-size:13px;font-family:Dialog">url</text>
+  <rect
+     height="1"
+     width="160"
+     x="244.87852"
+     y="1789.3191"
+     id="rect4191"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <polyline
+     points="413,1429 542,1429"
+     id="polyline4193"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="439.87851"
+     y="1550.3191"
+     id="text4195"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="527.87854"
+     y="1550.3191"
+     id="text4197"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <rect
+     height="184"
+     width="272"
+     x="1212.8785"
+     y="845.31915"
+     id="rect4199"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="184"
+     width="272"
+     x="1212.8785"
+     y="845.31915"
+     id="rect4201"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1332.8785"
+     y="859.31915"
+     id="text4203"
+     style="font-size:13px;font-family:Dialog">Note</text>
+  <rect
+     height="1"
+     width="272"
+     x="1212.8785"
+     y="870.31915"
+     id="rect4205"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1216.8785"
+     y="885.31915"
+     id="text4207"
+     style="font-size:13px;font-family:Dialog">description : String</text>
+  <text
+     font-size="13"
+     x="1216.8785"
+     y="903.31915"
+     id="text4209"
+     style="font-size:13px;font-family:Dialog">attachmentPath : String</text>
+  <text
+     font-size="13"
+     x="1216.8785"
+     y="921.31921"
+     id="text4211"
+     style="font-size:13px;font-family:Dialog">attachmentType : AttachmentType</text>
+  <rect
+     height="1"
+     width="272"
+     x="1212.8785"
+     y="969.31909"
+     id="rect4213"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <rect
+     height="112"
+     width="168"
+     x="1580.8785"
+     y="805.31915"
+     id="rect4215"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="112"
+     width="168"
+     x="1580.8785"
+     y="805.31915"
+     id="rect4217"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1611.8785"
+     y="840.31915"
+     id="text4219"
+     style="font-size:13px;font-family:Dialog">AttachmentType</text>
+  <text
+     font-size="13"
+     x="1601.8785"
+     y="820.31915"
+     id="text4221"
+     style="font-size:13px;font-family:Dialog">&lt;&lt;enumeration&gt;&gt;</text>
+  <rect
+     height="1"
+     width="168"
+     x="1580.8785"
+     y="851.31915"
+     id="rect4223"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="1584.8785"
+     y="866.31915"
+     id="text4225"
+     style="font-size:13px;font-family:Dialog">image</text>
+  <text
+     font-size="13"
+     x="1584.8785"
+     y="884.31915"
+     id="text4227"
+     style="font-size:13px;font-family:Dialog">document</text>
+  <rect
+     height="1"
+     width="168"
+     x="1580.8785"
+     y="895.31915"
+     id="rect4229"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <polyline
+     points="1198,877 717,877"
+     id="polyline4231"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="1183.8785"
+     y="997.31909"
+     id="text4233"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="736.87854"
+     y="997.31909"
+     id="text4235"
+     style="font-size:13px;font-family:Dialog">0..1</text>
+  <polyline
+     points="1270,718 1270,493"
+     id="polyline4237"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="1255.8785"
+     y="828.31915"
+     id="text4239"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="1255.8785"
+     y="647.31915"
+     id="text4241"
+     style="font-size:13px;font-family:Dialog">0..1</text>
+  <rect
+     height="176"
+     width="160"
+     x="28.878517"
+     y="341.31915"
+     id="rect4243"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="176"
+     width="160"
+     x="28.878517"
+     y="341.31915"
+     id="rect4245"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="76.878517"
+     y="355.31915"
+     id="text4247"
+     style="font-size:13px;font-family:Dialog">Geoname</text>
+  <rect
+     height="1"
+     width="160"
+     x="28.878517"
+     y="366.31915"
+     id="rect4249"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="32.878517"
+     y="381.31915"
+     id="text4251"
+     style="font-size:13px;font-family:Dialog">id : integer</text>
+  <text
+     font-size="13"
+     x="32.878517"
+     y="399.31915"
+     id="text4253"
+     style="font-size:13px;font-family:Dialog">geonameId : Integer</text>
+  <text
+     font-size="13"
+     x="32.878517"
+     y="417.31915"
+     id="text4255"
+     style="font-size:13px;font-family:Dialog">name : String</text>
+  <text
+     font-size="13"
+     x="32.878517"
+     y="435.31915"
+     id="text4257"
+     style="font-size:13px;font-family:Dialog">population : Integer</text>
+  <text
+     font-size="13"
+     x="32.878517"
+     y="453.31915"
+     id="text4259"
+     style="font-size:13px;font-family:Dialog">geometry : Integer</text>
+  <rect
+     height="1"
+     width="160"
+     x="28.878517"
+     y="479.31915"
+     id="rect4261"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <polyline
+     points="173,389 326,486"
+     id="polyline4263"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="203.87852"
+     y="513.31915"
+     id="text4265"
+     style="font-size:13px;font-family:Dialog">1</text>
+  <text
+     font-size="13"
+     x="318.87851"
+     y="591.31915"
+     id="text4267"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <rect
+     height="148"
+     width="137"
+     x="484.87851"
+     y="1189.3191"
+     id="rect4269"
+     style="fill:#ffffff;stroke:#ffffff;stroke-width:1" />
+  <rect
+     height="148"
+     width="137"
+     x="484.87851"
+     y="1189.3191"
+     id="rect4271"
+     style="fill:none;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="508.87851"
+     y="1224.3191"
+     id="text4273"
+     style="font-size:13px;font-family:Dialog">AnswerStatus</text>
+  <text
+     font-size="13"
+     x="489.87851"
+     y="1204.3191"
+     id="text4275"
+     style="font-size:13px;font-family:Dialog">&lt;&lt;enumeration&gt;&gt;</text>
+  <rect
+     height="1"
+     width="137"
+     x="484.87851"
+     y="1235.3191"
+     id="rect4277"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <text
+     font-size="13"
+     x="488.87851"
+     y="1250.3191"
+     id="text4279"
+     style="font-size:13px;font-family:Dialog">new</text>
+  <text
+     font-size="13"
+     x="488.87851"
+     y="1268.3191"
+     id="text4281"
+     style="font-size:13px;font-family:Dialog">completed</text>
+  <text
+     font-size="13"
+     x="488.87851"
+     y="1286.3191"
+     id="text4283"
+     style="font-size:13px;font-family:Dialog">validated</text>
+  <text
+     font-size="13"
+     x="488.87851"
+     y="1304.3191"
+     id="text4285"
+     style="font-size:13px;font-family:Dialog">rejected</text>
+  <rect
+     height="1"
+     width="137"
+     x="484.87851"
+     y="1315.3191"
+     id="rect4287"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <polyline
+     points="453,286 630,286"
+     id="polyline4289"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="484.87851"
+     y="393.31915"
+     id="text4291"
+     style="font-size:13px;font-family:Dialog">questionOfSurvey</text>
+  <text
+     font-size="13"
+     x="480.87851"
+     y="406.31915"
+     id="text4293"
+     style="font-size:13px;font-family:Dialog">1</text>
+  <text
+     font-size="13"
+     x="472.87851"
+     y="429.31915"
+     id="text4295"
+     style="font-size:13px;font-family:Dialog">survey</text>
+  <text
+     font-size="13"
+     x="615.87854"
+     y="406.31915"
+     id="text4297"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="579.87854"
+     y="432.31915"
+     id="text4299"
+     style="font-size:13px;font-family:Dialog">question</text>
+  <line
+     x1="1483.8785"
+     x2="1488.8785"
+     y1="893.31915"
+     y2="893.31915"
+     id="line4301"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="1493.8785"
+     x2="1498.8785"
+     y1="893.31915"
+     y2="893.31915"
+     id="line4303"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="1503.8785"
+     x2="1508.8785"
+     y1="893.31915"
+     y2="893.31915"
+     id="line4305"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="1513.8785"
+     x2="1518.8785"
+     y1="893.31915"
+     y2="893.31915"
+     id="line4307"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="1523.8785"
+     x2="1528.8785"
+     y1="893.31915"
+     y2="893.31915"
+     id="line4309"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="1533.8785"
+     x2="1538.8785"
+     y1="893.31915"
+     y2="893.31915"
+     id="line4311"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="1543.8785"
+     x2="1548.8785"
+     y1="893.31915"
+     y2="893.31915"
+     id="line4313"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="1553.8785"
+     x2="1558.8785"
+     y1="893.31915"
+     y2="893.31915"
+     id="line4315"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="1563.8785"
+     x2="1568.8785"
+     y1="893.31915"
+     y2="893.31915"
+     id="line4317"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="1573.8785"
+     x2="1578.8785"
+     y1="893.31915"
+     y2="893.31915"
+     id="line4319"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="1568.8785"
+     x2="1580.8785"
+     y1="900.31915"
+     y2="893.31915"
+     id="line4321"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="1568.8785"
+     x2="1580.8785"
+     y1="886.31915"
+     y2="893.31915"
+     id="line4323"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="540.87854"
+     x2="540.87854"
+     y1="1137.3191"
+     y2="1142.3191"
+     id="line4325"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="540.87854"
+     x2="540.87854"
+     y1="1147.3191"
+     y2="1152.3191"
+     id="line4327"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="540.87854"
+     x2="540.87854"
+     y1="1157.3191"
+     y2="1162.3191"
+     id="line4329"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="540.87854"
+     x2="540.87854"
+     y1="1167.3191"
+     y2="1172.3191"
+     id="line4331"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="540.87854"
+     x2="540.87854"
+     y1="1177.3191"
+     y2="1182.3191"
+     id="line4333"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="540.87854"
+     x2="540.87854"
+     y1="1187.3191"
+     y2="1189.3191"
+     id="line4335"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="533.87854"
+     x2="540.87854"
+     y1="1177.3191"
+     y2="1189.3191"
+     id="line4337"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <line
+     x1="547.87854"
+     x2="540.87854"
+     y1="1177.3191"
+     y2="1189.3191"
+     id="line4339"
+     style="fill:#000000;stroke:#000000;stroke-width:1" />
+  <polyline
+     points="270,165 173,214"
+     id="polyline4341"
+     style="fill:none;stroke:#000000;stroke-width:1"
+     transform="translate(14.878518,127.31914)" />
+  <text
+     font-size="13"
+     x="245.87852"
+     y="292.31915"
+     id="text4343"
+     style="font-size:13px;font-family:Dialog">0..*</text>
+  <text
+     font-size="13"
+     x="187.87852"
+     y="320.31915"
+     id="text4345"
+     style="font-size:13px;font-family:Dialog">1..*</text>
+  <text
+     font-size="13"
+     x="217.87852"
+     y="344.31915"
+     id="text4347"
+     style="font-size:13px;font-family:Dialog">loc</text>
+  <path
+     style="fill:none;stroke:#ba0000;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     d="m 27.530374,370.23469 c -5.62288,490.12519 121.451706,504.92305 326.417776,597.16741 126.47885,75.496 81.26105,547.777 149.29186,635.123 75.45921,63.7111 361.69313,-11.6358 414.98073,58.1985 140.82026,184.5472 383.02416,129.3673 450.40586,37.9555 21.8444,-107.2224 27.3318,-140.35 -55.6681,-258.0978 -135.3817,-52.4447 -312.4082,-58.039 -399.7985,-164.474 -42.73031,-109.0594 -17.514,-187.2338 12.65185,-263.1585 93.95275,-80.4161 133.35485,-0.5323 247.97625,-60.7289 37.6504,-87.02987 4.0356,-176.83306 53.1378,-253.03706 l 172.0652,-78.44148 C 1543.604,563.27484 1330.6711,246.24655 1267.4119,261.42877 1131.539,256.95578 889.99581,287.70622 865.08297,246.24655 830.53516,215.02169 836.37903,163.60098 761.33778,152.62284 l -197.36889,2.53037 c -83.18861,23.8128 -21.1419,127.32731 -78.44148,161.94371 C 123.47387,333.55352 87.70931,294.7678 25,357.58285"
+     id="path4357"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccsccccccccccccc" />
+  <path
+     style="fill:none;stroke:#c60000;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+     d="m 1391.4,375.29544 c 177.1259,-53.13778 177.1259,-53.13778 177.1259,-53.13778"
+     id="path5127"
+     inkscape:connector-curvature="0" />
+  <text
+     xml:space="preserve"
+     style="font-size:24px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
+     x="1583.7081"
+     y="304.44507"
+     id="text5129"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan5131"
+       x="1583.7081"
+       y="304.44507">Concepts at least partially implemented</tspan><tspan
+       sodipodi:role="line"
+       x="1583.7081"
+       y="334.44507"
+       id="tspan5133">(Category is now called Filter</tspan><tspan
+       sodipodi:role="line"
+       x="1583.7081"
+       y="364.44507"
+       id="tspan5135">and Filter is now called FilterSet)</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:48px;font-style:normal;font-weight:bold;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans Bold"
+     x="389.37332"
+     y="56.46875"
+     id="text3324"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan3326"
+       x="389.37332"
+       y="56.46875">Original model concept </tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:24px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     x="391.27112"
+     y="95.0569"
+     id="text3328"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan3330"
+       x="391.27112"
+       y="95.0569">This is not kept in sync with actual model, so it should only be used for rough concepts as originally planned</tspan></text>
+</svg>
