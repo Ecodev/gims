@@ -28,7 +28,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 		{text: '20%', value:'0.200'},
 		{text: '10%', value:'0.100'},
 		{text: '0%', value:'0.000'},
-		{text: 'Unknown', value:'null'},
+		{text: 'Unknown', value:null},
 	];
 
 

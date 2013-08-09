@@ -13,68 +13,111 @@
 
         <?php echo $this->crudButtons('question'); ?>
 
-        <div class="control-group">
-            <label for="question.type">Type</label>
-            <select id="question.type"
-					name="type"
-					ng-model="question.type"
-					ng-change="initChoices()"
-                    ng-options="c.value as c.text for c in types">
-			</select>
+        <br/><br/>
+
+        <div class="control-group form-horizontal">
+            <label class='control-label' for="question.type">Type</label>
+            <div class='controls'>
+                <select class='span5'
+                        id="question.type"
+                        name="type"
+                        ng-model="question.type"
+                        ng-change="initChoices()"
+                        ng-options="c.value as c.text for c in types">
+                </select>
+            </div>
         </div>
 
-        <div class="control-group" ng-class="{error: myForm.filter.$invalid}">
-            <label for="question.filter">Thematic</label>
-            <gims-select api="filter" model="question.filter" placeholder="Select a thematic" style="width: 556px;" required></gims-select>
-            <span ng-show="myForm.filter.$error.required" class="help-inline">Required</span>
+
+        <div class="control-group form-horizontal" ng-class="{error: myForm.filter.$invalid}">
+            <label class='control-label' for="question.filter">Thematic</label>
+            <div class='controls row-fluid'>
+                <gims-select    class='span5'
+                                api="filter"
+                                model="question.filter"
+                                placeholder="Select a thematic"
+                                required>
+                </gims-select>
+                <span ng-show="myForm.filter.$error.required" class="help-inline">Required</span>
+            </div>
         </div>
 
 
 
-		<div class="control-group" ng-class="{error: myForm.name.$invalid}">
-			<label for="question.part">Zone</label>
-			<gims-select required
-					class="input-medium"
-					id="question.parts"
-					name="type"
-					model="question.parts"
-					api="part"
-					multiple="multiple">
-			</gims-select>
+		<div class="control-group form-horizontal" ng-class="{error: myForm.name.$invalid}">
+		    <label class='control-label' for="question.part">Zone</label>
+            <div class='controls row-fluid'>
+                <gims-select    required
+                                class="span5 input-medium"
+                                id="question.parts"
+                                name="type"
+                                model="question.parts"
+                                api="part"
+                                multiple="multiple">
+                </gims-select>
+            </div>
 		</div>
 
 
-		<div class="control-group" ng-class="{error: myForm.name.$invalid}">
-            <label for="question.name">Question</label>
-            <input id="question.name" type="text" name="name" ng-model="question.name" required class="span6"/>
-            <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+
+        <br/><br/>
+		<div class="control-group form-horizontal" ng-class="{error: myForm.name.$invalid}">
+            <label class='control-label' for="question.name">Question</label>
+            <div class='controls control-row'>
+                <input class='span8' id="question.name" type="text" name="name" ng-model="question.name" required/>
+                <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+            </div>
         </div>
 
-		<div class="control-group " ng-repeat="choice in question.choices" ng-class="{error: myForm.name.$invalid}">
 
-			<label for="choice.label">Choice {{$index+1}}</label>
-			<select required
-					class="input-small"
-					id="question.value"
-					name="type"
-					ng-model="choice.value"
-					ng-options="p.value as p.text for p in percentages">
-			</select>
 
-			<input id="choice.value" type="text" name="name" ng-model="choice.label" required class="span6"/>
-			<button class="btn btn-danger btn-xs" ng-click="deleteChoice($index)" style='position:relative;top:-5px'><i class="icon-trash"></i> Delete</button>
-            <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+
+        <br/><br/>
+        <div ng-repeat="choice in question.choices" ng-class="{error: myForm.name.$invalid}">
+
+            <div class="control-group form-horizontal">
+                <label class='control-label' for="choice.label">Choice {{$index+1}}</label>
+                <div class='controls'>
+                    <input id="choice.value" type="text" name="name" ng-model="choice.label" required class='span8'/>
+                <span ng-show="myForm.name.$error.required" class="span1 help-inline">Required</span>
+                </div>
+            </div>
+
+            <div class="control-group form-horizontal">
+                <label class='control-label' ></label>
+                <div class='controls control-row'>
+                    <select required
+                            class="input-small"
+                            id="question.value"
+                            name="type"
+                            ng-model="choice.value"
+                            ng-options="p.value as p.text for p in percentages">
+                    </select>
+                    <button class="btn btn-danger btn-xs" ng-click="deleteChoice($index)" ><i class="icon-trash"></i></button>
+                </div>
+            </div>
         </div>
 
-		<p>
-			<button ng-show='addBtnChoice' class="btn btn-success btn-xs" ng-click="addChoice()"><i class="icon-plus"></i> Add choice</button>
-		</p>
+        <div class="control-group form-horizontal">
+            <label class='control-label'>&nbsp;</label>
+            <div class='controls'>
+                <button ng-show='addBtnChoice' class="btn btn-success btn-xs" ng-click="addChoice()"><i class="icon-plus"></i> Add choice</button>
+            </div>
+        </div>
 
 
 
-        <div class="control-group" ng-class="{error: myForm.sorting.$invalid}" ng-show="question.id">
-            <label for="question.sorting">Sorting</label>
-            <input id="question.sorting" type="text" name="sorting" ng-model="question.sorting" class="span6"/>
+
+
+
+
+        <br/><br/>
+
+        <div class="control-group form-horizontal" ng-class="{error: myForm.sorting.$invalid}" ng-show="question.id">
+            <label class='control-label' for="question.sorting">Sorting</label>
+            <div class='controls controls-row'>
+                <input class='span1' id="question.sorting" type="text" name="sorting" ng-model="question.sorting"/>
+            </div>
         </div>
 
     </form>
