@@ -28,9 +28,9 @@ class Question extends AbstractModel
     private $sorting;
 
     /**
-     * @var string
+     * @var QuestionType
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="question_type")
      */
     private $type;
 
@@ -120,11 +120,13 @@ class Question extends AbstractModel
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($name = null)
     {
+        $this->setName($name);
         $this->answers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->choices = new \Doctrine\Common\Collections\ArrayCollection();
         $this->parts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->setType(QuestionType::$NUMERIC);
     }
 
     /**
@@ -153,10 +155,10 @@ class Question extends AbstractModel
     /**
      * Set type
      *
-     * @param string $type
+     * @param QuestionType $type
      * @return Question
      */
-    public function setType($type)
+    public function setType(QuestionType $type)
     {
         $this->type = $type;
 
@@ -166,7 +168,7 @@ class Question extends AbstractModel
     /**
      * Get type
      *
-     * @return string
+     * @return QuestionType
      */
     public function getType()
     {
@@ -202,7 +204,7 @@ class Question extends AbstractModel
      * @param Filter $filter
      * @return Question
      */
-    public function setFilter(Filter $filter = null)
+    public function setFilter(Filter $filter)
     {
         $this->filter = $filter;
 

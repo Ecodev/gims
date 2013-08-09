@@ -82,7 +82,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function __construct()
     {
         $this->answers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->status = QuestionnaireStatus::$NEW;
+        $this->setStatus(QuestionnaireStatus::$NEW);
     }
 
     /**

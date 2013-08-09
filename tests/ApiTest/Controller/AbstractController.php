@@ -141,7 +141,6 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
         $this->question = new Question();
         $this->question->setSurvey($this->survey)
                 ->setSorting(1)
-                ->setType(1)
                 ->setFilter($this->filter)
                 ->setName('foo');
 

@@ -11,8 +11,8 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
 	$scope.types = [
 		{text: 'Info', value: 'info'},
-		{text: 'Multiple Choice Question', value: 'mcq'},
-		//{text: 'Percentage', value: 'percentage'}
+		{text: 'Multiple Choice Question', value: 'choice'},
+		//{text: 'Numeric', value: 'numeric'}
 	];
 
 

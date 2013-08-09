@@ -125,7 +125,7 @@ class QuestionControllerTest extends AbstractController
         // Question
         $data = array(
             'name'     => 'name for test create a new question',
-            'type'     => 1,
+            'type'     => \Application\Model\QuestionType::$CHOICE,
             'sorting'  => 1,
             'survey'   => $this->survey->getId(),
             'filter' => $this->filter->getId(),
@@ -154,7 +154,6 @@ class QuestionControllerTest extends AbstractController
             $question = new Question();
             $question->setSurvey($this->survey)
                 ->setSorting($value)
-                ->setType(1)
                 ->setFilter($this->filter)
                 ->setName('bar');
 
