@@ -51,10 +51,7 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
         if ($questionnaire) {
 
             // Fetch part
-            $part = null;
-            if ($partId > 0) {
-                $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($partId);
-            }
+            $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($partId);
             $parts = array();
             foreach (array($part) as $_part) {
                 $parts[] = array(
@@ -73,7 +70,7 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
 
             // Add information whether the filter is selectable or not
             $resultNumber = count($result);
-            $partName = is_object($parts[0]['part']) ? $parts[0]['part']->getName() : 'Total';
+            $partName = $parts[0]['part']->getName();
             for ($index = 0; $index < $resultNumber; $index++) {
                 $currentResult = &$result[$index];
                 $nextResult = null;

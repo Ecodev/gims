@@ -55,7 +55,7 @@ use \Application\Traits\EntityManagerAware;
      * @param \Application\Model\Part $part
      * @return float|null null if no answer at all, otherwise the value
      */
-    public function computeFilter(Filter $filter, Questionnaire $questionnaire, Part $part = null)
+    public function computeFilter(Filter $filter, Questionnaire $questionnaire, Part $part)
     {
         $key = $this->getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheComputeFilter)) {
@@ -77,7 +77,7 @@ use \Application\Traits\EntityManagerAware;
      * @param \Application\Model\Part $part
      * @return float|null null if no answer at all, otherwise the value
      */
-    private function computeFilterInternal(Filter $filter, Questionnaire $questionnaire, \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters, Part $part = null)
+    private function computeFilterInternal(Filter $filter, Questionnaire $questionnaire, \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters, Part $part)
     {
         // @todo for sylvain: the logic goes as follows: if the filter id is contained within excludeFilters, skip calculation.
         if (in_array($filter->getId(), $this->excludedFilters)) {

@@ -47,6 +47,9 @@ class Population extends AbstractModel
      * @var Part
      *
      * @ORM\ManyToOne(targetEntity="Part")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
+     * })
      */
     private $part;
 
@@ -125,7 +128,7 @@ class Population extends AbstractModel
      * @param Part $part
      * @return Answer
      */
-    public function setPart(Part $part = null)
+    public function setPart(Part $part)
     {
         $this->part = $part;
 

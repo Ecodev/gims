@@ -56,6 +56,11 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
     protected $part2;
 
     /**
+     * @var Part
+     */
+    protected $part3;
+
+    /**
      * @var Answer
      */
     protected $answer;
@@ -139,22 +144,27 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
                 ->setType(1)
                 ->setFilter($this->filter)
                 ->setName('foo');
+
         $this->part = new Part();
         $this->part->setName('test part 1');
 
         $this->part2 = new Part();
         $this->part2->setName('test part 2');
 
+        $this->part3 = new Part();
+        $this->part3->setName('test part 3');
+
         $this->answer = new Answer();
         $this->answer
                 ->setQuestion($this->question)
                 ->setQuestionnaire($this->questionnaire)
-                ->setPart($this->part); // answer one has a part whereas question two not.
+                ->setPart($this->part);
 
         $this->answer2 = new Answer();
         $this->answer2
                 ->setQuestion($this->question)
-                ->setQuestionnaire($this->questionnaire);
+                ->setQuestionnaire($this->questionnaire)
+                ->setPart($this->part2);
 
 
 
@@ -187,6 +197,7 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
         $this->getEntityManager()->persist($this->userQuestionnaire);
         $this->getEntityManager()->persist($this->part);
         $this->getEntityManager()->persist($this->part2);
+        $this->getEntityManager()->persist($this->part3);
         $this->getEntityManager()->persist($this->filter);
         $this->getEntityManager()->persist($this->geoName);
         $this->getEntityManager()->persist($this->survey);

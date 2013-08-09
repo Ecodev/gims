@@ -39,9 +39,9 @@ class ConsoleControllerTest extends \Zend\Test\PHPUnit\Controller\AbstractConsol
     {
         $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneByName('Switzerland');
         $parts = array(
-            $this->partUrban = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Urban'),
-            $this->partRural = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Rural'),
-            null,
+            $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Urban'),
+            $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Rural'),
+            $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Total'),
         );
         $this->getEntityManager()->flush();
         $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');

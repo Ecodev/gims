@@ -23,4 +23,17 @@ class PartRepository extends AbstractRepository
 
         return $part;
     }
+
+    public function getAllNonTotal() {
+
+        $query = $this->getEntityManager()->createQuery('SELECT p
+            FROM Application\Model\Part p
+            WHERE
+            p.isTotal = false'
+        );
+
+        $parts = $query->getResult();
+
+        return $parts;
+    }
 }

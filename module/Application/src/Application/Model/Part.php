@@ -30,6 +30,13 @@ class Part extends AbstractModel
      */
     private $name;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $isTotal = false;
+
     public function __construct($name = null)
     {
         $this->setName($name);
@@ -58,4 +65,12 @@ class Part extends AbstractModel
         return $this->name;
     }
 
+    /**
+     * Returns the read-only property whether this part represent the total
+     * @return boolean
+     */
+    public function isTotal()
+    {
+        return $this->isTotal;
+    }
 }

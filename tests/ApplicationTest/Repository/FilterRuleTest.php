@@ -14,9 +14,14 @@ class FilterRuleRepositoryTest extends AbstractRepository
         $questionnaire = new \Application\Model\Questionnaire();
         $questionnaire->setSurvey($survey)->setGeoname($geoname)->setDateObservationStart(new \DateTime())->setDateObservationEnd(new \DateTime());
         $filter = new \Application\Model\Filter('test filter');
+        $part = new \Application\Model\Part('unit test parts');
         $relation = new \Application\Model\Rule\FilterRule();
         $rule = new \Application\Model\Rule\Exclude();
-        $relation->setJustification('unit tests')->setFilter($filter)->setQuestionnaire($questionnaire)->setRule($rule);
+        $relation->setJustification('unit tests')
+                ->setFilter($filter)
+                ->setQuestionnaire($questionnaire)
+                ->setRule($rule)
+                ->setPart($part);
 
         $this->getEntityManager()->persist($survey);
         $this->getEntityManager()->persist($geoname);
@@ -24,6 +29,7 @@ class FilterRuleRepositoryTest extends AbstractRepository
         $this->getEntityManager()->persist($filter);
         $this->getEntityManager()->persist($rule);
         $this->getEntityManager()->persist($relation);
+        $this->getEntityManager()->persist($part);
 
         $this->getEntityManager()->flush();
         $this->getEntityManager()->clear();

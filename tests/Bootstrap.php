@@ -2,6 +2,7 @@
 
 // Setup autoloading
 require __DIR__ . '/../init_autoloader.php';
+require __DIR__ . '/../module/debug.php';
 
 use Zend\Loader\StandardAutoloader;
 

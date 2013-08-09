@@ -76,14 +76,13 @@ class Jmp extends Calculator
      * @param \Application\Model\Part $part
      * @return array [[name => filterName, data => [year => flattenedRegression]]]]
      */
-    public function computeFlatten($yearStart, $yearEnd, FilterSet $filterSet, $questionnaires, Part $part = null,
-        $excludedFilters = array())
+    public function computeFlatten($yearStart, $yearEnd, FilterSet $filterSet, $questionnaires, Part $part, $excludedFilters = array())
     {
         // @todo for sylvain. Property excluded filters is used in parent class. Check out @method computeFilterInternal
         $this->excludedFilters = $excludedFilters; // Can't believe I am writing that!
         $parts = array();
-        if (!$part) {
-            $parts = $this->getPartRepository()->findAll();
+        if ($part->isTotal()) {
+            $parts = $this->getPartRepository()->getAllNonTotal();
         }
 
         $result = array();
@@ -207,7 +206,7 @@ class Jmp extends Calculator
      * @param \Application\Model\Part $part
      * @return array [year => [regresssion => value, population => value]]
      */
-    public function computeRegressionForAllYears(array $years, Filter $filter, $questionnaires, Part $part = null)
+    public function computeRegressionForAllYears(array $years, Filter $filter, $questionnaires, Part $part)
     {
         $key = $this->getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheComputeRegressionForAllYears)) {
@@ -232,7 +231,7 @@ class Jmp extends Calculator
      * @param \Application\Model\Part $part
      * @return array [regresssion => value, population => value]
      */
-    public function computeRegression($year, Filter $filter, $questionnaires, Part $part = null)
+    public function computeRegression($year, Filter $filter, $questionnaires, Part $part)
     {
         $d = $this->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
 
@@ -272,7 +271,7 @@ class Jmp extends Calculator
      * @param \Application\Model\Part $part
      * @return array
      */
-    public function computeFilterForAllQuestionnaires(Filter $filter, $questionnaires, Part $part = null)
+    public function computeFilterForAllQuestionnaires(Filter $filter, $questionnaires, Part $part)
     {
         $key = $this->getCacheKey(func_get_args());
 

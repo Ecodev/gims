@@ -285,6 +285,11 @@ class Jmp extends AbstractImporter
     private $partRural;
 
     /**
+     * @var \Application\Model\Part
+     */
+    private $partTotal;
+
+    /**
      * Import data from file
      */
     public function import($filename)
@@ -299,12 +304,13 @@ class Jmp extends AbstractImporter
         $this->excludeRule = $this->getEntityManager()->getRepository('Application\Model\Rule\AbstractRule')->getSingletonExclude();
         $this->partUrban = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Urban');
         $this->partRural = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Rural');
+        $this->partTotal = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Total');
 
 
         $this->partOffsets = array(
             3 => $this->partUrban,
             4 => $this->partRural,
-            5 => null, // total is not a part
+            5 => $this->partTotal,
         );
 
         foreach ($sheeNamesToImport as $i => $sheetName) {
@@ -769,7 +775,7 @@ class Jmp extends AbstractImporter
      * @param \Application\Model\Part $part
      * @return \Application\Model\Rule\QuestionnaireRule|null
      */
-    protected function getQuestionnaireRule(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part = null)
+    protected function getQuestionnaireRule(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part)
     {
         $questionnaireRuleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireRule');
 //        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
@@ -828,7 +834,7 @@ class Jmp extends AbstractImporter
      * @param string $forcedName
      * @return null|\Application\Model\Rule\Formula
      */
-    protected function getFormula(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part = null, $forcedName = null)
+    protected function getFormula(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part, $forcedName = null)
     {
         $formulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Formula');
 
@@ -898,13 +904,13 @@ class Jmp extends AbstractImporter
                     if ($refPart == $part)
                         $refPartId = 'current';
                     else
-                        $refPartId = $part ? $part->getId() : null;
+                        $refPartId = $part->getId();
 
 
                     // Simple case is when we reference a filter
                     if ($refFilterId) {
 
-                        return "{F#$refFilterId,Q#$refQuestionnaireId" . ($refPartId ? ',P#' . $refPartId : '') . "}";
+                        return "{F#$refFilterId,Q#$refQuestionnaireId,P#$refPartId}";
                         // More advanced case is when we reference another QuestionnaireRule (Calculation, Estimate or Ratio)
                     } else {
 
@@ -916,7 +922,7 @@ class Jmp extends AbstractImporter
                             $this->getEntityManager()->flush();
                             $refRuleId = $refQuestionnaireRule->getRule()->getId();
 
-                            return "{R#$refRuleId,Q#$refQuestionnaireId" . ($refPartId ? ',P#' . $refPartId : '') . "}";
+                            return "{R#$refRuleId,Q#$refQuestionnaireId,P#$refPartId}";
                         } else {
                             return 'NULL'; // if no formula found at all, return NULL string which will behave like an empty cell in PHPExcell
                         }
@@ -1018,7 +1024,7 @@ class Jmp extends AbstractImporter
      * @param \Application\Model\Part $part
      * @return \Application\Model\Rule\FilterRule
      */
-    protected function getFilterRule(\Application\Model\Filter $filter, \Application\Model\Questionnaire $questionnaire, \Application\Model\Rule\AbstractRule $rule, \Application\Model\Part $part = null)
+    protected function getFilterRule(\Application\Model\Filter $filter, \Application\Model\Questionnaire $questionnaire, \Application\Model\Rule\AbstractRule $rule, \Application\Model\Part $part)
     {
         $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
 
@@ -1122,14 +1128,14 @@ class Jmp extends AbstractImporter
      * @param \Application\Model\Questionnaire $questionnaire
      * @param \Application\Model\Part $part
      */
-    protected function linkFormula($formulaText, \Application\Model\Filter $filter, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part = null)
+    protected function linkFormula($formulaText, \Application\Model\Filter $filter, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part)
     {
         $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\Formula');
         $formula = $repository->findOneBy(array('formula' => $formulaText));
 
         if (!$formula) {
             $formula = new \Application\Model\Rule\Formula();
-            $formula->setName($filter->getName() . ' (' . $questionnaire->getName() . ($part ? ', ' . $part->getName() : '') . ')')
+            $formula->setName($filter->getName() . ' (' . $questionnaire->getName() . ', ' . $part->getName() . ')')
                     ->setFormula($formulaText);
             $this->getEntityManager()->persist($formula);
         }

@@ -11,7 +11,7 @@ class PopulationRepository extends AbstractRepository
      * @param \Application\Model\Part $part
      * @return \Application\Model\Population
      */
-    public function getOneByQuestionnaire(\Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part = null)
+    public function getOneByQuestionnaire(\Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part)
     {
 
         $query = $this->getEntityManager()->createQuery("SELECT p FROM Application\Model\Population p
@@ -22,17 +22,15 @@ class PopulationRepository extends AbstractRepository
             q.geoname = g
             AND q = :questionnaire
             AND p.year = :year
-            AND (p.part " . ($part ? "= :part" : "IS NULL") . ")"
+            AND p.part = :part"
                 )
         ;
 
         $params = array(
             'questionnaire' => $questionnaire,
             'year' => $questionnaire->getSurvey()->getYear(),
+            'part' => $part,
         );
-
-        if ($part)
-            $params['part'] = $part;
 
         $query->setParameters($params);
 

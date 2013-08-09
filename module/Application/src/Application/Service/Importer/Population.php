@@ -16,6 +16,11 @@ class Population extends AbstractImporter
     private $partRural;
 
     /**
+     * @var \Application\Model\Part
+     */
+    private $partTotal;
+
+    /**
      * Import populaion data from three files (urban, rural, total)
      * @param string $urbanFilename
      * @param string $ruralFilename
@@ -32,6 +37,7 @@ class Population extends AbstractImporter
 
         $this->partUrban = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Urban');
         $this->partRural = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Rural');
+        $this->partTotal = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Total');
         $this->getEntityManager()->flush(); // Flush to be sure that parts have ID
 
         $countryRepository = $this->getEntityManager()->getRepository('Application\Model\Country');
@@ -63,7 +69,7 @@ class Population extends AbstractImporter
 
                     $this->getPopulation($year, $country, $this->partUrban)->setPopulation((int) ($urban * 1000));
                     $this->getPopulation($year, $country, $this->partRural)->setPopulation((int) ($rural * 1000));
-                    $this->getPopulation($year, $country)->setPopulation((int) ($total * 1000));
+                    $this->getPopulation($year, $country, $this->partTotal)->setPopulation((int) ($total * 1000));
 
                     $col++;
                     $importedValueCount += 3;
@@ -104,7 +110,7 @@ class Population extends AbstractImporter
      * @param \Application\Model\Country $country
      * @return \Application\Model\Population
      */
-    protected function getPopulation($year, \Application\Model\Country $country, \Application\Model\Part $part = null)
+    protected function getPopulation($year, \Application\Model\Country $country, \Application\Model\Part $part)
     {
         $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
         $population = $populationRepository->findOneBy(array(

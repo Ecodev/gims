@@ -49,26 +49,16 @@ class QuestionController extends AbstractRestfulController
                 // Numerical key must correspond to the id of the part.
                 $output = array();
                 foreach ($answers as $answer) {
-                    $answerData = $hydrator->extract($answer, \Application\Model\Answer::getJsonConfig());
-
                     $part = $answer->getPart();
-                    if($part) {
-                        $answerData['part'] = $hydrator->extract($part, \Application\Model\Part::getJsonConfig());
-                    }
+                    $answerData = $hydrator->extract($answer, \Application\Model\Answer::getJsonConfig());
+                    $answerData['part'] = $hydrator->extract($part, \Application\Model\Part::getJsonConfig());
 
-                    if(!empty($answerData['part']['id'])) {
-                        $output[$answerData['part']['id']] = $answerData;
-                    } else {
-                        // It is ok to have one answer in position 0 (= total) but not more!
-                        // should not be the case... so log it
-                        if(!empty($output[0])) {
-                            $logger = Module::getServiceManager()->get('Zend\Log');
-                            $logger->info(
-                                sprintf('[WARNING] Answer object "%s" has too many null Part. ', $answerData['id'])
-                            );
-                        }
-                        $output[0] = $answerData;
-                    }
+                    if ($part->isTotal())
+                        $index = 0;
+                    else
+                        $index = $part->getId();
+
+                    $output[$index] = $answerData;
                 }
                 return $output;
             }

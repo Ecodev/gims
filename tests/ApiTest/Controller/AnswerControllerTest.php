@@ -6,7 +6,7 @@ use Zend\Http\Request;
 
 class AnswerControllerTest extends AbstractController
 {
-    
+
     /**
      * Get suitable route for GET method.
      *
@@ -144,7 +144,7 @@ class AnswerControllerTest extends AbstractController
                 'id' => $this->questionnaire->getId()
             ),
             'part'          => array(
-                'id' => $this->part2->getId()
+                'id' => $this->part3->getId()
             ),
         );
 
@@ -166,7 +166,7 @@ class AnswerControllerTest extends AbstractController
             'valuePercent'  => 0.6,
             'question'      => $this->question->getId(),
             'questionnaire' => $this->questionnaire->getId(),
-            'part'          => $this->part2->getId(),
+            'part'          => $this->part3->getId(),
         );
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
@@ -217,7 +217,7 @@ class AnswerControllerTest extends AbstractController
                 'id' => $this->questionnaire->getId()
             ),
             'part'          => array(
-                'id' => $this->part2->getId()
+                'id' => $this->part3->getId()
             ),
         );
 

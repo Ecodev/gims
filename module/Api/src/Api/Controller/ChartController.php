@@ -57,7 +57,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $shortDash = '';
             /////////////////////////////////////////
             // @todo clean me up! This trick was implemented a day before the launch. It must be cleaned up.
-            if ($filterSet->getId() > 6) {
+            if (false && $filterSet->getId() > 6) {
 
                 // exchange value
                 $color = $this->colors;

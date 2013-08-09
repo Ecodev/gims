@@ -155,6 +155,11 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
      */
     protected $highFilter3;
 
+    /**
+     * @var \Application\Model\Part
+     */
+    protected $part;
+
     public function setUp()
     {
         parent::setUp();
@@ -206,6 +211,12 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $this->question31->setFilter($this->filter31);
         $this->question32->setFilter($this->filter32);
 
+        // Create a stub for the Part class, so we can tell it represent the total part (it's usually a read-only property)
+        $this->part = $this->getMock('\Application\Model\Part', array('isTotal'));
+        $this->part->expects($this->any())
+                ->method('isTotal')
+                ->will($this->returnValue(true));
+
         $this->answer131 = new \Application\Model\Answer();
         $this->answer132 = new \Application\Model\Answer();
         $this->answer141 = new \Application\Model\Answer();
@@ -213,12 +224,12 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $this->answer31 = new \Application\Model\Answer();
         $this->answer32 = new \Application\Model\Answer();
 
-        $this->answer131->setQuestionnaire($this->questionnaire)->setQuestion($this->question131)->setValueAbsolute(0.1);
-        $this->answer132->setQuestionnaire($this->questionnaire)->setQuestion($this->question132)->setValueAbsolute(0.01);
-        $this->answer141->setQuestionnaire($this->questionnaire)->setQuestion($this->question141)->setValueAbsolute(0.001);
-        $this->answer142->setQuestionnaire($this->questionnaire)->setQuestion($this->question142)->setValueAbsolute(0.0001);
-        $this->answer31->setQuestionnaire($this->questionnaire)->setQuestion($this->question31)->setValueAbsolute(0.00001);
-        $this->answer32->setQuestionnaire($this->questionnaire)->setQuestion($this->question32)->setValueAbsolute(0.000001);
+        $this->answer131->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question131)->setValueAbsolute(0.1);
+        $this->answer132->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question132)->setValueAbsolute(0.01);
+        $this->answer141->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question141)->setValueAbsolute(0.001);
+        $this->answer142->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question142)->setValueAbsolute(0.0001);
+        $this->answer31->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question31)->setValueAbsolute(0.00001);
+        $this->answer32->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question32)->setValueAbsolute(0.000001);
 
         $this->highFilter1 = new \Application\Model\Filter('improved');
         $this->highFilter2 = new \Application\Model\Filter('unimproved');

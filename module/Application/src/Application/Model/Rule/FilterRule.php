@@ -46,7 +46,7 @@ class FilterRule extends \Application\Model\AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Application\Model\Part")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
      */
     private $part;
@@ -121,7 +121,7 @@ class FilterRule extends \Application\Model\AbstractModel
      * @param \Application\Model\Part $part
      * @return FilterRule
      */
-    public function setPart(\Application\Model\Part $part = null)
+    public function setPart(\Application\Model\Part $part)
     {
         $this->part = $part;
 
