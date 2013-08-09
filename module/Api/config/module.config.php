@@ -3,6 +3,7 @@
 return array(
     'controllers' => array(
         'invokables' => array(
+            'Api\Controller\QuestionType' => 'Api\Controller\QuestionTypeController',
 			'Api\Controller\QuestionChoice' => 'Api\Controller\QuestionChoiceController',
             'Api\Controller\Questionnaire' => 'Api\Controller\QuestionnaireController',
             'Api\Controller\Question' => 'Api\Controller\QuestionController',

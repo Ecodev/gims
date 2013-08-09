@@ -9,11 +9,11 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 	$scope.sending = false;
 	$scope.addBtnChoice = false;
 
-	$scope.types = [
-		{text: 'Info', value: 'info'},
-		{text: 'Multiple Choice Question', value: 'choice'},
-		//{text: 'Numeric', value: 'numeric'}
-	];
+//	$scope.types = [
+//		{text: 'Info', value: 'info'},
+//		{text: 'Multiple Choice Question', value: 'choice'},
+//		//{text: 'Percentage', value: 'percentage'}
+//	];
 
 
 	$scope.percentages = [
@@ -34,15 +34,15 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
     $scope.initChoices = function(){
 
-		if($scope.question.type == 'info' || $scope.question.type == 'percentage'){
+		if($scope.question.type == 'info' ){ // hide choices zone
 			$scope.question.choices = [];
 			$scope.addBtnChoice = false;
 		}
-		else if($scope.question.type == 'mcq' && ( !$scope.question.choices || $scope.question.choices.length == 0) ){
+		else if($scope.question.type == 'choice' && ( !$scope.question.choices || $scope.question.choices.length == 0) ){
 			$scope.question.choices = [{}];
 			$scope.addBtnChoice = true;
 		}
-		else if($scope.question.type == 'mcq' &&  $scope.question.choices.length > 0  ){
+		else if($scope.question.type == 'choice' &&  $scope.question.choices.length > 0  ){
 			$scope.addBtnChoice = true;
 		}
     }
@@ -126,9 +126,12 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 			$scope.initChoices();
         });
 		Restangular.all('part', $routeParams.id).getList().then(function(parts) {
-			console.info(parts);
 			$scope.parts = parts;
 		});
+
+        Restangular.all('questionType', $routeParams.id).getList().then(function(types) {
+            $scope.types = types;
+        });
     }
 
     // Load survey if possible
