@@ -89,7 +89,7 @@ class Question extends AbstractModel
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\OneToMany(targetEntity="QuestionChoice", mappedBy="question")
+     * @ORM\OneToMany(targetEntity="Choice", mappedBy="question")
      * @ORM\JoinColumns({
      *  @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
      * })
@@ -386,16 +386,16 @@ class Question extends AbstractModel
 
     /**
      * Notify the question that it was added to the choice.
-     * This should only be called by QuestionChoice::setQuestion()
+     * This should only be called by Choice::setQuestion()
      *
-     * @param QuestionChoice $questionChoice
+     * @param Choice $choice
      *
      * @return Question
      */
-    public function questionChoiceAdded(QuestionChoice $questionChoice)
+    public function choiceAdded(Choice $choice)
     {
-        if (!$this->getChoices()->contains($questionChoice)) {
-            $this->getChoices()->add($questionChoice);
+        if (!$this->getChoices()->contains($choice)) {
+            $this->getChoices()->add($choice);
         }
 
         return $this;

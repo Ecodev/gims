@@ -5,7 +5,7 @@ namespace Api\Controller;
 use Application\Model\Survey;
 use Application\Module;
 use Application\Model\Question;
-use Application\Model\QuestionChoice;
+use Application\Model\Choice;
 use Zend\View\Model\JsonModel;
 
 class QuestionController extends AbstractRestfulController
@@ -163,15 +163,15 @@ class QuestionController extends AbstractRestfulController
             $newChoice['sorting'] = $i;
             // if no id -> create
             if(!isset($newChoice['id'])) {
-                $questionChoice = new QuestionChoice();
-                $this->getEntityManager()->persist($questionChoice);
+                $choice = new Choice();
+                $this->getEntityManager()->persist($choice);
             } // if id exists -> update
             else {
-                $questionChoiceRepository = $this->getEntityManager()->getRepository('Application\Model\QuestionChoice');
-                $questionChoice = $questionChoiceRepository->findOneById((int)$newChoice['id']);
+                $choiceRepository = $this->getEntityManager()->getRepository('Application\Model\Choice');
+                $choice = $choiceRepository->findOneById((int)$newChoice['id']);
             }
-            $questionChoice->setQuestion($question);
-            $this->hydrator->hydrate($newChoice, $questionChoice);
+            $choice->setQuestion($question);
+            $this->hydrator->hydrate($newChoice, $choice);
             $i++;
         }
 

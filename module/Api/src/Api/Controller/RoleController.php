@@ -13,7 +13,7 @@ class RoleController extends AbstractRestfulController
      * @return mixed|void|JsonModel
      * @throws \Exception
      */
-    public function create($data)
+    public function create($data, \Closure $postAction = null)
     {
         throw new \Exception('Not implemented');
     }

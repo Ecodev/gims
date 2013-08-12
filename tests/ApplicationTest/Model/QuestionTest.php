@@ -3,15 +3,15 @@
 namespace ApplicationTest\Model;
 
 use Application\Model\Question;
-use Application\Model\QuestionChoice;
+use Application\Model\Choice;
 
 class QuestionTest extends AbstractModel
 {
 
-    public function testQuestionChoicesRelation()
+    public function testChoicesRelation()
     {
         $question = new Question();
-        $choice = new QuestionChoice();
+        $choice = new Choice();
 
 
         $this->assertCount(0, $question->getChoices(), 'collection is initialized on creation');
@@ -21,12 +21,12 @@ class QuestionTest extends AbstractModel
         $this->assertSame($choice, $question->getChoices()->first(), 'original choice can be retreived from question');
     }
 
-    public function testQuestionChoicesCanBeSet()
+    public function testChoicesCanBeSet()
     {
         $choices = new \Doctrine\Common\Collections\ArrayCollection();
-        $choices->add(new QuestionChoice());
-        $choices->add(new QuestionChoice());
-        $choices->add(new QuestionChoice());
+        $choices->add(new Choice());
+        $choices->add(new Choice());
+        $choices->add(new Choice());
         $question = new Question();
 
         $this->assertCount(0, $question->getChoices(), 'collection is initialized on creation');
@@ -37,10 +37,10 @@ class QuestionTest extends AbstractModel
         $this->assertEquals($choices, $question->getChoices(), '... but their content is the same');
     }
 
-    public function testQuestionChoicesAreUnique()
+    public function testChoicesAreUnique()
     {
         $choices = new \Doctrine\Common\Collections\ArrayCollection();
-        $duplicatedChoice = new QuestionChoice();
+        $duplicatedChoice = new Choice();
         $choices->add($duplicatedChoice);
         $choices->add($duplicatedChoice);
         $question = new Question();
@@ -49,14 +49,14 @@ class QuestionTest extends AbstractModel
         $this->assertCount(1, $question->getChoices(), 'question must be notified when choice is added');
     }
 
-    public function testQuestionChoicesAlreadyExistingAreKept()
+    public function testChoicesAlreadyExistingAreKept()
     {
         $question = new Question();
         $choices1 = new \Doctrine\Common\Collections\ArrayCollection();
         $choices2 = new \Doctrine\Common\Collections\ArrayCollection();
-        $choice1 = new QuestionChoice();
-        $alreadyExistingChoice = new QuestionChoice();
-        $choice2 = new QuestionChoice();
+        $choice1 = new Choice();
+        $alreadyExistingChoice = new Choice();
+        $choice2 = new Choice();
 
         $choices1->add($choice1);
         $choices1->add($alreadyExistingChoice);

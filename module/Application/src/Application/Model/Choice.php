@@ -5,11 +5,11 @@ namespace Application\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Question defines a Survey (and NOT a questionnaire).
+ * Choice is used to defines all possible choices for a Question of type QuestionType::$CHOICE
  *
- * @ORM\Entity(repositoryClass="Application\Repository\QuestionRepository")
+ * @ORM\Entity(repositoryClass="Application\Repository\ChoiceRepository")
  */
-class QuestionChoice extends AbstractModel
+class Choice extends AbstractModel
 {
     /**
      * @var array
@@ -75,7 +75,7 @@ class QuestionChoice extends AbstractModel
     public function setQuestion(Question $question)
     {
         $this->question = $question;
-        $this->question->questionChoiceAdded($this);
+        $this->question->choiceAdded($this);
 
         return $this;
     }

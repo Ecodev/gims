@@ -10,14 +10,14 @@ use Application\Service\Hydrator;
 class HydratorTest extends \ApplicationTest\Controller\AbstractController
 {
     /**
-     * @var \Application\Model\QuestionChoice
+     * @var \Application\Model\Choice
      */
-    private $questionChoice1;
+    private $choice1;
 
     /**
-     * @var \Application\Model\QuestionChoice
+     * @var \Application\Model\Choice
      */
-    private $questionChoice2;
+    private $choice2;
 
     /**
      * @var \Application\Model\User
@@ -62,8 +62,8 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
 
         $this->user = new \Application\Model\User();
         $this->user->setName('John');
-        $this->questionChoice1 = new \Application\Model\QuestionChoice();
-        $this->questionChoice2 = new \Application\Model\QuestionChoice();
+        $this->choice1 = new \Application\Model\Choice();
+        $this->choice2 = new \Application\Model\Choice();
 
 
         // Create a stub for the Hydrator class with predetermined values, so we don't have to mess with database
@@ -71,8 +71,8 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->hydrator->expects($this->any())
                 ->method('getObject')
                 ->will($this->returnValueMap(array(
-                            array('Application\Model\QuestionChoice', 1, $this->questionChoice1),
-                            array('Application\Model\QuestionChoice', 2, $this->questionChoice2),
+                            array('Application\Model\Choice', 1, $this->choice1),
+                            array('Application\Model\Choice', 2, $this->choice2),
         )));
 
     }
@@ -173,8 +173,8 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     public function testCanHydrateCollectionExistingInDatabase()
     {
         $choices = new \Doctrine\Common\Collections\ArrayCollection();
-        $choices->add($this->questionChoice1);
-        $choices->add($this->questionChoice2);
+        $choices->add($this->choice1);
+        $choices->add($this->choice2);
         $question = new \Application\Model\Question();
 
         $data = array(
