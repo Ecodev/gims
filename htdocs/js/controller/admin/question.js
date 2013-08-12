@@ -2,61 +2,68 @@
 angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, $routeParams, $location, Restangular, Modal) {
     "use strict";
 
-	// Default redirect
-	var returnUrl = '/';
-	var returnTab = '';
+    // Default redirect
+    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts'};
+    var returnUrl = '/';
+    var returnTab = '';
 
-	$scope.sending = false;
-	$scope.addBtnChoice = false;
-
-//	$scope.types = [
-//		{text: 'Info', value: 'info'},
-//		{text: 'Multiple Choice Question', value: 'choice'},
-//		//{text: 'Percentage', value: 'percentage'}
-//	];
+    $scope.sending = false;
+    $scope.addBtnChoice = false;
 
 
-	$scope.percentages = [
-		{text: '100%', value:'1.000'},
-		{text: '90%', value:'0.900'},
-		{text: '80%', value:'0.800'},
-		{text: '70%', value:'0.700'},
-		{text: '60%', value:'0.600'},
-		{text: '50%', value:'0.500'},
-		{text: '40%', value:'0.400'},
-		{text: '30%', value:'0.300'},
-		{text: '20%', value:'0.200'},
-		{text: '10%', value:'0.100'},
-		{text: '0%', value:'0.000'},
-		{text: 'Unknown', value:null},
-	];
+    $scope.percentages = [
+        {text: '100%', value: '1.000'},
+        {text: '90%', value: '0.900'},
+        {text: '80%', value: '0.800'},
+        {text: '70%', value: '0.700'},
+        {text: '60%', value: '0.600'},
+        {text: '50%', value: '0.500'},
+        {text: '40%', value: '0.400'},
+        {text: '30%', value: '0.300'},
+        {text: '20%', value: '0.200'},
+        {text: '10%', value: '0.100'},
+        {text: '0%', value: '0.000'},
+        {text: 'Unknown', value: null},
+    ];
 
 
-    $scope.initChoices = function(){
+    $scope.initChoices = function () {
 
-		if($scope.question.type == 'info' ){ // hide choices zone
-			$scope.question.choices = [];
-			$scope.addBtnChoice = false;
-		}
-		else if($scope.question.type == 'choice' && ( !$scope.question.choices || $scope.question.choices.length == 0) ){
-			$scope.question.choices = [{}];
-			$scope.addBtnChoice = true;
-		}
-		else if($scope.question.type == 'choice' &&  $scope.question.choices.length > 0  ){
-			$scope.addBtnChoice = true;
-		}
+        $scope.addBtnChoice = false;
+        $scope.showChoices = false;
+
+
+        if ($scope.question.type == 'choice') {
+            $scope.showChoices = true;
+           if (!$scope.question.choices || $scope.question.choices.length == 0)
+                $scope.question.choices = [{}];
+            $scope.addBtnChoice = true;
+        }
+//        else if ($scope.question.type == 'text') {
+//
+//        }
+//        else if ($scope.question.type == 'numerical') {
+//
+//        }
+//        if ($scope.question.type == 'info') {
+//
+//
+//        }
+//        else if ($scope.question.type == 'multi_type') {
+//
+//        }
+
     }
 
 
-	$scope.addChoice = function(){
-		$scope.question.choices.push({});
-	}
+    $scope.addOption = function () {
+        $scope.question.choices.push({});
+    }
 
 
-	$scope.deleteChoice = function(index){
-		$scope.question.choices.splice(index,1);
-	}
-
+    $scope.deleteOption = function (index) {
+        $scope.question.choices.splice(index, 1);
+    }
 
 
     if ($routeParams.returnUrl) {
@@ -66,7 +73,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     }
 
 
-    var redirect = function() {
+    var redirect = function () {
         $location.path(returnUrl).search({}).hash(returnTab);
     };
 
@@ -77,30 +84,26 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     $scope.saveAndClose = function () {
         this.save(true);
     };
-    $scope.save = function (redirectAfterSave)
-	{
+    $scope.save = function (redirectAfterSave) {
         $scope.sending = true;
 
         // First case is for update a question, second is for creating
-        $scope.question.filter = $scope.question.filter.id;
-        if ($scope.question.id)
-		{
-                $scope.question.put({fields: 'metadata,filter,survey,type,choices,parts'}).then(function(question)
-				{
-					$scope.sending = false;
-					$scope.question= question;
-					$scope.initChoices();
-					if (redirectAfterSave) {
-						redirect();
-					}
-				});
+        if ($scope.question.filter) $scope.question.filter = $scope.question.filter.id;
+        if ($scope.question.id) {
+            $scope.question.put(questionFields).then(function (question) {
+                $scope.sending = false;
+                $scope.question = question;
+                $scope.initChoices();
+                if (redirectAfterSave) {
+                    redirect();
+                }
+            });
         }
-		else
-		{
+        else {
             $scope.question.survey = $routeParams.survey;
 
             delete $scope.question.sorting; // let the server define the sorting value
-            Restangular.all('question').post($scope.question).then(function(question) {
+            Restangular.all('question').post($scope.question).then(function (question) {
                 $scope.sending = false;
 
                 if (redirectAfterSave) {
@@ -113,6 +116,23 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
         }
     };
 
+
+    $scope.setParentQuestions = function (survey_id) {
+        Restangular.one('survey', survey_id).get({fields: 'questions,questions.type'}).then(function (survey) {
+            $scope.groupQuestions = [];
+
+            for (var question in survey.questions) {
+                question = survey.questions[question];
+                if (question.type == 'multi_type' || question.type == 'info') {
+                    $scope.groupQuestions.push(question);
+                }
+            }
+
+        });
+    }
+
+
+
     // Delete a question
     $scope.delete = function () {
         Modal.confirmDelete($scope.question, {label: $scope.question.name, returnUrl: $location.search().returnUrl});
@@ -121,18 +141,23 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
     // Try loading question if possible...
     if ($routeParams.id) {
-        Restangular.one('question', $routeParams.id).get({fields: 'metadata,filter,survey,type,choices,parts'}).then(function(question) {
+        Restangular.one('question', $routeParams.id).get(questionFields).then(function (question) {
             $scope.question = question;
-			$scope.initChoices();
+            $scope.setParentQuestions($scope.question.survey.id);
+            $scope.initChoices();
         });
-		Restangular.all('part', $routeParams.id).getList().then(function(parts) {
-			$scope.parts = parts;
-		});
-
-        Restangular.all('questionType', $routeParams.id).getList().then(function(types) {
-            $scope.types = types;
-        });
+    } else {
+        $scope.question = {};
+        $scope.setParentQuestions($routeParams.survey);
     }
+
+
+
+
+
+    Restangular.all('questionType', $routeParams.id).getList().then(function (types) {
+        $scope.types = types;
+    });
 
     // Load survey if possible
     var params = $location.search();

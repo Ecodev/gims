@@ -13,6 +13,9 @@
 
         <?php echo $this->crudButtons('question'); ?>
 
+        <pre>{{question|json}}</pre>
+
+
         <br/><br/>
 
         <div class="control-group form-horizontal">
@@ -29,14 +32,27 @@
         </div>
 
 
+
+
+        <div class="control-group form-horizontal" ng-class="{error: myForm.filter.$invalid}">
+            <label class='control-label' for="question.parent">Parent question</label>
+            <div class='controls row-fluid'>
+                <select class='span5'
+                        name="parent"
+                        ng-model="parent"
+                        ng-options="p.id as p.name for p in groupQuestions">
+                </select>
+            </div>
+        </div>
+
+
         <div class="control-group form-horizontal" ng-class="{error: myForm.filter.$invalid}">
             <label class='control-label' for="question.filter">Thematic</label>
             <div class='controls row-fluid'>
                 <gims-select    class='span5'
                                 api="filter"
                                 model="question.filter"
-                                placeholder="Select a thematic"
-                                required>
+                                placeholder="Select a thematic">
                 </gims-select>
                 <span ng-show="myForm.filter.$error.required" class="help-inline">Required</span>
             </div>
@@ -47,8 +63,7 @@
 		<div class="control-group form-horizontal" ng-class="{error: myForm.name.$invalid}">
 		    <label class='control-label' for="question.part">Zone</label>
             <div class='controls row-fluid'>
-                <gims-select    required
-                                class="span5 input-medium"
+                <gims-select    class="span5 input-medium"
                                 id="question.parts"
                                 name="type"
                                 model="question.parts"
@@ -62,9 +77,9 @@
 
         <br/><br/>
 		<div class="control-group form-horizontal" ng-class="{error: myForm.name.$invalid}">
-            <label class='control-label' for="question.name">Question</label>
+            <label class='control-label' for="question.name">Label</label>
             <div class='controls control-row'>
-                <input class='span8' id="question.name" type="text" name="name" ng-model="question.name" required/>
+                <input class='span8' id="question.name" type="text" name="name" ng-model="question.name"/>
                 <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
             </div>
         </div>
@@ -72,14 +87,15 @@
 
 
 
+
         <br/><br/>
-        <div ng-repeat="choice in question.choices" ng-class="{error: myForm.name.$invalid}">
+        <div ng-repeat="choice in question.choices" ng-show="showChoices" ng-class="{error: myForm.name.$invalid}">
 
             <div class="control-group form-horizontal">
                 <label class='control-label' for="choice.label">Choice {{$index+1}}</label>
                 <div class='controls'>
                     <input id="choice.value" type="text" name="name" ng-model="choice.label" required class='span8'/>
-                <span ng-show="myForm.name.$error.required" class="span1 help-inline">Required</span>
+                    <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
                 </div>
             </div>
 
@@ -93,16 +109,18 @@
                             ng-model="choice.value"
                             ng-options="p.value as p.text for p in percentages">
                     </select>
-                    <button class="btn btn-danger btn-xs" ng-click="deleteChoice($index)" ><i class="icon-trash"></i></button>
+                    <button class="btn btn-danger btn-xs" ng-click="deleteOption($index)" ><i class="icon-trash"></i></button>
                 </div>
             </div>
         </div>
 
-        <div class="control-group form-horizontal">
+        <div class="control-group form-horizontal" ng-show='addBtnChoice'>
             <label class='control-label'>&nbsp;</label>
             <div class='controls'>
-                <button ng-show='addBtnChoice' class="btn btn-success btn-xs" ng-click="addChoice()"><i class="icon-plus"></i> Add choice</button>
+                <button class="btn btn-success btn-xs" ng-click="addOption()"><i class="icon-plus"></i> Add choice</button>
             </div>
+
+            <br/><br/>
         </div>
 
 
@@ -111,7 +129,6 @@
 
 
 
-        <br/><br/>
 
         <div class="control-group form-horizontal" ng-class="{error: myForm.sorting.$invalid}" ng-show="question.id">
             <label class='control-label' for="question.sorting">Sorting</label>
