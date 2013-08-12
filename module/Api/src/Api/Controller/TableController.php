@@ -13,10 +13,8 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $idQuestionnaires = explode(',', $questionnaireParameter);
         $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
 
-        $pp = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
-        array_unshift($pp, null); // null entry for Total part ?
         $parts = array();
-        foreach ($pp as $part) {
+        foreach ($this->getEntityManager()->getRepository('Application\Model\Part')->findAll() as $part) {
             $parts[] = array(
                 'part' => $part,
                 'population' => null, // will be computed later for each questionnaire
@@ -47,7 +45,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         return new JsonModel($result);
     }
 
-    /* 
+    /*
      * Compute the answers for a given questionnaire (hence country+survey) and filter
      */
     public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0, &$result)
