@@ -5,13 +5,13 @@ namespace Application\Model\Rule;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * QuestionnaireRule allows us to "apply" a rule to a questionnaire-part pair. This
+ * QuestionnaireFormula allows us to "apply" a formula to a questionnaire-part pair. This
  * is used for what is called Calculations, Estimates and Ratios in original Excel files.
  *
- * @ORM\Entity(repositoryClass="Application\Repository\QuestionnaireRuleRepository")
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="questionnaire_rule_unique",columns={"questionnaire_id", "part_id", "rule_id"})})
+ * @ORM\Entity(repositoryClass="Application\Repository\QuestionnaireFormulaRepository")
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="questionnaire_formula_unique",columns={"questionnaire_id", "part_id", "formula_id"})})
  */
-class QuestionnaireRule extends \Application\Model\AbstractModel
+class QuestionnaireFormula extends \Application\Model\AbstractModel
 {
 
     /**
@@ -35,14 +35,14 @@ class QuestionnaireRule extends \Application\Model\AbstractModel
     private $part;
 
     /**
-     * @var AbstractRule
+     * @var Formula
      *
-     * @ORM\ManyToOne(targetEntity="AbstractRule")
+     * @ORM\ManyToOne(targetEntity="Formula")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
      */
-    private $rule;
+    private $formula;
 
     /**
      * @var string
@@ -55,7 +55,7 @@ class QuestionnaireRule extends \Application\Model\AbstractModel
      * Set questionnaire
      *
      * @param \Application\Model\Questionnaire $questionnaire
-     * @return QuestionnaireRule
+     * @return QuestionnaireFormula
      */
     public function setQuestionnaire(\Application\Model\Questionnaire $questionnaire)
     {
@@ -78,7 +78,7 @@ class QuestionnaireRule extends \Application\Model\AbstractModel
      * Set part
      *
      * @param \Application\Model\Part $part
-     * @return QuestionnaireRule
+     * @return QuestionnaireFormula
      */
     public function setPart(\Application\Model\Part $part)
     {
@@ -98,33 +98,33 @@ class QuestionnaireRule extends \Application\Model\AbstractModel
     }
 
     /**
-     * Set rule
+     * Set formula
      *
-     * @param AbstractRule $rule
-     * @return QuestionnaireRule
+     * @param Formula $formula
+     * @return QuestionnaireFormula
      */
-    public function setRule(AbstractRule $rule)
+    public function setFormula(Formula $formula)
     {
-        $this->rule = $rule;
+        $this->formula = $formula;
 
         return $this;
     }
 
     /**
-     * Get rule
+     * Get formula
      *
-     * @return AbstractRule
+     * @return Formula
      */
-    public function getRule()
+    public function getFormula()
     {
-        return $this->rule;
+        return $this->formula;
     }
 
     /**
      * Set justification
      *
      * @param string $justification
-     * @return QuestionnaireRule
+     * @return QuestionnaireFormula
      */
     public function setJustification($justification)
     {

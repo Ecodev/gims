@@ -7,10 +7,26 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Formula is a way to define a value as a custom formula.
  *
- * TODO: For now the formula is not actually implemented but will be
- * in the future, see following tickets:
- * - https://support.ecodev.ch/issues/2073
- * - https://support.ecodev.ch/issues/2074
+ * Syntax is as follow:
+ *
+ * Reference a Filter's value:
+ * {F#12,Q#34,P#56}
+ *
+ * Reference an Unofficial Filter name (NOT value). It will return NULL if no Unofficial Filter is found. The ID refers to the official Filter:
+ * {F#12,Q#34}
+ *
+ * Reference a QuestionnaireFormula's value:
+ * {Fo#12,Q#34,P#56}
+ *
+ * Where:
+ * - F  = Filter
+ * - Q  = Questionnaire
+ * - P  = Part
+ * - Fo  = Formula
+ *
+ * In all cases Q and P can have the value "current" instead of actual ID. It means
+ * that the current Questionnaire or Part should be used, instead of one selected
+ * by its ID. This syntax should prefered when possible to maximise Formula re-use.
  *
  * @ORM\Entity
  */
@@ -23,15 +39,6 @@ class Formula extends AbstractRule
      * @ORM\Column(type="string", nullable=true, length=4096)
      */
     private $formula;
-
-    /**
-     * This is the "cached" result of the formula
-     * TODO: it should be removed when real formula engine is implemented. See class header comment
-     * @var float
-     *
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $value;
 
     /**
      * Set formula
@@ -55,28 +62,4 @@ class Formula extends AbstractRule
     {
         return $this->formula;
     }
-
-    /**
-     * Set absolute value
-     *
-     * @param float $value
-     * @return Formula
-     */
-    public function setValue($value)
-    {
-        $this->value = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get absolute value
-     *
-     * @return float
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
 }

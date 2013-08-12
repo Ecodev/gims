@@ -91,7 +91,7 @@ class Jmp extends AbstractImporter
             'replacements' => array(
             // No replacements to make for water
             ),
-            'questionnaireRules' => array(
+            'questionnaireFormulas' => array(
                 'Calculation' => array(78, 79, 80, 81, 82),
                 'Estimate' => array(83, 84, 85, 86, 87, 88),
                 'Ratio' => array(94, 95, 96, 97, 98, 99, 100, 101, 102, 103),
@@ -216,7 +216,7 @@ class Jmp extends AbstractImporter
                 9 => array("to unknown place/ not sure/DK", 999, 0, null),
                 10 => array("to elsewhere", 999, 0, null),
             ),
-            'questionnaireRules' => array(
+            'questionnaireFormulas' => array(
                 'Calculation' => array(85, 86, 87),
                 'Estimate' => array(88, 89, 90, 91, 92, 93),
                 'Ratio' => array(100, 101, 102, 103, 104, 105, 106, 107),
@@ -270,7 +270,7 @@ class Jmp extends AbstractImporter
     private $questionnaireCount = 0;
     private $answerCount = 0;
     private $excludeCount = 0;
-    private $questionnaireRuleCount = 0;
+    private $questionnaireFormulaCount = 0;
     private $ratioCount = 0;
     private $formulaCount = 0;
 
@@ -342,7 +342,7 @@ class Jmp extends AbstractImporter
             // Second pass on imported questionnaires to process cross-questionnaire things
             echo 'Importing Calculations, Estimates and Ratios';
             foreach ($this->importedQuestionnaires as $col => $questionnaire) {
-                $this->importQuestionnaireRules($sheet, $col, $questionnaire);
+                $this->importQuestionnaireFormulas($sheet, $col, $questionnaire);
                 echo '.';
             }
             echo PHP_EOL;
@@ -364,7 +364,7 @@ class Jmp extends AbstractImporter
         $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $answerRepository->updateAbsoluteValueFromPercentageValue();
 
-        return "Total imported: $this->questionnaireCount questionnaires, $this->answerCount answers, $this->excludeCount exclude rules, $this->ratioCount ratio rules, $this->questionnaireRuleCount questionnaire rules, $this->formulaCount formulas" . PHP_EOL;
+        return "Total imported: $this->questionnaireCount questionnaires, $this->answerCount answers, $this->excludeCount exclude rules, $this->ratioCount ratio rules, $this->questionnaireFormulaCount questionnaire rules, $this->formulaCount formulas" . PHP_EOL;
     }
 
     protected function getFilter($definition)
@@ -754,30 +754,30 @@ class Jmp extends AbstractImporter
      * @param integer $col
      * @param \Application\Model\Questionnaire $questionnaire
      */
-    protected function importQuestionnaireRules(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire)
+    protected function importQuestionnaireFormulas(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire)
     {
-        foreach ($this->definitions[$sheet->getTitle()]['questionnaireRules'] as $group) {
+        foreach ($this->definitions[$sheet->getTitle()]['questionnaireFormulas'] as $group) {
             foreach ($group as $row) {
                 foreach ($this->partOffsets as $offset => $part) {
-                    $this->getQuestionnaireRule($sheet, $col, $row, $offset, $questionnaire, $part);
+                    $this->getQuestionnaireFormula($sheet, $col, $row, $offset, $questionnaire, $part);
                 }
             }
         }
     }
 
     /**
-     * Create or get a QuestionnaireRule and its Formula
+     * Create or get a QuestionnaireFormula and its Formula
      * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
      * @param integer $row
      * @param integer $offset
      * @param \Application\Model\Questionnaire $questionnaire
      * @param \Application\Model\Part $part
-     * @return \Application\Model\Rule\QuestionnaireRule|null
+     * @return \Application\Model\Rule\QuestionnaireFormula|null
      */
-    protected function getQuestionnaireRule(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part)
+    protected function getQuestionnaireFormula(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part)
     {
-        $questionnaireRuleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireRule');
+        $questionnaireFormulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireFormula');
 //        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
 
         $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
@@ -798,23 +798,23 @@ class Jmp extends AbstractImporter
             // If we had an existing formula, maybe we also have an existing association
             $assoc = null;
             if ($formula && $formula->getId()) {
-                $assoc = $questionnaireRuleRepository->findOneBy(array(
+                $assoc = $questionnaireFormulaRepository->findOneBy(array(
                     'questionnaire' => $questionnaire,
                     'part' => $part,
-                    'rule' => $formula,
+                    'formula' => $formula,
                 ));
             }
 
             // If association doesn't exist yet, create it
             if (!$assoc) {
-                $assoc = new \Application\Model\Rule\QuestionnaireRule();
+                $assoc = new \Application\Model\Rule\QuestionnaireFormula();
                 $assoc->setJustification($this->defaultJustification)
                         ->setQuestionnaire($questionnaire)
-                        ->setRule($formula)
+                        ->setFormula($formula)
                         ->setPart($part);
 
                 $this->getEntityManager()->persist($assoc);
-                $this->questionnaireRuleCount++;
+                $this->questionnaireFormulaCount++;
             }
 
             return $assoc;
@@ -882,7 +882,7 @@ class Jmp extends AbstractImporter
 
                     if (isset($importedQuestionnaires[$refCol])) {
                         $refQuestionnaireId = $importedQuestionnaires[$refCol]->getId();
-                        return "{UF#$refFilterId,Q#$refQuestionnaireId}";
+                        return "{F#$refFilterId,Q#$refQuestionnaireId}";
                     }
 
                     // Find out referenced Questionnaire
@@ -911,18 +911,18 @@ class Jmp extends AbstractImporter
                     if ($refFilterId) {
 
                         return "{F#$refFilterId,Q#$refQuestionnaireId,P#$refPartId}";
-                        // More advanced case is when we reference another QuestionnaireRule (Calculation, Estimate or Ratio)
+                        // More advanced case is when we reference another QuestionnaireFormula (Calculation, Estimate or Ratio)
                     } else {
 
                         $refColQuestionnaire = array_search($questionnaire, $importedQuestionnaires);
 
-                        $refQuestionnaireRule = $this->getQuestionnaireRule($sheet, $refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart, "INDIRECT SHIT");
+                        $refQuestionnaireFormula = $this->getQuestionnaireFormula($sheet, $refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart, "INDIRECT SHIT");
 
-                        if ($refQuestionnaireRule) {
+                        if ($refQuestionnaireFormula) {
                             $this->getEntityManager()->flush();
-                            $refRuleId = $refQuestionnaireRule->getRule()->getId();
+                            $refFormulaId = $refQuestionnaireFormula->getFormula()->getId();
 
-                            return "{R#$refRuleId,Q#$refQuestionnaireId,P#$refPartId}";
+                            return "{Fo#$refFormulaId,Q#$refQuestionnaireId,P#$refPartId}";
                         } else {
                             return 'NULL'; // if no formula found at all, return NULL string which will behave like an empty cell in PHPExcell
                         }
@@ -942,7 +942,7 @@ class Jmp extends AbstractImporter
 
         if (!$formula) {
             $prefix = '';
-            foreach ($this->definitions[$sheet->getTitle()]['questionnaireRules'] as $label => $rows) {
+            foreach ($this->definitions[$sheet->getTitle()]['questionnaireFormulas'] as $label => $rows) {
                 if (in_array($row, $rows)) {
                     $prefix = $label . ': ';
                 }
@@ -1086,7 +1086,7 @@ class Jmp extends AbstractImporter
      */
     protected function finishRatios(\Application\Model\Questionnaire $questionnaire)
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireRule');
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireFormula');
         $synonyms = array(
             'Facilités améliorées partagées / Facilités améliorées',
             'Shared facilities / All improved facilities',
@@ -1106,15 +1106,15 @@ class Jmp extends AbstractImporter
         $filterImprovedSharedId = $filterImprovedShared->getId();
         foreach ($synonyms as $synonym) {
             foreach ($this->partOffsets as $offset => $part) {
-                $questionnaireRule = $repository->getOneByRuleName($synonym, $questionnaire, $part);
+                $questionnaireFormula = $repository->getOneByFormulaName($synonym, $questionnaire, $part);
 
-                if ($questionnaireRule) {
-                    $questionnaireRuleId = $questionnaireRule->getId();
+                if ($questionnaireFormula) {
+                    $formulaId = $questionnaireFormula->getFormula()->getId();
 
-                    $formulaImproved = "={F#$filterImprovedSharedId,Q#current,P#current} * (1 - {QR#$questionnaireRuleId,Q#current,P#current})";
+                    $formulaImproved = "={F#$filterImprovedSharedId,Q#current,P#current} * (1 - {Fo#$formulaId,Q#current,P#current})";
                     $this->linkFormula($formulaImproved, $filterImproved, $questionnaire, $part);
 
-                    $formulaShared = "={F#$filterImprovedSharedId,Q#current,P#current} * {QR#$questionnaireRuleId,Q#current,P#current}";
+                    $formulaShared = "={F#$filterImprovedSharedId,Q#current,P#current} * {Fo#$formulaId,Q#current,P#current}";
                     $this->linkFormula($formulaShared, $filterShared, $questionnaire, $part);
                 }
             }

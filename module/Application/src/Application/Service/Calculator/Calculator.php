@@ -24,8 +24,112 @@ use \Application\Traits\EntityManagerAware;
 
     // @todo for sylvain: is the cache introducing some unwanted result in calculation?
     private $cacheComputeFilter = array();
-
     protected $excludedFilters = array();
+    private $questionnaireFormulaRepository;
+    private $filterRepository;
+    private $questionnaireRepository;
+    private $partRepository;
+
+    /**
+     * Set the questionnaireformula repository
+     * @param \Application\Repository\questionnaireFormulaRepository $questionnaireFormulaRepository
+     * @return \Application\Service\Calculator\Calculator
+     */
+    public function setQuestionnaireFormulaRepository(\Application\Repository\questionnaireFormulaRepository $questionnaireFormulaRepository)
+    {
+        $this->questionnaireFormulaRepository = $questionnaireFormulaRepository;
+
+        return $this;
+    }
+
+    /**
+     * Get the questionnaireformula repository
+     * @return \Application\Repository\questionnaireFormulaRepository
+     */
+    public function getQuestionnaireFormulaRepository()
+    {
+        if (!$this->questionnaireFormulaRepository) {
+            $this->questionnaireFormulaRepository = $this->getEntityManager()->getRepository('Application\Model\QuestionnaireFormula');
+        }
+
+        return $this->questionnaireFormulaRepository;
+    }
+
+    /**
+     * Set the filter repository
+     * @param \Application\Repository\FilterRepository $filterRepository
+     * @return \Application\Service\Calculator\Calculator
+     */
+    public function setFilterRepository(\Application\Repository\FilterRepository $filterRepository)
+    {
+        $this->filterRepository = $filterRepository;
+
+        return $this;
+    }
+
+    /**
+     * Get the filter repository
+     * @return \Application\Repository\FilterRepository
+     */
+    public function getFilterRepository()
+    {
+        if (!$this->filterRepository) {
+            $this->filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
+        }
+
+        return $this->filterRepository;
+    }
+
+    /**
+     * Set the part repository
+     * @param \Application\Repository\PartRepository $partRepository
+     * @return \Application\Service\Calculator\Calculator
+     */
+    public function setPartRepository(\Application\Repository\PartRepository $partRepository)
+    {
+        $this->partRepository = $partRepository;
+
+        return $this;
+    }
+
+    /**
+     * Get the part repository
+     * @return \Application\Repository\PartRepository
+     */
+    public function getPartRepository()
+    {
+        if (!$this->partRepository) {
+            $this->partRepository = $this->getEntityManager()->getRepository('Application\Model\Part');
+        }
+
+        return $this->partRepository;
+    }
+
+    /**
+     * Set the questionnaire repository
+     * @param \Application\Repository\QuestionnaireRepository $questionnaireRepository
+     * @return \Application\Service\Calculator\Calculator
+     */
+    public function setQuestionnaireRepository(\Application\Repository\QuestionnaireRepository $questionnaireRepository)
+    {
+        $this->questionnaireRepository = $questionnaireRepository;
+
+        return $this;
+    }
+
+    /**
+     * Get the questionnaire repository
+     * @return \Application\Repository\QuestionnaireRepository
+     */
+    public function getQuestionnaireRepository()
+    {
+        if (!$this->questionnaireRepository) {
+            $this->questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
+        }
+
+        return $this->questionnaireRepository;
+    }
+
     /**
      * Returns a unique identifying all arguments, so we can use the result as cache key
      * @param array $args
@@ -99,8 +203,7 @@ use \Application\Traits\EntityManagerAware;
                 $alreadySummedFilters->add(true);
                 $absoluteValue = $answer->getValueAbsolute();
                 // If the filter of the answer has subfilters, then add the parent filter value and continue to compute subfilters
-                if ($answerFilter->getChildren()->count() == 0)
-                {
+                if ($answerFilter->getChildren()->count() == 0) {
                     return $absoluteValue;
                 }
             }
@@ -155,6 +258,70 @@ use \Application\Traits\EntityManagerAware;
         }
 
         return $sum;
+    }
+
+    public function computeFormula(\Application\Model\Rule\Formula $formula, \Application\Model\Questionnaire $currentQuestionnaire, Part $currentPart)
+    {
+        $originalFormula = $formula->getFormula();
+
+        // Replace {F#12,Q#34,P#56} with Filter value
+        $convertedFormulas = preg_replace_callback('/\{F#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use($currentQuestionnaire, $currentPart) {
+                    $filterId = $matches[1];
+                    $questionnaireId = $matches[2];
+                    $partId = $matches[3];
+
+                    $filter = $this->getFilterRepository()->findOneById($filterId);
+                    $questionnaire = $questionnaireId == 'current' ? $currentQuestionnaire : $this->getQuestionnaireRepository()->findOneById($questionnaireId);
+                    $part = $partId == 'current' ? $currentPart : $this->getPartRepository()->findOneById($partId);
+
+                    return $this->computeFilter($filter, $questionnaire, $part);
+                }, $originalFormula);
+
+        // Replace {F#12,Q#34} with Unofficial Filter name, or NULL if no Unofficial Filter
+        $convertedFormulas = preg_replace_callback('/\{F#(\d+),Q#(\d+|current)\}/', function($matches) use($currentQuestionnaire, $currentPart) {
+                    $filterId = $matches[1];
+                    $questionnaireId = $matches[2];
+
+                    $questionnaire = $questionnaireId == 'current' ? $currentQuestionnaire->getId() : $questionnaireId;
+
+// TODO: finish implementation
+//                    $unofficialFilter = $this->getFilterRepository()->findOneBy(array(
+//                        'isOfficial' => false,
+//                        'officialFilter' => $filterId,
+//                        'officialFilter' => $filterId,
+//
+//                    ));
+//
+//                    return $this->computeFilter($unofficialFilter, $questionnaire, $part);
+                }, $convertedFormulas);
+
+        // Replace {Fo#12,Q#34,P#56} with QuestionnaireFormula value
+        $convertedFormulas = preg_replace_callback('/\{Fo#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use($currentQuestionnaire, $currentPart) {
+                    $formulaId = $matches[1];
+                    $questionnaireId = $matches[2];
+                    $partId = $matches[3];
+
+                    $questionnaire = $questionnaireId == 'current' ? $currentQuestionnaire : $questionnaireId;
+                    $part = $partId == 'current' ? $currentPart : $partId;
+
+                    $questionnaireFormula = $this->getQuestionnaireFormulaRepository()->findOneBy(array(
+                        'formula' => $formulaId,
+                        'questionnaire' => $questionnaire,
+                        'part' => $part,
+                    ));
+
+
+                    if (!$questionnaireFormula)
+                    {
+                        throw new \Exception('Reference to non existing QuestionnaireFormula: ' . $matches[0]);
+                    }
+
+                    return $this->computeFormula($questionnaireFormula->getFormula(), $questionnaireFormula->getQuestionnaire(), $questionnaireFormula->getPart());
+                }, $convertedFormulas);
+
+//        v($originalFormula, $convertedFormulas);
+
+        return \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($convertedFormulas);
     }
 
 }

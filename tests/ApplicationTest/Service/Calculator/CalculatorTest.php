@@ -101,19 +101,91 @@ class CalculatorTest extends AbstractCalculator
     {
         $service = new \Application\Service\Calculator\Calculator();
 
-        // Define filter1 to add 0.5
+//        // Define filter1 to add 0.5
+//        $formula = new \Application\Model\Rule\Formula();
+//        $formula->setValue(0.5);
+//        $filterRule = new \Application\Model\Rule\FilterRule();
+//        $filterRule->setPart($this->part)->setFilter($this->filter1)->setQuestionnaire($this->questionnaire)->setRule($formula);
+//
+//        // Define filter1 to also add 0.1
+//        $formula2 = new \Application\Model\Rule\Formula();
+//        $formula2->setValue(0.1);
+//        $filterRule2 = new \Application\Model\Rule\FilterRule();
+//        $filterRule2->setPart($this->part)->setFilter($this->filter1)->setQuestionnaire($this->questionnaire)->setRule($formula2);
+//
+//        $this->assertEquals(0.7111, $service->computeFilter($this->filter1, $this->questionnaire, $this->part));
+    }
+
+    public function testFormula()
+    {
+        $service = new \Application\Service\Calculator\Calculator();
+        $service->setServiceLocator($this->getApplicationServiceLocator());
+
+        // Create a stub for the FilterRepository class with predetermined values, so we don't have to mess with database
+        $stubFilterRepository = $this->getMock('\Application\Repository\FilterRepository', array('findOneById'), array(), '', false);
+        $stubFilterRepository->expects($this->any())
+                ->method('findOneById')
+                ->will($this->returnValueMap(array(
+                            array('1', $this->filter1),
+                            array('11', $this->filter11),
+                            array('12', $this->filter12),
+        )));
+        $service->setFilterRepository($stubFilterRepository);
+
+        // Create a stub for the QuestionnaireRepository class with predetermined values, so we don't have to mess with database
+        $stubQuestionnaireRepository = $this->getMock('\Application\Repository\QuestionnaireRepository', array('findOneById'), array(), '', false);
+        $stubQuestionnaireRepository->expects($this->any())
+                ->method('findOneById')
+                ->will($this->returnValueMap(array(
+                            array('34', $this->questionnaire),
+        )));
+        $service->setQuestionnaireRepository($stubQuestionnaireRepository);
+
+        // Create a stub for the PartRepository class with predetermined values, so we don't have to mess with database
+        $stubPartRepository = $this->getMock('\Application\Repository\PartRepository', array('findOneById'), array(), '', false);
+        $stubPartRepository->expects($this->any())
+                ->method('findOneById')
+                ->will($this->returnValueMap(array(
+                            array('56', $this->part),
+        )));
+        $service->setPartRepository($stubPartRepository);
+
+        // Create a stub for the QuestionnaireFormulaRepository class with predetermined values, so we don't have to mess with database
+        $questionnaireFormula = new \Application\Model\Rule\QuestionnaireFormula();
+        $questionnaireFormula->setFormula((new \Application\Model\Rule\Formula())->setFormula('=2+3'))
+                ->setQuestionnaire($this->questionnaire)
+                ->setPart($this->part);
+        $stubQuestionnaireFormulaRepository = $this->getMock('\Application\Repository\QuestionnaireFormulaRepository', array('findOneBy'), array(), '', false);
+        $stubQuestionnaireFormulaRepository->expects($this->any())
+                ->method('findOneBy')
+                ->will($this->returnValue($questionnaireFormula)
+        );
+        $service->setQuestionnaireFormulaRepository($stubQuestionnaireFormulaRepository);
+        $this->assertEquals($questionnaireFormula, $stubQuestionnaireFormulaRepository->findOneBy(array('foo')));
+
+
         $formula = new \Application\Model\Rule\Formula();
-        $formula->setValue(0.5);
-        $filterRule = new \Application\Model\Rule\FilterRule();
-        $filterRule->setPart($this->part)->setFilter($this->filter1)->setQuestionnaire($this->questionnaire)->setRule($formula);
+        $formula->setFormula('=(3 + 7) * SUM(2, 3)');
+        $this->assertEquals(50, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to handle standard Excel things');
 
-        // Define filter1 to also add 0.1
-        $formula2 = new \Application\Model\Rule\Formula();
-        $formula2->setValue(0.1);
-        $filterRule2 = new \Application\Model\Rule\FilterRule();
-        $filterRule2->setPart($this->part)->setFilter($this->filter1)->setQuestionnaire($this->questionnaire)->setRule($formula2);
+        $formula->setFormula('= 10 + {F#11,Q#34,P#56}');
+        $this->assertEquals(10.101, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a Filter value');
 
-        $this->assertEquals(0.7111, $service->computeFilter($this->filter1, $this->questionnaire, $this->part));
+        $formula->setFormula('= 10 + {F#11,Q#current,P#current}');
+        $this->assertEquals(10.101, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a Filter value with same Questionnaire and Part');
+
+
+        $formula->setFormula('={Fo#12,Q#34,P#56}');
+        $this->assertEquals(5, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a QuestionnaireFormula');
+
+        $formula->setFormula('={Fo#12,Q#current,P#current}');
+        $this->assertEquals(5, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a QuestionnaireFormula with same Questionnaire and Part');
+
+
+// TODO: finish implementation
+//        $formula->setFormula('={F#12,Q#34}');
+//        $this->assertEquals(5, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer an Unofficial Filter name');
+
     }
 
 }

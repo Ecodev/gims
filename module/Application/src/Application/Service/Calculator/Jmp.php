@@ -13,8 +13,6 @@ class Jmp extends Calculator
     private $cacheComputeFilterForAllQuestionnaires = array();
     private $cacheComputeRegressionForAllYears = array();
     private $populationRepository;
-    private $partRepository;
-
 
     /**
      * Set the population repository
@@ -39,31 +37,6 @@ class Jmp extends Calculator
         }
 
         return $this->populationRepository;
-    }
-
-    /**
-     * Set the part repository
-     * @param \Application\Repository\PartRepository $partRepository
-     * @return \Application\Service\Calculator\Jmp
-     */
-    public function setPartRepository(\Application\Repository\PartRepository $partRepository)
-    {
-        $this->partRepository = $partRepository;
-
-        return $this;
-    }
-
-    /**
-     * Get the part repository
-     * @return \Application\Repository\PartRepository
-     */
-    public function getPartRepository()
-    {
-        if (!$this->partRepository) {
-            $this->partRepository = $this->getEntityManager()->getRepository('Application\Model\Part');
-        }
-
-        return $this->partRepository;
     }
 
     /**
