@@ -8,7 +8,7 @@ source:
    - config
    - module
    - tests
-   - vendor/CodePlex
+   - vendor/phpoffice
    - vendor/creof
    - vendor/doctrine
    - vendor/firephp
