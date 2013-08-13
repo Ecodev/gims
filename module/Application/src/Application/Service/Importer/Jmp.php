@@ -843,8 +843,10 @@ class Jmp extends AbstractImporter
         $cell = $sheet->getCellByColumnAndRow($col + $offset, $row);
 
         // Some countries have estimates with non-zero values but without name! (Yemen, Tables_W, DHS92, estimates line 88)
-        if (!$name)
+        if (!$name) {
+//            w($col, $row, $offset);
             $name = 'Unnamed estimation imported from country files';
+        }
 
         $originalFormula = $cell->getValue();
 
@@ -898,7 +900,7 @@ class Jmp extends AbstractImporter
                     if ($refQuestionnaire == $questionnaire)
                         $refQuestionnaireId = 'current';
                     else
-                        $refQuestionnaireId = $questionnaire->getId();
+                        $refQuestionnaireId = $refQuestionnaire->getId();
 
                     // Find out referenced Part
                     $refPart = $refData['part'];
@@ -915,14 +917,16 @@ class Jmp extends AbstractImporter
                         // More advanced case is when we reference another QuestionnaireFormula (Calculation, Estimate or Ratio)
                     } else {
 
-                        $refColQuestionnaire = array_search($questionnaire, $importedQuestionnaires);
+                        // Find the column of the referenced questionnaire
+                        $refColQuestionnaire = array_search($refQuestionnaire, $importedQuestionnaires);
 
-                        $refQuestionnaireFormula = $this->getQuestionnaireFormula($sheet, $refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart, "INDIRECT SHIT");
+                        $refQuestionnaireFormula = $this->getQuestionnaireFormula($sheet, $refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart);
 
                         if ($refQuestionnaireFormula) {
                             $this->getEntityManager()->flush();
                             $refFormulaId = $refQuestionnaireFormula->getFormula()->getId();
 
+//                            v($refFormulaId,$refQuestionnaireId,$refPartId, $refQuestionnaireFormula->getFormula()->getId(), $refQuestionnaireFormula->getQuestionnaire()->getId(), $refQuestionnaireFormula->getPart()->getId());
                             return "{Fo#$refFormulaId,Q#$refQuestionnaireId,P#$refPartId}";
                         } else {
                             return 'NULL'; // if no formula found at all, return NULL string which will behave like an empty cell in PHPExcell

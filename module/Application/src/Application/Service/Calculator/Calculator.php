@@ -49,7 +49,7 @@ use \Application\Traits\EntityManagerAware;
     public function getQuestionnaireFormulaRepository()
     {
         if (!$this->questionnaireFormulaRepository) {
-            $this->questionnaireFormulaRepository = $this->getEntityManager()->getRepository('Application\Model\QuestionnaireFormula');
+            $this->questionnaireFormulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireFormula');
         }
 
         return $this->questionnaireFormulaRepository;
@@ -210,18 +210,11 @@ use \Application\Traits\EntityManagerAware;
         }
 
 
-        $formulaValue = null;
+        // If the filter has a formula, returns its value
         foreach ($filter->getFilterRules() as $filterRule) {
             $rule = $filterRule->getRule();
-            if ($filterRule->getQuestionnaire() == $questionnaire && $filterRule->getPart() == $part) {
-
-                // If we have a formula, cumulate their value to add them later to normal result
-                if ($rule instanceof \Application\Model\Rule\Formula) {
-                    $value = $rule->getValue();
-                    if (!is_null($value)) {
-                        $formulaValue += $value;
-                    }
-                }
+            if ($rule instanceof \Application\Model\Rule\Formula && $filterRule->getQuestionnaire() == $questionnaire && $filterRule->getPart() == $part) {
+                return $this->computeFormula($rule, $questionnaire, $part);
             }
         }
 
@@ -245,12 +238,6 @@ use \Application\Traits\EntityManagerAware;
         // If no sum so far, we use children instead. This is "normal case"
         if (is_null($sum)) {
             $sum = $summer($filter->getChildren());
-        }
-
-        // And finally add cumulated formula values (what is called "Estimates" in Excel)
-        // TODO: This probably will change once we implement real formula engine
-        if (!is_null($formulaValue)) {
-            $sum += $formulaValue;
         }
 
         if (!is_null($absoluteValue)) {
@@ -283,7 +270,9 @@ use \Application\Traits\EntityManagerAware;
                     $questionnaire = $questionnaireId == 'current' ? $currentQuestionnaire : $this->getQuestionnaireRepository()->findOneById($questionnaireId);
                     $part = $partId == 'current' ? $currentPart : $this->getPartRepository()->findOneById($partId);
 
-                    return $this->computeFilter($filter, $questionnaire, $part);
+                    $value = $this->computeFilter($filter, $questionnaire, $part);
+
+                    return is_null($value) ? 'NULL' : $value;
                 }, $originalFormula);
 
         // Replace {F#12,Q#34} with Unofficial Filter name, or NULL if no Unofficial Filter
@@ -308,7 +297,7 @@ use \Application\Traits\EntityManagerAware;
                 }, $convertedFormulas);
 
         // Replace {Fo#12,Q#34,P#56} with QuestionnaireFormula value
-        $convertedFormulas = preg_replace_callback('/\{Fo#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use($currentQuestionnaire, $currentPart) {
+        $convertedFormulas = preg_replace_callback('/\{Fo#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use($currentQuestionnaire, $currentPart, $formula, $originalFormula) {
                     $formulaId = $matches[1];
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
@@ -324,10 +313,12 @@ use \Application\Traits\EntityManagerAware;
 
 
                     if (!$questionnaireFormula) {
-                        throw new \Exception('Reference to non existing QuestionnaireFormula: ' . $matches[0]);
+                        throw new \Exception('Reference to non existing QuestionnaireFormula ' . $matches[0] . ' in  Formula#' . $formula->getId() . ', "' . $formula->getName() . '": ' . $originalFormula);
                     }
 
-                    return $this->computeFormula($questionnaireFormula->getFormula(), $questionnaireFormula->getQuestionnaire(), $questionnaireFormula->getPart());
+                    $value = $this->computeFormula($questionnaireFormula->getFormula(), $questionnaireFormula->getQuestionnaire(), $questionnaireFormula->getPart());
+
+                    return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
 
         return \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($convertedFormulas);

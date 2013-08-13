@@ -52,6 +52,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
     {
 
         $service = new \Application\Service\Calculator\Calculator();
+        $service->setServiceLocator($this->getServiceLocator());
         $hydrator = new \Application\Service\Hydrator();
 
         $current = array();

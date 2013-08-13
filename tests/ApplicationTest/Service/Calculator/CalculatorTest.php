@@ -97,31 +97,26 @@ class CalculatorTest extends AbstractCalculator
         $this->assertEquals(12345.011111, $res3, 'after clearing cache, result reflect new values');
     }
 
-    public function testCumulatedFormulasAreSummed()
+    public function testFormulaOverrideNormalResult()
     {
         $service = new \Application\Service\Calculator\Calculator();
 
-//        // Define filter1 to add 0.5
-//        $formula = new \Application\Model\Rule\Formula();
-//        $formula->setValue(0.5);
-//        $filterRule = new \Application\Model\Rule\FilterRule();
-//        $filterRule->setPart($this->part)->setFilter($this->filter1)->setQuestionnaire($this->questionnaire)->setRule($formula);
-//
-//        // Define filter1 to also add 0.1
-//        $formula2 = new \Application\Model\Rule\Formula();
-//        $formula2->setValue(0.1);
-//        $filterRule2 = new \Application\Model\Rule\FilterRule();
-//        $filterRule2->setPart($this->part)->setFilter($this->filter1)->setQuestionnaire($this->questionnaire)->setRule($formula2);
-//
-//        $this->assertEquals(0.7111, $service->computeFilter($this->filter1, $this->questionnaire, $this->part));
+        // Define filter1 to actually be the result of a formula
+        $formula = new \Application\Model\Rule\Formula();
+        $formula->setFormula('=0.5');
+        $filterRule = new \Application\Model\Rule\FilterRule();
+        $filterRule->setPart($this->part)->setFilter($this->filter1)->setQuestionnaire($this->questionnaire)->setRule($formula);
+
+        $this->assertEquals(0.5, $service->computeFilter($this->filter1, $this->questionnaire, $this->part));
     }
 
-    public function testFormula()
+    public function testFormulaSyntax()
     {
         $service = new \Application\Service\Calculator\Calculator();
         $service->setServiceLocator($this->getApplicationServiceLocator());
 
         // Create a stub for the FilterRepository class with predetermined values, so we don't have to mess with database
+        $nullFilter = new \Application\Model\Filter();
         $stubFilterRepository = $this->getMock('\Application\Repository\FilterRepository', array('findOneById', 'findOneBy'), array(), '', false);
         $stubFilterRepository->expects($this->any())
                 ->method('findOneById')
@@ -129,6 +124,7 @@ class CalculatorTest extends AbstractCalculator
                             array('1', $this->filter1),
                             array('11', $this->filter11),
                             array('12', $this->filter12),
+                            array('666', $nullFilter),
         )));
         $service->setFilterRepository($stubFilterRepository);
 
@@ -176,13 +172,20 @@ class CalculatorTest extends AbstractCalculator
         $formula->setFormula('= 10 + {F#11,Q#current,P#current}');
         $this->assertEquals(10.101, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a Filter value with same Questionnaire and Part');
 
+        $formula->setFormula('= 10 + {F#666,Q#34,P#56}');
+        $this->assertEquals(10, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a Filter value which is NULL');
 
+        
         // QuestionnaireFormula values
         $formula->setFormula('={Fo#12,Q#34,P#56}');
         $this->assertEquals(5, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a QuestionnaireFormula');
 
         $formula->setFormula('={Fo#12,Q#current,P#current}');
         $this->assertEquals(5, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a QuestionnaireFormula with same Questionnaire and Part');
+
+        $questionnaireFormula->getFormula()->setFormula('=NULL');
+        $formula->setFormula('=7 + {Fo#12,Q#current,P#current}');
+        $this->assertEquals(7, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a QuestionnaireFormula which is NULL');
 
 
         // Unnoficial filter names
