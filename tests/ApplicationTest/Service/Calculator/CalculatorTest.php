@@ -122,7 +122,7 @@ class CalculatorTest extends AbstractCalculator
         $service->setServiceLocator($this->getApplicationServiceLocator());
 
         // Create a stub for the FilterRepository class with predetermined values, so we don't have to mess with database
-        $stubFilterRepository = $this->getMock('\Application\Repository\FilterRepository', array('findOneById'), array(), '', false);
+        $stubFilterRepository = $this->getMock('\Application\Repository\FilterRepository', array('findOneById', 'findOneBy'), array(), '', false);
         $stubFilterRepository->expects($this->any())
                 ->method('findOneById')
                 ->will($this->returnValueMap(array(
@@ -163,11 +163,13 @@ class CalculatorTest extends AbstractCalculator
         $service->setQuestionnaireFormulaRepository($stubQuestionnaireFormulaRepository);
         $this->assertEquals($questionnaireFormula, $stubQuestionnaireFormulaRepository->findOneBy(array('foo')));
 
-
         $formula = new \Application\Model\Rule\Formula();
+
         $formula->setFormula('=(3 + 7) * SUM(2, 3)');
         $this->assertEquals(50, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to handle standard Excel things');
 
+
+        // Filter values
         $formula->setFormula('= 10 + {F#11,Q#34,P#56}');
         $this->assertEquals(10.101, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a Filter value');
 
@@ -175,6 +177,7 @@ class CalculatorTest extends AbstractCalculator
         $this->assertEquals(10.101, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a Filter value with same Questionnaire and Part');
 
 
+        // QuestionnaireFormula values
         $formula->setFormula('={Fo#12,Q#34,P#56}');
         $this->assertEquals(5, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a QuestionnaireFormula');
 
@@ -182,10 +185,19 @@ class CalculatorTest extends AbstractCalculator
         $this->assertEquals(5, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a QuestionnaireFormula with same Questionnaire and Part');
 
 
-// TODO: finish implementation
-//        $formula->setFormula('={F#12,Q#34}');
-//        $this->assertEquals(5, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer an Unofficial Filter name');
+        // Unnoficial filter names
+        $formula->setFormula('={F#12,Q#34}');
+        $this->assertNull($service->computeFormula($formula, $this->questionnaire, $this->part), 'refering a non-existing Unofficial Filter name, returns null');
 
+        // Inject our unnofficial filter
+        $unofficialFilter = new \Application\Model\Filter('unofficial with "double quotes"');
+        $unofficialFilter->setQuestionnaire($this->questionnaire)->setOfficialFilter($this->filter1);
+        $stubFilterRepository->expects($this->any())
+                ->method('findOneBy')
+                ->will($this->returnValue($unofficialFilter));
+
+        $formula->setFormula('=ISTEXT({F#12,Q#34})');
+        $this->assertTrue($service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer an Unofficial Filter name');
     }
 
 }

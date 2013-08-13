@@ -7,12 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Formula is a way to define a value as a custom formula.
  *
- * Syntax is as follow:
+ * Syntax is based on Excel formula syntax. Except cell references (eg: A2, B3)
+ * must be entirely replaced with following syntax:
  *
  * Reference a Filter's value:
  * {F#12,Q#34,P#56}
  *
- * Reference an Unofficial Filter name (NOT value). It will return NULL if no Unofficial Filter is found. The ID refers to the official Filter:
+ * Reference an Unofficial Filter name (NOT value). It will return NULL if no
+ * Unofficial Filter is found. The ID refers to the official Filter:
  * {F#12,Q#34}
  *
  * Reference a QuestionnaireFormula's value:
@@ -26,7 +28,13 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * In all cases Q and P can have the value "current" instead of actual ID. It means
  * that the current Questionnaire or Part should be used, instead of one selected
- * by its ID. This syntax should prefered when possible to maximise Formula re-use.
+ * by its ID. This syntax should be prefered when possible to maximise Formula re-use.
+ *
+ * An entire formula could be:
+ * <samp>=IF(ISTEXT({F#12,Q#34}), SUM({F#12,Q#34,P#56}, {Fo#2,Q#34,P#56}), {Fo#2,Q#34,P#56})<samp>
+ *
+ * Or the more re-usable version:
+ * <samp>=IF(ISTEXT({F#12,Q#current}), SUM({F#12,Q#current,P#current}, {Fo#2,Q#current,P#current}), {Fo#2,Q#current,P#current})<samp>
  *
  * @ORM\Entity
  */

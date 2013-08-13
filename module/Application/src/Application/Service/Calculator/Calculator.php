@@ -260,6 +260,15 @@ use \Application\Traits\EntityManagerAware;
         return $sum;
     }
 
+    /**
+     * Compute the value of a formula based on GIMS syntax.
+     * For details about syntax, @see \Application\Model\Rule\Formula
+     * @param \Application\Model\Rule\Formula $formula
+     * @param \Application\Model\Questionnaire $currentQuestionnaire
+     * @param \Application\Model\Part $currentPart
+     * @return mixed
+     * @throws \Exception
+     */
     public function computeFormula(\Application\Model\Rule\Formula $formula, \Application\Model\Questionnaire $currentQuestionnaire, Part $currentPart)
     {
         $originalFormula = $formula->getFormula();
@@ -278,21 +287,24 @@ use \Application\Traits\EntityManagerAware;
                 }, $originalFormula);
 
         // Replace {F#12,Q#34} with Unofficial Filter name, or NULL if no Unofficial Filter
-        $convertedFormulas = preg_replace_callback('/\{F#(\d+),Q#(\d+|current)\}/', function($matches) use($currentQuestionnaire, $currentPart) {
-                    $filterId = $matches[1];
+        $convertedFormulas = preg_replace_callback('/\{F#(\d+),Q#(\d+|current)\}/', function($matches) use($currentQuestionnaire) {
+                    $officialFilterId = $matches[1];
                     $questionnaireId = $matches[2];
 
                     $questionnaire = $questionnaireId == 'current' ? $currentQuestionnaire->getId() : $questionnaireId;
 
-// TODO: finish implementation
-//                    $unofficialFilter = $this->getFilterRepository()->findOneBy(array(
-//                        'isOfficial' => false,
-//                        'officialFilter' => $filterId,
-//                        'officialFilter' => $filterId,
-//
-//                    ));
-//
-//                    return $this->computeFilter($unofficialFilter, $questionnaire, $part);
+                    $unofficialFilter = $this->getFilterRepository()->findOneBy(array(
+                        'officialFilter' => $officialFilterId,
+                        'questionnaire' => $questionnaire,
+                    ));
+
+                    if ($unofficialFilter) {
+                        // Format string for Excel formula
+                        return '"' . str_replace('"', '""', $unofficialFilter->getName()) . '"';
+                    } else {
+                        return 'NULL';
+                    }
+
                 }, $convertedFormulas);
 
         // Replace {Fo#12,Q#34,P#56} with QuestionnaireFormula value
@@ -311,15 +323,12 @@ use \Application\Traits\EntityManagerAware;
                     ));
 
 
-                    if (!$questionnaireFormula)
-                    {
+                    if (!$questionnaireFormula) {
                         throw new \Exception('Reference to non existing QuestionnaireFormula: ' . $matches[0]);
                     }
 
                     return $this->computeFormula($questionnaireFormula->getFormula(), $questionnaireFormula->getQuestionnaire(), $questionnaireFormula->getPart());
                 }, $convertedFormulas);
-
-//        v($originalFormula, $convertedFormulas);
 
         return \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($convertedFormulas);
     }
