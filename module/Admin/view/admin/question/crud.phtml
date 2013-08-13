@@ -13,7 +13,7 @@
 
         <?php echo $this->crudButtons('question'); ?>
 
-        <pre>{{question|json}}</pre>
+        <!--pre>{{question|json}}</pre-->
 
 
         <br/><br/>
@@ -38,9 +38,9 @@
             <label class='control-label' for="question.parent">Parent question</label>
             <div class='controls row-fluid'>
                 <select class='span5'
-                        name="parent"
-                        ng-model="parent"
-                        ng-options="p.id as p.name for p in groupQuestions">
+                        name="question.parent"
+                        ng-model="question.parent.id"
+                        ng-options="p.id as p.name for p in parentsList">
                 </select>
             </div>
         </div>

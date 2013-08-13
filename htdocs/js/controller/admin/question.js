@@ -3,14 +3,14 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     "use strict";
 
     // Default redirect
-    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts'};
+    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,parent'};
     var returnUrl = '/';
     var returnTab = '';
 
     $scope.sending = false;
     $scope.addBtnChoice = false;
 
-
+    // @TODO : manage value null and integer value
     $scope.percentages = [
         {text: '100%', value: '1.000'},
         {text: '90%', value: '0.900'},
@@ -119,14 +119,15 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
     $scope.setParentQuestions = function (survey_id) {
         Restangular.one('survey', survey_id).get({fields: 'questions,questions.type'}).then(function (survey) {
-            $scope.groupQuestions = [];
+            var parentsList = [];// @TODO : find a way to add "no @ion" -> dont work @ save : [{id:0,name:'None'}];
 
             for (var question in survey.questions) {
                 question = survey.questions[question];
                 if (question.type == 'multi_type' || question.type == 'info') {
-                    $scope.groupQuestions.push(question);
+                    parentsList.push({id:question.id, name:question.name});
                 }
             }
+            $scope.parentsList = parentsList;
 
         });
     }
@@ -155,7 +156,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
 
 
-    Restangular.all('questionType', $routeParams.id).getList().then(function (types) {
+    Restangular.all('questionType').getList().then(function (types) {
         $scope.types = types;
     });
 

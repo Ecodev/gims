@@ -98,8 +98,46 @@ class QuestionController extends AbstractRestfulController
             )
         );
 
-        return new JsonModel($this->hydrator->extractArray($questions, $this->getJsonConfig()));
+        //$questions = $this->hydrator->extractArray($questions, $this->getJsonConfig());
+
+        $flatQuestions = array();
+        foreach($questions as $key => $question){
+            $flatQuestion = array('id' => $question->getId(),
+                                  'name' => $question->getName());
+            if(!is_null($question->getParent())) $flatQuestion['parentid'] = $question->getParent()->getId();
+            else $flatQuestion['parentid'] = 0;
+            array_push($flatQuestions, $flatQuestion);
+        }
+
+        $new = array();
+        foreach ($flatQuestions as $a)
+            $new[$a['parentid']][] = $a;
+
+        $questions = $this->createTree($new, $new[0], 0);
+
+        return new JsonModel($questions);
     }
+
+
+    protected function createTree(&$list, $parent, $deep){
+        $tree = array();
+        foreach ($parent as $k=>$l){
+            $l['level'] = $deep;
+            if(isset($list[$l['id']])){
+                $children = $this->createTree($list, $list[$l['id']], $deep+1);
+                $tree[] = $l;
+                $tree = array_merge($tree, $children);
+            }else{
+                $tree[] = $l;
+            }
+
+        }
+        return $tree;
+    }
+
+
+
+
 
     /**
      * @param int $id

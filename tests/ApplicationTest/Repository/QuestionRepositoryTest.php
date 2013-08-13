@@ -7,7 +7,7 @@ use \Application\Model\QuestionType;
 class QuestionRepositoryTest extends AbstractRepository
 {
 
-    public function testCanSaveAllQuestionTypeesInDatabase()
+    public function testCanSaveAllQuestionTypesInDatabase()
     {
         $filter = new \Application\Model\Filter('test filter');
         $survey = new \Application\Model\Survey();
@@ -34,7 +34,7 @@ class QuestionRepositoryTest extends AbstractRepository
         $this->getEntityManager()->clear();
         $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question');
         $loadedQuestion = $questionRepository->findOneById($question->getId());
-        $this->assertSame(QuestionType::$MULTI_TYPE, $loadedQuestion->getType(), 'loaded question from database, should return an enum object (not a string)');
+        $this->assertSame(end(QuestionType::getValues()), $loadedQuestion->getType(), 'loaded question from database, should return an enum object (not a string)');
     }
 
 }

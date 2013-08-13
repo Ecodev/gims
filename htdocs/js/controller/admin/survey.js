@@ -55,12 +55,18 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
 
     // Load survey if possible
     if ($routeParams.id) {
-        Restangular.one('survey', $routeParams.id).get({fields: 'metadata,questionnaires,questionnaires.completed,questions'}).then(function(survey) {
-
+        Restangular.one('survey', $routeParams.id).get({fields: 'metadata,questionnaires,questionnaires.completed'}).then(function(survey) {
             // Cast "active" to be string for the need of the select menu.
             survey.active += ''; // string value
             $scope.survey = survey;
+
+            Restangular.one('survey', $routeParams.id).all('question').getList({fields:'type,parent'}).then(function(questions) {
+                console.info(questions);
+                $scope.survey.questions = questions;
+            });
         });
+
+
     } else {
         $scope.survey = {};
     }

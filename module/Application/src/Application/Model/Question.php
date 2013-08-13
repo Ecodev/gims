@@ -37,7 +37,7 @@ class Question extends AbstractModel
     /**
      * @var string
      *
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text", nullable=false)
      */
     private $name;
 
@@ -417,8 +417,6 @@ class Question extends AbstractModel
      */
     public function setParts(\Doctrine\Common\Collections\ArrayCollection $parts)
     {
-        //if(!$this->getParts()->contains($part))
-        //	$this->getParts()->add($part);
         $this->parts = $parts;
         return $this;
     }
