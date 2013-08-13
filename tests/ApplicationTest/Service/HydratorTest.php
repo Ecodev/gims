@@ -346,7 +346,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->assertEquals(array(
             'id' => null,
             'name' => 'filter 1',
-            'isOfficial' => false,
+            'isOfficial' => true,
             // @todo check what to do
 //            'officialFilter' => array(
 //                'id' => null,
@@ -362,7 +362,6 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     public function testExtractBooleanProperty()
     {
         $filter1 = new \Application\Model\Filter('filter 1');
-        $filter1->setIsOfficial(true);
 
         $this->assertEquals(array(
             'id' => null,

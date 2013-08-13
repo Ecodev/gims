@@ -18,7 +18,7 @@ class FilterRepository extends AbstractRepository
     {
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
 
-        $qb = $filterRepository->createQueryBuilder('f')->where('f.name = :name AND f.isOfficial = TRUE');
+        $qb = $filterRepository->createQueryBuilder('f')->where('f.name = :name AND f.questionnaire IS NULL');
         $parameters = array('name' => $name);
         if ($parentName) {
             $parameters['parentName'] = $parentName;
@@ -42,7 +42,7 @@ class FilterRepository extends AbstractRepository
 
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
 
-        $qb = $filterRepository->createQueryBuilder('f')->where('f.isOfficial = true');
+        $qb = $filterRepository->createQueryBuilder('f')->where('f.questionnaire IS NULL');
         $qb->leftJoin('f.parents', 'p');
             #->having('COUNT(p.id) = 0')
             #->groupBy('f.id');
@@ -92,7 +92,7 @@ class FilterRepository extends AbstractRepository
 
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
 
-        $qb = $filterRepository->createQueryBuilder('f')->where('f.name = :name AND f.isOfficial = TRUE');
+        $qb = $filterRepository->createQueryBuilder('f')->where('f.name = :name AND f.questionnaire IS NULL');
         $parameters = array('name' => $name);
         if ($parentName) {
             $parameters['parentName'] = $parentName;

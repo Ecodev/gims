@@ -129,8 +129,7 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
         $this->geoName = new Geoname('test geoname');
 
         $this->filter = new Filter();
-        $this->filter->setName('foo')
-                ->setIsOfficial(true);
+        $this->filter->setName('foo');
 
         $this->questionnaire = new Questionnaire();
         $this->questionnaire->setSurvey($this->survey);

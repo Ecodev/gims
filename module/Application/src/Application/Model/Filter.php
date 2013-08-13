@@ -60,11 +60,14 @@ class Filter extends AbstractModel
     private $name;
 
     /**
-     * @var boolean
+     * @var Questionnaire
      *
-     * @ORM\Column(type="boolean", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Questionnaire")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(onDelete="CASCADE")
+     * })
      */
-    private $isOfficial = false;
+    private $questionnaire;
 
     /**
      * @var Filter
@@ -148,26 +151,36 @@ class Filter extends AbstractModel
     }
 
     /**
-     * Set official
+     * Set questionnaire. If a questionnaire is set, it means the Filter is unofficial
      *
-     * @param boolean $isOfficial
+     * @param Questionnaire $questionnaire
      * @return Filter
      */
-    public function setIsOfficial($isOfficial)
+    public function setQuestionnaire(Questionnaire $questionnaire)
     {
-        $this->isOfficial = $isOfficial;
+        $this->questionnaire = $questionnaire;
 
         return $this;
     }
 
     /**
-     * Get official
+     * Get questionnaire. If a questionnaire is set, it means the Filter is unofficial
+     *
+     * @return Questionnaire
+     */
+    public function getQuestionnaire()
+    {
+        return $this->questionnaire;
+    }
+
+    /**
+     * Returns whether this Filter is official or unofficial (specific to one questionnaire)
      *
      * @return boolean
      */
     public function isOfficial()
     {
-        return $this->isOfficial;
+        return !$this->getQuestionnaire();
     }
 
     /**
@@ -178,11 +191,8 @@ class Filter extends AbstractModel
      */
     public function setOfficialFilter(Filter $officialFilter = null)
     {
-        // If there is an official filter, then this filter is not official,
-        //  but opposite may not be true, we could have a non-official filter, not yet linked to official one
+        // Copy parents from official Filter
         if ($officialFilter) {
-            $this->setIsOfficial(false);
-
             foreach ($officialFilter->getParents() as $parent) {
                 $parent->addChild($this);
             }

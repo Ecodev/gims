@@ -11,8 +11,6 @@ class FilterRepositoryTest extends AbstractRepository
 
         $c1 = new \Application\Model\Filter('parent filter');
         $c2 = new \Application\Model\Filter('child filter');
-        $c1->setIsOfficial(true);
-        $c2->setIsOfficial(true);
         $c1->addChild($c2);
 
         $this->getEntityManager()->persist($c1);

@@ -381,7 +381,6 @@ class Jmp extends AbstractImporter
             $filter = new \Application\Model\Filter();
             $this->getEntityManager()->persist($filter);
             $filter->setName($name);
-            $filter->setIsOfficial(true);
             if ($parent) {
                 $parent->addChild($filter);
             }
@@ -521,7 +520,7 @@ class Jmp extends AbstractImporter
             // Use alternate instead of official, if any
             $alternateFilterName = $sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
             if ($alternateFilterName) {
-                $filter = $this->getAlternateFilter($alternateFilterName, $filter);
+                $filter = $this->getAlternateFilter($questionnaire, $alternateFilterName, $filter);
             }
 
             // Import answers
@@ -676,11 +675,12 @@ class Jmp extends AbstractImporter
 
     /**
      * Returns an alternate filter linked to the official either from database, or newly created
+     * @param \Application\Model\Questionnaire $questionnaire
      * @param string $name
      * @param \Application\Model\Filter $officialFilter
      * @return \Application\Model\Filter
      */
-    protected function getAlternateFilter($name, \Application\Model\Filter $officialFilter)
+    protected function getAlternateFilter(\Application\Model\Questionnaire $questionnaire, $name, \Application\Model\Filter $officialFilter)
     {
         if ($name == $officialFilter->getName())
             return $officialFilter;
@@ -703,6 +703,7 @@ class Jmp extends AbstractImporter
             $this->getEntityManager()->persist($filter);
             $filter->setName($name);
             $filter->setOfficialFilter($officialFilter);
+            $filter->setQuestionnaire($questionnaire);
         }
 
         $this->cacheAlternateFilters[$key] = $filter;
@@ -985,7 +986,6 @@ class Jmp extends AbstractImporter
 
             if (!$highFilter) {
                 $highFilter = new \Application\Model\Filter($name);
-                $highFilter->setIsOfficial(true);
                 $filterSet->addFilter($highFilter);
                 $this->getEntityManager()->persist($highFilter);
             }
