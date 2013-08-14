@@ -6,7 +6,7 @@ use Application\Model\Filter;
 use Application\Model\FilterSet;
 use Application\Model\Answer;
 use Application\Model\Part;
-use Application\Model\Question;
+use Application\Model\NumericQuestion;
 use Application\Model\Questionnaire;
 
 /**

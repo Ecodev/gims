@@ -30,8 +30,8 @@ class CalculatorTest extends AbstractCalculator
 
 
         // Overwrite computed filters with an answer
-        $this->question11 = new \Application\Model\Question();
-        $this->question13 = new \Application\Model\Question();
+        $this->question11 = new \Application\Model\Question\NumericQuestion();
+        $this->question13 = new \Application\Model\Question\NumericQuestion();
         $this->question11->setFilter($this->filter11);
         $this->question13->setFilter($this->filter13);
         $this->answer11 = new \Application\Model\Answer();
@@ -56,7 +56,7 @@ class CalculatorTest extends AbstractCalculator
         // Add alternative (non-official) filter to previously unexisting answer
         $this->filter21bis = new \Application\Model\Filter('cat 2.1 bis');
         $this->filter21bis->setOfficialFilter($this->filter21);
-        $this->question21bis = new \Application\Model\Question();
+        $this->question21bis = new \Application\Model\Question\NumericQuestion();
         $this->question21bis->setFilter($this->filter21bis);
         $this->answer21bis = new \Application\Model\Answer();
         $this->answer21bis->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question21bis)->setValueAbsolute(0.000000001);
@@ -175,7 +175,7 @@ class CalculatorTest extends AbstractCalculator
         $formula->setFormula('= 10 + {F#666,Q#34,P#56}');
         $this->assertEquals(10, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a Filter value which is NULL');
 
-        
+
         // QuestionnaireFormula values
         $formula->setFormula('={Fo#12,Q#34,P#56}');
         $this->assertEquals(5, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a QuestionnaireFormula');

@@ -2,7 +2,7 @@
 
 namespace ApiTest\Controller;
 
-use Application\Model\Question;
+use Application\Model\Question\NumericQuestion;
 use Zend\Http\Request;
 
 class QuestionControllerTest extends AbstractController
@@ -63,7 +63,7 @@ class QuestionControllerTest extends AbstractController
         $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
         $allowedFields = array('id', 'name', 'filter', 'answers', 'sorting');
         foreach ($this->getJsonResponse() as $key => $value) {
-            $this->assertTrue(in_array($key, $allowedFields));
+            $this->assertTrue(in_array($key, $allowedFields), "the key '$key' should not be in response");
         }
     }
 
@@ -129,6 +129,7 @@ class QuestionControllerTest extends AbstractController
             'sorting'  => 1,
             'survey'   => $this->survey->getId(),
             'filter' => $this->filter->getId(),
+            'type' => \Application\Model\QuestionType::$NUMERIC,
         );
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
@@ -151,7 +152,7 @@ class QuestionControllerTest extends AbstractController
         $questions[1] = $this->question;
         foreach (array(2, 3, 4, 5) as $value) {
 
-            $question = new Question();
+            $question = new NumericQuestion();
             $question->setSurvey($this->survey)
                 ->setSorting($value)
                 ->setFilter($this->filter)

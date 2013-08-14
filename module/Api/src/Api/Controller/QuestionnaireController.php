@@ -187,7 +187,7 @@ class QuestionnaireController extends AbstractRestfulController
     public function create($data, \Closure $postAction=null)
     {
         // Check that all required properties are given by the GUI
-        $properties = $this->metaModelService->getMandatoryProperties();
+        $properties = $this->getMetaModelService()->getMandatoryProperties();
         $dataKeys = array_keys($data);
 
         foreach ($properties as $propertyName) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Model;
+namespace Application\Model\Question;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -9,8 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Application\Repository\ChoiceRepository")
  */
-class Choice extends AbstractModel
+class Choice extends \Application\Model\AbstractModel
 {
+
     /**
      * @var array
      */
@@ -20,7 +21,6 @@ class Choice extends AbstractModel
         'sorting'
     );
 
-
     /**
      * @var integer
      *
@@ -29,9 +29,9 @@ class Choice extends AbstractModel
     private $sorting = 0;
 
     /**
-     * @var Question
+     * @var NumericQuestion
      *
-     * @ORM\ManyToOne(targetEntity="Question", inversedBy="choices")
+     * @ORM\ManyToOne(targetEntity="ChoiceQuestion", inversedBy="choices")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
@@ -61,7 +61,7 @@ class Choice extends AbstractModel
     }
 
     /**
-     * @return \Application\Model\Question
+     * @return ChoiceQuestion
      */
     public function getQuestion()
     {
@@ -69,10 +69,10 @@ class Choice extends AbstractModel
     }
 
     /**
-     * @param \Application\Model\Question $question
+     * @param ChoiceQuestion $question
      * @return $this
      */
-    public function setQuestion(Question $question)
+    public function setQuestion(ChoiceQuestion $question)
     {
         $this->question = $question;
         $this->question->choiceAdded($this);
@@ -80,13 +80,11 @@ class Choice extends AbstractModel
         return $this;
     }
 
-
-
     /**
      * Set sorting
      *
      * @param integer $sorting
-     * @return Question
+     * @return NumericQuestion
      */
     public function setSorting($sorting)
     {
@@ -104,9 +102,6 @@ class Choice extends AbstractModel
     {
         return (int) $this->sorting;
     }
-
-
-
 
     /**
      * @return float
@@ -143,6 +138,5 @@ class Choice extends AbstractModel
         $this->label = $label;
         return $this;
     }
-
 
 }

@@ -30,7 +30,7 @@ class QuestionType extends AbstractEnum
     public static $TEXT = 'text';
 
     /**
-     * An answer which links to a single \Application\Model\Choice object
+     * An answer which links to a single \Application\Model\Question\Choice object
      */
     public static $CHOICE = 'choice';
 
@@ -38,6 +38,34 @@ class QuestionType extends AbstractEnum
      * An answer which links to a single \Application\Model\User object
      */
     public static $USER = 'user';
+
+    private static function getMapping()
+    {
+        return array(
+            'Application\Model\Question\NumericQuestion' => self::$NUMERIC,
+            'Application\Model\Question\ChoiceQuestion' => self::$CHOICE,
+        );
+    }
+
+    public static function getClass(QuestionType $type)
+    {
+        $className = array_search($type, self::getMapping());
+        if (!$className) {
+            throw new \Exception('Unsupported QuestionType: ' . $type);
+        }
+
+        return $className;
+    }
+
+    public static function getType($className)
+    {
+        $type = @self::getMapping()[$className];
+        if (!$type) {
+            throw new \Exception('Unsupported QuestionType for class name: ' . $className);
+        }
+
+        return $type;
+    }
 
 }
 

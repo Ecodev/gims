@@ -25,7 +25,7 @@ return array(
                     'polygon' => 'polygon',
                     'linestring' => 'linestring',
                     'questionnaire_status' => 'questionnaire_status',
-                    'question_type' => 'question_type',
+                    'question_type' => 'string', // TODO: suppress entirely this line, once all database upgraded to new multi-class implementation, but be sure to check it can build all DB migrations
                 ),
             ),
         ),
@@ -50,7 +50,6 @@ return array(
                     'polygon' => 'CrEOF\Spatial\DBAL\Types\Geometry\PolygonType',
                     'linestring' => 'CrEOF\Spatial\DBAL\Types\Geometry\LineStringType',
                     'questionnaire_status' => 'Application\DBAL\Types\QuestionnaireStatusType',
-                    'question_type' => 'Application\DBAL\Types\QuestionTypeType',
                 ),
                 'proxy_dir' => 'data/cache/DoctrineORMModule/Proxy',
             ),

@@ -64,9 +64,9 @@ class Answer extends AbstractModel
     private $relevance;
 
     /**
-     * @var Question
+     * @var \Application\Model\Question\AbstractAnswerableQuestion
      *
-     * @ORM\ManyToOne(targetEntity="Question", inversedBy="answers", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Application\Model\Question\AbstractAnswerableQuestion", inversedBy="answers", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
@@ -241,10 +241,10 @@ class Answer extends AbstractModel
     /**
      * Set question
      *
-     * @param Question $question
+     * @param \Application\Model\Question\AbstractAnswerableQuestion $question
      * @return Answer
      */
-    public function setQuestion(Question $question)
+    public function setQuestion(\Application\Model\Question\AbstractAnswerableQuestion $question)
     {
         $this->question = $question;
 
@@ -256,7 +256,7 @@ class Answer extends AbstractModel
     /**
      * Get question
      *
-     * @return Question
+     * @return \Application\Model\Question\AbstractAnswerableQuestion
      */
     public function getQuestion()
     {

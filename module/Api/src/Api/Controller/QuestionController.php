@@ -2,10 +2,10 @@
 
 namespace Api\Controller;
 
+use Zend\Mvc\MvcEvent;
 use Application\Model\Survey;
-use Application\Module;
-use Application\Model\Question;
-use Application\Model\Choice;
+use Application\Model\Question\AbstractQuestion;
+use Application\Model\Question\Choice;
 use Zend\View\Model\JsonModel;
 
 class QuestionController extends AbstractRestfulController
@@ -34,7 +34,7 @@ class QuestionController extends AbstractRestfulController
         $config = array(
             // @todo remove it has been proven to work
             // Here we use a closure to get the questions' answers, but only for the current questionnaire
-            'answers' => function (\Application\Service\Hydrator $hydrator, Question $question) use (
+            'answers' => function (\Application\Service\Hydrator $hydrator, AbstractQuestion $question) use (
                 $questionnaire, $controller
             ) {
                 $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
@@ -65,6 +65,32 @@ class QuestionController extends AbstractRestfulController
         );
 
         return $config;
+    }
+
+    /**
+     * In the special case of QuestionController we want to be able to
+     * create/update several concrete class. So we accept a special 'type'
+     * parameter to let us know what type we actuall want to.
+     * @return string
+     */
+    protected function getModel()
+    {
+        $request = $this->getRequest();
+        if ($this->requestHasContentType($request, self::CONTENT_TYPE_JSON)) {
+            $data = Json::decode($request->getContent(), $this->jsonDecodeType);
+
+        } else {
+            $data = $request->getPost()->toArray();
+        }
+
+        if (isset($data['type'])) {
+            $type = \Application\Model\QuestionType::get($data['type']);
+            $class = \Application\Model\QuestionType::getClass($type);
+
+            return $class;
+        }
+
+        return '\Application\Model\Question\AbstractQuestion';
     }
 
     public function getList()
@@ -104,7 +130,7 @@ class QuestionController extends AbstractRestfulController
         foreach($questions as $key => $question){
             $flatQuestion = array('id' => $question->getId(),
                                   'name' => $question->getName());
-            if(!is_null($question->getParent())) $flatQuestion['parentid'] = $question->getParent()->getId();
+            if(!is_null($question->getChapter())) $flatQuestion['parentid'] = $question->getChapter()->getId();
             else $flatQuestion['parentid'] = 0;
             array_push($flatQuestions, $flatQuestion);
         }
@@ -205,7 +231,7 @@ class QuestionController extends AbstractRestfulController
                 $this->getEntityManager()->persist($choice);
             } // if id exists -> update
             else {
-                $choiceRepository = $this->getEntityManager()->getRepository('Application\Model\Choice');
+                $choiceRepository = $this->getEntityManager()->getRepository('Application\Model\Question\Choice');
                 $choice = $choiceRepository->findOneById((int)$newChoice['id']);
             }
             $choice->setQuestion($question);
@@ -271,7 +297,7 @@ class QuestionController extends AbstractRestfulController
         }
 
         // Check that all required properties are given by the GUI
-        $properties = $this->metaModelService->getMandatoryProperties();
+        $properties = $this->getMetaModelService()->getMandatoryProperties();
         $dataKeys = array_keys($data);
 
         foreach ($properties as $propertyName) {
@@ -292,10 +318,11 @@ class QuestionController extends AbstractRestfulController
                 unset($data['choices']);
             }
             $self = $this;
-            $result = parent::create($data, function (\Application\Model\Question $question)
+
+            $result = parent::create($data, function (\Application\Model\Question\AbstractQuestion $question)
                                             use ($newChoices, $self) {
-                                                if($newChoices)
-                                                $self->setChoices($newChoices, $question);
+                                                if($question instanceof \Application\Model\Question\ChoiceQuestion && $newChoices)
+                                                    $self->setChoices($newChoices, $question);
                                          });
 
 
@@ -330,11 +357,11 @@ class QuestionController extends AbstractRestfulController
     /**
      * Ask Rbac whether the User is allowed to update this survey
      *
-     * @param Question $question
+     * @param AbstractQuestion $question
      *
      * @return bool
      */
-    protected function isAllowedQuestion(Question $question)
+    protected function isAllowedQuestion(AbstractQuestion $question)
     {
 
         // @todo remove me once login will be better handled GUI wise

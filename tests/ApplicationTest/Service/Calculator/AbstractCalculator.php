@@ -81,32 +81,32 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     protected $questionnaire;
 
     /**
-     * @var \Application\Model\Question
+     * @var \Application\Model\Question\NumericQuestion
      */
     protected $question131;
 
     /**
-     * @var \Application\Model\Question
+     * @var \Application\Model\Question\NumericQuestion
      */
     protected $question132;
 
     /**
-     * @var \Application\Model\Question
+     * @var \Application\Model\Question\NumericQuestion
      */
     protected $question141;
 
     /**
-     * @var \Application\Model\Question
+     * @var \Application\Model\Question\NumericQuestion
      */
     protected $question142;
 
     /**
-     * @var \Application\Model\Question
+     * @var \Application\Model\Question\NumericQuestion
      */
     protected $question31;
 
     /**
-     * @var \Application\Model\Question
+     * @var \Application\Model\Question\NumericQuestion
      */
     protected $question32;
 
@@ -197,12 +197,12 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $this->questionnaire = new \Application\Model\Questionnaire();
         $this->questionnaire->setSurvey($survey);
 
-        $this->question131 = new \Application\Model\Question();
-        $this->question132 = new \Application\Model\Question();
-        $this->question141 = new \Application\Model\Question();
-        $this->question142 = new \Application\Model\Question();
-        $this->question31 = new \Application\Model\Question();
-        $this->question32 = new \Application\Model\Question();
+        $this->question131 = new \Application\Model\Question\NumericQuestion();
+        $this->question132 = new \Application\Model\Question\NumericQuestion();
+        $this->question141 = new \Application\Model\Question\NumericQuestion();
+        $this->question142 = new \Application\Model\Question\NumericQuestion();
+        $this->question31 = new \Application\Model\Question\NumericQuestion();
+        $this->question32 = new \Application\Model\Question\NumericQuestion();
 
         $this->question131->setFilter($this->filter131);
         $this->question132->setFilter($this->filter132);

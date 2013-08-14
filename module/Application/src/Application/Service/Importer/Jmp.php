@@ -716,11 +716,11 @@ class Jmp extends AbstractImporter
      * @param \Application\Model\Questionnaire $survey
      * @param \Application\Model\Filter $filter
      * @param integer $row Sorting of the question
-     * @return \Application\Model\Question
+     * @return \Application\Model\Question\NumericQuestion
      */
     protected function getQuestion(\Application\Model\Survey $survey, \Application\Model\Filter $filter, $row)
     {
-        $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question');
+        $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question\NumericQuestion');
 
         $key = $survey->getCode() . '::' . $filter->getName() . '::' . $row;
 
@@ -732,7 +732,7 @@ class Jmp extends AbstractImporter
         }
 
         if (!$question) {
-            $question = new \Application\Model\Question();
+            $question = new \Application\Model\Question\NumericQuestion();
             $this->getEntityManager()->persist($question);
 
             $question->setSurvey($survey);
@@ -740,7 +740,6 @@ class Jmp extends AbstractImporter
             $question->setSorting($survey->getQuestions()->count());
             $question->setName('Percentage of population?');
             $question->setParts(new \Doctrine\Common\Collections\ArrayCollection(array($this->partRural, $this->partUrban)));
-            $question->setType(\Application\Model\QuestionType::$NUMERIC); // @TODO: find out better value
             $this->getEntityManager()->persist($question);
         }
 

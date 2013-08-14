@@ -9,7 +9,7 @@ use Application\Model\FilterSet;
 use Application\Model\Geoname;
 use Application\Model\Part;
 use Application\Model\Permission;
-use Application\Model\Question;
+use Application\Model\Question\NumericQuestion;
 use Application\Model\Questionnaire;
 use Application\Model\Role;
 use Application\Model\Survey;
@@ -31,7 +31,7 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
     protected $questionnaire;
 
     /**
-     * @var Question
+     * @var NumericQuestion
      */
     protected $question;
 
@@ -137,7 +137,7 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
         $this->questionnaire->setDateObservationEnd(new \DateTime('2011-01-01T00:00:00+0100'));
         $this->questionnaire->setGeoname($this->geoName);
 
-        $this->question = new Question();
+        $this->question = new NumericQuestion();
         $this->question->setSurvey($this->survey)
                 ->setSorting(1)
                 ->setFilter($this->filter)

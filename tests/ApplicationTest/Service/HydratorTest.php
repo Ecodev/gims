@@ -10,12 +10,12 @@ use Application\Service\Hydrator;
 class HydratorTest extends \ApplicationTest\Controller\AbstractController
 {
     /**
-     * @var \Application\Model\Choice
+     * @var \Application\Model\Question\Choice
      */
     private $choice1;
 
     /**
-     * @var \Application\Model\Choice
+     * @var \Application\Model\Question\Choice
      */
     private $choice2;
 
@@ -62,8 +62,8 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
 
         $this->user = new \Application\Model\User();
         $this->user->setName('John');
-        $this->choice1 = new \Application\Model\Choice();
-        $this->choice2 = new \Application\Model\Choice();
+        $this->choice1 = new \Application\Model\Question\Choice();
+        $this->choice2 = new \Application\Model\Question\Choice();
 
 
         // Create a stub for the Hydrator class with predetermined values, so we don't have to mess with database
@@ -71,8 +71,8 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->hydrator->expects($this->any())
                 ->method('getObject')
                 ->will($this->returnValueMap(array(
-                            array('Application\Model\Choice', 1, $this->choice1),
-                            array('Application\Model\Choice', 2, $this->choice2),
+                            array('Application\Model\Question\Choice', 1, $this->choice1),
+                            array('Application\Model\Question\Choice', 2, $this->choice2),
         )));
 
     }
@@ -175,7 +175,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $choices = new \Doctrine\Common\Collections\ArrayCollection();
         $choices->add($this->choice1);
         $choices->add($this->choice2);
-        $question = new \Application\Model\Question();
+        $question = new \Application\Model\Question\ChoiceQuestion();
 
         $data = array(
             'name' => 'What is your name ?',

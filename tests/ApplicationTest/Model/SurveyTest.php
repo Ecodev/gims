@@ -3,7 +3,7 @@
 namespace ApplicationTest\Model;
 
 use Application\Model\Survey;
-use Application\Model\Question;
+use Application\Model\Question\NumericQuestion;
 use Application\Model\Questionnaire;
 
 class SurveyTest extends AbstractModel
@@ -12,7 +12,7 @@ class SurveyTest extends AbstractModel
     public function testQuestionsRelation()
     {
         $survey = new Survey();
-        $question = new Question();
+        $question = new NumericQuestion();
 
 
         $this->assertCount(0, $survey->getQuestions(), 'collection is initialized on creation');

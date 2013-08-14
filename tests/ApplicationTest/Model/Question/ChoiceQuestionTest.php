@@ -2,15 +2,15 @@
 
 namespace ApplicationTest\Model;
 
-use Application\Model\Question;
-use Application\Model\Choice;
+use Application\Model\Question\ChoiceQuestion;
+use Application\Model\Question\Choice;
 
 class QuestionTest extends AbstractModel
 {
 
     public function testChoicesRelation()
     {
-        $question = new Question();
+        $question = new ChoiceQuestion();
         $choice = new Choice();
 
 
@@ -27,7 +27,7 @@ class QuestionTest extends AbstractModel
         $choices->add(new Choice());
         $choices->add(new Choice());
         $choices->add(new Choice());
-        $question = new Question();
+        $question = new ChoiceQuestion();
 
         $this->assertCount(0, $question->getChoices(), 'collection is initialized on creation');
 
@@ -43,7 +43,7 @@ class QuestionTest extends AbstractModel
         $duplicatedChoice = new Choice();
         $choices->add($duplicatedChoice);
         $choices->add($duplicatedChoice);
-        $question = new Question();
+        $question = new ChoiceQuestion();
 
         $question->setChoices($choices);
         $this->assertCount(1, $question->getChoices(), 'question must be notified when choice is added');
@@ -51,7 +51,7 @@ class QuestionTest extends AbstractModel
 
     public function testChoicesAlreadyExistingAreKept()
     {
-        $question = new Question();
+        $question = new ChoiceQuestion();
         $choices1 = new \Doctrine\Common\Collections\ArrayCollection();
         $choices2 = new \Doctrine\Common\Collections\ArrayCollection();
         $choice1 = new Choice();

@@ -28,7 +28,7 @@ class MetaModelTest extends \ApplicationTest\Controller\AbstractController
     public function modelProvider()
     {
         return array(
-            array('Application\Model\Question', array('sorting', 'name', 'filter', 'survey')),
+            array('Application\Model\Question\NumericQuestion', array('filter', 'sorting', 'name', 'survey')),
             array('Application\Model\Survey', array('name', 'code')),
             // more models to add here...
         );

@@ -42,7 +42,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OrderBy({"sorting" = "ASC"})
-     * @ORM\OneToMany(targetEntity="Question", mappedBy="survey")
+     * @ORM\OneToMany(targetEntity="Application\Model\Question\AbstractQuestion", mappedBy="survey")
      */
     private $questions;
 
@@ -265,11 +265,11 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      * Notify the survey that it was added to the question.
      * This should only be called by Question::setSurvey()
      *
-     * @param Question $question
+     * @param \Application\Model\Question\AbstractQuestion $question
      *
      * @return Survey
      */
-    public function questionAdded(Question $question)
+    public function questionAdded(\Application\Model\Question\AbstractQuestion $question)
     {
         $this->getQuestions()->add($question);
 

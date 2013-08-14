@@ -44,8 +44,8 @@ class JmpTest extends AbstractCalculator
         $survey2->setCode('tst 2')->setName('Test survey 2')->setYear(2005);
         $questionnaire2->setSurvey($survey2);
 
-        $question131 = new \Application\Model\Question();
-        $question32 = new \Application\Model\Question();
+        $question131 = new \Application\Model\Question\NumericQuestion();
+        $question32 = new \Application\Model\Question\NumericQuestion();
 
         $question131->setFilter($this->filter131);
         $question32->setFilter($this->filter32);

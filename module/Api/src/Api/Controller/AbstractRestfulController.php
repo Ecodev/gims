@@ -16,22 +16,46 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     /**
      * @var Permission
      */
-    protected $permissionService;
+    private $permissionService;
 
     /**
      * @var MetaModel
      */
-    protected $metaModelService;
+    private $metaModelService;
 
     /**
      * @var \Application\Service\Hydrator
      */
     protected $hydrator;
 
+    /**
+     * Returns permission service
+     * @return \Api\Service\Permission
+     */
+    protected function getPermissionService()
+    {
+        if (!$this->permissionService) {
+            $this->permissionService = new Permission($this->getModel());
+        }
+
+        return $this->permissionService;
+    }
+
+    /**
+     * Returns MetaModel service
+     * @return \Api\Service\MetaModel
+     */
+    protected function getMetaModelService()
+    {
+        if (!$this->metaModelService) {
+            $this->metaModelService = new MetaModel($this->getModel());
+        }
+
+        return $this->metaModelService;
+    }
+
     public function __construct()
     {
-        $this->permissionService = new Permission($this->getModel());
-        $this->metaModelService = new MetaModel($this->getModel());
         $this->hydrator = new \Application\Service\Hydrator();
     }
 
@@ -65,7 +89,8 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      * Optionnaly return closures to override json properties
      * @return array
      */
-    protected function getClosures() {
+    protected function getClosures()
+    {
         return array();
     }
 
@@ -74,7 +99,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      *
      * @return string for instance "Application\Model\User"
      */
-    protected function getModel()
+    protected function getModel(array $data = null)
     {
         $class = get_called_class();
         $shortClass = preg_replace('/(.*\\\\)([^\\\\]+)(Controller$)/', '$2', $class);
@@ -99,13 +124,13 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      */
     public function create($data, \Closure $postAction = null)
     {
-        $modelName = $this->getModel();
+        $modelName = $this->getModel($data);
 
         /** @var $object AbstractModel */
         $object = new $modelName();
         $this->hydrator->hydrate($data, $object);
 
-        if( $postAction ){
+        if ($postAction) {
             $postAction($object);
         }
 
