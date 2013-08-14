@@ -2,6 +2,7 @@
 
 namespace Api\Controller;
 
+use Zend\Json\Json;
 use Zend\Mvc\MvcEvent;
 use Application\Model\Survey;
 use Application\Model\Question\AbstractQuestion;
@@ -75,6 +76,7 @@ class QuestionController extends AbstractRestfulController
      */
     protected function getModel()
     {
+
         $request = $this->getRequest();
         if ($this->requestHasContentType($request, self::CONTENT_TYPE_JSON)) {
             $data = Json::decode($request->getContent(), $this->jsonDecodeType);
@@ -134,6 +136,9 @@ class QuestionController extends AbstractRestfulController
             else $flatQuestion['parentid'] = 0;
             array_push($flatQuestions, $flatQuestion);
         }
+
+//        echo '<pre>';
+//        print_r($flatQuestions);
 
         $new = array();
         foreach ($flatQuestions as $a)

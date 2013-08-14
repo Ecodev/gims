@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Chapter extends AbstractQuestion
 {
 
+
     /**
      * @var string
      *
@@ -55,7 +56,7 @@ class Chapter extends AbstractQuestion
      */
     public function getDescription()
     {
-        return $this->sdescription;
+        return $this->description;
     }
 
     /**

@@ -13,7 +13,7 @@
 
         <?php echo $this->crudButtons('question'); ?>
 
-        <!--pre>{{question|json}}</pre-->
+        <pre>{{question|json}}</pre>
 
 
         <br/><br/>
@@ -35,12 +35,12 @@
 
 
         <div class="control-group form-horizontal" ng-class="{error: myForm.filter.$invalid}">
-            <label class='control-label' for="question.parent">Parent question</label>
+            <label class='control-label' for="question.chapter">Parent question</label>
             <div class='controls row-fluid'>
                 <select class='span5'
-                        name="question.parent"
-                        ng-model="question.parent.id"
-                        ng-options="p.id as p.name for p in parentsList">
+                        name="question.chapter"
+                        ng-model="question.chapter.id"
+                        ng-options="p.id as p.name for p in chapterList">
                 </select>
             </div>
         </div>

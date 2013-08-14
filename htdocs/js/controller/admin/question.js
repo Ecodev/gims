@@ -3,7 +3,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     "use strict";
 
     // Default redirect
-    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,parent'};
+    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,chapter'};
     var returnUrl = '/';
     var returnTab = '';
 
@@ -33,7 +33,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
         $scope.showChoices = false;
 
 
-        if ($scope.question.type == 'choice') {
+        if ($scope.question.type == 'Choice') {
             $scope.showChoices = true;
            if (!$scope.question.choices || $scope.question.choices.length == 0)
                 $scope.question.choices = [{}];
@@ -89,6 +89,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
         // First case is for update a question, second is for creating
         if ($scope.question.filter) $scope.question.filter = $scope.question.filter.id;
+        if ($scope.question.chapter) $scope.question.chapter = $scope.question.chapter.id;
         if ($scope.question.id) {
             $scope.question.put(questionFields).then(function (question) {
                 $scope.sending = false;
@@ -118,16 +119,16 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
 
     $scope.setParentQuestions = function (survey_id) {
-        Restangular.one('survey', survey_id).get({fields: 'questions,questions.type'}).then(function (survey) {
-            var parentsList = [];// @TODO : find a way to add "no @ion" -> dont work @ save : [{id:0,name:'None'}];
-
+        Restangular.one('survey', survey_id).get({fields:'questions,questions.type'}).then(function (survey) {
+            var chapterList = [];   // @TODO : find a way to add "none" -> dont work @ save : [{id:0,name:'None'}];
+            console.info(survey.questions);
             for (var question in survey.questions) {
                 question = survey.questions[question];
-                if (question.type == 'multi_type' || question.type == 'info') {
-                    parentsList.push({id:question.id, name:question.name});
+                if (question.type == 'Chapter') {
+                    chapterList.push({id:question.id, name:question.name});
                 }
             }
-            $scope.parentsList = parentsList;
+            $scope.chapterList = chapterList;
 
         });
     }
