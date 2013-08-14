@@ -99,7 +99,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      *
      * @return string for instance "Application\Model\User"
      */
-    protected function getModel(array $data = null)
+    protected function getModel()
     {
         $class = get_called_class();
         $shortClass = preg_replace('/(.*\\\\)([^\\\\]+)(Controller$)/', '$2', $class);
@@ -124,7 +124,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      */
     public function create($data, \Closure $postAction = null)
     {
-        $modelName = $this->getModel($data);
+        $modelName = $this->getModel();
 
         /** @var $object AbstractModel */
         $object = new $modelName();
