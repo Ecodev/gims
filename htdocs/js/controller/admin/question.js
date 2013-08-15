@@ -3,12 +3,13 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     "use strict";
 
     // Default redirect
-    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,chapter'};
+    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,chapter,compulsory,multiple,questions'};
     var returnUrl = '/';
     var returnTab = '';
 
     $scope.sending = false;
     $scope.addBtnChoice = false;
+
 
     // @TODO : manage value null and integer value
     $scope.percentages = [
@@ -26,22 +27,32 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
         {text: 'Unknown', value: null},
     ];
 
+    $scope.compulsory = [
+        {text: 'Optional', value: 0},
+        {text: 'Compulsory', value: 1},
+    ];
+
+    $scope.multiple = [
+        {text: 'Single choice', value: false},
+        {text: 'Multiple choices', value: true},
+    ];
+
+
 
     $scope.initChoices = function () {
 
         $scope.addBtnChoice = false;
-        $scope.showChoices = false;
-        $scope.chapter = false;
-
+        $scope.isChoices = false;
+        $scope.isChapter = false;
 
         if ($scope.question.type == 'Choice') {
-            $scope.showChoices = true;
+            $scope.isChoices = true;
            if (!$scope.question.choices || $scope.question.choices.length == 0)
                 $scope.question.choices = [{}];
             $scope.addBtnChoice = true;
         }
         if ($scope.question.type == 'Chapter') {
-            $scope.chapter=true;
+            $scope.isChapter=true;
         }
 //        else if ($scope.question.type == 'text') {
 //
@@ -120,7 +131,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     $scope.setParentQuestions = function (survey_id) {
         Restangular.one('survey', survey_id).get({fields:'questions,questions.type'}).then(function (survey) {
             var chapterList = [];   // @TODO : find a way to add "none" -> dont work @ save : [{id:0,name:'None'}];
-            console.info(survey.questions);
+
             for (var question in survey.questions) {
                 question = survey.questions[question];
                 if (question.type == 'Chapter') {
@@ -167,5 +178,9 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
             $scope.survey = survey;
         });
     }
+
+
+
+
 });
 

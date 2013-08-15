@@ -13,6 +13,14 @@ class ChoiceQuestion extends AbstractAnswerableQuestion
 {
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
+     */
+    private $multiple = 0;
+
+
+    /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Choice", mappedBy="question")
      * @ORM\JoinColumns({
@@ -77,5 +85,22 @@ class ChoiceQuestion extends AbstractAnswerableQuestion
 
         return $this;
     }
+
+    /**
+     * @return boolean
+     */
+    public function getMultiple()
+    {
+        return $this->multiple;
+    }
+
+    /**
+     * @param boolean $multiple
+     */
+    public function setMultiple($multiple)
+    {
+        $this->multiple = $multiple;
+    }
+
 
 }

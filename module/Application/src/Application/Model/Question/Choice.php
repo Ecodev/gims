@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Choice extends \Application\Model\AbstractModel
 {
 
+
     /**
      * @var array
      */
@@ -21,12 +22,15 @@ class Choice extends \Application\Model\AbstractModel
         'sorting'
     );
 
+
     /**
      * @var integer
      *
      * @ORM\Column(type="smallint", nullable=false, options={"default" = 0})
      */
     private $sorting = 0;
+
+
 
     /**
      * @var NumericQuestion
@@ -138,5 +142,8 @@ class Choice extends \Application\Model\AbstractModel
         $this->label = $label;
         return $this;
     }
+
+
+
 
 }

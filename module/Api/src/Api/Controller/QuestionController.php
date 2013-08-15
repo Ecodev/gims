@@ -97,18 +97,6 @@ class QuestionController extends AbstractRestfulController
 
     public function getList()
     {
-
-        //        $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question');
-        //        $questions = $questionRepository->findAll();
-        //
-        //        /** @var Question $question */
-        //        foreach ($questions as $question) {
-        //            $newName = $question->getFilter()->getName();
-        //            $question->setName($newName);
-        //            $this->getEntityManager()->persist($question);
-        //        }
-        //            $this->getEntityManager()->flush();
-
         $questionnaire = $this->getQuestionnaire();
 
         // Cannot list all question, without specifying a questionnaire
@@ -128,6 +116,8 @@ class QuestionController extends AbstractRestfulController
 
         //$questions = $this->hydrator->extractArray($questions, $this->getJsonConfig());
 
+        // prepare flat array of questions for then be reordered by Parent > childrens > childrens
+        // Ignores fields requests. @TODO : Implement it.
         $flatQuestions = array();
         foreach($questions as $key => $question){
             $flatQuestion = array('id' => $question->getId(),

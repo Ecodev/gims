@@ -13,7 +13,7 @@
 
         <?php echo $this->crudButtons('question'); ?>
 
-        <pre>{{question|json}}</pre>
+        <!--pre>{{question|json}}</pre-->
 
 
         <br/><br/>
@@ -27,6 +27,16 @@
                         ng-model="question.type"
                         ng-change="initChoices()"
                         ng-options="c.value as c.text for c in types">
+                </select>
+            </div>
+        </div>
+        <div class="control-group form-horizontal" ng-show='isChoices' ng-class="{error: myForm.filter.$invalid}">
+            <label class='control-label' for="question.multiple">Number of choices wanted</label>
+            <div class='controls row-fluid'>
+                <select class='span5'
+                        name="question.multiple"
+                        ng-model="question.multiple"
+                        ng-options="p.value as p.text for p in multiple">
                 </select>
             </div>
         </div>
@@ -46,7 +56,7 @@
         </div>
 
 
-        <div class="control-group form-horizontal" ng-hide='chapter' ng-class="{error: myForm.filter.$invalid}">
+        <div class="control-group form-horizontal" ng-hide='isChapter' ng-class="{error: myForm.filter.$invalid}">
             <label class='control-label' for="question.filter">Thematic</label>
             <div class='controls row-fluid'>
                 <gims-select    class='span5'
@@ -60,7 +70,7 @@
 
 
 
-		<div class="control-group form-horizontal" ng-hide='chapter' ng-class="{error: myForm.name.$invalid}">
+		<div class="control-group form-horizontal" ng-hide='isChapter' ng-class="{error: myForm.name.$invalid}">
 		    <label class='control-label' for="question.part">Zone</label>
             <div class='controls row-fluid'>
                 <gims-select    class="span5 input-medium"
@@ -76,11 +86,21 @@
 
 
         <br/><br/>
-		<div class="control-group form-horizontal" ng-class="{error: myForm.name.$invalid}">
+		<div class="control-group form-horizontal"  ng-class="{error: myForm.name.$invalid}">
             <label class='control-label' for="question.name">Label</label>
             <div class='controls control-row'>
                 <input class='span8' id="question.name" type="text" name="name" ng-model="question.name"/>
                 <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+            </div>
+        </div>
+        <div class="control-group form-horizontal"  ng-hide='isChapter' ng-class="{error: myForm.filter.$invalid}">
+            <label class='control-label' for="question.compulsory">Compulsory</label>
+            <div class='controls row-fluid'>
+                <select class='span5'
+                        name="question.compulsory"
+                        ng-model="question.compulsory"
+                        ng-options="p.value as p.text for p in compulsory">
+                </select>
             </div>
         </div>
 
@@ -89,10 +109,10 @@
 
 
         <br/><br/>
-        <div ng-repeat="choice in question.choices" ng-show="showChoices" ng-class="{error: myForm.name.$invalid}">
+        <div ng-repeat="choice in question.choices" ng-show="isChoices" ng-class="{error: myForm.name.$invalid}">
 
             <div class="control-group form-horizontal">
-                <label class='control-label' for="choice.label">Choice {{$index+1}}</label>
+                <label class='control-label' for="choice.label">Option {{$index+1}}</label>
                 <div class='controls'>
                     <input id="choice.value" type="text" name="name" ng-model="choice.label" required class='span8'/>
                     <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
@@ -122,10 +142,6 @@
 
             <br/><br/>
         </div>
-
-
-
-
 
 
 
