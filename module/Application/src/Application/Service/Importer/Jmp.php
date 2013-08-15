@@ -1143,13 +1143,7 @@ class Jmp extends AbstractImporter
             $this->getEntityManager()->persist($formula);
         }
 
-        $filterRule = new \Application\Model\Rule\FilterRule();
-        $filterRule->setFilter($filter)
-                ->setQuestionnaire($questionnaire)
-                ->setPart($part)
-                ->setRule($formula)
-                ->setJustification($this->defaultJustification);
-        $this->getEntityManager()->persist($filterRule);
+        $this->getFilterRule($filter, $questionnaire, $formula, $part);
 
         $this->ratioCount++;
     }
