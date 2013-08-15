@@ -46,7 +46,7 @@
         </div>
 
 
-        <div class="control-group form-horizontal" ng-class="{error: myForm.filter.$invalid}">
+        <div class="control-group form-horizontal" ng-hide='chapter' ng-class="{error: myForm.filter.$invalid}">
             <label class='control-label' for="question.filter">Thematic</label>
             <div class='controls row-fluid'>
                 <gims-select    class='span5'
@@ -60,7 +60,7 @@
 
 
 
-		<div class="control-group form-horizontal" ng-class="{error: myForm.name.$invalid}">
+		<div class="control-group form-horizontal" ng-hide='chapter' ng-class="{error: myForm.name.$invalid}">
 		    <label class='control-label' for="question.part">Zone</label>
             <div class='controls row-fluid'>
                 <gims-select    class="span5 input-medium"

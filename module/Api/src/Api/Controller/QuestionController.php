@@ -131,7 +131,9 @@ class QuestionController extends AbstractRestfulController
         $flatQuestions = array();
         foreach($questions as $key => $question){
             $flatQuestion = array('id' => $question->getId(),
-                                  'name' => $question->getName());
+                                  'name' => $question->getName(),
+                                  'sorting' => $question->getSorting()
+                                );
             if(!is_null($question->getChapter())) $flatQuestion['parentid'] = $question->getChapter()->getId();
             else $flatQuestion['parentid'] = 0;
             array_push($flatQuestions, $flatQuestion);
@@ -188,22 +190,25 @@ class QuestionController extends AbstractRestfulController
         // Update object or not...
         if($this->isAllowedSurvey($survey) && $this->isAllowedQuestion($question)) {
 
+            $questionSiblings = $question->getChapter() ? $question->getChapter()->getQuestions() : $survey->getQuestions();
+
             // true means we have to move sorting values up and down
             if(!empty($data['sorting']) && $data['sorting'] < $question->getSorting()) {
 
-                foreach ($survey->getQuestions() as $_question) {
-                    if($_question->getSorting() >= $data['sorting']
-                        && $_question->getSorting() < $question->getSorting()
+                foreach ($questionSiblings as $questionSibling) {
+                    if($questionSibling->getSorting() >= $data['sorting']
+                        && $questionSibling->getSorting() < $question->getSorting()
                     ) {
-                        $_question->setSorting($_question->getSorting() + 1);
+                        $questionSibling->setSorting($questionSibling->getSorting() + 1);
                     }
                 }
             } elseif(!empty($data['sorting']) && $data['sorting'] > $question->getSorting()) {
-                foreach ($survey->getQuestions() as $_question) {
-                    if($_question->getSorting() <= $data['sorting']
-                        && $_question->getSorting() > $question->getSorting()
+
+                foreach ($questionSiblings as $questionSibling) {
+                    if($questionSibling->getSorting() <= $data['sorting']
+                        && $questionSibling->getSorting() > $question->getSorting()
                     ) {
-                        $_question->setSorting($_question->getSorting() - 1);
+                        $questionSibling->setSorting($questionSibling->getSorting() - 1);
                     }
                 }
             }
@@ -222,6 +227,8 @@ class QuestionController extends AbstractRestfulController
         }
         return $result;
     }
+
+
 
 
 
@@ -351,6 +358,7 @@ class QuestionController extends AbstractRestfulController
 
         // @todo remove me once login will be better handled GUI wise
         return true;
+
 
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');

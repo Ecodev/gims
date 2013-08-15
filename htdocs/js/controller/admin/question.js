@@ -31,6 +31,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
         $scope.addBtnChoice = false;
         $scope.showChoices = false;
+        $scope.chapter = false;
 
 
         if ($scope.question.type == 'Choice') {
@@ -39,19 +40,17 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
                 $scope.question.choices = [{}];
             $scope.addBtnChoice = true;
         }
+        if ($scope.question.type == 'Chapter') {
+            $scope.chapter=true;
+        }
 //        else if ($scope.question.type == 'text') {
 //
 //        }
 //        else if ($scope.question.type == 'numerical') {
 //
 //        }
-//        if ($scope.question.type == 'info') {
-//
-//
-//        }
-//        else if ($scope.question.type == 'multi_type') {
-//
-//        }
+
+
 
     }
 
