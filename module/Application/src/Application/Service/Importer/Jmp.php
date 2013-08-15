@@ -843,8 +843,7 @@ class Jmp extends AbstractImporter
 
         // Some countries have estimates with non-zero values but without name! (Yemen, Tables_W, DHS92, estimates line 88)
         if (!$name) {
-//            w($col, $row, $offset);
-            $name = 'Unnamed estimation imported from country files';
+            $name = 'Unnamed formula imported from country files';
         }
 
         $originalFormula = $cell->getValue();
@@ -857,6 +856,11 @@ class Jmp extends AbstractImporter
             $originalFormula = '=' . $originalFormula;
         }
 
+        // Excel files sometimes express percent as 0 - 100, and sometimes as 0.00 - 1.00,
+        // whereas in GIMS it always is 0.00 - 1.00. So this means we have to drop the
+        // useless conversion done in formula
+        $replacedFormula = str_replace(array('*100', '/100'), '', $originalFormula);
+
         // Expand range syntax to enumerate each cell: "A1:A5" => "A1,A2,A3,A4,A5"
         // WARNING: this only expand vertical ranges, not horizontal ranges (which probably never make any sense for JMP anyway)
         $cellPattern = '\$?(([[:alpha:]]+)(\\d+))';
@@ -867,14 +871,13 @@ class Jmp extends AbstractImporter
                 $expanded[] = $matches[2] . $i;
             }
             return join(',', $expanded);
-        }, $originalFormula);
+        }, $replacedFormula);
 
         // Replace all cell reference with our own syntax
         $filters = $this->cacheFilters;
         $colToParts = $this->colToParts;
         $importedQuestionnaires = $this->importedQuestionnaires;
         $referencedInvalidQuestionnaire = false;
-//        v($sheet->getTitle(), $row, $col, $offset, $originalFormula);
         $convertedFormula = preg_replace_callback("/$cellPattern/", function($matches) use ($filters, $colToParts, $importedQuestionnaires, $sheet, $col, $row, $offset, $questionnaire, $part, &$referencedInvalidQuestionnaire) {
                     $refCol = \PHPExcel_Cell::columnIndexFromString($matches[2]) - 1;
                     $refRow = $matches[3];
@@ -925,7 +928,6 @@ class Jmp extends AbstractImporter
                             $this->getEntityManager()->flush();
                             $refFormulaId = $refQuestionnaireFormula->getFormula()->getId();
 
-//                            v($refFormulaId,$refQuestionnaireId,$refPartId, $refQuestionnaireFormula->getFormula()->getId(), $refQuestionnaireFormula->getQuestionnaire()->getId(), $refQuestionnaireFormula->getPart()->getId());
                             return "{Fo#$refFormulaId,Q#$refQuestionnaireId,P#$refPartId}";
                         } else {
                             return 'NULL'; // if no formula found at all, return NULL string which will behave like an empty cell in PHPExcell
