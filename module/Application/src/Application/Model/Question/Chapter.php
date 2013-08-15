@@ -31,8 +31,9 @@ class Chapter extends AbstractQuestion
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($name = null)
     {
+        parent::__construct($name);
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 

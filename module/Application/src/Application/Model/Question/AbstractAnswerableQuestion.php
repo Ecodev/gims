@@ -20,7 +20,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
      *
      * @ORM\ManyToOne(targetEntity="Application\Model\Filter", fetch="EAGER")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="SET NULL", nullable=false)
+     *   @ORM\JoinColumn(onDelete="SET NULL")
      * })
      */
     private $filter;
