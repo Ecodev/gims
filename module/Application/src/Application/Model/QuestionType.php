@@ -13,7 +13,6 @@ class QuestionType extends AbstractEnum
      */
     public static $CHAPTER = 'Chapter';
 
-
     /**
      * A numeric answer, eg: 123.45
      */
@@ -45,6 +44,12 @@ class QuestionType extends AbstractEnum
         );
     }
 
+    /**
+     * Return the class name of the given QuestionType
+     * @param \Application\Model\QuestionType $type
+     * @return string
+     * @throws \Exception
+     */
     public static function getClass(QuestionType $type)
     {
         $className = array_search($type, self::getMapping());
@@ -55,14 +60,23 @@ class QuestionType extends AbstractEnum
         return $className;
     }
 
+    /**
+     * Returns the QuestionType corresponding to the className
+     * @param string $className
+     * @return QuestionType
+     * @throws \Exception
+     */
     public static function getType($className)
     {
-        $type = @self::getMapping()[$className];
-        if (!$type) {
-            throw new \Exception('Unsupported QuestionType for class name: ' . $className);
+        // here we need to take into account Doctrine Proxy subclass, so we need
+        // to assume that the given classname may be a child of our own class
+        foreach (self::getMapping() as $class => $type) {
+            if ($class == $className || is_subclass_of($className, $class)) {
+                return $type;
+            }
         }
 
-        return $type;
+        throw new \Exception('Unsupported QuestionType for class name: ' . $className);
     }
 
 }
