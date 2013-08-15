@@ -59,10 +59,11 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
             // Cast "active" to be string for the need of the select menu.
             survey.active += ''; // string value
             $scope.survey = survey;
+        });
 
-            Restangular.one('survey', $routeParams.id).all('question').getList({fields:'type,parent'}).then(function(questions) {
-                $scope.survey.questions = questions;
-            });
+
+        Restangular.one('survey', $routeParams.id).all('question').getList({fields:'type,parent'}).then(function(questions) {
+            $scope.questions = questions;
         });
 
 

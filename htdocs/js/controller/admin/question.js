@@ -3,7 +3,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     "use strict";
 
     // Default redirect
-    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,chapter,compulsory,multiple,questions'};
+    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,chapter,compulsory,multiple'};
     var returnUrl = '/';
     var returnTab = '';
 
@@ -104,6 +104,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
             $scope.question.put(questionFields).then(function (question) {
                 $scope.sending = false;
                 $scope.question = question;
+                $scope.questions = question.questions;
                 $scope.initChoices();
                 if (redirectAfterSave) {
                     redirect();
@@ -139,7 +140,6 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
                 }
             }
             $scope.chapterList = chapterList;
-
         });
     }
 
@@ -158,6 +158,11 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
             $scope.setParentQuestions($scope.question.survey.id);
             $scope.initChoices();
         });
+
+        Restangular.one('chapter', $routeParams.id).all('question').getList().then(function(questions) {
+            $scope.questions = questions;
+        });
+
     } else {
         $scope.question = {};
         $scope.setParentQuestions($routeParams.survey);

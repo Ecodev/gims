@@ -30,7 +30,7 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
      */
     private $sorting;
 
-    /**
+    /** 
      * @var string
      *
      * @ORM\Column(type="text", nullable=false)

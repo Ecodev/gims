@@ -15,10 +15,9 @@
 
         <!--pre>{{question|json}}</pre-->
 
-
         <br/><br/>
 
-        <div class="control-group form-horizontal">
+        <div class="control-group form-horizontal row-fluid">
             <label class='control-label' for="question.type">Type</label>
             <div class='controls'>
                 <select class='span5'
@@ -30,9 +29,9 @@
                 </select>
             </div>
         </div>
-        <div class="control-group form-horizontal" ng-show='isChoices' ng-class="{error: myForm.filter.$invalid}">
+        <div class="control-group form-horizontal row-fluid" ng-show='isChoices' ng-class="{error: myForm.filter.$invalid}">
             <label class='control-label' for="question.multiple">Number of choices wanted</label>
-            <div class='controls row-fluid'>
+            <div class='controls'>
                 <select class='span5'
                         name="question.multiple"
                         ng-model="question.multiple"
@@ -44,9 +43,9 @@
 
 
 
-        <div class="control-group form-horizontal" ng-class="{error: myForm.filter.$invalid}">
+        <div class="control-group form-horizontal row-fluid" ng-class="{error: myForm.filter.$invalid}">
             <label class='control-label' for="question.chapter">Parent question</label>
-            <div class='controls row-fluid'>
+            <div class='controls'>
                 <select class='span5'
                         name="question.chapter"
                         ng-model="question.chapter.id"
@@ -56,9 +55,9 @@
         </div>
 
 
-        <div class="control-group form-horizontal" ng-hide='isChapter' ng-class="{error: myForm.filter.$invalid}">
+        <div class="control-group form-horizontal row-fluid" ng-hide='isChapter' ng-class="{error: myForm.filter.$invalid}">
             <label class='control-label' for="question.filter">Thematic</label>
-            <div class='controls row-fluid'>
+            <div class='controls'>
                 <gims-select    class='span5'
                                 api="filter"
                                 model="question.filter"
@@ -70,9 +69,9 @@
 
 
 
-		<div class="control-group form-horizontal" ng-hide='isChapter' ng-class="{error: myForm.name.$invalid}">
+		<div class="control-group form-horizontal row-fluid" ng-hide='isChapter' ng-class="{error: myForm.name.$invalid}">
 		    <label class='control-label' for="question.part">Zone</label>
-            <div class='controls row-fluid'>
+            <div class='controls'>
                 <gims-select    class="span5 input-medium"
                                 id="question.parts"
                                 name="type"
@@ -93,10 +92,10 @@
                 <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
             </div>
         </div>
-        <div class="control-group form-horizontal"  ng-hide='isChapter' ng-class="{error: myForm.filter.$invalid}">
+        <div class="control-group form-horizontal row-fluid"  ng-hide='isChapter' ng-class="{error: myForm.filter.$invalid}">
             <label class='control-label' for="question.compulsory">Compulsory</label>
-            <div class='controls row-fluid'>
-                <select class='span5'
+            <div class='controls'>
+                <select class='span2'
                         name="question.compulsory"
                         ng-model="question.compulsory"
                         ng-options="p.value as p.text for p in compulsory">
@@ -142,6 +141,18 @@
 
             <br/><br/>
         </div>
+
+
+
+
+        <div class="control-group form-horizontal" ng-show='isChapter' >
+            <label class='control-label' for="question.sorting">Included questions</label>
+            <div class='controls'>
+                <div gims-grid-question></div>
+            </div>
+        </div>
+
+
 
 
 

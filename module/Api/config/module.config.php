@@ -57,7 +57,7 @@ return array(
                         'options' => array(
                             'route' => '/:parent/:idParent/:controller[/:id]',
                             'constraints' => array(
-                                'parent' => '(user|survey|role|questionnaire)',
+                                'parent' => '(chapter|user|survey|role|questionnaire)',
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'idParent' => '[0-9]+',
                                 'id' => '[0-9]+',

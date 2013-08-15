@@ -8,10 +8,10 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
         transclude: true,
         template: '<div>' +
             '<div class="row-fluid">' +
-            '<div class="span9">' +
+            '<div class="span7">' +
             '<input type="text" ng-model="gridOptions.filterOptions.filterText" placeholder="Search..." class="search" style="width: 400px"/>' +
             '</div>' +
-            '<div class="span3" style="text-align: right">' +
+            '<div class="span5" style="text-align: right">' +
             '<i class="icon-plus-sign"></i> ' +
             '<gims-link-new origin="survey" target="question" return-tab="1"/>' +
             '</div>' +
@@ -48,7 +48,7 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
             // Configure ng-grid.
             $scope.gridOptions = {
                 plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
-                data: 'survey.questions',
+                data: 'questions',
                 enableCellSelection: true,
                 showFooter: false,
                 selectedItems: $scope.selectedRow,

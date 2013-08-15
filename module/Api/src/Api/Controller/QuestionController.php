@@ -13,24 +13,28 @@ class QuestionController extends AbstractRestfulController
 {
 
     /**
-     * @var \Application\Model\Questionnaire
+     * @var \Application\Model\AbstractModel
      */
-    protected $questionnaire;
+    protected $parent;
 
-    protected function getQuestionnaire()
+
+    protected function getParent()
     {
-        $idQuestionnaire = $this->params('idParent');
-        if(!$this->questionnaire && $idQuestionnaire) {
-            $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
-            $this->questionnaire = $questionnaireRepository->find($idQuestionnaire);
+        $id = $this->params('idParent');
+        if (!$this->parent && $id) {
+            $object = ucfirst($this->params('parent'));
+            if($object=='Chapter')
+                $object = 'Question\\'.$object;
+            $this->parent = $this->getEntityManager()->getRepository('Application\Model\\' . $object)->find($id);
         }
-
-        return $this->questionnaire;
+        return $this->parent;
     }
+
+
 
     protected function getClosures()
     {
-        $questionnaire = $this->getQuestionnaire();
+        $questionnaire = $this->getParent();
         $controller = $this;
         $config = array(
             // @todo remove it has been proven to work
@@ -76,11 +80,11 @@ class QuestionController extends AbstractRestfulController
      */
     protected function getModel()
     {
+        //if($this->parent) return get_class($this->parent);
 
         $request = $this->getRequest();
         if ($this->requestHasContentType($request, self::CONTENT_TYPE_JSON)) {
             $data = Json::decode($request->getContent(), $this->jsonDecodeType);
-
         } else {
             $data = $request->getPost()->toArray();
         }
@@ -95,31 +99,31 @@ class QuestionController extends AbstractRestfulController
         return '\Application\Model\Question\AbstractQuestion';
     }
 
+
     public function getList()
     {
-        $questionnaire = $this->getQuestionnaire();
+        $object = $this->getParent();
 
         // Cannot list all question, without specifying a questionnaire
-        if(!$questionnaire) {
+        if(!$object) {
             $this->getResponse()->setStatusCode(404);
             return;
         }
 
-        $questions = $this->getRepository()->findBy(
-            array(
-                'survey' => $questionnaire->getSurvey(),
-            ),
-            array(
-                'sorting' => 'ASC'
-            )
-        );
+        if(get_class($object)  == 'Application\Model\Question\Chapter')
+           $criteria = array('chapter' => $object) ;
+        elseif(get_class($object)  == 'Application\Model\Survey')
+           $criteria = array('survey' => $object) ;
+        elseif(get_class($object)  == 'Application\Model\Questionnaire')
+            $criteria = array('survey' => $object->getSurvey()) ;
 
-        //$questions = $this->hydrator->extractArray($questions, $this->getJsonConfig());
+        $questions = $this->getRepository()->findBy($criteria, array('sorting' => 'ASC'));
+
 
         // prepare flat array of questions for then be reordered by Parent > childrens > childrens
         // Ignores fields requests. @TODO : Implement it.
         $flatQuestions = array();
-        foreach($questions as $key => $question){
+        foreach($questions as  $question){
             $flatQuestion = array('id' => $question->getId(),
                                   'name' => $question->getName(),
                                   'sorting' => $question->getSorting()
@@ -129,22 +133,23 @@ class QuestionController extends AbstractRestfulController
             array_push($flatQuestions, $flatQuestion);
         }
 
-//        echo '<pre>';
-//        print_r($flatQuestions);
 
         $new = array();
-        foreach ($flatQuestions as $a)
+        $firstId = null;
+        foreach ($flatQuestions as $a){
+            if($firstId === null) $firstId = $a['parentid'];
             $new[$a['parentid']][] = $a;
+        }
 
-        $questions = $this->createTree($new, $new[0], 0);
-
+        $questions = $this->createTree($new, $new[$firstId], 0);
         return new JsonModel($questions);
     }
 
 
     protected function createTree(&$list, $parent, $deep){
         $tree = array();
-        foreach ($parent as $k=>$l){
+        foreach ($parent as $l){
+
             $l['level'] = $deep;
             if(isset($list[$l['id']])){
                 $children = $this->createTree($list, $list[$l['id']], $deep+1);
