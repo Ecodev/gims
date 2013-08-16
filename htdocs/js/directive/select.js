@@ -29,7 +29,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
         link: function(scope, element, attr, ctrl) {
 
         },
-        controller: function($scope, $attrs, Restangular, $location, $route, $routeParams) {
+        controller: function($scope, $attrs, Restangular, CachedRestangular, $location, $route, $routeParams) {
             var api = $scope.api;
             var name = $scope.name || api; // default key to same name as route
             var fromUrl = name == 'id' ? $routeParams.id : $location.search()[name];
@@ -55,8 +55,13 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
 
             // define what mode should be user for what type of item
             var config = {
-                questionnaire: 'ajax'
+                questionnaire: 'ajax',
+                country: 'cached',
+                part: 'cached'
             };
+
+            // Use cached version if configuration ask for it
+            var myRestangular = config[api] == 'cached' ? CachedRestangular : Restangular;
 
             // If the object type should use ajax search, then configure as such
             if (config[api] == 'ajax')
@@ -64,7 +69,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 $scope.options = {
                     minimumInputLength: 1,
                     ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
-                        url: Restangular.all(api).getRestangularUrl(),
+                        url: myRestangular.all(api).getRestangularUrl(),
                         data: function(term, page) {
                             return {
                                 q: term // search term
@@ -80,11 +85,11 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 // Reload a single or multiple items if we have its ID from URL
                 if (fromUrl) {
                     if (fromUrl.split(',').length > 1) {
-                        Restangular.all(api).getList({id: fromUrl, returnType: 'list'}).then(function (items) {
+                        myRestangular.all(api).getList({id: fromUrl, returnType: 'list'}).then(function (items) {
                             $scope[$attrs.ngModel] = items;
                         });
                     } else {
-                        Restangular.one(api, fromUrl).get().then(function (item) {
+                        myRestangular.one(api, fromUrl).get().then(function (item) {
                             $scope[$attrs.ngModel] = item;
                         });
                     }
@@ -95,7 +100,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             {
                 // Load items and re-select item based on URL params (if any)
                 var items;
-                Restangular.all(api).getList().then(function(data) {
+                myRestangular.all(api).getList().then(function(data) {
 
                     // @todo clean me up! For demo purposes role list must be filtered...
                     if (api === 'role') {

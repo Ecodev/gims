@@ -21,4 +21,9 @@ angular.module('myApp.services')
                 method: 'PUT'
             }
         });
+    })
+    .factory('CachedRestangular', function (Restangular) {
+        return Restangular.withConfig(function (RestangularConfigurer) {
+            RestangularConfigurer.setDefaultHttpFields({cache: true});
+        });
     });
