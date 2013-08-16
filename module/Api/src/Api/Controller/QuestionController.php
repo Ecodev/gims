@@ -141,8 +141,15 @@ class QuestionController extends AbstractRestfulController
             $new[$a['parentid']][] = $a;
         }
 
-        $questions = $this->createTree($new, $new[$firstId], 0);
+        if ($flatQuestions)
+        {
+            $questions = $this->createTree($new, $new[$firstId], 0);
+        } else {
+            $questions = array();
+        }
+        
         return new JsonModel($questions);
+
     }
 
 
