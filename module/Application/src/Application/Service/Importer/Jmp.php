@@ -862,16 +862,21 @@ class Jmp extends AbstractImporter
         $replacedFormula = str_replace(array('*100', '/100'), '', $originalFormula);
 
         // Expand range syntax to enumerate each cell: "A1:A5" => "A1,A2,A3,A4,A5"
-        // WARNING: this only expand vertical ranges, not horizontal ranges (which probably never make any sense for JMP anyway)
         $cellPattern = '\$?(([[:alpha:]]+)(\\d+))';
-        $expandedFormula = preg_replace_callback("/$cellPattern:$cellPattern/", function($matches) {
-            $expanded = array();
-            for ($i = $matches[3]; $i <= $matches[6]; $i++)
-            {
-                $expanded[] = $matches[2] . $i;
-            }
-            return join(',', $expanded);
-        }, $replacedFormula);
+        $expandedFormula = preg_replace_callback("/$cellPattern:$cellPattern/", function($matches) use($sheet, $cell) {
+
+                    // This only expand vertical ranges, not horizontal ranges (which probably never make any sense for JMP anyway)
+                    if ($matches[2] != $matches[5]) {
+                        throw new \Exception('Horizontal range are not supported: ' . $matches[0] . ' found in ' . $sheet->getTitle() . ', cell ' . $cell->getCoordinate());
+                    }
+
+                    $expanded = array();
+                    for ($i = $matches[3]; $i <= $matches[6]; $i++) {
+                        $expanded[] = $matches[2] . $i;
+                    }
+
+                    return '{' . join(',', $expanded) . '}';
+                }, $replacedFormula);
 
         // Replace all cell reference with our own syntax
         $filters = $this->cacheFilters;
