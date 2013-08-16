@@ -13,13 +13,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Questionnaire extends AbstractModel implements \Application\Service\RoleContextInterface
 {
+
     /**
      * @var array
      */
     protected static $jsonConfig
-        = array(
-            'name',
-        );
+    = array(
+        'name',
+    );
 
     /**
      * @var \DateTime
@@ -256,7 +257,9 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
             $questionCount = 0;
             foreach ($this->getSurvey()->getQuestions() as $q) {
-                $questionCount += $q->getParts() + 1;
+                if ($q instanceof Question\AbstractAnswerableQuestion) {
+                    $questionCount += $q->getParts()->count();
+                }
             }
 
             if ($questionCount > 0) {
