@@ -21,6 +21,15 @@ class Chapter extends AbstractQuestion
      */
     private $description = '';
 
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="smallint", nullable=true, options={"default" = 0}  )
+     */
+    private $final = false;
+
+
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OrderBy({"sorting" = "ASC"})
@@ -83,6 +92,33 @@ class Chapter extends AbstractQuestion
         $this->getQuestions()->add($question);
 
         return $this;
+    }
+
+
+
+
+
+    /**
+     * Set final
+     *
+     * @param string final
+     * @return AbstractQuestion
+     */
+    public function setfinal($final)
+    {
+        $this->final = $final;
+
+        return $this;
+    }
+
+    /**
+     * Get final
+     *
+     * @return string
+     */
+    public function getFinal()
+    {
+        return $this->final;
     }
 
 }
