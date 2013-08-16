@@ -20,7 +20,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
      *
      * @ORM\ManyToOne(targetEntity="Application\Model\Filter", fetch="EAGER")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="SET NULL")
+     *   @ORM\JoinColumn(onDelete="CASCADE")
      * })
      */
     private $filter;
@@ -34,7 +34,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\ManyToMany(targetEntity="Application\Model\Part")
-     * @ORM\JoinTable(name="question_part", joinColumns={@ORM\JoinColumn(name="question_id")})
+     * @ORM\JoinTable(name="question_part", joinColumns={@ORM\JoinColumn(name="question_id", onDelete="CASCADE")})
      */
     private $parts;
 
