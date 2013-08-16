@@ -39,7 +39,7 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
             $scope.removeQuestionnaire = function (row) {
                 var Questionnaire = new $resource('/api/questionnaire'); // TODO: find out a way to it with restangular instead of $resource
                 var questionnaire = new Questionnaire(row.entity);
-                Modal.confirmDelete(questionnaire, {objects: $scope.survey.questionnaires, label: questionnaire.name, returnUrl: $location.path()});
+                Modal.confirmDelete(questionnaire, {objects: $scope.questionnaires, label: questionnaire.name, returnUrl: $location.path()});
             };
 
             // Keep track of the selected row.

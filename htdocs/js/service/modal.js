@@ -40,7 +40,7 @@ angular.module('myApp.services')
                             });
                         }
 
-                        object.$delete(params, function () {
+                        object.remove(params).then(function () {
 
                             // remove from local storage
                             if (toSplice != null) {
