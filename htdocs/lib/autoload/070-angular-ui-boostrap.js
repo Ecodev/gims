@@ -1,1 +1,1 @@
-../ui-bootstrap/ui-bootstrap-tpls-0.3.0.js
+../ui-bootstrap/ui-bootstrap-tpls-0.5.0.js

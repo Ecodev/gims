@@ -1,1 +1,0 @@
-../angular-strap/angular-strap.js

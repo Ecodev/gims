@@ -12,8 +12,7 @@ angular.module('myApp', [
         'myApp.services',
         'myApp.directives',
         'http-auth-interceptor',
-        'chartsExample.directives',
-        '$strap.directives'
+        'chartsExample.directives'
     ]).
     config(function ($routeProvider, $locationProvider, $dialogProvider, RestangularProvider) {
         $routeProvider.when('/home', {templateUrl: '/template/application/index/home'});

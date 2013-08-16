@@ -97,44 +97,31 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         refreshChartPartial();
     };
 
-    // Using jQuery for being straight forward...
-    $('#btn-new-filter-set').popover({
-        html: true,
-        placement: 'bottom',
-        content: '<div class="span12" style="width: 450px">' +
-            '<form class="form-inline">' +
-            '<input id="filterSetTextField" type="text" class="span8" placeholder="Enter a filter set name...">' +
-            ' <button id="saveFilterSet" class="btn">Create</button>' +
-            ' <button id="closeFilterSet" class="btn">Cancel</button>' +
-            '</form>' +
-            '</div>'
-    })
-        .parent()
-        .delegate('button#saveFilterSet', 'click', function (e) {
-            e.preventDefault();
-            if ($('#filterSetTextField').val()) {
+    $scope.openNewFilterSet = function() {
+        $scope.newFilterSetOpened = true;
+    };
 
+    $scope.closeNewFilterSet = function() {
+        $scope.newFilterSetOpened = false;
+    };
 
-                $http.post('/api/filterSet', {
-                    name: $('#filterSetTextField').val(),
-                    filterSetSource: getParameterValue('filterSet'),
-                    excludedFilters: getExcludedFilters()
-                }).success(function (data) {
-                        $location.search('filterSet', data.id);
+    $scope.createNewFilterSet = function() {
+        if ($scope.newFilterSetName) {
+            $http.post('/api/filterSet', {
+                name: $scope.newFilterSetName,
+                filterSetSource: getParameterValue('filterSet'),
+                excludedFilters: getExcludedFilters()
+            }).success(function (data) {
+                    $location.search('filterSet', data.id);
 
-                        // reload page
-                        $timeout(function () {
-                            window.location.reload();
-                        }, 0);
-                    });
-                $scope.$apply();
-            }
-        })
-        .delegate('button#closeFilterSet', 'click', function (e) {
-            e.preventDefault();
-            $('#btn-new-filter-set').popover('hide');
-        });
-
+                    // reload page
+                    $timeout(function () {
+                        window.location.reload();
+                    }, 0);
+                });
+        }
+    };
+    
     // Whenever the list of excluded values is changed
     $scope.$watch('pointSelected', function (a) {
         if ($scope.pointSelected) {

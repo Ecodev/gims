@@ -11,8 +11,8 @@
 
         <?php echo $this->crudButtons('survey'); ?>
 
-        <tabs style="margin-top: 20px" active="panes[0].active">
-            <pane heading="General info">
+        <tabset style="margin-top: 20px" active="panes[0].active">
+            <tab heading="General info">
                 <div class="control-group" ng-class="{error: myForm.code.$invalid}">
                     <label for="survey.code">Code</label>
                     <input id="survey.code" type="text" name="code" ng-model="survey.code" required />
@@ -49,32 +49,32 @@
                     <div class="row-fluid">
                         <div class="span6">
                             <label for="survey.dateStart">Date start</label>
-                            <input id="survey.dateStart" class="input-small" type="text" ng-model="survey.dateStart" data-date-format="dd/mm/yyyy" bs-datepicker />
-                            <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+                            <label for="survey.dateStart">
+                                <input id="survey.dateStart" class="input-small" type="text" ng-model="survey.dateStart" datepicker-popup="dd/MM/yyyy"/><button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+                            </label>
                         </div>
                         <div class="span6">
                             <label for="survey.dateEnd">Date end</label>
-                            <input id="survey.dateEnd" class="input-small" type="text" ng-model="survey.dateEnd"
-                                   data-date-format="dd/mm/yyyy" bs-datepicker/>
-                            <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i>
-                            </button>
+                            <label for="survey.dateEnd">
+                                <input id="survey.dateEnd" class="input-small" type="text" ng-model="survey.dateEnd" datepicker-popup="dd/MM/yyyy"/><button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+                            </label>
                         </div>
                     </div>
                 </div>
-            </pane>
+            </tab>
 
-            <pane heading="Questions" active="panes[1].active" ui-if="survey.id">
+            <tab heading="Questions" active="panes[1].active" ui-if="survey.id">
                 <div gims-grid-question></div>
-            </pane>
+            </tab>
 
-            <pane heading="Questionnaires" active="panes[2].active" ui-if="survey.id">
+            <tab heading="Questionnaires" active="panes[2].active" ui-if="survey.id">
                 <div gims-grid-questionnaire></div>
-            </pane>
+            </tab>
 
-            <pane heading="Users" active="panes[3].active" ui-if="survey.id">
+            <tab heading="Users" active="panes[3].active" ui-if="survey.id">
                 <gims-relations relation="UserSurvey" first="survey" second="user" third="role"></gims-relations>
-            </pane>
-        </tabs>
+            </tab>
+        </tabset>
     </form>
 
     <?php echo $this->metadata('survey'); ?>

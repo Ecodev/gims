@@ -10,8 +10,8 @@
 
         <?php echo $this->crudButtons('user'); ?>
 
-        <tabs style="margin-top: 20px">
-            <pane heading="General info">
+        <tabset style="margin-top: 20px">
+            <tab heading="General info">
 
                 <div class="control-group" ng-class="{error: myForm.name.$invalid}">
                     <label for="user.name"><?php echo $this->translate("Name"); ?></label>
@@ -43,16 +43,16 @@
                             required></select>
                     <span ng-show="myForm.state.$error.required" class="help-inline">Required</span>
                 </div> -->
-            </pane>
+            </tab>
 
-            <pane heading="Surveys" ui-if="user.id">
+            <tab heading="Surveys" ui-if="user.id">
                 <gims-relations relation="UserSurvey" first="user" second="survey" third="role" format="code"></gims-relations>
-            </pane>
+            </tab>
 
-            <pane heading="Questionnaires" ui-if="user.id">
+            <tab heading="Questionnaires" ui-if="user.id">
                 <gims-relations relation="UserQuestionnaire" first="user" second="questionnaire" third="role"></gims-relations>
-            </pane>
-        </tabs>
+            </tab>
+        </tabset>
     </form>
     <?php echo $this->metadata('user'); ?>
 </div> <!-- /container -->
