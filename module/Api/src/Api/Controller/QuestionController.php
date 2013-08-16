@@ -124,12 +124,12 @@ class QuestionController extends AbstractRestfulController
         // Ignores fields requests. @TODO : Implement it.
         $flatQuestions = array();
         foreach($questions as  $question){
-            $flatQuestion = array('id' => $question->getId(),
-                                  'name' => $question->getName(),
-                                  'sorting' => $question->getSorting()
-                                );
+
+            $flatQuestion = $this->hydrator->extract($question, $this->getJsonConfig());
+
             if(!is_null($question->getChapter())) $flatQuestion['parentid'] = $question->getChapter()->getId();
             else $flatQuestion['parentid'] = 0;
+
             array_push($flatQuestions, $flatQuestion);
         }
 
