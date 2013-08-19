@@ -15,7 +15,6 @@ use Application\Model\Role;
 use Application\Model\Survey;
 use Application\Model\User;
 use Application\Model\UserQuestionnaire;
-use Zend\Json\Json;
 
 abstract class AbstractController extends \ApplicationTest\Controller\AbstractController
 {
@@ -204,22 +203,6 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
         $this->getEntityManager()->persist($this->answer);
         $this->getEntityManager()->persist($this->answer2);
         $this->getEntityManager()->flush();
-    }
-
-    /**
-     * @return array
-     */
-    protected function getJsonResponse()
-    {
-        $content = $this->getResponse()->getContent();
-        try {
-            $json = Json::decode($content, Json::TYPE_ARRAY);
-        } catch (\Zend\Json\Exception\RuntimeException $exception) {
-            throw new \Zend\Json\Exception\RuntimeException($exception->getMessage() . PHP_EOL . PHP_EOL . $content . PHP_EOL, $exception->getCode(), $exception);
-        }
-
-        $this->assertTrue(is_array($json));
-        return $json;
     }
 
 }

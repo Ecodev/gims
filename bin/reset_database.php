@@ -75,18 +75,21 @@ STRING;
      * @param string $siteLocal
      * @param string $dumpFile
      */
-    static private function loadDump($siteLocal, $dumpFile)
+    static public function loadDump($siteLocal, $dumpFile)
     {
-        require("$siteLocal/config/autoload/local.php");
-
-        $loadCmd = <<<STRING
-        ./vendor/bin/doctrine-module orm:schema-tool:drop --full-database --force
-        ./vendor/bin/doctrine-module dbal:run-sql "DROP TYPE IF EXISTS questionnaire_status CASCADE;"
-		gunzip -c $dumpFile | pg_restore --host localhost --username $username --no-owner --dbname=$database
-STRING;
+        $config = require("$siteLocal/config/autoload/local.php");
+        $dbConfig = $config['doctrine']['connection']['orm_default']['params'];
+        $username = $dbConfig['user'];
+        $database = $dbConfig['dbname'];
 
         echo "loading dump $dumpFile...\n";
-        echo exec($loadCmd) . PHP_EOL;
+        self::executeLocalCommand('./vendor/bin/doctrine-module orm:schema-tool:drop --full-database --force');
+        self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP TYPE IF EXISTS questionnaire_status CASCADE;"');
+        self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP RULE IF EXISTS geometry_columns_delete ON geometry_columns CASCADE;"');
+        self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP RULE IF EXISTS geometry_columns_insert ON geometry_columns CASCADE;"');
+        self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP RULE IF EXISTS geometry_columns_update ON geometry_columns CASCADE;"');
+		self::executeLocalCommand("gunzip -c $dumpFile | pg_restore --host localhost --username $username --no-owner --dbname=$database");
+        self::executeLocalCommand('./vendor/bin/doctrine-module migrations:migrate --no-interaction');
     }
 
     /**
@@ -117,6 +120,21 @@ STRING;
         self::loadDump($siteLocal, $dumpFile);
 
         echo "database updated\n";
+    }
+
+    /**
+     * Execute a shell command and throw exception if fails
+     * @param string $command
+     * @throws \Exception
+     */
+    protected static function executeLocalCommand($command)
+    {
+        $return_var = null;
+        $fullCommand = "$command 2>&1";
+        passthru($fullCommand, $return_var);
+        if ($return_var) {
+            throw new \Exception('FAILED executing: ' . $command);
+        }
     }
 
 }

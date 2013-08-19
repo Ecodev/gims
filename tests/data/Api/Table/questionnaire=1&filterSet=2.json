@@ -1,0 +1,537 @@
+[
+    {
+        "filter": {
+            "id": 126,
+            "name": "Total improved",
+            "isOfficial": true,
+            "level": 0
+        },
+        "values": [
+            {
+                "Rural": 0.7506,
+                "Total": 0.923,
+                "Urban": 0.8672
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 2,
+            "name": "Tap water",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": 0.005,
+                "Total": 0.04600000000000001,
+                "Urban": 0.368
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 3,
+            "name": "House connections",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": 0.003,
+                "Total": 0.033,
+                "Urban": 0.267
+            },
+            {
+                "Rural": 0.003,
+                "Total": 0.033,
+                "Urban": 0.267
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 4,
+            "name": "Piped water into dwelling",
+            "isOfficial": true,
+            "level": 3
+        },
+        "values": [
+            {
+                "Rural": 0.003,
+                "Total": 0.033,
+                "Urban": 0.267
+            },
+            {
+                "Rural": 0.003,
+                "Total": 0.033,
+                "Urban": 0.267
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 5,
+            "name": "Piped water to yard\/plot",
+            "isOfficial": true,
+            "level": 3
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            },
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 6,
+            "name": "Public tap, standpipe",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": 0.002,
+                "Total": 0.013,
+                "Urban": 0.101
+            },
+            {
+                "Rural": 0.002,
+                "Total": 0.013,
+                "Urban": 0.101
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 7,
+            "name": "Other",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            },
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 9,
+            "name": "Protected ground water",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": 0.91,
+                "Total": 0.877,
+                "Urban": 0.62
+            },
+            {
+                "Rural": 0.91,
+                "Total": 0.877,
+                "Urban": 0.62
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 52,
+            "name": "Covered cistern\/tank",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            },
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 55,
+            "name": "with other improved",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            },
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 65,
+            "name": "Other improved sources",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            },
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 66,
+            "name": "Other 1",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            },
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 67,
+            "name": "Other 2",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            },
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 127,
+            "name": "Piped onto premises",
+            "isOfficial": true,
+            "level": 0
+        },
+        "values": [
+            {
+                "Rural": 0.003,
+                "Total": 0.033,
+                "Urban": 0.267
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 128,
+            "name": "Surface water",
+            "isOfficial": true,
+            "level": 0
+        },
+        "values": [
+            {
+                "Rural": 0.039,
+                "Total": 0.035,
+                "Urban": 0.005
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 57,
+            "name": "Surface water",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": 0.039,
+                "Total": 0.035,
+                "Urban": 0.005
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 58,
+            "name": "River",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": 0.008,
+                "Total": 0.007,
+                "Urban": 0.001
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 59,
+            "name": "Lake",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 60,
+            "name": "Dam",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 61,
+            "name": "Pond",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": 0.031,
+                "Total": 0.028,
+                "Urban": 0.004
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 62,
+            "name": "Stream",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 63,
+            "name": "Irrigation channel",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 64,
+            "name": "Other",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 129,
+            "name": "Other Improved",
+            "isOfficial": true,
+            "level": 0
+        },
+        "values": [
+            {
+                "Rural": 0.9119999999999999,
+                "Total": 0.8899999999999999,
+                "Urban": 0.721
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 130,
+            "name": "Other Unimproved",
+            "isOfficial": true,
+            "level": 0
+        },
+        "values": [
+            {
+                "Rural": 0.004,
+                "Total": 0.004,
+                "Urban": 0.006
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 53,
+            "name": "Uncovered cistern\/tank",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 56,
+            "name": "without other improved",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 68,
+            "name": "Other non-improved",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": 0.004,
+                "Total": 0.004,
+                "Urban": 0.006
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 69,
+            "name": "Cart with small tank\/drum",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 70,
+            "name": "Tanker truck provided",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 71,
+            "name": "Other 1",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": 0.004,
+                "Total": 0.004,
+                "Urban": 0.006
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 72,
+            "name": "Other 2",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    }
+]

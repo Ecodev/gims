@@ -4,21 +4,26 @@ namespace ApiTest\Controller;
 
 use Zend\Http\Request;
 
-class TableControllerTest extends AbstractController
+class TableControllerTest extends \ApplicationTest\Controller\AbstractController
 {
-    public function testGetValidTableStructureWithMissingParameter()
-    {
-        $this->dispatch('/api/table?questionnaire=' . $this->questionnaire->getId(), Request::METHOD_GET);
 
-        $this->assertResponseStatusCode(200);
-        $this->getJsonResponse();
+    public function getValidDataProvider()
+    {
+        return new \ApiTest\JsonFileIterator('data/Api/Table');
     }
 
-    public function testGetValidData()
+    /**
+     * @dataProvider getValidDataProvider
+     */
+    public function testGetValidData($params, $expectedJson, $message, $logFile)
     {
-        $this->dispatch('/api/table?questionnaire=' . $this->questionnaire->getId() . '&filterSet=' . $this->filterSet->getId(), Request::METHOD_GET);
+        $this->dispatch('/api/table?' . $params, Request::METHOD_GET);
 
         $this->assertResponseStatusCode(200);
-        $this->getJsonResponse();
+        $actualJson = $this->getJsonResponse();
+        $this->logJson($logFile, $actualJson);
+
+        $this->assertEquals($expectedJson, $actualJson, $message);
     }
+
 }
