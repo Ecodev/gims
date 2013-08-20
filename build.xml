@@ -2,6 +2,23 @@
 
 <project name="GIMS" default="build">
 
+    <taskdef classname="tasks.LoadDump" name="load-dump" />
+    <taskdef classname="tasks.LoadRemoteDump" name="load-remote-dump" />
+
+    <target name="load-data">
+        <propertyprompt propertyName="dumpFile" defaultValue="tests/data/db.backup.gzip" promptText="Path to gzipped DB dump" useExistingValue="true" />
+        <load-dump dumpfile="${dumpFile}" />
+    </target>
+
+    <target name="load-test-data" description="Load data for tests">
+        <load-dump dumpfile="tests/data/db.backup.gzip" />
+    </target>
+
+    <target name="load-remote-data" description="Load data from a remote server into local database">
+        <propertyprompt propertyName="remote" defaultValue="gims.pro" promptText="Remote host (eg: remote.hostname.com)" useExistingValue="true" />
+        <load-remote-dump remote="${remote}" />
+    </target>
+
     <!-- Install all PHP dependencies via composer -->
     <target name="composer-install">
         <composer command="install">
@@ -13,7 +30,7 @@
     <!-- ============================================  -->
     <!-- Target: build                                 -->
     <!-- ============================================  -->
-    <target name="build" depends="composer-install" description="build all assets for a fully functionnal application (DB, CSS, JS)">
+    <target name="build" depends="composer-install" description="Build all assets for a fully functionnal application (DB, CSS, JS)">
         <exec command="./bin/build.sh" checkreturn="true" logoutput="/dev/stdout" />
     </target>
 
@@ -31,7 +48,7 @@
         <delete dir="htdocs/tmp/" includeemptydirs="true" verbose="true" />
     </target>
 
-    <target name="test" depends="validate-schema,phpunit,karma-unit,karma-e2e" description="run all tests available">
+    <target name="test" depends="validate-schema,phpunit,karma-unit,karma-e2e" description="Run all tests available">
         <echo msg="Testing done" />
     </target>
 
@@ -40,7 +57,7 @@
         <exec command="./vendor/bin/doctrine-module orm:validate-schema" checkreturn="true" logoutput="/dev/stdout" />
     </target>
 
-    <target name="phpunit" depends="build">
+    <target name="phpunit" depends="build, load-test-data">
         <echo msg="Testing phpunit..." />
         <exec command="cd tests/ ; ../vendor/bin/phpunit" checkreturn="true" logoutput="/dev/stdout" />
     </target>

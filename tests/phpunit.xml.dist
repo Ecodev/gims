@@ -21,8 +21,4 @@
     <logging>
         <!--<log type="coverage-html" target="../data/logs/report" charset="UTF-8" yui="true" hightlight="true" lowupperbound="50" highlowerbound="80"></log>-->
     </logging>
-
-    <listeners>
-        <listener class="DatabaseMounter" file="DatabaseMounter.php" />
-    </listeners>
 </phpunit>
