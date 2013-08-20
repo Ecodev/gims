@@ -26,4 +26,10 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
     {
         return new ViewModel();
     }
+
+    public function questionsAction()
+    {
+        return new ViewModel();
+    }
+
 }

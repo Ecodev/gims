@@ -45,6 +45,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
         $scope.isChoices = false;
         $scope.isChapter = false;
 
+
         if ($scope.question.type == 'Choice') {
             $scope.isChoices = true;
            if (!$scope.question.choices || $scope.question.choices.length == 0)
@@ -54,14 +55,6 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
         if ($scope.question.type == 'Chapter') {
             $scope.isChapter=true;
         }
-//        else if ($scope.question.type == 'text') {
-//
-//        }
-//        else if ($scope.question.type == 'numerical') {
-//
-//        }
-
-
 
     }
 

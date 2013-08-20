@@ -10,26 +10,14 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($sco
     // If a questionnaire is specified in URL, load its data
     if ($routeParams.id) {
 
-        // @todo improve me! Hardcoded value... (Urban, Rural, Total)
-        requiredNumberOfAnswers = 3;
-        Restangular.one('questionnaire', $routeParams.id).all('question').getList({fields: 'filter,answers'}).then(function(questions) {
+        Restangular.one('questionnaire', $routeParams.id).all('question').getList({fields: 'type,filter,answers,choices,parts,compulsory,multiple,final,chapter'}).then(function(questions) {
+            $scope.originalQuestions = questions; // backup original questions
             $scope.questions = questions;
-            // Store copy of original object
-            angular.forEach(questions, function(question) {
-
-                // Make sure we have the right number existing in the Model
-                numberOfAnswers = question.answers.length;
-                if (numberOfAnswers < requiredNumberOfAnswers) {
-
-                    // create an empty answer for the need of NgGrid
-                    for (var index = 0; index < requiredNumberOfAnswers - numberOfAnswers; index++) {
-                        question.answers.push({});
-                    }
-                }
-                $scope.originalQuestions.push(Restangular.copy(question));
-            });
         });
     }
+
+
+
 
     // Validate Answer method
     $scope.validateAnswer = function(column, row) {

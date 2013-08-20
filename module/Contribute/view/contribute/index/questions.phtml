@@ -1,0 +1,33 @@
+
+
+
+    {{currentQuestion.name}}
+    {{currentQuestion.description}}
+
+    <div ng-switch="currentQuestion.type">
+        <div ng-switch-when="Chapter">
+            <!--gims-question></gims-question-->
+            Chapter
+        </div>
+        <div ng-switch-when="Numeric">numerical</div>
+        <div ng-switch-when="Text">text</div>
+        <div ng-switch-when="Choice">choice</div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--pre>
+    current id : {{currentIndex}}
+    {{currentQuestion|json}}
+</pre-->

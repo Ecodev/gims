@@ -3,13 +3,30 @@
     <h2>Questionnaire</h2>
     <gims-select api="questionnaire" name="id" model="questionnaire" placeholder="<?php echo $this->translate('Select a questionnaire') ?>" style="width:100%;"/></gims-select>
 
-    <h2>Questions</h2>
+    <br/>
 
-    <div class="alert alert-info">Empty values are due to different labels (original denominations) being used in the
-        Excel country files for the same
-        question of the survey !</div>
-    <div ng-grid="gridOptions" class="gridStyle"></div>
+    <div class='row-fluid'>
 
-    <!--pre>{{questions | json}}</pre-->
+        <div class='span2'>
+            <h3>Navigation</h3>
 
-</div> <!-- /container -->
+            <div class="btn-group">
+                <button class="btn" ng-click='goToPrevious();'>Previous</button>
+                <button class="btn" ng-click='goToNext();'>Next</button>
+            </div>
+
+            <form class="navbar navbar-form ">
+                <input type="text" class='span5' ng-model="wantedId">
+                <button type="submit" class="btn" ng-click="goTo()">Go to</button>
+            </form>
+            <!--gims-questions-nav ></gims-questions-nav-->
+        </div>
+
+
+        <div class='span10'>
+            <h3>Questions</h3>
+            <gims-questionnaire></gims-questionnaire>
+        </div>
+
+    </div>
+</div>

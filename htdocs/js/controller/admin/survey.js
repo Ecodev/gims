@@ -62,7 +62,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
         });
 
 
-        Restangular.one('survey', $routeParams.id).all('question').getList({fields:'type,parent'}).then(function(questions) {
+        Restangular.one('survey', $routeParams.id).all('question').getList({fields:'type,chapter'}).then(function(questions) {
             $scope.questions = questions;
         });
 

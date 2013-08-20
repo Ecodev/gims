@@ -55,6 +55,15 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
                 filterOptions: {},
                 multiSelect: false,
                 columnDefs: [
+                    // @todo : remove first column
+                    {
+                        field: 'id',
+                        displayName: 'id',
+                        width: '5%',
+                        cellTemplate:   '<div class="ngCellText" ng-class="col.colIndex()">' +
+                            '{{row.entity.id}}' +
+                            '</div>'
+                    },
                     {
                         field: 'sorting',
                         displayName: '#',

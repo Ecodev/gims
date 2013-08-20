@@ -106,8 +106,8 @@ class QuestionController extends AbstractRestfulController
 
         // Cannot list all question, without specifying a questionnaire
         if(!$object) {
-            $this->getResponse()->setStatusCode(404);
-            return;
+            //$this->getResponse()->setStatusCode(404); // if empty, don't need 404 error, just return null.
+            return '';
         }
 
         if(get_class($object)  == 'Application\Model\Question\Chapter')
@@ -124,30 +124,21 @@ class QuestionController extends AbstractRestfulController
         // Ignores fields requests. @TODO : Implement it.
         $flatQuestions = array();
         foreach($questions as  $question){
-
             $flatQuestion = $this->hydrator->extract($question, $this->getJsonConfig());
-
-            if(!is_null($question->getChapter())) $flatQuestion['parentid'] = $question->getChapter()->getId();
-            else $flatQuestion['parentid'] = 0;
-
             array_push($flatQuestions, $flatQuestion);
         }
-
 
         $new = array();
         $firstId = null;
         foreach ($flatQuestions as $a){
-            if($firstId === null) $firstId = $a['parentid'];
-            $new[$a['parentid']][] = $a;
+            if(empty($a['chapter']['id'])) $a['chapter']['id'] = 0;
+            if($firstId === null) $firstId = $a['chapter']['id'];
+            $new[$a['chapter']['id']][] = $a;
         }
 
-        if ($flatQuestions)
-        {
-            $questions = $this->createTree($new, $new[$firstId], 0);
-        } else {
-            $questions = array();
-        }
-        
+        if ($flatQuestions)     $questions = $this->createTree($new, $new[$firstId], 0);
+        else                    $questions = array();
+
         return new JsonModel($questions);
 
     }
