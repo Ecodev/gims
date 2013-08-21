@@ -173,7 +173,6 @@ class QuestionController extends AbstractRestfulController
      */
     public function update($id, $data)
     {
-
         // Retrieve question since permissions apply against it.
         /** @var $question \Application\Model\Question */
         $questionRepository = $this->getEntityManager()->getRepository($this->getModel());
