@@ -187,7 +187,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'animation' => false,
             ),
             'title' => array(
-                'text' => ($country ? $country->getName() : 'Unknown country') . ' - ' . ($part ? $part->getName() : 'Total'),
+                'text' => ($country ? $country->getName() : 'Unknown country') . ' - ' . ($part ? $part->getName() : 'Unkown part'),
             ),
             'subtitle' => array(
                 'text' => 'Estimated proportion of the population for ' . ($filterSet ? $filterSet->getName() : 'Unkown filterSet'),

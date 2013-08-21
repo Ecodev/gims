@@ -61,7 +61,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
         foreach ($parts as $p) {
             $computed = $service->computeFilter($filter, $questionnaire, $p['part']);
-            $current['values'][0][$p['part'] ? $p['part']->getName() : 'Total'] = $computed && $p['population']->getPopulation() ? $computed / $p['population']->getPopulation() : null;
+            $current['values'][0][$p['part']->getName()] = $computed && $p['population']->getPopulation() ? $computed / $p['population']->getPopulation() : null;
         }
 
         $filterExists = false;
