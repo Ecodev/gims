@@ -13,7 +13,7 @@
 
         <?php echo $this->crudButtons('question'); ?>
 
-        <!--pre>{{question|json}}</pre-->
+
 
         <br/><br/>
 
@@ -54,8 +54,8 @@
         <div class="control-group form-horizontal row-fluid" ng-show='isChapter' ng-class="{error: myForm.filter.$invalid}">
             <label class='control-label' for="question.final">Display mode</label>
             <div class='controls'>
-                <label class='radio'><input type='radio' name='question.final' value='0' ng-model='question.final' checked>Behaviors like a folder and subquestions are displayed on their own page</label>
-                <label class='radio'><input type='radio' name='question.final' value='1' ng-model='question.final'>Display all subquestions in one single page</label>
+                <label class='radio'><input type='radio' name='question.final' value='0' ng-model='question.final' checked>Behaviors like a folder : every subquestion is displayed on its own page</label>
+                <label class='radio'><input type='radio' name='question.final' value='1' ng-model='question.final'>Behaviors like a question : displays all subquestions in the current page</label>
             </div>
         </div>
 
@@ -175,3 +175,5 @@
 
     <?php echo $this->metadata('question'); ?>
 </div> <!-- /container -->
+
+<!--pre>{{question|json}}</pre-->

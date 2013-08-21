@@ -185,23 +185,21 @@ class QuestionController extends AbstractRestfulController
 
             $questionSiblings = $question->getChapter() ? $question->getChapter()->getQuestions() : $survey->getQuestions();
 
+            var_dump($questionSiblings);
+
             // true means we have to move sorting values up and down
-            if(!empty($data['sorting']) && $data['sorting'] < $question->getSorting()) {
+            if(!empty($data['sorting']) && $data['sorting'] < $question->getSorting()) { // if new sorting is lower
 
                 foreach ($questionSiblings as $questionSibling) {
-                    if($questionSibling->getSorting() >= $data['sorting']
-                        && $questionSibling->getSorting() < $question->getSorting()
-                    ) {
-                        $questionSibling->setSorting($questionSibling->getSorting() + 1);
+                    if($questionSibling->getSorting() >= $data['sorting'] && $questionSibling->getSorting() < $question->getSorting() ) {
+                        //$questionSibling->setSorting($questionSibling->getSorting() + 1);
                     }
                 }
-            } elseif(!empty($data['sorting']) && $data['sorting'] > $question->getSorting()) {
+            } elseif(!empty($data['sorting']) && $data['sorting'] > $question->getSorting()) { // if new sorting is higher
 
                 foreach ($questionSiblings as $questionSibling) {
-                    if($questionSibling->getSorting() <= $data['sorting']
-                        && $questionSibling->getSorting() > $question->getSorting()
-                    ) {
-                        $questionSibling->setSorting($questionSibling->getSorting() - 1);
+                    if($questionSibling->getSorting() <= $data['sorting'] && $questionSibling->getSorting() > $question->getSorting()) {
+                        //$questionSibling->setSorting($questionSibling->getSorting() - 1);
                     }
                 }
             }
@@ -299,6 +297,19 @@ class QuestionController extends AbstractRestfulController
             /** @var Question $question */
             $question = $questions->last();
             $data['sorting'] = $question->getSorting() + 1;
+
+            /* @todo : insert last id of the same level hierarchy, not the absolute last id
+             if($chapter = $question->getChapter())
+                //$question = $this->getRepository()->findByChapter($chapter,  array('sorting' => 'DESC'));
+                $criteria = Criteria::create()
+                    ->where(Criteria::expr()->eq("birthday", "1982-02-17"))
+                    ->orderBy(array("username" => Criteria::ASC))
+                    ->setFirstResult(0)
+                    ->setMaxResults(20);
+
+                $questions = $question->maching($criteria);
+            else
+             */
         }
 
         // Check that all required properties are given by the GUI
