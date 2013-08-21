@@ -185,7 +185,6 @@ class QuestionController extends AbstractRestfulController
 
             $questionSiblings = $question->getChapter() ? $question->getChapter()->getQuestions() : $survey->getQuestions();
 
-            var_dump($questionSiblings);
 
             // true means we have to move sorting values up and down
             if(!empty($data['sorting']) && $data['sorting'] < $question->getSorting()) { // if new sorting is lower

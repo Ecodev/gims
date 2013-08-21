@@ -41,21 +41,22 @@
         </div>
 
         <div class="control-group form-horizontal row-fluid" ng-class="{error: myForm.filter.$invalid}">
-            <label class='control-label' for="question.chapter">Parent question</label>
+            <label class='control-label' for="question.chapter">Belongs to chapter</label>
             <div class='controls'>
                 <select class='span5'
                         name="question.chapter"
                         ng-model="question.chapter.id"
                         ng-options="p.id as p.name for p in chapterList">
                 </select>
+                <button class="btn btn-danger btn-xs" ng-click="removeChapter()" ><i class="icon-trash"></i></button>
             </div>
         </div>
 
         <div class="control-group form-horizontal row-fluid" ng-show='isChapter' ng-class="{error: myForm.filter.$invalid}">
             <label class='control-label' for="question.final">Display mode</label>
             <div class='controls'>
-                <label class='radio'><input type='radio' name='question.final' value='0' ng-model='question.final' checked>Behaviors like a folder : every subquestion is displayed on its own page</label>
-                <label class='radio'><input type='radio' name='question.final' value='1' ng-model='question.final'>Behaviors like a question : displays all subquestions in the current page</label>
+                <label class='radio'><input type='radio' name='question.final' value='0' ng-model='question.final' checked>Behaves like a folder : every subquestion is displayed on its own page</label>
+                <label class='radio'><input type='radio' name='question.final' value='1' ng-model='question.final'>Behaves like a question : displays all subquestions in the current page</label>
             </div>
         </div>
 
@@ -99,6 +100,14 @@
                 <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
             </div>
         </div>
+        <div class="control-group form-horizontal" ng-show='isChapter' ng-class="{error: myForm.name.$invalid}">
+            <label class='control-label' for="question.description">Description</label>
+            <div class='controls control-row'>
+                <textarea class='span8' id="question.description" type="text" name="name" ng-model="question.description"></textarea>
+                <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+            </div>
+        </div>
+
         <div class="control-group form-horizontal row-fluid"  ng-hide='isChapter' ng-class="{error: myForm.filter.$invalid}">
             <label class='control-label' for="question.compulsory">Compulsory</label>
             <div class='controls'>
@@ -176,4 +185,4 @@
     <?php echo $this->metadata('question'); ?>
 </div> <!-- /container -->
 
-<!--pre>{{question|json}}</pre-->
+<pre>{{question|json}}</pre>

@@ -1,29 +1,29 @@
 
 
-
     {{currentQuestion.name}}
     {{currentQuestion.description}}
 
     <div ng-switch="currentQuestion.type">
-        <div ng-switch-when="Chapter">
-            <!--gims-question></gims-question-->
-            Chapter
+
+        <div ng-switch-when="Chapter">Chapter
+            <div ng-repeat='child in currentQuestionChildren'>
+                Question {{child.id}} - {{child.name}}
+            </div>
+
+
         </div>
-        <div ng-switch-when="Numeric">numerical</div>
-        <div ng-switch-when="Text">text</div>
-        <div ng-switch-when="Choice">choice</div>
+        <div ng-switch-when="Numeric">
+
+            Question {{currentQuestion.id}} - {{currentQuestion.name}} - {{currentQuestion.type}}
+        </div>
+        <div ng-switch-when="Text">
+            Question {{currentQuestion.id}} - {{currentQuestion.name}} - {{currentQuestion.type}}
+        </div>
+        <div ng-switch-when="Choice">
+            Question {{currentQuestion.id}} - {{currentQuestion.name}} - {{currentQuestion.type}}
+        </div>
+
     </div>
-
-
-
-
-
-
-
-
-
-
-
 
 
 
