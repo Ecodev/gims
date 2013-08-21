@@ -41,11 +41,6 @@
                 "Rural": 0.003,
                 "Total": 0.033,
                 "Urban": 0.267
-            },
-            {
-                "Rural": 0.003,
-                "Total": 0.033,
-                "Urban": 0.267
             }
         ]
     },
@@ -57,11 +52,6 @@
             "level": 3
         },
         "values": [
-            {
-                "Rural": 0.003,
-                "Total": 0.033,
-                "Urban": 0.267
-            },
             {
                 "Rural": 0.003,
                 "Total": 0.033,
@@ -81,11 +71,6 @@
                 "Rural": null,
                 "Total": null,
                 "Urban": null
-            },
-            {
-                "Rural": null,
-                "Total": null,
-                "Urban": null
             }
         ]
     },
@@ -97,11 +82,6 @@
             "level": 2
         },
         "values": [
-            {
-                "Rural": 0.002,
-                "Total": 0.013,
-                "Urban": 0.101
-            },
             {
                 "Rural": 0.002,
                 "Total": 0.013,
@@ -121,11 +101,6 @@
                 "Rural": null,
                 "Total": null,
                 "Urban": null
-            },
-            {
-                "Rural": null,
-                "Total": null,
-                "Urban": null
             }
         ]
     },
@@ -137,11 +112,6 @@
             "level": 1
         },
         "values": [
-            {
-                "Rural": 0.91,
-                "Total": 0.877,
-                "Urban": 0.62
-            },
             {
                 "Rural": 0.91,
                 "Total": 0.877,
@@ -161,11 +131,6 @@
                 "Rural": null,
                 "Total": null,
                 "Urban": null
-            },
-            {
-                "Rural": null,
-                "Total": null,
-                "Urban": null
             }
         ]
     },
@@ -177,11 +142,6 @@
             "level": 1
         },
         "values": [
-            {
-                "Rural": null,
-                "Total": null,
-                "Urban": null
-            },
             {
                 "Rural": null,
                 "Total": null,
@@ -201,11 +161,6 @@
                 "Rural": null,
                 "Total": null,
                 "Urban": null
-            },
-            {
-                "Rural": null,
-                "Total": null,
-                "Urban": null
             }
         ]
     },
@@ -217,11 +172,6 @@
             "level": 2
         },
         "values": [
-            {
-                "Rural": null,
-                "Total": null,
-                "Urban": null
-            },
             {
                 "Rural": null,
                 "Total": null,
@@ -241,11 +191,6 @@
                 "Rural": null,
                 "Total": null,
                 "Urban": null
-            },
-            {
-                "Rural": null,
-                "Total": null,
-                "Urban": null
             }
         ]
     },
@@ -261,6 +206,51 @@
                 "Rural": 0.003,
                 "Total": 0.033,
                 "Urban": 0.267
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 3,
+            "name": "House connections",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": 0.003,
+                "Total": 0.033,
+                "Urban": 0.267
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 4,
+            "name": "Piped water into dwelling",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": 0.003,
+                "Total": 0.033,
+                "Urban": 0.267
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 5,
+            "name": "Piped water to yard\/plot",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
             }
         ]
     },
@@ -411,6 +401,126 @@
                 "Rural": 0.912,
                 "Total": 0.89,
                 "Urban": 0.721
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 6,
+            "name": "Public tap, standpipe",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": 0.002,
+                "Total": 0.013,
+                "Urban": 0.101
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 7,
+            "name": "Other",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 9,
+            "name": "Protected ground water",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": 0.91,
+                "Total": 0.877,
+                "Urban": 0.62
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 52,
+            "name": "Covered cistern\/tank",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 55,
+            "name": "with other improved",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 65,
+            "name": "Other improved sources",
+            "isOfficial": true,
+            "level": 1
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 66,
+            "name": "Other 1",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 67,
+            "name": "Other 2",
+            "isOfficial": true,
+            "level": 2
+        },
+        "values": [
+            {
+                "Rural": null,
+                "Total": null,
+                "Urban": null
             }
         ]
     },

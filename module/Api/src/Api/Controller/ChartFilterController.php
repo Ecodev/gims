@@ -9,7 +9,6 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
 
     public function indexAction()
     {
-        $result = array();
         $questionnaireId = $this->params()->fromQuery('questionnaire');
 
         // make sure the questionnaire exists
@@ -65,8 +64,9 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
             // @todo It should be some kind of service but technical leader decides...
             $tableController = new TableController();
             $tableController->setServiceLocator($this->getServiceLocator());
+            $result = array();
             foreach ($filters as $filter) {
-                $tableController->computeWithChildren($questionnaire, $filter, $parts, 0, $result);
+                $result = array_merge($result, $tableController->computeWithChildren($questionnaire, $filter, $parts));
             }
 
             // Add information whether the filter is selectable or not

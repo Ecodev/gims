@@ -26,31 +26,46 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
         $result = array();
         if ($filterSet) {
-            foreach($idQuestionnaires as $indexQuestionnaire => $idQuestionnaire)
-            {
+            foreach ($idQuestionnaires as $idQuestionnaire) {
                 $questionnaire = $questionnaireRepository->find($idQuestionnaire);
-                if ($questionnaire)
-                {
-                    foreach($parts as $i => $p)
-                    {
+                if ($questionnaire) {
+
+                    // First collect parts' population
+                    foreach ($parts as $i => $p) {
                         $parts[$i]['population'] = $populationRepository->getOneByQuestionnaire($questionnaire, $parts[$i]['part']);
                     }
+
+                    // Do the actual computing for all filters
+                    $resultOneQuestionnaire = array();
                     foreach ($filterSet->getFilters() as $filter) {
-                        $this->computeWithChildren($questionnaire, $filter, $parts, 0, $result);
+                        $resultOneQuestionnaire = array_merge($resultOneQuestionnaire, $this->computeWithChildren($questionnaire, $filter, $parts));
+                    }
+
+                    // Merge this questionnaire results with other questionnaire results
+                    foreach ($resultOneQuestionnaire as $i => $data) {
+                        if (isset($result[$i])) {
+                            $result[$i]['values'][] = reset($data['values']);
+                        } else {
+                            $result[] = $data;
+                        }
                     }
                 }
             }
-      }
+        }
 
         return new JsonModel($result);
     }
 
-    /*
-     * Compute the answers for a given questionnaire (hence country+survey) and filter
+    /**
+     * Comput value for the given filter and all its children recursively.
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @param \Application\Model\Filter $filter
+     * @param array $parts
+     * @param integer $level the level of the current filter in the filter tree
+     * @return array a list (not tree) of all filters with their values and tree level
      */
-    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0, &$result)
+    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0)
     {
-
         $service = new \Application\Service\Calculator\Calculator();
         $service->setServiceLocator($this->getServiceLocator());
         $hydrator = new \Application\Service\Hydrator();
@@ -72,28 +87,15 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             $current['values'][0][$p['part']->getName()] = $value;
         }
 
-        $filterExists = false;
-        foreach($result as $numRow => $data)
-        {
-            if ($data['filter']['id'] == $filter->getId())
-            {
-                $result[$numRow]['values'][] = $current['values'][0];
-                $filterExists = true;
-                break;
-            }
-        }
-        if (!$filterExists)
-        {
-            $result[] = $current;
-        }
-
-        foreach ($filter->getChildren() as $child)
-        {
+        // Compute children
+        $result = array($current);
+        foreach ($filter->getChildren() as $child) {
             if ($child->isOfficial()) {
-                $this->computeWithChildren($questionnaire, $child, $parts, $level + 1, $result);
+                $result = array_merge($result, $this->computeWithChildren($questionnaire, $child, $parts, $level + 1));
             }
         }
 
+        return $result;
     }
 
 }
