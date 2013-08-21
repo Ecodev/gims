@@ -28,6 +28,7 @@ class JsonFileIterator extends \GlobIterator
         @list($params, $message) = split('#', str_replace('.json', '', $file->getFilename()));
 
         $fullpath = getcwd() . '/../data/logs/tests/' . $file->getPath() . '/';
+        `rm -rf $fullpath`;
         @mkdir($fullpath, 0777, true);
 
         $json = Json::decode(file_get_contents($file->getPathname()), Json::TYPE_ARRAY);
