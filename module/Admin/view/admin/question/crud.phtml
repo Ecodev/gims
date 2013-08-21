@@ -55,7 +55,7 @@
         <div class="control-group form-horizontal row-fluid" ng-show='isChapter' ng-class="{error: myForm.filter.$invalid}">
             <label class='control-label' for="question.final">Display mode</label>
             <div class='controls'>
-                <label class='radio'><input type='radio' name='question.final' value='0' ng-model='question.final' checked>Behaves like a folder : every subquestion is displayed on its own page</label>
+                <label class='radio'><input type='radio' name='question.final' value='0' ng-model='question.final' ng-checked="1">Behaves like a folder : every subquestion is displayed on its own page</label>
                 <label class='radio'><input type='radio' name='question.final' value='1' ng-model='question.final'>Behaves like a question : displays all subquestions in the current page</label>
             </div>
         </div>

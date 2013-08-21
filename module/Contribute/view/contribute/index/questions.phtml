@@ -1,23 +1,23 @@
 
+    <i>[here go all the parent chapter name and description (if there are any)]</i><br/>
 
-    {{currentQuestion.name}}
-    {{currentQuestion.description}}
+    <h4>{{currentQuestion.name}}</h4>
+    <p>{{currentQuestion.description}}</p>
+
 
     <div ng-switch="currentQuestion.type">
 
-        <div ng-switch-when="Chapter">Chapter
+        <div ng-switch-when="Chapter">
             <div ng-repeat='child in currentQuestionChildren'>
                 Question {{child.id}} - {{child.name}}
             </div>
-
-
         </div>
         <div ng-switch-when="Numeric">
-
-            Question {{currentQuestion.id}} - {{currentQuestion.name}} - {{currentQuestion.type}}
+            <input type='text' type='numerical'/>
         </div>
         <div ng-switch-when="Text">
-            Question {{currentQuestion.id}} - {{currentQuestion.name}} - {{currentQuestion.type}}
+
+            <input type='text' />
         </div>
         <div ng-switch-when="Choice">
             Question {{currentQuestion.id}} - {{currentQuestion.name}} - {{currentQuestion.type}}
@@ -26,8 +26,3 @@
     </div>
 
 
-
-<!--pre>
-    current id : {{currentIndex}}
-    {{currentQuestion|json}}
-</pre-->

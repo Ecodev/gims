@@ -3,12 +3,11 @@
     <h2>Questionnaire</h2>
     <gims-select api="questionnaire" name="id" model="questionnaire" placeholder="<?php echo $this->translate('Select a questionnaire') ?>" style="width:100%;"/></gims-select>
 
-    <br/>
+    <br/><br/><br/>
 
     <div class='row-fluid'>
 
         <div class='span2'>
-            <h3>Navigation</h3>
 
             <div class="btn-group">
                 <button class="btn" ng-click='goToPrevious();'>Previous</button>
@@ -19,14 +18,23 @@
                 <input type="text" class='span5' ng-model="wantedId">
                 <button type="submit" class="btn" ng-click="goTo()">Go to</button>
             </form>
+
+            current id : {{currentIndex}}
+
             <!--gims-questions-nav ></gims-questions-nav-->
         </div>
 
 
         <div class='span10'>
-            <h3>Questions</h3>
             <gims-questionnaire></gims-questionnaire>
         </div>
 
+
     </div>
+
+    <pre>
+    {{currentQuestion|json}}
+    </pre>
+
+
 </div>

@@ -107,10 +107,11 @@ angular.module('myApp.directives').directive('gimsQuestionnaire', function () {
                                     if(testedQuestion.final){ // if its final,
                                         for(var k=i; k<$scope.questions.length; k++){ // loop forward to find next chapter (we want to go to next question)
                                             var newTestedQuestion = $scope.questions[k];
-                                            if(newTestedQuestion.id!=testedQuestion.id && newTestedQuestion.type=='Chapter' && newTestedQuestion.level == testedQuestion.level){
+                                            if(newTestedQuestion.id!=testedQuestion.id && newTestedQuestion.type=='Chapter' && newTestedQuestion.level<=testedQuestion.level){
                                                 return k;
                                             }
                                         }
+                                        return i-1;
                                     }else{
                                         break;
                                     }
