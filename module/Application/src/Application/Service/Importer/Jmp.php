@@ -397,6 +397,7 @@ class Jmp extends AbstractImporter
     {
         // Import filters
         $this->cacheFilters = array();
+        $this->cacheQuestions = array();
         foreach ($officialFilters['definitions'] as $row => $definition) {
             $filter = $this->getFilter($definition);
             $this->cacheFilters[$row] = $filter;
@@ -537,7 +538,7 @@ class Jmp extends AbstractImporter
                         continue;
                     }
 
-                    $question = $this->getQuestion($survey, $filter, $row);
+                    $question = $this->getQuestion($survey, $filter);
 
                     // If question already exists, maybe the answer also already exists, in that case we will overwrite its value
                     $answer = null;
@@ -685,7 +686,7 @@ class Jmp extends AbstractImporter
         if ($name == $officialFilter->getName())
             return $officialFilter;
 
-        $key = $name . '::' . $officialFilter->getName();
+        $key = $this->getCacheKey(array($name, $officialFilter));
         if (array_key_exists($key, $this->cacheAlternateFilters)) {
             $filter = $this->cacheAlternateFilters[$key];
         } else {
@@ -715,14 +716,13 @@ class Jmp extends AbstractImporter
      * Returns a question either from database, or newly created
      * @param \Application\Model\Questionnaire $survey
      * @param \Application\Model\Filter $filter
-     * @param integer $row Sorting of the question
      * @return \Application\Model\Question\NumericQuestion
      */
-    protected function getQuestion(\Application\Model\Survey $survey, \Application\Model\Filter $filter, $row)
+    protected function getQuestion(\Application\Model\Survey $survey, \Application\Model\Filter $filter)
     {
         $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question\NumericQuestion');
 
-        $key = $survey->getCode() . '::' . $filter->getName() . '::' . $row;
+        $key = $this->getCacheKey(func_get_args());
 
         if (array_key_exists($key, $this->cacheQuestions)) {
             $question = $this->cacheQuestions[$key];
@@ -1155,5 +1155,26 @@ class Jmp extends AbstractImporter
         $this->ratioCount++;
     }
 
-}
+    /**
+     * Returns a unique identifying all arguments, so we can use the result as cache key
+     * @param array $args
+     * @return string
+     */
+    protected function getCacheKey(array $args)
+    {
+        $key = '';
+        foreach ($args as $arg) {
+            if (is_null($arg))
+                $key .= '[[NULL]]';
+            else if (is_object($arg))
+                $key .= spl_object_hash($arg);
+            else if (is_array($arg))
+                $key .= $this->getCacheKey($arg);
+            else
+                $key .= $arg;
+        }
 
+        return $key;
+    }
+
+}
