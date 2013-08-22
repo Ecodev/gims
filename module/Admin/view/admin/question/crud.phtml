@@ -30,11 +30,11 @@
             </div>
         </div>
         <div class="control-group form-horizontal row-fluid" ng-show='isChoices' ng-class="{error: myForm.filter.$invalid}">
-            <label class='control-label' for="question.isMultiple">Number of choices wanted</label>
+            <label class='control-label' for="question.multiple">Number of choices wanted</label>
             <div class='controls'>
                 <select class='span5'
-                        name="question.isMultiple"
-                        ng-model="question.isMultiple"
+                        name="question.multiple"
+                        ng-model="question.multiple"
                         ng-options="p.value as p.text for p in multiple">
                 </select>
             </div>
@@ -53,7 +53,7 @@
         </div>
 
         <div class="control-group form-horizontal row-fluid" ng-show='isChapter' ng-class="{error: myForm.filter.$invalid}">
-            <label class='control-label' for="question.isFinal">Display mode</label>
+            <label class='control-label' for="question.final">Display mode</label>
             <div class='controls'>
                 <label class='radio'><input type='radio' name='question.isFinal' value='0' ng-model='question.isFinal' ng-checked="1">Behaves like a folder : every subquestion is displayed on its own page</label>
                 <label class='radio'><input type='radio' name='question.isFinal' value='1' ng-model='question.isFinal'>Behaves like a question : displays all subquestions in the current page</label>
@@ -108,16 +108,16 @@
             </div>
         </div>
 
-        <div class="control-group form-horizontal row-fluid"  ng-hide='isChapter' ng-class="{error: myForm.filter.$invalid}">
-            <label class='control-label' for="question.isCompulsory">Compulsory</label>
+
+
+        <div class="control-group form-horizontal row-fluid" ng-hide='isChapter' ng-class="{error: myForm.filter.$invalid}">
+            <label class='control-label' for="question.final"></label>
             <div class='controls'>
-                <select class='span2'
-                        name="question.isCompulsory"
-                        ng-model="question.isCompulsory"
-                        ng-options="p.value as p.text for p in compulsory">
-                </select>
+                <label class='radio'><input type='radio' name='question.isCompulsory' value='0' ng-model='question.isCompulsory' ng-checked="1">Optional</label>
+                <label class='radio'><input type='radio' name='question.isCompulsory' value='1' ng-model='question.isCompulsory'>Compulsory</label>
             </div>
         </div>
+
 
 
 
@@ -185,4 +185,4 @@
     <?php echo $this->metadata('question'); ?>
 </div> <!-- /container -->
 
-<pre>{{question|json}}</pre>
+<!--pre>{{question|json}}</pre-->

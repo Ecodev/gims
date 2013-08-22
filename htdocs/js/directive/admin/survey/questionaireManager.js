@@ -101,10 +101,10 @@ angular.module('myApp.directives').directive('gimsQuestionnaire', function () {
                     if(next){ // we want to go to next question
                         /*  @todo : dont allow to go next when a final is the last question. Actually behaves has folder */
                         if(wantedQuestion.chapter!=null && Number(wantedQuestion.chapter.id)>0){
-                            for(var j=i-1; j>=0; j--){ // loop rewind to find parent and know if it's final or not
+                            for(var j=i-1; j>=0; j--){ // loop rewind to find parent and know if its final or not
                                 var testedQuestion = $scope.questions[j];
                                 if(testedQuestion.type=='Chapter'){
-                                    if(testedQuestion.isFinal){ // if it's final,
+                                    if(testedQuestion.isFinal){ // if its final,
                                         for(var k=i; k<$scope.questions.length; k++){ // loop forward to find next chapter (we want to go to next question)
                                             var newTestedQuestion = $scope.questions[k];
                                             if(newTestedQuestion.id!=testedQuestion.id && newTestedQuestion.type=='Chapter' && newTestedQuestion.level<=testedQuestion.level){
@@ -122,29 +122,23 @@ angular.module('myApp.directives').directive('gimsQuestionnaire', function () {
 
                     }else{ // we want to go to previous question
                         if(wantedQuestion.chapter!=null && Number(wantedQuestion.chapter.id)>0){
-                            var lastFinal = i;
-                            var lastLevel = wantedQuestion.level;
-                            for(var j=i-1; j>=0; j--){ // loop rewind to find parent and know if it's final or not
+                            var firstChapterPerLevel = [];
+                            for(var j=i-1; j>=0; j--){ // go rewind until first question or first zero leveled question
                                 var testedQuestion = $scope.questions[j];
-                                if(testedQuestion.level==0 && !testedQuestion.isFinal){
-                                    lastFinal= i;
-                                    break;
+                                if(testedQuestion.type=='Chapter' && !firstChapterPerLevel[testedQuestion.level]){
+                                    firstChapterPerLevel[testedQuestion.level] = j; // sets the first chapter encontered each level
                                 }
-                                else if(testedQuestion.level==0 && testedQuestion.isFinal){
-                                    lastFinal = j;
+                                if(testedQuestion.level==0) break;
+                            }
+                            for(var q in firstChapterPerLevel){ // loop forward the "chapterPerLevel" array to find the first chapter that is final and replace var i
+                                var testedQuestion = $scope.questions[firstChapterPerLevel[q]];
+                                if(testedQuestion.isFinal){
+                                    i =  firstChapterPerLevel[q];
                                     break;
-                                }
-                                else if(testedQuestion.type=='Chapter'  ){
-                                    if(testedQuestion.isFinal && testedQuestion.level < lastLevel){ // if it's final,
-                                        lastFinal = j;
-                                        lastLevel = testedQuestion.level;
-
-                                    }
                                 }
                             }
-                            return lastFinal;
                         }
-                        return i;
+                        return i; // if no chapter final is founded on second loop, i stay unchanged and return the wanted question.
                     }
                 }
                 return i; // never should be called

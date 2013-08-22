@@ -38,7 +38,7 @@
 
 
         <div ng-switch-when="Text">
-            <div class='span1' ng-repeat='part in currentQuestion.parts'>
+            <div class='span4' ng-repeat='part in currentQuestion.parts'>
                 <label for='numerical-{{currentQuestion.id}}-{{part.id}}'>
                     {{part.name}}<br/>
                     <input class='span12' type='text' name='numerical-{{currentQuestion.id}}-{{part.id}}' id='numerical-{{currentQuestion.id}}-{{part.id}}'/>
