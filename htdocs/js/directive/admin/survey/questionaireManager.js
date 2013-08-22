@@ -9,14 +9,12 @@ angular.module('myApp.directives').directive('gimsQuestionnaire', function () {
             $scope.currentQuestion = null;
 
             $scope.$watch('questions', function(questions) {
-                //console.info('watch questions');
                 if( questions.length>0 ){
                     $scope.refreshQuestion();
                 }
             });
 
             $scope.$watch('currentIndex', function(newIndex, old){
-                //console.info('watch index');
                 if(newIndex !== old)
                     $scope.refreshQuestion();
             });
