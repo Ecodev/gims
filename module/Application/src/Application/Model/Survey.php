@@ -55,7 +55,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * @var boolean
      *
-     * @ORM\Column(type="boolean", nullable=false, options={"default" = FALSE})
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
      */
     private $isActive = false;
 

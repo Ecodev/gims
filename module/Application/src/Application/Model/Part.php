@@ -31,7 +31,7 @@ class Part extends AbstractModel
     /**
      * @var boolean
      *
-     * @ORM\Column(type="boolean", nullable=false, options={"default" = FALSE})
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
      */
     private $isTotal = false;
 
