@@ -186,10 +186,13 @@ class QuestionControllerTest extends AbstractController
 
         $this->dispatch($route, Request::METHOD_PUT, $data);
 
-        $sortingValues = array(2,3,4,5,1);
-        foreach ($this->survey->getQuestions() as $key => $question) {
-            $this->assertSame($sortingValues[$key], $question->getSorting());
+        $expectedSorting = array(2, 3, 4, 5, 1);
+        $actualSorting = array();
+        foreach ($questions as $question) {
+            $actualSorting []= $question->getSorting();
         }
+
+        $this->assertSame($expectedSorting, $actualSorting);
     }
 
     /**
@@ -211,9 +214,12 @@ class QuestionControllerTest extends AbstractController
 
         $this->dispatch($route, Request::METHOD_PUT, $data);
 
-        $sortingValues = array(5, 1, 2, 3, 4);
-        foreach ($this->survey->getQuestions() as $key => $question) {
-            $this->assertSame($sortingValues[$key], $question->getSorting());
+        $expectedSorting = array(5, 1, 2, 3, 4);
+        $actualSorting = array();
+        foreach ($questions as $question) {
+            $actualSorting []= $question->getSorting();
         }
+
+        $this->assertSame($expectedSorting, $actualSorting);
     }
 }

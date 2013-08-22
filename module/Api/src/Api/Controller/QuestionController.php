@@ -190,14 +190,14 @@ class QuestionController extends AbstractRestfulController
 
                 foreach ($questionSiblings as $questionSibling) {
                     if($questionSibling->getSorting() >= $data['sorting'] && $questionSibling->getSorting() < $question->getSorting() ) {
-                        //$questionSibling->setSorting($questionSibling->getSorting() + 1);
+                        $questionSibling->setSorting($questionSibling->getSorting() + 1);
                     }
                 }
             } elseif(!empty($data['sorting']) && $data['sorting'] > $question->getSorting()) { // if new sorting is higher
 
                 foreach ($questionSiblings as $questionSibling) {
                     if($questionSibling->getSorting() <= $data['sorting'] && $questionSibling->getSorting() > $question->getSorting()) {
-                        //$questionSibling->setSorting($questionSibling->getSorting() - 1);
+                        $questionSibling->setSorting($questionSibling->getSorting() - 1);
                     }
                 }
             }
