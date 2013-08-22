@@ -3,39 +3,39 @@
     <h2>Questionnaire</h2>
     <gims-select api="questionnaire" name="id" model="questionnaire" placeholder="<?php echo $this->translate('Select a questionnaire') ?>" style="width:100%;"/></gims-select>
 
+    <!-- SECTION FOR GLASS -->
     <br/><br/><br/>
-
     <div class='row-fluid'>
 
         <div class='span2'>
-
             <div class="btn-group">
                 <button class="btn" ng-click='goToPrevious();'>Previous</button>
                 <button class="btn" ng-click='goToNext();'>Next</button>
             </div>
-
             <form class="navbar navbar-form ">
                 <input type="text" class='span5' ng-model="wantedId">
                 <button type="submit" class="btn" ng-click="goTo()">Go to</button>
             </form>
-
-
-
-            <!--gims-questions-nav ></gims-questions-nav-->
         </div>
-
 
         <div class='span10'>
             <gims-questionnaire></gims-questionnaire>
         </div>
 
-
+        <!-- debug glass
+            <pre>
+                current id : {{currentIndex}}
+                {{currentQuestion|json}}
+            </pre>
+        -->
     </div>
+    <!-- END OF GLASS SECTION -->
 
-    <!--pre>
-current id : {{currentIndex}}
-    {{currentQuestion|json}}
-    </pre-->
+
+
+    <!-- SECTION FOR JMP
+    <div ng-grid="gridOptions" class="gridStyle"></div>
+     END OF SECTION FOR JMP -->
 
 
 </div>
