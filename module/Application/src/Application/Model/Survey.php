@@ -19,7 +19,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
         = array(
             'name',
             'code',
-            'active',
+            'isActive',
             'year',
             'dateStart',
             'dateEnd',
@@ -55,9 +55,9 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * @var boolean
      *
-     * @ORM\Column(type="boolean", nullable=false)
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = FALSE})
      */
-    private $active = false;
+    private $isActive = false;
 
     /**
      * @var integer
@@ -147,13 +147,13 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * Set active
      *
-     * @param boolean $active
+     * @param boolean $isActive
      *
      * @return Survey
      */
-    public function setActive($active)
+    public function setIsActive($isActive)
     {
-        $this->active = $active;
+        $this->isActive = (bool) $isActive;
 
         return $this;
     }
@@ -163,9 +163,9 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @return boolean
      */
-    public function getActive()
+    public function isActive()
     {
-        return $this->active;
+        return $this->isActive;
     }
 
     /**

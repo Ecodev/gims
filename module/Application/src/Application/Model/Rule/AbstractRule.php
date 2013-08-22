@@ -59,7 +59,7 @@ abstract class AbstractRule extends \Application\Model\AbstractModel
      */
     public function setIsFinal($value)
     {
-        $this->isFinal = $value;
+        $this->isFinal = (bool) $value;
 
         return $this;
     }

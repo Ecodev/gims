@@ -17,7 +17,7 @@ class ChoiceQuestion extends AbstractAnswerableQuestion
      *
      * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
      */
-    private $multiple = 0;
+    private $isMultiple = false;
 
 
     /**
@@ -87,19 +87,21 @@ class ChoiceQuestion extends AbstractAnswerableQuestion
     }
 
     /**
+     * Return whether this question accept multiple selection of choice
      * @return boolean
      */
-    public function getMultiple()
+    public function isMultiple()
     {
-        return $this->multiple;
+        return $this->isMultiple;
     }
 
     /**
-     * @param boolean $multiple
+     * Set whether this question accept multiple selection of choice
+     * @param boolean $isMultiple
      */
-    public function setMultiple($multiple)
+    public function setIsMultiple($isMultiple)
     {
-        $this->multiple = $multiple;
+        $this->isMultiple = (bool) $isMultiple;
     }
 
 

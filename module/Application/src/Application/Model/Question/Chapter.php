@@ -13,7 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Chapter extends AbstractQuestion
 {
 
-
     /**
      * @var string
      *
@@ -21,14 +20,12 @@ class Chapter extends AbstractQuestion
      */
     private $description = '';
 
-
     /**
      * @var boolean
      *
-     * @ORM\Column(type="smallint", nullable=true, options={"default" = 0}  )
+     * @ORM\Column(type="boolean", nullable=true, options={"default" = 0})
      */
-    private $final = false;
-
+    private $isFinal = false;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -94,19 +91,15 @@ class Chapter extends AbstractQuestion
         return $this;
     }
 
-
-
-
-
     /**
      * Set final
      *
-     * @param string final
+     * @param boolean $isFinal
      * @return AbstractQuestion
      */
-    public function setfinal($final)
+    public function setIsFinal($isFinal)
     {
-        $this->final = $final;
+        $this->isFinal = (bool) $isFinal;
 
         return $this;
     }
@@ -116,9 +109,9 @@ class Chapter extends AbstractQuestion
      *
      * @return string
      */
-    public function getFinal()
+    public function isFinal()
     {
-        return $this->final;
+        return $this->isFinal;
     }
 
 }

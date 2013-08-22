@@ -45,7 +45,7 @@ describe('admin/survey/new', function() {
 
         input('survey.code').enter(randomCode);
         input('survey.name').enter('foo');
-        select('survey.active').option(0);
+        select('survey.isActive').option(0);
         input('survey.year').enter('2013');
         input('survey.comments').enter('foo bar');
         input('survey.dateStart').enter('08/05/2013');

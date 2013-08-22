@@ -120,7 +120,7 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
         $this->metaModel = new MetaModel();
 
         $this->survey = new Survey();
-        $this->survey->setActive(true);
+        $this->survey->setIsActive(true);
         $this->survey->setName('test survey');
         $this->survey->setCode('code test survey');
         $this->survey->setYear(2010);

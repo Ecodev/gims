@@ -457,7 +457,7 @@ class Jmp extends AbstractImporter
         if (!$survey) {
             $survey = new \Application\Model\Survey();
 
-            $survey->setActive(true);
+            $survey->setIsActive(true);
             $survey->setCode($code);
             $survey->setName($sheet->getCellByColumnAndRow($col + 0, 2)->getCalculatedValue());
             $survey->setYear($sheet->getCellByColumnAndRow($col + 3, 3)->getCalculatedValue());

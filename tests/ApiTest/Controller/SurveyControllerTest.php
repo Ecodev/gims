@@ -59,7 +59,7 @@ class SurveyControllerTest extends AbstractController
     public function ensureOnlyAllowedFieldAreDisplayedInResponseForSurvey()
     {
         $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
-        $allowedFields = array('id', 'name', 'code', 'active', 'year', 'dateStart', 'dateEnd', 'questions', 'questionnaires');
+        $allowedFields = array('id', 'name', 'code', 'isActive', 'year', 'dateStart', 'dateEnd', 'questions', 'questionnaires');
         foreach ($this->getJsonResponse() as $key => $value) {
             $this->assertTrue(in_array($key, $allowedFields));
         }

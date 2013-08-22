@@ -25,11 +25,10 @@
                     <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
                 </div>
 
-                <div class="control-group" ng-class="{error: myForm.active.$invalid}">
-                    <label for="survey.active">Active</label>
-                    <select id="survey.active" name="active" ng-model="survey.active" ng-options="c.value as c.text for c in actives"
-                            required></select>
-                    <span ng-show="myForm.active.$error.required" class="help-inline">Required</span>
+                <div class="control-group" ng-class="{error: myForm.isActive.$invalid}">
+                    <label for="survey.isActive">Active</label>
+                    <select id="survey.isActive" name="active" ng-model="survey.isActive" ng-options="c.value as c.text for c in actives"></select>
+                    <span ng-show="myForm.isActive.$error.required" class="help-inline">Required</span>
                 </div>
 
                 <div class="control-group" ng-class="{error: myForm.year.$invalid}">

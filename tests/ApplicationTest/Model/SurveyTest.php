@@ -49,7 +49,7 @@ class SurveyTest extends AbstractModel
         $fields = array(
             'name',
             'code',
-            'active',
+            'isActive',
             'year',
             'dateStart',
             'dateEnd',

@@ -10,7 +10,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($sco
     // If a questionnaire is specified in URL, load its data
     if ($routeParams.id) {
 
-        Restangular.one('questionnaire', $routeParams.id).all('question').getList({fields: 'type,filter,answers,choices,parts,compulsory,multiple,final,chapter,description'}).then(function(questions) {
+        Restangular.one('questionnaire', $routeParams.id).all('question').getList({fields: 'type,filter,answers,choices,parts,isCompulsory,isMultiple,isFinal,chapter,description'}).then(function(questions) {
             $scope.originalQuestions = questions; // backup original questions
             $scope.questions = questions;
         });

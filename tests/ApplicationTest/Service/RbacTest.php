@@ -13,10 +13,10 @@ class RbacTest extends \ApplicationTest\Controller\AbstractController
         $user->setPassword('foo')->setName('test user');
 
         $survey = new \Application\Model\Survey();
-        $survey->setName('test survey')->setActive(true)->setCode('test code');
+        $survey->setName('test survey')->setIsActive(true)->setCode('test code');
 
         $survey2 = new \Application\Model\Survey();
-        $survey2->setName('test survey2')->setActive(true)->setCode('test code2');
+        $survey2->setName('test survey2')->setIsActive(true)->setCode('test code2');
 
         $questionnaire = new \Application\Model\Questionnaire();
         $questionnaire->setDateObservationStart(new \DateTime())->setDateObservationEnd(new \DateTime())->setSurvey($survey)->setGeoname($geoname);

@@ -9,6 +9,7 @@ use Application\Service\Hydrator;
 
 class HydratorTest extends \ApplicationTest\Controller\AbstractController
 {
+
     /**
      * @var \Application\Model\Question\Choice
      */
@@ -74,7 +75,6 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
                             array('Application\Model\Question\Choice', 1, $this->choice1),
                             array('Application\Model\Question\Choice', 2, $this->choice2),
         )));
-
     }
 
     public function testCanHydrateAndExtract()
@@ -183,7 +183,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
                 1,
                 2,
             )
-            );
+        );
         $this->hydrator->hydrate($data, $question);
 
         $this->assertEquals($choices, $question->getChoices(), 'question should have the two new choices');
@@ -213,7 +213,8 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     /**
      * @test
      */
-    public function extractSurveyWithPropertyQuestionnairesAndCheckResultContainsKeyQuestionnaires() {
+    public function extractSurveyWithPropertyQuestionnairesAndCheckResultContainsKeyQuestionnaires()
+    {
         $actual = $this->hydrator->extract($this->getFakeSurvey(), array('name', 'questionnaires'));
         $this->assertArrayHasKey('questionnaires', $actual);
     }
@@ -267,7 +268,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $actual = $this->hydrator->getPropertyStructure();
         foreach (array('Survey', 'Questionnaire', 'Answer') as $entity) {
             $this->assertContains(
-                'dateCreated', $actual['Application\Model\\' . $entity], 'Can not resolve metadata property alias'
+                    'dateCreated', $actual['Application\Model\\' . $entity], 'Can not resolve metadata property alias'
             );
         }
     }
@@ -285,7 +286,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
 
         foreach (array('Survey', 'Questionnaire', 'Answer') as $entity) {
             $this->assertNotContains(
-                'foo', $actual['Application\Model\\' . $entity], 'Can not resolve metadata property alias'
+                    'foo', $actual['Application\Model\\' . $entity], 'Can not resolve metadata property alias'
             );
         }
     }
@@ -347,7 +348,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'id' => null,
             'name' => 'filter 1',
             'isOfficial' => true,
-            // @todo check what to do
+                // @todo check what to do
 //            'officialFilter' => array(
 //                'id' => null,
 //                'name' => 'filter 2',
@@ -427,6 +428,33 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->assertEquals('filter 2', $filter1->getOfficialFilter()->getName(), 'properties of subobject should never be modified');
     }
 
+    public function testCanHydrateBoolean()
+    {
+        $chapter = new \Application\Model\Question\Chapter();
+        $this->assertFalse($chapter->isFinal(), 'default is false');
+
+        $this->hydrator->hydrate(array('isFinal' => true), $chapter);
+        $this->assertTrue($chapter->isFinal(), 'can set to true');
+
+        $this->hydrator->hydrate(array('isFinal' => false), $chapter);
+        $this->assertFalse($chapter->isFinal(), 'can set to true');
+
+        $this->hydrator->hydrate(array('isFinal' => '1'), $chapter);
+        $this->assertTrue($chapter->isFinal(), 'can set to 1');
+
+        $this->hydrator->hydrate(array('isFinal' => '0'), $chapter);
+        $this->assertFalse($chapter->isFinal(), 'can set to 0');
+    }
+
+    public function testCanExtractBoolean()
+    {
+        $chapter = new \Application\Model\Question\Chapter();
+
+        $actual = $this->hydrator->extract($chapter, array('isFinal'));
+        $this->assertArrayHasKey('isFinal', $actual);
+        $this->assertFalse($actual['isFinal']);
+    }
+
     /**
      * Return a fake survey for the sake of the test.
      *
@@ -436,7 +464,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     {
 
         $survey = new Survey();
-        $survey->setActive(true);
+        $survey->setIsActive(true);
         $survey->setName('test survey');
         $survey->setCode('code test survey');
         $survey->setYear(2010);
@@ -450,4 +478,5 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $questionnaire->setGeoname($geoName);
         return $survey;
     }
+
 }

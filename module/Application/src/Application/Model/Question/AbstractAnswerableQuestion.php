@@ -41,9 +41,9 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
     /**
      * @var int
      *
-     * @ORM\Column(type="smallint", nullable=true)
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = TRUE})
      */
-    private $compulsory;
+    private $isCompulsory = true;
 
     /**
      * Constructor
@@ -104,20 +104,22 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
     }
 
     /**
-     * @return int
+     * Returns whether this question must be answered
+     * @return boolean
      */
-    public function getCompulsory()
+    public function isCompulsory()
     {
-        return $this->compulsory;
+        return $this->isCompulsory;
     }
 
     /**
-     * @param int $compulsory
+     * @param boolean $isCompulsory
      * @return $this
      */
-    public function setCompulsory($compulsory)
+    public function setIsCompulsory($isCompulsory)
     {
-        $this->compulsory = $compulsory;
+        $this->isCompulsory = (bool) $isCompulsory;
+
         return $this;
     }
 

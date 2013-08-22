@@ -11,8 +11,8 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
     }
 
     $scope.actives = [
-        {text: 'Yes', value: 'true'},
-        {text: 'No', value: 'false'}
+        {text: 'Yes', value: true},
+        {text: 'No', value: false}
     ];
 
     $scope.saveAndClose = function () {
@@ -56,8 +56,6 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
     // Load survey if possible
     if ($routeParams.id) {
         Restangular.one('survey', $routeParams.id).get({fields: 'metadata,questionnaires,questionnaires.completed'}).then(function(survey) {
-            // Cast "active" to be string for the need of the select menu.
-            survey.active += ''; // string value
             $scope.survey = survey;
         });
 
@@ -103,7 +101,7 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $locati
         columnDefs: [
             {field: 'code', displayName: 'Code', width: '150px'},
             {field: 'name', displayName: 'Name', width: '750px'},
-            {field: 'active', displayName: 'Active', cellFilter: 'checkmark', width: '100px'},
+            {field: 'isActive', displayName: 'Active', cellFilter: 'checkmark', width: '100px'},
             {field: 'year', displayName: 'Year', width: '100px'},
             {displayName: '', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
                         '<button type="button" class="btn btn-mini" ng-click="remove(row)" ><i class="icon-trash icon-large"></i></button>'}
