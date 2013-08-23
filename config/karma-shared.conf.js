@@ -9,6 +9,16 @@ module.exports = function(config) {
         browsers: ['Chrome'],
         proxies: {
             '/': 'http://gims.local/'
+        },
+        // Our custom browser 'cli' will use PhantomJS, but with a huge
+        // window size to let ng-grid render as many columns as possible
+        customLaunchers: {
+            'cli': {
+                base: 'PhantomJS',
+                options: {
+                    viewportSize: {width: 1900, height: 1200}
+                }
+            }
         }
     });
 };

@@ -64,11 +64,11 @@
 
     <target name="karma-unit" depends="build">
         <echo msg="Testing karma-unit..." />
-        <exec command="karma start --no-auto-watch --single-run --browsers PhantomJS config/karma-unit.conf.js" checkreturn="true" logoutput="/dev/stdout" />
+        <exec command="karma start --no-auto-watch --single-run --browsers cli config/karma-unit.conf.js" checkreturn="true" logoutput="/dev/stdout" />
     </target>
 
     <target name="karma-e2e" depends="build">
         <echo msg="Testing karma-e2e..." />
-        <exec command="karma start --no-auto-watch --single-run --browsers PhantomJS config/karma-e2e.conf.js" checkreturn="true" logoutput="/dev/stdout" />
+        <exec command="karma start --no-auto-watch --single-run --browsers cli config/karma-e2e.conf.js" checkreturn="true" logoutput="/dev/stdout" />
     </target>
 </project>
