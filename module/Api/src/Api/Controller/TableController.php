@@ -78,7 +78,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             $computed = $service->computeFilter($filter, $questionnaire, $p['part']);
 
             // Round the value
-            if ($computed && $p['population']->getPopulation()) {
+            if (!is_null($computed) && $p['population']->getPopulation()) {
                 $value = round($computed / $p['population']->getPopulation(), 3);
             } else {
                 $value = null;

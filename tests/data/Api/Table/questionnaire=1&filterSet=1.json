@@ -1000,7 +1000,7 @@
             {
                 "Rural": 0.001,
                 "Total": 0.001,
-                "Urban": null
+                "Urban": 0
             }
         ]
     },
@@ -1045,7 +1045,7 @@
             {
                 "Rural": 0.001,
                 "Total": 0.001,
-                "Urban": null
+                "Urban": 0
             }
         ]
     },
@@ -1075,7 +1075,7 @@
             {
                 "Rural": 0.001,
                 "Total": 0.001,
-                "Urban": null
+                "Urban": 0
             }
         ]
     }
