@@ -2,40 +2,20 @@
 
     <h2>Questionnaire</h2>
     <gims-select api="questionnaire" name="id" model="questionnaire" placeholder="<?php echo $this->translate('Select a questionnaire') ?>" style="width:100%;"/></gims-select>
+<p></p>
+<p><i class="icon-loading" ng-show="isLoading"></i></p>
+<br/>
 
-    <!-- SECTION FOR GLASS -->
-    <br/><br/><br/>
-    <div class='row-fluid'>
+<div class="alert alert-info" ng-hide="isLoading + questions"><i class="icon-info-sign"></i> <?php echo $this->translate('Select questionnaire to be answered.') ?></div>
 
-        <div class='span2'>
-            <div class="btn-group">
-                <button class="btn" ng-click='goToPrevious();'>Previous</button>
-                <button class="btn" ng-click='goToNext();'>Next</button>
-            </div>
-            <form class="navbar navbar-form ">
-                <input type="text" class='span5' ng-model="wantedId">
-                <button type="submit" class="btn" ng-click="goTo()">Go to</button>
-            </form>
-        </div>
-
-        <div class='span10'>
-            <gims-questionnaire></gims-questionnaire>
-        </div>
-
-    </div>
-    <!-- END OF GLASS SECTION -->
-
-
-
-    <!-- SECTION FOR JMP
-    <div ng-grid="gridOptions" class="gridStyle"></div>
-     END OF SECTION FOR JMP -->
-
-
+<div ng-show="questions.length">
+    <gims-contribute-questionnaire-jmp ng-show="isJmp"></gims-contribute-questionnaire-jmp>
+    <gims-contribute-questionnaire-glass ng-show="!isJmp"></gims-contribute-questionnaire-glass>
+</div>
 </div>
 
 
-<!--pre>
+<!--<pre>
 current id : {{currentIndex}}
 {{currentQuestion|json}}
-</pre-->
+</pre>-->

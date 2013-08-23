@@ -1,4 +1,4 @@
-angular.module('myApp.directives').directive('gimsQuestionnaire', function () {
+angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass', function () {
     return {
         restrict: 'E',
         templateUrl: '/template/contribute/questions',
@@ -147,31 +147,3 @@ angular.module('myApp.directives').directive('gimsQuestionnaire', function () {
         }
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

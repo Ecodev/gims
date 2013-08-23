@@ -3,7 +3,7 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
     'use strict';
 
     return {
-        restrict: 'E', // Only usage possible is with attribute
+        restrict: 'E', // Only usage possible is with element
         // This HTML will replace the directive.
         replace: true,
         scope: {

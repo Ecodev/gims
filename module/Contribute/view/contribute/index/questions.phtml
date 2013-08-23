@@ -1,4 +1,18 @@
 
+<div class='row-fluid'>
+
+    <div class='span2'>
+        <div class="btn-group">
+            <button class="btn" ng-click='goToPrevious();'>Previous</button>
+            <button class="btn" ng-click='goToNext();'>Next</button>
+        </div>
+        <form class="navbar navbar-form ">
+            <input type="text" class='span5' ng-model="wantedId">
+            <button type="submit" class="btn" ng-click="goTo()">Go to</button>
+        </form>
+    </div>
+
+    <div class='span10'>
 
 <h4>{{currentQuestion.name}}</h4>
 <p>{{currentQuestion.description}}</p>
@@ -44,3 +58,7 @@
 </div>
 
 
+
+    </div>
+
+</div>
