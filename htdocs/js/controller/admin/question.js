@@ -3,7 +3,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     "use strict";
 
     // Default redirect
-    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,chapter,isCompulsory,multiple,isFinal,description'};
+    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,chapter,isCompulsory,isMultiple,isFinal,description'};
     var returnUrl = '/';
     var returnTab = '';
 
@@ -32,6 +32,10 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
         {text: 'Compulsory', value: 1}
     ];
 
+    $scope.multiple = [
+        {text: 'Single choice', value: false},
+        {text: 'Multiple choices', value: true},
+    ];
 
     $scope.initChoices = function () {
 
