@@ -121,8 +121,6 @@ angular.module('myApp.directives').directive('gimsTable', function () {
 
                     $scope.isLoading = true;
 
-                    // @todo remove me. Line was commented out but left because the code could have been useful...
-                    // $timeout.cancel(uniqueAjaxRequest);
                     uniqueAjaxRequest = $timeout(function () {
 
                         // ... then, get table data via Ajax, but only once per 200 milliseconds
