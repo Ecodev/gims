@@ -757,7 +757,7 @@ class Jmp extends AbstractImporter
             $question->setSurvey($survey);
             $question->setFilter($filter);
             $question->setSorting($survey->getQuestions()->count());
-            $question->setName('Percentage of population?');
+            $question->setName($filter->getName());
             $question->setParts(new \Doctrine\Common\Collections\ArrayCollection(array($this->partRural, $this->partUrban, $this->partTotal)));
             $this->getEntityManager()->persist($question);
         }
