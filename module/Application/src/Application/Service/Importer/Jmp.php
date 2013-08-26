@@ -14,7 +14,7 @@ class Jmp extends AbstractImporter
     private $definitions = array(
         'Tables_W' => array(
             'definitions' => array(
-                4 => array("Access to drinking water", null, 0, null),
+                4 => array("Water", null, 0, null),
                 5 => array("Tap water", 4, 0, null),
                 6 => array("House connections", 5, 0, null),
                 7 => array("Piped water into dwelling", 6, 0, null),
@@ -96,6 +96,10 @@ class Jmp extends AbstractImporter
                 'Estimate' => array(83, 84, 85, 86, 87, 88),
                 'Ratio' => array(94, 95, 96, 97, 98, 99, 100, 101, 102, 103),
             ),
+            'filterSet' => array(
+                'improvedName' => 'Water: use of improved sources (JMP data)',
+                'improvedUnimprovedName' => 'Water: use of improved and unimproved sources (JMP data)',
+            ),
             'highFilters' => array(
                 "Total improved" => array(
                     'row' => 89,
@@ -131,7 +135,7 @@ class Jmp extends AbstractImporter
         ),
         'Tables_S' => array(
             'definitions' => array(
-                4 => array("Use of sanitation facilities", null, 0, null),
+                4 => array("Sanitation", null, 0, null),
                 5 => array("Flush and pour flush", 4, 2, array(11, 30)),
                 6 => array("to piped sewer system", 5, 1, array(12, 31)),
                 7 => array("to septic tank", 5, 1, array(13, 32)),
@@ -229,6 +233,10 @@ class Jmp extends AbstractImporter
             'ratios' => array(
                 'min' => 100,
                 'max' => 107,
+            ),
+            'filterSet' => array(
+                'improvedName' => 'Sanitation: use of improved facilities (JMP data)',
+                'improvedUnimprovedName' => 'Sanitation: use of improved and unimproved facilities (JMP data)',
             ),
             'highFilters' => array(
                 "Improved + shared" => array(
@@ -359,7 +367,7 @@ class Jmp extends AbstractImporter
             echo PHP_EOL;
 
             // Third pass to import high filters and their formulas
-            $this->importHighFilters($firstFilter->getName(), $this->definitions[$sheetName]['highFilters'], $sheet);
+            $this->importHighFilters($this->definitions[$sheetName]['filterSet'], $this->definitions[$sheetName]['highFilters'], $sheet);
 
             // Fourth pass to hardcode special cases of formulas
             echo 'Finishing special cases of Ratios';
@@ -983,27 +991,25 @@ class Jmp extends AbstractImporter
 
     /**
      * Import high filters, their FilterSet, exclude rules and their formulas (if any)
-     * @param string $filterSetBaseName
+     * @param array $filterSetNames
      * @param array $filters
      * @param \PHPExcel_Worksheet $sheet
      */
-    protected function importHighFilters($filterSetBaseName, array $filters, \PHPExcel_Worksheet $sheet)
+    protected function importHighFilters(array $filterSetNames, array $filters, \PHPExcel_Worksheet $sheet)
     {
-        $filterSetName =  $filterSetBaseName . ' - Improved/Unimproved';
-        $improvedFilterSetName =  $filterSetBaseName . ' - Improved (JMP data)';
         $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
-        $filterSet = $filterSetRepository->getOrCreate($filterSetName);
-        $improvedFilterSet = $filterSetRepository->getOrCreate($improvedFilterSetName);
+        $filterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedUnimprovedName']);
+        $improvedFilterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedName']);
         $this->getEntityManager()->flush();
 
         // Get or create all filter
         echo 'Importing high filters';
-        foreach ($filters as $filterSetName => $filterData) {
+        foreach ($filters as $filterName => $filterData) {
 
             // Look for existing high filter...
             $highFilter = null;
             foreach ($filterSet->getFilters() as $f) {
-                if ($f->getName() == $filterSetName) {
+                if ($f->getName() == $filterName) {
                     $highFilter = $f;
                     break;
                 }
@@ -1011,7 +1017,7 @@ class Jmp extends AbstractImporter
 
             // .. or create it
             if (!$highFilter) {
-                $highFilter = new \Application\Model\Filter($filterSetName);
+                $highFilter = new \Application\Model\Filter($filterName);
                 $filterSet->addFilter($highFilter);
                 $this->getEntityManager()->persist($highFilter);
 
@@ -1031,7 +1037,7 @@ class Jmp extends AbstractImporter
 
                 if ($filterData['row']) {
                     foreach ($this->partOffsets as $offset => $part) {
-                        $formula = $this->getFormula($sheet, $col, $filterData['row'], $offset, $questionnaire, $part, $filterSetName . ' (' . $questionnaire->getName() . ($part ? ', ' . $part->getName() : '') . ')');
+                        $formula = $this->getFormula($sheet, $col, $filterData['row'], $offset, $questionnaire, $part, $filterName . ' (' . $questionnaire->getName() . ($part ? ', ' . $part->getName() : '') . ')');
                         if ($formula) {
                             $this->getFilterRule($highFilter, $questionnaire, $formula, $part);
                         }
@@ -1039,7 +1045,7 @@ class Jmp extends AbstractImporter
                 }
             }
 
-            $this->cacheHighFilters[$filterSetName] = $highFilter;
+            $this->cacheHighFilters[$filterName] = $highFilter;
             echo '.';
         }
 
