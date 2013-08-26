@@ -25,7 +25,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
         $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
         $excludeStr = $this->params()->fromQuery('exclude');
-        $excludedAnswers = is_string($excludeStr)&&strlen($excludeStr) ? split(',', $excludeStr) : array();
+        $excludedAnswers = is_string($excludeStr)&&strlen($excludeStr) ? explode(',', $excludeStr) : array();
 
         $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findBy(array('geoname' => $country ? $country->getGeoname() : -1));
 
@@ -285,7 +285,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $idFilter = 0;
         $filtersExcluded = array();
         foreach($excludedAnswers as $r) {
-            list($idFilter, $surveyCode) = split(':', $r);
+            list($idFilter, $surveyCode) = explode(':', $r);
             if (!array_key_exists($idFilter, $filtersExcluded))
                 $filtersExcluded[$idFilter] = array();
             $filtersExcluded[$idFilter][] = $surveyCode;
