@@ -14,7 +14,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
 
         // If they are all available ...
         if ($scope.country && $scope.part && $scope.filterSet) {
-            $scope.refreshChart();
+            refreshChart();
         }
     });
 
@@ -46,8 +46,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             $scope.chartObj.series[serieLength].remove();
         }
     };
-
-    $scope.updateChartInProcess = false;
 
     var getExcludedFilters = function () {
         var excludedFilters = [];
@@ -121,10 +119,13 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                 });
         }
     };
-    
+
     // Whenever the list of excluded values is changed
     $scope.$watch('pointSelected', function (a) {
         if ($scope.pointSelected) {
+
+            // We throw an window.resize event to force Highcharts to reflow and adapt to its new size
+            $timeout(function() { jQuery(window).resize(); }, 1);
 
             var questionnaireName = $scope.pointSelected.name;
 
@@ -184,7 +185,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
     var refreshChartPartial = function () {
 
         if ($scope.exclude instanceof Array && typeof($scope.chartObj) !== 'undefined') {
-            $scope.updateChartInProcess = true;
+            $scope.isLoading = true;
             var excludedSeries = new Array();
             for (var i = 0; i < $scope.exclude.length; i++) {
                 var serie = $scope.exclude[i].split(':')[0];
@@ -222,7 +223,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                                 $scope.chartObj.addSeries(data[i], false, false);
                             }
                             $scope.chartObj.redraw();
-                            $scope.updateChartInProcess = false;
+                            $scope.isLoading = false;
                         }
                     });
             } else if (changed) {
@@ -232,7 +233,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         }
     };
 
-    $scope.refreshChart = function () {
+    var refreshChart = function () {
         $scope.isLoading = true;
         $scope.plotColors = [];
         $timeout.cancel(uniqueAjaxRequest);

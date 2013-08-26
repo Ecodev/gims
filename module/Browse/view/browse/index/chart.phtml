@@ -29,13 +29,13 @@
     <div class="alert alert-info" ng-hide="chart"><i class="icon-info-sign"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?></div>
 
     <div class="row-fluid">
-        <div class="span8">
+        <div ng-class="{span12: !pointSelected, span8: pointSelected}" >
             <chart value="chart" type="area" height="400" chart-obj="chartObj" />
         </div>
-        <div class="span4">
+        <div class="span4" ng-show="pointSelected">
             <div style="text-align: center; margin-bottom: 10px">
-                <button ng-click="updateChart()" ng-class="{disabled: updateChartInProcess}" ng-show="pointSelected" class="btn">Update chart</button>
-                <button id="btn-new-filter-set" ng-show="pointSelected" class="btn" ng-click="openNewFilterSet()">Create new filter set</button>
+                <button ng-click="updateChart()" ng-class="{disabled: isLoading}" class="btn">Update chart</button>
+                <button id="btn-new-filter-set" class="btn" ng-click="openNewFilterSet()">Create new filter set</button>
                 <div modal="newFilterSetOpened" close="closeNewFilterSet()" options="opts">
                     <div class="modal-header">
                         <h3>Create new Filter Set</h3>
@@ -51,10 +51,10 @@
                     </div>
 
                 </div>
-                <div ng-grid="gridOptions" class="gridStyle" ng-show="pointSelected" style="min-width: 400px"></div>
+                <div ng-grid="gridOptions" class="gridStyle" style="min-width: 400px"></div>
                 <div style="margin-top: 10px; text-align: center">
-                    <button ng-click="ignoreQuestionnaire()" ng-class="{disabled: updateChartInProcess}"
-                            ng-show="pointSelected" class="btn">Ignore questionnaire
+                    <button ng-click="ignoreQuestionnaire()" ng-class="{disabled: isLoading}"
+                            class="btn">Ignore questionnaire
                     </button>
                 </div>
             </div>
