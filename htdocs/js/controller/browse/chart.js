@@ -107,7 +107,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         if ($scope.newFilterSetName) {
             $http.post('/api/filterSet', {
                 name: $scope.newFilterSetName,
-                filterSetSource: getParameterValue('filterSet'),
+                originalFilterSet: getParameterValue('filterSet'),
                 excludedFilters: getExcludedFilters()
             }).success(function (data) {
                     $location.search('filterSet', data.id);

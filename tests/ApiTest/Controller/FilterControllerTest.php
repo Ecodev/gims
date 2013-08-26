@@ -161,7 +161,7 @@ class FilterControllerTest extends AbstractController
         $data = array(
             'name' => 'new-filterSet',
             'excludedFilters' => array($this->filter->getId()),
-            'filterSetSource' => $this->filterSet->getId(),
+            'originalFilterSet' => $this->filterSet->getId(),
         );
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);

@@ -16,26 +16,26 @@ class FilterSetController extends AbstractRestfulController
      */
     public function create($data, \Closure $postAction = null)
     {
-        $filterSetId = empty($data['filterSetSource']) ? null : $data['filterSetSource'];
+        $filterSetId = empty($data['originalFilterSet']) ? null : $data['originalFilterSet'];
 
         // Retrieve a questionnaire from the storage
         $repository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
 
-        /** @var \Application\Model\FilterSet $filterSetSource */
-        $filterSetSource = $repository->findOneById($filterSetId);
+        /** @var \Application\Model\FilterSet $originalFilterSet */
+        $originalFilterSet = $repository->findOneById($filterSetId);
 
-        if ($filterSetSource) {
+        if ($originalFilterSet) {
 
             // Special case, it should be copied from an existing.
             $modelName = $this->getModel();
 
             /** @var $object \Application\Model\FilterSet */
-            $object = new $modelName();
-            $this->hydrator->hydrate($data, $object);
+            $newFilterSet = new $modelName();
+            $this->hydrator->hydrate($data, $newFilterSet);
 
             // Loops around filters
-            foreach ($filterSetSource->getFilters() as $filter) {
-                $object->addFilter($filter);
+            foreach ($originalFilterSet->getFilters() as $filter) {
+                $newFilterSet->addFilter($filter);
             }
 
             if (!empty($data['excludedFilters'])) {
@@ -44,14 +44,14 @@ class FilterSetController extends AbstractRestfulController
                     $_filter = $this->getEntityManager()
                         ->getRepository('Application\Model\Filter')
                         ->findOneById($excludedFilterId);
-                    $object->addExcludedFilter($_filter);
+                    $newFilterSet->addExcludedFilter($_filter);
                 }
             }
 
-            $this->getEntityManager()->persist($object);
+            $this->getEntityManager()->persist($newFilterSet);
             $this->getEntityManager()->flush();
 
-            return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
+            return new JsonModel($this->hydrator->extract($newFilterSet, $this->getJsonConfig()));
         } else {
             $this->getResponse()->setStatusCode(404);
             $result = new JsonModel(array('message' => 'No existing filterSet found. Check parameter filterSet'));

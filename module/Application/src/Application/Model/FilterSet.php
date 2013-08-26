@@ -19,7 +19,7 @@ class FilterSet extends AbstractModel
      * @var array
      */
     protected static $jsonConfig
-        = array('name');
+    = array('name');
 
     /**
      * @var string
@@ -35,6 +35,16 @@ class FilterSet extends AbstractModel
      * @ORM\OrderBy({"id" = "ASC"})
      */
     private $filters;
+
+    /**
+     * @var FilterSet
+     *
+     * @ORM\ManyToOne(targetEntity="FilterSet")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(onDelete="SET NULL")
+     * })
+     */
+    private $originalFilterSet;
 
     /**
      * @var ArrayCollection
@@ -133,6 +143,30 @@ class FilterSet extends AbstractModel
         }
 
         return $this;
+    }
+
+    /**
+     * Set originalFilterSet from which this filter set was copied
+     *
+     * @param FilterSet $originalFilterSet
+     *
+     * @return FilterSet
+     */
+    public function setOriginalFilterSet(FilterSet $originalFilterSet = null)
+    {
+        $this->originalFilterSet = $originalFilterSet;
+
+        return $this;
+    }
+
+    /**
+     * Get originalFilterSet from which this filter set was copied
+     *
+     * @return FilterSet
+     */
+    public function getOriginalFilterSet()
+    {
+        return $this->originalFilterSet;
     }
 
 }

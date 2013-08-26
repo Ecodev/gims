@@ -101,8 +101,7 @@
                 83.40000000000001
             ],
             "color": "#2f7ed8",
-            "type": "line",
-            "dashStyle": ""
+            "type": "line"
         },
         {
             "name": "Piped onto premises",
@@ -141,8 +140,7 @@
                 31.5
             ],
             "color": "#0d233a",
-            "type": "line",
-            "dashStyle": ""
+            "type": "line"
         },
         {
             "name": "Surface water",
@@ -181,8 +179,7 @@
                 0.7
             ],
             "color": "#8bbc21",
-            "type": "line",
-            "dashStyle": ""
+            "type": "line"
         },
         {
             "name": "Other Improved",
@@ -221,8 +218,7 @@
                 66.8
             ],
             "color": "#910000",
-            "type": "line",
-            "dashStyle": ""
+            "type": "line"
         },
         {
             "name": "Other Unimproved",
@@ -261,8 +257,7 @@
                 0
             ],
             "color": "#1aadce",
-            "type": "line",
-            "dashStyle": ""
+            "type": "line"
         },
         {
             "type": "scatter",
