@@ -101,26 +101,31 @@ class Jmp extends AbstractImporter
                     'row' => 89,
                     'children' => array(5, 12, 55, 58, 68),
                     'excludes' => 91,
+                    'isImproved' => true,
                 ),
                 "Piped onto premises" => array(
                     'row' => 90,
                     'children' => array(6),
                     'excludes' => 92,
+                    'isImproved' => true,
                 ),
                 "Surface water" => array(
                     'row' => 87,
                     'children' => array(60),
                     'excludes' => 93,
+                    'isImproved' => false,
                 ),
                 "Other Improved" => array(
                     'row' => null,
                     'children' => array(9, 10, 12, 55, 58, 68),
                     'excludes' => null,
+                    'isImproved' => false,
                 ),
                 "Other Unimproved" => array(
                     'row' => null,
                     'children' => array(56, 59, 71),
                     'excludes' => null,
+                    'isImproved' => false,
                 ),
             ),
         ),
@@ -230,31 +235,37 @@ class Jmp extends AbstractImporter
                     'row' => 94,
                     'children' => array(-6, -7, -8, -9, 49, 73, 76),
                     'excludes' => 96,
+                    'isImproved' => true,
                 ),
                 "Sewerage connections" => array(
                     'row' => 95,
                     'children' => array(6),
                     'excludes' => 97,
+                    'isImproved' => false,
                 ),
                 "Improved" => array(
                     'row' => null,
                     'children' => array(), // based on ratio
                     'excludes' => null,
+                    'isImproved' => true,
                 ),
                 "Shared" => array(
                     'row' => null,
                     'children' => array(), // based on ratio
                     'excludes' => 99,
+                    'isImproved' => false,
                 ),
                 "Other unimproved" => array(
                     'row' => null,
                     'children' => array(-10, 30, 52, 53, 54, 55, 56, 80),
                     'excludes' => null,
+                    'isImproved' => false,
                 ),
                 "Open defecation" => array(
                     'row' => null,
                     'children' => array(79),
                     'excludes' => 98,
+                    'isImproved' => false,
                 ),
             ),
         ),
@@ -348,7 +359,7 @@ class Jmp extends AbstractImporter
             echo PHP_EOL;
 
             // Third pass to import high filters and their formulas
-            $this->importHighFilters($firstFilter->getName() . ' - Improved/Unimproved', $this->definitions[$sheetName]['highFilters'], $sheet);
+            $this->importHighFilters($firstFilter->getName(), $this->definitions[$sheetName]['highFilters'], $sheet);
 
             // Fourth pass to hardcode special cases of formulas
             echo 'Finishing special cases of Ratios';
@@ -971,33 +982,42 @@ class Jmp extends AbstractImporter
     }
 
     /**
-     * Import high filters, their exclude rules and their formulas (if any)
-     * @param string $name
+     * Import high filters, their FilterSet, exclude rules and their formulas (if any)
+     * @param string $filterSetBaseName
      * @param array $filters
      * @param \PHPExcel_Worksheet $sheet
      */
-    protected function importHighFilters($name, array $filters, \PHPExcel_Worksheet $sheet)
+    protected function importHighFilters($filterSetBaseName, array $filters, \PHPExcel_Worksheet $sheet)
     {
+        $filterSetName =  $filterSetBaseName . ' - Improved/Unimproved';
+        $improvedFilterSetName =  $filterSetBaseName . ' - Improved (JMP data)';
         $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
-        $filterSet = $filterSetRepository->getOrCreate($name);
+        $filterSet = $filterSetRepository->getOrCreate($filterSetName);
+        $improvedFilterSet = $filterSetRepository->getOrCreate($improvedFilterSetName);
         $this->getEntityManager()->flush();
 
         // Get or create all filter
         echo 'Importing high filters';
-        foreach ($filters as $name => $filterData) {
+        foreach ($filters as $filterSetName => $filterData) {
 
+            // Look for existing high filter...
             $highFilter = null;
             foreach ($filterSet->getFilters() as $f) {
-                if ($f->getName() == $name) {
+                if ($f->getName() == $filterSetName) {
                     $highFilter = $f;
                     break;
                 }
             }
 
+            // .. or create it
             if (!$highFilter) {
-                $highFilter = new \Application\Model\Filter($name);
+                $highFilter = new \Application\Model\Filter($filterSetName);
                 $filterSet->addFilter($highFilter);
                 $this->getEntityManager()->persist($highFilter);
+
+                if ($filterData['isImproved']) {
+                    $improvedFilterSet->addFilter($highFilter);
+                }
             }
 
             // Affect children filters
@@ -1011,7 +1031,7 @@ class Jmp extends AbstractImporter
 
                 if ($filterData['row']) {
                     foreach ($this->partOffsets as $offset => $part) {
-                        $formula = $this->getFormula($sheet, $col, $filterData['row'], $offset, $questionnaire, $part, $name . ' (' . $questionnaire->getName() . ($part ? ', ' . $part->getName() : '') . ')');
+                        $formula = $this->getFormula($sheet, $col, $filterData['row'], $offset, $questionnaire, $part, $filterSetName . ' (' . $questionnaire->getName() . ($part ? ', ' . $part->getName() : '') . ')');
                         if ($formula) {
                             $this->getFilterRule($highFilter, $questionnaire, $formula, $part);
                         }
@@ -1019,7 +1039,7 @@ class Jmp extends AbstractImporter
                 }
             }
 
-            $this->cacheHighFilters[$name] = $highFilter;
+            $this->cacheHighFilters[$filterSetName] = $highFilter;
             echo '.';
         }
 
