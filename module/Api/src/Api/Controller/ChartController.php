@@ -49,7 +49,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             if ($filterSet->getOriginalFilterSet())
             {
                 $originalFilterSet = $filterSet->getOriginalFilterSet();
-                $series = array_merge($series, $this->getSeries($originalFilterSet, $questionnaires, $part, array(), $this->lightColors, 'ShortDash'));
+                $series = array_merge($series, $this->getSeries($originalFilterSet, $questionnaires, $part, array(), $this->lightColors, 'ShortDash', ' (original)'));
             }
 
             $excludedFilters = array();
@@ -261,13 +261,25 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         return $series;
     }
 
-    protected function getSeries(FilterSet $filterSet, array $questionnaires, Part $part, array $excludedFilters, array $colors, $dashStyle = null)
+    /**
+     * Get line and scatter series for the given filterSet and questionnaires
+     * @param \Application\Model\FilterSet $filterSet
+     * @param array $questionnaires
+     * @param \Application\Model\Part $part
+     * @param array $excludedFilters
+     * @param array $colors
+     * @param string $dashStyle
+     * @param string $suffix for serie name
+     * @return string
+     */
+    protected function getSeries(FilterSet $filterSet, array $questionnaires, Part $part, array $excludedFilters, array $colors, $dashStyle = null, $suffix = null)
     {
         $series = array();
         $calculator = new \Application\Service\Calculator\Jmp();
         $calculator->setServiceLocator($this->getServiceLocator());
         $lines = $calculator->computeFlatten($this->startYear, $this->endYear, $filterSet, $questionnaires, $part, $excludedFilters);
         foreach ($lines as $key => &$serie) {
+            $serie['name'] .= $suffix;
             $serie['color'] = $colors[$key % count($colors)];
             $serie['type'] = 'line';
 
@@ -290,7 +302,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'type' => 'scatter',
                 'color' => $colors[$key % count($colors)],
                 'marker' => array('symbol' => $this->symbols[$key % count($this->symbols)]),
-                'name' => $filter->getName(),
+                'name' => $filter->getName() . $suffix,
                 'allowPointSelect' => false, // because we will use our own click handler
                 'data' => array(),
             );

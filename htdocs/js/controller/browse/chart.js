@@ -144,8 +144,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                 part: $scope.part.id
             };
 
+            $scope.isLoading = true;
             $scope.filters = Restangular.all('chartFilter').getList(parameters).then(function (data) {
-
+                $scope.isLoading = false;
                 $scope.filters = data;
 
                 $timeout(function () {
