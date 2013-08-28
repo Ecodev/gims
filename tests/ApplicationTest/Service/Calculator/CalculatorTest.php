@@ -169,8 +169,8 @@ class CalculatorTest extends AbstractCalculator
         $formula->setFormula('= 10 + {F#11,Q#34,P#56}');
         $this->assertEquals(10.101, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a Filter value');
 
-        $formula->setFormula('= 10 + {F#11,Q#current,P#current}');
-        $this->assertEquals(10.101, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a Filter value with same Questionnaire and Part');
+        $formula->setFormula('= 10 + {F#current,Q#current,P#current}');
+        $this->assertEquals(10.101, $service->computeFormula($formula, $this->questionnaire, $this->part, $this->filter11), 'should be able to refer a Filter value with same Questionnaire and Part');
 
         $formula->setFormula('= 10 + {F#666,Q#34,P#56}');
         $this->assertEquals(10, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a Filter value which is NULL');
@@ -201,6 +201,35 @@ class CalculatorTest extends AbstractCalculator
 
         $formula->setFormula('=ISTEXT({F#12,Q#34})');
         $this->assertTrue($service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer an Unofficial Filter name');
+    }
+
+    public function testFormulaSyntaxSelf()
+    {
+        $formula = new \Application\Model\Rule\Formula();
+
+        $fitlerRule = new \Application\Model\Rule\FilterRule();
+        $fitlerRule->setRule($formula)
+                ->setFilter($this->filter1)
+                ->setQuestionnaire($this->questionnaire)
+                ->setPart($this->part);
+
+        $formula->setFormula('={self}');
+        $this->assertEquals(0.1111, (new Calculator())->computeFormula($formula, $this->questionnaire, $this->part, $this->filter1), 'should fallback to filter value without any formulas');
+
+        // Same result as above, but with different use of our API
+        $this->assertEquals(0.1111, (new Calculator())->computeFilter($this->filter1, $this->questionnaire, $this->part), 'should fallback to filter value without any formulas');
+
+        // We now add a second formula, that will be used as a fallback from first one
+        $formula2 = new \Application\Model\Rule\Formula();
+        $formula2->setFormula('=8 * 2');
+
+        $fitlerRule2 = new \Application\Model\Rule\FilterRule();
+        $fitlerRule2->setRule($formula2)
+                ->setFilter($this->filter1)
+                ->setQuestionnaire($this->questionnaire)
+                ->setPart($this->part);
+
+        $this->assertEquals(16, (new Calculator())->computeFilter($this->filter1, $this->questionnaire, $this->part), 'should fallback to second formula');
     }
 
 }

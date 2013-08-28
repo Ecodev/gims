@@ -33,48 +33,21 @@ class ConsoleControllerTest extends \Zend\Test\PHPUnit\Controller\AbstractConsol
     }
 
     /**
-     * Preload database with minimum population if not exists yet
+     * Truncate database to be sure that we create all objects from scratch
      */
-    protected function preloadPopulation()
+    protected function truncateDatabase()
     {
-        $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneByName('Switzerland');
-        $parts = array(
-            $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Urban'),
-            $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Rural'),
-            $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Total'),
-        );
-        $this->getEntityManager()->flush();
-        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
-
-        foreach ($parts as $part) {
-            foreach (array(1997, 2003) as $year) {
-                $population = $populationRepository->findOneBy(array(
-                    'year' => $year,
-                    'country' => $country,
-                    'part' => $part,
-                ));
-
-                if (!$population) {
-                    $population = new \Application\Model\Population();
-                    $population->setPopulation(12345)
-                            ->setYear($year)
-                            ->setCountry($country)
-                            ->setPart($part);
-
-                    $this->getEntityManager()->persist($population);
-                }
-            }
-        }
-
-        $this->getEntityManager()->flush();
+        $this->getEntityManager()->getConnection()->executeQuery('TRUNCATE survey CASCADE;');
+        $this->getEntityManager()->getConnection()->executeQuery('TRUNCATE rule CASCADE;');
+        $this->getEntityManager()->getConnection()->executeQuery('TRUNCATE filter CASCADE;');
     }
 
     public function testJmpImport()
     {
-        $this->preloadPopulation();
+        $this->truncateDatabase();
         $this->dispatch('import jmp ' . __DIR__ . '/../../data/import_jmp.xlsx');
-        
-        $this->assertConsoleOutputContains('Total imported: 2 questionnaires, 70 answers, 17 exclude rules, 8 ratio rules, 19 questionnaire rules, 14 formulas');
+
+        $this->assertConsoleOutputContains('Total imported: 2 questionnaires, 70 answers, 17 exclude rules, 8 ratio rules, 19 questionnaire rules, 15 formulas');
     }
 
     public function testPopulationImport()

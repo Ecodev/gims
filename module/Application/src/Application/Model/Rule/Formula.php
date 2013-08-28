@@ -20,14 +20,18 @@ use Doctrine\ORM\Mapping as ORM;
  * Reference a QuestionnaireFormula's value:
  * {Fo#12,Q#34,P#56}
  *
+ * Reference the value if computed without this formula. It allows for formulas
+ * chaining and final fallback on value without any formulas:
+ * {self}
+ *
  * Where:
  * - F  = Filter
  * - Q  = Questionnaire
  * - P  = Part
- * - Fo  = Formula
+ * - Fo = Formula
  *
- * In all cases Q and P can have the value "current" instead of actual ID. It means
- * that the current Questionnaire or Part should be used, instead of one selected
+ * In the first case, F, and in all cases Q and P, can have the value "current" instead of actual ID. It means
+ * that the current Filter, Questionnaire or Part should be used, instead of one selected
  * by its ID. This syntax should be prefered when possible to maximise Formula re-use.
  *
  * An entire formula could be:

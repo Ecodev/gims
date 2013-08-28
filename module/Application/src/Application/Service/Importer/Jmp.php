@@ -797,17 +797,12 @@ class Jmp extends AbstractImporter
     protected function getQuestionnaireFormula(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part)
     {
         $questionnaireFormulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireFormula');
-//        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
-
         $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
         $value = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
 
         if ($name && !is_null($value) || $value <> 0) {
 
-//            $population = $populationRepository->getOneByQuestionnaire($questionnaire, $part);
-//            $absoluteValue = $population->getPopulation() * $value / 100;
-
-            $formula = $this->getFormula($sheet, $col, $row, $offset, $questionnaire, $part);
+            $formula = $this->getFormulaFromCell($sheet, $col, $row, $offset, $questionnaire, $part);
 
             // If formula was non-existing, or invalid, cannot do anything more
             if (!$formula) {
@@ -853,18 +848,9 @@ class Jmp extends AbstractImporter
      * @param string $forcedName
      * @return null|\Application\Model\Rule\Formula
      */
-    protected function getFormula(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part, $forcedName = null)
+    protected function getFormulaFromCell(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part, $forcedName = null)
     {
-        $formulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Formula');
-
-        $name = $forcedName ? : $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
         $cell = $sheet->getCellByColumnAndRow($col + $offset, $row);
-
-        // Some countries have estimates with non-zero values but without name! (Yemen, Tables_W, DHS92, estimates line 88)
-        if (!$name) {
-            $name = 'Unnamed formula imported from country files';
-        }
-
         $originalFormula = $cell->getValue();
 
         // if we have nothing at all, cannot do anything
@@ -964,29 +950,46 @@ class Jmp extends AbstractImporter
             return null;
         }
 
+        $prefix = '';
+        foreach ($this->definitions[$sheet->getTitle()]['questionnaireFormulas'] as $label => $rows) {
+            if (in_array($row, $rows)) {
+                $prefix = $label . ': ';
+            }
+        }
+
+        $name = $forcedName ? : $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
+
+        // Some countries have estimates with non-zero values but without name! (Yemen, Tables_W, DHS92, estimates line 88)
+        if (!$name) {
+            $name = 'Unnamed formula imported from country files';
+        }
+
+        return $this->getFormula($prefix . $name, $convertedFormula);
+    }
+
+    /**
+     * Create or get a formula
+     * @param string $name
+     * @param string $formula
+     * @return \Application\Model\Rule\Formula
+     */
+    protected function getFormula($name, $formula)
+    {
+        $formulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Formula');
+
         // Look for existing formula (to prevent duplication)
         $this->getEntityManager()->flush();
-        $formula = $formulaRepository->findOneBy(array(
-            'formula' => $convertedFormula,
-        ));
+        $formulaObject = $formulaRepository->findOneByFormula($formula);
 
-        if (!$formula) {
-            $prefix = '';
-            foreach ($this->definitions[$sheet->getTitle()]['questionnaireFormulas'] as $label => $rows) {
-                if (in_array($row, $rows)) {
-                    $prefix = $label . ': ';
-                }
-            }
-
-
-            $formula = new \Application\Model\Rule\Formula();
-            $formula->setName($prefix . $name)
-                    ->setFormula($convertedFormula);
-            $this->getEntityManager()->persist($formula);
+        if (!$formulaObject) {
+            $formulaObject = new \Application\Model\Rule\Formula();
+            $formulaObject->setName($name)
+                    ->setFormula($formula);
+            $this->getEntityManager()->persist($formulaObject);
             $this->formulaCount++;
         }
 
-        return $formula;
+        return $formulaObject;
     }
 
     /**
@@ -997,6 +1000,7 @@ class Jmp extends AbstractImporter
      */
     protected function importHighFilters(array $filterSetNames, array $filters, \PHPExcel_Worksheet $sheet)
     {
+        $complementaryTotalFormula = $this->getFormula('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . '}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . '})), {F#current,Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . '}, {self})');
         $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
         $filterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedUnimprovedName']);
         $improvedFilterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedName']);
@@ -1031,13 +1035,20 @@ class Jmp extends AbstractImporter
                 $highFilter->addChild($this->cacheFilters[$child]);
             }
 
-
+            // Import high filters formulas
             foreach ($this->importedQuestionnaires as $col => $questionnaire) {
                 $this->importExcludes($sheet, $col, $questionnaire, $highFilter, $filterData);
 
                 if ($filterData['row']) {
                     foreach ($this->partOffsets as $offset => $part) {
-                        $formula = $this->getFormula($sheet, $col, $filterData['row'], $offset, $questionnaire, $part, $filterName . ' (' . $questionnaire->getName() . ($part ? ', ' . $part->getName() : '') . ')');
+
+                        // If we are total part, we first add the complementory formula which is hardcoded
+                        // and can be found in tab "GraphData_W". This formula defines the total as the sum of its parts
+                        if ($part == $this->partTotal) {
+                             $this->getFilterRule($highFilter, $questionnaire, $complementaryTotalFormula, $part);
+                        }
+
+                        $formula = $this->getFormulaFromCell($sheet, $col, $filterData['row'], $offset, $questionnaire, $part, $filterName . ' (' . $questionnaire->getName() . ($part ? ', ' . $part->getName() : '') . ')');
                         if ($formula) {
                             $this->getFilterRule($highFilter, $questionnaire, $formula, $part);
                         }

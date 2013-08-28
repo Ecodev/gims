@@ -66,8 +66,8 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
      */
     public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0)
     {
-        $service = new \Application\Service\Calculator\Calculator();
-        $service->setServiceLocator($this->getServiceLocator());
+        $calculator = new \Application\Service\Calculator\Calculator();
+        $calculator->setServiceLocator($this->getServiceLocator());
         $hydrator = new \Application\Service\Hydrator();
 
         $current = array();
@@ -75,7 +75,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $current['filter']['level'] = $level;
 
         foreach ($parts as $p) {
-            $computed = $service->computeFilter($filter, $questionnaire, $p['part']);
+            $computed = $calculator->computeFilter($filter, $questionnaire, $p['part']);
 
             // Round the value
             if (!is_null($computed) && $p['population']->getPopulation()) {
