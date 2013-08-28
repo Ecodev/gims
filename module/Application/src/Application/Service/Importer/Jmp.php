@@ -292,6 +292,7 @@ class Jmp extends AbstractImporter
     private $questionnaireFormulaCount = 0;
     private $ratioCount = 0;
     private $formulaCount = 0;
+    private $alternateFilterCount = 0;
 
     /**
      * @var \Application\Model\Part
@@ -383,7 +384,7 @@ class Jmp extends AbstractImporter
         $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $answerRepository->updateAbsoluteValueFromPercentageValue();
 
-        return "Total imported: $this->questionnaireCount questionnaires, $this->answerCount answers, $this->excludeCount exclude rules, $this->ratioCount ratio rules, $this->questionnaireFormulaCount questionnaire rules, $this->formulaCount formulas" . PHP_EOL;
+        return "Total imported: $this->questionnaireCount questionnaires, $this->answerCount answers, $this->excludeCount exclude rules, $this->ratioCount ratio rules, $this->questionnaireFormulaCount questionnaire rules, $this->formulaCount formulas, $this->alternateFilterCount alternate filters" . PHP_EOL;
     }
 
     protected function getFilter($definition)
@@ -705,7 +706,7 @@ class Jmp extends AbstractImporter
         if ($name == $officialFilter->getName())
             return $officialFilter;
 
-        $key = $this->getCacheKey(array($name, $officialFilter));
+        $key = $this->getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheAlternateFilters)) {
             $filter = $this->cacheAlternateFilters[$key];
         } else {
@@ -714,6 +715,7 @@ class Jmp extends AbstractImporter
             $criteria = array(
                 'name' => $name,
                 'officialFilter' => $officialFilter,
+                'questionnaire' => $questionnaire,
             );
             $filter = $filterRepository->findOneBy($criteria);
         }
@@ -724,6 +726,7 @@ class Jmp extends AbstractImporter
             $filter->setName($name);
             $filter->setOfficialFilter($officialFilter);
             $filter->setQuestionnaire($questionnaire);
+            $this->alternateFilterCount++;
         }
 
         $this->cacheAlternateFilters[$key] = $filter;
@@ -1035,7 +1038,7 @@ class Jmp extends AbstractImporter
                 $highFilter->addChild($this->cacheFilters[$child]);
             }
 
-            // Import high filters formulas
+            // Import high filters' formulas
             foreach ($this->importedQuestionnaires as $col => $questionnaire) {
                 $this->importExcludes($sheet, $col, $questionnaire, $highFilter, $filterData);
 

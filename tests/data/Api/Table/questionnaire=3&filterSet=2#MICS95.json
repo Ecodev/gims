@@ -1,16 +1,16 @@
 [
     {
         "filter": {
-            "id": 126,
+            "id": 183,
             "name": "Total improved",
             "isOfficial": true,
             "level": 0
         },
         "values": [
             {
-                "Rural": 0.929,
-                "Total": 0.942,
-                "Urban": 0.991
+                "Rural": 0.759,
+                "Total": 0.782,
+                "Urban": 0.864
             }
         ]
     },
@@ -196,7 +196,7 @@
     },
     {
         "filter": {
-            "id": 127,
+            "id": 184,
             "name": "Piped onto premises",
             "isOfficial": true,
             "level": 0
@@ -256,7 +256,7 @@
     },
     {
         "filter": {
-            "id": 128,
+            "id": 185,
             "name": "Surface water",
             "isOfficial": true,
             "level": 0
@@ -391,7 +391,7 @@
     },
     {
         "filter": {
-            "id": 129,
+            "id": 186,
             "name": "Other Improved",
             "isOfficial": true,
             "level": 0
@@ -526,7 +526,7 @@
     },
     {
         "filter": {
-            "id": 130,
+            "id": 187,
             "name": "Other Unimproved",
             "isOfficial": true,
             "level": 0

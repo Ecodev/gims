@@ -2,7 +2,7 @@
 
 namespace Api\Controller;
 
-use Zend\View\Model\JsonModel;
+use Application\View\Model\NumericJsonModel;
 use Application\Model\FilterSet;
 use Application\Model\Part;
 
@@ -39,7 +39,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
         // If we only want to refresh the lines with ignored values, we return a partial highcharts data with just those series (quicker to refresh)
         if ($this->params()->fromQuery('onlyExcluded')) {
-            return new JsonModel($series);
+            return new NumericJsonModel($series);
         }
 
         // Then get series of flatten regression lines
@@ -127,7 +127,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             'series' => $series,
         );
 
-        return new JsonModel($chart);
+        return new NumericJsonModel($chart);
     }
 
     /**
@@ -206,7 +206,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $serie['dashStyle'] = 'ShortDash';
                 foreach ($serie['data'] as &$d) {
                     if (!is_null($d))
-                        $d = round($d * 100, 1);
+                        $d = \Application\Utility::bcround($d * 100, 1);
                 }
                 $series[] = $serie;
             }
@@ -242,7 +242,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                             'id' => $idFilter . ':' . $surveyCode,
                             'questionnaire' => $data['questionnaire'][$surveyCode],
                             'x' => $data['years'][$i],
-                            'y' => round(($value) * 100, 1),
+                            'y' => \Application\Utility::bcround($value * 100, 1),
                         );
                         // select the ignored values
                         if (in_array($idFilter . ':' . $surveyCode, $this->excludedAnswers)) {
@@ -289,7 +289,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
             foreach ($serie['data'] as &$d) {
                 if (!is_null($d))
-                    $d = round($d * 100, 1);
+                    $d = \Application\Utility::bcround($d * 100, 1);
             }
             $series[] = $serie;
         }
@@ -315,7 +315,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                         'id' => $idFilter . ':' . $surveyCode,
                         'questionnaire' => $data['questionnaire'][$surveyCode],
                         'x' => $data['years'][$i],
-                        'y' => round($value * 100, 1),
+                        'y' => \Application\Utility::bcround($value * 100, 1),
                     );
                     // select the ignored values
                     if (in_array($idFilter . ':' . $surveyCode, $this->excludedAnswers)) {

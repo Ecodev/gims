@@ -34,7 +34,7 @@ class NumericJsonModel extends JsonModel
      */
     public static function numericToString($json)
     {
-        return preg_replace('/:\s*(-?\d+\.?\d*)\b/', ':"$1"', $json);
+        return preg_replace('/([:\[,]\s*)(-?\d+\.?\d*)\b/', '$1"$2"', $json);
     }
 
     /**
