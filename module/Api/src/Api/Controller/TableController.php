@@ -2,7 +2,7 @@
 
 namespace Api\Controller;
 
-use Zend\View\Model\JsonModel;
+use Application\View\Model\NumericJsonModel;
 
 class TableController extends \Application\Controller\AbstractAngularActionController
 {
@@ -53,7 +53,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             }
         }
 
-        return new JsonModel($result);
+        return new NumericJsonModel($result);
     }
 
     /**
@@ -79,7 +79,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
             // Round the value
             if (!is_null($computed) && $p['population']->getPopulation()) {
-                $value = round($computed / $p['population']->getPopulation(), 3);
+                $value = \Application\Utility::bcround($computed / $p['population']->getPopulation(), 3);
             } else {
                 $value = null;
             }

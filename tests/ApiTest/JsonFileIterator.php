@@ -31,7 +31,7 @@ class JsonFileIterator extends \GlobIterator
         `rm -rf $fullpath`;
         @mkdir($fullpath, 0777, true);
 
-        $json = Json::decode(file_get_contents($file->getPathname()), Json::TYPE_ARRAY);
+        $json = file_get_contents($file->getPathname());
         $result = array(
             $params,
             $json,

@@ -15,6 +15,7 @@
         "php": ">=5.4.0",
         "ext-pgsql": "*",
         "ext-intl": "*",
+        "ext-bcmath": "*",
         "zendframework/zendframework": "2.*",
         "phing/phing": "dev-master",
         "firephp/firephp-core": "dev-master",

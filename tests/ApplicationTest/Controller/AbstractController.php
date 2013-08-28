@@ -49,13 +49,26 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
     }
 
     /**
-     * Log given JSON to file for easy comparaison/replacement of existing expected JSON files
-     * @param string $logFile full path to log file to write to
-     * @param array $json
+     * Assert JSON are identical with numerical arbitrary precision
+     * @param string $expected pretty JSON string with numeric values as float
+     * @param string $actual non-pretty JSON string with numeric values as float
+     * @param string $message
+     * @param string $logFile
      */
-    protected function logJson($logFile, array $json)
+    protected function assertNumericJson($expected, $actual, $message, $logFile)
     {
-        file_put_contents($logFile, json_encode($json, JSON_PRETTY_PRINT));
+        // Make actual JSON pretty-printed, but without losing any numeric precision
+        $actualWithString = \Application\View\Model\NumericJsonModel::numericToString($actual);
+        $actualObject = Json::decode($actualWithString, Json::TYPE_ARRAY);
+        $prettyActualWithString = json_encode($actualObject, JSON_PRETTY_PRINT);
+        $prettyActualWithFloat = \Application\View\Model\NumericJsonModel::stringToNumeric($prettyActualWithString);
+
+        // Log given JSON to file for easy comparaison/replacement of existing expected JSON files
+        if ($logFile) {
+            file_put_contents($logFile, $prettyActualWithFloat);
+        }
+
+        $this->assertSame($expected, $prettyActualWithFloat, $message);
     }
 
 }

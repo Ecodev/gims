@@ -20,10 +20,7 @@ class TableControllerTest extends \ApplicationTest\Controller\AbstractController
         $this->dispatch('/api/table?' . $params, Request::METHOD_GET);
 
         $this->assertResponseStatusCode(200);
-        $actualJson = $this->getJsonResponse();
-        $this->logJson($logFile, $actualJson);
-
-        $this->assertEquals($expectedJson, $actualJson, $message);
+        $this->assertNumericJson($expectedJson, $this->getResponse()->getContent(), $message, $logFile);
     }
 
 }
