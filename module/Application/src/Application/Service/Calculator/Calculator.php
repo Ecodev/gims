@@ -325,10 +325,20 @@ use \Application\Traits\EntityManagerAware;
         // Replace {self} with computed value without this formula
         $convertedFormulas = preg_replace_callback('/\{self\}/', function() use($currentFilter, $currentQuestionnaire, $currentPart, $formula) {
 
-                    return $this->computeFilterInternal($currentFilter, $currentQuestionnaire, new \Doctrine\Common\Collections\ArrayCollection(), $currentPart, $formula);
+                    $value = $this->computeFilterInternal($currentFilter, $currentQuestionnaire, new \Doctrine\Common\Collections\ArrayCollection(), $currentPart, $formula);
+                    return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
 
-        return \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($convertedFormulas);
+        $result = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($convertedFormulas);
+
+        // In some edge cases, it may happen that we get FALSE as result,
+        // we need to convert it to NULL, otherwise it will be converted to
+        // 0 later, which is not correct. Eg: '=IF(FALSE, NULL, NULL)'
+        if ($result === false) {
+            $result = null;
+        }
+
+        return $result;
     }
 
 }
