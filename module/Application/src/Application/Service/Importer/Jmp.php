@@ -895,7 +895,10 @@ class Jmp extends AbstractImporter
                     $refCol = \PHPExcel_Cell::columnIndexFromString($matches[2]) - 1;
                     $refRow = $matches[3];
 
-                    $refFilter = @$filters[$refRow];
+                    // We first look on negative indexes to find original filters in case we made
+                    // replacements (for Sanitation), because formulas always refers to the originals,
+                    // not the one we created in this script
+                    $refFilter = @$filters[-$refRow] ?: @$filters[$refRow];
                     $refFilterId = $refFilter ? $refFilter->getId() : null;
 
                     if (isset($importedQuestionnaires[$refCol])) {
