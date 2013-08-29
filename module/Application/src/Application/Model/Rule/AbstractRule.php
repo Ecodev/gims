@@ -23,13 +23,6 @@ abstract class AbstractRule extends \Application\Model\AbstractModel
     private $name;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", nullable=false)
-     */
-    private $isFinal = false;
-
-    /**
      * Set name
      *
      * @param string $name
@@ -52,25 +45,4 @@ abstract class AbstractRule extends \Application\Model\AbstractModel
         return $this->name;
     }
 
-    /**
-     * Indicate that we must NOT sum the subfilters to the rule value (default false)
-     *
-     * @param boolean $value
-     */
-    public function setIsFinal($value)
-    {
-        $this->isFinal = (bool) $value;
-
-        return $this;
-    }
-
-    /**
-     * Indicate that we must NOT sum the subfilters to the rule value (default false)
-     *
-     * @return boolean
-     */
-     public function isFinal()
-     {
-        return $this->isFinal;
-     }
 }
