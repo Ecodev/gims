@@ -5,7 +5,15 @@ namespace Application\Repository;
 class PartRepository extends AbstractRepository
 {
 
-    use Traits\OrderedByName;
+
+    /**
+     * Override parent to order by Id
+     * @return type
+     */
+    public function findAll()
+    {
+        return $this->findBy(array(), array('id' => 'ASC'));
+    }
 
     /**
      * Returns a part either from database, or newly created
