@@ -2,7 +2,7 @@
 
 namespace Api\Controller;
 
-use Zend\View\Model\JsonModel;
+use Application\View\Model\NumericJsonModel;
 
 class ChartFilterController extends \Application\Controller\AbstractAngularActionController
 {
@@ -102,6 +102,6 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
             return;
         }
 
-        return new JsonModel($result);
+        return new NumericJsonModel($result);
     }
 }
