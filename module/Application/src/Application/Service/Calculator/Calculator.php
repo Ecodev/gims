@@ -196,18 +196,12 @@ use \Application\Traits\EntityManagerAware;
             $alreadySummedFilters->add($filter);
         }
 
-        $absoluteValue = null;
         // If the filter have a specified answer, returns it (skip all computation)
         foreach ($questionnaire->getAnswers() as $answer) {
             $answerFilter = $answer->getQuestion()->getFilter()->getOfficialFilter() ? : $answer->getQuestion()->getFilter();
             if ($answerFilter === $filter && $answer->getPart() == $part) {
-
                 $alreadySummedFilters->add(true);
-                $absoluteValue = $answer->getValueAbsolute();
-                // If the filter of the answer has subfilters, then add the parent filter value and continue to compute subfilters
-                if ($answerFilter->getChildren()->count() == 0) {
-                    return $absoluteValue;
-                }
+                return $answer->getValueAbsolute();
             }
         }
 
@@ -239,10 +233,6 @@ use \Application\Traits\EntityManagerAware;
         // If no sum so far, we use children instead. This is "normal case"
         if (is_null($sum)) {
             $sum = $summer($filter->getChildren());
-        }
-
-        if (!is_null($absoluteValue)) {
-            $sum += $absoluteValue;
         }
 
         return $sum;
