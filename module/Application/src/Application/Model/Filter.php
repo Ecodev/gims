@@ -111,6 +111,7 @@ class Filter extends AbstractModel
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="\Application\Model\Rule\FilterRule", mappedBy="filter")
+     * @ORM\OrderBy({"id" = "ASC"})
      */
     private $filterRules;
 
