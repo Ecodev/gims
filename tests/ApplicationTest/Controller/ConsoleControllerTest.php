@@ -47,7 +47,16 @@ class ConsoleControllerTest extends \Zend\Test\PHPUnit\Controller\AbstractConsol
         $this->truncateDatabase();
         $this->dispatch('import jmp ' . __DIR__ . '/../../data/import_jmp.xlsx');
 
-        $this->assertConsoleOutputContains('Total imported: 2 questionnaires, 70 answers, 17 exclude rules, 8 ratio rules, 19 questionnaire rules, 15 formulas, 18 alternate filters');
+        $expected = <<<STRING
+Questionnaires   : 2
+Alternate Filters: 18
+Answers          : 70
+Formulas         : 19
+Uses of Exclude  : 17
+Uses of Formula for Filter        : 33
+Uses of Formula for Questionnaires: 19
+STRING;
+        $this->assertConsoleOutputContains($expected);
     }
 
     public function testPopulationImport()

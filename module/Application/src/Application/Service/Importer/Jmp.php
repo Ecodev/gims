@@ -290,9 +290,9 @@ class Jmp extends AbstractImporter
     private $answerCount = 0;
     private $excludeCount = 0;
     private $questionnaireFormulaCount = 0;
-    private $ratioCount = 0;
     private $formulaCount = 0;
     private $alternateFilterCount = 0;
+    private $filterRuleCount = 0;
 
     /**
      * @var \Application\Model\Part
@@ -384,7 +384,17 @@ class Jmp extends AbstractImporter
         $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $answerRepository->updateAbsoluteValueFromPercentageValue();
 
-        return "Total imported: $this->questionnaireCount questionnaires, $this->answerCount answers, $this->excludeCount exclude rules, $this->ratioCount ratio rules, $this->questionnaireFormulaCount questionnaire rules, $this->formulaCount formulas, $this->alternateFilterCount alternate filters" . PHP_EOL;
+        return <<<STRING
+
+Questionnaires   : $this->questionnaireCount
+Alternate Filters: $this->alternateFilterCount
+Answers          : $this->answerCount
+Formulas         : $this->formulaCount
+Uses of Exclude  : $this->excludeCount
+Uses of Formula for Filter        : $this->filterRuleCount
+Uses of Formula for Questionnaires: $this->questionnaireFormulaCount
+
+STRING;
     }
 
     protected function getFilter($definition)
@@ -898,7 +908,7 @@ class Jmp extends AbstractImporter
                     // We first look on negative indexes to find original filters in case we made
                     // replacements (for Sanitation), because formulas always refers to the originals,
                     // not the one we created in this script
-                    $refFilter = @$filters[-$refRow] ?: @$filters[$refRow];
+                    $refFilter = @$filters[-$refRow] ? : @$filters[$refRow];
                     $refFilterId = $refFilter ? $refFilter->getId() : null;
 
                     if (isset($importedQuestionnaires[$refCol])) {
@@ -1045,15 +1055,16 @@ class Jmp extends AbstractImporter
             foreach ($this->importedQuestionnaires as $col => $questionnaire) {
                 $this->importExcludes($sheet, $col, $questionnaire, $highFilter, $filterData);
 
-                if ($filterData['row']) {
-                    foreach ($this->partOffsets as $offset => $part) {
+                foreach ($this->partOffsets as $offset => $part) {
 
-                        // If we are total part, we first add the complementory formula which is hardcoded
-                        // and can be found in tab "GraphData_W". This formula defines the total as the sum of its parts
-                        if ($part == $this->partTotal) {
-                             $this->getFilterRule($highFilter, $questionnaire, $complementaryTotalFormula, $part);
-                        }
+                    // If we are total part, we first add the complementory formula which is hardcoded
+                    // and can be found in tab "GraphData_W". This formula defines the total as the sum of its parts
+                    if ($part == $this->partTotal) {
+                        $this->getFilterRule($highFilter, $questionnaire, $complementaryTotalFormula, $part);
+                    }
 
+                    // If the high filter exists in "Tables_W", then it may have a special formula that need to be imported
+                    if ($filterData['row']) {
                         $formula = $this->getFormulaFromCell($sheet, $col, $filterData['row'], $offset, $questionnaire, $part, $filterName . ' (' . $questionnaire->getName() . ($part ? ', ' . $part->getName() : '') . ')');
                         if ($formula) {
                             $this->getFilterRule($highFilter, $questionnaire, $formula, $part);
@@ -1101,6 +1112,8 @@ class Jmp extends AbstractImporter
 
             if ($rule instanceof \Application\Model\Rule\Exclude) {
                 $this->excludeCount++;
+            } else {
+                $this->filterRuleCount++;
             }
         }
 
@@ -1183,19 +1196,9 @@ class Jmp extends AbstractImporter
      */
     protected function linkFormula($formulaText, \Application\Model\Filter $filter, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part)
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\Formula');
-        $formula = $repository->findOneBy(array('formula' => $formulaText));
-
-        if (!$formula) {
-            $formula = new \Application\Model\Rule\Formula();
-            $formula->setName($filter->getName() . ' (' . $questionnaire->getName() . ', ' . $part->getName() . ')')
-                    ->setFormula($formulaText);
-            $this->getEntityManager()->persist($formula);
-        }
-
+        $name = $filter->getName() . ' (' . $questionnaire->getName() . ', ' . $part->getName() . ')';
+        $formula = $this->getFormula($name, $formulaText);
         $this->getFilterRule($filter, $questionnaire, $formula, $part);
-
-        $this->ratioCount++;
     }
 
     /**
