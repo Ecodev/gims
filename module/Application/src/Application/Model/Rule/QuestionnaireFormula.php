@@ -17,7 +17,7 @@ class QuestionnaireFormula extends \Application\Model\AbstractModel
     /**
      * @var Questionnaire
      *
-     * @ORM\ManyToOne(targetEntity="Application\Model\Questionnaire")
+     * @ORM\ManyToOne(targetEntity="Application\Model\Questionnaire", inversedBy="questionnaireFormulas"))
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
@@ -60,6 +60,7 @@ class QuestionnaireFormula extends \Application\Model\AbstractModel
     public function setQuestionnaire(\Application\Model\Questionnaire $questionnaire)
     {
         $this->questionnaire = $questionnaire;
+        $this->questionnaire->questionnaireFormulaAdded($this);
 
         return $this;
     }

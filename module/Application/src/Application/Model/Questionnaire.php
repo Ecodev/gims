@@ -78,11 +78,21 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     private $comments;
 
     /**
+     * Additional formulas to compute interesting values which are not found in Filter tree
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="\Application\Model\Rule\QuestionnaireFormula", mappedBy="questionnaire")
+     * @ORM\OrderBy({"id" = "ASC"})
+     */
+    private $questionnaireFormulas;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->answers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->questionnaireFormulas = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setStatus(QuestionnaireStatus::$NEW);
     }
 
@@ -286,6 +296,28 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function setComments($comments)
     {
         $this->comments = $comments;
+        return $this;
+    }
+
+    /**
+     * Get formulas
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getQuestionnaireFormulas()
+    {
+        return $this->questionnaireFormulas;
+    }
+
+    /**
+     * Notify the questionnaire that it has a new formula.
+     * This should only be called by QuestionnaireFormula::setQuestionnaire()
+     * @param Rule\QuestionnaireFormula $questionnaireFormula
+     * @return Questionnaire
+     */
+    public function questionnaireFormulaAdded(Rule\QuestionnaireFormula $questionnaireFormula)
+    {
+        $this->getQuestionnaireFormulas()->add($questionnaireFormula);
+
         return $this;
     }
 

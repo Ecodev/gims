@@ -293,8 +293,8 @@ class Filter extends AbstractModel
     }
 
     /**
-     * Notify the user that it was added to UserSurvey relation.
-     * This should only be called by Rule::setFilter()
+     * Notify the filter that it was added to FilterRule relation.
+     * This should only be called by FilterRule::setFilter()
      * @param Rule\FilterRule $rule
      * @return Filter
      */

@@ -284,6 +284,7 @@ class Jmp extends AbstractImporter
     private $cacheFilters = array();
     private $cacheQuestions = array();
     private $cacheHighFilters = array();
+    private $cacheFormulas = array();
     private $importedQuestionnaires = array();
     private $colToParts = array();
     private $questionnaireCount = 0;
@@ -823,14 +824,9 @@ STRING;
             }
 
             // If we had an existing formula, maybe we also have an existing association
-            $assoc = null;
-            if ($formula && $formula->getId()) {
-                $assoc = $questionnaireFormulaRepository->findOneBy(array(
-                    'questionnaire' => $questionnaire,
-                    'part' => $part,
-                    'formula' => $formula,
-                ));
-            }
+            $assoc = $questionnaire->getQuestionnaireFormulas()->filter(function($assoc) use ($questionnaire, $part, $formula) {
+                                return $assoc->getQuestionnaire() == $questionnaire && $assoc->getPart() == $part && $assoc->getFormula() == $formula;
+                            })->first();
 
             // If association doesn't exist yet, create it
             if (!$assoc) {
@@ -951,7 +947,12 @@ STRING;
                         $refQuestionnaireFormula = $this->getQuestionnaireFormula($sheet, $refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart);
 
                         if ($refQuestionnaireFormula) {
-                            $this->getEntityManager()->flush();
+
+                            // If not ID yet, we need to save to DB to have valid ID
+                            if (!$refQuestionnaireFormula->getFormula()->getId()) {
+                                $this->getEntityManager()->flush();
+                            }
+                            
                             $refFormulaId = $refQuestionnaireFormula->getFormula()->getId();
 
                             return "{Fo#$refFormulaId,Q#$refQuestionnaireId,P#$refPartId}";
@@ -991,6 +992,11 @@ STRING;
      */
     protected function getFormula($name, $formula)
     {
+        $key = $this->getCacheKey(array($formula));
+        if (array_key_exists($key, $this->cacheFormulas)) {
+            return $this->cacheFormulas[$key];
+        }
+
         $formulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Formula');
 
         // Look for existing formula (to prevent duplication)
@@ -1005,6 +1011,7 @@ STRING;
             $this->formulaCount++;
         }
 
+        $this->cacheFormulas[$key] = $formulaObject;
         return $formulaObject;
     }
 
