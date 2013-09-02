@@ -178,10 +178,20 @@ class QuestionController extends AbstractRestfulController
         // Update object or not...
         if ($this->isAllowedSurvey($survey) && $this->isAllowedQuestion($question)) {
 
-            $questionSiblings = $question->getChapter() ? $question->getChapter()->getQuestions() : $survey->getQuestions();
+            $questionSiblings = $question->getSiblings();
+            $lastSibling = $questionSiblings->last();
+            $firstSibling = $questionSiblings->first();
 
+            // limit to next available sorting free number
+            if(!empty($data['sorting']) && $data['sorting'] > $lastSibling->getSorting()+1){
+                $data['sorting'] = $lastSibling->getSorting()+1;
+            }
+            // limit to previous available sorting free number
+            else if(!empty($data['sorting']) && $data['sorting'] < $firstSibling->getSorting()-1){
+                $data['sorting'] = $firstSibling->getSorting()-1;
+            }
             // true means we have to move sorting values up and down
-            if (!empty($data['sorting']) && $data['sorting'] < $question->getSorting()) { // if new sorting is lower
+            elseif (!empty($data['sorting']) && $data['sorting'] < $question->getSorting()) { // if new sorting is lower
                 foreach ($questionSiblings as $questionSibling) {
                     if ($questionSibling->getSorting() >= $data['sorting'] && $questionSibling->getSorting() < $question->getSorting()) {
                         $questionSibling->setSorting($questionSibling->getSorting() + 1);
@@ -276,22 +286,22 @@ class QuestionController extends AbstractRestfulController
         if ($questions->isEmpty()) {
             $data['sorting'] = 1;
         } else {
-            /** @var Question $question */
-            $question = $questions->last();
+
+            // get the last sibling to get last sorting number
+            $questions = $survey->getQuestions();
+            if( isset($data['chapter']) ){
+                foreach($questions as $question){
+                    if($question->getId() == $data['chapter']){
+                        $question = $question->getQuestions()->last();
+                        break;
+                    }
+                }
+            }else{
+                $question = $survey->getQuestions()->last();
+            }
+
             $data['sorting'] = $question->getSorting() + 1;
 
-            /* @todo : insert last id of the same level hierarchy, not the absolute last id
-              if($chapter = $question->getChapter())
-              //$question = $this->getRepository()->findByChapter($chapter,  array('sorting' => 'DESC'));
-              $criteria = Criteria::create()
-              ->where(Criteria::expr()->eq("birthday", "1982-02-17"))
-              ->orderBy(array("username" => Criteria::ASC))
-              ->setFirstResult(0)
-              ->setMaxResults(20);
-
-              $questions = $question->maching($criteria);
-              else
-             */
         }
 
         // Check that all required properties are given by the GUI

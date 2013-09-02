@@ -4,6 +4,7 @@ namespace Application\Model\Question;
 
 use Doctrine\ORM\Mapping as ORM;
 use Application\Model\Survey;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Question defines a Survey (and NOT a questionnaire).
@@ -151,7 +152,7 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
      * Set survey
      *
      * @param Survey $survey
-     * @return AbstractQuestion
+     * @return Survey
      */
     public function setSurvey(Survey $survey)
     {
@@ -171,5 +172,28 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
     {
         return $this->survey;
     }
+
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getSiblings()
+    {
+        if( !is_null($this->getChapter()) ){
+            return $this->getChapter()->getQuestions();
+        }else{
+            $questions = $this->getSurvey()->getQuestions();
+
+            $finalQuestions = new \Doctrine\Common\Collections\ArrayCollection();
+            foreach($questions as $question)
+                if(!$question->getChapter()) $finalQuestions->add($question);
+
+            return $finalQuestions;
+        }
+    }
+
+
+
+
 
 }
