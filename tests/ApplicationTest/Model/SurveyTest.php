@@ -14,7 +14,6 @@ class SurveyTest extends AbstractModel
         $survey = new Survey();
         $question = new NumericQuestion();
 
-
         $this->assertCount(0, $survey->getQuestions(), 'collection is initialized on creation');
 
         $question->setSurvey($survey);
@@ -27,7 +26,6 @@ class SurveyTest extends AbstractModel
         $survey = new Survey();
         $questionnaire = new Questionnaire();
 
-
         $this->assertCount(0, $survey->getQuestionnaires(), 'collection is initialized on creation');
 
         $questionnaire->setSurvey($survey);
@@ -38,14 +36,16 @@ class SurveyTest extends AbstractModel
     /**
      * @test
      */
-    public function getJsonConfigForSurvey() {
+    public function getJsonConfigForSurvey()
+    {
         $this->assertInternalType('array', Survey::getJsonConfig());
     }
 
     /**
      * @test
      */
-    public function getJsonConfigReturnsSpecificFieldsForSurvey() {
+    public function getJsonConfigReturnsSpecificFieldsForSurvey()
+    {
         $fields = array(
             'name',
             'code',
@@ -63,7 +63,8 @@ class SurveyTest extends AbstractModel
     /**
      * @test
      */
-    public function getMetaDataOfSurveyReturnsAnArray() {
+    public function getMetaDataOfSurveyReturnsAnArray()
+    {
         $actual = Survey::getMetadata();
         $this->assertInternalType('array', $actual);
         $this->assertNotNull($actual);

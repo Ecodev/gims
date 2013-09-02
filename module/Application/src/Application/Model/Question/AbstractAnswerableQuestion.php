@@ -138,6 +138,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
     public function setParts(\Doctrine\Common\Collections\ArrayCollection $parts)
     {
         $this->parts = $parts;
+
         return $this;
     }
 

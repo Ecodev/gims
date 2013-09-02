@@ -56,6 +56,7 @@ class FilterSetController extends AbstractRestfulController
             $this->getResponse()->setStatusCode(404);
             $result = new JsonModel(array('message' => 'No existing filterSet found. Check parameter filterSet'));
         }
+
         return $result;
     }
 }

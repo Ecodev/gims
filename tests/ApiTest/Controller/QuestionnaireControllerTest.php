@@ -48,9 +48,9 @@ class QuestionnaireControllerTest extends AbstractController
         // Questionnaire
         $data = array(
             'dateObservationStart' => '2013-05-22T00:00:00.000Z',
-            'dateObservationEnd'   => '2014-05-22T00:00:00.000Z',
-            'geoname'              => $this->geoName->getId(),
-            'survey'               => $this->survey->getId(),
+            'dateObservationEnd' => '2014-05-22T00:00:00.000Z',
+            'geoname' => $this->geoName->getId(),
+            'survey' => $this->survey->getId(),
         );
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
@@ -61,7 +61,7 @@ class QuestionnaireControllerTest extends AbstractController
         $this->assertResponseStatusCode(200);
         $this->getJsonResponse();
         $this->assertJsonStringEqualsJsonString(
-            '{"message":"deleted successfully"}', $this->getResponse()->getContent()
+                '{"message":"deleted successfully"}', $this->getResponse()->getContent()
         );
 
         // Should not be able to delete the same resource again
@@ -107,11 +107,11 @@ class QuestionnaireControllerTest extends AbstractController
     {
         // Questionnaire
         $data = array(
-            'dateObservationStart'    => '2013-05-22T00:00:00.000Z',
-            'dateObservationEnd'    => '2014-05-22T00:00:00.000Z',
+            'dateObservationStart' => '2013-05-22T00:00:00.000Z',
+            'dateObservationEnd' => '2014-05-22T00:00:00.000Z',
             'geoname' => $this->geoName->getId(),
-            'survey'  => $this->survey->getId(),
-            'status'  => 'new',
+            'survey' => $this->survey->getId(),
+            'status' => 'new',
         );
 
         $this->dispatch($this->getRoute('post') . '?fields=survey', Request::METHOD_POST, $data);
@@ -131,38 +131,34 @@ class QuestionnaireControllerTest extends AbstractController
         switch ($method) {
             case 'getList':
                 $route = sprintf(
-                    '/api/survey/%s/questionnaire',
-                    $this->survey->getId()
+                        '/api/survey/%s/questionnaire', $this->survey->getId()
                 );
                 break;
             case 'get':
                 $route = sprintf(
-                    '/api/survey/%s/questionnaire/%s',
-                    $this->survey->getId(),
-                    $this->questionnaire->getId()
+                        '/api/survey/%s/questionnaire/%s', $this->survey->getId(), $this->questionnaire->getId()
                 );
                 break;
             case 'post':
                 $route = sprintf(
-                    '/api/questionnaire'
+                        '/api/questionnaire'
                 );
                 break;
             case 'put':
                 $route = sprintf(
-                    '/api/questionnaire?id=%s',
-                    $this->questionnaire->getId()
+                        '/api/questionnaire?id=%s', $this->questionnaire->getId()
                 );
                 break;
             case 'delete':
                 $route = sprintf(
-                    '/api/questionnaire/%s',
-                    $this->questionnaire->getId()
+                        '/api/questionnaire/%s', $this->questionnaire->getId()
                 );
                 break;
             default:
                 $route = '';
-
         }
+
         return $route;
     }
+
 }

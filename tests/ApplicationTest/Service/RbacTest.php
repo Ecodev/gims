@@ -48,7 +48,6 @@ class RbacTest extends \ApplicationTest\Controller\AbstractController
         $userQuestionnaire = new \Application\Model\UserQuestionnaire();
         $userQuestionnaire->setUser($user)->setQuestionnaire($questionnaire)->setRole($roleQuestionnaire);
 
-
         $this->getEntityManager()->persist($geoname);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->persist($survey);
@@ -65,7 +64,6 @@ class RbacTest extends \ApplicationTest\Controller\AbstractController
         $this->getEntityManager()->persist($userQuestionnaire);
         $this->getEntityManager()->flush();
 
-
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getApplicationServiceLocator()->get('ZfcRbac\Service\Rbac');
 
@@ -75,7 +73,6 @@ class RbacTest extends \ApplicationTest\Controller\AbstractController
         $rbac->setIdentity($user);
         $this->assertFalse($rbac->hasRole('anonymous'), 'Logged in users does not have builtin anonymous role');
         $this->assertTrue($rbac->hasRole('member'), 'Logged in users have builtin member role');
-
 
         $this->assertFalse($rbac->isGranted('non existing permission name'), 'non existing permission is denied');
 

@@ -30,7 +30,8 @@ class MetaModelTest extends \ApplicationTest\Controller\AbstractController
         return array(
             array('Application\Model\Question\NumericQuestion', array('sorting', 'name', 'survey')),
             array('Application\Model\Survey', array('name', 'code')),
-            // more models to add here...
+                // more models to add here...
         );
     }
+
 }

@@ -60,7 +60,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $series = array_merge($series, $this->getSeries($filterSet, $questionnaires, $part, $excludedFilters, $this->colors));
         }
 
-
         $chart = array(
             'chart' => array(
                 'height' => 600,
@@ -146,6 +145,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 }
             }
         }
+
         return $key;
     }
 
@@ -332,4 +332,3 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     }
 
 }
-

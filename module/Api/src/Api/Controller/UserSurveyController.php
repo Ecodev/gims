@@ -35,6 +35,7 @@ class UserSurveyController extends AbstractRestfulController
         // Cannot list all userSurvey, without specifying a user
         if (!$parent) {
             $this->getResponse()->setStatusCode(404);
+
             return;
         }
 
@@ -94,6 +95,7 @@ class UserSurveyController extends AbstractRestfulController
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));
         }
+
         return $result;
     }
 
@@ -111,6 +113,7 @@ class UserSurveyController extends AbstractRestfulController
 
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
+
         return $rbac->isGranted(Permission::CAN_CREATE_OR_UPDATE_ANSWER);
     }
 

@@ -53,9 +53,11 @@ class UserController extends AbstractRestfulController
 
         if ($user) {
             $this->getResponse()->setStatusCode(201);
+
             return new JsonModel($this->hydrator->extract($user, $this->getJsonConfig()));
         } else {
             $this->getResponse()->setStatusCode(400);
+
             return new JsonModel(array('message' => $this->getUserService()->getRegisterForm()->getMessages()));
         }
     }
@@ -81,6 +83,7 @@ class UserController extends AbstractRestfulController
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));
         }
+
         return $result;
     }
 
@@ -108,6 +111,7 @@ class UserController extends AbstractRestfulController
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));
         }
+
         return $result;
     }
 
@@ -125,6 +129,7 @@ class UserController extends AbstractRestfulController
 
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
+
         return $rbac->isGrantedWithContext(
                         $user, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new UserAssertion($user)
         );
@@ -168,6 +173,7 @@ class UserController extends AbstractRestfulController
 
         if (!$form->isValid()) {
             $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage($this->failedLoginMessage);
+
             return $this->redirect()->toUrl($this->url()->fromRoute(static::ROUTE_LOGIN).($redirect ? '?redirect='.$redirect : ''));
         }
 

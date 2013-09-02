@@ -13,7 +13,6 @@ class QuestionTest extends AbstractModel
         $question = new ChoiceQuestion();
         $choice = new Choice();
 
-
         $this->assertCount(0, $question->getChoices(), 'collection is initialized on creation');
 
         $choice->setQuestion($question);

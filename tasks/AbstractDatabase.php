@@ -15,7 +15,7 @@ abstract class AbstractDatabase extends Task
      * Execute PHP code on $remote server
      * @param string $php code (without special escaping, nor '<?php')
      */
-    static private function executeRemotePhp($remote, $php)
+    private static function executeRemotePhp($remote, $php)
     {
         // Create temp file with PHP code
         $tempFile = '/tmp/gims.remotephp.' . exec('whoami') . '.php';
@@ -28,7 +28,7 @@ abstract class AbstractDatabase extends Task
 
         // Execute remote code (who will delete itself)
         $sshCmd = <<<STRING
-		ssh $remote "php $tempFile"
+        ssh $remote "php $tempFile"
 STRING;
         self::executeLocalCommand($sshCmd);
     }
@@ -38,16 +38,16 @@ STRING;
      * @param string $remote
      * @param string $dumpFile path
      */
-    static private function dumpDataRemotely($remote, $dumpFile)
+    private static function dumpDataRemotely($remote, $dumpFile)
     {
         $remoteCode = <<<STRING
-		require_once('/sites/$remote/config/autoload/local.php');
+        require_once('/sites/$remote/config/autoload/local.php');
         \$pgpass = trim(`echo ~`) . "/.pgpass";
         file_put_contents(\$pgpass, "localhost:5432:\$database:\$username:\$password");
         chmod(\$pgpass, 0600);
 
-		\$dumpCmd = "pg_dump --host localhost --username \$username --format=custom \$database | gzip > $dumpFile";
-		exec(\$dumpCmd);
+        \$dumpCmd = "pg_dump --host localhost --username \$username --format=custom \$database | gzip > $dumpFile";
+        exec(\$dumpCmd);
 STRING;
 
         echo "dumping data $dumpFile on $remote...\n";
@@ -59,10 +59,10 @@ STRING;
      * @param string $remote
      * @param string $dumpFile
      */
-    static private function copyFile($remote, $dumpFile)
+    private static function copyFile($remote, $dumpFile)
     {
         $copyCmd = <<<STRING
-		scp $remote:$dumpFile $dumpFile
+        scp $remote:$dumpFile $dumpFile
 STRING;
 
         echo "copying dump to $dumpFile ...\n";
@@ -74,7 +74,7 @@ STRING;
      * @param string $siteLocal
      * @param string $dumpFile
      */
-    static public function loadDump($siteLocal, $dumpFile)
+    public static function loadDump($siteLocal, $dumpFile)
     {
         $config = require("$siteLocal/config/autoload/local.php");
         $dbConfig = $config['doctrine']['connection']['orm_default']['params'];
@@ -91,7 +91,7 @@ STRING;
         self::executeLocalCommand('./vendor/bin/doctrine-module migrations:migrate --no-interaction');
     }
 
-    static function loadRemoteDump($remote)
+    public static function loadRemoteDump($remote)
     {
         $siteLocal = trim(`git rev-parse --show-toplevel`);
 

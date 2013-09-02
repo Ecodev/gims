@@ -103,6 +103,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     {
         $class = get_called_class();
         $shortClass = preg_replace('/(.*\\\\)([^\\\\]+)(Controller$)/', '$2', $class);
+
         return 'Application\Model\\' . $shortClass;
     }
 
@@ -138,10 +139,12 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $this->getEntityManager()->flush();
         if (!$object) {
             $this->getResponse()->setStatusCode(404);
+
             return;
         }
 
         $this->getResponse()->setStatusCode(201);
+
         return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
     }
 
@@ -155,12 +158,14 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $object = $this->getRepository()->findOneBy(array('id' => $id));
         if (!$object) {
             $this->getResponse()->setStatusCode(404);
+
             return;
         }
 
         $this->getEntityManager()->remove($object);
         $this->getEntityManager()->flush();
         $this->getResponse()->setStatusCode(200);
+
         return new JsonModel(array('message' => 'deleted successfully'));
     }
 
@@ -176,6 +181,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             $object = $this->getRepository()->findOneBy(array('id' => $id));
             if (!$object) {
                 $this->getResponse()->setStatusCode(404);
+
                 return;
             }
             $objects[] = $object;
@@ -187,6 +193,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         } else {
             $result = new JsonModel($this->hydrator->extract($objects[0], $this->getJsonConfig()));
         }
+
         return $result;
     }
 
@@ -213,11 +220,13 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
 
         if (!$object) {
             $this->getResponse()->setStatusCode(404);
+
             return;
         }
         $this->hydrator->hydrate($data, $object);
         $this->getEntityManager()->flush();
         $this->getResponse()->setStatusCode(201);
+
         return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
     }
 

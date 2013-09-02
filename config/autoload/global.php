@@ -38,6 +38,7 @@ return array(
             'Application\DBAL\Logging\ForwardSQLLogger' => function($sm) {
                 $logger = new \Application\DBAL\Logging\ForwardSQLLogger();
                 $logger->setLogger($sm->get('Zend\Log'));
+
                 return $logger;
             }
         ),

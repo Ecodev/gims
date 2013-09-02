@@ -19,8 +19,7 @@ class AnswerControllerTest extends AbstractController
         switch ($method) {
             case 'get':
                 $route = sprintf(
-                    '/api/answer/%s',
-                    $this->answer->getId()
+                        '/api/answer/%s', $this->answer->getId()
                 );
                 break;
             case 'post':
@@ -28,15 +27,13 @@ class AnswerControllerTest extends AbstractController
                 break;
             case 'put':
                 $route = sprintf(
-                    '/api/answer/%s?id=%s',
-                    $this->answer->getId(),
-                    $this->answer->getId()
+                        '/api/answer/%s?id=%s', $this->answer->getId(), $this->answer->getId()
                 );
                 break;
             default:
                 $route = '';
-
         }
+
         return $route;
     }
 
@@ -136,14 +133,14 @@ class AnswerControllerTest extends AbstractController
         $this->rbac->setIdentity($this->user);
         // Question
         $data = array(
-            'valuePercent'  => 0.6,
-            'question'      => array(
+            'valuePercent' => 0.6,
+            'question' => array(
                 'id' => $this->question->getId()
             ),
             'questionnaire' => array(
                 'id' => $this->questionnaire->getId()
             ),
-            'part'          => array(
+            'part' => array(
                 'id' => $this->part3->getId()
             ),
         );
@@ -163,10 +160,10 @@ class AnswerControllerTest extends AbstractController
 
         // Question
         $data = array(
-            'valuePercent'  => 0.6,
-            'question'      => $this->question->getId(),
+            'valuePercent' => 0.6,
+            'question' => $this->question->getId(),
             'questionnaire' => $this->questionnaire->getId(),
-            'part'          => $this->part3->getId(),
+            'part' => $this->part3->getId(),
         );
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
@@ -182,18 +179,17 @@ class AnswerControllerTest extends AbstractController
     {
         // Question
         $data = array(
-            'valuePercent'  => 0.6,
-            'question'      => array(
+            'valuePercent' => 0.6,
+            'question' => array(
                 'id' => $this->question->getId()
             ),
             'questionnaire' => array(
                 'id' => $this->questionnaire->getId()
             ),
-            'part'          => array(
+            'part' => array(
                 'id' => $this->part->getId()
             ),
         );
-
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         // @todo comment me out once permission will be enabled (=> GUI handling)
@@ -209,14 +205,14 @@ class AnswerControllerTest extends AbstractController
         $this->rbac->setIdentity($this->user);
         // Question
         $data = array(
-            'valuePercent'  => 0.6,
-            'question'      => array(
+            'valuePercent' => 0.6,
+            'question' => array(
                 'id' => $this->question->getId()
             ),
             'questionnaire' => array(
                 'id' => $this->questionnaire->getId()
             ),
-            'part'          => array(
+            'part' => array(
                 'id' => $this->part3->getId()
             ),
         );

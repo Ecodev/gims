@@ -22,6 +22,7 @@ class FilterController extends AbstractRestfulController
                         $result[] = $hydrator->extract($child, Filter::getJsonConfig());
                     }
                 }
+
                 return $result;
             }
         );

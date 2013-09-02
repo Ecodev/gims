@@ -28,7 +28,6 @@ class CalculatorTest extends AbstractCalculator
         $this->assertEquals($this->answer31->getValueAbsolute(), (new Calculator())->computeFilter($this->filter31, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
         $this->assertEquals($this->answer32->getValueAbsolute(), (new Calculator())->computeFilter($this->filter32, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
 
-
         // Overwrite computed filters with an answer
         $this->question11 = new \Application\Model\Question\NumericQuestion();
         $this->question13 = new \Application\Model\Question\NumericQuestion();
@@ -52,7 +51,6 @@ class CalculatorTest extends AbstractCalculator
         $this->assertEquals($this->answer141->getValueAbsolute(), (new Calculator())->computeFilter($this->filter14, $this->questionnaire, $this->part), 'should be the sum of children, but only for selected part');
         $this->assertEquals($this->answer142->getValueAbsolute(), (new Calculator())->computeFilter($this->filter14, $this->questionnaire, $part), 'should be the sum of children, but only for selected part');
 
-
         // Add alternative (non-official) filter to previously unexisting answer
         $this->filter21bis = new \Application\Model\Filter('cat 2.1 bis');
         $this->filter21bis->setOfficialFilter($this->filter21);
@@ -65,7 +63,6 @@ class CalculatorTest extends AbstractCalculator
         $this->assertEquals($this->answer21bis->getValueAbsolute(), (new Calculator())->computeFilter($this->filter2, $this->questionnaire, $this->part), 'should be the sum of children, including the answer which is specified with alternative filter');
         $this->assertEquals($this->answer21bis->getValueAbsolute(), (new Calculator())->computeFilter($this->filter21, $this->questionnaire, $this->part), 'should be the alternative answer, when answer is specified with alternative filter');
         $this->assertEquals($this->answer21bis->getValueAbsolute(), (new Calculator())->computeFilter($this->filter3, $this->questionnaire, $this->part), 'should be the sum of summands, when summands have answer');
-
 
         // Define summands to use several time cat1.4.1 (once via cat1 and once via cat1.4)
         $this->filter3->addSummand($this->filter1)->addSummand($this->filter14);
@@ -164,7 +161,6 @@ class CalculatorTest extends AbstractCalculator
         $formula->setFormula('=(3 + 7) * SUM(2, 3)');
         $this->assertEquals(50, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to handle standard Excel things');
 
-
         // Filter values
         $formula->setFormula('= 10 + {F#11,Q#34,P#56}');
         $this->assertEquals(10.101, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a Filter value');
@@ -174,7 +170,6 @@ class CalculatorTest extends AbstractCalculator
 
         $formula->setFormula('= 10 + {F#666,Q#34,P#56}');
         $this->assertEquals(10, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a Filter value which is NULL');
-
 
         // QuestionnaireFormula values
         $formula->setFormula('={Fo#12,Q#34,P#56}');
@@ -186,7 +181,6 @@ class CalculatorTest extends AbstractCalculator
         $questionnaireFormula->getFormula()->setFormula('=NULL');
         $formula->setFormula('=7 + {Fo#12,Q#current,P#current}');
         $this->assertEquals(7, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a QuestionnaireFormula which is NULL');
-
 
         // Unnoficial filter names
         $formula->setFormula('={F#12,Q#34}');

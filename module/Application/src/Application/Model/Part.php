@@ -18,8 +18,8 @@ class Part extends AbstractModel
      * @var array
      */
     protected static $jsonConfig = array(
-		'name'
-	);
+        'name'
+    );
 
     /**
      * @var string

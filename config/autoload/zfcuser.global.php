@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ZfcUser Configuration
  *
@@ -22,11 +23,9 @@ $settings = array(
      * The entity class should implement ZfcUser\Entity\UserInterface
      */
     'user_entity_class' => 'Application\Model\User',
-    
-    // Deactivate default Doctrine entities from ZfcUserDoctrineORM 
+    // Deactivate default Doctrine entities from ZfcUserDoctrineORM
     // to avoid conflict with our entities
     'enable_default_entities' => false,
-
     /**
      * Enable registration
      *
@@ -46,7 +45,7 @@ $settings = array(
      */
 //    'enable_username' => false,
 
-    /**     
+    /**
      * Authentication Adapters
      *
      * Specify the adapters that will be used to try and authenticate the user
@@ -54,8 +53,7 @@ $settings = array(
      * Default value: array containing 'ZfcUser\Authentication\Adapter\Db' with priority 100
      * Accepted values: array containing services that implement 'ZfcUser\Authentication\Adapter\ChainableAdapter'
      */
-    'auth_adapters' => array( 100 => 'ZfcUser\Authentication\Adapter\Db' ),
-
+    'auth_adapters' => array(100 => 'ZfcUser\Authentication\Adapter\Db'),
     /**
      * Enable Display Name
      *
@@ -65,7 +63,6 @@ $settings = array(
      * Accepted values: boolean true or false
      */
     'enable_display_name' => true,
-
     /**
      * Modes for authentication identity match
      *
@@ -122,14 +119,14 @@ $settings = array(
      * this to configure which Zend\Captcha adapter to use, and the options to
      * pass to it. The default uses the Figlet captcha.
      */
-    /*'form_captcha_options' => array(
-        'class'   => 'figlet',
-        'options' => array(
-            'wordLen'    => 5,
-            'expiration' => 300,
-            'timeout'    => 300,
-        ),
-    ),*/
+    /* 'form_captcha_options' => array(
+      'class'   => 'figlet',
+      'options' => array(
+      'wordLen'    => 5,
+      'expiration' => 300,
+      'timeout'    => 300,
+      ),
+      ), */
 
     /**
      * Use Redirect Parameter If Present
@@ -141,11 +138,11 @@ $settings = array(
     //'use_redirect_parameter_if_present' => true,
 
     /**
-	 * Sets the view template for the user login widget
-	 *
-	 * Default value: 'zfc-user/user/login.phtml'
+     * Sets the view template for the user login widget
+     *
+     * Default value: 'zfc-user/user/login.phtml'
      * Accepted values: string path to a view script
-	 */
+     */
     //'user_login_widget_view_template' => 'zfc-user/user/login.phtml',
 
     /**
@@ -158,7 +155,6 @@ $settings = array(
      *
      */
     'login_redirect_route' => 'home',
-
     /**
      * Logout Redirect Route
      *
@@ -168,62 +164,60 @@ $settings = array(
      * Accepted values: A valid route name within your application
      */
     'logout_redirect_route' => 'home',
+        /**
+         * Password Security
+         *
+         * DO NOT CHANGE THE PASSWORD HASH SETTINGS FROM THEIR DEFAULTS
+         * Unless A) you have done sufficient research and fully understand exactly
+         * what you are changing, AND B) you have a very specific reason to deviate
+         * from the default settings and know what you're doing.
+         *
+         * The password hash settings may be changed at any time without
+         * invalidating existing user accounts. Existing user passwords will be
+         * re-hashed automatically on their next successful login.
+         */
+        /**
+         * Password Cost
+         *
+         * The number represents the base-2 logarithm of the iteration count used for
+         * hashing. Default is 14 (about 10 hashes per second on an i5).
+         *
+         * Accepted values: integer between 4 and 31
+         */
+        //'password_cost' => 14,
 
-    /**
-     * Password Security
-     *
-     * DO NOT CHANGE THE PASSWORD HASH SETTINGS FROM THEIR DEFAULTS
-     * Unless A) you have done sufficient research and fully understand exactly
-     * what you are changing, AND B) you have a very specific reason to deviate
-     * from the default settings and know what you're doing.
-     *
-     * The password hash settings may be changed at any time without
-     * invalidating existing user accounts. Existing user passwords will be
-     * re-hashed automatically on their next successful login.
-     */
+        /**
+         * Enable user state usage
+         *
+         * Should user's state be used in the registration/login process?
+         */
+        //'enable_user_state' => true,
 
-    /**
-     * Password Cost
-     *
-     * The number represents the base-2 logarithm of the iteration count used for
-     * hashing. Default is 14 (about 10 hashes per second on an i5).
-     *
-     * Accepted values: integer between 4 and 31
-     */
-    //'password_cost' => 14,
+        /**
+         * Default user state upon registration
+         *
+         * What state user should have upon registration?
+         * Allowed value type: integer
+         */
+        //'default_user_state' => 1,
 
-    /**
-     * Enable user state usage
-     * 
-     * Should user's state be used in the registration/login process?
-     */
-    //'enable_user_state' => true,
-    
-    /**
-     * Default user state upon registration
-     * 
-     * What state user should have upon registration?
-     * Allowed value type: integer
-     */
-    //'default_user_state' => 1,
-    
-    /**
-     * States which are allowing user to login
-     * 
-     * When user tries to login, is his/her state one of the following?
-     * Include null if you want user's with no state to login as well.
-     * Allowed value types: null and integer
-     */
-    //'allowed_login_states' => array( null, 1 ),
-    
-    /**
-     * User table name
-     */
-    //'table_name' => 'user',
-    
-    /**
-     * End of ZfcUser configuration
-     */
+        /**
+         * States which are allowing user to login
+         *
+         * When user tries to login, is his/her state one of the following?
+         * Include null if you want user's with no state to login as well.
+         * Allowed value types: null and integer
+         */
+        //'allowed_login_states' => array( null, 1 ),
+
+        /**
+         * User table name
+         */
+        //'table_name' => 'user',
+
+        /**
+         * End of ZfcUser configuration
+         */
 );
 
 /**
@@ -233,7 +227,7 @@ return array(
     'zfcuser' => $settings,
     'service_manager' => array(
         'aliases' => array(
-            'zfcuser_zend_db_adapter' => (isset($settings['zend_db_adapter'])) ? $settings['zend_db_adapter']: 'Zend\Db\Adapter\Adapter',
+            'zfcuser_zend_db_adapter' => (isset($settings['zend_db_adapter'])) ? $settings['zend_db_adapter'] : 'Zend\Db\Adapter\Adapter',
         ),
     ),
 );

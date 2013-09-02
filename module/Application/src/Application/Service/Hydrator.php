@@ -197,6 +197,7 @@ class Hydrator
                 $_properties[$key] = $property;
             }
         }
+
         return $_properties;
     }
 

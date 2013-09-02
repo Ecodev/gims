@@ -5,7 +5,6 @@ namespace Application\Repository;
 class PartRepository extends AbstractRepository
 {
 
-
     /**
      * Override parent to order by Id
      * @return type

@@ -21,8 +21,7 @@ class SurveyControllerTest extends AbstractController
             case 'delete':
             case 'get':
                 $route = sprintf(
-                    '/api/survey/%s',
-                    $this->survey->getId()
+                        '/api/survey/%s', $this->survey->getId()
                 );
                 break;
             case 'post':
@@ -30,15 +29,13 @@ class SurveyControllerTest extends AbstractController
                 break;
             case 'put':
                 $route = sprintf(
-                    '/api/survey/%s?id=%s',
-                    $this->survey->getId(),
-                    $this->survey->getId()
+                        '/api/survey/%s?id=%s', $this->survey->getId(), $this->survey->getId()
                 );
                 break;
             default:
                 $route = '';
-
         }
+
         return $route;
     }
 
@@ -131,7 +128,6 @@ class SurveyControllerTest extends AbstractController
         $this->assertNotEquals($expected, $actual['name']);
     }
 
-
     /**
      * @test
      * @group SurveyApi
@@ -169,7 +165,6 @@ class SurveyControllerTest extends AbstractController
         $this->assertEquals($data['name'], $actual['name']);
     }
 
-
     /**
      * @test
      * @group SurveyApi
@@ -178,18 +173,17 @@ class SurveyControllerTest extends AbstractController
     {
         // Question
         $data = array(
-            'name'          => 0.6,
-            'question'      => array(
+            'name' => 0.6,
+            'question' => array(
                 'id' => $this->question->getId()
             ),
             'questionnaire' => array(
                 'id' => $this->questionnaire->getId()
             ),
-            'part'          => array(
+            'part' => array(
                 'id' => $this->part->getId()
             ),
         );
-
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         // @todo comment me out once permission will be enabled (=> GUI handling)
@@ -278,4 +272,5 @@ class SurveyControllerTest extends AbstractController
         $this->dispatch('/api/survey/' . ($this->survey->getId() + 1), Request::METHOD_DELETE);
         $this->assertResponseStatusCode(404);
     }
+
 }

@@ -19,7 +19,6 @@ class ChoiceQuestion extends AbstractAnswerableQuestion
      */
     private $isMultiple = false;
 
-
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Choice", mappedBy="question")
@@ -103,6 +102,5 @@ class ChoiceQuestion extends AbstractAnswerableQuestion
     {
         $this->isMultiple = (bool) $isMultiple;
     }
-
 
 }

@@ -23,11 +23,11 @@ class RbacFactory implements FactoryInterface
         $rbac    = new Rbac($config);
         $options = $rbac->getOptions();
 
-        foreach($options->getProviders() as $class => $config) {
+        foreach ($options->getProviders() as $class => $config) {
             $rbac->addProvider($class::factory($sl, $config));
         }
 
-        foreach($options->getFirewalls() as $class => $config) {
+        foreach ($options->getFirewalls() as $class => $config) {
             $rbac->addFirewall(new $class($config));
         }
 

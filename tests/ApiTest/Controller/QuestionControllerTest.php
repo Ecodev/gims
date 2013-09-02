@@ -20,28 +20,23 @@ class QuestionControllerTest extends AbstractController
         switch ($method) {
             case 'get':
                 $route = sprintf(
-                    '/api/questionnaire/%s/question/%s',
-                    $this->questionnaire->getId(),
-                    $this->question->getId()
+                        '/api/questionnaire/%s/question/%s', $this->questionnaire->getId(), $this->question->getId()
                 );
                 break;
             case 'post':
                 $route = sprintf(
-                    '/api/questionnaire/%s/question',
-                    $this->questionnaire->getId()
+                        '/api/questionnaire/%s/question', $this->questionnaire->getId()
                 );
                 break;
             case 'put':
                 $route = sprintf(
-                    '/api/questionnaire/%s/question?id=%s',
-                    $this->questionnaire->getId(),
-                    $this->question->getId()
+                        '/api/questionnaire/%s/question?id=%s', $this->questionnaire->getId(), $this->question->getId()
                 );
                 break;
             default:
                 $route = '';
-
         }
+
         return $route;
     }
 
@@ -124,10 +119,10 @@ class QuestionControllerTest extends AbstractController
     {
         // Question
         $data = array(
-            'name'     => 'name for test create a new question',
-            'type'     => \Application\Model\QuestionType::$CHOICE,
-            'sorting'  => 1,
-            'survey'   => $this->survey->getId(),
+            'name' => 'name for test create a new question',
+            'type' => \Application\Model\QuestionType::$CHOICE,
+            'sorting' => 1,
+            'survey' => $this->survey->getId(),
             'filter' => $this->filter->getId(),
             'type' => \Application\Model\QuestionType::$NUMERIC,
         );
@@ -145,7 +140,8 @@ class QuestionControllerTest extends AbstractController
         $this->assertCount(1, $this->survey->getQuestions());
     }
 
-    private function getMockQuestions(){
+    private function getMockQuestions()
+    {
 
         // create four additional questions next to the one created in the abstract
         // -> they will be five questions connected to a survey
@@ -154,9 +150,9 @@ class QuestionControllerTest extends AbstractController
 
             $question = new NumericQuestion();
             $question->setSurvey($this->survey)
-                ->setSorting($value)
-                ->setFilter($this->filter)
-                ->setName('bar');
+                    ->setSorting($value)
+                    ->setFilter($this->filter)
+                    ->setName('bar');
 
             $this->getEntityManager()->persist($question);
             $questions[$value] = $question;
@@ -176,8 +172,7 @@ class QuestionControllerTest extends AbstractController
         $questions = $this->getMockQuestions();
 
         $route = $route = sprintf(
-            '/api/question?id=%s',
-            $questions[5]->getId()
+                '/api/question?id=%s', $questions[5]->getId()
         );
 
         $data = array(
@@ -189,7 +184,7 @@ class QuestionControllerTest extends AbstractController
         $expectedSorting = array(2, 3, 4, 5, 1);
         $actualSorting = array();
         foreach ($questions as $question) {
-            $actualSorting []= $question->getSorting();
+            $actualSorting [] = $question->getSorting();
         }
 
         $this->assertSame($expectedSorting, $actualSorting);
@@ -204,8 +199,7 @@ class QuestionControllerTest extends AbstractController
         $questions = $this->getMockQuestions();
 
         $route = $route = sprintf(
-            '/api/question?id=%s',
-            $questions[1]->getId()
+                '/api/question?id=%s', $questions[1]->getId()
         );
 
         $data = array(
@@ -217,9 +211,10 @@ class QuestionControllerTest extends AbstractController
         $expectedSorting = array(5, 1, 2, 3, 4);
         $actualSorting = array();
         foreach ($questions as $question) {
-            $actualSorting []= $question->getSorting();
+            $actualSorting [] = $question->getSorting();
         }
 
         $this->assertSame($expectedSorting, $actualSorting);
     }
+
 }

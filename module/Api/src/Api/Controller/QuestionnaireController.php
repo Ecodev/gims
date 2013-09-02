@@ -40,9 +40,9 @@ class QuestionnaireController extends AbstractRestfulController
                                 $answer->getDateCreated()->format(DATE_ISO8601) :
                                 $answer->getDateModified()->format(DATE_ISO8601);
                     }
+
                     return $result;
                 };
-
 
         $config['reporterNames'] = function (
                 \Application\Service\Hydrator $hydrator, Questionnaire $questionnaire
@@ -70,7 +70,6 @@ class QuestionnaireController extends AbstractRestfulController
 
                     return implode(',', $results);
                 };
-
 
         $config['validatorNames'] = function (
                 \Application\Service\Hydrator $hydrator, Questionnaire $questionnaire
@@ -134,6 +133,7 @@ class QuestionnaireController extends AbstractRestfulController
 
         if (!$questionnaire) {
             $this->getResponse()->setStatusCode(404);
+
             return;
         }
 
@@ -145,6 +145,7 @@ class QuestionnaireController extends AbstractRestfulController
 
         if (!$questionnaireAssertion->canBeDeleted()) {
             $this->getResponse()->setStatusCode(403);
+
             return new JsonModel(array('message' => 'Forbidden action'));
         }
 
@@ -173,6 +174,7 @@ class QuestionnaireController extends AbstractRestfulController
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));
         }
+
         return $result;
     }
 
@@ -208,6 +210,7 @@ class QuestionnaireController extends AbstractRestfulController
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));
         }
+
         return $result;
     }
 
@@ -239,6 +242,7 @@ class QuestionnaireController extends AbstractRestfulController
 
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
+
         return $rbac->isGrantedWithContext(
                         $questionnaire, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new SurveyAssertion($questionnaire)
         );
@@ -258,10 +262,10 @@ class QuestionnaireController extends AbstractRestfulController
 
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
+
         return $rbac->isGrantedWithContext(
                         $survey, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new SurveyAssertion($survey)
         );
     }
 
 }
-

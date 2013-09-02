@@ -21,7 +21,7 @@ class UserRepository extends AbstractRepository
 
         $counts = array('COUNT(*) AS total');
         foreach (\Application\Model\QuestionnaireStatus::getValues() as $status) {
-            $status = (string)$status;
+            $status = (string) $status;
             $rsm->addScalarResult($status, $status);
             $counts[] = "COUNT(CASE WHEN status = '$status' THEN TRUE ELSE NULL END) AS $status";
         }

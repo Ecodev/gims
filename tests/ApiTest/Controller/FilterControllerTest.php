@@ -21,8 +21,7 @@ class FilterControllerTest extends AbstractController
             case 'delete':
             case 'get':
                 $route = sprintf(
-                    '/api/filterSet/%s',
-                    $this->filterSet->getId()
+                        '/api/filterSet/%s', $this->filterSet->getId()
                 );
                 break;
             case 'post':
@@ -30,15 +29,13 @@ class FilterControllerTest extends AbstractController
                 break;
             case 'put':
                 $route = sprintf(
-                    '/api/filterSet/%s?id=%s',
-                    $this->filterSet->getId(),
-                    $this->filterSet->getId()
+                        '/api/filterSet/%s?id=%s', $this->filterSet->getId(), $this->filterSet->getId()
                 );
                 break;
             default:
                 $route = '';
-
         }
+
         return $route;
     }
 
@@ -130,7 +127,6 @@ class FilterControllerTest extends AbstractController
         $actual = $this->getJsonResponse();
         $this->assertNotEquals($expected, $actual['name']);
     }
-
 
     /**
      * @test
@@ -279,4 +275,5 @@ class FilterControllerTest extends AbstractController
         $this->dispatch('/api/filterSet/' . ($this->filterSet->getId() + 1), Request::METHOD_DELETE);
         $this->assertResponseStatusCode(404);
     }
+
 }

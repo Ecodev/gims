@@ -52,10 +52,11 @@ class QuestionnaireAssertion implements \ZfcRbac\Assertion\AssertionInterface
         // if the user has role reporter
         $assertion = false;
         if (in_array('reporter', $roles)
-            && (string)$this->questionnaire->getStatus() !== \Application\Model\QuestionnaireStatus::$VALIDATED
+            && (string) $this->questionnaire->getStatus() !== \Application\Model\QuestionnaireStatus::$VALIDATED
         ) {
             $assertion = true;
         }
+
         return $assertion;
     }
 
@@ -74,6 +75,7 @@ class QuestionnaireAssertion implements \ZfcRbac\Assertion\AssertionInterface
         if (in_array('validator', $roles)) {
             $assertion = true;
         }
+
         return $assertion;
     }
 

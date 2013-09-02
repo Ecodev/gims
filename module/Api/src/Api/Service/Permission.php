@@ -2,7 +2,6 @@
 
 namespace Api\Service;
 
-
 class Permission
 {
     /**

@@ -105,7 +105,6 @@ class AuthController extends \ZfcUser\Controller\UserController
 
             $user = $this->getUserService()->register($data);
 
-
             if ($user) {
                 $data['identity'] = $data['email'];
                 $data['credential'] = $data['password'];

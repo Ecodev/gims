@@ -99,6 +99,7 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
 
         } else {
             $this->getResponse()->setStatusCode(404);
+
             return;
         }
 

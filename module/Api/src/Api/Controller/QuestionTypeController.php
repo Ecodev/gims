@@ -8,9 +8,6 @@ use Zend\View\Model\JsonModel;
 class QuestionTypeController extends AbstractRestfulController
 {
 
-
-
-
     public function getList()
     {
         $properties = QuestionType::getValues();
@@ -21,13 +18,8 @@ class QuestionTypeController extends AbstractRestfulController
                                             'value' => $property->__toString()
                                     ));
 
-
         return new JsonModel( $arrayValues );
     }
-
-
-
-
 
     /**
      * @param array $data

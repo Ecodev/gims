@@ -8,7 +8,6 @@
  *
  * It basically deactivates all caches, and activates all logs.
  */
-
 return array(
     'doctrine' => array(
         'configuration' => array(

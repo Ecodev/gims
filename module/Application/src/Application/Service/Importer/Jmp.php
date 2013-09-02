@@ -327,7 +327,6 @@ class Jmp extends AbstractImporter
         $this->partRural = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Rural');
         $this->partTotal = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Total');
 
-
         $this->partOffsets = array(
             3 => $this->partUrban,
             4 => $this->partRural,
@@ -347,7 +346,6 @@ class Jmp extends AbstractImporter
                     $filterSet->addFilter($child);
                 }
             }
-
 
             $workbook->setActiveSheetIndex($i);
             $sheet = $workbook->getSheet($i);
@@ -499,6 +497,7 @@ STRING;
 
             if (!$survey->getYear()) {
                 echo 'WARNING: skipped survey because there is no year. On sheet "' . $sheet->getTitle() . '" cell ' . $sheet->getCellByColumnAndRow($col + 3, 3)->getCoordinate();
+
                 return true;
             }
             $this->getEntityManager()->persist($survey);
@@ -510,6 +509,7 @@ STRING;
         $questionnaire = $this->getQuestionnaire($survey, $countryCell);
         if (!$questionnaire) {
             echo 'WARNING: skipped questionnaire because there is no country name. On sheet "' . $sheet->getTitle() . '" cell ' . $countryCell->getCoordinate() . PHP_EOL;
+
             return true;
         }
 
@@ -697,6 +697,7 @@ STRING;
             // Fallback on cached result
             if (preg_match('/(Cyclic Reference in Formula|Formula Error)/', $exception->getMessage())) {
                 $value = $cell->getOldCalculatedValue();
+
                 return $value == \PHPExcel_Calculation_Functions::NA() ? null : $value;
             } else {
                 // Forward exception
@@ -877,7 +878,7 @@ STRING;
 
         // Expand range syntax to enumerate each cell: "A1:A5" => "A1,A2,A3,A4,A5"
         $cellPattern = '\$?(([[:alpha:]]+)(\\d+))';
-        $expandedFormula = preg_replace_callback("/$cellPattern:$cellPattern/", function($matches) use($sheet, $cell) {
+        $expandedFormula = preg_replace_callback("/$cellPattern:$cellPattern/", function($matches) use ($sheet, $cell) {
 
                     // This only expand vertical ranges, not horizontal ranges (which probably never make any sense for JMP anyway)
                     if ($matches[2] != $matches[5]) {
@@ -909,6 +910,7 @@ STRING;
 
                     if (isset($importedQuestionnaires[$refCol])) {
                         $refQuestionnaireId = $importedQuestionnaires[$refCol]->getId();
+
                         return "{F#$refFilterId,Q#$refQuestionnaireId}";
                     }
 
@@ -936,7 +938,6 @@ STRING;
 
                     // Simple case is when we reference a filter
                     if ($refFilterId) {
-
                         return "{F#$refFilterId,Q#$refQuestionnaireId,P#$refPartId}";
                         // More advanced case is when we reference another QuestionnaireFormula (Calculation, Estimate or Ratio)
                     } else {
@@ -952,7 +953,7 @@ STRING;
                             if (!$refQuestionnaireFormula->getFormula()->getId()) {
                                 $this->getEntityManager()->flush();
                             }
-                            
+
                             $refFormulaId = $refQuestionnaireFormula->getFormula()->getId();
 
                             return "{Fo#$refFormulaId,Q#$refQuestionnaireId,P#$refPartId}";
@@ -964,6 +965,7 @@ STRING;
 
         if ($referencedInvalidQuestionnaire) {
             echo 'WARNING: skipped formula because it referenced non-existing questionnaire. On sheet "' . $sheet->getTitle() . '" cell ' . $cell->getCoordinate() . PHP_EOL;
+
             return null;
         }
 
@@ -1012,6 +1014,7 @@ STRING;
         }
 
         $this->cacheFormulas[$key] = $formulaObject;
+
         return $formulaObject;
     }
 

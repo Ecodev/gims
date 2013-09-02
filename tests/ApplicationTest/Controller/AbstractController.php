@@ -17,7 +17,6 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
         // Everything is relative to the application root now.
         chdir(__DIR__ . '/../../../');
 
-
         // Config is the normal configuration, overridden by test configuration
         $config = include 'config/application.config.php';
         $config['module_listener_options']['config_glob_paths'][] = 'config/autoload/{,*.}{phpunit}.php';
@@ -45,6 +44,7 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
         }
 
         $this->assertTrue(is_array($json));
+
         return $json;
     }
 

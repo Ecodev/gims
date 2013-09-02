@@ -4,7 +4,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Api\Controller\QuestionType' => 'Api\Controller\QuestionTypeController',
-			'Api\Controller\Choice' => 'Api\Controller\ChoiceController',
+            'Api\Controller\Choice' => 'Api\Controller\ChoiceController',
             'Api\Controller\Questionnaire' => 'Api\Controller\QuestionnaireController',
             'Api\Controller\Question' => 'Api\Controller\QuestionController',
             'Api\Controller\Answer' => 'Api\Controller\AnswerController',
@@ -80,7 +80,6 @@ return array(
                             ),
                         ),
                     ),
-
                     // This route allow to call a non REST controller with action
                     'non_rest_controller' => array(
                         'type' => 'Segment',

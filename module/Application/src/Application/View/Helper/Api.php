@@ -13,6 +13,7 @@ class Api extends \Zend\View\Helper\AbstractHtmlElement
     public function __invoke($route)
     {
         $result = file_get_contents('http://fab.gims.pro/api/' . $route);
+
         return $result;
     }
 

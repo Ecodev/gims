@@ -2,11 +2,11 @@
 
 namespace ApiTest\Service;
 
-
 use Api\Service\Permission;
 
 class PermissionTest extends \ApplicationTest\Controller\AbstractController
 {
+
     public function setUp()
     {
         parent::setUp();

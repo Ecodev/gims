@@ -105,7 +105,6 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
      */
     protected $metaModel;
 
-
     public function setUp()
     {
         parent::setUp();
@@ -162,8 +161,6 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
                 ->setQuestion($this->question)
                 ->setQuestionnaire($this->questionnaire)
                 ->setPart($this->part2);
-
-
 
         // create a fake user
         $this->user = new User();

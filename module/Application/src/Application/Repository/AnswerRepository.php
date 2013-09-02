@@ -26,6 +26,7 @@ class AnswerRepository extends AbstractRepository
                     AND (answer.part_id = p.part_id OR answer.part_id IS NULL AND p.part_id IS NULL)',
             $clause
         );
+
         return $this->getEntityManager()->getConnection()->executeUpdate($sql);
     }
 

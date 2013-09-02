@@ -242,6 +242,7 @@ abstract class AbstractModel
     public static function getJsonConfig()
     {
         $class = '\\' . get_called_class();
+
         return array_merge(self::$jsonConfig, $class::$jsonConfig);
     }
 
@@ -255,6 +256,7 @@ abstract class AbstractModel
     public static function isPropertyInJsonConfig($key)
     {
         $class = '\\' . get_called_class();
+
         return in_array($key, $class::$jsonConfig);
     }
 }

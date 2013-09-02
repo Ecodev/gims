@@ -296,6 +296,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function setComments($comments)
     {
         $this->comments = $comments;
+
         return $this;
     }
 

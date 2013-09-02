@@ -13,7 +13,6 @@ class ChapterTest extends AbstractModel
         $chapter = new Chapter();
         $question = new NumericQuestion();
 
-
         $this->assertCount(0, $chapter->getQuestions(), 'collection is initialized on creation');
 
         $question->setChapter($chapter);

@@ -21,7 +21,6 @@ class QuestionnaireRepositoryTest extends AbstractRepository
 
         $this->assertEquals(QuestionnaireStatus::$NEW, $questionnaire->getStatus(), 'new questionnaire should have a status of new');
 
-
         // Test each status, that should not throw any exception
         foreach (QuestionnaireStatus::getValues() as $status) {
             $questionnaire->setStatus($status);

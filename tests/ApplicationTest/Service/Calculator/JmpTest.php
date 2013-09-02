@@ -36,7 +36,6 @@ class JmpTest extends AbstractCalculator
 
         $this->questionnaire2 = new \Application\Model\Questionnaire();
 
-
         // Define a second questionnaire with answers for leaf filters only
         $questionnaire2 = new \Application\Model\Questionnaire();
 
@@ -55,7 +54,6 @@ class JmpTest extends AbstractCalculator
 
         $answer131->setPart($this->part)->setQuestionnaire($questionnaire2)->setQuestion($question131)->setValueAbsolute(0.1);
         $answer32->setPart($this->part)->setQuestionnaire($questionnaire2)->setQuestion($question32)->setValueAbsolute(0.000001);
-
 
         $this->questionnaires = array($this->questionnaire, $questionnaire2);
 
@@ -97,7 +95,6 @@ class JmpTest extends AbstractCalculator
                                 ->setPopulation(12)
                             ),
         )));
-
 
         $this->assertEquals(10, $stubPopulationRepository->getOneByQuestionnaire($this->questionnaire, $this->part)->getPopulation());
         $this->assertEquals(3, $stubPopulationRepository->getOneByQuestionnaire($this->questionnaire, $this->part1)->getPopulation());
@@ -485,7 +482,6 @@ class JmpTest extends AbstractCalculator
         $this->answer131->setValueAbsolute((0.2));
         $res2 = $this->service->computeFlatten($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part);
         $this->assertEquals($res1, $res2, 'result should be cached and therefore be the same');
-
 
         $res3 = $this->service2->computeFlatten($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part);
 

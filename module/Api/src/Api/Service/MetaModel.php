@@ -51,7 +51,7 @@ class MetaModel
         {
             $properties = array_merge($properties, $this->getMandatoryPropertiesInternal($parent->getName()));
         }
-        
+
         return $properties;
     }
 

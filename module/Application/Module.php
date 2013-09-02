@@ -109,7 +109,6 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
         // Match preferred language to those available, defaulting to generic English
         $locale = Locale::lookup($supported, $preference, false, $default);
 
-
         $translator = $e->getApplication()->getServiceManager()->get('translator');
         $translator->setLocale($locale);
         Locale::setDefault($locale);

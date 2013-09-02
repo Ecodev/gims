@@ -20,6 +20,7 @@ class AnswerController extends AbstractRestfulController
         );
 
         $objects = $this->getRepository()->findBy($c);
+
         return new JsonModel($this->hydrator->extractArray($objects, $this->getJsonConfig()));
     }
 
@@ -54,6 +55,7 @@ class AnswerController extends AbstractRestfulController
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));
         }
+
         return $result;
     }
 
@@ -83,6 +85,7 @@ class AnswerController extends AbstractRestfulController
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));
         }
+
         return $result;
     }
 
@@ -101,6 +104,7 @@ class AnswerController extends AbstractRestfulController
 
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
+
         return $rbac->isGrantedWithContext(
             $questionnaire,
             Permission::CAN_CREATE_OR_UPDATE_ANSWER,

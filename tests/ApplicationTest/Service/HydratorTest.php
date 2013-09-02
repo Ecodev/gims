@@ -66,7 +66,6 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->choice1 = new \Application\Model\Question\Choice();
         $this->choice2 = new \Application\Model\Question\Choice();
 
-
         // Create a stub for the Hydrator class with predetermined values, so we don't have to mess with database
         $this->hydrator = $this->getMock('\Application\Service\Hydrator', array('getObject'), array(), '', false);
         $this->hydrator->expects($this->any())
@@ -476,6 +475,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $questionnaire->setDateObservationStart(new \DateTime('2010-01-01T00:00:00+0100'));
         $questionnaire->setDateObservationEnd(new \DateTime('2011-01-01T00:00:00+0100'));
         $questionnaire->setGeoname($geoName);
+
         return $survey;
     }
 

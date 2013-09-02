@@ -201,6 +201,7 @@ use \Application\Traits\EntityManagerAware;
             $answerFilter = $answer->getQuestion()->getFilter()->getOfficialFilter() ? : $answer->getQuestion()->getFilter();
             if ($answerFilter === $filter && $answer->getPart() == $part) {
                 $alreadySummedFilters->add(true);
+
                 return $answer->getValueAbsolute();
             }
         }
@@ -212,7 +213,6 @@ use \Application\Traits\EntityManagerAware;
                 return $this->computeFormula($rule, $questionnaire, $part, $filter);
             }
         }
-
 
         // Summer to sum values of given filters, but only if non-null (to preserve null value if no answer at all)
         $summer = function(\IteratorAggregate $filters) use ($questionnaire, $part, $alreadySummedFilters) {
@@ -253,7 +253,7 @@ use \Application\Traits\EntityManagerAware;
         $originalFormula = $formula->getFormula();
 
         // Replace {F#12,Q#34,P#56} with Filter value
-        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use($currentFilter, $currentQuestionnaire, $currentPart) {
+        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($currentFilter, $currentQuestionnaire, $currentPart) {
                     $filterId = $matches[1];
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
@@ -268,7 +268,7 @@ use \Application\Traits\EntityManagerAware;
                 }, $originalFormula);
 
         // Replace {F#12,Q#34} with Unofficial Filter name, or NULL if no Unofficial Filter
-        $convertedFormulas = preg_replace_callback('/\{F#(\d+),Q#(\d+|current)\}/', function($matches) use($currentQuestionnaire) {
+        $convertedFormulas = preg_replace_callback('/\{F#(\d+),Q#(\d+|current)\}/', function($matches) use ($currentQuestionnaire) {
                     $officialFilterId = $matches[1];
                     $questionnaireId = $matches[2];
 
@@ -288,7 +288,7 @@ use \Application\Traits\EntityManagerAware;
                 }, $convertedFormulas);
 
         // Replace {Fo#12,Q#34,P#56} with QuestionnaireFormula value
-        $convertedFormulas = preg_replace_callback('/\{Fo#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use($currentFilter, $currentQuestionnaire, $currentPart, $formula, $originalFormula) {
+        $convertedFormulas = preg_replace_callback('/\{Fo#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($currentFilter, $currentQuestionnaire, $currentPart, $formula, $originalFormula) {
                     $formulaId = $matches[1];
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
@@ -302,7 +302,6 @@ use \Application\Traits\EntityManagerAware;
                         'part' => $part,
                     ));
 
-
                     if (!$questionnaireFormula) {
                         throw new \Exception('Reference to non existing QuestionnaireFormula ' . $matches[0] . ' in  Formula#' . $formula->getId() . ', "' . $formula->getName() . '": ' . $originalFormula);
                     }
@@ -313,9 +312,10 @@ use \Application\Traits\EntityManagerAware;
                 }, $convertedFormulas);
 
         // Replace {self} with computed value without this formula
-        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use($currentFilter, $currentQuestionnaire, $currentPart, $formula) {
+        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($currentFilter, $currentQuestionnaire, $currentPart, $formula) {
 
                     $value = $this->computeFilterInternal($currentFilter, $currentQuestionnaire, new \Doctrine\Common\Collections\ArrayCollection(), $currentPart, $formula);
+
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
 

@@ -17,6 +17,7 @@ class SurveyController extends AbstractRestfulController
             array(),
             array('year' => 'DESC')
         );
+
         return new JsonModel($this->hydrator->extractArray($surveys, $this->getJsonConfig()));
     }
 
@@ -40,6 +41,7 @@ class SurveyController extends AbstractRestfulController
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));
         }
+
         return $result;
     }
 
@@ -64,6 +66,7 @@ class SurveyController extends AbstractRestfulController
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));
         }
+
         return $result;
     }
 
@@ -91,6 +94,7 @@ class SurveyController extends AbstractRestfulController
             $this->getResponse()->setStatusCode(401);
             $result = new JsonModel(array('message' => 'Authorization required'));
         }
+
         return $result;
     }
 
@@ -108,6 +112,7 @@ class SurveyController extends AbstractRestfulController
 
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
+
         return $rbac->isGrantedWithContext(
             $survey,
             Permission::CAN_CREATE_OR_UPDATE_ANSWER,
