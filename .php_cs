@@ -12,7 +12,7 @@ return Symfony\CS\Config\Config::create()
                     'elseif',
                     'linefeed',
                     'trailing_spaces',
-//                    'unused_use', // This breaks usage of traits in parent class, specifically in Application\Service\Calculator\Calculator
+//                    'unused_use', // This breaks usage of traits in parent class, specifically in Application\Service\Calculator\Calculator, see https://github.com/fabpot/PHP-CS-Fixer/issues/217
                     'visibility',
                     'return',
                     'short_tag',
