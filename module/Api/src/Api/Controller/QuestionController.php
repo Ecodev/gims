@@ -169,9 +169,14 @@ class QuestionController extends AbstractRestfulController
      */
     public function update($id, $data)
     {
+
         // Retrieve question since permissions apply against it.
         /** @var $question \Application\Model\Question */
         $questionRepository = $this->getEntityManager()->getRepository($this->getModel());
+
+        if (isset($data['type'])) {
+            $questionRepository->changeType($id, $this->getModel());
+        }
         $question = $questionRepository->findOneById($id);
         $survey = $question->getSurvey();
 
@@ -246,7 +251,6 @@ class QuestionController extends AbstractRestfulController
                 $exist = false;
                 foreach ($newChoices as $newChoice) {
                     if ($newChoice['id'] == $choice->getId()) {
-
                         $exist = true;
                         break;
                     }
