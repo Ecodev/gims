@@ -139,7 +139,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
 
         // If not allowed to create object, cancel everything
         if (!$this->getRbac()->isActionGranted($object, 'create')) {
-            $this->getResponse()->setStatusCode(4034);
+            $this->getResponse()->setStatusCode(403);
             return new JsonModel(array('message' => $this->getRbac()->getMessage()));
         }
 
