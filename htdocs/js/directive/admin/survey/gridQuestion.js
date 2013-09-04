@@ -47,7 +47,7 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
 
             // Configure ng-grid.
             $scope.gridOptions = {
-                plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
+                plugins: [new ngGridFlexibleHeightPlugin({minHeight: 400})],
                 data: 'questions',
                 enableCellSelection: true,
                 showFooter: false,
@@ -67,7 +67,7 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
                     {
                         field: 'sorting',
                         displayName: '#',
-                        width: '5%',
+                        width: '10%',
                         cellTemplate:   '<div class="ngCellText" ng-class="col.colIndex()">' +
                                             '<span style="padding-left: {{row.entity.level}}em;">{{row.entity.sorting}}</span>' +
                                         '</div>'
@@ -75,7 +75,7 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
                     {
                         field: 'name',
                         displayName: 'Question',
-                        width: '85%',
+                        width: '80%',
                         cellTemplate:   '<div class="ngCellText" ng-class="col.colIndex()">' +
                                             '<span style="padding-left: {{row.entity.level}}em;">{{row.entity.name}}</span>' +
                                         '</div>'
