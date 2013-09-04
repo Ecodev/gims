@@ -278,6 +278,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * Return the roles currently active for this user and current role context (if any)
+     * @return array
      */
     public function getRoles()
     {

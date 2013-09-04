@@ -2,10 +2,7 @@
 
 namespace Api\Controller;
 
-use Application\Assertion\UserAssertion;
-use Application\Model\User;
 use Zend\View\Model\JsonModel;
-use ZfcUser\Controller\UserController as ZfcUser;
 
 class UserController extends AbstractRestfulController
 {
@@ -60,79 +57,6 @@ class UserController extends AbstractRestfulController
 
             return new JsonModel(array('message' => $this->getUserService()->getRegisterForm()->getMessages()));
         }
-    }
-
-    /**
-     * @param int   $id
-     * @param array $data
-     *
-     * @return mixed|JsonModel
-     */
-    public function update($id, $data)
-    {
-        // Retrieve user since permissions apply against it.
-        $repository = $this->getRepository();
-
-        /** @var $user \Application\Model\User */
-        $user = $repository->findOneById($id);
-
-        // Update object or not...
-        if ($this->isAllowed($user)) {
-            $result = parent::update($id, $data);
-        } else {
-            $this->getResponse()->setStatusCode(401);
-            $result = new JsonModel(array('message' => 'Authorization required'));
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return mixed|JsonModel
-     */
-    public function delete($id)
-    {
-
-        // Retrieve user since permissions apply against it.
-        $repository = $this->getEntityManager()->getRepository($this->getModel());
-
-        /** @var $user \Application\Model\User */
-        $user = $repository->findOneById($id);
-
-        // Update object or not...
-        if (is_null($user)) {
-            $this->getResponse()->setStatusCode(404);
-            $result = new JsonModel(array('message' => 'No object found'));
-        } elseif ($this->isAllowed($user)) {
-            $result = parent::delete($id);
-        } else {
-            $this->getResponse()->setStatusCode(401);
-            $result = new JsonModel(array('message' => 'Authorization required'));
-        }
-
-        return $result;
-    }
-
-    /**
-     * Ask Rbac whether the User is allowed to update
-     *
-     * @param User $user
-     *
-     * @return bool
-     */
-    protected function isAllowed(User $user)
-    {
-        // @todo remove me once login will be better handled GUI wise
-        return true;
-
-        /* @var $rbac \Application\Service\Rbac */
-        $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-
-        return $rbac->isGrantedWithContext(
-                        $user, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new UserAssertion($user)
-        );
     }
 
     public function statisticsAction()

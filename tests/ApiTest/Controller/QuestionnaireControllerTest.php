@@ -61,7 +61,7 @@ class QuestionnaireControllerTest extends AbstractController
         $this->assertResponseStatusCode(200);
         $this->getJsonResponse();
         $this->assertJsonStringEqualsJsonString(
-                '{"message":"deleted successfully"}', $this->getResponse()->getContent()
+                '{"message":"Deleted successfully"}', $this->getResponse()->getContent()
         );
 
         // Should not be able to delete the same resource again

@@ -2,13 +2,11 @@
 
 namespace Api\Controller;
 
-use Application\Assertion\QuestionnaireAssertion;
-use Application\Model\Permission;
-use Application\Model\Questionnaire;
 use Zend\View\Model\JsonModel;
 
 class AnswerController extends AbstractRestfulController
 {
+
     /**
      * @return mixed|JsonModel
      */
@@ -34,27 +32,13 @@ class AnswerController extends AbstractRestfulController
      */
     public function create($data, \Closure $postAction = null)
     {
-        // questionnaire value is mandatory
-        if (empty($data['questionnaire'])) {
-            throw new \Exception('Missing questionnaire value', 1365598940);
-        }
+        $result = parent::create($data, function(\Application\Model\Answer $answer) {
 
-        // Retrieve a questionnaire from the storage
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
-        $questionnaire = $repository->findOneById($data['questionnaire']);
+                            // Compute absolute values based on percentage values
+                            $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
+                            $answerRepository->updateAbsoluteValueFromPercentageValue($answer);
+                        });
 
-        // Update object or not...
-        if ($this->isAllowed($questionnaire)) {
-            $result = parent::create($data);
-
-            // Compute absolute values based on percentage values for all answer
-            // TODO: find a cleaner way to do that, especially not for all answers, but only one
-            $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
-            $answerRepository->updateAbsoluteValueFromPercentageValue();
-        } else {
-            $this->getResponse()->setStatusCode(401);
-            $result = new JsonModel(array('message' => 'Authorization required'));
-        }
 
         return $result;
     }
@@ -67,48 +51,14 @@ class AnswerController extends AbstractRestfulController
      */
     public function update($id, $data)
     {
-        // Retrieve questionnaire since permissions apply against it.
-        /** @var $answer \Application\Model\Answer */
-        $repository = $this->getEntityManager()->getRepository($this->getModel());
-        $answer = $repository->findOneById($id);
-        $questionnaire = $answer->getQuestionnaire();
+        $result = parent::update($id, $data);
 
-        // Update object or not...
-        if ($this->isAllowed($questionnaire)) {
-            $result = parent::update($id, $data);
-
-            // Compute absolute values based on percentage values for all answer
-            // TODO: find a cleaner way to do that, especially not for all answers, but only one
-            $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
-            $answerRepository->updateAbsoluteValueFromPercentageValue($answer);
-        } else {
-            $this->getResponse()->setStatusCode(401);
-            $result = new JsonModel(array('message' => 'Authorization required'));
-        }
+        // Compute absolute values based on percentage values
+        $answerRepository = $this->getRepository();
+        $answer = $answerRepository->findOneById($id);
+        $answerRepository->updateAbsoluteValueFromPercentageValue($answer);
 
         return $result;
     }
 
-    /**
-     * Ask Rbac whether the User is allowed to update
-     *
-     * @param \Application\Model\Questionnaire $questionnaire
-     *
-     * @return bool
-     */
-    protected function isAllowed(Questionnaire $questionnaire)
-    {
-
-        // @todo remove me once login will be better handled GUI wise
-        return true;
-
-        /* @var $rbac \Application\Service\Rbac */
-        $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-
-        return $rbac->isGrantedWithContext(
-            $questionnaire,
-            Permission::CAN_CREATE_OR_UPDATE_ANSWER,
-            new QuestionnaireAssertion($questionnaire)
-        );
-    }
 }

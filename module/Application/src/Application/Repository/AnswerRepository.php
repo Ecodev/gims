@@ -8,12 +8,13 @@ class AnswerRepository extends AbstractRepository
     /**
      * Compute absolute value from percentage value, based on population (for JMP)
      *
+     * @param \Application\Model\Answer $answer optional answer to limit on what we compute thing
      * @return integer row modifed count
      */
-    public function updateAbsoluteValueFromPercentageValue($answer = NULL)
+    public function updateAbsoluteValueFromPercentageValue(\Application\Model\Answer $answer = NULL)
     {
         // if we have an answer we could limit the scope of the request
-        $clause = is_object($answer) ? 'answer.id = ' . $answer->getId() : 'answer.value_absolute IS NULL';
+        $clause = $answer ? 'answer.id = ' . $answer->getId() : 'answer.value_absolute IS NULL';
         $sql = sprintf(
             'UPDATE answer SET value_absolute = p.population * value_percent
                 FROM questionnaire q

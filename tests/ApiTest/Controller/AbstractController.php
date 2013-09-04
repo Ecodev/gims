@@ -8,12 +8,11 @@ use Application\Model\Filter;
 use Application\Model\FilterSet;
 use Application\Model\Geoname;
 use Application\Model\Part;
-use Application\Model\Permission;
 use Application\Model\Question\NumericQuestion;
 use Application\Model\Questionnaire;
-use Application\Model\Role;
 use Application\Model\Survey;
 use Application\Model\User;
+use Application\Model\UserSurvey;
 use Application\Model\UserQuestionnaire;
 
 abstract class AbstractController extends \ApplicationTest\Controller\AbstractController
@@ -81,24 +80,24 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
     protected $rbac;
 
     /**
-     * @var Permission
+     * @var UserSurvey
      */
-    protected $permission;
+    protected $userSurvey;
 
     /**
      * @var UserQuestionnaire
      */
-    protected $userQuestionnaire;
+    protected $userQuestionnaire1;
+
+    /**
+     * @var UserQuestionnaire
+     */
+    protected $userQuestionnaire2;
 
     /**
      * @var Geoname
      */
     protected $geoName;
-
-    /**
-     * @var Role
-     */
-    protected $role;
 
     /**
      * @var metaModel
@@ -139,7 +138,7 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
         $this->question->setSurvey($this->survey)
                 ->setSorting(1)
                 ->setFilter($this->filter)
-                ->setName('foo');
+                ->setName('test survey');
 
         $this->part = new Part();
         $this->part->setName('test part 1');
@@ -166,29 +165,36 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
         $this->user = new User();
         $this->user->setPassword('foo')->setName('test user');
 
-        // Get rbac service
+        // Get rbac service to tell who we are (simulate logged in user)
         $this->rbac = $this->getApplication()->getServiceManager()->get('ZfcRbac\Service\Rbac');
+        $this->rbac->setIdentity($this->user);
 
-        // Get existing permission
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Permission');
+        // Get existing roles
+        $roleRepository = $this->getEntityManager()->getRepository('Application\Model\Role');
+        $editor = $roleRepository->findOneByName('editor');
+        $reporter = $roleRepository->findOneByName('reporter');
+        $validator = $roleRepository->findOneByName('validator');
 
-        /** @var $role \Application\Model\Permission */
-        $this->permission = $repository->findOneByName(\Application\Model\Permission::CAN_CREATE_OR_UPDATE_ANSWER);
+        // Define user as survey editor
+        $this->userSurvey = new UserSurvey();
+        $this->userSurvey->setUser($this->user)->setSurvey($this->survey)->setRole($editor);
 
-        $this->role = new Role('foo');
-        $this->role->addPermission($this->permission);
+        // Define user as questionnaire reporter (the guy who answer the questionnaire)
+        $this->userQuestionnaire1 = new UserQuestionnaire();
+        $this->userQuestionnaire1->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($reporter);
 
-        // create a fake user-questionnaire
-        $this->userQuestionnaire = new UserQuestionnaire();
-        $this->userQuestionnaire->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($this->role);
+        // Define user as questionnaire validator (the guy who answer can validate if user is correct)
+        $this->userQuestionnaire2 = new UserQuestionnaire();
+        $this->userQuestionnaire2->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($validator);
 
-        $this->filterSet = new FilterSet('foo');
+        $this->filterSet = new FilterSet('test filterSet');
         $this->filterSet->addFilter($this->filter);
 
         $this->getEntityManager()->persist($this->filterSet);
         $this->getEntityManager()->persist($this->user);
-        $this->getEntityManager()->persist($this->role);
-        $this->getEntityManager()->persist($this->userQuestionnaire);
+        $this->getEntityManager()->persist($this->userSurvey);
+        $this->getEntityManager()->persist($this->userQuestionnaire1);
+        $this->getEntityManager()->persist($this->userQuestionnaire2);
         $this->getEntityManager()->persist($this->part);
         $this->getEntityManager()->persist($this->part2);
         $this->getEntityManager()->persist($this->part3);

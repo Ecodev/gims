@@ -123,36 +123,6 @@ class QuestionnaireController extends AbstractRestfulController
     }
 
     /**
-     * @param int $id
-     *
-     * @return mixed|JsonModel
-     */
-    public function delete($id)
-    {
-        $questionnaire = $this->getRepository()->findOneBy(array('id' => $id));
-
-        if (!$questionnaire) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-
-        $questionnaireAssertion = new QuestionnaireAssertion($questionnaire);
-
-        /* @var $rbac \Application\Service\Rbac */
-        $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-        $questionnaireAssertion->setRbac($rbac);
-
-        if (!$questionnaireAssertion->canBeDeleted()) {
-            $this->getResponse()->setStatusCode(403);
-
-            return new JsonModel(array('message' => 'Forbidden action'));
-        }
-
-        return parent::delete($id);
-    }
-
-    /**
      * @param int   $id
      * @param array $data
      *
@@ -160,58 +130,22 @@ class QuestionnaireController extends AbstractRestfulController
      */
     public function update($id, $data)
     {
-        // Retrieve question since permissions apply against it.
         /** @var $questionnaire \Application\Model\Questionnaire */
-        $questionnaireRepository = $this->getEntityManager()->getRepository($this->getModel());
-        $questionnaire = $questionnaireRepository->findOneById($id);
-        $survey = $questionnaire->getSurvey();
+        $questionnaire = $this->getRepository()->findOneById($id);
 
-        // @todo check here or in assertion if status has changed
-        // Update object or not...
-        if ($this->isAllowedSurvey($survey) && $this->isAllowedQuestionnaire($questionnaire)) {
-            $result = parent::update($id, $data);
-        } else {
-            $this->getResponse()->setStatusCode(401);
-            $result = new JsonModel(array('message' => 'Authorization required'));
-        }
+        // If trying to validate, or un-validate, a questionnaire, we must check the permission to do that
+        if (isset($data['status']) &&
+                $data['status'] != $questionnaire->getStatus() &&
+                ($data['status'] == \Application\Model\QuestionnaireStatus::$VALIDATED ||
+                $questionnaire->getStatus() == \Application\Model\QuestionnaireStatus::$VALIDATED)) {
+            if (!$this->getRbac()->isActionGranted($questionnaire, 'validate')) {
+                $this->getResponse()->setStatusCode(401);
 
-        return $result;
-    }
-
-    /**
-     * @param array    $data
-     *
-     * @param callable $postAction
-     *
-     * @throws \Exception
-     * @return mixed|void|JsonModel
-     */
-    public function create($data, \Closure $postAction=null)
-    {
-        // Check that all required properties are given by the GUI
-        $properties = $this->getMetaModelService()->getMandatoryProperties();
-        $dataKeys = array_keys($data);
-
-        foreach ($properties as $propertyName) {
-            if (!in_array($propertyName, $dataKeys)) {
-                throw new \Exception('Missing property ' . $propertyName, 1368459231);
+                return new JsonModel(array('message' => $this->getRbac()->getMessage()));
             }
         }
 
-        // Retrieve a questionnaire from the storage
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Survey');
-        $survey = $repository->findOneById($data['survey']);
-
-        // Update object or not...
-        if ($this->isAllowedSurvey($survey)) {
-            $result = parent::create($data);
-        } else {
-            // @todo code should be 403 if not enough permission
-            $this->getResponse()->setStatusCode(401);
-            $result = new JsonModel(array('message' => 'Authorization required'));
-        }
-
-        return $result;
+        return parent::update($id, $data);
     }
 
     /**
@@ -226,46 +160,6 @@ class QuestionnaireController extends AbstractRestfulController
         }
 
         return $this->survey;
-    }
-
-    /**
-     * Ask Rbac whether the User is allowed to update
-     *
-     * @param Questionnaire $questionnaire
-     *
-     * @return bool
-     */
-    protected function isAllowedQuestionnaire(Questionnaire $questionnaire)
-    {
-        // @todo remove me once login will be better handled GUI wise
-        return true;
-
-        /* @var $rbac \Application\Service\Rbac */
-        $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-
-        return $rbac->isGrantedWithContext(
-                        $questionnaire, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new SurveyAssertion($questionnaire)
-        );
-    }
-
-    /**
-     * Ask Rbac whether the User is allowed to update
-     *
-     * @param Survey $survey
-     *
-     * @return bool
-     */
-    protected function isAllowedSurvey(Survey $survey)
-    {
-        // @todo remove me once login will be better handled GUI wise
-        return true;
-
-        /* @var $rbac \Application\Service\Rbac */
-        $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-
-        return $rbac->isGrantedWithContext(
-                        $survey, Permission::CAN_CREATE_OR_UPDATE_ANSWER, new SurveyAssertion($survey)
-        );
     }
 
 }

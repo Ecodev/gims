@@ -2,7 +2,6 @@
 
 namespace Api\Controller;
 
-use Application\Model\UserSurvey;
 use Zend\View\Model\JsonModel;
 
 class UserSurveyController extends AbstractRestfulController
@@ -45,27 +44,6 @@ class UserSurveyController extends AbstractRestfulController
     }
 
     /**
-     * @param array $data
-     *
-     * @return mixed|void|JsonModel
-     * @throws \Exception
-     */
-    public function create($data, \Closure $postAction = null)
-    {
-        $userSurvey = new UserSurvey();
-
-        // Update object or not...
-        if ($this->isAllowed($userSurvey)) {
-            $result = parent::create($data);
-        } else {
-            $this->getResponse()->setStatusCode(401);
-            $result = new JsonModel(array('message' => 'Authorization required'));
-        }
-
-        return $result;
-    }
-
-    /**
      * @param int   $id
      * @param array $data
      *
@@ -74,47 +52,6 @@ class UserSurveyController extends AbstractRestfulController
     public function update($id, $data)
     {
         throw new \Exception('Not implemented');
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return mixed|JsonModel
-     */
-    public function delete($id)
-    {
-        $userSurvey =  $this->getRepository()->findOneById($id);
-
-        // Update object or not...
-        if (is_null($userSurvey)) {
-            $this->getResponse()->setStatusCode(404);
-            $result = new JsonModel(array('message' => 'No object found'));
-        } elseif ($this->isAllowed($userSurvey)) {
-            $result = parent::delete($id);
-        } else {
-            $this->getResponse()->setStatusCode(401);
-            $result = new JsonModel(array('message' => 'Authorization required'));
-        }
-
-        return $result;
-    }
-
-    /**
-     * Ask Rbac whether the User is allowed to update
-     *
-     * @param UserSurvey $userSurvey
-     *
-     * @return bool
-     */
-    protected function isAllowed(UserSurvey $userSurvey)
-    {
-        // @todo remove me once login will be better handled GUI wise
-        return true;
-
-        /* @var $rbac \Application\Service\Rbac */
-        $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-
-        return $rbac->isGranted(Permission::CAN_CREATE_OR_UPDATE_ANSWER);
     }
 
 }

@@ -12,18 +12,18 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Survey extends AbstractModel implements \Application\Service\RoleContextInterface
 {
+
     /**
      * @var array
      */
-    protected static $jsonConfig
-        = array(
-            'name',
-            'code',
-            'isActive',
-            'year',
-            'dateStart',
-            'dateEnd',
-        );
+    protected static $jsonConfig = array(
+        'name',
+        'code',
+        'isActive',
+        'year',
+        'dateStart',
+        'dateEnd',
+    );
 
     /**
      * @var string
@@ -299,4 +299,19 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
 
         return $this;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRoleContext()
+    {
+        // If we don't have ID, that mean we were not saved yet,
+        // and we cannot use ourself as context
+        if ($this->getId()) {
+            return $this;
+        } else {
+            return null;
+        }
+    }
+
 }

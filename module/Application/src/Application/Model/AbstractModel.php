@@ -259,4 +259,13 @@ abstract class AbstractModel
 
         return in_array($key, $class::$jsonConfig);
     }
+
+    /**
+     * Returns the role context used for this object to check permission
+     * @return \Application\Service\RoleContextInterface
+     */
+    public function getRoleContext()
+    {
+        return null;
+    }
 }

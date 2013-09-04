@@ -169,59 +169,57 @@ class QuestionController extends AbstractRestfulController
      */
     public function update($id, $data)
     {
+        /** @var $question Application\Model\Question\AbstractQuestion */
+        $question = $this->getRepository()->findOneById($id);
 
-        // Retrieve question since permissions apply against it.
-        /** @var $question \Application\Model\Question */
-        $questionRepository = $this->getEntityManager()->getRepository($this->getModel());
-
-        if (isset($data['type'])) {
-            $questionRepository->changeType($id, $this->getModel());
+        if (isset($data['sorting'])) {
+            $data['sorting'] = $this->reorderSiblingQuestions($question, $data['sorting']);
         }
-        $question = $questionRepository->findOneById($id);
+
+        if (isset($data['choices'])) {
+            $this->setChoices($data['choices'], $question);
+            unset($data['choices']);
+        }
+
+        return parent::update($id, $data);
+    }
+
+    /**
+     * Reorder sibling questions to make room for the new question according to its sorting
+     * @param \Application\Model\Question\AbstractQuestion $question the question BEFORE setting its new sorting
+     * @param integer $newSorting the new sorting
+     */
+    protected function reorderSiblingQuestions(AbstractQuestion $question, $newSorting)
+    {
         $survey = $question->getSurvey();
+        $questionSiblings = $question->getChapter() ? $question->getChapter()->getQuestions() : $survey->getQuestions();
+        $lastSibling = $questionSiblings->last();
+        $firstSibling = $questionSiblings->first();
 
-        // Update object or not...
-        if ($this->isAllowedSurvey($survey) && $this->isAllowedQuestion($question)) {
-
-            $questionSiblings = $question->getSiblings();
-            $lastSibling = $questionSiblings->last();
-            $firstSibling = $questionSiblings->first();
-
-            // limit to next available sorting free number
-            if(!empty($data['sorting']) && $data['sorting'] > $lastSibling->getSorting()+1){
-                $data['sorting'] = $lastSibling->getSorting()+1;
-            }
-            // limit to previous available sorting free number
-            else if(!empty($data['sorting']) && $data['sorting'] < $firstSibling->getSorting()-1){
-                $data['sorting'] = $firstSibling->getSorting()-1;
-            }
-            // true means we have to move sorting values up and down
-            elseif (!empty($data['sorting']) && $data['sorting'] < $question->getSorting()) { // if new sorting is lower
-                foreach ($questionSiblings as $questionSibling) {
-                    if ($questionSibling->getSorting() >= $data['sorting'] && $questionSibling->getSorting() < $question->getSorting()) {
-                        $questionSibling->setSorting($questionSibling->getSorting() + 1);
-                    }
-                }
-            } elseif (!empty($data['sorting']) && $data['sorting'] > $question->getSorting()) { // if new sorting is higher
-                foreach ($questionSiblings as $questionSibling) {
-                    if ($questionSibling->getSorting() <= $data['sorting'] && $questionSibling->getSorting() > $question->getSorting()) {
-                        $questionSibling->setSorting($questionSibling->getSorting() - 1);
-                    }
+        // limit to next available sorting free number
+        if ($newSorting > $lastSibling->getSorting() + 1) {
+            $newSorting = $lastSibling->getSorting() + 1;
+        }
+        // limit to previous available sorting free number
+        elseif ($newSorting < $firstSibling->getSorting() - 1) {
+            $newSorting = $firstSibling->getSorting() - 1;
+        }
+        // true means we have to move sorting values up and down
+        elseif ($newSorting < $question->getSorting()) { // if new sorting is lower
+            foreach ($questionSiblings as $questionSibling) {
+                if ($questionSibling->getSorting() >= $newSorting && $questionSibling->getSorting() < $question->getSorting()) {
+                    $questionSibling->setSorting($questionSibling->getSorting() + 1);
                 }
             }
-
-            if (isset($data['choices'])) {
-                $this->setChoices($data['choices'], $question);
-                unset($data['choices']);
+        } elseif ($newSorting > $question->getSorting()) { // if new sorting is higher
+            foreach ($questionSiblings as $questionSibling) {
+                if ($questionSibling->getSorting() <= $newSorting && $questionSibling->getSorting() > $question->getSorting()) {
+                    $questionSibling->setSorting($questionSibling->getSorting() - 1);
+                }
             }
-
-            $result = parent::update($id, $data);
-        } else {
-            $this->getResponse()->setStatusCode(401);
-            $result = new JsonModel(array('message' => 'Authorization required'));
         }
 
-        return $result;
+        return $newSorting;
     }
 
     protected function setChoices(array $newChoices, $question)
@@ -251,6 +249,7 @@ class QuestionController extends AbstractRestfulController
                 $exist = false;
                 foreach ($newChoices as $newChoice) {
                     if ($newChoice['id'] == $choice->getId()) {
+
                         $exist = true;
                         break;
                     }
@@ -293,96 +292,36 @@ class QuestionController extends AbstractRestfulController
 
             // get the last sibling to get last sorting number
             $questions = $survey->getQuestions();
-            if( isset($data['chapter']) ){
-                foreach($questions as $question){
-                    if($question->getId() == $data['chapter']){
+            if (isset($data['chapter'])) {
+                foreach ($questions as $question) {
+                    if ($question->getId() == $data['chapter']) {
                         $question = $question->getQuestions()->last();
                         break;
                     }
                 }
-            }else{
+            } else {
                 $question = $survey->getQuestions()->last();
             }
 
             $data['sorting'] = $question->getSorting() + 1;
-
         }
 
-        // Check that all required properties are given by the GUI
-        $properties = $this->getMetaModelService()->getMandatoryProperties();
-        $dataKeys = array_keys($data);
-
-        foreach ($properties as $propertyName) {
-            if (!in_array($propertyName, $dataKeys)) {
-                throw new \Exception('Missing property ' . $propertyName, 1368459231);
-            }
+        // unset ['choices'] to preserve $data from hydrator and backup in a variable
+        $newChoices = null;
+        if (isset($data['choices'])) {
+            $newChoices = $data['choices'];
+            unset($data['choices']);
         }
 
-        // Update object or not...
-
-        if ($this->isAllowedSurvey($survey)) {
-
-            // unset ['choices'] to preserve $data from hydrator and backup in a variable
-            $newChoices = null;
-            if (isset($data['choices'])) {
-                $newChoices = $data['choices'];
-                unset($data['choices']);
-            }
-            $self = $this;
-
-            $result = parent::create($data, function (\Application\Model\Question\AbstractQuestion $question)
-                            use ($newChoices, $self) {
-                                if ($question instanceof \Application\Model\Question\ChoiceQuestion && $newChoices)
-                                    $self->setChoices($newChoices, $question);
-                            });
-        } else {
-            $this->getResponse()->setStatusCode(401);
-            $result = new JsonModel(array('message' => 'Authorization required'));
-        }
+        $result = parent::create($data, function (\Application\Model\Question\AbstractQuestion $question)
+                        use ($newChoices) {
+                            if ($question instanceof \Application\Model\Question\ChoiceQuestion && $newChoices) {
+                                $this->setChoices($newChoices, $question);
+                                $this->getEntityManager()->flush();
+                            }
+                        });
 
         return $result;
-    }
-
-    /**
-     * Ask Rbac whether the User is allowed to update this survey
-     *
-     * @param Survey $survey
-     *
-     * @return bool
-     */
-    protected function isAllowedSurvey(Survey $survey)
-    {
-
-        // @todo remove me once login will be better handled GUI wise
-        return true;
-
-        /* @var $rbac \Application\Service\Rbac */
-        $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-
-        return $rbac->isGrantedWithContext(
-                        $survey, Permission::CAN_MANAGE_SURVEY, new SurveyAssertion($survey)
-        );
-    }
-
-    /**
-     * Ask Rbac whether the User is allowed to update this survey
-     *
-     * @param AbstractQuestion $question
-     *
-     * @return bool
-     */
-    protected function isAllowedQuestion(AbstractQuestion $question)
-    {
-
-        // @todo remove me once login will be better handled GUI wise
-        return true;
-
-        /* @var $rbac \Application\Service\Rbac */
-        $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-
-        return $rbac->isGrantedWithContext(
-                        $question, Permission::CAN_CREATE_OR_UPDATE_QUESTION, new QuestionAssertion($question)
-        );
     }
 
 }

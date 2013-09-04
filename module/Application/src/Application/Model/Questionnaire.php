@@ -17,8 +17,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     /**
      * @var array
      */
-    protected static $jsonConfig
-    = array(
+    protected static $jsonConfig = array(
         'name',
     );
 
@@ -320,6 +319,14 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         $this->getQuestionnaireFormulas()->add($questionnaireFormula);
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRoleContext()
+    {
+        return $this->getSurvey();
     }
 
 }

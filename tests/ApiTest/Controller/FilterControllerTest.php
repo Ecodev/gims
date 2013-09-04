@@ -262,7 +262,7 @@ class FilterControllerTest extends AbstractController
     {
         $this->rbac->setIdentity($this->user);
         $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
-        $this->assertEquals($this->getJsonResponse()['message'], 'deleted successfully');
+        $this->assertEquals($this->getJsonResponse()['message'], 'Deleted successfully');
     }
 
     /**

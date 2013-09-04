@@ -2,7 +2,6 @@
 
 namespace Api\Controller;
 
-use Application\Model\UserQuestionnaire;
 use Zend\View\Model\JsonModel;
 
 class UserQuestionnaireController extends AbstractRestfulController
@@ -45,27 +44,6 @@ class UserQuestionnaireController extends AbstractRestfulController
     }
 
     /**
-     * @param array $data
-     *
-     * @return mixed|void|JsonModel
-     * @throws \Exception
-     */
-    public function create($data, \Closure $postAction = null)
-    {
-        $userQuestionnaire = new UserQuestionnaire();
-
-        // Update object or not...
-        if ($this->isAllowed($userQuestionnaire)) {
-            $result = parent::create($data);
-        } else {
-            $this->getResponse()->setStatusCode(401);
-            $result = new JsonModel(array('message' => 'Authorization required'));
-        }
-
-        return $result;
-    }
-
-    /**
      * @param int   $id
      * @param array $data
      *
@@ -74,47 +52,6 @@ class UserQuestionnaireController extends AbstractRestfulController
     public function update($id, $data)
     {
         throw new \Exception('Not implemented');
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return mixed|JsonModel
-     */
-    public function delete($id)
-    {
-        $userQuestionnaire = $this->getRepository()->findOneById($id);
-
-        // Update object or not...
-        if (is_null($userQuestionnaire)) {
-            $this->getResponse()->setStatusCode(404);
-            $result = new JsonModel(array('message' => 'No object found'));
-        } elseif ($this->isAllowed($userQuestionnaire)) {
-            $result = parent::delete($id);
-        } else {
-            $this->getResponse()->setStatusCode(401);
-            $result = new JsonModel(array('message' => 'Authorization required'));
-        }
-
-        return $result;
-    }
-
-    /**
-     * Ask Rbac whether the User is allowed to update
-     *
-     * @param UserQuestionnaire $userQuestionnaire
-     *
-     * @return bool
-     */
-    protected function isAllowed(UserQuestionnaire $userQuestionnaire)
-    {
-        // @todo remove me once login will be better handled GUI wise
-        return true;
-
-        /* @var $rbac \Application\Service\Rbac */
-        $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-
-        return $rbac->isGranted(Permission::CAN_CREATE_OR_UPDATE_ANSWER);
     }
 
 }

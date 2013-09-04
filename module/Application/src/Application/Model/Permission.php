@@ -3,6 +3,7 @@
 namespace Application\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Application\Model\AbstractModel;
 
 /**
  * Permission is as defined in RBAC system: http://en.wikipedia.org/wiki/Role-based_access_control
@@ -12,19 +13,28 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Permission extends AbstractModel
 {
-    const CAN_CREATE_OR_UPDATE_ANSWER = 'can-create-or-update-answer';
 
-    const CAN_CREATE_OR_UPDATE_SURVEY = 'can-create-or-update-survey';
+    /**
+     * Returns the permission name for the given action, eg: "filter-delete"
+     * @param \Application\Model\AbstractModel $object
+     * @param string $action
+     * @return string
+     */
+    public static function getPermissionName(AbstractModel $object, $action)
+    {
+        if ($object instanceof \Application\Model\Question\AbstractQuestion) {
+            $name = 'Question'; // All questions use same permissions
+        } else {
+            $name = str_replace('Application\Model\\', '', get_class($object));
+        }
 
-    const CAN_CREATE_OR_UPDATE_QUESTION = 'can-create-or-update-question';
-
-    const CAN_VALIDATE_QUESTIONNAIRE = 'can-validate-questionnaire';
+        return $name . '-' . $action;
+    }
 
     /**
      * @var array
      */
-    protected static $jsonConfig
-        = array();
+    protected static $jsonConfig = array();
 
     /**
      * @var string

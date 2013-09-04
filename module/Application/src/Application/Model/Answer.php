@@ -12,14 +12,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Answer extends AbstractModel
 {
+
     /**
      * @var array
      */
-    protected static $jsonConfig
-        = array(
-            'valuePercent',
-            'valueAbsolute',
-        );
+    protected static $jsonConfig = array(
+        'valuePercent',
+        'valueAbsolute',
+    );
 
     /**
      * @var integer
@@ -331,6 +331,14 @@ class Answer extends AbstractModel
     public function getPart()
     {
         return $this->part;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRoleContext()
+    {
+        return $this->getQuestionnaire();
     }
 
 }

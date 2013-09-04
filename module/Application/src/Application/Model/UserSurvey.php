@@ -13,15 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserSurvey extends AbstractModel
 {
+
     /**
      * @var array
      */
-    protected static $jsonConfig
-        = array(
-            'user',
-            'role',
-            'survey',
-        );
+    protected static $jsonConfig = array(
+        'user',
+        'role',
+        'survey',
+    );
 
     /**
      * @var User
@@ -121,6 +121,14 @@ class UserSurvey extends AbstractModel
     public function getSurvey()
     {
         return $this->survey;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRoleContext()
+    {
+        return $this->getSurvey();
     }
 
 }

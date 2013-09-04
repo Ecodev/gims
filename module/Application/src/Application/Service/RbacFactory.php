@@ -48,6 +48,8 @@ class RbacFactory implements FactoryInterface
             ));
         }
 
+        $rbac->setServiceLocator($sl);
+
         return $rbac;
     }
 }

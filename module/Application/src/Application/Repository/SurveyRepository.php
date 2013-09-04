@@ -5,5 +5,9 @@ namespace Application\Repository;
 class SurveyRepository extends AbstractRepository
 {
 
-    use Traits\OrderedByName;
+    public function findAll()
+    {
+        return $this->findBy(array(), array('year' => 'DESC', 'name' => 'ASC'));
+    }
+
 }

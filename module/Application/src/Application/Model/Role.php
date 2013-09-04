@@ -7,6 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Role is as defined in RBAC system: http://en.wikipedia.org/wiki/Role-based_access_control
  *
+ * 'anonymous' and 'member' are both hardcoded roles that MUST exist in the system at
+ * all times. They are exclusive, meaning that 'anonymous' is a non-logged user,
+ * whereas 'member' is a logged user.
+ *
  * @ORM\Entity(repositoryClass="Application\Repository\RoleRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="role_unique", columns={"name"})})
  */

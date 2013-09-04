@@ -130,9 +130,6 @@ class Hydrator
                     $isAllowed = true;
                 }
 
-                // @todo implement me!
-                // @todo encapsulate routine above into isFieldAllowed
-                //if ($this->permissionService->isFieldAllowed($properties))
                 // @todo remove me probably. Move closure as property of model?
                 if ($property instanceof \Closure) {
                     $_properties[$key] = $property;

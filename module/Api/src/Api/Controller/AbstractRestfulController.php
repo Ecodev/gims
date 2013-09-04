@@ -3,10 +3,8 @@
 namespace Api\Controller;
 
 use Api\Service\MetaModel;
-use Api\Service\Permission;
 use Application\Traits\EntityManagerAware;
 use Zend\View\Model\JsonModel;
-use Application\Model\AbstractModel;
 
 abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRestfulController
 {
@@ -14,9 +12,9 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     use EntityManagerAware;
 
     /**
-     * @var Permission
+     * @var \Application\Service\Rbac
      */
-    private $permissionService;
+    private $rbac;
 
     /**
      * @var MetaModel
@@ -29,16 +27,16 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     protected $hydrator;
 
     /**
-     * Returns permission service
-     * @return \Api\Service\Permission
+     * Returns RBAC service
+     * @return \Application\Service\Rbac
      */
-    protected function getPermissionService()
+    protected function getRbac()
     {
-        if (!$this->permissionService) {
-            $this->permissionService = new Permission($this->getModel());
+        if (!$this->rbac) {
+            $this->rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
         }
 
-        return $this->permissionService;
+        return $this->rbac;
     }
 
     /**
@@ -125,25 +123,33 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      */
     public function create($data, \Closure $postAction = null)
     {
+        // Check that all required properties are given by the GUI
+        $mandatoryProperties = $this->getMetaModelService()->getMandatoryProperties();
+        $givenProperties = array_keys($data);
+        $missingProperties = array_diff($mandatoryProperties, $givenProperties);
+        if ($missingProperties) {
+            throw new \Exception('Missing mandatory properties: ' . implode(', ', $missingProperties), 1368459231);
+        }
+
         $modelName = $this->getModel();
 
         /** @var $object AbstractModel */
         $object = new $modelName();
         $this->hydrator->hydrate($data, $object);
 
-        if ($postAction) {
-            $postAction($object);
+        // If not allowed to create object, cancel everything
+        if (!$this->getRbac()->isActionGranted($object, 'create')) {
+            $this->getResponse()->setStatusCode(4034);
+            return new JsonModel(array('message' => $this->getRbac()->getMessage()));
         }
 
         $this->getEntityManager()->persist($object);
         $this->getEntityManager()->flush();
-        if (!$object) {
-            $this->getResponse()->setStatusCode(404);
-
-            return;
-        }
-
         $this->getResponse()->setStatusCode(201);
+
+        if ($postAction) {
+            $postAction($object);
+        }
 
         return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
     }
@@ -155,18 +161,24 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      */
     public function delete($id)
     {
-        $object = $this->getRepository()->findOneBy(array('id' => $id));
+        $object = $this->getRepository()->findOneById($id);
         if (!$object) {
             $this->getResponse()->setStatusCode(404);
 
-            return;
+            return new JsonModel(array('message' => 'No object found'));
+        }
+
+        // If not allowed to delete object, cancel everything
+        if (!$this->getRbac()->isActionGranted($object, 'delete')) {
+            $this->getResponse()->setStatusCode(403);
+            return new JsonModel(array('message' => $this->getRbac()->getMessage()));
         }
 
         $this->getEntityManager()->remove($object);
         $this->getEntityManager()->flush();
         $this->getResponse()->setStatusCode(200);
 
-        return new JsonModel(array('message' => 'deleted successfully'));
+        return new JsonModel(array('message' => 'Deleted successfully'));
     }
 
     /**
@@ -178,12 +190,19 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     {
         $objects = array();
         foreach (explode(',', $id) as $id) {
-            $object = $this->getRepository()->findOneBy(array('id' => $id));
+            $object = $this->getRepository()->findOneById($id);
             if (!$object) {
                 $this->getResponse()->setStatusCode(404);
 
-                return;
+                return new JsonModel(array('message' => 'No object found'));
             }
+
+            // If not allowed to read the object, cancel everything
+            if (!$this->getRbac()->isActionGranted($object, 'read')) {
+                $this->getResponse()->setStatusCode(403);
+                return new JsonModel(array('message' => $this->getRbac()->getMessage()));
+            }
+
             $objects[] = $object;
         }
 

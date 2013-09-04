@@ -141,4 +141,12 @@ class Choice extends \Application\Model\AbstractModel
         return $this;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getRoleContext()
+    {
+        return $this->getQuestion()->getRoleContext();
+    }
+
 }
