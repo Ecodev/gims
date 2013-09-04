@@ -4,7 +4,7 @@ angular.module('myApp.directives').directive('gimsTextQuestion', function () {
         template: "<div class='span4' ng-repeat='part in question.parts'>"+
             "     <label for='numerical-{{question.id}}-{{part.id}}'>"+
             "         {{part.name}}<br/>"+
-            "         <input class='span12' type='text' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'/>"+
+            "         <textarea class='span12' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'></textarea>"+
             "     </label>"+
             " </div>",
         scope:{
