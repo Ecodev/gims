@@ -6,6 +6,7 @@ use Application\Model\AbstractModel;
 
 class Rbac extends \ZfcRbac\Service\Rbac
 {
+
     use \Zend\ServiceManager\ServiceLocatorAwareTrait;
 
     /**
@@ -34,6 +35,13 @@ class Rbac extends \ZfcRbac\Service\Rbac
         $context = $object->getRoleContext();
 
         if ($context) {
+            
+            // The original creator of context always has all access
+            $creator = $context->getCreator();
+            if ($creator && $creator == $rbac->getIdentity()) {
+                return true;
+            }
+
             $result = $rbac->isGrantedWithContext($context, $permission);
         } else {
             $result = $rbac->isGranted($permission);
