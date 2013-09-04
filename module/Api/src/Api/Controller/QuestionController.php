@@ -3,32 +3,13 @@
 namespace Api\Controller;
 
 use Zend\Json\Json;
-use Zend\Mvc\MvcEvent;
 use Application\Model\Survey;
 use Application\Model\Question\AbstractQuestion;
 use Application\Model\Question\Choice;
 use Zend\View\Model\JsonModel;
 
-class QuestionController extends AbstractRestfulController
+class QuestionController extends AbstractChildRestfulController
 {
-
-    /**
-     * @var \Application\Model\AbstractModel
-     */
-    protected $parent;
-
-    protected function getParent()
-    {
-        $id = $this->params('idParent');
-        if (!$this->parent && $id) {
-            $object = ucfirst($this->params('parent'));
-            if ($object == 'Chapter')
-                $object = 'Question\\' . $object;
-            $this->parent = $this->getEntityManager()->getRepository('Application\Model\\' . $object)->find($id);
-        }
-
-        return $this->parent;
-    }
 
     protected function getClosures()
     {
@@ -104,16 +85,18 @@ class QuestionController extends AbstractRestfulController
 
         // Cannot list all question, without specifying a questionnaire
         if (!$object) {
-            //$this->getResponse()->setStatusCode(404); // if empty, don't need 404 error, just return null.
-            return '';
+            $this->getResponse()->setStatusCode(400);
+
+            return new JsonModel(array('message' => 'Cannot list all items without a valid parent. Use URL similar to: /api/parent/1/question'));
         }
 
-        if (get_class($object) == 'Application\Model\Question\Chapter')
+        if ($object instanceof \Application\Model\Question\Chapter) {
             $criteria = array('chapter' => $object);
-        elseif (get_class($object) == 'Application\Model\Survey')
+        } elseif ($object instanceof \Application\Model\Survey) {
             $criteria = array('survey' => $object);
-        elseif (get_class($object) == 'Application\Model\Questionnaire')
+        } elseif ($object instanceof \Application\Model\Questionnaire) {
             $criteria = array('survey' => $object->getSurvey());
+        }
 
         $questions = $this->getRepository()->findBy($criteria, array('sorting' => 'ASC'));
 

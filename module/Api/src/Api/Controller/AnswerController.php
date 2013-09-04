@@ -4,23 +4,8 @@ namespace Api\Controller;
 
 use Zend\View\Model\JsonModel;
 
-class AnswerController extends AbstractRestfulController
+class AnswerController extends AbstractChildRestfulController
 {
-
-    /**
-     * @return mixed|JsonModel
-     */
-    public function getList()
-    {
-        $idQuestionnaire = $this->params('idQuestionnaire');
-        $c = array(
-            'questionnaire' => $idQuestionnaire,
-        );
-
-        $objects = $this->getRepository()->findBy($c);
-
-        return new JsonModel($this->hydrator->extractArray($objects, $this->getJsonConfig()));
-    }
 
     /**
      * @param array    $data

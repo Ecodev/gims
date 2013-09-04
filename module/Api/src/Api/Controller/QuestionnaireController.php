@@ -2,12 +2,11 @@
 
 namespace Api\Controller;
 
-use Application\Assertion\QuestionnaireAssertion;
 use Application\Model\Questionnaire;
 use Application\Model\Survey;
 use Zend\View\Model\JsonModel;
 
-class QuestionnaireController extends AbstractRestfulController
+class QuestionnaireController extends AbstractChildRestfulController
 {
 
     /**
@@ -115,7 +114,7 @@ class QuestionnaireController extends AbstractRestfulController
 
     public function getList()
     {
-        $survey = $this->getSurvey();
+        $survey = $this->getParent();
         $q = $this->params()->fromQuery('q');
         $questionnaires = $this->getRepository()->getAll($survey, $q);
 
@@ -146,20 +145,6 @@ class QuestionnaireController extends AbstractRestfulController
         }
 
         return parent::update($id, $data);
-    }
-
-    /**
-     * @return Survey|null
-     */
-    protected function getSurvey()
-    {
-        $idSurvey = $this->params('idParent');
-        if (!$this->survey && $idSurvey) {
-            $surveyRepository = $this->getEntityManager()->getRepository('Application\Model\Survey');
-            $this->survey = $surveyRepository->find($idSurvey);
-        }
-
-        return $this->survey;
     }
 
 }
