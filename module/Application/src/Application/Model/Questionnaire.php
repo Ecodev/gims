@@ -324,9 +324,28 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     /**
      * @inheritdoc
      */
-    public function getRoleContext()
+    public function getRoleContext($action)
     {
-        return $this->getSurvey();
+        if ($action == 'validate') {
+            return $this;
+        } else {
+            return $this->getSurvey();
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPermissions()
+    {
+        $rbac = \Application\Module::getServiceManager()->get('ZfcRbac\Service\Rbac');
+
+        $result = parent::getPermissions();
+        foreach (array('validate') as $action) {
+            $result[$action] = $rbac->isActionGranted($this, $action);
+        }
+
+        return $result;
     }
 
 }

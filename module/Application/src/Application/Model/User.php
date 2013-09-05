@@ -12,15 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcRbac\Identity\IdentityInterface
 {
+
     /**
      * @var array
      */
-    protected static $jsonConfig
-        = array(
-            'name',
-            'email',
-            'state',
-        );
+    protected static $jsonConfig = array(
+        'name',
+        'email',
+        'state',
+    );
 
     /**
      * @var string
@@ -265,7 +265,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
             throw new \InvalidArgumentException('Context must return a valid ID. To get a valid ID from Doctrine, use: $this->getEntityManager()->persist($context);');
         }
 
-        $this->roleContext = array(get_class($context) => $context->getId());
+        $this->roleContext = $context;
     }
 
     /**
@@ -288,14 +288,14 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
         // If there is no context, or the context matches, add roles from survey
         foreach ($this->getUserSurveys() as $userSurvey) {
-            if (!$this->roleContext || @$this->roleContext['Application\Model\Survey'] == $userSurvey->getSurvey()->getId()) {
+            if (!$this->roleContext || @$this->roleContext == $userSurvey->getSurvey()) {
                 $roles [] = $userSurvey->getRole()->getName();
             }
         }
 
         // If there is no context, or the context matches, add roles from questionnaire
         foreach ($this->getUserQuestionnaires() as $userQuestionnaire) {
-            if (!$this->roleContext || @$this->roleContext['Application\Model\Questionnaire'] == $userQuestionnaire->getQuestionnaire()->getId()) {
+            if (!$this->roleContext || @$this->roleContext == $userQuestionnaire->getQuestionnaire()) {
                 $roles [] = $userQuestionnaire->getRole()->getName();
             }
         }
@@ -308,7 +308,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      */
     public function getGravatar()
     {
-        return 'http://www.gravatar.com/avatar/' . md5( strtolower( trim( $this->getEmail() ) ) );
+        return 'http://www.gravatar.com/avatar/' . md5(strtolower(trim($this->getEmail())));
     }
 
 }

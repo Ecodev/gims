@@ -2,12 +2,14 @@
 angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($scope, $routeParams, $location, Restangular, Modal) {
     "use strict";
 
-    $scope.status = [
+    var allStatus = [
         {text: 'New', value: 'new'},
         {text: 'Ongoing', value: 'ongoing'},
         {text: 'Completed', value: 'completed'},
         {text: 'Validated', value: 'validated'}
     ];
+
+    $scope.status = allStatus;
 
     $scope.sending = false;
 
@@ -78,32 +80,18 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
     if ($routeParams.id) {
         Restangular
             .one('questionnaire', $routeParams.id)
-            .get({fields: 'metadata,geoname,status,dateObservationStart,dateObservationEnd,comments,name'})
+            .get({fields: 'metadata,geoname,status,dateObservationStart,dateObservationEnd,comments,name,permissions'})
             .then(function (questionnaire) {
                 $scope.questionnaire = questionnaire;
             });
     }
 
-    // @todo fetch user "login" for having current capability
-//    Restangular.one('login').then(function (user) {
-//        $scope.user = user;
-//    });
-
-    // When questionnaire changes, navigate to its URL
-//    $scope.$watch('questionnaire', function (questionnaire) {
-//
-//        if (questionnaire.permission !== undefined) {
-//            // @todo set select to disable if status is unreachable by the user.
-//            // $scope.statusDisabled = false;
-//            if (questionnaire.permission.canBeCompleted) {
-//                $scope.status.push({text: 'Completed', value: 'completed'});
-//            }
-//
-//            if (questionnaire.permission.canBeValidated) {
-//                $scope.status.push({text: 'Validated', value: 'validated'});
-//            }
-//        }
-//    });
+    // Only show 'validated' option if it is already validated, or if the user has enough permission to select it
+    $scope.$watch('questionnaire', function (questionnaire) {
+        $scope.status = _.filter(allStatus, function(status) {
+            return status.value != 'validated' || questionnaire.status == 'validated' || questionnaire.permissions.validate;
+            });
+    });
 
     // Load survey if possible
     var params = $location.search();

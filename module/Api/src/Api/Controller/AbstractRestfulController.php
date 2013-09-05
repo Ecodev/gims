@@ -129,7 +129,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      * @param array $data
      *
      * @param callable $postAction
-     * @return mixed|JsonModel
+     * @return JsonModel
      */
     public function create($data)
     {
@@ -165,7 +165,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     /**
      * @param int $id
      *
-     * @return mixed|JsonModel
+     * @return JsonModel
      */
     public function delete($id)
     {
@@ -192,7 +192,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     /**
      * @param int $id
      *
-     * @return mixed|JsonModel
+     * @return JsonModel
      */
     public function get($id)
     {
@@ -225,7 +225,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     }
 
     /**
-     * @return mixed|JsonModel
+     * @return JsonModel
      */
     public function getList()
     {
@@ -238,7 +238,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      * @param int   $id
      * @param array $data
      *
-     * @return mixed|JsonModel
+     * @return JsonModel
      */
     public function update($id, $data)
     {
@@ -248,8 +248,15 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         if (!$object) {
             $this->getResponse()->setStatusCode(404);
 
-            return;
+            return new JsonModel(array('message' => 'No object found'));
         }
+
+        // If not allowed to read the object, cancel everything
+        if (!$this->getRbac()->isActionGranted($object, 'update')) {
+            $this->getResponse()->setStatusCode(403);
+            return new JsonModel(array('message' => $this->getRbac()->getMessage()));
+        }
+
         $this->hydrator->hydrate($data, $object);
         $this->getEntityManager()->flush();
         $this->getResponse()->setStatusCode(201);

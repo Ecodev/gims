@@ -94,21 +94,6 @@ class QuestionnaireController extends AbstractChildRestfulController
                     return implode(',', $results);
                 };
 
-        // Permission is not handled for now
-        #$config['permission'] = function (\Application\Service\Hydrator $hydrator, Questionnaire $questionnaire) use ($controller) {
-        #    $questionnaireAssertion = new QuestionnaireAssertion($questionnaire);
-        #    /* @var $rbac \Application\Service\Rbac */
-        #    $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-        #    $questionnaireAssertion->setRbac($rbac); // @todo temporary code waiting questionnaire assertion to be able to get rbac service
-        #    return array(
-        #        'canBeCompleted' => true, //$questionnaireAssertion->canBeCompleted(),
-        #        'canBeValidated ' => $questionnaireAssertion->canBeValidated(),
-        #        'canBeDeleted' => $questionnaireAssertion->canBeDeleted(),
-        #        'canBeUpdated' => true, // @todo implement me
-        #        'isLocked' => false, // @todo implement me
-        #    );
-        #};
-
         return $config;
     }
 

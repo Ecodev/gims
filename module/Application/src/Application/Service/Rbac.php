@@ -3,7 +3,18 @@
 namespace Application\Service;
 
 use Application\Model\AbstractModel;
+use Application\Assertion\AbstractAssertion;
 
+/**
+ * This class allow us to query permission model and find out if the current
+ * user is allowed to do things.
+ *
+ * The main method is <code>isActionGranted()</code> and should be used for most
+ * cases. It automates almost everything for the most common cases.
+ *
+ * Then, lower-level API, <code>isGrantedWithContext()</code> and
+ * <code>isGranted()</code> can be used for more specific cases.
+ */
 class Rbac extends \ZfcRbac\Service\Rbac
 {
 
@@ -26,15 +37,16 @@ class Rbac extends \ZfcRbac\Service\Rbac
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
 
         $permission = \Application\Model\Permission::getPermissionName($object, $action);
-        $context = $object->getRoleContext();
+        $context = $object->getRoleContext($action);
+        $assertion = $this->getAssertion($object, $action);
 
         if ($context) {
-            $result = $rbac->isGrantedWithContext($context, $permission);
+            $result = $rbac->isGrantedWithContext($context, $permission, $assertion);
         } else {
-            $result = $rbac->isGranted($permission);
+            $result = $rbac->isGranted($permission, $assertion);
         }
 
-        $this->setMessage($result, $object, $permission);
+        $this->setMessage($result, $object, $permission, $assertion);
 
         return $result;
     }
@@ -46,10 +58,12 @@ class Rbac extends \ZfcRbac\Service\Rbac
      * @param string $permission
      * @return void
      */
-    protected function setMessage($isGranted, AbstractModel $object, $permission)
+    private function setMessage($isGranted, AbstractModel $object, $permission, AbstractAssertion $assertion = null)
     {
         if ($isGranted) {
             $this->message = null;
+        } elseif ($assertion && $assertion->getMessage()) {
+            $this->message = $assertion->getMessage();
         } else {
 
             /* @var $rbac \Application\Service\Rbac */
@@ -93,6 +107,22 @@ class Rbac extends \ZfcRbac\Service\Rbac
         }
 
         return $result;
+    }
+
+    /**
+     * Returns an assertion if necessary
+     * @param \Application\Model\AbstractModel $object
+     * @param string $action
+     * @return \Application\Assertion\AbstractAssertion|null
+     */
+    protected function getAssertion(AbstractModel $object, $action)
+    {
+        // Every action which is not read on answer must check if questionnaire status is not VALIDATED
+        if ($object instanceof \Application\Model\Answer && $action != 'read') {
+            return new \Application\Assertion\CanAnswerQuestionnaire($object);
+        }
+
+        return null;
     }
 
 }

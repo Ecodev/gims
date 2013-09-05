@@ -144,9 +144,9 @@ class Choice extends \Application\Model\AbstractModel
     /**
      * @inheritdoc
      */
-    public function getRoleContext()
+    public function getRoleContext($action)
     {
-        return $this->getQuestion()->getRoleContext();
+        return $this->getQuestion()->getRoleContext($action);
     }
 
 }

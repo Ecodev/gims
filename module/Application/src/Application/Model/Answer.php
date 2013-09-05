@@ -336,7 +336,7 @@ class Answer extends AbstractModel
     /**
      * @inheritdoc
      */
-    public function getRoleContext()
+    public function getRoleContext($action)
     {
         return $this->getQuestionnaire();
     }

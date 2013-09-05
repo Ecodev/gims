@@ -63,8 +63,8 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
                         '<div class="bar" ng-style="{width: row.entity[col.field] * 100}"></div>' +
                         '</div>'},
                     {displayName: '', cellTemplate: '<div style="margin: 5px 5px 0 5px ">' +
-                        '<i class="icon-bullhorn icon-grid" ng-visible="row.entity.comments" data-toggle="tooltip" title="{{row.entity.comments}}"></i>' +
-                        '<i class="icon-grid" ng-class="{\'icon-lock\': row.entity.permission.isLocked, \'icon-unlock\': !row.entity.permission.isLocked}"></i>' +
+                        '<i class="icon-grid icon-comment" ng-visible="row.entity.comments" data-toggle="tooltip" title="{{row.entity.comments}}"></i>' +
+                        '<i class="icon-grid icon-check" ng-visible="row.entity.status == \'validated\'" title="Validated"></i>' +
                         '<button type="button" class="btn btn-mini btn-edit" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
                         '<button type="button" class="btn btn-mini btn-remove" ng-click="removeQuestionnaire(row)" ><i class="icon-trash icon-large"></i></button>' +
                         // ng-visible="row.entity.permission.canBeDeleted" @todo add me back to line above when permission are implemented
@@ -75,7 +75,7 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
             Restangular
                 .one('survey', $routeParams.id)
                 .all('questionnaire')
-                .getList({fields: 'dateLastAnswerModification,reporterNames,validatorNames,completed,spatial,comments'})
+                .getList({fields: 'dateLastAnswerModification,reporterNames,validatorNames,completed,spatial,comments,status'})
                 .then(function (questionnaires) {
                     $scope.questionnaires = questionnaires;
                 });

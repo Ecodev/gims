@@ -303,7 +303,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * @inheritdoc
      */
-    public function getRoleContext()
+    public function getRoleContext($action)
     {
         // If we don't have ID, that mean we were not saved yet,
         // and we cannot use ourself as context
