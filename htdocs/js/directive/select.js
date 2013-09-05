@@ -102,14 +102,6 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 var items;
                 myRestangular.all(api).getList().then(function(data) {
 
-                    // @todo clean me up! For demo purposes role list must be filtered...
-                    if (api === 'role') {
-                        angular.forEach(data, function (item, index) {
-                            if (item.id !== 4 && item.id !== 3) {
-                                delete data[index];
-                            }
-                        });
-                    }
                     items = data;
                     angular.forEach(items, function(item) {
                         if (item.id == fromUrl) {
