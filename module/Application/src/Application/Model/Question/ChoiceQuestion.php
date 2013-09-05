@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Application\Repository\QuestionRepository")
  */
-class ChoiceQuestion extends AbstractAnswerableQuestion
+class ChoiceQuestion extends AbstractPopulationQuestion
 {
 
     /**

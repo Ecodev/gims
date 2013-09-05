@@ -1,4 +1,3 @@
-
 angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($scope, $routeParams, Restangular, Answer) {
     'use strict';
 
@@ -11,13 +10,26 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($sco
 
         $scope.isLoading = true;
         Restangular.one('questionnaire', $routeParams.id).all('question').getList({fields: 'type,filter,answers,choices,parts,isCompulsory,isMultiple,isFinal,chapter,description'}).then(function(questions) {
-            var requiredNumberOfAnswers = 3;
+
             $scope.questions = questions;
 
-            // Store copy of original object
+            // test if jmp
             angular.forEach(questions, function(question) {
+                angular.forEach(question.answers, function(answer) {
+                    answer = Restangular.restangularizeElement(null, answer, 'answer');
+                });
 
-                if (question.type == 'Numeric') {
+                if (question.type != 'Numeric') {
+                    $scope.isJmp = false;
+                }
+            });
+
+            // if jmp, do some task that should be avoided in glass
+            if ($scope.isJmp) {
+
+                // Store copy of original object
+                angular.forEach(questions, function(question) {
+                    var requiredNumberOfAnswers = question.parts.length;
 
                     // Make sure we have the right number existing in the Model
                     var numberOfAnswers = question.answers.length;
@@ -29,11 +41,8 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($sco
                         }
                     }
                     $scope.originalQuestions.push(Restangular.copy(question));
-                }
-                else {
-                    $scope.isJmp = false;
-                }
-            });
+                });
+            }
 
             $scope.isLoading = false;
         });

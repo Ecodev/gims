@@ -22,9 +22,12 @@ class AnswerRepository extends AbstractRepository
                     JOIN geoname g ON (q.geoname_id = g.id)
                     JOIN country c ON (c.geoname_id = g.id)
                     JOIN population p ON (p.country_id = c.id AND s.year = p.year)
+                    JOIN question ON (s.id = question.survey_id)
                 WHERE %s
+                    AND answer.part_id = p.part_id
                     AND answer.questionnaire_id = q.id
-                    AND (answer.part_id = p.part_id OR answer.part_id IS NULL AND p.part_id IS NULL)',
+                    AND answer.question_id = question.id
+                    AND question.is_population = true',
             $clause
         );
 
