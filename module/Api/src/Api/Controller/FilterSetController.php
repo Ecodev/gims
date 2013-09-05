@@ -14,7 +14,7 @@ class FilterSetController extends AbstractRestfulController
      *
      * @return mixed|void|JsonModel
      */
-    public function create($data, \Closure $postAction = null)
+    public function create($data)
     {
         $filterSetId = empty($data['originalFilterSet']) ? null : $data['originalFilterSet'];
 

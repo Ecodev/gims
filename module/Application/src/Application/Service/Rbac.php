@@ -25,23 +25,10 @@ class Rbac extends \ZfcRbac\Service\Rbac
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
 
-        // The original creator of object always has all access
-        $creator = $object->getCreator();
-        if ($creator && $creator == $rbac->getIdentity()) {
-            return true;
-        }
-
         $permission = \Application\Model\Permission::getPermissionName($object, $action);
         $context = $object->getRoleContext();
 
         if ($context) {
-            
-            // The original creator of context always has all access
-            $creator = $context->getCreator();
-            if ($creator && $creator == $rbac->getIdentity()) {
-                return true;
-            }
-
             $result = $rbac->isGrantedWithContext($context, $permission);
         } else {
             $result = $rbac->isGranted($permission);

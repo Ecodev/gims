@@ -3,13 +3,20 @@
 namespace Api\Controller;
 
 use Zend\Json\Json;
+use Zend\View\Model\JsonModel;
+use Application\Model\AbstractModel;
 use Application\Model\Survey;
 use Application\Model\Question\AbstractQuestion;
 use Application\Model\Question\Choice;
-use Zend\View\Model\JsonModel;
 
 class QuestionController extends AbstractChildRestfulController
 {
+
+    /**
+     * The new choices to be added to the newly created question
+     * @var array|null
+     */
+    private $newChoices = null;
 
     protected function getClosures()
     {
@@ -60,8 +67,6 @@ class QuestionController extends AbstractChildRestfulController
      */
     protected function getModel()
     {
-        //if($this->parent) return get_class($this->parent);
-
         $request = $this->getRequest();
         if ($this->requestHasContentType($request, self::CONTENT_TYPE_JSON)) {
             $data = Json::decode($request->getContent(), $this->jsonDecodeType);
@@ -81,21 +86,21 @@ class QuestionController extends AbstractChildRestfulController
 
     public function getList()
     {
-        $object = $this->getParent();
+        $parent = $this->getParent();
 
-        // Cannot list all question, without specifying a questionnaire
-        if (!$object) {
+        // Cannot list all question, without specifying a questionnaire, survey or chapter
+        if (!$parent) {
             $this->getResponse()->setStatusCode(400);
 
             return new JsonModel(array('message' => 'Cannot list all items without a valid parent. Use URL similar to: /api/parent/1/question'));
         }
 
-        if ($object instanceof \Application\Model\Question\Chapter) {
-            $criteria = array('chapter' => $object);
-        } elseif ($object instanceof \Application\Model\Survey) {
-            $criteria = array('survey' => $object);
-        } elseif ($object instanceof \Application\Model\Questionnaire) {
-            $criteria = array('survey' => $object->getSurvey());
+        if ($parent instanceof \Application\Model\Question\Chapter) {
+            $criteria = array('chapter' => $parent);
+        } elseif ($parent instanceof \Application\Model\Survey) {
+            $criteria = array('survey' => $parent);
+        } elseif ($parent instanceof \Application\Model\Questionnaire) {
+            $criteria = array('survey' => $parent->getSurvey());
         }
 
         $questions = $this->getRepository()->findBy($criteria, array('sorting' => 'ASC'));
@@ -231,7 +236,7 @@ class QuestionController extends AbstractChildRestfulController
             foreach ($actualChoices as $choice) {
                 $exist = false;
                 foreach ($newChoices as $newChoice) {
-                    if ($newChoice['id'] == $choice->getId()) {
+                    if (@$newChoice['id'] == $choice->getId()) {
 
                         $exist = true;
                         break;
@@ -241,9 +246,21 @@ class QuestionController extends AbstractChildRestfulController
                 if (!$exist) {
 
                     $question->getChoices()->removeElement($choice);
-                    \Application\Module::getEntityManager()->remove($choice);
+                    $this->getEntityManager()->remove($choice);
                 }
             }
+        }
+    }
+
+    /**
+     * Create choices for the newly created question
+     * @param \Application\Model\AbstractModel $question
+     */
+    protected function postCreate(AbstractModel $question)
+    {
+        if ($question instanceof \Application\Model\Question\ChoiceQuestion && $this->newChoices) {
+            $this->setChoices($this->newChoices, $question);
+            $this->getEntityManager()->flush();
         }
     }
 
@@ -254,17 +271,16 @@ class QuestionController extends AbstractChildRestfulController
      * @throws \Exception
      * @return mixed|void|JsonModel
      */
-    public function create($data, \Closure $postAction = null)
+    public function create($data)
     {
-        // Get the last sorting value from question
-        if (empty($data['survey']) && (int) $data['survey'] > 0) {
-            throw new \Exception('Missing or invalid survey value', 1368459230);
-        }
-
-        // Retrieve a questionnaire from the storage
         $repository = $this->getEntityManager()->getRepository('Application\Model\Survey');
         /** @var Survey $survey */
-        $survey = $repository->findOneById((int) $data['survey']);
+        $survey = $repository->findOneById((int) @$data['survey']);
+
+        // Check that we have a survey
+        if (!$survey) {
+            throw new \Exception('Missing or invalid survey value', 1368459230);
+        }
 
         /** @var \Doctrine\Common\Collections\ArrayCollection $questions */
         $questions = $survey->getQuestions();
@@ -289,22 +305,13 @@ class QuestionController extends AbstractChildRestfulController
             $data['sorting'] = $question->getSorting() + 1;
         }
 
-        // unset ['choices'] to preserve $data from hydrator and backup in a variable
-        $newChoices = null;
+        // unset ['choices'] to preserve $data from hydrator and backup in a variable for use in postCreate()
         if (isset($data['choices'])) {
-            $newChoices = $data['choices'];
+            $this->newChoices = $data['choices'];
             unset($data['choices']);
         }
 
-        $result = parent::create($data, function (\Application\Model\Question\AbstractQuestion $question)
-                        use ($newChoices) {
-                            if ($question instanceof \Application\Model\Question\ChoiceQuestion && $newChoices) {
-                                $this->setChoices($newChoices, $question);
-                                $this->getEntityManager()->flush();
-                            }
-                        });
-
-        return $result;
+        return parent::create($data);
     }
 
 }

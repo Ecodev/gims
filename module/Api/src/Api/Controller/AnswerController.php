@@ -3,29 +3,19 @@
 namespace Api\Controller;
 
 use Zend\View\Model\JsonModel;
+use Application\Model\AbstractModel;
 
 class AnswerController extends AbstractChildRestfulController
 {
 
     /**
-     * @param array    $data
-     *
-     * @param callable $postAction
-     *
-     * @throws \Exception
-     * @return mixed|void|JsonModel
+     * Compute absolute values based on percentage values of newly created answer
+     * @param \Application\Model\AbstractModel $answer
      */
-    public function create($data, \Closure $postAction = null)
+    protected function postCreate(AbstractModel $answer)
     {
-        $result = parent::create($data, function(\Application\Model\Answer $answer) {
-
-                            // Compute absolute values based on percentage values
-                            $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
-                            $answerRepository->updateAbsoluteValueFromPercentageValue($answer);
-                        });
-
-
-        return $result;
+        $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
+        $answerRepository->updateAbsoluteValueFromPercentageValue($answer);
     }
 
     /**

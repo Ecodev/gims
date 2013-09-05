@@ -13,7 +13,7 @@ class ChoiceController extends AbstractRestfulController
      * @return mixed|void|JsonModel
      * @throws \Exception
      */
-    public function create($data, \Closure $postAction = null)
+    public function create($data)
     {
         throw new \Exception('Not implemented');
     }

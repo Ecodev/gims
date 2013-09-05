@@ -119,7 +119,7 @@ class Version20130903155106 extends AbstractMigration
 
     public function down(Schema $schema)
     {
-
+        $this->throwIrreversibleMigrationException();
     }
 
 }

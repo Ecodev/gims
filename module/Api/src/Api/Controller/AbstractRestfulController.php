@@ -2,6 +2,7 @@
 
 namespace Api\Controller;
 
+use Application\Model\AbstractModel;
 use Api\Service\MetaModel;
 use Application\Traits\EntityManagerAware;
 use Zend\View\Model\JsonModel;
@@ -116,12 +117,21 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     }
 
     /**
+     * Optionnal hook to do something after the object was created and flushed in database
+     * @param \Application\Model\AbstractModel $object
+     */
+    protected function postCreate(AbstractModel $object)
+    {
+        // nothing to do
+    }
+
+    /**
      * @param array $data
      *
      * @param callable $postAction
      * @return mixed|JsonModel
      */
-    public function create($data, \Closure $postAction = null)
+    public function create($data)
     {
         // Check that all required properties are given by the GUI
         $mandatoryProperties = $this->getMetaModelService()->getMandatoryProperties();
@@ -147,9 +157,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $this->getEntityManager()->flush();
         $this->getResponse()->setStatusCode(201);
 
-        if ($postAction) {
-            $postAction($object);
-        }
+        $this->postCreate($object);
 
         return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
     }
