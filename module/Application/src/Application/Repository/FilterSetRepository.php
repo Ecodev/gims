@@ -10,6 +10,15 @@ class FilterSetRepository extends AbstractRepository
     use Traits\OrderedByName;
 
     /**
+     * Returns all items with read access
+     * @return array
+     */
+    public function getAllWithPermission($parentName, \Application\Model\AbstractModel $parent = null)
+    {
+        return $this->findAll();
+    }
+
+    /**
      * Returns a FilterSet either from database, or newly created
      * @param string $name
      * @return \Application\Model\FilterSet

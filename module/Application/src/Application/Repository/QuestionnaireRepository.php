@@ -4,6 +4,30 @@ namespace Application\Repository;
 
 class QuestionnaireRepository extends AbstractRepository
 {
+
+    /**
+     * Returns all items with read access
+     * @return array
+     */
+    public function getAllWithPermission($parentName, \Application\Model\AbstractModel $parent = null)
+    {
+        $permissionDql = $this->getPermissionDql('survey', 'Questionnaire-read');
+        $query = $this->getEntityManager()->createQuery("SELECT questionnaire
+            FROM Application\Model\Questionnaire questionnaire
+            JOIN question.survey survey
+            $permissionDql
+            WHERE
+            $parentName = :parent
+            "
+        );
+
+        $query->setParameters(array(
+            'parent' => $parent
+        ));
+
+        return $query->getResult();
+    }
+
     /**
      * Returns an array of questionnaire matching search criteria
      * @param \Application\Model\Survey $survey

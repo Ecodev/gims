@@ -14,6 +14,19 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 {
 
     /**
+     * Returns currently logged user or null
+     *
+     * @return User|null
+     */
+    public static function getCurrentUser()
+    {
+        $sm = \Application\Module::getServiceManager();
+        $auth = $sm->get('zfcuser_auth_service');
+
+        return $auth->getIdentity();
+    }
+
+    /**
      * @var array
      */
     protected static $jsonConfig = array(

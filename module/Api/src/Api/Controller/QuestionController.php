@@ -88,22 +88,18 @@ class QuestionController extends AbstractChildRestfulController
     {
         $parent = $this->getParent();
 
-        // Cannot list all question, without specifying a questionnaire, survey or chapter
-        if (!$parent) {
+        if ($parent instanceof \Application\Model\Question\Chapter) {
+            $questions = $this->getRepository()->getAllWithPermission('chapter', $parent);
+        } elseif ($parent instanceof \Application\Model\Survey) {
+            $questions = $this->getRepository()->getAllWithPermission('survey', $parent);
+        } elseif ($parent instanceof \Application\Model\Questionnaire) {
+            $questions = $this->getRepository()->getAllWithPermission('survey', $parent->getSurvey());
+            // Cannot list all question, without specifying a questionnaire, survey or chapter
+        } else {
             $this->getResponse()->setStatusCode(400);
 
             return new JsonModel(array('message' => 'Cannot list all items without a valid parent. Use URL similar to: /api/parent/1/question'));
         }
-
-        if ($parent instanceof \Application\Model\Question\Chapter) {
-            $criteria = array('chapter' => $parent);
-        } elseif ($parent instanceof \Application\Model\Survey) {
-            $criteria = array('survey' => $parent);
-        } elseif ($parent instanceof \Application\Model\Questionnaire) {
-            $criteria = array('survey' => $parent->getSurvey());
-        }
-
-        $questions = $this->getRepository()->findBy($criteria, array('sorting' => 'ASC'));
 
         // prepare flat array of questions for then be reordered by Parent > childrens > childrens
         // Ignores fields requests. @TODO : Implement it.
