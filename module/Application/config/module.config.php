@@ -51,6 +51,7 @@ return array(
                     'questionnaire_status' => 'Application\DBAL\Types\QuestionnaireStatusType',
                 ),
                 'proxy_dir' => 'data/cache/DoctrineORMModule/Proxy',
+                'generate_proxies' => false,
             ),
         ),
     ),

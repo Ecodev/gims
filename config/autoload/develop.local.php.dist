@@ -14,6 +14,7 @@ return array(
             'orm_default' => array(
                 // Log all SQL queries from Doctrine (to data/logs/all.log and FirePHP/FirePHP4Chrome)
                 'sqlLogger' => 'Application\DBAL\Logging\ForwardSQLLogger',
+                'generate_proxies' => true,
             ),
         ),
     ),
