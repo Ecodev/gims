@@ -18,7 +18,6 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
             $scope.$watch('currentIndex', function(newIndex, old)
             {
                 if(newIndex !== old){
-                    $scope.saveAnswers(old);
                     $scope.refreshQuestion();
                 }
             });

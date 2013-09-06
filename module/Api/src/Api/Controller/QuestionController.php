@@ -237,14 +237,12 @@ class QuestionController extends AbstractChildRestfulController
                 $exist = false;
                 foreach ($newChoices as $newChoice) {
                     if (@$newChoice['id'] == $choice->getId()) {
-
                         $exist = true;
                         break;
                     }
                 }
 
                 if (!$exist) {
-
                     $question->getChoices()->removeElement($choice);
                     $this->getEntityManager()->remove($choice);
                 }
