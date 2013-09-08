@@ -8,8 +8,9 @@ angular.module('myApp.directives').directive('gimsNumQuestion', function () {
                 "               <div ng-switch-when='Urban'>Urban</div>"+
                 "               <div ng-switch-when='Rural'>Rural</div>"+
                 "         </div>"+
-                "         <input class='span12' type='number' ng-model='question.answers[part.id].valueAbsolute' ng-blur='save(part.id)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'/>"+
+                "         <input class='span12' type='number' ng-model='indexedAnswers[part.id].valueAbsolute' ng-blur='save(part.id)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'/>"+
                 "     </label>"+
+                //"<div class='span12'><pre>{{indexedAnswers[part.id]|json}}</pre></div>"+
                 " </div>",
 
         scope:{
@@ -17,22 +18,38 @@ angular.module('myApp.directives').directive('gimsNumQuestion', function () {
         },
         controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal)
         {
+            $scope.indexedAnswers = {};
 
             $scope.$watch('question', function (question, oldQuestion)
             {
                 if( question == oldQuestion ){
                     angular.forEach(question.parts, function(part) {
-
-                        if (!question.answers[part.id]) {
-                            question.answers[part.id] = {
-                                questionnaire : Number(question.parentResource.id),
-                                part : part.id,
-                                question : question.id
-                            }
-                        }
+                        $scope.indexedAnswers[part.id] = $scope.findAnswer(question, part.id);
                     });
                 }
             });
+
+
+            $scope.findAnswer = function (question, pid)
+            {
+                for(var key in question.answers){
+                    var testedAnswer = question.answers[key];
+                    if (testedAnswer.part && testedAnswer.part.id==pid) {
+                        return testedAnswer;
+                    }
+                }
+                return {
+                    questionnaire : Number(question.parentResource.id),
+                    part : pid,
+                    question : question.id
+                }
+            }
+
+
+
+
+
+
 
 
             $scope.saving = false;
@@ -41,7 +58,7 @@ angular.module('myApp.directives').directive('gimsNumQuestion', function () {
                 if ($scope.saving==false) {
                     $scope.saving=true;
 
-                    var newAnswer = $scope.question.answers[part_id];
+                    var newAnswer = $scope.indexedAnswers[part_id];
 
                     // if exists but value not empty -> update
                     if (newAnswer.id && newAnswer.valueAbsolute) {
@@ -50,14 +67,14 @@ angular.module('myApp.directives').directive('gimsNumQuestion', function () {
                         // if dont exists -> create
                     } else if (!newAnswer.id && newAnswer.valueAbsolute) {
                         Restangular.all('answer').post(newAnswer).then(function(answer){
-                            $scope.question.answers[part_id] = answer;
+                            $scope.indexedAnswers[part_id] = answer;
                             $scope.saving=false;
                         });
 
                         // if exists and empty -> remove
                     } else if (newAnswer.id && newAnswer.valueAbsolute===null ){
                         newAnswer.remove().then(function(){
-                            $scope.question.answers[part_id] = {
+                            $scope.indexedAnswers[part_id] = {
                                 questionnaire : Number($scope.question.parentResource.id),
                                 part : part_id,
                                 question : $scope.question.id

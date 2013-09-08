@@ -12,6 +12,27 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
         },
         controller: function($scope, $routeParams, Restangular, Answer, $timeout) {
 
+            $scope.$watch('questions', function (questions)
+            {
+                if (questions.length>0 && $scope.isJmp) {
+                    angular.forEach(questions, function(question) {
+                        var newAnswers = {};
+                        angular.forEach(question.answers, function(answer) {
+                            if (answer.part && answer.part.id) {
+                                if(answer.part.id==3 && $scope.isJmp)
+                                    answer.part.id = 0;
+                                newAnswers[answer.part.id] = answer;
+                            }
+                        });
+                        for(var i=0; i<3; i++){
+                            if( !newAnswers[i]) newAnswers[i] = {};
+                        }
+                        question.answers = newAnswers;
+                    });
+                }
+            });
+            /* */
+
             // Validate Answer method
             $scope.validateAnswer = function(column, row) {
 

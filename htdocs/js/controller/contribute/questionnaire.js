@@ -15,12 +15,9 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($sco
 
             // test if jmp
             angular.forEach(questions, function(question) {
-                angular.forEach(question.answers, function(answer) {
-                    answer = Restangular.restangularizeElement(null, answer, 'answer');
-                });
-
                 if (question.type != 'Numeric') {
                     $scope.isJmp = false;
+                    return;
                 }
             });
 

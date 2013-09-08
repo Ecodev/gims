@@ -229,7 +229,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      */
     public function getList()
     {
-        $objects = $this->getRepository()->findAll();
+        $objects = $this->getRepository()->getAllWithPermission(null, null);
 
         return new JsonModel($this->hydrator->extractArray($objects, $this->getJsonConfig()));
     }

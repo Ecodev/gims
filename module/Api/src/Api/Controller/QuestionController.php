@@ -25,15 +25,16 @@ class QuestionController extends AbstractChildRestfulController
         $config = array(
             // @todo remove it has been proven to work
             // Here we use a closure to get the questions' answers, but only for the current questionnaire
+
             'answers' => function (\Application\Service\Hydrator $hydrator, AbstractQuestion $question) use (
-            $questionnaire, $controller
+                $questionnaire, $controller
             ) {
                 $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
                 $answers = $answerRepository->findBy(
-                        array(
-                            'question' => $question,
-                            'questionnaire' => $questionnaire,
-                        )
+                    array(
+                         'question' => $question,
+                         'questionnaire' => $questionnaire,
+                    )
                 );
 
                 // special case for question, reorganize keys for the needs of NgGrid:
@@ -43,13 +44,15 @@ class QuestionController extends AbstractChildRestfulController
                     $part = $answer->getPart();
                     $answerData = $hydrator->extract($answer, \Application\Model\Answer::getJsonConfig());
                     $answerData['part'] = $hydrator->extract($part, \Application\Model\Part::getJsonConfig());
-
+/*
                     if ($part->isTotal())
                         $index = 0;
                     else
                         $index = $part->getId();
 
                     $output[$index] = $answerData;
+/* */
+                    array_push($output, $answerData);
                 }
 
                 return $output;
@@ -157,8 +160,15 @@ class QuestionController extends AbstractChildRestfulController
      */
     public function update($id, $data)
     {
-        /** @var $question Application\Model\Question\AbstractQuestion */
-        $question = $this->getRepository()->findOneById($id);
+        /** @var $question \Application\Model\Question\AbstractQuestion */
+
+        $questionRepository = $this->getRepository();
+
+        if (isset($data['type'])) {
+            $questionRepository->changeType($id, $this->getModel());
+        }
+
+        $question = $questionRepository->findOneById($id);
 
         if (isset($data['sorting'])) {
             $data['sorting'] = $this->reorderSiblingQuestions($question, $data['sorting']);

@@ -8,6 +8,15 @@ class FilterRepository extends AbstractRepository
     use Traits\OrderedByName;
 
     /**
+     * Returns all items with read access
+     * @return array
+     */
+    public function getAllWithPermission($parentName, \Application\Model\AbstractModel $parent = null)
+    {
+        return $this->findAll();
+    }
+
+    /**
      * Returns one official filter
      *
      * @param string $name

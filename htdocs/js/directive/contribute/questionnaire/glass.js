@@ -10,7 +10,14 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
 
             $scope.$watch('questions', function (questions)
             {
-                if( questions.length>0 ){
+                if (questions.length>0) {
+                    angular.forEach(questions, function(question) {
+
+                        angular.forEach(question.answers, function(answer) {
+                            answer = Restangular.restangularizeElement(null, answer, 'answer');
+                        });
+                    });
+
                     $scope.refreshQuestion();
                 }
             });

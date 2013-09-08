@@ -14,10 +14,10 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                     "   <div class='span1 text-center' ng-repeat='part in question.parts'>"+
                     "       <div ng-switch='question.isMultiple'>"+
                     "           <div ng-switch-when='true'>" +
-                    "               <input type='checkbox' name='{{part.id}}-{{choice.id}}'  ng-model='indexedAnswers[choice.id+\"-\"+part.id].value' ng-blur='save(choice.id,part.id,choice.id)'/>"+
+                    "               <input type='checkbox' ng-model='indexedAnswers[choice.id+\"-\"+part.id].isCheckboxChecked' ng-click='save(choice.id, part.id)' name='{{part.id}}-{{choice.id}}' />"+
                     "           </div>"+
                     "           <div ng-switch-when='false'>" +
-                    "               <input type='radio' name='{{part.id}}-{{question.id}}'/>"+
+                    "               <input type='radio' ng-model='indexedAnswers[part.id].valuePercent' value='{{choice.value}}' ng-click='save(choice.id,part.id)' name='{{part.id}}-{{question.id}}'/>"+
                     "           </div>"+
                     "       </div>"+
                     "   </div>"+
@@ -33,29 +33,95 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
         controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal)
         {
             $scope.indexedAnswers = {};
-
             $scope.$watch('question', function(question) {
+
+                //console.error(question);
+
                 for(var i=0; i<question.parts.length; i++ ){
-                    for(var j=0; j<question.choices.length; j++ ){
-                        var question_identifier = question.choices[j].id +"-"+ question.parts[i].id;
-                        $scope.indexedAnswers[question_identifier] = $scope.findAnswer(question.choices[j].id, question.parts[i].id);
+                    if(question.isMultiple){
+                        for(var j=0; j<question.choices.length; j++ ){
+                            //console.warn(question.choices[j]);
+                            var identifier = question.choices[j].id+"-"+question.parts[i].id;
+                            $scope.indexedAnswers[identifier] = $scope.findAnswer(question, question.parts[i].id, question.choices[j].id);
+                        }
+                    }else{
+                        var identifier = question.parts[i].id;
+                        $scope.indexedAnswers[identifier] = $scope.findAnswer(question, question.parts[i].id);
                     }
                 }
+
             });
 
-            $scope.save = function(choice_id, part_id){
-                console.info('save - qid:'+$scope.question.id+" cid:"+choice_id+" pid:"+part_id);
-            }
 
 
-            $scope.findAnswer = function(cid, pid)
+
+
+
+            $scope.findAnswer = function (question, pid, cid)
             {
-                for(var i=0; i<$scope.question.answers.length; i++ ){
-                    var testedAnswer = $scope.question.answers[i];
-                    if(testedAnswer.choice.id==cid && testedAnswer.part.id==pid) return testedAnswer;
+
+                for(var key in question.answers){
+                    var testedAnswer = question.answers[key];
+                    if (testedAnswer.part && testedAnswer.part.id==pid) {
+                        if (!question.isMultiple) {
+                            return testedAnswer;
+                        }else if (question.isMultiple &&  testedAnswer.valueChoice==cid) {
+                            return testedAnswer;
+                        }
+                    }
                 }
-                return {};
+                var emptyChoice = {
+                    questionnaire : Number(question.parentResource.id),
+                    part : pid,
+                    question : question.id
+                }
+                if(cid) emptyChoice.valueChoice=cid;
+                return emptyChoice;
             }
+
+
+
+
+            $scope.save = function (choice_id, part_id)
+            {
+                console.info('save - qid:'+$scope.question.id+" cid:"+choice_id+" pid:"+part_id);
+
+                if($scope.question.isMultiple){
+                    var identifier = choice_id+'-'+part_id;
+                }else{
+                    var identifier = part_id;
+                }
+
+                var newAnswer = $scope.indexedAnswers[identifier];
+                newAnswer.valueChoice=choice_id;
+
+                // if id is setted, that means it has just been removed (click event)
+                if (newAnswer.id && !$scope.question.isMultiple) {
+                    newAnswer.put();
+                }else if (newAnswer.id && $scope.question.isMultiple) {
+                    newAnswer.remove().then(function(){
+                        $scope.indexedAnswers[identifier] = {
+                            questionnaire : Number($scope.question.parentResource.id),
+                            part : part_id,
+                            valueChoice:choice_id,
+                            question : $scope.question.id
+                        };
+
+                    });
+
+                // if don't exists -> create
+                } else if (!newAnswer.id) {
+                    Restangular.all('answer').post(newAnswer).then(function(answer){
+                        $scope.indexedAnswers[identifier] = answer;
+
+                    });
+                }
+
+            }
+
+
+
+
 
 
         }

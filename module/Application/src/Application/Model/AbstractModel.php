@@ -201,19 +201,6 @@ abstract class AbstractModel
     }
 
     /**
-     * Returns currently logged user
-     *
-     * @return User
-     */
-    private static function getCurrentUser()
-    {
-        $sm = Module::getServiceManager();
-        $auth = $sm->get('zfcuser_auth_service');
-
-        return $auth->getIdentity();
-    }
-
-    /**
      * Automatically called by Doctrine when the object is saved for the first time
      *
      * @ORM\PrePersist
@@ -221,7 +208,7 @@ abstract class AbstractModel
     public function timestampCreation()
     {
         $this->setDateCreated(self::getNow());
-        $this->setCreator(self::getCurrentUser());
+        $this->setCreator(User::getCurrentUser());
     }
 
     /**
@@ -232,7 +219,7 @@ abstract class AbstractModel
     public function timestampModification()
     {
         $this->setDateModified(self::getNow());
-        $this->setModifier(self::getCurrentUser());
+        $this->setModifier(User::getCurrentUser());
     }
 
     /**
