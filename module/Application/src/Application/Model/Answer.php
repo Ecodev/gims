@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
  * Answer is the raw data on which all computing/graph/table are based.
  *
  * @ORM\Entity(repositoryClass="Application\Repository\AnswerRepository")
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="answer_unique",columns={"question_id", "questionnaire_id", "part_id"})})
  */
 class Answer extends AbstractModel
 {
@@ -19,7 +18,18 @@ class Answer extends AbstractModel
     protected static $jsonConfig = array(
         'valuePercent',
         'valueAbsolute',
+        'valueText',
+        'isCheckboxChecked',
+        'valueChoice'
     );
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", nullable=true, options={"default" = 0})
+     */
+    private $isCheckboxChecked = false;
 
     /**
      * @var integer
@@ -99,6 +109,35 @@ class Answer extends AbstractModel
      * })
      */
     private $part;
+
+
+
+    /**
+     * Set checkboxChecked
+     *
+     * @param boolean $isFinal
+     * @return AbstractQuestion
+     */
+    public function setIsCheckboxChecked($isCheckboxChecked)
+    {
+        $this->isCheckboxChecked = (bool) $isCheckboxChecked;
+
+        return $this;
+    }
+
+    /**
+     * Get checkboxChecked
+     *
+     * @return string
+     */
+    public function isCheckboxChecked()
+    {
+        return $this->isCheckboxChecked;
+    }
+
+
+
+
 
     /**
      * Set valueChoice
@@ -340,5 +379,6 @@ class Answer extends AbstractModel
     {
         return $this->getQuestionnaire();
     }
+
 
 }

@@ -25,15 +25,16 @@ class QuestionController extends AbstractChildRestfulController
         $config = array(
             // @todo remove it has been proven to work
             // Here we use a closure to get the questions' answers, but only for the current questionnaire
+
             'answers' => function (\Application\Service\Hydrator $hydrator, AbstractQuestion $question) use (
-            $questionnaire, $controller
+                $questionnaire, $controller
             ) {
                 $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
                 $answers = $answerRepository->findBy(
-                        array(
-                            'question' => $question,
-                            'questionnaire' => $questionnaire,
-                        )
+                    array(
+                         'question' => $question,
+                         'questionnaire' => $questionnaire,
+                    )
                 );
 
                 // special case for question, reorganize keys for the needs of NgGrid:
@@ -43,13 +44,15 @@ class QuestionController extends AbstractChildRestfulController
                     $part = $answer->getPart();
                     $answerData = $hydrator->extract($answer, \Application\Model\Answer::getJsonConfig());
                     $answerData['part'] = $hydrator->extract($part, \Application\Model\Part::getJsonConfig());
-
+/*
                     if ($part->isTotal())
                         $index = 0;
                     else
                         $index = $part->getId();
 
                     $output[$index] = $answerData;
+/* */
+                    array_push($output, $answerData);
                 }
 
                 return $output;
@@ -88,18 +91,22 @@ class QuestionController extends AbstractChildRestfulController
     {
         $parent = $this->getParent();
 
-        if ($parent instanceof \Application\Model\Question\Chapter) {
-            $questions = $this->getRepository()->getAllWithPermission('chapter', $parent);
-        } elseif ($parent instanceof \Application\Model\Survey) {
-            $questions = $this->getRepository()->getAllWithPermission('survey', $parent);
-        } elseif ($parent instanceof \Application\Model\Questionnaire) {
-            $questions = $this->getRepository()->getAllWithPermission('survey', $parent->getSurvey());
-            // Cannot list all question, without specifying a questionnaire, survey or chapter
-        } else {
+        // Cannot list all question, without specifying a questionnaire, survey or chapter
+        if (!$parent) {
             $this->getResponse()->setStatusCode(400);
 
             return new JsonModel(array('message' => 'Cannot list all items without a valid parent. Use URL similar to: /api/parent/1/question'));
         }
+
+        if ($parent instanceof \Application\Model\Question\Chapter) {
+            $criteria = array('chapter' => $parent);
+        } elseif ($parent instanceof \Application\Model\Survey) {
+            $criteria = array('survey' => $parent);
+        } elseif ($parent instanceof \Application\Model\Questionnaire) {
+            $criteria = array('survey' => $parent->getSurvey());
+        }
+
+        $questions = $this->getRepository()->findBy($criteria, array('sorting' => 'ASC'));
 
         // prepare flat array of questions for then be reordered by Parent > childrens > childrens
         // Ignores fields requests. @TODO : Implement it.
@@ -153,8 +160,15 @@ class QuestionController extends AbstractChildRestfulController
      */
     public function update($id, $data)
     {
-        /** @var $question Application\Model\Question\AbstractQuestion */
-        $question = $this->getRepository()->findOneById($id);
+        /** @var $question \Application\Model\Question\AbstractQuestion */
+
+        $questionRepository = $this->getRepository();
+
+        if (isset($data['type'])) {
+            $questionRepository->changeType($id, $this->getModel());
+        }
+
+        $question = $questionRepository->findOneById($id);
 
         if (isset($data['sorting'])) {
             $data['sorting'] = $this->reorderSiblingQuestions($question, $data['sorting']);
@@ -233,14 +247,12 @@ class QuestionController extends AbstractChildRestfulController
                 $exist = false;
                 foreach ($newChoices as $newChoice) {
                     if (@$newChoice['id'] == $choice->getId()) {
-
                         $exist = true;
                         break;
                     }
                 }
 
                 if (!$exist) {
-
                     $question->getChoices()->removeElement($choice);
                     $this->getEntityManager()->remove($choice);
                 }

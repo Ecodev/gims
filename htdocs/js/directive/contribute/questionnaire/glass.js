@@ -8,18 +8,23 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
             $scope.currentIndex = 0;
             $scope.currentQuestion = null;
 
-            $scope.$watch('questions', function(questions) {
+            $scope.$watch('questions', function (questions)
+            {
                 if( questions.length>0 ){
                     $scope.refreshQuestion();
                 }
             });
 
-            $scope.$watch('currentIndex', function(newIndex, old){
-                if(newIndex !== old)
+            $scope.$watch('currentIndex', function(newIndex, old)
+            {
+                if(newIndex !== old){
+                    $scope.saveAnswers(old);
                     $scope.refreshQuestion();
+                }
             });
 
-            $scope.refreshQuestion = function(){
+            $scope.refreshQuestion = function()
+            {
                 $scope.currentQuestion = $scope.questions[$scope.currentIndex];
                 if($scope.currentQuestion.isFinal){
                     var children = [];
@@ -36,6 +41,15 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                     $scope.currentQuestionChildren = [];
                 }
             }
+
+
+
+
+
+
+
+
+
 
 
 
