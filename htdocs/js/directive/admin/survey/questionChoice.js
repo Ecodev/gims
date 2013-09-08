@@ -35,12 +35,9 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
             $scope.indexedAnswers = {};
             $scope.$watch('question', function(question) {
 
-                //console.error(question);
-
                 for(var i=0; i<question.parts.length; i++ ){
                     if(question.isMultiple){
                         for(var j=0; j<question.choices.length; j++ ){
-                            //console.warn(question.choices[j]);
                             var identifier = question.choices[j].id+"-"+question.parts[i].id;
                             $scope.indexedAnswers[identifier] = $scope.findAnswer(question, question.parts[i].id, question.choices[j].id);
                         }
@@ -84,8 +81,6 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
 
             $scope.save = function (choice_id, part_id)
             {
-                console.info('save - qid:'+$scope.question.id+" cid:"+choice_id+" pid:"+part_id);
-
                 if($scope.question.isMultiple){
                     var identifier = choice_id+'-'+part_id;
                 }else{
