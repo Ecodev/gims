@@ -35,17 +35,23 @@
     </target>
 
     <!-- ============================================  -->
-    <!-- (DEFAULT)  Target: dist                       -->
+    <!-- Delete all temporary files                    -->
     <!-- ============================================  -->
     <target name="clean">
         <echo msg="Clean..." />
-        <delete>
+        <delete includeemptydirs="true" quiet="true">
+            <fileset dir="data/logs" includes="**/*" excludes=".gitkeep" />
+        </delete>
+        <delete quiet="true">
             <fileset dir="data/cache">
                 <include name="*" />
             </fileset>
         </delete>
-        <delete dir="htdocs/css/" includeemptydirs="true" verbose="true" />
-        <delete dir="htdocs/tmp/" includeemptydirs="true" verbose="true" />
+        <delete dir="data/cache/DoctrineORMModule/" includeemptydirs="true" quiet="true"/>
+        <delete dir="data/cache/sass/" includeemptydirs="true" quiet="true"/>
+        <delete dir="data/docs/api/" includeemptydirs="true" quiet="true"/>
+        <delete dir="htdocs/css/" includeemptydirs="true" quiet="true"/>
+        <delete dir="htdocs/tmp/" includeemptydirs="true" quiet="true"/>
     </target>
 
     <target name="test" depends="validate-schema,phpunit,karma-unit,karma-e2e" description="Run all tests available">
