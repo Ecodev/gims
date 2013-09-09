@@ -8,7 +8,7 @@ angular.module('myApp.directives').directive('gimsTextQuestion', function () {
                 "               <div ng-switch-when='Urban'>Urban</div>"+
                 "               <div ng-switch-when='Rural'>Rural</div>"+
                 "         </div>"+
-                "         <textarea class='span12' ng-model='indexedAnswers[part.id].valueText' ng-blur='save(part.id)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'></textarea>"+
+                "         <textarea class='span12' ng-model='indexedAnswers[part.id].valueText' ng-blur='save(part.id,$event)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'></textarea>"+
                 "     </label>"+
                 " </div>",
                 //"<div class='span11'><pre>{{indexedAnswers|json}}</pre></div>",
@@ -44,23 +44,20 @@ angular.module('myApp.directives').directive('gimsTextQuestion', function () {
             }
 
 
-            $scope.saving = false;
-            $scope.save = function (part_id)
+            $scope.save = function (part_id, event)
             {
-                if ($scope.saving==false) {
-                    $scope.saving=true;
-
+                if (event) {
                     var newAnswer = $scope.indexedAnswers[part_id];
 
                     // if exists but value not empty -> update
                     if (newAnswer.id && newAnswer.valueText) {
-                        newAnswer.put().then(function(){$scope.saving=false;});
+                        newAnswer.put();
 
                         // if dont exists -> create
                     } else if (!newAnswer.id && newAnswer.valueText) {
+
                         Restangular.all('answer').post(newAnswer).then(function(answer){
                             $scope.indexedAnswers[part_id] = answer;
-                            $scope.saving=false;
                         });
 
                         // if exists and empty -> remove
@@ -71,7 +68,6 @@ angular.module('myApp.directives').directive('gimsTextQuestion', function () {
                                 part : part_id,
                                 question : $scope.question.id
                             };
-                            $scope.saving=false;
                         });
                     }
                 }

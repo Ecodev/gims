@@ -14,6 +14,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                     "   <div class='span1 text-center' ng-repeat='part in question.parts'>"+
                     "       <div ng-switch='question.isMultiple'>"+
                     "           <div ng-switch-when='true'>" +
+                    //ng-true-value='{{choice.id}}'
                     "               <input type='checkbox' ng-model='indexedAnswers[choice.id+\"-\"+part.id].isCheckboxChecked' ng-click='save(choice.id, part.id)' name='{{part.id}}-{{choice.id}}' />"+
                     "           </div>"+
                     "           <div ng-switch-when='false'>" +
