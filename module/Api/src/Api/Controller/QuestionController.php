@@ -157,8 +157,14 @@ class QuestionController extends AbstractChildRestfulController
     public function update($id, $data)
     {
         /** @var $question \Application\Model\Question\AbstractQuestion */
-
         $questionRepository = $this->getRepository();
+
+        // If not allowed to read the object, cancel everything
+        $questionBeforeTypeChange = $questionRepository->getOneById($id);
+        if (!$this->getRbac()->isActionGranted($questionBeforeTypeChange, 'update')) {
+            $this->getResponse()->setStatusCode(403);
+            return new JsonModel(array('message' => $this->getRbac()->getMessage()));
+        }
 
         if (isset($data['type'])) {
             $questionRepository->changeType($id, $this->getModel());

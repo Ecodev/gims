@@ -37,4 +37,22 @@ class QuestionRepository extends AbstractRepository
         return $this;
     }
 
+    /**
+     * Get one question, without taking into consideration its type
+     */
+    public function getOneById($id)
+    {
+
+        $query = $this->getEntityManager()->createQuery("SELECT q FROM Application\Model\Question\AbstractQuestion q WHERE q.id = :id");
+
+        $params = array(
+            'id' => $id,
+        );
+
+        $query->setParameters($params);
+        $question = $query->getOneOrNullResult();
+
+        return $question;
+    }
+
 }
