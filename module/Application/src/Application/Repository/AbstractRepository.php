@@ -21,7 +21,7 @@ abstract class AbstractRepository extends EntityRepository
         }
 
         $user = \Application\Model\User::getCurrentUser();
-        $userId = $user ? $user->getId() : 'NULL';
+        $userId = $user ? $user->getId() : 0;
         $defaultRole = $user ? 'member' : 'anonymous';
 
         return "
