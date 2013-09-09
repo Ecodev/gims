@@ -5,7 +5,9 @@ namespace Application\Model\Question;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * A question which can be answered by end-user, and thus may be specific to parts.
+ * A question which can represent a population, and thus have automatic percentage to absolute computation.
+ *
+ * The end-user enter percentage values, which will be converted to absolute internally based on population data.
  *
  * @ORM\Entity(repositoryClass="Application\Repository\QuestionRepository")
  */
