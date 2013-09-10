@@ -29,7 +29,7 @@ abstract class AbstractRepository extends EntityRepository
         $defaultRole = $user ? 'member' : 'anonymous';
 
         return "
-            JOIN Application\Model\\$relationType relation WITH relation.$context = survey AND relation.user = $userId
+            LEFT JOIN Application\Model\\$relationType relation WITH relation.$context = survey AND relation.user = $userId
             JOIN Application\Model\Role role WITH relation.role = role OR role.name = '$defaultRole'
             JOIN Application\Model\Permission permission WITH permission MEMBER OF role.permissions AND permission.name = '$permission'
 ";
