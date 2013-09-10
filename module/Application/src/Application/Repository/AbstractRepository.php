@@ -9,7 +9,11 @@ abstract class AbstractRepository extends EntityRepository
 
     public function getAllWithPermission($parentName, \Application\Model\AbstractModel $parent = null)
     {
-        return $this->findAll();
+        if ($parentName) {
+            return $this->findBy(array($parentName => $parent));
+        } else {
+            return $this->findAll();
+        }
     }
 
     protected function getPermissionDql($context, $permission)
