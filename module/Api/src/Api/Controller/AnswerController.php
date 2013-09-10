@@ -11,8 +11,9 @@ class AnswerController extends AbstractChildRestfulController
     /**
      * Compute absolute values based on percentage values of newly created answer
      * @param \Application\Model\AbstractModel $answer
+     * @param array $data
      */
-    protected function postCreate(AbstractModel $answer)
+    protected function postCreate(AbstractModel $answer, array $data)
     {
         $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $answerRepository->updateAbsoluteValueFromPercentageValue($answer);

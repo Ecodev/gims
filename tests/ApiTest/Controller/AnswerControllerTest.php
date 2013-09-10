@@ -166,7 +166,7 @@ class AnswerControllerTest extends AbstractController
      * @test
      * @group AnswerApi
      */
-    public function postANewAnswerReturnsStatusCode401ForUserWithRoleAnonymous()
+    public function postANewAnswerReturnsStatusCode403ForUserWithRoleAnonymous()
     {
         // Question
         $data = array(
@@ -182,9 +182,9 @@ class AnswerControllerTest extends AbstractController
             ),
         );
 
+        $this->rbac->setIdentity(null);
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
-        // @todo comment me out once permission will be enabled (=> GUI handling)
-        #$this->assertResponseStatusCode(401);
+        $this->assertResponseStatusCode(403);
     }
 
     /**
@@ -215,16 +215,16 @@ class AnswerControllerTest extends AbstractController
      * @test
      * @group AnswerApi
      */
-    public function updateAnAnswerAsAnonymousReturnsStatusCode401()
+    public function updateAnAnswerAsAnonymousReturnsStatusCode403()
     {
         $expected = $this->answer->getValuePercent() + 0.2;
         $data = array(
             'valuePercent' => $expected,
         );
 
+        $this->rbac->setIdentity(null);
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
-        // @todo comment me out once permission will be enabled (=> GUI handling)
-        #$this->assertResponseStatusCode(401);
+        $this->assertResponseStatusCode(403);
     }
 
     /**

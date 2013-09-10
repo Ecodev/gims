@@ -11,7 +11,7 @@ class SurveyController extends AbstractRestfulController
      * Give editor role to the user on the new survey, so he can create questions and so on
      * @param \Application\Model\AbstractModel $survey
      */
-    protected function postCreate(AbstractModel $survey)
+    protected function postCreate(AbstractModel $survey, array $data)
     {
         $user = $this->getRbac()->getIdentity();
         $role = $this->getEntityManager()->getRepository('Application\Model\Role')->findOneByName('editor');

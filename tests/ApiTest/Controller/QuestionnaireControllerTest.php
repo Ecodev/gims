@@ -44,7 +44,6 @@ class QuestionnaireControllerTest extends AbstractController
      */
     public function questionnaireWithNoAnswerCanBeDeleted()
     {
-
         // Questionnaire
         $data = array(
             'dateObservationStart' => '2013-05-22T00:00:00.000Z',
@@ -67,17 +66,6 @@ class QuestionnaireControllerTest extends AbstractController
         // Should not be able to delete the same resource again
         $this->dispatch('/api/questionnaire/' . $actual['id'], Request::METHOD_DELETE);
         $this->assertResponseStatusCode(404);
-    }
-
-    /**
-     * @test
-     */
-    public function questionnaireWithExistingAnswersCanNotBeDeleted()
-    {
-        // Should be able to delete once
-        // @todo enable me once we have permission handling
-        #$this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
-        #$this->assertResponseStatusCode(403);
     }
 
     /**

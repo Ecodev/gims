@@ -5,7 +5,7 @@ namespace ApiTest\Controller;
 use Application\Model\FilterSet;
 use Zend\Http\Request;
 
-class FilterControllerTest extends AbstractController
+class FilterSetControllerTest extends AbstractController
 {
 
     /**
@@ -161,80 +161,68 @@ class FilterControllerTest extends AbstractController
         $this->assertEquals($expected, $actual['id']);
     }
 
-//    /**
-//     * @test
-//     * @group FilterSetApi
-//     */
-//    public function postANewFilterSetReturnsStatusCode401ForUserWithRoleAnonymous()
-//    {
-//        // Question
-//        $data = array(
-//            'name'          => 0.6,
-//            'question'      => array(
-//                'id' => $this->question->getId()
-//            ),
-//            'questionnaire' => array(
-//                'id' => $this->questionnaire->getId()
-//            ),
-//            'part'          => array(
-//                'id' => $this->part->getId()
-//            ),
-//        );
-//
-//
-//        $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
-//        // @todo comment me out once permission will be enabled (=> GUI handling)
-//        #$this->assertResponseStatusCode(401);
-//    }
-//
-//    /**
-//     * @test
-//     * @group FilterSetApi
-//     */
-//    public function postANewFilterSetReturnsStatusCode201ForUserWithRoleReporter()
-//    {
-//        // Question
-//        $data = array(
-//            'name' => 'new-filterSet',
-//            'code' => 100,
-//            'year' => 2013,
-//        );
-//
-//        $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
-//        $this->assertResponseStatusCode(201);
-//    }
-//
-//    /**
-//     * @test
-//     * @group FilterSetApi
-//     */
-//    public function updateAnFilterSetAsAnonymousReturnsStatusCode401()
-//    {
-//        $expected = $this->filterSet->getName() . 'foo';
-//        $data = array(
-//            'name' => $expected,
-//        );
-//
-//        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
-//        // @todo comment me out once permission will be enabled (=> GUI handling)
-//        #$this->assertResponseStatusCode(401);
-//    }
-//
-//    /**
-//     * @test
-//     * @group FilterSetApi
-//     */
-//    public function updateAnFilterSetWithRoleReporterReturnsStatusCode201()
-//    {
-//        $expected = $this->filterSet->getName() . 'foo';
-//        $data = array(
-//            'name' => $expected,
-//        );
-//
-//        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
-//        $this->assertResponseStatusCode(201);
-//    }
-//
+    /**
+     * @test
+     * @group FilterSetApi
+     */
+    public function postANewFilterSetReturnsStatusCode201ForUserWithRoleAnonymous()
+    {
+        // FilterSet
+        $data = array(
+            'name' => 'new-filterSet',
+        );
+
+        $this->rbac->setIdentity(null);
+        $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
+        $this->assertResponseStatusCode(201);
+    }
+
+    /**
+     * @test
+     * @group FilterSetApi
+     */
+    public function postANewFilterSetReturnsStatusCode201ForUserWithRoleReporter()
+    {
+        // FilteSet
+        $data = array(
+            'name' => 'new-filterSet',
+        );
+
+        $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
+        $this->assertResponseStatusCode(201);
+    }
+
+    /**
+     * @test
+     * @group FilterSetApi
+     */
+    public function updateAnFilterSetAsAnonymousReturnsStatusCode201()
+    {
+        $expected = $this->filterSet->getName() . 'foo';
+        $data = array(
+            'name' => $expected,
+        );
+
+        $this->rbac->setIdentity(null);
+        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
+        $this->assertResponseStatusCode(201);
+    }
+
+    /**
+     * @test
+     * @group FilterSetApi
+     */
+    public function updateAnFilterSetWithRoleReporterReturnsStatusCode201()
+    {
+        $expected = $this->filterSet->getName() . 'foo';
+        $data = array(
+            'name' => $expected,
+        );
+
+        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
+        $this->assertResponseStatusCode(201);
+    }
+
     /**
      * @test
      * @group FilterSetApi

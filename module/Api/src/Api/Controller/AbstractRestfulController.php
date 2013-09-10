@@ -120,7 +120,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      * Optionnal hook to do something after the object was created and flushed in database
      * @param \Application\Model\AbstractModel $object
      */
-    protected function postCreate(AbstractModel $object)
+    protected function postCreate(AbstractModel $object, array $data)
     {
         // nothing to do
     }
@@ -157,9 +157,13 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $this->getEntityManager()->flush();
         $this->getResponse()->setStatusCode(201);
 
-        $this->postCreate($object);
+        $result = $this->postCreate($object, $data);
 
-        return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
+        if (!$result) {
+            $result = new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
+        }
+
+        return $result;
     }
 
     /**

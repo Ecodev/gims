@@ -163,26 +163,18 @@ class SurveyControllerTest extends AbstractController
      * @test
      * @group SurveyApi
      */
-    public function postANewSurveyReturnsStatusCode401ForUserWithRoleAnonymous()
+    public function postANewSurveyReturnsStatusCode403ForUserWithRoleAnonymous()
     {
-        // Question
+        // Survey
         $data = array(
-            'name' => 0.6,
-            'question' => array(
-                'id' => $this->question->getId()
-            ),
-            'questionnaire' => array(
-                'id' => $this->questionnaire->getId()
-            ),
-            'part' => array(
-                'id' => $this->part->getId()
-            ),
+            'name' => 'new-survey',
+            'code' => 100,
+            'year' => 2013,
         );
 
+        $this->rbac->setIdentity(null);
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
-        // @todo comment me out once permission will be enabled (=> GUI handling)
-//        v($this->getResponse()->getContent());
-//        $this->assertResponseStatusCode(401);
+        $this->assertResponseStatusCode(403);
     }
 
     /**
@@ -206,16 +198,16 @@ class SurveyControllerTest extends AbstractController
      * @test
      * @group SurveyApi
      */
-    public function updateAnSurveyAsAnonymousReturnsStatusCode401()
+    public function updateASurveyAsAnonymousReturnsStatusCode403()
     {
         $expected = $this->survey->getName() . 'foo';
         $data = array(
             'name' => $expected,
         );
 
+        $this->rbac->setIdentity(null);
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
-        // @todo comment me out once permission will be enabled (=> GUI handling)
-        #$this->assertResponseStatusCode(401);
+        $this->assertResponseStatusCode(403);
     }
 
     /**

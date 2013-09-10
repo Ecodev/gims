@@ -266,7 +266,7 @@ class QuestionController extends AbstractChildRestfulController
      * Create choices for the newly created question
      * @param \Application\Model\AbstractModel $question
      */
-    protected function postCreate(AbstractModel $question)
+    protected function postCreate(AbstractModel $question, array $data)
     {
         if ($question instanceof \Application\Model\Question\ChoiceQuestion && $this->newChoices) {
             $this->setChoices($this->newChoices, $question);
