@@ -46,7 +46,7 @@ class Rbac extends \ZfcRbac\Service\Rbac
             $result = $rbac->isGranted($permission, $assertion);
         }
 
-        $this->setMessage($result, $object, $permission, $assertion);
+        $this->setMessage($result, $object, $permission, $context, $assertion);
 
         return $result;
     }
@@ -54,11 +54,13 @@ class Rbac extends \ZfcRbac\Service\Rbac
     /**
      * Format a message in case of access denied
      * @param boolean $isGranted
-     * @param \Application\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @param string $permission
+     * @param RoleContextInterface $context
+     * @param AbstractAssertion $assertion
      * @return void
      */
-    private function setMessage($isGranted, AbstractModel $object, $permission, AbstractAssertion $assertion = null)
+    private function setMessage($isGranted, AbstractModel $object, $permission, RoleContextInterface $context = null, AbstractAssertion $assertion = null)
     {
         if ($isGranted) {
             $this->message = null;
@@ -66,10 +68,20 @@ class Rbac extends \ZfcRbac\Service\Rbac
             $this->message = $assertion->getMessage();
         } else {
 
-            /* @var $rbac \Application\Service\Rbac */
-            $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-            $roles = implode(', ', $rbac->getIdentity()->getRoles());
-            $this->message = 'Insufficient access rights for permission "' . $permission . '" on "' . get_class($object) . '#' . $object->getId() . '" with your current roles: ' . $roles;
+            $user = $this->getIdentity();
+            if ($user instanceof \Application\Model\User && $context) {
+                $user->setRolesContext($context);
+            }
+
+            $roles = implode(', ', $this->getIdentity()->getRoles());
+
+            // Reset context to avoid side-effect on next usage of $this->isGranted()
+            if ($user instanceof \Application\Model\User) {
+                $user->resetRolesContext();
+            }
+
+            $contextMessage = $context ? 'in context "' . get_class($context) . '#' . $context->getId() . '"' : 'without any context';
+            $this->message = 'Insufficient access rights for permission "' . $permission . '" on "' . get_class($object) . '#' . $object->getId() . '" with your current roles [' . $roles . '] ' . $contextMessage;
         }
     }
 
