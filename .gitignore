@@ -12,3 +12,4 @@ reset.sh
 .DS_Store
 .~lock.*
 *.uml~
+.idea

@@ -3,7 +3,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     "use strict";
 
     // Default redirect
-    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,chapter,isCompulsory,isMultiple,isFinal,description'};
+    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,chapter,isCompulsory,isMultiple,isFinal,description,questions'};
     var returnUrl = '/';
     var returnTab = '';
 
@@ -151,10 +151,13 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
             $scope.question = question;
             $scope.setParentQuestions($scope.question.survey.id);
             $scope.initChoices();
-        });
-
-        Restangular.one('chapter', $routeParams.id).all('question').getList().then(function(questions) {
-            $scope.questions = questions;
+            
+            if(question.type==='Chapter' && question.questions){
+                //@todo : loop questions to restangularize, and remove new request
+                Restangular.one('chapter', $routeParams.id).all('question').getList().then(function(questions) {
+                    $scope.questions = questions;
+                });
+            }
         });
 
     } else {

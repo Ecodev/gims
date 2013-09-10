@@ -50,14 +50,7 @@ class QuestionController extends AbstractChildRestfulController
                     $part = $answer->getPart();
                     $answerData = $hydrator->extract($answer, \Application\Model\Answer::getJsonConfig());
                     $answerData['part'] = $hydrator->extract($part, \Application\Model\Part::getJsonConfig());
-/*
-                    if ($part->isTotal())
-                        $index = 0;
-                    else
-                        $index = $part->getId();
 
-                    $output[$index] = $answerData;
-/* */
                     array_push($output, $answerData);
                 }
 
@@ -317,8 +310,14 @@ class QuestionController extends AbstractChildRestfulController
             } else {
                 $question = $survey->getQuestions()->last();
             }
-
-            $data['sorting'] = $question->getSorting() + 1;
+            
+            
+            if($question){
+                $data['sorting'] = $question->getSorting() + 1;
+            }else{
+                $data['sorting'] = 1;
+            }
+            
         }
 
         // unset ['choices'] to preserve $data from hydrator and backup in a variable for use in postCreate()

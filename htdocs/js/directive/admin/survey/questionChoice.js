@@ -4,7 +4,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
         template:   "<div class='row-fluid'>"+
                     "   <div class='span1 text-center' ng-repeat='part in question.parts'>"+
                     "         <div ng-switch='part.name'>" +
-                    "               <div ng-switch-when='Total'>Urban + Rural</div>"+
+                    "               <div ng-switch-when='Total'>National</div>"+
                     "               <div ng-switch-when='Urban'>Urban</div>"+
                     "               <div ng-switch-when='Rural'>Rural</div>"+
                     "         </div>"+
@@ -15,10 +15,10 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                     "       <div ng-switch='question.isMultiple'>"+
                     "           <div ng-switch-when='true'>" +
                     //ng-true-value='{{choice.id}}'
-                    "               <input type='checkbox' ng-model='indexedAnswers[choice.id+\"-\"+part.id].isCheckboxChecked' ng-click='save(choice.id, part.id)' name='{{part.id}}-{{choice.id}}' />"+
+                    "               <input type='checkbox' ng-model='index[question.id+\"-\"+choice.id+\"-\"+part.id].isCheckboxChecked' ng-click='save(question.id,choice.id,part.id)' name='{{part.id}}-{{choice.id}}' />"+
                     "           </div>"+
                     "           <div ng-switch-when='false'>" +
-                    "               <input type='radio' ng-model='indexedAnswers[part.id].valuePercent' value='{{choice.value}}' ng-click='save(choice.id,part.id)' name='{{part.id}}-{{question.id}}'/>"+
+                    "               <input type='radio' ng-model='index[question.id+\"-\"+part.id].valuePercent' value='{{choice.value}}' ng-click='save(question.id,choice.id,part.id)' name='{{part.id}}-{{question.id}}'/>"+
                     "           </div>"+
                     "       </div>"+
                     "   </div>"+
@@ -26,28 +26,31 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                     "       {{choice.label}}"+
                     "   </span>"+
                     "</div>",
-                    //"<div class='span11'><pre>{{indexedAnswers|json}}</pre></div>",
 
         scope:{
+            index:'=',
             question:'='
         },
         controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal)
         {
-            $scope.indexedAnswers = {};
-            $scope.$watch('question', function(question) {
-
-                for(var i=0; i<question.parts.length; i++ ){
+            $scope.$watch('question', function(question) 
+            {
+                angular.forEach(question.parts, function(part) {
                     if(question.isMultiple){
-                        for(var j=0; j<question.choices.length; j++ ){
-                            var identifier = question.choices[j].id+"-"+question.parts[i].id;
-                            $scope.indexedAnswers[identifier] = $scope.findAnswer(question, question.parts[i].id, question.choices[j].id);
-                        }
+                        angular.forEach(question.choices, function(choice) {
+                            var identifier = question.id+"-"+choice.id+"-"+part.id;
+                            if (!$scope.index[identifier] || ($scope.index[identifier] && !$scope.index[identifier].isCheckboxChecked)) {
+                                $scope.index[identifier] = $scope.findAnswer(question, part.id, choice.id);
+                            }
+                        });
                     }else{
-                        var identifier = question.parts[i].id;
-                        $scope.indexedAnswers[identifier] = $scope.findAnswer(question, question.parts[i].id);
+                        var identifier = question.id+"-"+part.id;
+                        if (!$scope.index[identifier] || 
+                                ($scope.index[identifier] && !$scope.index[identifier].valuePercent)) {
+                            $scope.index[identifier] = $scope.findAnswer(question, part.id);
+                        }
                     }
-                }
-
+                });
             });
 
 
@@ -80,15 +83,15 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
 
 
 
-            $scope.save = function (choice_id, part_id)
+            $scope.save = function (question_id, choice_id, part_id)
             {
                 if($scope.question.isMultiple){
-                    var identifier = choice_id+'-'+part_id;
+                    var identifier = question_id+"-"+choice_id+'-'+part_id;
                 }else{
-                    var identifier = part_id;
+                    var identifier = question_id+"-"+part_id;
                 }
 
-                var newAnswer = $scope.indexedAnswers[identifier];
+                var newAnswer = $scope.index[identifier];
                 newAnswer.valueChoice=choice_id;
 
                 // if id is setted, that means it has just been removed (click event)
@@ -96,7 +99,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                     newAnswer.put();
                 }else if (newAnswer.id && $scope.question.isMultiple) {
                     newAnswer.remove().then(function(){
-                        $scope.indexedAnswers[identifier] = {
+                        $scope.index[identifier] = {
                             questionnaire : Number($scope.question.parentResource.id),
                             part : part_id,
                             valueChoice:choice_id,
@@ -108,7 +111,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                 // if don't exists -> create
                 } else if (!newAnswer.id) {
                     Restangular.all('answer').post(newAnswer).then(function(answer){
-                        $scope.indexedAnswers[identifier] = answer;
+                        $scope.index[identifier] = answer;
 
                     });
                 }

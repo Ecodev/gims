@@ -7,6 +7,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
 
             $scope.currentIndex = 0;
             $scope.currentQuestion = null;
+            $scope.index = {};
 
             $scope.$watch('questions', function (questions)
             {
@@ -36,7 +37,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                     var children = [];
                     for(var i=Number($scope.currentIndex)+1; i<$scope.questions.length; ++i){
                         var testedQuestion = $scope.questions[i];
-                        if(testedQuestion.level > $scope.currentQuestion.level ){
+                        if(testedQuestion.level > $scope.currentQuestion.level){
                             children.push(testedQuestion);
                         }else{
                             break;
@@ -46,7 +47,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                 }else{
                     $scope.currentQuestionChildren = [];
                 }
-            }
+            };
 
 
 

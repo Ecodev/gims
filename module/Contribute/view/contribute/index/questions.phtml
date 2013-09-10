@@ -14,50 +14,49 @@
 
     <div class='span10'>
 
-<h4>{{currentQuestion.name}}</h4>
-<p>{{currentQuestion.description}}</p>
+        <h4>{{currentQuestion.name}}</h4>
+        <p>{{currentQuestion.description}}</p>
 
+        <div ng-switch="currentQuestion.type">
+            <div ng-switch-when="Chapter">
+                <div ng-repeat='child in currentQuestionChildren'>
+                    <h5>{{child.name}}</h5>
 
-<div ng-switch="currentQuestion.type">
-
-    <div ng-switch-when="Chapter">
-        <div ng-repeat='child in currentQuestionChildren'>
-            <h5>{{child.name}}</h5>
-
-            <div class='row-fluid'>
-                <div ng-switch="child.type" >
-                    <div ng-switch-when="Chapter"></div>
-                    <div ng-switch-when="Numeric">
-                        <gims-num-question question='child'></gims-num-question>
+                    <div class='row-fluid'>
+                        <div ng-switch="child.type" >
+                            <div ng-switch-when="Chapter">
+                                <p>{{child.description}}</p>
+                            </div>
+                            <div ng-switch-when="Numeric">
+                                <gims-num-question question='child' index="index"></gims-num-question>
+                            </div>
+                            <div ng-switch-when="Text">
+                                <gims-text-question question='child' index="index"></gims-text-question>
+                            </div>
+                            <div ng-switch-when="Choice">
+                                <gims-choi-question question='child' index="index"></gims-choi-question>
+                            </div>
+                        </div>
                     </div>
-                    <div ng-switch-when="Text">
-                        <gims-text-question question='child'></gims-text-question>
-                    </div>
-                    <div ng-switch-when="Choice">
-                        <gims-choi-question question='child'></gims-choi-question>
-                    </div>
+
                 </div>
             </div>
 
+            <div ng-switch-when="Numeric" class='row-fluid'>
+                <gims-num-question question='currentQuestion' index="index"></gims-num-question>
+            </div>
+
+            <div ng-switch-when="Text">
+                <gims-text-question question='currentQuestion' index="index"></gims-text-question>
+            </div>
+
+            <div ng-switch-when="Choice">
+                <gims-choi-question question='currentQuestion' index="index"></gims-choi-question>
+            </div>
+
         </div>
-    </div>
-
-
-    <div ng-switch-when="Numeric" class='row-fluid'>
-        <gims-num-question question='currentQuestion'></gims-num-question>
-    </div>
-
-    <div ng-switch-when="Text">
-        <gims-text-question question='currentQuestion'></gims-text-question>
-    </div>
-
-    <div ng-switch-when="Choice">
-        <gims-choi-question question='currentQuestion'></gims-choi-question>
-    </div>
-
-</div>
-
-
+        
+        <!--pre>{{index|json}}</pre-->
 
     </div>
 
