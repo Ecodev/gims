@@ -116,8 +116,6 @@ class FilterControllerTest extends AbstractController
      */
     public function updateNameOfFilterSetAndCheckWhetherOriginalNameIsDifferentFromUpdatedValue()
     {
-        $this->rbac->setIdentity($this->user);
-
         $expected = $this->filterSet->getName();
         $data = array(
             'name' => $this->filterSet->getName() . 'foo',
@@ -134,8 +132,6 @@ class FilterControllerTest extends AbstractController
      */
     public function updateAnFilterSetWillReturn201AsCode()
     {
-        $this->rbac->setIdentity($this->user);
-
         $expected = $this->filterSet->getName() . 'foo';
         $data = array(
             'name' => $expected,
@@ -151,8 +147,6 @@ class FilterControllerTest extends AbstractController
      */
     public function postANewFilterSetAndCheckResponseReturnsIt()
     {
-        $this->rbac->setIdentity($this->user);
-
         // FilterSet
         $data = array(
             'name' => 'new-filterSet',
@@ -199,7 +193,6 @@ class FilterControllerTest extends AbstractController
 //     */
 //    public function postANewFilterSetReturnsStatusCode201ForUserWithRoleReporter()
 //    {
-//        $this->rbac->setIdentity($this->user);
 //        // Question
 //        $data = array(
 //            'name' => 'new-filterSet',
@@ -233,7 +226,6 @@ class FilterControllerTest extends AbstractController
 //     */
 //    public function updateAnFilterSetWithRoleReporterReturnsStatusCode201()
 //    {
-//        $this->rbac->setIdentity($this->user);
 //        $expected = $this->filterSet->getName() . 'foo';
 //        $data = array(
 //            'name' => $expected,
@@ -249,7 +241,6 @@ class FilterControllerTest extends AbstractController
      */
     public function deleteFilterSetMustReturnStatusCode200()
     {
-        $this->rbac->setIdentity($this->user);
         $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
         $this->assertResponseStatusCode(200);
     }
@@ -260,7 +251,6 @@ class FilterControllerTest extends AbstractController
      */
     public function deleteFilterSetMustContainsMessageDeletedSuccessfully()
     {
-        $this->rbac->setIdentity($this->user);
         $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
         $this->assertEquals($this->getJsonResponse()['message'], 'Deleted successfully');
     }
@@ -271,7 +261,6 @@ class FilterControllerTest extends AbstractController
      */
     public function deleteAFilterSetWhichDoesNotExistReturnsStatusCode404()
     {
-        $this->rbac->setIdentity($this->user);
         $this->dispatch('/api/filterSet/' . ($this->filterSet->getId() + 1), Request::METHOD_DELETE);
         $this->assertResponseStatusCode(404);
     }

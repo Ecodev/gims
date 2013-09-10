@@ -116,8 +116,6 @@ class SurveyControllerTest extends AbstractController
      */
     public function updateNameOfSurveyAndCheckWhetherOriginalNameIsDifferentFromUpdatedValue()
     {
-        $this->rbac->setIdentity($this->user);
-
         $expected = $this->survey->getName();
         $data = array(
             'name' => $this->survey->getName() . 'foo',
@@ -134,8 +132,6 @@ class SurveyControllerTest extends AbstractController
      */
     public function updateAnSurveyWillReturn201AsCode()
     {
-        $this->rbac->setIdentity($this->user);
-
         $expected = $this->survey->getName() . 'foo';
         $data = array(
             'name' => $expected,
@@ -151,8 +147,6 @@ class SurveyControllerTest extends AbstractController
      */
     public function postANewSurveyAndCheckResponseReturnsIt()
     {
-        $this->rbac->setIdentity($this->user);
-
         // Survey
         $data = array(
             'name' => 'new-survey',
@@ -187,7 +181,8 @@ class SurveyControllerTest extends AbstractController
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         // @todo comment me out once permission will be enabled (=> GUI handling)
-        #$this->assertResponseStatusCode(401);
+//        v($this->getResponse()->getContent());
+//        $this->assertResponseStatusCode(401);
     }
 
     /**
@@ -196,7 +191,6 @@ class SurveyControllerTest extends AbstractController
      */
     public function postANewSurveyReturnsStatusCode201ForUserWithRoleReporter()
     {
-        $this->rbac->setIdentity($this->user);
         // Question
         $data = array(
             'name' => 'new-survey',
@@ -230,7 +224,6 @@ class SurveyControllerTest extends AbstractController
      */
     public function updateAnSurveyWithRoleReporterReturnsStatusCode201()
     {
-        $this->rbac->setIdentity($this->user);
         $expected = $this->survey->getName() . 'foo';
         $data = array(
             'name' => $expected,
@@ -246,7 +239,6 @@ class SurveyControllerTest extends AbstractController
      */
     public function deleteSurveyMustReturnStatusCode200()
     {
-        $this->rbac->setIdentity($this->user);
         $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
         $this->assertResponseStatusCode(200);
     }
@@ -257,7 +249,6 @@ class SurveyControllerTest extends AbstractController
      */
     public function deleteSurveyMustContainsMessageDeletedSuccessfully()
     {
-        $this->rbac->setIdentity($this->user);
         $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
         $this->assertEquals($this->getJsonResponse()['message'], 'Deleted successfully');
     }
@@ -268,7 +259,6 @@ class SurveyControllerTest extends AbstractController
      */
     public function deleteASurveyWhichDoesNotExistReturnsStatusCode404()
     {
-        $this->rbac->setIdentity($this->user);
         $this->dispatch('/api/survey/' . ($this->survey->getId() + 1), Request::METHOD_DELETE);
         $this->assertResponseStatusCode(404);
     }

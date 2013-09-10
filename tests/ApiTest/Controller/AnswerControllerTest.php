@@ -77,8 +77,6 @@ class AnswerControllerTest extends AbstractController
      */
     public function updateAnswerAndCheckWhetherValuePercentIsDifferentFromOriginalValue()
     {
-        $this->rbac->setIdentity($this->user);
-
         $expected = $this->answer->getValuePercent();
         $data = array(
             'valuePercent' => 0.2,
@@ -95,8 +93,6 @@ class AnswerControllerTest extends AbstractController
      */
     public function canUpdateValuePercentOfAnswer()
     {
-        $this->rbac->setIdentity($this->user);
-
         $expected = $this->answer->getValuePercent() + 0.2;
         $data = array(
             'valuePercent' => $expected,
@@ -113,8 +109,6 @@ class AnswerControllerTest extends AbstractController
      */
     public function updateAnAnswerWillReturn201AsCode()
     {
-        $this->rbac->setIdentity($this->user);
-
         $expected = $this->answer->getValuePercent() + 0.2;
         $data = array(
             'valuePercent' => $expected,
@@ -130,7 +124,6 @@ class AnswerControllerTest extends AbstractController
      */
     public function postANewAnswerWithNestedObjectWillCreateIt()
     {
-        $this->rbac->setIdentity($this->user);
         // Question
         $data = array(
             'valuePercent' => 0.6,
@@ -156,8 +149,6 @@ class AnswerControllerTest extends AbstractController
      */
     public function postANewAnswerWithFlatObjectWillCreateIt()
     {
-        $this->rbac->setIdentity($this->user);
-
         // Question
         $data = array(
             'valuePercent' => 0.6,
@@ -202,7 +193,6 @@ class AnswerControllerTest extends AbstractController
      */
     public function postANewAnswerReturnsStatusCode201ForUserWithRoleReporter()
     {
-        $this->rbac->setIdentity($this->user);
         // Question
         $data = array(
             'valuePercent' => 0.6,
@@ -243,7 +233,6 @@ class AnswerControllerTest extends AbstractController
      */
     public function updateAnAnswerWithRoleReporterReturnsStatusCode201()
     {
-        $this->rbac->setIdentity($this->user);
         $expected = $this->answer->getValuePercent() + 0.2;
         $data = array(
             'valuePercent' => $expected,
