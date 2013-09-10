@@ -27,7 +27,7 @@ class AnswerControllerTest extends AbstractController
                 break;
             case 'put':
                 $route = sprintf(
-                        '/api/answer/%s?id=%s', $this->answer->getId(), $this->answer->getId()
+                        '/api/answer/%s', $this->answer->getId()
                 );
                 break;
             default:
@@ -54,7 +54,7 @@ class AnswerControllerTest extends AbstractController
     public function ensureOnlyAllowedFieldAreDisplayedInResponseForAnswer()
     {
         $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
-        $allowedFields = array('id', 'valuePercent', 'valueAbsolute','valueText', 'isCheckboxChecked','valueChoice', 'part', 'question');
+        $allowedFields = array('id', 'valuePercent', 'valueAbsolute', 'valueText', 'isCheckboxChecked', 'valueChoice', 'part', 'question');
         foreach ($this->getJsonResponse() as $key => $value) {
             $this->assertTrue(in_array($key, $allowedFields));
         }
@@ -215,6 +215,32 @@ class AnswerControllerTest extends AbstractController
      * @test
      * @group AnswerApi
      */
+    public function postANewAnswerReturnsSpecifiedFields()
+    {
+        // Question
+        $data = array(
+            'valuePercent' => 0.6,
+            'question' => array(
+                'id' => $this->question->getId()
+            ),
+            'questionnaire' => array(
+                'id' => $this->questionnaire->getId()
+            ),
+            'part' => array(
+                'id' => $this->part3->getId()
+            ),
+        );
+
+        $this->dispatch($this->getRoute('post') . '?fields=questionnaire', Request::METHOD_POST, $data);
+        $this->assertResponseStatusCode(201);
+        $actual = $this->getJsonResponse();
+        $this->assertEquals($data['questionnaire']['id'], $actual['questionnaire']['id']);
+    }
+
+    /**
+     * @test
+     * @group AnswerApi
+     */
     public function updateAnAnswerAsAnonymousReturnsStatusCode403()
     {
         $expected = $this->answer->getValuePercent() + 0.2;
@@ -240,6 +266,23 @@ class AnswerControllerTest extends AbstractController
 
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(201);
+    }
+
+    /**
+     * @test
+     * @group AnswerApi
+     */
+    public function updateAnAnswerReturnsSpecifiedFields()
+    {
+        $expected = $this->answer->getValuePercent() + 0.2;
+        $data = array(
+            'valuePercent' => $expected,
+        );
+
+        $this->dispatch($this->getRoute('put') . '?fields=questionnaire', Request::METHOD_PUT, $data);
+        $this->assertResponseStatusCode(201);
+        $actual = $this->getJsonResponse();
+        $this->assertEquals($this->answer->getQuestionnaire()->getId(), $actual['questionnaire']['id']);
     }
 
 }
