@@ -41,6 +41,12 @@ class QuestionController extends AbstractChildRestfulController
                 // Numerical key must correspond to the id of the part.
                 $output = array();
                 foreach ($answers as $answer) {
+
+                    // If does not have access to answer, skip silently
+                    if (!$controller->getRbac()->isActionGranted($answer, 'read')) {
+                        continue;
+                    }
+
                     $part = $answer->getPart();
                     $answerData = $hydrator->extract($answer, \Application\Model\Answer::getJsonConfig());
                     $answerData['part'] = $hydrator->extract($part, \Application\Model\Part::getJsonConfig());
