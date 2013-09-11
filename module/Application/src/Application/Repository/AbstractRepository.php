@@ -3,36 +3,53 @@
 namespace Application\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query\Expr\Join;
 
 abstract class AbstractRepository extends EntityRepository
 {
 
-    public function getAllWithPermission($parentName, \Application\Model\AbstractModel $parent = null)
+    /**
+     * Returns all items with permissions
+     * @param string $action
+     * @return array
+     */
+    public function getAllWithPermission($action = 'read')
     {
-        if ($parentName) {
-            return $this->findBy(array($parentName => $parent));
-        } else {
-            return $this->findAll();
-        }
+        return $this->findAll();
     }
 
-    protected function getPermissionDql($context, $permission)
+    /**
+     * Modify $qb to add constraint to check for given permission in the current context.
+     *
+     * This method assumes that the member $context already exists in the query, so you
+     * need to do appropriate join before using this method.
+     *
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param string $context
+     * @param string $permission
+     * @throws Exception
+     */
+    protected function addPermission(QueryBuilder $qb, $context, $permission)
     {
         if ($context == 'survey') {
             $relationType = 'UserSurvey';
         } elseif ($context == 'questionnaire') {
             $relationType = 'UserQuestionnaire';
+        } else {
+            throw new Exception("Unsupported context '$context' for automatic permission");
         }
 
+        $qb->leftJoin("Application\Model\\$relationType", 'relation', Join::WITH, "relation.$context = $context AND relation.user = :permissionUser");
+        $qb->join('Application\Model\Role', 'role', Join::WITH, "relation.role = role OR role.name = :permissionDefaultRole");
+        $qb->join('Application\Model\Permission', 'permission', Join::WITH, "permission MEMBER OF role.permissions AND permission.name = :permissionPermission");
+
         $user = \Application\Model\User::getCurrentUser();
-        $userId = $user ? $user->getId() : 0;
         $defaultRole = $user ? 'member' : 'anonymous';
 
-        return "
-            LEFT JOIN Application\Model\\$relationType relation WITH relation.$context = survey AND relation.user = $userId
-            JOIN Application\Model\Role role WITH relation.role = role OR role.name = '$defaultRole'
-            JOIN Application\Model\Permission permission WITH permission MEMBER OF role.permissions AND permission.name = '$permission'
-";
+        $qb->setParameter('permissionUser', $user);
+        $qb->setParameter('permissionDefaultRole', $defaultRole);
+        $qb->setParameter('permissionPermission', $permission);
     }
 
 }

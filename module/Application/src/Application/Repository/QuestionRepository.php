@@ -2,30 +2,25 @@
 
 namespace Application\Repository;
 
-class QuestionRepository extends AbstractRepository
+class QuestionRepository extends AbstractChildRepository
 {
 
     /**
      * Returns all items with read access
      * @return array
      */
-    public function getAllWithPermission($parentName, \Application\Model\AbstractModel $parent = null)
+    public function getAllWithPermission($action = 'read', $parentName = null, \Application\Model\AbstractModel $parent = null)
     {
-        $permissionDql = $this->getPermissionDql('survey', 'Question-read');
-        $query = $this->getEntityManager()->createQuery("SELECT question
-            FROM Application\Model\Question\AbstractQuestion question
-            JOIN question.survey survey
-            $permissionDql
-            WHERE
-            $parentName = :parent
-            "
-        );
+        $qb = $this->createQueryBuilder('question')
+                ->join('question.survey', 'survey', \Doctrine\ORM\Query\Expr\Join::WITH)
+                ->where($parentName . ' = :parent')
+                ->setParameter('parent', $parent)
+                ->orderBy('question.sorting')
+        ;
 
-        $query->setParameters(array(
-            'parent' => $parent
-        ));
+        $this->addPermission($qb, 'survey', \Application\Model\Permission::getPermissionName($this, $action));
 
-        return $query->getResult();
+        return $qb->getQuery()->getResult();
     }
 
     public function changeType($id, $type)

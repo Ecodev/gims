@@ -2,30 +2,24 @@
 
 namespace Application\Repository;
 
-class AnswerRepository extends AbstractRepository
+class AnswerRepository extends AbstractChildRepository
 {
 
     /**
      * Returns all items with read access
      * @return array
      */
-    public function getAllWithPermission($parentName, \Application\Model\AbstractModel $parent = null)
+    public function getAllWithPermission($action = 'read', $parentName = null, \Application\Model\AbstractModel $parent = null)
     {
-        $permissionDql = $this->getPermissionDql('questionnaire', 'Answer-read');
-        $query = $this->getEntityManager()->createQuery("SELECT answer
-            FROM Application\Model\Answer answer
-            JOIN answer.questionnaire questionnaire
-            $permissionDql
-            WHERE
-            $parentName = :parent
-            "
-        );
+        $qb = $this->createQueryBuilder('answer')
+                ->join('answer.questionnaire', 'questionnaire', \Doctrine\ORM\Query\Expr\Join::WITH)
+                ->where($parentName . ' = :parent')
+                ->setParameter('parent', $parent)
+        ;
 
-        $query->setParameters(array(
-            'parent' => $parent
-        ));
+        $this->addPermission($qb, 'questionnaire', \Application\Model\Permission::getPermissionName($this, $action));
 
-        return $query->getResult();
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -50,9 +44,7 @@ class AnswerRepository extends AbstractRepository
                     AND answer.part_id = p.part_id
                     AND answer.questionnaire_id = q.id
                     AND answer.question_id = question.id
-                    AND question.is_population = true',
-            $clause
-
+                    AND question.is_population = true', $clause
         );
 
         return $this->getEntityManager()->getConnection()->executeUpdate($sql);

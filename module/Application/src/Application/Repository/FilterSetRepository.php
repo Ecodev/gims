@@ -13,7 +13,7 @@ class FilterSetRepository extends AbstractRepository
      * Returns all items with read access
      * @return array
      */
-    public function getAllWithPermission($parentName, \Application\Model\AbstractModel $parent = null)
+    public function getAllWithPermission($action = 'read')
     {
         return $this->findAll();
     }

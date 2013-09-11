@@ -4,6 +4,7 @@ namespace Application\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Application\Model\AbstractModel;
+use Application\Repository\AbstractRepository;
 
 /**
  * Permission is as defined in RBAC system: http://en.wikipedia.org/wiki/Role-based_access_control
@@ -15,15 +16,17 @@ class Permission extends AbstractModel
 {
 
     /**
-     * Returns the permission name for the given action, eg: "filter-delete"
-     * @param \Application\Model\AbstractModel $object
+     * Returns the permission name for the given action, eg: "Filter-delete"
+     * @param AbstractModel|AbstractRepository $object
      * @param string $action
      * @return string
      */
-    public static function getPermissionName(AbstractModel $object, $action)
+    public static function getPermissionName($object, $action)
     {
         if ($object instanceof \Application\Model\Question\AbstractQuestion) {
             $name = 'Question'; // All questions use same permissions
+        } elseif ($object instanceof AbstractRepository) {
+            $name = str_replace('Repository', '', str_replace('Application\Repository\\', '', get_class($object)));
         } else {
             $name = str_replace('Application\Model\\', '', get_class($object));
         }

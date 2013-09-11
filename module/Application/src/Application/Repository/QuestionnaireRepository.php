@@ -2,65 +2,40 @@
 
 namespace Application\Repository;
 
-class QuestionnaireRepository extends AbstractRepository
+class QuestionnaireRepository extends AbstractChildRepository
 {
 
     /**
-     * Returns all items with read access
+     * Returns all items with matching search criteria
      * @return array
      */
-    public function getAllWithPermission($parentName, \Application\Model\AbstractModel $parent = null)
+    public function getAllWithPermission($action = 'read', $parentName = null, \Application\Model\AbstractModel $parent = null, $search = null)
     {
-        $permissionDql = $this->getPermissionDql('survey', 'Questionnaire-read');
-        $query = $this->getEntityManager()->createQuery("SELECT questionnaire
-            FROM Application\Model\Questionnaire questionnaire
-            JOIN question.survey survey
-            $permissionDql
-            WHERE
-            $parentName = :parent
-            "
-        );
 
-        $query->setParameters(array(
-            'parent' => $parent
-        ));
+        $qb = $this->createQueryBuilder('questionnaire');
+        $qb->join('questionnaire.survey', 'survey', \Doctrine\ORM\Query\Expr\Join::WITH);
 
-        return $query->getResult();
-    }
-
-    /**
-     * Returns an array of questionnaire matching search criteria
-     * @param \Application\Model\Survey $survey
-     * @param string $search
-     * @return array
-     */
-    public function getAll(\Application\Model\Survey $survey = null, $search = null)
-    {
-        $qb = $this->createQueryBuilder('q');
-        $parameter = 0;
-        if ($survey || $search) {
-            $qb->join('q.survey', 's', \Doctrine\ORM\Query\Expr\Join::WITH);
-
-            if ($survey) {
-                $qb->andWhere('s = ?' . $parameter);
-                $qb->setParameter($parameter++, $survey);
-            }
+        if ($parent) {
+            $qb->where($parentName . ' = :parent');
+            $qb->setParameter('parent', $parent);
         }
 
+        $this->addPermission($qb, 'questionnaire', \Application\Model\Permission::getPermissionName($this, $action));
+
+
         if ($search) {
-            $qb->join('q.geoname', 'g', \Doctrine\ORM\Query\Expr\Join::WITH);
+            $qb->join('questionnaire.geoname', 'g', \Doctrine\ORM\Query\Expr\Join::WITH);
             $where = array();
-            foreach (explode(' ', $search) as $word) {
-                $where[] = '(LOWER(s.code) LIKE LOWER(?' . $parameter . ') OR LOWER(g.name) LIKE LOWER(?' . $parameter . '))';
-                $qb->setParameter($parameter++, '%' . $word . '%');
+            foreach (explode(' ', $search) as $i => $word) {
+                $parameterName = 'word' . $i;
+                $where[] = '(LOWER(survey.code) LIKE LOWER(:' . $parameterName . ') OR LOWER(g.name) LIKE LOWER(:' . $parameterName . '))';
+                $qb->setParameter($parameterName, '%' . $word . '%');
             }
             $qb->andWhere(join(' AND ', $where));
             $qb->setMaxResults(50);
         }
 
-        $result = $qb->getQuery()->getResult();
-
-        return $result;
+        return $qb->getQuery()->getResult();
     }
 
 }
