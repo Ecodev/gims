@@ -27,14 +27,14 @@ class QuestionController extends AbstractChildRestfulController
             // Here we use a closure to get the questions' answers, but only for the current questionnaire
 
             'answers' => function (\Application\Service\Hydrator $hydrator, AbstractQuestion $question) use (
-                $questionnaire, $controller
+            $questionnaire, $controller
             ) {
                 $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
                 $answers = $answerRepository->findBy(
-                    array(
-                         'question' => $question,
-                         'questionnaire' => $questionnaire,
-                    )
+                        array(
+                            'question' => $question,
+                            'questionnaire' => $questionnaire,
+                        )
                 );
 
                 // special case for question, reorganize keys for the needs of NgGrid:
@@ -50,14 +50,14 @@ class QuestionController extends AbstractChildRestfulController
                     $part = $answer->getPart();
                     $answerData = $hydrator->extract($answer, \Application\Model\Answer::getJsonConfig());
                     $answerData['part'] = $hydrator->extract($part, \Application\Model\Part::getJsonConfig());
-/*
-                    if ($part->isTotal())
-                        $index = 0;
-                    else
-                        $index = $part->getId();
+                    /*
+                      if ($part->isTotal())
+                      $index = 0;
+                      else
+                      $index = $part->getId();
 
-                    $output[$index] = $answerData;
-/* */
+                      $output[$index] = $answerData;
+                      /* */
                     array_push($output, $answerData);
                 }
 
@@ -96,13 +96,13 @@ class QuestionController extends AbstractChildRestfulController
     public function getList()
     {
         $parent = $this->getParent();
-
+        $permission = $this->params()->fromQuery('permission', 'read');
         if ($parent instanceof \Application\Model\Question\Chapter) {
-            $questions = $this->getRepository()->getAllWithPermission('chapter', $parent);
+            $questions = $this->getRepository()->getAllWithPermission($permission, 'chapter', $parent);
         } elseif ($parent instanceof \Application\Model\Survey) {
-            $questions = $this->getRepository()->getAllWithPermission('survey', $parent);
+            $questions = $this->getRepository()->getAllWithPermission($permission, 'survey', $parent);
         } elseif ($parent instanceof \Application\Model\Questionnaire) {
-            $questions = $this->getRepository()->getAllWithPermission('survey', $parent->getSurvey());
+            $questions = $this->getRepository()->getAllWithPermission($permission, 'survey', $parent->getSurvey());
             // Cannot list all question, without specifying a questionnaire, survey or chapter
         } else {
             $this->getResponse()->setStatusCode(400);

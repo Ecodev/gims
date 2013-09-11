@@ -2,7 +2,7 @@
 
 namespace Application\Repository;
 
-class UserQuestionnaireRepository extends AbstractRepository
+class UserQuestionnaireRepository extends AbstractChildRepository
 {
 
 }
