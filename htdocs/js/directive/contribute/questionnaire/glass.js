@@ -5,6 +5,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
 
         controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal) {
 
+            $scope.navigation = [];
             $scope.currentIndex = 0;
             $scope.currentQuestion = null;
             $scope.index = {};
@@ -13,11 +14,16 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
             {
                 if (questions.length>0) {
                     angular.forEach(questions, function(question) {
-
                         angular.forEach(question.answers, function(answer) {
                             answer = Restangular.restangularizeElement(null, answer, 'answer');
                         });
                     });
+
+                    // filter only chapters for navigation
+                    for(i in $scope.questions){
+                        var testedQuestion = $scope.questions[i];
+                        if(testedQuestion.type=='Chapter') $scope.navigation.push(testedQuestion);
+                    }
 
                     $scope.refreshQuestion();
                 }
@@ -29,10 +35,14 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                     $scope.refreshQuestion();
                 }
             });
+            
 
             $scope.refreshQuestion = function()
             {
                 $scope.currentQuestion = $scope.questions[$scope.currentIndex];
+                
+                
+                // if question is chapter, retrieve all the questions that are contained in the chapter for display.
                 if($scope.currentQuestion.isFinal){
                     var children = [];
                     for(var i=Number($scope.currentIndex)+1; i<$scope.questions.length; ++i){
@@ -44,9 +54,28 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                         }
                     }
                     $scope.currentQuestionChildren = children;
+                    
+                // if question is not a chapter, there is no subquestions
                 }else{
                     $scope.currentQuestionChildren = [];
                 }
+                
+                
+                // retrieve all parent chapter to display name and description
+                $scope.parentChapters = [];                
+                var firstChapterPerLevel = [];
+                for(var j=Number($scope.currentIndex)-1; j>=0; j--){
+                    var testedQuestion = $scope.questions[j];
+                    if(testedQuestion.type=='Chapter' && testedQuestion.level<$scope.currentQuestion.level && !firstChapterPerLevel[testedQuestion.level]){
+                        firstChapterPerLevel[testedQuestion.level] = j;
+                    }
+                    if(testedQuestion.level==0) break;
+                }
+                for(var q in firstChapterPerLevel){ 
+                    var testedQuestion = $scope.questions[firstChapterPerLevel[q]];
+                    $scope.parentChapters.push($scope.questions[firstChapterPerLevel[q]]);
+                }
+                
             };
 
 

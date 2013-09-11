@@ -10,9 +10,19 @@
             <input type="text" class='span5' ng-model="wantedId">
             <button type="submit" class="btn" ng-click="goTo()">Go to</button>
         </form>
+        
+        
+        
+        
     </div>
 
     <div class='span10'>
+
+        <div ng-repeat='parentChapter in parentChapters'>
+            <h3>{{parentChapter.name}}</h3>
+            <p>{{parentChapter.description}}</p>
+            <hr/>
+        </div>
 
         <h4>{{currentQuestion.name}}</h4>
         <p>{{currentQuestion.description}}</p>
@@ -57,7 +67,5 @@
         </div>
         
         <!--pre>{{index|json}}</pre-->
-
     </div>
-
 </div>
