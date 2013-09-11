@@ -21,6 +21,7 @@ class ChoiceQuestion extends AbstractPopulationQuestion
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OrderBy({"sorting" = "ASC"})
      * @ORM\OneToMany(targetEntity="Choice", mappedBy="question")
      * @ORM\JoinColumns({
      *  @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
