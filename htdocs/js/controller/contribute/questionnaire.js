@@ -4,6 +4,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($sco
     $scope.isJmp = true;
     $scope.questions = [];
     $scope.originalQuestions = []; // store original questions
+    $scope.questionnaireQueryParams = {permission: 'update'};
 
     // If a questionnaire is specified in URL, load its data
     if ($routeParams.id) {
