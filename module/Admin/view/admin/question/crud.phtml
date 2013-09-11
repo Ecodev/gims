@@ -128,24 +128,20 @@
 
             <div class="control-group form-horizontal">
                 <label class='control-label' for="choice.label">Option {{$index+1}}</label>
-                <div class='controls'>
-                    <input id="choice.value" type="text" name="name" ng-model="choice.label" required class='span8'/>
-                    <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
-                </div>
-            </div>
-
-            <div class="control-group form-horizontal">
-                <label class='control-label' ></label>
                 <div class='controls control-row'>
-                    <select class="input-small"
+                    <input id="choice.value" type="text" name="name" ng-model="choice.label" class='span8'/>
+                    <select ng-hide='question.isMultiple'
+                            class="input-small span1"
                             id="question.value"
                             name="type"
                             ng-model="choice.value"
                             ng-options="p.value as p.text for p in percentages">
                     </select>
                     <button class="btn btn-danger btn-xs" ng-click="deleteOption($index)" ><i class="icon-trash"></i></button>
+                    <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
                 </div>
             </div>
+
         </div>
 
         <div class="control-group form-horizontal" ng-show='addBtnChoice'>
