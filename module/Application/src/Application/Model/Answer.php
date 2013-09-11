@@ -24,12 +24,7 @@ class Answer extends AbstractModel
     );
 
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", nullable=true, options={"default" = 0})
-     */
-    private $isCheckboxChecked = false;
+
 
     /**
      * @var integer
@@ -109,32 +104,6 @@ class Answer extends AbstractModel
      * })
      */
     private $part;
-
-
-
-    /**
-     * Set checkboxChecked
-     *
-     * @param boolean $isFinal
-     * @return AbstractQuestion
-     */
-    public function setIsCheckboxChecked($isCheckboxChecked)
-    {
-        $this->isCheckboxChecked = (bool) $isCheckboxChecked;
-
-        return $this;
-    }
-
-    /**
-     * Get checkboxChecked
-     *
-     * @return string
-     */
-    public function isCheckboxChecked()
-    {
-        return $this->isCheckboxChecked;
-    }
-
 
 
 

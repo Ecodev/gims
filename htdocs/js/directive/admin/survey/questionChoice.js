@@ -39,7 +39,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                     if(question.isMultiple){
                         angular.forEach(question.choices, function(choice) {
                             var identifier = question.id+"-"+choice.id+"-"+part.id;
-                            if (!$scope.index[identifier] || ($scope.index[identifier] && !$scope.index[identifier].isCheckboxChecked)) {
+                            if (!$scope.index[identifier] || ($scope.index[identifier] && $scope.index[identifier].isCheckboxChecked===null)) {
                                 $scope.index[identifier] = $scope.findAnswer(question, part.id, choice.id);
                             }
                         });
@@ -67,6 +67,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                         if (!question.isMultiple) {
                             return testedAnswer;
                         }else if (question.isMultiple &&  testedAnswer.valueChoice==cid) {
+                            testedAnswer.isCheckboxChecked = true;
                             return testedAnswer;
                         }
                     }
@@ -74,7 +75,8 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                 var emptyChoice = {
                     questionnaire : Number(question.parentResource.id),
                     part : pid,
-                    question : question.id
+                    question : question.id,
+                    isCheckboxChecked :null
                 }
                 if(cid) emptyChoice.valueChoice=cid;
                 return emptyChoice;
@@ -85,6 +87,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
 
             $scope.save = function (question_id, choice_id, part_id)
             {
+                console.info(question_id+"-"+choice_id+"-"+part_id);
                 if($scope.question.isMultiple){
                     var identifier = question_id+"-"+choice_id+'-'+part_id;
                 }else{
@@ -103,7 +106,8 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                             questionnaire : Number($scope.question.parentResource.id),
                             part : part_id,
                             valueChoice:choice_id,
-                            question : $scope.question.id
+                            question : $scope.question.id,
+                            isCheckboxChecked: false
                         };
 
                     });
@@ -111,6 +115,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                 // if don't exists -> create
                 } else if (!newAnswer.id) {
                     Restangular.all('answer').post(newAnswer).then(function(answer){
+                        if($scope.question.isMultiple) answer.isCheckboxChecked = true;
                         $scope.index[identifier] = answer;
 
                     });
