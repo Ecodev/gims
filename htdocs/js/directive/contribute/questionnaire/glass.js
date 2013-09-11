@@ -20,9 +20,13 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                     });
 
                     // filter only chapters for navigation
-                    for(i in $scope.questions){
+                    for(i in questions){
                         var testedQuestion = $scope.questions[i];
-                        if(testedQuestion.type=='Chapter') $scope.navigation.push(testedQuestion);
+                        
+                        if (testedQuestion && testedQuestion.type && !$scope.hasFinalParentChapters(i)) {
+                            $scope.navigation.push(testedQuestion);
+                        }
+                        
                     }
 
                     $scope.refreshQuestion();
@@ -40,7 +44,6 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
             $scope.refreshQuestion = function()
             {
                 $scope.currentQuestion = $scope.questions[$scope.currentIndex];
-                
                 
                 // if question is chapter, retrieve all the questions that are contained in the chapter for display.
                 if($scope.currentQuestion.isFinal){
@@ -60,22 +63,13 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                     $scope.currentQuestionChildren = [];
                 }
                 
-                
                 // retrieve all parent chapter to display name and description
                 $scope.parentChapters = [];                
-                var firstChapterPerLevel = [];
-                for(var j=Number($scope.currentIndex)-1; j>=0; j--){
-                    var testedQuestion = $scope.questions[j];
-                    if(testedQuestion.type=='Chapter' && testedQuestion.level<$scope.currentQuestion.level && !firstChapterPerLevel[testedQuestion.level]){
-                        firstChapterPerLevel[testedQuestion.level] = j;
-                    }
-                    if(testedQuestion.level==0) break;
-                }
-                for(var q in firstChapterPerLevel){ 
+                var firstChapterPerLevel = $scope.getListOfFirstChapterPerLevel(Number($scope.currentIndex));
+                for (var q in firstChapterPerLevel) { 
                     var testedQuestion = $scope.questions[firstChapterPerLevel[q]];
                     $scope.parentChapters.push($scope.questions[firstChapterPerLevel[q]]);
                 }
-                
             };
 
 
@@ -105,31 +99,36 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
              *  Navigation
              *  */
 
-            $scope.goToNext = function(){
-                if($scope.currentIndex < $scope.questions.length-1)
-                    $scope.currentIndex = $scope.getFinalQuestion(Number($scope.currentIndex)+1, true);
-            }
+            $scope.goToNext = function()
+            {
+                if ($scope.currentIndex < $scope.questions.length-1){
+                    var index =$scope.getFinalQuestion(Number($scope.currentIndex)+1, true);
+                    $scope.currentIndex = index;
+                }
+            };
 
-            $scope.goToPrevious = function(){
-                if($scope.currentIndex > 0)
-                    $scope.currentIndex = $scope.getFinalQuestion(Number($scope.currentIndex)-1, false);
-            }
+            $scope.goToPrevious = function()
+            {
+                if ($scope.currentIndex > 0) {
+                    var index = $scope.getFinalQuestion(Number($scope.currentIndex)-1, false);
+                    $scope.currentIndex = index;
+                }
+            };
 
-            $scope.goTo = function(){
-                // if the setted id is bigger than size of question array, find the index for the question that has the id
-                var found = true;
-                if($scope.wantedId > $scope.questions.length){
-                    found = false;
-                    for(var question in $scope.questions){
-                        if( question>=0 && $scope.questions[question] && $scope.questions[question].id == $scope.wantedId){
-                            found=true;
-                            $scope.wantedId = question;
-                            break;
-                        }
+            $scope.goTo = function(wantedQuestionId) 
+            {
+                var wantedId = null;
+                for (var question in $scope.questions) {
+                    if( $scope.questions[question] && $scope.questions[question].id==wantedQuestionId){
+                        wantedId = question;
+                        break;
                     }
                 }
-                if(found) $scope.currentIndex = $scope.getFinalQuestion(Number($scope.wantedId), false);
-            }
+                //console.info('goto -> change currentid : '+wantedId);
+                var index = $scope.getFinalQuestion(Number(wantedId), false);
+                //console.info(wantedQuestionId+" -> "+wantedId+" -> "+index);
+                $scope.currentIndex = index;
+            };
 
 
 
@@ -141,9 +140,10 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
              *  @return index : the index of the question you want to display
 
              * */
-            $scope.getFinalQuestion = function(i, next){
+            $scope.getFinalQuestion = function(i, next)
+            {
                 var wantedQuestion = $scope.questions[i];
-                if(wantedQuestion.level == 0 && wantedQuestion.type=='Chapter')
+                if(wantedQuestion.level===0 && wantedQuestion.type==='Chapter')
                     return i;
                 else{
                     if(next){ // we want to go to next question
@@ -169,15 +169,11 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                         return i; // if parent not final, return next id for next question / chapter in the list.
 
                     }else{ // we want to go to previous question
-                        if(wantedQuestion.chapter!=null && Number(wantedQuestion.chapter.id)>0){
-                            var firstChapterPerLevel = [];
-                            for(var j=i-1; j>=0; j--){ // go rewind until first question or first zero leveled question
-                                var testedQuestion = $scope.questions[j];
-                                if(testedQuestion.type=='Chapter' && !firstChapterPerLevel[testedQuestion.level]){
-                                    firstChapterPerLevel[testedQuestion.level] = j; // sets the first chapter encontered each level
-                                }
-                                if(testedQuestion.level==0) break;
-                            }
+                        if (wantedQuestion.chapter!=null && Number(wantedQuestion.chapter.id)>0) {
+
+                            //console.info("retrieve parent chapters for nav : "+i);
+                            var firstChapterPerLevel = $scope.getListOfFirstChapterPerLevel(i);
+                            
                             for(var q in firstChapterPerLevel){ // loop forward the "chapterPerLevel" array to find the first chapter that is final and replace var i
                                 var testedQuestion = $scope.questions[firstChapterPerLevel[q]];
                                 if(testedQuestion.isFinal){
@@ -190,7 +186,30 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                     }
                 }
                 return i; // never should be called
-            }
+            };
+            
+            $scope.getListOfFirstChapterPerLevel = function(startIndex)
+            {
+                var askedQuestion = $scope.questions[startIndex];
+                var firstChapterPerLevel = [];
+                for(var j=startIndex; j>=0; j--){ // go rewind until first question or first zero leveled question
+                    var testedQuestion = $scope.questions[j];
+                    if(testedQuestion.type==='Chapter' && testedQuestion.level<askedQuestion.level && !firstChapterPerLevel[testedQuestion.level]){
+                        firstChapterPerLevel[testedQuestion.level] = j; // sets the first chapter encontered each level
+                    }
+                    if(testedQuestion.level===0) break;
+                }
+                return firstChapterPerLevel;
+            };
+            
+            $scope.hasFinalParentChapters = function(index)
+            {
+                var listOfParentChapters = $scope.getListOfFirstChapterPerLevel(index);
+                for (i in listOfParentChapters) {
+                    if($scope.questions[listOfParentChapters[i]].isFinal) return true;
+                }
+                return false;
+            };
 
 
 
