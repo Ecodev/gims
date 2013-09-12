@@ -774,6 +774,7 @@ STRING;
             $question->setSorting($survey->getQuestions()->count());
             $question->setName($filter->getName());
             $question->setParts(new \Doctrine\Common\Collections\ArrayCollection(array($this->partRural, $this->partUrban, $this->partTotal)));
+            $question->setIsPopulation(true);
             $this->getEntityManager()->persist($question);
         }
 
