@@ -19,13 +19,13 @@
             <hr/>
         </div>
 
-        <h4>{{currentQuestion.name}}</h4>
+        <h3>{{currentQuestion.name}}</h3>
         <p>{{currentQuestion.description}}</p>
 
         <div ng-switch="currentQuestion.type">
             <div ng-switch-when="Chapter">
                 <div ng-repeat='child in currentQuestionChildren'>
-                    <h5>{{child.name}}</h5>
+                    <h4>{{child.name}}</h4>
 
                     <div class='row-fluid'>
                         <div ng-switch="child.type" >

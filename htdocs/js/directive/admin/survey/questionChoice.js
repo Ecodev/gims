@@ -87,7 +87,6 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
 
             $scope.save = function (question_id, choice_id, part_id)
             {
-                console.info(question_id+"-"+choice_id+"-"+part_id);
                 if($scope.question.isMultiple){
                     var identifier = question_id+"-"+choice_id+'-'+part_id;
                 }else{
