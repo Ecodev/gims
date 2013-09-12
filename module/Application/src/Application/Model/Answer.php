@@ -36,7 +36,7 @@ class Answer extends AbstractModel
     /**
      * @var float
      *
-     * @ORM\Column(type="decimal", precision=4, scale=3, nullable=true)
+     * @ORM\Column(type="decimal", precision=7, scale=6, nullable=true)
      */
     private $valuePercent;
 
