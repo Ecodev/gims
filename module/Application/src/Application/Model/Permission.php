@@ -35,11 +35,6 @@ class Permission extends AbstractModel
     }
 
     /**
-     * @var array
-     */
-    protected static $jsonConfig = array();
-
-    /**
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -53,6 +48,16 @@ class Permission extends AbstractModel
     public function __construct($name = null)
     {
         $this->setName($name);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'name',
+        ));
     }
 
     /**

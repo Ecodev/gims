@@ -16,14 +16,6 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
 {
 
     /**
-     * @var array
-     */
-    protected static $jsonConfig = array(
-        'name',
-        'sorting',
-    );
-
-    /**
      * @var integer
      *
      * @ORM\Column(type="smallint", nullable=false)
@@ -63,6 +55,17 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
     public function __construct($name = null)
     {
         $this->setName($name);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'name',
+            'sorting',
+        ));
     }
 
     /**

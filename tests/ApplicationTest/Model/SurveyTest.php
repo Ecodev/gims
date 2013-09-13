@@ -60,14 +60,4 @@ class SurveyTest extends AbstractModel
         }
     }
 
-    /**
-     * @test
-     */
-    public function getMetaDataOfSurveyReturnsAnArray()
-    {
-        $actual = Survey::getMetadata();
-        $this->assertInternalType('array', $actual);
-        $this->assertNotNull($actual);
-    }
-
 }

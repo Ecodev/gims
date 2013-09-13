@@ -19,7 +19,7 @@ class FilterController extends AbstractRestfulController
                 $result = array();
                 foreach ($filter->getChildren() as $child) {
                     if ($child->isOfficial()) {
-                        $result[] = $hydrator->extract($child, Filter::getJsonConfig());
+                        $result[] = $hydrator->extract($child);
                     }
                 }
 

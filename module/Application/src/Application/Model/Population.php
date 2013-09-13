@@ -14,12 +14,6 @@ class Population extends AbstractModel
 {
 
     /**
-     * @var array
-     */
-    protected static $jsonConfig
-        = array();
-
-    /**
      * @var integer
      *
      * @ORM\Column(type="decimal", precision=4, scale=0)

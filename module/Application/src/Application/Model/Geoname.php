@@ -12,13 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Geoname extends AbstractModel
 {
-    /**
-     * @var array
-     */
-    protected static $jsonConfig
-        = array(
-            'name',
-        );
 
     /**
      * @var string
@@ -160,6 +153,16 @@ class Geoname extends AbstractModel
     public function __construct($name = null)
     {
         $this->setName($name);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'name',
+        ));
     }
 
     /**

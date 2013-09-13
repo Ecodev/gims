@@ -27,15 +27,6 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     }
 
     /**
-     * @var array
-     */
-    protected static $jsonConfig = array(
-        'name',
-        'email',
-        'state',
-    );
-
-    /**
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -85,6 +76,18 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     {
         $this->userSurveys = new \Doctrine\Common\Collections\ArrayCollection();
         $this->userQuestionnaires = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'name',
+            'email',
+            'state',
+        ));
     }
 
     /**

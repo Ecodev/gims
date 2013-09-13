@@ -13,20 +13,6 @@ class Answer extends AbstractModel
 {
 
     /**
-     * @var array
-     */
-    protected static $jsonConfig = array(
-        'valuePercent',
-        'valueAbsolute',
-        'valueText',
-        'isCheckboxChecked',
-        'valueChoice'
-    );
-
-
-
-
-    /**
      * @var integer
      *
      * @ORM\Column(type="smallint", nullable=true)
@@ -105,8 +91,19 @@ class Answer extends AbstractModel
      */
     private $part;
 
-
-
+    /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'valuePercent',
+            'valueAbsolute',
+            'valueText',
+            'isCheckboxChecked',
+            'valueChoice'
+        ));
+    }
 
     /**
      * Set valueChoice
@@ -348,6 +345,5 @@ class Answer extends AbstractModel
     {
         return $this->getQuestionnaire();
     }
-
 
 }

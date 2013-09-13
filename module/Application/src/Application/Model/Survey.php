@@ -14,18 +14,6 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
 {
 
     /**
-     * @var array
-     */
-    protected static $jsonConfig = array(
-        'name',
-        'code',
-        'isActive',
-        'year',
-        'dateStart',
-        'dateEnd',
-    );
-
-    /**
      * @var string
      *
      * @ORM\Column(type="text", nullable=false)
@@ -94,6 +82,21 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     {
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questionnaires = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'name',
+            'code',
+            'isActive',
+            'year',
+            'dateStart',
+            'dateEnd',
+        ));
     }
 
     /**

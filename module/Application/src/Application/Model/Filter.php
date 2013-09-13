@@ -44,15 +44,6 @@ class Filter extends AbstractModel
 {
 
     /**
-     * @var array
-     */
-    protected static $jsonConfig
-        = array(
-            'name',
-            'isOfficial',
-        );
-
-    /**
      * @var string
      *
      * @ORM\Column(type="text", nullable=false)
@@ -126,6 +117,17 @@ class Filter extends AbstractModel
         $this->parents = new \Doctrine\Common\Collections\ArrayCollection();
         $this->summands = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setName($name);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'name',
+            'isOfficial',
+        ));
     }
 
     /**

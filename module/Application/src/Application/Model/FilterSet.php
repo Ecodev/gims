@@ -16,12 +16,6 @@ class FilterSet extends AbstractModel
 {
 
     /**
-     * @var array
-     */
-    protected static $jsonConfig
-    = array('name');
-
-    /**
      * @var string
      *
      * @ORM\Column(type="text", nullable=false)
@@ -67,6 +61,16 @@ class FilterSet extends AbstractModel
         $this->filters = new \Doctrine\Common\Collections\ArrayCollection();
         $this->excludedFilters = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setName($name);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'name',
+        ));
     }
 
     /**

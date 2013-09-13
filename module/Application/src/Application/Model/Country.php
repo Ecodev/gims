@@ -14,15 +14,6 @@ class Country extends AbstractModel
 {
 
     /**
-     * @var array
-     */
-    protected static $jsonConfig
-        = array(
-            'code',
-            'name',
-        );
-
-    /**
      * @var string
      *
      * @ORM\Column(type="string", nullable=false)
@@ -147,6 +138,17 @@ class Country extends AbstractModel
      * @ORM\ManyToOne(targetEntity="Geoname")
      */
     private $geoname;
+
+    /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'code',
+            'name',
+        ));
+    }
 
     /**
      * Get code

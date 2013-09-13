@@ -76,6 +76,38 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         )));
     }
 
+    public function testDot()
+    {
+        $closure = function () {
+                    $foo = 123;
+                };
+
+        $actual = $this->hydrator->expandDotsToArray(array(
+            'name',
+            'subobject',
+            'subobject.name',
+            'subobject.subsubobject.name',
+            'othersub.name',
+            'closure' => $closure,
+        ));
+
+        $expected = array(
+            'name',
+            'subobject' => array(
+                'name',
+                'subsubobject' => array(
+                    'name'
+                )
+            ),
+            'othersub' => array(
+                'name'
+            ),
+            'closure' => $closure,
+        );
+
+        $this->assertEquals($expected, $actual);
+    }
+
     public function testCanHydrateAndExtract()
     {
         $data = array(
@@ -188,26 +220,27 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->assertEquals($choices, $question->getChoices(), 'question should have the two new choices');
     }
 
-    // @todo fix me or remove me
-//    public function testExtractSubObject()
-//    {
-//        $filter1 = new \Application\Model\Filter('filter 1');
-//        $filter2 = new \Application\Model\Filter('filter 2');
-//        $filter1->setOfficialFilter($filter2);
-//
-//        $this->assertEquals(array(
-//            'id' => null,
-//            'name' => 'filter 1',
-//            'officialFilter' => array(
-//                'id' => null,
-//                'name' => 'filter 2',
-//            ),
-//                ), $this->fixture->extract($filter1, array(
-//                    'name',
-//                    'officialFilter' => array('name'),
-//                    'unkown properties' => array('foo', 'bar')
-//                )), 'should return subobject, but only known one');
-//    }
+    public function testExtractSubObject()
+    {
+        $filter1 = new \Application\Model\Filter('filter 1');
+        $filter2 = new \Application\Model\Filter('filter 2');
+        $filter1->setOfficialFilter($filter2);
+
+        $this->assertEquals(array(
+            'id' => null,
+            'name' => 'filter 1',
+            'isOfficial' => true,
+            'officialFilter' => array(
+                'id' => null,
+                'name' => 'filter 2',
+                'isOfficial' => true,
+            ),
+                ), $this->hydrator->extract($filter1, array(
+                    'name',
+                    'officialFilter' => array('name'),
+                    'unkown properties' => array('foo', 'bar')
+                )), 'should return subobject, but only known one');
+    }
 
     /**
      * @test
@@ -221,93 +254,6 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     /**
      * @test
      */
-    public function parsePropertiesAndCheckReturnContainsRecursivePropertyStructureForFieldSet2()
-    {
-        $this->hydrator->parseProperties('Application\Model\Survey', $this->fieldSet2);
-        $actual = $this->hydrator->getPropertyStructure();
-
-        $this->assertCount(2, $actual['Application\Model\Survey']);
-        $this->assertCount(0, $actual['Application\Model\Questionnaire']);
-    }
-
-    /**
-     * @test
-     */
-    public function parsePropertiesAndCheckReturnContainsRecursivePropertyStructureForFieldSet1()
-    {
-        $this->hydrator->parseProperties('Application\Model\Survey', $this->fieldSet1);
-        $actual = $this->hydrator->getPropertyStructure();
-        $this->assertCount(4, $actual['Application\Model\Survey']);
-        $this->assertCount(5, $actual['Application\Model\Questionnaire']);
-        $this->assertCount(4, $actual['Application\Model\Answer']);
-    }
-
-    /**
-     * @test
-     */
-    public function completePropertyStructureWithDefaultPropertiesAndCheckWhetherReturnContainsId()
-    {
-        $this->hydrator->parseProperties('Application\Model\Survey', $this->fieldSet1);
-        $this->hydrator->completePropertyStructureWithDefaultProperties();
-
-        $actual = $this->hydrator->getPropertyStructure();
-        foreach (array('Survey', 'Questionnaire', 'Answer') as $entity) {
-            $this->assertContains('id', $actual['Application\Model\\' . $entity]);
-        }
-    }
-
-    /**
-     * @test
-     */
-    public function completePropertyStructureWithDefaultPropertiesAndCheckWhetherReturnResolveFieldAliasMetadata()
-    {
-        $properties = $this->hydrator->resolvePropertyAliases('\Application\Model\Survey', $this->fieldSet1);
-        $this->hydrator->parseProperties('Application\Model\Survey', $properties);
-
-        $actual = $this->hydrator->getPropertyStructure();
-        foreach (array('Survey', 'Questionnaire', 'Answer') as $entity) {
-            $this->assertContains(
-                    'dateCreated', $actual['Application\Model\\' . $entity], 'Can not resolve metadata property alias'
-            );
-        }
-    }
-
-    /**
-     * @test
-     */
-    public function checkPropertyPermissionMethodShouldRemoveFieldFoo()
-    {
-        $this->hydrator->parseProperties('Application\Model\Survey', $this->fieldSet1);
-        $this->hydrator->completePropertyStructureWithDefaultProperties();
-        $this->hydrator->checkPropertyPermission();
-
-        $actual = $this->hydrator->getPropertyStructure();
-
-        foreach (array('Survey', 'Questionnaire', 'Answer') as $entity) {
-            $this->assertNotContains(
-                    'foo', $actual['Application\Model\\' . $entity], 'Can not resolve metadata property alias'
-            );
-        }
-    }
-
-    /**
-     * @test
-     */
-    public function getJsonConfigForEntityReturnsNotEmptyArray()
-    {
-        $this->hydrator->parseProperties('Application\Model\Survey', $this->fieldSet1);
-        $this->hydrator->completePropertyStructureWithDefaultProperties();
-        $this->hydrator->checkPropertyPermission();
-
-        foreach (array('Survey', 'Questionnaire', 'Answer') as $entity) {
-            $actual = $this->hydrator->getJsonConfigForEntity('Application\Model\\' . $entity);
-            $this->assertNotEmpty($actual);
-        }
-    }
-
-    /**
-     * @test
-     */
     public function extractSurveyWithPropertyQuestionnairesAndQuestionnairesNameAndCheckResultContainsKeyQuestionnairesName()
     {
         $actual = $this->hydrator->extract($this->getFakeSurvey(), array('name', 'questionnaires', 'questionnaires.name'));
@@ -315,27 +261,28 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->assertNotEmpty($actual['questionnaires']);
     }
 
-    // @todo fix me or remove me
-//    public function testExtractSubObjects()
-//    {
-//        $filter1 = new \Application\Model\Filter('filter 1');
-//        $filter2 = new \Application\Model\Filter('filter 2');
-//        $filter1->addChild($filter2);
-//
-//        $this->assertEquals(array(
-//            'id' => null,
-//            'name' => 'filter 1',
-//            'children' => array(
-//                array(
-//                    'id' => null,
-//                    'name' => 'filter 2',
-//                ),
-//            ),
-//                ), $this->fixture->extract($filter1, array(
-//                    'name',
-//                    'children' => array('name'),
-//                )), 'should return array of subobjects, but only known ones');
-//    }
+    public function testExtractSubObjects()
+    {
+        $filter1 = new \Application\Model\Filter('filter 1');
+        $filter2 = new \Application\Model\Filter('filter 2');
+        $filter1->addChild($filter2);
+
+        $this->assertEquals(array(
+            'id' => null,
+            'name' => 'filter 1',
+            'isOfficial' => true,
+            'children' => array(
+                array(
+                    'id' => null,
+                    'name' => 'filter 2',
+                    'isOfficial' => true,
+                ),
+            ),
+                ), $this->hydrator->extract($filter1, array(
+                    'name',
+                    'children' => array('name'),
+                )), 'should return array of subobjects, but only known ones');
+    }
 
     public function testExtractSubObjectWithRecursiveConfiguration()
     {

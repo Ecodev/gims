@@ -18,14 +18,6 @@ class Role extends AbstractModel
 {
 
     /**
-     * @var array
-     */
-    protected static $jsonConfig
-        = array(
-            'name',
-        );
-
-    /**
      * @var string
      *
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -55,6 +47,16 @@ class Role extends AbstractModel
     {
         $this->permissions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setName($name);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'name',
+        ));
     }
 
     /**

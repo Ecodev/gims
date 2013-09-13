@@ -92,7 +92,14 @@ class FilterSetControllerTest extends AbstractController
     {
         $this->dispatch($this->getRoute('get') . '?fields=metadata', Request::METHOD_GET);
         $actual = $this->getJsonResponse();
-        foreach (FilterSet::getMetadata() as $key => $val) {
+        $metadata = array(
+            'dateCreated',
+            'dateModified',
+            'creator',
+            'modifier',
+        );
+
+        foreach ($metadata as $key => $val) {
             $metadata = is_string($key) ? $key : $val;
             $this->assertArrayHasKey($metadata, $actual);
         }

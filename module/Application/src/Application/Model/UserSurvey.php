@@ -15,15 +15,6 @@ class UserSurvey extends AbstractModel
 {
 
     /**
-     * @var array
-     */
-    protected static $jsonConfig = array(
-        'user',
-        'role',
-        'survey',
-    );
-
-    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="userSurveys")
@@ -52,6 +43,18 @@ class UserSurvey extends AbstractModel
      * })
      */
     private $survey;
+
+    /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'user',
+            'role',
+            'survey',
+        ));
+    }
 
     /**
      * Set "user"

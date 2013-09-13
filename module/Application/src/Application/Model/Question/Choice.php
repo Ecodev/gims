@@ -10,22 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Application\Repository\ChoiceRepository")
  */
 class Choice extends \Application\Model\AbstractModel
-{
+{ /**
+ * @var integer
+ *
+ * @ORM\Column(type="smallint", nullable=false, options={"default" = 0})
+ */
 
-    /**
-     * @var array
-     */
-    protected static $jsonConfig = array(
-        'value',
-        'label',
-        'sorting'
-    );
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(type="smallint", nullable=false, options={"default" = 0})
-     */
     private $sorting = 0;
 
     /**
@@ -53,11 +43,15 @@ class Choice extends \Application\Model\AbstractModel
     private $label;
 
     /**
-     * Constructor
+     * @inheritdoc
      */
-    public function __construct()
+    public function getJsonConfig()
     {
-        #$this->answers = new \Doctrine\Common\Collections\ArrayCollection();
+        return array_merge(parent::getJsonConfig(), array(
+            'value',
+            'label',
+            'sorting',
+        ));
     }
 
     /**

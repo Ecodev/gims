@@ -46,8 +46,8 @@ class QuestionController extends AbstractChildRestfulController
                     }
 
                     $part = $answer->getPart();
-                    $answerData = $hydrator->extract($answer, \Application\Model\Answer::getJsonConfig());
-                    $answerData['part'] = $hydrator->extract($part, \Application\Model\Part::getJsonConfig());
+                    $answerData = $hydrator->extract($answer);
+                    $answerData['part'] = $hydrator->extract($part);
 
                     array_push($output, $answerData);
                 }
@@ -106,8 +106,9 @@ class QuestionController extends AbstractChildRestfulController
         // prepare flat array of questions for then be reordered by Parent > childrens > childrens
         // Ignores fields requests. @TODO : Implement it.
         $flatQuestions = array();
+        $jsonConfig = $this->getJsonConfig();
         foreach ($questions as $question) {
-            $flatQuestion = $this->hydrator->extract($question, $this->getJsonConfig());
+            $flatQuestion = $this->hydrator->extract($question, $jsonConfig);
             array_push($flatQuestions, $flatQuestion);
         }
 

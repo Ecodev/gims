@@ -10,9 +10,18 @@ class Hydrator
 {
 
     /**
-     * @var array
+     * Returns an array of array of property values of all given objects
+     *
+     * @param array $objects
+     * @param array $properties
+     *
+     * @return array
      */
-    protected $propertyStructure = array();
+    public function extractArray($objects, array $properties = array())
+    {
+        $properties = $this->initializePropertyStructure($properties);
+        return $this->internalExtractArray($objects, $properties);
+    }
 
     /**
      * Returns an array of array of property values of all given objects
@@ -22,153 +31,46 @@ class Hydrator
      *
      * @return array
      */
-    public function extractArray($objects, array $properties)
+    private function internalExtractArray($objects, array $properties = array())
     {
         $result = array();
         foreach ($objects as $object) {
-            $result[] = $this->extract($object, $properties);
+            $result[] = $this->internalExtract($object, $properties);
         }
 
         return $result;
     }
 
     /**
-     * Return properties from the property structure given an entity.
-     *
-     * @param string $className
-     *
-     * @throws \Exception
-     * @return array
-     */
-    public function getJsonConfigForEntity($className)
-    {
-
-        // Launch exception if value is still missing
-        if (empty($this->propertyStructure[$className])) {
-            throw new \Exception('Not existing className key in property structure ' . $className, 1370277983);
-        }
-
-        return $this->propertyStructure[$className];
-    }
-
-    /**
-     * Parse given properties and fill-in attribute "propertyStructure"
-     *
-     * @param string $className
-     * @param array  $properties
-     *
-     * @return void
-     */
-    public function parseProperties($className, array $properties)
-    {
-        $classMetadata = Module::getEntityManager()->getClassMetadata($className);
-        foreach ($properties as $key => $property) {
-            if (is_string($property) && is_int(strpos($property, '.'))) {
-
-                $structure = explode('.', $property);
-
-                // remove last segment as key for the array
-                $element = array_shift($structure);
-
-                // Initialize a new structure, the first element without
-                $subStructure = array(
-                    implode('.', $structure)
-                );
-                $subClassName = $classMetadata->getAssociationTargetClass($element);
-                $this->parseProperties($subClassName, $subStructure);
-            } elseif ($property instanceof \Closure) {
-                $this->propertyStructure[$className][$key] = $property;
-            } else {
-                $this->propertyStructure[$className][] = $property;
-
-                // check whether the property is an association
-                if (Module::getEntityManager()->getClassMetadata($className)->hasAssociation($property)) {
-                    $relationClassName = $classMetadata->getAssociationTargetClass($property);
-                    if (!isset($this->propertyStructure[$relationClassName])) {
-                        $this->propertyStructure[$relationClassName] = array();
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Complete property structure with default properties
-     *
-     * @return void
-     */
-    public function completePropertyStructureWithDefaultProperties()
-    {
-        foreach ($this->getPropertyStructure() as $className => $properties) {
-
-            // Merge with default properties
-            $this->propertyStructure[$className] = array_merge(
-                    $properties, call_user_func($className . '::getJsonConfig')
-            );
-        }
-    }
-
-    /**
-     * Check that properties from the structure are allowed to be outputted.
-     *
-     * @return void
-     */
-    public function checkPropertyPermission()
-    {
-        // Check if fields is allowed to be printed out.
-        foreach ($this->getPropertyStructure() as $className => $properties) {
-
-            $_properties = array();
-            foreach ($properties as $key => $property) {
-
-                $isAllowed = false;
-
-                // If method does not exist, skip it
-                // Check if the property is callable or is defined as default
-                if ((is_string($property) && is_callable(array($className, $this->formatGetter($property)))) || call_user_func_array($className . '::isPropertyInJsonConfig', array($property))
-                ) {
-                    $isAllowed = true;
-                }
-
-                // @todo remove me probably. Move closure as property of model?
-                if ($property instanceof \Closure) {
-                    $_properties[$key] = $property;
-                } elseif ($isAllowed) {
-                    $_properties[] = $property;
-                }
-            }
-
-            // Merge with default properties
-            $this->propertyStructure[$className] = $_properties;
-        }
-    }
-
-    /**
-     * Resolve property aliases.
+     * Replace 'metadata' alias with actual property names.
      * E.g. metadata which is just an alias to dateModified, dateCreated, creator, modifier
      *
-     * @param string $className
      * @param array  $properties
-     *
      * @return array
      */
-    public function resolvePropertyAliases($className, array $properties)
+    private function resolveMetadataAliases(array $properties)
     {
+        $metadata = array(
+            'dateCreated',
+            'dateModified',
+            'creator',
+            'modifier',
+        );
 
-        $_properties = array();
-        foreach ($properties as $key => $property) {
-            if (is_string($key)) { // most probably a closure
-                $_properties[$key] = $property;
-            } elseif (preg_match('/metadata/is', $property)) {
-                foreach (call_user_func($className . '::getMetadata') as $metadata) {
-                    $_properties[] = str_replace('metadata', $metadata, $property);
-                }
-            } else {
-                $_properties[] = $property;
+        $key = array_search('metadata', $properties);
+        if ($key !== false) {
+            unset($properties[$key]);
+            $properties = array_merge($properties, $metadata);
+        }
+
+        // Do it recursively
+        foreach ($properties as &$property) {
+            if (is_array($property)) {
+                $property = $this->resolveMetadataAliases($property);
             }
         }
 
-        return $_properties;
+        return $properties;
     }
 
     /**
@@ -179,9 +81,9 @@ class Hydrator
      *
      * @return array
      */
-    private function mergeWithDefaultProperties($className, array $properties)
+    private function mergeWithDefaultProperties(AbstractModel $object, array $properties)
     {
-        $defaultProperties = call_user_func($className . '::getJsonConfig');
+        $defaultProperties = $object->getJsonConfig();
         $properties = array_merge($defaultProperties, $properties);
 
         // Avoid duplicate keys.
@@ -199,26 +101,17 @@ class Hydrator
     }
 
     /**
-     * Main method for initializing attribute "propertyStructure"
+     * Convert properties into a real array ready for use in internalExtract()
      *
-     * @param string $className
-     * @param array  $properties
-     *
+     * @param array $properties
      * @return array
      */
-    private function initializePropertyStructure($className, array $properties)
+    private function initializePropertyStructure(array $properties)
     {
-        // instantiate property with default value
-        $this->propertyStructure[$className] = array();
+        $propertiesArray = $this->expandDotsToArray($properties);
+        $properties = $this->resolveMetadataAliases($propertiesArray);
 
-        $properties = $this->mergeWithDefaultProperties($className, $properties);
-        $properties = $this->resolvePropertyAliases($className, $properties);
-
-        // Analyse properties and build a property structure.
-        $this->parseProperties($className, $properties);
-
-        $this->completePropertyStructureWithDefaultProperties();
-        $this->checkPropertyPermission();
+        return $properties;
     }
 
     /**
@@ -230,12 +123,25 @@ class Hydrator
      * @throws \InvalidArgumentException
      * @return array
      */
-    public function extract(AbstractModel $object, array $properties)
+    public function extract(AbstractModel $object, array $properties = array())
+    {
+        $properties = $this->initializePropertyStructure($properties);
+        return $this->internalExtract($object, $properties);
+    }
+
+    /**
+     * Return an array of property values of the given object
+     *
+     * @param AbstractModel $object
+     * @param array         $properties
+     *
+     * @throws \InvalidArgumentException
+     * @return array
+     */
+    private function internalExtract(AbstractModel $object, array $properties = array())
     {
         $result = array();
-
-        $this->initializePropertyStructure(get_class($object), $properties);
-        $properties = $this->getJsonConfigForEntity(get_class($object));
+        $properties = $this->mergeWithDefaultProperties($object, $properties);
 
         foreach ($properties as $key => $value) {
 
@@ -252,7 +158,7 @@ class Hydrator
                 $propertyName = $key;
                 $propertyValue = $value($this, $object);
             } elseif (is_string($key)) {
-                $getter = $this->formatGetter($value);
+                $getter = $this->formatGetter($key);
 
                 // If method does not exist, skip it
                 if (!is_callable(array($object, $getter))) {
@@ -262,11 +168,11 @@ class Hydrator
                 $subObject = $object->$getter();
 
                 // Reuse same configuration if ask for recursive
-                $jsonConfig = $value == '__recursive' ? $properties : $value;
+                $subObjectProperties = $value == '__recursive' ? $properties : $value;
                 if ($subObject instanceof \IteratorAggregate) {
-                    $propertyValue = $this->extractArray($subObject, $jsonConfig);
+                    $propertyValue = $this->internalExtractArray($subObject, $subObjectProperties);
                 } else {
-                    $propertyValue = $subObject ? $this->extract($subObject, $jsonConfig) : null;
+                    $propertyValue = $subObject ? $this->internalExtract($subObject, $subObjectProperties) : null;
                 }
 
                 $propertyName = $key;
@@ -281,15 +187,10 @@ class Hydrator
                 $propertyValue = $object->$getter();
                 if ($propertyValue instanceof \DateTime) {
                     $propertyValue = $propertyValue->format(\DateTime::ISO8601);
-                } elseif ($propertyValue instanceof \Doctrine\Common\Collections\ArrayCollection || $propertyValue instanceof \Doctrine\ORM\PersistentCollection) {
-
-                    $className = Module::getEntityManager()->getClassMetadata(get_class($object))->getAssociationTargetClass($value);
-                    $_properties = $this->getJsonConfigForEntity($className);
-                    $propertyValue = $this->extractArray($propertyValue, $_properties);
+                } elseif ($propertyValue instanceof \IteratorAggregate) {
+                    $propertyValue = $this->internalExtractArray($propertyValue);
                 } elseif ($propertyValue instanceof \Application\Model\AbstractModel) {
-                    $className = Module::getEntityManager()->getClassMetadata(get_class($object))->getAssociationTargetClass($value);
-                    $_properties = $this->getJsonConfigForEntity($className);
-                    $propertyValue = $this->extract($propertyValue, $_properties);
+                    $propertyValue = $this->internalExtract($propertyValue);
                 } elseif ($propertyValue instanceof \Application\Model\AbstractEnum) {
                     $propertyValue = (string) $propertyValue;
                 }
@@ -439,11 +340,37 @@ class Hydrator
     }
 
     /**
-     * @return array
+     * Expands dot notation into array
+     * Eg: ['a', 'b.c'] => ['a', ['b' => 'c']]
+     * @param array $properties
      */
-    public function getPropertyStructure()
+    public function expandDotsToArray(array $properties)
     {
-        return $this->propertyStructure;
+        $result = array();
+        foreach ($properties as $key => $property) {
+            if (!is_string($key) && is_string($property)) {
+                $keys = explode('.', $property);
+
+                $value = array_pop($keys);
+                $arr = &$result;
+                while ($key = array_shift($keys)) {
+
+                    // If value already exists, remove it to replace it with an array ([0 => 'a'], becomes ['a' => array()])
+                    $existingKey = array_search($key, $arr);
+                    if ($existingKey !== false) {
+                        unset($arr[$existingKey]);
+                    }
+
+                    $arr = &$arr[$key];
+                }
+
+                $arr[] = $value;
+            } else {
+                $result[$key] = $property;
+            }
+        }
+
+        return $result;
     }
 
 }

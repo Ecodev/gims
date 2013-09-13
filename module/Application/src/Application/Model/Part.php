@@ -15,13 +15,6 @@ class Part extends AbstractModel
 {
 
     /**
-     * @var array
-     */
-    protected static $jsonConfig = array(
-        'name'
-    );
-
-    /**
      * @var string
      *
      * @ORM\Column(type="text", nullable=false)
@@ -38,6 +31,16 @@ class Part extends AbstractModel
     public function __construct($name = null)
     {
         $this->setName($name);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'name',
+        ));
     }
 
     /**
@@ -71,4 +74,5 @@ class Part extends AbstractModel
     {
         return $this->isTotal;
     }
+
 }

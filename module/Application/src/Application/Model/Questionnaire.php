@@ -15,13 +15,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 {
 
     /**
-     * @var array
-     */
-    protected static $jsonConfig = array(
-        'name',
-    );
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetimetz", nullable=false)
@@ -93,6 +86,16 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         $this->answers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questionnaireFormulas = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setStatus(QuestionnaireStatus::$NEW);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'name',
+        ));
     }
 
     /**

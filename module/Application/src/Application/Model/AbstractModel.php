@@ -19,31 +19,6 @@ abstract class AbstractModel
     private static $now;
 
     /**
-     * @var array
-     */
-    protected static $jsonConfig = array(
-        'id'
-    );
-
-    /**
-     * @var array
-     */
-    protected static $metadata = array(
-        'dateCreated',
-        'dateModified',
-        'creator',
-        'modifier',
-    );
-
-    /**
-     * @return array
-     */
-    public static function getMetadata()
-    {
-        return self::$metadata;
-    }
-
-    /**
      * @var integer
      *
      * @ORM\Column(type="integer", nullable=false)
@@ -223,13 +198,14 @@ abstract class AbstractModel
     }
 
     /**
+     * Returns an array of properties that always appear in JSON
      * @return array
      */
-    public static function getJsonConfig()
+    public function getJsonConfig()
     {
-        $class = '\\' . get_called_class();
-
-        return array_merge(self::$jsonConfig, $class::$jsonConfig);
+        return array(
+            'id',
+        );
     }
 
     /**
