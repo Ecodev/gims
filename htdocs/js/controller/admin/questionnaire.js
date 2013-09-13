@@ -1,5 +1,6 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($scope, $routeParams, $location, Restangular, Modal) {
+angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($scope, $routeParams, $location, Restangular, Modal)
+{
     "use strict";
 
     var allStatus = [
@@ -22,19 +23,23 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
         returnTab = $routeParams.returnTab;
     }
 
-    var redirect = function () {
+    var redirect = function ()
+    {
         $location.path(returnUrl).search({}).hash(returnTab);
     };
 
-    $scope.cancel = function () {
+    $scope.cancel = function ()
+    {
         redirect();
     };
 
-    $scope.saveAndClose = function () {
+    $scope.saveAndClose = function ()
+    {
         this.save(true);
     };
 
-    $scope.save = function (redirectAfterSave) {
+    $scope.save = function (redirectAfterSave)
+    {
 
         $scope.sending = true;
 
@@ -42,7 +47,8 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
         var geoname = $scope.questionnaire.geoname;
         $scope.questionnaire.geoname = $scope.questionnaire.geoname.id;
         if ($scope.questionnaire.id) {
-            $scope.questionnaire.put().then(function () {
+            $scope.questionnaire.put().then(function ()
+            {
                 $scope.sending = false;
 
                 if (redirectAfterSave) {
@@ -52,7 +58,8 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
         } else {
             $scope.questionnaire.survey = $routeParams.survey;
             $scope.questionnaire.status = 'new';
-            Restangular.all('questionnaire').post($scope.questionnaire).then(function (questionnaire) {
+            Restangular.all('questionnaire').post($scope.questionnaire).then(function (questionnaire)
+            {
                 $scope.sending = false;
 
                 if (redirectAfterSave) {
@@ -68,7 +75,8 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
     };
 
     // Delete a questionnaire
-    $scope.delete = function () {
+    $scope.delete = function ()
+    {
         Modal.confirmDelete($scope.questionnaire, {label: $scope.questionnaire.name, returnUrl: $location.search().returnUrl});
     };
 
@@ -78,25 +86,26 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
 
     // Try loading questionnaire if possible...
     if ($routeParams.id) {
-        Restangular
-            .one('questionnaire', $routeParams.id)
-            .get({fields: 'metadata,geoname,status,dateObservationStart,dateObservationEnd,comments,name,permissions'})
-            .then(function (questionnaire) {
+        Restangular.one('questionnaire', $routeParams.id).get({fields: 'metadata,geoname,status,dateObservationStart,dateObservationEnd,comments,name,permissions'}).then(function (questionnaire)
+            {
                 $scope.questionnaire = questionnaire;
             });
     }
 
     // Only show 'validated' option if it is already validated, or if the user has enough permission to select it
-    $scope.$watch('questionnaire', function (questionnaire) {
-        $scope.status = _.filter(allStatus, function(status) {
+    $scope.$watch('questionnaire', function (questionnaire)
+    {
+        $scope.status = _.filter(allStatus, function (status)
+        {
             return status.value != 'validated' || questionnaire.status == 'validated' || questionnaire.permissions.validate;
-            });
+        });
     });
 
     // Load survey if possible
     var params = $location.search();
     if (params.survey !== undefined) {
-        Restangular.one('survey', params.survey).get().then(function (survey) {
+        Restangular.one('survey', params.survey).get().then(function (survey)
+        {
             $scope.survey = survey;
         });
     }

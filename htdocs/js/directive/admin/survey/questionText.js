@@ -1,7 +1,7 @@
 angular.module('myApp.directives').directive('gimsTextQuestion', function () {
     return {
         restrict: 'E',
-        template: "<div class='span4' ng-repeat='part in question.parts'>"+
+        template: "<div ng-repeat='part in question.parts' ng-class='{span12:question.parts.length==1, span6:question.parts.length==2, span4:question.parts.length==3}'>"+
                 "     <label for='numerical-{{question.id}}-{{part.id}}'>"+
                 "         <div ng-switch='part.name'>" +
                 "               <div ng-switch-when='Total'>National</div>"+

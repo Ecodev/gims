@@ -56,7 +56,6 @@ html {
     text-align: center;
 }
 
-
 .nav-pills-icon {
     text-align: center;
 }
@@ -68,7 +67,6 @@ div.browse .span4 {
     }
 }
 
-
 .container-angular > .container {
     margin-top: 2em;
 }
@@ -79,7 +77,8 @@ div.browse .span4 {
 }
 
 .gridStyle {
-    height: 1000px; // Use super big height, so the auto-resize works correctly
+    height: 1000px;
+    // Use super big height, so the auto-resize works correctly
 }
 
 // Automatically insert '>' between breadcrumbs
@@ -108,4 +107,50 @@ div.browse .span4 {
 
 .popover {
     max-width: 500px !important;
+}
+
+#questionnaireNav > ul {
+    padding-top: 20px;
+}
+
+#questionnaireNav ul {
+    margin-bottom: 5px;
+    margin-left: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+#questionnaireNav ul ul {
+    display: none;
+}
+
+#questionnaireNav ul ul li {
+    padding-left: 0.75em;
+}
+
+#questionnaireNav a {
+    display: block;
+    margin: 0 0 2px 0;
+}
+
+#questionnaireNav li.active_parent > a {
+    background: #ddd;
+}
+
+#questionnaireNav li.active> a {
+    /*    background:#003bb3;*/
+}
+
+#questionnaireNav li.active_parent > div > gims-questions-nav > ul,
+#questionnaireNav li.active > div > gims-questions-nav > ul {
+    display: block;
+}
+
+#questionnaireNav .potentialEmptyUl.mask {
+    display: none !important;
+    border: 1px solid red;
+}
+
+#questionnaireNav .nav {
+    margin-bottom: 0 !important;
 }
