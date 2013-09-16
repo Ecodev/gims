@@ -224,12 +224,12 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $this->answer31 = new \Application\Model\Answer();
         $this->answer32 = new \Application\Model\Answer();
 
-        $this->answer131->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question131)->setValueAbsolute(0.1);
-        $this->answer132->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question132)->setValueAbsolute(0.01);
-        $this->answer141->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question141)->setValueAbsolute(0.001);
-        $this->answer142->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question142)->setValueAbsolute(0.0001);
-        $this->answer31->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question31)->setValueAbsolute(0.00001);
-        $this->answer32->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question32)->setValueAbsolute(0.000001);
+        $this->answer131->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question131)->setValuePercent(0.1);
+        $this->answer132->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question132)->setValuePercent(0.01);
+        $this->answer141->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question141)->setValuePercent(0.001);
+        $this->answer142->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question142)->setValuePercent(0.0001);
+        $this->answer31->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question31)->setValuePercent(0.00001);
+        $this->answer32->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question32)->setValuePercent(0.000001);
 
         $this->highFilter1 = new \Application\Model\Filter('improved');
         $this->highFilter2 = new \Application\Model\Filter('unimproved');

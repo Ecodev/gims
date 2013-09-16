@@ -1027,7 +1027,7 @@ STRING;
      */
     protected function importHighFilters(array $filterSetNames, array $filters, \PHPExcel_Worksheet $sheet)
     {
-        $complementaryTotalFormula = $this->getFormula('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . '}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . '})), {F#current,Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . '}, {self})');
+        $complementaryTotalFormula = $this->getFormula('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . '}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . '})), ({F#current,Q#current,P#' . $this->partRural->getId() . '} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . '} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, {self})');
         $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
         $filterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedUnimprovedName']);
         $improvedFilterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedName']);

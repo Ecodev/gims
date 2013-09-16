@@ -13,20 +13,20 @@ class CalculatorTest extends AbstractCalculator
     public function testComputingQuestionnaireIsCorrect()
     {
         // Assert computing for every single filter
-        $this->assertEquals($this->answer131->getValueAbsolute() + $this->answer132->getValueAbsolute() + $this->answer141->getValueAbsolute() + $this->answer142->getValueAbsolute(), (new Calculator())->computeFilter($this->filter1, $this->questionnaire, $this->part), 'should be the sum of unique children (excluding duplicates via summands)');
-        $this->assertEquals($this->answer131->getValueAbsolute() + $this->answer141->getValueAbsolute(), (new Calculator())->computeFilter($this->filter11, $this->questionnaire, $this->part), 'should be the sum of summands');
-        $this->assertEquals($this->answer132->getValueAbsolute() + $this->answer142->getValueAbsolute(), (new Calculator())->computeFilter($this->filter12, $this->questionnaire, $this->part), 'should be the sum of summands');
-        $this->assertEquals($this->answer131->getValueAbsolute() + $this->answer132->getValueAbsolute(), (new Calculator())->computeFilter($this->filter13, $this->questionnaire, $this->part), 'should be the sum of children');
-        $this->assertEquals($this->answer131->getValueAbsolute(), (new Calculator())->computeFilter($this->filter131, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
-        $this->assertEquals($this->answer132->getValueAbsolute(), (new Calculator())->computeFilter($this->filter132, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
-        $this->assertEquals($this->answer141->getValueAbsolute() + $this->answer142->getValueAbsolute(), (new Calculator())->computeFilter($this->filter14, $this->questionnaire, $this->part), 'should be the sum of children');
-        $this->assertEquals($this->answer141->getValueAbsolute(), (new Calculator())->computeFilter($this->filter141, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
-        $this->assertEquals($this->answer142->getValueAbsolute(), (new Calculator())->computeFilter($this->filter142, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
+        $this->assertEquals($this->answer131->getValuePercent() + $this->answer132->getValuePercent() + $this->answer141->getValuePercent() + $this->answer142->getValuePercent(), (new Calculator())->computeFilter($this->filter1, $this->questionnaire, $this->part), 'should be the sum of unique children (excluding duplicates via summands)');
+        $this->assertEquals($this->answer131->getValuePercent() + $this->answer141->getValuePercent(), (new Calculator())->computeFilter($this->filter11, $this->questionnaire, $this->part), 'should be the sum of summands');
+        $this->assertEquals($this->answer132->getValuePercent() + $this->answer142->getValuePercent(), (new Calculator())->computeFilter($this->filter12, $this->questionnaire, $this->part), 'should be the sum of summands');
+        $this->assertEquals($this->answer131->getValuePercent() + $this->answer132->getValuePercent(), (new Calculator())->computeFilter($this->filter13, $this->questionnaire, $this->part), 'should be the sum of children');
+        $this->assertEquals($this->answer131->getValuePercent(), (new Calculator())->computeFilter($this->filter131, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
+        $this->assertEquals($this->answer132->getValuePercent(), (new Calculator())->computeFilter($this->filter132, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
+        $this->assertEquals($this->answer141->getValuePercent() + $this->answer142->getValuePercent(), (new Calculator())->computeFilter($this->filter14, $this->questionnaire, $this->part), 'should be the sum of children');
+        $this->assertEquals($this->answer141->getValuePercent(), (new Calculator())->computeFilter($this->filter141, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
+        $this->assertEquals($this->answer142->getValuePercent(), (new Calculator())->computeFilter($this->filter142, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
         $this->assertNull((new Calculator())->computeFilter($this->filter2, $this->questionnaire, $this->part), 'should be null, when no answer at all');
         $this->assertNull((new Calculator())->computeFilter($this->filter21, $this->questionnaire, $this->part), 'should be null, when no answer at all');
-        $this->assertEquals($this->answer31->getValueAbsolute() + $this->answer32->getValueAbsolute(), (new Calculator())->computeFilter($this->filter3, $this->questionnaire, $this->part), 'should be the sum of children, when summands have no answer');
-        $this->assertEquals($this->answer31->getValueAbsolute(), (new Calculator())->computeFilter($this->filter31, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
-        $this->assertEquals($this->answer32->getValueAbsolute(), (new Calculator())->computeFilter($this->filter32, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
+        $this->assertEquals($this->answer31->getValuePercent() + $this->answer32->getValuePercent(), (new Calculator())->computeFilter($this->filter3, $this->questionnaire, $this->part), 'should be the sum of children, when summands have no answer');
+        $this->assertEquals($this->answer31->getValuePercent(), (new Calculator())->computeFilter($this->filter31, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
+        $this->assertEquals($this->answer32->getValuePercent(), (new Calculator())->computeFilter($this->filter32, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
 
         // Overwrite computed filters with an answer
         $this->question11 = new \Application\Model\Question\NumericQuestion();
@@ -35,21 +35,21 @@ class CalculatorTest extends AbstractCalculator
         $this->question13->setFilter($this->filter13);
         $this->answer11 = new \Application\Model\Answer();
         $this->answer13 = new \Application\Model\Answer();
-        $this->answer11->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question11)->setValueAbsolute(0.0000001);
-        $this->answer13->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question13)->setValueAbsolute(0.00000001);
+        $this->answer11->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question11)->setValuePercent(0.0000001);
+        $this->answer13->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question13)->setValuePercent(0.00000001);
 
         // Assert that manually specified answer override computed values
-        $this->assertEquals($this->answer11->getValueAbsolute(), (new Calculator())->computeFilter($this->filter11, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
-        $this->assertEquals($this->answer13->getValueAbsolute(), (new Calculator())->computeFilter($this->filter13, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
-        $this->assertEquals($this->answer11->getValueAbsolute() + $this->answer13->getValueAbsolute() + $this->answer132->getValueAbsolute() + $this->answer141->getValueAbsolute() + $this->answer142->getValueAbsolute(), (new Calculator())->computeFilter($this->filter1, $this->questionnaire, $this->part), 'should be the sum of children, but with overriden values instead of computed');
+        $this->assertEquals($this->answer11->getValuePercent(), (new Calculator())->computeFilter($this->filter11, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
+        $this->assertEquals($this->answer13->getValuePercent(), (new Calculator())->computeFilter($this->filter13, $this->questionnaire, $this->part), 'should be the answer, when answer specified');
+        $this->assertEquals($this->answer11->getValuePercent() + $this->answer13->getValuePercent() + $this->answer132->getValuePercent() + $this->answer141->getValuePercent() + $this->answer142->getValuePercent(), (new Calculator())->computeFilter($this->filter1, $this->questionnaire, $this->part), 'should be the sum of children, but with overriden values instead of computed');
 
         // Add part to existing answer
         $part = new \Application\Model\Part('custom');
         $this->answer142->setPart($part);
 
         // Assert that we take part into consideration for filering answers
-        $this->assertEquals($this->answer141->getValueAbsolute(), (new Calculator())->computeFilter($this->filter14, $this->questionnaire, $this->part), 'should be the sum of children, but only for selected part');
-        $this->assertEquals($this->answer142->getValueAbsolute(), (new Calculator())->computeFilter($this->filter14, $this->questionnaire, $part), 'should be the sum of children, but only for selected part');
+        $this->assertEquals($this->answer141->getValuePercent(), (new Calculator())->computeFilter($this->filter14, $this->questionnaire, $this->part), 'should be the sum of children, but only for selected part');
+        $this->assertEquals($this->answer142->getValuePercent(), (new Calculator())->computeFilter($this->filter14, $this->questionnaire, $part), 'should be the sum of children, but only for selected part');
 
         // Add alternative (non-official) filter to previously unexisting answer
         $this->filter21bis = new \Application\Model\Filter('cat 2.1 bis');
@@ -57,16 +57,16 @@ class CalculatorTest extends AbstractCalculator
         $this->question21bis = new \Application\Model\Question\NumericQuestion();
         $this->question21bis->setFilter($this->filter21bis);
         $this->answer21bis = new \Application\Model\Answer();
-        $this->answer21bis->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question21bis)->setValueAbsolute(0.000000001);
+        $this->answer21bis->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question21bis)->setValuePercent(0.000000001);
 
         // Assert that alternative filter is used for computation
-        $this->assertEquals($this->answer21bis->getValueAbsolute(), (new Calculator())->computeFilter($this->filter2, $this->questionnaire, $this->part), 'should be the sum of children, including the answer which is specified with alternative filter');
-        $this->assertEquals($this->answer21bis->getValueAbsolute(), (new Calculator())->computeFilter($this->filter21, $this->questionnaire, $this->part), 'should be the alternative answer, when answer is specified with alternative filter');
-        $this->assertEquals($this->answer21bis->getValueAbsolute(), (new Calculator())->computeFilter($this->filter3, $this->questionnaire, $this->part), 'should be the sum of summands, when summands have answer');
+        $this->assertEquals($this->answer21bis->getValuePercent(), (new Calculator())->computeFilter($this->filter2, $this->questionnaire, $this->part), 'should be the sum of children, including the answer which is specified with alternative filter');
+        $this->assertEquals($this->answer21bis->getValuePercent(), (new Calculator())->computeFilter($this->filter21, $this->questionnaire, $this->part), 'should be the alternative answer, when answer is specified with alternative filter');
+        $this->assertEquals($this->answer21bis->getValuePercent(), (new Calculator())->computeFilter($this->filter3, $this->questionnaire, $this->part), 'should be the sum of summands, when summands have answer');
 
         // Define summands to use several time cat1.4.1 (once via cat1 and once via cat1.4)
         $this->filter3->addSummand($this->filter1)->addSummand($this->filter14);
-        $this->assertEquals($this->answer21bis->getValueAbsolute() + $this->answer11->getValueAbsolute() + $this->answer13->getValueAbsolute() + $this->answer132->getValueAbsolute() + $this->answer141->getValueAbsolute(), (new Calculator())->computeFilter($this->filter3, $this->questionnaire, $this->part), 'should not sum twice the same filter');
+        $this->assertEquals($this->answer21bis->getValuePercent() + $this->answer11->getValuePercent() + $this->answer13->getValuePercent() + $this->answer132->getValuePercent() + $this->answer141->getValuePercent(), (new Calculator())->computeFilter($this->filter3, $this->questionnaire, $this->part), 'should not sum twice the same filter');
     }
 
     public function testComputingFilterIsCorrect()
@@ -84,7 +84,7 @@ class CalculatorTest extends AbstractCalculator
         $service = new \Application\Service\Calculator\Calculator();
 
         $res1 = $service->computeFilter($this->highFilter3, $this->questionnaire, $this->part);
-        $this->answer131->setValueAbsolute((12345));
+        $this->answer131->setValuePercent((12345));
         $res2 = $service->computeFilter($this->highFilter3, $this->questionnaire, $this->part);
         $this->assertEquals($res1, $res2, 'result should be cached and therefore be the same');
 

@@ -234,7 +234,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     'data' => array(),
                 );
                 $i = 0;
-                foreach ($data['values%'] as $surveyCode => $value) {
+                foreach ($data['values'] as $surveyCode => $value) {
 
                     if (!is_null($value)) {
                         $scatterData = array(
@@ -307,7 +307,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'data' => array(),
             );
             $i = 0;
-            foreach ($data['values%'] as $surveyCode => $value) {
+            foreach ($data['values'] as $surveyCode => $value) {
 
                 if (!is_null($value)) {
                     $scatterData = array(

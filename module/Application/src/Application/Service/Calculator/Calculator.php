@@ -23,13 +23,38 @@ class Calculator
 
 use \Application\Traits\EntityManagerAware;
 
-    // @todo for sylvain: is the cache introducing some unwanted result in calculation?
     private $cacheComputeFilter = array();
     protected $excludedFilters = array();
+    private $populationRepository;
     private $questionnaireFormulaRepository;
     private $filterRepository;
     private $questionnaireRepository;
     private $partRepository;
+
+    /**
+     * Set the population repository
+     * @param \Application\Repository\PopulationRepository $populationRepository
+     * @return \Application\Service\Calculator\Jmp
+     */
+    public function setPopulationRepository(\Application\Repository\PopulationRepository $populationRepository)
+    {
+        $this->populationRepository = $populationRepository;
+
+        return $this;
+    }
+
+    /**
+     * Get the population repository
+     * @return \Application\Repository\PopulationRepository
+     */
+    public function getPopulationRepository()
+    {
+        if (!$this->populationRepository) {
+            $this->populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+        }
+
+        return $this->populationRepository;
+    }
 
     /**
      * Set the questionnaireformula repository
@@ -158,7 +183,7 @@ use \Application\Traits\EntityManagerAware;
      * @param \Application\Model\Filter $filter
      * @param \Application\Model\Questionnaire $questionnaire
      * @param \Application\Model\Part $part
-     * @return float|null null if no answer at all, otherwise the value
+     * @return float|null null if no answer at all, otherwise the percentage value
      */
     public function computeFilter(Filter $filter, Questionnaire $questionnaire, Part $part)
     {
@@ -181,7 +206,7 @@ use \Application\Traits\EntityManagerAware;
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters will be used to avoid duplicates
      * @param \Application\Model\Part $part
      * @param \Application\Model\Rule\Formula $excludedFormula optional formula to exclude when computing
-     * @return float|null null if no answer at all, otherwise the value
+     * @return float|null null if no answer at all, otherwise the percentage value
      */
     private function computeFilterInternal(Filter $filter, Questionnaire $questionnaire, \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters, Part $part, Formula $excludedFormula = null)
     {
@@ -202,7 +227,7 @@ use \Application\Traits\EntityManagerAware;
             if ($answerFilter === $filter && $answer->getPart() == $part) {
                 $alreadySummedFilters->add(true);
 
-                return $answer->getValueAbsolute();
+                return $answer->getValuePercent();
             }
         }
 
@@ -309,6 +334,17 @@ use \Application\Traits\EntityManagerAware;
                     $value = $this->computeFormula($questionnaireFormula->getFormula(), $questionnaireFormula->getQuestionnaire(), $questionnaireFormula->getPart(), $currentFilter);
 
                     return is_null($value) ? 'NULL' : $value;
+                }, $convertedFormulas);
+
+        // Replace {Q#34,P#56} with population data
+        $convertedFormulas = preg_replace_callback('/\{Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($currentQuestionnaire, $currentPart) {
+                    $questionnaireId = $matches[1];
+                    $partId = $matches[2];
+
+                    $questionnaire = $this->getQuestionnaireRepository()->findOneById($questionnaireId == 'current' ? $currentQuestionnaire : $questionnaireId);
+                    $part = $this->getPartRepository()->findOneById($partId == 'current' ? $currentPart : $partId);
+
+                    return $this->getPopulationRepository()->getOneByQuestionnaire($questionnaire, $part)->getPopulation();
                 }, $convertedFormulas);
 
         // Replace {self} with computed value without this formula

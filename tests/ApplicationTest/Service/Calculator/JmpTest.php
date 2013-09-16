@@ -52,8 +52,8 @@ class JmpTest extends AbstractCalculator
         $answer131 = new \Application\Model\Answer();
         $answer32 = new \Application\Model\Answer();
 
-        $answer131->setPart($this->part)->setQuestionnaire($questionnaire2)->setQuestion($question131)->setValueAbsolute(0.1);
-        $answer32->setPart($this->part)->setQuestionnaire($questionnaire2)->setQuestion($question32)->setValueAbsolute(0.000001);
+        $answer131->setPart($this->part)->setQuestionnaire($questionnaire2)->setQuestion($question131)->setValuePercent(0.1);
+        $answer32->setPart($this->part)->setQuestionnaire($questionnaire2)->setQuestion($question32)->setValuePercent(0.000001);
 
         $this->questionnaires = array($this->questionnaire, $questionnaire2);
 
@@ -118,11 +118,6 @@ class JmpTest extends AbstractCalculator
                 'tst 1' => 0.1111,
                 'tst 2' => 0.1,
             ),
-            'values%' =>
-            array(
-                'tst 1' => 0.01111,
-                'tst 2' => 0.0066666666666667,
-            ),
             'count' => 2,
             'years' =>
             array(
@@ -133,9 +128,7 @@ class JmpTest extends AbstractCalculator
             'maxYear' => 2005,
             'period' => 5,
             'slope' => -0.00222,
-            'slope%' => -0.0008886666666666666,
             'average' => 0.10555,
-            'average%' => 0.008888333333333333,
             'questionnaire' => array(
                 'tst 1' => null,
                 'tst 2' => null,
@@ -145,16 +138,13 @@ class JmpTest extends AbstractCalculator
 
         $this->assertEquals(array(
             'values' => array(),
-            'values%' => array(),
             'count' => 0,
             'years' => array(),
             'minYear' => null,
             'maxYear' => null,
             'period' => 1,
             'slope' => null,
-            'slope%' => null,
             'average' => null,
-            'average%' => null,
             'population' => 0,
                 ), $this->service->computeFilterForAllQuestionnaires($this->highFilter1, array(), $this->part), 'no questionnaires should still return valid structure');
     }
@@ -166,12 +156,12 @@ class JmpTest extends AbstractCalculator
     public function regressionProvider()
     {
         return array(
-            array(2000, array('regression' => 0.01111, 'population' => 25)),
-            array(2001, array('regression' => 0.010221333333333, 'population' => 25)),
-            array(2002, array('regression' => 0.0093326666666669, 'population' => 25)),
-            array(2003, array('regression' => 0.0084440000000001, 'population' => 25)),
-            array(2004, array('regression' => 0.0075553333333336, 'population' => 25)),
-            array(2005, array('regression' => 0.0066666666666668, 'population' => 25)),
+            array(2000, array('regression' => 0.1111, 'population' => 25)),
+            array(2001, array('regression' => 0.10888, 'population' => 25)),
+            array(2002, array('regression' => 0.10666, 'population' => 25)),
+            array(2003, array('regression' => 0.10444, 'population' => 25)),
+            array(2004, array('regression' => 0.10222, 'population' => 25)),
+            array(2005, array('regression' => 0.1, 'population' => 25)),
         );
     }
 
@@ -187,7 +177,7 @@ class JmpTest extends AbstractCalculator
     public function testComputeRegressionForShortPeriod()
     {
         $this->questionnaire->getSurvey()->setYear(2003);
-        $this->assertEquals(array('regression' => 0.0088889166666667, 'population' => 25), $this->service->computeRegression(2004, $this->highFilter3, $this->questionnaires, $this->part), 'regression between known years according');
+        $this->assertEquals(array('regression' => 0.105556, 'population' => 25), $this->service->computeRegression(2004, $this->highFilter3, $this->questionnaires, $this->part), 'regression between known years according');
     }
 
     public function computeFlattenOneYearProvider()
@@ -277,8 +267,8 @@ class JmpTest extends AbstractCalculator
                         'name' => 'improved',
                         'data' =>
                         array(
-                            0 => 0.0057780000000001,
-                            1 => 0.0048893333333335,
+                            0 => 0.09778,
+                            1 => 0.095560000000001,
                         ),
                     ),
                     1 =>
@@ -295,8 +285,8 @@ class JmpTest extends AbstractCalculator
                         'name' => 'total',
                         'data' =>
                         array(
-                            0 => 0.00577786,
-                            1 => 0.0048889866666666,
+                            0 => 0.097779,
+                            1 => 0.095557,
                         ),
                     ),
                 )),
@@ -339,29 +329,29 @@ class JmpTest extends AbstractCalculator
                             0 => NULL,
                             1 => NULL,
                             2 => NULL,
-                            3 => 0.012887333333333,
-                            4 => 0.012887333333333,
-                            5 => 0.012887333333333,
-                            6 => 0.012887333333333,
-                            7 => 0.012887333333333,
-                            8 => 0.012887333333333,
-                            9 => 0.011998666666667,
-                            10 => 0.01111,
-                            11 => 0.010221333333333,
-                            12 => 0.0093326666666669,
-                            13 => 0.0084440000000001,
-                            14 => 0.0075553333333336,
-                            15 => 0.0066666666666668,
-                            16 => 0.0057780000000001,
-                            17 => 0.0048893333333335,
-                            18 => 0.0048893333333335,
-                            19 => 0.0048893333333335,
-                            20 => 0.0048893333333335,
-                            21 => 0.0048893333333335,
-                            22 => 0.0048893333333335,
-                            23 => 0.0048893333333335,
-                            24 => 0.0048893333333335,
-                            25 => 0.0048893333333335,
+                            3 => NULL,
+                            4 => 0.11554,
+                            5 => 0.11554,
+                            6 => 0.11554,
+                            7 => 0.11554,
+                            8 => 0.11554,
+                            9 => 0.11332,
+                            10 => 0.1111,
+                            11 => 0.10888,
+                            12 => 0.10666,
+                            13 => 0.10444,
+                            14 => 0.10222,
+                            15 => 0.1,
+                            16 => 0.09778,
+                            17 => 0.095560000000001,
+                            18 => 0.095560000000001,
+                            19 => 0.095560000000001,
+                            20 => 0.095560000000001,
+                            21 => 0.095560000000001,
+                            22 => null,
+                            23 => null,
+                            24 => null,
+                            25 => null,
                         ),
                     ),
                     1 =>
@@ -405,29 +395,29 @@ class JmpTest extends AbstractCalculator
                             0 => NULL,
                             1 => NULL,
                             2 => NULL,
-                            3 => 0.012888846666667,
-                            4 => 0.012888846666667,
-                            5 => 0.012888846666667,
-                            6 => 0.012888846666667,
-                            7 => 0.012888846666667,
-                            8 => 0.012888846666667,
-                            9 => 0.011999973333333,
-                            10 => 0.0111111,
-                            11 => 0.010222226666667,
-                            12 => 0.0093333533333333,
-                            13 => 0.0084444800000001,
-                            14 => 0.0075556066666667,
-                            15 => 0.0066667333333335,
-                            16 => 0.00577786,
-                            17 => 0.0048889866666666,
-                            18 => 0.0048889866666666,
-                            19 => 0.0048889866666666,
-                            20 => 0.0048889866666666,
-                            21 => 0.0048889866666666,
-                            22 => 0.0048889866666666,
-                            23 => 0.0048889866666666,
-                            24 => 0.0048889866666666,
-                            25 => 0.0048889866666666,
+                            3 => null,
+                            4 => 0.115555,
+                            5 => 0.115555,
+                            6 => 0.115555,
+                            7 => 0.115555,
+                            8 => 0.115555,
+                            9 => 0.113333,
+                            10 => 0.111111,
+                            11 => 0.108889,
+                            12 => 0.106667,
+                            13 => 0.104445,
+                            14 => 0.102223,
+                            15 => 0.100001,
+                            16 => 0.097779,
+                            17 => 0.095557,
+                            18 => 0.095557,
+                            19 => 0.095557,
+                            20 => 0.095557,
+                            21 => 0.095557,
+                            22 => null,
+                            23 => null,
+                            24 => null,
+                            25 => null,
                         ),
                     ),
                 ),
@@ -479,7 +469,7 @@ class JmpTest extends AbstractCalculator
         $data = reset($tmp);
         $res1 = $this->service->computeFlatten($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part);
 
-        $this->answer131->setValueAbsolute((0.2));
+        $this->answer131->setValuePercent((0.2));
         $res2 = $this->service->computeFlatten($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part);
         $this->assertEquals($res1, $res2, 'result should be cached and therefore be the same');
 
@@ -492,8 +482,8 @@ class JmpTest extends AbstractCalculator
                 'name' => 'improved',
                 'data' =>
                 array(
-                    0 => 0.0037780000000005,
-                    1 => 0.0008893333333333,
+                    0 => 0.077779999999997,
+                    1 => 0.05556,
                 ),
             ),
             1 =>
@@ -510,8 +500,8 @@ class JmpTest extends AbstractCalculator
                 'name' => 'total',
                 'data' =>
                 array(
-                    0 => 0.0037778600000005,
-                    1 => 0.00088898666666726,
+                    0 => 0.077778999999992,
+                    1 => 0.055556999999993,
                 ),
             ),
                 ), $res3, 'after clearing cache, result reflect new values');
@@ -538,10 +528,6 @@ class JmpTest extends AbstractCalculator
             array(
                 'tst 2' => 0.1,
             ),
-            'values%' =>
-            array(
-                'tst 2' => 0.0066666666666667,
-            ),
             'count' => 1,
             'years' =>
             array(
@@ -551,9 +537,7 @@ class JmpTest extends AbstractCalculator
             'maxYear' => 2005,
             'period' => 1,
             'slope' => null,
-            'slope%' => null,
             'average' => 0.1,
-            'average%' => 0.0066666666666667,
             'questionnaire' => array(
                 'tst 2' => null,
             ),
@@ -574,8 +558,8 @@ class JmpTest extends AbstractCalculator
             array(
                 'name' => 'improved',
                 'data' => array(
-                    0.033333333333333,
-                    0.033333333333333,
+                    0 => 0.1,
+                    1 => null,
                 ),
             ),
             array(
@@ -588,8 +572,8 @@ class JmpTest extends AbstractCalculator
             array(
                 'name' => 'total',
                 'data' => array(
-                    0.033333333333333,
-                    0.033333333333333,
+                    0 => 0.1,
+                    1 => null,
                 ),
             ),
                 ), $r1);
@@ -598,8 +582,8 @@ class JmpTest extends AbstractCalculator
             array(
                 'name' => 'improved',
                 'data' => array(
-                    0.0014285714285714,
-                    0.0014285714285714,
+                    0 => 0.01,
+                    1 => 0.01,
                 ),
             ),
             array(
@@ -612,8 +596,8 @@ class JmpTest extends AbstractCalculator
             array(
                 'name' => 'total',
                 'data' => array(
-                    0.0014285714285714,
-                    0.0014285714285714,
+                    0 => 0.01,
+                    1 => 0.01,
                 ),
             ),
                 ), $r2);
@@ -622,8 +606,8 @@ class JmpTest extends AbstractCalculator
             array(
                 'name' => 'improved',
                 'data' => array(
-                    0.011,
-                    0.011,
+                    0 => 0.037,
+                    1 => 0.01,
                 ),
             ),
             array(
@@ -636,8 +620,8 @@ class JmpTest extends AbstractCalculator
             array(
                 'name' => 'total',
                 'data' => array(
-                    0.011,
-                    0.011,
+                    0 => 0.037,
+                    1 => 0.01,
                 ),
             ),
                 ), $rt);
@@ -648,7 +632,7 @@ class JmpTest extends AbstractCalculator
         // Set everything to zero
         foreach ($this->questionnaires as $questionnaire) {
             foreach ($questionnaire->getAnswers() as $answer) {
-                $answer->setValueAbsolute(0);
+                $answer->setValuePercent(0);
             }
         }
 

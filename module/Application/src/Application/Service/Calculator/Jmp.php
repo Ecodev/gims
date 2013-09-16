@@ -2,7 +2,6 @@
 
 namespace Application\Service\Calculator;
 
-use Application\Model\Questionnaire;
 use Application\Model\Part;
 use Application\Model\FilterSet;
 use Application\Model\Filter;
@@ -12,32 +11,6 @@ class Jmp extends Calculator
 
     private $cacheComputeFilterForAllQuestionnaires = array();
     private $cacheComputeRegressionForAllYears = array();
-    private $populationRepository;
-
-    /**
-     * Set the population repository
-     * @param \Application\Repository\PopulationRepository $populationRepository
-     * @return \Application\Service\Calculator\Jmp
-     */
-    public function setPopulationRepository(\Application\Repository\PopulationRepository $populationRepository)
-    {
-        $this->populationRepository = $populationRepository;
-
-        return $this;
-    }
-
-    /**
-     * Get the population repository
-     * @return \Application\Repository\PopulationRepository
-     */
-    public function getPopulationRepository()
-    {
-        if (!$this->populationRepository) {
-            $this->populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
-        }
-
-        return $this->populationRepository;
-    }
 
     /**
      * Returns an array of all filter data, which includes name and year-regression pairs
@@ -105,7 +78,7 @@ class Jmp extends Calculator
      * @param integer $year
      * @param array $allRegressions [year => [regression => value, population => value]]
      * @param array $usedYears [year] should be empty array for first call, then used for recursivity
-     * @return null|int
+     * @return null|float
      */
     public function computeFlattenOneYear($year, array $allRegressions, array $usedYears = array())
     {
@@ -213,20 +186,19 @@ class Jmp extends Calculator
         } elseif ($year == $d['minYear'] - 6) {
             $result = $this->computeRegression($year + 4, $filter, $questionnaires, $part)['regression'];
         } elseif ($year < $d['maxYear'] + 3 && $year > $d['minYear'] - 3 && $d['count'] > 1 && $d['period'] > 4) {
-            $result = $this->ifNonZeroValue($d['values%'], function() use ($year, $d) {
-                        return \PHPExcel_Calculation_Statistical::FORECAST($year, $d['values%'], $d['years']);
+            $result = $this->ifNonZeroValue($d['values'], function() use ($year, $d) {
+                        return \PHPExcel_Calculation_Statistical::FORECAST($year, $d['values'], $d['years']);
                     });
         } elseif ($year < $d['maxYear'] + 7 && $year > $d['minYear'] - 7 && ($d['count'] < 2 || $d['period'] < 5)) {
-            $result = \PHPExcel_Calculation_Statistical::AVERAGE($d['values%']);
+            $result = \PHPExcel_Calculation_Statistical::AVERAGE($d['values']);
         } elseif ($year > $d['minYear'] - 7 && $year < $d['minYear'] - 1) {
-            $result = $this->ifNonZeroValue($d['values%'], function() use ($d) {
-                        return \PHPExcel_Calculation_Statistical::FORECAST($d['minYear'] - 2, $d['values%'], $d['years']);
+            $result = $this->ifNonZeroValue($d['values'], function() use ($d) {
+                        return \PHPExcel_Calculation_Statistical::FORECAST($d['minYear'] - 2, $d['values'], $d['years']);
                     });
         } elseif ($year > $d['maxYear'] + 1 && $year < $d['maxYear'] + 7) {
-            $result = $this->ifNonZeroValue($d['values%'], function() use ($d) {
-                        return \PHPExcel_Calculation_Statistical::FORECAST($d['maxYear'] + 2, $d['values%'], $d['years']);
+            $result = $this->ifNonZeroValue($d['values'], function() use ($d) {
+                        return \PHPExcel_Calculation_Statistical::FORECAST($d['maxYear'] + 2, $d['values'], $d['years']);
                     });
-            ;
         } else {
             $result = null;
         }
@@ -254,7 +226,6 @@ class Jmp extends Calculator
 
         $result = array(
             'values' => array(),
-            'values%' => array(),
             'count' => 0,
         );
         $rules = $filter->getFilterRules();
@@ -282,7 +253,6 @@ class Jmp extends Calculator
             $computed = $this->computeFilter($filter, $questionnaire, $part);
             if (is_null($computed)) {
                 $result['values'][$questionnaire->getSurvey()->getCode()] = null;
-                $result['values%'][$questionnaire->getSurvey()->getCode()] = null;
                 $result['questionnaire'][$questionnaire->getSurvey()->getCode()] = $questionnaire->getId();
                 continue;
             }
@@ -291,11 +261,10 @@ class Jmp extends Calculator
 
             $population = $this->getPopulationRepository()->getOneByQuestionnaire($questionnaire, $part);
             $totalPopulation += $population->getPopulation();
-            $result['count']++;
+            $result['count'] ++;
 
             $result['questionnaire'][$questionnaire->getSurvey()->getCode()] = $questionnaire->getId();
             $result['values'][$questionnaire->getSurvey()->getCode()] = $computed;
-            $result['values%'][$questionnaire->getSurvey()->getCode()] = $computed / $population->getPopulation();
         }
 
         $result['years'] = $years;
@@ -306,12 +275,8 @@ class Jmp extends Calculator
         $result['slope'] = $result['count'] < 2 ? null : $this->ifNonZeroValue($result['values'], function() use ($result, $years) {
                             return \PHPExcel_Calculation_Statistical::SLOPE($result['values'], $years);
                         });
-        $result['slope%'] = $result['count'] < 2 ? null : $this->ifNonZeroValue($result['values%'], function() use ($result, $years) {
-                            return \PHPExcel_Calculation_Statistical::SLOPE($result['values%'], $years);
-                        });
 
         $result['average'] = $result['count'] ? \PHPExcel_Calculation_MathTrig::SUM($result['values']) / $result['count'] : null;
-        $result['average%'] = $result['count'] ? \PHPExcel_Calculation_MathTrig::SUM($result['values%']) / $result['count'] : null;
         $result['population'] = $totalPopulation;
 
         $this->cacheComputeFilterForAllQuestionnaires[$key] = $result;

@@ -20,8 +20,11 @@ use Doctrine\ORM\Mapping as ORM;
  * Reference a QuestionnaireFormula's value:
  * {Fo#12,Q#34,P#56}
  *
+ * Reference a population data of the questionnaire's country:
+ * {Q#34,P#56}
+ *
  * Reference the value if computed without this formula. It allows for formulas
- * chaining and final fallback on value without any formulas:
+ * chaining:
  * {self}
  *
  * Where:

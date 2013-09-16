@@ -13,15 +13,8 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $idQuestionnaires = explode(',', $questionnaireParameter);
         $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
 
-        $parts = array();
-        foreach ($this->getEntityManager()->getRepository('Application\Model\Part')->findAll() as $part) {
-            $parts[] = array(
-                'part' => $part,
-                'population' => null, // will be computed later for each questionnaire
-            );
-        }
+        $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
 
-        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
         $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
 
         $result = array();
@@ -29,11 +22,6 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             foreach ($idQuestionnaires as $idQuestionnaire) {
                 $questionnaire = $questionnaireRepository->find($idQuestionnaire);
                 if ($questionnaire) {
-
-                    // First collect parts' population
-                    foreach ($parts as $i => $p) {
-                        $parts[$i]['population'] = $populationRepository->getOneByQuestionnaire($questionnaire, $parts[$i]['part']);
-                    }
 
                     // Do the actual computing for all filters
                     $resultOneQuestionnaire = array();
@@ -74,17 +62,17 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $current['filter'] = $hydrator->extract($filter, array('name'));
         $current['filter']['level'] = $level;
 
-        foreach ($parts as $p) {
-            $computed = $calculator->computeFilter($filter, $questionnaire, $p['part']);
-
+        foreach ($parts as $part) {
+            $computed = $calculator->computeFilter($filter, $questionnaire, $part);
+            
             // Round the value
-            if (!is_null($computed) && $p['population']->getPopulation()) {
-                $value = \Application\Utility::bcround($computed / $p['population']->getPopulation(), 3);
+            if (!is_null($computed)) {
+                $value = \Application\Utility::bcround($computed, 3);
             } else {
                 $value = null;
             }
 
-            $current['values'][0][$p['part']->getName()] = $value;
+            $current['values'][0][$part->getName()] = $value;
         }
 
         // Compute children
