@@ -321,10 +321,10 @@ use \Application\Traits\EntityManagerAware;
 
         $result = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($convertedFormulas);
 
-        // In some edge cases, it may happen that we get FALSE as result,
+        // In some edge cases, it may happen that we get FALSE or empty double quotes as result,
         // we need to convert it to NULL, otherwise it will be converted to
-        // 0 later, which is not correct. Eg: '=IF(FALSE, NULL, NULL)'
-        if ($result === false) {
+        // 0 later, which is not correct. Eg: '=IF(FALSE, NULL, NULL)', or '=IF(FALSE,NULL,"")'
+        if ($result === false || $result === '""') {
             $result = null;
         }
 
