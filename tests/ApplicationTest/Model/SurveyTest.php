@@ -38,7 +38,8 @@ class SurveyTest extends AbstractModel
      */
     public function getJsonConfigForSurvey()
     {
-        $this->assertInternalType('array', Survey::getJsonConfig());
+        $survey = new Survey();
+        $this->assertInternalType('array', $survey->getJsonConfig());
     }
 
     /**
@@ -46,6 +47,7 @@ class SurveyTest extends AbstractModel
      */
     public function getJsonConfigReturnsSpecificFieldsForSurvey()
     {
+        $survey = new Survey();
         $fields = array(
             'name',
             'code',
@@ -54,7 +56,7 @@ class SurveyTest extends AbstractModel
             'dateStart',
             'dateEnd',
         );
-        $actual = Survey::getJsonConfig();
+        $actual = $survey->getJsonConfig();
         foreach ($fields as $field) {
             $this->assertContains($field, $actual);
         }
