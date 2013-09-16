@@ -209,20 +209,6 @@ abstract class AbstractModel
     }
 
     /**
-     * Tells whether the key is defined as possible.
-     *
-     * @param string $key
-     *
-     * @return array
-     */
-    public static function isPropertyInJsonConfig($key)
-    {
-        $class = '\\' . get_called_class();
-
-        return in_array($key, $class::$jsonConfig);
-    }
-
-    /**
      * Returns the role context used for this object to check permission
      *
      * @param string $action the action for which we ask the context (in most case it doesn't make any difference)
