@@ -563,9 +563,9 @@ STRING;
                 // unless an alternate filter is defined, in this case we will import the formula result
                 if ($alternateFilterName || $answerCell->getDataType() == \PHPExcel_Cell_DataType::TYPE_NUMERIC) {
 
-                    // If there is actually no value, skip it (need to be done after previous if to avoid formula exception within PHPExcel)
+                    // If there is actually no value, skip it (need to be done after previous IF to avoid formula exception within PHPExcel)
                     $value = $this->getCalculatedValueSafely($answerCell);
-                    if (is_null($value)) {
+                    if (!is_numeric($value) || ($value == 0 && $answerCell->getDataType() == \PHPExcel_Cell_DataType::TYPE_FORMULA)) {
                         continue;
                     }
 
