@@ -14,6 +14,7 @@ return array(
         'Admin',
         'Browse',
         'Contribute',
+        'Export',
         'ZendDeveloperTools',
     ),
     // These are various options for the listeners attached to the ModuleManager
