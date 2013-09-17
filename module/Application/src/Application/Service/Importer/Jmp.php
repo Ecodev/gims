@@ -2,6 +2,18 @@
 
 namespace Application\Service\Importer;
 
+use Application\Model\Answer;
+use Application\Model\Filter;
+use Application\Model\Part;
+use Application\Model\Question\NumericQuestion;
+use Application\Model\Questionnaire;
+use Application\Model\Rule\AbstractRule;
+use Application\Model\Rule\Exclude;
+use Application\Model\Rule\FilterRule;
+use Application\Model\Rule\Formula;
+use Application\Model\Rule\QuestionnaireFormula;
+use Application\Model\Survey;
+
 class Jmp extends AbstractImporter
 {
 
@@ -296,17 +308,17 @@ class Jmp extends AbstractImporter
     private $filterRuleCount = 0;
 
     /**
-     * @var \Application\Model\Part
+     * @var Part
      */
     private $partUrban;
 
     /**
-     * @var \Application\Model\Part
+     * @var Part
      */
     private $partRural;
 
     /**
-     * @var \Application\Model\Part
+     * @var Part
      */
     private $partTotal;
 
@@ -407,7 +419,7 @@ STRING;
         $filter = $filterRepository->getOneOfficialByNames($name, $parentName);
         if (!$filter) {
 
-            $filter = new \Application\Model\Filter();
+            $filter = new Filter();
             $this->getEntityManager()->persist($filter);
             $filter->setName($name);
             if ($parent) {
@@ -484,7 +496,7 @@ STRING;
         $surveyRepository = $this->getEntityManager()->getRepository('Application\Model\Survey');
         $survey = $surveyRepository->findOneBy(array('code' => $code));
         if (!$survey) {
-            $survey = new \Application\Model\Survey();
+            $survey = new Survey();
 
             $survey->setIsActive(true);
             $survey->setCode($code);
@@ -535,10 +547,10 @@ STRING;
      * Questions will only be created if an answer exists.
      * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
-     * @param \Application\Model\Questionnaire $questionnaire
+     * @param Questionnaire $questionnaire
      * @return integer imported answer count
      */
-    protected function importAnswers(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Survey $survey, \Application\Model\Questionnaire $questionnaire)
+    protected function importAnswers(\PHPExcel_Worksheet $sheet, $col, Survey $survey, Questionnaire $questionnaire)
     {
         $repository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $knownRows = array_keys($this->cacheFilters);
@@ -582,7 +594,7 @@ STRING;
                     }
 
                     if (!$answer) {
-                        $answer = new \Application\Model\Answer();
+                        $answer = new Answer();
                         $this->getEntityManager()->persist($answer);
                         $answer->setQuestionnaire($questionnaire);
                         $answer->setQuestion($question);
@@ -600,7 +612,7 @@ STRING;
         echo "Answers: " . $answerCount . PHP_EOL . PHP_EOL;
     }
 
-    protected function getQuestionnaire(\Application\Model\Survey $survey, \PHPExcel_Cell $countryCell)
+    protected function getQuestionnaire(Survey $survey, \PHPExcel_Cell $countryCell)
     {
         // Mapping JMP country names to Geoname country names
         $countryNameMapping = array(
@@ -668,7 +680,7 @@ STRING;
         ));
 
         if (!$questionnaire) {
-            $questionnaire = new \Application\Model\Questionnaire();
+            $questionnaire = new Questionnaire();
             $questionnaire->setSurvey($survey);
             $questionnaire->setDateObservationStart(new \DateTime($survey->getYear() . '-01-01'));
             $questionnaire->setDateObservationEnd(new \DateTime($survey->getYear() . '-12-31T23:59:59'));
@@ -686,7 +698,7 @@ STRING;
      * Some files have a buggy self-referencing formula, so we need to fallback on cached result of formula
      * @param \PHPExcel_Cell $cell
      * @return type
-     * @throws \Application\Service\Importer\PHPExcel_Exception
+     * @throws \PHPExcel_Exception
      */
     protected function getCalculatedValueSafely(\PHPExcel_Cell $cell)
     {
@@ -708,12 +720,12 @@ STRING;
 
     /**
      * Returns an alternate filter linked to the official either from database, or newly created
-     * @param \Application\Model\Questionnaire $questionnaire
+     * @param Questionnaire $questionnaire
      * @param string $name
-     * @param \Application\Model\Filter $officialFilter
-     * @return \Application\Model\Filter
+     * @param Filter $officialFilter
+     * @return Filter
      */
-    protected function getAlternateFilter(\Application\Model\Questionnaire $questionnaire, $name, \Application\Model\Filter $officialFilter)
+    protected function getAlternateFilter(Questionnaire $questionnaire, $name, Filter $officialFilter)
     {
         if ($name == $officialFilter->getName())
             return $officialFilter;
@@ -733,7 +745,7 @@ STRING;
         }
 
         if (!$filter) {
-            $filter = new \Application\Model\Filter();
+            $filter = new Filter();
             $this->getEntityManager()->persist($filter);
             $filter->setName($name);
             $filter->setOfficialFilter($officialFilter);
@@ -748,11 +760,11 @@ STRING;
 
     /**
      * Returns a question either from database, or newly created
-     * @param \Application\Model\Questionnaire $survey
-     * @param \Application\Model\Filter $filter
-     * @return \Application\Model\Question\NumericQuestion
+     * @param Questionnaire $survey
+     * @param Filter $filter
+     * @return NumericQuestion
      */
-    protected function getQuestion(\Application\Model\Survey $survey, \Application\Model\Filter $filter)
+    protected function getQuestion(Survey $survey, Filter $filter)
     {
         $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question\NumericQuestion');
 
@@ -766,7 +778,7 @@ STRING;
         }
 
         if (!$question) {
-            $question = new \Application\Model\Question\NumericQuestion();
+            $question = new NumericQuestion();
             $this->getEntityManager()->persist($question);
 
             $question->setSurvey($survey);
@@ -787,9 +799,9 @@ STRING;
      * Import all rules on the questionnaire level (Calculations, Estimates and Ratios)
      * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
-     * @param \Application\Model\Questionnaire $questionnaire
+     * @param Questionnaire $questionnaire
      */
-    protected function importQuestionnaireFormulas(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire)
+    protected function importQuestionnaireFormulas(\PHPExcel_Worksheet $sheet, $col, Questionnaire $questionnaire)
     {
         foreach ($this->definitions[$sheet->getTitle()]['questionnaireFormulas'] as $group) {
             foreach ($group as $row) {
@@ -806,11 +818,11 @@ STRING;
      * @param integer $col
      * @param integer $row
      * @param integer $offset
-     * @param \Application\Model\Questionnaire $questionnaire
-     * @param \Application\Model\Part $part
-     * @return \Application\Model\Rule\QuestionnaireFormula|null
+     * @param Questionnaire $questionnaire
+     * @param Part $part
+     * @return QuestionnaireFormula|null
      */
-    protected function getQuestionnaireFormula(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part)
+    protected function getQuestionnaireFormula(\PHPExcel_Worksheet $sheet, $col, $row, $offset, Questionnaire $questionnaire, Part $part)
     {
         $questionnaireFormulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireFormula');
         $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
@@ -832,7 +844,7 @@ STRING;
 
             // If association doesn't exist yet, create it
             if (!$assoc) {
-                $assoc = new \Application\Model\Rule\QuestionnaireFormula();
+                $assoc = new QuestionnaireFormula();
                 $assoc->setJustification($this->defaultJustification)
                         ->setQuestionnaire($questionnaire)
                         ->setFormula($formula)
@@ -854,12 +866,12 @@ STRING;
      * @param integer $col
      * @param integer $row
      * @param integer $offset
-     * @param \Application\Model\Questionnaire $questionnaire
-     * @param \Application\Model\Part $part
+     * @param Questionnaire $questionnaire
+     * @param Part $part
      * @param string $forcedName
-     * @return null|\Application\Model\Rule\Formula
+     * @return null|Formula
      */
-    protected function getFormulaFromCell(\PHPExcel_Worksheet $sheet, $col, $row, $offset, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part, $forcedName = null)
+    protected function getFormulaFromCell(\PHPExcel_Worksheet $sheet, $col, $row, $offset, Questionnaire $questionnaire, Part $part, $forcedName = null)
     {
         $cell = $sheet->getCellByColumnAndRow($col + $offset, $row);
         $originalFormula = $cell->getValue();
@@ -991,7 +1003,7 @@ STRING;
      * Create or get a formula
      * @param string $name
      * @param string $formula
-     * @return \Application\Model\Rule\Formula
+     * @return Formula
      */
     protected function getFormula($name, $formula)
     {
@@ -1007,7 +1019,7 @@ STRING;
         $formulaObject = $formulaRepository->findOneByFormula($formula);
 
         if (!$formulaObject) {
-            $formulaObject = new \Application\Model\Rule\Formula();
+            $formulaObject = new Formula();
             $formulaObject->setName($name)
                     ->setFormula($formula);
             $this->getEntityManager()->persist($formulaObject);
@@ -1048,7 +1060,7 @@ STRING;
 
             // .. or create it
             if (!$highFilter) {
-                $highFilter = new \Application\Model\Filter($filterName);
+                $highFilter = new Filter($filterName);
                 $filterSet->addFilter($highFilter);
                 $this->getEntityManager()->persist($highFilter);
 
@@ -1093,13 +1105,13 @@ STRING;
 
     /**
      * Create or get a filterRule
-     * @param \Application\Model\Filter $filter
-     * @param \Application\Model\Questionnaire $questionnaire
-     * @param \Application\Model\Rule\AbstractRule $rule
-     * @param \Application\Model\Part $part
-     * @return \Application\Model\Rule\FilterRule
+     * @param Filter $filter
+     * @param Questionnaire $questionnaire
+     * @param AbstractRule $rule
+     * @param Part $part
+     * @return FilterRule
      */
-    protected function getFilterRule(\Application\Model\Filter $filter, \Application\Model\Questionnaire $questionnaire, \Application\Model\Rule\AbstractRule $rule, \Application\Model\Part $part)
+    protected function getFilterRule(Filter $filter, Questionnaire $questionnaire, AbstractRule $rule, Part $part)
     {
         $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
 
@@ -1112,7 +1124,7 @@ STRING;
         ));
 
         if (!$filterRule) {
-            $filterRule = new \Application\Model\Rule\FilterRule();
+            $filterRule = new FilterRule();
             $filterRule->setJustification($this->defaultJustification)
                     ->setQuestionnaire($questionnaire)
                     ->setRule($rule)
@@ -1121,7 +1133,7 @@ STRING;
 
             $this->getEntityManager()->persist($filterRule);
 
-            if ($rule instanceof \Application\Model\Rule\Exclude) {
+            if ($rule instanceof Exclude) {
                 $this->excludeCount++;
             } else {
                 $this->filterRuleCount++;
@@ -1135,9 +1147,9 @@ STRING;
      * Import exclude rules based on Yes/No content on cells
      * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
-     * @param \Application\Model\Questionnaire $questionnaire
+     * @param Questionnaire $questionnaire
      */
-    protected function importExcludes(\PHPExcel_Worksheet $sheet, $col, \Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $filterData)
+    protected function importExcludes(\PHPExcel_Worksheet $sheet, $col, Questionnaire $questionnaire, Filter $filter, array $filterData)
     {
         $row = $filterData['excludes'];
         if (!$row) {
@@ -1158,10 +1170,10 @@ STRING;
      * Finish the special cases of ratio used for high filters: "Sanitation - Improved" and "Sanitation - Shared"
      * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
-     * @param \Application\Model\Questionnaire $questionnaire
+     * @param Questionnaire $questionnaire
      * @return void
      */
-    protected function finishRatios(\Application\Model\Questionnaire $questionnaire)
+    protected function finishRatios(Questionnaire $questionnaire)
     {
         $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireFormula');
         $synonyms = array(
@@ -1201,11 +1213,11 @@ STRING;
     /**
      * Create (or get) a formula and link it to the given filter
      * @param string $formulaText
-     * @param \Application\Model\Filter $filter
-     * @param \Application\Model\Questionnaire $questionnaire
-     * @param \Application\Model\Part $part
+     * @param Filter $filter
+     * @param Questionnaire $questionnaire
+     * @param Part $part
      */
-    protected function linkFormula($formulaText, \Application\Model\Filter $filter, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part)
+    protected function linkFormula($formulaText, Filter $filter, Questionnaire $questionnaire, Part $part)
     {
         $name = $filter->getName() . ' (' . $questionnaire->getName() . ', ' . $part->getName() . ')';
         $formula = $this->getFormula($name, $formulaText);
