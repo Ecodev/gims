@@ -8,9 +8,9 @@
         },
         "values": [
             {
-                "Urban": 0.881,
-                "Rural": 0.541,
-                "Total": 0.614
+                "Urban": 0.810,
+                "Rural": 0.701,
+                "Total": 0.729
             }
         ]
     },
@@ -23,8 +23,8 @@
         },
         "values": [
             {
-                "Urban": null,
-                "Rural": null,
+                "Urban": 0.094,
+                "Rural": 0.002,
                 "Total": null
             }
         ]
@@ -38,9 +38,9 @@
         },
         "values": [
             {
-                "Urban": 0.494,
-                "Rural": 0.042,
-                "Total": 0.093
+                "Urban": 0.283,
+                "Rural": 0.071,
+                "Total": null
             }
         ]
     },
@@ -53,9 +53,9 @@
         },
         "values": [
             {
-                "Urban": 0.228,
-                "Rural": 0.148,
-                "Total": 0.157
+                "Urban": 0.066,
+                "Rural": 0.057,
+                "Total": null
             }
         ]
     },
@@ -68,8 +68,8 @@
         },
         "values": [
             {
-                "Urban": null,
-                "Rural": null,
+                "Urban": 0.009,
+                "Rural": 0.000,
                 "Total": null
             }
         ]
@@ -83,8 +83,8 @@
         },
         "values": [
             {
-                "Urban": null,
-                "Rural": null,
+                "Urban": 0.134,
+                "Rural": 0.186,
                 "Total": null
             }
         ]
@@ -113,8 +113,8 @@
         },
         "values": [
             {
-                "Urban": null,
-                "Rural": null,
+                "Urban": 0.134,
+                "Rural": 0.186,
                 "Total": null
             }
         ]
@@ -218,9 +218,9 @@
         },
         "values": [
             {
-                "Urban": 0.146,
-                "Rural": 0.003,
-                "Total": 0.033
+                "Urban": 0.094,
+                "Rural": 0.002,
+                "Total": 0.026
             }
         ]
     },
@@ -248,9 +248,9 @@
         },
         "values": [
             {
-                "Urban": 0.572,
-                "Rural": 0.366,
-                "Total": 0.410
+                "Urban": 0.526,
+                "Rural": 0.473,
+                "Total": 0.487
             }
         ]
     },
@@ -263,9 +263,9 @@
         },
         "values": [
             {
-                "Urban": 0.308,
-                "Rural": 0.176,
-                "Total": 0.204
+                "Urban": 0.284,
+                "Rural": 0.228,
+                "Total": 0.242
             }
         ]
     },
@@ -278,9 +278,9 @@
         },
         "values": [
             {
-                "Urban": 0.458,
-                "Rural": 0.625,
-                "Total": 0.589
+                "Urban": 0.385,
+                "Rural": 0.585,
+                "Total": 0.533
             }
         ]
     },
@@ -293,8 +293,8 @@
         },
         "values": [
             {
-                "Urban": null,
-                "Rural": null,
+                "Urban": 0.013,
+                "Rural": 0.001,
                 "Total": null
             }
         ]
@@ -308,9 +308,9 @@
         },
         "values": [
             {
-                "Urban": 0.228,
-                "Rural": 0.148,
-                "Total": 0.157
+                "Urban": null,
+                "Rural": null,
+                "Total": null
             }
         ]
     },
@@ -353,9 +353,9 @@
         },
         "values": [
             {
-                "Urban": 0.228,
-                "Rural": 0.148,
-                "Total": 0.157
+                "Urban": null,
+                "Rural": null,
+                "Total": null
             }
         ]
     },
@@ -578,9 +578,9 @@
         },
         "values": [
             {
-                "Urban": 0.084,
-                "Rural": 0.166,
-                "Total": 0.157
+                "Urban": null,
+                "Rural": null,
+                "Total": null
             }
         ]
     },
@@ -593,9 +593,9 @@
         },
         "values": [
             {
-                "Urban": 0.091,
-                "Rural": 0.207,
-                "Total": 0.193
+                "Urban": 0.224,
+                "Rural": 0.385,
+                "Total": null
             }
         ]
     },
@@ -608,9 +608,9 @@
         },
         "values": [
             {
-                "Urban": 0.049,
-                "Rural": 0.100,
-                "Total": 0.094
+                "Urban": 0.145,
+                "Rural": 0.197,
+                "Total": null
             }
         ]
     },
@@ -623,8 +623,8 @@
         },
         "values": [
             {
-                "Urban": null,
-                "Rural": null,
+                "Urban": 0.002,
+                "Rural": 0.001,
                 "Total": null
             }
         ]
@@ -653,9 +653,9 @@
         },
         "values": [
             {
-                "Urban": 0.006,
-                "Rural": 0.004,
-                "Total": 0.004
+                "Urban": 0.001,
+                "Rural": 0.001,
+                "Total": null
             }
         ]
     },
@@ -668,9 +668,9 @@
         },
         "values": [
             {
-                "Urban": 0.006,
-                "Rural": 0.004,
-                "Total": 0.004
+                "Urban": 0.001,
+                "Rural": 0.001,
+                "Total": null
             }
         ]
     },
@@ -698,9 +698,9 @@
         },
         "values": [
             {
-                "Urban": 0.048,
-                "Rural": 0.334,
-                "Total": 0.273
+                "Urban": 0.026,
+                "Rural": 0.095,
+                "Total": 0.077
             }
         ]
     },
@@ -713,9 +713,9 @@
         },
         "values": [
             {
-                "Urban": 0.048,
-                "Rural": 0.334,
-                "Total": 0.302
+                "Urban": 0.026,
+                "Rural": 0.095,
+                "Total": null
             }
         ]
     }

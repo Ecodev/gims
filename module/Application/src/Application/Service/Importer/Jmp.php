@@ -272,7 +272,7 @@ class Jmp extends AbstractImporter
                 "Shared" => array(
                     'row' => null,
                     'children' => array(), // based on ratio
-                    'excludes' => 99,
+                    'excludes' => null, // Because Shared is a very special case, we totally ignore exclude rules
                     'isImproved' => false,
                 ),
                 "Other unimproved" => array(
@@ -383,10 +383,7 @@ class Jmp extends AbstractImporter
 
             // Fourth pass to hardcode special cases of formulas
             echo 'Finishing special cases of Ratios';
-            foreach ($this->importedQuestionnaires as $col => $questionnaire) {
-                $this->finishRatios($questionnaire);
-                echo '.';
-            }
+            $this->finishRatios($questionnaire);
             echo PHP_EOL;
         }
 
@@ -1193,18 +1190,26 @@ STRING;
 
 
         $filterImprovedSharedId = $filterImprovedShared->getId();
-        foreach ($synonyms as $synonym) {
-            foreach ($this->partOffsets as $offset => $part) {
-                $questionnaireFormula = $repository->getOneByFormulaName($synonym, $questionnaire, $part);
+        foreach ($this->partOffsets as $part) {
+            $ratios = $repository->getAllByFormulaName($synonyms, $this->importedQuestionnaires, $part);
 
-                if ($questionnaireFormula) {
-                    $formulaId = $questionnaireFormula->getFormula()->getId();
+            if ($ratios) {
+                array_walk($ratios, function(&$f) {
+                            $formulaId = $f->getFormula()->getId();
+                            $questionnaireId = $f->getQuestionnaire()->getId();
+                            $f = "{Fo#$formulaId,Q#$questionnaireId,P#current}";
+                        });
 
-                    $formulaImproved = "={F#$filterImprovedSharedId,Q#current,P#current} * (1 - {Fo#$formulaId,Q#current,P#current})";
+                $averageOfAllRatiosAvailable = 'AVERAGE(' . implode(', ', $ratios) . ')';
+
+                foreach ($this->importedQuestionnaires as $questionnaire) {
+
+                    $formulaImproved = "={F#$filterImprovedSharedId,Q#current,P#current} * (1 - $averageOfAllRatiosAvailable)";
                     $this->linkFormula($formulaImproved, $filterImproved, $questionnaire, $part);
 
-                    $formulaShared = "={F#$filterImprovedSharedId,Q#current,P#current} * {Fo#$formulaId,Q#current,P#current}";
+                    $formulaShared = "={F#$filterImprovedSharedId,Q#current,P#current} * $averageOfAllRatiosAvailable";
                     $this->linkFormula($formulaShared, $filterShared, $questionnaire, $part);
+                    echo '.';
                 }
             }
         }

@@ -52,7 +52,7 @@ Questionnaires   : 2
 Alternate Filters: 18
 Answers          : 70
 Formulas         : 19
-Uses of Exclude  : 17
+Uses of Exclude  : 11
 Uses of Formula for Filter        : 33
 Uses of Formula for Questionnaires: 19
 STRING;

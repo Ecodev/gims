@@ -5,27 +5,28 @@ namespace Application\Repository;
 class QuestionnaireFormulaRepository extends AbstractRepository
 {
 
-    public function getOneByFormulaName($formulaName, \Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part)
+    public function getAllByFormulaName(array $formulaNames, array $questionnaires, \Application\Model\Part $part)
     {
-        $query = $this->getEntityManager()->createQuery('SELECT a
-            FROM Application\Model\Rule\QuestionnaireFormula a
-            JOIN Application\Model\Rule\Formula f
-            WHERE
-            a.formula = f
-            AND f.name LIKE :ruleName
-            AND a.questionnaire = :questionnaire
-            AND a.part = :part'
-        );
+        $qb = $this->createQueryBuilder('qf');
+        $qb->join('qf.formula', 'formula', \Doctrine\ORM\Query\Expr\Join::WITH)
+                ->andWhere('qf.questionnaire IN (:questionnaires)')
+                ->andWhere('qf.part = :part');
 
         $params = array(
-            'ruleName' => '%' . $formulaName . '%',
-            'questionnaire' => $questionnaire,
+            'questionnaires' => $questionnaires,
             'part' => $part,
         );
+        $qb->setParameters($params);
 
-        $query->setParameters($params);
+        $where = array();
+        foreach ($formulaNames as $i => $word) {
+            $parameterName = 'word' . $i;
+            $where[] = 'LOWER(formula.name) LIKE LOWER(:' . $parameterName . ')';
+            $qb->setParameter($parameterName, '%' . $word . '%');
+        }
+        $qb->andWhere(join(' OR ', $where));
 
-        $questionnaireFormula = $query->getOneOrNullResult();
+        $questionnaireFormula = $qb->getQuery()->getResult();
 
         return $questionnaireFormula;
     }
