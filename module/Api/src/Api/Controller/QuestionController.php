@@ -12,6 +12,8 @@ use Application\Model\Question\Choice;
 class QuestionController extends AbstractChildRestfulController
 {
 
+    use \Application\Traits\FlatHierarchicQuestions;
+
     /**
      * The new choices to be added to the newly created question
      *
@@ -84,6 +86,10 @@ class QuestionController extends AbstractChildRestfulController
         return '\Application\Model\Question\AbstractQuestion';
     }
 
+
+
+
+
     public function getList()
     {
 
@@ -101,53 +107,12 @@ class QuestionController extends AbstractChildRestfulController
 
             return new JsonModel(array('message' => 'Cannot list all items without a valid parent. Use URL similar to: /api/parent/1/question'));
         }
-
-
-        // prepare flat array of questions for then be reordered by Parent > childrens > childrens
-        // Ignores fields requests. @TODO : Implement it.
-        $flatQuestions = array();
-        $jsonConfig = $this->getJsonConfig();
-        foreach ($questions as $question) {
-            $flatQuestion = $this->hydrator->extract($question, $jsonConfig);
-            array_push($flatQuestions, $flatQuestion);
-        }
-
-
-        $new = array();
-        $firstId = null;
-        foreach ($flatQuestions as $a) {
-            if (empty($a['chapter']['id'])) {
-                $a['chapter']['id'] = 0;
-            }
-            $new[$a['chapter']['id']][] = $a;
-        }
-
-        if ($flatQuestions) {
-            $questions = $this->createTree($new, $new[0], 0);
-        } else {
-            $questions = array();
-        }
+        $questions = $this->getFlatHierarchy($questions, $this->getJsonConfig(), $this->hydrator);
 
         return new JsonModel($questions);
     }
 
-    protected function createTree(&$list, $parent, $deep)
-    {
-        $tree = array();
-        foreach ($parent as $l) {
 
-            $l['level'] = $deep;
-            if (isset($list[$l['id']])) {
-                $children = $this->createTree($list, $list[$l['id']], $deep + 1);
-                $tree[] = $l;
-                $tree = array_merge($tree, $children);
-            } else {
-                $tree[] = $l;
-            }
-        }
-
-        return $tree;
-    }
 
     /**
      * @param int $id

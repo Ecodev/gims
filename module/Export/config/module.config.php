@@ -22,7 +22,7 @@ return array(
             'export' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/export/:action',
+                    'route' => '/export/:action/:id',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Export\Controller',
                         'controller' => 'Index',
@@ -30,6 +30,7 @@ return array(
                     ),
                     'constraints' => array(
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[0-9]*',
                     ),
                 ),
                 'may_terminate' => true,

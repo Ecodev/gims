@@ -154,3 +154,12 @@ div.browse .span4 {
 #questionnaireNav .nav {
     margin-bottom: 0 !important;
 }
+
+/* Links with .button class is not allowed in .navbar so this instruction override default behavior*/
+.navbar .nav > li > a.btn.btn-primary{
+    color:white;
+    text-shadow:none;
+    padding:4px 12px;
+    background-color:#04C;
+}
+
