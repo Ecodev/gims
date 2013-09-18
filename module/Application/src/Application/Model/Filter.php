@@ -126,7 +126,6 @@ class Filter extends AbstractModel
     {
         return array_merge(parent::getJsonConfig(), array(
             'name',
-            'isOfficial',
         ));
     }
 

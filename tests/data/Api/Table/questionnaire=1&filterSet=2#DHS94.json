@@ -3,7 +3,6 @@
         "filter": {
             "id": 183,
             "name": "Total improved",
-            "isOfficial": true,
             "level": 0
         },
         "values": [
@@ -18,7 +17,6 @@
         "filter": {
             "id": 2,
             "name": "Tap water",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -33,7 +31,6 @@
         "filter": {
             "id": 3,
             "name": "House connections",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -48,7 +45,6 @@
         "filter": {
             "id": 4,
             "name": "Piped water into dwelling",
-            "isOfficial": true,
             "level": 3
         },
         "values": [
@@ -63,7 +59,6 @@
         "filter": {
             "id": 5,
             "name": "Piped water to yard\/plot",
-            "isOfficial": true,
             "level": 3
         },
         "values": [
@@ -78,7 +73,6 @@
         "filter": {
             "id": 6,
             "name": "Public tap, standpipe",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -93,7 +87,6 @@
         "filter": {
             "id": 7,
             "name": "Other",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -108,7 +101,6 @@
         "filter": {
             "id": 9,
             "name": "Protected ground water",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -123,7 +115,6 @@
         "filter": {
             "id": 52,
             "name": "Covered cistern\/tank",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -138,7 +129,6 @@
         "filter": {
             "id": 55,
             "name": "with other improved",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -153,7 +143,6 @@
         "filter": {
             "id": 65,
             "name": "Other improved sources",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -168,7 +157,6 @@
         "filter": {
             "id": 66,
             "name": "Other 1",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -183,7 +171,6 @@
         "filter": {
             "id": 67,
             "name": "Other 2",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -198,7 +185,6 @@
         "filter": {
             "id": 184,
             "name": "Piped onto premises",
-            "isOfficial": true,
             "level": 0
         },
         "values": [
@@ -213,7 +199,6 @@
         "filter": {
             "id": 3,
             "name": "House connections",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -228,7 +213,6 @@
         "filter": {
             "id": 4,
             "name": "Piped water into dwelling",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -243,7 +227,6 @@
         "filter": {
             "id": 5,
             "name": "Piped water to yard\/plot",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -258,7 +241,6 @@
         "filter": {
             "id": 185,
             "name": "Surface water",
-            "isOfficial": true,
             "level": 0
         },
         "values": [
@@ -273,7 +255,6 @@
         "filter": {
             "id": 57,
             "name": "Surface water",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -288,7 +269,6 @@
         "filter": {
             "id": 58,
             "name": "River",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -303,7 +283,6 @@
         "filter": {
             "id": 59,
             "name": "Lake",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -318,7 +297,6 @@
         "filter": {
             "id": 60,
             "name": "Dam",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -333,7 +311,6 @@
         "filter": {
             "id": 61,
             "name": "Pond",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -348,7 +325,6 @@
         "filter": {
             "id": 62,
             "name": "Stream",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -363,7 +339,6 @@
         "filter": {
             "id": 63,
             "name": "Irrigation channel",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -378,7 +353,6 @@
         "filter": {
             "id": 64,
             "name": "Other",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -393,7 +367,6 @@
         "filter": {
             "id": 186,
             "name": "Other Improved",
-            "isOfficial": true,
             "level": 0
         },
         "values": [
@@ -408,7 +381,6 @@
         "filter": {
             "id": 6,
             "name": "Public tap, standpipe",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -423,7 +395,6 @@
         "filter": {
             "id": 7,
             "name": "Other",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -438,7 +409,6 @@
         "filter": {
             "id": 9,
             "name": "Protected ground water",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -453,7 +423,6 @@
         "filter": {
             "id": 52,
             "name": "Covered cistern\/tank",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -468,7 +437,6 @@
         "filter": {
             "id": 55,
             "name": "with other improved",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -483,7 +451,6 @@
         "filter": {
             "id": 65,
             "name": "Other improved sources",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -498,7 +465,6 @@
         "filter": {
             "id": 66,
             "name": "Other 1",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -513,7 +479,6 @@
         "filter": {
             "id": 67,
             "name": "Other 2",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -528,7 +493,6 @@
         "filter": {
             "id": 187,
             "name": "Other Unimproved",
-            "isOfficial": true,
             "level": 0
         },
         "values": [
@@ -543,7 +507,6 @@
         "filter": {
             "id": 53,
             "name": "Uncovered cistern\/tank",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -558,7 +521,6 @@
         "filter": {
             "id": 56,
             "name": "without other improved",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -573,7 +535,6 @@
         "filter": {
             "id": 68,
             "name": "Other non-improved",
-            "isOfficial": true,
             "level": 1
         },
         "values": [
@@ -588,7 +549,6 @@
         "filter": {
             "id": 69,
             "name": "Cart with small tank\/drum",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -603,7 +563,6 @@
         "filter": {
             "id": 70,
             "name": "Tanker truck provided",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -618,7 +577,6 @@
         "filter": {
             "id": 71,
             "name": "Other 1",
-            "isOfficial": true,
             "level": 2
         },
         "values": [
@@ -633,7 +591,6 @@
         "filter": {
             "id": 72,
             "name": "Other 2",
-            "isOfficial": true,
             "level": 2
         },
         "values": [

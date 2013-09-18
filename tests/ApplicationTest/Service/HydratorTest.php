@@ -229,11 +229,9 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->assertEquals(array(
             'id' => null,
             'name' => 'filter 1',
-            'isOfficial' => true,
             'officialFilter' => array(
                 'id' => null,
                 'name' => 'filter 2',
-                'isOfficial' => true,
             ),
                 ), $this->hydrator->extract($filter1, array(
                     'name',
@@ -270,12 +268,10 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->assertEquals(array(
             'id' => null,
             'name' => 'filter 1',
-            'isOfficial' => true,
             'children' => array(
                 array(
                     'id' => null,
                     'name' => 'filter 2',
-                    'isOfficial' => true,
                 ),
             ),
                 ), $this->hydrator->extract($filter1, array(
@@ -293,7 +289,6 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->assertEquals(array(
             'id' => null,
             'name' => 'filter 1',
-            'isOfficial' => true,
                 // @todo check what to do
 //            'officialFilter' => array(
 //                'id' => null,
