@@ -108,4 +108,9 @@ class UserController extends AbstractRestfulController
         return $this->forward()->dispatch(static::CONTROLLER_NAME, array('action' => 'authenticate'));
     }
 
+    public function delete($id)
+    {
+        throw new \Exception('Not implemtented ! see https://support.ecodev.ch/issues/2042');
+    }
+
 }
