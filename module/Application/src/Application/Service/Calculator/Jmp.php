@@ -128,7 +128,7 @@ class Jmp extends Calculator
 
         if (is_null($result)) {
             $yearLater = $year + 1;
-            $flattenYearLater = !in_array($yearEarlier, $usedYears) ? $this->computeFlattenOneYear($yearLater, $allRegressions, $usedYears) : null;
+            $flattenYearLater = !in_array($yearLater, $usedYears) ? $this->computeFlattenOneYear($yearLater, $allRegressions, $usedYears) : null;
 
             if ($flattenYearLater === $minRegression && $flattenYearLater < 0.05) {
                 $result = $flattenYearLater;
