@@ -1,12 +1,12 @@
 <?php
 
 define('ID', 0);
-define('CHAPTER', 4);
-define('QUESTION', 5);
-define('CHOICES', 6);
-define('NUM_URBAN', 1);
-define('NUM_RURAL', 2);
-define('NUM_TOTAL', 3);
+define('CHAPTER', 1);
+define('QUESTION', 2);
+define('CHOICES', 3);
+define('NUM_URBAN', 4);
+define('NUM_RURAL', 5);
+define('NUM_TOTAL', 6);
 define('TXT_URBAN', 7);
 define('TXT_RURAL', 8);
 define('TXT_TOTAL', 9);
@@ -126,7 +126,25 @@ function getAnswer ($question, $part, $choice) {
         if ((isset($question['isMultiple']) && $question['isMultiple'] && $answer['valueChoice']==$choice['id'] && $answer['part']['id']==$part['id']) ||
             ((!isset($question['isMultiple']) || !$question['isMultiple']) && $answer['part']['id']==$part['id'])
         ) {
-            return $answer['valuePercent'].$answer['valueAbsolute'].$answer['valueText'];
+
+            switch ($question['type']) {
+                case 'Numeric':
+                    return $answer['valueAbsolute'];
+                    break;
+
+                case 'Text':
+                    return $answer['valueText'];
+                    break;
+
+                case 'User':
+                case 'Choice':
+                    if ($question['isMultiple']) {
+                        return 1;
+                    }else{
+                        return $answer['valuePercent'];
+                    }
+                    break;
+            }
         }
     }
     return '';

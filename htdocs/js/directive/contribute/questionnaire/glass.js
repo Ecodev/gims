@@ -15,7 +15,6 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
             $scope.$watch('questions', function (questions)
             {
                 if (questions.length > 0) {
-
                     questions[0].active=true;
 
                     angular.forEach(questions, function (question, index)
@@ -33,32 +32,34 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                         });
                     });
 
-                    // end of navigation preparation
-                    angular.forEach($scope.navigation, function (question, index)
-                    {
-                        question.navIndex=index;
-                        question['children'] = $scope.getChildren(question.level, index);
-                        if (question.level === 0){
-                            $scope.hierarchicNavigation.push(question);
-                        }
-                    });
-
+                    // preparing hierarchy nav
+                    $scope.hierarchicNavigation = $scope.getChildren({navIndex:-1,level:-1});
                     $scope.refreshQuestion();
                 }
             });
 
-            $scope.getChildren = function(level, key)
+            $scope.getChildren = function(question)
             {
                 var elements = [];
-                for(var i=key+1; i<$scope.navigation.length-1; i++){
-                    var testedEl = $scope.navigation[i];
-                    testedEl['children'] = $scope.getChildren(testedEl.level, i);
-                    if(testedEl.level == level+1) {
-                        elements.push(testedEl);
-                    } else if (testedEl.level <= level){
-                        break;
+                for(var index = question.navIndex+1; index<$scope.navigation.length-1; index++){
+                    var testedQuestion = $scope.navigation[index];
+                    testedQuestion.navIndex=index;
+
+                    // si même niveau ou inférieur, inutile de poursuivre, c'est la fin du chapitre
+                    if (testedQuestion.level<=question.level) {
+                        return elements;
+                    }
+
+                    // si niveau directement inférieur = enfant
+                    if (testedQuestion.level==question.level+1) {
+                        elements.push(testedQuestion);
+                    }
+
+                    if (testedQuestion.level>=question.level+1) {
+                        testedQuestion['children'] = $scope.getChildren(testedQuestion);
                     }
                 }
+
                 return elements;
             }
 
