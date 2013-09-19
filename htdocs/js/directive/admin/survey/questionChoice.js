@@ -13,10 +13,10 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                         "   <td class='text-center' ng-repeat='part in question.parts' >"+
                         "       <div ng-switch='question.isMultiple'>"+
                         "           <div ng-switch-when='true'>" +
-                        "               <input type='checkbox' ng-model='index[question.id+\"-\"+choice.id+\"-\"+part.id].isCheckboxChecked' ng-click='save(question.id,choice.id,part.id)' name='{{part.id}}-{{choice.id}}' />"+
+                        "               <input type='checkbox' ng-model='index[question.id+\"-\"+choice.id+\"-\"+part.id].isCheckboxChecked' ng-click='save(question.id,choice,part.id)' name='{{part.id}}-{{choice.id}}' />"+
                         "           </div>"+
                         "           <div ng-switch-when='false'>" +
-                        "               <input type='radio' ng-model='index[question.id+\"-\"+part.id].valuePercent' value='{{choice.value}}' ng-click='save(question.id,choice.id,part.id)' name='{{part.id}}-{{question.id}}'/>"+
+                        "               <input type='radio' ng-model='index[question.id+\"-\"+part.id].valuePercent' value='{{choice.value}}' ng-click='save(question.id,choice,part.id)' name='{{part.id}}-{{question.id}}'/>"+
                         "           </div>"+
                         "       </div>"+
                         "   </td>"+
@@ -63,7 +63,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                     if (testedAnswer.part && testedAnswer.part.id==pid) {
                         if (!question.isMultiple) {
                             return testedAnswer;
-                        }else if (question.isMultiple &&  testedAnswer.valueChoice==cid) {
+                        } else if (question.isMultiple &&  testedAnswer.valueChoice.id==cid) {
                             testedAnswer.isCheckboxChecked = true;
                             return testedAnswer;
                         }
@@ -75,23 +75,23 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                     question : question.id,
                     isCheckboxChecked :null
                 }
-                if(cid) emptyChoice.valueChoice=cid;
+                if(cid) emptyChoice.valueChoice = {id:cid};
                 return emptyChoice;
             }
 
 
 
 
-            $scope.save = function (question_id, choice_id, part_id)
+            $scope.save = function (question_id, choice, part_id)
             {
                 if($scope.question.isMultiple){
-                    var identifier = question_id+"-"+choice_id+'-'+part_id;
+                    var identifier = question_id+"-"+choice.id+"-"+part_id;
                 }else{
                     var identifier = question_id+"-"+part_id;
                 }
 
                 var newAnswer = $scope.index[identifier];
-                newAnswer.valueChoice=choice_id;
+                newAnswer.valueChoice=choice;
 
                 // if id is setted, that means it has just been removed (click event)
                 if (newAnswer.id && !$scope.question.isMultiple) {
@@ -101,7 +101,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                         $scope.index[identifier] = {
                             questionnaire : Number($scope.question.parentResource.id),
                             part : part_id,
-                            valueChoice:choice_id,
+                            valueChoice : choice,
                             question : $scope.question.id,
                             isCheckboxChecked: false
                         };

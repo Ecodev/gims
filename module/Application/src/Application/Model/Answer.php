@@ -13,9 +13,10 @@ class Answer extends AbstractModel
 {
 
     /**
-     * @var integer
+     * @var Choice
      *
-     * @ORM\Column(type="smallint", nullable=true)
+     * @ORM\OneToOne(targetEntity="Application\Model\Question\Choice")
+     * @ORM\JoinColumn(name="value_choice")
      */
     private $valueChoice;
 
@@ -108,7 +109,7 @@ class Answer extends AbstractModel
     /**
      * Set valueChoice
      *
-     * @param integer $valueChoice
+     * @param Application\Model\Question\Choice
      * @return Answer
      */
     public function setValueChoice($valueChoice)
@@ -121,7 +122,7 @@ class Answer extends AbstractModel
     /**
      * Get valueChoice
      *
-     * @return integer
+     * @return Choice
      */
     public function getValueChoice()
     {

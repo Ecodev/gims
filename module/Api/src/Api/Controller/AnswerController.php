@@ -27,7 +27,6 @@ class AnswerController extends AbstractChildRestfulController
      */
     public function update($id, $data)
     {
-
         $result = parent::update($id, $data);
 
         // Compute absolute values based on percentage values

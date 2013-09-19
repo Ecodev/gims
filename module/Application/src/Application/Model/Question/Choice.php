@@ -10,12 +10,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Application\Repository\ChoiceRepository")
  */
 class Choice extends \Application\Model\AbstractModel
-{ /**
- * @var integer
- *
- * @ORM\Column(type="smallint", nullable=false, options={"default" = 0})
- */
+{
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(type="smallint", nullable=false, options={"default" = 0})
+     */
     private $sorting = 0;
 
     /**

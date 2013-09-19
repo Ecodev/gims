@@ -33,12 +33,8 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                         });
                     });
 
-
-
                     // preparing hierarchy nav
                     $scope.hierarchicNavigation = $scope.getChildren({navIndex:-1,level:-1});
-
-
                     $scope.refreshQuestion();
                 }
             });

@@ -261,6 +261,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             return new JsonModel(array('message' => $this->getRbac()->getMessage()));
         }
 
+
         $this->hydrator->hydrate($data, $object);
         $this->getEntityManager()->flush();
         $this->getResponse()->setStatusCode(201);

@@ -121,7 +121,7 @@ function insertChoices ($question, &$row, $workbook)
 function getAnswer ($question, $part, $choice) {
 
     foreach ($question['answers'] as $answer) {
-        if ((isset($question['isMultiple']) && $question['isMultiple'] && $answer['valueChoice']==$choice['id'] && $answer['part']['id']==$part['id']) ||
+        if ((isset($question['isMultiple']) && $question['isMultiple'] && $answer['valueChoice']['id']==$choice['id'] && $answer['part']['id']==$part['id']) ||
             ((!isset($question['isMultiple']) || !$question['isMultiple']) && $answer['part']['id']==$part['id'])
         ) {
 
