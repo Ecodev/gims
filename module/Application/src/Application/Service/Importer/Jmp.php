@@ -299,6 +299,7 @@ class Jmp extends AbstractImporter
     private $cacheFormulas = array();
     private $importedQuestionnaires = array();
     private $colToParts = array();
+    private $surveyCount = 0;
     private $questionnaireCount = 0;
     private $answerCount = 0;
     private $excludeCount = 0;
@@ -364,7 +365,6 @@ class Jmp extends AbstractImporter
 
             // Import all questionnaire found, until no questionnaire code found
             $col = 0;
-            $this->importedQuestionnaires = array();
             $this->colToParts = array();
             while ($this->importQuestionnaire($sheet, $col)) {
                 $col += 6;
@@ -394,6 +394,7 @@ class Jmp extends AbstractImporter
 
         return <<<STRING
 
+Surveys          : $this->surveyCount
 Questionnaires   : $this->questionnaireCount
 Alternate Filters: $this->alternateFilterCount
 Answers          : $this->answerCount
@@ -511,11 +512,12 @@ STRING;
             }
             $this->getEntityManager()->persist($survey);
             $this->getEntityManager()->flush();
+            $this->surveyCount++;
         }
 
         // Create questionnaire
         $countryCell = $sheet->getCellByColumnAndRow($col + 3, 1);
-        $questionnaire = $this->getQuestionnaire($survey, $countryCell);
+        $questionnaire = $this->getQuestionnaire($sheet, $col, $survey, $countryCell);
         if (!$questionnaire) {
             echo 'WARNING: skipped questionnaire because there is no country name. On sheet "' . $sheet->getTitle() . '" cell ' . $countryCell->getCoordinate() . PHP_EOL;
 
@@ -609,8 +611,28 @@ STRING;
         echo "Answers: " . $answerCount . PHP_EOL . PHP_EOL;
     }
 
-    protected function getQuestionnaire(Survey $survey, \PHPExcel_Cell $countryCell)
+    /**
+     * Get or create a questionnaire.
+     *
+     * It will only get a questionnaire from previous tab, so only if we are in Sanitation.
+     * In all other cases a new questionnaire will be created.
+     * 
+     * @param \PHPExcel_Worksheet $sheet
+     * @param integer $col
+     * @param \Application\Model\Survey $survey
+     * @param \PHPExcel_Cell $countryCell
+     * @return null|\Application\Model\Questionnaire
+     * @throws \Exception
+     */
+    protected function getQuestionnaire(\PHPExcel_Worksheet $sheet, $col, Survey $survey, \PHPExcel_Cell $countryCell)
     {
+        // If we already imported a questionnaire on that column, returns it directly.
+        // That means we are on second tab (Sanitation) and we assume the questionnaire is
+        // the same as the one we found on first tab (Water)
+        if (isset($this->importedQuestionnaires[$col])) {
+            return $this->importedQuestionnaires[$col];
+        }
+
         // Mapping JMP country names to Geoname country names
         $countryNameMapping = array(
             'Syrian Arab Republic' => 'Syria',
@@ -669,24 +691,16 @@ STRING;
         }
         $geoname = $country->getGeoname();
 
+        $questionnaire = new Questionnaire();
+        $questionnaire->setSurvey($survey);
+        $questionnaire->setDateObservationStart(new \DateTime($survey->getYear() . '-01-01'));
+        $questionnaire->setDateObservationEnd(new \DateTime($survey->getYear() . '-12-31T23:59:59'));
+        $questionnaire->setGeoname($geoname);
+        $questionnaire->setComments($sheet->getCellByColumnAndRow($col + 0, 3)->getCalculatedValue());
 
-        $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
-        $questionnaire = $questionnaireRepository->findOneBy(array(
-            'survey' => $survey,
-            'geoname' => $geoname,
-        ));
-
-        if (!$questionnaire) {
-            $questionnaire = new Questionnaire();
-            $questionnaire->setSurvey($survey);
-            $questionnaire->setDateObservationStart(new \DateTime($survey->getYear() . '-01-01'));
-            $questionnaire->setDateObservationEnd(new \DateTime($survey->getYear() . '-12-31T23:59:59'));
-            $questionnaire->setGeoname($geoname);
-
-            $this->getEntityManager()->persist($questionnaire);
-            $this->getEntityManager()->flush();
-            $this->questionnaireCount++;
-        }
+        $this->getEntityManager()->persist($questionnaire);
+        $this->getEntityManager()->flush();
+        $this->questionnaireCount++;
 
         return $questionnaire;
     }
