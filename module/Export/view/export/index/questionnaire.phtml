@@ -108,7 +108,7 @@ function insertChoices ($question, &$row, $workbook)
     if ($question['isMultiple']){
         foreach ($question['choices'] as $choice) {
             $row++;
-            $workbook->getActiveSheet()->setCellValueByColumnAndRow(CHOICES, $row, $choice['label']);
+            $workbook->getActiveSheet()->setCellValueByColumnAndRow(CHOICES, $row, $choice['name']);
             insertParts('num', $question, $row, $workbook, $choice);
         }
     } else {

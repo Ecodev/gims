@@ -1,5 +1,3 @@
-// Youpi 1000nd commit ! Applause !
-
 angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
     return {
         restrict: 'E',
@@ -22,7 +20,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                         "           </div>"+
                         "       </div>"+
                         "   </td>"+
-                        "   <td><div style='padding-top:5px'>{{choice.label}}</div></td>"+
+                        "   <td><div style='padding-top:5px'>{{choice.name}}</div></td>"+
                         "</tr>"+
                     "</table>",
 

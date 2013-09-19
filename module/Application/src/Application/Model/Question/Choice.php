@@ -40,7 +40,7 @@ class Choice extends \Application\Model\AbstractModel
      *
      * @ORM\Column(type="text", nullable=false)
      */
-    private $label;
+    private $name;
 
     /**
      * @inheritdoc
@@ -49,7 +49,7 @@ class Choice extends \Application\Model\AbstractModel
     {
         return array_merge(parent::getJsonConfig(), array(
             'value',
-            'label',
+            'name',
             'sorting',
         ));
     }
@@ -119,18 +119,18 @@ class Choice extends \Application\Model\AbstractModel
     /**
      * @return string
      */
-    public function getLabel()
+    public function getName()
     {
-        return $this->label;
+        return $this->name;
     }
 
     /**
-     * @param string $label
+     * @param string $name
      * @return $this
      */
-    public function setLabel($label)
+    public function setName($name)
     {
-        $this->label = $label;
+        $this->name = $name;
 
         return $this;
     }
