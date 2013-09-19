@@ -1,7 +1,6 @@
 <div class="container">
-
     <h2>Questionnaire</h2>
-    <gims-select queryparams="questionnaireQueryParams" api="questionnaire" name="id" model="questionnaire" placeholder="<?php echo $this->translate('Select a questionnaire') ?>" style="width:100%;"/></gims-select>
+    <gims-select class='hidden-print' queryparams="questionnaireQueryParams" api="questionnaire" name="id" model="questionnaire" placeholder="<?php echo $this->translate('Select a questionnaire') ?>" style="width:100%;"/></gims-select>
 <p></p>
 <p><i class="icon-loading" ng-show="isLoading"></i></p>
 <br/>

@@ -11,6 +11,7 @@
         <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/favicon.ico'))
                 ->prependStylesheet('/css/application.css')
                 ->prependStylesheet('/lib/select2/select2.css')
+                ->prependStylesheet('/css/print.css', array('media' => 'print'))
         ?>
 
         <!-- Scripts -->
@@ -26,7 +27,7 @@
 
     </head>
     <body>
-        <div class="top-bar navbar navbar-inverse navbar-fixed-top">
+        <div class="top-bar navbar navbar-inverse navbar-fixed-top hidden-print">
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -134,7 +135,7 @@
         </div>
         <div class="container-angular" ng-view></div>
 
-        <footer>
+        <footer >
             <div class="row-fluid" style="margin-bottom: 15px">
                 <p class="span4 muted">
                     <small>A project by <a href="http://www.who.int/phe/en/" target="_blank">WHO - Public Health and Environment</a> - 2013</small>

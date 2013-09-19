@@ -41,15 +41,15 @@ html {
 }
 
 .icon-survey {
-    @extend .icon-folder-open-alt
+    @extend .icon-folder-open-alt;
 }
 
 .icon-filterset {
-    @extend .icon-tags
+    @extend .icon-tags;
 }
 
 .icon-questionnaire {
-    @extend .icon-file
+    @extend .icon-file;
 }
 
 .column-loading {
@@ -156,10 +156,10 @@ div.browse .span4 {
 }
 
 /* Links with .button class is not allowed in .navbar so this instruction override default behavior*/
-.navbar .nav > li > a.btn.btn-primary{
-    color:white;
+.navbar .nav > li > a.btn.btn-default{
+    color:#333;
     text-shadow:none;
     padding:4px 12px;
-    background-color:#04C;
+    background-color:#E6E6E6;
 }
 

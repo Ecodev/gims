@@ -17,7 +17,6 @@ $workbook = new \PHPExcel();
 $row = 1;
 
 
-
 $workbook->getActiveSheet()->mergeCells('E'.$row.':G'.$row);
 $workbook->getActiveSheet()->mergeCells('H'.$row.':J'.$row);
 $workbook->getActiveSheet()->setCellValueByColumnAndRow(NUM_URBAN, $row, 'Numerical');
@@ -48,7 +47,7 @@ foreach ($questions as $question) {
         case 'Numeric':
             $workbook->getActiveSheet()->setCellValueByColumnAndRow(ID, $row,  $question['id']);
             $workbook->getActiveSheet()->setCellValueByColumnAndRow(QUESTION, $row, $question['name']);
-            //insertParts('num', $question, $row, $workbook);
+            insertParts('num', $question, $row, $workbook);
             break;
 
         case 'Text':
@@ -98,7 +97,6 @@ function insertParts($type, $question, $row, $workbook, $choice=null)
                 }
                 break;
         }
-        //echo '('.$col.'-'.$row.")\n";
         $workbook->getActiveSheet()->setCellValueByColumnAndRow($col, $row, getAnswer($question, $part, $choice));
     }
 }

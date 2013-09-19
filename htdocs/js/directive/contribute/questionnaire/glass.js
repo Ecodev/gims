@@ -2,6 +2,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
 {
     return {
         restrict: 'E',
+        templateUrl: '/template/contribute/questions',
         controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal)
         {
 
@@ -32,8 +33,12 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                         });
                     });
 
+
+
                     // preparing hierarchy nav
                     $scope.hierarchicNavigation = $scope.getChildren({navIndex:-1,level:-1});
+
+
                     $scope.refreshQuestion();
                 }
             });
@@ -41,7 +46,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
             $scope.getChildren = function(question)
             {
                 var elements = [];
-                for(var index = question.navIndex+1; index<$scope.navigation.length-1; index++){
+                for(var index = question.navIndex+1; index<$scope.navigation.length; index++){
                     var testedQuestion = $scope.navigation[index];
                     testedQuestion.navIndex=index;
 
@@ -63,6 +68,8 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                 return elements;
             }
 
+
+
             $scope.$watch('currentIndex', function (newIndex, old)
             {
                 if (newIndex !== old) {
@@ -71,13 +78,36 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
             });
 
 
+
+            $scope.goToPrintMode = function ()
+            {
+                var i=0;
+                for(i; i<$scope.navigation.length; i++){
+                    if($scope.navigation[i].level===0 && ($scope.navigation[i].active_parent || $scope.navigation[i].active)){
+                        console.info('id : '+i);
+                        $scope.navigation[i].isFinal=true;
+                        $scope.currentIndex=$scope.navigation[i].navIndex;
+                        break;
+                    }
+                }
+                setTimeout(function()
+                {
+                    window.print();
+                    $scope.navigation[i].isFinal=false;
+                    $scope.refreshQuestion();
+                },1500);
+            }
+
+
+
+
             $scope.refreshQuestion = function ()
             {
                 $scope.currentQuestion = $scope.questions[$scope.navigation[$scope.currentIndex].index];
                 // if question is chapter, retrieve all the subquestions that are contained in the chapter for display.
                 if ($scope.currentQuestion.isFinal) {
                     var children = [];
-                    for (var i = Number($scope.currentQuestion.index) + 1; i < $scope.questions.length; ++i) {
+                    for (var i=Number($scope.currentQuestion.index)+1; i<$scope.questions.length; ++i) {
                         var testedQuestion = $scope.questions[i];
                         if (testedQuestion.level > $scope.currentQuestion.level) {
                             children.push(testedQuestion);
@@ -99,7 +129,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                     $scope.parentChapters.push($scope.questions[firstChapterPerLevel[q]]);
                 }
 
-                // Update nav
+                // Update nav (active and active_parent class)
                 for (var id in $scope.navigation) {
                     var question = $scope.navigation[id];
                     question.active=false;
@@ -108,7 +138,6 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
 
                 var firstChapterPerLevel = $scope.getListOfFirstChapterPerLevel($scope.currentIndex, $scope.navigation);
                 for(var i=0; i<firstChapterPerLevel.length; i++){
-                    console.info(i);
                     $scope.navigation[firstChapterPerLevel[i]].active_parent = true;
                 }
                 $scope.navigation[$scope.currentIndex].active = true;
@@ -169,6 +198,6 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
 
         },
 
-        templateUrl: '/template/contribute/questions'
+
     }
 });

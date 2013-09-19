@@ -3,13 +3,13 @@
 
 <div class='row-fluid'>
     
-    <div class='span4'>
+    <div class='span4 hidden-print'>
         <gims-questions-nav id='questionnaireNav' nav='hierarchicNavigation' flat-nav='navigation' go-to='goTo(wantedIndex)'></gims-questions-nav>
     </div>
 
     <div class='span8'>
 
-        <div ng-repeat='parentChapter in parentChapters'>
+        <div class='hidden-print' ng-repeat='parentChapter in parentChapters'>
             <h3>{{parentChapter.name}}</h3>
             <p>{{parentChapter.description}}</p>
             <hr/>
@@ -56,8 +56,7 @@
             </div>
 
         </div>
-        
-        <!--pre>{{index|json}}</pre-->
+
     </div>
 </div>
 <br/>

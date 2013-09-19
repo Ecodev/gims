@@ -1,31 +1,28 @@
 angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
     return {
         restrict: 'E',
-        template:   "<div class='row-fluid'>"+
-                    "   <div class='span1 text-center' ng-repeat='part in question.parts'>"+
-                    "         <div ng-switch='part.name'>" +
-                    "               <div ng-switch-when='Total'>National</div>"+
-                    "               <div ng-switch-when='Urban'>Urban</div>"+
-                    "               <div ng-switch-when='Rural'>Rural</div>"+
-                    "         </div>"+
-                    "   </div>"+
-                    "</div>"+
-                    "<div class='row-fluid' ng-repeat='choice in question.choices'>"+
-                    "   <div class='span1 text-center' ng-repeat='part in question.parts'>"+
-                    "       <div ng-switch='question.isMultiple'>"+
-                    "           <div ng-switch-when='true'>" +
-                    //ng-true-value='{{choice.id}}'
-                    "               <input type='checkbox' ng-model='index[question.id+\"-\"+choice.id+\"-\"+part.id].isCheckboxChecked' ng-click='save(question.id,choice.id,part.id)' name='{{part.id}}-{{choice.id}}' />"+
-                    "           </div>"+
-                    "           <div ng-switch-when='false'>" +
-                    "               <input type='radio' ng-model='index[question.id+\"-\"+part.id].valuePercent' value='{{choice.value}}' ng-click='save(question.id,choice.id,part.id)' name='{{part.id}}-{{question.id}}'/>"+
-                    "           </div>"+
-                    "       </div>"+
-                    "   </div>"+
-                    "   <span class='span9'>"+
-                    "       {{choice.label}}"+
-                    "   </span>"+
-                    "</div>",
+        template:   "<table>"+
+                        "<tr>"+
+                        "   <td class='text-center' ng-repeat='part in question.parts' ng-switch='part.name'>"+
+                        "       <div ng-switch-when='Total'>National</div>"+
+                        "       <div ng-switch-when='Urban'>Urban</div>"+
+                        "       <div ng-switch-when='Rural'>Rural</div>"+
+                        "   </td><td></td>"+
+                        "</tr>"+
+                        "<tr ng-repeat='choice in question.choices' >"+
+                        "   <td class='text-center' ng-repeat='part in question.parts' >"+
+                        "       <div ng-switch='question.isMultiple'>"+
+                        "           <div ng-switch-when='true'>" +
+                        "               <input type='checkbox' ng-model='index[question.id+\"-\"+choice.id+\"-\"+part.id].isCheckboxChecked' ng-click='save(question.id,choice.id,part.id)' name='{{part.id}}-{{choice.id}}' />"+
+                        "           </div>"+
+                        "           <div ng-switch-when='false'>" +
+                        "               <input type='radio' ng-model='index[question.id+\"-\"+part.id].valuePercent' value='{{choice.value}}' ng-click='save(question.id,choice.id,part.id)' name='{{part.id}}-{{question.id}}'/>"+
+                        "           </div>"+
+                        "       </div>"+
+                        "   </td>"+
+                        "   <td><div style='padding-top:5px'>{{choice.label}}</div></td>"+
+                        "</tr>"+
+                    "</table>",
 
         scope:{
             index:'=',
