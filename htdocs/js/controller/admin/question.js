@@ -14,16 +14,16 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     // @TODO : manage value null and integer value
     $scope.percentages = [
         {text: '100%', value: '1.000'},
-        {text: '90%', value: '0.900'},
-        {text: '80%', value: '0.800'},
-        {text: '70%', value: '0.700'},
-        {text: '60%', value: '0.600'},
-        {text: '50%', value: '0.500'},
-        {text: '40%', value: '0.400'},
-        {text: '30%', value: '0.300'},
-        {text: '20%', value: '0.200'},
-        {text: '10%', value: '0.100'},
-        {text: '0%', value: '0.000'},
+        {text: '90%',  value: '0.900'},
+        {text: '80%',  value: '0.800'},
+        {text: '70%',  value: '0.700'},
+        {text: '60%',  value: '0.600'},
+        {text: '50%',  value: '0.500'},
+        {text: '40%',  value: '0.400'},
+        {text: '30%',  value: '0.300'},
+        {text: '20%',  value: '0.200'},
+        {text: '10%',  value: '0.100'},
+        {text: '0%',   value: '0.000'},
         //{text: 'Unknown', value: null},
     ];
 
@@ -42,7 +42,6 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
         $scope.addBtnChoice = false;
         $scope.isChoices = false;
         $scope.isChapter = false;
-
 
         if ($scope.question.type == 'Choice') {
             $scope.isChoices = true;
@@ -152,13 +151,12 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
             $scope.question = question;
             $scope.setParentQuestions($scope.question.survey.id);
             $scope.initChoices();
-            
-            if(question.type==='Chapter' && question.questions){
-                //@todo : loop questions to restangularize, and remove new request
-                Restangular.one('chapter', $routeParams.id).all('question').getList().then(function(questions) {
-                    $scope.questions = questions;
-                });
-            }
+
+            angular.forEach(question.questions, function(question){
+                question = Restangular.restangularizeElement(null, question, 'question');
+            });
+            $scope.questions = question.questions;
+
         });
 
     } else {
