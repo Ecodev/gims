@@ -13,10 +13,10 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                         "   <td class='text-center' ng-repeat='part in question.parts' >"+
                         "       <div ng-switch='question.isMultiple'>"+
                         "           <div ng-switch-when='true'>" +
-                        "               <input type='checkbox' ng-model='index[question.id+\"-\"+choice.id+\"-\"+part.id].isCheckboxChecked' ng-click='save(question.id,choice,part.id)' name='{{part.id}}-{{choice.id}}' />"+
+                        "               <input type='checkbox' ng-disabled='saving' ng-model='index[question.id+\"-\"+choice.id+\"-\"+part.id].isCheckboxChecked' ng-click='save(question.id,choice,part.id)' name='{{part.id}}-{{choice.id}}' />"+
                         "           </div>"+
                         "           <div ng-switch-when='false'>" +
-                        "               <input type='radio' ng-model='index[question.id+\"-\"+part.id].valuePercent' value='{{choice.value}}' ng-click='save(question.id,choice,part.id)' name='{{part.id}}-{{question.id}}'/>"+
+                        "               <input type='radio' ng-disabled='saving' ng-model='index[question.id+\"-\"+part.id].valuePercent' value='{{choice.value}}' ng-click='save(question.id,choice,part.id)' name='{{part.id}}-{{question.id}}'/>"+
                         "           </div>"+
                         "       </div>"+
                         "   </td>"+
@@ -52,12 +52,8 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
 
 
 
-
-
-
             $scope.findAnswer = function (question, pid, cid)
             {
-
                 for(var key in question.answers){
                     var testedAnswer = question.answers[key];
                     if (testedAnswer.part && testedAnswer.part.id==pid) {
@@ -81,9 +77,10 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
 
 
 
-
+            $scope.saving = false;
             $scope.save = function (question_id, choice, part_id)
             {
+                $scope.saving = true;
                 if($scope.question.isMultiple){
                     var identifier = question_id+"-"+choice.id+"-"+part_id;
                 }else{
@@ -95,7 +92,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
 
                 // if id is setted, that means it has just been removed (click event)
                 if (newAnswer.id && !$scope.question.isMultiple) {
-                    newAnswer.put();
+                    newAnswer.put().then(function(){$scope.saving=false;});
                 }else if (newAnswer.id && $scope.question.isMultiple) {
                     newAnswer.remove().then(function(){
                         $scope.index[identifier] = {
@@ -105,7 +102,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                             question : $scope.question.id,
                             isCheckboxChecked: false
                         };
-
+                        $scope.saving=false;
                     });
 
                 // if don't exists -> create
@@ -113,7 +110,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                     Restangular.all('answer').post(newAnswer).then(function(answer){
                         if($scope.question.isMultiple) answer.isCheckboxChecked = true;
                         $scope.index[identifier] = answer;
-
+                        $scope.saving=false;
                     });
                 }
 

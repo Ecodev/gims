@@ -8,7 +8,7 @@ angular.module('myApp.directives').directive('gimsTextQuestion', function () {
                 "               <div ng-switch-when='Urban'>Urban</div>"+
                 "               <div ng-switch-when='Rural'>Rural</div>"+
                 "         </div>"+
-                "         <textarea class='span12' ng-model='index[question.id+\"-\"+part.id].valueText' ng-blur='save(question.id,part.id,$event)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'></textarea>"+
+                "         <textarea class='span12' ng-disabled='saving' ng-model='index[question.id+\"-\"+part.id].valueText' ng-blur='save(question.id,part.id,$event)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'></textarea>"+
                 "     </label>"+
                 " </div>",
         scope:{
@@ -43,22 +43,22 @@ angular.module('myApp.directives').directive('gimsTextQuestion', function () {
                 };
             };
 
-
+            $scope.saving=false;
             $scope.save = function (question_id, part_id, event)
             {
                 if (event) {
-                    console.info('save');
+                    $scope.saving=true;
                     var newAnswer = $scope.index[question_id+"-"+part_id];
 
                     // if exists but value not empty -> update
                     if (newAnswer.id && newAnswer.valueText) {
-                        newAnswer.put();
+                        newAnswer.put().then(function(){$scope.saving=false;});
 
                     // if dont exists -> create
                     } else if (!newAnswer.id && newAnswer.valueText) {
-
                         Restangular.all('answer').post(newAnswer).then(function(answer){
                             $scope.index[question_id+"-"+part_id] = answer;
+                            $scope.saving=false;
                         });
 
                     // if exists and empty -> remove
@@ -69,6 +69,7 @@ angular.module('myApp.directives').directive('gimsTextQuestion', function () {
                                 part : part_id,
                                 question : $scope.question.id
                             };
+                            $scope.saving=false;
                         });
                     }
                 }

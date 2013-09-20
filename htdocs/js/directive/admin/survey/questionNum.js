@@ -8,7 +8,7 @@ angular.module('myApp.directives').directive('gimsNumQuestion', function () {
                 "               <div ng-switch-when='Urban'>Urban</div>"+
                 "               <div ng-switch-when='Rural'>Rural</div>"+
                 "         </div>"+
-                "         <input class='span12' type='number' ng-model='index[question.id+\"-\"+part.id].valueAbsolute' ng-blur='save(question.id,part.id,$event)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'/>"+
+                "         <input class='span12' ng-disabled='saving' type='number' ng-model='index[question.id+\"-\"+part.id].valueAbsolute' ng-blur='save(question.id,part.id,$event)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'/>"+
                 "     </label>"+
                 " </div>",
 
@@ -51,20 +51,22 @@ angular.module('myApp.directives').directive('gimsNumQuestion', function () {
 
 
 
-
+            $scope.saving=false;
             $scope.save = function (question_id, part_id,event)
             {
                 if (event) {
+                    $scope.saving=true;
                     var newAnswer = $scope.index[question_id+"-"+part_id];
 
                     // if exists but value not empty -> update
                     if (newAnswer.id && newAnswer.valueAbsolute) {
-                        newAnswer.put();
+                        newAnswer.put().then(function(){$scope.saving=false;});
 
                         // if dont exists -> create
                     } else if (!newAnswer.id && newAnswer.valueAbsolute) {
                         Restangular.all('answer').post(newAnswer).then(function(answer){
                             $scope.index[question_id+"-"+part_id] = answer;
+                            $scope.saving=false;
                         });
 
                         // if exists and empty -> remove
@@ -75,6 +77,7 @@ angular.module('myApp.directives').directive('gimsNumQuestion', function () {
                                 part : part_id,
                                 question : $scope.question.id
                             };
+                            $scope.saving=false;
                         });
                     }
                 }
