@@ -13,7 +13,7 @@ class QuestionRepository extends AbstractChildRepository
     {
         $qb = $this->createQueryBuilder('question')
                 ->join('question.survey', 'survey', \Doctrine\ORM\Query\Expr\Join::WITH)
-                ->where($parentName . ' = :parent')
+                ->where('question.'.$parentName . ' = :parent')
                 ->setParameter('parent', $parent)
                 ->orderBy('question.sorting')
         ;
