@@ -5,7 +5,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     // Default redirect
     var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,chapter,isCompulsory,isMultiple,isFinal,description,questions'};
     var returnUrl = '/';
-    var returnTab = '';
+    $scope.returnTab = '';
 
     $scope.sending = false;
     $scope.addBtnChoice = false;
@@ -71,13 +71,12 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
     if ($routeParams.returnUrl) {
         returnUrl = $routeParams.returnUrl;
-        returnTab = $routeParams.returnTab;
-        $('.survey-question-link').attr('href', returnUrl + '#' + returnTab);
+        $scope.returnTab = $routeParams.returnTab;
     }
 
 
     var redirect = function () {
-        $location.path(returnUrl).search({}).hash(returnTab);
+        $location.path(returnUrl).search({}).hash($scope.returnTab);
     };
 
     $scope.cancel = function () {
@@ -149,6 +148,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     if ($routeParams.id) {
         Restangular.one('question', $routeParams.id).get(questionFields).then(function (question) {
             $scope.question = question;
+            $scope.survey = question.survey;
             $scope.setParentQuestions($scope.question.survey.id);
             $scope.initChoices();
 
@@ -175,13 +175,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     // Load survey if possible
     var params = $location.search();
     if (params.survey !== undefined) {
-        Restangular.one('survey', params.survey).get().then(function (survey) {
-            $scope.survey = survey;
-        });
+        $scope.survey = Restangular.one('survey', params.survey).get();
     }
-
-
-
-
 });
 
