@@ -15,8 +15,10 @@ class Answer extends AbstractModel
     /**
      * @var Choice
      *
-     * @ORM\OneToOne(targetEntity="Application\Model\Question\Choice")
-     * @ORM\JoinColumn(name="value_choice")
+     * @ORM\ManyToOne(targetEntity="Application\Model\Question\Choice")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
+     * })
      */
     private $valueChoice;
 
@@ -112,7 +114,7 @@ class Answer extends AbstractModel
      * @param Application\Model\Question\Choice
      * @return Answer
      */
-    public function setValueChoice($valueChoice)
+    public function setValueChoice(\Application\Model\Question\Choice $valueChoice)
     {
         $this->valueChoice = $valueChoice;
 
