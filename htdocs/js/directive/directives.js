@@ -5,13 +5,7 @@ angular.module('myApp.directives')
             elm.text(version);
         };
     }])
-    .directive('ngBlur', function () {
-        return function (scope, elem, attrs) {
-            elem.bind('blur', function () {
-                scope.$apply(attrs.ngBlur);
-            });
-        };
-    })
+
     .directive('ngVisible', function () {
         return function (scope, elem, attr) {
             scope.$watch(attr.ngVisible, function (value) {

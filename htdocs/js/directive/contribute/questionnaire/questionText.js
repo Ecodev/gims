@@ -46,33 +46,33 @@ angular.module('myApp.directives').directive('gimsTextQuestion', function () {
             $scope.saving=false;
             $scope.save = function (question_id, part_id, event)
             {
-                if (event) {
-                    $scope.saving=true;
-                    var newAnswer = $scope.index[question_id+"-"+part_id];
 
-                    // if exists but value not empty -> update
-                    if (newAnswer.id && newAnswer.valueText) {
-                        newAnswer.put().then(function(){$scope.saving=false;});
+                $scope.saving=true;
+                var newAnswer = $scope.index[question_id+"-"+part_id];
 
-                    // if dont exists -> create
-                    } else if (!newAnswer.id && newAnswer.valueText) {
-                        Restangular.all('answer').post(newAnswer).then(function(answer){
-                            $scope.index[question_id+"-"+part_id] = answer;
-                            $scope.saving=false;
-                        });
+                // if exists but value not empty -> update
+                if (newAnswer.id && newAnswer.valueText) {
+                    newAnswer.put().then(function(){$scope.saving=false;});
 
-                    // if exists and empty -> remove
-                    } else if (newAnswer.id && newAnswer.valueText=="" ){
-                        newAnswer.remove().then(function(){
-                            $scope.index[question_id+"-"+part_id] = {
-                                questionnaire : Number($scope.question.parentResource.id),
-                                part : part_id,
-                                question : $scope.question.id
-                            };
-                            $scope.saving=false;
-                        });
-                    }
+                // if dont exists -> create
+                } else if (!newAnswer.id && newAnswer.valueText) {
+                    Restangular.all('answer').post(newAnswer).then(function(answer){
+                        $scope.index[question_id+"-"+part_id] = answer;
+                        $scope.saving=false;
+                    });
+
+                // if exists and empty -> remove
+                } else if (newAnswer.id && newAnswer.valueText=="" ){
+                    newAnswer.remove().then(function(){
+                        $scope.index[question_id+"-"+part_id] = {
+                            questionnaire : Number($scope.question.parentResource.id),
+                            part : part_id,
+                            question : $scope.question.id
+                        };
+                        $scope.saving=false;
+                    });
                 }
+
             };
 
 
