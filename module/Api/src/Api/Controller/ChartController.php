@@ -274,12 +274,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'allowPointSelect' => false, // because we will use our own click handler
                 'data' => array(),
             );
-            
+
             foreach ($data['values'] as $questionnaireId => $value) {
 
                 if (!is_null($value)) {
                     $scatterData = array(
-                        'name' => $data['surveys'][$questionnaireId],
+                        'name' => $data['surveys'][$questionnaireId] . $suffix,
                         'id' => $idFilter . ':' . $questionnaireId,
                         'questionnaire' => $questionnaireId,
                         'x' => $data['years'][$questionnaireId],
