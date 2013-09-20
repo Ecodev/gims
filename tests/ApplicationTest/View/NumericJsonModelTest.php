@@ -14,6 +14,9 @@ class NumericJsonModelTest extends \ApplicationTest\Controller\AbstractControlle
             array('{"data":[0.1]}', '{"data":["0.1"]}'),
             array('{"data":[0.1,0.2]}', '{"data":["0.1","0.2"]}'),
             array('{"style":"border:10px"}', '{"style":"border:10px"}'),
+            array('{"123":456}', '{"123":"456"}'), // numeric keys should not be transformed to numbers
+            array('{"id":"187:19"}', '{"id":"187:19"}'), // number in quotes should not be quoted
+            array('{"id":"18\"7:19"}', '{"id":"18\"7:19"}'), // escaped quote within string should not break anything
         );
     }
 

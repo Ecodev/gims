@@ -34,10 +34,12 @@ class JmpTest extends AbstractCalculator
     {
         parent::setUp();
 
-        $this->questionnaire2 = new \Application\Model\Questionnaire();
-
         // Define a second questionnaire with answers for leaf filters only
-        $questionnaire2 = new \Application\Model\Questionnaire();
+        // Create a stub for the Questionnaire class with fake ID, so we don't have to mess with database
+        $questionnaire2 = $this->getMock('\Application\Model\Questionnaire', array('getId'));
+        $questionnaire2->expects($this->any())
+                ->method('getId')
+                ->will($this->returnValue(2));
 
         $survey2 = new \Application\Model\Survey();
         $survey2->setCode('tst 2')->setName('Test survey 2')->setYear(2005);
@@ -115,23 +117,23 @@ class JmpTest extends AbstractCalculator
         $this->assertEquals(array(
             'values' =>
             array(
-                'tst 1' => 0.1111,
-                'tst 2' => 0.1,
+                1 => 0.1111,
+                2 => 0.1,
             ),
             'count' => 2,
             'years' =>
             array(
-                0 => 2000,
-                1 => 2005,
+                1 => 2000,
+                2 => 2005,
             ),
             'minYear' => 2000,
             'maxYear' => 2005,
             'period' => 5,
             'slope' => -0.00222,
             'average' => 0.10555,
-            'questionnaire' => array(
-                'tst 1' => null,
-                'tst 2' => null,
+            'surveys' => array(
+                1 => 'tst 1',
+                2 => 'tst 2',
             ),
             'population' => 25,
                 ), $this->service->computeFilterForAllQuestionnaires($this->highFilter1, $this->questionnaires, $this->part));
@@ -145,6 +147,7 @@ class JmpTest extends AbstractCalculator
             'period' => 1,
             'slope' => null,
             'average' => null,
+            'surveys' => array(),
             'population' => 0,
                 ), $this->service->computeFilterForAllQuestionnaires($this->highFilter1, array(), $this->part), 'no questionnaires should still return valid structure');
     }
@@ -526,20 +529,20 @@ class JmpTest extends AbstractCalculator
         $this->assertEquals(array(
             'values' =>
             array(
-                'tst 2' => 0.1,
+                2 => 0.1,
             ),
             'count' => 1,
             'years' =>
             array(
-                0 => 2005,
+                2 => 2005,
             ),
             'minYear' => 2005,
             'maxYear' => 2005,
             'period' => 1,
             'slope' => null,
             'average' => 0.1,
-            'questionnaire' => array(
-                'tst 2' => null,
+            'surveys' => array(
+                2 => 'tst 2',
             ),
             'population' => 15,
                 ), $this->service->computeFilterForAllQuestionnaires($this->filter1, $this->questionnaires, $this->part));

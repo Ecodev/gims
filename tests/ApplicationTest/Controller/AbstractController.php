@@ -57,13 +57,18 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
      */
     protected function assertNumericJson($expected, $actual, $message, $logFile)
     {
+        // Log raw string first, if JSON decode fails
+        if ($logFile) {
+            file_put_contents($logFile, $actual);
+        }
+
         // Make actual JSON pretty-printed, but without losing any numeric precision
         $actualWithString = \Application\View\Model\NumericJsonModel::numericToString($actual);
         $actualObject = Json::decode($actualWithString, Json::TYPE_ARRAY);
         $prettyActualWithString = json_encode($actualObject, JSON_PRETTY_PRINT);
         $prettyActualWithFloat = \Application\View\Model\NumericJsonModel::stringToNumeric($prettyActualWithString);
 
-        // Log given JSON to file for easy comparaison/replacement of existing expected JSON files
+        // Overwrite log  with given JSON to file for easy comparaison/replacement of existing expected JSON files
         if ($logFile) {
             file_put_contents($logFile, $prettyActualWithFloat);
         }

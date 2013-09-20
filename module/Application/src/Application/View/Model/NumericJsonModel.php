@@ -22,7 +22,7 @@ class NumericJsonModel extends JsonModel
      */
     public static function stringToNumeric($json)
     {
-        return preg_replace('/"(-?\d+\.?\d*)"/', '$1', $json);
+        return preg_replace('/"(-?\d+\.?\d*)"([^:])/', '$1$2', $json);
     }
 
     /**
@@ -34,7 +34,7 @@ class NumericJsonModel extends JsonModel
      */
     public static function numericToString($json)
     {
-        return preg_replace('/([:\[,]\s*)(-?\d+\.?\d*)\b/', '$1"$2"', $json);
+        return preg_replace('/(-?\d+\.?\d*)(?=([^"\\\\]*(\\\\.|"([^"\\\\]*\\\\.)*[^"\\\\]*"))*[^"]*$)/', '"$1"', $json);
     }
 
     /**

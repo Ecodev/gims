@@ -64,7 +64,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
         foreach ($parts as $part) {
             $computed = $calculator->computeFilter($filter, $questionnaire, $part);
-            
+
             // Round the value
             if (!is_null($computed)) {
                 $value = \Application\Utility::bcround($computed, 3);

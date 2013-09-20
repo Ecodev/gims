@@ -194,7 +194,12 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         // Define questionnaire with answers for leaf filters only
         $survey = new \Application\Model\Survey();
         $survey->setCode('tst 1')->setName('Test survey 1')->setYear(2000);
-        $this->questionnaire = new \Application\Model\Questionnaire();
+
+        // Create a stub for the Questionnaire class with fake ID, so we don't have to mess with database
+        $this->questionnaire = $this->getMock('\Application\Model\Questionnaire', array('getId'));
+        $this->questionnaire->expects($this->any())
+                ->method('getId')
+                ->will($this->returnValue(1));
         $this->questionnaire->setSurvey($survey);
 
         $this->question131 = new \Application\Model\Question\NumericQuestion();

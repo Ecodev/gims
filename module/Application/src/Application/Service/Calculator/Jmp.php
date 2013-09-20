@@ -231,6 +231,7 @@ class Jmp extends Calculator
         $rules = $filter->getFilterRules();
         $totalPopulation = 0;
         $years = array();
+        $surveys = array();
         $yearsWithData = array();
         foreach ($questionnaires as $questionnaire) {
 
@@ -248,12 +249,13 @@ class Jmp extends Calculator
             }
 
             $year = $questionnaire->getSurvey()->getYear();
-            $years[] = $year;
+            $years[$questionnaire->getId()] = $year;
+            $surveys[$questionnaire->getId()] = $questionnaire->getSurvey()->getCode();
 
             $computed = $this->computeFilter($filter, $questionnaire, $part);
             if (is_null($computed)) {
-                $result['values'][$questionnaire->getSurvey()->getCode()] = null;
-                $result['questionnaire'][$questionnaire->getSurvey()->getCode()] = $questionnaire->getId();
+                $result['values'][$questionnaire->getId()] = null;
+
                 continue;
             }
 
@@ -263,11 +265,11 @@ class Jmp extends Calculator
             $totalPopulation += $population->getPopulation();
             $result['count'] ++;
 
-            $result['questionnaire'][$questionnaire->getSurvey()->getCode()] = $questionnaire->getId();
-            $result['values'][$questionnaire->getSurvey()->getCode()] = $computed;
+            $result['values'][$questionnaire->getId()] = $computed;
         }
 
         $result['years'] = $years;
+        $result['surveys'] = $surveys;
         $result['minYear'] = $yearsWithData ? min($yearsWithData) : null;
         $result['maxYear'] = $yearsWithData ? max($yearsWithData) : null;
         $result['period'] = $result['maxYear'] - $result['minYear'] ? : 1;

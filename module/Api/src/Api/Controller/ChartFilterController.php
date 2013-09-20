@@ -51,14 +51,6 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
 
             // Fetch part
             $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($partId);
-            $parts = array();
-            foreach (array($part) as $_part) {
-                $parts[] = array(
-                    'part'       => $_part,
-                    'population' => $this->getEntityManager()->getRepository('Application\Model\Population')
-                        ->getOneByQuestionnaire($questionnaire, $_part),
-                );
-            }
 
             // @todo adrien, I let you check how you would like to implement this. For now I put the method "computeWithChildren" of $tableController as public
             // @todo It should be some kind of service but technical leader decides...
@@ -66,12 +58,12 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
             $tableController->setServiceLocator($this->getServiceLocator());
             $result = array();
             foreach ($filters as $filter) {
-                $result = array_merge($result, $tableController->computeWithChildren($questionnaire, $filter, $parts));
+                $result = array_merge($result, $tableController->computeWithChildren($questionnaire, $filter,  array($part)));
             }
 
             // Add information whether the filter is selectable or not
             $resultNumber = count($result);
-            $partName = $parts[0]['part']->getName();
+            $partName = $part->getName();
             for ($index = 0; $index < $resultNumber; $index++) {
                 $currentResult = &$result[$index];
                 $nextResult = null;

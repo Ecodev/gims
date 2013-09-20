@@ -14,7 +14,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     private $symbols = array('circle', 'diamond', 'square', 'triangle', 'triangle-down');
     private $startYear;
     private $endYear;
-    private $excludedAnswers;
+    private $excludedQuestionnaires;
 
     public function indexAction()
     {
@@ -23,8 +23,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         /** @var \Application\Model\FilterSet $filterSet */
         $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
         $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
-        $excludeStr = $this->params()->fromQuery('exclude');
-        $this->excludedAnswers = is_string($excludeStr) && strlen($excludeStr) ? explode(',', $excludeStr) : array();
+        $excludeStr = $this->params()->fromQuery('excludedQuestionnaires');
+        $this->excludedQuestionnaires = $excludeStr ? explode(',', $excludeStr) : array();
 
         $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findBy(array('geoname' => $country ? $country->getGeoname() : -1));
 
@@ -34,22 +34,24 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $this->startYear = 1980;
         $this->endYear = 2011;
 
-        // First get series of flatten regression lines with excluded values (if any)
-        $series = $this->computeExcluded($questionnaires, $part, $calculator, $filterSet);
-
-        // If we only want to refresh the lines with ignored values, we return a partial highcharts data with just those series (quicker to refresh)
-        if ($this->params()->fromQuery('onlyExcluded')) {
-            return new NumericJsonModel($series);
-        }
-
-        // Then get series of flatten regression lines
+        $series = array();
         if ($filterSet) {
 
+            // First get series of flatten regression lines with excluded values (if any)
+            $seriesWithExcludedQuestionnaires = $this->computeExcludedQuestionnaires($questionnaires, $part, $calculator, $filterSet);
+            $seriesWithExcludedFilters = $this->computeExcludedFilters($questionnaires, $part, $calculator, $filterSet);
+
+            // If we only want to refresh the lines with ignored values, we return a partial highcharts data with just those series (quicker to refresh)
+            if ($this->params()->fromQuery('onlyExcluded')) {
+                return new NumericJsonModel(array_merge($seriesWithExcludedQuestionnaires, $seriesWithExcludedFilters));
+            }
+
             // If the filterSet is a copy of an original FilterSet, then we also display the original (with light colors)
-            if ($filterSet->getOriginalFilterSet())
-            {
+            if ($filterSet->getOriginalFilterSet()) {
                 $originalFilterSet = $filterSet->getOriginalFilterSet();
-                $series = array_merge($series, $this->getSeries($originalFilterSet, $questionnaires, $part, array(), $this->lightColors, 'ShortDash', ' (original)'));
+                $seriesWithOriginal = $this->getSeries($originalFilterSet, $questionnaires, $part, array(), $this->lightColors, 'ShortDash', ' (original)');
+            } else {
+                $seriesWithOriginal = array();
             }
 
             $excludedFilters = array();
@@ -57,7 +59,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $excludedFilters[] = $excludedFilter->getId();
             }
 
-            $series = array_merge($series, $this->getSeries($filterSet, $questionnaires, $part, $excludedFilters, $this->colors));
+            // Finally we compute "normal" series
+            $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, $excludedFilters, $this->colors);
+
+            $series = array_merge($seriesWithExcludedQuestionnaires, $seriesWithExcludedFilters, $seriesWithOriginal, $normalSeries);
         }
 
         $chart = array(
@@ -150,114 +155,77 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     }
 
     /**
-     * @param array $allQuestionnaires
+     * Returns all series for excluded questionnaires
+     * @param array $questionnaires
      * @param \Application\Model\Part $part
-     * @param \Application\Service\Calculator\Jmp $calculator
-     * @param \Application\Model\FilterSet $filterSet
-     *
      * @return array
      */
-    protected function computeExcluded($allQuestionnaires, $part, $calculator, $filterSet)
+    protected function computeExcludedQuestionnaires(array $questionnaires, Part $part)
     {
-
-        $idFilter = 0;
-        $filtersExcluded = array();
-        foreach ($this->excludedAnswers as $r) {
-            list($idFilter, $surveyCode) = explode(':', $r);
-            if (!array_key_exists($idFilter, $filtersExcluded))
-                $filtersExcluded[$idFilter] = array();
-            $filtersExcluded[$idFilter][] = $surveyCode;
+        $excludedQuestionnairesByFilter = array();
+        foreach ($this->excludedQuestionnaires as $r) {
+            list($filterId, $questionnaireId) = explode(':', $r);
+            if (!array_key_exists($filterId, $excludedQuestionnairesByFilter))
+                $excludedQuestionnairesByFilter[$filterId] = array();
+            $excludedQuestionnairesByFilter[$filterId][] = $questionnaireId;
         }
 
-        $key = $this->getPosition($filterSet, $idFilter);
-
-        // If there are excluded answers, compute an additional regression line for each filter they concern
+        // If there are excluded questionnaire, compute an additional regression line for each filter they concern
         $series = array();
-        foreach ($filtersExcluded as $idFilter => $excludedSurveys) {
-            $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($idFilter);
+        foreach ($excludedQuestionnairesByFilter as $filterId => $excludedQuestionnaires) {
+
+            $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
             $filterSetSingle = new \Application\Model\FilterSet();
             $filterSetSingle->addFilter($filter);
 
             $questionnairesNotExcluded = array();
-            foreach ($allQuestionnaires as $questionnaire) {
-                if (!in_array($questionnaire->getSurvey()->getCode(), $excludedSurveys)) {
+            foreach ($questionnaires as $questionnaire) {
+                if (!in_array($questionnaire->getId(), $excludedQuestionnaires)) {
                     $questionnairesNotExcluded[] = $questionnaire;
                 }
             }
 
-            // @todo improve this. Code was added just before launch
-            $caseQuestionnaireExcluded = $this->params()->fromQuery('caseQuestionnaireExcluded');
-            if ($caseQuestionnaireExcluded) {
-                $_questionnaires = $questionnairesNotExcluded;
-            } else {
-                $_questionnaires = $allQuestionnaires;
-            }
-
-            $excludedFilters = explode(',', $this->params()->fromQuery('excludedFilters'));
-
-            // @todo for sylvain:  variable $excludedFilters was added by Fabien for excluded filters - as its name indicated.
-            $serieWithExcluded = $calculator->computeFlatten($this->startYear, $this->endYear, $filterSetSingle, $_questionnaires, $part, $excludedFilters);
-
-            foreach ($serieWithExcluded as &$serie) {
-                $serie['type'] = 'line';
-                $serie['color'] = $this->colors[$key];
-                $serie['name'] .= ' (ignored answers)';
-                $serie['idFilter'] = $idFilter;
-                $serie['dashStyle'] = 'ShortDash';
-                foreach ($serie['data'] as &$d) {
-                    if (!is_null($d))
-                        $d = \Application\Utility::bcround($d * 100, 1);
-                }
-                $series[] = $serie;
-            }
+            $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotExcluded, $part, array(), $this->colors, 'ShortDash', ' (ignored questionnaires)');
+            $series = array_merge($series, $mySeries);
         }
 
-        // for now just add this condition
-        if (!empty($filtersExcluded)) {
+        return $series;
+    }
 
-            $questionnaireId = explode(',', $this->params()->fromQuery('questionnaire'));
-            $filterSetId = explode(',', $this->params()->fromQuery('filterSet'));
-
-            $questionnaires[] = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($questionnaireId);
-            $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($filterSetId);
-
-            // Then add scatter points which are each questionnaire values
-            foreach ($filterSet->getFilters() as $filter) {
-                $idFilter = $filter->getId();
-                $data = $calculator->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
-                $scatter = array(
-                    'type' => 'scatter',
-                    'name' => $filter->getName() . ' (ignored answers)',
-                    'allowPointSelect' => false, // because we will use our own click handler
-                    'color' => $this->colors[$key],
-                    'marker' => array('symbol' => $this->symbols[$key]),
-                    'data' => array(),
-                );
-                $i = 0;
-                foreach ($data['values'] as $surveyCode => $value) {
-
-                    if (!is_null($value)) {
-                        $scatterData = array(
-                            'name' => $surveyCode,
-                            'id' => $idFilter . ':' . $surveyCode,
-                            'questionnaire' => $data['questionnaire'][$surveyCode],
-                            'x' => $data['years'][$i],
-                            'y' => \Application\Utility::bcround($value * 100, 1),
-                        );
-                        // select the ignored values
-                        if (in_array($idFilter . ':' . $surveyCode, $this->excludedAnswers)) {
-                            $scatterData['selected'] = 'true';
-                        }
-                        $scatter['data'][] = $scatterData;
-                    }
-                    $i++;
-                }
-                if (isset($scatter['data'][0]['selected'])) {
-                    $series[] = $scatter;
-                }
-            }
+    /**
+     * Returns all series for excluded filters
+     * @param array $questionnaires
+     * @param \Application\Model\Part $part
+     * @return array
+     */
+    protected function computeExcludedFilters(array $questionnaires, Part $part)
+    {
+        $params = $this->params()->fromQuery('excludedFilters');
+        if (!$params) {
+            return array();
         }
-        // Add scatter point
+
+        $params = explode(',', $params);
+        $excludedFiltersByHighFilters = array();
+        foreach ($params as $r) {
+            list($highFilterId, $filterId) = explode(':', $r);
+            if (!array_key_exists($highFilterId, $excludedFiltersByHighFilters))
+                $excludedFiltersByHighFilters[$highFilterId] = array();
+            $excludedFiltersByHighFilters[$highFilterId][] = $filterId;
+        }
+
+        // If there are excluded filters, compute an additional regression line for each filter they concern
+        $series = array();
+        foreach ($excludedFiltersByHighFilters as $highFilterId => $excludedFilters) {
+
+            $highFilter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($highFilterId);
+            $filterSetSingle = new \Application\Model\FilterSet();
+            $filterSetSingle->addFilter($highFilter);
+
+            $mySeries = $this->getSeries($filterSetSingle, $questionnaires, $part, $excludedFilters, $this->colors, 'ShortDash', ' (ignored filters)');
+            $series = array_merge($series, $mySeries);
+        }
+
         return $series;
     }
 
@@ -306,24 +274,23 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'allowPointSelect' => false, // because we will use our own click handler
                 'data' => array(),
             );
-            $i = 0;
-            foreach ($data['values'] as $surveyCode => $value) {
+            
+            foreach ($data['values'] as $questionnaireId => $value) {
 
                 if (!is_null($value)) {
                     $scatterData = array(
-                        'name' => $surveyCode,
-                        'id' => $idFilter . ':' . $surveyCode,
-                        'questionnaire' => $data['questionnaire'][$surveyCode],
-                        'x' => $data['years'][$i],
+                        'name' => $data['surveys'][$questionnaireId],
+                        'id' => $idFilter . ':' . $questionnaireId,
+                        'questionnaire' => $questionnaireId,
+                        'x' => $data['years'][$questionnaireId],
                         'y' => \Application\Utility::bcround($value * 100, 1),
                     );
                     // select the ignored values
-                    if (in_array($idFilter . ':' . $surveyCode, $this->excludedAnswers)) {
+                    if (in_array($idFilter . ':' . $questionnaireId, $this->excludedQuestionnaires)) {
                         $scatterData['selected'] = 'true';
                     }
                     $scatter['data'][] = $scatterData;
                 }
-                $i++;
             }
             $series[] = $scatter;
         }
