@@ -34,16 +34,16 @@ class Jmp extends AbstractImporter
                 9 => array("Public tap, standpipe", 5, 0, null),
                 10 => array("Other", 5, 0, null),
                 11 => array("Ground water", 4, 0, null),
-                12 => array("Protected ground water", 11, 1, array(14, 26, 46, 34)),
-                13 => array("Unprotected ground water", 11, 1, array(18, 38, 50)),
-                14 => array("Protected wells or springs", 11, 2, array(26, 34, 46)),
-                15 => array("Private", 14, 1, array(27, 35, 47)),
-                16 => array("Public", 14, 1, array(28, 36, 48)),
-                17 => array("Other", 14, 1, array(29, 37, 49)),
-                18 => array("Unprotected wells or springs", 11, 2, array(38, 50)),
-                19 => array("Private", 18, 1, array(39, 51)),
-                20 => array("Public", 18, 1, array(40, 52)),
-                21 => array("Other", 18, 1, array(41, 53)),
+                12 => array("Protected ground water (all protected wells or springs)", 11, 1, array(14, 26, 46, 34)),
+                13 => array("Unprotected ground water (all unprotected wells or springs)", 11, 1, array(18, 38, 50)),
+                14 => array("Undefined protected wells or springs", 12, 2, null),
+                15 => array("Private", 14, 1, null),
+                16 => array("Public", 14, 1, null),
+                17 => array("Other", 14, 1, null),
+                18 => array("Undefined unprotected wells or springs", 13, 2, null),
+                19 => array("Private", 18, 1, null),
+                20 => array("Public", 18, 1, null),
+                21 => array("Other", 18, 1, null),
                 22 => array("All wells", 11, 0, null),
                 23 => array("Private", 22, 1, array(27, 31)),
                 24 => array("Public", 22, 1, array(28, 32)),
@@ -616,7 +616,7 @@ STRING;
      *
      * It will only get a questionnaire from previous tab, so only if we are in Sanitation.
      * In all other cases a new questionnaire will be created.
-     * 
+     *
      * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
      * @param \Application\Model\Survey $survey

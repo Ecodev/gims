@@ -100,7 +100,7 @@
     {
         "filter": {
             "id": 9,
-            "name": "Protected ground water",
+            "name": "Protected ground water (all protected wells or springs)",
             "level": 1
         },
         "values": [
@@ -108,6 +108,62 @@
                 "Urban": 0.620,
                 "Rural": 0.910,
                 "Total": 0.877
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 11,
+            "name": "Undefined protected wells or springs",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 12,
+            "name": "Private",
+            "level": 3
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 13,
+            "name": "Public",
+            "level": 3
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 14,
+            "name": "Other",
+            "level": 3
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
             }
         ]
     },
@@ -408,7 +464,7 @@
     {
         "filter": {
             "id": 9,
-            "name": "Protected ground water",
+            "name": "Protected ground water (all protected wells or springs)",
             "level": 1
         },
         "values": [
@@ -416,6 +472,62 @@
                 "Urban": 0.620,
                 "Rural": 0.910,
                 "Total": 0.877
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 11,
+            "name": "Undefined protected wells or springs",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 12,
+            "name": "Private",
+            "level": 3
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 13,
+            "name": "Public",
+            "level": 3
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 14,
+            "name": "Other",
+            "level": 3
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
             }
         ]
     },
