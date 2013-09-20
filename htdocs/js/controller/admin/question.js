@@ -122,18 +122,19 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
         }
     };
 
-
+    $scope.chapterList = [];
     $scope.setParentQuestions = function (survey_id) {
-        Restangular.one('survey', survey_id).get({fields:'questions,questions.type'}).then(function (survey) {
-            var chapterList = [];   // @TODO : find a way to add "none" -> dont work @ save : [{id:0,name:'None'}];
+        Restangular.one('survey', survey_id).all('question').getList({fields:'chapter,level,type'}).then(function (questions) {
 
-            for (var question in survey.questions) {
-                question = survey.questions[question];
+            angular.forEach(questions,function(question){
                 if (question.type == 'Chapter') {
-                    chapterList.push({id:question.id, name:question.name});
+                    var spacer = '';
+                    for(var i=1;i<=question.level;i++){
+                        spacer+= "-- ";
+                    }
+                    $scope.chapterList.push({id:question.id, name:spacer+" "+question.name});
                 }
-            }
-            $scope.chapterList = chapterList;
+            });
         });
     }
 
