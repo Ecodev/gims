@@ -9,9 +9,8 @@
 
         <!-- Styles -->
         <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/favicon.ico'))
-                ->prependStylesheet('/css/application.css')
-                ->prependStylesheet('/lib/select2/select2.css')
-                ->prependStylesheet('/css/print.css', array('media' => 'print'))
+                ->prependStylesheet('/css/application.css', array('media'=>'all'))
+                ->prependStylesheet('/lib/select2/select2.css', array('media'=>'all'))
         ?>
 
         <!-- Scripts -->
