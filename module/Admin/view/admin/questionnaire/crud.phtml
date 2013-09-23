@@ -3,10 +3,10 @@
     <h2>
         <ul class="breadcrumb">
             <li><a href="/admin/survey">Surveys</a></li>
-            <li class="active">{{questionnaire.name}}</li>
+            <li><a href="/admin/survey/edit/{{survey.id}}#2">{{survey.code}}</a></li>
+            <li class="active">{{survey.code}} - {{questionnaire.geoname.name}}</li>
         </ul>
     </h2>
-
     <form name="myForm">
 
         <?php echo $this->crudButtons('questionnaire'); ?>
@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="control-group" ng-class="{error: myForm.geoname.$invalid}">
-                    <label for="questionnaire.geoname">Spatial</label>
+                    <label for="questionnaire.geoname">Country</label>
                     <gims-select api="geoname" model="questionnaire.geoname"
                            placeholder="<?php echo $this->translate('Select a country') ?>" style="width: 556px"
                            required></gims-select>

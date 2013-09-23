@@ -86,9 +86,10 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
 
     // Try loading questionnaire if possible...
     if ($routeParams.id) {
-        Restangular.one('questionnaire', $routeParams.id).get({fields: 'metadata,geoname,status,dateObservationStart,dateObservationEnd,comments,name,permissions'}).then(function (questionnaire)
+        Restangular.one('questionnaire', $routeParams.id).get({fields: 'metadata,geoname,status,dateObservationStart,dateObservationEnd,comments,name,permissions,survey'}).then(function (questionnaire)
             {
                 $scope.questionnaire = questionnaire;
+                $scope.survey = questionnaire.survey;
             });
     }
 
@@ -97,7 +98,7 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
     {
         $scope.status = _.filter(allStatus, function (status)
         {
-            return status.value != 'validated' || questionnaire.status == 'validated' || questionnaire.permissions.validate;
+            return status.value != 'validated' || questionnaire.status == 'validated' || (questionnaire.permissions && questionnaire.permissions.validate);
         });
     });
 
