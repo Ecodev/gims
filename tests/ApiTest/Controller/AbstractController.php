@@ -206,6 +206,11 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
         $this->getEntityManager()->persist($this->answer);
         $this->getEntityManager()->persist($this->answer2);
         $this->getEntityManager()->flush();
+
+        // After flushed in DB, we clear EM identiy cache, to be sure that we actually reload object from database
+        $this->getEntityManager()->clear();
+        $reloadedUser = $this->getEntityManager()->merge($this->user);
+        $this->rbac->setIdentity($reloadedUser);
     }
 
 }

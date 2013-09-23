@@ -13,7 +13,7 @@ class QuestionRepository extends AbstractChildRepository
     {
         $qb = $this->createQueryBuilder('question')
                 ->join('question.survey', 'survey', \Doctrine\ORM\Query\Expr\Join::WITH)
-                ->where('question.'.$parentName . ' = :parent')
+                ->where('question.' . $parentName . ' = :parent')
                 ->setParameter('parent', $parent)
                 ->orderBy('question.sorting')
         ;
@@ -23,10 +23,12 @@ class QuestionRepository extends AbstractChildRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function changeType($id, $type)
+    public function changeType($id, \Application\Model\QuestionType $questionType)
     {
-        $type = strtolower(str_replace("Application\\Model\\Question\\", "", $type));
-        $sql = "UPDATE question set dtype='" . $type . "' WHERE id=" . $id;
+        $class = \Application\Model\QuestionType::getClass($questionType);
+        $dtype = strtolower(str_replace("Application\\Model\\Question\\", '', $class));
+
+        $sql = "UPDATE question SET dtype='" . $dtype . "' WHERE id=" . $id;
         $this->getEntityManager()->getConnection()->executeUpdate($sql);
 
         return $this;

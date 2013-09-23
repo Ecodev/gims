@@ -30,11 +30,11 @@ class QuestionController extends AbstractChildRestfulController
             // Here we use a closure to get the questions' answers, but only for the current questionnaire
 
             'answers' => function (\Application\Service\Hydrator $hydrator, AbstractQuestion $question) use (
-                $questionnaire, $controller
+            $questionnaire, $controller
             ) {
                 $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
                 $answers = $answerRepository->findBy(array(
-                    'question'      => $question,
+                    'question' => $question,
                     'questionnaire' => $questionnaire));
 
                 // special case for question, reorganize keys for the needs of NgGrid:
@@ -86,10 +86,6 @@ class QuestionController extends AbstractChildRestfulController
         return '\Application\Model\Question\AbstractQuestion';
     }
 
-
-
-
-
     public function getList()
     {
 
@@ -112,8 +108,6 @@ class QuestionController extends AbstractChildRestfulController
         return new JsonModel($questions);
     }
 
-
-
     /**
      * @param int $id
      * @param array $data
@@ -125,19 +119,21 @@ class QuestionController extends AbstractChildRestfulController
         /** @var $question \Application\Model\Question\AbstractQuestion */
         $questionRepository = $this->getRepository();
 
+        $this->getEntityManager()->getConnection()->beginTransaction(); // suspend auto-commit
+        if (isset($data['type'])) {
+            $questionRepository->changeType($id, \Application\Model\QuestionType::get($data['type']));
+        }
+
         // If not allowed to read the object, cancel everything
-        $questionBeforeTypeChange = $questionRepository->getOneById($id);
-        if (!$this->getRbac()->isActionGranted($questionBeforeTypeChange, 'update')) {
+        $question = $questionRepository->findOneById($id);
+        if ($this->getRbac()->isActionGranted($question, 'update')) {
+            $this->getEntityManager()->getConnection()->commit();
+        } else {
+            $this->getEntityManager()->getConnection()->rollback();
             $this->getResponse()->setStatusCode(403);
 
             return new JsonModel(array('message' => $this->getRbac()->getMessage()));
         }
-
-        if (isset($data['type'])) {
-            $questionRepository->changeType($id, $this->getModel());
-        }
-
-        $question = $questionRepository->findOneById($id);
 
         if (isset($data['sorting'])) {
             $data['sorting'] = $this->reorderSiblingQuestions($question, $data['sorting']);
@@ -168,11 +164,11 @@ class QuestionController extends AbstractChildRestfulController
         if ($newSorting > $lastSibling->getSorting() + 1) {
             $newSorting = $lastSibling->getSorting() + 1;
 
-        // limit to previous available sorting free number
+            // limit to previous available sorting free number
         } elseif ($newSorting < $firstSibling->getSorting() - 1) {
             $newSorting = $firstSibling->getSorting() - 1;
 
-        // true means we have to move sorting values up and down
+            // true means we have to move sorting values up and down
         } elseif ($newSorting < $question->getSorting()) { // if new sorting is lower
             foreach ($questionSiblings as $questionSibling) {
                 if ($questionSibling->getSorting() >= $newSorting && $questionSibling->getSorting() < $question->getSorting()) {
@@ -202,7 +198,7 @@ class QuestionController extends AbstractChildRestfulController
             } // if id exists -> update
             else {
                 $choiceRepository = $this->getEntityManager()->getRepository('Application\Model\Question\Choice');
-                $choice = $choiceRepository->findOneById((int)$newChoice['id']);
+                $choice = $choiceRepository->findOneById((int) $newChoice['id']);
             }
             $choice->setQuestion($question);
             $this->hydrator->hydrate($newChoice, $choice);
@@ -254,7 +250,7 @@ class QuestionController extends AbstractChildRestfulController
     {
         $repository = $this->getEntityManager()->getRepository('Application\Model\Survey');
         /** @var Survey $survey */
-        $survey = $repository->findOneById((int)@$data['survey']);
+        $survey = $repository->findOneById((int) @$data['survey']);
 
         // Check that we have a survey
         if (!$survey) {
@@ -287,7 +283,6 @@ class QuestionController extends AbstractChildRestfulController
             } else {
                 $data['sorting'] = 1;
             }
-
         }
 
         // unset ['choices'] to preserve $data from hydrator and backup in a variable for use in postCreate()
@@ -300,3 +295,4 @@ class QuestionController extends AbstractChildRestfulController
     }
 
 }
+

@@ -30,7 +30,7 @@ class QuestionControllerTest extends AbstractController
                 break;
             case 'put':
                 $route = sprintf(
-                        '/api/questionnaire/%s/question?id=%s', $this->questionnaire->getId(), $this->question->getId()
+                        '/api/questionnaire/%s/question/%s', $this->questionnaire->getId(), $this->question->getId()
                 );
                 break;
             default:
@@ -120,16 +120,31 @@ class QuestionControllerTest extends AbstractController
         // Question
         $data = array(
             'name' => 'name for test create a new question',
-            'type' => \Application\Model\QuestionType::$CHOICE,
+            'type' => \Application\Model\QuestionType::$NUMERIC,
             'sorting' => 1,
             'survey' => $this->survey->getId(),
             'filter' => $this->filter->getId(),
-            'type' => \Application\Model\QuestionType::$NUMERIC,
         );
 
-        $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
+        $this->dispatch($this->getRoute('post') . '?fields=type', Request::METHOD_POST, $data);
         $actual = $this->getJsonResponse();
         $this->assertEquals($data['name'], $actual['name']);
+        $this->assertEquals($data['type'], $actual['type']);
+    }
+
+    /**
+     * @test
+     */
+    public function modifyQuestionType()
+    {
+        $data = array(
+            'type' => \Application\Model\QuestionType::$CHAPTER,
+        );
+
+        $url = $this->getRoute('put') . '?fields=type';
+        $this->dispatch($url, Request::METHOD_PUT, $data);
+        $afterChange = $this->getJsonResponse();
+        $this->assertEquals($data['type'], $afterChange['type'], 'should return new type');
     }
 
     /**
@@ -142,23 +157,23 @@ class QuestionControllerTest extends AbstractController
 
     private function getMockQuestions()
     {
-
         // create four additional questions next to the one created in the abstract
         // -> they will be five questions connected to a survey
-        $questions[1] = $this->question;
+        $questions[1] = $this->getEntityManager()->merge($this->question);
         foreach (array(2, 3, 4, 5) as $value) {
 
             $question = new NumericQuestion();
-            $question->setSurvey($this->survey)
+            $question->setSurvey($this->getEntityManager()->merge($this->survey))
                     ->setSorting($value)
-                    ->setFilter($this->filter)
+                    ->setFilter($this->getEntityManager()->merge($this->filter))
                     ->setName('bar');
 
             $this->getEntityManager()->persist($question);
             $questions[$value] = $question;
         }
+
         $this->getEntityManager()->flush();
-        $this->assertCount(5, $this->survey->getQuestions());
+        $this->assertCount(5, $this->getEntityManager()->merge($this->survey)->getQuestions());
 
         return $questions;
     }
