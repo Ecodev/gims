@@ -1,16 +1,22 @@
-angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $location, $http, $timeout, Restangular) {
+angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $location, $http, $timeout, Restangular) {
     'use strict';
 
     $scope.chartObj;
-    var fromUrl = $location.search()['exclude'];
-    $scope.excludedQuestionnaires = fromUrl ? fromUrl.split(',') : new Array(); // this triggers watch(scope.exclude) on page load
+    var fromUrl = $location.search()['excludedQuestionnaires'];
+    $scope.excludedQuestionnaires = fromUrl ? fromUrl.split(',') : []; // this triggers watch(scope.exclude) on page load
+
+    $scope.$watch('excludedQuestionnaires', function() {
+
+        if ($scope.excludedQuestionnaires && $scope.excludedQuestionnaires.length) {
+            $location.search('excludedQuestionnaires', $scope.excludedQuestionnaires.join(','));
+        }
+    }, true);
 
     // Whenever one of the parameter is changed
     var uniqueAjaxRequest;
-    $scope.$watch('country.id + part.id + filterSet.id', function (a) {
+    $scope.$watch('country.id + part.id + filterSet.id', function(a) {
 
         $scope.pointSelected = null;
-        $scope.excludedQuestionnaires = [];
 
         // If they are all available ...
         if ($scope.country && $scope.part && $scope.filterSet) {
@@ -37,11 +43,11 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
 
     $scope.pointSelected = null;
 
-    var getExcludedFilters = function () {
+    var getExcludedFilters = function() {
         var excludedFilters = [];
 
         // Find the not selected filters
-        $('.gridStyle .ngSelectionCheckbox').each(function (index, element) {
+        $('.gridStyle .ngSelectionCheckbox').each(function(index, element) {
             if ($(element).is(':checked') === false && $(element).is(':visible')) {
                 excludedFilters.push($scope.pointSelected.filter + ':' + $scope.filters[index].filter.id);
             }
@@ -50,7 +56,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         return excludedFilters;
     };
 
-    $scope.ignoreQuestionnaire = function () {
+    $scope.ignoreQuestionnaire = function() {
         $scope.excludedQuestionnaires.push($scope.pointSelected.id);
         $scope.refreshChart();
     };
@@ -69,31 +75,33 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                 name: $scope.newFilterSetName,
                 originalFilterSet: $scope.filterSet.id,
                 excludedFilters: getExcludedFilters()
-            }).success(function (data) {
-                    $location.search('filterSet', data.id);
+            }).success(function(data) {
+                $location.search('filterSet', data.id);
 
-                    // reload page
-                    $timeout(function () {
-                        window.location.reload();
-                    }, 0);
-                });
+                // reload page
+                $timeout(function() {
+                    window.location.reload();
+                }, 0);
+            });
         }
     };
 
     // Whenever the list of excluded values is changed
-    $scope.$watch('pointSelected', function (a) {
+    $scope.$watch('pointSelected', function(a) {
         if ($scope.pointSelected) {
 
             // We throw an window.resize event to force Highcharts to reflow and adapt to its new size
-            $timeout(function() { jQuery(window).resize(); }, 1);
+            $timeout(function() {
+                jQuery(window).resize();
+            }, 1);
 
             var questionnaireName = $scope.pointSelected.name;
 
             $scope.columnDefs = [];
 
             var cellTemplateFilter = '<div class="ngCellText" ng-class="col.colIndex()">' +
-                '<span style="padding-left: {{row.entity.filter.level}}em;">{{row.entity.filter.name}}</span>' +
-                '</div>';
+                    '<span style="padding-left: {{row.entity.filter.level}}em;">{{row.entity.filter.name}}</span>' +
+                    '</div>';
             $scope.columnDefs.push({field: 'filter', displayName: 'Filter', width: 240, cellTemplate: cellTemplateFilter});
             $scope.columnDefs.push({field: 'values[0].' + $scope.part.name, displayName: questionnaireName, cellFilter: 'percent'});
 
@@ -105,16 +113,16 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             };
 
             $scope.isLoading = true;
-            $scope.filters = Restangular.all('chartFilter').getList(parameters).then(function (data) {
+            $scope.filters = Restangular.all('chartFilter').getList(parameters).then(function(data) {
                 $scope.isLoading = false;
                 $scope.filters = data;
 
-                $timeout(function () {
+                $timeout(function() {
                     $('.gridStyle .ngSelectionHeader')
-                        .after('<input type="checkbox" class="ngSelectionHeader" checked="checked"/>') // add custom checkbox
-                        .remove(); // remove default head checkbox
+                            .after('<input type="checkbox" class="ngSelectionHeader" checked="checked"/>') // add custom checkbox
+                            .remove(); // remove default head checkbox
 
-                    $('.gridStyle .ngSelectionCheckbox').each(function (index, element) {
+                    $('.gridStyle .ngSelectionCheckbox').each(function(index, element) {
                         if ($scope.filters[index].selectable === false) {
                             $(element).hide();
                         } else {
@@ -131,9 +139,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
     /**
      * Add listener when toggling top checkbox
      */
-    $('.gridStyle').delegate('.ngSelectionHeader', 'click', function () {
+    $('.gridStyle').delegate('.ngSelectionHeader', 'click', function() {
         var self = this;
-        $('.gridStyle .ngSelectionCheckbox').each(function (index, element) {
+        $('.gridStyle .ngSelectionCheckbox').each(function(index, element) {
             if ($scope.filters[index].selectable === true) {
                 if ($(self).is(':checked') !== $(element).is(':checked')) {
                     $(element).click();
@@ -142,31 +150,31 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         });
     });
 
-    $scope.refreshChart = function () {
+    $scope.refreshChart = function() {
         $scope.isLoading = true;
         $timeout.cancel(uniqueAjaxRequest);
-        uniqueAjaxRequest = $timeout(function () {
+        uniqueAjaxRequest = $timeout(function() {
             // get chart data via Ajax, but only once per 200 milliseconds
             // (this avoid sending several request on page loading)
             $http.get('/api/chart',
-                {
-                    params: {
-                        country: $scope.country.id,
-                        part: $scope.part.id,
-                        filterSet: $scope.filterSet.id,
-                        excludedQuestionnaires: $scope.excludedQuestionnaires.join(','),
-                        excludedFilters: getExcludedFilters().join(',')
-                    }
-                }).success(function (data) {
+                    {
+                        params: {
+                            country: $scope.country.id,
+                            part: $scope.part.id,
+                            filterSet: $scope.filterSet.id,
+                            excludedQuestionnaires: $scope.excludedQuestionnaires.join(','),
+                            excludedFilters: getExcludedFilters().join(',')
+                        }
+                    }).success(function(data) {
 
-                    data.plotOptions.scatter.dataLabels.formatter = function () {
-                        return $('<span/>').css({
-                            color: this.point.selected ? '#DDD' : this.series.color
-                        }).text(this.point.name)[0].outerHTML;
-                    };
+                data.plotOptions.scatter.dataLabels.formatter = function() {
+                    return $('<span/>').css({
+                        color: this.point.selected ? '#DDD' : this.series.color
+                    }).text(this.point.name)[0].outerHTML;
+                };
 
-                    data.plotOptions.scatter.point = {events: {
-                        click: function (e) {
+                data.plotOptions.scatter.point = {events: {
+                        click: function(e) {
                             var ids = e.currentTarget.id.split(':');
                             $scope.pointSelected = {
                                 id: e.currentTarget.id,
@@ -177,12 +185,12 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                             $scope.$apply(); // this is needed because we are outside the AngularJS context (highcharts uses jQuery event handlers)
                         }
                     }
-                    };
+                };
 
-                    $scope.chart = data;
-                    $scope.isLoading = false;
+                $scope.chart = data;
+                $scope.isLoading = false;
 
-                });
+            });
 
         }, 200);
     };
