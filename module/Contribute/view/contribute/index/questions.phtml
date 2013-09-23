@@ -1,7 +1,7 @@
 
 <gims-questionnaire-tool-bar></gims-questionnaire-tool-bar>
 
-<div class='row-fluid'>
+<form novalidate name='questionnaireForm' class='row-fluid'>
     
     <div class='span4 hidden-print'>
         <gims-questions-nav id='questionnaireNav' nav='hierarchicNavigation' flat-nav='navigation' go-to='goTo(wantedIndex)'></gims-questions-nav>
@@ -57,6 +57,12 @@
 
         </div>
     </div>
-</div>
+</form>
+
+<pre>{{index|json}}</pre>
+
+<pre>{{questionnaireForm|json}}</pre>
+
+
 <br/>
 <gims-questionnaire-tool-bar></gims-questionnaire-tool-bar>

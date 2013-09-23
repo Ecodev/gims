@@ -8,7 +8,7 @@ angular.module('myApp.directives').directive('gimsTextQuestion', function () {
                 "               <div ng-switch-when='Urban'>Urban</div>"+
                 "               <div ng-switch-when='Rural'>Rural</div>"+
                 "         </div>"+
-                "         <textarea class='span12' ng-disabled='saving' ng-model='index[question.id+\"-\"+part.id].valueText' ng-blur='save(question.id,part.id,$event)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'></textarea>"+
+                "         <textarea class='span12' name='numerical-{{question.id}}-{{part.id}}' ng-model='index[question.id+\"-\"+part.id].valueText' ng-blur='save(question.id,part.id,$event)'  id='numerical-{{question.id}}-{{part.id}}' ng-disabled='saving'></textarea>"+
                 "     </label>"+
                 " </div>",
         scope:{
@@ -17,15 +17,13 @@ angular.module('myApp.directives').directive('gimsTextQuestion', function () {
         },
         controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal)
         {
-            $scope.$watch('question', function (question, oldQuestion)
+            $scope.$watch('question', function (question)
             {
-                if( question===oldQuestion ){
-                    angular.forEach(question.parts, function(part) {
-                        if (!$scope.index[question.id+'-'+part.id] || ($scope.index[question.id+'-'+part.id] && !$scope.index[question.id+'-'+part.id].valueText)) {
-                            $scope.index[question.id+"-"+part.id] = $scope.findAnswer(question, part.id);
-                        }
-                    });
-                }
+                angular.forEach(question.parts, function(part) {
+                    if (!$scope.index[question.id+'-'+part.id] || ($scope.index[question.id+'-'+part.id] && !$scope.index[question.id+'-'+part.id].valueText)) {
+                        $scope.index[question.id+"-"+part.id] = $scope.findAnswer(question, part.id);
+                    }
+                });
             });
 
             $scope.findAnswer = function (question, pid)
@@ -46,7 +44,6 @@ angular.module('myApp.directives').directive('gimsTextQuestion', function () {
             $scope.saving=false;
             $scope.save = function (question_id, part_id, event)
             {
-
                 $scope.saving=true;
                 var newAnswer = $scope.index[question_id+"-"+part_id];
 

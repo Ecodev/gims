@@ -5,13 +5,11 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
         templateUrl: '/template/contribute/questions',
         controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal)
         {
-
-            $scope.navigation = []; // used of next + previous buttons
-            $scope.hierarchicNavigation = []; // used of menu hierarchy
+            $scope.navigation = []; // used in next + previous buttons
+            $scope.hierarchicNavigation = []; // used in hierarchic menu
             $scope.currentIndex = 0;
             $scope.currentQuestion = null;
             $scope.index = {}; // indexed answers
-
 
             $scope.$watch('questions', function (questions)
             {
@@ -195,7 +193,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
             };
 
 
-        },
+        }
 
 
     }

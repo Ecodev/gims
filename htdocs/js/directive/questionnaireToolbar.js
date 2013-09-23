@@ -17,7 +17,9 @@ angular.module('myApp.directives').directive('gimsQuestionnaireToolBar', functio
                 "            <li class='divider-vertical'></li>"+
                 "            <li><button class='btn btn-default' ng-click='goToPrintMode()'><i class='icon-print'></i> Print</button></li>"+
                 "            <li class='divider-vertical'></li>"+
-                "            <li><button class='btn btn-default disabled'><i class='icon-check'></i> Submit for validation</button></li>"+
+                "            <li><button class='btn btn-default' ng-class={'btn-success':questionnaireForm.$invalid,disabled:!questionnaireForm.$invalid}><i class='icon-check'></i> Submit for validation</button></li>"+
+                "            <li class='divider-vertical'></li>"+
+                "            <li><a class='brand' href='#'>Questionnaire status : {{questionnaireForm.$invalid}}</a></li>"+
                 "        </ul>"+
                 "    </div>"+
                 "</div>"
