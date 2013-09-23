@@ -100,7 +100,7 @@
                 85.0,
                 85.1
             ],
-            "color": "#2f7ed8",
+            "color": "#492970",
             "type": "line"
         },
         {
@@ -139,7 +139,7 @@
                 12.1,
                 12.0
             ],
-            "color": "#0d233a",
+            "color": "#f28f43",
             "type": "line"
         },
         {
@@ -178,7 +178,7 @@
                 55.2,
                 55.3
             ],
-            "color": "#8bbc21",
+            "color": "#77a1e5",
             "type": "line"
         },
         {
@@ -217,7 +217,7 @@
                 29.8,
                 29.8
             ],
-            "color": "#910000",
+            "color": "#c42525",
             "type": "line"
         },
         {
@@ -256,7 +256,7 @@
                 27.8,
                 23.6
             ],
-            "color": "#1aadce",
+            "color": "#a6c96a",
             "type": "line"
         },
         {
@@ -295,12 +295,12 @@
                 1.8,
                 1.5
             ],
-            "color": "#492970",
+            "color": "#2f7ed8",
             "type": "line"
         },
         {
             "type": "scatter",
-            "color": "#2f7ed8",
+            "color": "#492970",
             "marker": {
                 "symbol": "circle"
             },
@@ -430,7 +430,7 @@
         },
         {
             "type": "scatter",
-            "color": "#0d233a",
+            "color": "#f28f43",
             "marker": {
                 "symbol": "diamond"
             },
@@ -532,7 +532,7 @@
         },
         {
             "type": "scatter",
-            "color": "#8bbc21",
+            "color": "#77a1e5",
             "marker": {
                 "symbol": "square"
             },
@@ -676,7 +676,7 @@
         },
         {
             "type": "scatter",
-            "color": "#910000",
+            "color": "#c42525",
             "marker": {
                 "symbol": "triangle"
             },
@@ -820,7 +820,7 @@
         },
         {
             "type": "scatter",
-            "color": "#1aadce",
+            "color": "#a6c96a",
             "marker": {
                 "symbol": "triangle-down"
             },
@@ -964,7 +964,7 @@
         },
         {
             "type": "scatter",
-            "color": "#492970",
+            "color": "#2f7ed8",
             "marker": {
                 "symbol": "circle"
             },

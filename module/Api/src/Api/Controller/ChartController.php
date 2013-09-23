@@ -56,7 +56,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
             // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
             $alternativeSeries = array_merge($seriesWithExcludedQuestionnaires, $seriesWithExcludedFilters, $seriesWithOriginal);
-            $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, $excludedFilters, $alternativeSeries ? $this->lightColors :  $this->colors, $alternativeSeries ? 'ShortDash' : null);
+            $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, $excludedFilters, $alternativeSeries ? $this->lightColors : $this->colors, $alternativeSeries ? 'ShortDash' : null);
 
             $series = array_merge($normalSeries, $alternativeSeries);
         }
@@ -131,23 +131,20 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     }
 
     /**
-     * @param \Application\Model\Filter $filterSet
-     * @param int $currentFilterId
-     *
-     * @return int
+     * Always returns the same integer for the same name and incrementing: 0, 1, 2...
+     * @staticvar array $keys
+     * @param string $filterName
+     * @return integer
      */
-    protected function getPosition($filterSet, $currentFilterId)
+    private function getConstantKey($filterName)
     {
-        $key = 0;
-        if (is_object($filterSet)) {
-            foreach ($filterSet->getFilters() as $key => $filter) {
-                if ($filter->getId() == $currentFilterId) {
-                    break;
-                }
-            }
+        static $keys = array();
+
+        if (!array_key_exists($filterName, $keys)) {
+            $keys[$filterName] = count($keys);
         }
 
-        return $key;
+        return $keys[$filterName];
     }
 
     /**
@@ -242,9 +239,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $calculator = new \Application\Service\Calculator\Jmp();
         $calculator->setServiceLocator($this->getServiceLocator());
         $lines = $calculator->computeFlatten($this->startYear, $this->endYear, $filterSet, $questionnaires, $part, $excludedFilters);
-        foreach ($lines as $key => &$serie) {
+        foreach ($lines as &$serie) {
+            $serie['color'] = $colors[$this->getConstantKey($serie['name']) % count($colors)];
             $serie['name'] .= $suffix;
-            $serie['color'] = $colors[$key % count($colors)];
             $serie['type'] = 'line';
 
             if ($dashStyle) {
@@ -259,13 +256,13 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         }
 
         // Then add scatter points which are each questionnaire values
-        foreach ($filterSet->getFilters() as $key => $filter) {
+        foreach ($filterSet->getFilters() as $filter) {
             $idFilter = $filter->getId();
             $data = $calculator->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
             $scatter = array(
                 'type' => 'scatter',
-                'color' => $colors[$key % count($colors)],
-                'marker' => array('symbol' => $this->symbols[$key % count($this->symbols)]),
+                'color' => $colors[$this->getConstantKey($filter->getName()) % count($colors)],
+                'marker' => array('symbol' => $this->symbols[$this->getConstantKey($filter->getName()) % count($this->symbols)]),
                 'name' => $filter->getName() . $suffix,
                 'allowPointSelect' => false, // because we will use our own click handler
                 'data' => array(),
@@ -275,7 +272,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
                 if (!is_null($value)) {
                     $scatterData = array(
-                        'name' => $data['surveys'][$questionnaireId] . $suffix,
+                        'name' => $data['surveys'][$questionnaireId],
                         'id' => $idFilter . ':' . $questionnaireId,
                         'questionnaire' => $questionnaireId,
                         'x' => $data['years'][$questionnaireId],
