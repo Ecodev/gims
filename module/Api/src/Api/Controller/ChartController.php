@@ -41,15 +41,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $seriesWithExcludedQuestionnaires = $this->computeExcludedQuestionnaires($questionnaires, $part, $calculator, $filterSet);
             $seriesWithExcludedFilters = $this->computeExcludedFilters($questionnaires, $part, $calculator, $filterSet);
 
-            // If we only want to refresh the lines with ignored values, we return a partial highcharts data with just those series (quicker to refresh)
-            if ($this->params()->fromQuery('onlyExcluded')) {
-                return new NumericJsonModel(array_merge($seriesWithExcludedQuestionnaires, $seriesWithExcludedFilters));
-            }
-
             // If the filterSet is a copy of an original FilterSet, then we also display the original (with light colors)
             if ($filterSet->getOriginalFilterSet()) {
                 $originalFilterSet = $filterSet->getOriginalFilterSet();
-                $seriesWithOriginal = $this->getSeries($originalFilterSet, $questionnaires, $part, array(), $this->lightColors, 'ShortDash', ' (original)');
+                $seriesWithOriginal = $this->getSeries($originalFilterSet, $questionnaires, $part, array(), $this->colors, null, ' (original)');
             } else {
                 $seriesWithOriginal = array();
             }
@@ -59,10 +54,11 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $excludedFilters[] = $excludedFilter->getId();
             }
 
-            // Finally we compute "normal" series
-            $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, $excludedFilters, $this->colors);
+            // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
+            $alternativeSeries = array_merge($seriesWithExcludedQuestionnaires, $seriesWithExcludedFilters, $seriesWithOriginal);
+            $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, $excludedFilters, $alternativeSeries ? $this->lightColors :  $this->colors, $alternativeSeries ? 'ShortDash' : null);
 
-            $series = array_merge($seriesWithExcludedQuestionnaires, $seriesWithExcludedFilters, $seriesWithOriginal, $normalSeries);
+            $series = array_merge($normalSeries, $alternativeSeries);
         }
 
         $chart = array(
@@ -185,7 +181,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 }
             }
 
-            $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotExcluded, $part, array(), $this->colors, 'ShortDash', ' (ignored questionnaires)');
+            $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotExcluded, $part, array(), $this->colors, null, ' (ignored questionnaires)');
             $series = array_merge($series, $mySeries);
         }
 
@@ -222,7 +218,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $filterSetSingle = new \Application\Model\FilterSet();
             $filterSetSingle->addFilter($highFilter);
 
-            $mySeries = $this->getSeries($filterSetSingle, $questionnaires, $part, $excludedFilters, $this->colors, 'ShortDash', ' (ignored filters)');
+            $mySeries = $this->getSeries($filterSetSingle, $questionnaires, $part, $excludedFilters, $this->colors, null, ' (ignored filters)');
             $series = array_merge($series, $mySeries);
         }
 

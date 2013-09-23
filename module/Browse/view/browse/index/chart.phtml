@@ -51,7 +51,7 @@
                 </div>
                 <div ng-grid="gridOptions" class="gridStyle" style="min-width: 400px"></div>
                 <div style="margin-top: 1em; text-align: center">
-                    <button class="btn" ng-click="updateChart()" ng-class="{disabled: isLoading}"><?php echo $this->translate('Update') ?></button>
+                    <button class="btn" ng-click="refreshChart()" ng-class="{disabled: isLoading}"><?php echo $this->translate('Update') ?></button>
                     <button class="btn" ng-click="ignoreQuestionnaire()" ng-class="{disabled: isLoading}"><?php echo $this->translate('Ignore questionnaire') ?></button>
                     <button class="btn" ng-click="openNewFilterSet()"><i class="icon-plus-sign"></i> <?php echo $this->translate('new filter set') ?></button>
 

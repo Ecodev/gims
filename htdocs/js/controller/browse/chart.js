@@ -14,7 +14,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
 
         // If they are all available ...
         if ($scope.country && $scope.part && $scope.filterSet) {
-            refreshChart();
+            $scope.refreshChart();
         }
     });
 
@@ -37,16 +37,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
 
     $scope.pointSelected = null;
 
-    var serieLength = null;
-
-    var resetChart = function () {
-        // hardcoded value for now.
-        // By change there are two filter per filter-set. Each filter has two output... 2*2=4
-        while ($scope.chartObj.series[serieLength]) {
-            $scope.chartObj.series[serieLength].remove();
-        }
-    };
-
     var getExcludedFilters = function () {
         var excludedFilters = [];
 
@@ -60,38 +50,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         return excludedFilters;
     };
 
-    /**
-     * Return a parameter value
-     *
-     * $location.search('filterSet') does not work and don't have the time to search why....
-     * Not enough in Angular context??
-     *
-     * @param parameterName
-     * @returns {string}
-     */
-    var getParameterValue = function (parameterName) {
-        // parameterName is not used for now. This function is anyway hacky...
-
-        var result = '';
-        var regexp = /filterSet=([0-9]+)/g;
-        var searches = regexp.exec(window.location.search);
-
-        if (searches[1] !== undefined) {
-            result = searches[1];
-        }
-        return result;
-    };
-
-
     $scope.ignoreQuestionnaire = function () {
         $scope.excludedQuestionnaires.push($scope.pointSelected.id);
-        resetChart();
-        refreshChartPartial();
-    };
-
-    $scope.updateChart = function () {
-        resetChart();
-        refreshChartPartial();
+        $scope.refreshChart();
     };
 
     $scope.openNewFilterSet = function() {
@@ -106,7 +67,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         if ($scope.newFilterSetName) {
             $http.post('/api/filterSet', {
                 name: $scope.newFilterSetName,
-                originalFilterSet: getParameterValue('filterSet'),
+                originalFilterSet: $scope.filterSet.id,
                 excludedFilters: getExcludedFilters()
             }).success(function (data) {
                     $location.search('filterSet', data.id);
@@ -139,7 +100,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             var parameters = {
                 questionnaire: $scope.pointSelected.questionnaire,
                 filter: $scope.pointSelected.filter,
-                filterSet: getParameterValue('filterSet'),
+                filterSet: $scope.filterSet.id,
                 part: $scope.part.id
             };
 
@@ -181,60 +142,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         });
     });
 
-    // Whenever the list of excluded values is changed
-    var refreshChartPartial = function () {
-
-        if ($scope.excludedQuestionnaires instanceof Array && typeof($scope.chartObj) !== 'undefined') {
-            $scope.isLoading = true;
-            var excludedSeries = new Array();
-            for (var i = 0; i < $scope.excludedQuestionnaires.length; i++) {
-                var serie = $scope.excludedQuestionnaires[i].split(':')[0];
-                if (excludedSeries.indexOf(serie) === -1) {
-                    excludedSeries.push(serie);
-                }
-            }
-            var changed = false;
-            for (var i = 0; i < $scope.chartObj.series.length; i++) {
-                if ($scope.chartObj.series[i].name.indexOf('ignored answers') !== -1) {
-                    $scope.chartObj.series[i].destroy(false);
-                    changed = true;
-                }
-            }
-
-            if ($scope.excludedQuestionnaires.length || getExcludedFilters().length) {
-                $http.get('/api/chart',
-                    {
-                        params: {
-                            country: $scope.country.id,
-                            part: $scope.part.id,
-                            filterSet: $scope.filterSet.id,
-                            excludedQuestionnaires: $scope.excludedQuestionnaires.join(','),
-                            excludedFilters: getExcludedFilters().join(','),
-                            onlyExcluded: 1
-                        }
-
-                    }).success(function (data) {
-                        if (typeof($scope.chartObj) !== 'undefined') {
-                            // add/update from the chart line series with excluded values
-                            for (var i = 0; i < data.length; i++) {
-                                // refresh the serie data on the graph
-                                $scope.chartObj.addSeries(data[i], false, false);
-                            }
-                            $scope.chartObj.redraw();
-                            $scope.isLoading = false;
-                        }
-                    });
-            } else {
-                // force chart refresh when no more answers are excluded
-                $scope.chartObj.redraw();
-                $scope.isLoading = false;
-            }
-        }
-    };
-
-    var refreshChart = function () {
+    $scope.refreshChart = function () {
         $scope.isLoading = true;
-        $scope.plotColors = [];
         $timeout.cancel(uniqueAjaxRequest);
         uniqueAjaxRequest = $timeout(function () {
             // get chart data via Ajax, but only once per 200 milliseconds
@@ -246,15 +155,13 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                         part: $scope.part.id,
                         filterSet: $scope.filterSet.id,
                         excludedQuestionnaires: $scope.excludedQuestionnaires.join(','),
-                        excludeFilter: getExcludedFilters().join(',')
+                        excludedFilters: getExcludedFilters().join(',')
                     }
                 }).success(function (data) {
 
-                    serieLength = data.series.length;
-
                     data.plotOptions.scatter.dataLabels.formatter = function () {
                         return $('<span/>').css({
-                            'color': this.point.selected ? '#DDD' : this.series.color
+                            color: this.point.selected ? '#DDD' : this.series.color
                         }).text(this.point.name)[0].outerHTML;
                     };
 
