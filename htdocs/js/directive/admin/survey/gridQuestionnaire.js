@@ -12,7 +12,6 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
             '<input type="text" ng-model="gridOptions.filterOptions.filterText" placeholder="Search..." class="search" style="width: 400px"/>' +
             '</div>' +
             '<div class="span3" style="text-align: right">' +
-            '<i class="icon-plus-sign"></i> ' +
             '<gims-link-new origin="survey" target="questionnaire" return-tab="2"/>' +
             '</div>' +
             '</div>' +
