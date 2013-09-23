@@ -86,7 +86,7 @@ angular.module('myApp').controller('Admin/UserCtrl', function($scope, $location,
         columnDefs: [
             {field: 'name', displayName: 'Name', width: '250px'},
             {field: 'email', displayName: 'Email', cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a href="mailto:{{row.entity[col.field]}}">{{row.entity[col.field]}}</a></div>'},
-            {displayName: '', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
+            {displayName: '', cellTemplate: '<a class="btn btn-mini" href="/admin/user/edit/{{row.entity.id}}" ><i class="icon-pencil icon-large"></i></a>' +
                         '<button type="button" class="btn btn-mini" ng-click="delete(row)" ><i class="icon-trash icon-large"></i></button>'}
         ]
     };
@@ -95,7 +95,4 @@ angular.module('myApp').controller('Admin/UserCtrl', function($scope, $location,
         Modal.confirmDelete(row.entity, {objects: $scope.users, label: row.entity.name});
     };
 
-    $scope.edit = function(row) {
-        $location.path('/admin/user/edit/' + row.entity.id);
-    };
 });

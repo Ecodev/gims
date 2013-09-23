@@ -24,16 +24,10 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
         },
         controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal) {
 
-            // Edit a questionnaire
-            $scope.edit = function (row) {
-                var returnUrl = $location.path();
-                $location.path('/admin/questionnaire/edit/' + row.entity.id)
-                    .search({
-                        'returnUrl': returnUrl,
-                        'returnTab': 2
-                    })
-                    .hash(null);
-            };
+
+            $scope.$watch(function(){ return $location.url(); }, function(){
+                $scope.returnUrl = encodeURIComponent($location.url());
+            });
 
             // Delete a questionnaire
             $scope.removeQuestionnaire = function (row) {
@@ -65,7 +59,7 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
                     {displayName: '', cellTemplate: '<div style="margin: 5px 5px 0 5px ">' +
                         '<i class="icon-grid icon-comment" ng-visible="row.entity.comments" data-toggle="tooltip" title="{{row.entity.comments}}"></i>' +
                         '<i class="icon-grid icon-check" ng-visible="row.entity.status == \'validated\'" title="Validated"></i>' +
-                        '<button type="button" class="btn btn-mini btn-edit" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
+                        '<a class="btn btn-mini btn-edit" href="/admin/questionnaire/edit/{{row.entity.id}}?returnUrl={{returnUrl}}"><i class="icon-pencil icon-large"></i></a>' +
                         '<button type="button" class="btn btn-mini btn-remove" ng-click="removeQuestionnaire(row)" ><i class="icon-trash icon-large"></i></button>' +
                         // ng-visible="row.entity.permission.canBeDeleted" @todo add me back to line above when permission are implemented
                         '</div>'}

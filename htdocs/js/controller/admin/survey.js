@@ -69,12 +69,14 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
         $scope.survey = {};
     }
 
-    // initialize the panes model with hardcoded value
-    $scope.panes = [{},{},{},{}];
-    var returnTab = parseInt($location.hash(), 10);
-    if (returnTab && $scope.panes[returnTab] !== undefined) {
-        $scope.panes[returnTab].active = true;
-    }
+    $scope.tabs = [false, false, false, false];
+    $scope.selectTab = function(tab) {
+        $scope.tabs[tab] = true;
+        $location.hash(tab);
+    };
+
+    // Set the tab from URL hash if any
+    $scope.selectTab(parseInt($location.hash()));
 });
 
 /**
@@ -103,17 +105,13 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $locati
             {field: 'name', displayName: 'Name', width: '750px'},
             {field: 'isActive', displayName: 'Active', cellFilter: 'checkmark', width: '100px'},
             {field: 'year', displayName: 'Year', width: '100px'},
-            {displayName: '', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>' +
+            {displayName: '', cellTemplate: '<a class="btn btn-mini" href="/admin/survey/edit/{{row.entity.id}}"><i class="icon-pencil icon-large"></i></a>' +
                         '<button type="button" class="btn btn-mini" ng-click="remove(row)" ><i class="icon-trash icon-large"></i></button>'}
         ]
     };
 
     $scope.remove = function (row) {
         Modal.confirmDelete(row.entity, {objects: $scope.surveys, label: row.entity.code, returnUrl: '/admin/survey'});
-    };
-
-    $scope.edit = function (row) {
-        $location.path('/admin/survey/edit/' + row.entity.id);
     };
 
 });

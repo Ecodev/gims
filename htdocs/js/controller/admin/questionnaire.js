@@ -16,16 +16,14 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
 
     // Default redirect
     var returnUrl = '/';
-    var returnTab = '';
 
     if ($routeParams.returnUrl) {
         returnUrl = $routeParams.returnUrl;
-        returnTab = $routeParams.returnTab;
     }
 
     var redirect = function ()
     {
-        $location.path(returnUrl).search({}).hash(returnTab);
+        $location.url(returnUrl);
     };
 
     $scope.cancel = function ()

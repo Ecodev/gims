@@ -5,7 +5,6 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     // Default redirect
     var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,chapter,isCompulsory,isMultiple,isFinal,description,questions'};
     var returnUrl = '/';
-    $scope.returnTab = '';
 
     $scope.sending = false;
     $scope.addBtnChoice = false;
@@ -71,12 +70,11 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
     if ($routeParams.returnUrl) {
         returnUrl = $routeParams.returnUrl;
-        $scope.returnTab = $routeParams.returnTab;
     }
 
 
     var redirect = function () {
-        $location.path(returnUrl).search({}).hash($scope.returnTab);
+        $location.url(returnUrl);
     };
 
     $scope.cancel = function () {

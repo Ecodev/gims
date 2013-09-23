@@ -24,16 +24,9 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
         },
         controller: function ($scope, $location, $resource, Modal) {
 
-            // Edit a question
-            $scope.edit = function (row) {
-                var returnUrl = $location.path();
-                $location.path('/admin/question/edit/' + row.entity.id)
-                    .search({
-                        'returnUrl': returnUrl,
-                        'returnTab': 1
-                    })
-                    .hash(null);
-            };
+            $scope.$watch(function(){ return $location.url(); }, function(){
+                $scope.returnUrl = encodeURIComponent($location.url());
+            });
 
             // Delete a question
             $scope.removeQuestion = function (row) {
@@ -83,8 +76,8 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
                     {
                         displayName: '',
                         width: '10%',
-                        cellTemplate: '<button type="button" class="btn btn-mini btn-edit" ng-click="edit(row)" >' +
-                                            '<i class="icon-pencil icon-large"></i></button>' +
+                        cellTemplate: '<a class="btn btn-mini btn-edit" href="/admin/question/edit/{{row.entity.id}}?returnUrl={{returnUrl}}">' +
+                                            '<i class="icon-pencil icon-large"></i></a>' +
                                             '<button type="button" class="btn btn-mini btn-remove" ng-click="removeQuestion(row)" >' +
                                             '<i class="icon-trash icon-large"></i>' +
                                         '</button>'
