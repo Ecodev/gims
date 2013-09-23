@@ -13,34 +13,71 @@
 
         <?php echo $this->crudButtons('question'); ?>
 
-
-
         <br/><br/>
 
-        <div class="control-group form-horizontal row-fluid">
-            <label class='control-label' for="question.type">Type</label>
-            <div class='controls'>
-                <select class='span5'
-                        id="question.type"
+        <div class="control-group form-horizontal row-fluid"  ng-class="{error: myForm.name.$invalid}">
+            <label class='control-label' for="question.name">Label</label>
+            <div class='control-row span8'>
+                <input class='span12' type="text" name="name" ng-model="question.name" required/>
+            </div>
+            <span ng-show="myForm.name.$error.required" class="span1 help-inline">Required</span>
+        </div>
+
+
+        <div class="control-group form-horizontal row-fluid" ng-class="{error: myForm.type.$invalid}">
+            <label class='control-label' for="type">Type</label>
+            <div class='span4 control-row fluid-row'>
+                <select required
+                        class='span12'
                         name="type"
                         ng-model="question.type"
                         ng-change="initChoices()"
                         ng-options="c.value as c.text for c in types">
                 </select>
             </div>
+            <span ng-show="myForm.type.$error.required" class="span1 help-inline">Required</span>
         </div>
-        <div class="control-group form-horizontal row-fluid" ng-show='isChoices' ng-class="{error: myForm.filter.$invalid}">
-            <label class='control-label' for="question.isMultiple">Number of choices wanted</label>
+
+
+
+
+        <div class="control-group form-horizontal row-fluid" ng-show='isChoices'>
+            <label class='control-label'></label>
             <div class='controls'>
-                <select class='span5'
-                        name="question.isMultiple"
-                        ng-model="question.isMultiple"
-                        ng-options="p.value as p.text for p in multiple">
-                </select>
+                <label class='radio'><input type='radio' name='question.isMultiple' value='0' ng-model='question.isMultiple' ng-checked="1">Single choice</label>
+                <label class='radio'><input type='radio' name='question.isMultiple' value='1' ng-model='question.isMultiple'>Multiple choices</label>
             </div>
         </div>
 
-        <div class="control-group form-horizontal row-fluid" ng-class="{error: myForm.filter.$invalid}">
+        <div class="control-group form-horizontal row-fluid" ng-hide='isChapter'>
+            <label class='control-label' for="question.isCompulsory"></label>
+            <div class='controls'>
+                <label class='radio'><input type='radio' name='question.isCompulsory' value='0' ng-model='question.isCompulsory' ng-checked="1">Optional</label>
+                <label class='radio'><input type='radio' name='question.isCompulsory' value='1' ng-model='question.isCompulsory'>Compulsory</label>
+            </div>
+        </div>
+
+
+        <div class="control-group form-horizontal" ng-show='isChapter' ng-class="{error: myForm.name.$invalid}">
+            <label class='control-label' for="question.description">Description</label>
+            <div class='controls control-row'>
+                <textarea class='span8' type="text" name="name" ng-model="question.description"></textarea>
+                <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
+            </div>
+        </div>
+
+
+        <br/><br/>
+
+
+
+
+
+
+
+
+
+        <div class="control-group form-horizontal row-fluid"">
             <label class='control-label' for="question.chapter">Belongs to chapter</label>
             <div class='controls'>
                 <select class='span5'
@@ -52,7 +89,7 @@
             </div>
         </div>
 
-        <div class="control-group form-horizontal row-fluid" ng-show='isChapter' ng-class="{error: myForm.filter.$invalid}">
+        <div class="control-group form-horizontal row-fluid" ng-show='isChapter'>
             <label class='control-label' for="question.isFinal">Display mode</label>
             <div class='controls'>
                 <label class='radio'><input type='radio' name='question.isFinal' value='0' ng-model='question.isFinal' ng-checked="1">Behaves like a folder : every subquestion is displayed on its own page</label>
@@ -66,47 +103,36 @@
         <div class="control-group form-horizontal row-fluid" ng-hide='isChapter' ng-class="{error: myForm.filter.$invalid}">
             <label class='control-label' for="question.filter">Thematic</label>
             <div class='controls'>
-                <gims-select    class='span5'
+                <gims-select    required
+                                class='span5'
+                                name='filter'
                                 api="filter"
                                 model="question.filter"
                                 placeholder="Select a thematic">
                 </gims-select>
-                <span ng-show="myForm.filter.$error.required" class="help-inline">Required</span>
             </div>
+            <span ng-show="myForm.filter.$error.required" class="span1 help-inline">Required</span>
         </div>
 
 
 
-		<div class="control-group form-horizontal row-fluid" ng-hide='isChapter' ng-class="{error: myForm.name.$invalid}">
+		<div class="control-group form-horizontal row-fluid" ng-hide='isChapter' ng-class="{error: myForm.zone.$invalid}">
 		    <label class='control-label' for="question.part">Zone</label>
             <div class='controls'>
-                <gims-select    class="span5 input-medium"
-                                id="question.parts"
-                                name="type"
-                                model="question.parts"
+                <gims-select    required
+                                class="span5 input-medium"
+                                name="zone"
                                 api="part"
+                                model="question.parts"
                                 multiple="multiple">
                 </gims-select>
             </div>
+            <span ng-show="myForm.zone.$error.required" class="span1 help-inline">Required</span>
 		</div>
+        <br/>
 
 
 
-        <br/><br/>
-		<div class="control-group form-horizontal"  ng-class="{error: myForm.name.$invalid}">
-            <label class='control-label' for="question.name">Label</label>
-            <div class='controls control-row'>
-                <input class='span8' id="question.name" type="text" name="name" ng-model="question.name"/>
-                <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
-            </div>
-        </div>
-        <div class="control-group form-horizontal" ng-show='isChapter' ng-class="{error: myForm.name.$invalid}">
-            <label class='control-label' for="question.description">Description</label>
-            <div class='controls control-row'>
-                <textarea class='span8' id="question.description" type="text" name="name" ng-model="question.description"></textarea>
-                <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
-            </div>
-        </div>
 
 
 
@@ -124,7 +150,7 @@
 
 
         <br/><br/>
-        <div ng-repeat="choice in question.choices" ng-show="isChoices" ng-class="{error: myForm.name.$invalid}">
+        <div ng-repeat="choice in question.choices" ng-show="isChoices" >
 
             <div class="control-group form-horizontal">
                 <label class='control-label' for="choice.label">Option {{$index+1}}</label>
@@ -138,13 +164,12 @@
                             ng-options="p.value as p.text for p in percentages">
                     </select>
                     <button class="btn btn-danger btn-xs" ng-click="deleteOption($index)" ><i class="icon-trash"></i></button>
-                    <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
                 </div>
             </div>
 
         </div>
 
-        <div class="control-group form-horizontal" ng-show='addBtnChoice'>
+        <div class="control-group form-horizontal" ng-show='isChoices'>
             <label class='control-label'>&nbsp;</label>
             <div class='controls'>
                 <button class="btn btn-success btn-xs" ng-click="addOption()"><i class="icon-plus"></i> Add choice</button>
@@ -158,7 +183,7 @@
         <div class="control-group form-horizontal" ng-class="{error: myForm.sorting.$invalid}" ng-show="question.id">
             <label class='control-label' for="question.sorting">Sorting</label>
             <div class='controls controls-row'>
-                <input class='span1' id="question.sorting" type="text" name="sorting" ng-model="question.sorting"/>
+                <input class='span1' type="text" name="sorting" ng-model="question.sorting"/>
             </div>
         </div>
 
@@ -172,13 +197,9 @@
 
 
 
-
-
-
-
     </form>
 
     <?php echo $this->metadata('question'); ?>
 </div> <!-- /container -->
 
-<!--pre>{{question|json}}</pre-->
+<pre>{{question|json}}</pre>

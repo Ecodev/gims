@@ -7,7 +7,6 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     var returnUrl = '/';
 
     $scope.sending = false;
-    $scope.addBtnChoice = false;
 
 
     // @TODO : manage value null and integer value
@@ -33,12 +32,11 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
     $scope.multiple = [
         {text: 'Single choice', value: false},
-        {text: 'Multiple choices', value: true},
+        {text: 'Multiple choices', value: true}
     ];
 
-    $scope.initChoices = function () {
-
-        $scope.addBtnChoice = false;
+    $scope.initChoices = function ()
+    {
         $scope.isChoices = false;
         $scope.isChapter = false;
 
@@ -46,7 +44,6 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
             $scope.isChoices = true;
            if (!$scope.question.choices || $scope.question.choices.length == 0)
                 $scope.question.choices = [{}];
-            $scope.addBtnChoice = true;
         }
         if ($scope.question.type == 'Chapter') {
             $scope.isChapter=true;
@@ -54,7 +51,8 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
     }
 
-    $scope.removeChapter = function(){
+    $scope.removeChapter = function()
+    {
         $scope.question.chapter = null;
     }
 
@@ -91,6 +89,12 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
         if ($scope.question.filter) $scope.question.filter = $scope.question.filter.id;
         if ($scope.question.chapter) $scope.question.chapter = $scope.question.chapter.id;
         if ($scope.question.id) {
+
+            // if change type from Choice to another, remove choices from DB
+            if($scope.question.type!='Choice' && $scope.question.choices && $scope.question.choices.length>0){
+                delete $scope.question.choices;
+            }
+
             $scope.question.put(questionFields).then(function (question) {
                 $scope.sending = false;
                 $scope.question = question;
