@@ -80,9 +80,12 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                 var i=0;
                 for(i; i<$scope.navigation.length; i++){
                     if($scope.navigation[i].level===0 && ($scope.navigation[i].active_parent || $scope.navigation[i].active)){
-                        console.info('id : '+i);
                         $scope.navigation[i].isFinal=true;
-                        $scope.currentIndex=$scope.navigation[i].navIndex;
+                        if (i==$scope.currentIndex) {
+                            $scope.refreshQuestion();
+                        } else {
+                            $scope.currentIndex=$scope.navigation[i].navIndex;
+                        }
                         break;
                     }
                 }

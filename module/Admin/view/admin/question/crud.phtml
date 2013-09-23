@@ -136,17 +136,6 @@
 
 
 
-        <div class="control-group form-horizontal row-fluid" ng-hide='isChapter' ng-class="{error: myForm.filter.$invalid}">
-            <label class='control-label' for="question.isCompulsory"></label>
-            <div class='controls'>
-                <label class='radio'><input type='radio' name='question.isCompulsory' value='0' ng-model='question.isCompulsory' ng-checked="1">Optional</label>
-                <label class='radio'><input type='radio' name='question.isCompulsory' value='1' ng-model='question.isCompulsory'>Compulsory</label>
-            </div>
-        </div>
-
-
-
-
 
 
         <br/><br/>
@@ -200,6 +189,4 @@
     </form>
 
     <?php echo $this->metadata('question'); ?>
-</div> <!-- /container -->
-
-<pre>{{question|json}}</pre>
+</div>
