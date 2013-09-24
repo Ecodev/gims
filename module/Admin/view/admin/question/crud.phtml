@@ -48,25 +48,24 @@
         <div class="control-group form-horizontal row-fluid" ng-show='isChoices'>
             <label class='control-label'></label>
             <div class='control-row span10'>
-                <label class='radio'><input type='radio' name='question.isMultiple' value='0' ng-model='question.isMultiple' ng-checked="1">Single choice</label>
-                <label class='radio'><input type='radio' name='question.isMultiple' value='1' ng-model='question.isMultiple'>Multiple choices</label>
+                <label class='radio'><input type='radio' name='isMultiple' value='0' ng-model='question.isMultiple' ng-checked="1">Single choice</label>
+                <label class='radio'><input type='radio' name='isMultiple' value='1' ng-model='question.isMultiple'>Multiple choices</label>
             </div>
         </div>
 
         <div class="control-group form-horizontal row-fluid" ng-hide='isChapter'>
             <label class='control-label' for="question.isCompulsory"></label>
             <div class='control-row span10'>
-                <label class='radio'><input type='radio' name='question.isCompulsory' value='0' ng-model='question.isCompulsory' ng-checked="1">Optional</label>
-                <label class='radio'><input type='radio' name='question.isCompulsory' value='1' ng-model='question.isCompulsory'>Compulsory</label>
+                <label class='radio'><input type='radio' name='isCompulsory' value='0' ng-model='question.isCompulsory' ng-checked="1">Optional</label>
+                <label class='radio'><input type='radio' name='isCompulsory' value='1' ng-model='question.isCompulsory'>Compulsory</label>
             </div>
         </div>
 
 
-        <div class="control-group form-horizontal" ng-show='isChapter' ng-class="{error: myForm.name.$invalid}">
+        <div class="control-group form-horizontal row-fluid" ng-show='isChapter'>
             <label class='control-label' for="question.description">Description</label>
             <div class='controls control-row span10'>
                 <textarea class='span6' type="text" name="name" ng-model="question.description"></textarea>
-                <span ng-show="myForm.name.$error.required" class="help-inline">Required</span>
             </div>
         </div>
 
@@ -86,7 +85,7 @@
             <div class='controls span10'>
                 <div class='span6'>
                     <select class='span12'
-                            name="question.chapter"
+                            name="chapter"
                             ng-model="question.chapter.id"
                             ng-options="p.id as p.name for p in chapterList">
                     </select>
@@ -98,19 +97,17 @@
         <div class="control-group form-horizontal row-fluid" ng-show='isChapter'>
             <label class='control-label' for="question.isFinal">Display mode</label>
             <div class='controls span10'>
-                <label class='radio'><input type='radio' name='question.isFinal' value='0' ng-model='question.isFinal' ng-checked="1">Behaves like a folder : every subquestion is displayed on its own page</label>
-                <label class='radio'><input type='radio' name='question.isFinal' value='1' ng-model='question.isFinal'>Behaves like a question : displays all subquestions in the current page</label>
+                <label class='radio'><input type='radio' name='isFinal' value='0' ng-model='question.isFinal' ng-checked="1">Behaves like a folder : every subquestion is displayed on its own page</label>
+                <label class='radio'><input type='radio' name='isFinal' value='1' ng-model='question.isFinal'>Behaves like a question : displays all subquestions in the current page</label>
             </div>
         </div>
-
 
 
 
         <div class="control-group form-horizontal row-fluid" ng-hide='isChapter' ng-class="{error: myForm.filter.$invalid}">
             <label class='control-label' for="question.filter">Thematic</label>
             <div class='controls span10'>
-                <gims-select    required
-                                class='span6'
+                <gims-select    class='span6'
                                 name='filter'
                                 api="filter"
                                 model="question.filter"
@@ -118,16 +115,13 @@
                 </gims-select>
                 <span ng-show="myForm.filter.$error.required" class="span1 help-inline">Required</span>
             </div>
-
         </div>
 
 
-
-		<div class="control-group form-horizontal row-fluid" ng-hide='isChapter' ng-class="{error: myForm.zone.$invalid}">
-		    <label class='control-label' for="question.part">Zone</label>
+        <div class="control-group form-horizontal row-fluid" ng-hide='isChapter' ng-class="{error: myForm.zone.$invalid}">
+            <label class='control-label' for="question.part">Zone</label>
             <div class='controls span10'>
-                <gims-select    required
-                                class="span6 input-medium"
+                <gims-select    class="span6 input-medium"
                                 name="zone"
                                 api="part"
                                 model="question.parts"
@@ -135,14 +129,13 @@
                 </gims-select>
                 <span ng-show="myForm.zone.$error.required" class="span1 help-inline">Required</span>
             </div>
-		</div>
+        </div>
         <br/>
 
 
 
         <br/>
         <div ng-repeat="choice in question.choices" ng-show="isChoices" >
-
             <div ng-form name='myInnerForm' class="control-group form-horizontal row-fluid" ng-class="{error:myInnerForm.choiceName.$invalid}">
                 <label class='control-label' for="choiceLabel">Option {{$index+1}}</label>
                 <div class='controls span10'>
@@ -160,8 +153,8 @@
                     <span ng-show="myInnerForm.choiceName.$error.required" class="span1 help-inline">Required</span>
                 </div>
             </div>
-
         </div>
+
 
         <br/>
         <div class="control-group form-horizontal" ng-show='isChoices'>
@@ -189,8 +182,6 @@
                 <div gims-grid-question></div>
             </div>
         </div>
-
-
 
     </form>
 
