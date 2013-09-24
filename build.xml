@@ -6,12 +6,12 @@
     <taskdef classname="tasks.LoadRemoteDump" name="load-remote-dump" />
 
     <target name="load-data">
-        <propertyprompt propertyName="dumpFile" defaultValue="tests/data/db.backup.gzip" promptText="Path to gzipped DB dump" useExistingValue="true" />
+        <propertyprompt propertyName="dumpFile" defaultValue="tests/data/db.backup.gz" promptText="Path to gzipped DB dump" useExistingValue="true" />
         <load-dump dumpfile="${dumpFile}" />
     </target>
 
     <target name="load-test-data" description="Load data for tests">
-        <load-dump dumpfile="tests/data/db.backup.gzip" />
+        <load-dump dumpfile="tests/data/db.backup.gz" />
     </target>
 
     <target name="load-remote-data" description="Load data from a remote server into local database">
