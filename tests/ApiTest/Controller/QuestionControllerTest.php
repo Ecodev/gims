@@ -232,4 +232,31 @@ class QuestionControllerTest extends AbstractController
         $this->assertSame($expectedSorting, $actualSorting);
     }
 
+    public function testCreatingQuestionWithChoices()
+    {
+        // Question
+        $data = array(
+            'name' => 'Question with choices',
+            'type' => \Application\Model\QuestionType::$CHOICE,
+            'survey' => $this->survey->getId(),
+            'filter' => $this->filter->getId(),
+            'choices' => array(
+                array(
+                    'name' => 'choice 1',
+                    'value' => 0.9,
+                ),
+                array() // This is an empty choice, which must be ignored
+            )
+        );
+
+        $this->dispatch($this->getRoute('post') . '?fields=type,choices', Request::METHOD_POST, $data);
+        $actual = $this->getJsonResponse();
+
+        $this->assertEquals($data['name'], $actual['name']);
+        $this->assertEquals($data['type'], $actual['type']);
+        $this->assertCount(1, $actual['choices']);
+        $this->assertEquals($data['choices'][0]['name'], $actual['choices'][0]['name']);
+        $this->assertEquals($data['choices'][0]['value'], $actual['choices'][0]['value']);
+    }
+
 }

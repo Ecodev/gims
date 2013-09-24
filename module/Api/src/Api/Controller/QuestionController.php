@@ -186,10 +186,21 @@ class QuestionController extends AbstractChildRestfulController
         return $newSorting;
     }
 
-    protected function setChoices(array $newChoices, $question)
+    /**
+     * Affects the new choices to the given question, and remove the obsolete choices
+     * @param array $newChoices
+     * @param \Application\Model\Question\AbstractQuestion $question
+     */
+    protected function setChoices(array $newChoices, AbstractQuestion $question)
     {
         $i = 0;
-        foreach ($newChoices as $key => $newChoice) {
+        foreach ($newChoices as $newChoice) {
+
+            // If choice is incomplete, ignore it
+            if (!isset($newChoice['name']) || !isset($newChoice['value'])) {
+                continue;
+            }
+
             $newChoice['sorting'] = $i;
             // if no id -> create
             if (!isset($newChoice['id'])) {
