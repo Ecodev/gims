@@ -42,8 +42,16 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
         if ($scope.question.type == 'Choice') {
             $scope.isChoices = true;
-           if (!$scope.question.choices || $scope.question.choices.length == 0)
+
+            // If we have no choices list at all, then we save the existing
+            // question with its new type to reload actual list of choices
+            if (!$scope.question.choices && $scope.question.id) {
+                $scope.save();
+            }
+            // Otherwise, if the question is new and no choices exists, we inject an empty one
+            else if (!$scope.question.choices || $scope.question.choices.length == 0) {
                 $scope.question.choices = [{}];
+            }
         }
         if ($scope.question.type == 'Chapter') {
             $scope.isChapter=true;
