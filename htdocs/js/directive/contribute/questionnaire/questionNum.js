@@ -35,6 +35,7 @@ angular.module('myApp.directives').directive('gimsNumQuestion', function () {
                 for(var key in question.answers){
                     var testedAnswer = question.answers[key];
                     if (testedAnswer.part && testedAnswer.part.id==pid) {
+                        delete testedAnswer.valueChoice;
                         return testedAnswer;
                     }
                 }
