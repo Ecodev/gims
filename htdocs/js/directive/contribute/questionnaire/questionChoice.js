@@ -42,8 +42,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                         });
                     }else{
                         var identifier = question.id+"-"+part.id;
-                        if (!$scope.index[identifier] || 
-                                ($scope.index[identifier] && !$scope.index[identifier].valuePercent)) {
+                        if (!$scope.index[identifier] || ($scope.index[identifier] && ($scope.index[identifier].valuePercent===null || $scope.index[identifier].valuePercent===undefined))) {
                             $scope.index[identifier] = $scope.findAnswer(question, part.id);
                         }
                     }
