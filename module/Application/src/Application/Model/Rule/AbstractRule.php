@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Rule is a way to exclude specify custom behavior during computing of filter.
  * This is on a filter-questionnaire-part basis.
  *
- * @ORM\Entity(repositoryClass="Application\Repository\RuleRepository")
+ * @ORM\Entity(repositoryClass="Application\Repository\Rule\RuleRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\Table(name="rule")
  */

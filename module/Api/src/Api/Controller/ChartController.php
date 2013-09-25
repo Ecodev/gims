@@ -238,7 +238,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $series = array();
         $calculator = new \Application\Service\Calculator\Jmp();
         $calculator->setServiceLocator($this->getServiceLocator());
-        $lines = $calculator->computeFlatten($this->startYear, $this->endYear, $filterSet, $questionnaires, $part, $excludedFilters);
+        $lines = $calculator->computeFlattenAllYears($this->startYear, $this->endYear, $filterSet, $questionnaires, $part, $excludedFilters);
         foreach ($lines as &$serie) {
             $serie['color'] = $colors[$this->getConstantKey($serie['name']) % count($colors)];
             $serie['name'] .= $suffix;

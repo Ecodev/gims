@@ -173,14 +173,14 @@ class JmpTest extends AbstractCalculator
      */
     public function testComputeRegressionForUnknownYears($year, $expected)
     {
-        $this->assertEquals($expected, $this->service->computeRegression($year, $this->highFilter1, $this->questionnaires, $this->part), 'regression between known years according');
-        $this->assertNull($this->service->computeRegression($year, $this->highFilter1, array(), $this->part)['regression'], 'no questionnaires should still return valid structure');
+        $this->assertEquals($expected, $this->service->computeRegressionOneYear($year, $this->highFilter1, $this->questionnaires, $this->part), 'regression between known years according');
+        $this->assertNull($this->service->computeRegressionOneYear($year, $this->highFilter1, array(), $this->part)['regression'], 'no questionnaires should still return valid structure');
     }
 
     public function testComputeRegressionForShortPeriod()
     {
         $this->questionnaire->getSurvey()->setYear(2003);
-        $this->assertEquals(array('regression' => 0.105556, 'population' => 25), $this->service->computeRegression(2004, $this->highFilter3, $this->questionnaires, $this->part), 'regression between known years according');
+        $this->assertEquals(array('regression' => 0.105556, 'population' => 25), $this->service->computeRegressionOneYear(2004, $this->highFilter3, $this->questionnaires, $this->part), 'regression between known years according');
     }
 
     public function computeFlattenOneYearProvider()
@@ -463,20 +463,20 @@ class JmpTest extends AbstractCalculator
      */
     public function testComputeFlatten($yearStart, $yearEnd, $useQuestionnaires, $expected)
     {
-        $this->assertEquals($expected, $this->service->computeFlatten($yearStart, $yearEnd, $this->filterSet, $useQuestionnaires ? $this->questionnaires : array(), $this->part));
+        $this->assertEquals($expected, $this->service->computeFlattenAllYears($yearStart, $yearEnd, $this->filterSet, $useQuestionnaires ? $this->questionnaires : array(), $this->part));
     }
 
     public function testCacheOnFilterForAllQuestionnaire()
     {
         $tmp = $this->flattenProvider();
         $data = reset($tmp);
-        $res1 = $this->service->computeFlatten($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part);
+        $res1 = $this->service->computeFlattenAllYears($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part);
 
         $this->answer131->setValuePercent((0.2));
-        $res2 = $this->service->computeFlatten($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part);
+        $res2 = $this->service->computeFlattenAllYears($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part);
         $this->assertEquals($res1, $res2, 'result should be cached and therefore be the same');
 
-        $res3 = $this->service2->computeFlatten($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part);
+        $res3 = $this->service2->computeFlattenAllYears($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part);
 
         $this->assertNotEquals($res1, $res3, 'after clearing cache, result differs');
         $this->assertEquals(array(
@@ -553,9 +553,9 @@ class JmpTest extends AbstractCalculator
         $this->answer131->setPart($this->part1);
         $this->answer132->setPart($this->part2);
 
-        $r1 = $this->service->computeFlatten(2006, 2007, $this->filterSet, $this->questionnaires, $this->part1);
-        $r2 = $this->service->computeFlatten(2006, 2007, $this->filterSet, $this->questionnaires, $this->part2);
-        $rt = $this->service->computeFlatten(2006, 2007, $this->filterSet, $this->questionnaires, $this->part);
+        $r1 = $this->service->computeFlattenAllYears(2006, 2007, $this->filterSet, $this->questionnaires, $this->part1);
+        $r2 = $this->service->computeFlattenAllYears(2006, 2007, $this->filterSet, $this->questionnaires, $this->part2);
+        $rt = $this->service->computeFlattenAllYears(2006, 2007, $this->filterSet, $this->questionnaires, $this->part);
 
         $this->assertEquals(array(
             array(
@@ -643,7 +643,7 @@ class JmpTest extends AbstractCalculator
         $this->assertEquals(array(
             'regression' => 0,
             'population' => 25,
-                ), $this->service->computeRegression(2006, $this->filter1, $this->questionnaires, $this->part));
+                ), $this->service->computeRegressionOneYear(2006, $this->filter1, $this->questionnaires, $this->part));
     }
 
 }

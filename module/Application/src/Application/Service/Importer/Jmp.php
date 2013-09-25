@@ -10,6 +10,7 @@ use Application\Model\Questionnaire;
 use Application\Model\Rule\AbstractRule;
 use Application\Model\Rule\Exclude;
 use Application\Model\Rule\FilterRule;
+use Application\Model\Rule\FilterFormula;
 use Application\Model\Rule\Formula;
 use Application\Model\Rule\QuestionnaireFormula;
 use Application\Model\Survey;
@@ -118,30 +119,55 @@ class Jmp extends AbstractImporter
                     'children' => array(5, 12, 55, 58, 68),
                     'excludes' => 91,
                     'isImproved' => true,
+                    'formulas' => array(
+                        3 => null,
+                        4 => null,
+                        5 => null,
+                    ),
                 ),
                 "Piped onto premises" => array(
                     'row' => 90,
                     'children' => array(6),
                     'excludes' => 92,
                     'isImproved' => true,
+                    'formulas' => array(
+                        3 => null,
+                        4 => null,
+                        5 => null,
+                    ),
                 ),
                 "Surface water" => array(
                     'row' => 87,
                     'children' => array(60),
                     'excludes' => 93,
                     'isImproved' => false,
+                    'formulas' => array(
+                        3 => '=IF(Total improved >= 0.995, 0, {self})',
+                        4 => '=IF(Total improved >= 0.995, 0, {self})',
+                        5 => '=IF(Total improved = 1, 0, {self})',
+                    ),
                 ),
                 "Other Improved" => array(
                     'row' => null,
                     'children' => array(9, 10, 12, 55, 58, 68),
                     'excludes' => null,
                     'isImproved' => false,
+                    'formulas' => array(
+                        3 => '=IF(ISNUMBER(Piped onto premises), Total improved - Piped onto premises, NULL)',
+                        4 => '=IF(ISNUMBER(Piped onto premises), Total improved - Piped onto premises, NULL)',
+                        5 => '=IF(ISNUMBER(Piped onto premises), Total improved - Piped onto premises, NULL)',
+                    ),
                 ),
                 "Other Unimproved" => array(
                     'row' => null,
                     'children' => array(56, 59, 71),
                     'excludes' => null,
                     'isImproved' => false,
+                    'formulas' => array(
+                        3 => '=IF(Total improved = 1, 0, 1 - Total improved - Surface water)',
+                        4 => '=IF(Total improved = 1, 0, 1 - Total improved - Surface water)',
+                        5 => '=IF(Total improved = 1, 0, 1 - Total improved - Surface water)',
+                    ),
                 ),
             ),
         ),
@@ -256,36 +282,66 @@ class Jmp extends AbstractImporter
                     'children' => array(-6, -7, -8, -9, 49, 73, 76),
                     'excludes' => 96,
                     'isImproved' => true,
+                    'formulas' => array(
+                        3 => null,
+                        4 => null,
+                        5 => '=IF(ISNUMBER(Shared), Shared + Improved, {self})',
+                    ),
                 ),
                 "Sewerage connections" => array(
                     'row' => 95,
                     'children' => array(6),
                     'excludes' => 97,
                     'isImproved' => false,
+                    'formulas' => array(
+                        3 => null,
+                        4 => null,
+                        5 => null,
+                    ),
                 ),
                 "Improved" => array(
                     'row' => null,
                     'children' => array(), // based on ratio
                     'excludes' => null,
                     'isImproved' => true,
+                    'formulas' => array(
+                        3 => null,
+                        4 => null,
+                        5 => null,
+                    ),
                 ),
                 "Shared" => array(
                     'row' => null,
                     'children' => array(), // based on ratio
                     'excludes' => null, // Because Shared is a very special case, we totally ignore exclude rules
                     'isImproved' => false,
+                    'formulas' => array(
+                        3 => '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)',
+                        4 => '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)',
+                        5 => null,
+                    ),
                 ),
                 "Other unimproved" => array(
                     'row' => null,
                     'children' => array(-10, 30, 52, 53, 54, 55, 56, 80),
                     'excludes' => null,
                     'isImproved' => false,
+                    'formulas' => array(
+                        3 => '=IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation)',
+                        4 => '=IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation)',
+                        5 => '=IF(Improved + shared + Open defecation >= 1, 0, IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation))',
+                    ),
                 ),
                 "Open defecation" => array(
                     'row' => null,
                     'children' => array(79),
                     'excludes' => 98,
                     'isImproved' => false,
+                    'formulas' => array(
+                        3 => '=IF(Improved + shared >= 0.995, 0, {self})',
+                        4 => '=IF(Improved + shared >= 0.995, 0, {self})',
+                        5 => '=IF(Improved + shared = 1, 0, {self})',
+                    ),
                 ),
             ),
         ),
@@ -307,6 +363,7 @@ class Jmp extends AbstractImporter
     private $formulaCount = 0;
     private $alternateFilterCount = 0;
     private $filterRuleCount = 0;
+    private $filterFormulaCount = 0;
 
     /**
      * @var Part
@@ -400,8 +457,9 @@ Alternate Filters: $this->alternateFilterCount
 Answers          : $this->answerCount
 Formulas         : $this->formulaCount
 Uses of Exclude  : $this->excludeCount
-Uses of Formula for Filter        : $this->filterRuleCount
-Uses of Formula for Questionnaires: $this->questionnaireFormulaCount
+Uses of Rule for Filter          : $this->filterRuleCount
+Uses of Formula for Filter       : $this->filterFormulaCount
+Uses of Formula for Questionnaire: $this->questionnaireFormulaCount
 
 STRING;
     }
@@ -1111,6 +1169,8 @@ STRING;
             echo '.';
         }
 
+        $this->importHighFilterFormulas($filters);
+
         echo PHP_EOL;
     }
 
@@ -1152,6 +1212,66 @@ STRING;
         }
 
         return $filterRule;
+    }
+
+    /**
+     * Create or get a FilterFormula
+     * @param Filter $filter
+     * @param Formula $formula
+     * @param Part $part
+     * @return FilterFormula
+     */
+    protected function getFilterFormula(Filter $filter, Formula $formula, Part $part)
+    {
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterFormula');
+
+        $this->getEntityManager()->flush();
+        $filterFormula = $repository->findOneBy(array(
+            'formula' => $formula,
+            'part' => $part,
+            'filter' => $filter,
+        ));
+
+        if (!$filterFormula) {
+            $filterFormula = new FilterFormula();
+            $filterFormula->setJustification($this->defaultJustification)
+                    ->setFormula($formula)
+                    ->setPart($part)
+                    ->setFilter($filter);
+
+            $this->getEntityManager()->persist($filterFormula);
+            $this->filterFormulaCount++;
+        }
+
+        return $filterFormula;
+    }
+
+    /**
+     * Import FilterFormula for all highfilters
+     * @param array $filters
+     */
+    public function importHighFilterFormulas(array $filters)
+    {
+        foreach ($filters as $filterName => $filterData) {
+            $highFilter = $this->cacheHighFilters[$filterName];
+            foreach ($filterData['formulas'] as $partKey => $formula) {
+                if (!$formula) {
+                    continue;
+                }
+
+                $part = $this->partOffsets[$partKey];
+
+                // Replace our filter name with actual ID in formulas
+                foreach ($filters as $filterNameOther => $foo) {
+                    $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
+                    $id = $otherHighFilter->getId();
+                    $formula = str_replace($filterNameOther, "{F#$id}", $formula);
+                }
+
+                $formulaObject = $this->getFormula('Regression: ' . $highFilter->getName(), $formula);
+                $this->getFilterFormula($highFilter, $formulaObject, $part);
+            }
+        }
     }
 
     /**

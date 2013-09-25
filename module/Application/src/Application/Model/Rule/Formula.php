@@ -13,6 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
  * Reference a Filter's value:
  * {F#12,Q#34,P#56}
  *
+ * Reference a Filter's regression value for same part and year. This is only
+ * available when doing regression computing, so when used by Calculator\Jmp:
+ * {F#12}
+ *
  * Reference an Unofficial Filter name (NOT value). It will return NULL if no
  * Unofficial Filter is found. The ID refers to the official Filter:
  * {F#12,Q#34}

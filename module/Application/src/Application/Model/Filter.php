@@ -107,12 +107,22 @@ class Filter extends AbstractModel
     private $filterRules;
 
     /**
+     * Additional formulas to apply to compute regression lines
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="\Application\Model\Rule\FilterFormula", mappedBy="filter")
+     * @ORM\OrderBy({"id" = "ASC"})
+     */
+    private $filterFormulas;
+
+    /**
      * Constructor
      * @param string $name
      */
     public function __construct($name = null)
     {
         $this->filterRules = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->filterFormulas = new \Doctrine\Common\Collections\ArrayCollection();
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->parents = new \Doctrine\Common\Collections\ArrayCollection();
         $this->summands = new \Doctrine\Common\Collections\ArrayCollection();
@@ -296,12 +306,34 @@ class Filter extends AbstractModel
     /**
      * Notify the filter that it was added to FilterRule relation.
      * This should only be called by FilterRule::setFilter()
-     * @param Rule\FilterRule $rule
+     * @param Rule\FilterRule $relation
      * @return Filter
      */
-    public function ruleAdded(Rule\FilterRule $rule)
+    public function ruleAdded(Rule\FilterRule $relation)
     {
-        $this->getFilterRules()->add($rule);
+        $this->getFilterRules()->add($relation);
+
+        return $this;
+    }
+
+    /**
+     * Get formulas
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getFilterFormulas()
+    {
+        return $this->filterFormulas;
+    }
+
+    /**
+     * Notify the filter that it was added to FilterFormula relation.
+     * This should only be called by FilterFormula::setFilter()
+     * @param Formula\FilterFormula $relation
+     * @return Filter
+     */
+    public function formulaAdded(Rule\FilterFormula $relation)
+    {
+        $this->getFilterFormulas()->add($relation);
 
         return $this;
     }

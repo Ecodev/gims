@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * FilterRule allows us to "apply" a rule to a filter-questionnaire-part triple.
  *
- * @ORM\Entity(repositoryClass="Application\Repository\FilterRuleRepository")
+ * @ORM\Entity(repositoryClass="Application\Repository\Rule\FilterRuleRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="filter_rule_unique",columns={"filter_id", "questionnaire_id", "part_id", "rule_id"})})
  */
-class FilterRule extends \Application\Model\AbstractModel
+class FilterRule extends AbstractRelation
 {
 
     /**
@@ -34,16 +34,6 @@ class FilterRule extends \Application\Model\AbstractModel
     private $questionnaire;
 
     /**
-     * @var Part
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Model\Part")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * })
-     */
-    private $part;
-
-    /**
      * @var AbstractRule
      *
      * @ORM\ManyToOne(targetEntity="AbstractRule")
@@ -52,13 +42,6 @@ class FilterRule extends \Application\Model\AbstractModel
      * })
      */
     private $rule;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string")
-     */
-    private $justification;
 
     /**
      * Set filter
@@ -108,29 +91,6 @@ class FilterRule extends \Application\Model\AbstractModel
     }
 
     /**
-     * Set part
-     *
-     * @param \Application\Model\Part $part
-     * @return FilterRule
-     */
-    public function setPart(\Application\Model\Part $part)
-    {
-        $this->part = $part;
-
-        return $this;
-    }
-
-    /**
-     * Get part
-     *
-     * @return \Application\Model\Part
-     */
-    public function getPart()
-    {
-        return $this->part;
-    }
-
-    /**
      * Set rule
      *
      * @param AbstractRule $rule
@@ -151,29 +111,6 @@ class FilterRule extends \Application\Model\AbstractModel
     public function getRule()
     {
         return $this->rule;
-    }
-
-    /**
-     * Set justification
-     *
-     * @param string $justification
-     * @return FilterRule
-     */
-    public function setJustification($justification)
-    {
-        $this->justification = $justification;
-
-        return $this;
-    }
-
-    /**
-     * Get justification
-     *
-     * @return string
-     */
-    public function getJustification()
-    {
-        return $this->justification;
     }
 
 }

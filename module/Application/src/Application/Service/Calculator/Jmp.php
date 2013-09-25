@@ -5,6 +5,7 @@ namespace Application\Service\Calculator;
 use Application\Model\Part;
 use Application\Model\FilterSet;
 use Application\Model\Filter;
+use Application\Model\Rule\Formula;
 
 class Jmp extends Calculator
 {
@@ -22,7 +23,7 @@ class Jmp extends Calculator
      * @param \Application\Model\Part $part
      * @return array [[name => filterName, data => [year => flattenedRegression]]]]
      */
-    public function computeFlatten($yearStart, $yearEnd, FilterSet $filterSet, $questionnaires, Part $part, $excludedFilters = array())
+    public function computeFlattenAllYears($yearStart, $yearEnd, FilterSet $filterSet, $questionnaires, Part $part, $excludedFilters = array())
     {
         // @todo for sylvain. Property excluded filters is used in parent class. Check out @method computeFilterInternal
         $this->excludedFilters = $excludedFilters; // Can't believe I am writing that!
@@ -37,31 +38,7 @@ class Jmp extends Calculator
 
             $data = array();
             foreach ($years as $year) {
-
-                // If we are computing the total (not a specific part), we will sum all parts to get it
-                $oneYearResult = null;
-                $totalPopulation = null;
-                foreach ($parts as $p) {
-                    $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $p);
-                    $resultPart = $this->computeFlattenOneYear($year, $allRegressions);
-                    if (!is_null($resultPart)) {
-                        $population = $allRegressions[$year]['population'];
-                        $totalPopulation += $population;
-                        $oneYearResult += $resultPart * $population;
-                    }
-                }
-
-                if ($totalPopulation) {
-                    $oneYearResult = $oneYearResult / $totalPopulation;
-                }
-
-                // If sum of parts yielded nothing, then fallback to normal computation
-                if (is_null($oneYearResult)) {
-                    $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $part);
-                    $oneYearResult = $this->computeFlattenOneYear($year, $allRegressions);
-                }
-
-                $data[] = $oneYearResult;
+                $data[] = $this->computeFlattenOneYearWithFormula($year, $years, $filter, $questionnaires, $part, $parts);
             }
 
             $result[] = array(
@@ -71,6 +48,42 @@ class Jmp extends Calculator
         }
 
         return $result;
+    }
+
+    public function computeFlattenOneYearWithFormula($year, array $years, Filter $filter, $questionnaires, $part, array $parts, Formula $excludedFormula = null)
+    {
+        // If the filter has a formula, returns its value
+        foreach ($filter->getFilterFormulas() as $filterFormula) {
+            $formula = $filterFormula->getFormula();
+            if ($formula != $excludedFormula && $filterFormula->getPart() == $part) {
+                return $this->computeFormulaFlatten($formula, $year, $years, $filter, $questionnaires, $part, $parts);
+            }
+        }
+
+        // If we are computing the total (not a specific part), we will sum all parts to get it
+        $oneYearResult = null;
+        $totalPopulation = null;
+        foreach ($parts as $p) {
+            $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $p);
+            $resultPart = $this->computeFlattenOneYear($year, $allRegressions);
+            if (!is_null($resultPart)) {
+                $population = $allRegressions[$year]['population'];
+                $totalPopulation += $population;
+                $oneYearResult += $resultPart * $population;
+            }
+        }
+
+        if ($totalPopulation) {
+            $oneYearResult = $oneYearResult / $totalPopulation;
+        }
+
+        // If sum of parts yielded nothing, then fallback to normal computation
+        if (is_null($oneYearResult)) {
+            $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $part);
+            $oneYearResult = $this->computeFlattenOneYear($year, $allRegressions);
+        }
+
+        return $oneYearResult;
     }
 
     /**
@@ -161,7 +174,7 @@ class Jmp extends Calculator
 
         $allRegressions = array();
         foreach ($years as $year) {
-            $allRegressions[$year] = $this->computeRegression($year, $filter, $questionnaires, $part);
+            $allRegressions[$year] = $this->computeRegressionOneYear($year, $filter, $questionnaires, $part);
         }
 
         $this->cacheComputeRegressionForAllYears[$key] = $allRegressions;
@@ -177,14 +190,14 @@ class Jmp extends Calculator
      * @param \Application\Model\Part $part
      * @return array [regresssion => value, population => value]
      */
-    public function computeRegression($year, Filter $filter, $questionnaires, Part $part)
+    public function computeRegressionOneYear($year, Filter $filter, $questionnaires, Part $part)
     {
         $d = $this->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
 
         if ($year == $d['maxYear'] + 6) {
-            $result = $this->computeRegression($year - 4, $filter, $questionnaires, $part)['regression'];
+            $result = $this->computeRegressionOneYear($year - 4, $filter, $questionnaires, $part)['regression'];
         } elseif ($year == $d['minYear'] - 6) {
-            $result = $this->computeRegression($year + 4, $filter, $questionnaires, $part)['regression'];
+            $result = $this->computeRegressionOneYear($year + 4, $filter, $questionnaires, $part)['regression'];
         } elseif ($year < $d['maxYear'] + 3 && $year > $d['minYear'] - 3 && $d['count'] > 1 && $d['period'] > 4) {
             $result = $this->ifNonZeroValue($d['values'], function() use ($year, $d) {
                         return \PHPExcel_Calculation_Statistical::FORECAST($year, $d['values'], $d['years']);
@@ -263,7 +276,7 @@ class Jmp extends Calculator
 
             $population = $this->getPopulationRepository()->getOneByQuestionnaire($questionnaire, $part);
             $totalPopulation += $population->getPopulation();
-            $result['count'] ++;
+            $result['count']++;
 
             $result['values'][$questionnaire->getId()] = $computed;
         }
@@ -301,6 +314,50 @@ class Jmp extends Calculator
         }
 
         return 0;
+    }
+
+    /**
+     * Compute the value of a formula based on GIMS syntax.
+     * For details about syntax, @see \Application\Model\Rule\Formula
+     * @param \Application\Model\Rule\Formula $formula
+     * @param \Application\Model\Part $part
+     * @param \Application\Model\Filter $currentFilter
+     * @return mixed
+     * @throws \Exception
+     */
+    public function computeFormulaFlatten(Formula $formula, $year, array $years, Filter $currentFilter, $questionnaires, $part, array $parts)
+    {
+        $originalFormula = $formula->getFormula();
+
+        // Replace {F#12} with Filter regression value
+        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current)}/', function($matches) use ($year, $years, $currentFilter, $questionnaires, $part, $parts) {
+                    $filterId = $matches[1];
+
+                    $filter = $filterId == 'current' ? $currentFilter : $this->getFilterRepository()->findOneById($filterId);
+
+                    $value = $this->computeFlattenOneYearWithFormula($year, $years, $filter, $questionnaires, $part, $parts);
+
+                    return is_null($value) ? 'NULL' : $value;
+                }, $originalFormula);
+
+        // Replace {self} with computed value without this formula
+        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($formula, $year, $years, $currentFilter, $questionnaires, $part, $parts) {
+
+                    $value = $this->computeFlattenOneYearWithFormula($year, $years, $currentFilter, $questionnaires, $part, $parts, $formula);
+
+                    return is_null($value) ? 'NULL' : $value;
+                }, $convertedFormulas);
+
+        $result = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($convertedFormulas);
+
+        // In some edge cases, it may happen that we get FALSE or empty double quotes as result,
+        // we need to convert it to NULL, otherwise it will be converted to
+        // 0 later, which is not correct. Eg: '=IF(FALSE, NULL, NULL)', or '=IF(FALSE,NULL,"")'
+        if ($result === false || $result === '""') {
+            $result = null;
+        }
+
+        return $result;
     }
 
 }

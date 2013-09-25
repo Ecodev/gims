@@ -1,8 +1,8 @@
 <?php
 
-namespace Application\Repository;
+namespace Application\Repository\Rule;
 
-class QuestionnaireFormulaRepository extends AbstractRepository
+class QuestionnaireFormulaRepository extends \Application\Repository\AbstractRepository
 {
 
     public function getAllByFormulaName(array $formulaNames, array $questionnaires, \Application\Model\Part $part)

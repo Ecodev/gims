@@ -1,8 +1,8 @@
 <?php
 
-namespace Application\Repository;
+namespace Application\Repository\Rule;
 
-class RuleRepository extends AbstractRepository
+class RuleRepository extends \Application\Repository\AbstractRepository
 {
 
     /**
