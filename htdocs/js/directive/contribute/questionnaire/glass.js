@@ -1,68 +1,28 @@
-angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass', function ()
+angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass', function (QuestionAssistant)
 {
     return {
         restrict: 'E',
         templateUrl: '/template/contribute/questions',
         controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal)
         {
+            //$scope.questionnaire = {index:-1,level:-1}; // this question is used as container for all questions. Allow recursive operations with an unique parent.
             $scope.navigation = []; // used in next + previous buttons
-            $scope.hierarchicNavigation = []; // used in hierarchic menu
+            $scope.hierarchicQuestions = []; // used in hierarchic menu
             $scope.currentIndex = 0;
-            $scope.currentQuestion = null;
+            $scope.currentQuestion = 0;
             $scope.index = {}; // indexed answers
+            $scope.indexedQuestions = {};
+            $scope.score = {};
 
-            $scope.$watch('questions', function (questions)
-            {
-                if (questions.length > 0) {
-                    questions[0].active=true;
 
-                    angular.forEach(questions, function (question, index)
-                    {
-                        // prepare navigation
-                        question.index = index;
-                        if (question && question.type && !$scope.hasFinalParentChapters(index)) {
-                            $scope.navigation.push(question);
-                        }
-
-                        // restangularize answers
-                        angular.forEach(question.answers, function (answer)
-                        {
-                            answer = Restangular.restangularizeElement(null, answer, 'answer');
-                        });
-                    });
-
-                    // preparing hierarchy nav
-                    $scope.hierarchicNavigation = $scope.getChildren({navIndex:-1,level:-1});
-                    $scope.refreshQuestion();
-                }
+            $scope.$watch('questionnaire', function (){
+                $scope.initializeQuestionnaire();
             });
 
-            $scope.getChildren = function(question)
+            $scope.$watch('questions', function ()
             {
-                var elements = [];
-                for(var index = question.navIndex+1; index<$scope.navigation.length; index++){
-                    var testedQuestion = $scope.navigation[index];
-                    testedQuestion.navIndex=index;
-
-                    // si même niveau ou inférieur, inutile de poursuivre, c'est la fin du chapitre
-                    if (testedQuestion.level<=question.level) {
-                        return elements;
-                    }
-
-                    // si niveau directement inférieur = enfant
-                    if (testedQuestion.level==question.level+1) {
-                        elements.push(testedQuestion);
-                    }
-
-                    if (testedQuestion.level>=question.level+1) {
-                        testedQuestion['children'] = $scope.getChildren(testedQuestion);
-                    }
-                }
-
-                return elements;
-            }
-
-
+                $scope.initializeQuestionnaire();
+            });
 
             $scope.$watch('currentIndex', function (newIndex, old)
             {
@@ -70,6 +30,84 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                     $scope.refreshQuestion();
                 }
             });
+
+
+
+            $scope.initializeQuestionnaire = function()
+            {
+                if ($scope.questionnaire && $scope.questions.length > 0) {
+
+                    $scope.questionnaire.level = -1;
+                    $scope.questionnaire.index = -1;
+                    $scope.questionnaire.status= 4;
+
+                    $scope.questions[0].active=true;
+
+                    angular.forEach($scope.questions, function (question, index) {
+
+                        // assign key to each question -> navigation menu bar uses it to avoid loops
+                        question.index = index;
+
+                        $scope.indexedQuestions[question.id] = question;
+
+                        // prepare navigation
+                        question.hasFinalParentChapters = $scope.hasFinalParentChapters(index);
+                        if (question && question.type && !question.hasFinalParentChapters ) {
+                            question.navIndex = $scope.navigation.length;
+                            $scope.navigation.push(question);
+                        }
+
+                        // restangularize answers
+                        angular.forEach(question.answers, function (answer) {
+                            answer = Restangular.restangularizeElement(null, answer, 'answer');
+                        });
+                    });
+
+                    // preparing hierarchic questions : used for nav and for validation form
+                    $scope.hierarchicQuestions = $scope.getChildren($scope.questionnaire, $scope.questions);
+                    $scope.questionnaire.children = $scope.hierarchicQuestions;
+                    QuestionAssistant.updateQuestion($scope.questionnaire, $scope.index, true);
+                    $scope.refreshQuestion();
+                }
+
+            }
+
+
+
+
+
+
+            /**
+             *
+             * @param question that may contain children
+             * @param list a flat array with list of all questions
+             * @returns {Array} a list of children
+             */
+            $scope.getChildren = function(question, list)
+            {
+                var elements = [];
+                if (list && list.length>0) {
+                    for(var index = question.index+1; index<list.length; index++){
+                        var testedQuestion = list[index];
+
+                        // si même profondeur ou inférieure, inutile de poursuivre, c'est la fin du chapitre
+                        if (testedQuestion.level<=question.level) {
+                            return elements;
+                        }
+                        // si profondeur plus grande de 1 = enfant
+                        if (testedQuestion.level==question.level+1) {
+                            testedQuestion.parent = question;
+                            elements.push(testedQuestion);
+                        }
+
+                        if (testedQuestion.level>=question.level+1) {
+                            testedQuestion['children'] = $scope.getChildren(testedQuestion, list);
+                        }
+                    }
+
+                    return elements;
+                }
+            }
 
 
 
@@ -100,11 +138,11 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
 
             $scope.refreshQuestion = function ()
             {
-                $scope.currentQuestion = $scope.questions[$scope.navigation[$scope.currentIndex].index];
+                $scope.currentQuestion = $scope.navigation[$scope.currentIndex];
                 // if question is chapter, retrieve all the subquestions that are contained in the chapter for display.
                 if ($scope.currentQuestion.isFinal) {
                     var children = [];
-                    for (var i=Number($scope.currentQuestion.index)+1; i<$scope.questions.length; ++i) {
+                    for (var i=$scope.currentQuestion.index+1; i<$scope.questions.length; ++i) {
                         var testedQuestion = $scope.questions[i];
                         if (testedQuestion.level > $scope.currentQuestion.level) {
                             children.push(testedQuestion);
@@ -121,7 +159,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
 
                 // retrieve all parent chapter to display name and description
                 $scope.parentChapters = [];
-                var firstChapterPerLevel = $scope.getListOfFirstChapterPerLevel($scope.navigation[$scope.currentIndex].index, $scope.questions);
+                var firstChapterPerLevel = $scope.getListOfFirstChapterPerLevel($scope.currentQuestion.index, $scope.questions);
                 for (var q in firstChapterPerLevel) {
                     $scope.parentChapters.push($scope.questions[firstChapterPerLevel[q]]);
                 }
@@ -137,9 +175,13 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                 for(var i=0; i<firstChapterPerLevel.length; i++){
                     $scope.navigation[firstChapterPerLevel[i]].active_parent = true;
                 }
-                $scope.navigation[$scope.currentIndex].active = true;
-
+                $scope.currentQuestion.active = true;
             };
+
+
+
+
+
 
 
             /**
@@ -191,10 +233,6 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                 }
                 return false;
             };
-
-
         }
-
-
     }
 });

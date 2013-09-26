@@ -1,28 +1,32 @@
-angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
+angular.module('myApp.directives').directive('gimsChoiQuestion', function (QuestionAssistant) {
     return {
         restrict: 'E',
-        template:   "<table>"+
-                        "<tr>"+
-                        "   <td class='text-center' ng-repeat='part in question.parts' ng-switch='part.name'>"+
-                        "       <div ng-switch-when='Total'>National</div>"+
-                        "       <div ng-switch-when='Urban'>Urban</div>"+
-                        "       <div ng-switch-when='Rural'>Rural</div>"+
-                        "   </td><td></td>"+
-                        "</tr>"+
-                        "<tr ng-repeat='choice in question.choices' >"+
-                        "   <td class='text-center' ng-repeat='part in question.parts' >"+
-                        "       <div ng-switch='question.isMultiple'>"+
-                        "           <div ng-switch-when='true'>" +
-                        "               <input type='checkbox' ng-disabled='saving' ng-model='index[question.id+\"-\"+choice.id+\"-\"+part.id].isCheckboxChecked' ng-click='save(question.id,choice,part.id)' name='{{part.id}}-{{choice.id}}' />"+
-                        "           </div>"+
-                        "           <div ng-switch-when='false'>" +
-                        "               <input type='radio' ng-disabled='saving' ng-model='index[question.id+\"-\"+part.id].valuePercent' value='{{choice.value}}' ng-click='save(question.id,choice,part.id)' name='{{part.id}}-{{question.id}}'/>"+
-                        "           </div>"+
-                        "       </div>"+
-                        "   </td>"+
-                        "   <td><div style='padding-top:5px'>{{choice.name}}</div></td>"+
-                        "</tr>"+
-                    "</table>",
+        template:   "<ng-form name='innerQuestionForm'>" +
+                        "<table>"+
+                            "<tr>"+
+                            "   <td class='text-center' ng-repeat='part in question.parts' ng-switch='part.name'>"+
+                            "       <div ng-switch-when='Total'>National</div>"+
+                            "       <div ng-switch-when='Urban'>Urban</div>"+
+                            "       <div ng-switch-when='Rural'>Rural</div>"+
+                            "   </td><td></td>"+
+                            "</tr>"+
+                            "<tr ng-repeat='choice in question.choices' >"+
+                            "   <td class='text-center' ng-repeat='part in question.parts' >"+
+                            "       <div ng-switch='question.isMultiple'>"+
+                            "           <div ng-switch-when='true'>" +
+                            "               <input type='checkbox' ng-disabled='saving' ng-model='index[question.id+\"-\"+choice.id+\"-\"+part.id].isCheckboxChecked' ng-click='save(question,choice,part)' name='{{part.id}}-{{choice.is}}' />"+
+                            "           </div>"+
+                            "           <div ng-switch-when='false'>" +
+                            "               <input type='radio' ng-disabled='saving' ng-required='question.isCompulsory' ng-model='index[question.id+\"-\"+part.id].valueChoice.id' value='{{choice.id}}' ng-click='save(question,choice,part)' name='{{part.id}}-{{question.id}}'/>"+
+                            "           </div>"+
+                            "       </div>"+
+                            "   </td>"+
+                            "   <td><div style='padding-top:5px'>{{choice.name}}</div></td>"+
+                            "</tr>"+
+                        "</table><br/>"+
+                        "<span ng-show='question.isCompulsory' class='badge' ng-class=\"{'badge-important':question.status==1, 'badge-success':question.status==3}\">Required</span>"+
+                        "<span ng-show='!question.isCompulsory' class='badge' ng-class=\"{'badge-warning':question.status==2, 'badge-success':question.status==3}\">Optional</span>"+
+                    "</ng-form>",
 
         scope:{
             index:'=',
@@ -30,78 +34,35 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
         },
         controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal)
         {
-            $scope.$watch('question', function(question) 
-            {
-                angular.forEach(question.parts, function(part) {
-                    if(question.isMultiple){
-                        angular.forEach(question.choices, function(choice) {
-                            var identifier = question.id+"-"+choice.id+"-"+part.id;
-                            if (!$scope.index[identifier] || ($scope.index[identifier] && $scope.index[identifier].isCheckboxChecked===null)) {
-                                $scope.index[identifier] = $scope.findAnswer(question, part.id, choice.id);
-                            }
-                        });
-                    }else{
-                        var identifier = question.id+"-"+part.id;
-                        if (!$scope.index[identifier] || ($scope.index[identifier] && ($scope.index[identifier].valuePercent===null || $scope.index[identifier].valuePercent===undefined))) {
-                            $scope.index[identifier] = $scope.findAnswer(question, part.id);
-                        }
-                    }
-                });
-            });
-
-
-
-            $scope.findAnswer = function (question, pid, cid)
-            {
-                for(var key in question.answers){
-                    var testedAnswer = question.answers[key];
-                    if (testedAnswer.part && testedAnswer.part.id==pid) {
-                        if (!question.isMultiple) {
-                            return testedAnswer;
-                        } else if (question.isMultiple &&  testedAnswer.valueChoice.id==cid) {
-                            testedAnswer.isCheckboxChecked = true;
-                            return testedAnswer;
-                        }
-                    }
-                }
-                var emptyChoice = {
-                    questionnaire : Number(question.parentResource.id),
-                    part : pid,
-                    question : question.id,
-                    isCheckboxChecked :null
-                }
-                if(cid) emptyChoice.valueChoice = {id:cid};
-                return emptyChoice;
-            }
-
-
-
             $scope.saving = false;
-            $scope.save = function (question_id, choice, part_id)
+            $scope.save = function (question, choice, part)
             {
                 $scope.saving = true;
                 if($scope.question.isMultiple){
-                    var identifier = question_id+"-"+choice.id+"-"+part_id;
+                    var identifier = question.id+"-"+choice.id+"-"+part.id;
                 }else{
-                    var identifier = question_id+"-"+part_id;
+                    var identifier = question.id+"-"+part.id;
                 }
 
                 var newAnswer = $scope.index[identifier];
                 newAnswer.valueChoice=choice;
+                newAnswer.valuePercent=choice.value;
 
-                // if id is setted, that means it has just been removed (click event)
+
+
+                // if id setted on radio button, update
                 if (newAnswer.id && !$scope.question.isMultiple) {
-                    newAnswer.put().then(function(){$scope.saving=false;});
+                    newAnswer.put().then(function(){
+                        $scope.saving=false;
+                        QuestionAssistant.updateQuestion(question, $scope.index, false, true);
+                    });
+
+                // if id is setted on checkbox element, that means that there already is a result and we want to remove it
                 }else if (newAnswer.id && $scope.question.isMultiple) {
                     newAnswer.remove().then(function(){
-                        $scope.index[identifier] = {
-                            questionnaire : Number($scope.question.parentResource.id),
-                            part : part_id,
-                            valueChoice : choice,
-                            question : $scope.question.id,
-                            isCheckboxChecked: false
-                        };
+                        $scope.index[identifier] = QuestionAssistant.getEmptyChoiceAnswer(question, part, choice);
                         $scope.saving=false;
+                        QuestionAssistant.updateQuestion(question, $scope.index, false, true);
                     });
 
                 // if don't exists -> create
@@ -110,6 +71,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function () {
                         if($scope.question.isMultiple) answer.isCheckboxChecked = true;
                         $scope.index[identifier] = answer;
                         $scope.saving=false;
+                        QuestionAssistant.updateQuestion(question, $scope.index, false, true);
                     });
                 }
 

@@ -34,6 +34,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
 
         },
         controller: function($scope, $attrs, Restangular, CachedRestangular, $location, $route, $routeParams) {
+
             var api = $scope.api;
             var name = $scope.name || api; // default key to same name as route
             var fromUrl = name == 'id' ? $routeParams.id : $location.search()[name];

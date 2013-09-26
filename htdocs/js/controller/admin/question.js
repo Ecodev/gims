@@ -8,7 +8,6 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
     $scope.sending = false;
 
-
     // @TODO : manage value null and integer value
     $scope.percentages = [
         {text: '100%', value: '1.000'},
@@ -56,7 +55,6 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
         if ($scope.question.type == 'Chapter') {
             $scope.isChapter=true;
         }
-
     }
 
     $scope.removeChapter = function()

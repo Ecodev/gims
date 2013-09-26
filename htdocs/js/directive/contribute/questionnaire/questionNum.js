@@ -1,86 +1,60 @@
-angular.module('myApp.directives').directive('gimsNumQuestion', function () {
+angular.module('myApp.directives').directive('gimsNumQuestion', function (QuestionAssistant) {
     return {
         restrict: 'E',
-        template: "<div class='span2' ng-repeat='part in question.parts'>"+
-                "     <label for='numerical-{{question.id}}-{{part.id}}'>"+
-                "         <div ng-switch='part.name'>" +
-                "               <div ng-switch-when='Total'>National</div>"+
-                "               <div ng-switch-when='Urban'>Urban</div>"+
-                "               <div ng-switch-when='Rural'>Rural</div>"+
-                "         </div>"+
-                "         <input class='span12' ng-disabled='saving' type='number' ng-model='index[question.id+\"-\"+part.id].valueAbsolute' ng-blur='save(question.id,part.id,$event)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'/>"+
-                "     </label>"+
-                " </div>",
+        template:   "<ng-form name='innerQuestionForm'> " +
+                        "<div class='span12'>"+
+                            "<div ng-form name='innerQuestionForm' class='span2' ng-repeat='part in question.parts'>"+
+                            "     <div ng-switch='part.name'>" +
+                            "           <div ng-switch-when='Total'>National</div>"+
+                            "           <div ng-switch-when='Urban'>Urban</div>"+
+                            "           <div ng-switch-when='Rural'>Rural</div>"+
+                            "     </div>"+
+                            "     <input class='span12' ng-disabled='saving' type='number' ng-required='question.isCompulsory' ng-model='index[question.id+\"-\"+part.id].valueAbsolute' ng-blur='save(question,part)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'/>"+
+                            "</div>"+
+                        "</div>"+
+                        "<span ng-show='question.isCompulsory' class='badge' ng-class=\"{'badge-important':question.status==1, 'badge-success':question.status==3}\">Required</span>"+
+                        "<span ng-show='!question.isCompulsory' class='badge' ng-class=\"{'badge-warning':question.status==2, 'badge-success':question.status==3}\">Optional</span>"+
+                    "</ng-form>",
 
         scope:{
             index:'=',
             question:'='
         },
+
         controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal)
         {
-            $scope.$watch('question', function (question, oldQuestion)
-            {
-                if( question===oldQuestion ){
-                    angular.forEach(question.parts, function(part) {
-                        if (!$scope.index[question.id+'-'+part.id] || ($scope.index[question.id+'-'+part.id] && !$scope.index[question.id+'-'+part.id].valueAbsolute)) {
-                            $scope.index[question.id+"-"+part.id] = $scope.findAnswer(question, part.id);
-                        }
-                    });
-                }
-            });
-
-
-            $scope.findAnswer = function (question, pid)
-            {
-                for(var key in question.answers){
-                    var testedAnswer = question.answers[key];
-                    if (testedAnswer.part && testedAnswer.part.id==pid) {
-                        delete testedAnswer.valueChoice;
-                        return testedAnswer;
-                    }
-                }
-                return {
-                    questionnaire : Number(question.parentResource.id),
-                    part : pid,
-                    question : question.id
-                }
-            }
-
-
-
-
-
-
-
             $scope.saving=false;
-            $scope.save = function (question_id, part_id,event)
+            $scope.save = function (question, part)
             {
                 $scope.saving=true;
-                var newAnswer = $scope.index[question_id+"-"+part_id];
+                var newAnswer = $scope.index[question.id+"-"+part.id];
 
                 // if exists but value not empty -> update
                 if (newAnswer.id && newAnswer.valueAbsolute) {
-                    newAnswer.put().then(function(){$scope.saving=false;});
+                    newAnswer.put().then(function(){
+                        $scope.saving=false;
+                        QuestionAssistant.updateQuestion(question, $scope.index, false, true);
+                    });
 
-                    // if dont exists -> create
+                // if dont exists -> create
                 } else if (!newAnswer.id && newAnswer.valueAbsolute) {
                     Restangular.all('answer').post(newAnswer).then(function(answer){
-                        $scope.index[question_id+"-"+part_id] = answer;
+                        $scope.index[question.id+"-"+part.id] = answer;
                         $scope.saving=false;
+                        QuestionAssistant.updateQuestion(question, $scope.index, false, true);
                     });
 
-                    // if exists and empty -> remove
-                } else if (newAnswer.id && newAnswer.valueAbsolute===null ){
+                // if exists and empty -> remove
+                } else if (newAnswer.id && (newAnswer.valueAbsolute===undefined || newAnswer.valueAbsolute===null)) {
                     newAnswer.remove().then(function(){
-                        $scope.index[question_id+"-"+part_id] = {
-                            questionnaire : Number($scope.question.parentResource.id),
-                            part : part_id,
-                            question : $scope.question.id
-                        };
+                        $scope.index[question.id+"-"+part.id] = QuestionAssistant.getEmptyTextAnswer(question, part.id);
                         $scope.saving=false;
+                        QuestionAssistant.updateQuestion(question, $scope.index, false, true);
                     });
+                } else {
+                    $scope.saving=false;
                 }
-            }
+            };
 
         }
     }
