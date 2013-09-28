@@ -142,9 +142,9 @@ class Jmp extends AbstractImporter
                     'excludes' => 93,
                     'isImproved' => false,
                     'formulas' => array(
-                        3 => '=IF(Total improved >= 0.995, 0, {self})',
-                        4 => '=IF(Total improved >= 0.995, 0, {self})',
-                        5 => '=IF(Total improved = 1, 0, {self})',
+                        3 => '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, {self}), NULL)',
+                        4 => '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, {self}), NULL)',
+                        5 => '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, {self}), NULL)',
                     ),
                 ),
                 "Other Improved" => array(
@@ -164,9 +164,9 @@ class Jmp extends AbstractImporter
                     'excludes' => null,
                     'isImproved' => false,
                     'formulas' => array(
-                        3 => '=IF(Total improved = 1, 0, 1 - Total improved - Surface water)',
-                        4 => '=IF(Total improved = 1, 0, 1 - Total improved - Surface water)',
-                        5 => '=IF(Total improved = 1, 0, 1 - Total improved - Surface water)',
+                        3 => '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)',
+                        4 => '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)',
+                        5 => '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)',
                     ),
                 ),
             ),
@@ -327,9 +327,9 @@ class Jmp extends AbstractImporter
                     'excludes' => null,
                     'isImproved' => false,
                     'formulas' => array(
-                        3 => '=IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation)',
-                        4 => '=IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation)',
-                        5 => '=IF(Improved + shared + Open defecation >= 1, 0, IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation))',
+                        3 => '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation), NULL)',
+                        4 => '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation), NULL)',
+                        5 => '=IF(ISNUMBeR(Improved + shared), IF(Improved + shared + Open defecation >= 1, 0, IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation)), NULL)',
                     ),
                 ),
                 "Open defecation" => array(
@@ -338,9 +338,9 @@ class Jmp extends AbstractImporter
                     'excludes' => 98,
                     'isImproved' => false,
                     'formulas' => array(
-                        3 => '=IF(Improved + shared >= 0.995, 0, {self})',
-                        4 => '=IF(Improved + shared >= 0.995, 0, {self})',
-                        5 => '=IF(Improved + shared = 1, 0, {self})',
+                        3 => '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, {self}), NULL)',
+                        4 => '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, {self}), NULL)',
+                        5 => '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, {self}), NULL)',
                     ),
                 ),
             ),
