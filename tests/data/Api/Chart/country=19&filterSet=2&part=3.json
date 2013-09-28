@@ -1,0 +1,878 @@
+{
+    "chart": {
+        "height": 600,
+        "animation": false
+    },
+    "title": {
+        "text": "Bangladesh - Total"
+    },
+    "subtitle": {
+        "text": "Estimated proportion of the population for Water: use of improved and unimproved sources (JMP data)"
+    },
+    "xAxis": {
+        "title": {
+            "enabled": true,
+            "text": "Year"
+        },
+        "labels": {
+            "step": 1,
+            "format": "{value}"
+        },
+        "allowDecimals": false
+    },
+    "yAxis": {
+        "title": {
+            "enabled": true,
+            "text": "Coverage (%)"
+        },
+        "min": 0,
+        "max": 100
+    },
+    "credits": {
+        "enabled": false
+    },
+    "plotOptions": {
+        "line": {
+            "marker": {
+                "enabled": false
+            },
+            "tooltip": {
+                "headerFormat": "<span style=\"font-size: 10px\">Estimate for {point.key}<\/span><br\/>",
+                "valueSuffix": "%"
+            },
+            "pointStart": 1980,
+            "dataLabels": {
+                "enabled": false
+            }
+        },
+        "scatter": {
+            "dataLabels": {
+                "enabled": true
+            },
+            "tooltip": {
+                "headerFormat": "",
+                "pointFormat": "<b>{point.name}<\/b><br\/>{point.y}% ({point.x})"
+            },
+            "marker": {
+                "states": {
+                    "select": {
+                        "lineColor": "#DDD",
+                        "fillColor": "#DDD"
+                    }
+                }
+            }
+        }
+    },
+    "series": [
+        {
+            "name": "Total improved",
+            "data": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                76.1,
+                76.1,
+                76.2,
+                76.2,
+                76.3,
+                76.7,
+                77.1,
+                77.5,
+                77.9,
+                78.2,
+                78.6,
+                79.0,
+                79.4,
+                79.7,
+                80.1,
+                80.5,
+                80.8,
+                81.2,
+                81.5,
+                81.9,
+                82.2,
+                82.6,
+                82.9,
+                83.2
+            ],
+            "color": "#2f7ed8",
+            "type": "line"
+        },
+        {
+            "name": "Piped onto premises",
+            "data": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                4.5,
+                4.6,
+                4.7,
+                4.9,
+                4.9,
+                5.1,
+                5.3,
+                5.5,
+                5.7,
+                5.9,
+                6.2,
+                6.4,
+                6.7,
+                6.9,
+                7.1,
+                7.4,
+                7.7,
+                7.9,
+                8.2,
+                8.5,
+                8.7,
+                9.0,
+                9.3,
+                9.6
+            ],
+            "color": "#0d233a",
+            "type": "line"
+        },
+        {
+            "name": "Surface water",
+            "data": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                3.0,
+                3.0,
+                2.9,
+                2.9,
+                2.9,
+                2.8,
+                2.7,
+                2.6,
+                2.6,
+                2.5,
+                2.4,
+                2.3,
+                2.2,
+                2.1,
+                2.0,
+                2.0,
+                1.9,
+                1.8,
+                1.7,
+                1.6,
+                1.6,
+                1.5,
+                1.4,
+                1.3
+            ],
+            "color": "#8bbc21",
+            "type": "line"
+        },
+        {
+            "name": "Other Improved",
+            "data": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                71.5,
+                71.5,
+                71.4,
+                71.4,
+                71.4,
+                71.6,
+                71.8,
+                72.0,
+                72.1,
+                72.3,
+                72.4,
+                72.6,
+                72.7,
+                72.8,
+                73.0,
+                73.1,
+                73.2,
+                73.3,
+                73.3,
+                73.4,
+                73.5,
+                73.5,
+                73.6,
+                73.6
+            ],
+            "color": "#910000",
+            "type": "line"
+        },
+        {
+            "name": "Other Unimproved",
+            "data": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                21.0,
+                20.9,
+                20.9,
+                20.8,
+                20.8,
+                20.5,
+                20.2,
+                19.9,
+                19.6,
+                19.3,
+                19.0,
+                18.7,
+                18.4,
+                18.1,
+                17.8,
+                17.6,
+                17.3,
+                17.0,
+                16.7,
+                16.5,
+                16.2,
+                15.9,
+                15.7,
+                15.4
+            ],
+            "color": "#1aadce",
+            "type": "line"
+        },
+        {
+            "type": "scatter",
+            "color": "#2f7ed8",
+            "marker": {
+                "symbol": "circle"
+            },
+            "name": "Total improved",
+            "allowPointSelect": false,
+            "data": [
+                {
+                    "name": "DHS94",
+                    "id": "183:1",
+                    "questionnaire": 1,
+                    "x": 1994,
+                    "y": 77.5
+                },
+                {
+                    "name": "MICS94",
+                    "id": "183:2",
+                    "questionnaire": 2,
+                    "x": 1994,
+                    "y": 78.5
+                },
+                {
+                    "name": "MICS95",
+                    "id": "183:3",
+                    "questionnaire": 3,
+                    "x": 1995,
+                    "y": 78.2
+                },
+                {
+                    "name": "MICS96",
+                    "id": "183:4",
+                    "questionnaire": 4,
+                    "x": 1996,
+                    "y": 79.8
+                },
+                {
+                    "name": "DHS97",
+                    "id": "183:5",
+                    "questionnaire": 5,
+                    "x": 1997,
+                    "y": 79.1
+                },
+                {
+                    "name": "SVRS98",
+                    "id": "183:6",
+                    "questionnaire": 6,
+                    "x": 1998,
+                    "y": 80.5
+                },
+                {
+                    "name": "MICS99",
+                    "id": "183:7",
+                    "questionnaire": 7,
+                    "x": 1999,
+                    "y": 98.1
+                },
+                {
+                    "name": "PP00",
+                    "id": "183:8",
+                    "questionnaire": 8,
+                    "x": 2000,
+                    "y": 97.8
+                },
+                {
+                    "name": "DHS00",
+                    "id": "183:9",
+                    "questionnaire": 9,
+                    "x": 2000,
+                    "y": 79.0
+                },
+                {
+                    "name": "HIES00",
+                    "id": "183:10",
+                    "questionnaire": 10,
+                    "x": 2000,
+                    "y": 73.3
+                },
+                {
+                    "name": "WHS03",
+                    "id": "183:12",
+                    "questionnaire": 12,
+                    "x": 2003,
+                    "y": 79.7
+                },
+                {
+                    "name": "DHS04",
+                    "id": "183:13",
+                    "questionnaire": 13,
+                    "x": 2004,
+                    "y": 79.7
+                },
+                {
+                    "name": "HIES05",
+                    "id": "183:14",
+                    "questionnaire": 14,
+                    "x": 2005,
+                    "y": 79.8
+                },
+                {
+                    "name": "MICS06",
+                    "id": "183:15",
+                    "questionnaire": 15,
+                    "x": 2006,
+                    "y": 79.6
+                },
+                {
+                    "name": "DHS07",
+                    "id": "183:16",
+                    "questionnaire": 16,
+                    "x": 2007,
+                    "y": 79.3
+                },
+                {
+                    "name": "MICS09",
+                    "id": "183:17",
+                    "questionnaire": 17,
+                    "x": 2009,
+                    "y": 85.4
+                },
+                {
+                    "name": "CEN11",
+                    "id": "183:18",
+                    "questionnaire": 18,
+                    "x": 2011,
+                    "y": 84.7
+                },
+                {
+                    "name": "DHS11",
+                    "id": "183:19",
+                    "questionnaire": 19,
+                    "x": 2011,
+                    "y": 85.8
+                }
+            ]
+        },
+        {
+            "type": "scatter",
+            "color": "#0d233a",
+            "marker": {
+                "symbol": "diamond"
+            },
+            "name": "Piped onto premises",
+            "allowPointSelect": false,
+            "data": [
+                {
+                    "name": "DHS94",
+                    "id": "184:1",
+                    "questionnaire": 1,
+                    "x": 1994,
+                    "y": 5.9
+                },
+                {
+                    "name": "MICS94",
+                    "id": "184:2",
+                    "questionnaire": 2,
+                    "x": 1994,
+                    "y": 5.6
+                },
+                {
+                    "name": "MICS95",
+                    "id": "184:3",
+                    "questionnaire": 3,
+                    "x": 1995,
+                    "y": 5.6
+                },
+                {
+                    "name": "MICS96",
+                    "id": "184:4",
+                    "questionnaire": 4,
+                    "x": 1996,
+                    "y": 6.8
+                },
+                {
+                    "name": "DHS97",
+                    "id": "184:5",
+                    "questionnaire": 5,
+                    "x": 1997,
+                    "y": 7.5
+                },
+                {
+                    "name": "SVRS98",
+                    "id": "184:6",
+                    "questionnaire": 6,
+                    "x": 1998,
+                    "y": 11.7
+                },
+                {
+                    "name": "DHS00",
+                    "id": "184:9",
+                    "questionnaire": 9,
+                    "x": 2000,
+                    "y": 5.8
+                },
+                {
+                    "name": "HIES00",
+                    "id": "184:10",
+                    "questionnaire": 10,
+                    "x": 2000,
+                    "y": 6.0
+                },
+                {
+                    "name": "WHS03",
+                    "id": "184:12",
+                    "questionnaire": 12,
+                    "x": 2003,
+                    "y": 6.7
+                },
+                {
+                    "name": "DHS04",
+                    "id": "184:13",
+                    "questionnaire": 13,
+                    "x": 2004,
+                    "y": 5.9
+                },
+                {
+                    "name": "HIES05",
+                    "id": "184:14",
+                    "questionnaire": 14,
+                    "x": 2005,
+                    "y": 5.8
+                },
+                {
+                    "name": "MICS06",
+                    "id": "184:15",
+                    "questionnaire": 15,
+                    "x": 2006,
+                    "y": 6.1
+                },
+                {
+                    "name": "DHS07",
+                    "id": "184:16",
+                    "questionnaire": 16,
+                    "x": 2007,
+                    "y": 7.1
+                },
+                {
+                    "name": "MICS09",
+                    "id": "184:17",
+                    "questionnaire": 17,
+                    "x": 2009,
+                    "y": 10.0
+                },
+                {
+                    "name": "CEN11",
+                    "id": "184:18",
+                    "questionnaire": 18,
+                    "x": 2011,
+                    "y": 12.9
+                },
+                {
+                    "name": "DHS11",
+                    "id": "184:19",
+                    "questionnaire": 19,
+                    "x": 2011,
+                    "y": 11.4
+                }
+            ]
+        },
+        {
+            "type": "scatter",
+            "color": "#8bbc21",
+            "marker": {
+                "symbol": "square"
+            },
+            "name": "Surface water",
+            "allowPointSelect": false,
+            "data": [
+                {
+                    "name": "DHS94",
+                    "id": "185:1",
+                    "questionnaire": 1,
+                    "x": 1994,
+                    "y": 3.2
+                },
+                {
+                    "name": "DHS97",
+                    "id": "185:5",
+                    "questionnaire": 5,
+                    "x": 1997,
+                    "y": 2.3
+                },
+                {
+                    "name": "MICS99",
+                    "id": "185:7",
+                    "questionnaire": 7,
+                    "x": 1999,
+                    "y": 2.7
+                },
+                {
+                    "name": "PP00",
+                    "id": "185:8",
+                    "questionnaire": 8,
+                    "x": 2000,
+                    "y": 2.6
+                },
+                {
+                    "name": "DHS00",
+                    "id": "185:9",
+                    "questionnaire": 9,
+                    "x": 2000,
+                    "y": 2.5
+                },
+                {
+                    "name": "HIES00",
+                    "id": "185:10",
+                    "questionnaire": 10,
+                    "x": 2000,
+                    "y": 1.8
+                },
+                {
+                    "name": "WHS03",
+                    "id": "185:12",
+                    "questionnaire": 12,
+                    "x": 2003,
+                    "y": 1.9
+                },
+                {
+                    "name": "DHS04",
+                    "id": "185:13",
+                    "questionnaire": 13,
+                    "x": 2004,
+                    "y": 1.9
+                },
+                {
+                    "name": "HIES05",
+                    "id": "185:14",
+                    "questionnaire": 14,
+                    "x": 2005,
+                    "y": 0.8
+                },
+                {
+                    "name": "MICS06",
+                    "id": "185:15",
+                    "questionnaire": 15,
+                    "x": 2006,
+                    "y": 1.8
+                },
+                {
+                    "name": "DHS07",
+                    "id": "185:16",
+                    "questionnaire": 16,
+                    "x": 2007,
+                    "y": 2.2
+                },
+                {
+                    "name": "MICS09",
+                    "id": "185:17",
+                    "questionnaire": 17,
+                    "x": 2009,
+                    "y": 1.3
+                },
+                {
+                    "name": "CEN11",
+                    "id": "185:18",
+                    "questionnaire": 18,
+                    "x": 2011,
+                    "y": 2.0
+                },
+                {
+                    "name": "DHS11",
+                    "id": "185:19",
+                    "questionnaire": 19,
+                    "x": 2011,
+                    "y": 1.1
+                }
+            ]
+        },
+        {
+            "type": "scatter",
+            "color": "#910000",
+            "marker": {
+                "symbol": "triangle"
+            },
+            "name": "Other Improved",
+            "allowPointSelect": false,
+            "data": [
+                {
+                    "name": "DHS94",
+                    "id": "186:1",
+                    "questionnaire": 1,
+                    "x": 1994,
+                    "y": 87.1
+                },
+                {
+                    "name": "MICS94",
+                    "id": "186:2",
+                    "questionnaire": 2,
+                    "x": 1994,
+                    "y": 87.1
+                },
+                {
+                    "name": "MICS95",
+                    "id": "186:3",
+                    "questionnaire": 3,
+                    "x": 1995,
+                    "y": 86.5
+                },
+                {
+                    "name": "MICS96",
+                    "id": "186:4",
+                    "questionnaire": 4,
+                    "x": 1996,
+                    "y": 88.2
+                },
+                {
+                    "name": "DHS97",
+                    "id": "186:5",
+                    "questionnaire": 5,
+                    "x": 1997,
+                    "y": 88.2
+                },
+                {
+                    "name": "SVRS98",
+                    "id": "186:6",
+                    "questionnaire": 6,
+                    "x": 1998,
+                    "y": 84.3
+                },
+                {
+                    "name": "MICS99",
+                    "id": "186:7",
+                    "questionnaire": 7,
+                    "x": 1999,
+                    "y": 98.1
+                },
+                {
+                    "name": "PP00",
+                    "id": "186:8",
+                    "questionnaire": 8,
+                    "x": 2000,
+                    "y": 97.8
+                },
+                {
+                    "name": "DHS00",
+                    "id": "186:9",
+                    "questionnaire": 9,
+                    "x": 2000,
+                    "y": 90.7
+                },
+                {
+                    "name": "HIES00",
+                    "id": "186:10",
+                    "questionnaire": 10,
+                    "x": 2000,
+                    "y": 89.1
+                },
+                {
+                    "name": "WHS03",
+                    "id": "186:12",
+                    "questionnaire": 12,
+                    "x": 2003,
+                    "y": 90.6
+                },
+                {
+                    "name": "DHS04",
+                    "id": "186:13",
+                    "questionnaire": 13,
+                    "x": 2004,
+                    "y": 91.3
+                },
+                {
+                    "name": "HIES05",
+                    "id": "186:14",
+                    "questionnaire": 14,
+                    "x": 2005,
+                    "y": 89.1
+                },
+                {
+                    "name": "MICS06",
+                    "id": "186:15",
+                    "questionnaire": 15,
+                    "x": 2006,
+                    "y": 91.5
+                },
+                {
+                    "name": "DHS07",
+                    "id": "186:16",
+                    "questionnaire": 16,
+                    "x": 2007,
+                    "y": 90.0
+                },
+                {
+                    "name": "MICS09",
+                    "id": "186:17",
+                    "questionnaire": 17,
+                    "x": 2009,
+                    "y": 88.1
+                },
+                {
+                    "name": "CEN11",
+                    "id": "186:18",
+                    "questionnaire": 18,
+                    "x": 2011,
+                    "y": 80.6
+                },
+                {
+                    "name": "DHS11",
+                    "id": "186:19",
+                    "questionnaire": 19,
+                    "x": 2011,
+                    "y": 87.2
+                }
+            ]
+        },
+        {
+            "type": "scatter",
+            "color": "#1aadce",
+            "marker": {
+                "symbol": "triangle-down"
+            },
+            "name": "Other Unimproved",
+            "allowPointSelect": false,
+            "data": [
+                {
+                    "name": "DHS94",
+                    "id": "187:1",
+                    "questionnaire": 1,
+                    "x": 1994,
+                    "y": 0.1
+                },
+                {
+                    "name": "MICS94",
+                    "id": "187:2",
+                    "questionnaire": 2,
+                    "x": 1994,
+                    "y": 3.0
+                },
+                {
+                    "name": "MICS95",
+                    "id": "187:3",
+                    "questionnaire": 3,
+                    "x": 1995,
+                    "y": 3.0
+                },
+                {
+                    "name": "MICS96",
+                    "id": "187:4",
+                    "questionnaire": 4,
+                    "x": 1996,
+                    "y": 3.0
+                },
+                {
+                    "name": "DHS97",
+                    "id": "187:5",
+                    "questionnaire": 5,
+                    "x": 1997,
+                    "y": 0.2
+                },
+                {
+                    "name": "SVRS98",
+                    "id": "187:6",
+                    "questionnaire": 6,
+                    "x": 1998,
+                    "y": 0.7
+                },
+                {
+                    "name": "DHS00",
+                    "id": "187:9",
+                    "questionnaire": 9,
+                    "x": 2000,
+                    "y": 0.0
+                },
+                {
+                    "name": "HIES00",
+                    "id": "187:10",
+                    "questionnaire": 10,
+                    "x": 2000,
+                    "y": 0.2
+                },
+                {
+                    "name": "HIES05",
+                    "id": "187:14",
+                    "questionnaire": 14,
+                    "x": 2005,
+                    "y": 0.4
+                },
+                {
+                    "name": "MICS06",
+                    "id": "187:15",
+                    "questionnaire": 15,
+                    "x": 2006,
+                    "y": 0.1
+                },
+                {
+                    "name": "DHS07",
+                    "id": "187:16",
+                    "questionnaire": 16,
+                    "x": 2007,
+                    "y": 0.1
+                },
+                {
+                    "name": "MICS09",
+                    "id": "187:17",
+                    "questionnaire": 17,
+                    "x": 2009,
+                    "y": 0.2
+                },
+                {
+                    "name": "CEN11",
+                    "id": "187:18",
+                    "questionnaire": 18,
+                    "x": 2011,
+                    "y": 0.4
+                },
+                {
+                    "name": "DHS11",
+                    "id": "187:19",
+                    "questionnaire": 19,
+                    "x": 2011,
+                    "y": 0.1
+                }
+            ]
+        }
+    ]
+}

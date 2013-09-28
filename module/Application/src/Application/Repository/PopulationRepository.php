@@ -13,7 +13,6 @@ class PopulationRepository extends AbstractRepository
      */
     public function getOneByQuestionnaire(\Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part)
     {
-
         $query = $this->getEntityManager()->createQuery("SELECT p FROM Application\Model\Population p
             JOIN p.country c
             JOIN c.geoname g
@@ -23,8 +22,7 @@ class PopulationRepository extends AbstractRepository
             AND q = :questionnaire
             AND p.year = :year
             AND p.part = :part"
-                )
-        ;
+        );
 
         $params = array(
             'questionnaire' => $questionnaire,
@@ -33,7 +31,34 @@ class PopulationRepository extends AbstractRepository
         );
 
         $query->setParameters($params);
+        $population = $query->getOneOrNullResult();
 
+        return $population;
+    }
+
+    /**
+     * Returns the population for given geoname, part and year
+     * @param \Application\Model\Geoname $geoname
+     * @param \Application\Model\Part $part
+     * @return \Application\Model\Population
+     */
+    public function getOneByGeoname(\Application\Model\Geoname $geoname, \Application\Model\Part $part, $year)
+    {
+        $query = $this->getEntityManager()->createQuery("SELECT p FROM Application\Model\Population p
+            JOIN p.country country
+            WHERE
+            country.geoname = :geoname
+            AND p.year = :year
+            AND p.part = :part"
+        );
+
+        $params = array(
+            'geoname' => $geoname,
+            'year' => $year,
+            'part' => $part,
+        );
+
+        $query->setParameters($params);
         $population = $query->getOneOrNullResult();
 
         return $population;

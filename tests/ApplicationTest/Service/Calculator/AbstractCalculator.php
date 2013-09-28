@@ -6,6 +6,11 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
 {
 
     /**
+     * @var \Application\Model\Geoname
+     */
+    protected $geoname;
+
+    /**
      * @var \Application\Model\Filter
      */
     protected $filter1;
@@ -164,6 +169,8 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     {
         parent::setUp();
 
+        $this->geoname = new \Application\Model\Geoname('test geoname');
+
         $this->filter1 = new \Application\Model\Filter('cat 1');
         $this->filter11 = new \Application\Model\Filter('cat 1.1 (sum of 1.*.1)');
         $this->filter12 = new \Application\Model\Filter('cat 1.2 (sum of 1.*.2)');
@@ -200,7 +207,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $this->questionnaire->expects($this->any())
                 ->method('getId')
                 ->will($this->returnValue(1));
-        $this->questionnaire->setSurvey($survey);
+        $this->questionnaire->setSurvey($survey)->setGeoname($this->geoname);
 
         $this->question131 = new \Application\Model\Question\NumericQuestion();
         $this->question132 = new \Application\Model\Question\NumericQuestion();

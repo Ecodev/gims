@@ -67,7 +67,7 @@ class Jmp extends Calculator
             $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $p);
             $resultPart = $this->computeFlattenOneYear($year, $allRegressions);
             if (!is_null($resultPart)) {
-                $population = $allRegressions[$year]['population'];
+                $population = $this->getPopulationRepository()->getOneByGeoname(reset($questionnaires)->getGeoname(), $p, $year)->getPopulation();
                 $totalPopulation += $population;
                 $oneYearResult += $resultPart * $population;
             }
@@ -100,8 +100,8 @@ class Jmp extends Calculator
         }
 
         $nonNullRegressions = array_reduce($allRegressions, function($result, $regression) {
-                    if (!is_null($regression['regression'])) {
-                        $result [] = $regression['regression'];
+                    if (!is_null($regression)) {
+                        $result [] = $regression;
                     }
 
                     return $result;
@@ -109,7 +109,7 @@ class Jmp extends Calculator
 
         $minRegression = $nonNullRegressions ? min($nonNullRegressions) : null;
         $maxRegression = $nonNullRegressions ? max($nonNullRegressions) : null;
-        $regression = $allRegressions[$year]['regression'];
+        $regression = $allRegressions[$year];
         array_push($usedYears, $year);
 
         // If regression value exists, make sure it's within our limits and returns it
@@ -195,9 +195,9 @@ class Jmp extends Calculator
         $d = $this->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
 
         if ($year == $d['maxYear'] + 6) {
-            $result = $this->computeRegressionOneYear($year - 4, $filter, $questionnaires, $part)['regression'];
+            $result = $this->computeRegressionOneYear($year - 4, $filter, $questionnaires, $part);
         } elseif ($year == $d['minYear'] - 6) {
-            $result = $this->computeRegressionOneYear($year + 4, $filter, $questionnaires, $part)['regression'];
+            $result = $this->computeRegressionOneYear($year + 4, $filter, $questionnaires, $part);
         } elseif ($year < $d['maxYear'] + 3 && $year > $d['minYear'] - 3 && $d['count'] > 1 && $d['period'] > 4) {
             $result = $this->ifNonZeroValue($d['values'], function() use ($year, $d) {
                         return \PHPExcel_Calculation_Statistical::FORECAST($year, $d['values'], $d['years']);
@@ -216,10 +216,7 @@ class Jmp extends Calculator
             $result = null;
         }
 
-        return array(
-            'regression' => $result,
-            'population' => $d['population']
-        );
+        return $result;
     }
 
     /**
@@ -242,7 +239,6 @@ class Jmp extends Calculator
             'count' => 0,
         );
         $rules = $filter->getFilterRules();
-        $totalPopulation = 0;
         $years = array();
         $surveys = array();
         $yearsWithData = array();
@@ -274,10 +270,7 @@ class Jmp extends Calculator
 
             $yearsWithData[] = $year;
 
-            $population = $this->getPopulationRepository()->getOneByQuestionnaire($questionnaire, $part);
-            $totalPopulation += $population->getPopulation();
             $result['count']++;
-
             $result['values'][$questionnaire->getId()] = $computed;
         }
 
@@ -292,7 +285,6 @@ class Jmp extends Calculator
                         });
 
         $result['average'] = $result['count'] ? \PHPExcel_Calculation_MathTrig::SUM($result['values']) / $result['count'] : null;
-        $result['population'] = $totalPopulation;
 
         $this->cacheComputeFilterForAllQuestionnaires[$key] = $result;
 
