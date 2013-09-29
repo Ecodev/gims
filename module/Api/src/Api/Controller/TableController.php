@@ -86,4 +86,62 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         return $result;
     }
 
+    public function questionnaireAction()
+    {
+        $p = $this->params()->fromQuery('country');
+        if (!$p)
+            $countryIds = array(-1);
+        else
+            $countryIds = explode(',', $p);
+        $countries = $this->getEntityManager()->getRepository('Application\Model\Country')->findById($countryIds);
+
+        /** @var \Application\Model\FilterSet $filterSet */
+        $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
+        $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
+        $calculator = new \Application\Service\Calculator\Jmp();
+        $calculator->setServiceLocator($this->getServiceLocator());
+
+        $result = array();
+        $columns = array(
+            'country' => 'Country',
+            'iso3' => 'ISO-3',
+            'survey' => 'Survey',
+            'year' => 'Year',
+        );
+
+        foreach ($countries as $country) {
+            $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findByGeoname($country->getGeoname());
+            if (!$filterSet) {
+                continue;
+            }
+            foreach ($filterSet->getFilters() as $filter) {
+                foreach ($parts as $part) {
+
+                    $data = $calculator->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
+                    foreach ($data['values'] as $questionnaireId => $value) {
+                        if (!isset($result[$questionnaireId])) {
+                            $result[$questionnaireId] = array(
+                                'country' => $country->getName(),
+                                'iso3' => $country->getIso3(),
+                                'survey' => $data['surveys'][$questionnaireId],
+                                'year' => $data['years'][$questionnaireId],
+                            );
+                        }
+
+                        $columnName = $filter->getName() . ' - ' . $part->getName();
+                        $columnId = 'f' . $filter->getId() . 'p' . $part->getId();
+                        $columns[$columnId] = $columnName;
+                        $result[$questionnaireId][$columnId] = \Application\Utility::bcround($value * 100, 1);
+                    }
+                }
+            }
+        }
+        $finalResult = array(
+            'columns' => $columns,
+            'data' => array_values($result),
+        );
+
+        return new NumericJsonModel($finalResult);
+    }
+
 }
