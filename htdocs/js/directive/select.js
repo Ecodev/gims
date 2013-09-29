@@ -38,6 +38,10 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             var api = $scope.api;
             var name = $scope.name || api; // default key to same name as route
             var fromUrl = name == 'id' ? $routeParams.id : $location.search()[name];
+            var idsFromUrl = fromUrl ? fromUrl.split(',') : [];
+            idsFromUrl = _.map(idsFromUrl, function(id) {
+                return parseInt(id);
+            });
 
             // Update URL when value changes
             if (!$route.current.$$route.reloadOnSearch || name == 'id') {
@@ -52,7 +56,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                         id = _.map(o, function(a) { return a.id; }).join(',');
                     }
 
-                    if (!_.isUndefined( id)) {
+                    if (!_.isUndefined(id)) {
                         if (name == 'id') {
                             if (id != $routeParams.id) {
                                 // If curent URL reload when url changes, but we are in 'id' mode, update the ID in the URL path
@@ -96,16 +100,14 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 };
 
                 // Reload a single or multiple items if we have its ID from URL
-                if (fromUrl) {
-                    if (fromUrl.split(',').length > 1) {
-                        myRestangular.all(api).getList(_.merge({id: fromUrl, returnType: 'list'}, $scope.queryparams)).then(function (items) {
-                            $scope[$attrs.ngModel] = items;
-                        });
-                    } else {
-                        myRestangular.one(api, fromUrl).get($scope.queryparams).then(function (item) {
-                            $scope[$attrs.ngModel] = item;
-                        });
-                    }
+                if (idsFromUrl.length == 1) {
+                    myRestangular.one(api, fromUrl).get($scope.queryparams).then(function(item) {
+                        $scope[$attrs.ngModel] = item;
+                    });
+                } else if (idsFromUrl.length > 1) {
+                    myRestangular.all(api).getList(_.merge({id: fromUrl}, $scope.queryparams)).then(function(items) {
+                        $scope[$attrs.ngModel] = items;
+                    });
                 }
             }
             // Otherwise, default to standard mode (list fully loaded)
@@ -116,11 +118,16 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 myRestangular.all(api).getList($scope.queryparams).then(function(data) {
 
                     items = data;
-                    angular.forEach(items, function(item) {
-                        if (item.id == fromUrl) {
-                            $scope[$attrs.ngModel] = item;
-                        }
+                    var selectedItems = _.filter(items, function(item) {
+                        return _.contains(idsFromUrl, item.id);
                     });
+
+                    // If we are not multiple, we need to return an object, not an array of objects
+                    if (!$attrs.multiple) {
+                        selectedItems = _.first(selectedItems);
+                    }
+                    
+                    $scope[$attrs.ngModel] = selectedItems;
                 });
 
                 $scope.options = {
@@ -150,10 +157,10 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             // Configure formatting
             var formatSelection = function(item) {
                 var result = item.name;
-				if ($scope.format == 'code')
-				{
-					result = item.code || item.id || item.name;
-				}
+                if ($scope.format == 'code')
+                {
+                    result = item.code || item.id || item.name;
+                }
                 return result;
             };
 
