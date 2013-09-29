@@ -4,6 +4,8 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Browse\Controller\Index' => 'Browse\Controller\IndexController',
+            'Browse\Controller\Chart' => 'Browse\Controller\ChartController',
+            'Browse\Controller\Table' => 'Browse\Controller\TableController',
         ),
     ),
     'view_manager' => array(
@@ -34,12 +36,13 @@ return array(
                     'default' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => '/[:action]',
+                            'route' => '[/:controller][/:action]',
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                             ),
                             'defaults' => array(
+                                'action' => 'index',
                             ),
                         ),
                     ),

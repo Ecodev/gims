@@ -103,7 +103,7 @@ return array(
             'angularjs_layout' => array(
                 'type' => 'Regex',
                 'options' => array(
-                    'regex' => '^(?!(/api|/export|/ocra_service_manager_yuml))(?<anything>.*)',
+                    'regex' => '^(?!(/api|/export|/template|/ocra_service_manager_yuml))(?<anything>.*)',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller' => 'Index',

@@ -1,0 +1,17 @@
+<div class="container">
+    <form>
+        <div class="row">
+            <span class="span6">
+                <p><gims-select api="country" model="country" placeholder="<?php echo $this->translate('Select a country') ?>" format="name" style="width:100%;"/></p>
+            </span>
+        </div>
+        <div class="row">
+            <span class="span6">
+                <p><gims-select api="filterSet" model="filterSet" placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/></p>
+            </span>
+        </div>
+    </form>
+
+    <div class="alert alert-info" ng-hide="table"><i class="icon-info-sign"></i> <?php echo $this->translate('Select parameters to show table here.') ?></div>
+    <div ng-grid="gridOptions" class="gridStyle"></div>
+</div>

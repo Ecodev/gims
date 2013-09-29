@@ -20,7 +20,7 @@ class ChartControllerTest extends AbstractController
 
     public function getValidDataProvider()
     {
-        return new \ApiTest\JsonFileIterator('data/Api/Chart');
+        return new \ApiTest\JsonFileIterator('data/api/chart');
     }
 
     /**

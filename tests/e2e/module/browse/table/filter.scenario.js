@@ -4,7 +4,7 @@
 describe('browse/table', function () {
 
     beforeEach(function () {
-        browser().navigateTo('/browse/table');
+        browser().navigateTo('/browse/table/filter');
     });
 
     it('should render a grid', function () {

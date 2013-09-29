@@ -168,11 +168,11 @@ class IndexControllerTest extends AbstractController
                 '/template/browse', $router->assemble(array(), array('name' => 'template_browse')), 'should return template URL'
         );
         $this->assertEquals(
-                '/template/browse/', $router->assemble(array(), array('name' => 'template_browse/default')), 'should return template URL'
+                '/template/browse', $router->assemble(array(), array('name' => 'template_browse/default')), 'should return template URL'
         );
         $this->assertEquals(
-                '/template/browse/about', $router->assemble(
-                        array('controller' => 'index', 'action' => 'about'), array('name' => 'template_browse/default')
+                '/template/browse/table/filter', $router->assemble(
+                        array('controller' => 'table', 'action' => 'filter'), array('name' => 'template_browse/default')
                 ), 'should return template URL to specified controller/action'
         );
     }

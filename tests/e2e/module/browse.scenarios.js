@@ -15,7 +15,7 @@ describe('browse', function () {
             toMatch(/Charts/);
 
         expect(element('[ng-view] .browse .span4:nth-child(3) p').text()).
-            toMatch(/Tables/);
+            toMatch(/FiltersQuestionnaires/);
     });
 
 });

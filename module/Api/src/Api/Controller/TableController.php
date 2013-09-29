@@ -7,7 +7,7 @@ use Application\View\Model\NumericJsonModel;
 class TableController extends \Application\Controller\AbstractAngularActionController
 {
 
-    public function indexAction()
+    public function filterAction()
     {
         $questionnaireParameter = $this->params()->fromQuery('questionnaire');
         $idQuestionnaires = explode(',', $questionnaireParameter);

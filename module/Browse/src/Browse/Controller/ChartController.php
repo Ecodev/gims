@@ -4,7 +4,7 @@ namespace Browse\Controller;
 
 use Zend\View\Model\ViewModel;
 
-class IndexController extends \Application\Controller\AbstractAngularActionController
+class ChartController extends \Application\Controller\AbstractAngularActionController
 {
 
     /**
