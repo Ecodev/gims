@@ -94,9 +94,6 @@ angular.module('myApp.directives').directive('gimsTable', function () {
                 // If they are all available ...
                 if (parameters.questionnaire && $scope.filterSet) {
 
-                    // Special case. This would probably be shift to the select.js file
-                    $location.search('questionnaire', parameters.questionnaire);
-
                     // Update column defs with base first
                     var columnDefs = [];
                     columnDefs.push(columnDefTemplateBase);

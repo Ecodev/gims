@@ -41,8 +41,18 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
 
             // Update URL when value changes
             if (!$route.current.$$route.reloadOnSearch || name == 'id') {
-                $scope.$watch($attrs.ngModel + '.id', function(id) {
-                    if (id) {
+                $scope.$watch($attrs.ngModel, function(o) {
+
+                    // Either get the single ID, or the multiple IDs
+                    var id;
+                    if (o && o.id) {
+                        id = o.id;
+                    }
+                    else if (o) {
+                        id = _.map(o, function(a) { return a.id; }).join(',');
+                    }
+
+                    if (!_.isUndefined( id)) {
                         if (name == 'id') {
                             if (id != $routeParams.id) {
                                 // If curent URL reload when url changes, but we are in 'id' mode, update the ID in the URL path
