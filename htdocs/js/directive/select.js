@@ -53,7 +53,9 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                         id = o.id;
                     }
                     else if (o) {
-                        id = _.map(o, function(a) { return a.id; }).join(',');
+                        id = _.map(o, function(a) {
+                            return a.id;
+                        }).join(',');
                     }
 
                     if (!_.isUndefined(id)) {
@@ -118,16 +120,19 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 myRestangular.all(api).getList($scope.queryparams).then(function(data) {
 
                     items = data;
-                    var selectedItems = _.filter(items, function(item) {
-                        return _.contains(idsFromUrl, item.id);
-                    });
 
-                    // If we are not multiple, we need to return an object, not an array of objects
-                    if (!$attrs.multiple) {
-                        selectedItems = _.first(selectedItems);
+                    if (idsFromUrl.length) {
+                        var selectedItems = _.filter(items, function(item) {
+                            return _.contains(idsFromUrl, item.id);
+                        });
+
+                        // If we are not multiple, we need to return an object, not an array of objects
+                        if (!$attrs.multiple) {
+                            selectedItems = _.first(selectedItems);
+                        }
+
+                        $scope[$attrs.ngModel] = selectedItems;
                     }
-                    
-                    $scope[$attrs.ngModel] = selectedItems;
                 });
 
                 $scope.options = {
