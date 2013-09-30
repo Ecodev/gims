@@ -132,7 +132,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                         $columnName = $filter->getName() . ' - ' . $part->getName();
                         $columnId = 'f' . $filter->getId() . 'p' . $part->getId();
                         $columns[$columnId] = $columnName;
-                        $result[$questionnaireId][$columnId] = \Application\Utility::bcround($value * 100, 1);
+                        $result[$questionnaireId][$columnId] = is_null($value) ? null : \Application\Utility::bcround($value * 100, 1);
                     }
                 }
             }
