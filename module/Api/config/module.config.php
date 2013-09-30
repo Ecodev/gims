@@ -84,7 +84,7 @@ return array(
                     'non_rest_controller' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => '/:controller[/:action]',
+                            'route' => '/:controller[/:action][/:filename]',
                             'constraints' => array(
                                 'controller' => '(chartFilter|chart|table)', // Define here allowed controllers: (controller1|controller2|controller3)
                             ),
@@ -100,7 +100,11 @@ return array(
     ),
     'view_manager' => array(
         'strategies' => array(
+            'ViewExcelStrategy',
             'ViewJsonStrategy',
+        ),
+        'template_path_stack' => array(
+            __DIR__ . '/../view',
         ),
     ),
 );

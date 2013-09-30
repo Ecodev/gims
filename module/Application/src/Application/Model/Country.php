@@ -145,7 +145,7 @@ class Country extends AbstractModel
     public function getJsonConfig()
     {
         return array_merge(parent::getJsonConfig(), array(
-            'code',
+            'iso3',
             'name',
         ));
     }

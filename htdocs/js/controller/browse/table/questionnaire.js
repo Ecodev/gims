@@ -19,6 +19,11 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
         // If they are all available ...
         if ($scope.country && $scope.filterSet) {
 
+            // Build export URL
+            var filterSetName = $scope.filterSet ? ' - ' + $scope.filterSet.name : '';
+            var filename = _.pluck($scope.country, 'iso3').join(', ') + filterSetName + '.csv';
+            $scope.exportUrl = $location.url().replace('browse/table/questionnaire', 'api/table/questionnaire/' + filename);
+
             $scope.isLoading = true;
 
             uniqueAjaxRequest = $timeout(function() {

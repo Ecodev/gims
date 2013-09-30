@@ -147,6 +147,8 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
+            'ViewExcelRenderer' => 'Application\Service\ViewExcelRendererFactory',
+            'ViewExcelStrategy' => 'Application\Service\ViewExcelStrategyFactory',
         ),
     ),
     'translator' => array(
@@ -183,13 +185,6 @@ return array(
         ),
     ),
     'view_helpers' => array(
-        'factories' => array(
-            'showmessages' => function($sm) {
-                $helper = new ModuleName\Helper\MessageShower();
-                // do stuff with $sm or the $helper
-                return $helper;
-            },
-        ),
         'invokables' => array(
             'headLink' => 'Application\View\Helper\HeadLink',
             'headScript' => 'Application\View\Helper\HeadScript',

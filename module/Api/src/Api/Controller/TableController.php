@@ -3,6 +3,7 @@
 namespace Api\Controller;
 
 use Application\View\Model\NumericJsonModel;
+use Application\View\Model\ExcelModel;
 
 class TableController extends \Application\Controller\AbstractAngularActionController
 {
@@ -141,7 +142,11 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             'data' => array_values($result),
         );
 
-        return new NumericJsonModel($finalResult);
+        $filename = $this->params('filename');
+        if ($filename)
+            return new ExcelModel($filename, $finalResult);
+        else
+            return new NumericJsonModel($finalResult);
     }
 
 }
