@@ -95,8 +95,13 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                             return _.merge({q: term}, $scope.queryparams);
                         },
                         results: function(data, page) { // parse the results into the format expected by Select2.
-                            // since we are using custom formatting functions we do not need to alter remote JSON data
-                            return {results: data};
+
+                            // Make sure to have Restangular object
+                            var restangularizedData = _.map(data, function(item) {
+                                return Restangular.restangularizeElement(null, item, api);
+                            });
+
+                            return {results: restangularizedData};
                         }
                     }
                 };
