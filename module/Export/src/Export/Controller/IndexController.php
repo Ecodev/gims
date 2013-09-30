@@ -10,7 +10,7 @@
 
 namespace Export\Controller;
 
-use Zend\View\Model\ViewModel;
+use Application\View\Model\ExcelModel;
 use Application\Traits\FlatHierarchicQuestions;
 
 
@@ -32,7 +32,7 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
         }
         $questions = $this->getFlatHierarchy($questions, array('type','filter','chapter','answers','answers.part','choices','parts','isMultiple','chapter'), new \Application\Service\Hydrator());
 
-        return new ViewModel(array('questions' => $questions));
+        return new ExcelModel($this->params('filename'), array('questions' => $questions));
     }
 
 }

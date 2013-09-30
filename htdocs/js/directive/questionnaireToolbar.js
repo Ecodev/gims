@@ -13,7 +13,7 @@ angular.module('myApp.directives').directive('gimsQuestionnaireToolBar', functio
                 "                </div>"+
                 "            </li>"+
                 "            <li class='divider-vertical'></li>"+
-                "            <li><a href='/export/questionnaire/{{questionnaire.id}}' target='_blank' class='btn btn-default'><i class='icon-download-alt'></i> Export</a></li>"+
+                "            <li><a href='/export/questionnaire/{{questionnaire.id}}/{{questionnaire.name}}.xslx' target='_blank' class='btn btn-default'><i class='icon-download-alt'></i> Export</a></li>"+
                 "            <li class='divider-vertical'></li>"+
                 "            <li><button class='btn btn-default' ng-click='goToPrintMode()'><i class='icon-print'></i> Print</button></li>"+
                 "            <li class='divider-vertical'></li>"+

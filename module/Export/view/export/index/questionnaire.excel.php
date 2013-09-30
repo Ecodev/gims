@@ -11,7 +11,8 @@ define('TXT_URBAN', 7);
 define('TXT_RURAL', 8);
 define('TXT_TOTAL', 9);
 
-$workbook = new \PHPExcel();
+/* @var $workbook \PHPExcel */
+$workbook;
 
 // headers
 $row = 1;
@@ -64,11 +65,6 @@ foreach ($questions as $question) {
             break;
     }
 }
-
-$this->excelSend($workbook);
-
-
-
 
 
 

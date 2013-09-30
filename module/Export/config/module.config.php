@@ -7,9 +7,6 @@ return array(
         ),
     ),
     'view_manager' => array(
-        'display_not_found_reason' => true,
-        'display_exceptions' => true,
-        'doctype' => 'HTML5',
         'template_path_stack' => array(
             __DIR__ . '/../view',
         ),
@@ -22,7 +19,7 @@ return array(
             'export' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/export/:action/:id',
+                    'route' => '/export/:action/:id/:filename',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Export\Controller',
                         'controller' => 'Index',
@@ -39,7 +36,6 @@ return array(
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'excelSend' => 'Export\View\Helper\ExcelSend',
         ),
     ),
 );
