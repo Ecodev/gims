@@ -396,6 +396,16 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->assertFalse($actual['isFinal']);
     }
 
+    public function testCanExtractNonBooleanStartingWithIs()
+    {
+        $country = new \Application\Model\Country();
+        $country->setIso3('abc');
+
+        $actual = $this->hydrator->extract($country, array('iso3'));
+        $this->assertArrayHasKey('iso3', $actual);
+        $this->assertEquals($country->getIso3(), $actual['iso3']);
+    }
+
     /**
      * Return a fake survey for the sake of the test.
      *

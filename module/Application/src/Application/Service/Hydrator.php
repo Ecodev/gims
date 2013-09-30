@@ -213,7 +213,8 @@ class Hydrator
      */
     private function formatGetter($input)
     {
-        if (strpos($input, 'is') === 0) {
+        // If it is a boolean, do nothing
+        if (preg_match('/^is[A-Z]/', $input)) {
             return $input;
         } else {
             return 'get' . ucfirst($input);
