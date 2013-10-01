@@ -16,12 +16,7 @@ sudo apt-get install -qq software-properties-common # to get next command: add-a
 sudo add-apt-repository --yes ppa:ubuntugis/ppa
 sudo add-apt-repository --yes ppa:chris-lea/node.js
 sudo apt-get -qq update
-sudo apt-get -qq install postgis postgresql-9.1-postgis rubygems apache2 php5-pgsql php5-cli php5-gd php5-mcrypt php5-intl
-
-# Use old version of Node.js to workaround https://github.com/isaacs/npm/issues/2907
-sudo apt-get install libc6 libgcc1 libstdc++6 rlwrap
-curl -O https://chrislea.com/nodejs_0.10.18-1chl1~precise1_amd64.deb
-sudo dpkg -i nodejs_0.10.18-1chl1~precise1_amd64.deb
+sudo apt-get -qq install postgis postgresql-9.1-postgis rubygems nodejs apache2 php5-pgsql php5-cli php5-gd php5-mcrypt php5-intl
 
 echo "Installing JS testing tools..."
 sudo npm --global --quiet install karma karma-ng-scenario phantomjs uglify-js ngmin
