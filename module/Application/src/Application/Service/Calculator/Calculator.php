@@ -224,7 +224,7 @@ use \Application\Traits\EntityManagerAware;
         // If the filter have a specified answer, returns it (skip all computation)
         foreach ($questionnaire->getAnswers() as $answer) {
             $answerFilter = $answer->getQuestion()->getFilter()->getOfficialFilter() ? : $answer->getQuestion()->getFilter();
-            if ($answerFilter === $filter && $answer->getPart() == $part) {
+            if ($answerFilter === $filter && $answer->getPart() === $part) {
                 $alreadySummedFilters->add(true);
 
                 return $answer->getValuePercent();
@@ -234,7 +234,7 @@ use \Application\Traits\EntityManagerAware;
         // If the filter has a formula, returns its value
         foreach ($filter->getFilterRules() as $filterRule) {
             $rule = $filterRule->getRule();
-            if ($rule instanceof \Application\Model\Rule\Formula && $rule != $excludedFormula && $filterRule->getQuestionnaire() == $questionnaire && $filterRule->getPart() == $part) {
+            if ($rule instanceof \Application\Model\Rule\Formula && $rule !== $excludedFormula && $filterRule->getQuestionnaire() === $questionnaire && $filterRule->getPart() === $part) {
                 return $this->computeFormula($rule, $questionnaire, $part, $filter);
             }
         }

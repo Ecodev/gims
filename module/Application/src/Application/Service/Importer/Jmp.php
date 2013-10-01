@@ -908,7 +908,7 @@ STRING;
 
             // If we had an existing formula, maybe we also have an existing association
             $assoc = $questionnaire->getQuestionnaireFormulas()->filter(function($assoc) use ($questionnaire, $part, $formula) {
-                                return $assoc->getQuestionnaire() == $questionnaire && $assoc->getPart() == $part && $assoc->getFormula() == $formula;
+                                return $assoc->getQuestionnaire() === $questionnaire && $assoc->getPart() === $part && $assoc->getFormula() === $formula;
                             })->first();
 
             // If association doesn't exist yet, create it
@@ -1005,14 +1005,14 @@ STRING;
                     }
 
                     $refQuestionnaire = $refData['questionnaire'];
-                    if ($refQuestionnaire == $questionnaire)
+                    if ($refQuestionnaire === $questionnaire)
                         $refQuestionnaireId = 'current';
                     else
                         $refQuestionnaireId = $refQuestionnaire->getId();
 
                     // Find out referenced Part
                     $refPart = $refData['part'];
-                    if ($refPart == $part)
+                    if ($refPart === $part)
                         $refPartId = 'current';
                     else
                         $refPartId = $part->getId();
@@ -1151,7 +1151,7 @@ STRING;
 
                     // If we are total part, we first add the complementory formula which is hardcoded
                     // and can be found in tab "GraphData_W". This formula defines the total as the sum of its parts
-                    if ($part == $this->partTotal) {
+                    if ($part === $this->partTotal) {
                         $this->getFilterRule($highFilter, $questionnaire, $complementaryTotalFormula, $part);
                     }
 

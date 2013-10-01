@@ -55,7 +55,7 @@ class Jmp extends Calculator
         // If the filter has a formula, returns its value
         foreach ($filter->getFilterFormulas() as $filterFormula) {
             $formula = $filterFormula->getFormula();
-            if ($formula != $excludedFormula && $filterFormula->getPart() == $part) {
+            if ($formula !== $excludedFormula && $filterFormula->getPart() === $part) {
                 return $this->computeFormulaFlatten($formula, $year, $years, $filter, $questionnaires, $part, $parts);
             }
         }
@@ -247,7 +247,7 @@ class Jmp extends Calculator
             // skip this questionnaire, if an exclude rule exists for him
             $skipQuestionnaire = false;
             foreach ($rules as $rule) {
-                if ($rule->getRule() instanceof \Application\Model\Rule\Exclude && $rule->getQuestionnaire() == $questionnaire && $rule->getPart() == $part) {
+                if ($rule->getRule() instanceof \Application\Model\Rule\Exclude && $rule->getQuestionnaire() === $questionnaire && $rule->getPart() === $part) {
                     $skipQuestionnaire = true;
                     break;
                 }
