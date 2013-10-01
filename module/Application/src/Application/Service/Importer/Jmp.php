@@ -417,6 +417,9 @@ class Jmp extends AbstractImporter
                 }
             }
 
+            // Import high filter, but not their formula, we need them before importing QuestionnaireFormulas
+            $this->importHighFilters($this->definitions[$sheetName]['filterSet'], $this->definitions[$sheetName]['highFilters']);
+
             $workbook->setActiveSheetIndex($i);
             $sheet = $workbook->getSheet($i);
 
@@ -435,8 +438,8 @@ class Jmp extends AbstractImporter
             }
             echo PHP_EOL;
 
-            // Third pass to import high filters and their formulas
-            $this->importHighFilters($this->definitions[$sheetName]['filterSet'], $this->definitions[$sheetName]['highFilters'], $sheet);
+            // Third pass to import formulas for high filters
+            $this->finishHighFilters($this->definitions[$sheetName]['highFilters'], $sheet);
 
             // Fourth pass to hardcode special cases of formulas
             echo 'Finishing special cases of Ratios';
@@ -976,28 +979,35 @@ STRING;
                 }, $replacedFormula);
 
         // Replace all cell reference with our own syntax
-        $filters = $this->cacheFilters;
-        $colToParts = $this->colToParts;
-        $importedQuestionnaires = $this->importedQuestionnaires;
         $referencedInvalidQuestionnaire = false;
-        $convertedFormula = preg_replace_callback("/$cellPattern/", function($matches) use ($filters, $colToParts, $importedQuestionnaires, $sheet, $col, $row, $offset, $questionnaire, $part, &$referencedInvalidQuestionnaire) {
+        $convertedFormula = preg_replace_callback("/$cellPattern/", function($matches) use ($sheet, $questionnaire, $part, &$referencedInvalidQuestionnaire, $expandedFormula) {
                     $refCol = \PHPExcel_Cell::columnIndexFromString($matches[2]) - 1;
                     $refRow = $matches[3];
 
-                    // We first look on negative indexes to find original filters in case we made
+                    // We first look for filter on negative indexes to find original filters in case we made
                     // replacements (for Sanitation), because formulas always refers to the originals,
                     // not the one we created in this script
-                    $refFilter = @$filters[-$refRow] ? : @$filters[$refRow];
+                    $refFilter = @$this->cacheFilters[-$refRow] ? : @$this->cacheFilters[$refRow];
+
+                    // If couldn't find filter yet, try last chance in high filters
+                    if (!$refFilter) {
+                        foreach ($this->definitions[$sheet->getTitle()]['highFilters'] as $highFilterName => $highFilterData) {
+                            if ($refRow == $highFilterData['row']) {
+                                $refFilter = $this->cacheHighFilters[$highFilterName];
+                            }
+                        }
+                    }
+
                     $refFilterId = $refFilter ? $refFilter->getId() : null;
 
-                    if (isset($importedQuestionnaires[$refCol])) {
-                        $refQuestionnaireId = $importedQuestionnaires[$refCol]->getId();
+                    if (isset($this->importedQuestionnaires[$refCol])) {
+                        $refQuestionnaireId = $this->importedQuestionnaires[$refCol]->getId();
 
                         return "{F#$refFilterId,Q#$refQuestionnaireId}";
                     }
 
                     // Find out referenced Questionnaire
-                    $refData = @$colToParts[$refCol];
+                    $refData = @$this->colToParts[$refCol];
                     if (!$refData) {
                         $referencedInvalidQuestionnaire = true;
 
@@ -1025,7 +1035,7 @@ STRING;
                     } else {
 
                         // Find the column of the referenced questionnaire
-                        $refColQuestionnaire = array_search($refQuestionnaire, $importedQuestionnaires);
+                        $refColQuestionnaire = array_search($refQuestionnaire, $this->importedQuestionnaires);
 
                         $refQuestionnaireFormula = $this->getQuestionnaireFormula($sheet, $refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart);
 
@@ -1101,14 +1111,12 @@ STRING;
     }
 
     /**
-     * Import high filters, their FilterSet, exclude rules and their formulas (if any)
+     * Import high filters, their FilterSet
      * @param array $filterSetNames
      * @param array $filters
-     * @param \PHPExcel_Worksheet $sheet
      */
-    protected function importHighFilters(array $filterSetNames, array $filters, \PHPExcel_Worksheet $sheet)
+    protected function importHighFilters(array $filterSetNames, array $filters)
     {
-        $complementaryTotalFormula = $this->getFormula('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . '}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . '})), ({F#current,Q#current,P#' . $this->partRural->getId() . '} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . '} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, {self})');
         $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
         $filterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedUnimprovedName']);
         $improvedFilterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedName']);
@@ -1143,6 +1151,27 @@ STRING;
                 $highFilter->addChild($this->cacheFilters[$child]);
             }
 
+            $this->cacheHighFilters[$filterName] = $highFilter;
+            echo '.';
+        }
+
+        echo PHP_EOL;
+    }
+
+    /**
+     * Finish high filters, by importing their exclude rules and their formulas (if any)
+     * @param array $filters
+     * @param \PHPExcel_Worksheet $sheet
+     */
+    protected function finishHighFilters(array $filters, \PHPExcel_Worksheet $sheet)
+    {
+        $complementaryTotalFormula = $this->getFormula('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . '}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . '})), ({F#current,Q#current,P#' . $this->partRural->getId() . '} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . '} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, {self})');
+        // Get or create all filter
+        echo 'Finishing high filters';
+        foreach ($filters as $filterName => $filterData) {
+
+            $highFilter = $this->cacheHighFilters[$filterName];
+
             // Import high filters' formulas
             foreach ($this->importedQuestionnaires as $col => $questionnaire) {
                 $this->importExcludes($sheet, $col, $questionnaire, $highFilter, $filterData);
@@ -1164,8 +1193,6 @@ STRING;
                     }
                 }
             }
-
-            $this->cacheHighFilters[$filterName] = $highFilter;
             echo '.';
         }
 
