@@ -301,7 +301,7 @@ class Jmp extends Calculator
     {
         foreach ($data as $d) {
             if ($d) {
-                return $phpExcelFunction();
+                return @$phpExcelFunction();
             }
         }
 

@@ -631,4 +631,18 @@ class JmpTest extends AbstractCalculator
         $this->assertEquals(0, $this->service->computeRegressionOneYear(2006, $this->filter1, $this->questionnaires, $this->part));
     }
 
+    public function testAllIdenticalValueShouldNotDivideByZero()
+    {
+        // Set everything to to have the same value for both questionnaire
+        foreach ($this->questionnaires[0]->getAnswers() as $answer) {
+            $answer->setValuePercent(1);
+        }
+        foreach ($this->questionnaires[1]->getAnswers() as $answer) {
+            $answer->setValuePercent(4);
+        }
+
+        // This call should NOT raise PHP warnings
+        $this->assertEquals(4, $this->service->computeRegressionOneYear(2006, $this->filter1, $this->questionnaires, $this->part));
+    }
+
 }
