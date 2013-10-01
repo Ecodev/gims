@@ -29,4 +29,4 @@ Full testing can be executed via Phing. This WILL DESTROY existing database:
 
     ./vendor/bin/phing test
 
-Detailed informations can be found in ``tests\README.md``.
+See [detailed informations](tests\README.md) for advanced usage.
