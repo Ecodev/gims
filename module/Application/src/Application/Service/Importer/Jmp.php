@@ -1015,7 +1015,7 @@ STRING;
                     if ($refPart === $part)
                         $refPartId = 'current';
                     else
-                        $refPartId = $part->getId();
+                        $refPartId = $refPart->getId();
 
 
                     // Simple case is when we reference a filter
