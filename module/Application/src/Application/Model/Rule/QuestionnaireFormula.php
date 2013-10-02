@@ -11,18 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Application\Repository\Rule\QuestionnaireFormulaRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="questionnaire_formula_unique",columns={"questionnaire_id", "part_id", "formula_id"})})
  */
-class QuestionnaireFormula extends AbstractRelation
+class QuestionnaireFormula extends AbstractFormulaUsage
 {
-
-    /**
-     * @var Questionnaire
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Model\Questionnaire", inversedBy="questionnaireFormulas"))
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * })
-     */
-    private $questionnaire;
 
     /**
      * @var Formula
@@ -33,30 +23,6 @@ class QuestionnaireFormula extends AbstractRelation
      * })
      */
     private $formula;
-
-    /**
-     * Set questionnaire
-     *
-     * @param \Application\Model\Questionnaire $questionnaire
-     * @return QuestionnaireFormula
-     */
-    public function setQuestionnaire(\Application\Model\Questionnaire $questionnaire)
-    {
-        $this->questionnaire = $questionnaire;
-        $this->questionnaire->questionnaireFormulaAdded($this);
-
-        return $this;
-    }
-
-    /**
-     * Get questionnaire
-     *
-     * @return \Application\Model\Questionnaire
-     */
-    public function getQuestionnaire()
-    {
-        return $this->questionnaire;
-    }
 
     /**
      * Set formula
@@ -72,6 +38,20 @@ class QuestionnaireFormula extends AbstractRelation
     }
 
     /**
+     * Set questionnaire
+     *
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @return QuestionnaireFormula
+     */
+    public function setQuestionnaire(\Application\Model\Questionnaire $questionnaire)
+    {
+        parent::setQuestionnaire($questionnaire);
+        $this->getQuestionnaire()->questionnaireFormulaAdded($this);
+
+        return $this;
+    }
+
+    /**
      * Get formula
      *
      * @return Formula
@@ -79,6 +59,15 @@ class QuestionnaireFormula extends AbstractRelation
     public function getFormula()
     {
         return $this->formula;
+    }
+
+    /**
+     * Get Filter, always return null
+     * @return null
+     */
+    public function getFilter()
+    {
+        return null;
     }
 
 }

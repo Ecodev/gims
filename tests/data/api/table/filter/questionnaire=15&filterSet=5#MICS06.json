@@ -1,7 +1,7 @@
 [
     {
         "filter": {
-            "id": 400,
+            "id": 274,
             "name": "Improved + shared",
             "level": 0
         },
@@ -197,7 +197,7 @@
     },
     {
         "filter": {
-            "id": 401,
+            "id": 275,
             "name": "Sewerage connections",
             "level": 0
         },
@@ -225,7 +225,7 @@
     },
     {
         "filter": {
-            "id": 402,
+            "id": 276,
             "name": "Improved",
             "level": 0
         },
@@ -239,7 +239,7 @@
     },
     {
         "filter": {
-            "id": 403,
+            "id": 277,
             "name": "Shared",
             "level": 0
         },
@@ -253,7 +253,7 @@
     },
     {
         "filter": {
-            "id": 404,
+            "id": 278,
             "name": "Other unimproved",
             "level": 0
         },
@@ -645,7 +645,7 @@
     },
     {
         "filter": {
-            "id": 405,
+            "id": 279,
             "name": "Open defecation",
             "level": 0
         },

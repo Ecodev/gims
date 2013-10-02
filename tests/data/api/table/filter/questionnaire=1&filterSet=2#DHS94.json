@@ -1,7 +1,7 @@
 [
     {
         "filter": {
-            "id": 183,
+            "id": 74,
             "name": "Total improved",
             "level": 0
         },
@@ -239,7 +239,7 @@
     },
     {
         "filter": {
-            "id": 184,
+            "id": 75,
             "name": "Piped onto premises",
             "level": 0
         },
@@ -295,7 +295,7 @@
     },
     {
         "filter": {
-            "id": 185,
+            "id": 76,
             "name": "Surface water",
             "level": 0
         },
@@ -421,7 +421,7 @@
     },
     {
         "filter": {
-            "id": 186,
+            "id": 77,
             "name": "Other Improved",
             "level": 0
         },
@@ -603,7 +603,7 @@
     },
     {
         "filter": {
-            "id": 187,
+            "id": 78,
             "name": "Other Unimproved",
             "level": 0
         },

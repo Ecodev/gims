@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Application\Repository\Rule\FilterRuleRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="filter_rule_unique",columns={"filter_id", "questionnaire_id", "part_id", "rule_id"})})
  */
-class FilterRule extends AbstractRelation
+class FilterRule extends AbstractFormulaUsage
 {
 
     /**
@@ -22,16 +22,6 @@ class FilterRule extends AbstractRelation
      * })
      */
     private $filter;
-
-    /**
-     * @var Questionnaire
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Model\Questionnaire")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * })
-     */
-    private $questionnaire;
 
     /**
      * @var AbstractRule
@@ -68,29 +58,6 @@ class FilterRule extends AbstractRelation
     }
 
     /**
-     * Set questionnaire
-     *
-     * @param \Application\Model\Questionnaire $questionnaire
-     * @return FilterRule
-     */
-    public function setQuestionnaire(\Application\Model\Questionnaire $questionnaire)
-    {
-        $this->questionnaire = $questionnaire;
-
-        return $this;
-    }
-
-    /**
-     * Get questionnaire
-     *
-     * @return \Application\Model\Questionnaire
-     */
-    public function getQuestionnaire()
-    {
-        return $this->questionnaire;
-    }
-
-    /**
      * Set rule
      *
      * @param AbstractRule $rule
@@ -111,6 +78,16 @@ class FilterRule extends AbstractRelation
     public function getRule()
     {
         return $this->rule;
+    }
+
+    /**
+     * Get Formula
+     *
+     * @return Formula|null
+     */
+    public function getFormula()
+    {
+        return $this->getRule() instanceof Formula ? $this->getRule() : null;
     }
 
 }

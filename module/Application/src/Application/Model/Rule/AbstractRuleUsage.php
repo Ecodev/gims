@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Common properties to "apply" a rule to something
  * @ORM\MappedSuperclass
  */
-abstract class AbstractRelation extends \Application\Model\AbstractModel
+abstract class AbstractRuleUsage extends \Application\Model\AbstractModel
 {
 
     /**

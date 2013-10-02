@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Application\Repository\Rule\FilterFormulaRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="filter_formula_unique",columns={"filter_id", "part_id", "formula_id"})})
  */
-class FilterFormula extends AbstractRelation
+class FilterFormula extends AbstractRuleUsage
 {
 
     /**

@@ -157,34 +157,39 @@ class CalculatorTest extends AbstractCalculator
         $this->assertEquals($questionnaireFormula, $stubQuestionnaireFormulaRepository->findOneBy(array('foo')));
 
         $formula = new \Application\Model\Rule\Formula();
+        $filterRule = new \Application\Model\Rule\FilterRule();
+        $filterRule->setRule($formula)
+                ->setQuestionnaire($this->questionnaire)
+                ->setPart($this->part)
+                ->setFilter($this->filter11);
 
         $formula->setFormula('=(3 + 7) * SUM(2, 3)');
-        $this->assertEquals(50, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to handle standard Excel things');
+        $this->assertEquals(50, $service->computeFormula($filterRule), 'should be able to handle standard Excel things');
 
         // Filter values
         $formula->setFormula('= 10 + {F#11,Q#34,P#56}');
-        $this->assertEquals(10.101, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a Filter value');
+        $this->assertEquals(10.101, $service->computeFormula($filterRule), 'should be able to refer a Filter value');
 
         $formula->setFormula('= 10 + {F#current,Q#current,P#current}');
-        $this->assertEquals(10.101, $service->computeFormula($formula, $this->questionnaire, $this->part, $this->filter11), 'should be able to refer a Filter value with same Questionnaire and Part');
+        $this->assertEquals(10.101, $service->computeFormula($filterRule), 'should be able to refer a Filter value with same Questionnaire and Part');
 
         $formula->setFormula('= 10 + {F#666,Q#34,P#56}');
-        $this->assertEquals(10, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a Filter value which is NULL');
+        $this->assertEquals(10, $service->computeFormula($filterRule), 'should be able to refer a Filter value which is NULL');
 
         // QuestionnaireFormula values
         $formula->setFormula('={Fo#12,Q#34,P#56}');
-        $this->assertEquals(5, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a QuestionnaireFormula');
+        $this->assertEquals(5, $service->computeFormula($filterRule), 'should be able to refer a QuestionnaireFormula');
 
         $formula->setFormula('={Fo#12,Q#current,P#current}');
-        $this->assertEquals(5, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a QuestionnaireFormula with same Questionnaire and Part');
+        $this->assertEquals(5, $service->computeFormula($filterRule), 'should be able to refer a QuestionnaireFormula with same Questionnaire and Part');
 
         $questionnaireFormula->getFormula()->setFormula('=NULL');
         $formula->setFormula('=7 + {Fo#12,Q#current,P#current}');
-        $this->assertEquals(7, $service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer a QuestionnaireFormula which is NULL');
+        $this->assertEquals(7, $service->computeFormula($filterRule), 'should be able to refer a QuestionnaireFormula which is NULL');
 
         // Unnoficial filter names
         $formula->setFormula('={F#12,Q#34}');
-        $this->assertNull($service->computeFormula($formula, $this->questionnaire, $this->part), 'refering a non-existing Unofficial Filter name, returns null');
+        $this->assertNull($service->computeFormula($filterRule), 'refering a non-existing Unofficial Filter name, returns null');
 
         // Inject our unnofficial filter
         $unofficialFilter = new \Application\Model\Filter('unofficial with "double quotes"');
@@ -194,7 +199,7 @@ class CalculatorTest extends AbstractCalculator
                 ->will($this->returnValue($unofficialFilter));
 
         $formula->setFormula('=ISTEXT({F#12,Q#34})');
-        $this->assertTrue($service->computeFormula($formula, $this->questionnaire, $this->part), 'should be able to refer an Unofficial Filter name');
+        $this->assertTrue($service->computeFormula($filterRule), 'should be able to refer an Unofficial Filter name');
     }
 
     public function testFormulaSyntaxSelf()
@@ -208,7 +213,7 @@ class CalculatorTest extends AbstractCalculator
                 ->setPart($this->part);
 
         $formula->setFormula('={self}');
-        $this->assertEquals(0.1111, (new Calculator())->computeFormula($formula, $this->questionnaire, $this->part, $this->filter1), 'should fallback to filter value without any formulas');
+        $this->assertEquals(0.1111, (new Calculator())->computeFormula($fitlerRule), 'should fallback to filter value without any formulas');
 
         // Same result as above, but with different use of our API
         $this->assertEquals(0.1111, (new Calculator())->computeFilter($this->filter1, $this->questionnaire, $this->part), 'should fallback to filter value without any formulas');

@@ -2,6 +2,7 @@
 
 namespace Application\Service\Calculator;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Application\Model\Filter;
 use Application\Model\FilterSet;
 use Application\Model\Answer;
@@ -9,6 +10,7 @@ use Application\Model\Part;
 use Application\Model\NumericQuestion;
 use Application\Model\Questionnaire;
 use Application\Model\Rule\Formula;
+use Application\Model\Rule\AbstractFormulaUsage;
 
 /**
  * Common base class for various computation. It includes a local instance cache.
@@ -185,14 +187,16 @@ use \Application\Traits\EntityManagerAware;
      * @param \Application\Model\Part $part
      * @return float|null null if no answer at all, otherwise the percentage value
      */
-    public function computeFilter(Filter $filter, Questionnaire $questionnaire, Part $part)
+    public function computeFilter(Filter $filter, Questionnaire $questionnaire, Part $part, ArrayCollection $alreadyUsedFormulas = null)
     {
         $key = $this->getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheComputeFilter)) {
             return $this->cacheComputeFilter[$key];
         }
+        if (!$alreadyUsedFormulas)
+            $alreadyUsedFormulas = new ArrayCollection();
 
-        $result = $this->computeFilterInternal($filter, $questionnaire, new \Doctrine\Common\Collections\ArrayCollection(), $part);
+        $result = $this->computeFilterInternal($filter, $questionnaire, $part, $alreadyUsedFormulas, new ArrayCollection());
 
         $this->cacheComputeFilter[$key] = $result;
 
@@ -203,12 +207,12 @@ use \Application\Traits\EntityManagerAware;
      * Returns the computed value of the given filter, based on the questionnaire's available answers
      * @param \Application\Model\Filter $filter
      * @param \Application\Model\Questionnaire $questionnaire
-     * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters will be used to avoid duplicates
      * @param \Application\Model\Part $part
-     * @param \Application\Model\Rule\Formula $excludedFormula optional formula to exclude when computing
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas already used formula to be exclude when computing
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters will be used to avoid duplicates
      * @return float|null null if no answer at all, otherwise the percentage value
      */
-    private function computeFilterInternal(Filter $filter, Questionnaire $questionnaire, \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters, Part $part, Formula $excludedFormula = null)
+    private function computeFilterInternal(Filter $filter, Questionnaire $questionnaire, Part $part, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
         // @todo for sylvain: the logic goes as follows: if the filter id is contained within excludeFilters, skip calculation.
         if (in_array($filter->getId(), $this->excludedFilters)) {
@@ -233,17 +237,16 @@ use \Application\Traits\EntityManagerAware;
 
         // If the filter has a formula, returns its value
         foreach ($filter->getFilterRules() as $filterRule) {
-            $rule = $filterRule->getRule();
-            if ($rule instanceof \Application\Model\Rule\Formula && $rule !== $excludedFormula && $filterRule->getQuestionnaire() === $questionnaire && $filterRule->getPart() === $part) {
-                return $this->computeFormula($rule, $questionnaire, $part, $filter);
+            if ($filterRule->getFormula() && $filterRule->getQuestionnaire() === $questionnaire && $filterRule->getPart() === $part && !$alreadyUsedFormulas->contains($filterRule)) {
+                return $this->computeFormula($filterRule, $alreadyUsedFormulas);
             }
         }
 
         // Summer to sum values of given filters, but only if non-null (to preserve null value if no answer at all)
-        $summer = function(\IteratorAggregate $filters) use ($questionnaire, $part, $alreadySummedFilters) {
+        $summer = function(\IteratorAggregate $filters) use ($questionnaire, $part, $alreadySummedFilters, $alreadyUsedFormulas) {
                     $sum = null;
                     foreach ($filters as $f) {
-                        $summandValue = $this->computeFilterInternal($f, $questionnaire, $alreadySummedFilters, $part);
+                        $summandValue = $this->computeFilterInternal($f, $questionnaire, $part, $alreadyUsedFormulas, $alreadySummedFilters);
                         if (!is_null($summandValue)) {
                             $sum += $summandValue;
                         }
@@ -266,19 +269,26 @@ use \Application\Traits\EntityManagerAware;
     /**
      * Compute the value of a formula based on GIMS syntax.
      * For details about syntax, @see \Application\Model\Rule\Formula
-     * @param \Application\Model\Rule\Formula $formula
-     * @param \Application\Model\Questionnaire $currentQuestionnaire
-     * @param \Application\Model\Part $currentPart
-     * @param \Application\Model\Filter $currentFilter
+     * @param \Application\Model\Rule\AbstractFormulaUsage $usage
      * @return mixed
      * @throws \Exception
      */
-    public function computeFormula(Formula $formula, Questionnaire $currentQuestionnaire, Part $currentPart, Filter $currentFilter = null)
+    public function computeFormula(AbstractFormulaUsage $usage, ArrayCollection $alreadyUsedFormulas = null)
     {
+        if (!$alreadyUsedFormulas) {
+            $alreadyUsedFormulas = new ArrayCollection();
+        }
+
+        $alreadyUsedFormulas->add($usage);
+        $formula = $usage->getFormula();
+        $currentQuestionnaire = $usage->getQuestionnaire();
+        $currentPart = $usage->getPart();
+        $currentFilter = $usage->getFilter();
+
         $originalFormula = $formula->getFormula();
 
         // Replace {F#12,Q#34,P#56} with Filter value
-        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($currentFilter, $currentQuestionnaire, $currentPart) {
+        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($currentFilter, $currentQuestionnaire, $currentPart, $alreadyUsedFormulas) {
                     $filterId = $matches[1];
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
@@ -287,7 +297,7 @@ use \Application\Traits\EntityManagerAware;
                     $questionnaire = $questionnaireId == 'current' ? $currentQuestionnaire : $this->getQuestionnaireRepository()->findOneById($questionnaireId);
                     $part = $partId == 'current' ? $currentPart : $this->getPartRepository()->findOneById($partId);
 
-                    $value = $this->computeFilter($filter, $questionnaire, $part);
+                    $value = $this->computeFilter($filter, $questionnaire, $part, $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $originalFormula);
@@ -313,25 +323,26 @@ use \Application\Traits\EntityManagerAware;
                 }, $convertedFormulas);
 
         // Replace {Fo#12,Q#34,P#56} with QuestionnaireFormula value
-        $convertedFormulas = preg_replace_callback('/\{Fo#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($currentFilter, $currentQuestionnaire, $currentPart, $formula, $originalFormula) {
+        $convertedFormulas = preg_replace_callback('/\{Fo#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($currentFilter, $currentQuestionnaire, $currentPart, $formula, $originalFormula, $alreadyUsedFormulas) {
                     $formulaId = $matches[1];
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
 
-                    $questionnaire = $questionnaireId == 'current' ? $currentQuestionnaire : $questionnaireId;
-                    $part = $partId == 'current' ? $currentPart : $partId;
+                    $questionnaire = $questionnaireId == 'current' ? $currentQuestionnaire->getId() : $questionnaireId;
+                    $part = $partId == 'current' ? $currentPart->getId() : $partId;
 
-                    $questionnaireFormula = $this->getQuestionnaireFormulaRepository()->findOneBy(array(
+                    $criteria = array(
                         'formula' => $formulaId,
                         'questionnaire' => $questionnaire,
                         'part' => $part,
-                    ));
+                    );
+                    $questionnaireFormula = $this->getQuestionnaireFormulaRepository()->findOneBy($criteria);
 
                     if (!$questionnaireFormula) {
-                        throw new \Exception('Reference to non existing QuestionnaireFormula ' . $matches[0] . ' in  Formula#' . $formula->getId() . ', "' . $formula->getName() . '": ' . $originalFormula);
+                        throw new \Exception('Reference to non existing QuestionnaireFormula ' . $matches[0] . ' with ' . var_export($criteria, true) . ' in  Formula#' . $formula->getId() . ', "' . $formula->getName() . '": ' . $originalFormula);
                     }
 
-                    $value = $this->computeFormula($questionnaireFormula->getFormula(), $questionnaireFormula->getQuestionnaire(), $questionnaireFormula->getPart(), $currentFilter);
+                    $value = $this->computeFormula($questionnaireFormula, $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
@@ -348,9 +359,9 @@ use \Application\Traits\EntityManagerAware;
                 }, $convertedFormulas);
 
         // Replace {self} with computed value without this formula
-        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($currentFilter, $currentQuestionnaire, $currentPart, $formula) {
+        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($currentFilter, $currentQuestionnaire, $currentPart, $alreadyUsedFormulas) {
 
-                    $value = $this->computeFilterInternal($currentFilter, $currentQuestionnaire, new \Doctrine\Common\Collections\ArrayCollection(), $currentPart, $formula);
+                    $value = $this->computeFilter($currentFilter, $currentQuestionnaire, $currentPart, $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
