@@ -28,7 +28,6 @@ class HeadScript extends \Zend\View\Helper\HeadScript implements ServiceLocatorA
     protected function includeDirectory($directory, $method, $args)
     {
         foreach (glob($directory . '/*') as $file) {
-//            var_dump($file);
             if (is_dir($file)) {
                 $this->includeDirectory($file, $method, $args);
             } else {
@@ -43,7 +42,7 @@ class HeadScript extends \Zend\View\Helper\HeadScript implements ServiceLocatorA
      * Compiled and concatened files must pre-exist (compiled by external tools).
      * @param string $method
      * @param array $args
-     * @return OKpilot_View_Helper_HeadScript
+     * @return HeadScript
      */
     public function __call($method, $args)
     {
