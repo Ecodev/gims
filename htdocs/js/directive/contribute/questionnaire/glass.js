@@ -35,11 +35,12 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
 
             $scope.initializeQuestionnaire = function()
             {
+                console.info($scope.questionnaire);
                 if ($scope.questionnaire && $scope.questions.length > 0) {
 
                     $scope.questionnaire.level = -1;
                     $scope.questionnaire.index = -1;
-                    $scope.questionnaire.status= 4;
+                    $scope.questionnaire.statusCode= 4;
 
                     $scope.questions[0].active=true;
 
@@ -74,7 +75,30 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
 
 
 
+            $scope.closeQuestionnaireAndNotify = function()
+            {
+                console.info($scope.questionnaire.statusCode);
 
+                if($scope.questionnaire.statusCode==1 || $scope.questionnaire.statusCode==3) {
+
+                    console.info($scope.questionnaire);
+                    if ($scope.questionnaire.status = 'new'){
+                        console.info(' questionnaire complete');
+                        $scope.questionnaire.status = 'completed';
+                    } else {
+                        console.info(' questionnaire new');
+                        $scope.questionnaire.status = 'new';
+                    }
+
+                    // -> cyclic structure, remove children
+                    var children = $scope.questionnaire.children;
+                    delete $scope.questionnaire.children;
+
+                    $scope.questionnaire.put();
+                    $scope.questionnaire.children = children; // re-add children after request.
+                    console.info($scope.questionnaire.status);
+                }
+            }
 
 
             /**

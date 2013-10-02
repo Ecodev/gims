@@ -45,7 +45,7 @@ angular.module('myApp.services')
                 }
             });
 
-            return question.status = status;
+            return question.statusCode = status;
         }
 
 
@@ -121,7 +121,7 @@ angular.module('myApp.services')
                 status = (statusPerPart[i] < status) ? statusPerPart[i] : status;
             }
 
-            return question.status = status;
+            return question.statusCode = status;
         }
 
 
@@ -174,8 +174,8 @@ angular.module('myApp.services')
             var childrenStatus = 4;
             if (question.children) {
                 angular.forEach( question.children, function(child) {
-                    if (!child.status) child.status = QuestionAssistant.updateQuestion(child, index, firstExecution, false);
-                    childrenStatus = (child.status < childrenStatus) ? child.status : childrenStatus;
+                    if (!child.statusCode) child.statusCode = QuestionAssistant.updateQuestion(child, index, firstExecution, false);
+                    childrenStatus = (child.statusCode < childrenStatus) ? child.statusCode : childrenStatus;
                 });
             }
 
@@ -218,15 +218,15 @@ angular.module('myApp.services')
             {
 
                 if (question) {
-                    if(!question.status || updateStatus) question.status = indexQuestion(this, question, firstExecution, index);
+                    if(!question.statusCode || updateStatus) question.statusCode = indexQuestion(this, question, firstExecution, index);
 
                     var childrenStatus = getChildrenStatus(this, question, index, firstExecution);
-                    if (childrenStatus < question.status) {
-                        question.status = childrenStatus;
+                    if (childrenStatus < question.statusCode) {
+                        question.statusCode = childrenStatus;
                     }
                     this.updateQuestion(question.parent, index, firstExecution, updateStatus);
 
-                    return question.status;
+                    return question.statusCode;
                 }
             },
 

@@ -10,8 +10,8 @@ angular.module('myApp.directives').directive('gimsTextQuestion', function (Quest
                         "     </div>"+
                         "     <textarea class='span12' ng-required='question.isCompulsory' name='text' ng-model='index[question.id+\"-\"+part.id].valueText' ng-blur='save(question,part)'  id='numerical-{{question.id}}-{{part.id}}' ng-disabled='saving'></textarea>"+
                         "</div>"+
-                        "<span ng-show='question.isCompulsory' class='badge' ng-class=\"{'badge-important':question.status==1, 'badge-success':question.status==3}\">Required</span>"+
-                        "<span ng-show='!question.isCompulsory' class='badge' ng-class=\"{'badge-warning':question.status==2, 'badge-success':question.status==3}\">Optional</span>"+
+                        "<span ng-show='question.isCompulsory' class='badge' ng-class=\"{'badge-important':question.statusCode==1, 'badge-success':question.statusCode==3}\">Required</span>"+
+                        "<span ng-show='!question.isCompulsory' class='badge' ng-class=\"{'badge-warning':question.statusCode==2, 'badge-success':question.statusCode==3}\">Optional</span>"+
                    "</ng-form>",
         scope:{
             index:'=',

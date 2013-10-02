@@ -136,6 +136,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
             'Application module commands',
             'import jmp <file>' => "Import individual country file in JMP format",
             'import population [<urbanFile> <ruralFile> <totalFile>]' => "Import population data: urban, rural and toal at the same time. If not provided files will be downloaded",
+            'email <action> <id>' => "Send email"
         );
     }
 

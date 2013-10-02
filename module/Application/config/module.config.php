@@ -131,7 +131,7 @@ return array(
                     'default' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => '/[:controller[/:action]]',
+                                'route' => '/[:controller[/:action]]',
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
@@ -165,6 +165,7 @@ return array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Console' => 'Application\Controller\ConsoleController',
+            'Application\Controller\Email' => 'Application\Controller\EmailController',
             'zfcuser' => 'Api\Controller\AuthController',
         ),
     ),
@@ -211,6 +212,14 @@ return array(
                         'defaults' => array(
                             'controller' => 'Application\Controller\Console',
                             'action' => 'importPopulation'
+                        ),
+                    ),
+                ),
+                'email' => array(
+                    'options' => array(
+                        'route' => 'email <action> <id>',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Email',
                         ),
                     ),
                 ),

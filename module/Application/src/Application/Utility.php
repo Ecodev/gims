@@ -22,4 +22,11 @@ abstract class Utility
         return bcadd($number, $sign . "0.{$zeros}5", $precision);
     }
 
+
+    function executeCliCommand($command)
+    {
+        $fullCommand = 'php htdocs/index.php' . $command . ' > /dev/null 2>&1 &';
+        exec($fullCommand);
+    }
+
 }

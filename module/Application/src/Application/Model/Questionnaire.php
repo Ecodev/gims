@@ -8,71 +8,66 @@ use Doctrine\ORM\Mapping as ORM;
  * Questionnaire is a particular "instance" of a Survey for a specific country (or
  * more generally for a geographic location). So a questionnaire links questions to
  * a country and its answers.
- *
  * @ORM\Entity(repositoryClass="Application\Repository\QuestionnaireRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Questionnaire extends AbstractModel implements \Application\Service\RoleContextInterface
 {
 
+    private $originalStatus;
+
     /**
      * @var \DateTime
-     *
      * @ORM\Column(type="datetimetz", nullable=false)
      */
     private $dateObservationStart;
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(type="datetimetz", nullable=false)
      */
     private $dateObservationEnd;
 
     /**
      * @var Geoname
-     *
      * @ORM\ManyToOne(targetEntity="Geoname")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="SET NULL", nullable=false)
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=false)
      * })
      */
     private $geoname;
 
     /**
      * @var Survey
-     *
      * @ORM\ManyToOne(targetEntity="Survey", inversedBy="questionnaires")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
+     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
      */
     private $survey;
 
     /**
      * @var ArrayCollection
-     *
      * @ORM\OneToMany(targetEntity="Answer", mappedBy="questionnaire")
      */
     private $answers;
 
     /**
      * @var QuestionnaireStatus
-     *
      * @ORM\Column(type="questionnaire_status")
      */
     private $status;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="text", nullable=true)
      */
     private $comments;
 
     /**
      * Additional formulas to compute interesting values which are not found in Filter tree
-     * @var ArrayCollection
      *
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="\Application\Model\Rule\QuestionnaireFormula", mappedBy="questionnaire")
      * @ORM\OrderBy({"id" = "ASC"})
      */
@@ -93,15 +88,15 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
-            'name',
-        ));
+        return array_merge(parent::getJsonConfig(), array('name',
+            'status'));
     }
 
     /**
      * Set dateObservationStart
      *
      * @param \DateTime $dateObservationStart
+     *
      * @return Questionnaire
      */
     public function setDateObservationStart(\DateTime $dateObservationStart)
@@ -125,6 +120,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      * Set dateObservationEnd
      *
      * @param \DateTime $dateObservationEnd
+     *
      * @return Questionnaire
      */
     public function setDateObservationEnd(\DateTime $dateObservationEnd)
@@ -148,6 +144,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      * Set geoname
      *
      * @param Geoname $geoname
+     *
      * @return Questionnaire
      */
     public function setGeoname(Geoname $geoname)
@@ -171,6 +168,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      * Set survey
      *
      * @param Survey $survey
+     *
      * @return Questionnaire
      */
     public function setSurvey(Survey $survey)
@@ -194,6 +192,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Get answers
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getAnswers()
@@ -201,14 +200,17 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         return $this->answers;
     }
 
+
     /**
      * Set status
      *
      * @param string $status
+     *
      * @return Answer
      */
     public function setStatus(QuestionnaireStatus $status)
     {
+        $this->originalStatus = $this->status;
         $this->status = $status;
 
         return $this;
@@ -228,7 +230,9 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     /**
      * Notify the questionnaire that he has a new answer.
      * This should only be called by Answer::setQuestionnaire()
+     *
      * @param Answer $answer
+     *
      * @return Questionnaire
      */
     public function answerAdded(Answer $answer)
@@ -240,11 +244,12 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Return the computed name based on geoname and survey
+     *
      * @return string
      */
     public function getName()
     {
-        return $this->getSurvey()->getCode() . ' - ' . $this->getGeoname()->getName();
+        return $this->getSurvey()->getCode().' - '.$this->getGeoname()->getName();
     }
 
     /**
@@ -304,6 +309,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Get formulas
+     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getQuestionnaireFormulas()
@@ -314,7 +320,9 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     /**
      * Notify the questionnaire that it has a new formula.
      * This should only be called by QuestionnaireFormula::setQuestionnaire()
+     *
      * @param Rule\QuestionnaireFormula $questionnaireFormula
+     *
      * @return Questionnaire
      */
     public function questionnaireFormulaAdded(Rule\QuestionnaireFormula $questionnaireFormula)
@@ -350,5 +358,48 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
         return $result;
     }
+
+
+
+    /**
+     * If questionnaire change status from Validated to Complete/New, notify Questionnaire reporters that questionnaire is again editable
+     * @ORM\PostPersist
+     * @ORM\PostUpdate
+     */
+    public function notifyReporters()
+    {
+        if ($this->originalStatus == QuestionnaireStatus::$VALIDATED
+            && ($this->originalStatus == QuestionnaireStatus::$VALIDATED || $this->getStatus() == QuestionnaireStatus::$NEW)) {
+            Utility::executeCliCommand('email notifyQuestionnaireReporters '.$this->getId());
+        }
+    }
+
+    /**
+     * If questionnaire change status from New to Complete, notify validators
+     * @ORM\PostPersist
+     * @ORM\PostUpdate
+     */
+    public function notifyValidator()
+    {
+        if ($this->originalStatus == QuestionnaireStatus::$NEW
+            && $this->getStatus() == QuestionnaireStatus::$COMPLETE
+        ) {
+            Utility::executeCliCommand('email notifyQuestionnaireValidator '.$this->getId());
+        }
+    }
+
+    /**
+     * If questionnaire change status from Complete to Validated, notify Questionnaire creator
+     * @ORM\PostPersist
+     * @ORM\PostUpdate
+     */
+    public function notifyCreator()
+    {
+        if ($this->originalStatus == QuestionnaireStatus::$COMPLETE
+            && $this->getStatus() == QuestionnaireStatus::$VALIDATED) {
+            Utility::executeCliCommand('email notifyQuestionnaireCreator '.$this->getId());
+        }
+    }
+
 
 }

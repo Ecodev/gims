@@ -32,4 +32,15 @@ return array(
             ),
         ),
     ),
+    'smtp' => array(
+        'name'              => 'mail.ecodev.ch',
+        'host'              => 'mail.ecodev.ch',
+        //'connection_class'  => 'login',
+        'port'              => 587,
+        //'connection_config' => array(
+        //    'username' => '@ecodev.ch',
+        //    'password' => '',
+        //    'ssl'      => 'tls',
+        //),
+    ),
 );
