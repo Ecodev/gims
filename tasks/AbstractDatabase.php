@@ -55,6 +55,23 @@ STRING;
     }
 
     /**
+     * Dump data from database
+     * @param string $siteLocal
+     * @param string $dumpFile path
+     */
+    public static function dumpData($siteLocal, $dumpFile)
+    {
+        $config = require("$siteLocal/config/autoload/local.php");
+        $dbConfig = $config['doctrine']['connection']['orm_default']['params'];
+        $username = $dbConfig['user'];
+        $database = $dbConfig['dbname'];
+
+        echo "dumping $dumpFile...\n";
+        $dumpCmd = "pg_dump --host localhost --username $username --format=custom $database | gzip > $dumpFile";
+        exec($dumpCmd);
+    }
+
+    /**
      * Copy a file from $remote
      * @param string $remote
      * @param string $dumpFile

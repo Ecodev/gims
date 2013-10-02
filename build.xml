@@ -2,11 +2,17 @@
 
 <project name="GIMS" default="build">
 
+    <taskdef classname="tasks.CreateDump" name="create-dump" />
     <taskdef classname="tasks.LoadDump" name="load-dump" />
     <taskdef classname="tasks.LoadRemoteDump" name="load-remote-dump" />
 
+    <target name="dump-data">
+        <propertyprompt propertyName="dumpFile" defaultValue="db.backup.gz" promptText="Path to gzipped DB dump to be created" useExistingValue="true" />
+        <create-dump dumpfile="${dumpFile}" />
+    </target>
+
     <target name="load-data">
-        <propertyprompt propertyName="dumpFile" defaultValue="tests/data/db.backup.gz" promptText="Path to gzipped DB dump" useExistingValue="true" />
+        <propertyprompt propertyName="dumpFile" defaultValue="db.backup.gz" promptText="Path to gzipped DB dump" useExistingValue="true" />
         <load-dump dumpfile="${dumpFile}" />
     </target>
 
