@@ -33,6 +33,7 @@ use \Application\Traits\EntityManagerAware;
     private $questionnaireRepository;
     private $partRepository;
     private $answerRepository;
+    private $filterRuleRepository;
 
     /**
      * Set the population repository
@@ -185,6 +186,31 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
+     * Set the filterRule repository
+     * @param \Application\Repository\FilterRuleRepository $filterRuleRepository
+     * @return \Application\Service\Calculator\Calculator
+     */
+    public function setFilterRuleRepository(\Application\Repository\FilterRuleRepository $filterRuleRepository)
+    {
+        $this->filterRuleRepository = $filterRuleRepository;
+
+        return $this;
+    }
+
+    /**
+     * Get the filterRule repository
+     * @return \Application\Repository\FilterRuleRepository
+     */
+    public function getFilterRuleRepository()
+    {
+        if (!$this->filterRuleRepository) {
+            $this->filterRuleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
+        }
+
+        return $this->filterRuleRepository;
+    }
+
+    /**
      * Returns a unique identifying all arguments, so we can use the result as cache key
      * @param array $args
      * @return string
@@ -258,10 +284,9 @@ use \Application\Traits\EntityManagerAware;
         }
 
         // If the filter has a formula, returns its value
-        foreach ($filter->getFilterRules() as $filterRule) {
-            if ($filterRule->getFormula() && $filterRule->getQuestionnaire() === $questionnaire && $filterRule->getPart() === $part && !$alreadyUsedFormulas->contains($filterRule)) {
-                return $this->computeFormula($filterRule, $alreadyUsedFormulas);
-            }
+        $filterRule = $this->getFilterRuleRepository()->getFirstWithFormula($questionnaire, $filter, $part, $alreadyUsedFormulas);
+        if ($filterRule) {
+            return $this->computeFormula($filterRule, $alreadyUsedFormulas);
         }
 
         // Summer to sum values of given filters, but only if non-null (to preserve null value if no answer at all)

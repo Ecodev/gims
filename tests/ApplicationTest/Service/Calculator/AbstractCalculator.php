@@ -2,6 +2,7 @@
 
 namespace ApplicationTest\Service\Calculator;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Application\Model\Questionnaire;
 use Application\Model\Filter;
 use Application\Model\Part;
@@ -278,6 +279,25 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         return $stubAnswerRepository;
     }
 
+    protected function getStubFilterRuleRepository()
+    {
+        // Create a stub for the FilterRuleRepository class with predetermined values, so we don't have to mess with database
+        $stubFilterRuleRepository = $this->getMock('\Application\Repository\FilterRuleRepository', array('getFirstWithFormula'), array(), '', false);
+        $stubFilterRuleRepository->expects($this->any())
+                ->method('getFirstWithFormula')
+                ->will($this->returnCallback(function(Questionnaire $questionnaire, Filter $filter, Part $part, ArrayCollection $alreadyUsedFormulas) {
+                                    foreach ($filter->getFilterRules() as $filterRule) {
+                                        if ($filterRule->getFormula() && $filterRule->getQuestionnaire() === $questionnaire && $filterRule->getPart() === $part && !$alreadyUsedFormulas->contains($filterRule)) {
+                                            return $filterRule;
+                                        }
+                                    }
+                                    return null;
+                                })
+        );
+
+        return $stubFilterRuleRepository;
+    }
+
     /**
      *
      * @return \Application\Service\Calculator\Calculator
@@ -286,6 +306,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     {
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setAnswerRepository($this->getStubAnswerRepository());
+        $calculator->setFilterRuleRepository($this->getStubFilterRuleRepository());
 
         $calculator->setServiceLocator($this->getApplicationServiceLocator());
         return $calculator;
