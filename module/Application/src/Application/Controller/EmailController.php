@@ -84,22 +84,28 @@ class EmailController extends AbstractActionController
 
 
 
-    public function sendMail($users, $content)
+    public function sendMail($users, $subject, $content=null)
     {
         if (count($users) > 0) {
 
+            $config = $this->getServiceLocator()->get('Config');
+
             // Setup SMTP transport using LOGIN authentication
             $transport = new SmtpTransport();
-            $options   = new SmtpOptions( $this->getServiceLocator()->get('Config')['smtp']);
+            $options   = new SmtpOptions( $config['smtp']);
             $transport->setOptions($options);
 
             $mail = new Mail\Message();
-            $mail->setSubject($content);
-            $mail->setBody($content);
+            $mail->setSubject($subject);
+            $mail->setBody($subject);
             $mail->setFrom('webmaster@gimsinitiative.org', 'Gims project');
-            foreach ($users as $user) {
-                // replace $user->getEmail() instead of samuel.baptista@ecodev.ch (tests address) and remove from 2nd parameter
-                $mail->addTo('samuel.baptista@ecodev.ch', $user->getEmail().'-'.$user->getDisplayName());
+
+            if ($config['environment'] == 'dev') {
+                $mail->addTo('samuel.baptista@ecodev.ch','Samuel Baptista');
+            } else {
+                foreach ($users as $user) {
+                    $mail->addTo($user->getEmail(), $user->getDisplayName());
+                }
             }
 
             $dateNow = new \DateTime();
@@ -109,7 +115,6 @@ class EmailController extends AbstractActionController
             file_put_contents($log, $mail->toString());
 
             $transport->send($mail);
-
             return $mail->toString()."\n";
         }
     }

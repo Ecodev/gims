@@ -3,6 +3,7 @@
 namespace Application\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Application\Utility;
 
 /**
  * Questionnaire is a particular "instance" of a Survey for a specific country (or
@@ -382,7 +383,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function notifyValidator()
     {
         if ($this->originalStatus == QuestionnaireStatus::$NEW
-            && $this->getStatus() == QuestionnaireStatus::$COMPLETE
+            && $this->getStatus() == QuestionnaireStatus::$COMPLETED
         ) {
             Utility::executeCliCommand('email notifyQuestionnaireValidator '.$this->getId());
         }
@@ -395,7 +396,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     public function notifyCreator()
     {
-        if ($this->originalStatus == QuestionnaireStatus::$COMPLETE
+        if ($this->originalStatus == QuestionnaireStatus::$COMPLETED
             && $this->getStatus() == QuestionnaireStatus::$VALIDATED) {
             Utility::executeCliCommand('email notifyQuestionnaireCreator '.$this->getId());
         }

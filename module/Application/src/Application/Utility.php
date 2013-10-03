@@ -23,7 +23,7 @@ abstract class Utility
     }
 
 
-    function executeCliCommand($command)
+    public static function executeCliCommand($command)
     {
         $fullCommand = 'php htdocs/index.php' . $command . ' > /dev/null 2>&1 &';
         exec($fullCommand);
