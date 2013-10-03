@@ -2,12 +2,15 @@
 
 namespace Application\Controller;
 
-use Zend\View\Model\ViewModel;
-use Zend\Mvc\Controller\AbstractActionController;
+
 use Zend\Mail;
+use Zend\Mail\Message;
 use Zend\Mail\Transport\Smtp as SmtpTransport;
 use Zend\Mail\Transport\SmtpOptions;
-use Zend\Mail\Message;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
+use Zend\View\Renderer\PhpRenderer;
+use Zend\View\Resolver;
 use Application\Model\Questionnaire;
 
 class EmailController extends AbstractActionController
@@ -66,6 +69,7 @@ class EmailController extends AbstractActionController
 
 
 
+
     /**
      * Notify all questionnaire validators (dispatched by reporters)
      */
@@ -75,10 +79,18 @@ class EmailController extends AbstractActionController
         $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($questionnaireId);
 
         $users = $this->getUsersByRole($questionnaire, 'validator');
+
+//        $renderer = new PhpRenderer();
+//        $resolver = new Resolver\AggregateResolver();
+//        $renderer->setResolver($resolver);
+//        $model = new ViewModel(array('test' => 'test ok'));
+//        $model->setTemplate('email/email');
+//        $content = $renderer->render($model);
+
+
         $content = $this->sendMail($users, 'The questionnaire '.$questionnaire->getName().' has been completed.');
 
         return $content;
-        //$htmlViewPart = new ViewModel(array('test' => 'testok')); // <- work if $htmlViewPart is returned, not fetched (how to fetch ?)
     }
 
 
@@ -100,8 +112,8 @@ class EmailController extends AbstractActionController
             $mail->setBody($subject);
             $mail->setFrom('webmaster@gimsinitiative.org', 'Gims project');
 
-            if ($config['environment'] == 'dev') {
-                $mail->addTo('samuel.baptista@ecodev.ch','Samuel Baptista');
+            if (isset($config['emailOverride']) && !empty($config['emailOverride'])) {
+                $mail->addTo($config['emailOverride']);
             } else {
                 foreach ($users as $user) {
                     $mail->addTo($user->getEmail(), $user->getDisplayName());
