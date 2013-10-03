@@ -55,7 +55,14 @@ class QuestionController extends AbstractChildRestfulController
                 }
 
                 return $output;
-            });
+            },
+//
+//            'permissions' => function (\Application\Service\Hydrator $hydrator, AbstractQuestion $question) use (
+//                $questionnaire, $controller
+//            ) {
+//                return $questionnaire->getPermissions();
+//            }
+        );
 
         return $config;
     }

@@ -5,13 +5,11 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
         templateUrl: '/template/contribute/questions',
         controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal)
         {
-            //$scope.questionnaire = {index:-1,level:-1}; // this question is used as container for all questions. Allow recursive operations with an unique parent.
             $scope.navigation = []; // used in next + previous buttons
             $scope.hierarchicQuestions = []; // used in hierarchic menu
             $scope.currentIndex = 0;
             $scope.currentQuestion = 0;
             $scope.index = {}; // indexed answers
-            $scope.indexedQuestions = {};
             $scope.score = {};
 
 
@@ -32,10 +30,8 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
             });
 
 
-
             $scope.initializeQuestionnaire = function()
             {
-                console.info($scope.questionnaire);
                 if ($scope.questionnaire && $scope.questions.length > 0) {
 
                     $scope.questionnaire.level = -1;
@@ -48,8 +44,6 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
 
                         // assign key to each question -> navigation menu bar uses it to avoid loops
                         question.index = index;
-
-                        $scope.indexedQuestions[question.id] = question;
 
                         // prepare navigation
                         question.hasFinalParentChapters = $scope.hasFinalParentChapters(index);
@@ -75,28 +69,23 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
 
 
 
-            $scope.closeQuestionnaireAndNotify = function()
+            $scope.markQuestionnaireAs = function(newStatus)
             {
-                console.info($scope.questionnaire.statusCode);
+                if($scope.questionnaire.statusCode==2 || $scope.questionnaire.statusCode==3) {
+                    if (newStatus === 'completed' && $scope.questionnaire.status === 'new' ||
+                        newStatus === 'validated' && $scope.questionnaire.status === 'completed') {
+                        $scope.questionnaire.status = newStatus;
 
-                if($scope.questionnaire.statusCode==1 || $scope.questionnaire.statusCode==3) {
+                        // -> cyclic structure error -> remove children
+                        var children = $scope.questionnaire.children;
+                        delete $scope.questionnaire.children;
 
-                    console.info($scope.questionnaire);
-                    if ($scope.questionnaire.status = 'new'){
-                        console.info(' questionnaire complete');
-                        $scope.questionnaire.status = 'completed';
-                    } else {
-                        console.info(' questionnaire new');
-                        $scope.questionnaire.status = 'new';
+                        $scope.questionnaire.put().then(function(questionnaire){
+                            $scope.questionnaire.status = questionnaire.status
+                            $scope.questionnaire.children = children;
+                        });
+
                     }
-
-                    // -> cyclic structure, remove children
-                    var children = $scope.questionnaire.children;
-                    delete $scope.questionnaire.children;
-
-                    $scope.questionnaire.put();
-                    $scope.questionnaire.children = children; // re-add children after request.
-                    console.info($scope.questionnaire.status);
                 }
             }
 

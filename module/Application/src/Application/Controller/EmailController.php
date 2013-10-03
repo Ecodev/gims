@@ -46,9 +46,8 @@ class EmailController extends AbstractActionController
         $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($questionnaireId);
 
         $users = $this->getUsersByRole($questionnaire, 'validator');
-        $content = $this->sendMail($users, 'The questionnaire '.$questionnaire->getName().' has been re-opened.');
+        $this->sendMail($users, 'The questionnaire '.$questionnaire->getName().' has been re-opened.');
 
-        return $content;
     }
 
 
@@ -62,9 +61,8 @@ class EmailController extends AbstractActionController
         $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($questionnaireId);
 
         $creator = $questionnaire->getCreator();
-        $content = $this->sendMail(array($creator), 'The questionnaire '.$questionnaire->getName().' has been validated.') ;
+        $this->sendMail(array($creator), 'The questionnaire '.$questionnaire->getName().' has been validated.') ;
 
-        return $content;
     }
 
 
@@ -88,9 +86,8 @@ class EmailController extends AbstractActionController
 //        $content = $renderer->render($model);
 
 
-        $content = $this->sendMail($users, 'The questionnaire '.$questionnaire->getName().' has been completed.');
+        $this->sendMail($users, 'The questionnaire '.$questionnaire->getName().' has been completed.');
 
-        return $content;
     }
 
 
