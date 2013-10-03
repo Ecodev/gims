@@ -100,6 +100,7 @@ class JmpTest extends AbstractCalculator
         $this->service = new \Application\Service\Calculator\Jmp();
         $this->service->setPopulationRepository($stubPopulationRepository);
         $this->service->setPartRepository($stubPartRepository);
+        $this->service->setAnswerRepository($this->getStubAnswerRepository());
         $this->service2 = clone $this->service;
     }
 

@@ -2,6 +2,10 @@
 
 namespace ApplicationTest\Service\Calculator;
 
+use Application\Model\Questionnaire;
+use Application\Model\Filter;
+use Application\Model\Part;
+
 abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractController
 {
 
@@ -250,6 +254,41 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $this->highFilter1->addChild($this->filter1);
         $this->highFilter2->addChild($this->filter2);
         $this->highFilter3->addChild($this->filter1)->addChild($this->filter2)->addChild($this->filter3);
+    }
+
+    protected function getStubAnswerRepository()
+    {
+        // Create a stub for the AnswerRepository class with predetermined values, so we don't have to mess with database
+        $stubAnswerRepository = $this->getMock('\Application\Repository\AnswerRepository', array('getValuePercent'), array(), '', false);
+        $stubAnswerRepository->expects($this->any())
+                ->method('getValuePercent')
+                ->will($this->returnCallback(function(Questionnaire $questionnaire, Filter $filter, Part $part) {
+                                    foreach ($questionnaire->getAnswers() as $answer) {
+                                        $answerFilter = $answer->getQuestion()->getFilter()->getOfficialFilter() ? : $answer->getQuestion()->getFilter();
+                                        if ($answerFilter === $filter && $answer->getPart() === $part) {
+
+                                            return $answer->getValuePercent();
+                                        }
+                                    }
+
+                                    return null;
+                                })
+        );
+
+        return $stubAnswerRepository;
+    }
+
+    /**
+     *
+     * @return \Application\Service\Calculator\Calculator
+     */
+    protected function getNewCalculator()
+    {
+        $calculator = new \Application\Service\Calculator\Calculator();
+        $calculator->setAnswerRepository($this->getStubAnswerRepository());
+
+        $calculator->setServiceLocator($this->getApplicationServiceLocator());
+        return $calculator;
     }
 
 }

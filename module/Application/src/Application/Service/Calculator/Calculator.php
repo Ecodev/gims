@@ -32,6 +32,7 @@ use \Application\Traits\EntityManagerAware;
     private $filterRepository;
     private $questionnaireRepository;
     private $partRepository;
+    private $answerRepository;
 
     /**
      * Set the population repository
@@ -159,6 +160,31 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
+     * Set the answer repository
+     * @param \Application\Repository\AnswerRepository $answerRepository
+     * @return \Application\Service\Calculator\Calculator
+     */
+    public function setAnswerRepository(\Application\Repository\AnswerRepository $answerRepository)
+    {
+        $this->answerRepository = $answerRepository;
+
+        return $this;
+    }
+
+    /**
+     * Get the answer repository
+     * @return \Application\Repository\AnswerRepository
+     */
+    public function getAnswerRepository()
+    {
+        if (!$this->answerRepository) {
+            $this->answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
+        }
+
+        return $this->answerRepository;
+    }
+
+    /**
      * Returns a unique identifying all arguments, so we can use the result as cache key
      * @param array $args
      * @return string
@@ -226,13 +252,9 @@ use \Application\Traits\EntityManagerAware;
         }
 
         // If the filter have a specified answer, returns it (skip all computation)
-        foreach ($questionnaire->getAnswers() as $answer) {
-            $answerFilter = $answer->getQuestion()->getFilter()->getOfficialFilter() ? : $answer->getQuestion()->getFilter();
-            if ($answerFilter === $filter && $answer->getPart() === $part) {
-                $alreadySummedFilters->add(true);
-
-                return $answer->getValuePercent();
-            }
+        $answerValue = $this->getAnswerRepository()->getValuePercent($questionnaire, $filter, $part);
+        if (!is_null($answerValue)) {
+            return $answerValue;
         }
 
         // If the filter has a formula, returns its value

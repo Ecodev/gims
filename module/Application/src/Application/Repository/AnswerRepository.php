@@ -2,8 +2,55 @@
 
 namespace Application\Repository;
 
+use Application\Model\Questionnaire;
+use Application\Model\Filter;
+use Application\Model\Part;
+
 class AnswerRepository extends AbstractChildRepository
 {
+
+    private $cache = array();
+
+    /**
+     * Returns the percent value of an answer if it exists.
+     * Optimized for mass querying wihtin a Questionnaire based on a cache.
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @param \Application\Model\Filter $filter
+     * @param \Application\Model\Part $part
+     * @return float|null
+     */
+    public function getValuePercent(Questionnaire $questionnaire, Filter $filter, Part $part)
+    {
+        // If no cache for questionnaire, fill the cache
+        if (!isset($this->cache[$questionnaire->getId()])) {
+            $qb = $this->createQueryBuilder('answer')
+                    ->select('answer.valuePercent, part.id AS part_id, filter.id AS filter_id, officialFilter.id AS officialFilter_id')
+                    ->join('answer.question', 'question')
+                    ->join('answer.part', 'part')
+                    ->join('question.filter', 'filter')
+                    ->leftJoin('filter.officialFilter', 'officialFilter')
+                    ->andWhere('answer.questionnaire = :questionnaire')
+            ;
+
+            $qb->setParameters(array(
+                'questionnaire' => $questionnaire->getId(),
+            ));
+
+            $res = $qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SCALAR);
+
+            // Restructure cache to be [questionnaireId => [filterId => [partId => value]]]
+            foreach ($res as $data) {
+                if ($data['officialFilter_id'])
+                    $this->cache[$questionnaire->getId()][$data['officialFilter_id']][$data['part_id']] = (float) $data['valuePercent'];
+                else
+                    $this->cache[$questionnaire->getId()][$data['filter_id']][$data['part_id']] = (float) $data['valuePercent'];
+            }
+        }
+
+        $res = @$this->cache[$questionnaire->getId()][$filter->getId()][$part->getId()];
+
+        return $res;
+    }
 
     /**
      * Returns all items with read access
