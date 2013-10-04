@@ -18,7 +18,7 @@ angular.module('myApp.directives').directive('gimsQuestionnaireToolBar', functio
                 "            <li><button class='btn btn-default' ng-click='goToPrintMode()'><i class='icon-print'></i> Print</button></li>"+
                 "            <li class='divider-vertical'></li>"+
                 "            <li><button class='btn btn-default' ng-show='questionnaire.status==\"new\"' ng-click='markQuestionnaireAs(\"completed\")' ng-class=\"{'btn-success':questionnaire.statusCode==3, 'btn-warning':questionnaire.statusCode==2, disabled:questionnaire.statusCode==1}\"><i class='icon-check'></i> Submit for validation</button></li>"+
-                "            <li><button class='btn btn-default' ng-show='questionnaire.status==\"completed\"' ng-click='markQuestionnaireAs(\"validated\")' ng-class=\"{'btn-success':questionnaire.statusCode==3, 'btn-warning':questionnaire.statusCode==2, disabled:questionnaire.statusCode==1}\"><i class='icon-check'></i> Validate questionnaire</button></li>"+
+                "            <li><button class='btn btn-default' ng-show='questionnaire.status==\"completed\" && questionnaire.permissions.validate' ng-click='markQuestionnaireAs(\"validated\")' ng-class=\"{'btn-success':questionnaire.statusCode==3, 'btn-warning':questionnaire.statusCode==2, disabled:questionnaire.statusCode==1}\"><i class='icon-check'></i> Validate questionnaire</button></li>"+
                 "        </ul>"+
                 "    </div>"+
                 "</div>"

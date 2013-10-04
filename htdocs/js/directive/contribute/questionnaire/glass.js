@@ -71,9 +71,9 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
 
             $scope.markQuestionnaireAs = function(newStatus)
             {
-                if($scope.questionnaire.statusCode==2 || $scope.questionnaire.statusCode==3) {
+                if($scope.questionnaire.statusCode==1 || $scope.questionnaire.statusCode==3) {
                     if (newStatus === 'completed' && $scope.questionnaire.status === 'new' ||
-                        newStatus === 'validated' && $scope.questionnaire.status === 'completed') {
+                        newStatus === 'validated' && $scope.questionnaire.permissions.validate && $scope.questionnaire.status === 'completed') {
                         $scope.questionnaire.status = newStatus;
 
                         // -> cyclic structure error -> remove children
