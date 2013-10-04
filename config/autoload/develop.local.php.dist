@@ -31,4 +31,5 @@ return array(
         // ...
 
     //'emailOverride' => 'example@test.com'
+
 );
