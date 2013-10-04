@@ -43,4 +43,7 @@ return array(
         //    'ssl'      => 'tls',
         //),
     ),
+
+    'emailOverride' => 'your@email.com',
+    'domain' => 'gims.local'
 );
