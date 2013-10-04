@@ -361,7 +361,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     }
 
 
-
     /**
      * If questionnaire change status from Validated to Complete/New, notify Questionnaire reporters that questionnaire is again editable
      * @ORM\PostPersist
@@ -370,7 +369,8 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function notifyReporters()
     {
         if ($this->originalStatus == QuestionnaireStatus::$VALIDATED
-            && ($this->originalStatus == QuestionnaireStatus::$VALIDATED || $this->getStatus() == QuestionnaireStatus::$NEW)) {
+            && ($this->originalStatus == QuestionnaireStatus::$VALIDATED || $this->getStatus() == QuestionnaireStatus::$NEW)
+        ) {
             Utility::executeCliCommand('email notifyQuestionnaireReporters '.$this->getId());
         }
     }
@@ -397,7 +397,10 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function notifyCreator()
     {
         if ($this->originalStatus == QuestionnaireStatus::$COMPLETED
-            && $this->getStatus() == QuestionnaireStatus::$VALIDATED) {
+            && $this->getStatus() == QuestionnaireStatus::$VALIDATED
+            && $this->getPermissions()['validate']
+        ) {
+            echo 'a';
             Utility::executeCliCommand('email notifyQuestionnaireCreator '.$this->getId());
         }
     }

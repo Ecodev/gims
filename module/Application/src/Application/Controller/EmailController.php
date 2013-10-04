@@ -40,7 +40,7 @@ class EmailController extends AbstractActionController
     /**
      * Notify questionnaire reporters if the questionnaire is again editable
      */
-    public function notifyQuestionnaireReporters()
+    public function notifyQuestionnaireReportersAction()
     {
         $questionnaireId = $this->getRequest()->getParam('id');
         $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($questionnaireId);
@@ -54,15 +54,15 @@ class EmailController extends AbstractActionController
     /**
      * Notify questionnaire creator if (sent by validators)
      */
-    public function notifyQuestionnaireCreator()
+    public function notifyQuestionnaireCreatorAction()
     {
+        echo 'notif creator email';
         $questionnaireId = $this->getRequest()->getParam('id');
         /** @var Questionnaire $questionnaire */
         $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($questionnaireId);
 
         $creator = $questionnaire->getCreator();
         $this->sendMail(array($creator), 'The questionnaire '.$questionnaire->getName().' has been validated.') ;
-
     }
 
 
@@ -84,7 +84,6 @@ class EmailController extends AbstractActionController
 //        $model = new ViewModel(array('test' => 'test ok'));
 //        $model->setTemplate('email/email');
 //        $content = $renderer->render($model);
-
 
         $this->sendMail($users, 'The questionnaire '.$questionnaire->getName().' has been completed.');
 
