@@ -3,8 +3,6 @@
 namespace Application;
 
 use Locale;
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Db\ResultSet\ResultSet;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;

@@ -962,7 +962,7 @@ STRING;
         $replacedFormula = str_replace(array('*100', '/100'), '', $originalFormula);
 
         // Expand range syntax to enumerate each cell: "A1:A5" => "A1,A2,A3,A4,A5"
-        $cellPattern = '\$?(([[:alpha:]]+)(\\d+))';
+        $cellPattern = '\$?(([[:alpha:]]+)\$?(\\d+))';
         $expandedFormula = preg_replace_callback("/$cellPattern:$cellPattern/", function($matches) use ($sheet, $cell) {
 
                     // This only expand vertical ranges, not horizontal ranges (which probably never make any sense for JMP anyway)
