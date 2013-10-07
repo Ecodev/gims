@@ -289,25 +289,34 @@ use \Application\Traits\EntityManagerAware;
             return $this->computeFormula($filterRule, $alreadyUsedFormulas);
         }
 
-        // Summer to sum values of given filters, but only if non-null (to preserve null value if no answer at all)
-        $summer = function(\IteratorAggregate $filters) use ($questionnaire, $part, $alreadySummedFilters, $alreadyUsedFormulas) {
-                    $sum = null;
-                    foreach ($filters as $f) {
-                        $summandValue = $this->computeFilterInternal($f, $questionnaire, $part, $alreadyUsedFormulas, $alreadySummedFilters);
-                        if (!is_null($summandValue)) {
-                            $sum += $summandValue;
-                        }
-                    }
-
-                    return $sum;
-                };
-
         // First, attempt to sum summands
-        $sum = $summer($filter->getSummands());
+        $sum = $this->summer($filter->getSummands(), $questionnaire, $part, $alreadyUsedFormulas, $alreadySummedFilters);
 
         // If no sum so far, we use children instead. This is "normal case"
         if (is_null($sum)) {
-            $sum = $summer($filter->getChildren());
+            $sum = $this->summer($filter->getChildren(), $questionnaire, $part, $alreadyUsedFormulas, $alreadySummedFilters);
+        }
+
+        return $sum;
+    }
+
+    /**
+     * Summer to sum values of given filters, but only if non-null (to preserve null value if no answer at all)
+     * @param \IteratorAggregate $filters
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @param \Application\Model\Part $part
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters
+     * @return float|null
+     */
+    private function summer(\IteratorAggregate $filters, Questionnaire $questionnaire, Part $part, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
+    {
+        $sum = null;
+        foreach ($filters as $f) {
+            $summandValue = $this->computeFilterInternal($f, $questionnaire, $part, $alreadyUsedFormulas, $alreadySummedFilters);
+            if (!is_null($summandValue)) {
+                $sum += $summandValue;
+            }
         }
 
         return $sum;
