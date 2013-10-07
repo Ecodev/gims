@@ -1,18 +1,9 @@
 <?php
 
-/**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
-
 namespace Export\Controller;
 
 use Application\View\Model\ExcelModel;
 use Application\Traits\FlatHierarchicQuestions;
-
 
 class IndexController extends \Application\Controller\AbstractAngularActionController
 {
@@ -30,7 +21,7 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
         if ($permission) {
             $questions = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getAllWithPermission('read', 'survey', $questionnaire->getSurvey());
         }
-        $questions = $this->getFlatHierarchy($questions, array('type','filter','chapter','answers','answers.part','choices','parts','isMultiple','chapter'), new \Application\Service\Hydrator());
+        $questions = $this->getFlatHierarchy($questions, array('type', 'filter', 'chapter', 'answers', 'answers.part', 'choices', 'parts', 'isMultiple', 'chapter'), new \Application\Service\Hydrator());
 
         return new ExcelModel($this->params('filename'), array('questions' => $questions));
     }
