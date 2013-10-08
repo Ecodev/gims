@@ -4,7 +4,6 @@ namespace Application\Repository\Rule;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Model\Questionnaire;
-use Application\Model\Filter;
 use Application\Model\Part;
 
 class FilterRuleRepository extends \Application\Repository\AbstractRepository
@@ -16,12 +15,12 @@ class FilterRuleRepository extends \Application\Repository\AbstractRepository
      * Returns the percent value of an answer if it exists.
      * Optimized for mass querying wihtin a Questionnaire based on a cache.
      * @param \Application\Model\Questionnaire $questionnaire
-     * @param \Application\Model\Filter $filter
+     * @param integer $filterId
      * @param \Application\Model\Part $part
      * @param \Doctrine\Common\Collections\ArrayCollection $excluded
      * @return FilterRule|null
      */
-    public function getFirstWithFormula(Questionnaire $questionnaire, Filter $filter, Part $part, ArrayCollection $excluded)
+    public function getFirstWithFormula(Questionnaire $questionnaire, $filterId, Part $part, ArrayCollection $excluded)
     {
         // If no cache for questionnaire, fill the cache
         if (!isset($this->cache[$questionnaire->getId()])) {
@@ -47,7 +46,7 @@ class FilterRuleRepository extends \Application\Repository\AbstractRepository
             }
         }
 
-        $possible = @$this->cache[$questionnaire->getId()][$filter->getId()][$part->getId()] ? : array();
+        $possible = @$this->cache[$questionnaire->getId()][$filterId][$part->getId()] ? : array();
 
         foreach ($possible as $filterRule) {
             if (!$excluded->contains($filterRule))

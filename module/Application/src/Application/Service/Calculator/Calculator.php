@@ -4,12 +4,8 @@ namespace Application\Service\Calculator;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Model\Filter;
-use Application\Model\FilterSet;
-use Application\Model\Answer;
 use Application\Model\Part;
-use Application\Model\NumericQuestion;
 use Application\Model\Questionnaire;
-use Application\Model\Rule\Formula;
 use Application\Model\Rule\AbstractFormulaUsage;
 
 /**
@@ -248,7 +244,7 @@ use \Application\Traits\EntityManagerAware;
         if (!$alreadyUsedFormulas)
             $alreadyUsedFormulas = new ArrayCollection();
 
-        $result = $this->computeFilterInternal($filter, $questionnaire, $part, $alreadyUsedFormulas, new ArrayCollection());
+        $result = $this->computeFilterInternal($filter->getId(), $questionnaire, $part, $alreadyUsedFormulas, new ArrayCollection());
 
         $this->cacheComputeFilter[$key] = $result;
 
@@ -257,44 +253,47 @@ use \Application\Traits\EntityManagerAware;
 
     /**
      * Returns the computed value of the given filter, based on the questionnaire's available answers
-     * @param \Application\Model\Filter $filter
+     * @param integer $filterId
      * @param \Application\Model\Questionnaire $questionnaire
      * @param \Application\Model\Part $part
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas already used formula to be exclude when computing
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters will be used to avoid duplicates
      * @return float|null null if no answer at all, otherwise the percentage value
      */
-    private function computeFilterInternal(Filter $filter, Questionnaire $questionnaire, Part $part, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
+    private function computeFilterInternal($filterId, Questionnaire $questionnaire, Part $part, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
         // @todo for sylvain: the logic goes as follows: if the filter id is contained within excludeFilters, skip calculation.
-        if (in_array($filter->getId(), $this->excludedFilters)) {
+        if (in_array($filterId, $this->excludedFilters)) {
             return null;
         }
+
         // Avoid duplicates
-        if ($alreadySummedFilters->contains($filter)) {
+        if ($alreadySummedFilters->contains($filterId)) {
             return null;
         } else {
-            $alreadySummedFilters->add($filter);
+            $alreadySummedFilters->add($filterId);
         }
 
         // If the filter have a specified answer, returns it (skip all computation)
-        $answerValue = $this->getAnswerRepository()->getValuePercent($questionnaire, $filter, $part);
+        $answerValue = $this->getAnswerRepository()->getValuePercent($questionnaire, $filterId, $part);
         if (!is_null($answerValue)) {
             return $answerValue;
         }
 
         // If the filter has a formula, returns its value
-        $filterRule = $this->getFilterRuleRepository()->getFirstWithFormula($questionnaire, $filter, $part, $alreadyUsedFormulas);
+        $filterRule = $this->getFilterRuleRepository()->getFirstWithFormula($questionnaire, $filterId, $part, $alreadyUsedFormulas);
         if ($filterRule) {
             return $this->computeFormula($filterRule, $alreadyUsedFormulas);
         }
 
         // First, attempt to sum summands
-        $sum = $this->summer($filter->getSummands(), $questionnaire, $part, $alreadyUsedFormulas, $alreadySummedFilters);
+        $summandIds = $this->getFilterRepository()->getSummandIds($filterId, $questionnaire);
+        $sum = $this->summer($summandIds, $questionnaire, $part, $alreadyUsedFormulas, $alreadySummedFilters);
 
         // If no sum so far, we use children instead. This is "normal case"
         if (is_null($sum)) {
-            $sum = $this->summer($filter->getChildren(), $questionnaire, $part, $alreadyUsedFormulas, $alreadySummedFilters);
+            $childrenIds = $this->getFilterRepository()->getChildrenIds($filterId, $questionnaire);
+            $sum = $this->summer($childrenIds, $questionnaire, $part, $alreadyUsedFormulas, $alreadySummedFilters);
         }
 
         return $sum;
@@ -302,18 +301,18 @@ use \Application\Traits\EntityManagerAware;
 
     /**
      * Summer to sum values of given filters, but only if non-null (to preserve null value if no answer at all)
-     * @param \IteratorAggregate $filters
+     * @param \IteratorAggregate $filterIds
      * @param \Application\Model\Questionnaire $questionnaire
      * @param \Application\Model\Part $part
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters
      * @return float|null
      */
-    private function summer(\IteratorAggregate $filters, Questionnaire $questionnaire, Part $part, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
+    private function summer(array $filterIds, Questionnaire $questionnaire, Part $part, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
         $sum = null;
-        foreach ($filters as $f) {
-            $summandValue = $this->computeFilterInternal($f, $questionnaire, $part, $alreadyUsedFormulas, $alreadySummedFilters);
+        foreach ($filterIds as $filterId) {
+            $summandValue = $this->computeFilterInternal($filterId, $questionnaire, $part, $alreadyUsedFormulas, $alreadySummedFilters);
             if (!is_null($summandValue)) {
                 $sum += $summandValue;
             }

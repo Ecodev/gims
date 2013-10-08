@@ -7,6 +7,10 @@ use \ApplicationTest\Traits\TestWithTransaction;
 
 class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase
 {
+    /**
+     * @var array [classname => [id => object]]
+     */
+    private $identity = array();
 
     use TestWithTransaction {
         TestWithTransaction::setUp as setUpTransaction;
@@ -74,6 +78,51 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
         }
 
         $this->assertSame($expected, $prettyActualWithFloat, $message);
+    }
+
+    /**
+     * Return a new model from given class
+     * This is meant for in-memory tests and should never be used with actual database
+     * @param string $classname
+     * @return AbstractModel
+     */
+    protected function getNewModelWithId($classname)
+    {
+        if (!isset($this->identity[$classname]))
+            $this->identity[$classname] = array();
+
+        $id = count($this->identity[$classname]) + 1;
+
+        // Create a stub for the Questionnaire class with fake ID, so we don't have to mess with database
+        $stub = $this->getMock($classname, array('getId'));
+        $stub->expects($this->any())
+                ->method('getId')
+                ->will($this->returnValue($id));
+
+        $this->identity[$classname][$id] = $stub;
+        return $stub;
+    }
+
+    /**
+     * Returns an existing object with the given ID
+     * This is meant for in-memory tests and should never be used with actual database
+     * @param string $classname
+     * @param integer|\Closure $id if closure, return the first object where closure returns true
+     * @return type
+     */
+    protected function getModel($classname, $id)
+    {
+        if (is_callable($id)) {
+            foreach ($this->identity[$classname] as $object) {
+                if ($id($object)) {
+                    return $object;
+                }
+            }
+
+            return null;
+        } else {
+            return $this->identity[$classname][$id];
+        }
     }
 
 }

@@ -5,6 +5,8 @@ namespace Application\Repository;
 class FilterRepository extends AbstractRepository
 {
 
+    private $cache = array();
+
     use Traits\OrderedByName;
 
     /**
@@ -61,4 +63,45 @@ class FilterRepository extends AbstractRepository
         return $filter;
     }
 
+    public function getSummandIds($filterId)
+    {
+        return $this->getDescendantIds($filterId, 'summands');
+    }
+
+    public function getChildrenIds($filterId)
+    {
+        return $this->getDescendantIds($filterId, 'children');
+    }
+
+    protected function getDescendantIds($filterId, $descendantType)
+    {
+        if (!$this->cache) {
+
+            $qb = $this->createQueryBuilder('filter')
+                    ->select('filter, summands, children')
+                    ->leftJoin('filter.summands', 'summands')
+                    ->leftJoin('filter.children', 'children')
+            ;
+
+            // Restructure cache to be [questionnaireId => [filterId => [partId => value]]]
+            $res = $qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            foreach ($res as $filter) {
+
+                $descendants = array(
+                    'summands' => array(),
+                    'children' => array(),
+                );
+                foreach (array_keys($descendants) as $type) {
+                    foreach ($filter[$type] as $descendant) {
+                        $descendants[$type][] = $descendant['id'];
+                    }
+                }
+                $this->cache[$filter['id']] = $descendants;
+            }
+        }
+
+        return @$this->cache[$filterId][$descendantType] ? : array();
+    }
+
 }
+

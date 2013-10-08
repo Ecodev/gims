@@ -3,7 +3,6 @@
 namespace Application\Repository;
 
 use Application\Model\Questionnaire;
-use Application\Model\Filter;
 use Application\Model\Part;
 
 class AnswerRepository extends AbstractChildRepository
@@ -15,11 +14,11 @@ class AnswerRepository extends AbstractChildRepository
      * Returns the percent value of an answer if it exists.
      * Optimized for mass querying wihtin a Questionnaire based on a cache.
      * @param \Application\Model\Questionnaire $questionnaire
-     * @param \Application\Model\Filter $filter
+     * @param integer $filterId
      * @param \Application\Model\Part $part
      * @return float|null
      */
-    public function getValuePercent(Questionnaire $questionnaire, Filter $filter, Part $part)
+    public function getValuePercent(Questionnaire $questionnaire, $filterId, Part $part)
     {
         // If no cache for questionnaire, fill the cache
         if (!isset($this->cache[$questionnaire->getId()])) {
@@ -47,7 +46,7 @@ class AnswerRepository extends AbstractChildRepository
             }
         }
 
-        $res = @$this->cache[$questionnaire->getId()][$filter->getId()][$part->getId()];
+        $res = @$this->cache[$questionnaire->getId()][$filterId][$part->getId()];
 
         return $res;
     }

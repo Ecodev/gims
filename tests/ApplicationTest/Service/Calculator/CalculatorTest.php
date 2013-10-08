@@ -2,8 +2,6 @@
 
 namespace ApplicationTest\Service\Calculator;
 
-use Application\Service\Calculator\Calculator;
-
 class CalculatorTest extends AbstractCalculator
 {
 
@@ -52,7 +50,7 @@ class CalculatorTest extends AbstractCalculator
         $this->assertEquals($this->answer142->getValuePercent(), $this->getNewCalculator()->computeFilter($this->filter14, $this->questionnaire, $part), 'should be the sum of children, but only for selected part');
 
         // Add alternative (non-official) filter to previously unexisting answer
-        $this->filter21bis = new \Application\Model\Filter('cat 2.1 bis');
+        $this->filter21bis = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 2.1 bis');
         $this->filter21bis->setOfficialFilter($this->filter21);
         $this->question21bis = new \Application\Model\Question\NumericQuestion();
         $this->question21bis->setFilter($this->filter21bis);
@@ -73,7 +71,7 @@ class CalculatorTest extends AbstractCalculator
     {
         $service = $this->getNewCalculator();
 
-        $this->assertNull($service->computeFilter(new \Application\Model\Filter(), $this->questionnaire, $this->part), 'empty filter result is always null');
+        $this->assertNull($service->computeFilter($this->getNewModelWithId('\Application\Model\Filter'), $this->questionnaire, $this->part), 'empty filter result is always null');
         $this->assertEquals(0.1111, $service->computeFilter($this->highFilter1, $this->questionnaire, $this->part), 'when only one filter should be equal to that filter');
         $this->assertNull($service->computeFilter($this->highFilter2, $this->questionnaire, $this->part), 'when only one filter is null should also be null');
         $this->assertEquals(0.111111, $service->computeFilter($this->highFilter3, $this->questionnaire, $this->part), 'sum all filters');
@@ -112,17 +110,7 @@ class CalculatorTest extends AbstractCalculator
         $service = $this->getNewCalculator();
 
         // Create a stub for the FilterRepository class with predetermined values, so we don't have to mess with database
-        $nullFilter = new \Application\Model\Filter();
-        $stubFilterRepository = $this->getMock('\Application\Repository\FilterRepository', array('findOneById', 'findOneBy'), array(), '', false);
-        $stubFilterRepository->expects($this->any())
-                ->method('findOneById')
-                ->will($this->returnValueMap(array(
-                            array('1', $this->filter1),
-                            array('11', $this->filter11),
-                            array('12', $this->filter12),
-                            array('666', $nullFilter),
-        )));
-        $service->setFilterRepository($stubFilterRepository);
+        $nullFilter = $this->getNewModelWithId('\Application\Model\Filter');
 
         // Create a stub for the QuestionnaireRepository class with predetermined values, so we don't have to mess with database
         $stubQuestionnaireRepository = $this->getMock('\Application\Repository\QuestionnaireRepository', array('findOneById'), array(), '', false);
@@ -166,13 +154,13 @@ class CalculatorTest extends AbstractCalculator
         $this->assertEquals(50, $service->computeFormula($filterRule), 'should be able to handle standard Excel things');
 
         // Filter values
-        $formula->setFormula('= 10 + {F#11,Q#34,P#56}');
+        $formula->setFormula('= 10 + {F#2,Q#34,P#56}');
         $this->assertEquals(10.101, $service->computeFormula($filterRule), 'should be able to refer a Filter value');
 
         $formula->setFormula('= 10 + {F#current,Q#current,P#current}');
         $this->assertEquals(10.101, $service->computeFormula($filterRule), 'should be able to refer a Filter value with same Questionnaire and Part');
 
-        $formula->setFormula('= 10 + {F#666,Q#34,P#56}');
+        $formula->setFormula('= 10 + {F#' . $nullFilter->getId() . ',Q#34,P#56}');
         $this->assertEquals(10, $service->computeFormula($filterRule), 'should be able to refer a Filter value which is NULL');
 
         // QuestionnaireFormula values
@@ -191,13 +179,10 @@ class CalculatorTest extends AbstractCalculator
         $this->assertNull($service->computeFormula($filterRule), 'refering a non-existing Unofficial Filter name, returns null');
 
         // Inject our unnofficial filter
-        $unofficialFilter = new \Application\Model\Filter('unofficial with "double quotes"');
+        $unofficialFilter = $this->getNewModelWithId('\Application\Model\Filter')->setName('unofficial with "double quotes"');
         $unofficialFilter->setQuestionnaire($this->questionnaire)->setOfficialFilter($this->filter1);
-        $stubFilterRepository->expects($this->any())
-                ->method('findOneBy')
-                ->will($this->returnValue($unofficialFilter));
 
-        $formula->setFormula('=ISTEXT({F#12,Q#34})');
+        $formula->setFormula('=ISTEXT({F#' . $unofficialFilter->getOfficialFilter()->getId() . ',Q#' . $unofficialFilter->getQuestionnaire()->getId() . '})');
         $this->assertTrue($service->computeFormula($filterRule), 'should be able to refer an Unofficial Filter name');
     }
 
