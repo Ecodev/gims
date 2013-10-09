@@ -338,27 +338,23 @@ use \Application\Traits\EntityManagerAware;
         }
 
         $alreadyUsedFormulas->add($usage);
-        $formula = $usage->getFormula();
-        $currentQuestionnaire = $usage->getQuestionnaire();
-        $currentPart = $usage->getPart();
-        $currentFilter = $usage->getFilter();
+        $originalFormula = $usage->getFormula()->getFormula();
 
-        $originalFormula = $formula->getFormula();
         _log()->debug(__FUNCTION__, array($usage->getId(), $originalFormula));
 
         // Replace {F#12,Q#34,P#56} with Filter value
-        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($currentFilter, $currentQuestionnaire, $currentPart, $alreadyUsedFormulas) {
+        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage, $alreadyUsedFormulas) {
                     $filterId = $matches[1];
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
 
                     if ($filterId == 'current') {
-                        $filterId = $currentFilter->getId();
+                        $filterId = $usage->getFilter()->getId();
                     }
-                    $questionnaire = $questionnaireId == 'current' ? $currentQuestionnaire : $this->getQuestionnaireRepository()->findOneById($questionnaireId);
+                    $questionnaire = $questionnaireId == 'current' ? $usage->getQuestionnaire() : $this->getQuestionnaireRepository()->findOneById($questionnaireId);
 
                     if ($partId == 'current') {
-                        $partId = $currentPart->getId();
+                        $partId = $usage->getPart()->getId();
                     }
 
                     $value = $this->computeFilter($filterId, $questionnaire, $partId, $alreadyUsedFormulas);
@@ -367,12 +363,12 @@ use \Application\Traits\EntityManagerAware;
                 }, $originalFormula);
 
         // Replace {F#12,Q#34} with Unofficial Filter name, or NULL if no Unofficial Filter
-        $convertedFormulas = preg_replace_callback('/\{F#(\d+),Q#(\d+|current)\}/', function($matches) use ($currentQuestionnaire) {
+        $convertedFormulas = preg_replace_callback('/\{F#(\d+),Q#(\d+|current)\}/', function($matches) use ($usage) {
                     $officialFilterId = $matches[1];
                     $questionnaireId = $matches[2];
 
                     if ($questionnaireId == 'current') {
-                        $currentQuestionnaire->getId();
+                        $usage->getQuestionnaire()->getId();
                     }
 
                     $unofficialFilterName = $this->getFilterRepository()->getUnofficialName($officialFilterId, $questionnaireId);
@@ -385,13 +381,13 @@ use \Application\Traits\EntityManagerAware;
                 }, $convertedFormulas);
 
         // Replace {Fo#12,Q#34,P#56} with QuestionnaireFormula value
-        $convertedFormulas = preg_replace_callback('/\{Fo#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($currentFilter, $currentQuestionnaire, $currentPart, $formula, $originalFormula, $alreadyUsedFormulas) {
+        $convertedFormulas = preg_replace_callback('/\{Fo#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage, $alreadyUsedFormulas) {
                     $formulaId = $matches[1];
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
 
-                    $questionnaire = $questionnaireId == 'current' ? $currentQuestionnaire->getId() : $questionnaireId;
-                    $part = $partId == 'current' ? $currentPart->getId() : $partId;
+                    $questionnaire = $questionnaireId == 'current' ? $usage->getQuestionnaire()->getId() : $questionnaireId;
+                    $part = $partId == 'current' ? $usage->getPart()->getId() : $partId;
 
                     $criteria = array(
                         'formula' => $formulaId,
@@ -401,7 +397,7 @@ use \Application\Traits\EntityManagerAware;
                     $questionnaireFormula = $this->getQuestionnaireFormulaRepository()->findOneBy($criteria);
 
                     if (!$questionnaireFormula) {
-                        throw new \Exception('Reference to non existing QuestionnaireFormula ' . $matches[0] . ' with ' . var_export($criteria, true) . ' in  Formula#' . $formula->getId() . ', "' . $formula->getName() . '": ' . $originalFormula);
+                        throw new \Exception('Reference to non existing QuestionnaireFormula ' . $matches[0] . ' with ' . var_export($criteria, true) . ' in  Formula#' . $usage->getFormula()->getId() . ', "' . $usage->getFormula()->getName() . '": ' . $usage->getFormula()->getFormula());
                     }
 
                     $value = $this->computeFormula($questionnaireFormula, $alreadyUsedFormulas);
@@ -410,23 +406,23 @@ use \Application\Traits\EntityManagerAware;
                 }, $convertedFormulas);
 
         // Replace {Q#34,P#56} with population data
-        $convertedFormulas = preg_replace_callback('/\{Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($currentQuestionnaire, $currentPart) {
+        $convertedFormulas = preg_replace_callback('/\{Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage) {
                     $questionnaireId = $matches[1];
                     $partId = $matches[2];
 
-                    $questionnaire = $this->getQuestionnaireRepository()->findOneById($questionnaireId == 'current' ? $currentQuestionnaire : $questionnaireId);
+                    $questionnaire = $this->getQuestionnaireRepository()->findOneById($questionnaireId == 'current' ? $usage->getQuestionnaire() : $questionnaireId);
 
                     if ($partId == 'current') {
-                        $partId = $currentPart->getId();
+                        $partId = $usage->getPart()->getId();
                     }
 
                     return $this->getPopulationRepository()->getOneByQuestionnaire($questionnaire, $partId)->getPopulation();
                 }, $convertedFormulas);
 
         // Replace {self} with computed value without this formula
-        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($currentFilter, $currentQuestionnaire, $currentPart, $alreadyUsedFormulas) {
+        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($usage, $alreadyUsedFormulas) {
 
-                    $value = $this->computeFilter($currentFilter->getId(), $currentQuestionnaire, $currentPart->getId(), $alreadyUsedFormulas);
+                    $value = $this->computeFilter($usage->getFilter()->getId(), $usage->getQuestionnaire(), $usage->getPart()->getId(), $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
