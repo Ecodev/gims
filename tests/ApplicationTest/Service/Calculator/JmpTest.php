@@ -64,8 +64,8 @@ class JmpTest extends AbstractCalculator
                 ->addFilter($this->highFilter2)
                 ->addFilter($this->highFilter3);
 
-        $this->part1 = new \Application\Model\Part('tst part 1');
-        $this->part2 = new \Application\Model\Part('tst part 2');
+        $this->part1 = $this->getNewModelWithId('\Application\Model\Part')->setName('tst part 1');
+        $this->part2 = $this->getNewModelWithId('\Application\Model\Part')->setName('tst part 2');
 
         // Create a stub for the PartRepository class, so we don't have to mess with database
         $stubPartRepository = $this->getMock('\Application\Repository\PartRepository', array('getAllNonTotal'), array(), '', false);

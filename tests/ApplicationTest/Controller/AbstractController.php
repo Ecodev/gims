@@ -7,6 +7,7 @@ use \ApplicationTest\Traits\TestWithTransaction;
 
 class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase
 {
+
     /**
      * @var array [classname => [id => object]]
      */
@@ -86,20 +87,25 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
      * @param string $classname
      * @return AbstractModel
      */
-    protected function getNewModelWithId($classname)
+    protected function getNewModelWithId($classname, $mockedMethods = array())
     {
         if (!isset($this->identity[$classname]))
             $this->identity[$classname] = array();
 
         $id = count($this->identity[$classname]) + 1;
+        $mockedMethods ['getId'] = $this->returnValue($id);
 
-        // Create a stub for the Questionnaire class with fake ID, so we don't have to mess with database
-        $stub = $this->getMock($classname, array('getId'));
-        $stub->expects($this->any())
-                ->method('getId')
-                ->will($this->returnValue($id));
+        // Create a stub for the class with fake ID, so we don't have to mess with database
+        $stub = $this->getMock($classname, array_keys($mockedMethods));
+        foreach ($mockedMethods as $methodName => $methodReturnValue) {
+
+            $stub->expects($this->any())
+                    ->method($methodName)
+                    ->will($methodReturnValue);
+        }
 
         $this->identity[$classname][$id] = $stub;
+
         return $stub;
     }
 

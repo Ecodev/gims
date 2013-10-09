@@ -8,10 +8,10 @@ class PopulationRepository extends AbstractRepository
     /**
      * Returns the population for given questionnaire and part
      * @param \Application\Model\Questionnaire $questionnaire
-     * @param \Application\Model\Part $part
+     * @param integer $partId
      * @return \Application\Model\Population
      */
-    public function getOneByQuestionnaire(\Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part)
+    public function getOneByQuestionnaire(\Application\Model\Questionnaire $questionnaire, $partId)
     {
         $query = $this->getEntityManager()->createQuery("SELECT p FROM Application\Model\Population p
             JOIN p.country c
@@ -27,7 +27,7 @@ class PopulationRepository extends AbstractRepository
         $params = array(
             'questionnaire' => $questionnaire,
             'year' => $questionnaire->getSurvey()->getYear(),
-            'part' => $part,
+            'part' => $partId,
         );
 
         $query->setParameters($params);

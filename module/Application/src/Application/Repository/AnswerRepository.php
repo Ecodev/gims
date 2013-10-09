@@ -15,10 +15,10 @@ class AnswerRepository extends AbstractChildRepository
      * Optimized for mass querying wihtin a Questionnaire based on a cache.
      * @param \Application\Model\Questionnaire $questionnaire
      * @param integer $filterId
-     * @param \Application\Model\Part $part
+     * @param integer $partId
      * @return float|null
      */
-    public function getValuePercent(Questionnaire $questionnaire, $filterId, Part $part)
+    public function getValuePercent(Questionnaire $questionnaire, $filterId, $partId)
     {
         // If no cache for questionnaire, fill the cache
         if (!isset($this->cache[$questionnaire->getId()])) {
@@ -45,8 +45,8 @@ class AnswerRepository extends AbstractChildRepository
                     $this->cache[$questionnaire->getId()][$data['filter_id']][$data['part_id']] = (float) $data['valuePercent'];
             }
         }
-
-        $res = @$this->cache[$questionnaire->getId()][$filterId][$part->getId()];
+//v($partId);
+        $res = @$this->cache[$questionnaire->getId()][$filterId][$partId];
 
         return $res;
     }

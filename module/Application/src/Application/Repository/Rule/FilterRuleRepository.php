@@ -16,11 +16,11 @@ class FilterRuleRepository extends \Application\Repository\AbstractRepository
      * Optimized for mass querying wihtin a Questionnaire based on a cache.
      * @param \Application\Model\Questionnaire $questionnaire
      * @param integer $filterId
-     * @param \Application\Model\Part $part
+     * @param integer $partId
      * @param \Doctrine\Common\Collections\ArrayCollection $excluded
      * @return FilterRule|null
      */
-    public function getFirstWithFormula(Questionnaire $questionnaire, $filterId, Part $part, ArrayCollection $excluded)
+    public function getFirstWithFormula(Questionnaire $questionnaire, $filterId, $partId, ArrayCollection $excluded)
     {
         // If no cache for questionnaire, fill the cache
         if (!isset($this->cache[$questionnaire->getId()])) {
@@ -46,7 +46,7 @@ class FilterRuleRepository extends \Application\Repository\AbstractRepository
             }
         }
 
-        $possible = @$this->cache[$questionnaire->getId()][$filterId][$part->getId()] ? : array();
+        $possible = @$this->cache[$questionnaire->getId()][$filterId][$partId] ? : array();
 
         foreach ($possible as $filterRule) {
             if (!$excluded->contains($filterRule))

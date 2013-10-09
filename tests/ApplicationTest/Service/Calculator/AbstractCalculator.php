@@ -225,11 +225,10 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $this->question32->setFilter($this->filter32);
 
         // Create a stub for the Part class, so we can tell it represent the total part (it's usually a read-only property)
-        $this->part = $this->getMock('\Application\Model\Part', array('isTotal'));
-        $this->part->expects($this->any())
-                ->method('isTotal')
-                ->will($this->returnValue(true));
+        $this->part = $this->getNewModelWithId('\Application\Model\Part', array('isTotal' => $this->returnValue(true)));
 
+        $this->assertTrue($this->part->isTotal());
+        
         $this->answer131 = new \Application\Model\Answer();
         $this->answer132 = new \Application\Model\Answer();
         $this->answer141 = new \Application\Model\Answer();
@@ -259,10 +258,10 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $stubAnswerRepository = $this->getMock('\Application\Repository\AnswerRepository', array('getValuePercent'), array(), '', false);
         $stubAnswerRepository->expects($this->any())
                 ->method('getValuePercent')
-                ->will($this->returnCallback(function(Questionnaire $questionnaire, $filterId, Part $part) {
+                ->will($this->returnCallback(function(Questionnaire $questionnaire, $filterId, $partId) {
                                     foreach ($questionnaire->getAnswers() as $answer) {
                                         $answerFilter = $answer->getQuestion()->getFilter()->getOfficialFilter() ? : $answer->getQuestion()->getFilter();
-                                        if ($answerFilter->getId() === $filterId && $answer->getPart() === $part) {
+                                        if ($answerFilter->getId() == $filterId && $answer->getPart()->getId() == $partId) {
 
                                             return $answer->getValuePercent();
                                         }
@@ -281,11 +280,11 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $stubFilterRuleRepository = $this->getMock('\Application\Repository\FilterRuleRepository', array('getFirstWithFormula', 'getSummands', 'getChildren'), array(), '', false);
         $stubFilterRuleRepository->expects($this->any())
                 ->method('getFirstWithFormula')
-                ->will($this->returnCallback(function(Questionnaire $questionnaire, $filterId, Part $part, ArrayCollection $alreadyUsedFormulas) {
+                ->will($this->returnCallback(function(Questionnaire $questionnaire, $filterId, $partId, ArrayCollection $alreadyUsedFormulas) {
 
                                     $filter = $this->getModel('\Application\Model\Filter', $filterId);
                                     foreach ($filter->getFilterRules() as $filterRule) {
-                                        if ($filterRule->getFormula() && $filterRule->getQuestionnaire() === $questionnaire && $filterRule->getPart() === $part && !$alreadyUsedFormulas->contains($filterRule)) {
+                                        if ($filterRule->getFormula() && $filterRule->getQuestionnaire() === $questionnaire && $filterRule->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterRule)) {
                                             return $filterRule;
                                         }
                                     }
