@@ -15,7 +15,7 @@ class PopulationRepository extends AbstractRepository
      */
     public function getOneByQuestionnaire(\Application\Model\Questionnaire $questionnaire, $partId)
     {
-        if (!$this->cache) {
+        if (!isset($this->cache[$questionnaire->getGeoname()->getId()])) {
 
             $query = $this->getEntityManager()->createQuery("SELECT p FROM Application\Model\Population p
         JOIN p.country c WITH c.geoname = :geoname"
@@ -26,11 +26,11 @@ class PopulationRepository extends AbstractRepository
             ));
 
             foreach ($query->getResult() as $p) {
-                $this->cache[$p->getYear()][$p->getPart()->getId()] = $p;
+                $this->cache[$questionnaire->getGeoname()->getId()][$p->getYear()][$p->getPart()->getId()] = $p;
             }
         }
 
-        return $this->cache[$questionnaire->getSurvey()->getYear()][$partId];
+        return $this->cache[$questionnaire->getGeoname()->getId()][$questionnaire->getSurvey()->getYear()][$partId];
     }
 
     /**
