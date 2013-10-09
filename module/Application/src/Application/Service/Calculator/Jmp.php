@@ -261,7 +261,7 @@ class Jmp extends Calculator
             $years[$questionnaire->getId()] = $year;
             $surveys[$questionnaire->getId()] = $questionnaire->getSurvey()->getCode();
 
-            $computed = $this->computeFilter($filter, $questionnaire, $part);
+            $computed = $this->computeFilter($filter->getId(), $questionnaire, $part);
             if (is_null($computed)) {
                 $result['values'][$questionnaire->getId()] = null;
 

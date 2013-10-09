@@ -297,7 +297,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
 
     protected function getStubFilterRepository()
     {
-        $stubFilterRepository = $this->getMock('\Application\Repository\FilterRepository', array('findOneBy', 'findOneById', 'getSummandIds', 'getChildrenIds'), array(), '', false);
+        $stubFilterRepository = $this->getMock('\Application\Repository\FilterRepository', array('getUnofficialName', 'findOneById', 'getSummandIds', 'getChildrenIds'), array(), '', false);
 
         $stubFilterRepository->expects($this->any())->method('getSummandIds')
                 ->will($this->returnCallback(function($filterId) {
@@ -324,12 +324,14 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
                                 }));
 
         $stubFilterRepository->expects($this->any())
-                ->method('findOneBy')
-                ->will($this->returnCallback(function($searchParams) {
+                ->method('getUnofficialName')
+                ->will($this->returnCallback(function($officialFilterId, $questionnaireId) {
 
-                                    return $this->getModel('\Application\Model\Filter', function($filter) use($searchParams) {
-                                                        return $filter->getOfficialFilter() && $filter->getOfficialFilter()->getId() == $searchParams['officialFilter'] && $filter->getQuestionnaire() && $filter->getQuestionnaire()->getId() == $searchParams['questionnaire'];
-                                                    });
+                                    $filter = $this->getModel('\Application\Model\Filter', function($filter) use($officialFilterId, $questionnaireId) {
+                                                return $filter->getOfficialFilter() && $filter->getOfficialFilter()->getId() == $officialFilterId && $filter->getQuestionnaire() && $filter->getQuestionnaire()->getId() == $questionnaireId;
+                                            });
+
+                                    return $filter ? $filter->getName() : null;
                                 }));
 
         return $stubFilterRepository;

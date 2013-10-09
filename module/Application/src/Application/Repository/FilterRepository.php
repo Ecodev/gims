@@ -5,7 +5,8 @@ namespace Application\Repository;
 class FilterRepository extends AbstractRepository
 {
 
-    private $cache = array();
+    private $cacheDescendants = array();
+    private $cacheUnofficialNames = array();
 
     use Traits\OrderedByName;
 
@@ -63,19 +64,35 @@ class FilterRepository extends AbstractRepository
         return $filter;
     }
 
+    /**
+     * Returns an array of ID of summands
+     * @param integer $filterId
+     * @return array
+     */
     public function getSummandIds($filterId)
     {
         return $this->getDescendantIds($filterId, 'summands');
     }
 
+    /**
+     * Returns an array of ID of children
+     * @param integer $filterId
+     * @return array
+     */
     public function getChildrenIds($filterId)
     {
         return $this->getDescendantIds($filterId, 'children');
     }
 
+    /**
+     * Returns an array of ID of descendants (either summands or children)
+     * @param integer $filterId
+     * @param string $descendantType
+     * @return array
+     */
     protected function getDescendantIds($filterId, $descendantType)
     {
-        if (!$this->cache) {
+        if (!$this->cacheDescendants) {
 
             $qb = $this->createQueryBuilder('filter')
                     ->select('filter, summands, children')
@@ -96,11 +113,40 @@ class FilterRepository extends AbstractRepository
                         $descendants[$type][] = $descendant['id'];
                     }
                 }
-                $this->cache[$filter['id']] = $descendants;
+                $this->cacheDescendants[$filter['id']] = $descendants;
             }
         }
 
-        return @$this->cache[$filterId][$descendantType] ? : array();
+        return @$this->cacheDescendants[$filterId][$descendantType] ? : array();
+    }
+
+    /**
+     * Return the unofficial name of an official filter for the given questionnaire
+     * @param integer $officialFilterId
+     * @param integer $questionnaireId
+     * @return string|null
+     */
+    public function getUnofficialName($officialFilterId, $questionnaireId)
+    {
+
+        if (!isset($this->cacheUnofficialNames[$questionnaireId])) {
+
+            $qb = $this->createQueryBuilder('filter')
+                    ->select('officialFilter.id, filter.name')
+                    ->join('filter.officialFilter', 'officialFilter')
+                    ->andWhere('filter.questionnaire = :questionnaire')
+            ;
+
+            $qb->setParameter('questionnaire', $questionnaireId);
+
+            // Restructure cache to be [questionnaireId => [officialFilterId => name]]
+            $res = $qb->getQuery()->getResult();
+            foreach ($res as $filter) {
+                $this->cacheUnofficialNames[$questionnaireId][$filter['id']] = $filter['name'];
+            }
+        }
+
+        return @$this->cacheUnofficialNames[$questionnaireId][$officialFilterId];
     }
 
 }

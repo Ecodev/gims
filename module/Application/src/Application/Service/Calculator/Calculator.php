@@ -230,12 +230,12 @@ use \Application\Traits\EntityManagerAware;
 
     /**
      * Returns the computed value of the given filter, based on the questionnaire's available answers
-     * @param \Application\Model\Filter $filter
+     * @param integer $filterId
      * @param \Application\Model\Questionnaire $questionnaire
      * @param \Application\Model\Part $part
      * @return float|null null if no answer at all, otherwise the percentage value
      */
-    public function computeFilter(Filter $filter, Questionnaire $questionnaire, Part $part, ArrayCollection $alreadyUsedFormulas = null)
+    public function computeFilter($filterId, Questionnaire $questionnaire, Part $part, ArrayCollection $alreadyUsedFormulas = null)
     {
         $key = $this->getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheComputeFilter)) {
@@ -244,7 +244,7 @@ use \Application\Traits\EntityManagerAware;
         if (!$alreadyUsedFormulas)
             $alreadyUsedFormulas = new ArrayCollection();
 
-        $result = $this->computeFilterInternal($filter->getId(), $questionnaire, $part, $alreadyUsedFormulas, new ArrayCollection());
+        $result = $this->computeFilterInternal($filterId, $questionnaire, $part, $alreadyUsedFormulas, new ArrayCollection());
 
         $this->cacheComputeFilter[$key] = $result;
 
@@ -262,6 +262,8 @@ use \Application\Traits\EntityManagerAware;
      */
     private function computeFilterInternal($filterId, Questionnaire $questionnaire, Part $part, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
+
+        _log()->debug(__FUNCTION__, array($filterId, $questionnaire->getName(), $part->getName()));
         // @todo for sylvain: the logic goes as follows: if the filter id is contained within excludeFilters, skip calculation.
         if (in_array($filterId, $this->excludedFilters)) {
             return null;
@@ -348,11 +350,13 @@ use \Application\Traits\EntityManagerAware;
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
 
-                    $filter = $filterId == 'current' ? $currentFilter : $this->getFilterRepository()->findOneById($filterId);
+                    if ($filterId == 'current') {
+                        $filterId = $currentFilter->getId();
+                    }
                     $questionnaire = $questionnaireId == 'current' ? $currentQuestionnaire : $this->getQuestionnaireRepository()->findOneById($questionnaireId);
                     $part = $partId == 'current' ? $currentPart : $this->getPartRepository()->findOneById($partId);
 
-                    $value = $this->computeFilter($filter, $questionnaire, $part, $alreadyUsedFormulas);
+                    $value = $this->computeFilter($filterId, $questionnaire, $part, $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $originalFormula);
@@ -362,18 +366,16 @@ use \Application\Traits\EntityManagerAware;
                     $officialFilterId = $matches[1];
                     $questionnaireId = $matches[2];
 
-                    $questionnaire = $questionnaireId == 'current' ? $currentQuestionnaire->getId() : $questionnaireId;
+                    if ($questionnaireId == 'current') {
+                        $currentQuestionnaire->getId();
+                    }
 
-                    $unofficialFilter = $this->getFilterRepository()->findOneBy(array(
-                        'officialFilter' => $officialFilterId,
-                        'questionnaire' => $questionnaire,
-                    ));
-
-                    if ($unofficialFilter) {
-                        // Format string for Excel formula
-                        return '"' . str_replace('"', '""', $unofficialFilter->getName()) . '"';
-                    } else {
+                    $unofficialFilterName = $this->getFilterRepository()->getUnofficialName($officialFilterId, $questionnaireId);
+                    if (is_null($unofficialFilterName)) {
                         return 'NULL';
+                    } else {
+                        // Format string for Excel formula
+                        return '"' . str_replace('"', '""', $unofficialFilterName) . '"';
                     }
                 }, $convertedFormulas);
 
@@ -416,7 +418,7 @@ use \Application\Traits\EntityManagerAware;
         // Replace {self} with computed value without this formula
         $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($currentFilter, $currentQuestionnaire, $currentPart, $alreadyUsedFormulas) {
 
-                    $value = $this->computeFilter($currentFilter, $currentQuestionnaire, $currentPart, $alreadyUsedFormulas);
+                    $value = $this->computeFilter($currentFilter->getId(), $currentQuestionnaire, $currentPart, $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
