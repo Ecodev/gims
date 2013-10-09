@@ -2,6 +2,8 @@
 
 namespace Application\Repository\Rule;
 
+use Application\Model\Questionnaire;
+
 class QuestionnaireFormulaRepository extends \Application\Repository\AbstractRepository
 {
 
@@ -29,6 +31,41 @@ class QuestionnaireFormulaRepository extends \Application\Repository\AbstractRep
         $questionnaireFormula = $qb->getQuery()->getResult();
 
         return $questionnaireFormula;
+    }
+
+    /**
+     * Returns a QuestionnaireFormula for the given triplet
+     * @param integer $questionnaireId
+     * @param integer $partId
+     * @param integer $formulaId
+     * @return \Application\Model\Rule\QuestionnaireFormula|null
+     */
+    public function getOneByQuestionnaire($questionnaireId, $partId, $formulaId)
+    {
+        // If no cache for questionnaire, fill the cache
+        if (!isset($this->cache[$questionnaireId])) {
+            $qb = $this->createQueryBuilder('questionnaireFormula')
+                    ->select('questionnaireFormula, questionnaire, formula')
+                    ->join('questionnaireFormula.questionnaire', 'questionnaire')
+                    ->join('questionnaireFormula.formula', 'formula')
+                    ->andWhere('questionnaireFormula.questionnaire = :questionnaire')
+            ;
+
+            $qb->setParameters(array(
+                'questionnaire' => $questionnaireId,
+            ));
+
+            $res = $qb->getQuery()->getResult();
+
+            // Restructure cache to be [questionnaireId => [formulaId => [partId => value]]]
+            foreach ($res as $questionnaireFormula) {
+                if ($questionnaireFormula->getFormula()) {
+                    $this->cache[$questionnaireFormula->getQuestionnaire()->getId()][$questionnaireFormula->getFormula()->getId()][$questionnaireFormula->getPart()->getId()] = $questionnaireFormula;
+                }
+            }
+        }
+
+        return @$this->cache[$questionnaireId][$formulaId][$partId];
     }
 
 }

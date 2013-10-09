@@ -58,10 +58,10 @@ use \Application\Traits\EntityManagerAware;
 
     /**
      * Set the questionnaireformula repository
-     * @param \Application\Repository\questionnaireFormulaRepository $questionnaireFormulaRepository
+     * @param \Application\Repository\Rule\QuestionnaireFormulaRepository $questionnaireFormulaRepository
      * @return \Application\Service\Calculator\Calculator
      */
-    public function setQuestionnaireFormulaRepository(\Application\Repository\questionnaireFormulaRepository $questionnaireFormulaRepository)
+    public function setQuestionnaireFormulaRepository(\Application\Repository\Rule\QuestionnaireFormulaRepository $questionnaireFormulaRepository)
     {
         $this->questionnaireFormulaRepository = $questionnaireFormulaRepository;
 
@@ -70,7 +70,7 @@ use \Application\Traits\EntityManagerAware;
 
     /**
      * Get the questionnaireformula repository
-     * @return \Application\Repository\questionnaireFormulaRepository
+     * @return \Application\Repository\Rule\QuestionnaireFormulaRepository
      */
     public function getQuestionnaireFormulaRepository()
     {
@@ -386,18 +386,18 @@ use \Application\Traits\EntityManagerAware;
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
 
-                    $questionnaire = $questionnaireId == 'current' ? $usage->getQuestionnaire()->getId() : $questionnaireId;
-                    $part = $partId == 'current' ? $usage->getPart()->getId() : $partId;
+                    if ($questionnaireId == 'current') {
+                        $questionnaireId = $usage->getQuestionnaire()->getId();
+                    }
 
-                    $criteria = array(
-                        'formula' => $formulaId,
-                        'questionnaire' => $questionnaire,
-                        'part' => $part,
-                    );
-                    $questionnaireFormula = $this->getQuestionnaireFormulaRepository()->findOneBy($criteria);
+                    if ($partId == 'current') {
+                        $partId = $usage->getPart()->getId();
+                    }
+
+                    $questionnaireFormula = $this->getQuestionnaireFormulaRepository()->getOneByQuestionnaire($questionnaireId, $partId, $formulaId);
 
                     if (!$questionnaireFormula) {
-                        throw new \Exception('Reference to non existing QuestionnaireFormula ' . $matches[0] . ' with ' . var_export($criteria, true) . ' in  Formula#' . $usage->getFormula()->getId() . ', "' . $usage->getFormula()->getName() . '": ' . $usage->getFormula()->getFormula());
+                        throw new \Exception('Reference to non existing QuestionnaireFormula ' . $matches[0] . ' in  Formula#' . $usage->getFormula()->getId() . ', "' . $usage->getFormula()->getName() . '": ' . $usage->getFormula()->getFormula());
                     }
 
                     $value = $this->computeFormula($questionnaireFormula, $alreadyUsedFormulas);

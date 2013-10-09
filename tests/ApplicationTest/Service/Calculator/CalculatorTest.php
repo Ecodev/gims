@@ -135,13 +135,13 @@ class CalculatorTest extends AbstractCalculator
         $questionnaireFormula->setFormula((new \Application\Model\Rule\Formula())->setFormula('=2+3'))
                 ->setQuestionnaire($this->questionnaire)
                 ->setPart($this->part);
-        $stubQuestionnaireFormulaRepository = $this->getMock('\Application\Repository\QuestionnaireFormulaRepository', array('findOneBy'), array(), '', false);
+        $stubQuestionnaireFormulaRepository = $this->getMock('\Application\Repository\Rule\QuestionnaireFormulaRepository', array('getOneByQuestionnaire'), array(), '', false);
         $stubQuestionnaireFormulaRepository->expects($this->any())
-                ->method('findOneBy')
+                ->method('getOneByQuestionnaire')
                 ->will($this->returnValue($questionnaireFormula)
         );
         $service->setQuestionnaireFormulaRepository($stubQuestionnaireFormulaRepository);
-        $this->assertEquals($questionnaireFormula, $stubQuestionnaireFormulaRepository->findOneBy(array('foo')));
+        $this->assertEquals($questionnaireFormula, $stubQuestionnaireFormulaRepository->getOneByQuestionnaire(1, 2, 3));
 
         $formula = new \Application\Model\Rule\Formula();
         $filterRule = new \Application\Model\Rule\FilterRule();
