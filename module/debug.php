@@ -144,3 +144,13 @@ function w()
     echo "" . ($isHtml ? '</pre>' : '') . "_________________________________________________________________________________________________________________________" . ($isHtml ? '</br>' : '') . "\n";
     die("script aborted on purpose.\n");
 }
+
+
+/**
+ * Returns logger
+ * @return \Zend\Log\Logger
+ */
+function _log()
+{
+    return \Application\Module::getServiceManager()->get('Zend\log');
+}
