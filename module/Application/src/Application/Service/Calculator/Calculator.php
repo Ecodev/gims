@@ -344,6 +344,7 @@ use \Application\Traits\EntityManagerAware;
         $currentFilter = $usage->getFilter();
 
         $originalFormula = $formula->getFormula();
+        _log()->debug(__FUNCTION__, array($usage->getId(), $originalFormula));
 
         // Replace {F#12,Q#34,P#56} with Filter value
         $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($currentFilter, $currentQuestionnaire, $currentPart, $alreadyUsedFormulas) {
