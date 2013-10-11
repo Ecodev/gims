@@ -1,0 +1,231 @@
+{
+    "columns": {
+        "country": "Country",
+        "iso3": "ISO-3",
+        "survey": "Survey",
+        "year": "Year",
+        "f74p1": "Total improved - Urban",
+        "f74p2": "Total improved - Rural",
+        "f74p3": "Total improved - Total",
+        "f75p1": "Piped onto premises - Urban",
+        "f75p2": "Piped onto premises - Rural",
+        "f75p3": "Piped onto premises - Total"
+    },
+    "data": [
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "DHS94",
+            "year": 1994,
+            "f74p1": 86.7,
+            "f74p2": 75.1,
+            "f74p3": 77.5,
+            "f75p1": 26.7,
+            "f75p2": 0.3,
+            "f75p3": 5.9
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "MICS94",
+            "year": 1994,
+            "f74p1": 87.2,
+            "f74p2": 76.2,
+            "f74p3": 78.5,
+            "f75p1": 26.0,
+            "f75p2": 0.1,
+            "f75p3": 5.6
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "MICS95",
+            "year": 1995,
+            "f74p1": 86.4,
+            "f74p2": 75.9,
+            "f74p3": 78.2,
+            "f75p1": 25.5,
+            "f75p2": 0.1,
+            "f75p3": 5.6
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "MICS96",
+            "year": 1996,
+            "f74p1": 88.0,
+            "f74p2": 77.5,
+            "f74p3": 79.8,
+            "f75p1": 29.6,
+            "f75p2": 0.3,
+            "f75p3": 6.8
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "DHS97",
+            "year": 1997,
+            "f74p1": 87.3,
+            "f74p2": 76.8,
+            "f74p3": 79.1,
+            "f75p1": 32.1,
+            "f75p2": 0.4,
+            "f75p3": 7.5
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "SVRS98",
+            "year": 1998,
+            "f74p1": 87.3,
+            "f74p2": 78.4,
+            "f74p3": 80.5,
+            "f75p1": 25.9,
+            "f75p3": 11.7
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "DHS00",
+            "year": 2000,
+            "f74p1": 85.6,
+            "f74p2": 77.0,
+            "f74p3": 79.0,
+            "f75p1": 24.2,
+            "f75p2": 0.1,
+            "f75p3": 5.8
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "HIES00",
+            "year": 2000,
+            "f74p1": 81.3,
+            "f74p2": 70.8,
+            "f74p3": 73.3,
+            "f75p1": 25.3,
+            "f75p2": 0.1,
+            "f75p3": 6.0
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "WHS03",
+            "year": 2003,
+            "f74p1": 86.4,
+            "f74p2": 77.5,
+            "f74p3": 79.7,
+            "f75p1": 25.3,
+            "f75p2": 0.6,
+            "f75p3": 6.7
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "DHS04",
+            "year": 2004,
+            "f74p1": 85.5,
+            "f74p2": 77.7,
+            "f74p3": 79.7,
+            "f75p1": 23.3,
+            "f75p2": 0.0,
+            "f75p3": 5.9
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "HIES05",
+            "year": 2005,
+            "f74p1": 85.4,
+            "f74p2": 77.9,
+            "f74p3": 79.8,
+            "f75p1": 22.4,
+            "f75p2": 0.1,
+            "f75p3": 5.8
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "MICS06",
+            "year": 2006,
+            "f74p1": 84.7,
+            "f74p2": 77.8,
+            "f74p3": 79.6,
+            "f75p1": 22.4,
+            "f75p2": 0.3,
+            "f75p3": 6.1
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "DHS07",
+            "year": 2007,
+            "f74p1": 85.3,
+            "f74p2": 77.1,
+            "f74p3": 79.3,
+            "f75p1": 26.2,
+            "f75p2": 0.2,
+            "f75p3": 7.1
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "MICS09",
+            "year": 2009,
+            "f74p1": 86.6,
+            "f74p2": 85.0,
+            "f74p3": 85.4,
+            "f75p1": 32.5,
+            "f75p2": 1.5,
+            "f75p3": 10.0
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "CEN11",
+            "year": 2011,
+            "f74p1": 85.2,
+            "f74p2": 84.5,
+            "f74p3": 84.7,
+            "f75p1": 41.4,
+            "f75p2": 1.6,
+            "f75p3": 12.9
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "DHS11",
+            "year": 2011,
+            "f74p1": 86.6,
+            "f74p2": 85.5,
+            "f74p3": 85.8,
+            "f75p1": 37.2,
+            "f75p2": 1.2,
+            "f75p3": 11.4
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "MICS99",
+            "year": 1999,
+            "f74p3": 98.1,
+            "f75p3": null
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "PP00",
+            "year": 2000,
+            "f74p3": 97.8,
+            "f75p3": null
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "MHS01",
+            "year": 2001,
+            "f74p3": null,
+            "f75p3": null
+        }
+    ]
+}
