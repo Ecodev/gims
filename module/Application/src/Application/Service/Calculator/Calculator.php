@@ -368,7 +368,7 @@ use \Application\Traits\EntityManagerAware;
                     $questionnaireId = $matches[2];
 
                     if ($questionnaireId == 'current') {
-                        $usage->getQuestionnaire()->getId();
+                        $questionnaireId = $usage->getQuestionnaire()->getId();
                     }
 
                     $unofficialFilterName = $this->getFilterRepository()->getUnofficialName($officialFilterId, $questionnaireId);
@@ -410,7 +410,7 @@ use \Application\Traits\EntityManagerAware;
                     $questionnaireId = $matches[1];
                     $partId = $matches[2];
 
-                    $questionnaire = $this->getQuestionnaireRepository()->findOneById($questionnaireId == 'current' ? $usage->getQuestionnaire() : $questionnaireId);
+                    $questionnaire = $questionnaireId == 'current' ? $usage->getQuestionnaire() : $this->getQuestionnaireRepository()->findOneById($questionnaireId);
 
                     if ($partId == 'current') {
                         $partId = $usage->getPart()->getId();
