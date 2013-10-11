@@ -21,8 +21,9 @@ class FilterRuleRepository extends \Application\Repository\AbstractRepository
      */
     public function getFirstWithFormula(Questionnaire $questionnaire, $filterId, $partId, ArrayCollection $excluded)
     {
+        $questionnaireId = $questionnaire->getId();
         // If no cache for questionnaire, fill the cache
-        if (!isset($this->cache[$questionnaire->getId()])) {
+        if (!isset($this->cache[$questionnaireId])) {
             $qb = $this->createQueryBuilder('filterRule')
                     ->select('filterRule, questionnaire, filter, rule')
                     ->join('filterRule.questionnaire', 'questionnaire')
@@ -32,7 +33,7 @@ class FilterRuleRepository extends \Application\Repository\AbstractRepository
             ;
 
             $qb->setParameters(array(
-                'questionnaire' => $questionnaire,
+                'questionnaire' => $questionnaireId,
             ));
 
             $res = $qb->getQuery()->getResult();
@@ -45,7 +46,10 @@ class FilterRuleRepository extends \Application\Repository\AbstractRepository
             }
         }
 
-        $possible = @$this->cache[$questionnaire->getId()][$filterId][$partId] ? : array();
+        if (isset($this->cache[$questionnaireId][$filterId][$partId]))
+            $possible = $this->cache[$questionnaireId][$filterId][$partId];
+        else
+            $possible = array();
 
         foreach ($possible as $filterRule) {
             if (!$excluded->contains($filterRule))

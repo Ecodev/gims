@@ -20,8 +20,9 @@ class AnswerRepository extends AbstractChildRepository
      */
     public function getValuePercent(Questionnaire $questionnaire, $filterId, $partId)
     {
+        $questionnaireId = $questionnaire->getId();
         // If no cache for questionnaire, fill the cache
-        if (!isset($this->cache[$questionnaire->getId()])) {
+        if (!isset($this->cache[$questionnaireId])) {
             $qb = $this->createQueryBuilder('answer')
                     ->select('answer.valuePercent, part.id AS part_id, filter.id AS filter_id, officialFilter.id AS officialFilter_id')
                     ->join('answer.question', 'question')
@@ -32,7 +33,7 @@ class AnswerRepository extends AbstractChildRepository
             ;
 
             $qb->setParameters(array(
-                'questionnaire' => $questionnaire->getId(),
+                'questionnaire' => $questionnaireId,
             ));
 
             $res = $qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SCALAR);
@@ -40,15 +41,16 @@ class AnswerRepository extends AbstractChildRepository
             // Restructure cache to be [questionnaireId => [filterId => [partId => value]]]
             foreach ($res as $data) {
                 if ($data['officialFilter_id'])
-                    $this->cache[$questionnaire->getId()][$data['officialFilter_id']][$data['part_id']] = (float) $data['valuePercent'];
+                    $this->cache[$questionnaireId][$data['officialFilter_id']][$data['part_id']] = (float) $data['valuePercent'];
                 else
-                    $this->cache[$questionnaire->getId()][$data['filter_id']][$data['part_id']] = (float) $data['valuePercent'];
+                    $this->cache[$questionnaireId][$data['filter_id']][$data['part_id']] = (float) $data['valuePercent'];
             }
         }
-//v($partId);
-        $res = @$this->cache[$questionnaire->getId()][$filterId][$partId];
 
-        return $res;
+        if (isset($this->cache[$questionnaireId][$filterId][$partId]))
+            return $this->cache[$questionnaireId][$filterId][$partId];
+        else
+            return null;
     }
 
     /**

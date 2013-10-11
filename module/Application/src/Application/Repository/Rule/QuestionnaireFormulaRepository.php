@@ -65,7 +65,10 @@ class QuestionnaireFormulaRepository extends \Application\Repository\AbstractRep
             }
         }
 
-        return @$this->cache[$questionnaireId][$formulaId][$partId];
+        if (isset($this->cache[$questionnaireId][$formulaId][$partId]))
+            return $this->cache[$questionnaireId][$formulaId][$partId];
+        else
+            return null;
     }
 
 }

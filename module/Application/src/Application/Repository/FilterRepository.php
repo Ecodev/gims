@@ -117,7 +117,10 @@ class FilterRepository extends AbstractRepository
             }
         }
 
-        return @$this->cacheDescendants[$filterId][$descendantType] ? : array();
+        if (isset($this->cacheDescendants[$filterId][$descendantType]))
+            return $this->cacheDescendants[$filterId][$descendantType];
+        else
+            return array();
     }
 
     /**
@@ -146,7 +149,10 @@ class FilterRepository extends AbstractRepository
             }
         }
 
-        return @$this->cacheUnofficialNames[$questionnaireId][$officialFilterId];
+        if (isset($this->cacheUnofficialNames[$questionnaireId][$officialFilterId]))
+            return $this->cacheUnofficialNames[$questionnaireId][$officialFilterId];
+        else
+            return null;
     }
 
 }
