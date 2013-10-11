@@ -167,7 +167,7 @@ class Jmp extends Calculator
      */
     public function computeRegressionForAllYears(array $years, Filter $filter, $questionnaires, Part $part)
     {
-        $key = $this->getCacheKey(func_get_args());
+        $key = \Application\Utility::getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheComputeRegressionForAllYears)) {
             return $this->cacheComputeRegressionForAllYears[$key];
         }
@@ -228,7 +228,7 @@ class Jmp extends Calculator
      */
     public function computeFilterForAllQuestionnaires(Filter $filter, $questionnaires, Part $part)
     {
-        $key = $this->getCacheKey(func_get_args());
+        $key = \Application\Utility::getCacheKey(func_get_args());
 
         if (array_key_exists($key, $this->cacheComputeFilterForAllQuestionnaires)) {
             return $this->cacheComputeFilterForAllQuestionnaires[$key];
@@ -261,7 +261,7 @@ class Jmp extends Calculator
             $years[$questionnaire->getId()] = $year;
             $surveys[$questionnaire->getId()] = $questionnaire->getSurvey()->getCode();
 
-            $computed = $this->computeFilter($filter->getId(), $questionnaire, $part->getId());
+            $computed = $this->computeFilter($filter->getId(), $questionnaire->getId(), $part->getId());
             if (is_null($computed)) {
                 $result['values'][$questionnaire->getId()] = null;
 

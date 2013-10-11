@@ -87,7 +87,7 @@ class FilterRepository extends AbstractRepository
     /**
      * Returns an array of ID of descendants (either summands or children)
      * @param integer $filterId
-     * @param string $descendantType
+     * @param string $descendantType "summands" or "children"
      * @return array
      */
     protected function getDescendantIds($filterId, $descendantType)
@@ -131,7 +131,6 @@ class FilterRepository extends AbstractRepository
      */
     public function getUnofficialName($officialFilterId, $questionnaireId)
     {
-
         if (!isset($this->cacheUnofficialNames[$questionnaireId])) {
 
             $qb = $this->createQueryBuilder('filter')

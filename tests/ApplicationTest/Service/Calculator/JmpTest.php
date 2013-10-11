@@ -36,10 +36,7 @@ class JmpTest extends AbstractCalculator
 
         // Define a second questionnaire with answers for leaf filters only
         // Create a stub for the Questionnaire class with fake ID, so we don't have to mess with database
-        $questionnaire2 = $this->getMock('\Application\Model\Questionnaire', array('getId'));
-        $questionnaire2->expects($this->any())
-                ->method('getId')
-                ->will($this->returnValue(2));
+        $questionnaire2 = $this->getNewModelWithId('\Application\Model\Questionnaire');
 
         $survey2 = new \Application\Model\Survey();
         $survey2->setCode('tst 2')->setName('Test survey 2')->setYear(2005);

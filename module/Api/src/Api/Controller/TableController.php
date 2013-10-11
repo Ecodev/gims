@@ -64,7 +64,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $current['filter']['level'] = $level;
 
         foreach ($parts as $part) {
-            $computed = $calculator->computeFilter($filter->getId(), $questionnaire, $part->getId());
+            $computed = $calculator->computeFilter($filter->getId(), $questionnaire->getId(), $part->getId());
 
             // Round the value
             if (!is_null($computed)) {

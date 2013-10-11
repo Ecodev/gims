@@ -30,4 +30,35 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
         $this->assertSame($expected, \Application\Utility::bcround($number, 3));
     }
 
+    public function testGetCacheKey()
+    {
+        $foo1 = new \stdClass();
+        $foo2 = new \stdClass();
+        $foo3 = clone $foo2;
+
+        $allKeys = array();
+        $allKeys[] = \Application\Utility::getCacheKey(array());
+        $allKeys[] = \Application\Utility::getCacheKey(array('', ''));
+        $allKeys[] = \Application\Utility::getCacheKey(array(0));
+        $allKeys[] = \Application\Utility::getCacheKey(array(null));
+        $allKeys[] = \Application\Utility::getCacheKey(array(null, null));
+        $allKeys[] = \Application\Utility::getCacheKey(array(1, 1, null));
+        $allKeys[] = \Application\Utility::getCacheKey(array(1, 1));
+        $allKeys[] = \Application\Utility::getCacheKey(array(1, 1, ''));
+        $allKeys[] = \Application\Utility::getCacheKey(array(1, array(1)));
+        $allKeys[] = \Application\Utility::getCacheKey(array('11', 1));
+        $allKeys[] = \Application\Utility::getCacheKey(array(1, '11'));
+        $allKeys[] = \Application\Utility::getCacheKey(array(1, '11', array(2)));
+        $allKeys[] = \Application\Utility::getCacheKey(array(1, '11', array(2, $foo1)));
+        $allKeys[] = \Application\Utility::getCacheKey(array(1, '11', array(2, $foo2)));
+        $allKeys[] = \Application\Utility::getCacheKey(array(1, '11', array(2, $foo3)));
+
+        $uniqueKeys = array_unique($allKeys);
+        $this->assertEquals(count($allKeys), count($uniqueKeys), 'all keys must be unique');
+
+        foreach ($allKeys as $key) {
+            $this->assertTrue(is_string($key), 'each key must be a string');
+        }
+    }
+
 }

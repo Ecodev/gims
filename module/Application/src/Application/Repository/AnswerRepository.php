@@ -2,9 +2,6 @@
 
 namespace Application\Repository;
 
-use Application\Model\Questionnaire;
-use Application\Model\Part;
-
 class AnswerRepository extends AbstractChildRepository
 {
 

@@ -2,8 +2,6 @@
 
 namespace Application\Repository\Rule;
 
-use Application\Model\Questionnaire;
-
 class QuestionnaireFormulaRepository extends \Application\Repository\AbstractRepository
 {
 

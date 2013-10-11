@@ -802,7 +802,7 @@ STRING;
         if ($name == $officialFilter->getName())
             return $officialFilter;
 
-        $key = $this->getCacheKey(func_get_args());
+        $key = \Application\Utility::getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheAlternateFilters)) {
             $filter = $this->cacheAlternateFilters[$key];
         } else {
@@ -840,7 +840,7 @@ STRING;
     {
         $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question\NumericQuestion');
 
-        $key = $this->getCacheKey(func_get_args());
+        $key = \Application\Utility::getCacheKey(func_get_args());
 
         if (array_key_exists($key, $this->cacheQuestions)) {
             $question = $this->cacheQuestions[$key];
@@ -1086,7 +1086,7 @@ STRING;
      */
     protected function getFormula($name, $formula)
     {
-        $key = $this->getCacheKey(array($formula));
+        $key = \Application\Utility::getCacheKey(array($formula));
         if (array_key_exists($key, $this->cacheFormulas)) {
             return $this->cacheFormulas[$key];
         }
@@ -1388,28 +1388,6 @@ STRING;
         $name = $filter->getName() . ' (' . $questionnaire->getName() . ', ' . $part->getName() . ')';
         $formula = $this->getFormula($name, $formulaText);
         $this->getFilterRule($filter, $questionnaire, $formula, $part);
-    }
-
-    /**
-     * Returns a unique identifying all arguments, so we can use the result as cache key
-     * @param array $args
-     * @return string
-     */
-    protected function getCacheKey(array $args)
-    {
-        $key = '';
-        foreach ($args as $arg) {
-            if (is_null($arg))
-                $key .= '[[NULL]]';
-            else if (is_object($arg))
-                $key .= spl_object_hash($arg);
-            else if (is_array($arg))
-                $key .= $this->getCacheKey($arg);
-            else
-                $key .= $arg;
-        }
-
-        return $key;
     }
 
 }

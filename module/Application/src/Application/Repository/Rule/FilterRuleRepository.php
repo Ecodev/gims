@@ -3,7 +3,6 @@
 namespace Application\Repository\Rule;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Application\Model\Questionnaire;
 
 class FilterRuleRepository extends \Application\Repository\AbstractRepository
 {

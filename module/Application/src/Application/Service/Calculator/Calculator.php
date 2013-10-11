@@ -183,10 +183,10 @@ use \Application\Traits\EntityManagerAware;
 
     /**
      * Set the filterRule repository
-     * @param \Application\Repository\FilterRuleRepository $filterRuleRepository
+     * @param \Application\Repository\Rule\FilterRuleRepository $filterRuleRepository
      * @return \Application\Service\Calculator\Calculator
      */
-    public function setFilterRuleRepository(\Application\Repository\FilterRuleRepository $filterRuleRepository)
+    public function setFilterRuleRepository(\Application\Repository\Rule\FilterRuleRepository $filterRuleRepository)
     {
         $this->filterRuleRepository = $filterRuleRepository;
 
@@ -195,7 +195,7 @@ use \Application\Traits\EntityManagerAware;
 
     /**
      * Get the filterRule repository
-     * @return \Application\Repository\FilterRuleRepository
+     * @return \Application\Repository\Rule\FilterRuleRepository
      */
     public function getFilterRuleRepository()
     {
@@ -207,45 +207,23 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
-     * Returns a unique identifying all arguments, so we can use the result as cache key
-     * @param array $args
-     * @return string
-     */
-    protected function getCacheKey(array $args)
-    {
-        $key = '';
-        foreach ($args as $arg) {
-            if (is_null($arg))
-                $key .= '[[NULL]]';
-            else if (is_object($arg))
-                $key .= spl_object_hash($arg);
-            else if (is_array($arg))
-                $key .= $this->getCacheKey($arg);
-            else
-                $key .= $arg;
-        }
-
-        return $key;
-    }
-
-    /**
      * Returns the computed value of the given filter, based on the questionnaire's available answers
      * @param integer $filterId
-     * @param \Application\Model\Questionnaire $questionnaire
+     * @param integer $questionnaireId
      * @param integer $partId
      * @return float|null null if no answer at all, otherwise the percentage value
      */
-    public function computeFilter($filterId, Questionnaire $questionnaire, $partId, ArrayCollection $alreadyUsedFormulas = null)
+    public function computeFilter($filterId, $questionnaireId, $partId, ArrayCollection $alreadyUsedFormulas = null)
     {
         _log()->debug(__FUNCTION__, array('start', $filterId));
-        $key = $this->getCacheKey(func_get_args());
+        $key = \Application\Utility::getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheComputeFilter)) {
             return $this->cacheComputeFilter[$key];
         }
+
         if (!$alreadyUsedFormulas)
             $alreadyUsedFormulas = new ArrayCollection();
 
-        $questionnaireId = $questionnaire->getId();
         $result = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $alreadyUsedFormulas, new ArrayCollection());
 
         $this->cacheComputeFilter[$key] = $result;
@@ -352,13 +330,16 @@ use \Application\Traits\EntityManagerAware;
                     if ($filterId == 'current') {
                         $filterId = $usage->getFilter()->getId();
                     }
-                    $questionnaire = $questionnaireId == 'current' ? $usage->getQuestionnaire() : $this->getQuestionnaireRepository()->findOneById($questionnaireId);
+
+                    if ($questionnaireId == 'current') {
+                        $questionnaireId = $usage->getQuestionnaire()->getId();
+                    }
 
                     if ($partId == 'current') {
                         $partId = $usage->getPart()->getId();
                     }
 
-                    $value = $this->computeFilter($filterId, $questionnaire, $partId, $alreadyUsedFormulas);
+                    $value = $this->computeFilter($filterId, $questionnaireId, $partId, $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $originalFormula);
@@ -423,7 +404,7 @@ use \Application\Traits\EntityManagerAware;
         // Replace {self} with computed value without this formula
         $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($usage, $alreadyUsedFormulas) {
 
-                    $value = $this->computeFilter($usage->getFilter()->getId(), $usage->getQuestionnaire(), $usage->getPart()->getId(), $alreadyUsedFormulas);
+                    $value = $this->computeFilter($usage->getFilter()->getId(), $usage->getQuestionnaire()->getId(), $usage->getPart()->getId(), $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
