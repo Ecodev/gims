@@ -13,15 +13,14 @@ class FilterRuleRepository extends \Application\Repository\AbstractRepository
     /**
      * Returns the percent value of an answer if it exists.
      * Optimized for mass querying wihtin a Questionnaire based on a cache.
-     * @param \Application\Model\Questionnaire $questionnaire
+     * @param integer $questionnaireId
      * @param integer $filterId
      * @param integer $partId
      * @param \Doctrine\Common\Collections\ArrayCollection $excluded
      * @return FilterRule|null
      */
-    public function getFirstWithFormula(Questionnaire $questionnaire, $filterId, $partId, ArrayCollection $excluded)
+    public function getFirstWithFormula($questionnaireId, $filterId, $partId, ArrayCollection $excluded)
     {
-        $questionnaireId = $questionnaire->getId();
         // If no cache for questionnaire, fill the cache
         if (!isset($this->cache[$questionnaireId])) {
             $qb = $this->createQueryBuilder('filterRule')

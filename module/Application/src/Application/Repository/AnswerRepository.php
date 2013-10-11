@@ -13,14 +13,13 @@ class AnswerRepository extends AbstractChildRepository
     /**
      * Returns the percent value of an answer if it exists.
      * Optimized for mass querying wihtin a Questionnaire based on a cache.
-     * @param \Application\Model\Questionnaire $questionnaire
+     * @param integer $questionnaireId
      * @param integer $filterId
      * @param integer $partId
      * @return float|null
      */
-    public function getValuePercent(Questionnaire $questionnaire, $filterId, $partId)
+    public function getValuePercent($questionnaireId, $filterId, $partId)
     {
-        $questionnaireId = $questionnaire->getId();
         // If no cache for questionnaire, fill the cache
         if (!isset($this->cache[$questionnaireId])) {
             $qb = $this->createQueryBuilder('answer')
