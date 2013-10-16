@@ -238,22 +238,14 @@ class Jmp extends Calculator
             'values' => array(),
             'count' => 0,
         );
-        $rules = $filter->getFilterRules();
+        
         $years = array();
         $surveys = array();
         $yearsWithData = array();
         foreach ($questionnaires as $questionnaire) {
 
             // skip this questionnaire, if an exclude rule exists for him
-            $skipQuestionnaire = false;
-            foreach ($rules as $rule) {
-                if ($rule->getRule() instanceof \Application\Model\Rule\Exclude && $rule->getQuestionnaire() === $questionnaire && $rule->getPart() === $part) {
-                    $skipQuestionnaire = true;
-                    break;
-                }
-            }
-
-            if ($skipQuestionnaire) {
+            if ($this->getFilterRuleRepository()->isExcluded($questionnaire->getId(), $filter->getId(), $part->getId())) {
                 continue;
             }
 

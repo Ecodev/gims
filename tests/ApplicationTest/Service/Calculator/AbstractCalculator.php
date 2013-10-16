@@ -3,8 +3,6 @@
 namespace ApplicationTest\Service\Calculator;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Application\Model\Questionnaire;
-use Application\Model\Part;
 
 abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractController
 {
@@ -278,7 +276,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     protected function getStubFilterRuleRepository()
     {
         // Create a stub for the FilterRuleRepository class with predetermined values, so we don't have to mess with database
-        $stubFilterRuleRepository = $this->getMock('\Application\Repository\Rule\FilterRuleRepository', array('getFirstWithFormula', 'getSummands', 'getChildren'), array(), '', false);
+        $stubFilterRuleRepository = $this->getMock('\Application\Repository\Rule\FilterRuleRepository', array('getFirstWithFormula', 'isExcluded'), array(), '', false);
         $stubFilterRuleRepository->expects($this->any())
                 ->method('getFirstWithFormula')
                 ->will($this->returnCallback(function($questionnaireId, $filterId, $partId, ArrayCollection $alreadyUsedFormulas) {
@@ -286,6 +284,20 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
                                     $filter = $this->getModel('\Application\Model\Filter', $filterId);
                                     foreach ($filter->getFilterRules() as $filterRule) {
                                         if ($filterRule->getFormula() && $filterRule->getQuestionnaire()->getId() == $questionnaireId && $filterRule->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterRule)) {
+                                            return $filterRule;
+                                        }
+                                    }
+                                    return null;
+                                })
+        );
+
+        $stubFilterRuleRepository->expects($this->any())
+                ->method('isExcluded')
+                ->will($this->returnCallback(function($questionnaireId, $filterId, $partId) {
+
+                                    $filter = $this->getModel('\Application\Model\Filter', $filterId);
+                                    foreach ($filter->getFilterRules() as $filterRule) {
+                                        if ($filterRule->getRule() instanceof \Application\Model\Rule\Exclude && $filterRule->getQuestionnaire()->getId() == $questionnaireId && $filterRule->getPart()->getId() == $partId) {
                                             return $filterRule;
                                         }
                                     }
