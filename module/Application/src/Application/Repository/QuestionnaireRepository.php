@@ -38,4 +38,21 @@ class QuestionnaireRepository extends AbstractChildRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * Returns all questionnaires for th given geoname (and load their surveys)
+     * @param \Application\Model\Geoname|integer $geoname
+     * @return Questionnaires[]
+     */
+    public function getByGeonameWithSurvey($geoname)
+    {
+        $qb = $this->createQueryBuilder('questionnaire');
+        $qb->select('questionnaire, survey')
+                ->join('questionnaire.survey', 'survey')
+                ->where('questionnaire.geoname = :geoname');
+
+        $qb->setParameter('geoname', $geoname);
+
+        return $qb->getQuery()->getResult();
+    }
+
 }

@@ -26,7 +26,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $excludeStr = $this->params()->fromQuery('excludedQuestionnaires');
         $this->excludedQuestionnaires = $excludeStr ? explode(',', $excludeStr) : array();
 
-        $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findBy(array('geoname' => $country ? $country->getGeoname() : -1));
+        $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getByGeonameWithSurvey($country ? $country->getGeoname() : -1);
 
         $calculator = new \Application\Service\Calculator\Jmp();
         $calculator->setServiceLocator($this->getServiceLocator());

@@ -111,7 +111,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         );
 
         foreach ($countries as $country) {
-            $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findByGeoname($country->getGeoname());
+            $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getByGeonameWithSurvey($country->getGeoname());
             if (!$filterSet) {
                 continue;
             }
