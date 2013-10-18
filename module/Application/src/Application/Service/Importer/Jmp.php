@@ -961,7 +961,7 @@ STRING;
         // useless conversion done in formula
         $replacedFormula = str_replace(array('*100', '/100'), '', $originalFormula);
 
-        // Expand range syntax to enumerate each cell: "A1:A5" => "A1,A2,A3,A4,A5"
+        // Expand range syntax to enumerate each cell: "A1:A5" => "{A1,A2,A3,A4,A5}"
         $cellPattern = '\$?(([[:alpha:]]+)\$?(\\d+))';
         $expandedFormula = preg_replace_callback("/$cellPattern:$cellPattern/", function($matches) use ($sheet, $cell) {
 
@@ -979,8 +979,7 @@ STRING;
                 }, $replacedFormula);
 
         // Replace all cell reference with our own syntax
-        $referencedInvalidQuestionnaire = false;
-        $convertedFormula = preg_replace_callback("/$cellPattern/", function($matches) use ($sheet, $questionnaire, $part, &$referencedInvalidQuestionnaire, $expandedFormula) {
+        $convertedFormula = preg_replace_callback("/$cellPattern/", function($matches) use ($sheet, $questionnaire, $part, $expandedFormula) {
                     $refCol = \PHPExcel_Cell::columnIndexFromString($matches[2]) - 1;
                     $refRow = $matches[3];
 
@@ -1008,10 +1007,10 @@ STRING;
 
                     // Find out referenced Questionnaire
                     $refData = @$this->colToParts[$refCol];
-                    if (!$refData) {
-                        $referencedInvalidQuestionnaire = true;
 
-                        return null;
+                    // If reference an non-existing questionnaire, replace reference with NULL
+                    if (!$refData) {
+                        return 'NULL';
                     }
 
                     $refQuestionnaire = $refData['questionnaire'];
@@ -1055,11 +1054,6 @@ STRING;
                     }
                 }, $expandedFormula);
 
-        if ($referencedInvalidQuestionnaire) {
-            echo 'WARNING: skipped formula because it referenced non-existing questionnaire. On sheet "' . $sheet->getTitle() . '" cell ' . $cell->getCoordinate() . PHP_EOL;
-
-            return null;
-        }
 
         $prefix = '';
         foreach ($this->definitions[$sheet->getTitle()]['questionnaireFormulas'] as $label => $rows) {

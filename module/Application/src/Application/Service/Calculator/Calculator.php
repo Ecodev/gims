@@ -227,7 +227,7 @@ use \Application\Traits\EntityManagerAware;
         $result = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $alreadyUsedFormulas, new ArrayCollection());
 
         $this->cacheComputeFilter[$key] = $result;
-
+        _log()->debug(__FUNCTION__, array('end', $filterId, $result));
         return $result;
     }
 
@@ -418,6 +418,7 @@ use \Application\Traits\EntityManagerAware;
             $result = null;
         }
 
+        _log()->debug(__FUNCTION__, array($usage->getId(), $originalFormula, $convertedFormulas, $result));
         return $result;
     }
 
