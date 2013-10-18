@@ -950,6 +950,17 @@ STRING;
         // useless conversion done in formula
         $replacedFormula = str_replace(array('*100', '/100'), '', $originalFormula);
 
+        // Some formulas (usually estimations) hardcode values as percent between 0 - 100, we need to convert them
+        // to 0.00 - 1.00, but only for hardcoded values and not any number within more complex formula (it would be too dangerous)
+        // eg: "=29.6" => "=0.296"
+        // This is the case for Cambodge DHS05 "Bottled water with HC" estimation
+        $replacedFormula = preg_replace_callback('/^=(-?\d+(\.\d+)?)$/', function($matches) {
+                    $number = $matches[1];
+                    $number = $number / 100;
+
+                    return "=$number";
+                }, $replacedFormula);
+
         // Expand range syntax to enumerate each cell: "A1:A5" => "{A1,A2,A3,A4,A5}"
         $cellPattern = '\$?(([[:alpha:]]+)\$?(\\d+))';
         $expandedFormula = preg_replace_callback("/$cellPattern:$cellPattern/", function($matches) use ($sheet, $cell) {
