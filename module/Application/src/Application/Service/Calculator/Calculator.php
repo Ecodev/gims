@@ -215,7 +215,7 @@ use \Application\Traits\EntityManagerAware;
      */
     public function computeFilter($filterId, $questionnaireId, $partId, ArrayCollection $alreadyUsedFormulas = null)
     {
-        _log()->debug(__FUNCTION__, array('start', $filterId));
+        _log()->debug(__FUNCTION__, array('start', $filterId, $questionnaireId, $partId));
         $key = \Application\Utility::getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheComputeFilter)) {
             return $this->cacheComputeFilter[$key];
@@ -227,7 +227,7 @@ use \Application\Traits\EntityManagerAware;
         $result = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $alreadyUsedFormulas, new ArrayCollection());
 
         $this->cacheComputeFilter[$key] = $result;
-        _log()->debug(__FUNCTION__, array('end', $filterId, $result));
+        _log()->debug(__FUNCTION__, array('end', $filterId, $questionnaireId, $partId, $result));
         return $result;
     }
 
@@ -339,7 +339,12 @@ use \Application\Traits\EntityManagerAware;
                         $partId = $usage->getPart()->getId();
                     }
 
-                    $value = $this->computeFilter($filterId, $questionnaireId, $partId, $alreadyUsedFormulas);
+                    // skip this questionnaire, if an exclude rule exists for him
+                    if ($this->getFilterRuleRepository()->isExcluded($questionnaireId, $filterId, $partId)) {
+                        $value = null;
+                    } else {
+                        $value = $this->computeFilter($filterId, $questionnaireId, $partId, $alreadyUsedFormulas);
+                    }
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $originalFormula);

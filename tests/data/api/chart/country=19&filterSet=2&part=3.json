@@ -106,14 +106,14 @@
         {
             "name": "Piped onto premises",
             "data": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
+                4.6,
+                4.6,
+                4.6,
+                4.6,
+                4.6,
+                4.6,
+                4.6,
+                4.6,
                 4.5,
                 4.6,
                 4.7,
@@ -184,14 +184,14 @@
         {
             "name": "Other Improved",
             "data": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
+                -4.6,
+                -4.6,
+                -4.6,
+                -4.6,
+                -4.6,
+                -4.6,
+                -4.6,
+                -4.6,
                 71.5,
                 71.5,
                 71.4,
@@ -311,20 +311,6 @@
                     "y": 80.5
                 },
                 {
-                    "name": "MICS99",
-                    "id": "74:7",
-                    "questionnaire": 7,
-                    "x": 1999,
-                    "y": 98.1
-                },
-                {
-                    "name": "PP00",
-                    "id": "74:8",
-                    "questionnaire": 8,
-                    "x": 2000,
-                    "y": 97.8
-                },
-                {
                     "name": "DHS00",
                     "id": "74:9",
                     "questionnaire": 9,
@@ -441,13 +427,6 @@
                     "y": 7.5
                 },
                 {
-                    "name": "SVRS98",
-                    "id": "75:6",
-                    "questionnaire": 6,
-                    "x": 1998,
-                    "y": 11.7
-                },
-                {
                     "name": "DHS00",
                     "id": "75:9",
                     "questionnaire": 9,
@@ -541,20 +520,6 @@
                     "questionnaire": 5,
                     "x": 1997,
                     "y": 2.3
-                },
-                {
-                    "name": "MICS99",
-                    "id": "76:7",
-                    "questionnaire": 7,
-                    "x": 1999,
-                    "y": 2.7
-                },
-                {
-                    "name": "PP00",
-                    "id": "76:8",
-                    "questionnaire": 8,
-                    "x": 2000,
-                    "y": 2.6
                 },
                 {
                     "name": "DHS00",

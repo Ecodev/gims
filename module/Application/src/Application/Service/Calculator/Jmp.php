@@ -66,6 +66,7 @@ class Jmp extends Calculator
         foreach ($parts as $p) {
             $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $p);
             $resultPart = $this->computeFlattenOneYear($year, $allRegressions);
+            _log()->debug(__FUNCTION__, array($filter->getId(), $year, $p->getId(), $resultPart));
             if (!is_null($resultPart)) {
                 $population = $this->getPopulationRepository()->getOneByGeoname(reset($questionnaires)->getGeoname(), $p, $year)->getPopulation();
                 $totalPopulation += $population;
@@ -81,8 +82,10 @@ class Jmp extends Calculator
         if (is_null($oneYearResult)) {
             $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $part);
             $oneYearResult = $this->computeFlattenOneYear($year, $allRegressions);
+            _log()->debug(__FUNCTION__, array($filter->getId(), $year, $part->getId(), $oneYearResult, $allRegressions));
         }
 
+        _log()->debug(__FUNCTION__, array('final', $filter->getId(), $year, $part->getId(), $oneYearResult));
         return $oneYearResult;
     }
 
@@ -238,7 +241,7 @@ class Jmp extends Calculator
             'values' => array(),
             'count' => 0,
         );
-        
+
         $years = array();
         $surveys = array();
         $yearsWithData = array();
@@ -254,16 +257,12 @@ class Jmp extends Calculator
             $surveys[$questionnaire->getId()] = $questionnaire->getSurvey()->getCode();
 
             $computed = $this->computeFilter($filter->getId(), $questionnaire->getId(), $part->getId());
-            if (is_null($computed)) {
-                $result['values'][$questionnaire->getId()] = null;
-
-                continue;
-            }
-
-            $yearsWithData[] = $year;
-
-            $result['count']++;
             $result['values'][$questionnaire->getId()] = $computed;
+
+            if (!is_null($computed)) {
+                $yearsWithData[] = $year;
+                $result['count']++;
+            }
         }
 
         $result['years'] = $years;
@@ -340,7 +339,7 @@ class Jmp extends Calculator
         if ($result === false || $result === '""') {
             $result = null;
         }
-
+        _log()->debug(__FUNCTION__, array($originalFormula, $convertedFormulas, $result));
         return $result;
     }
 

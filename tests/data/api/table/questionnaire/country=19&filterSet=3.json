@@ -81,7 +81,7 @@
             "f74p2": 78.4,
             "f74p3": 80.5,
             "f75p1": 25.9,
-            "f75p3": 11.7
+            "f75p3": null
         },
         {
             "country": "Bangladesh",
@@ -208,7 +208,7 @@
             "iso3": "BGD",
             "survey": "MICS99",
             "year": 1999,
-            "f74p3": 98.1,
+            "f74p3": null,
             "f75p3": null
         },
         {
@@ -216,7 +216,7 @@
             "iso3": "BGD",
             "survey": "PP00",
             "year": 2000,
-            "f74p3": 97.8,
+            "f74p3": null,
             "f75p3": null
         },
         {
