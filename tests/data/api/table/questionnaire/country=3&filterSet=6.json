@@ -4,12 +4,12 @@
         "iso3": "ISO-3",
         "survey": "Survey",
         "year": "Year",
-        "f274p1": "Improved + shared - Urban",
-        "f274p2": "Improved + shared - Rural",
-        "f274p3": "Improved + shared - Total",
-        "f276p1": "Improved - Urban",
-        "f276p2": "Improved - Rural",
-        "f276p3": "Improved - Total"
+        "f274p1": "SUI+S",
+        "f274p2": "SRI+S",
+        "f274p3": "STI+S",
+        "f276p1": "SUI",
+        "f276p2": "SRI",
+        "f276p3": "STI"
     },
     "data": [
         {

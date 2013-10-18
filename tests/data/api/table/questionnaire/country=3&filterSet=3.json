@@ -4,12 +4,12 @@
         "iso3": "ISO-3",
         "survey": "Survey",
         "year": "Year",
-        "f74p1": "Total improved - Urban",
-        "f74p2": "Total improved - Rural",
-        "f74p3": "Total improved - Total",
-        "f75p1": "Piped onto premises - Urban",
-        "f75p2": "Piped onto premises - Rural",
-        "f75p3": "Piped onto premises - Total"
+        "f74p1": "WUTI",
+        "f74p2": "WRTI",
+        "f74p3": "WTTI",
+        "f75p1": "WUPOP",
+        "f75p2": "WRPOP",
+        "f75p3": "WTPOP"
     },
     "data": [
         {

@@ -129,6 +129,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                         }
 
                         $columnName = $this->getCodeName($filterSet, $part, $filter->getName());
+                        //$columnName = $filter->getName().' - '.$part->getName();
                         $columnId = 'f'.$filter->getId().'p'.$part->getId();
                         $columns[$columnId] = $columnName;
                         $result[$questionnaireId][$columnId] = is_null($value) ? null : \Application\Utility::bcround($value * 100, 1);
@@ -199,13 +200,12 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                     foreach ($filters as $filter) {
                         $columnId = 'c'.$count;
                         $columnName = $this->getCodeName($filterSet, $partId, $filter['name']);
-                        $columns[$columnId.'r'] = $columnName.'r';
-                        $statsData[$columnId.'r'] = $filter['data'][$year];
                         $columns[$columnId] = $columnName;
-                        $statsData[$columnId] = $filter['data'][$year] * $population[$year][$partId];
+                        $statsData[$columnId] = \Application\Utility::bcround($filter['data'][$year]*100, 1);
+                        $columns[$columnId.'a'] = $columnName.'a';
+                        $statsData[$columnId.'a'] = (int) ($filter['data'][$year] * $population[$year][$partId]);
                         $count++;
                     }
-
                 }
 
                 $result[] = array_merge($countryData, $populationData, $statsData);
@@ -317,13 +317,11 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                 $finalYears[] = $range;
             } else {
                 $startAndEndYear = explode('-', $range);
-                sort($startAndEndYear);
-                for ($i = $startAndEndYear[0]; $i <= $startAndEndYear[1]; $i++) {
-                    $finalYears[] = $i;
-                }
+                $finalYears = array_merge($finalYears,range($startAndEndYear[0], $startAndEndYear[1]));
             }
         }
-
+        $finalYears = array_unique($finalYears);
+        sort($finalYears);
         return $finalYears;
     }
 
