@@ -612,7 +612,6 @@ STRING;
      */
     protected function importAnswers(\PHPExcel_Worksheet $sheet, $col, Survey $survey, Questionnaire $questionnaire)
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $knownRows = array_keys($this->cacheFilters);
         array_shift($knownRows); // Skip first filter, since it's not an actual row, but the sheet topic (eg: "Access to drinking water sources")
 
@@ -627,7 +626,8 @@ STRING;
                 $filter = $this->getAlternateFilter($questionnaire, $alternateFilterName, $filter);
             }
 
-            // Import answers
+            // Import answers for each parts
+            $question = null;
             foreach ($this->partOffsets as $offset => $part) {
                 $answerCell = $sheet->getCellByColumnAndRow($col + $offset, $row);
 
@@ -641,26 +641,15 @@ STRING;
                         continue;
                     }
 
-                    $question = $this->getQuestion($survey, $filter);
-
-                    // If question already exists, maybe the answer also already exists, in that case we will overwrite its value
-                    $answer = null;
-                    if ($question->getId()) {
-                        $answer = $repository->findOneBy(array(
-                            'question' => $question,
-                            'questionnaire' => $questionnaire,
-                            'part' => $part,
-                        ));
+                    if (!$question) {
+                        $question = $this->getQuestion($survey, $filter);
                     }
 
-                    if (!$answer) {
-                        $answer = new Answer();
-                        $this->getEntityManager()->persist($answer);
-                        $answer->setQuestionnaire($questionnaire);
-                        $answer->setQuestion($question);
-                        $answer->setPart($part);
-                    }
-
+                    $answer = new Answer();
+                    $this->getEntityManager()->persist($answer);
+                    $answer->setQuestionnaire($questionnaire);
+                    $answer->setQuestion($question);
+                    $answer->setPart($part);
                     $answer->setValuePercent($value / 100);
 
                     $answerCount++;
