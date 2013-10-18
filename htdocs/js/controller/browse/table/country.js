@@ -22,8 +22,12 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
         } else {
             $location.search('years', $scope.years);
         }
-
     }
+
+
+//    $scope.$watch('country + filterSet.id + years' , function(a) {
+//        $scope.displayTable();
+//    });
 
     // Whenever one of the parameter is changed
     var uniqueAjaxRequest;
