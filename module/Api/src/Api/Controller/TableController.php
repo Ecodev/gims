@@ -8,6 +8,8 @@ use Application\View\Model\ExcelModel;
 class TableController extends \Application\Controller\AbstractAngularActionController
 {
 
+    private $parts; // used for cache
+
     public function filterAction()
     {
         $questionnaireParameter = $this->params()->fromQuery('questionnaire');
@@ -126,7 +128,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                                                               'year'    => $data['years'][$questionnaireId],);
                         }
 
-                        $columnName = $filter->getName().' - '.$part->getName();
+                        $columnName = $this->getCodeName($filterSet, $part, $filter->getName());
                         $columnId = 'f'.$filter->getId().'p'.$part->getId();
                         $columns[$columnId] = $columnName;
                         $result[$questionnaireId][$columnId] = is_null($value) ? null : \Application\Utility::bcround($value * 100, 1);
@@ -154,6 +156,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         /** @var \Application\Model\FilterSet $filterSet */
         $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
         $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
+        $this->parts = $parts; // used for cache
 
         $result = array();
         $columns = array('country' => 'Country',
@@ -173,8 +176,6 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
             $population = $this->getCountryPopulation($country,$years);
             $allYearsComputed = $this->getAllYearsComputed($parts, $filterSet, $questionnaires);
-            $allYearsComputed = $this->sortFilters($allYearsComputed);
-
             $filteredYearsComputed = $this->filterYears($allYearsComputed, $years);
 
             foreach ($years as $year) {
@@ -192,16 +193,19 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                 $populationData['PT'] = $population[$year][3];
 
                 $statsData = array();
+                $count = 1;
                 foreach ($filteredYearsComputed as $partId => $filters) {
 
                     foreach ($filters as $filter) {
-                        $columnId = 'f'.$filter['id'].'p'.$partId;
+                        $columnId = 'c'.$count;
                         $columnName = $this->getCodeName($filterSet, $partId, $filter['name']);
-                        $columns[$columnId.'R'] = $columnName.'R';
-                        $statsData[$columnId.'R'] = $filter['data'][$year];
+                        $columns[$columnId.'r'] = $columnName.'r';
+                        $statsData[$columnId.'r'] = $filter['data'][$year];
                         $columns[$columnId] = $columnName;
                         $statsData[$columnId] = $filter['data'][$year] * $population[$year][$partId];
+                        $count++;
                     }
+
                 }
 
                 $result[] = array_merge($countryData, $populationData, $statsData);
@@ -283,7 +287,6 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                     $yearsData[$year] = $filter['data'][$year - 1980];
                 }
                 $tmpFieldset = array(
-                    'id' => $filter['id'],
                     'name' => $filter['name'],
                     'data' => $yearsData
                 );
@@ -295,40 +298,6 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         return $finalFieldsets;
     }
 
-
-    /**
-     * @param $filtersPerPart
-     *
-     * @return return array manually ordered to have the same order than excel sheet
-     */
-    private function sortFilters ($filtersPerPart)
-    {
-        $order = array(
-            'Piped onto premises' => 1,
-            'Other Improved' => 2,
-            'Total improved' => 3,
-            'Other Unimproved' => 4,
-            'Surface water' => 5,
-        );
-
-        foreach ($filtersPerPart as $key => $filters){
-            foreach ($filters as $key2 => $filter) {
-                $filtersPerPart[$key][$key2]['sort'] = $order[$filter['name']];
-            }
-            usort($filtersPerPart[$key], array('\Api\Controller\TableController','sortFiltersFunction'));
-        }
-
-        return $filtersPerPart;
-    }
-
-
-    private static function sortFiltersFunction($a, $b)
-    {
-        if($a['sort'] == $b['sort'])
-            return 0;
-
-        return ($a['sort'] < $b['sort']) ? -1 : 1;
-    }
 
 
     /**
@@ -368,34 +337,28 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
      *
      * @return string code name in uppercase
      */
-    public function getCodeName($filterset, $partId, $filterName)
+    public function getCodeName($filterset, $part, $filterName)
     {
         // first letter of the Filterset (care, if some have W, the all will start the same way)
         $filtersetL = substr($filterset->getName(), 0, 1);
 
-        // Part letter U/R/T
         $partL = null;
-        if ($partId == 1)
-            $partL = 'U';
-        else if ($partId == 2)
-            $partL = 'R';
-        else if ($partId == 3)
-            $partL = 'T';
+        if (is_numeric($part)) {
+            foreach ($this->parts as $partObj) {
+                if($partObj->getId() == $part) $partL = substr($partObj->getName(), 0, 1);
+            }
+        } else {
+            $partL = substr($part->getName(), 0, 1);
+        }
 
         // Filter letter (manual pairing or automatic acronym)
         $filterL = '';
-        if ($filterName === 'Piped onto premises')
-            $filterL = 'IP';
-        elseif ($filterName === 'Surface water')
-            $filterL = 'US';
-        elseif ($filterName === 'Other Unimproved')
-            $filterL = 'UO';
-        else {
+
             $filterNameSplit = explode(' ',$filterName);
             foreach ($filterNameSplit as $word) {
-                $filterL = substr($word, 0, 1) .$filterL;
+                $filterL .= substr($word, 0, 1) ;
             }
-        }
+
         return strtoupper($filtersetL.$partL.$filterL);
 
     }

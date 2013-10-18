@@ -42,7 +42,6 @@ class Jmp extends Calculator
             }
 
             $result[] = array(
-                'id' => $filter->getId(),
                 'name' => $filter->getName(),
                 'data' => $data,
             );
