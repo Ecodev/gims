@@ -1,0 +1,37 @@
+<div class="container">
+    <form>
+        <div class="row">
+            <span class="span6">
+                <p><gims-select api="country" model="country" placeholder="<?php echo $this->translate('Select a country') ?>" format="name" style="width:100%;" multiple="multiple"/></p>
+            </span>
+        </div>
+        <div class="row">
+            <span class="span6">
+                <p><gims-select api="filterSet" model="filterSet" placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/></p>
+            </span>
+        </div>
+        <div class="row">
+            <span class="span6">
+                <p>
+                    <label><?php echo $this->translate('Enter specific years of years range, separated by commas.') ?></label>
+
+                    <!--select ui-select2 ng-model="selectedYears" multiple  ng-change='updateUrl()' style='width:100%'>
+                        <option value=''></option>
+                        <option ng-repeat='year in years' value='{{year.v}}'>{{year.v}}</option>
+                    </select-->
+                    <input ng-model="years" ng-blur='updateUrl()' placeholder="E.g : 1980,1990-2000,2005-2010,2013,2015" style="width:100%;"/>
+                </p>
+            </span>
+        </div>
+        <p><i class="icon-loading" ng-show="isLoading"></i></p>
+        <div class="row">
+            <span class="span6">
+                <button class="btn" ng-class="{disabled: !country || !filterSet.id || !selectedYears}" ng-click="displayTable()"><i class="icon-download-alt"></i> Generate table</button>
+                <a href="{{exportUrl}}" target="_blank" class="btn" ng-class="{disabled: !exportUrl}"><i class="icon-download-alt"></i> Export</a>
+            </span>
+        </div>
+    </form>
+
+    <div class="alert alert-info" ng-hide="columnDefs"><i class="icon-info-sign"></i> <?php echo $this->translate('Select parameters to show table here.') ?></div>
+    <div ng-grid="gridOptions" class="gridStyle" ng-show="columnDefs"></div>
+</div>

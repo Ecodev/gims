@@ -6,6 +6,7 @@ return array(
             'Browse\Controller\Index' => 'Browse\Controller\IndexController',
             'Browse\Controller\Chart' => 'Browse\Controller\ChartController',
             'Browse\Controller\Table' => 'Browse\Controller\TableController',
+            'Browse\Controller\Country' => 'Browse\Controller\TableController',
         ),
     ),
     'view_manager' => array(

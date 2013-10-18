@@ -23,4 +23,12 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         return new ViewModel();
     }
 
+    /**
+     * @return ViewModel
+     */
+    public function countryAction()
+    {
+        return new ViewModel();
+    }
+
 }

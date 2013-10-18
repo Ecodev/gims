@@ -47,10 +47,12 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Comput value for the given filter and all its children recursively.
+     *
      * @param \Application\Model\Questionnaire $questionnaire
      * @param \Application\Model\Filter $filter
      * @param array $parts
      * @param integer $level the level of the current filter in the filter tree
+     *
      * @return array a list (not tree) of all filters with their values and tree level
      */
     public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0)
@@ -90,10 +92,9 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
     public function questionnaireAction()
     {
         $p = $this->params()->fromQuery('country');
-        if (!$p)
-            $countryIds = array(-1);
-        else
+        if (!$p) $countryIds = array(-1); else {
             $countryIds = explode(',', $p);
+        }
         $countries = $this->getEntityManager()->getRepository('Application\Model\Country')->findById($countryIds);
 
         /** @var \Application\Model\FilterSet $filterSet */
@@ -103,12 +104,10 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $calculator->setServiceLocator($this->getServiceLocator());
 
         $result = array();
-        $columns = array(
-            'country' => 'Country',
-            'iso3' => 'ISO-3',
-            'survey' => 'Survey',
-            'year' => 'Year',
-        );
+        $columns = array('country' => 'Country',
+                         'iso3'    => 'ISO-3',
+                         'survey'  => 'Survey',
+                         'year'    => 'Year',);
 
         foreach ($countries as $country) {
             $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getByGeonameWithSurvey($country->getGeoname());
@@ -121,32 +120,285 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                     $data = $calculator->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
                     foreach ($data['values'] as $questionnaireId => $value) {
                         if (!isset($result[$questionnaireId])) {
-                            $result[$questionnaireId] = array(
-                                'country' => $country->getName(),
-                                'iso3' => $country->getIso3(),
-                                'survey' => $data['surveys'][$questionnaireId],
-                                'year' => $data['years'][$questionnaireId],
-                            );
+                            $result[$questionnaireId] = array('country' => $country->getName(),
+                                                              'iso3'    => $country->getIso3(),
+                                                              'survey'  => $data['surveys'][$questionnaireId],
+                                                              'year'    => $data['years'][$questionnaireId],);
                         }
 
-                        $columnName = $filter->getName() . ' - ' . $part->getName();
-                        $columnId = 'f' . $filter->getId() . 'p' . $part->getId();
+                        $columnName = $filter->getName().' - '.$part->getName();
+                        $columnId = 'f'.$filter->getId().'p'.$part->getId();
                         $columns[$columnId] = $columnName;
                         $result[$questionnaireId][$columnId] = is_null($value) ? null : \Application\Utility::bcround($value * 100, 1);
                     }
                 }
             }
         }
-        $finalResult = array(
-            'columns' => $columns,
-            'data' => array_values($result),
-        );
+        $finalResult = array('columns' => $columns,
+                             'data'    => array_values($result),);
 
         $filename = $this->params('filename');
-        if ($filename)
-            return new ExcelModel($filename, $finalResult);
-        else
+        if ($filename) return new ExcelModel($filename, $finalResult); else
             return new NumericJsonModel($finalResult);
     }
+
+
+    public function countryAction()
+    {
+        $p = $this->params()->fromQuery('country');
+        $years = $this->getWantedYears($this->params()->fromQuery('years'));
+        if (!$p) $countryIds = array(-1); else
+            $countryIds = explode(',', $p);
+        $countries = $this->getEntityManager()->getRepository('Application\Model\Country')->findById($countryIds);
+
+        /** @var \Application\Model\FilterSet $filterSet */
+        $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
+        $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
+
+        $result = array();
+        $columns = array('country' => 'Country',
+                         'iso3'    => 'ISO-3',
+                         'year'    => 'Year',
+                         'PU'      => 'PU',
+                         'PR'      => 'PR',
+                         'PT'      => 'PT'
+        );
+
+        foreach ($countries as $country) {
+
+            $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findByGeoname($country->getGeoname());
+            if (!$filterSet) {
+                continue;
+            }
+
+            $population = $this->getCountryPopulation($country,$years);
+            $allYearsComputed = $this->getAllYearsComputed($parts, $filterSet, $questionnaires);
+            $allYearsComputed = $this->sortFilters($allYearsComputed);
+
+            $filteredYearsComputed = $this->filterYears($allYearsComputed, $years);
+
+            foreach ($years as $year) {
+
+                // country info columns
+                $countryData = array(
+                    'country' => $country->getName(),
+                    'iso3'    => $country->getIso3(),
+                    'year'    => $year
+                );
+
+                // population columns
+                $populationData['PU'] = $population[$year][1];
+                $populationData['PR'] = $population[$year][2];
+                $populationData['PT'] = $population[$year][3];
+
+                $statsData = array();
+                foreach ($filteredYearsComputed as $partId => $filters) {
+
+                    foreach ($filters as $filter) {
+                        $columnId = 'f'.$filter['id'].'p'.$partId;
+                        $columnName = $this->getCodeName($filterSet, $partId, $filter['name']);
+                        $columns[$columnId.'R'] = $columnName.'R';
+                        $statsData[$columnId.'R'] = $filter['data'][$year];
+                        $columns[$columnId] = $columnName;
+                        $statsData[$columnId] = $filter['data'][$year] * $population[$year][$partId];
+                    }
+                }
+
+                $result[] = array_merge($countryData, $populationData, $statsData);
+            }
+        }
+
+        $finalResult = array('columns' => $columns,
+                             'data'    => array_values($result));
+
+        $filename = $this->params('filename');
+        if ($filename) return new ExcelModel($filename, $finalResult); else
+            return new NumericJsonModel($finalResult);
+    }
+
+
+    /**
+     * @param $country
+     * @param $years
+     *
+     * @return array Population by year and by part
+     * Array (
+     *      [{partid}] => array(
+     *              [2010] => xxxx
+     *              [2012] => xxxx
+     *          )
+     * )
+     */
+    private function getCountryPopulation($country, $years)
+    {
+        /** @var \Application\Model\Population $population */
+        $populationPerYear = array();
+        foreach ($years as $year) {
+            $population = $this->getEntityManager()->getRepository('Application\Model\Population')
+                                                                 ->findBy(array('country' => $country->getId(),'year' => $year));
+
+            foreach ($population as $populationPart) {
+                $populationPerYear[$year][$populationPart->getPart()->getId()] = $populationPart->getPopulation();
+            }
+        }
+        return $populationPerYear;
+    }
+
+
+    /**
+     * @param $parts
+     * @param $filterSet
+     * @param $questionnaires
+     *
+     * @return array all data ordered by part
+     */
+    private function getAllYearsComputed ($parts, $filterSet, $questionnaires)
+    {
+        $calculator = new \Application\Service\Calculator\Jmp();
+        $calculator->setServiceLocator($this->getServiceLocator());
+
+        $dataPerPart = array();
+        foreach ($parts as $part) {
+            $dataPerPart[$part->getId()] = $calculator->computeFlattenAllYears(1980, 2015, $filterSet, $questionnaires, $part);
+        }
+        return $dataPerPart;
+    }
+
+
+    /**
+     * @param $fieldParts
+     * @param $years
+     *
+     * @return array Filter ordered by part and with only wanted years.
+     */
+    private function filterYears ($fieldParts, $years)
+    {
+        $finalFieldsets = array();
+        foreach($fieldParts as $partId => $filters)
+        {
+            $finalFieldsets[$partId] = array();
+            foreach ($filters as $filter) {
+                $yearsData = array();
+                foreach ($years as $year) {
+                    $yearsData[$year] = $filter['data'][$year - 1980];
+                }
+                $tmpFieldset = array(
+                    'id' => $filter['id'],
+                    'name' => $filter['name'],
+                    'data' => $yearsData
+                );
+                $finalFieldsets[$partId][] = $tmpFieldset;
+            }
+
+        }
+
+        return $finalFieldsets;
+    }
+
+
+    /**
+     * @param $filtersPerPart
+     *
+     * @return return array manually ordered to have the same order than excel sheet
+     */
+    private function sortFilters ($filtersPerPart)
+    {
+        $order = array(
+            'Piped onto premises' => 1,
+            'Other Improved' => 2,
+            'Total improved' => 3,
+            'Other Unimproved' => 4,
+            'Surface water' => 5,
+        );
+
+        foreach ($filtersPerPart as $key => $filters){
+            foreach ($filters as $key2 => $filter) {
+                $filtersPerPart[$key][$key2]['sort'] = $order[$filter['name']];
+            }
+            usort($filtersPerPart[$key], array('\Api\Controller\TableController','sortFiltersFunction'));
+        }
+
+        return $filtersPerPart;
+    }
+
+
+    private static function sortFiltersFunction($a, $b)
+    {
+        if($a['sort'] == $b['sort'])
+            return 0;
+
+        return ($a['sort'] < $b['sort']) ? -1 : 1;
+    }
+
+
+    /**
+     * Decode the syntax of wanted years
+     *
+     * @param $years
+     *
+     * @return array of years
+     */
+    private function getWantedYears ($years)
+    {
+        $ranges = explode(',', $years);
+        $finalYears = [];
+        foreach ($ranges as $range) {
+            $range = trim($range, ' ');
+            if (!strpos($range, '-')) {
+                $finalYears[] = $range;
+            } else {
+                $startAndEndYear = explode('-', $range);
+                sort($startAndEndYear);
+                for ($i = $startAndEndYear[0]; $i <= $startAndEndYear[1]; $i++) {
+                    $finalYears[] = $i;
+                }
+            }
+        }
+
+        return $finalYears;
+    }
+
+
+    /**
+     * Retreive a code name by using two techniques : manual mapping or inversed acronym letters for the filter
+     *
+     * @param $filterset
+     * @param $partId
+     * @param $filterName
+     *
+     * @return string code name in uppercase
+     */
+    public function getCodeName($filterset, $partId, $filterName)
+    {
+        // first letter of the Filterset (care, if some have W, the all will start the same way)
+        $filtersetL = substr($filterset->getName(), 0, 1);
+
+        // Part letter U/R/T
+        $partL = null;
+        if ($partId == 1)
+            $partL = 'U';
+        else if ($partId == 2)
+            $partL = 'R';
+        else if ($partId == 3)
+            $partL = 'T';
+
+        // Filter letter (manual pairing or automatic acronym)
+        $filterL = '';
+        if ($filterName === 'Piped onto premises')
+            $filterL = 'IP';
+        elseif ($filterName === 'Surface water')
+            $filterL = 'US';
+        elseif ($filterName === 'Other Unimproved')
+            $filterL = 'UO';
+        else {
+            $filterNameSplit = explode(' ',$filterName);
+            foreach ($filterNameSplit as $word) {
+                $filterL = substr($word, 0, 1) .$filterL;
+            }
+        }
+        return strtoupper($filtersetL.$partL.$filterL);
+
+    }
+
 
 }

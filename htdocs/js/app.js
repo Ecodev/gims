@@ -22,6 +22,7 @@ angular.module('myApp', [
         $routeProvider.when('/browse/chart', {templateUrl: '/template/browse/chart', controller: 'Browse/ChartCtrl', reloadOnSearch: false});
         $routeProvider.when('/browse/table/filter', {templateUrl: '/template/browse/table/filter', controller: 'Browse/Table/FilterCtrl', reloadOnSearch: false});
         $routeProvider.when('/browse/table/questionnaire', {templateUrl: '/template/browse/table/questionnaire', controller: 'Browse/Table/QuestionnaireCtrl', reloadOnSearch: false});
+        $routeProvider.when('/browse/table/country', {templateUrl: '/template/browse/table/country', controller: 'Browse/Table/CountryCtrl', reloadOnSearch: false});
         $routeProvider.when('/contribute', {templateUrl: '/template/contribute', controller: 'ContributeCtrl'});
         $routeProvider.when('/contribute/questionnaire', {templateUrl: '/template/contribute/questionnaire', controller: 'Contribute/QuestionnaireCtrl'});
         $routeProvider.when('/contribute/questionnaire/:id', {templateUrl: '/template/contribute/questionnaire', controller: 'Contribute/QuestionnaireCtrl'});
