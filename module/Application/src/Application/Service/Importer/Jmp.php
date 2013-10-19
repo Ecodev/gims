@@ -153,9 +153,9 @@ class Jmp extends AbstractImporter
                     'excludes' => null,
                     'isImproved' => false,
                     'formulas' => array(
-                        3 => '=IF(ISNUMBER(Piped onto premises), Total improved - Piped onto premises, NULL)',
-                        4 => '=IF(ISNUMBER(Piped onto premises), Total improved - Piped onto premises, NULL)',
-                        5 => '=IF(ISNUMBER(Piped onto premises), Total improved - Piped onto premises, NULL)',
+                        3 => '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)',
+                        4 => '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)',
+                        5 => '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)',
                     ),
                 ),
                 "Other Unimproved" => array(
@@ -1159,7 +1159,7 @@ STRING;
      */
     protected function finishHighFilters(array $filters, \PHPExcel_Worksheet $sheet)
     {
-        $complementaryTotalFormula = $this->getFormula('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . '}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . '})), ({F#current,Q#current,P#' . $this->partRural->getId() . '} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . '} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, {self})');
+        $complementaryTotalFormula = $this->getFormula('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . '}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . '})), ({F#current,Q#current,P#' . $this->partRural->getId() . '} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . '} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, NULL)');
         // Get or create all filter
         echo 'Finishing high filters';
         foreach ($filters as $filterName => $filterData) {

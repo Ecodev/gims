@@ -50,7 +50,18 @@ class Jmp extends Calculator
         return $result;
     }
 
-    public function computeFlattenOneYearWithFormula($year, array $years, Filter $filter, $questionnaires, $part, array $parts, Formula $excludedFormula = null)
+    /**
+     *
+     * @param integer $year
+     * @param array $years
+     * @param \Application\Model\Filter $filter
+     * @param array $questionnaires
+     * @param \Application\Model\Part $part
+     * @param array $parts
+     * @param \Application\Model\Rule\Formula $excludedFormula
+     * @return null|float
+     */
+    public function computeFlattenOneYearWithFormula($year, array $years, Filter $filter, $questionnaires, Part $part, array $parts, Formula $excludedFormula = null)
     {
         // If the filter has a formula, returns its value
         foreach ($filter->getFilterFormulas() as $filterFormula) {
@@ -66,7 +77,7 @@ class Jmp extends Calculator
         foreach ($parts as $p) {
             $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $p);
             $resultPart = $this->computeFlattenOneYear($year, $allRegressions);
-            _log()->debug(__FUNCTION__, array($filter->getId(), $year, $p->getId(), $resultPart));
+            _log()->debug(__FUNCTION__, array($filter->getId(), $p->getId(), $year, $resultPart));
             if (!is_null($resultPart)) {
                 $population = $this->getPopulationRepository()->getOneByGeoname(reset($questionnaires)->getGeoname(), $p, $year)->getPopulation();
                 $totalPopulation += $population;
@@ -82,10 +93,10 @@ class Jmp extends Calculator
         if (is_null($oneYearResult)) {
             $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $part);
             $oneYearResult = $this->computeFlattenOneYear($year, $allRegressions);
-            _log()->debug(__FUNCTION__, array($filter->getId(), $year, $part->getId(), $oneYearResult, $allRegressions));
+            _log()->debug(__FUNCTION__, array($filter->getId(), $part->getId(), $year, $oneYearResult, $allRegressions));
         }
 
-        _log()->debug(__FUNCTION__, array('final', $filter->getId(), $year, $part->getId(), $oneYearResult));
+        _log()->debug(__FUNCTION__, array('final', $filter->getId(), $part->getId(), $year, $oneYearResult));
         return $oneYearResult;
     }
 
@@ -339,7 +350,8 @@ class Jmp extends Calculator
         if ($result === false || $result === '""') {
             $result = null;
         }
-        _log()->debug(__FUNCTION__, array($originalFormula, $convertedFormulas, $result));
+
+        _log()->debug(__FUNCTION__, array($currentFilter->getId(), $formula->getName(), $originalFormula, $convertedFormulas, $result));
         return $result;
     }
 

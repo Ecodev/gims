@@ -423,7 +423,7 @@ use \Application\Traits\EntityManagerAware;
             $result = null;
         }
 
-        _log()->debug(__FUNCTION__, array($usage->getId(), $originalFormula, $convertedFormulas, $result));
+        _log()->debug(__FUNCTION__, array($usage->getId(), $usage->getFormula()->getName(), $originalFormula, $convertedFormulas, $result));
         return $result;
     }
 
