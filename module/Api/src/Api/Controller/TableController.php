@@ -116,8 +116,9 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             if (!$filterSet) {
                 continue;
             }
-            foreach ($filterSet->getFilters() as $filter) {
-                foreach ($parts as $part) {
+            
+            foreach ($parts as $part) {
+                foreach ($filterSet->getFilters() as $filter) {
 
                     $data = $calculator->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
                     foreach ($data['values'] as $questionnaireId => $value) {
