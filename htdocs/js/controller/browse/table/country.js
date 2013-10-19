@@ -22,12 +22,19 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
         } else {
             $location.search('years', $scope.years);
         }
+        buildExportUrl();
+    };
+
+    // Build export URL
+    function buildExportUrl() {
+            var filterSetName = $scope.filterSet ? ' - ' + $scope.filterSet.name : '';
+            var filename = _.pluck($scope.country, 'iso3').join(', ') + filterSetName + '.xlsx';
+            $scope.exportUrl = $location.url().replace('browse/table/country', 'api/table/country/' + filename);
     }
 
-
-//    $scope.$watch('country + filterSet.id + years' , function(a) {
-//        $scope.displayTable();
-//    });
+    $scope.$watch('country + filterSet.id' , function(a) {
+        $scope.displayTable();
+    });
 
     // Whenever one of the parameter is changed
     var uniqueAjaxRequest;
@@ -36,11 +43,7 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
         // If they are all available ...
         if ($scope.country && $scope.filterSet && $scope.years && $scope.years.length>=4) {
 
-            // Build export URL
-            var filterSetName = $scope.filterSet ? ' - ' + $scope.filterSet.name : '';
-            var filename = _.pluck($scope.country, 'iso3').join(', ') + filterSetName + '.xlsx';
-            $scope.exportUrl = $location.url().replace('browse/table/country', 'api/table/country/' + filename);
-
+            buildExportUrl();
             $scope.isLoading = true;
 
             uniqueAjaxRequest = $timeout(function() {
@@ -59,5 +62,5 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
                 });
             }, 200);
         }
-    }
+    };
 });

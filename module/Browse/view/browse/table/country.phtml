@@ -21,14 +21,14 @@
                        popover-placement="right"
 
                         ></i>
-                    <label class='span5'><?php echo $this->translate('Enter year(s)') ?></label>
+                    <label for="years" class='span5'><?php echo $this->translate('Enter year(s)') ?></label>
 
                 </p>
             </span>
         </div>
         <div class="row">
             <p class='span6'>
-                <input class='span6' ng-model="years" ng-blur='updateUrl()' placeholder="E.g : 1980,1990-2000,2005-2010,2013,2015" />
+                <input id="years" class='span6' ng-model="years" ng-blur='updateUrl()' placeholder="E.g : 1980,1990-2000,2005-2010,2013,2015" />
             </p>
         </div>
 
