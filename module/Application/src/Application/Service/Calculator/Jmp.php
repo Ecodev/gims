@@ -72,31 +72,30 @@ class Jmp extends Calculator
         }
 
         // If we are computing the total (not a specific part), we will sum all parts to get it
-        $oneYearResult = null;
-        $totalPopulation = null;
-        foreach ($parts as $p) {
-            $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $p);
-            $resultPart = $this->computeFlattenOneYear($year, $allRegressions);
-            _log()->debug(__FUNCTION__, array($filter->getId(), $p->getId(), $year, $resultPart));
-            if (!is_null($resultPart)) {
-                $population = $this->getPopulationRepository()->getOneByGeoname(reset($questionnaires)->getGeoname(), $p, $year)->getPopulation();
-                $totalPopulation += $population;
-                $oneYearResult += $resultPart * $population;
+        if ($parts) {
+            $oneYearResult = null;
+            $totalPopulation = null;
+            foreach ($parts as $p) {
+                $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $p);
+                $resultPart = $this->computeFlattenOneYear($year, $allRegressions);
+
+                if (!is_null($resultPart)) {
+                    $population = $this->getPopulationRepository()->getOneByGeoname(reset($questionnaires)->getGeoname(), $p, $year)->getPopulation();
+                    $totalPopulation += $population;
+                    $oneYearResult += $resultPart * $population;
+                }
+            }
+
+            if ($totalPopulation) {
+                $oneYearResult = $oneYearResult / $totalPopulation;
             }
         }
-
-        if ($totalPopulation) {
-            $oneYearResult = $oneYearResult / $totalPopulation;
-        }
-
-        // If sum of parts yielded nothing, then fallback to normal computation
-        if (is_null($oneYearResult)) {
+        // Otherwise fallback to normal computation
+        else {
             $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $part);
             $oneYearResult = $this->computeFlattenOneYear($year, $allRegressions);
-            _log()->debug(__FUNCTION__, array($filter->getId(), $part->getId(), $year, $oneYearResult, $allRegressions));
         }
 
-        _log()->debug(__FUNCTION__, array('final', $filter->getId(), $part->getId(), $year, $oneYearResult));
         return $oneYearResult;
     }
 

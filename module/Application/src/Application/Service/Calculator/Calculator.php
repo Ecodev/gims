@@ -242,8 +242,6 @@ use \Application\Traits\EntityManagerAware;
      */
     private function computeFilterInternal($filterId, $questionnaireId, $partId, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
-
-        _log()->debug(__FUNCTION__, array($filterId, $questionnaireId, $partId));
         // @todo for sylvain: the logic goes as follows: if the filter id is contained within excludeFilters, skip calculation.
         if (in_array($filterId, $this->excludedFilters)) {
             return null;

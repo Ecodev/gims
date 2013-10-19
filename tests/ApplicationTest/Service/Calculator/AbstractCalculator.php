@@ -165,7 +165,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     /**
      * @var \Application\Model\Part
      */
-    protected $part;
+    protected $part1;
 
     public function setUp()
     {
@@ -222,10 +222,8 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $this->question31->setFilter($this->filter31);
         $this->question32->setFilter($this->filter32);
 
-        // Create a stub for the Part class, so we can tell it represent the total part (it's usually a read-only property)
-        $this->part = $this->getNewModelWithId('\Application\Model\Part', array('isTotal' => $this->returnValue(true)));
-
-        $this->assertTrue($this->part->isTotal());
+        // Create a stub for the Part class
+        $this->part1 = $this->getNewModelWithId('\Application\Model\Part')->setName('tst part 1');
 
         $this->answer131 = new \Application\Model\Answer();
         $this->answer132 = new \Application\Model\Answer();
@@ -234,12 +232,12 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $this->answer31 = new \Application\Model\Answer();
         $this->answer32 = new \Application\Model\Answer();
 
-        $this->answer131->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question131)->setValuePercent(0.1);
-        $this->answer132->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question132)->setValuePercent(0.01);
-        $this->answer141->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question141)->setValuePercent(0.001);
-        $this->answer142->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question142)->setValuePercent(0.0001);
-        $this->answer31->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question31)->setValuePercent(0.00001);
-        $this->answer32->setPart($this->part)->setQuestionnaire($this->questionnaire)->setQuestion($this->question32)->setValuePercent(0.000001);
+        $this->answer131->setPart($this->part1)->setQuestionnaire($this->questionnaire)->setQuestion($this->question131)->setValuePercent(0.1);
+        $this->answer132->setPart($this->part1)->setQuestionnaire($this->questionnaire)->setQuestion($this->question132)->setValuePercent(0.01);
+        $this->answer141->setPart($this->part1)->setQuestionnaire($this->questionnaire)->setQuestion($this->question141)->setValuePercent(0.001);
+        $this->answer142->setPart($this->part1)->setQuestionnaire($this->questionnaire)->setQuestion($this->question142)->setValuePercent(0.0001);
+        $this->answer31->setPart($this->part1)->setQuestionnaire($this->questionnaire)->setQuestion($this->question31)->setValuePercent(0.00001);
+        $this->answer32->setPart($this->part1)->setQuestionnaire($this->questionnaire)->setQuestion($this->question32)->setValuePercent(0.000001);
 
         $this->highFilter1 = $this->getNewModelWithId('\Application\Model\Filter')->setName('improved');
         $this->highFilter2 = $this->getNewModelWithId('\Application\Model\Filter')->setName('unimproved');
