@@ -51,7 +51,7 @@ class Jmp extends Calculator
     }
 
     /**
-     *
+     * Compute the flatten regression value for the given year with optional formulas
      * @param integer $year
      * @param array $years
      * @param \Application\Model\Filter $filter
@@ -103,7 +103,7 @@ class Jmp extends Calculator
     /**
      * Compute the flatten regression value for the given year
      * @param integer $year
-     * @param array $allRegressions [year => [regression => value, population => value]]
+     * @param array $allRegressions [year => regression]
      * @param array $usedYears [year] should be empty array for first call, then used for recursivity
      * @return null|float
      */
@@ -177,7 +177,7 @@ class Jmp extends Calculator
      * @param \Application\Model\Filter $filter
      * @param array $questionnaires
      * @param \Application\Model\Part $part
-     * @return array [year => [regresssion => value, population => value]]
+     * @return array [year => regresssion]
      */
     public function computeRegressionForAllYears(array $years, Filter $filter, $questionnaires, Part $part)
     {
@@ -197,12 +197,12 @@ class Jmp extends Calculator
     }
 
     /**
-     * Returns the regression and the total population concerned by it
+     * Returns the regression for one year
      * @param integer $year
      * @param \Application\Model\Filter $filter
      * @param array $questionnaires
      * @param \Application\Model\Part $part
-     * @return array [regresssion => value, population => value]
+     * @return null|float
      */
     public function computeRegressionOneYear($year, Filter $filter, $questionnaires, Part $part)
     {
