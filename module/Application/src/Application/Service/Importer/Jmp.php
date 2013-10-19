@@ -947,22 +947,28 @@ STRING;
 
         // Excel files sometimes express percent as 0 - 100, and sometimes as 0.00 - 1.00,
         // whereas in GIMS it always is 0.00 - 1.00. So this means we have to drop the
-        // useless conversion done in formula
-        $replacedFormula = str_replace(array('*100', '/100'), '', $originalFormula);
+        // useless conversion done in formula, but only if there is at least one cell reference
+        // in the formula ("=15/100" should be kept intact, as seen in Afghanistan, Table_S, AZ100)
+        $cellPattern = '\$?(([[:alpha:]]+)\$?(\\d+))';
+        if (preg_match("/$cellPattern/", $originalFormula))
+            $replacedFormula = str_replace(array('*100', '/100'), '', $originalFormula);
+        else
+            $replacedFormula = $originalFormula;
 
         // Some formulas (usually estimations) hardcode values as percent between 0 - 100, we need to convert them
         // to 0.00 - 1.00, but only for hardcoded values and not any number within more complex formula (it would be too dangerous)
         // eg: "=29.6" => "=0.296"
         // This is the case for Cambodge DHS05 "Bottled water with HC" estimation
-        $replacedFormula = preg_replace_callback('/^=(-?\d+(\.\d+)?)$/', function($matches) {
-                    $number = $matches[1];
-                    $number = $number / 100;
+        if (!in_array($row, $this->definitions[$sheet->getTitle()]['questionnaireFormulas']['Ratio'])) {
+            $replacedFormula = preg_replace_callback('/^=(-?\d+(\.\d+)?)$/', function($matches) {
+                        $number = $matches[1];
+                        $number = $number / 100;
 
-                    return "=$number";
-                }, $replacedFormula);
+                        return "=$number";
+                    }, $replacedFormula);
+        }
 
         // Expand range syntax to enumerate each cell: "A1:A5" => "{A1,A2,A3,A4,A5}"
-        $cellPattern = '\$?(([[:alpha:]]+)\$?(\\d+))';
         $expandedFormula = preg_replace_callback("/$cellPattern:$cellPattern/", function($matches) use ($sheet, $cell) {
 
                     // This only expand vertical ranges, not horizontal ranges (which probably never make any sense for JMP anyway)
