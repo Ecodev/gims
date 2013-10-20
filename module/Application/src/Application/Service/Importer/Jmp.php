@@ -285,7 +285,7 @@ class Jmp extends AbstractImporter
                     'formulas' => array(
                         3 => null,
                         4 => null,
-                        5 => '=IF(ISNUMBER(Shared), Shared + Improved, {self})',
+                        5 => null,
                     ),
                 ),
                 "Sewerage connections" => array(
@@ -318,7 +318,7 @@ class Jmp extends AbstractImporter
                     'formulas' => array(
                         3 => '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)',
                         4 => '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)',
-                        5 => null,
+                        5 => '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)',
                     ),
                 ),
                 "Other unimproved" => array(

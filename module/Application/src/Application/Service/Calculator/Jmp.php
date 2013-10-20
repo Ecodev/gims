@@ -318,7 +318,7 @@ class Jmp extends Calculator
      * @return mixed
      * @throws \Exception
      */
-    public function computeFormulaFlatten(Formula $formula, $year, array $years, Filter $currentFilter, $questionnaires, $part, array $parts)
+    public function computeFormulaFlatten(Formula $formula, $year, array $years, Filter $currentFilter, $questionnaires, Part $part, array $parts)
     {
         $originalFormula = $formula->getFormula();
 
@@ -369,7 +369,7 @@ class Jmp extends Calculator
             $result = null;
         }
 
-        _log()->debug(__FUNCTION__, array($currentFilter->getId(), $formula->getName(), $originalFormula, $convertedFormulas, $result));
+        _log()->debug(__FUNCTION__, array($currentFilter->getId(), $part->getId(), $formula->getId(), $formula->getName(), $originalFormula, $convertedFormulas, $result));
         return $result;
     }
 
