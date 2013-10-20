@@ -1316,7 +1316,7 @@ STRING;
         }
 
         foreach ($this->partOffsets as $offset => $part) {
-            $includedValue = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
+            $includedValue = trim($this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row)));
 
             // If it is not included, then it means we need an exclude rule
             if (strcasecmp($includedValue, 'No') == 0) {
