@@ -29,6 +29,7 @@ class FilterRuleRepository extends \Application\Repository\AbstractRepository
                     ->join('filterRule.filter', 'filter')
                     ->join('filterRule.rule', 'rule')
                     ->andWhere('filterRule.questionnaire = :questionnaire')
+                    ->orderBy('filterRule.id')
             ;
 
             $qb->setParameters(array(

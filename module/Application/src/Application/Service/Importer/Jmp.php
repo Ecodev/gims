@@ -305,9 +305,9 @@ class Jmp extends AbstractImporter
                     'excludes' => null,
                     'isImproved' => true,
                     'formulas' => array(
-                        3 => null,
-                        4 => null,
-                        5 => null,
+                        3 => "=IF(ISNUMBER(Improved + shared), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)",
+                        4 => "=IF(ISNUMBER(Improved + shared), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)",
+                        5 => "=IF(ISNUMBER(Improved + shared), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)",
                     ),
                 ),
                 "Shared" => array(
@@ -443,7 +443,7 @@ class Jmp extends AbstractImporter
 
             // Fourth pass to hardcode special cases of formulas
             echo 'Finishing special cases of Ratios';
-            $this->finishRatios($questionnaire);
+            $this->finishRatios();
             echo PHP_EOL;
         }
 
@@ -1292,6 +1292,7 @@ STRING;
                 foreach ($filters as $filterNameOther => $foo) {
                     $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
                     $id = $otherHighFilter->getId();
+                    $formula = str_replace('AVERAGE({' . $filterNameOther, "AVERAGE({F#$id", $formula);
                     $formula = str_replace($filterNameOther, "{F#$id}", $formula);
                 }
 
@@ -1326,12 +1327,10 @@ STRING;
 
     /**
      * Finish the special cases of ratio used for high filters: "Sanitation - Improved" and "Sanitation - Shared"
-     * @param \PHPExcel_Worksheet $sheet
-     * @param integer $col
-     * @param Questionnaire $questionnaire
+     * We define those filter as being the Ratio itself
      * @return void
      */
-    protected function finishRatios(Questionnaire $questionnaire)
+    protected function finishRatios()
     {
         $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireFormula');
         $synonyms = array(
@@ -1340,39 +1339,27 @@ STRING;
             'Shared improved facilities/all improved facilities',
         );
 
-        $filterImprovedShared = @$this->cacheHighFilters['Improved + shared'];
         $filterImproved = @$this->cacheHighFilters['Improved'];
         $filterShared = @$this->cacheHighFilters['Shared'];
 
         // SKip everything if we are not in Sanitation
-        if (!$filterImproved || !$filterImprovedShared || !$filterShared) {
+        if (!$filterImproved || !$filterShared) {
             return;
         }
 
+        $ratios = $repository->getAllByFormulaName($synonyms, $this->importedQuestionnaires);
+        foreach ($ratios as $ratio) {
 
-        $filterImprovedSharedId = $filterImprovedShared->getId();
-        foreach ($this->partOffsets as $part) {
-            $ratios = $repository->getAllByFormulaName($synonyms, $this->importedQuestionnaires, $part);
+            $formulaId = $ratio->getFormula()->getId();
+            $questionnaireId = $ratio->getQuestionnaire()->getId();
+            $ratioReference = "{Fo#$formulaId,Q#$questionnaireId,P#current}";
 
-            if ($ratios) {
-                array_walk($ratios, function(&$f) {
-                            $formulaId = $f->getFormula()->getId();
-                            $questionnaireId = $f->getQuestionnaire()->getId();
-                            $f = "{Fo#$formulaId,Q#$questionnaireId,P#current}";
-                        });
+            $formulaImproved = "=1 - $ratioReference";
+            $this->linkFormula($formulaImproved, $filterImproved, $ratio->getQuestionnaire(), $ratio->getPart());
 
-                $averageOfAllRatiosAvailable = 'AVERAGE(' . implode(', ', $ratios) . ')';
-
-                foreach ($this->importedQuestionnaires as $questionnaire) {
-
-                    $formulaImproved = "={F#$filterImprovedSharedId,Q#current,P#current} * (1 - $averageOfAllRatiosAvailable)";
-                    $this->linkFormula($formulaImproved, $filterImproved, $questionnaire, $part);
-
-                    $formulaShared = "={F#$filterImprovedSharedId,Q#current,P#current} * $averageOfAllRatiosAvailable";
-                    $this->linkFormula($formulaShared, $filterShared, $questionnaire, $part);
-                    echo '.';
-                }
-            }
+            $formulaShared = "=$ratioReference";
+            $this->linkFormula($formulaShared, $filterShared, $ratio->getQuestionnaire(), $ratio->getPart());
+            echo '.';
         }
     }
 

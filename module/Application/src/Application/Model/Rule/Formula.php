@@ -8,28 +8,51 @@ use Doctrine\ORM\Mapping as ORM;
  * Formula is a way to define a value as a custom formula.
  *
  * Syntax is based on Excel formula syntax. Except cell references (eg: A2, B3)
- * must be entirely replaced with following syntax:
+ * must be entirely replaced with following syntax. There is different syntax
+ * for the two different context.
  *
- * Reference a Filter's value:
- * {F#12,Q#34,P#56}
+ * Basic context (Calculator\Calculator):
+ * <ul>
+ *     <li>
+ *         Reference a Filter's value:
+ *         <pre>{F#12,Q#34,P#56}</pre>
+ *     </li>
+ *     <li>
+ *         Reference an Unofficial Filter name (NOT value). It will return NULL if no
+ *         Unofficial Filter is found. The ID refers to the official Filter:
+ *         <pre>{F#12,Q#34}</pre>
+ *     </li>
+ *     <li>
+ *         Reference a QuestionnaireFormula's value:
+ *         <pre>{Fo#12,Q#34,P#56}</pre>
+ *     </li>
+ *     <li>
+ *         Reference a population data of the questionnaire's country:
+ *         <pre>{Q#34,P#56}</pre>
+ *     </li>
+ * </ul>
  *
- * Reference a Filter's regression value for same part and year. This is only
- * available when doing regression computing, so when used by Calculator\Jmp:
- * {F#12}
+ * Regression context (Calculator\Jmp):
+ * <ul>
+ *     <li>
+ *         Reference a Filter's regression value for same part and year:
+ *         <pre>{F#12}</pre>
+ *     </li>
+ *     <li>
+ *         Reference a list of available filter values for all current questionnaires.
+ *         The result use Excel array constant syntax (eg: "{1,2,3,4,5}")
+ *         <pre>{F#12,Q#all}</pre>
+ *     </li>
+ * </ul>
  *
- * Reference an Unofficial Filter name (NOT value). It will return NULL if no
- * Unofficial Filter is found. The ID refers to the official Filter:
- * {F#12,Q#34}
- *
- * Reference a QuestionnaireFormula's value:
- * {Fo#12,Q#34,P#56}
- *
- * Reference a population data of the questionnaire's country:
- * {Q#34,P#56}
- *
- * Reference the value if computed without this formula. It allows for formulas
- * chaining:
- * {self}
+ * Both context:
+ * <ul>
+ *     <li>
+ *         Reference the value if computed without this formula. It allows
+ *         for formulas chaining:
+ *         <pre>{self}</pre>
+ *     </li>
+ * </ul>
  *
  * Where:
  * - F  = Filter
@@ -42,10 +65,10 @@ use Doctrine\ORM\Mapping as ORM;
  * by its ID. This syntax should be prefered when possible to maximise Formula re-use.
  *
  * An entire formula could be:
- * <samp>=IF(ISTEXT({F#12,Q#34}), SUM({F#12,Q#34,P#56}, {Fo#2,Q#34,P#56}), {Fo#2,Q#34,P#56})<samp>
+ * <pre>=IF(ISTEXT({F#12,Q#34}), SUM({F#12,Q#34,P#56}, {Fo#2,Q#34,P#56}), {Fo#2,Q#34,P#56})</pre>
  *
  * Or the more re-usable version:
- * <samp>=IF(ISTEXT({F#12,Q#current}), SUM({F#12,Q#current,P#current}, {Fo#2,Q#current,P#current}), {Fo#2,Q#current,P#current})<samp>
+ * <pre>=IF(ISTEXT({F#12,Q#current}), SUM({F#12,Q#current,P#current}, {Fo#2,Q#current,P#current}), {Fo#2,Q#current,P#current})</pre>
  *
  * @ORM\Entity
  */
@@ -81,4 +104,5 @@ class Formula extends AbstractRule
     {
         return $this->formula;
     }
+
 }

@@ -5,16 +5,21 @@ namespace Application\Repository\Rule;
 class QuestionnaireFormulaRepository extends \Application\Repository\AbstractRepository
 {
 
-    public function getAllByFormulaName(array $formulaNames, array $questionnaires, \Application\Model\Part $part)
+    /**
+     * Get all QuestionnaireFormula with any given names within the given questionnaires
+     * @param array $formulaNames
+     * @param array $questionnaires
+     * @return QuestionnaireFormula[]
+     */
+    public function getAllByFormulaName(array $formulaNames, array $questionnaires)
     {
         $qb = $this->createQueryBuilder('qf');
         $qb->join('qf.formula', 'formula', \Doctrine\ORM\Query\Expr\Join::WITH)
                 ->andWhere('qf.questionnaire IN (:questionnaires)')
-                ->andWhere('qf.part = :part');
+        ;
 
         $params = array(
             'questionnaires' => $questionnaires,
-            'part' => $part,
         );
         $qb->setParameters($params);
 
