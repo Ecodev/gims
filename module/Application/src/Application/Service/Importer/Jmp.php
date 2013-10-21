@@ -973,7 +973,8 @@ STRING;
         // to 0.00 - 1.00, but only for hardcoded values and not any number within more complex formula (it would be too dangerous)
         // eg: "=29.6" => "=0.296"
         // This is the case for Cambodge DHS05 "Bottled water with HC" estimation
-        if (!in_array($row, $this->definitions[$sheet->getTitle()]['questionnaireFormulas']['Ratio'])) {
+        $formulaRows = $this->definitions[$sheet->getTitle()]['questionnaireFormulas'];
+        if (in_array($row, $formulaRows['Estimate']) || in_array($row, $formulaRows['Calculation']) ) {
             $replacedFormula = preg_replace_callback('/^=(-?\d+(\.\d+)?)$/', function($matches) {
                         $number = $matches[1];
                         $number = $number / 100;
