@@ -174,7 +174,7 @@ class Jmp extends AbstractImporter
         'Tables_S' => array(
             'definitions' => array(
                 4 => array("Sanitation", null, 0, null),
-                5 => array("Flush and pour flush", 4, 2, array(11, 30)),
+                5 => array("Flush and pour flush", 4, 2, array(11, 30), 999),
                 6 => array("to piped sewer system", 5, 1, array(12, 31)),
                 7 => array("to septic tank", 5, 1, array(13, 32)),
                 8 => array("to pit", 5, 1, array(14, 33)),
@@ -529,6 +529,16 @@ STRING;
 
             // Keep original filter available on negative indexes
             $this->cacheFilters[-$row] = $originalFilter;
+        }
+
+        // Add extra summand which can be one of replacement
+        foreach ($officialFilters['definitions'] as $row => $definition) {
+            $filter = $this->cacheFilters[$row];
+            $extraSummand = @$definition[4];
+            if ($extraSummand) {
+                $s = $this->cacheFilters[$extraSummand];
+                $filter->addSummand($s);
+            }
         }
 
         $this->getEntityManager()->flush();
