@@ -1060,6 +1060,16 @@ STRING;
                     }
                 }, $expandedFormula);
 
+        // In some case ISTEXT() is used to check if a number does not exist. But GIMS
+        // always returns either a number or NULL, never empty string. So we adapt formula
+        // to use a more semantic way to check absence of number
+        $isTextUsageWhichCannotBeText = array(
+            '/ISTEXT\((\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\})\)/',
+            '/ISTEXT\((\{Fo#(\d+),Q#(\d+|current),P#(\d+|current)\})\)/',
+            '/ISTEXT\((\{Q#(\d+|current),P#(\d+|current)\})\)/',
+            '/ISTEXT\((\{F#(\d+|current)})\)/',
+        );
+        $convertedFormula = preg_replace($isTextUsageWhichCannotBeText, 'NOT(ISNUMBER($1))', $convertedFormula);
 
         $prefix = '';
         foreach ($this->definitions[$sheet->getTitle()]['questionnaireFormulas'] as $label => $rows) {
