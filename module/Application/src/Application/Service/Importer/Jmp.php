@@ -965,6 +965,10 @@ STRING;
         else
             $replacedFormula = $originalFormula;
 
+        // For the same reason, we need to replace complementary computing based on 100, to be based on 1
+        // eg: "=100-A23" => "=1-A23"
+        $replacedFormula = preg_replace('/([^a-zA-Z])100-/', '${1}1-', $replacedFormula);
+
         // Some formulas (usually estimations) hardcode values as percent between 0 - 100, we need to convert them
         // to 0.00 - 1.00, but only for hardcoded values and not any number within more complex formula (it would be too dangerous)
         // eg: "=29.6" => "=0.296"
