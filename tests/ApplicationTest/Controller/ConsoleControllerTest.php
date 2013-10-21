@@ -52,7 +52,7 @@ Surveys          : 1
 Questionnaires   : 2
 Alternate Filters: 18
 Answers          : 70
-Formulas         : 35
+Formulas         : 34
 Uses of Exclude  : 11
 Uses of Rule for Filter          : 33
 Uses of Formula for Filter       : 21
