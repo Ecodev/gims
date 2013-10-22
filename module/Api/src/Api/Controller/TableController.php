@@ -123,6 +123,9 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
             foreach ($parts as $part) {
                 foreach ($filterSet->getFilters() as $filter) {
+                    $columnName = $this->getCodeName($filterSet, $part, $filter->getName());
+                    $columnId = 'f' . $filter->getId() . 'p' . $part->getId();
+                    $columns[$columnId] = $columnName;
 
                     $data = $calculator->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
                     foreach ($data['values'] as $questionnaireId => $value) {
@@ -135,10 +138,6 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                             );
                         }
 
-                        $columnName = $this->getCodeName($filterSet, $part, $filter->getName());
-                        //$columnName = $filter->getName().' - '.$part->getName();
-                        $columnId = 'f' . $filter->getId() . 'p' . $part->getId();
-                        $columns[$columnId] = $columnName;
                         $result[$questionnaireId][$columnId] = is_null($value) ? null : \Application\Utility::bcround($value * 100, 1);
                     }
                 }
