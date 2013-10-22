@@ -213,9 +213,12 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                         $columnId = 'c' . $count;
                         $columnName = $this->getCodeName($filterSet, $partId, $filter['name']);
                         $columns[$columnId] = $columnName;
-                        $statsData[$columnId] = \Application\Utility::bcround($filter['data'][$year] * 100, 1);
+
+                        $value = $filter['data'][$year];
+                        $statsData[$columnId] = is_null($value) ? null : \Application\Utility::bcround($value * 100, 1);
+
                         $columns[$columnId . 'a'] = $columnName . 'a';
-                        $statsData[$columnId . 'a'] = (int) ($filter['data'][$year] * $population[$year][$partId]);
+                        $statsData[$columnId . 'a'] = is_null($value) ? null : (int) ($value * $population[$year][$partId]);
                         $count++;
                     }
                 }
