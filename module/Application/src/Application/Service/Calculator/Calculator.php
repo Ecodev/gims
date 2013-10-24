@@ -3,9 +3,6 @@
 namespace Application\Service\Calculator;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Application\Model\Filter;
-use Application\Model\Part;
-use Application\Model\Questionnaire;
 use Application\Model\Rule\AbstractQuestionnaireUsage;
 
 /**
@@ -211,9 +208,11 @@ use \Application\Traits\EntityManagerAware;
      * @param integer $filterId
      * @param integer $questionnaireId
      * @param integer $partId
+     * @param boolean $useSecondLevelRules
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
      * @return float|null null if no answer at all, otherwise the percentage value
      */
-    public function computeFilter($filterId, $questionnaireId, $partId, ArrayCollection $alreadyUsedFormulas = null)
+    public function computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules = false, ArrayCollection $alreadyUsedFormulas = null)
     {
         _log()->debug(__FUNCTION__, array('start', $filterId, $questionnaireId, $partId));
         $key = \Application\Utility::getCacheKey(func_get_args());
@@ -224,7 +223,7 @@ use \Application\Traits\EntityManagerAware;
         if (!$alreadyUsedFormulas)
             $alreadyUsedFormulas = new ArrayCollection();
 
-        $result = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $alreadyUsedFormulas, new ArrayCollection());
+        $result = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, new ArrayCollection());
 
         $this->cacheComputeFilter[$key] = $result;
         _log()->debug(__FUNCTION__, array('end', $filterId, $questionnaireId, $partId, $result));
@@ -236,11 +235,12 @@ use \Application\Traits\EntityManagerAware;
      * @param integer $filterId
      * @param integer $questionnaireId
      * @param integer $partId
+     * @param boolean $useSecondLevelRules
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas already used formula to be exclude when computing
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters will be used to avoid duplicates
      * @return float|null null if no answer at all, otherwise the percentage value
      */
-    private function computeFilterInternal($filterId, $questionnaireId, $partId, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
+    private function computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
         // @todo for sylvain: the logic goes as follows: if the filter id is contained within excludeFilters, skip calculation.
         if (in_array($filterId, $this->excludedFilters)) {
@@ -261,19 +261,19 @@ use \Application\Traits\EntityManagerAware;
         }
 
         // If the filter has a formula, returns its value
-        $filterQuestionnaireUsage = $this->getFilterQuestionnaireUsageRepository()->getFirst($questionnaireId, $filterId, $partId, $alreadyUsedFormulas);
+        $filterQuestionnaireUsage = $this->getFilterQuestionnaireUsageRepository()->getFirst($questionnaireId, $filterId, $partId, $useSecondLevelRules, $alreadyUsedFormulas);
         if ($filterQuestionnaireUsage) {
-            return $this->computeFormula($filterQuestionnaireUsage, $alreadyUsedFormulas);
+            return $this->computeFormula($filterQuestionnaireUsage, $alreadyUsedFormulas, $useSecondLevelRules);
         }
 
         // First, attempt to sum summands
         $summandIds = $this->getFilterRepository()->getSummandIds($filterId);
-        $sum = $this->summer($summandIds, $questionnaireId, $partId, $alreadyUsedFormulas, $alreadySummedFilters);
+        $sum = $this->summer($summandIds, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, $alreadySummedFilters);
 
         // If no sum so far, we use children instead. This is "normal case"
         if (is_null($sum)) {
             $childrenIds = $this->getFilterRepository()->getChildrenIds($filterId);
-            $sum = $this->summer($childrenIds, $questionnaireId, $partId, $alreadyUsedFormulas, $alreadySummedFilters);
+            $sum = $this->summer($childrenIds, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, $alreadySummedFilters);
         }
 
         return $sum;
@@ -284,15 +284,16 @@ use \Application\Traits\EntityManagerAware;
      * @param \IteratorAggregate $filterIds
      * @param integer $questionnaireId
      * @param integer $partId
+     * @param boolean $useSecondLevelRules
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters
      * @return float|null
      */
-    private function summer(array $filterIds, $questionnaireId, $partId, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
+    private function summer(array $filterIds, $questionnaireId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
         $sum = null;
         foreach ($filterIds as $filterId) {
-            $summandValue = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $alreadyUsedFormulas, $alreadySummedFilters);
+            $summandValue = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, $alreadySummedFilters);
             if (!is_null($summandValue)) {
                 $sum += $summandValue;
             }
@@ -305,10 +306,11 @@ use \Application\Traits\EntityManagerAware;
      * Compute the value of a formula based on GIMS syntax.
      * For details about syntax, @see \Application\Model\Rule\Rule
      * @param \Application\Model\Rule\AbstractQuestionnaireUsage $usage
-     * @return mixed
+     * @param boolean $useSecondLevelRules
+     * @return null|float
      * @throws \Exception
      */
-    public function computeFormula(AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas = null)
+    public function computeFormula(AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas = null, $useSecondLevelRules = false)
     {
         if (!$alreadyUsedFormulas) {
             $alreadyUsedFormulas = new ArrayCollection();
@@ -320,7 +322,7 @@ use \Application\Traits\EntityManagerAware;
         _log()->debug(__FUNCTION__, array($usage->getId(), $originalFormula));
 
         // Replace {F#12,Q#34,P#56} with Filter value
-        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage, $alreadyUsedFormulas) {
+        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage, $alreadyUsedFormulas, $useSecondLevelRules) {
                     $filterId = $matches[1];
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
@@ -337,7 +339,7 @@ use \Application\Traits\EntityManagerAware;
                         $partId = $usage->getPart()->getId();
                     }
 
-                    $value = $this->computeFilter($filterId, $questionnaireId, $partId, $alreadyUsedFormulas);
+                    $value = $this->computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $originalFormula);
@@ -400,9 +402,9 @@ use \Application\Traits\EntityManagerAware;
                 }, $convertedFormulas);
 
         // Replace {self} with computed value without this formula
-        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($usage, $alreadyUsedFormulas) {
+        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($usage, $alreadyUsedFormulas, $useSecondLevelRules) {
 
-                    $value = $this->computeFilter($usage->getFilter()->getId(), $usage->getQuestionnaire()->getId(), $usage->getPart()->getId(), $alreadyUsedFormulas);
+                    $value = $this->computeFilter($usage->getFilter()->getId(), $usage->getQuestionnaire()->getId(), $usage->getPart()->getId(), $useSecondLevelRules, $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);

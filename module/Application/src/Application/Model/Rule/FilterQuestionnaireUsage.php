@@ -24,6 +24,13 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
     private $filter;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
+     */
+    private $isSecondLevel = false;
+
+    /**
      * Set filter
      *
      * @param Filter $filter
@@ -45,6 +52,26 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
     public function getFilter()
     {
         return $this->filter;
+    }
+
+    /**
+     * Set whether this rule is used in the second level of computation
+     * @return boolean
+     */
+    public function setIsSecondLevel($isSecondLevel)
+    {
+        $this->isSecondLevel = $isSecondLevel;
+
+        return $this;
+    }
+
+    /**
+     * Returns whether this rule is used in the second level of computation
+     * @return boolean
+     */
+    public function isSecondLevel()
+    {
+        return (bool) $this->isSecondLevel;
     }
 
 }

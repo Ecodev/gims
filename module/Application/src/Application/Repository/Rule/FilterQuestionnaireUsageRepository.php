@@ -14,10 +14,11 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
      * @param integer $questionnaireId
      * @param integer $filterId
      * @param integer $partId
+     * @param boolean $useSecondLevelRules
      * @param \Doctrine\Common\Collections\ArrayCollection $excluded
      * @return FilterQuestionnaireUsage|null
      */
-    public function getFirst($questionnaireId, $filterId, $partId, ArrayCollection $excluded)
+    public function getFirst($questionnaireId, $filterId, $partId, $useSecondLevelRules, ArrayCollection $excluded)
     {
         // If no cache for questionnaire, fill the cache
         if (!isset($this->cache[$questionnaireId])) {
@@ -27,7 +28,7 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
                     ->join('filterQuestionnaireUsage.filter', 'filter')
                     ->join('filterQuestionnaireUsage.rule', 'rule')
                     ->andWhere('filterQuestionnaireUsage.questionnaire = :questionnaire')
-                    ->orderBy('filterQuestionnaireUsage.sorting, filterQuestionnaireUsage.id')
+                    ->orderBy('filterQuestionnaireUsage.isSecondLevel DESC, filterQuestionnaireUsage.sorting, filterQuestionnaireUsage.id')
             ;
 
             $qb->setParameters(array(
@@ -47,8 +48,9 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
         else
             $possible = array();
 
+        // Returns the first non-excluded and according to its level
         foreach ($possible as $filterQuestionnaireUsage) {
-            if (!$excluded->contains($filterQuestionnaireUsage))
+            if (($useSecondLevelRules || !$filterQuestionnaireUsage->isSecondLevel()) && !$excluded->contains($filterQuestionnaireUsage))
                 return $filterQuestionnaireUsage;
         }
 

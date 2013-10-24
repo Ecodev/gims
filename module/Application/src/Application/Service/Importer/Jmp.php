@@ -364,6 +364,11 @@ class Jmp extends AbstractImporter
     private $filterUsageCount = 0;
 
     /**
+     * @var Rule
+     */
+    private $excludeRule;
+
+    /**
      * @var Part
      */
     private $partUrban;
@@ -1188,7 +1193,7 @@ STRING;
      */
     protected function finishHighFilters(array $filters, \PHPExcel_Worksheet $sheet)
     {
-        $complementaryTotalFormula = $this->getRule('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . '}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . '})), ({F#current,Q#current,P#' . $this->partRural->getId() . '} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . '} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, NULL)');
+        $complementaryTotalFormula = $this->getRule('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . '}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . '})), ({F#current,Q#current,P#' . $this->partRural->getId() . '} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . '} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, {self})');
         // Get or create all filter
         echo 'Finishing high filters';
         foreach ($filters as $filterName => $filterData) {
@@ -1197,14 +1202,13 @@ STRING;
 
             // Import high filters' formulas
             foreach ($this->importedQuestionnaires as $col => $questionnaire) {
-                $this->importExcludes($sheet, $col, $questionnaire, $highFilter, $filterData);
 
                 foreach ($this->partOffsets as $offset => $part) {
 
                     // If we are total part, we first add the complementory formula which is hardcoded
                     // and can be found in tab "GraphData_W". This formula defines the total as the sum of its parts
                     if ($part === $this->partTotal) {
-                        $this->getFilterQuestionnaireUsage($highFilter, $questionnaire, $complementaryTotalFormula, $part);
+                        $this->getFilterQuestionnaireUsage($highFilter, $questionnaire, $complementaryTotalFormula, $part, true);
                     }
 
                     // If the high filter exists in "Tables_W", then it may have a special formula that need to be imported
@@ -1215,6 +1219,8 @@ STRING;
                         }
                     }
                 }
+
+                $this->importExcludes($sheet, $col, $questionnaire, $highFilter, $filterData);
             }
             echo '.';
         }
@@ -1230,9 +1236,10 @@ STRING;
      * @param Questionnaire $questionnaire
      * @param Rule $rule
      * @param Part $part
+     * @param boolean $isSecondLevel
      * @return FilterQuestionnaireUsage
      */
-    protected function getFilterQuestionnaireUsage(Filter $filter, Questionnaire $questionnaire, Rule $rule, Part $part)
+    protected function getFilterQuestionnaireUsage(Filter $filter, Questionnaire $questionnaire, Rule $rule, Part $part, $isSecondLevel = false)
     {
         $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterQuestionnaireUsage');
 
@@ -1242,6 +1249,7 @@ STRING;
             'rule' => $rule,
             'part' => $part,
             'filter' => $filter,
+            'isSecondLevel' => $isSecondLevel,
         ));
 
         if (!$filterQuestionnaireUsage) {
@@ -1250,7 +1258,8 @@ STRING;
                     ->setQuestionnaire($questionnaire)
                     ->setRule($rule)
                     ->setPart($part)
-                    ->setFilter($filter);
+                    ->setFilter($filter)
+                    ->setIsSecondLevel($isSecondLevel);
 
             $this->getEntityManager()->persist($filterQuestionnaireUsage);
 
@@ -1339,11 +1348,11 @@ STRING;
         }
 
         foreach ($this->partOffsets as $offset => $part) {
-            $includedValue = trim($this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row)));
+            $includedValue = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
 
             // If it is not included, then it means we need an exclude rule
-            if (strcasecmp($includedValue, 'No') == 0) {
-                $this->getFilterQuestionnaireUsage($filter, $questionnaire, $this->excludeRule, $part);
+            if ($includedValue != 'Yes') {
+                $this->getFilterQuestionnaireUsage($filter, $questionnaire, $this->excludeRule, $part, true);
             }
         }
     }
@@ -1397,7 +1406,7 @@ STRING;
     {
         $name = $filter->getName() . ' (' . $questionnaire->getName() . ', ' . $part->getName() . ')';
         $rule = $this->getRule($name, $formula);
-        $this->getFilterQuestionnaireUsage($filter, $questionnaire, $rule, $part);
+        $this->getFilterQuestionnaireUsage($filter, $questionnaire, $rule, $part, true);
     }
 
 }
