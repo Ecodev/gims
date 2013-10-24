@@ -2,6 +2,8 @@
 
 namespace Application\Repository;
 
+use Doctrine\ORM\Query\Expr\Join;
+
 class QuestionnaireRepository extends AbstractChildRepository
 {
 
@@ -53,6 +55,26 @@ class QuestionnaireRepository extends AbstractChildRepository
         $qb->setParameter('geoname', $geoname);
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Returns whether the questionnaire have answers only for total part
+     * @param array $questionnaires
+     * @return boolean
+     */
+    public function isOnlyTotal(array $questionnaires)
+    {
+        $qb = $this->createQueryBuilder('questionnaire');
+        $qb->select('COUNT(answers.id)')
+                ->join('questionnaire.answers', 'answers')
+                ->join('answers.part', 'part', Join::WITH, 'part.isTotal = false')
+                ->where('questionnaire IN (:questionnaire)')
+        ;
+
+        $qb->setParameter('questionnaire', $questionnaires);
+        $count = $qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
+
+        return !$count;
     }
 
 }

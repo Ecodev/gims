@@ -26,10 +26,13 @@ class Jmp extends Calculator
     public function computeFlattenAllYears($yearStart, $yearEnd, FilterSet $filterSet, $questionnaires, Part $part, $excludedFilters = array())
     {
         // @todo for sylvain. Property excluded filters is used in parent class. Check out @method computeFilterInternal
-        $this->excludedFilters = $excludedFilters; // Can't believe I am writing that!
-        $parts = array();
-        if ($part->isTotal()) {
+        $this->excludedFilters = $excludedFilters;
+
+        // Enable hardcoded complementary computing for total parts if we have data for other parts
+        if ($part->isTotal() && !$this->getQuestionnaireRepository()->isOnlyTotal($questionnaires)) {
             $parts = $this->getPartRepository()->getAllNonTotal();
+        } else {
+            $parts = array();
         }
 
         $result = array();
