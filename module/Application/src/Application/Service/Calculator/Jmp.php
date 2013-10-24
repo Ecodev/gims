@@ -5,7 +5,7 @@ namespace Application\Service\Calculator;
 use Application\Model\Part;
 use Application\Model\FilterSet;
 use Application\Model\Filter;
-use Application\Model\Rule\Formula;
+use Application\Model\Rule\Rule;
 
 class Jmp extends Calculator
 {
@@ -58,16 +58,16 @@ class Jmp extends Calculator
      * @param array $questionnaires
      * @param \Application\Model\Part $part
      * @param array $parts
-     * @param \Application\Model\Rule\Formula $excludedFormula
+     * @param \Application\Model\Rule\Rule $excludedRule
      * @return null|float
      */
-    public function computeFlattenOneYearWithFormula($year, array $years, Filter $filter, $questionnaires, Part $part, array $parts, Formula $excludedFormula = null)
+    public function computeFlattenOneYearWithFormula($year, array $years, Filter $filter, $questionnaires, Part $part, array $parts, Rule $excludedRule = null)
     {
         // If the filter has a formula, returns its value
-        foreach ($filter->getFilterFormulas() as $filterFormula) {
-            $formula = $filterFormula->getFormula();
-            if ($formula !== $excludedFormula && $filterFormula->getPart() === $part) {
-                return $this->computeFormulaFlatten($formula, $year, $years, $filter, $questionnaires, $part, $parts);
+        foreach ($filter->getFilterUsages() as $filterUsage) {
+            $rule = $filterUsage->getRule();
+            if ($rule !== $excludedRule && $filterUsage->getPart() === $part) {
+                return $this->computeFormulaFlatten($rule, $year, $years, $filter, $questionnaires, $part, $parts);
             }
         }
 
@@ -257,11 +257,6 @@ class Jmp extends Calculator
         $yearsWithData = array();
         foreach ($questionnaires as $questionnaire) {
 
-            // skip this questionnaire, if an exclude rule exists for him
-            if ($this->getFilterRuleRepository()->isExcluded($questionnaire->getId(), $filter->getId(), $part->getId())) {
-                continue;
-            }
-
             $year = $questionnaire->getSurvey()->getYear();
             $years[$questionnaire->getId()] = $year;
             $surveys[$questionnaire->getId()] = $questionnaire->getSurvey()->getCode();
@@ -311,16 +306,16 @@ class Jmp extends Calculator
 
     /**
      * Compute the value of a formula based on GIMS syntax.
-     * For details about syntax, @see \Application\Model\Rule\Formula
-     * @param \Application\Model\Rule\Formula $formula
+     * For details about syntax, @see \Application\Model\Rule\Rule
+     * @param \Application\Model\Rule\Rule $rule
      * @param \Application\Model\Part $part
      * @param \Application\Model\Filter $currentFilter
      * @return mixed
      * @throws \Exception
      */
-    public function computeFormulaFlatten(Formula $formula, $year, array $years, Filter $currentFilter, $questionnaires, Part $part, array $parts)
+    public function computeFormulaFlatten(Rule $rule, $year, array $years, Filter $currentFilter, $questionnaires, Part $part, array $parts)
     {
-        $originalFormula = $formula->getFormula();
+        $originalFormula = $rule->getFormula();
 
         // Replace {F#12,Q#all} with a list of Filter values for all questionnaires
         $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#all}/', function($matches) use ($currentFilter, $questionnaires, $part) {
@@ -353,9 +348,9 @@ class Jmp extends Calculator
                 }, $convertedFormulas);
 
         // Replace {self} with computed value without this formula
-        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($formula, $year, $years, $currentFilter, $questionnaires, $part, $parts) {
+        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($rule, $year, $years, $currentFilter, $questionnaires, $part, $parts) {
 
-                    $value = $this->computeFlattenOneYearWithFormula($year, $years, $currentFilter, $questionnaires, $part, $parts, $formula);
+                    $value = $this->computeFlattenOneYearWithFormula($year, $years, $currentFilter, $questionnaires, $part, $parts, $rule);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
@@ -369,7 +364,7 @@ class Jmp extends Calculator
             $result = null;
         }
 
-        _log()->debug(__FUNCTION__, array($currentFilter->getId(), $part->getId(), $formula->getId(), $formula->getName(), $originalFormula, $convertedFormulas, $result));
+        _log()->debug(__FUNCTION__, array($currentFilter->getId(), $part->getId(), $rule->getId(), $rule->getName(), $originalFormula, $convertedFormulas, $result));
         return $result;
     }
 

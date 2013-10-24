@@ -99,7 +99,7 @@ class JmpTest extends AbstractCalculator
         $this->service->setPartRepository($stubPartRepository);
         $this->service->setAnswerRepository($this->getStubAnswerRepository());
         $this->service->setFilterRepository($this->getStubFilterRepository());
-        $this->service->setFilterRuleRepository($this->getStubFilterRuleRepository());
+        $this->service->setFilterQuestionnaireUsageRepository($this->getStubFilterQuestionnaireUsageRepository());
         $this->service2 = clone $this->service;
     }
 
@@ -511,19 +511,22 @@ class JmpTest extends AbstractCalculator
 
     public function testExcludeRules()
     {
-        $exclude = new \Application\Model\Rule\Exclude();
+        $exclude = new \Application\Model\Rule\Rule();
+        $exclude->setFormula('=NULL');
 
-        $filterRule = new \Application\Model\Rule\FilterRule();
-        $filterRule->setPart($this->part1)->setQuestionnaire($this->questionnaire)->setRule($exclude)->setFilter($this->filter1);
+        $filterQuestionnaireUsage = new \Application\Model\Rule\FilterQuestionnaireUsage();
+        $filterQuestionnaireUsage->setPart($this->part1)->setQuestionnaire($this->questionnaire)->setRule($exclude)->setFilter($this->filter1);
 
         $this->assertEquals(array(
             'values' =>
             array(
+                1 => null,
                 2 => 0.1,
             ),
             'count' => 1,
             'years' =>
             array(
+                1 => 2000,
                 2 => 2005,
             ),
             'minYear' => 2005,
@@ -532,6 +535,7 @@ class JmpTest extends AbstractCalculator
             'slope' => null,
             'average' => 0.1,
             'surveys' => array(
+                1 => 'tst 1',
                 2 => 'tst 2',
             ),
                 ), $this->service->computeFilterForAllQuestionnaires($this->filter1, $this->questionnaires, $this->part1));

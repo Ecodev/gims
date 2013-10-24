@@ -5,7 +5,7 @@ namespace Application\Model\Rule;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Formula is a way to define a value as a custom formula.
+ * Rule is a way to define a value as a custom formula.
  *
  * Syntax is based on Excel formula syntax. Except cell references (eg: A2, B3)
  * must be entirely replaced with following syntax. There is different syntax
@@ -23,8 +23,8 @@ use Doctrine\ORM\Mapping as ORM;
  *         <pre>{F#12,Q#34}</pre>
  *     </li>
  *     <li>
- *         Reference a QuestionnaireFormula's value:
- *         <pre>{Fo#12,Q#34,P#56}</pre>
+ *         Reference a QuestionnaireUsage's value:
+ *         <pre>{R#12,Q#34,P#56}</pre>
  *     </li>
  *     <li>
  *         Reference a population data of the questionnaire's country:
@@ -55,25 +55,32 @@ use Doctrine\ORM\Mapping as ORM;
  * </ul>
  *
  * Where:
- * - F  = Filter
- * - Q  = Questionnaire
- * - P  = Part
- * - Fo = Formula
+ * - F = Filter
+ * - Q = Questionnaire
+ * - P = Part
+ * - R = Rule
  *
  * In the first case, F, and in all cases Q and P, can have the value "current" instead of actual ID. It means
  * that the current Filter, Questionnaire or Part should be used, instead of one selected
- * by its ID. This syntax should be prefered when possible to maximise Formula re-use.
+ * by its ID. This syntax should be prefered when possible to maximise Rule re-use.
  *
  * An entire formula could be:
- * <pre>=IF(ISTEXT({F#12,Q#34}), SUM({F#12,Q#34,P#56}, {Fo#2,Q#34,P#56}), {Fo#2,Q#34,P#56})</pre>
+ * <pre>=IF(ISTEXT({F#12,Q#34}), SUM({F#12,Q#34,P#56}, {R#2,Q#34,P#56}), {R#2,Q#34,P#56})</pre>
  *
  * Or the more re-usable version:
- * <pre>=IF(ISTEXT({F#12,Q#current}), SUM({F#12,Q#current,P#current}, {Fo#2,Q#current,P#current}), {Fo#2,Q#current,P#current})</pre>
+ * <pre>=IF(ISTEXT({F#12,Q#current}), SUM({F#12,Q#current,P#current}, {R#2,Q#current,P#current}), {R#2,Q#current,P#current})</pre>
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Application\Repository\Rule\RuleRepository")
  */
-class Formula extends AbstractRule
+class Rule extends \Application\Model\AbstractModel
 {
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $name;
 
     /**
      * @var string
@@ -81,6 +88,29 @@ class Formula extends AbstractRule
      * @ORM\Column(type="string", nullable=true, length=4096)
      */
     private $formula;
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Rule
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Return the name of this rule (for end-user)
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 
     /**
      * Set formula

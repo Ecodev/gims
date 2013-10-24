@@ -7,12 +7,10 @@ use Application\Model\Filter;
 use Application\Model\Part;
 use Application\Model\Question\NumericQuestion;
 use Application\Model\Questionnaire;
-use Application\Model\Rule\AbstractRule;
-use Application\Model\Rule\Exclude;
-use Application\Model\Rule\FilterRule;
-use Application\Model\Rule\FilterFormula;
-use Application\Model\Rule\Formula;
-use Application\Model\Rule\QuestionnaireFormula;
+use Application\Model\Rule\Rule;
+use Application\Model\Rule\FilterQuestionnaireUsage;
+use Application\Model\Rule\FilterUsage;
+use Application\Model\Rule\QuestionnaireUsage;
 use Application\Model\Survey;
 
 class Jmp extends AbstractImporter
@@ -104,7 +102,7 @@ class Jmp extends AbstractImporter
             'replacements' => array(
             // No replacements to make for water
             ),
-            'questionnaireFormulas' => array(
+            'questionnaireUsages' => array(
                 'Calculation' => array(78, 79, 80, 81, 82),
                 'Estimate' => array(83, 84, 85, 86, 87, 88),
                 'Ratio' => array(94, 95, 96, 97, 98, 99, 100, 101, 102, 103),
@@ -263,7 +261,7 @@ class Jmp extends AbstractImporter
                 9 => array("to unknown place/ not sure/DK", 999, 0, null),
                 10 => array("to elsewhere", 999, 0, null),
             ),
-            'questionnaireFormulas' => array(
+            'questionnaireUsages' => array(
                 'Calculation' => array(85, 86, 87),
                 'Estimate' => array(88, 89, 90, 91, 92, 93),
                 'Ratio' => array(100, 101, 102, 103, 104, 105, 106, 107),
@@ -359,11 +357,11 @@ class Jmp extends AbstractImporter
     private $questionnaireCount = 0;
     private $answerCount = 0;
     private $excludeCount = 0;
-    private $questionnaireFormulaCount = 0;
-    private $formulaCount = 0;
+    private $questionnaireUsageCount = 0;
+    private $ruleCount = 0;
     private $alternateFilterCount = 0;
-    private $filterRuleCount = 0;
-    private $filterFormulaCount = 0;
+    private $filterQuestionnaireUsageCount = 0;
+    private $filterUsageCount = 0;
 
     /**
      * @var Part
@@ -392,7 +390,7 @@ class Jmp extends AbstractImporter
         $reader->setLoadSheetsOnly($sheeNamesToImport);
         $workbook = $reader->load($filename);
 
-        $this->excludeRule = $this->getEntityManager()->getRepository('Application\Model\Rule\AbstractRule')->getSingletonExclude();
+        $this->excludeRule = $this->getRule('Exclude from computing', '=NULL');
         $this->partUrban = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Urban');
         $this->partRural = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Rural');
         $this->partTotal = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Total');
@@ -417,7 +415,7 @@ class Jmp extends AbstractImporter
                 }
             }
 
-            // Import high filter, but not their formula, we need them before importing QuestionnaireFormulas
+            // Import high filter, but not their formula, we need them before importing QuestionnaireUsages
             $this->importHighFilters($this->definitions[$sheetName]['filterSet'], $this->definitions[$sheetName]['highFilters']);
 
             $workbook->setActiveSheetIndex($i);
@@ -433,7 +431,7 @@ class Jmp extends AbstractImporter
             // Second pass on imported questionnaires to process cross-questionnaire things
             echo 'Importing Calculations, Estimates and Ratios';
             foreach ($this->importedQuestionnaires as $col => $questionnaire) {
-                $this->importQuestionnaireFormulas($sheet, $col, $questionnaire);
+                $this->importQuestionnaireUsages($sheet, $col, $questionnaire);
                 echo '.';
             }
             echo PHP_EOL;
@@ -458,11 +456,11 @@ Surveys          : $this->surveyCount
 Questionnaires   : $this->questionnaireCount
 Alternate Filters: $this->alternateFilterCount
 Answers          : $this->answerCount
-Formulas         : $this->formulaCount
+Rules            : $this->ruleCount
 Uses of Exclude  : $this->excludeCount
-Uses of Rule for Filter          : $this->filterRuleCount
-Uses of Formula for Filter       : $this->filterFormulaCount
-Uses of Formula for Questionnaire: $this->questionnaireFormulaCount
+Uses of Rule for Filter       : $this->filterQuestionnaireUsageCount
+Uses of Rule for Filter       : $this->filterUsageCount
+Uses of Rule for Questionnaire: $this->questionnaireUsageCount
 
 STRING;
     }
@@ -872,57 +870,57 @@ STRING;
      * @param integer $col
      * @param Questionnaire $questionnaire
      */
-    protected function importQuestionnaireFormulas(\PHPExcel_Worksheet $sheet, $col, Questionnaire $questionnaire)
+    protected function importQuestionnaireUsages(\PHPExcel_Worksheet $sheet, $col, Questionnaire $questionnaire)
     {
-        foreach ($this->definitions[$sheet->getTitle()]['questionnaireFormulas'] as $group) {
+        foreach ($this->definitions[$sheet->getTitle()]['questionnaireUsages'] as $group) {
             foreach ($group as $row) {
                 foreach ($this->partOffsets as $offset => $part) {
-                    $this->getQuestionnaireFormula($sheet, $col, $row, $offset, $questionnaire, $part);
+                    $this->getQuestionnaireUsage($sheet, $col, $row, $offset, $questionnaire, $part);
                 }
             }
         }
     }
 
     /**
-     * Create or get a QuestionnaireFormula and its Formula
+     * Create or get a QuestionnaireUsage and its Formula
      * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
      * @param integer $row
      * @param integer $offset
      * @param Questionnaire $questionnaire
      * @param Part $part
-     * @return QuestionnaireFormula|null
+     * @return QuestionnaireUsage|null
      */
-    protected function getQuestionnaireFormula(\PHPExcel_Worksheet $sheet, $col, $row, $offset, Questionnaire $questionnaire, Part $part)
+    protected function getQuestionnaireUsage(\PHPExcel_Worksheet $sheet, $col, $row, $offset, Questionnaire $questionnaire, Part $part)
     {
-        $questionnaireFormulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireFormula');
+        $questionnaireUsageRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireUsage');
         $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
         $value = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
 
         if ($name && !is_null($value) || $value <> 0) {
 
-            $formula = $this->getFormulaFromCell($sheet, $col, $row, $offset, $questionnaire, $part);
+            $rule = $this->getRuleFromCell($sheet, $col, $row, $offset, $questionnaire, $part);
 
             // If formula was non-existing, or invalid, cannot do anything more
-            if (!$formula) {
+            if (!$rule) {
                 return null;
             }
 
             // If we had an existing formula, maybe we also have an existing association
-            $assoc = $questionnaire->getQuestionnaireFormulas()->filter(function($assoc) use ($questionnaire, $part, $formula) {
-                                return $assoc->getQuestionnaire() === $questionnaire && $assoc->getPart() === $part && $assoc->getFormula() === $formula;
+            $assoc = $questionnaire->getQuestionnaireUsages()->filter(function($usage) use ($questionnaire, $part, $rule) {
+                                return $usage->getQuestionnaire() === $questionnaire && $usage->getPart() === $part && $usage->getRule() === $rule;
                             })->first();
 
             // If association doesn't exist yet, create it
             if (!$assoc) {
-                $assoc = new QuestionnaireFormula();
+                $assoc = new QuestionnaireUsage();
                 $assoc->setJustification($this->defaultJustification)
                         ->setQuestionnaire($questionnaire)
-                        ->setFormula($formula)
+                        ->setRule($rule)
                         ->setPart($part);
 
                 $this->getEntityManager()->persist($assoc);
-                $this->questionnaireFormulaCount++;
+                $this->questionnaireUsageCount++;
             }
 
             return $assoc;
@@ -940,9 +938,9 @@ STRING;
      * @param Questionnaire $questionnaire
      * @param Part $part
      * @param string $forcedName
-     * @return null|Formula
+     * @return null|Rule
      */
-    protected function getFormulaFromCell(\PHPExcel_Worksheet $sheet, $col, $row, $offset, Questionnaire $questionnaire, Part $part, $forcedName = null)
+    protected function getRuleFromCell(\PHPExcel_Worksheet $sheet, $col, $row, $offset, Questionnaire $questionnaire, Part $part, $forcedName = null)
     {
         $cell = $sheet->getCellByColumnAndRow($col + $offset, $row);
         $originalFormula = $cell->getValue();
@@ -973,8 +971,8 @@ STRING;
         // to 0.00 - 1.00, but only for hardcoded values and not any number within more complex formula (it would be too dangerous)
         // eg: "=29.6" => "=0.296"
         // This is the case for Cambodge DHS05 "Bottled water with HC" estimation
-        $formulaRows = $this->definitions[$sheet->getTitle()]['questionnaireFormulas'];
-        if (in_array($row, $formulaRows['Estimate']) || in_array($row, $formulaRows['Calculation']) ) {
+        $ruleRows = $this->definitions[$sheet->getTitle()]['questionnaireUsages'];
+        if (in_array($row, $ruleRows['Estimate']) || in_array($row, $ruleRows['Calculation'])) {
             $replacedFormula = preg_replace_callback('/^=(-?\d+(\.\d+)?)$/', function($matches) {
                         $number = $matches[1];
                         $number = $number / 100;
@@ -1051,24 +1049,24 @@ STRING;
                     // Simple case is when we reference a filter
                     if ($refFilterId) {
                         return "{F#$refFilterId,Q#$refQuestionnaireId,P#$refPartId}";
-                        // More advanced case is when we reference another QuestionnaireFormula (Calculation, Estimate or Ratio)
+                        // More advanced case is when we reference another QuestionnaireUsage (Calculation, Estimate or Ratio)
                     } else {
 
                         // Find the column of the referenced questionnaire
                         $refColQuestionnaire = array_search($refQuestionnaire, $this->importedQuestionnaires);
 
-                        $refQuestionnaireFormula = $this->getQuestionnaireFormula($sheet, $refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart);
+                        $refQuestionnaireUsage = $this->getQuestionnaireUsage($sheet, $refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart);
 
-                        if ($refQuestionnaireFormula) {
+                        if ($refQuestionnaireUsage) {
 
                             // If not ID yet, we need to save to DB to have valid ID
-                            if (!$refQuestionnaireFormula->getFormula()->getId()) {
+                            if (!$refQuestionnaireUsage->getRule()->getId()) {
                                 $this->getEntityManager()->flush();
                             }
 
-                            $refFormulaId = $refQuestionnaireFormula->getFormula()->getId();
+                            $refRuleId = $refQuestionnaireUsage->getRule()->getId();
 
-                            return "{Fo#$refFormulaId,Q#$refQuestionnaireId,P#$refPartId}";
+                            return "{R#$refRuleId,Q#$refQuestionnaireId,P#$refPartId}";
                         } else {
                             return 'NULL'; // if no formula found at all, return NULL string which will behave like an empty cell in PHPExcell
                         }
@@ -1080,14 +1078,14 @@ STRING;
         // to use a more semantic way to check absence of number
         $isTextUsageWhichCannotBeText = array(
             '/ISTEXT\((\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\})\)/',
-            '/ISTEXT\((\{Fo#(\d+),Q#(\d+|current),P#(\d+|current)\})\)/',
+            '/ISTEXT\((\{R#(\d+),Q#(\d+|current),P#(\d+|current)\})\)/',
             '/ISTEXT\((\{Q#(\d+|current),P#(\d+|current)\})\)/',
             '/ISTEXT\((\{F#(\d+|current)})\)/',
         );
         $convertedFormula = preg_replace($isTextUsageWhichCannotBeText, 'NOT(ISNUMBER($1))', $convertedFormula);
 
         $prefix = '';
-        foreach ($this->definitions[$sheet->getTitle()]['questionnaireFormulas'] as $label => $rows) {
+        foreach ($this->definitions[$sheet->getTitle()]['questionnaireUsages'] as $label => $rows) {
             if (in_array($row, $rows)) {
                 $prefix = $label . ': ';
             }
@@ -1100,39 +1098,39 @@ STRING;
             $name = 'Unnamed formula imported from country files';
         }
 
-        return $this->getFormula($prefix . $name, $convertedFormula);
+        return $this->getRule($prefix . $name, $convertedFormula);
     }
 
     /**
      * Create or get a formula
      * @param string $name
      * @param string $formula
-     * @return Formula
+     * @return Rule
      */
-    protected function getFormula($name, $formula)
+    protected function getRule($name, $formula)
     {
         $key = \Application\Utility::getCacheKey(array($formula));
         if (array_key_exists($key, $this->cacheFormulas)) {
             return $this->cacheFormulas[$key];
         }
 
-        $formulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Formula');
+        $ruleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Rule');
 
         // Look for existing formula (to prevent duplication)
         $this->getEntityManager()->flush();
-        $formulaObject = $formulaRepository->findOneByFormula($formula);
+        $rule = $ruleRepository->findOneByFormula($formula);
 
-        if (!$formulaObject) {
-            $formulaObject = new Formula();
-            $formulaObject->setName($name)
+        if (!$rule) {
+            $rule = new Rule();
+            $rule->setName($name)
                     ->setFormula($formula);
-            $this->getEntityManager()->persist($formulaObject);
-            $this->formulaCount++;
+            $this->getEntityManager()->persist($rule);
+            $this->ruleCount++;
         }
 
-        $this->cacheFormulas[$key] = $formulaObject;
+        $this->cacheFormulas[$key] = $rule;
 
-        return $formulaObject;
+        return $rule;
     }
 
     /**
@@ -1190,7 +1188,7 @@ STRING;
      */
     protected function finishHighFilters(array $filters, \PHPExcel_Worksheet $sheet)
     {
-        $complementaryTotalFormula = $this->getFormula('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . '}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . '})), ({F#current,Q#current,P#' . $this->partRural->getId() . '} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . '} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, NULL)');
+        $complementaryTotalFormula = $this->getRule('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . '}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . '})), ({F#current,Q#current,P#' . $this->partRural->getId() . '} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . '} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, NULL)');
         // Get or create all filter
         echo 'Finishing high filters';
         foreach ($filters as $filterName => $filterData) {
@@ -1206,14 +1204,14 @@ STRING;
                     // If we are total part, we first add the complementory formula which is hardcoded
                     // and can be found in tab "GraphData_W". This formula defines the total as the sum of its parts
                     if ($part === $this->partTotal) {
-                        $this->getFilterRule($highFilter, $questionnaire, $complementaryTotalFormula, $part);
+                        $this->getFilterQuestionnaireUsage($highFilter, $questionnaire, $complementaryTotalFormula, $part);
                     }
 
                     // If the high filter exists in "Tables_W", then it may have a special formula that need to be imported
                     if ($filterData['row']) {
-                        $formula = $this->getFormulaFromCell($sheet, $col, $filterData['row'], $offset, $questionnaire, $part, $filterName . ' (' . $questionnaire->getName() . ($part ? ', ' . $part->getName() : '') . ')');
-                        if ($formula) {
-                            $this->getFilterRule($highFilter, $questionnaire, $formula, $part);
+                        $rule = $this->getRuleFromCell($sheet, $col, $filterData['row'], $offset, $questionnaire, $part, $filterName . ' (' . $questionnaire->getName() . ($part ? ', ' . $part->getName() : '') . ')');
+                        if ($rule) {
+                            $this->getFilterQuestionnaireUsage($highFilter, $questionnaire, $rule, $part);
                         }
                     }
                 }
@@ -1221,88 +1219,88 @@ STRING;
             echo '.';
         }
 
-        $this->importHighFilterFormulas($filters);
+        $this->importHighFilterUsages($filters);
 
         echo PHP_EOL;
     }
 
     /**
-     * Create or get a filterRule
+     * Create or get a filterQuestionnaireUsage
      * @param Filter $filter
      * @param Questionnaire $questionnaire
-     * @param AbstractRule $rule
+     * @param Rule $rule
      * @param Part $part
-     * @return FilterRule
+     * @return FilterQuestionnaireUsage
      */
-    protected function getFilterRule(Filter $filter, Questionnaire $questionnaire, AbstractRule $rule, Part $part)
+    protected function getFilterQuestionnaireUsage(Filter $filter, Questionnaire $questionnaire, Rule $rule, Part $part)
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterQuestionnaireUsage');
 
         $this->getEntityManager()->flush();
-        $filterRule = $repository->findOneBy(array(
+        $filterQuestionnaireUsage = $repository->findOneBy(array(
             'questionnaire' => $questionnaire,
             'rule' => $rule,
             'part' => $part,
             'filter' => $filter,
         ));
 
-        if (!$filterRule) {
-            $filterRule = new FilterRule();
-            $filterRule->setJustification($this->defaultJustification)
+        if (!$filterQuestionnaireUsage) {
+            $filterQuestionnaireUsage = new FilterQuestionnaireUsage();
+            $filterQuestionnaireUsage->setJustification($this->defaultJustification)
                     ->setQuestionnaire($questionnaire)
                     ->setRule($rule)
                     ->setPart($part)
                     ->setFilter($filter);
 
-            $this->getEntityManager()->persist($filterRule);
+            $this->getEntityManager()->persist($filterQuestionnaireUsage);
 
-            if ($rule instanceof Exclude) {
+            if ($rule === $this->excludeRule) {
                 $this->excludeCount++;
             } else {
-                $this->filterRuleCount++;
+                $this->filterQuestionnaireUsageCount++;
             }
         }
 
-        return $filterRule;
+        return $filterQuestionnaireUsage;
     }
 
     /**
-     * Create or get a FilterFormula
+     * Create or get a FilterUsage
      * @param Filter $filter
-     * @param Formula $formula
+     * @param Rule $rule
      * @param Part $part
-     * @return FilterFormula
+     * @return FilterUsage
      */
-    protected function getFilterFormula(Filter $filter, Formula $formula, Part $part)
+    protected function getFilterUsage(Filter $filter, Rule $rule, Part $part)
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterFormula');
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterUsage');
 
         $this->getEntityManager()->flush();
-        $filterFormula = $repository->findOneBy(array(
-            'formula' => $formula,
+        $filterUsage = $repository->findOneBy(array(
+            'rule' => $rule,
             'part' => $part,
             'filter' => $filter,
         ));
 
-        if (!$filterFormula) {
-            $filterFormula = new FilterFormula();
-            $filterFormula->setJustification($this->defaultJustification)
-                    ->setFormula($formula)
+        if (!$filterUsage) {
+            $filterUsage = new FilterUsage();
+            $filterUsage->setJustification($this->defaultJustification)
+                    ->setRule($rule)
                     ->setPart($part)
                     ->setFilter($filter);
 
-            $this->getEntityManager()->persist($filterFormula);
-            $this->filterFormulaCount++;
+            $this->getEntityManager()->persist($filterUsage);
+            $this->filterUsageCount++;
         }
 
-        return $filterFormula;
+        return $filterUsage;
     }
 
     /**
-     * Import FilterFormula for all highfilters
+     * Import FilterUsage for all highfilters
      * @param array $filters
      */
-    public function importHighFilterFormulas(array $filters)
+    public function importHighFilterUsages(array $filters)
     {
         foreach ($filters as $filterName => $filterData) {
             $highFilter = $this->cacheHighFilters[$filterName];
@@ -1321,8 +1319,8 @@ STRING;
                     $formula = str_replace($filterNameOther, "{F#$id}", $formula);
                 }
 
-                $formulaObject = $this->getFormula('Regression: ' . $highFilter->getName(), $formula);
-                $this->getFilterFormula($highFilter, $formulaObject, $part);
+                $rule = $this->getRule('Regression: ' . $highFilter->getName(), $formula);
+                $this->getFilterUsage($highFilter, $rule, $part);
             }
         }
     }
@@ -1345,7 +1343,7 @@ STRING;
 
             // If it is not included, then it means we need an exclude rule
             if (strcasecmp($includedValue, 'No') == 0) {
-                $this->getFilterRule($filter, $questionnaire, $this->excludeRule, $part);
+                $this->getFilterQuestionnaireUsage($filter, $questionnaire, $this->excludeRule, $part);
             }
         }
     }
@@ -1357,7 +1355,7 @@ STRING;
      */
     protected function finishRatios()
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireFormula');
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireUsage');
         $synonyms = array(
             'Facilités améliorées partagées / Facilités améliorées',
             'Shared facilities / All improved facilities',
@@ -1372,34 +1370,34 @@ STRING;
             return;
         }
 
-        $ratios = $repository->getAllByFormulaName($synonyms, $this->importedQuestionnaires);
+        $ratios = $repository->getAllByRuleName($synonyms, $this->importedQuestionnaires);
         foreach ($ratios as $ratio) {
 
-            $formulaId = $ratio->getFormula()->getId();
+            $ruleId = $ratio->getRule()->getId();
             $questionnaireId = $ratio->getQuestionnaire()->getId();
-            $ratioReference = "{Fo#$formulaId,Q#$questionnaireId,P#current}";
+            $ratioReference = "{R#$ruleId,Q#$questionnaireId,P#current}";
 
             $formulaImproved = "=1 - $ratioReference";
-            $this->linkFormula($formulaImproved, $filterImproved, $ratio->getQuestionnaire(), $ratio->getPart());
+            $this->linkRule($formulaImproved, $filterImproved, $ratio->getQuestionnaire(), $ratio->getPart());
 
             $formulaShared = "=$ratioReference";
-            $this->linkFormula($formulaShared, $filterShared, $ratio->getQuestionnaire(), $ratio->getPart());
+            $this->linkRule($formulaShared, $filterShared, $ratio->getQuestionnaire(), $ratio->getPart());
             echo '.';
         }
     }
 
     /**
-     * Create (or get) a formula and link it to the given filter
-     * @param string $formulaText
+     * Create (or get) a rule and link it to the given filter
+     * @param string $formula
      * @param Filter $filter
      * @param Questionnaire $questionnaire
      * @param Part $part
      */
-    protected function linkFormula($formulaText, Filter $filter, Questionnaire $questionnaire, Part $part)
+    protected function linkRule($formula, Filter $filter, Questionnaire $questionnaire, Part $part)
     {
         $name = $filter->getName() . ' (' . $questionnaire->getName() . ', ' . $part->getName() . ')';
-        $formula = $this->getFormula($name, $formulaText);
-        $this->getFilterRule($filter, $questionnaire, $formula, $part);
+        $rule = $this->getRule($name, $formula);
+        $this->getFilterQuestionnaireUsage($filter, $questionnaire, $rule, $part);
     }
 
 }

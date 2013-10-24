@@ -2,7 +2,7 @@
 
 namespace ApplicationTest\Repository;
 
-class FilterRuleRepositoryTest extends AbstractRepository
+class FilterQuestionnaireUsageRepositoryTest extends AbstractRepository
 {
 
     public function testCanSaveConcreteRuleAndReload()
@@ -15,9 +15,10 @@ class FilterRuleRepositoryTest extends AbstractRepository
         $questionnaire->setSurvey($survey)->setGeoname($geoname)->setDateObservationStart(new \DateTime())->setDateObservationEnd(new \DateTime());
         $filter = new \Application\Model\Filter('test filter');
         $part = new \Application\Model\Part('unit test parts');
-        $relation = new \Application\Model\Rule\FilterRule();
-        $rule = new \Application\Model\Rule\Exclude();
-        $relation->setJustification('unit tests')
+        $usage = new \Application\Model\Rule\FilterQuestionnaireUsage();
+        $rule = new \Application\Model\Rule\Rule();
+        $rule->setName('test rule');
+        $usage->setJustification('unit tests')
                 ->setFilter($filter)
                 ->setQuestionnaire($questionnaire)
                 ->setRule($rule)
@@ -28,15 +29,15 @@ class FilterRuleRepositoryTest extends AbstractRepository
         $this->getEntityManager()->persist($questionnaire);
         $this->getEntityManager()->persist($filter);
         $this->getEntityManager()->persist($rule);
-        $this->getEntityManager()->persist($relation);
+        $this->getEntityManager()->persist($usage);
         $this->getEntityManager()->persist($part);
 
         $this->getEntityManager()->flush();
         $this->getEntityManager()->clear();
 
-        $ruleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\AbstractRule');
+        $ruleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Rule');
         $loadedRule = $ruleRepository->findOneById($rule->getId());
-        $this->assertInstanceOf('Application\Model\Rule\Exclude', $loadedRule, 'should be the correct class');
+        $this->assertInstanceOf('Application\Model\Rule\Rule', $loadedRule, 'should be the correct class');
 
         $this->assertNotSame($rule, $loadedRule, 'should not be same object, since we entirely cleared Doctrine and reloaded a new object');
         $this->assertSame($rule->getId(), $loadedRule->getId(), 'should be same ID');

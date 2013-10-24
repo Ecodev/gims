@@ -52,11 +52,11 @@ Surveys          : 1
 Questionnaires   : 2
 Alternate Filters: 18
 Answers          : 70
-Formulas         : 34
+Rules            : 35
 Uses of Exclude  : 11
-Uses of Rule for Filter          : 33
-Uses of Formula for Filter       : 21
-Uses of Formula for Questionnaire: 20
+Uses of Rule for Filter       : 33
+Uses of Rule for Filter       : 21
+Uses of Rule for Questionnaire: 20
 STRING;
         $this->assertConsoleOutputContains($expected);
     }

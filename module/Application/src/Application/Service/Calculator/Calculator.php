@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Application\Model\Filter;
 use Application\Model\Part;
 use Application\Model\Questionnaire;
-use Application\Model\Rule\AbstractFormulaUsage;
+use Application\Model\Rule\AbstractQuestionnaireUsage;
 
 /**
  * Common base class for various computation. It includes a local instance cache.
@@ -24,12 +24,12 @@ use \Application\Traits\EntityManagerAware;
     private $cacheComputeFilter = array();
     protected $excludedFilters = array();
     private $populationRepository;
-    private $questionnaireFormulaRepository;
+    private $questionnaireUsageRepository;
     private $filterRepository;
     private $questionnaireRepository;
     private $partRepository;
     private $answerRepository;
-    private $filterRuleRepository;
+    private $filterQuestionnaireUsageRepository;
 
     /**
      * Set the population repository
@@ -57,28 +57,28 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
-     * Set the questionnaireformula repository
-     * @param \Application\Repository\Rule\QuestionnaireFormulaRepository $questionnaireFormulaRepository
+     * Set the questionnaireusage repository
+     * @param \Application\Repository\Rule\QuestionnaireUsageRepository $questionnaireUsageRepository
      * @return \Application\Service\Calculator\Calculator
      */
-    public function setQuestionnaireFormulaRepository(\Application\Repository\Rule\QuestionnaireFormulaRepository $questionnaireFormulaRepository)
+    public function setQuestionnaireUsageRepository(\Application\Repository\Rule\QuestionnaireUsageRepository $questionnaireUsageRepository)
     {
-        $this->questionnaireFormulaRepository = $questionnaireFormulaRepository;
+        $this->questionnaireUsageRepository = $questionnaireUsageRepository;
 
         return $this;
     }
 
     /**
-     * Get the questionnaireformula repository
-     * @return \Application\Repository\Rule\QuestionnaireFormulaRepository
+     * Get the questionnaireusage repository
+     * @return \Application\Repository\Rule\QuestionnaireUsageRepository
      */
-    public function getQuestionnaireFormulaRepository()
+    public function getQuestionnaireUsageRepository()
     {
-        if (!$this->questionnaireFormulaRepository) {
-            $this->questionnaireFormulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireFormula');
+        if (!$this->questionnaireUsageRepository) {
+            $this->questionnaireUsageRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireUsage');
         }
 
-        return $this->questionnaireFormulaRepository;
+        return $this->questionnaireUsageRepository;
     }
 
     /**
@@ -182,28 +182,28 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
-     * Set the filterRule repository
-     * @param \Application\Repository\Rule\FilterRuleRepository $filterRuleRepository
+     * Set the filterQuestionnaireUsage repository
+     * @param \Application\Repository\Rule\FilterQuestionnaireUsageRepository $filterQuestionnaireUsageRepository
      * @return \Application\Service\Calculator\Calculator
      */
-    public function setFilterRuleRepository(\Application\Repository\Rule\FilterRuleRepository $filterRuleRepository)
+    public function setFilterQuestionnaireUsageRepository(\Application\Repository\Rule\FilterQuestionnaireUsageRepository $filterQuestionnaireUsageRepository)
     {
-        $this->filterRuleRepository = $filterRuleRepository;
+        $this->filterQuestionnaireUsageRepository = $filterQuestionnaireUsageRepository;
 
         return $this;
     }
 
     /**
-     * Get the filterRule repository
-     * @return \Application\Repository\Rule\FilterRuleRepository
+     * Get the filterQuestionnaireUsage repository
+     * @return \Application\Repository\Rule\FilterQuestionnaireUsageRepository
      */
-    public function getFilterRuleRepository()
+    public function getFilterQuestionnaireUsageRepository()
     {
-        if (!$this->filterRuleRepository) {
-            $this->filterRuleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
+        if (!$this->filterQuestionnaireUsageRepository) {
+            $this->filterQuestionnaireUsageRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterQuestionnaireUsage');
         }
 
-        return $this->filterRuleRepository;
+        return $this->filterQuestionnaireUsageRepository;
     }
 
     /**
@@ -261,9 +261,9 @@ use \Application\Traits\EntityManagerAware;
         }
 
         // If the filter has a formula, returns its value
-        $filterRule = $this->getFilterRuleRepository()->getFirstWithFormula($questionnaireId, $filterId, $partId, $alreadyUsedFormulas);
-        if ($filterRule) {
-            return $this->computeFormula($filterRule, $alreadyUsedFormulas);
+        $filterQuestionnaireUsage = $this->getFilterQuestionnaireUsageRepository()->getFirst($questionnaireId, $filterId, $partId, $alreadyUsedFormulas);
+        if ($filterQuestionnaireUsage) {
+            return $this->computeFormula($filterQuestionnaireUsage, $alreadyUsedFormulas);
         }
 
         // First, attempt to sum summands
@@ -303,19 +303,19 @@ use \Application\Traits\EntityManagerAware;
 
     /**
      * Compute the value of a formula based on GIMS syntax.
-     * For details about syntax, @see \Application\Model\Rule\Formula
-     * @param \Application\Model\Rule\AbstractFormulaUsage $usage
+     * For details about syntax, @see \Application\Model\Rule\Rule
+     * @param \Application\Model\Rule\AbstractQuestionnaireUsage $usage
      * @return mixed
      * @throws \Exception
      */
-    public function computeFormula(AbstractFormulaUsage $usage, ArrayCollection $alreadyUsedFormulas = null)
+    public function computeFormula(AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas = null)
     {
         if (!$alreadyUsedFormulas) {
             $alreadyUsedFormulas = new ArrayCollection();
         }
 
         $alreadyUsedFormulas->add($usage);
-        $originalFormula = $usage->getFormula()->getFormula();
+        $originalFormula = $usage->getRule()->getFormula();
 
         _log()->debug(__FUNCTION__, array($usage->getId(), $originalFormula));
 
@@ -337,12 +337,7 @@ use \Application\Traits\EntityManagerAware;
                         $partId = $usage->getPart()->getId();
                     }
 
-                    // skip this questionnaire, if an exclude rule exists for him
-                    if ($this->getFilterRuleRepository()->isExcluded($questionnaireId, $filterId, $partId)) {
-                        $value = null;
-                    } else {
-                        $value = $this->computeFilter($filterId, $questionnaireId, $partId, $alreadyUsedFormulas);
-                    }
+                    $value = $this->computeFilter($filterId, $questionnaireId, $partId, $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $originalFormula);
@@ -365,9 +360,9 @@ use \Application\Traits\EntityManagerAware;
                     }
                 }, $convertedFormulas);
 
-        // Replace {Fo#12,Q#34,P#56} with QuestionnaireFormula value
-        $convertedFormulas = preg_replace_callback('/\{Fo#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage, $alreadyUsedFormulas) {
-                    $formulaId = $matches[1];
+        // Replace {R#12,Q#34,P#56} with QuestionnaireUsage value
+        $convertedFormulas = preg_replace_callback('/\{R#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage, $alreadyUsedFormulas) {
+                    $ruleId = $matches[1];
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
 
@@ -379,13 +374,13 @@ use \Application\Traits\EntityManagerAware;
                         $partId = $usage->getPart()->getId();
                     }
 
-                    $questionnaireFormula = $this->getQuestionnaireFormulaRepository()->getOneByQuestionnaire($questionnaireId, $partId, $formulaId);
+                    $questionnaireUsage = $this->getQuestionnaireUsageRepository()->getOneByQuestionnaire($questionnaireId, $partId, $ruleId);
 
-                    if (!$questionnaireFormula) {
-                        throw new \Exception('Reference to non existing QuestionnaireFormula ' . $matches[0] . ' in  Formula#' . $usage->getFormula()->getId() . ', "' . $usage->getFormula()->getName() . '": ' . $usage->getFormula()->getFormula());
+                    if (!$questionnaireUsage) {
+                        throw new \Exception('Reference to non existing QuestionnaireUsage ' . $matches[0] . ' in  Rule#' . $usage->getRule()->getId() . ', "' . $usage->getRule()->getName() . '": ' . $usage->getRule()->getFormula());
                     }
 
-                    $value = $this->computeFormula($questionnaireFormula, $alreadyUsedFormulas);
+                    $value = $this->computeFormula($questionnaireUsage, $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
@@ -421,7 +416,7 @@ use \Application\Traits\EntityManagerAware;
             $result = null;
         }
 
-        _log()->debug(__FUNCTION__, array($usage->getId(), $usage->getFormula()->getName(), $originalFormula, $convertedFormulas, $result));
+        _log()->debug(__FUNCTION__, array($usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormulas, $result));
         return $result;
     }
 

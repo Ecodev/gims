@@ -271,38 +271,25 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         return $stubAnswerRepository;
     }
 
-    protected function getStubFilterRuleRepository()
+    protected function getStubFilterQuestionnaireUsageRepository()
     {
-        // Create a stub for the FilterRuleRepository class with predetermined values, so we don't have to mess with database
-        $stubFilterRuleRepository = $this->getMock('\Application\Repository\Rule\FilterRuleRepository', array('getFirstWithFormula', 'isExcluded'), array(), '', false);
-        $stubFilterRuleRepository->expects($this->any())
-                ->method('getFirstWithFormula')
+        // Create a stub for the FilterQuestionnaireUsageRepository class with predetermined values, so we don't have to mess with database
+        $stubFilterQuestionnaireUsageRepository = $this->getMock('\Application\Repository\Rule\FilterQuestionnaireUsageRepository', array('getFirst'), array(), '', false);
+        $stubFilterQuestionnaireUsageRepository->expects($this->any())
+                ->method('getFirst')
                 ->will($this->returnCallback(function($questionnaireId, $filterId, $partId, ArrayCollection $alreadyUsedFormulas) {
 
                                     $filter = $this->getModel('\Application\Model\Filter', $filterId);
-                                    foreach ($filter->getFilterRules() as $filterRule) {
-                                        if ($filterRule->getFormula() && $filterRule->getQuestionnaire()->getId() == $questionnaireId && $filterRule->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterRule)) {
-                                            return $filterRule;
+                                    foreach ($filter->getFilterQuestionnaireUsages() as $filterQuestionnaireUsage) {
+                                        if ($filterQuestionnaireUsage->getRule() && $filterQuestionnaireUsage->getQuestionnaire()->getId() == $questionnaireId && $filterQuestionnaireUsage->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterQuestionnaireUsage)) {
+                                            return $filterQuestionnaireUsage;
                                         }
                                     }
                                     return null;
                                 })
         );
 
-        $stubFilterRuleRepository->expects($this->any())
-                ->method('isExcluded')
-                ->will($this->returnCallback(function($questionnaireId, $filterId, $partId) {
-
-                                    $filter = $this->getModel('\Application\Model\Filter', $filterId);
-                                    foreach ($filter->getFilterRules() as $filterRule) {
-                                        if ($filterRule->getRule() instanceof \Application\Model\Rule\Exclude && $filterRule->getQuestionnaire()->getId() == $questionnaireId && $filterRule->getPart()->getId() == $partId) {
-                                            return $filterRule;
-                                        }
-                                    }
-                                    return null;
-                                })
-        );
-        return $stubFilterRuleRepository;
+        return $stubFilterQuestionnaireUsageRepository;
     }
 
     protected function getStubFilterRepository()
@@ -356,7 +343,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setAnswerRepository($this->getStubAnswerRepository());
         $calculator->setFilterRepository($this->getStubFilterRepository());
-        $calculator->setFilterRuleRepository($this->getStubFilterRuleRepository());
+        $calculator->setFilterQuestionnaireUsageRepository($this->getStubFilterQuestionnaireUsageRepository());
 
         $calculator->setServiceLocator($this->getApplicationServiceLocator());
         return $calculator;

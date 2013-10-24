@@ -8,13 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
  * Common properties to "apply" a formula to something, on questionnaire level
  * @ORM\MappedSuperclass
  */
-abstract class AbstractFormulaUsage extends AbstractRuleUsage
+abstract class AbstractQuestionnaireUsage extends AbstractUsage
 {
 
     /**
      * @var Questionnaire
      *
-     * @ORM\ManyToOne(targetEntity="Application\Model\Questionnaire", inversedBy="questionnaireFormulas"))
+     * @ORM\ManyToOne(targetEntity="Application\Model\Questionnaire", inversedBy="questionnaireUsages"))
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
@@ -25,7 +25,7 @@ abstract class AbstractFormulaUsage extends AbstractRuleUsage
      * Set questionnaire
      *
      * @param \Application\Model\Questionnaire $questionnaire
-     * @return QuestionnaireFormula
+     * @return QuestionnaireUsage
      */
     public function setQuestionnaire(\Application\Model\Questionnaire $questionnaire)
     {
@@ -43,12 +43,6 @@ abstract class AbstractFormulaUsage extends AbstractRuleUsage
     {
         return $this->questionnaire;
     }
-
-    /**
-     * Get Formula
-     * @return Formula|null
-     */
-    abstract function getFormula();
 
     /**
      * Get Filter

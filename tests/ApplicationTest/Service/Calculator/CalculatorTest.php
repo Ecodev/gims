@@ -97,10 +97,10 @@ class CalculatorTest extends AbstractCalculator
         $service = $this->getNewCalculator();
 
         // Define filter1 to actually be the result of a formula
-        $formula = new \Application\Model\Rule\Formula();
-        $formula->setFormula('=0.5');
-        $filterRule = new \Application\Model\Rule\FilterRule();
-        $filterRule->setPart($this->part1)->setFilter($this->filter1)->setQuestionnaire($this->questionnaire)->setRule($formula);
+        $rule = new \Application\Model\Rule\Rule();
+        $rule->setFormula('=0.5');
+        $filterQuestionnaireUsage = new \Application\Model\Rule\FilterQuestionnaireUsage();
+        $filterQuestionnaireUsage->setPart($this->part1)->setFilter($this->filter1)->setQuestionnaire($this->questionnaire)->setRule($rule);
 
         $this->assertEquals(0.5, $service->computeFilter($this->filter1->getId(), $this->questionnaire->getId(), $this->part1->getId()));
     }
@@ -130,84 +130,84 @@ class CalculatorTest extends AbstractCalculator
         )));
         $service->setPartRepository($stubPartRepository);
 
-        // Create a stub for the QuestionnaireFormulaRepository class with predetermined values, so we don't have to mess with database
-        $questionnaireFormula = new \Application\Model\Rule\QuestionnaireFormula();
-        $questionnaireFormula->setFormula((new \Application\Model\Rule\Formula())->setFormula('=2+3'))
+        // Create a stub for the QuestionnaireUsageRepository class with predetermined values, so we don't have to mess with database
+        $questionnaireUsage = new \Application\Model\Rule\QuestionnaireUsage();
+        $questionnaireUsage->setRule((new \Application\Model\Rule\Rule())->setFormula('=2+3'))
                 ->setQuestionnaire($this->questionnaire)
                 ->setPart($this->part1);
-        $stubQuestionnaireFormulaRepository = $this->getMock('\Application\Repository\Rule\QuestionnaireFormulaRepository', array('getOneByQuestionnaire'), array(), '', false);
-        $stubQuestionnaireFormulaRepository->expects($this->any())
+        $stubQuestionnaireUsageRepository = $this->getMock('\Application\Repository\Rule\QuestionnaireUsageRepository', array('getOneByQuestionnaire'), array(), '', false);
+        $stubQuestionnaireUsageRepository->expects($this->any())
                 ->method('getOneByQuestionnaire')
-                ->will($this->returnValue($questionnaireFormula)
+                ->will($this->returnValue($questionnaireUsage)
         );
-        $service->setQuestionnaireFormulaRepository($stubQuestionnaireFormulaRepository);
-        $this->assertEquals($questionnaireFormula, $stubQuestionnaireFormulaRepository->getOneByQuestionnaire(1, 2, 3));
+        $service->setQuestionnaireUsageRepository($stubQuestionnaireUsageRepository);
+        $this->assertEquals($questionnaireUsage, $stubQuestionnaireUsageRepository->getOneByQuestionnaire(1, 2, 3));
 
-        $formula = new \Application\Model\Rule\Formula();
-        $filterRule = new \Application\Model\Rule\FilterRule();
-        $filterRule->setRule($formula)
+        $rule = new \Application\Model\Rule\Rule();
+        $filterQuestionnaireUsage = new \Application\Model\Rule\FilterQuestionnaireUsage();
+        $filterQuestionnaireUsage->setRule($rule)
                 ->setQuestionnaire($this->questionnaire)
                 ->setPart($this->part1)
                 ->setFilter($this->filter11);
 
-        $formula->setFormula('=(3 + 7) * SUM(2, 3)');
-        $this->assertEquals(50, $service->computeFormula($filterRule), 'should be able to handle standard Excel things');
+        $rule->setFormula('=(3 + 7) * SUM(2, 3)');
+        $this->assertEquals(50, $service->computeFormula($filterQuestionnaireUsage), 'should be able to handle standard Excel things');
 
         // Filter values
-        $formula->setFormula('= 10 + {F#2,Q#' . $this->questionnaire->getId() . ',P#' . $this->part1->getId() . '}');
-        $this->assertEquals(10.101, $service->computeFormula($filterRule), 'should be able to refer a Filter value');
+        $rule->setFormula('= 10 + {F#2,Q#' . $this->questionnaire->getId() . ',P#' . $this->part1->getId() . '}');
+        $this->assertEquals(10.101, $service->computeFormula($filterQuestionnaireUsage), 'should be able to refer a Filter value');
 
-        $formula->setFormula('= 10 + {F#current,Q#current,P#current}');
-        $this->assertEquals(10.101, $service->computeFormula($filterRule), 'should be able to refer a Filter value with same Questionnaire and Part');
+        $rule->setFormula('= 10 + {F#current,Q#current,P#current}');
+        $this->assertEquals(10.101, $service->computeFormula($filterQuestionnaireUsage), 'should be able to refer a Filter value with same Questionnaire and Part');
 
-        $formula->setFormula('= 10 + {F#' . $nullFilter->getId() . ',Q#' . $this->questionnaire->getId() . ',P#' . $this->part1->getId() . '}');
-        $this->assertEquals(10, $service->computeFormula($filterRule), 'should be able to refer a Filter value which is NULL');
+        $rule->setFormula('= 10 + {F#' . $nullFilter->getId() . ',Q#' . $this->questionnaire->getId() . ',P#' . $this->part1->getId() . '}');
+        $this->assertEquals(10, $service->computeFormula($filterQuestionnaireUsage), 'should be able to refer a Filter value which is NULL');
 
-        // QuestionnaireFormula values
-        $formula->setFormula('={Fo#12,Q#' . $this->questionnaire->getId() . ',P#' . $this->part1->getId() . '}');
-        $this->assertEquals(5, $service->computeFormula($filterRule), 'should be able to refer a QuestionnaireFormula');
+        // QuestionnaireUsage values
+        $rule->setFormula('={R#12,Q#' . $this->questionnaire->getId() . ',P#' . $this->part1->getId() . '}');
+        $this->assertEquals(5, $service->computeFormula($filterQuestionnaireUsage), 'should be able to refer a QuestionnaireUsage');
 
-        $formula->setFormula('={Fo#12,Q#current,P#current}');
-        $this->assertEquals(5, $service->computeFormula($filterRule), 'should be able to refer a QuestionnaireFormula with same Questionnaire and Part');
+        $rule->setFormula('={R#12,Q#current,P#current}');
+        $this->assertEquals(5, $service->computeFormula($filterQuestionnaireUsage), 'should be able to refer a QuestionnaireUsage with same Questionnaire and Part');
 
-        $questionnaireFormula->getFormula()->setFormula('=NULL');
-        $formula->setFormula('=7 + {Fo#12,Q#current,P#current}');
-        $this->assertEquals(7, $service->computeFormula($filterRule), 'should be able to refer a QuestionnaireFormula which is NULL');
+        $questionnaireUsage->getRule()->setFormula('=NULL');
+        $rule->setFormula('=7 + {R#12,Q#current,P#current}');
+        $this->assertEquals(7, $service->computeFormula($filterQuestionnaireUsage), 'should be able to refer a QuestionnaireUsage which is NULL');
 
         // Unnoficial filter names
-        $formula->setFormula('={F#12,Q#' . $this->questionnaire->getId() . '}');
-        $this->assertNull($service->computeFormula($filterRule), 'refering a non-existing Unofficial Filter name, returns null');
+        $rule->setFormula('={F#12,Q#' . $this->questionnaire->getId() . '}');
+        $this->assertNull($service->computeFormula($filterQuestionnaireUsage), 'refering a non-existing Unofficial Filter name, returns null');
 
         // Inject our unnofficial filter
         $unofficialFilter = $this->getNewModelWithId('\Application\Model\Filter')->setName('unofficial with "double quotes"');
         $unofficialFilter->setQuestionnaire($this->questionnaire)->setOfficialFilter($this->filter1);
 
-        $formula->setFormula('=ISTEXT({F#' . $unofficialFilter->getOfficialFilter()->getId() . ',Q#' . $unofficialFilter->getQuestionnaire()->getId() . '})');
-        $this->assertTrue($service->computeFormula($filterRule), 'should be able to refer an Unofficial Filter name');
+        $rule->setFormula('=ISTEXT({F#' . $unofficialFilter->getOfficialFilter()->getId() . ',Q#' . $unofficialFilter->getQuestionnaire()->getId() . '})');
+        $this->assertTrue($service->computeFormula($filterQuestionnaireUsage), 'should be able to refer an Unofficial Filter name');
     }
 
     public function testFormulaSyntaxSelf()
     {
-        $formula = new \Application\Model\Rule\Formula();
+        $rule = new \Application\Model\Rule\Rule();
 
-        $fitlerRule = new \Application\Model\Rule\FilterRule();
-        $fitlerRule->setRule($formula)
+        $fitlerRule = new \Application\Model\Rule\FilterQuestionnaireUsage();
+        $fitlerRule->setRule($rule)
                 ->setFilter($this->filter1)
                 ->setQuestionnaire($this->questionnaire)
                 ->setPart($this->part1);
 
-        $formula->setFormula('={self}');
+        $rule->setFormula('={self}');
         $this->assertEquals(0.1111, $this->getNewCalculator()->computeFormula($fitlerRule), 'should fallback to filter value without any formulas');
 
         // Same result as above, but with different use of our API
         $this->assertEquals(0.1111, $this->getNewCalculator()->computeFilter($this->filter1->getId(), $this->questionnaire->getId(), $this->part1->getId()), 'should fallback to filter value without any formulas');
 
         // We now add a second formula, that will be used as a fallback from first one
-        $formula2 = new \Application\Model\Rule\Formula();
-        $formula2->setFormula('=8 * 2');
+        $rule2 = new \Application\Model\Rule\Rule();
+        $rule2->setFormula('=8 * 2');
 
-        $fitlerRule2 = new \Application\Model\Rule\FilterRule();
-        $fitlerRule2->setRule($formula2)
+        $fitlerRule2 = new \Application\Model\Rule\FilterQuestionnaireUsage();
+        $fitlerRule2->setRule($rule2)
                 ->setFilter($this->filter1)
                 ->setQuestionnaire($this->questionnaire)
                 ->setPart($this->part1);

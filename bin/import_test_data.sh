@@ -3,7 +3,7 @@ phing load-data -DdumpFile=../gims/population.backup.gz
 
 #time php htdocs/index.php import jmp data/cache/country_data/Country_data_Europe/Western_Europe/Germany_12.xlsm
 #time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/South_Eastern_Asia/Cambodia_12.xlsm
-exit
+#exit
 
 time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/South_Central_Asia/Bangladesh_12.xlsm
 
@@ -19,15 +19,16 @@ time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/S
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('choice_id_seq', MAX(id) ) FROM choice;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('country_id_seq', MAX(id) ) FROM country;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('filter_id_seq', MAX(id) ) FROM filter;"
-./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('filter_rule_id_seq', MAX(id) ) FROM filter_rule;"
+./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('filter_questionnaire_usage_id_seq', MAX(id) ) FROM filter_questionnaire_usage;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('filter_set_id_seq', MAX(id) ) FROM filter_set;"
+./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('filter_usage_id_seq', MAX(id) ) FROM filter_usage;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('geoname_id_seq', MAX(id) ) FROM geoname;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('part_id_seq', MAX(id) ) FROM part;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('permission_id_seq', MAX(id) ) FROM permission;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('population_id_seq', MAX(id) ) FROM population;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('question_id_seq', MAX(id) ) FROM question;"
-./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('questionnaire_formula_id_seq', MAX(id) ) FROM questionnaire_formula;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('questionnaire_id_seq', MAX(id) ) FROM questionnaire;"
+./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('questionnaire_usage_id_seq', MAX(id) ) FROM questionnaire_usage;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('role_id_seq', MAX(id) ) FROM role;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('rule_id_seq', MAX(id) ) FROM rule;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('survey_id_seq', MAX(id) ) FROM survey;"
