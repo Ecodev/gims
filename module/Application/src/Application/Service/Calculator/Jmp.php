@@ -23,7 +23,7 @@ class Jmp extends Calculator
      * @param \Application\Model\Part $part
      * @return array [[name => filterName, data => [year => flattenedRegression]]]]
      */
-    public function computeFlattenAllYears($yearStart, $yearEnd, FilterSet $filterSet, $questionnaires, Part $part, $excludedFilters = array())
+    public function computeFlattenAllYears($yearStart, $yearEnd, FilterSet $filterSet, array $questionnaires, Part $part, $excludedFilters = array())
     {
         // @todo for sylvain. Property excluded filters is used in parent class. Check out @method computeFilterInternal
         $this->excludedFilters = $excludedFilters;
@@ -64,12 +64,13 @@ class Jmp extends Calculator
      * @param \Application\Model\Rule\Rule $excludedRule
      * @return null|float
      */
-    public function computeFlattenOneYearWithFormula($year, array $years, Filter $filter, $questionnaires, Part $part, array $parts, Rule $excludedRule = null)
+    public function computeFlattenOneYearWithFormula($year, array $years, Filter $filter, array $questionnaires, Part $part, array $parts, Rule $excludedRule = null)
     {
         // If the filter has a formula, returns its value
-        foreach ($filter->getFilterUsages() as $filterUsage) {
-            $rule = $filterUsage->getRule();
-            if ($rule !== $excludedRule && $filterUsage->getPart() === $part) {
+        $usages = $questionnaires ? reset($questionnaires)->getGeoname()->getFilterGeonameUsages() : array();
+        foreach ($usages as $filterGeonameUsage) {
+            $rule = $filterGeonameUsage->getRule();
+            if ($rule !== $excludedRule && $filterGeonameUsage->getFilter() === $filter && $filterGeonameUsage->getPart() === $part) {
                 return $this->computeFormulaFlatten($rule, $year, $years, $filter, $questionnaires, $part, $parts);
             }
         }
@@ -181,7 +182,7 @@ class Jmp extends Calculator
      * @param \Application\Model\Part $part
      * @return array [year => regresssion]
      */
-    public function computeRegressionForAllYears(array $years, Filter $filter, $questionnaires, Part $part)
+    public function computeRegressionForAllYears(array $years, Filter $filter, array $questionnaires, Part $part)
     {
         $key = \Application\Utility::getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheComputeRegressionForAllYears)) {
@@ -206,7 +207,7 @@ class Jmp extends Calculator
      * @param \Application\Model\Part $part
      * @return null|float
      */
-    public function computeRegressionOneYear($year, Filter $filter, $questionnaires, Part $part)
+    public function computeRegressionOneYear($year, Filter $filter, array $questionnaires, Part $part)
     {
         $d = $this->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
 
@@ -242,7 +243,7 @@ class Jmp extends Calculator
      * @param \Application\Model\Part $part
      * @return array
      */
-    public function computeFilterForAllQuestionnaires(Filter $filter, $questionnaires, Part $part)
+    public function computeFilterForAllQuestionnaires(Filter $filter, array $questionnaires, Part $part)
     {
         $key = \Application\Utility::getCacheKey(func_get_args());
 
@@ -316,7 +317,7 @@ class Jmp extends Calculator
      * @return mixed
      * @throws \Exception
      */
-    public function computeFormulaFlatten(Rule $rule, $year, array $years, Filter $currentFilter, $questionnaires, Part $part, array $parts)
+    public function computeFormulaFlatten(Rule $rule, $year, array $years, Filter $currentFilter, array $questionnaires, Part $part, array $parts)
     {
         $originalFormula = $rule->getFormula();
 

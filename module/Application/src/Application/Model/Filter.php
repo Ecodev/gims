@@ -107,22 +107,12 @@ class Filter extends AbstractModel
     private $filterQuestionnaireUsages;
 
     /**
-     * Additional formulas to apply to compute regression lines
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="\Application\Model\Rule\FilterUsage", mappedBy="filter")
-     * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
-     */
-    private $filterUsages;
-
-    /**
      * Constructor
      * @param string $name
      */
     public function __construct($name = null)
     {
         $this->filterQuestionnaireUsages = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->filterUsages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->parents = new \Doctrine\Common\Collections\ArrayCollection();
         $this->summands = new \Doctrine\Common\Collections\ArrayCollection();
@@ -312,28 +302,6 @@ class Filter extends AbstractModel
     public function filterQuestionnaireUsageAdded(Rule\FilterQuestionnaireUsage $usage)
     {
         $this->getFilterQuestionnaireUsages()->add($usage);
-
-        return $this;
-    }
-
-    /**
-     * Get formulas
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getFilterUsages()
-    {
-        return $this->filterUsages;
-    }
-
-    /**
-     * Notify the filter that it was added to FilterUsage relation.
-     * This should only be called by FilterUsage::setFilter()
-     * @param Rule\FilterUsage $usage
-     * @return Filter
-     */
-    public function filterUsageAdded(Rule\FilterUsage $usage)
-    {
-        $this->getFilterUsages()->add($usage);
 
         return $this;
     }

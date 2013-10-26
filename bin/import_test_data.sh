@@ -21,7 +21,7 @@ time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/S
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('filter_id_seq', MAX(id) ) FROM filter;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('filter_questionnaire_usage_id_seq', MAX(id) ) FROM filter_questionnaire_usage;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('filter_set_id_seq', MAX(id) ) FROM filter_set;"
-./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('filter_usage_id_seq', MAX(id) ) FROM filter_usage;"
+./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('filter_geoname_usage_id_seq', MAX(id) ) FROM filter_geoname_usage;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('geoname_id_seq', MAX(id) ) FROM geoname;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('part_id_seq', MAX(id) ) FROM part;"
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('permission_id_seq', MAX(id) ) FROM permission;"

@@ -9,9 +9,10 @@ use Application\Model\Question\NumericQuestion;
 use Application\Model\Questionnaire;
 use Application\Model\Rule\Rule;
 use Application\Model\Rule\FilterQuestionnaireUsage;
-use Application\Model\Rule\FilterUsage;
+use Application\Model\Rule\FilterGeonameUsage;
 use Application\Model\Rule\QuestionnaireUsage;
 use Application\Model\Survey;
+use Application\Model\Geoname;
 
 class Jmp extends AbstractImporter
 {
@@ -361,7 +362,7 @@ class Jmp extends AbstractImporter
     private $ruleCount = 0;
     private $alternateFilterCount = 0;
     private $filterQuestionnaireUsageCount = 0;
-    private $filterUsageCount = 0;
+    private $filterGeonameUsageCount = 0;
 
     /**
      * @var Rule
@@ -464,7 +465,7 @@ Answers          : $this->answerCount
 Rules            : $this->ruleCount
 Uses of Exclude  : $this->excludeCount
 Uses of Rule for Filter       : $this->filterQuestionnaireUsageCount
-Uses of Rule for Filter       : $this->filterUsageCount
+Uses of Rule for Filter       : $this->filterGeonameUsageCount
 Uses of Rule for Questionnaire: $this->questionnaireUsageCount
 
 STRING;
@@ -1225,7 +1226,7 @@ STRING;
             echo '.';
         }
 
-        $this->importHighFilterUsages($filters);
+        $this->importHighFilterGeonameUsages($filters);
 
         echo PHP_EOL;
     }
@@ -1274,62 +1275,67 @@ STRING;
     }
 
     /**
-     * Create or get a FilterUsage
+     * Create or get a FilterGeonameUsage
      * @param Filter $filter
+     * @param Geoname $geoname
      * @param Rule $rule
      * @param Part $part
-     * @return FilterUsage
+     * @return FilterGeonameUsage
      */
-    protected function getFilterUsage(Filter $filter, Rule $rule, Part $part)
+    protected function getFilterGeonameUsage(Filter $filter, Geoname $geoname, Rule $rule, Part $part)
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterUsage');
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
 
         $this->getEntityManager()->flush();
-        $filterUsage = $repository->findOneBy(array(
+        $filterGeonameUsage = $repository->findOneBy(array(
             'rule' => $rule,
             'part' => $part,
             'filter' => $filter,
+            'geoname' => $geoname,
         ));
 
-        if (!$filterUsage) {
-            $filterUsage = new FilterUsage();
-            $filterUsage->setJustification($this->defaultJustification)
+        if (!$filterGeonameUsage) {
+            $filterGeonameUsage = new FilterGeonameUsage();
+            $filterGeonameUsage->setJustification($this->defaultJustification)
                     ->setRule($rule)
                     ->setPart($part)
-                    ->setFilter($filter);
+                    ->setFilter($filter)
+                    ->setGeoname($geoname);
 
-            $this->getEntityManager()->persist($filterUsage);
-            $this->filterUsageCount++;
+            $this->getEntityManager()->persist($filterGeonameUsage);
+            $this->filterGeonameUsageCount++;
         }
 
-        return $filterUsage;
+        return $filterGeonameUsage;
     }
 
     /**
-     * Import FilterUsage for all highfilters
+     * Import FilterGeonameUsage for all highfilters
      * @param array $filters
      */
-    public function importHighFilterUsages(array $filters)
+    public function importHighFilterGeonameUsages(array $filters)
     {
-        foreach ($filters as $filterName => $filterData) {
-            $highFilter = $this->cacheHighFilters[$filterName];
-            foreach ($filterData['formulas'] as $partKey => $formula) {
-                if (!$formula) {
-                    continue;
+        foreach ($this->importedQuestionnaires as $questionnaire) {
+            foreach ($filters as $filterName => $filterData) {
+                $highFilter = $this->cacheHighFilters[$filterName];
+                foreach ($filterData['formulas'] as $partKey => $formula) {
+                    if (!$formula) {
+                        continue;
+                    }
+
+                    $part = $this->partOffsets[$partKey];
+
+                    // Replace our filter name with actual ID in formulas
+                    foreach ($filters as $filterNameOther => $foo) {
+                        $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
+                        $id = $otherHighFilter->getId();
+                        $formula = str_replace('AVERAGE({' . $filterNameOther, "AVERAGE({F#$id", $formula);
+                        $formula = str_replace($filterNameOther, "{F#$id}", $formula);
+                    }
+
+                    $rule = $this->getRule('Regression: ' . $highFilter->getName(), $formula);
+                    $this->getFilterGeonameUsage($highFilter, $questionnaire->getGeoname(), $rule, $part);
                 }
-
-                $part = $this->partOffsets[$partKey];
-
-                // Replace our filter name with actual ID in formulas
-                foreach ($filters as $filterNameOther => $foo) {
-                    $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
-                    $id = $otherHighFilter->getId();
-                    $formula = str_replace('AVERAGE({' . $filterNameOther, "AVERAGE({F#$id", $formula);
-                    $formula = str_replace($filterNameOther, "{F#$id}", $formula);
-                }
-
-                $rule = $this->getRule('Regression: ' . $highFilter->getName(), $formula);
-                $this->getFilterUsage($highFilter, $rule, $part);
             }
         }
     }
