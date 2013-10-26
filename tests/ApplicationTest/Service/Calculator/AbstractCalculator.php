@@ -271,17 +271,37 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         return $stubAnswerRepository;
     }
 
+    protected function getStubQuestionnaireRepository()
+    {
+        $stubQuestionnaireRepository = $this->getMock('\Application\Repository\QuestionnaireRepository', array('isOnlyTotal'), array(), '', false);
+        $stubQuestionnaireRepository->expects($this->any())
+                ->method('isOnlyTotal')
+                ->will($this->returnCallback(function(array $questionnaires) {
+                                    foreach ($questionnaires as $questionnaire) {
+                                        foreach ($questionnaire->getAnswers() as $answer) {
+                                            if (!$answer->getPart()->isTotal())
+                                                return false;
+                                        }
+                                    }
+
+                                    return true;
+                                })
+        );
+
+        return $stubQuestionnaireRepository;
+    }
+
     protected function getStubFilterQuestionnaireUsageRepository()
     {
         // Create a stub for the FilterQuestionnaireUsageRepository class with predetermined values, so we don't have to mess with database
         $stubFilterQuestionnaireUsageRepository = $this->getMock('\Application\Repository\Rule\FilterQuestionnaireUsageRepository', array('getFirst'), array(), '', false);
         $stubFilterQuestionnaireUsageRepository->expects($this->any())
                 ->method('getFirst')
-                ->will($this->returnCallback(function($questionnaireId, $filterId, $partId, ArrayCollection $alreadyUsedFormulas) {
+                ->will($this->returnCallback(function($questionnaireId, $filterId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas) {
 
                                     $filter = $this->getModel('\Application\Model\Filter', $filterId);
                                     foreach ($filter->getFilterQuestionnaireUsages() as $filterQuestionnaireUsage) {
-                                        if ($filterQuestionnaireUsage->getRule() && $filterQuestionnaireUsage->getQuestionnaire()->getId() == $questionnaireId && $filterQuestionnaireUsage->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterQuestionnaireUsage)) {
+                                        if (($useSecondLevelRules || !$filterQuestionnaireUsage->isSecondLevel()) && $filterQuestionnaireUsage->getRule() && $filterQuestionnaireUsage->getQuestionnaire()->getId() == $questionnaireId && $filterQuestionnaireUsage->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterQuestionnaireUsage)) {
                                             return $filterQuestionnaireUsage;
                                         }
                                     }
@@ -344,6 +364,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $calculator->setAnswerRepository($this->getStubAnswerRepository());
         $calculator->setFilterRepository($this->getStubFilterRepository());
         $calculator->setFilterQuestionnaireUsageRepository($this->getStubFilterQuestionnaireUsageRepository());
+        $calculator->setQuestionnaireRepository($this->getStubQuestionnaireRepository());
 
         $calculator->setServiceLocator($this->getApplicationServiceLocator());
         return $calculator;

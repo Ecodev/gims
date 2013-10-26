@@ -100,6 +100,7 @@ class JmpTest extends AbstractCalculator
         $this->service->setAnswerRepository($this->getStubAnswerRepository());
         $this->service->setFilterRepository($this->getStubFilterRepository());
         $this->service->setFilterQuestionnaireUsageRepository($this->getStubFilterQuestionnaireUsageRepository());
+        $this->service->setQuestionnaireRepository($this->getStubQuestionnaireRepository());
         $this->service2 = clone $this->service;
     }
 

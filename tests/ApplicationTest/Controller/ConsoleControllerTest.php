@@ -53,7 +53,7 @@ Questionnaires   : 2
 Alternate Filters: 18
 Answers          : 70
 Rules            : 35
-Uses of Exclude  : 11
+Uses of Exclude  : 35
 Uses of Rule for Filter       : 33
 Uses of Rule for Filter       : 21
 Uses of Rule for Questionnaire: 20
