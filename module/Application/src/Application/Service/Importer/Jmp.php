@@ -119,9 +119,6 @@ class Jmp extends AbstractImporter
                     'excludes' => 91,
                     'isImproved' => true,
                     'formulas' => array(
-                        3 => null,
-                        4 => null,
-                        5 => null,
                     ),
                 ),
                 "Piped onto premises" => array(
@@ -130,9 +127,6 @@ class Jmp extends AbstractImporter
                     'excludes' => 92,
                     'isImproved' => true,
                     'formulas' => array(
-                        3 => null,
-                        4 => null,
-                        5 => null,
                     ),
                 ),
                 "Surface water" => array(
@@ -141,9 +135,9 @@ class Jmp extends AbstractImporter
                     'excludes' => 93,
                     'isImproved' => false,
                     'formulas' => array(
-                        3 => '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, {self}), NULL)',
-                        4 => '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, {self}), NULL)',
-                        5 => '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, {self}), NULL)',
+                        array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, {self}), NULL)'),
+                        array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, {self}), NULL)'),
+                        array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, {self}), NULL)'),
                     ),
                 ),
                 "Other Improved" => array(
@@ -152,9 +146,9 @@ class Jmp extends AbstractImporter
                     'excludes' => null,
                     'isImproved' => false,
                     'formulas' => array(
-                        3 => '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)',
-                        4 => '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)',
-                        5 => '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)',
+                        array(3, '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)'),
+                        array(4, '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)'),
+                        array(5, '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)'),
                     ),
                 ),
                 "Other Unimproved" => array(
@@ -163,9 +157,9 @@ class Jmp extends AbstractImporter
                     'excludes' => null,
                     'isImproved' => false,
                     'formulas' => array(
-                        3 => '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)',
-                        4 => '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)',
-                        5 => '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)',
+                        array(3, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
+                        array(4, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
+                        array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
                     ),
                 ),
             ),
@@ -282,9 +276,6 @@ class Jmp extends AbstractImporter
                     'excludes' => 96,
                     'isImproved' => true,
                     'formulas' => array(
-                        3 => null,
-                        4 => null,
-                        5 => null,
                     ),
                 ),
                 "Sewerage connections" => array(
@@ -293,9 +284,6 @@ class Jmp extends AbstractImporter
                     'excludes' => 97,
                     'isImproved' => false,
                     'formulas' => array(
-                        3 => null,
-                        4 => null,
-                        5 => null,
                     ),
                 ),
                 "Improved" => array(
@@ -304,9 +292,13 @@ class Jmp extends AbstractImporter
                     'excludes' => null,
                     'isImproved' => true,
                     'formulas' => array(
-                        3 => "=IF(ISNUMBER(Improved + shared), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)",
-                        4 => "=IF(ISNUMBER(Improved + shared), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)",
-                        5 => "=IF(ISNUMBER(Improved + shared), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)",
+                        // Additionnal rules for developed countries
+                        array(3, "=IF(AND(Improved + shared > 0.995, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                        array(4, "=IF(AND(Improved + shared > 0.995, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                        // Normal rules
+                        array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                        array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                        array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
                     ),
                 ),
                 "Shared" => array(
@@ -315,9 +307,9 @@ class Jmp extends AbstractImporter
                     'excludes' => null, // Because Shared is a very special case, we totally ignore exclude rules
                     'isImproved' => false,
                     'formulas' => array(
-                        3 => '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)',
-                        4 => '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)',
-                        5 => '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)',
+                        array(3, '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)'),
+                        array(4, '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)'),
+                        array(5, '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)'),
                     ),
                 ),
                 "Other unimproved" => array(
@@ -326,9 +318,9 @@ class Jmp extends AbstractImporter
                     'excludes' => null,
                     'isImproved' => false,
                     'formulas' => array(
-                        3 => '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation), NULL)',
-                        4 => '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation), NULL)',
-                        5 => '=IF(ISNUMBeR(Improved + shared), IF(Improved + shared + Open defecation >= 1, 0, IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation)), NULL)',
+                        array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation), NULL)'),
+                        array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation), NULL)'),
+                        array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared + Open defecation >= 1, 0, IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation)), NULL)'),
                     ),
                 ),
                 "Open defecation" => array(
@@ -337,9 +329,9 @@ class Jmp extends AbstractImporter
                     'excludes' => 98,
                     'isImproved' => false,
                     'formulas' => array(
-                        3 => '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, {self}), NULL)',
-                        4 => '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, {self}), NULL)',
-                        5 => '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, {self}), NULL)',
+                        array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, {self}), NULL)'),
+                        array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, {self}), NULL)'),
+                        array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, {self}), NULL)'),
                     ),
                 ),
             ),
@@ -383,6 +375,12 @@ class Jmp extends AbstractImporter
      * @var Part
      */
     private $partTotal;
+
+    /**
+     * Whether the currently imported country is considered developed
+     * @var boolean
+     */
+    private $isDevelopedCountry;
 
     /**
      * Import data from file
@@ -736,6 +734,64 @@ STRING;
             'Saint lucia' => 'Saint Lucia',
         );
 
+        $developedCountries = array(
+            'ALB',
+            'AND',
+            'AUS',
+            'AUT',
+            'BEL',
+            'BGR',
+            'BIH',
+            'BLR',
+            'BMU',
+            'CAN',
+            'CHE',
+            'CIS',
+            'CYP',
+            'CZE',
+            'DEU',
+            'DNK',
+            'ESP',
+            'EST',
+            'FIN',
+            'FRA',
+            'FRO',
+            'GBR',
+            'GRC',
+            'GRL',
+            'HRV',
+            'HUN',
+            'IMN',
+            'IRL',
+            'ISL',
+            'ISR',
+            'ITA',
+            'JPN',
+            'LIE',
+            'LTU',
+            'LUX',
+            'LVA',
+            'MCO',
+            'MDA',
+            'MKD',
+            'MLT',
+            'MNE',
+            'NLD',
+            'NOR',
+            'NZL',
+            'POL',
+            'PRT',
+            'ROU',
+            'RUS',
+            'SMR',
+            'SRB',
+            'SVK',
+            'SVN',
+            'SWE',
+            'UKR',
+            'USA',
+        );
+
         // Some files have a buggy self-referencing formula, so we need to fallback on cached result of formula
         $countryName = $this->getCalculatedValueSafely($countryCell);
 
@@ -753,6 +809,7 @@ STRING;
         if (!$country) {
             throw new \Exception('No country found for name "' . $countryName . '"');
         }
+        $this->isDevelopedCountry = in_array($country->getIso3(), $developedCountries);
         $geoname = $country->getGeoname();
 
         $questionnaire = new Questionnaire();
@@ -1318,22 +1375,30 @@ STRING;
         foreach ($this->importedQuestionnaires as $questionnaire) {
             foreach ($filters as $filterName => $filterData) {
                 $highFilter = $this->cacheHighFilters[$filterName];
-                foreach ($filterData['formulas'] as $partKey => $formula) {
-                    if (!$formula) {
+
+                foreach ($filterData['formulas'] as $formulaData) {
+
+
+                    $part = $this->partOffsets[$formulaData[0]];
+                    $formula = $formulaData[1];
+                    $isDevelopedFormula = @$formulaData[2];
+
+                    // Only add developed formulas for developed countries
+                    if ($isDevelopedFormula && !$this->isDevelopedCountry) {
                         continue;
                     }
-
-                    $part = $this->partOffsets[$partKey];
 
                     // Replace our filter name with actual ID in formulas
                     foreach ($filters as $filterNameOther => $foo) {
                         $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
                         $id = $otherHighFilter->getId();
+                        $formula = str_replace('COUNT({' . $filterNameOther, "COUNT({F#$id", $formula);
                         $formula = str_replace('AVERAGE({' . $filterNameOther, "AVERAGE({F#$id", $formula);
                         $formula = str_replace($filterNameOther, "{F#$id}", $formula);
                     }
 
-                    $rule = $this->getRule('Regression: ' . $highFilter->getName(), $formula);
+                    $suffix = $isDevelopedFormula ? ' (for developed countries)' : '';
+                    $rule = $this->getRule('Regression: ' . $highFilter->getName() . $suffix, $formula);
                     $this->getFilterGeonameUsage($highFilter, $questionnaire->getGeoname(), $rule, $part);
                 }
             }

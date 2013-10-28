@@ -1,10 +1,6 @@
 truncate -s 0 data/logs/all.log
 phing load-data -DdumpFile=../gims/population.backup.gz
 
-#time php htdocs/index.php import jmp data/cache/country_data/Country_data_Europe/Western_Europe/Germany_12.xlsm
-#time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/South_Eastern_Asia/Cambodia_12.xlsm
-#exit
-
 time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/South_Central_Asia/Bangladesh_12.xlsm
 
 # Reload partial dumps
@@ -37,8 +33,11 @@ time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/S
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('user_survey_id_seq', MAX(id) ) FROM user_survey;"
 
 # Import additional countries
-time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/South_Central_Asia/Afghanistan_12.xlsm
-time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/Western_Asia/Azerbaijan_12.xlsm
+time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/South_Central_Asia/Afghanistan_12.xlsm # for importing NULL instead of ignoring non-existing formulas
+time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/Western_Asia/Azerbaijan_12.xlsm   # for recursive formulas and interdependence during import
+time php htdocs/index.php import jmp data/cache/country_data/Country_data_Europe/Western_Europe/Germany_12.xlsm  # for developed countries rules
+time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/Western_Asia/Saudi_arabia_12.xlsm # for no urban/rural disaggregation rules
+
 #time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/South_Eastern_Asia/Cambodia_12.xlsm
 #time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/South_Eastern_Asia/Lao_people_dem_rep_12.xlsm
 

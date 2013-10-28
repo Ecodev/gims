@@ -2,6 +2,7 @@
 
 namespace Application\Service\Calculator;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Application\Model\Part;
 use Application\Model\FilterSet;
 use Application\Model\Filter;
@@ -61,17 +62,21 @@ class Jmp extends Calculator
      * @param array $questionnaires
      * @param \Application\Model\Part $part
      * @param array $parts
-     * @param \Application\Model\Rule\Rule $excludedRule
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return null|float
      */
-    public function computeFlattenOneYearWithFormula($year, array $years, Filter $filter, array $questionnaires, Part $part, array $parts, Rule $excludedRule = null)
+    public function computeFlattenOneYearWithFormula($year, array $years, Filter $filter, array $questionnaires, Part $part, array $parts, ArrayCollection $alreadyUsedRules = null)
     {
+        if (!$alreadyUsedRules) {
+            $alreadyUsedRules = new ArrayCollection();
+        }
+
         // If the filter has a formula, returns its value
         $usages = $questionnaires ? reset($questionnaires)->getGeoname()->getFilterGeonameUsages() : array();
         foreach ($usages as $filterGeonameUsage) {
             $rule = $filterGeonameUsage->getRule();
-            if ($rule !== $excludedRule && $filterGeonameUsage->getFilter() === $filter && $filterGeonameUsage->getPart() === $part) {
-                return $this->computeFormulaFlatten($rule, $year, $years, $filter, $questionnaires, $part, $parts);
+            if (!$alreadyUsedRules->contains($rule) && $filterGeonameUsage->getFilter() === $filter && $filterGeonameUsage->getPart() === $part) {
+                return $this->computeFormulaFlatten($rule, $year, $years, $filter, $questionnaires, $part, $parts, $alreadyUsedRules);
             }
         }
 
@@ -312,13 +317,22 @@ class Jmp extends Calculator
      * Compute the value of a formula based on GIMS syntax.
      * For details about syntax, @see \Application\Model\Rule\Rule
      * @param \Application\Model\Rule\Rule $rule
-     * @param \Application\Model\Part $part
+     * @param type $year
+     * @param array $years
      * @param \Application\Model\Filter $currentFilter
-     * @return mixed
-     * @throws \Exception
+     * @param array $questionnaires
+     * @param \Application\Model\Part $part
+     * @param array $parts
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
+     * @return null|float
      */
-    public function computeFormulaFlatten(Rule $rule, $year, array $years, Filter $currentFilter, array $questionnaires, Part $part, array $parts)
+    public function computeFormulaFlatten(Rule $rule, $year, array $years, Filter $currentFilter, array $questionnaires, Part $part, array $parts, ArrayCollection $alreadyUsedRules = null)
     {
+        if (!$alreadyUsedRules) {
+            $alreadyUsedRules = new ArrayCollection();
+        }
+        $alreadyUsedRules->add($rule);
+
         $originalFormula = $rule->getFormula();
 
         // Replace {F#12,Q#all} with a list of Filter values for all questionnaires
@@ -352,9 +366,10 @@ class Jmp extends Calculator
                 }, $convertedFormulas);
 
         // Replace {self} with computed value without this formula
-        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($rule, $year, $years, $currentFilter, $questionnaires, $part, $parts) {
+        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($year, $years, $currentFilter, $questionnaires, $part, $parts, $alreadyUsedRules) {
 
-                    $value = $this->computeFlattenOneYearWithFormula($year, $years, $currentFilter, $questionnaires, $part, $parts, $rule);
+
+                    $value = $this->computeFlattenOneYearWithFormula($year, $years, $currentFilter, $questionnaires, $part, $parts, $alreadyUsedRules);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
