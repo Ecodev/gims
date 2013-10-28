@@ -101,19 +101,10 @@ class Filter extends AbstractModel
      * Additional rules to apply to compute value
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="\Application\Model\Rule\FilterRule", mappedBy="filter")
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OneToMany(targetEntity="\Application\Model\Rule\FilterQuestionnaireUsage", mappedBy="filter")
+     * @ORM\OrderBy({"isSecondLevel" = "DESC", "sorting" = "ASC", "id" = "ASC"})
      */
-    private $filterRules;
-
-    /**
-     * Additional formulas to apply to compute regression lines
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="\Application\Model\Rule\FilterFormula", mappedBy="filter")
-     * @ORM\OrderBy({"id" = "ASC"})
-     */
-    private $filterFormulas;
+    private $filterQuestionnaireUsages;
 
     /**
      * Constructor
@@ -121,8 +112,7 @@ class Filter extends AbstractModel
      */
     public function __construct($name = null)
     {
-        $this->filterRules = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->filterFormulas = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->filterQuestionnaireUsages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->parents = new \Doctrine\Common\Collections\ArrayCollection();
         $this->summands = new \Doctrine\Common\Collections\ArrayCollection();
@@ -298,42 +288,20 @@ class Filter extends AbstractModel
      * Get rules
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getFilterRules()
+    public function getFilterQuestionnaireUsages()
     {
-        return $this->filterRules;
+        return $this->filterQuestionnaireUsages;
     }
 
     /**
-     * Notify the filter that it was added to FilterRule relation.
-     * This should only be called by FilterRule::setFilter()
-     * @param Rule\FilterRule $relation
+     * Notify the filter that it was added to FilterQuestionnaireUsage relation.
+     * This should only be called by FilterQuestionnaireUsage::setFilter()
+     * @param Rule\FilterQuestionnaireUsage $usage
      * @return Filter
      */
-    public function ruleAdded(Rule\FilterRule $relation)
+    public function filterQuestionnaireUsageAdded(Rule\FilterQuestionnaireUsage $usage)
     {
-        $this->getFilterRules()->add($relation);
-
-        return $this;
-    }
-
-    /**
-     * Get formulas
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getFilterFormulas()
-    {
-        return $this->filterFormulas;
-    }
-
-    /**
-     * Notify the filter that it was added to FilterFormula relation.
-     * This should only be called by FilterFormula::setFilter()
-     * @param Formula\FilterFormula $relation
-     * @return Filter
-     */
-    public function formulaAdded(Rule\FilterFormula $relation)
-    {
-        $this->getFilterFormulas()->add($relation);
+        $this->getFilterQuestionnaireUsages()->add($usage);
 
         return $this;
     }

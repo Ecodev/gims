@@ -9,7 +9,7 @@
             {
                 "Urban": 0.881,
                 "Rural": 0.541,
-                "Total": 0.614
+                "Total": 0.250
             }
         ]
     },
@@ -205,7 +205,7 @@
             {
                 "Urban": 0.146,
                 "Rural": 0.003,
-                "Total": 0.033
+                "Total": null
             }
         ]
     },
@@ -231,9 +231,9 @@
         },
         "values": [
             {
-                "Urban": 0.572,
-                "Rural": 0.366,
-                "Total": 0.410
+                "Urban": null,
+                "Rural": null,
+                "Total": null
             }
         ]
     },
@@ -245,9 +245,9 @@
         },
         "values": [
             {
-                "Urban": 0.308,
-                "Rural": 0.176,
-                "Total": 0.204
+                "Urban": null,
+                "Rural": null,
+                "Total": null
             }
         ]
     },
@@ -261,7 +261,7 @@
             {
                 "Urban": 0.458,
                 "Rural": 0.625,
-                "Total": 0.589
+                "Total": 0.605
             }
         ]
     },
@@ -653,7 +653,7 @@
             {
                 "Urban": 0.048,
                 "Rural": 0.334,
-                "Total": 0.273
+                "Total": 0.302
             }
         ]
     },

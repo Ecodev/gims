@@ -1,0 +1,204 @@
+{
+    "chart": {
+        "height": 600,
+        "animation": false
+    },
+    "title": {
+        "text": "Germany - Urban"
+    },
+    "subtitle": {
+        "text": "Estimated proportion of the population for Sanitation: use of improved facilities (JMP data)"
+    },
+    "xAxis": {
+        "title": {
+            "enabled": true,
+            "text": "Year"
+        },
+        "labels": {
+            "step": 1,
+            "format": "{value}"
+        },
+        "allowDecimals": false
+    },
+    "yAxis": {
+        "title": {
+            "enabled": true,
+            "text": "Coverage (%)"
+        },
+        "min": 0,
+        "max": 100
+    },
+    "credits": {
+        "enabled": false
+    },
+    "plotOptions": {
+        "line": {
+            "marker": {
+                "enabled": false
+            },
+            "tooltip": {
+                "headerFormat": "<span style=\"font-size: 10px\">Estimate for {point.key}<\/span><br\/>",
+                "valueSuffix": "%"
+            },
+            "pointStart": 1980,
+            "dataLabels": {
+                "enabled": false
+            }
+        },
+        "scatter": {
+            "dataLabels": {
+                "enabled": true
+            },
+            "tooltip": {
+                "headerFormat": "",
+                "pointFormat": "<b>{point.name}<\/b><br\/>{point.y}% ({point.x})"
+            },
+            "marker": {
+                "states": {
+                    "select": {
+                        "lineColor": "#DDD",
+                        "fillColor": "#DDD"
+                    }
+                }
+            }
+        }
+    },
+    "series": [
+        {
+            "name": "Improved + shared",
+            "data": [
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0
+            ],
+            "color": "#492970",
+            "type": "line"
+        },
+        {
+            "name": "Improved",
+            "data": [
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0,
+                100.0
+            ],
+            "color": "#77a1e5",
+            "type": "line"
+        },
+        {
+            "type": "scatter",
+            "color": "#492970",
+            "marker": {
+                "symbol": "circle"
+            },
+            "name": "Improved + shared",
+            "allowPointSelect": false,
+            "data": [
+                {
+                    "name": "ES98",
+                    "id": "274:43",
+                    "questionnaire": 43,
+                    "x": 1998,
+                    "y": 100.0
+                },
+                {
+                    "name": "ES01",
+                    "id": "274:47",
+                    "questionnaire": 47,
+                    "x": 2001,
+                    "y": 100.0
+                },
+                {
+                    "name": "SIS01",
+                    "id": "274:48",
+                    "questionnaire": 48,
+                    "x": 2001,
+                    "y": 100.0
+                },
+                {
+                    "name": "ES04",
+                    "id": "274:51",
+                    "questionnaire": 51,
+                    "x": 2004,
+                    "y": 100.0
+                },
+                {
+                    "name": "ES05",
+                    "id": "274:52",
+                    "questionnaire": 52,
+                    "x": 2005,
+                    "y": 100.0
+                }
+            ]
+        },
+        {
+            "type": "scatter",
+            "color": "#77a1e5",
+            "marker": {
+                "symbol": "square"
+            },
+            "name": "Improved",
+            "allowPointSelect": false,
+            "data": [
+
+            ]
+        }
+    ]
+}

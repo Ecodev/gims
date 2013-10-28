@@ -69,10 +69,10 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      * Additional formulas to compute interesting values which are not found in Filter tree
      *
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="\Application\Model\Rule\QuestionnaireFormula", mappedBy="questionnaire")
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OneToMany(targetEntity="\Application\Model\Rule\QuestionnaireUsage", mappedBy="questionnaire")
+     * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
      */
-    private $questionnaireFormulas;
+    private $questionnaireUsages;
 
     /**
      * Constructor
@@ -80,7 +80,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function __construct()
     {
         $this->answers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->questionnaireFormulas = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->questionnaireUsages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setStatus(QuestionnaireStatus::$NEW);
     }
 
@@ -313,22 +313,22 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getQuestionnaireFormulas()
+    public function getQuestionnaireUsages()
     {
-        return $this->questionnaireFormulas;
+        return $this->questionnaireUsages;
     }
 
     /**
-     * Notify the questionnaire that it has a new formula.
-     * This should only be called by QuestionnaireFormula::setQuestionnaire()
+     * Notify the questionnaire that it has a new rule.
+     * This should only be called by QuestionnaireUsage::setQuestionnaire()
      *
-     * @param Rule\QuestionnaireFormula $questionnaireFormula
+     * @param Rule\QuestionnaireUsage $questionnaireUsage
      *
      * @return Questionnaire
      */
-    public function questionnaireFormulaAdded(Rule\QuestionnaireFormula $questionnaireFormula)
+    public function questionnaireUsageAdded(Rule\QuestionnaireUsage $questionnaireUsage)
     {
-        $this->getQuestionnaireFormulas()->add($questionnaireFormula);
+        $this->getQuestionnaireUsages()->add($questionnaireUsage);
 
         return $this;
     }

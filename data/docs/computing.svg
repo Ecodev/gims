@@ -117,9 +117,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.60226478"
-     inkscape:cx="993.74896"
-     inkscape:cy="288.70401"
+     inkscape:zoom="1.2045296"
+     inkscape:cx="655.17709"
+     inkscape:cy="299.32763"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -984,7 +984,7 @@
          id="tspan4506"
          x="295.94012"
          y="43.357098"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;stroke:#d45500;font-family:Courier New;-inkscape-font-specification:Courier New">Exclude rules</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;stroke:#d45500;font-family:Courier New;-inkscape-font-specification:Courier New">Rules on Filter-Questionnaire (level 2)</tspan><tspan
          sodipodi:role="line"
          x="295.94012"
          y="58.357098"
@@ -1092,7 +1092,7 @@
          id="tspan3248"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Courier New;-inkscape-font-specification:Courier New"
          x="-224.63181"
-         y="146.22531">Filter Formulas</tspan><tspan
+         y="146.22531">Rules on Filter-Questionnaire (level 1)</tspan><tspan
          sodipodi:role="line"
          id="tspan3250"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Courier New;-inkscape-font-specification:Courier New"
@@ -1100,7 +1100,7 @@
          y="161.22531">Filter 3-3 is 30% of Filter 4-2</tspan></text>
     <path
        style="fill:none;stroke:#d45500;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend-1)"
-       d="M -41.070119,145.20639 C 232.7631,134.59691 202.85578,-139.57615 290.53613,-170.56267"
+       d="M -40.655019,133.1685 C 233.1782,122.55902 202.85578,-139.57615 290.53613,-170.56267"
        id="path4312-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -1156,7 +1156,7 @@
          id="tspan3248-9"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Courier New;-inkscape-font-specification:Courier New"
          x="-223.48615"
-         y="193.52002">Questionnaires Formulas</tspan><tspan
+         y="193.52002">Rules on Questionnaire</tspan><tspan
          sodipodi:role="line"
          id="tspan3250-8"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Courier New;-inkscape-font-specification:Courier New"
@@ -1173,7 +1173,7 @@
          id="tspan3248-5"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Courier New;-inkscape-font-specification:Courier New"
          x="1167.0358"
-         y="42.169209">Filter Formulas</tspan><tspan
+         y="42.169209">Rules on Filter</tspan><tspan
          sodipodi:role="line"
          id="tspan3250-1"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Courier New;-inkscape-font-specification:Courier New"

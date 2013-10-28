@@ -140,11 +140,20 @@ class Geoname extends AbstractModel
     private $moddate;
 
     /**
-     * @var \DateTime
+     * @var \CrEOF\Spatial\DBAL\Types\GeometryType
      *
      * @ORM\Column(type="geometry", nullable=true)
      */
     private $geometry;
+
+    /**
+     * Additional formulas to apply to compute regression lines
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="\Application\Model\Rule\FilterGeonameUsage", mappedBy="geoname")
+     * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
+     */
+    private $filterGeonameUsages;
 
     /**
      * Constructor
@@ -152,6 +161,7 @@ class Geoname extends AbstractModel
      */
     public function __construct($name = null)
     {
+        $this->filterGeonameUsages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setName($name);
     }
 
@@ -577,6 +587,28 @@ class Geoname extends AbstractModel
     public function getModdate()
     {
         return $this->moddate;
+    }
+
+    /**
+     * Get formulas
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getFilterGeonameUsages()
+    {
+        return $this->filterGeonameUsages;
+    }
+
+    /**
+     * Notify the Geoname that it was added to FilterGeonameUsage relation.
+     * This should only be called by FilterGeonameUsage::setGeoname()
+     * @param Rule\FilterGeonameUsage $usage
+     * @return Filter
+     */
+    public function filterGeonameUsageAdded(Rule\FilterGeonameUsage $usage)
+    {
+        $this->getFilterGeonameUsages()->add($usage);
+
+        return $this;
     }
 
 }

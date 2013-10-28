@@ -67,7 +67,7 @@ STRING;
         $database = $dbConfig['dbname'];
 
         echo "dumping $dumpFile...\n";
-        $dumpCmd = "pg_dump --host localhost --username $username --format=custom $database | gzip > $dumpFile";
+        $dumpCmd = "pg_dump --host localhost --username $username --format=custom $database | gzip > \"$dumpFile\"";
         exec($dumpCmd);
     }
 
@@ -104,7 +104,7 @@ STRING;
         self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP RULE IF EXISTS geometry_columns_delete ON geometry_columns CASCADE;"');
         self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP RULE IF EXISTS geometry_columns_insert ON geometry_columns CASCADE;"');
         self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP RULE IF EXISTS geometry_columns_update ON geometry_columns CASCADE;"');
-        self::executeLocalCommand("gunzip -c $dumpFile | pg_restore --host localhost --username $username --no-owner --dbname=$database");
+        self::executeLocalCommand("gunzip -c \"$dumpFile\" | pg_restore --host localhost --username $username --no-owner --dbname=$database");
         self::executeLocalCommand('./vendor/bin/doctrine-module migrations:migrate --no-interaction');
     }
 

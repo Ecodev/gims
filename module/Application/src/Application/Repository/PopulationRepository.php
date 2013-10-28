@@ -5,35 +5,32 @@ namespace Application\Repository;
 class PopulationRepository extends AbstractRepository
 {
 
+    private $cache = array();
+
     /**
      * Returns the population for given questionnaire and part
      * @param \Application\Model\Questionnaire $questionnaire
-     * @param \Application\Model\Part $part
+     * @param integer $partId
      * @return \Application\Model\Population
      */
-    public function getOneByQuestionnaire(\Application\Model\Questionnaire $questionnaire, \Application\Model\Part $part)
+    public function getOneByQuestionnaire(\Application\Model\Questionnaire $questionnaire, $partId)
     {
-        $query = $this->getEntityManager()->createQuery("SELECT p FROM Application\Model\Population p
-            JOIN p.country c
-            JOIN c.geoname g
-            JOIN Application\Model\Questionnaire q
-            WHERE
-            q.geoname = g
-            AND q = :questionnaire
-            AND p.year = :year
-            AND p.part = :part"
-        );
+        if (!isset($this->cache[$questionnaire->getGeoname()->getId()])) {
 
-        $params = array(
-            'questionnaire' => $questionnaire,
-            'year' => $questionnaire->getSurvey()->getYear(),
-            'part' => $part,
-        );
+            $query = $this->getEntityManager()->createQuery("SELECT p FROM Application\Model\Population p
+        JOIN p.country c WITH c.geoname = :geoname"
+            );
 
-        $query->setParameters($params);
-        $population = $query->getOneOrNullResult();
+            $query->setParameters(array(
+                'geoname' => $questionnaire->getGeoname(),
+            ));
 
-        return $population;
+            foreach ($query->getResult() as $p) {
+                $this->cache[$questionnaire->getGeoname()->getId()][$p->getYear()][$p->getPart()->getId()] = $p;
+            }
+        }
+
+        return $this->cache[$questionnaire->getGeoname()->getId()][$questionnaire->getSurvey()->getYear()][$partId];
     }
 
     /**

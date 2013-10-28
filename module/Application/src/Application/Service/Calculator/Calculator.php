@@ -3,14 +3,7 @@
 namespace Application\Service\Calculator;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Application\Model\Filter;
-use Application\Model\FilterSet;
-use Application\Model\Answer;
-use Application\Model\Part;
-use Application\Model\NumericQuestion;
-use Application\Model\Questionnaire;
-use Application\Model\Rule\Formula;
-use Application\Model\Rule\AbstractFormulaUsage;
+use Application\Model\Rule\AbstractQuestionnaireUsage;
 
 /**
  * Common base class for various computation. It includes a local instance cache.
@@ -28,12 +21,12 @@ use \Application\Traits\EntityManagerAware;
     private $cacheComputeFilter = array();
     protected $excludedFilters = array();
     private $populationRepository;
-    private $questionnaireFormulaRepository;
+    private $questionnaireUsageRepository;
     private $filterRepository;
     private $questionnaireRepository;
     private $partRepository;
     private $answerRepository;
-    private $filterRuleRepository;
+    private $filterQuestionnaireUsageRepository;
 
     /**
      * Set the population repository
@@ -61,28 +54,28 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
-     * Set the questionnaireformula repository
-     * @param \Application\Repository\questionnaireFormulaRepository $questionnaireFormulaRepository
+     * Set the questionnaireusage repository
+     * @param \Application\Repository\Rule\QuestionnaireUsageRepository $questionnaireUsageRepository
      * @return \Application\Service\Calculator\Calculator
      */
-    public function setQuestionnaireFormulaRepository(\Application\Repository\questionnaireFormulaRepository $questionnaireFormulaRepository)
+    public function setQuestionnaireUsageRepository(\Application\Repository\Rule\QuestionnaireUsageRepository $questionnaireUsageRepository)
     {
-        $this->questionnaireFormulaRepository = $questionnaireFormulaRepository;
+        $this->questionnaireUsageRepository = $questionnaireUsageRepository;
 
         return $this;
     }
 
     /**
-     * Get the questionnaireformula repository
-     * @return \Application\Repository\questionnaireFormulaRepository
+     * Get the questionnaireusage repository
+     * @return \Application\Repository\Rule\QuestionnaireUsageRepository
      */
-    public function getQuestionnaireFormulaRepository()
+    public function getQuestionnaireUsageRepository()
     {
-        if (!$this->questionnaireFormulaRepository) {
-            $this->questionnaireFormulaRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireFormula');
+        if (!$this->questionnaireUsageRepository) {
+            $this->questionnaireUsageRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireUsage');
         }
 
-        return $this->questionnaireFormulaRepository;
+        return $this->questionnaireUsageRepository;
     }
 
     /**
@@ -186,128 +179,124 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
-     * Set the filterRule repository
-     * @param \Application\Repository\FilterRuleRepository $filterRuleRepository
+     * Set the filterQuestionnaireUsage repository
+     * @param \Application\Repository\Rule\FilterQuestionnaireUsageRepository $filterQuestionnaireUsageRepository
      * @return \Application\Service\Calculator\Calculator
      */
-    public function setFilterRuleRepository(\Application\Repository\FilterRuleRepository $filterRuleRepository)
+    public function setFilterQuestionnaireUsageRepository(\Application\Repository\Rule\FilterQuestionnaireUsageRepository $filterQuestionnaireUsageRepository)
     {
-        $this->filterRuleRepository = $filterRuleRepository;
+        $this->filterQuestionnaireUsageRepository = $filterQuestionnaireUsageRepository;
 
         return $this;
     }
 
     /**
-     * Get the filterRule repository
-     * @return \Application\Repository\FilterRuleRepository
+     * Get the filterQuestionnaireUsage repository
+     * @return \Application\Repository\Rule\FilterQuestionnaireUsageRepository
      */
-    public function getFilterRuleRepository()
+    public function getFilterQuestionnaireUsageRepository()
     {
-        if (!$this->filterRuleRepository) {
-            $this->filterRuleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterRule');
+        if (!$this->filterQuestionnaireUsageRepository) {
+            $this->filterQuestionnaireUsageRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterQuestionnaireUsage');
         }
 
-        return $this->filterRuleRepository;
-    }
-
-    /**
-     * Returns a unique identifying all arguments, so we can use the result as cache key
-     * @param array $args
-     * @return string
-     */
-    protected function getCacheKey(array $args)
-    {
-        $key = '';
-        foreach ($args as $arg) {
-            if (is_null($arg))
-                $key .= '[[NULL]]';
-            else if (is_object($arg))
-                $key .= spl_object_hash($arg);
-            else if (is_array($arg))
-                $key .= $this->getCacheKey($arg);
-            else
-                $key .= $arg;
-        }
-
-        return $key;
+        return $this->filterQuestionnaireUsageRepository;
     }
 
     /**
      * Returns the computed value of the given filter, based on the questionnaire's available answers
-     * @param \Application\Model\Filter $filter
-     * @param \Application\Model\Questionnaire $questionnaire
-     * @param \Application\Model\Part $part
+     * @param integer $filterId
+     * @param integer $questionnaireId
+     * @param integer $partId
+     * @param boolean $useSecondLevelRules
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
      * @return float|null null if no answer at all, otherwise the percentage value
      */
-    public function computeFilter(Filter $filter, Questionnaire $questionnaire, Part $part, ArrayCollection $alreadyUsedFormulas = null)
+    public function computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules = false, ArrayCollection $alreadyUsedFormulas = null)
     {
-        $key = $this->getCacheKey(func_get_args());
+        _log()->debug(__FUNCTION__, array('start', $filterId, $questionnaireId, $partId));
+        $key = \Application\Utility::getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheComputeFilter)) {
             return $this->cacheComputeFilter[$key];
         }
+
         if (!$alreadyUsedFormulas)
             $alreadyUsedFormulas = new ArrayCollection();
 
-        $result = $this->computeFilterInternal($filter, $questionnaire, $part, $alreadyUsedFormulas, new ArrayCollection());
+        $result = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, new ArrayCollection());
 
         $this->cacheComputeFilter[$key] = $result;
-
+        _log()->debug(__FUNCTION__, array('end', $filterId, $questionnaireId, $partId, $result));
         return $result;
     }
 
     /**
      * Returns the computed value of the given filter, based on the questionnaire's available answers
-     * @param \Application\Model\Filter $filter
-     * @param \Application\Model\Questionnaire $questionnaire
-     * @param \Application\Model\Part $part
+     * @param integer $filterId
+     * @param integer $questionnaireId
+     * @param integer $partId
+     * @param boolean $useSecondLevelRules
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas already used formula to be exclude when computing
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters will be used to avoid duplicates
      * @return float|null null if no answer at all, otherwise the percentage value
      */
-    private function computeFilterInternal(Filter $filter, Questionnaire $questionnaire, Part $part, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
+    private function computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
         // @todo for sylvain: the logic goes as follows: if the filter id is contained within excludeFilters, skip calculation.
-        if (in_array($filter->getId(), $this->excludedFilters)) {
+        if (in_array($filterId, $this->excludedFilters)) {
             return null;
         }
+
         // Avoid duplicates
-        if ($alreadySummedFilters->contains($filter)) {
+        if ($alreadySummedFilters->contains($filterId)) {
             return null;
         } else {
-            $alreadySummedFilters->add($filter);
+            $alreadySummedFilters->add($filterId);
         }
 
         // If the filter have a specified answer, returns it (skip all computation)
-        $answerValue = $this->getAnswerRepository()->getValuePercent($questionnaire, $filter, $part);
+        $answerValue = $this->getAnswerRepository()->getValuePercent($questionnaireId, $filterId, $partId);
         if (!is_null($answerValue)) {
             return $answerValue;
         }
 
         // If the filter has a formula, returns its value
-        $filterRule = $this->getFilterRuleRepository()->getFirstWithFormula($questionnaire, $filter, $part, $alreadyUsedFormulas);
-        if ($filterRule) {
-            return $this->computeFormula($filterRule, $alreadyUsedFormulas);
+        $filterQuestionnaireUsage = $this->getFilterQuestionnaireUsageRepository()->getFirst($questionnaireId, $filterId, $partId, $useSecondLevelRules, $alreadyUsedFormulas);
+        if ($filterQuestionnaireUsage) {
+            return $this->computeFormula($filterQuestionnaireUsage, $alreadyUsedFormulas, $useSecondLevelRules);
         }
 
-        // Summer to sum values of given filters, but only if non-null (to preserve null value if no answer at all)
-        $summer = function(\IteratorAggregate $filters) use ($questionnaire, $part, $alreadySummedFilters, $alreadyUsedFormulas) {
-                    $sum = null;
-                    foreach ($filters as $f) {
-                        $summandValue = $this->computeFilterInternal($f, $questionnaire, $part, $alreadyUsedFormulas, $alreadySummedFilters);
-                        if (!is_null($summandValue)) {
-                            $sum += $summandValue;
-                        }
-                    }
-
-                    return $sum;
-                };
-
         // First, attempt to sum summands
-        $sum = $summer($filter->getSummands());
+        $summandIds = $this->getFilterRepository()->getSummandIds($filterId);
+        $sum = $this->summer($summandIds, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, $alreadySummedFilters);
 
         // If no sum so far, we use children instead. This is "normal case"
         if (is_null($sum)) {
-            $sum = $summer($filter->getChildren());
+            $childrenIds = $this->getFilterRepository()->getChildrenIds($filterId);
+            $sum = $this->summer($childrenIds, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, $alreadySummedFilters);
+        }
+
+        return $sum;
+    }
+
+    /**
+     * Summer to sum values of given filters, but only if non-null (to preserve null value if no answer at all)
+     * @param \IteratorAggregate $filterIds
+     * @param integer $questionnaireId
+     * @param integer $partId
+     * @param boolean $useSecondLevelRules
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters
+     * @return float|null
+     */
+    private function summer(array $filterIds, $questionnaireId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
+    {
+        $sum = null;
+        foreach ($filterIds as $filterId) {
+            $summandValue = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, $alreadySummedFilters);
+            if (!is_null($summandValue)) {
+                $sum += $summandValue;
+            }
         }
 
         return $sum;
@@ -315,100 +304,107 @@ use \Application\Traits\EntityManagerAware;
 
     /**
      * Compute the value of a formula based on GIMS syntax.
-     * For details about syntax, @see \Application\Model\Rule\Formula
-     * @param \Application\Model\Rule\AbstractFormulaUsage $usage
-     * @return mixed
+     * For details about syntax, @see \Application\Model\Rule\Rule
+     * @param \Application\Model\Rule\AbstractQuestionnaireUsage $usage
+     * @param boolean $useSecondLevelRules
+     * @return null|float
      * @throws \Exception
      */
-    public function computeFormula(AbstractFormulaUsage $usage, ArrayCollection $alreadyUsedFormulas = null)
+    public function computeFormula(AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas = null, $useSecondLevelRules = false)
     {
         if (!$alreadyUsedFormulas) {
             $alreadyUsedFormulas = new ArrayCollection();
         }
 
         $alreadyUsedFormulas->add($usage);
-        $formula = $usage->getFormula();
-        $currentQuestionnaire = $usage->getQuestionnaire();
-        $currentPart = $usage->getPart();
-        $currentFilter = $usage->getFilter();
+        $originalFormula = $usage->getRule()->getFormula();
 
-        $originalFormula = $formula->getFormula();
+        _log()->debug(__FUNCTION__, array($usage->getId(), $originalFormula));
 
         // Replace {F#12,Q#34,P#56} with Filter value
-        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($currentFilter, $currentQuestionnaire, $currentPart, $alreadyUsedFormulas) {
+        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage, $alreadyUsedFormulas, $useSecondLevelRules) {
                     $filterId = $matches[1];
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
 
-                    $filter = $filterId == 'current' ? $currentFilter : $this->getFilterRepository()->findOneById($filterId);
-                    $questionnaire = $questionnaireId == 'current' ? $currentQuestionnaire : $this->getQuestionnaireRepository()->findOneById($questionnaireId);
-                    $part = $partId == 'current' ? $currentPart : $this->getPartRepository()->findOneById($partId);
+                    if ($filterId == 'current') {
+                        $filterId = $usage->getFilter()->getId();
+                    }
 
-                    $value = $this->computeFilter($filter, $questionnaire, $part, $alreadyUsedFormulas);
+                    if ($questionnaireId == 'current') {
+                        $questionnaireId = $usage->getQuestionnaire()->getId();
+                    }
+
+                    if ($partId == 'current') {
+                        $partId = $usage->getPart()->getId();
+                    }
+
+                    $value = $this->computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $originalFormula);
 
         // Replace {F#12,Q#34} with Unofficial Filter name, or NULL if no Unofficial Filter
-        $convertedFormulas = preg_replace_callback('/\{F#(\d+),Q#(\d+|current)\}/', function($matches) use ($currentQuestionnaire) {
+        $convertedFormulas = preg_replace_callback('/\{F#(\d+),Q#(\d+|current)\}/', function($matches) use ($usage) {
                     $officialFilterId = $matches[1];
                     $questionnaireId = $matches[2];
 
-                    $questionnaire = $questionnaireId == 'current' ? $currentQuestionnaire->getId() : $questionnaireId;
+                    if ($questionnaireId == 'current') {
+                        $questionnaireId = $usage->getQuestionnaire()->getId();
+                    }
 
-                    $unofficialFilter = $this->getFilterRepository()->findOneBy(array(
-                        'officialFilter' => $officialFilterId,
-                        'questionnaire' => $questionnaire,
-                    ));
-
-                    if ($unofficialFilter) {
-                        // Format string for Excel formula
-                        return '"' . str_replace('"', '""', $unofficialFilter->getName()) . '"';
-                    } else {
+                    $unofficialFilterName = $this->getFilterRepository()->getUnofficialName($officialFilterId, $questionnaireId);
+                    if (is_null($unofficialFilterName)) {
                         return 'NULL';
+                    } else {
+                        // Format string for Excel formula
+                        return '"' . str_replace('"', '""', $unofficialFilterName) . '"';
                     }
                 }, $convertedFormulas);
 
-        // Replace {Fo#12,Q#34,P#56} with QuestionnaireFormula value
-        $convertedFormulas = preg_replace_callback('/\{Fo#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($currentFilter, $currentQuestionnaire, $currentPart, $formula, $originalFormula, $alreadyUsedFormulas) {
-                    $formulaId = $matches[1];
+        // Replace {R#12,Q#34,P#56} with QuestionnaireUsage value
+        $convertedFormulas = preg_replace_callback('/\{R#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage, $alreadyUsedFormulas) {
+                    $ruleId = $matches[1];
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
 
-                    $questionnaire = $questionnaireId == 'current' ? $currentQuestionnaire->getId() : $questionnaireId;
-                    $part = $partId == 'current' ? $currentPart->getId() : $partId;
-
-                    $criteria = array(
-                        'formula' => $formulaId,
-                        'questionnaire' => $questionnaire,
-                        'part' => $part,
-                    );
-                    $questionnaireFormula = $this->getQuestionnaireFormulaRepository()->findOneBy($criteria);
-
-                    if (!$questionnaireFormula) {
-                        throw new \Exception('Reference to non existing QuestionnaireFormula ' . $matches[0] . ' with ' . var_export($criteria, true) . ' in  Formula#' . $formula->getId() . ', "' . $formula->getName() . '": ' . $originalFormula);
+                    if ($questionnaireId == 'current') {
+                        $questionnaireId = $usage->getQuestionnaire()->getId();
                     }
 
-                    $value = $this->computeFormula($questionnaireFormula, $alreadyUsedFormulas);
+                    if ($partId == 'current') {
+                        $partId = $usage->getPart()->getId();
+                    }
+
+                    $questionnaireUsage = $this->getQuestionnaireUsageRepository()->getOneByQuestionnaire($questionnaireId, $partId, $ruleId);
+
+                    if (!$questionnaireUsage) {
+                        throw new \Exception('Reference to non existing QuestionnaireUsage ' . $matches[0] . ' in  Rule#' . $usage->getRule()->getId() . ', "' . $usage->getRule()->getName() . '": ' . $usage->getRule()->getFormula());
+                    }
+
+                    $value = $this->computeFormula($questionnaireUsage, $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
 
         // Replace {Q#34,P#56} with population data
-        $convertedFormulas = preg_replace_callback('/\{Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($currentQuestionnaire, $currentPart) {
+        $convertedFormulas = preg_replace_callback('/\{Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage) {
                     $questionnaireId = $matches[1];
                     $partId = $matches[2];
 
-                    $questionnaire = $this->getQuestionnaireRepository()->findOneById($questionnaireId == 'current' ? $currentQuestionnaire : $questionnaireId);
-                    $part = $this->getPartRepository()->findOneById($partId == 'current' ? $currentPart : $partId);
+                    $questionnaire = $questionnaireId == 'current' ? $usage->getQuestionnaire() : $this->getQuestionnaireRepository()->findOneById($questionnaireId);
 
-                    return $this->getPopulationRepository()->getOneByQuestionnaire($questionnaire, $part)->getPopulation();
+                    if ($partId == 'current') {
+                        $partId = $usage->getPart()->getId();
+                    }
+
+                    return $this->getPopulationRepository()->getOneByQuestionnaire($questionnaire, $partId)->getPopulation();
                 }, $convertedFormulas);
 
         // Replace {self} with computed value without this formula
-        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($currentFilter, $currentQuestionnaire, $currentPart, $alreadyUsedFormulas) {
+        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($usage, $alreadyUsedFormulas, $useSecondLevelRules) {
 
-                    $value = $this->computeFilter($currentFilter, $currentQuestionnaire, $currentPart, $alreadyUsedFormulas);
+                    $value = $this->computeFilter($usage->getFilter()->getId(), $usage->getQuestionnaire()->getId(), $usage->getPart()->getId(), $useSecondLevelRules, $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
@@ -422,6 +418,7 @@ use \Application\Traits\EntityManagerAware;
             $result = null;
         }
 
+        _log()->debug(__FUNCTION__, array($usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormulas, $result));
         return $result;
     }
 

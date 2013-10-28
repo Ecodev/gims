@@ -8,12 +8,12 @@ class JmpTest extends AbstractCalculator
     /**
      * @var \Application\Model\Part
      */
-    private $part1;
+    private $part2;
 
     /**
      * @var \Application\Model\Part
      */
-    private $part2;
+    private $partTotal;
 
     /**
      * @var \Application\Model\FilterSet
@@ -36,10 +36,7 @@ class JmpTest extends AbstractCalculator
 
         // Define a second questionnaire with answers for leaf filters only
         // Create a stub for the Questionnaire class with fake ID, so we don't have to mess with database
-        $questionnaire2 = $this->getMock('\Application\Model\Questionnaire', array('getId'));
-        $questionnaire2->expects($this->any())
-                ->method('getId')
-                ->will($this->returnValue(2));
+        $questionnaire2 = $this->getNewModelWithId('\Application\Model\Questionnaire');
 
         $survey2 = new \Application\Model\Survey();
         $survey2->setCode('tst 2')->setName('Test survey 2')->setYear(2005);
@@ -54,8 +51,8 @@ class JmpTest extends AbstractCalculator
         $answer131 = new \Application\Model\Answer();
         $answer32 = new \Application\Model\Answer();
 
-        $answer131->setPart($this->part)->setQuestionnaire($questionnaire2)->setQuestion($question131)->setValuePercent(0.1);
-        $answer32->setPart($this->part)->setQuestionnaire($questionnaire2)->setQuestion($question32)->setValuePercent(0.000001);
+        $answer131->setPart($this->part1)->setQuestionnaire($questionnaire2)->setQuestion($question131)->setValuePercent(0.1);
+        $answer32->setPart($this->part1)->setQuestionnaire($questionnaire2)->setQuestion($question32)->setValuePercent(0.000001);
 
         $this->questionnaires = array($this->questionnaire, $questionnaire2);
 
@@ -64,8 +61,8 @@ class JmpTest extends AbstractCalculator
                 ->addFilter($this->highFilter2)
                 ->addFilter($this->highFilter3);
 
-        $this->part1 = new \Application\Model\Part('tst part 1');
-        $this->part2 = new \Application\Model\Part('tst part 2');
+        $this->part2 = $this->getNewModelWithId('\Application\Model\Part')->setName('tst part 2');
+        $this->partTotal = $this->getNewModelWithId('\Application\Model\Part', array('isTotal' => $this->returnValue(true)))->setName('tst part total');
 
         // Create a stub for the PartRepository class, so we don't have to mess with database
         $stubPartRepository = $this->getMock('\Application\Repository\PartRepository', array('getAllNonTotal'), array(), '', false);
@@ -78,30 +75,32 @@ class JmpTest extends AbstractCalculator
         $stubPopulationRepository->expects($this->any())
                 ->method('getOneByGeoname')
                 ->will($this->returnValueMap(array(
-                            array($this->geoname, $this->part, 2000, (new \Application\Model\Population())->setPopulation(10)),
-                            array($this->geoname, $this->part, 2001, (new \Application\Model\Population())->setPopulation(10)),
-                            array($this->geoname, $this->part, 2005, (new \Application\Model\Population())->setPopulation(15)),
-                            array($this->geoname, $this->part1, 2000, (new \Application\Model\Population())->setPopulation(3)),
-                            array($this->geoname, $this->part1, 2001, (new \Application\Model\Population())->setPopulation(3)),
-                            array($this->geoname, $this->part1, 2005, (new \Application\Model\Population())->setPopulation(3)),
-                            array($this->geoname, $this->part2, 2000, (new \Application\Model\Population())->setPopulation(7)),
-                            array($this->geoname, $this->part2, 2001, (new \Application\Model\Population())->setPopulation(7)),
-                            array($this->geoname, $this->part2, 2005, (new \Application\Model\Population())->setPopulation(12)),
+                            array($this->geoname, $this->part1, 2000, (new \Application\Model\Population())->setPopulation(10)),
+                            array($this->geoname, $this->part1, 2001, (new \Application\Model\Population())->setPopulation(10)),
+                            array($this->geoname, $this->part1, 2005, (new \Application\Model\Population())->setPopulation(15)),
+                            array($this->geoname, $this->part2, 2000, (new \Application\Model\Population())->setPopulation(3)),
+                            array($this->geoname, $this->part2, 2001, (new \Application\Model\Population())->setPopulation(3)),
+                            array($this->geoname, $this->part2, 2005, (new \Application\Model\Population())->setPopulation(3)),
+                            array($this->geoname, $this->partTotal, 2000, (new \Application\Model\Population())->setPopulation(7)),
+                            array($this->geoname, $this->partTotal, 2001, (new \Application\Model\Population())->setPopulation(7)),
+                            array($this->geoname, $this->partTotal, 2005, (new \Application\Model\Population())->setPopulation(12)),
         )));
 
-        $this->assertEquals(10, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part, 2000)->getPopulation());
-        $this->assertEquals(3, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part1, 2000)->getPopulation());
-        $this->assertEquals(7, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part2, 2000)->getPopulation());
+        $this->assertEquals(10, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part1, 2000)->getPopulation());
+        $this->assertEquals(3, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part2, 2000)->getPopulation());
+        $this->assertEquals(7, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->partTotal, 2000)->getPopulation());
 
-        $this->assertEquals(15, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part, 2005)->getPopulation());
-        $this->assertEquals(3, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part1, 2005)->getPopulation());
-        $this->assertEquals(12, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part2, 2005)->getPopulation());
+        $this->assertEquals(15, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part1, 2005)->getPopulation());
+        $this->assertEquals(3, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part2, 2005)->getPopulation());
+        $this->assertEquals(12, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->partTotal, 2005)->getPopulation());
 
         $this->service = new \Application\Service\Calculator\Jmp();
         $this->service->setPopulationRepository($stubPopulationRepository);
         $this->service->setPartRepository($stubPartRepository);
         $this->service->setAnswerRepository($this->getStubAnswerRepository());
-        $this->service->setFilterRuleRepository($this->getStubFilterRuleRepository());
+        $this->service->setFilterRepository($this->getStubFilterRepository());
+        $this->service->setFilterQuestionnaireUsageRepository($this->getStubFilterQuestionnaireUsageRepository());
+        $this->service->setQuestionnaireRepository($this->getStubQuestionnaireRepository());
         $this->service2 = clone $this->service;
     }
 
@@ -128,7 +127,7 @@ class JmpTest extends AbstractCalculator
                 1 => 'tst 1',
                 2 => 'tst 2',
             ),
-                ), $this->service->computeFilterForAllQuestionnaires($this->highFilter1, $this->questionnaires, $this->part));
+                ), $this->service->computeFilterForAllQuestionnaires($this->highFilter1, $this->questionnaires, $this->part1));
 
         $this->assertEquals(array(
             'values' => array(),
@@ -140,7 +139,7 @@ class JmpTest extends AbstractCalculator
             'slope' => null,
             'average' => null,
             'surveys' => array(),
-                ), $this->service->computeFilterForAllQuestionnaires($this->highFilter1, array(), $this->part), 'no questionnaires should still return valid structure');
+                ), $this->service->computeFilterForAllQuestionnaires($this->highFilter1, array(), $this->part1), 'no questionnaires should still return valid structure');
     }
 
     /**
@@ -164,14 +163,14 @@ class JmpTest extends AbstractCalculator
      */
     public function testComputeRegressionForUnknownYears($year, $expected)
     {
-        $this->assertEquals($expected, $this->service->computeRegressionOneYear($year, $this->highFilter1, $this->questionnaires, $this->part), 'regression between known years according');
-        $this->assertNull($this->service->computeRegressionOneYear($year, $this->highFilter1, array(), $this->part), 'no questionnaires should still return valid structure');
+        $this->assertEquals($expected, $this->service->computeRegressionOneYear($year, $this->highFilter1, $this->questionnaires, $this->part1), 'regression between known years according');
+        $this->assertNull($this->service->computeRegressionOneYear($year, $this->highFilter1, array(), $this->part1), 'no questionnaires should still return valid structure');
     }
 
     public function testComputeRegressionForShortPeriod()
     {
         $this->questionnaire->getSurvey()->setYear(2003);
-        $this->assertEquals(0.105556, $this->service->computeRegressionOneYear(2004, $this->highFilter3, $this->questionnaires, $this->part), 'regression between known years according');
+        $this->assertEquals(0.105556, $this->service->computeRegressionOneYear(2004, $this->highFilter3, $this->questionnaires, $this->part1), 'regression between known years according');
     }
 
     public function computeFlattenOneYearProvider()
@@ -454,20 +453,21 @@ class JmpTest extends AbstractCalculator
      */
     public function testComputeFlatten($yearStart, $yearEnd, $useQuestionnaires, $expected)
     {
-        $this->assertEquals($expected, $this->service->computeFlattenAllYears($yearStart, $yearEnd, $this->filterSet, $useQuestionnaires ? $this->questionnaires : array(), $this->part));
+        $actual = $this->service->computeFlattenAllYears($yearStart, $yearEnd, $this->filterSet, $useQuestionnaires ? $this->questionnaires : array(), $this->part1);
+        $this->assertEquals($expected, $actual);
     }
 
     public function testCacheOnFilterForAllQuestionnaire()
     {
         $tmp = $this->flattenProvider();
         $data = reset($tmp);
-        $res1 = $this->service->computeFlattenAllYears($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part);
+        $res1 = $this->service->computeFlattenAllYears($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part1);
 
         $this->answer131->setValuePercent((0.2));
-        $res2 = $this->service->computeFlattenAllYears($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part);
+        $res2 = $this->service->computeFlattenAllYears($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part1);
         $this->assertEquals($res1, $res2, 'result should be cached and therefore be the same');
 
-        $res3 = $this->service2->computeFlattenAllYears($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part);
+        $res3 = $this->service2->computeFlattenAllYears($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part1);
 
         $this->assertNotEquals($res1, $res3, 'after clearing cache, result differs');
         $this->assertEquals(array(
@@ -512,19 +512,22 @@ class JmpTest extends AbstractCalculator
 
     public function testExcludeRules()
     {
-        $exclude = new \Application\Model\Rule\Exclude();
+        $exclude = new \Application\Model\Rule\Rule();
+        $exclude->setFormula('=NULL');
 
-        $filterRule = new \Application\Model\Rule\FilterRule();
-        $filterRule->setPart($this->part)->setQuestionnaire($this->questionnaire)->setRule($exclude)->setFilter($this->filter1);
+        $filterQuestionnaireUsage = new \Application\Model\Rule\FilterQuestionnaireUsage();
+        $filterQuestionnaireUsage->setPart($this->part1)->setQuestionnaire($this->questionnaire)->setRule($exclude)->setFilter($this->filter1);
 
         $this->assertEquals(array(
             'values' =>
             array(
+                1 => null,
                 2 => 0.1,
             ),
             'count' => 1,
             'years' =>
             array(
+                1 => 2000,
                 2 => 2005,
             ),
             'minYear' => 2005,
@@ -533,26 +536,27 @@ class JmpTest extends AbstractCalculator
             'slope' => null,
             'average' => 0.1,
             'surveys' => array(
+                1 => 'tst 1',
                 2 => 'tst 2',
             ),
-                ), $this->service->computeFilterForAllQuestionnaires($this->filter1, $this->questionnaires, $this->part));
+                ), $this->service->computeFilterForAllQuestionnaires($this->filter1, $this->questionnaires, $this->part1));
     }
 
     public function testComplementaryTotal()
     {
-        $this->answer131->setPart($this->part1);
-        $this->answer132->setPart($this->part2);
+        $this->answer131->setPart($this->part2);
+        $this->answer132->setPart($this->partTotal);
 
         $r1 = $this->service->computeFlattenAllYears(2000, 2001, $this->filterSet, $this->questionnaires, $this->part1);
         $r2 = $this->service->computeFlattenAllYears(2000, 2001, $this->filterSet, $this->questionnaires, $this->part2);
-        $rt = $this->service->computeFlattenAllYears(2000, 2001, $this->filterSet, $this->questionnaires, $this->part);
+        $rt = $this->service->computeFlattenAllYears(2000, 2001, $this->filterSet, $this->questionnaires, $this->partTotal);
 
         $this->assertEquals(array(
             array(
                 'name' => 'improved',
                 'data' => array(
-                    0 => 0.1,
-                    1 => 0.1,
+                    0 => 0.001100000000001,
+                    1 => 0.020880000000005,
                 ),
             ),
             array(
@@ -565,8 +569,8 @@ class JmpTest extends AbstractCalculator
             array(
                 'name' => 'total',
                 'data' => array(
-                    0 => 0.1,
-                    1 => 0.1,
+                    0 => 0.0011109999999945,
+                    1 => 0.020888999999997,
                 ),
             ),
                 ), $r1);
@@ -575,8 +579,8 @@ class JmpTest extends AbstractCalculator
             array(
                 'name' => 'improved',
                 'data' => array(
-                    0 => 0.01,
-                    1 => 0.01,
+                    0 => 0.1,
+                    1 => 0.1,
                 ),
             ),
             array(
@@ -589,8 +593,8 @@ class JmpTest extends AbstractCalculator
             array(
                 'name' => 'total',
                 'data' => array(
-                    0 => 0.01,
-                    1 => 0.01,
+                    0 => 0.1,
+                    1 => 0.1,
                 ),
             ),
                 ), $r2);
@@ -599,8 +603,8 @@ class JmpTest extends AbstractCalculator
             array(
                 'name' => 'improved',
                 'data' => array(
-                    0 => 0.037,
-                    1 => 0.037,
+                    0 => 0.023923076923078,
+                    1 => 0.039138461538466,
                 ),
             ),
             array(
@@ -613,8 +617,8 @@ class JmpTest extends AbstractCalculator
             array(
                 'name' => 'total',
                 'data' => array(
-                    0 => 0.037,
-                    1 => 0.037,
+                    0 => 0.023931538461534,
+                    1 => 0.039145384615382,
                 ),
             ),
                 ), $rt);
@@ -630,7 +634,7 @@ class JmpTest extends AbstractCalculator
         }
 
         // This call should NOT raise PHP warnings
-        $this->assertEquals(0, $this->service->computeRegressionOneYear(2006, $this->filter1, $this->questionnaires, $this->part));
+        $this->assertEquals(0, $this->service->computeRegressionOneYear(2006, $this->filter1, $this->questionnaires, $this->part1));
     }
 
     public function testAllIdenticalValueShouldNotDivideByZero()
@@ -644,7 +648,7 @@ class JmpTest extends AbstractCalculator
         }
 
         // This call should NOT raise PHP warnings
-        $this->assertEquals(4, $this->service->computeRegressionOneYear(2006, $this->filter1, $this->questionnaires, $this->part));
+        $this->assertEquals(4, $this->service->computeRegressionOneYear(2006, $this->filter1, $this->questionnaires, $this->part1));
     }
 
 }
