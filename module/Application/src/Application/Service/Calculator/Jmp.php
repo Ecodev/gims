@@ -363,7 +363,7 @@ class Jmp extends Calculator
         $originalFormula = $rule->getFormula();
 
         // Replace {F#12,Q#all} with a list of Filter values for all questionnaires
-        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#all}/', function($matches) use ($currentFilterId, $questionnaires, $partId) {
+        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+|current),Q#all}/', function($matches) use ($currentFilterId, $questionnaires, $partId) {
                     $filterId = $matches[1];
 
                     if ($filterId == 'current') {
@@ -385,7 +385,7 @@ class Jmp extends Calculator
                 }, $originalFormula);
 
         // Replace {F#12} with Filter regression value
-        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current)}/', function($matches) use ($year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+|current)}/', function($matches) use ($year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
                     $filterId = $matches[1];
 
                     if ($filterId == 'current') {
@@ -398,7 +398,7 @@ class Jmp extends Calculator
                 }, $convertedFormulas);
 
         // Replace {self} with computed value without this formula
-        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($year, $years, $currentFilterId, $questionnaires, $partId, $partIds, $alreadyUsedRules) {
+        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{self\}/', function() use ($year, $years, $currentFilterId, $questionnaires, $partId, $partIds, $alreadyUsedRules) {
 
 
                     $value = $this->computeFlattenOneYearWithFormula($year, $years, $currentFilterId, $questionnaires, $partId, $partIds, $alreadyUsedRules);

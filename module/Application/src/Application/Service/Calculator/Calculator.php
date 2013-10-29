@@ -322,7 +322,7 @@ use \Application\Traits\EntityManagerAware;
         _log()->debug(__FUNCTION__, array($usage->getId(), $originalFormula));
 
         // Replace {F#12,Q#34,P#56} with Filter value
-        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage, $alreadyUsedFormulas, $useSecondLevelRules) {
+        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage, $alreadyUsedFormulas, $useSecondLevelRules) {
                     $filterId = $matches[1];
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
@@ -345,7 +345,7 @@ use \Application\Traits\EntityManagerAware;
                 }, $originalFormula);
 
         // Replace {F#12,Q#34} with Unofficial Filter name, or NULL if no Unofficial Filter
-        $convertedFormulas = preg_replace_callback('/\{F#(\d+),Q#(\d+|current)\}/', function($matches) use ($usage) {
+        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+),Q#(\d+|current)\}/', function($matches) use ($usage) {
                     $officialFilterId = $matches[1];
                     $questionnaireId = $matches[2];
 
@@ -363,7 +363,7 @@ use \Application\Traits\EntityManagerAware;
                 }, $convertedFormulas);
 
         // Replace {R#12,Q#34,P#56} with QuestionnaireUsage value
-        $convertedFormulas = preg_replace_callback('/\{R#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage, $alreadyUsedFormulas) {
+        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{R#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage, $alreadyUsedFormulas) {
                     $ruleId = $matches[1];
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
@@ -388,7 +388,7 @@ use \Application\Traits\EntityManagerAware;
                 }, $convertedFormulas);
 
         // Replace {Q#34,P#56} with population data
-        $convertedFormulas = preg_replace_callback('/\{Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage) {
+        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage) {
                     $questionnaireId = $matches[1];
                     $partId = $matches[2];
 
@@ -402,7 +402,7 @@ use \Application\Traits\EntityManagerAware;
                 }, $convertedFormulas);
 
         // Replace {self} with computed value without this formula
-        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($usage, $alreadyUsedFormulas, $useSecondLevelRules) {
+        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{self\}/', function() use ($usage, $alreadyUsedFormulas, $useSecondLevelRules) {
 
                     $value = $this->computeFilter($usage->getFilter()->getId(), $usage->getQuestionnaire()->getId(), $usage->getPart()->getId(), $useSecondLevelRules, $alreadyUsedFormulas);
 

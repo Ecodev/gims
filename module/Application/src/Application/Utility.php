@@ -45,8 +45,7 @@ abstract class Utility
                 $key .= '[[NULL]]';
             else if (is_object($arg)) {
                 $key .= spl_object_hash($arg);
-            }
-            else if (is_array($arg))
+            } else if (is_array($arg))
                 $key .= '[[ARRAY|' . self::getCacheKey($arg) . ']]';
             else
                 $key .= $arg;
@@ -57,4 +56,27 @@ abstract class Utility
         return $key;
     }
 
+    /**
+     * Same as preg_replace_callback(), but call the callback only once per unique match
+     * @param string $pattern
+     * @param \Closure $callback
+     * @param string $subject
+     * @return string replaced string
+     */
+    public static function pregReplaceUniqueCallback($pattern, \Closure $callback, $subject)
+    {
+        $replacements = array();
+        return preg_replace_callback($pattern, function($matches) use ($callback, &$replacements) {
+                    $key = $matches[0];
+
+                    if (!isset($replacements[$key])) {
+                        $replacement = $callback($matches);
+                        $replacements[$key] = $replacement;
+                    }
+
+                    return $replacements[$key];
+                }, $subject);
+    }
+
 }
+

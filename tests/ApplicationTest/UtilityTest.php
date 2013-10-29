@@ -5,6 +5,40 @@ namespace ApplicationTest;
 class UtilityTest extends \ApplicationTest\Controller\AbstractController
 {
 
+    public function pregReplaceUniqueCallbackDataProvider()
+    {
+        return array(
+            array('/a(.)/', '', 0),
+            array('/a(.)/', 'a', 0),
+            array('/a(.)/', 'ab', 1),
+            array('/a(.)/', 'abab', 1),
+            array('/a(.)/', 'ababacac', 2),
+            array('/a(.)/', 'ababacababac', 2),
+            array('/A(\d+)/', 'A1,A11', 2),
+        );
+    }
+
+    /**
+     * @dataProvider pregReplaceUniqueCallbackDataProvider
+     */
+    public function testpregReplaceUniqueCallback($pattern, $subject, $expectedCount)
+    {
+        $callback = function ($matches) use (&$count) {
+                    $count++;
+
+                    return '[' . strtoupper($matches[0]) . ']';
+                };
+
+        $count = 0;
+        $expected = preg_replace_callback($pattern, $callback, $subject);
+
+        $count = 0;
+        $actual = \Application\Utility::pregReplaceUniqueCallback($pattern, $callback, $subject);
+
+        $this->assertEquals($expected, $actual);
+        $this->assertEquals($expectedCount, $count);
+    }
+
     public function bcroundDataProvider()
     {
         return array(

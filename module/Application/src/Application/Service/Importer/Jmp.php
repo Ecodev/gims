@@ -1037,7 +1037,7 @@ STRING;
         // This is the case for Cambodge DHS05 "Bottled water with HC" estimation
         $ruleRows = $this->definitions[$sheet->getTitle()]['questionnaireUsages'];
         if (in_array($row, $ruleRows['Estimate']) || in_array($row, $ruleRows['Calculation'])) {
-            $replacedFormula = preg_replace_callback('/^=(-?\d+(\.\d+)?)$/', function($matches) {
+            $replacedFormula = \Application\Utility::pregReplaceUniqueCallback('/^=(-?\d+(\.\d+)?)$/', function($matches) {
                         $number = $matches[1];
                         $number = $number / 100;
 
@@ -1046,7 +1046,7 @@ STRING;
         }
 
         // Expand range syntax to enumerate each cell: "A1:A5" => "{A1,A2,A3,A4,A5}"
-        $expandedFormula = preg_replace_callback("/$cellPattern:$cellPattern/", function($matches) use ($sheet, $cell) {
+        $expandedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern:$cellPattern/", function($matches) use ($sheet, $cell) {
 
                     // This only expand vertical ranges, not horizontal ranges (which probably never make any sense for JMP anyway)
                     if ($matches[2] != $matches[5]) {
@@ -1062,7 +1062,7 @@ STRING;
                 }, $replacedFormula);
 
         // Replace all cell reference with our own syntax
-        $convertedFormula = preg_replace_callback("/$cellPattern/", function($matches) use ($sheet, $questionnaire, $part, $expandedFormula) {
+        $convertedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern/", function($matches) use ($sheet, $questionnaire, $part, $expandedFormula) {
                     $refCol = \PHPExcel_Cell::columnIndexFromString($matches[2]) - 1;
                     $refRow = $matches[3];
 
