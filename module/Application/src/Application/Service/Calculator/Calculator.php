@@ -226,7 +226,7 @@ use \Application\Traits\EntityManagerAware;
         $result = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, new ArrayCollection());
 
         $this->cacheComputeFilter[$key] = $result;
-        _log()->debug(__FUNCTION__, array('end', $filterId, $questionnaireId, $partId, $result));
+        _log()->debug(__FUNCTION__, array('end  ', $filterId, $questionnaireId, $partId, $result));
         return $result;
     }
 

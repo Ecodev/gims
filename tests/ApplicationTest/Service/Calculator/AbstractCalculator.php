@@ -171,7 +171,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     {
         parent::setUp();
 
-        $this->geoname = new \Application\Model\Geoname('test geoname');
+        $this->geoname = $this->getNewModelWithId('\Application\Model\Geoname')->setName('test geoname');
 
         $this->filter1 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 1');
         $this->filter11 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 1.1 (sum of 1.*.1)');
@@ -303,6 +303,26 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
                                     foreach ($filter->getFilterQuestionnaireUsages() as $filterQuestionnaireUsage) {
                                         if (($useSecondLevelRules || !$filterQuestionnaireUsage->isSecondLevel()) && $filterQuestionnaireUsage->getRule() && $filterQuestionnaireUsage->getQuestionnaire()->getId() == $questionnaireId && $filterQuestionnaireUsage->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterQuestionnaireUsage)) {
                                             return $filterQuestionnaireUsage;
+                                        }
+                                    }
+                                    return null;
+                                })
+        );
+
+        return $stubFilterQuestionnaireUsageRepository;
+    }
+    protected function getStubFilterGeonameUsageRepository()
+    {
+        // Create a stub for the FilterQuestionnaireUsageRepository class with predetermined values, so we don't have to mess with database
+        $stubFilterQuestionnaireUsageRepository = $this->getMock('\Application\Repository\Rule\FilterGeonameUsageRepository', array('getFirst'), array(), '', false);
+        $stubFilterQuestionnaireUsageRepository->expects($this->any())
+                ->method('getFirst')
+                ->will($this->returnCallback(function($geonameId, $filterId, $partId, ArrayCollection $alreadyUsedFormulas) {
+
+                                    $geoname = $this->getModel('\Application\Model\Geoname', $geonameId);
+                                    foreach ($geoname->getFilterGeonameUsages() as $filterGeonameUsage) {
+                                        if ($filterGeonameUsage->getRule() && $filterGeonameUsage->getFilter()->getId() == $filterId && $filterGeonameUsage->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterGeonameUsage->getRule())) {
+                                            return $filterGeonameUsage;
                                         }
                                     }
                                     return null;

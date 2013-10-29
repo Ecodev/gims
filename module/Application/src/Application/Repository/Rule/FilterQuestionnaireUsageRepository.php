@@ -22,17 +22,22 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
     {
         // If no cache for questionnaire, fill the cache
         if (!isset($this->cache[$questionnaireId])) {
+
+            // First we found which geoname is used for the given questionnaire
+            $geonameId = $this->getEntityManager()->getRepository('Application\Model\Geoname')->getIdByQuestionnaireId($questionnaireId);
+
+            // Then we get all data for the geoname
             $qb = $this->createQueryBuilder('filterQuestionnaireUsage')
                     ->select('filterQuestionnaireUsage, questionnaire, filter, rule')
                     ->join('filterQuestionnaireUsage.questionnaire', 'questionnaire')
                     ->join('filterQuestionnaireUsage.filter', 'filter')
                     ->join('filterQuestionnaireUsage.rule', 'rule')
-                    ->andWhere('filterQuestionnaireUsage.questionnaire = :questionnaire')
+                    ->andWhere('questionnaire.geoname = :geoname')
                     ->orderBy('filterQuestionnaireUsage.isSecondLevel DESC, filterQuestionnaireUsage.sorting, filterQuestionnaireUsage.id')
             ;
 
             $qb->setParameters(array(
-                'questionnaire' => $questionnaireId,
+                'geoname' => $geonameId,
             ));
 
             $res = $qb->getQuery()->getResult();

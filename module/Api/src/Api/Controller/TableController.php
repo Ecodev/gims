@@ -127,7 +127,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                     $columnId = 'f' . $filter->getId() . 'p' . $part->getId();
                     $columns[$columnId] = $columnName;
 
-                    $data = $calculator->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
+                    $data = $calculator->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
                     foreach ($data['values'] as $questionnaireId => $value) {
                         if (!isset($result[$questionnaireId])) {
                             $result[$questionnaireId] = array(

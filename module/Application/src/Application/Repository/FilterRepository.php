@@ -132,19 +132,21 @@ class FilterRepository extends AbstractRepository
     public function getUnofficialName($officialFilterId, $questionnaireId)
     {
         if (!isset($this->cacheUnofficialNames[$questionnaireId])) {
+            $geonameId = $this->getEntityManager()->getRepository('Application\Model\Geoname')->getIdByQuestionnaireId($questionnaireId);
 
             $qb = $this->createQueryBuilder('filter')
-                    ->select('officialFilter.id, filter.name')
+                    ->select('officialFilter.id, filter.name, questionnaire.id AS questionnaire_id')
                     ->join('filter.officialFilter', 'officialFilter')
-                    ->andWhere('filter.questionnaire = :questionnaire')
+                    ->join('filter.questionnaire', 'questionnaire')
+                    ->andWhere('questionnaire.geoname = :geoname')
             ;
 
-            $qb->setParameter('questionnaire', $questionnaireId);
+            $qb->setParameter('geoname', $geonameId);
 
             // Restructure cache to be [questionnaireId => [officialFilterId => name]]
             $res = $qb->getQuery()->getResult();
             foreach ($res as $filter) {
-                $this->cacheUnofficialNames[$questionnaireId][$filter['id']] = $filter['name'];
+                $this->cacheUnofficialNames[$filter['questionnaire_id']][$filter['id']] = $filter['name'];
             }
         }
 

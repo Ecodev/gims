@@ -36,10 +36,10 @@ class PopulationRepository extends AbstractRepository
     /**
      * Returns the population for given geoname, part and year
      * @param \Application\Model\Geoname $geoname
-     * @param \Application\Model\Part $part
+     * @param integer $partId
      * @return \Application\Model\Population
      */
-    public function getOneByGeoname(\Application\Model\Geoname $geoname, \Application\Model\Part $part, $year)
+    public function getOneByGeoname(\Application\Model\Geoname $geoname, $partId, $year)
     {
         $query = $this->getEntityManager()->createQuery("SELECT p FROM Application\Model\Population p
             JOIN p.country country
@@ -52,7 +52,7 @@ class PopulationRepository extends AbstractRepository
         $params = array(
             'geoname' => $geoname,
             'year' => $year,
-            'part' => $part,
+            'part' => $partId,
         );
 
         $query->setParameters($params);

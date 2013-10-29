@@ -19,27 +19,33 @@ class AnswerRepository extends AbstractChildRepository
     {
         // If no cache for questionnaire, fill the cache
         if (!isset($this->cache[$questionnaireId])) {
+
+            // First we found which geoname is used for the given questionnaire
+            $geonameId = $this->getEntityManager()->getRepository('Application\Model\Geoname')->getIdByQuestionnaireId($questionnaireId);
+
+            // Then we get all data for the geoname
             $qb = $this->createQueryBuilder('answer')
-                    ->select('answer.valuePercent, part.id AS part_id, filter.id AS filter_id, officialFilter.id AS officialFilter_id')
+                    ->select('answer.valuePercent, part.id AS part_id, filter.id AS filter_id, officialFilter.id AS official_filter_id, questionnaire.id AS questionnaire_id')
                     ->join('answer.question', 'question')
+                    ->join('answer.questionnaire', 'questionnaire')
                     ->join('answer.part', 'part')
                     ->join('question.filter', 'filter')
                     ->leftJoin('filter.officialFilter', 'officialFilter')
-                    ->andWhere('answer.questionnaire = :questionnaire')
+                    ->andWhere('questionnaire.geoname = :geoname')
             ;
 
             $qb->setParameters(array(
-                'questionnaire' => $questionnaireId,
+                'geoname' => $geonameId,
             ));
 
             $res = $qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SCALAR);
 
             // Restructure cache to be [questionnaireId => [filterId => [partId => value]]]
             foreach ($res as $data) {
-                if ($data['officialFilter_id'])
-                    $this->cache[$questionnaireId][$data['officialFilter_id']][$data['part_id']] = (float) $data['valuePercent'];
+                if ($data['official_filter_id'])
+                    $this->cache[$data['questionnaire_id']][$data['official_filter_id']][$data['part_id']] = (float) $data['valuePercent'];
                 else
-                    $this->cache[$questionnaireId][$data['filter_id']][$data['part_id']] = (float) $data['valuePercent'];
+                    $this->cache[$data['questionnaire_id']][$data['filter_id']][$data['part_id']] = (float) $data['valuePercent'];
             }
         }
 

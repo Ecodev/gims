@@ -258,7 +258,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         // Then add scatter points which are each questionnaire values
         foreach ($filterSet->getFilters() as $filter) {
             $idFilter = $filter->getId();
-            $data = $calculator->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
+            $data = $calculator->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
             $scatter = array(
                 'type' => 'scatter',
                 'color' => $colors[$this->getConstantKey($filter->getName()) % count($colors)],

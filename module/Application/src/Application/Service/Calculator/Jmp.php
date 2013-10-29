@@ -5,7 +5,6 @@ namespace Application\Service\Calculator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Model\Part;
 use Application\Model\FilterSet;
-use Application\Model\Filter;
 use Application\Model\Rule\Rule;
 
 class Jmp extends Calculator
@@ -13,6 +12,35 @@ class Jmp extends Calculator
 
     private $cacheComputeFilterForAllQuestionnaires = array();
     private $cacheComputeRegressionForAllYears = array();
+
+    private $filterGeonameUsageRepository;
+
+
+    /**
+     * Set the filterGeonameUsage repository
+     * @param \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepository
+     * @return \Application\Service\Calculator\Calculator
+     */
+    public function setFilterGeonameUsageRepository(\Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepository)
+    {
+        $this->filterGeonameUsageRepository = $filterGeonameUsageRepository;
+
+        return $this;
+    }
+
+    /**
+     * Get the filterGeonameUsage repository
+     * @return \Application\Repository\Rule\FilterGeonameUsageRepository
+     */
+    public function getFilterGeonameUsageRepository()
+    {
+        if (!$this->filterGeonameUsageRepository) {
+            $this->filterGeonameUsageRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
+        }
+
+        return $this->filterGeonameUsageRepository;
+    }
+
 
     /**
      * Returns an array of all filter data, which includes name and year-regression pairs
@@ -31,9 +59,9 @@ class Jmp extends Calculator
 
         // Enable hardcoded complementary computing for total parts if we have data for other parts
         if ($part->isTotal() && !$this->getQuestionnaireRepository()->isOnlyTotal($questionnaires)) {
-            $parts = $this->getPartRepository()->getAllNonTotal();
+            $partIds = $this->getPartRepository()->getIdsNonTotal();
         } else {
-            $parts = array();
+            $partIds = array();
         }
 
         $result = array();
@@ -42,7 +70,7 @@ class Jmp extends Calculator
 
             $data = array();
             foreach ($years as $year) {
-                $data[] = $this->computeFlattenOneYearWithFormula($year, $years, $filter, $questionnaires, $part, $parts);
+                $data[] = $this->computeFlattenOneYearWithFormula($year, $years, $filter->getId(), $questionnaires, $part->getId(), $partIds);
             }
 
             $result[] = array(
@@ -58,38 +86,37 @@ class Jmp extends Calculator
      * Compute the flatten regression value for the given year with optional formulas
      * @param integer $year
      * @param array $years
-     * @param \Application\Model\Filter $filter
+     * @param integer $filterId
      * @param array $questionnaires
-     * @param \Application\Model\Part $part
-     * @param array $parts
+     * @param integer $partId
+     * @param array $partIds
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return null|float
      */
-    public function computeFlattenOneYearWithFormula($year, array $years, Filter $filter, array $questionnaires, Part $part, array $parts, ArrayCollection $alreadyUsedRules = null)
+    private function computeFlattenOneYearWithFormula($year, array $years, $filterId, array $questionnaires, $partId, array $partIds, ArrayCollection $alreadyUsedRules = null)
     {
         if (!$alreadyUsedRules) {
             $alreadyUsedRules = new ArrayCollection();
         }
 
         // If the filter has a formula, returns its value
-        $usages = $questionnaires ? reset($questionnaires)->getGeoname()->getFilterGeonameUsages() : array();
-        foreach ($usages as $filterGeonameUsage) {
-            $rule = $filterGeonameUsage->getRule();
-            if (!$alreadyUsedRules->contains($rule) && $filterGeonameUsage->getFilter() === $filter && $filterGeonameUsage->getPart() === $part) {
-                return $this->computeFormulaFlatten($rule, $year, $years, $filter, $questionnaires, $part, $parts, $alreadyUsedRules);
+        if ($questionnaires) {
+            $filterGeonameUsage = $this->getFilterGeonameUsageRepository()->getFirst(reset($questionnaires)->getGeoname()->getId(), $filterId, $partId, $alreadyUsedRules);
+            if ($filterGeonameUsage) {
+                return $this->computeFormulaFlatten($filterGeonameUsage->getRule(), $year, $years, $filterId, $questionnaires, $partId, $partIds, $alreadyUsedRules);
             }
         }
 
         // If we are computing the total (not a specific part), we will sum all parts to get it
-        if ($parts) {
+        if ($partIds) {
             $oneYearResult = null;
             $totalPopulation = null;
-            foreach ($parts as $p) {
-                $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $p);
+            foreach ($partIds as $id) {
+                $allRegressions = $this->computeRegressionForAllYears($years, $filterId, $questionnaires, $id);
                 $resultPart = $this->computeFlattenOneYear($year, $allRegressions);
 
                 if (!is_null($resultPart)) {
-                    $population = $this->getPopulationRepository()->getOneByGeoname(reset($questionnaires)->getGeoname(), $p, $year)->getPopulation();
+                    $population = $this->getPopulationRepository()->getOneByGeoname(reset($questionnaires)->getGeoname(), $id, $year)->getPopulation();
                     $totalPopulation += $population;
                     $oneYearResult += $resultPart * $population;
                 }
@@ -101,7 +128,7 @@ class Jmp extends Calculator
         }
         // Otherwise fallback to normal computation
         else {
-            $allRegressions = $this->computeRegressionForAllYears($years, $filter, $questionnaires, $part);
+            $allRegressions = $this->computeRegressionForAllYears($years, $filterId, $questionnaires, $partId);
             $oneYearResult = $this->computeFlattenOneYear($year, $allRegressions);
         }
 
@@ -182,12 +209,12 @@ class Jmp extends Calculator
     /**
      * Returns regressions for each years specified
      * @param array $years
-     * @param \Application\Model\Filter $filter
+     * @param integer $filterId
      * @param array $questionnaires
-     * @param \Application\Model\Part $part
+     * @param integer $partId
      * @return array [year => regresssion]
      */
-    public function computeRegressionForAllYears(array $years, Filter $filter, array $questionnaires, Part $part)
+    private function computeRegressionForAllYears(array $years, $filterId, array $questionnaires, $partId)
     {
         $key = \Application\Utility::getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheComputeRegressionForAllYears)) {
@@ -196,7 +223,7 @@ class Jmp extends Calculator
 
         $allRegressions = array();
         foreach ($years as $year) {
-            $allRegressions[$year] = $this->computeRegressionOneYear($year, $filter, $questionnaires, $part);
+            $allRegressions[$year] = $this->computeRegressionOneYear($year, $filterId, $questionnaires, $partId);
         }
 
         $this->cacheComputeRegressionForAllYears[$key] = $allRegressions;
@@ -207,19 +234,19 @@ class Jmp extends Calculator
     /**
      * Returns the regression for one year
      * @param integer $year
-     * @param \Application\Model\Filter $filter
+     * @param integer $filterId
      * @param array $questionnaires
-     * @param \Application\Model\Part $part
+     * @param integer $partId
      * @return null|float
      */
-    public function computeRegressionOneYear($year, Filter $filter, array $questionnaires, Part $part)
+    public function computeRegressionOneYear($year, $filterId, array $questionnaires, $partId)
     {
-        $d = $this->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
+        $d = $this->computeFilterForAllQuestionnaires($filterId, $questionnaires, $partId);
 
         if ($year == $d['maxYear'] + 6) {
-            $result = $this->computeRegressionOneYear($year - 4, $filter, $questionnaires, $part);
+            $result = $this->computeRegressionOneYear($year - 4, $filterId, $questionnaires, $partId);
         } elseif ($year == $d['minYear'] - 6) {
-            $result = $this->computeRegressionOneYear($year + 4, $filter, $questionnaires, $part);
+            $result = $this->computeRegressionOneYear($year + 4, $filterId, $questionnaires, $partId);
         } elseif ($year < $d['maxYear'] + 3 && $year > $d['minYear'] - 3 && $d['count'] > 1 && $d['period'] > 4) {
             $result = $this->ifNonZeroValue($d['values'], function() use ($year, $d) {
                         return \PHPExcel_Calculation_Statistical::FORECAST($year, $d['values'], $d['years']);
@@ -243,12 +270,12 @@ class Jmp extends Calculator
 
     /**
      * Implement computing on filter level, as seen on tab "GraphData_W"
-     * @param \Application\Model\Filter $filter
+     * @param integer $filterId
      * @param array $questionnaires
-     * @param \Application\Model\Part $part
+     * @param integer $partId
      * @return array
      */
-    public function computeFilterForAllQuestionnaires(Filter $filter, array $questionnaires, Part $part)
+    public function computeFilterForAllQuestionnaires($filterId, array $questionnaires, $partId)
     {
         $key = \Application\Utility::getCacheKey(func_get_args());
 
@@ -270,7 +297,7 @@ class Jmp extends Calculator
             $years[$questionnaire->getId()] = $year;
             $surveys[$questionnaire->getId()] = $questionnaire->getSurvey()->getCode();
 
-            $computed = $this->computeFilter($filter->getId(), $questionnaire->getId(), $part->getId(), true);
+            $computed = $this->computeFilter($filterId, $questionnaire->getId(), $partId, true);
             $result['values'][$questionnaire->getId()] = $computed;
 
             if (!is_null($computed)) {
@@ -317,16 +344,16 @@ class Jmp extends Calculator
      * Compute the value of a formula based on GIMS syntax.
      * For details about syntax, @see \Application\Model\Rule\Rule
      * @param \Application\Model\Rule\Rule $rule
-     * @param type $year
+     * @param integer $year
      * @param array $years
-     * @param \Application\Model\Filter $currentFilter
+     * @param integer $currentFilterId
      * @param array $questionnaires
-     * @param \Application\Model\Part $part
-     * @param array $parts
+     * @param integer $partId
+     * @param array $partIds
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return null|float
      */
-    public function computeFormulaFlatten(Rule $rule, $year, array $years, Filter $currentFilter, array $questionnaires, Part $part, array $parts, ArrayCollection $alreadyUsedRules = null)
+    public function computeFormulaFlatten(Rule $rule, $year, array $years, $currentFilterId, array $questionnaires, $partId, array $partIds, ArrayCollection $alreadyUsedRules = null)
     {
         if (!$alreadyUsedRules) {
             $alreadyUsedRules = new ArrayCollection();
@@ -336,11 +363,14 @@ class Jmp extends Calculator
         $originalFormula = $rule->getFormula();
 
         // Replace {F#12,Q#all} with a list of Filter values for all questionnaires
-        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#all}/', function($matches) use ($currentFilter, $questionnaires, $part) {
+        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current),Q#all}/', function($matches) use ($currentFilterId, $questionnaires, $partId) {
                     $filterId = $matches[1];
-                    $filter = $filterId == 'current' ? $currentFilter : $this->getFilterRepository()->findOneById($filterId);
 
-                    $data = $this->computeFilterForAllQuestionnaires($filter, $questionnaires, $part);
+                    if ($filterId == 'current') {
+                        $filterId = $currentFilterId;
+                    }
+
+                    $data = $this->computeFilterForAllQuestionnaires($filterId, $questionnaires, $partId);
 
                     $values = array();
                     foreach ($data['values'] as $v) {
@@ -355,21 +385,23 @@ class Jmp extends Calculator
                 }, $originalFormula);
 
         // Replace {F#12} with Filter regression value
-        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current)}/', function($matches) use ($year, $years, $currentFilter, $questionnaires, $part, $parts) {
+        $convertedFormulas = preg_replace_callback('/\{F#(\d+|current)}/', function($matches) use ($year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
                     $filterId = $matches[1];
 
-                    $filter = $filterId == 'current' ? $currentFilter : $this->getFilterRepository()->findOneById($filterId);
+                    if ($filterId == 'current') {
+                        $filterId = $currentFilterId;
+                    }
 
-                    $value = $this->computeFlattenOneYearWithFormula($year, $years, $filter, $questionnaires, $part, $parts);
+                    $value = $this->computeFlattenOneYearWithFormula($year, $years, $filterId, $questionnaires, $partId, $partIds);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
 
         // Replace {self} with computed value without this formula
-        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($year, $years, $currentFilter, $questionnaires, $part, $parts, $alreadyUsedRules) {
+        $convertedFormulas = preg_replace_callback('/\{self\}/', function() use ($year, $years, $currentFilterId, $questionnaires, $partId, $partIds, $alreadyUsedRules) {
 
 
-                    $value = $this->computeFlattenOneYearWithFormula($year, $years, $currentFilter, $questionnaires, $part, $parts, $alreadyUsedRules);
+                    $value = $this->computeFlattenOneYearWithFormula($year, $years, $currentFilterId, $questionnaires, $partId, $partIds, $alreadyUsedRules);
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
@@ -383,7 +415,7 @@ class Jmp extends Calculator
             $result = null;
         }
 
-        _log()->debug(__FUNCTION__, array($currentFilter->getId(), $part->getId(), $rule->getId(), $rule->getName(), $originalFormula, $convertedFormulas, $result));
+        _log()->debug(__FUNCTION__, array($currentFilterId, $partId, $year, $rule->getId(), $rule->getName(), $originalFormula, $convertedFormulas, $result));
         return $result;
     }
 
