@@ -48,8 +48,8 @@ class ConsoleControllerTest extends \Zend\Test\PHPUnit\Controller\AbstractConsol
         $this->dispatch('import jmp ' . __DIR__ . '/../../data/import_jmp.xlsx');
 
         $expected = <<<STRING
-Surveys          : 1
-Questionnaires   : 2
+Surveys          : 2
+Questionnaires   : 3
 Alternate Filters: 18
 Answers          : 70
 Rules            : 36

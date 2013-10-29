@@ -579,7 +579,7 @@ STRING;
             }
 
             if (!$survey->getYear()) {
-                echo 'WARNING: skipped survey because there is no year. On sheet "' . $sheet->getTitle() . '" cell ' . $sheet->getCellByColumnAndRow($col + 3, 3)->getCoordinate();
+                echo 'WARNING: skipped survey because there is no year. On sheet "' . $sheet->getTitle() . '" cell ' . $sheet->getCellByColumnAndRow($col + 3, 3)->getCoordinate() . PHP_EOL;
 
                 return true;
             }
@@ -688,11 +688,12 @@ STRING;
      */
     protected function getQuestionnaire(\PHPExcel_Worksheet $sheet, $col, Survey $survey, \PHPExcel_Cell $countryCell)
     {
-        // If we already imported a questionnaire on that column, returns it directly.
-        // That means we are on second tab (Sanitation) and we assume the questionnaire is
-        // the same as the one we found on first tab (Water)
-        if (isset($this->importedQuestionnaires[$col])) {
-            return $this->importedQuestionnaires[$col];
+        // If we already imported a questionnaire on that column with same Survey,
+        // returns it directly. That means we are on second tab (Sanitation) and we
+        // assume the questionnaire is the same as the one we found on first tab (Water)
+        $otherQuestionnaire = @$this->importedQuestionnaires[$col];
+        if ($otherQuestionnaire && $otherQuestionnaire->getSurvey() === $survey) {
+            return $otherQuestionnaire;
         }
 
         // Mapping JMP country names to Geoname country names
