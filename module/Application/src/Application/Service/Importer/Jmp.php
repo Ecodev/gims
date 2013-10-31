@@ -556,7 +556,7 @@ STRING;
      */
     protected function importQuestionnaire(\PHPExcel_Worksheet $sheet, $col)
     {
-        $code = $sheet->getCellByColumnAndRow($col + 2, 1)->getCalculatedValue();
+        $code = trim($sheet->getCellByColumnAndRow($col + 2, 1)->getCalculatedValue());
 
         // If no code found, we assume no survey at all
         if (!$code) {
@@ -568,6 +568,19 @@ STRING;
         $year = $sheet->getCellByColumnAndRow($col + 3, 3)->getCalculatedValue();
         $twoDigitsYear = substr($year, -2);
         $code = str_replace($year, $twoDigitsYear, $code);
+
+        $codeMapping = array(
+            'ENHOGAR09-10' => 'ENHGR09-10', // Dominican Republic
+            'CEN00-02' => 'CEN02', // French Polynesia
+            'EMP10' => 'EPM10', // Madagascar
+            'CEN2006/08' => 'CEN06/08', // Martinique
+            'Census' => 'CEN09', // New Caledonia
+            'CEN' => 'CEN99', //
+        );
+
+        // Replace special cases
+        if (isset($codeMapping[$code]))
+            $code = $codeMapping[$code];
 
         // Load or create survey
         $surveyRepository = $this->getEntityManager()->getRepository('Application\Model\Survey');
