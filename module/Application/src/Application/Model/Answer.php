@@ -104,7 +104,8 @@ class Answer extends AbstractModel
             'valueAbsolute',
             'valueText',
             'isCheckboxChecked',
-            'valueChoice'
+            'valueChoice',
+            'valueUser'
         ));
     }
 

@@ -1,12 +1,8 @@
-
-angular.module('myApp.services')
-    .factory('QuestionAssistant', function ($dialog, $location) {
+angular.module('myApp.services').factory('QuestionAssistant', function ($dialog, $location)
+    {
         'use strict';
 
-
-
-
-        var indexQuestion = function(QuestionAssistant, question, firstExecution, index)
+        var indexQuestion = function (QuestionAssistant, question, firstExecution, index)
         {
             switch (question.type) {
                 case 'Text' :
@@ -14,6 +10,9 @@ angular.module('myApp.services')
                     break;
                 case 'Numeric' :
                     return indexOneAnswerPerPartQuestion(QuestionAssistant, question, firstExecution, index, 'valueAbsolute');
+                    break;
+                case 'User' :
+                    return indexOneAnswerPerPartQuestion(QuestionAssistant, question, firstExecution, index, 'valueUser');
                     break;
                 case 'Choice' :
                     return indexOneOrMultipleAnswersPerPartQuestion(QuestionAssistant, question, firstExecution, index);
@@ -23,7 +22,6 @@ angular.module('myApp.services')
             return 4;
         }
 
-
         /**
          * Numeric and Text questions are similar and when they're compulsory, they need one answer per part
          *
@@ -32,16 +30,24 @@ angular.module('myApp.services')
         var indexOneAnswerPerPartQuestion = function (QuestionAssistant, question, firstExecution, index, valueField)
         {
             var status = 3;
-
-            angular.forEach(question.parts, function(part) {
-                var id = question.id+'-'+part.id
+            angular.forEach(question.parts, function (part)
+            {
+                var id = question.id + '-' + part.id
                 var answer = findOneAnswerPerPartAnswer(QuestionAssistant, question, index, firstExecution, valueField, part.id);
                 if (!answer) {
-                    if(question.isCompulsory) status = 1; // if compulsory, all parts have to have answer
-                    else if(!question.isCompulsory) status = 2; // if not compulsory, just notify that there are unanswered fields.
-                    if(firstExecution) index[id] = QuestionAssistant.getEmptyTextAnswer(question, part.id);
+                    if (question.isCompulsory) {
+                        status = 1;
+                    } // if compulsory, all parts have to have answer
+                    else if (!question.isCompulsory) {
+                        status = 2;
+                    } // if not compulsory, just notify that there are unanswered fields.
+                    if (firstExecution) {
+                        index[id] = QuestionAssistant.getEmptyTextAnswer(question, part.id);
+                    }
                 } else {
-                    if(firstExecution) index[id] = answer;
+                    if (firstExecution) {
+                        index[id] = answer;
+                    }
                 }
             });
 
@@ -52,7 +58,7 @@ angular.module('myApp.services')
         var findOneAnswerPerPartAnswer = function (QuestionAssistant, question, index, firstExecution, valueField, pid)
         {
             if (!firstExecution) {
-                var id = question.id+'-'+pid;
+                var id = question.id + '-' + pid;
                 if (index[id] && index[id][valueField]) {
                     delete index[id].valueChoice;
                     return index[id];
@@ -61,9 +67,9 @@ angular.module('myApp.services')
                 }
             } else {
 
-                for(var key in question.answers){
+                for (var key in question.answers) {
                     var testedAnswer = question.answers[key];
-                    if (testedAnswer.part && testedAnswer.part.id==pid) {
+                    if (testedAnswer.part && testedAnswer.part.id == pid) {
                         delete testedAnswer.valueChoice;
                         return testedAnswer;
                     }
@@ -71,10 +77,6 @@ angular.module('myApp.services')
             }
             return false;
         };
-
-
-
-
 
 
         // multiple + compulsory    -> 1 if no answer found, 3 if (at least) one answer found
@@ -85,7 +87,8 @@ angular.module('myApp.services')
         {
 
             var statusPerPart = {};
-            angular.forEach(question.parts, function(part) {
+            angular.forEach(question.parts, function (part)
+            {
 
                 if (question.isCompulsory) {
                     statusPerPart[part.id] = 1
@@ -93,25 +96,34 @@ angular.module('myApp.services')
                     statusPerPart[part.id] = 2
                 }
 
-                if(question.isMultiple){
-                    angular.forEach(question.choices, function(choice) {
-                        var identifier = question.id+"-"+choice.id+"-"+part.id;
+                if (question.isMultiple) {
+                    angular.forEach(question.choices, function (choice)
+                    {
+                        var identifier = question.id + "-" + choice.id + "-" + part.id;
                         var answer = findOneOrMultipleAnswersPerPartAnswer(QuestionAssistant, question, firstExecution, index, part, choice);
                         if (!answer) {
-                            if(firstExecution) index[identifier] = QuestionAssistant.getEmptyChoiceAnswer(question, part, choice);
+                            if (firstExecution) {
+                                index[identifier] = QuestionAssistant.getEmptyChoiceAnswer(question, part, choice);
+                            }
                         } else {
                             statusPerPart[part.id] = 3;
-                            if(firstExecution) index[identifier] = answer;
+                            if (firstExecution) {
+                                index[identifier] = answer;
+                            }
                         }
                     });
-                }else{
-                    var identifier = question.id+"-"+part.id;
+                } else {
+                    var identifier = question.id + "-" + part.id;
                     var answer = findOneOrMultipleAnswersPerPartAnswer(QuestionAssistant, question, firstExecution, index, part, null);
                     if (!answer) {
-                        if(firstExecution) index[identifier] = QuestionAssistant.getEmptyChoiceAnswer(question, part);
+                        if (firstExecution) {
+                            index[identifier] = QuestionAssistant.getEmptyChoiceAnswer(question, part);
+                        }
                     } else {
                         statusPerPart[part.id] = 3;
-                        if(firstExecution) index[identifier] = answer;
+                        if (firstExecution) {
+                            index[identifier] = answer;
+                        }
                     }
                 }
             });
@@ -124,36 +136,31 @@ angular.module('myApp.services')
             return question.statusCode = status;
         }
 
-
-
-
-
-
         var findOneOrMultipleAnswersPerPartAnswer = function (QuestionAssistant, question, firstExecution, index, part, choice)
         {
 
             if (!firstExecution) {
                 if (question.isMultiple) {
-                    var id = question.id+"-"+choice.id+"-"+part.id;
+                    var id = question.id + "-" + choice.id + "-" + part.id;
                     if (index[id] && index[id].isCheckboxChecked) {
                         return index[id];
                     }
                 } else {
-                    var id = question.id+"-"+part.id;
-                    if( index[id] && index[id].valueChoice && index[id].valueChoice.id){
+                    var id = question.id + "-" + part.id;
+                    if (index[id] && index[id].valueChoice && index[id].valueChoice.id) {
                         return index[id];
                     }
                 }
 
             } else {
-                for(var key in question.answers){
+                for (var key in question.answers) {
                     var testedAnswer = question.answers[key];
 
-                    if (testedAnswer.part && testedAnswer.part.id==part.id) {
+                    if (testedAnswer.part && testedAnswer.part.id == part.id) {
                         if (!question.isMultiple) {
 
                             return testedAnswer;
-                        } else if (question.isMultiple &&  testedAnswer.valueChoice.id==choice.id) {
+                        } else if (question.isMultiple && testedAnswer.valueChoice.id == choice.id) {
                             testedAnswer.isCheckboxChecked = true;
 
                             return testedAnswer;
@@ -165,27 +172,22 @@ angular.module('myApp.services')
             return false;
         }
 
-
-
-
-
         var getChildrenStatus = function (QuestionAssistant, question, index, firstExecution)
         {
             var childrenStatus = 4;
             if (question.children) {
-                angular.forEach( question.children, function(child) {
-                    if (!child.statusCode) child.statusCode = QuestionAssistant.updateQuestion(child, index, firstExecution, false);
+                angular.forEach(question.children, function (child)
+                {
+                    if (!child.statusCode) {
+                        child.statusCode = QuestionAssistant.updateQuestion(child, index, firstExecution, false);
+                    }
                     childrenStatus = (child.statusCode < childrenStatus) ? child.statusCode : childrenStatus;
                 });
             }
 
             return childrenStatus;
 
-            }
-
-
-
-
+        }
 
         return {
 
@@ -214,11 +216,13 @@ angular.module('myApp.services')
              *      2 : isValidated  -> Is valid but many optional fields are empty
              *      3 : isComplete   -> All fields even the optional ones have been completed
              */
-            updateQuestion : function (question, index, firstExecution, updateStatus)
+            updateQuestion: function (question, index, firstExecution, updateStatus)
             {
 
                 if (question) {
-                    if(!question.statusCode || updateStatus) question.statusCode = indexQuestion(this, question, firstExecution, index);
+                    if (!question.statusCode || updateStatus) {
+                        question.statusCode = indexQuestion(this, question, firstExecution, index);
+                    }
 
                     var childrenStatus = getChildrenStatus(this, question, index, firstExecution);
                     if (childrenStatus < question.statusCode) {
@@ -235,30 +239,30 @@ angular.module('myApp.services')
              * Used to create empty answer for Numeric and Text questions when loading a question that has no answer or after removing an answer
 
              */
-            getEmptyTextAnswer : function (question, pid)
+            getEmptyTextAnswer: function (question, pid)
             {
                 return {
-                    questionnaire : question.parentResource.id,
-                    part : pid,
-                    question : question.id
+                    questionnaire: question.parentResource.id,
+                    part: pid,
+                    question: question.id
                 };
             },
 
             /**
              * Used to create empty answer for QuestionChoices when loading a question that has no answer or after removing an answer
              */
-            getEmptyChoiceAnswer : function (question, part, choice)
+            getEmptyChoiceAnswer: function (question, part, choice)
             {
                 var answer = {
-                    questionnaire : question.parentResource.id,
-                    part : part.id,
-                    question : question.id,
-                    isCheckboxChecked : null
+                    questionnaire: question.parentResource.id,
+                    part: part.id,
+                    question: question.id,
+                    isCheckboxChecked: null
                 }
-                if(choice) answer.valueChoice = choice;
+                if (choice) {
+                    answer.valueChoice = choice;
+                }
                 return answer;
             }
-
         };
-
     });

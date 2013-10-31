@@ -54,7 +54,7 @@ class AnswerControllerTest extends AbstractController
     public function ensureOnlyAllowedFieldAreDisplayedInResponseForAnswer()
     {
         $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
-        $allowedFields = array('id', 'valuePercent', 'valueAbsolute', 'valueText', 'isCheckboxChecked', 'valueChoice', 'part', 'question');
+        $allowedFields = array('id', 'valuePercent', 'valueAbsolute', 'valueText', 'isCheckboxChecked', 'valueChoice', 'part', 'question', 'valueUser');
         foreach ($this->getJsonResponse() as $key => $value) {
             $this->assertTrue(in_array($key, $allowedFields));
         }

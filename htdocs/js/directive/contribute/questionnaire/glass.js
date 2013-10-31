@@ -29,7 +29,6 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                 }
             });
 
-
             $scope.initializeQuestionnaire = function()
             {
                 if ($scope.questionnaire && $scope.questions.length > 0) {

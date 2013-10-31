@@ -108,6 +108,16 @@ class UserController extends AbstractRestfulController
         return $this->forward()->dispatch(static::CONTROLLER_NAME, array('action' => 'authenticate'));
     }
 
+
+    public function getList()
+    {
+        $q = $this->params()->fromQuery('q');
+        $users = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), 'user', null, $q);
+
+        return new JsonModel($this->hydrator->extractArray($users, $this->getJsonConfig()));
+    }
+
+
     public function delete($id)
     {
         throw new \Exception('Not implemtented ! see https://support.ecodev.ch/issues/2042');
