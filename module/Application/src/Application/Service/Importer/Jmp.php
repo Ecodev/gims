@@ -563,6 +563,12 @@ STRING;
             return false;
         }
 
+        // Sometimes code use 4-digit year instead of 2-digit, we replace it here
+        // so we can find existing survey. This is the case of Burkina Faso, survey ENA2010
+        $year = $sheet->getCellByColumnAndRow($col + 3, 3)->getCalculatedValue();
+        $twoDigitsYear = substr($year, -2);
+        $code = str_replace($year, $twoDigitsYear, $code);
+
         // Load or create survey
         $surveyRepository = $this->getEntityManager()->getRepository('Application\Model\Survey');
         $survey = $surveyRepository->findOneBy(array('code' => $code));
@@ -572,7 +578,7 @@ STRING;
             $survey->setIsActive(true);
             $survey->setCode($code);
             $survey->setName($sheet->getCellByColumnAndRow($col + 0, 2)->getCalculatedValue());
-            $survey->setYear($sheet->getCellByColumnAndRow($col + 3, 3)->getCalculatedValue());
+            $survey->setYear($year);
 
             if (!$survey->getName()) {
                 $survey->setName($survey->getCode());
