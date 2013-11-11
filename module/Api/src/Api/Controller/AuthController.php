@@ -9,6 +9,8 @@ use Zend\Json\Json;
 class AuthController extends \ZfcUser\Controller\UserController
 {
 
+    use \Application\Traits\EntityManagerAware;
+
     /**
      * Return the user info if logged in
      * @return array|false
@@ -32,6 +34,14 @@ class AuthController extends \ZfcUser\Controller\UserController
         return false;
     }
 
+    protected function updateLastLoginDate()
+    {
+        /* @var \Application\Model\User $user */
+        $user = $this->zfcUserAuthentication()->getIdentity();
+        $user->setLastLogin(new \DateTime());
+        $this->getEntityManager()->flush();
+    }
+
     /**
      * Login form
      */
@@ -40,7 +50,7 @@ class AuthController extends \ZfcUser\Controller\UserController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $data = $data ?: Json::decode($request->getContent(), Json::TYPE_ARRAY);
+            $data = $data ? : Json::decode($request->getContent(), Json::TYPE_ARRAY);
 
             // Copy data to POST values of request so ZfcUser authentication can found them
             foreach ($data as $key => $value) {
@@ -88,6 +98,8 @@ class AuthController extends \ZfcUser\Controller\UserController
                 'messages' => 'Invalid username or password'
             ));
         } else {
+            $this->updateLastLoginDate();
+
             return new JsonModel($this->getUserInfo());
         }
     }

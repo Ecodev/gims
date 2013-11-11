@@ -2,21 +2,29 @@ angular.module('myApp.directives').directive('gimsUserQuestion', function (Quest
     return {
         restrict: 'E',
         template: "<ng-form name='innerQuestionForm'> " +
-                        "<div class='span12'>" +
-                        "<div ng-repeat='part in question.parts' class='span4'>"+
-                        "     <div ng-switch='part.name'>" +
-                        "           <div ng-switch-when='Total'>National</div>"+
-                        "           <div ng-switch-when='Urban'>Urban</div>"+
-                        "           <div ng-switch-when='Rural'>Rural</div>"+
-                        "     </div>"+
-                        "     <gims-select class='span8' name='user' api='user' model='index[question.id+\"-\"+part.id].valueUser' id='numerical-{{question.id}}-{{part.id}}'  disabled='saving'></gims-select>"+
-                        "     <button class='span3 btn btn-danger btn-xs' ng-click='resetUser(question, part)'><i class='icon-trash'></i></button>"+
-                        "</div></div><br/>"+
-                        "<span ng-show='question.isCompulsory' class='badge' ng-class=\"{'badge-important':question.statusCode==1, 'badge-success':question.statusCode==3}\">Required</span>"+
-                        "<span ng-show='!question.isCompulsory' class='badge' ng-class=\"{'badge-warning':question.statusCode==2, 'badge-success':question.statusCode==3}\">Optional</span>"+
-                        "<br/><br/><gims-add-user callback='updateUsersList()'></gims-add-user></div>"+
-            "</ng-form>" +
-            "",
+                        "<div class='row-fluid show-grid'>" +
+                        "   <div ng-repeat='part in question.parts' class='span4'>"+
+                        "        <div ng-switch='part.name'>" +
+                        "              <div ng-switch-when='Total'>National</div>"+
+                        "              <div ng-switch-when='Urban'>Urban</div>"+
+                        "              <div ng-switch-when='Rural'>Rural</div>"+
+                        "        </div>"+
+                        "        <gims-select style='width:100%' name='user' api='user' model='index[question.id+\"-\"+part.id].valueUser' id='numerical-{{question.id}}-{{part.id}}' disabled='saving'></gims-select>"+
+                        "        <div class='pull-right' style='margin-top:5px'>"+
+                        "           <button class='btn' ng-click='openModal(question, part, true)' ><i class='icon-plus'></i></button>"+
+                        "           <button class='btn' ng-click='openModal(question, part, false)' ng-show='index[question.id+\"-\"+part.id].valueUser && index[question.id+\"-\"+part.id].valueUser.lastLogin'><i class='icon-eye-open'></i></button>"+
+                        "           <button class='btn' ng-click='openModal(question, part, false)' ng-show='index[question.id+\"-\"+part.id].valueUser && !index[question.id+\"-\"+part.id].valueUser.lastLogin'><i class='icon-edit'></i></button>"+
+                        "           <button class='btn' ng-click='resetUser(question, part)' ng-show='index[question.id+\"-\"+part.id].valueUser'><i class='icon-trash'></i></button>"+
+                        "        </div>"+
+                        "        <div class='clearfix'></div>"+
+                        "   </div>"+
+                        "</div><br/>"+
+                        "<div style='line-height:40px'>"+
+                        "    <span ng-show='question.isCompulsory' class='badge' ng-class=\"{'badge-important':question.statusCode==1, 'badge-success':question.statusCode==3}\">Required</span>"+
+                        "    <span ng-show='!question.isCompulsory' class='badge' ng-class=\"{'badge-warning':question.statusCode==2, 'badge-success':question.statusCode==3}\">Optional</span>"+
+                        "<gims-add-user show-modal='showModal' user='modalUser'></gims-add-user>"+
+                  "</ng-form>" +
+                  "",
         scope:{
             index:'=',
             question:'='
@@ -26,37 +34,47 @@ angular.module('myApp.directives').directive('gimsUserQuestion', function (Quest
         },
         controller: function($scope, $location, $resource, $routeParams, Restangular, Modal)
         {
-            $scope.saving=false;
+
+            $scope.showModal = false;
+            $scope.saving = false;
+
             angular.forEach($scope.question.parts, function(part) {
                 var question = $scope.question;
                 $scope.$watch(function() {
                         return $scope.index[question.id+'-'+part.id].valueUser; // only way to $watch on some array cells
                 }, function(newUser, oldUser){
-                    // if different users
-                    if(newUser !== oldUser) {
-                        // if one user has is null or has no id -> save
-                        if( !newUser || !oldUser || !newUser.id || !oldUser.id){
-                            $scope.save(question, part);
-
-                        // users can be different but have the same id (happens when create call returne restangularized object)
-                        // avoids update after update -> ids have to be different
-                        }else if (newUser && oldUser && newUser.id && newUser.id && newUser.id != oldUser.id){
-                            $scope.save(question, part);
-                        }
+                    if (!oldUser && newUser && newUser.id ||
+                        oldUser && oldUser.id && !newUser ||
+                        oldUser && newUser && oldUser.id != newUser.id
+                        ){
+                        $scope.save(question, part);
                     }
                 });
             },true);
 
-            $scope.updateUsersList = function()
-            {
 
-                console.info('update user list');
+
+            $scope.openModal = function(question, part, createUser)
+            {
+                $scope.showModal = true;
+
+                var modalUserListener = $scope.$watch('modalUser', function(newModalUser) { // $watch return a function that can stop listening
+                    $scope.index[question.id+"-"+part.id].valueUser = newModalUser;
+                    modalUserListener(); // stop the listener cause we don't want to add much listeners
+                },true);
+
+                if (createUser) {
+                    $scope.modalUser = {};
+                } else if ($scope.index[question.id + "-" + part.id].valueUser) {
+                    $scope.modalUser = $scope.index[question.id + "-" + part.id].valueUser;
+                }
             }
+
 
             $scope.save = function(question, part)
             {
                 $scope.saving=true;
-                var newAnswer = $scope.index[question.id+"-"+part.id];
+                var newAnswer = $scope.index[question.id + "-" + part.id];
 
                 // if exists but value not empty -> update
                 if (newAnswer.id && newAnswer.valueUser) {
@@ -68,7 +86,7 @@ angular.module('myApp.directives').directive('gimsUserQuestion', function (Quest
                 // if dont exists -> create
                 } else if (!newAnswer.id && newAnswer.valueUser) {
                     Restangular.all('answer').post(newAnswer).then(function(answer){
-                        $scope.index[question.id+"-"+part.id] = answer;
+                        $scope.index[question.id + "-" + part.id] = answer;
                         $scope.saving=false;
                         QuestionAssistant.updateQuestion(question, $scope.index, false, true);
                     });
@@ -76,7 +94,7 @@ angular.module('myApp.directives').directive('gimsUserQuestion', function (Quest
                 // if exists but empty -> remove
                 } else if (newAnswer.id && (!newAnswer.valueUser || newAnswer.valueUser == "")) {
                     newAnswer.remove().then(function(){
-                        $scope.index[question.id+"-"+part.id] = QuestionAssistant.getEmptyTextAnswer(question, part.id);
+                        $scope.index[question.id + "-" + part.id] = QuestionAssistant.getEmptyTextAnswer(question, part.id);
                         $scope.saving=false;
                         QuestionAssistant.updateQuestion(question, $scope.index, false, true);
                     });
@@ -87,7 +105,7 @@ angular.module('myApp.directives').directive('gimsUserQuestion', function (Quest
 
             $scope.resetUser = function(question, part)
             {
-                $scope.index[question.id+"-"+part.id].valueUser = null;
+                $scope.index[question.id + "-" + part.id].valueUser = null;
             }
         }
     }

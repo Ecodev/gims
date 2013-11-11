@@ -27,7 +27,9 @@ class UserController extends AbstractRestfulController
 
     /**
      * Set User Service
+     *
      * @param \ZfcUser\Service\User $userService
+     *
      * @return \Api\Controller\UserController
      */
     public function setUserService(\ZfcUser\Service\User $userService)
@@ -45,6 +47,11 @@ class UserController extends AbstractRestfulController
      */
     public function create($data)
     {
+        if (!isset($data['password'])) {
+            $data['password'] = $this->generateRandomPassword();
+            $data['passwordVerify'] = $data['password'];
+        }
+
         $data['display_name'] = $data['name'];
         $user = $this->getUserService()->register($data);
 
@@ -59,17 +66,30 @@ class UserController extends AbstractRestfulController
         }
     }
 
+    private function generateRandomPassword()
+    {
+        $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+        $pass = array(); //remember to declare $pass as an array
+        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+        for ($i = 0; $i < 8; $i++) {
+            $n = rand(0, $alphaLength);
+            $pass[] = $alphabet[$n];
+        }
+
+        return implode($pass); //turn the array into a string
+    }
+
     public function statisticsAction()
     {
-// TODO: make the user mandatory and return stats based on actual roles (once we can pass the ID from angular)
-//        $user = $this->getRepository()->findOneById($this->params('idUser'));
-//
-//        if (!$user) {
-//            $this->getResponse()->setStatusCode(404);
-//            return new JsonModel(array('message' => 'No object found'));
-//        }
+        // TODO: make the user mandatory and return stats based on actual roles (once we can pass the ID from angular)
+        //        $user = $this->getRepository()->findOneById($this->params('idUser'));
+        //
+        //        if (!$user) {
+        //            $this->getResponse()->setStatusCode(404);
+        //            return new JsonModel(array('message' => 'No object found'));
+        //        }
 
-        $stats = $this->getRepository()->getStatistics(/* $user */);
+        $stats = $this->getRepository()->getStatistics( /* $user */);
 
         return new JsonModel($stats);
     }
@@ -77,7 +97,7 @@ class UserController extends AbstractRestfulController
     public function loginAction()
     {
         $request = $this->getRequest();
-        $form    = $this->getLoginForm();
+        $form = $this->getLoginForm();
 
         if ($this->getOptions()->getUseRedirectParameterIfPresent() && $request->getQuery()->get('redirect')) {
             $redirect = $request->getQuery()->get('redirect');
@@ -87,8 +107,8 @@ class UserController extends AbstractRestfulController
 
         if (!$request->isPost()) {
             return array(
-                'loginForm' => $form,
-                'redirect'  => $redirect,
+                'loginForm'          => $form,
+                'redirect'           => $redirect,
                 'enableRegistration' => $this->getOptions()->getEnableRegistration(),
             );
         }
@@ -98,7 +118,7 @@ class UserController extends AbstractRestfulController
         if (!$form->isValid()) {
             $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage($this->failedLoginMessage);
 
-            return $this->redirect()->toUrl($this->url()->fromRoute(static::ROUTE_LOGIN).($redirect ? '?redirect='.$redirect : ''));
+            return $this->redirect()->toUrl($this->url()->fromRoute(static::ROUTE_LOGIN) . ($redirect ? '?redirect=' . $redirect : ''));
         }
 
         // clear adapters
@@ -108,7 +128,6 @@ class UserController extends AbstractRestfulController
         return $this->forward()->dispatch(static::CONTROLLER_NAME, array('action' => 'authenticate'));
     }
 
-
     public function getList()
     {
         $q = $this->params()->fromQuery('q');
@@ -116,7 +135,6 @@ class UserController extends AbstractRestfulController
 
         return new JsonModel($this->hydrator->extractArray($users, $this->getJsonConfig()));
     }
-
 
     public function delete($id)
     {
