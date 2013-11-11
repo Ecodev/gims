@@ -16,7 +16,6 @@ class QuestionController extends AbstractChildRestfulController
 
     /**
      * The new choices to be added to the newly created question
-     *
      * @var array|null
      */
     private $newChoices = null;
@@ -30,12 +29,13 @@ class QuestionController extends AbstractChildRestfulController
             // Here we use a closure to get the questions' answers, but only for the current questionnaire
 
             'answers' => function (\Application\Service\Hydrator $hydrator, AbstractQuestion $question) use (
-            $questionnaire, $controller
+                $questionnaire, $controller
             ) {
                 $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
                 $answers = $answerRepository->findBy(array(
-                    'question' => $question,
-                    'questionnaire' => $questionnaire));
+                    'question'      => $question,
+                    'questionnaire' => $questionnaire
+                ));
 
                 // special case for question, reorganize keys for the needs of NgGrid:
                 // Numerical key must correspond to the id of the part.
@@ -56,12 +56,12 @@ class QuestionController extends AbstractChildRestfulController
 
                 return $output;
             },
-//
-//            'permissions' => function (\Application\Service\Hydrator $hydrator, AbstractQuestion $question) use (
-//                $questionnaire, $controller
-//            ) {
-//                return $questionnaire->getPermissions();
-//            }
+            //
+            //            'permissions' => function (\Application\Service\Hydrator $hydrator, AbstractQuestion $question) use (
+            //                $questionnaire, $controller
+            //            ) {
+            //                return $questionnaire->getPermissions();
+            //            }
         );
 
         return $config;
@@ -71,13 +71,13 @@ class QuestionController extends AbstractChildRestfulController
      * In the special case of QuestionController we want to be able to
      * create/update several concrete class. So we accept a special 'type'
      * parameter to let us know what type we actuall want to.
-     *
      * @return string
      */
     protected function getModel()
     {
         $request = $this->getRequest();
-        if ($this->requestHasContentType($request, self::CONTENT_TYPE_JSON)) {
+        if ($this->requestHasContentType($request, self::CONTENT_TYPE_JSON)
+        ) {
             $data = Json::decode($request->getContent(), $this->jsonDecodeType);
         } else {
             $data = $request->getPost()->toArray();
@@ -195,6 +195,7 @@ class QuestionController extends AbstractChildRestfulController
 
     /**
      * Affects the new choices to the given question, and remove the obsolete choices
+     *
      * @param array $newChoices
      * @param \Application\Model\Question\AbstractQuestion $question
      */
@@ -295,7 +296,6 @@ class QuestionController extends AbstractChildRestfulController
                 $question = $survey->getQuestions()->last();
             }
 
-
             if ($question) {
                 $data['sorting'] = $question->getSorting() + 1;
             } else {
@@ -313,4 +313,3 @@ class QuestionController extends AbstractChildRestfulController
     }
 
 }
-

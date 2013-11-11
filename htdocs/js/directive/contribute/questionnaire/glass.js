@@ -29,10 +29,12 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                 }
             });
 
-
             $scope.initializeQuestionnaire = function()
             {
                 if ($scope.questionnaire && $scope.questions.length > 0) {
+
+//                    var note = {question : 7, questionnaire : 1}
+//                    Restangular.all('note').post(note).then(function(note){console.log(note);});
 
                     $scope.questionnaire.level = -1;
                     $scope.questionnaire.index = -1;

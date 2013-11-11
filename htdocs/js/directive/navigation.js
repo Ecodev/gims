@@ -25,12 +25,10 @@ angular.module('myApp.directives').directive('gimsQuestionsNav', function(Recurs
 
         controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal)
         {
-
             $scope.goToLocal = function(index){
                 $scope.goTo({wantedIndex:index});
             }
         }
-
     }
 });
 

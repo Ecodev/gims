@@ -114,6 +114,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'name' => 'John Connor',
             'email' => 'john.connor@skynet.net',
             'state' => null,
+            'lastLogin' => null
         );
 
         $this->hydrator->hydrate($data, $this->user);
@@ -189,6 +190,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
                 'name' => 'John',
                 'email' => null,
                 'state' => null,
+                'lastLogin' => null,
             ),
             1 =>
             array(
@@ -196,6 +198,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
                 'name' => 'Bob',
                 'email' => null,
                 'state' => null,
+                'lastLogin' => null,
             ),
                 )
                 , $this->hydrator->extractArray(array($this->user, $user2), array('name')));
@@ -321,6 +324,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'name' => 'John',
             'email' => null,
             'state' => null,
+            'lastLogin' => null,
             'custom name' => 'Mr. John Connor',
                 ), $this->hydrator->extract($this->user, array(
                     'custom name' => function(Hydrator $hydrator, \Application\Model\User $user) {
@@ -336,6 +340,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'id' => null,
             'email' => null,
             'state' => null,
+            'lastLogin' => null,
             'dateCreated' => $this->user->getDateCreated()->format(\DateTime::ISO8601),
             'name' => 'John',
                 ), $this->hydrator->extract($this->user, array(

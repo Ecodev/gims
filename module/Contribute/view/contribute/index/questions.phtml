@@ -2,7 +2,7 @@
 <gims-questionnaire-tool-bar></gims-questionnaire-tool-bar>
 
 <form novalidate name='questionnaireForm' class='row-fluid'>
-    
+
     <div class='span4 hidden-print'>
         <gims-questions-nav id='questionnaireNav' nav='hierarchicQuestions' go-to='goTo(wantedIndex)'></gims-questions-nav>
     </div>
@@ -36,6 +36,9 @@
                             <div ng-switch-when="Choice">
                                 <gims-choi-question question='child' index="index"></gims-choi-question>
                             </div>
+                            <div ng-switch-when="User">
+                                <gims-user-question question='child' index="index"></gims-user-question>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -52,11 +55,12 @@
             <div ng-switch-when="Choice">
                 <gims-choi-question question='currentQuestion' index="index"></gims-choi-question>
             </div>
-
+            <div ng-switch-when="User">
+                <gims-user-question question='currentQuestion' index="index"></gims-user-question>
+            </div>
         </div>
     </div>
 </form>
-
 <br/>
 Legend :
 <span class='badge badge-warning'>Some optional questions are empty</span>

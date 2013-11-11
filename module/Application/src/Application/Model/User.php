@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * User
- *
  * @ORM\Table(name="`user`", uniqueConstraints={@ORM\UniqueConstraint(name="user_email",columns={"email"})})
  * @ORM\Entity(repositoryClass="Application\Repository\UserRepository")
  */
@@ -15,7 +14,6 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * Returns currently logged user or null
-     *
      * @return User|null
      */
     public static function getCurrentUser()
@@ -28,42 +26,90 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $name;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $email;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", length=128, nullable=false)
      */
     private $password;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", length=25, nullable=true)
+     */
+    private $phone;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $skype;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $job;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $ministry;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $address;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $zip;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $city;
+
+    /**
+     * @var \Application\Model\Country
+     * @ORM\ManyToOne(targetEntity="\Application\Model\Country")
+     */
+    private $country;
+
+    /**
      * @var integer
-     *
      * @ORM\Column(type="smallint", nullable=true)
      */
     private $state;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(type="datetimetz", nullable=true)
+     */
+    private $lastLogin;
+
+    /**
      * @var ArrayCollection
-     *
      * @ORM\OneToMany(targetEntity="UserSurvey", mappedBy="user")
      */
     private $userSurveys;
 
     /**
      * @var ArrayCollection
-     *
      * @ORM\OneToMany(targetEntity="UserQuestionnaire", mappedBy="user")
      */
     private $userQuestionnaires;
@@ -83,16 +129,17 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
-            'name',
-            'email',
-            'state',
-        ));
+        return array_merge(parent::getJsonConfig(),
+            array(
+                'name',
+                'email',
+                'state',
+                'lastLogin'
+            ));
     }
 
     /**
      * Set name
-     *
      * @param string $name
      * @return User
      */
@@ -105,7 +152,6 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * Get name
-     *
      * @return string
      */
     public function getName()
@@ -115,7 +161,6 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * Set email
-     *
      * @param string $email
      * @return User
      */
@@ -128,7 +173,6 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * Get email
-     *
      * @return string
      */
     public function getEmail()
@@ -138,7 +182,6 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * Set password
-     *
      * @param string $password
      * @return User
      */
@@ -151,7 +194,6 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * Get password
-     *
      * @return string
      */
     public function getPassword()
@@ -161,7 +203,6 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * Set state
-     *
      * @param integer $state
      * @return User
      */
@@ -174,7 +215,6 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * Get state
-     *
      * @return integer
      */
     public function getState()
@@ -325,6 +365,178 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     public function getGravatar()
     {
         return 'http://www.gravatar.com/avatar/' . md5(strtolower(trim($this->getEmail())));
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string $phone
+     * @return User
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSkype()
+    {
+        return $this->skype;
+    }
+
+    /**
+     * @param string $skype
+     * @return User
+     */
+    public function setSkype($skype)
+    {
+        $this->skype = $skype;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJob()
+    {
+        return $this->job;
+    }
+
+    /**
+     * @param string $job
+     * @return User
+     */
+    public function setJob($job)
+    {
+        $this->job = $job;
+
+        return $this;
+
+    }
+
+    /**
+     * @return string
+     */
+    public function getMinistry()
+    {
+        return $this->ministry;
+    }
+
+    /**
+     * @param string $ministry
+     * @return User
+     */
+    public function setMinistry($ministry)
+    {
+        $this->ministry = $ministry;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     * @return User
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getZip()
+    {
+        return $this->zip;
+    }
+
+    /**
+     * @param string $zip
+     * @return User
+     */
+    public function setZip($zip)
+    {
+        $this->zip = $zip;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param string $city
+     * @return User
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * @return \Application\Model\Country
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param \Application\Model\Country $country
+     * @return User
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastLogin()
+    {
+        return $this->lastLogin;
+    }
+
+    /**
+     * @param int $lastLogin
+     * @return User
+     */
+    public function setLastLogin($lastLogin)
+    {
+        $this->lastLogin = $lastLogin;
+
+        return $this;
     }
 
 }

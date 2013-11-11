@@ -20,18 +20,18 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
         require: 'ngModel',
         replace: true,
         transclude: true,
-        template: '<input ui-select2="options" ng-model="model"/>',
+        template: '<input ui-select2="options" ng-model="model" ng-disabled="disabled"/>',
         scope: {
             api: '@',
             name: '@',
             placeholder: '@',
             format: '@',
             queryparams: '=',
+            disabled : '=',
             model: '=' // TODO: could not find a way to use real 'ng-model'. So for now we use custom 'model' attribute and bi-bind it to real ng-model. Ugly, but working
         },
         // The linking function will add behavior to the template
         link: function(scope, element, attr, ctrl) {
-
         },
         controller: function($scope, $attrs, Restangular, CachedRestangular, $location, $route, $routeParams) {
 
@@ -77,6 +77,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             // define what mode should be used for what type of item
             var config = {
                 questionnaire: 'ajax',
+                user: 'ajax',
                 country: 'cached',
                 part: 'cached'
             };

@@ -28,9 +28,9 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function (Quest
                         "<span ng-show='!question.isCompulsory' class='badge' ng-class=\"{'badge-warning':question.statusCode==2, 'badge-success':question.statusCode==3}\">Optional</span>"+
                     "</ng-form>",
 
-        scope:{
-            index:'=',
-            question:'='
+        scope: {
+            index: '=',
+            question: '='
         },
         controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal)
         {
@@ -38,48 +38,48 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function (Quest
             $scope.save = function (question, choice, part)
             {
                 $scope.saving = true;
-                if($scope.question.isMultiple){
-                    var identifier = question.id+"-"+choice.id+"-"+part.id;
-                }else{
-                    var identifier = question.id+"-"+part.id;
+                if ($scope.question.isMultiple) {
+                    var identifier = question.id + "-" + choice.id + "-" + part.id;
+                } else {
+                    var identifier = question.id + "-" + part.id;
                 }
 
                 var newAnswer = $scope.index[identifier];
-                newAnswer.valueChoice=choice;
-                newAnswer.valuePercent=choice.value;
-
+                newAnswer.valueChoice = choice;
+                newAnswer.valuePercent = choice.value;
 
 
                 // if id setted on radio button, update
                 if (newAnswer.id && !$scope.question.isMultiple) {
-                    newAnswer.put().then(function(){
-                        $scope.saving=false;
+                    newAnswer.put().then(function ()
+                    {
+                        $scope.saving = false;
                         QuestionAssistant.updateQuestion(question, $scope.index, false, true);
                     });
 
-                // if id is setted on checkbox element, that means that there already is a result and we want to remove it
-                }else if (newAnswer.id && $scope.question.isMultiple) {
-                    newAnswer.remove().then(function(){
+                    // if id is setted on checkbox element, that means that there already is a result and we want to remove it
+                } else if (newAnswer.id && $scope.question.isMultiple) {
+                    newAnswer.remove().then(function ()
+                    {
                         $scope.index[identifier] = QuestionAssistant.getEmptyChoiceAnswer(question, part, choice);
-                        $scope.saving=false;
+                        $scope.saving = false;
                         QuestionAssistant.updateQuestion(question, $scope.index, false, true);
                     });
 
-                // if don't exists -> create
+                    // if don't exists -> create
                 } else if (!newAnswer.id) {
-                    Restangular.all('answer').post(newAnswer).then(function(answer){
-                        if($scope.question.isMultiple) answer.isCheckboxChecked = true;
+                    Restangular.all('answer').post(newAnswer).then(function (answer)
+                    {
+                        if ($scope.question.isMultiple) {
+                            answer.isCheckboxChecked = true;
+                        }
                         $scope.index[identifier] = answer;
-                        $scope.saving=false;
+                        $scope.saving = false;
                         QuestionAssistant.updateQuestion(question, $scope.index, false, true);
                     });
                 }
 
             }
-
-
-
-
 
 
         }

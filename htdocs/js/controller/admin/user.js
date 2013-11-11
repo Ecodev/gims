@@ -54,7 +54,7 @@ $scope.s = 'assaas';
 
     // Load user if possible
     if ($routeParams.id) {
-        Restangular.one('user', $routeParams.id).get({fields: 'metadata'}).then(function(user) {
+        Restangular.one('user', $routeParams.id).get({fields: 'metadata,phone,skype,job,ministry,address,zip,city,country'}).then(function(user) {
             $scope.user = user;
         });
     } else {
@@ -69,6 +69,7 @@ angular.module('myApp').controller('Admin/UserCtrl', function($scope, $location,
     'use strict';
 
     // Initialize
+
     $scope.users = Restangular.all('user').getList();
 
     // Keep track of the selected row.

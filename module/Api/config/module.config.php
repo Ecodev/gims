@@ -21,6 +21,7 @@ return array(
             'Api\Controller\ChartFilter' => 'Api\Controller\ChartFilterController',
             'Api\Controller\Chart' => 'Api\Controller\ChartController',
             'Api\Controller\Table' => 'Api\Controller\TableController',
+            'Api\Controller\Note' => 'Api\Controller\NoteController',
         ),
     ),
     'router' => array(

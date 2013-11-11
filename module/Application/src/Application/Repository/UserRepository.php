@@ -69,4 +69,28 @@ class UserRepository extends AbstractRepository
         return $qb->getQuery()->getResult();
     }
 
+
+    public function getAllWithPermission($action = 'read', $parentName = null, \Application\Model\AbstractModel $parent = null, $search = null)
+    {
+        $qb = $this->createQueryBuilder('user');
+
+        if ($parent) {
+            $qb->where($parentName . ' = :parent');
+            $qb->setParameter('parent', $parent);
+        }
+
+        if ($search) {
+            $where = array();
+            foreach (explode(' ', $search) as $i => $word) {
+                $parameterName = 'word' . $i;
+                $where[] = '(LOWER(user.name) LIKE LOWER(:' . $parameterName . ') OR LOWER(user.name) LIKE LOWER(:' . $parameterName . '))';
+                $qb->setParameter($parameterName, '%' . $word . '%');
+            }
+            $qb->andWhere(join(' AND ', $where));
+            $qb->setMaxResults(50);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 }
