@@ -159,7 +159,7 @@ return array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Console' => 'Application\Controller\ConsoleController',
             'Application\Controller\Email' => 'Application\Controller\EmailController',
-            'zfcuser' => 'Api\Controller\AuthController',
+            'zfcuser' => 'Application\Controller\AuthController',
         ),
     ),
     'view_manager' => array(

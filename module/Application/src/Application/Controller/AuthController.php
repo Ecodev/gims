@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Controller;
+namespace Application\Controller;
 
 use Zend\Http\Response;
 use Zend\View\Model\JsonModel;
