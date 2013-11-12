@@ -1,6 +1,28 @@
 <?php
 
-$countries = array(
+/**
+ * Check that all existing files on disk exist in the countries array
+ * @param array $countries
+ */
+function check(array $countries)
+{
+
+    $files = explode("\n", trim(`find data/cache/country_data -type f`));
+    echo count($files) . PHP_EOL;
+    foreach ($countries as $a) {
+        $k = array_search($a['path'], $files);
+        if ($k !== false) {
+            unset($files[$k]);
+        }
+    }
+    echo count($files) . PHP_EOL;
+    var_export($files);
+}
+
+/**
+ * List of all countries with their ID from database and Excel file
+ */
+return array(
     array(
         'id' => 3,
         'iso3' => 'AFG',
@@ -1508,63 +1530,3 @@ $countries = array(
         'path' => 'data/cache/country_data/Country_data_Africa/Eastern_Africa/Zimbabwe_12.xlsm',
     ),
 );
-
-function check($countries)
-{
-
-    $files = explode("\n", trim(`find data/cache/country_data -type f`));
-    echo count($files) . PHP_EOL;
-    foreach ($countries as $a) {
-        $k = array_search($a['path'], $files);
-        if ($k !== false) {
-            unset($files[$k]);
-        }
-    }
-    echo count($files) . PHP_EOL;
-    var_export($files);
-}
-
-function export(array $countries, array $onlyThose = array())
-{
-    $hostname = basename(getcwd());
-    @mkdir('each');
-    @mkdir('each/backup');
-    @mkdir('each/questionnaire');
-    @mkdir('each/country');
-
-    foreach ($countries as $country) {
-
-        $id = $country['id'];
-        $name = $country['name'];
-        $path = $country['path'];
-
-        if ($onlyThose && array_search($name, $onlyThose) === false)
-            continue;
-
-        if (!$path)
-            continue;
-
-        echo $path . PHP_EOL;
-        $backup = "each/backup/$name.backup.gz";
-
-        // Recycle backup if exists
-        if (is_readable($backup)) {
-            echo `phing load-data -DdumpFile="$backup"`;
-        } else {
-            echo `phing load-data -DdumpFile=../gims/population.backup.gz`;
-            echo `php htdocs/index.php import jmp $path`;
-            echo `phing dump-data -DdumpFile="$backup"`;
-        }
-
-        echo `wget -O "each/questionnaire/$name - Water.csv"      "http://$hostname.local/api/table/questionnaire/foo.csv?years=1990-2011&country=$id&filterSet=2"`;
-        echo `wget -O "each/questionnaire/$name - Sanitation.csv" "http://$hostname.local/api/table/questionnaire/foo.csv?years=1990-2011&country=$id&filterSet=5"`;
-
-        echo `wget -O "each/country/$name - Water.csv"      "http://$hostname.local/api/table/country/foo.csv?years=1990-2011&country=$id&filterSet=2"`;
-        echo `wget -O "each/country/$name - Sanitation.csv" "http://$hostname.local/api/table/country/foo.csv?years=1990-2011&country=$id&filterSet=5"`;
-    }
-}
-
-$onlyThose = array(
-);
-
-export($countries, $onlyThose);
