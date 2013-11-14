@@ -1,4 +1,4 @@
-angular.module('myApp.services').factory('QuestionAssistant', function ($dialog, $location)
+angular.module('myApp.services').factory('QuestionAssistant', function ()
     {
         'use strict';
 
@@ -32,7 +32,7 @@ angular.module('myApp.services').factory('QuestionAssistant', function ($dialog,
             var status = 3;
             angular.forEach(question.parts, function (part)
             {
-                var id = question.id + '-' + part.id
+                var id = question.id + '-' + part.id;
                 var answer = findOneAnswerPerPartAnswer(QuestionAssistant, question, index, firstExecution, valueField, part.id);
                 if (!answer) {
                     if (question.isCompulsory) {

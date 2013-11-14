@@ -6,77 +6,113 @@
             <li class="active">{{user.name}}</li>
         </ul>
     </h2>
-    <form name="myForm">
+
+    <form name="myForm" class="form-horizontal">
 
         <?php echo $this->crudButtons('user'); ?>
 
         <tabset style="margin-top: 20px">
             <tab heading="General info">
 
-                <div class="control-group" ng-class="{error: myForm.name.$invalid}">
-                    <label for="user.name"><?php echo $this->translate("Name"); ?></label>
-                    <input id="user.name" type="text" name="name" ng-model="user.name" required class="span6" ng-minlength="3"/>
-                    <span ng-show="myForm.name.$error.required" class="help-inline"><?php echo $this->translate("Required"); ?></span>
-                    <span ng-show="myForm.name.$error.minlength" class="help-inline"><?php echo sprintf($this->translate("It must be at least %u characters long"), 3); ?></span>
+                <div class="form-group" ng-class="{'has-error': myForm.name.$invalid}">
+                    <label class="col-sm-1" for="user.name"><?php echo $this->translate("Name"); ?></label>
+                    <div class="col-sm-6">
+                        <input id="user.name" type="text" name="name" ng-model="user.name" required ng-minlength="3"/>
+                    </div>
+                    <div class="col-sm-3">
+                        <span ng-show="myForm.name.$error.required" class="help-block"><?php echo $this->translate("Required"); ?></span>
+                        <span ng-show="myForm.name.$error.minlength" class="help-block"><?php echo sprintf($this->translate("It must be at least %u characters long"), 3); ?></span>
+                    </div>
                 </div>
 
-                <div class="control-group" ng-class="{error: myForm.email.$invalid}">
-                    <label for="user.email"><?php echo $this->translate("Email"); ?></label>
-                    <input id="user.email" type="email" name="email" ng-model="user.email" required class="span6"  />
-                    <span ng-show="myForm.email.$error.required" class="help-inline"><?php echo $this->translate("Required"); ?></span>
+                <div class="form-group" ng-class="{'has-error': myForm.email.$invalid}">
+                    <label class="col-sm-1" for="user.email"><?php echo $this->translate("Email"); ?></label>
+                    <div class="col-sm-6">
+                        <input id="user.email" type="email" name="email" ng-model="user.email" required />
+                    </div>
+                    <div class="col-sm-3">
+                        <span ng-show="myForm.email.$error.required" class="help-block"><?php echo $this->translate("Required"); ?></span>
+                        <span ng-show="myForm.email.$error.email" class="help-block"><?php echo $this->translate('Enter a valid email address'); ?></span>
+                    </div>
                 </div>
 
-                <div class="control-group" ng-class="{error: myForm.password.$invalid || myForm.passwordVerify.$invalid}">
-                    <label for="user.password"><?php echo $this->translate("Password"); ?></label>
-                    <input id="user.password" name="password" type="password" ng-model="user.password" placeholder="password" class="span6" ng-minlength="6">
-                    <span ng-show="myForm.password.$error.required" class="help-inline"><?php echo $this->translate("Required"); ?></span>
-                    <span ng-show="myForm.password.$error.minlength" class="help-inline"><?php echo sprintf($this->translate("It must be at least %u characters long"), 6); ?></span>
-                    <br>
-                    <input name="passwordVerify" type="password" ng-model="user.passwordVerify" ui-validate=" '$value==user.password' " ui-validate-watch=" 'user.password' " placeholder="confirm password"  class="span6">
-                    <span ng-show="myForm.passwordVerify.$error.validator" class="help-inline"><?php echo $this->translate("Passwords do not match!"); ?></span>
+                <div class="form-group" ng-class="{'has-error': myForm.password.$invalid || myForm.passwordVerify.$invalid}">
+                    <label class="col-sm-1" for="user.password"><?php echo $this->translate("Password"); ?></label>
+
+                    <div class="col-sm-11">
+
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <input id="user.password" name="password" type="password" ng-model="user.password" placeholder="password" ng-minlength="6">
+                            </div>
+                            <div class="col-sm-3">
+                                <span ng-show="myForm.password.$error.required" class="help-block"><?php echo $this->translate("Required"); ?></span>
+                                <span ng-show="myForm.password.$error.minlength" class="help-block"><?php echo sprintf($this->translate("It must be at least %u characters long"), 6); ?></span>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <input name="passwordVerify" type="password" ng-model="user.passwordVerify" ui-validate=" '$value==user.password' " ui-validate-watch=" 'user.password' " placeholder="confirm password" >
+                            </div>
+                            <div class="col-sm-3">
+                                <span ng-show="myForm.passwordVerify.$error.validator" class="help-block"><?php echo $this->translate("Passwords do not match!"); ?></span>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
 
-                <div class="control-group" ng-class="{error: myForm.phone.$invalid}">
-                    <label for="user.phone">Phone</label>
-                    <input id="user.phone" type="text" name="phone" ng-model="user.phone" class="span6"/>
+                <div class="form-group" ng-class="{'has-error': myForm.phone.$invalid}">
+                    <label class="col-sm-1" for="user.phone">Phone</label>
+                    <div class="col-sm-6">
+                        <input id="user.phone" type="text" name="phone" ng-model="user.phone"/>
                     </div>
-                <div class="control-group" ng-class="{error: myForm.skype.$invalid}">
-                    <label for="user.skype">Skype</label>
-                    <input id="user.skype" type="text" name="skype" ng-model="user.skype" class="span6"/>
-                    </div>
-                <div class="control-group" ng-class="{error: myForm.job.$invalid}">
-                    <label for="user.job">Job title</label>
-                    <input id="user.job" type="text" name="job" ng-model="user.job" class="span6"/>
-                    </div>
-                <div class="control-group" ng-class="{error: myForm.ministry.$invalid}">
-                    <label for="user.ministry">Ministry / Departement</label>
-                    <input id="user.ministry" type="text" name="ministry" ng-model="user.ministry" class="span6"/>
-                    </div>
-                <div class="control-group" ng-class="{error: myForm.address.$invalid}">
-                    <label for="user.address">Address</label>
-                    <textarea id="user.address" type="text" name="address" ng-model="user.address" class="span6" ></textarea>
-                    </div>
-                <div class="control-group" ng-class="{error: myForm.zip.$invalid}">
-                    <label for="user.zip">ZIP</label>
-                    <input id="user.zip" type="text" name="zip" ng-model="user.zip" class="span6"/>
-                    </div>
-                <div class="control-group" ng-class="{error: myForm.city.$invalid}">
-                    <label for="user.city">City</label>
-                    <input id="user.city" type="text" name="city" ng-model="user.city" class="span6"/>
-                    </div>
-                <div class="control-group" ng-class="{error: myForm.country.$invalid}">
-                    <label for="country">Country</label>
-                    <gims-select id="country" api="country" name="country" model="user.country" style="width:50%"></gims-select>
                 </div>
-                
-                <!--
-                <div class="control-group" ng-class="{error: myForm.state.$invalid}">
-                    <label for="user.state">State</label>
-                    <select id="user.state" name="state" ng-model="user.state" ng-options="c.value as c.text for c in states"
-                            required></select>
-                    <span ng-show="myForm.state.$error.required" class="help-inline">Required</span>
-                </div> -->
+                <div class="form-group" ng-class="{'has-error': myForm.skype.$invalid}">
+                    <label class="col-sm-1" for="user.skype">Skype</label>
+                    <div class="col-sm-6">
+                        <input id="user.skype" type="text" name="skype" ng-model="user.skype"/>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{'has-error': myForm.job.$invalid}">
+                    <label class="col-sm-1" for="user.job">Job title</label>
+                    <div class="col-sm-6">
+                        <input id="user.job" type="text" name="job" ng-model="user.job"/>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{'has-error': myForm.ministry.$invalid}">
+                    <label class="col-sm-1" for="user.ministry">Ministry / Departement</label>
+                    <div class="col-sm-6">
+                        <input id="user.ministry" type="text" name="ministry" ng-model="user.ministry"/>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{'has-error': myForm.address.$invalid}">
+                    <label class="col-sm-1" for="user.address">Address</label>
+                    <div class="col-sm-6">
+                        <textarea id="user.address" type="text" name="address" ng-model="user.address" ></textarea>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{'has-error': myForm.zip.$invalid}">
+                    <label class="col-sm-1" for="user.zip">ZIP</label>
+                    <div class="col-sm-6">
+                        <input id="user.zip" type="text" name="zip" ng-model="user.zip"/>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{'has-error': myForm.city.$invalid}">
+                    <label class="col-sm-1" for="user.city">City</label>
+                    <div class="col-sm-6">
+                        <input id="user.city" type="text" name="city" ng-model="user.city"/>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{'has-error': myForm.country.$invalid}">
+                    <label class="col-sm-1" for="country">Country</label>
+                    <div class="col-sm-6">
+                        <gims-select id="country" api="country" name="country" model="user.country" style="width:100%"></gims-select>
+                    </div>
+                </div>
+
             </tab>
 
             <tab heading="Surveys" ui-if="user.id">

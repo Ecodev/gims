@@ -7,11 +7,11 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
         replace: true,
         transclude: true,
         template: '<div>' +
-            '<div class="row-fluid">' +
-            '<div class="span7">' +
+            '<div class="row">' +
+            '<div class="col-md-7">' +
             '<input type="text" ng-model="gridOptions.filterOptions.filterText" placeholder="Search..." class="search" style="width: 400px"/>' +
             '</div>' +
-            '<div class="span5" style="text-align: right">' +
+            '<div class="col-md-5" style="text-align: right">' +
             '<gims-link-new origin="survey" target="question" return-tab="1"/>' +
             '</div>' +
             '</div>' +
@@ -75,9 +75,9 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
                     {
                         displayName: '',
                         width: '10%',
-                        cellTemplate: '<a class="btn btn-mini btn-edit" href="/admin/question/edit/{{row.entity.id}}?returnUrl={{returnUrl}}">' +
+                        cellTemplate: '<a class="btn btn-default btn-xs btn-edit" href="/admin/question/edit/{{row.entity.id}}?returnUrl={{returnUrl}}">' +
                                             '<i class="icon-pencil icon-large"></i></a>' +
-                                            '<button type="button" class="btn btn-mini btn-remove" ng-click="removeQuestion(row)" >' +
+                                            '<button type="button" class="btn btn-default btn-xs" ng-click="removeQuestion(row)" >' +
                                             '<i class="icon-trash icon-large"></i>' +
                                         '</button>'
                     }

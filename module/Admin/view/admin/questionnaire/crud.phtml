@@ -7,69 +7,67 @@
             <li class="active">{{survey.code}} - {{questionnaire.geoname.name}}</li>
         </ul>
     </h2>
-    <form name="myForm">
+    <form name="myForm" class="form-horizontal">
 
         <?php echo $this->crudButtons('questionnaire'); ?>
 
         <tabset style="margin-top: 20px" active="panes[0].active">
             <tab heading="General info">
 
-                <div class="control-group" ng-class="{error: myForm.status.$invalid}" ng-show="questionnaire.id">
-                    <label for="questionnaire.status">Status</label>
-                    <select id="questionnaire.status" name="state" ng-model="questionnaire.status"
-                            ng-options="c.value as c.text for c in status" ng-disabled="statusDisabled"></select>
-                </div>
-
-                <div class="control-group" ng-class="{error: myForm.geoname.$invalid}">
-                    <label for="questionnaire.geoname">Country</label>
-                    <gims-select api="geoname" model="questionnaire.geoname"
-                           placeholder="<?php echo $this->translate('Select a country') ?>" style="width: 556px"
-                           required></gims-select>
-                    <span ng-show="myForm.geoname.$error.required" class="help-inline">Required</span>
-                </div>
-
-                <div class="input-append span12" style="margin-left: 0">
-                    <div class="row-fluid">
-                        <div class="span3">
-                            <div class="control-group" ng-class="{error: !questionnaire.dateObservationStart}">
-                                <label for="questionnaire.dateObservationStart">
-                                    <span>Date observation time</span>
-                                    <span ng-show="!questionnaire.dateObservationStart"
-                                          class="help-inline">Required</span>
-                                </label>
-
-                                <label for="questionnaire.dateObservationStart">
-                                <input id="questionnaire.dateObservationStart" class="input-small" type="text"
-                                       ng-model="questionnaire.dateObservationStart"
-                                       required
-                                       datepicker-popup="dd/MM/yyyy"/><button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i>
-                                </button>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="span9">
-                            <div class="control-group" ng-class="{error: !questionnaire.dateObservationEnd}">
-                                <label for="questionnaire.dateObservationEnd">
-                                    <span>Date observation end</span>
-                                    <span ng-show="!questionnaire.dateObservationEnd"
-                                          class="help-inline">Required</span>
-                                </label>
-
-                                <label for="questionnaire.dateObservationEnd">
-                                <input id="questionnaire.dateObservationEnd" class="input-small" type="text"
-                                       ng-model="questionnaire.dateObservationEnd"
-                                       required
-                                       datepicker-popup="dd/MM/yyyy"/><button type="button" class="btn"><i class="icon-calendar"></i>
-                                </button></label>
-                            </div>
-                        </div>
+                <div class="form-group" ng-class="{'has-error': myForm.status.$invalid}" ng-show="questionnaire.id">
+                    <label class="col-sm-2" for="questionnaire.status">Status</label>
+                    <div class="col-sm-2">
+                        <select id="questionnaire.status" name="state" ng-model="questionnaire.status"
+                                ng-options="c.value as c.text for c in status" ng-disabled="statusDisabled"></select>
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label for="questionnaire.comments">Comments</label>
-                    <textarea id="questionnaire.comments" type="text" name="comments" ng-model="questionnaire.comments"
-                              class="span6"></textarea>
+                <div class="form-group" ng-class="{'has-error': myForm.geoname.$invalid}">
+                    <label class="col-sm-2" for="questionnaire.geoname">Country</label>
+                    <div class="col-sm-6">
+                        <gims-select api="geoname" model="questionnaire.geoname" name="geoname"
+                                     placeholder="<?php echo $this->translate('Select a country') ?>" style="width: 100%"
+                                     required></gims-select>
+                    </div>
+                    <div class="col-sm-2">
+                        <span ng-show="myForm.geoname.$error.required" class="help-block">Required</span>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-class="{'has-error': myForm.dateObservationStart.$invalid}">
+                    <label class="col-sm-2" for="questionnaire.dateObservationStart">Observation start</label>
+
+                    <div class="col-sm-2">
+                        <input id="questionnaire.dateObservationStart" class="input-sm" type="text" name="dateObservationStart"
+                               ng-model="questionnaire.dateObservationStart"
+                               required
+                               datepicker-popup="dd/MM/yyyy"/>
+                    </div>
+                    <div class="col-sm-2">
+                        <span ng-show="myForm.dateObservationStart.$error.required" class="help-block">Required</span>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-class="{'has-error': myForm.dateObservationEnd.$invalid}">
+                    <label class="col-sm-2" for="questionnaire.dateObservationEnd">Observation end</label>
+
+                    <div class="col-sm-2">
+
+                        <input id="questionnaire.dateObservationEnd" class="input-sm" type="text" name="dateObservationEnd"
+                               ng-model="questionnaire.dateObservationEnd"
+                               required
+                               datepicker-popup="dd/MM/yyyy"/>
+                    </div>
+                    <div class="col-sm-2">
+                        <span ng-show="myForm.dateObservationEnd.$error.required" class="help-block">Required</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2" for="questionnaire.comments">Comments</label>
+                    <div class="col-sm-6">
+                        <textarea id="questionnaire.comments" type="text" name="comments" ng-model="questionnaire.comments"></textarea>
+                    </div>
                 </div>
 
             </tab>

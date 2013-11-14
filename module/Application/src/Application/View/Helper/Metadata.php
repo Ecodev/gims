@@ -13,23 +13,23 @@ class Metadata extends \Zend\View\Helper\AbstractHtmlElement
     public function __invoke($objectName)
     {
         $result = <<<STRING
-    <div class="row-fluid form-metadata">
-        <div class="span6">
+    <div class="row form-metadata">
+        <p class="col-md-6">
             <span ng-class="{'hide': !$objectName.dateCreated}">
                 Created on {{{$objectName}.dateCreated | date:'dd of MMM yyyy @ HH:mm'}}
             </span>
             <span ng-class="{'hide': !$objectName.creator}">
                 by {{{$objectName}.creator.name}}
             </span>
-        </div>
-        <div class="span6">
+        </p>
+        <p class="col-md-6">
             <span ng-class="{'hide': !$objectName.dateModified}">
                 Updated on {{{$objectName}.dateModified | date:'dd of MMM yyyy @ HH:mm'}}
             </span>
             <span ng-class="{'hide': !$objectName.modifier}">
                 by {{{$objectName}.modifier.name}}
             </span>
-        </div>
+        </p>
     </div>
 STRING;
 

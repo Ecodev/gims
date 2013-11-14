@@ -15,7 +15,7 @@ angular.module('myApp', [
         'http-auth-interceptor',
         'chartsExample.directives'
     ]).
-    config(function ($routeProvider, $locationProvider, $dialogProvider, RestangularProvider) {
+    config(function ($routeProvider, $locationProvider, RestangularProvider) {
         $routeProvider.when('/home', {templateUrl: '/template/application/index/home'});
         $routeProvider.when('/about', {templateUrl: '/template/application/index/about'});
         $routeProvider.when('/browse', {templateUrl: '/template/browse'});
@@ -42,7 +42,6 @@ angular.module('myApp', [
 
         $locationProvider.html5Mode(true);
 
-        $dialogProvider.options({backdropFade: true, dialogFade:true});
 
         RestangularProvider.setBaseUrl('/api');
 

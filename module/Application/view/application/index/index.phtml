@@ -8,9 +8,10 @@
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
 
         <!-- Styles -->
-        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/favicon.ico'))
-                ->prependStylesheet('/css/application.css', array('media'=>'all'))
-                ->prependStylesheet('/lib/select2/select2.css', array('media'=>'all'))
+        <?php
+        echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/favicon.ico'))
+                ->prependStylesheet('/css/application.css', array('media' => 'all'))
+                ->prependStylesheet('/lib/select2/select2.css', array('media' => 'all'))
         ?>
 
         <!-- Scripts -->
@@ -26,131 +27,127 @@
 
     </head>
     <body>
-        <div class="top-bar navbar navbar-inverse navbar-fixed-top hidden-print">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <a class="sr-only" href="#content">Skip to main content</a>
+
+        <!-- Docs master nav -->
+        <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="<?php echo $this->url('home') ?>">GIMS</a>
-                    <div class="nav-collapse collapse">
-                        <ul class="nav">
-                            <li><a href="/about"><?php echo $this->translate('About') ?></a></li>
-                            <li><a href="/browse"><?php echo $this->translate('Browse') ?></a></li>
-                            <li><a href="/contribute"><?php echo $this->translate('Contribute') ?></a></li>
-                        </ul>
-                    </div><!--/.nav-collapse -->
-
-                    <div class="pull-right" ng-controller="UserCtrl">
-
-                        <!-- Modal Login Window !-->
-                        <div modal="showLogin" close="hideLogin()" options="{dialogClass: 'modal loginWindow'}">
-                            <?php
-                                $loginForm = $this->zfcUserLoginWidget(array('render' => false))->loginForm;
-                                $loginForm->prepare();
-                                $loginForm->setAttribute('action', $this->url('zfcuser/login'));
-                                $loginForm->setAttribute('method', 'post');
-                                $loginForm->setAttribute('class', 'modal-form ng-submit: sendLogin()');
-
-                                $this->registerForm->prepare();
-                                $this->registerForm->setAttribute('action', $this->url('zfcuser/register'));
-                                $this->registerForm->setAttribute('method', 'post');
-                            ?>
-                            <div class="modal-body">
-                                <div class="row-fluid">
-                                    <div class="span6">
-                                        <h3 class="modal-header"><?php echo $this->translate('Sign in'); ?></h3>
-                                            <form class="modal-form" ng-submit="sendLogin()">
-                                                <div class="alert alert-error" ng-show="invalidUsernamePassword">
-                                                    <span><?php echo $this->translate('Invalid username or password'); ?></span>
-                                                </div>
-                                                <div class="control-group" id="control-group-identity">
-                                                    <label for="login-email" class="control-label"><?php echo $this->translate('Email'); ?></label>
-                                                </div>
-                                                <div class="control" id="controls-identity">
-                                                    <input type="email" gims-focus name="identity" id="login-email" ng-model="login.identity">
-                                                </div>
-
-                                                <div class="control-group" id="control-group-credential">
-                                                    <label for="login-password" class="control-label"><?php echo $this->translate('Password'); ?></label>
-                                                </div>
-                                                <div class="control" id="controls-credential">
-                                                    <input type="password" name="credential" id="login-password" ng-model="login.credential">
-                                                </div>
-
-                                                <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Sign In'); ?></button>  <i ng-show="signing" class="icon-loading"></i>
-
-                                                <input type="hidden" name="redirect" value="{{redirect}}">
-
-                                        </form>
-                                    </div>
-                                    <div class="span6">
-                                        <h3 class="modal-header"><?php echo $this->translate('Register'); ?></h3>
-                                        <form class="modal-form" name="registerForm" ng-submit="sendRegister()">
-                                            <div class="control-group" ng-class="{error: userExisting || (registerForm.email.$dirty && registerForm.email.$error.email)}">
-                                                <label for="register-email"><?php echo $this->translate('Email'); ?></label>
-                                                <input type="email" name="email" id="register-email" required ng-model="register.email">
-                                                <span ng-show="registerForm.email.$error.email" class="help-inline"><?php echo $this->translate('Enter a valid email address'); ?></span>
-                                                <span ng-show="userExisting" class="help-inline"><?php echo $this->translate('There is already an account with this email address'); ?></span>
-                                            </div>
-                                            <div class="control-group" ng-class="{error: registerForm.display_name.$dirty && registerForm.display_name.$invalid}">
-                                                <label for="register-name"><?php echo $this->translate('Display name'); ?></label>
-                                                <input id="register-name" type="text" name="display_name" ng-model="register.name" required ng-minlength="3"/>
-                                                <span ng-show="registerForm.display_name.$error.minlength" class="help-inline"><?php echo sprintf($this->translate("Minimum %u characters"), 3); ?></span>
-                                            </div>
-                                            <div class="control-group" ng-class="{error: registerForm.password.$dirty && registerForm.password.$invalid}">
-                                                <label for="register-password"><?php echo $this->translate('Password'); ?></label>
-                                                <input type="password" name="password" id="register-password" placeholder="password" ng-model="register.password" required ng-minlength="6"/>
-                                                <span ng-show="registerForm.password.$error.minlength" class="help-inline"><?php echo sprintf($this->translate("Minimum %u characters"), 6); ?></span>
-                                            </div>
-                                            <div class="control-group" ng-class="{error: registerForm.passwordVerify.$dirty && registerForm.passwordVerify.$invalid}">
-                                                <input type="password" name="passwordVerify" id="register-password-verify" placeholder="confirm password" required ui-validate=" '$value==register.password' " ui-validate-watch=" 'register.passwordVerify' " ng-model="register.passwordVerify">
-                                                <span ng-show="registerForm.passwordVerify.$error.validator" class="help-inline"><?php echo $this->translate("Passwords do not match!"); ?></span>
-                                            </div>
-                                            <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Register') ?></button> <i ng-show="registering" class="icon-loading"></i>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <a class="btn cancel" ng-click="hideLogin()"><?php echo $this->translate('Cancel'); ?></a>
-                            </div>
-                        </div>
-
-                        <p class="navbar-text" ng-show="user">
-                            <ng-switch on="user.gravatar==undefined">
-                                <img ng-switch-when="false" ng-src="{{user.gravatar}}?s=40" />
-                            </ng-switch>
-                            <span>{{user.name}}</span>
-                            <a target="_self" href="<?php echo $this->url('zfcuser/logout') ?>">[<?php echo $this->translate('Sign out') ?>]</a>
-                        </p>
-                        <a class="btn btn-primary" href ng-click="promptLogin()" ng-hide="user"><span class="icon-user" /> <?php echo $this->translate('User login') ?></a>
-                    </div>
+                    </button>
+                    <a href="<?php echo $this->url('home') ?>" class="navbar-brand">GIMS</a>
                 </div>
+                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/about"><?php echo $this->translate('About') ?></a></li>
+                        <li><a href="/browse"><?php echo $this->translate('Browse') ?></a></li>
+                        <li><a href="/contribute"><?php echo $this->translate('Contribute') ?></a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+
+                            <div class="pull-right" ng-controller="UserCtrl">
+                                <p ng-show="user" class="navbar-text loggedInUser">
+                                <ng-switch on="user.gravatar==undefined">
+                                    <img ng-switch-when="false" ng-src="{{user.gravatar}}?s=50" />
+                                </ng-switch>
+                                <span>{{user.name}}</span>
+                                <a target="_self" href="<?php echo $this->url('zfcuser/logout') ?>">[<?php echo $this->translate('Sign out') ?>]</a>
+                                </p>
+                                <a ng-hide="user" class="btn btn-primary loginButton" href ng-click="promptLogin()"><span class="icon-user"></span> <?php echo $this->translate('User login') ?></a>
+                            </div>
+
+                        </li>
+                    </ul>
+                </nav>
             </div>
-        </div>
-        </div>
+        </header>
+
         <div class="container-angular" ng-view></div>
 
         <footer >
-            <div class="row-fluid" style="margin-bottom: 15px">
-                <p class="span4 muted">
+            <div class="row" style="margin-bottom: 15px">
+                <p class="col-md-4 text-muted">
                     <small>A project by <a href="http://www.who.int/phe/en/" target="_blank">WHO - Public Health and Environment</a> - 2013</small>
                 </p>
 
-                <p class="span4 muted">
+                <p class="col-md-4 text-muted">
                     <img src="/img/who-logo-black.png" alt="" style="height: 30px"/>
                 </p>
-                <p class="span4 muted">
-                    <small><?php echo $this->translate(
-                            'Designed and built by <a href="http://www.ecodev.ch" target="_blank">Ecodev</a>'
-                        ) ?></small>
+                <p class="col-md-4 text-muted">
+                    <small><?php
+                        echo $this->translate(
+                                'Designed and built by <a href="http://www.ecodev.ch" target="_blank">Ecodev</a>'
+                        )
+                        ?></small>
                 </p>
             </div>
 
         </footer>
-<?php echo $this->inlineScript() ?>
+
+        <!-- Modal Login Window !-->
+        <script type="text/ng-template" id="loginWindow.html">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 class="modal-header"><?php echo $this->translate('Sign in'); ?></h3>
+                        <form class="modal-form" name="loginForm" ng-submit="sendLogin()">
+                            <div class="alert alert-danger" ng-show="invalidUsernamePassword">
+                                <span><?php echo $this->translate('Invalid username or password'); ?></span>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error': loginForm.identity.$dirty && loginForm.identity.$invalid}">
+                                <label for="login-email" class="control-label"><?php echo $this->translate('Email'); ?></label>
+                                <input gims-focus type="email" name="identity" id="login-email" ng-model="login.identity" />
+                                <span ng-show="loginForm.identity.$error.email" class="help-block"><?php echo $this->translate('Enter a valid email address'); ?></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="login-password" class="control-label"><?php echo $this->translate('Password'); ?></label>
+                                <input type="password" name="credential" id="login-password" ng-model="login.credential" />
+                            </div>
+
+                            <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Sign In'); ?></button>  <i ng-show="signing" class="icon-loading"></i>
+
+                            <input type="hidden" name="redirect" value="{{redirect}}">
+
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="modal-header"><?php echo $this->translate('Register'); ?></h3>
+                        <form class="modal-form" name="registerForm" ng-submit="sendRegister()">
+                            <div class="form-group" ng-class="{'has-error': userExisting || (registerForm.email.$dirty && registerForm.email.$error.email)}">
+                                <label for="register-email"><?php echo $this->translate('Email'); ?></label>
+                                <input type="email" name="email" id="register-email" required ng-model="register.email">
+                                <span ng-show="registerForm.email.$error.email" class="help-block"><?php echo $this->translate('Enter a valid email address'); ?></span>
+                                <span ng-show="userExisting" class="help-block"><?php echo $this->translate('There is already an account with this email address'); ?></span>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error': registerForm.display_name.$dirty && registerForm.display_name.$invalid}">
+                                <label for="register-name"><?php echo $this->translate('Display name'); ?></label>
+                                <input id="register-name" type="text" name="display_name" ng-model="register.name" required ng-minlength="3"/>
+                                <span ng-show="registerForm.display_name.$error.minlength" class="help-block"><?php echo sprintf($this->translate("Minimum %u characters"), 3); ?></span>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error': registerForm.password.$dirty && registerForm.password.$invalid}">
+                                <label for="register-password"><?php echo $this->translate('Password'); ?></label>
+                                <input type="password" name="password" id="register-password" placeholder="password" ng-model="register.password" required ng-minlength="6"/>
+                                <span ng-show="registerForm.password.$error.minlength" class="help-block"><?php echo sprintf($this->translate("Minimum %u characters"), 6); ?></span>
+                            </div>
+                            <div class="form-group" ng-class="{'has-error': registerForm.passwordVerify.$dirty && registerForm.passwordVerify.$invalid}">
+                                <input type="password" name="passwordVerify" id="register-password-verify" placeholder="confirm password" required ui-validate=" '$value==register.password' " ui-validate-watch=" 'register.passwordVerify' " ng-model="register.passwordVerify">
+                                <span ng-show="registerForm.passwordVerify.$error.validator" class="help-block"><?php echo $this->translate("Passwords do not match!"); ?></span>
+                            </div>
+                            <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Register') ?></button> <i ng-show="registering" class="icon-loading"></i>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-default cancel" ng-click="cancelLogin()"><?php echo $this->translate('Cancel'); ?></a>
+            </div>
+        </script>
+        <?php echo $this->inlineScript() ?>
     </body>
 </html>

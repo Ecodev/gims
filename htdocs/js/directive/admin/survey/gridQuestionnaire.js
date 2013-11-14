@@ -7,11 +7,11 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
         replace: true,
         transclude: true,
         template: '<div>' +
-            '<div class="row-fluid">' +
-            '<div class="span9">' +
+            '<div class="row">' +
+            '<div class="col-md-9">' +
             '<input type="text" ng-model="gridOptions.filterOptions.filterText" placeholder="Search..." class="search" style="width: 400px"/>' +
             '</div>' +
-            '<div class="span3" style="text-align: right">' +
+            '<div class="col-md-3" style="text-align: right">' +
             '<gims-link-new origin="survey" target="questionnaire" return-tab="2"/>' +
             '</div>' +
             '</div>' +
@@ -53,13 +53,13 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
                     {field: 'dateLastAnswerModification', displayName: 'Modif.', cellFilter: 'date:"dd MMM yyyy"'},
                     {field: 'validatorNames', displayName: 'Validation by'},
                     {field: 'completed', displayName: 'Completed', cellTemplate: '<div class="progress" style="margin: 5px 5px 0 5px">' +
-                        '<div class="bar" ng-style="{width: row.entity[col.field] * 100}"></div>' +
+                        '<div class="progress-bar" ng-style="{width: row.entity[col.field] * 100}"></div>' +
                         '</div>'},
                     {displayName: '', cellTemplate: '<div style="margin: 5px 5px 0 5px ">' +
                         '<i class="icon-grid icon-comment" ng-visible="row.entity.comments" data-toggle="tooltip" title="{{row.entity.comments}}"></i>' +
                         '<i class="icon-grid icon-check" ng-visible="row.entity.status == \'validated\'" title="Validated"></i>' +
-                        '<a class="btn btn-mini btn-edit" href="/admin/questionnaire/edit/{{row.entity.id}}?returnUrl={{returnUrl}}"><i class="icon-pencil icon-large"></i></a>' +
-                        '<button type="button" class="btn btn-mini btn-remove" ng-click="removeQuestionnaire(row)" ><i class="icon-trash icon-large"></i></button>' +
+                        '<a class="btn btn-default btn-xs btn-edit" href="/admin/questionnaire/edit/{{row.entity.id}}?returnUrl={{returnUrl}}"><i class="icon-pencil icon-large"></i></a>' +
+                        '<button type="button" class="btn btn-default btn-xs" ng-click="removeQuestionnaire(row)" ><i class="icon-trash icon-large"></i></button>' +
                         // ng-visible="row.entity.permission.canBeDeleted" @todo add me back to line above when permission are implemented
                         '</div>'}
                 ]

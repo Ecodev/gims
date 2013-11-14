@@ -105,8 +105,8 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $locati
             {field: 'name', displayName: 'Name', width: '750px'},
             {field: 'isActive', displayName: 'Active', cellFilter: 'checkmark', width: '100px'},
             {field: 'year', displayName: 'Year', width: '100px'},
-            {displayName: '', cellTemplate: '<a class="btn btn-mini" href="/admin/survey/edit/{{row.entity.id}}"><i class="icon-pencil icon-large"></i></a>' +
-                        '<button type="button" class="btn btn-mini" ng-click="remove(row)" ><i class="icon-trash icon-large"></i></button>'}
+            {displayName: '', cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/survey/edit/{{row.entity.id}}"><i class="icon-pencil icon-large"></i></a>' +
+                        '<button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="icon-trash icon-large"></i></button>'}
         ]
     };
 

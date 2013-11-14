@@ -1,26 +1,25 @@
-<!-- Main hero unit for a primary marketing message or call to action -->
 <div class="container">
     <form>
         <div class="row">
-            <div class="span6">
+            <div class="col-md-6">
                 <p><gims-select api="country" model="country" placeholder="<?php echo $this->translate('Select a country') ?>" format="name" style="width:100%;"/></p>
             </div>
-            <div class="span6" style="text-align: right">
+            <div class="col-md-6" style="text-align: right">
                 <img src="/img/jmp-logo-black.png" alt="JMP logo" class="logo-chart"/>
                 <img src="/img/who-logo-black.png" alt="WHO logo" class="logo-chart"/>
                 <img src="/img/unicef-logo-black.png" alt="Unicef logo" class="logo-chart"/>
             </div>
         </div>
         <div class="row">
-            <span class="span6">
+            <span class="col-md-6">
                 <p><gims-select api="filterSet" model="filterSet" placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/></p>
             </span>
         </div>
         <div class="row">
-            <span class="span2">
+            <span class="col-md-2">
                 <p><gims-select api="part" model="part" placeholder="<?php echo $this->translate('Select a part') ?>" style="width:100%;"/></p>
             </span>
-            <span class="span2">
+            <span class="col-md-2">
                 <p>&nbsp;<i class="icon-loading" ng-show="isLoading"></i></p>
             </span>
         </div>
@@ -28,34 +27,41 @@
 
     <div class="alert alert-info" ng-hide="chart"><i class="icon-info-sign"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?></div>
 
-    <div class="row-fluid">
-        <div ng-class="{span12: !pointSelected, span8: pointSelected}" >
+    <div class="row">
+        <div ng-class="{'col-md-12': !pointSelected, 'col-md-8': pointSelected}" >
             <chart value="chart" type="area" height="400" chart-obj="chartObj" />
         </div>
-        <div class="span4" ng-show="pointSelected">
+        <div class="col-md-4" ng-show="pointSelected">
             <div>
-                <div modal="newFilterSetOpened" close="closeNewFilterSet()" options="opts">
-                    <div class="modal-header">
-                        <h3>Create new Filter Set</h3>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-inline">
-                            <input id="filterSetTextField" ng-model="newFilterSetName" type="text" class="span4" placeholder="Enter a filter set name..." autofocus="autofocus">
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn cancel" ng-click="closeNewFilterSet()"><?php echo $this->translate('Cancel') ?></button>
-                        <button class="btn btn-primary" ng-click="createNewFilterSet()"><?php echo $this->translate('Create') ?></button>
-                    </div>
-
-                </div>
                 <div ng-grid="gridOptions" class="gridStyle" style="min-width: 400px"></div>
                 <div style="margin-top: 1em; text-align: center">
-                    <button class="btn" ng-click="refreshChart()" ng-class="{disabled: isLoading}"><?php echo $this->translate('Update') ?></button>
-                    <button class="btn" ng-click="ignoreQuestionnaire()" ng-class="{disabled: isLoading}"><?php echo $this->translate('Ignore questionnaire') ?></button>
-                    <button class="btn" ng-click="openNewFilterSet()"><i class="icon-plus-sign"></i> <?php echo $this->translate('new filter set') ?></button>
+                    <button class="btn btn-default" ng-click="refreshChart()" ng-class="{disabled: isLoading}"><?php echo $this->translate('Update') ?></button>
+                    <button class="btn btn-default" ng-click="ignoreQuestionnaire()" ng-class="{disabled: isLoading}"><?php echo $this->translate('Ignore questionnaire') ?></button>
+                    <button class="btn btn-default" ng-click="openNewFilterSet()"><i class="icon-plus-sign"></i> <?php echo $this->translate('new filter set') ?></button>
 
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+
+<!-- Modal Login Window !-->
+<script type="text/ng-template" id="newFilterSet.html">
+    <div class="modal-header">
+        <h3>Create new Filter Set</h3>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group">
+                <label for="filterSetTextField">Filter name</label>
+                <input id="filterSetTextField" ng-model="newFilterSet.name" type="text" placeholder="Enter a filter set name..." autofocus="autofocus">
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-default cancel" ng-click="cancelNewFilterSet()"><?php echo $this->translate('Cancel') ?></button>
+        <button class="btn btn-primary" ng-click="createNewFilterSet()"><?php echo $this->translate('Create') ?></button>
+    </div>
+</script>

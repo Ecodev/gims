@@ -15,16 +15,16 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
         },
         template: '<div>' +
                 '<div ng-grid="gridOptions" class="gridStyle"></div>' +
-                '<div class="well control-group" ng-class="{error: exists}" ng-hide="isReadOnly">' +
-                '<span class="span4">' +
+                '<div class="well form-group" ng-class="{\'has-error\': exists}" ng-hide="isReadOnly">' +
+                '<span class="col-md-4">' +
                 '<gims-select api="{{second}}" model="secondValue" placeholder="Select a {{second}}" style="width:100%;" format="{{format}}"></gims-select>' +
                 '</span>' +
-                '<span class="span4">' +
+                '<span class="col-md-4">' +
                 '<gims-select api="{{third}}" model="thirdValue" placeholder="Select a {{third}}" style="width:100%;"></gims-select>' +
                 '</span>' +
-                '<span class="span1">' +
-                '<button class="btn" ng-click="add()" ng-class="{disabled: !secondValue || !thirdValue || exists}">Add</button> <i class="icon-loading" ng-show="isLoading"></i>' +
-                '</span><span class="help-inline" ng-show="exists">This relation already exists</span>' +
+                '<span class="col-md-1">' +
+                '<button class="btn btn-default" ng-click="add()" ng-class="{disabled: !secondValue || !thirdValue || exists}">Add</button> <i class="icon-loading" ng-show="isLoading"></i>' +
+                '</span><span class="help-block" ng-show="exists">This relation already exists</span>' +
                 '</div>' +
                 '</div>',
         // The linking function will add behavior to the template
@@ -54,7 +54,7 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                 columnDefs: [
                     {field: $scope.second + '.name', displayName: capitaliseFirstLetter($scope.second)},
                     {field: $scope.third + '.name', displayName: capitaliseFirstLetter($scope.third), width: '250px'},
-                    {width: '90px', cellTemplate: '<button type="button" class="btn btn-mini" ng-click="delete(row)"><i class="icon-trash icon-large"></i></button>'}
+                    {width: '90px', cellTemplate: '<button type="button" class="btn btn-default btn-xs" ng-click="delete(row)"><i class="icon-trash icon-large"></i></button>'}
                 ]
             };
 

@@ -1,0 +1,50 @@
+
+// Bootstrap 3.0 does not have focus color and rounded border by default anymore.
+// We re-enable it here
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="text"],
+input[type="url"],
+input[type="number"],
+select,
+textarea
+{
+    @extend .form-control;
+}
+
+.form-group > label {
+    @extend .control-label;
+}
+
+.nav.nav-tabs {
+    margin-bottom: 20px;
+}
+
+
+// Colors
+// Contextual variations of badges
+// Bootstrap 3.0 removed contexts for badges, we re-introduce them, based on what is done for labels
+.badge-default {
+  @include label-variant($label-default-bg);
+}
+
+.badge-primary {
+  @include label-variant($label-primary-bg);
+}
+
+.badge-success {
+  @include label-variant($label-success-bg);
+}
+
+.badge-info {
+  @include label-variant($label-info-bg);
+}
+
+.badge-warning {
+  @include label-variant($label-warning-bg);
+}
+
+.badge-danger {
+  @include label-variant($label-danger-bg);
+}

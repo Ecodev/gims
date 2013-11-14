@@ -2,17 +2,17 @@ angular.module('myApp.directives').directive('gimsNumQuestion', function (Questi
     return {
         restrict: 'E',
         template:   "<ng-form name='innerQuestionForm'> " +
-                        "<div class='span12'>"+
-                            "<div ng-form name='innerQuestionForm' class='span2' ng-repeat='part in question.parts'>"+
+                        "<div class='col-md-12'>"+
+                            "<div ng-form name='innerQuestionForm' class='col-md-2' ng-repeat='part in question.parts'>"+
                             "     <div ng-switch='part.name'>" +
                             "           <div ng-switch-when='Total'>National</div>"+
                             "           <div ng-switch-when='Urban'>Urban</div>"+
                             "           <div ng-switch-when='Rural'>Rural</div>"+
                             "     </div>"+
-                            "     <input class='span12' ng-disabled='saving' type='number' ng-required='question.isCompulsory' ng-model='index[question.id+\"-\"+part.id].valueAbsolute' ng-blur='save(question,part)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'/>"+
+                            "     <input class='col-md-12' ng-disabled='saving' type='number' ng-required='question.isCompulsory' ng-model='index[question.id+\"-\"+part.id].valueAbsolute' ng-blur='save(question,part)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'/>"+
                             "</div>"+
                         "</div>"+
-                        "<span ng-show='question.isCompulsory' class='badge' ng-class=\"{'badge-important':question.statusCode==1, 'badge-success':question.statusCode==3}\">Required</span>"+
+                        "<span ng-show='question.isCompulsory' class='badge' ng-class=\"{'badge-danger':question.statusCode==1, 'badge-success':question.statusCode==3}\">Required</span>"+
                         "<span ng-show='!question.isCompulsory' class='badge' ng-class=\"{'badge-warning':question.statusCode==2, 'badge-success':question.statusCode==3}\">Optional</span>"+
                     "</ng-form>",
 

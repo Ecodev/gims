@@ -1,4 +1,4 @@
-angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $location, $http, $timeout, Restangular) {
+angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $location, $http, $timeout, Restangular, $modal) {
     'use strict';
 
     $scope.chartObj;
@@ -43,7 +43,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
     $scope.pointSelected = null;
 
-    var getExcludedFilters = function() {
+    $scope.getExcludedFilters = function() {
         var excludedFilters = [];
 
         // Find the not selected filters
@@ -62,28 +62,11 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     };
 
     $scope.openNewFilterSet = function() {
-        $scope.newFilterSetOpened = true;
-    };
-
-    $scope.closeNewFilterSet = function() {
-        $scope.newFilterSetOpened = false;
-    };
-
-    $scope.createNewFilterSet = function() {
-        if ($scope.newFilterSetName) {
-            $http.post('/api/filterSet', {
-                name: $scope.newFilterSetName,
-                originalFilterSet: $scope.filterSet.id,
-                excludedFilters: getExcludedFilters()
-            }).success(function(data) {
-                $location.search('filterSet', data.id);
-
-                // reload page
-                $timeout(function() {
-                    window.location.reload();
-                }, 0);
-            });
-        }
+        $modal.open({
+            templateUrl: 'newFilterSet.html',
+            controller: 'Browse/ChartNewFilterSetCtrl',
+            scope: $scope
+        });
     };
 
     // Whenever the list of excluded values is changed
@@ -163,7 +146,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                             part: $scope.part.id,
                             filterSet: $scope.filterSet.id,
                             excludedQuestionnaires: $scope.excludedQuestionnaires.join(','),
-                            excludedFilters: getExcludedFilters().join(',')
+                            excludedFilters: $scope.getExcludedFilters().join(',')
                         }
                     }).success(function(data) {
 
@@ -193,5 +176,31 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             });
 
         }, 200);
+    };
+});
+
+
+angular.module('myApp').controller('Browse/ChartNewFilterSetCtrl', function($scope, $location, $http, $timeout, $modalInstance) {
+    'use strict';
+    $scope.newFilterSet = {};
+    $scope.cancelNewFilterSet = function() {
+        $modalInstance.dismiss();
+    };
+
+    $scope.createNewFilterSet = function() {
+        if ($scope.newFilterSet.name) {
+            $http.post('/api/filterSet', {
+                name: $scope.newFilterSet.name,
+                originalFilterSet: $scope.filterSet.id,
+                excludedFilters: $scope.getExcludedFilters()
+            }).success(function(data) {
+                $location.search('filterSet', data.id);
+
+                // reload page
+                $timeout(function() {
+                    window.location.reload();
+                }, 0);
+            });
+        }
     };
 });

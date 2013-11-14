@@ -1,5 +1,6 @@
 // I gather this file is a starting point for the project.
 @import "bootstrap";
+@import "bootstrap-customization";
 
 // According to Twitter Bootstrap recommendation, add padding before responsive for .navbar-fixed-top
 body {
@@ -19,16 +20,14 @@ input.error {
     font-size: 80%;
 }
 
-// Include responsive Bootstrap styles
-@import "bootstrap-responsive";
 @import "font-awesome";
 @import "ng-grid";
 @import "splash";
 @import "sticky-footer";
 
+// Force vertical scrollbar
 html {
     overflow-y: scroll;
-    // Force vertical scrollbar
 }
 
 .icon-loading {
@@ -60,7 +59,7 @@ html {
     text-align: center;
 }
 
-div.browse .span4 {
+div.browse .col-md-4 {
     text-align: center;
     .nav-pills-icon {
         display: inline-block;
@@ -71,25 +70,16 @@ div.browse .span4 {
     margin-top: 2em;
 }
 
-.modal.loginWindow {
-    width: 60%;
-    margin-left: -30%; /* -width/2 */
+.loggedInUser {
+    margin: 0;
+}
+.loginButton {
+    margin-top: 8px;
 }
 
 .gridStyle {
     height: 1000px;
     // Use super big height, so the auto-resize works correctly
-}
-
-// Automatically insert '>' between breadcrumbs
-.breadcrumb {
-    li:after {
-        content: ' > ';
-        color: #ccc;
-    }
-    li:last-child:after {
-        content: '';
-    }
 }
 
 .tab-content {
@@ -165,10 +155,9 @@ div.browse .span4 {
 
 
 
-.badge-little{
+.badge-little {
     padding:0 !important;
     height:15px !important;
     width:15px !important;
     border:1px solid white
-
 }

@@ -1,21 +1,21 @@
 <div class="container">
     <form>
         <div class="row">
-            <span class="span6">
+            <span class="col-md-6">
                 <p><gims-select api="country" model="country" placeholder="<?php echo $this->translate('Select a country') ?>" format="name" style="width:100%;" multiple="multiple"/></p>
             </span>
         </div>
         <div class="row">
-            <span class="span6">
+            <span class="col-md-6">
                 <p><gims-select api="filterSet" model="filterSet" placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/></p>
             </span>
-            <span class="span2">
+            <span class="col-md-2">
                 <p>&nbsp;<i class="icon-loading" ng-show="isLoading"></i></p>
             </span>
         </div>
         <div class="row">
-            <span class="span6">
-                <a href="{{exportUrl}}" target="_blank" class="btn" ng-class="{disabled: !exportUrl}"><i class="icon-download-alt"></i> Export</a>
+            <span class="form-group col-md-6">
+                <a href="{{exportUrl}}" target="_blank" class="btn btn-default" ng-class="{disabled: !exportUrl}"><i class="icon-download-alt"></i> Export</a>
             </span>
         </div>
     </form>

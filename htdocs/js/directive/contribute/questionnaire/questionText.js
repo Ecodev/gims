@@ -2,15 +2,15 @@ angular.module('myApp.directives').directive('gimsTextQuestion', function (Quest
     return {
         restrict: 'E',
         template: "<ng-form name='innerQuestionForm'> " +
-                        "<div ng-repeat='part in question.parts' ng-class='{span12:question.parts.length==1, span6:question.parts.length==2, span4:question.parts.length==3}'>"+
+                        "<div ng-repeat='part in question.parts' ng-class='{col-md-12:question.parts.length==1, col-md-6:question.parts.length==2, col-md-4:question.parts.length==3}'>"+
                         "     <div ng-switch='part.name'>" +
                         "           <div ng-switch-when='Total'>National</div>"+
                         "           <div ng-switch-when='Urban'>Urban</div>"+
                         "           <div ng-switch-when='Rural'>Rural</div>"+
                         "     </div>"+
-                        "     <textarea class='span12' ng-required='question.isCompulsory' name='text' ng-model='index[question.id+\"-\"+part.id].valueText' ng-blur='save(question,part)'  id='numerical-{{question.id}}-{{part.id}}' ng-disabled='saving'></textarea>"+
+                        "     <textarea class='col-md-12' ng-required='question.isCompulsory' name='text' ng-model='index[question.id+\"-\"+part.id].valueText' ng-blur='save(question,part)'  id='numerical-{{question.id}}-{{part.id}}' ng-disabled='saving'></textarea>"+
                         "</div>"+
-                        "<span ng-show='question.isCompulsory' class='badge' ng-class=\"{'badge-important':question.statusCode==1, 'badge-success':question.statusCode==3}\">Required</span>"+
+                        "<span ng-show='question.isCompulsory' class='badge' ng-class=\"{'badge-danger':question.statusCode==1, 'badge-success':question.statusCode==3}\">Required</span>"+
                         "<span ng-show='!question.isCompulsory' class='badge' ng-class=\"{'badge-warning':question.statusCode==2, 'badge-success':question.statusCode==3}\">Optional</span>"+
                    "</ng-form>",
         scope:{
