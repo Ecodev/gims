@@ -201,6 +201,15 @@ return array(
                         ),
                     ),
                 ),
+                'import-glass' => array(
+                    'options' => array(
+                        'route' => 'import glass',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Console',
+                            'action' => 'importGlass'
+                        ),
+                    ),
+                ),
                 'import-population' => array(
                     'options' => array(
                         'route' => 'import population [<urbanFile>] [<ruralFile>] [<totalFile>]',

@@ -9,7 +9,7 @@ angular.module('myApp.directives').directive('gimsNumQuestion', function (Questi
                             "           <div ng-switch-when='Urban'>Urban</div>"+
                             "           <div ng-switch-when='Rural'>Rural</div>"+
                             "     </div>"+
-                            "     <input class='col-md-12' ng-disabled='saving' type='number' ng-required='question.isCompulsory' ng-model='index[question.id+\"-\"+part.id].valueAbsolute' ng-blur='save(question,part)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'/>"+
+                            "     <input class='col-md-12' ng-disabled='saving' type='text' ng-required='question.isCompulsory' ng-model='index[question.id+\"-\"+part.id].valueAbsolute' ng-blur='save(question,part)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'/>"+
                             "</div>"+
                         "</div>"+
                         "<span ng-show='question.isCompulsory' class='badge' ng-class=\"{'badge-danger':question.statusCode==1, 'badge-success':question.statusCode==3}\">Required</span>"+
@@ -28,6 +28,13 @@ angular.module('myApp.directives').directive('gimsNumQuestion', function (Questi
             {
                 $scope.saving=true;
                 var newAnswer = $scope.index[question.id+"-"+part.id];
+
+                if (isNaN(newAnswer.valueAbsolute))
+                {
+                    $scope.index[question.id+"-"+part.id] = QuestionAssistant.getEmptyTextAnswer(question, part.id);
+                    $scope.saving=false;
+                    return;
+                }
 
                 // if exists but value not empty -> update
                 if (newAnswer.id && newAnswer.valueAbsolute) {
