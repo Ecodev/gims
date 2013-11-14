@@ -2,7 +2,7 @@ angular.module('myApp.directives').directive('gimsTextQuestion', function (Quest
     return {
         restrict: 'E',
         template: "<ng-form name='innerQuestionForm'> " +
-                        "<div ng-repeat='part in question.parts' ng-class='{col-md-12:question.parts.length==1, col-md-6:question.parts.length==2, col-md-4:question.parts.length==3}'>"+
+                        '<div ng-repeat="part in question.parts" ng-class="{\'col-md-12\': question.parts.length==1, \'col-md-6\': question.parts.length==2, \'col-md-4\': question.parts.length==3}">' +
                         "     <div ng-switch='part.name'>" +
                         "           <div ng-switch-when='Total'>National</div>"+
                         "           <div ng-switch-when='Urban'>Urban</div>"+
