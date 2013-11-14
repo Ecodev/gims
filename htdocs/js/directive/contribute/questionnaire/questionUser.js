@@ -11,10 +11,10 @@ angular.module('myApp.directives').directive('gimsUserQuestion', function(Questi
                 "        </div>" +
                 "        <gims-select style='width:100%' name='user' api='user' model='index[question.id+\"-\"+part.id].valueUser' id='numerical-{{question.id}}-{{part.id}}' disabled='saving'></gims-select>" +
                 "        <div class='pull-right' style='margin-top:5px'>" +
-                "           <button class='btn btn-default' ng-click='openUserModal(question, part, true)' ><i class='icon-plus'></i></button>" +
-                "           <button class='btn btn-default' ng-click='openUserModal(question, part, false)' ng-show='index[question.id+\"-\"+part.id].valueUser && index[question.id+\"-\"+part.id].valueUser.lastLogin'><i class='icon-eye-open'></i></button>" +
-                "           <button class='btn btn-default' ng-click='openUserModal(question, part, false)' ng-show='index[question.id+\"-\"+part.id].valueUser && !index[question.id+\"-\"+part.id].valueUser.lastLogin'><i class='icon-edit'></i></button>" +
-                "           <button class='btn btn-default' ng-click='resetUser(question, part)' ng-show='index[question.id+\"-\"+part.id].valueUser'><i class='icon-trash'></i></button>" +
+                "           <button class='btn btn-default' ng-click='openUserModal(question, part, true)' ><i class='fa fa-plus'></i></button>" +
+                "           <button class='btn btn-default' ng-click='openUserModal(question, part, false)' ng-show='index[question.id+\"-\"+part.id].valueUser && index[question.id+\"-\"+part.id].valueUser.lastLogin'><i class='fa fa-eye'></i></button>" +
+                "           <button class='btn btn-default' ng-click='openUserModal(question, part, false)' ng-show='index[question.id+\"-\"+part.id].valueUser && !index[question.id+\"-\"+part.id].valueUser.lastLogin'><i class='fa fa-pencil'></i></button>" +
+                "           <button class='btn btn-default' ng-click='resetUser(question, part)' ng-show='index[question.id+\"-\"+part.id].valueUser'><i class='fa fa-trash-o'></i></button>" +
                 "        </div>" +
                 "        <div class='clearfix'></div>" +
                 "   </div>" +

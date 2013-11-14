@@ -73,7 +73,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
                     question = Restangular.one('question', question.id).get({fields: 'filter,answers'});
 
                     // GUI remove the loading icon
-                    $('.icon-loading', row.elm).toggle();
+                    $('.fa-loading', row.elm).toggle();
                 };
 
                 // Get the field and check whether it has an error class
@@ -82,7 +82,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
                     $('.col' + column.index, row.elm).css('backgroundColor', 'inherit');
 
                     // GUI display a loading icon
-                    $('.icon-loading', row.elm).toggle();
+                    $('.fa-loading', row.elm).toggle();
 
                     // True means the answer exists and must be updated. Otherwise, create a new answer
                     if (answer.id > 0) {
@@ -124,7 +124,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
                     {field: 'answers.1.valuePercent', displayName: 'Urban', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate}, //, cellTemplate: 'cellTemplate.html'
                     {field: 'answers.2.valuePercent', displayName: 'Rural', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
                     {field: 'answers.0.valuePercent', displayName: 'Total', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
-                    {displayName: '', cellTemplate: '<i class="icon-loading" style="display: none" />', cellClass: 'column-loading', width: '28px'}
+                    {displayName: '', cellTemplate: '<i class="fa fa-loading" style="display: none" />', cellClass: 'column-loading', width: '28px'}
                 ]
             };
 

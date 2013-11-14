@@ -56,10 +56,10 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
                         '<div class="progress-bar" ng-style="{width: row.entity[col.field] * 100}"></div>' +
                         '</div>'},
                     {displayName: '', cellTemplate: '<div style="margin: 5px 5px 0 5px ">' +
-                        '<i class="icon-grid icon-comment" ng-visible="row.entity.comments" data-toggle="tooltip" title="{{row.entity.comments}}"></i>' +
-                        '<i class="icon-grid icon-check" ng-visible="row.entity.status == \'validated\'" title="Validated"></i>' +
-                        '<a class="btn btn-default btn-xs btn-edit" href="/admin/questionnaire/edit/{{row.entity.id}}?returnUrl={{returnUrl}}"><i class="icon-pencil icon-large"></i></a>' +
-                        '<button type="button" class="btn btn-default btn-xs" ng-click="removeQuestionnaire(row)" ><i class="icon-trash icon-large"></i></button>' +
+                        '<i class="fa fa-grid fa-comment" ng-visible="row.entity.comments" data-toggle="tooltip" title="{{row.entity.comments}}"></i>' +
+                        '<i class="fa fa-grid fa-check-square-o" ng-visible="row.entity.status == \'validated\'" title="Validated"></i>' +
+                        '<a class="btn btn-default btn-xs btn-edit" href="/admin/questionnaire/edit/{{row.entity.id}}?returnUrl={{returnUrl}}"><i class="fa fa-pencil fa-lg"></i></a>' +
+                        '<button type="button" class="btn btn-default btn-xs" ng-click="removeQuestionnaire(row)" ><i class="fa fa-trash-o fa-lg"></i></button>' +
                         // ng-visible="row.entity.permission.canBeDeleted" @todo add me back to line above when permission are implemented
                         '</div>'}
                 ]

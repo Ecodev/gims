@@ -9,7 +9,7 @@
             </div>
             <div class="form-group">
                 <label for="years"><?php echo $this->translate('Years') ?>
-                    <i class=" icon-question-sign"
+                    <i class="fa fa-question-circle"
                        popover="You can chain multiple years requests by commas. If separated by a dash, all years contained in the range will be selected. E.g : 1980,1990-2000,2005-2010,2013,2015"
                        popover-trigger="mouseenter"
                        popover-placement="right"
@@ -19,13 +19,13 @@
             </div>
 
             <div class="form-group">
-                <button class="btn btn-default" ng-class="{disabled: !country || !filterSet.id || !years}" ng-click="displayTable()"><i class="icon-refresh"></i> Generate table</button>
-                <a href="{{exportUrl}}" target="_blank" class="btn btn-default" ng-class="{disabled: !exportUrl}"><i class="icon-download-alt"></i> Export</a>
-                <span><i class="icon-loading" ng-show="isLoading"></i></span>
+                <button class="btn btn-default" ng-class="{disabled: !country || !filterSet.id || !years}" ng-click="displayTable()"><i class="fa fa-refresh"></i> Generate table</button>
+                <a href="{{exportUrl}}" target="_blank" class="btn btn-default" ng-class="{disabled: !exportUrl}"><i class="fa fa-download"></i> Export</a>
+                <span><i class="fa fa-loading" ng-show="isLoading"></i></span>
             </div>
         </form>
     </div>
 
-    <div class="alert alert-info" ng-hide="columnDefs"><i class="icon-info-sign"></i> <?php echo $this->translate('Select parameters to show table here.') ?></div>
+    <div class="alert alert-info" ng-hide="columnDefs"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to show table here.') ?></div>
     <div ng-grid="gridOptions" class="gridStyle" ng-show="columnDefs"></div>
 </div>

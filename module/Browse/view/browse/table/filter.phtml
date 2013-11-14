@@ -10,7 +10,7 @@
                 <p><gims-select api="filterSet" model="filterSet" placeholder="Select a filter" style="width:100%;"></gims-select></p>
             </span>
             <span class="col-md-2">
-                <p>&nbsp;<i class="icon-loading" ng-show="isLoading"></i></p>
+                <p>&nbsp;<i class="fa fa-loading" ng-show="isLoading"></i></p>
             </span>
         </div>
         <div class="row">
@@ -22,6 +22,6 @@
         </div>
     </form>
     
-    <div class="alert alert-info" ng-hide="table"><i class="icon-info-sign"></i> <?php echo $this->translate('Select parameters to show table here.') ?></div>
+    <div class="alert alert-info" ng-hide="table"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to show table here.') ?></div>
     <div ng-grid="gridOptions" class="gridStyle"></div>
 </div>

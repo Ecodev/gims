@@ -20,12 +20,12 @@
                 <p><gims-select api="part" model="part" placeholder="<?php echo $this->translate('Select a part') ?>" style="width:100%;"/></p>
             </span>
             <span class="col-md-2">
-                <p>&nbsp;<i class="icon-loading" ng-show="isLoading"></i></p>
+                <p>&nbsp;<i class="fa fa-loading" ng-show="isLoading"></i></p>
             </span>
         </div>
     </form>
 
-    <div class="alert alert-info" ng-hide="chart"><i class="icon-info-sign"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?></div>
+    <div class="alert alert-info" ng-hide="chart"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?></div>
 
     <div class="row">
         <div ng-class="{'col-md-12': !pointSelected, 'col-md-8': pointSelected}" >
@@ -37,7 +37,7 @@
                 <div style="margin-top: 1em; text-align: center">
                     <button class="btn btn-default" ng-click="refreshChart()" ng-class="{disabled: isLoading}"><?php echo $this->translate('Update') ?></button>
                     <button class="btn btn-default" ng-click="ignoreQuestionnaire()" ng-class="{disabled: isLoading}"><?php echo $this->translate('Ignore questionnaire') ?></button>
-                    <button class="btn btn-default" ng-click="openNewFilterSet()"><i class="icon-plus-sign"></i> <?php echo $this->translate('new filter set') ?></button>
+                    <button class="btn btn-default" ng-click="openNewFilterSet()"><i class="fa fa-plus-circle"></i> <?php echo $this->translate('new filter set') ?></button>
 
                 </div>
             </div>

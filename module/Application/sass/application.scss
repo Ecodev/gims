@@ -30,25 +30,25 @@ html {
     overflow-y: scroll;
 }
 
-.icon-loading {
+.fa-loading {
     &.hide {
         display: none !important;
     }
 
-    @extend .icon-refresh;
-    @extend .icon-spin;
+    @extend .fa-refresh;
+    @extend .fa-spin;
 }
 
-.icon-survey {
-    @extend .icon-folder-open-alt;
+.fa-survey {
+    @extend .fa-folder-open-o;
 }
 
-.icon-filterset {
-    @extend .icon-tags;
+.fa-filterset {
+    @extend .fa-tags;
 }
 
-.icon-questionnaire {
-    @extend .icon-file;
+.fa-questionnaire {
+    @extend .fa-file;
 }
 
 .column-loading {
@@ -86,7 +86,7 @@ div.browse .col-md-4 {
     overflow: visible;
 }
 
-.icon-grid {
+.fa-grid {
     padding-right: 10px;
 }
 

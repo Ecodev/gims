@@ -24,11 +24,11 @@ angular.module('myApp').controller('Admin/FilterSetCtrl', function ($scope, $loc
         columnDefs: [
             {field: 'name', displayName: 'Name', width: '750px'},
             {displayName: '', cellTemplate: '' +
-                        '<button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="icon-trash icon-large"></i></button>'}
+                        '<button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
         ]
     };
 
-    // <button type="button" class="btn btn-default btn-xs" ng-click="edit(row)" ><i class="icon-pencil icon-large"></i></button>
+    // <button type="button" class="btn btn-default btn-xs" ng-click="edit(row)" ><i class="fa fa-pencil fa-lg"></i></button>
     $scope.remove = function (row) {
         Modal.confirmDelete(row.entity, {objects: $scope.filterSets, label: row.entity.code, returnUrl: '/admin/filter-set'});
     };

@@ -19,7 +19,7 @@ class CrudButtons extends \Zend\View\Helper\AbstractHtmlElement
         <span ng-switch="sending > 0">
             <div class="btn-group" ng-switch-when="true">
                 <button class="btn btn-primary disabled btn-saving">
-                    <i class="icon-loading"></i>
+                    <i class="fa fa-loading"></i>
                     <ng-pluralize count="sending + 0" when="{'one': 'Saving', 'other': 'Saving {} items'}" />
                 </button>
                 <button class="btn btn-primary dropdown-toggle disabled" data-toggle="dropdown">
@@ -28,7 +28,7 @@ class CrudButtons extends \Zend\View\Helper\AbstractHtmlElement
             </div>
 
             <div class="btn-group" ng-switch-when="false">
-                <button class="btn btn-primary btn-save" ng-click="save()" ng-disabled="myForm.\$invalid"><i class="icon-ok"></i> Save</button>
+                <button class="btn btn-primary btn-save" ng-click="save()" ng-disabled="myForm.\$invalid"><i class="fa fa-check"></i> Save</button>
                 <button class="btn btn-primary dropdown-toggle" ng-disabled="myForm.\$invalid" data-toggle="dropdown">
                     <span class="caret"></span>
                 </button>
@@ -41,7 +41,7 @@ class CrudButtons extends \Zend\View\Helper\AbstractHtmlElement
         </span>
 
         <button ng-click="delete()"
-                ng-show="$objectName.id" class="btn btn-danger"><i class="icon-trash"></i> Delete</button>
+                ng-show="$objectName.id" class="btn btn-danger"><i class="fa fa-trash-o"></i> Delete</button>
         <!-- && $objectName.permission.canBeDeleted -->
 STRING;
 

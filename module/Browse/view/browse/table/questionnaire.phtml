@@ -10,16 +10,16 @@
                 <p><gims-select api="filterSet" model="filterSet" placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/></p>
             </span>
             <span class="col-md-2">
-                <p>&nbsp;<i class="icon-loading" ng-show="isLoading"></i></p>
+                <p>&nbsp;<i class="fa fa-loading" ng-show="isLoading"></i></p>
             </span>
         </div>
         <div class="row">
             <span class="form-group col-md-6">
-                <a href="{{exportUrl}}" target="_blank" class="btn btn-default" ng-class="{disabled: !exportUrl}"><i class="icon-download-alt"></i> Export</a>
+                <a href="{{exportUrl}}" target="_blank" class="btn btn-default" ng-class="{disabled: !exportUrl}"><i class="fa fa-download"></i> Export</a>
             </span>
         </div>
     </form>
 
-    <div class="alert alert-info" ng-hide="columnDefs"><i class="icon-info-sign"></i> <?php echo $this->translate('Select parameters to show table here.') ?></div>
+    <div class="alert alert-info" ng-hide="columnDefs"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to show table here.') ?></div>
     <div ng-grid="gridOptions" class="gridStyle" ng-show="columnDefs"></div>
 </div>

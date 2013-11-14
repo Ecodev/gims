@@ -76,9 +76,9 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
                         displayName: '',
                         width: '10%',
                         cellTemplate: '<a class="btn btn-default btn-xs btn-edit" href="/admin/question/edit/{{row.entity.id}}?returnUrl={{returnUrl}}">' +
-                                            '<i class="icon-pencil icon-large"></i></a>' +
+                                            '<i class="fa fa-pencil fa-lg"></i></a>' +
                                             '<button type="button" class="btn btn-default btn-xs" ng-click="removeQuestion(row)" >' +
-                                            '<i class="icon-trash icon-large"></i>' +
+                                            '<i class="fa fa-trash-o fa-lg"></i>' +
                                         '</button>'
                     }
                 ]
