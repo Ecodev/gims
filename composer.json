@@ -24,7 +24,6 @@
         "doctrine/doctrine-orm-module": "0.*",
         "doctrine/migrations": "dev-master",
         "creof/doctrine2-spatial": "dev-master",
-        "mwillbanks/zfc-twitter-bootstrap": "dev-master",
         "zendframework/zend-developer-tools": "dev-master",
         "phpoffice/phpexcel": "dev-master"
     },

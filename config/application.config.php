@@ -8,7 +8,6 @@ return array(
         'ZfcUser',
         'ZfcUserDoctrineORM',
         'ZfcRbac',
-        'ZfcTwitterBootstrap',
         'Application',
         'Api',
         'Admin',
