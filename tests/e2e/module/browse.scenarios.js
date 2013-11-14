@@ -8,13 +8,13 @@ describe('browse', function () {
     });
 
     it('should render about when user navigates to /browse', function () {
-        expect(element('[ng-view] .browse .span4:nth-child(1) p').text()).
+        expect(element('[ng-view] .browse .col-md-4:nth-child(1) p').text()).
             toMatch(/Maps/);
 
-        expect(element('[ng-view] .browse .span4:nth-child(2) p').text()).
+        expect(element('[ng-view] .browse .col-md-4:nth-child(2) p').text()).
             toMatch(/Charts/);
 
-        expect(element('[ng-view] .browse .span4:nth-child(3) p').text()).
+        expect(element('[ng-view] .browse .col-md-4:nth-child(3) p').text()).
             toMatch(/FiltersQuestionnaires/);
     });
 

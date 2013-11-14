@@ -15,15 +15,15 @@ describe('contribute', function () {
 
     it('should render admin buttons', function () {
 
-        expect(element('[ng-view] .span4:nth-child(1) li:nth-child(1) p').text()).
+        expect(element('[ng-view] .col-md-4:nth-child(1) li:nth-child(1) p').text()).
             toMatch(/Surveys/);
 
-        expect(element('[ng-view] .span4:nth-child(1) li:nth-child(2) p').text()).
+        expect(element('[ng-view] .col-md-4:nth-child(1) li:nth-child(2) p').text()).
             toMatch(/Users/);
     });
 
     it('should render other buttons', function () {
-        expect(element('[ng-view] .span4:nth-child(2) li:nth-child(1) p').text()).
+        expect(element('[ng-view] .col-md-4:nth-child(2) li:nth-child(1) p').text()).
             toMatch(/Questionnaires/);
     });
 });
