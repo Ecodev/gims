@@ -15,7 +15,7 @@
             <tab heading="General info">
 
                 <div class="form-group" ng-class="{'has-error': myForm.name.$invalid}">
-                    <label class="col-sm-1" for="user.name"><?php echo $this->translate("Name"); ?></label>
+                    <label class="control-label col-sm-1" for="user.name"><?php echo $this->translate("Name"); ?></label>
                     <div class="col-sm-6">
                         <input id="user.name" type="text" name="name" ng-model="user.name" required ng-minlength="3"/>
                     </div>
@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="form-group" ng-class="{'has-error': myForm.email.$invalid}">
-                    <label class="col-sm-1" for="user.email"><?php echo $this->translate("Email"); ?></label>
+                    <label class="control-label col-sm-1" for="user.email"><?php echo $this->translate("Email"); ?></label>
                     <div class="col-sm-6">
                         <input id="user.email" type="email" name="email" ng-model="user.email" required />
                     </div>
@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="form-group" ng-class="{'has-error': myForm.password.$invalid || myForm.passwordVerify.$invalid}">
-                    <label class="col-sm-1" for="user.password"><?php echo $this->translate("Password"); ?></label>
+                    <label class="control-label col-sm-1" for="user.password"><?php echo $this->translate("Password"); ?></label>
 
                     <div class="col-sm-11">
 
@@ -65,49 +65,49 @@
 
 
                 <div class="form-group" ng-class="{'has-error': myForm.phone.$invalid}">
-                    <label class="col-sm-1" for="user.phone">Phone</label>
+                    <label class="control-label col-sm-1" for="user.phone">Phone</label>
                     <div class="col-sm-6">
                         <input id="user.phone" type="text" name="phone" ng-model="user.phone"/>
                     </div>
                 </div>
                 <div class="form-group" ng-class="{'has-error': myForm.skype.$invalid}">
-                    <label class="col-sm-1" for="user.skype">Skype</label>
+                    <label class="control-label col-sm-1" for="user.skype">Skype</label>
                     <div class="col-sm-6">
                         <input id="user.skype" type="text" name="skype" ng-model="user.skype"/>
                     </div>
                 </div>
                 <div class="form-group" ng-class="{'has-error': myForm.job.$invalid}">
-                    <label class="col-sm-1" for="user.job">Job title</label>
+                    <label class="control-label col-sm-1" for="user.job">Job title</label>
                     <div class="col-sm-6">
                         <input id="user.job" type="text" name="job" ng-model="user.job"/>
                     </div>
                 </div>
                 <div class="form-group" ng-class="{'has-error': myForm.ministry.$invalid}">
-                    <label class="col-sm-1" for="user.ministry">Ministry / Departement</label>
+                    <label class="control-label col-sm-1" for="user.ministry">Ministry / Departement</label>
                     <div class="col-sm-6">
                         <input id="user.ministry" type="text" name="ministry" ng-model="user.ministry"/>
                     </div>
                 </div>
                 <div class="form-group" ng-class="{'has-error': myForm.address.$invalid}">
-                    <label class="col-sm-1" for="user.address">Address</label>
+                    <label class="control-label col-sm-1" for="user.address">Address</label>
                     <div class="col-sm-6">
                         <textarea id="user.address" type="text" name="address" ng-model="user.address" ></textarea>
                     </div>
                 </div>
                 <div class="form-group" ng-class="{'has-error': myForm.zip.$invalid}">
-                    <label class="col-sm-1" for="user.zip">ZIP</label>
+                    <label class="control-label col-sm-1" for="user.zip">ZIP</label>
                     <div class="col-sm-6">
                         <input id="user.zip" type="text" name="zip" ng-model="user.zip"/>
                     </div>
                 </div>
                 <div class="form-group" ng-class="{'has-error': myForm.city.$invalid}">
-                    <label class="col-sm-1" for="user.city">City</label>
+                    <label class="control-label col-sm-1" for="user.city">City</label>
                     <div class="col-sm-6">
                         <input id="user.city" type="text" name="city" ng-model="user.city"/>
                     </div>
                 </div>
                 <div class="form-group" ng-class="{'has-error': myForm.country.$invalid}">
-                    <label class="col-sm-1" for="country">Country</label>
+                    <label class="control-label col-sm-1" for="country">Country</label>
                     <div class="col-sm-6">
                         <gims-select id="country" api="country" name="country" model="user.country" style="width:100%"></gims-select>
                     </div>

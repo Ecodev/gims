@@ -13,14 +13,9 @@ textarea
     @extend .form-control;
 }
 
-.form-group > label {
-    @extend .control-label;
-}
-
 .nav.nav-tabs {
     margin-bottom: 20px;
 }
-
 
 // Colors
 // Contextual variations of badges

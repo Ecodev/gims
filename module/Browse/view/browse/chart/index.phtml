@@ -48,20 +48,20 @@
 
 <!-- Modal Login Window !-->
 <script type="text/ng-template" id="newFilterSet.html">
-    <div class="modal-header">
-        <h3>Create new Filter Set</h3>
-    </div>
-    <div class="modal-body">
-        <form>
-            <div class="form-group">
-                <label for="filterSetTextField">Filter name</label>
-                <input id="filterSetTextField" ng-model="newFilterSet.name" type="text" placeholder="Enter a filter set name..." autofocus="autofocus">
-            </div>
-        </form>
-    </div>
-
-    <div class="modal-footer">
-        <button class="btn btn-default cancel" ng-click="cancelNewFilterSet()"><?php echo $this->translate('Cancel') ?></button>
-        <button class="btn btn-primary" ng-click="createNewFilterSet()"><?php echo $this->translate('Create') ?></button>
-    </div>
+    <form name="myForm">
+        <div class="modal-header">
+            <h3>Create new Filter Set</h3>
+        </div>
+        <div class="modal-body">
+                <div class="form-group" ng-class="{'has-error': myForm.filterSetName.$invalid}">
+                    <label class="control-label" for="filterSetName">Filter name</label>
+                    <input id="filterSetName" name="filterSetName" ng-model="newFilterSet.name" type="text" placeholder="Enter a filter set name..." autofocus="autofocus" required>
+                    <span ng-show="myForm.filterSetName.$error.required" class="help-block">Required</span>
+                </div>
+        </div>
+        <div class="modal-footer">
+            <a class="btn btn-default cancel" ng-click="cancelNewFilterSet()"><?php echo $this->translate('Cancel') ?></a>
+            <button class="btn btn-primary" ng-click="createNewFilterSet()" ng-disabled="myForm.$invalid"><?php echo $this->translate('Create') ?></button>
+        </div>
+    </form>
 </script>

@@ -15,7 +15,7 @@
             <tab heading="General info">
 
                 <div class="form-group" ng-class="{'has-error': myForm.status.$invalid}" ng-show="questionnaire.id">
-                    <label class="col-sm-2" for="questionnaire.status">Status</label>
+                    <label class="control-label col-sm-2" for="questionnaire.status">Status</label>
                     <div class="col-sm-2">
                         <select id="questionnaire.status" name="state" ng-model="questionnaire.status"
                                 ng-options="c.value as c.text for c in status" ng-disabled="statusDisabled"></select>
@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="form-group" ng-class="{'has-error': myForm.geoname.$invalid}">
-                    <label class="col-sm-2" for="questionnaire.geoname">Country</label>
+                    <label class="control-label col-sm-2" for="questionnaire.geoname">Country</label>
                     <div class="col-sm-6">
                         <gims-select api="geoname" model="questionnaire.geoname" name="geoname"
                                      placeholder="<?php echo $this->translate('Select a country') ?>" style="width: 100%"
@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="form-group" ng-class="{'has-error': myForm.dateObservationStart.$invalid}">
-                    <label class="col-sm-2" for="questionnaire.dateObservationStart">Observation start</label>
+                    <label class="control-label col-sm-2" for="questionnaire.dateObservationStart">Observation start</label>
 
                     <div class="col-sm-2">
                         <input id="questionnaire.dateObservationStart" class="input-sm" type="text" name="dateObservationStart"
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="form-group" ng-class="{'has-error': myForm.dateObservationEnd.$invalid}">
-                    <label class="col-sm-2" for="questionnaire.dateObservationEnd">Observation end</label>
+                    <label class="control-label col-sm-2" for="questionnaire.dateObservationEnd">Observation end</label>
 
                     <div class="col-sm-2">
 
@@ -64,7 +64,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-2" for="questionnaire.comments">Comments</label>
+                    <label class="control-label col-sm-2" for="questionnaire.comments">Comments</label>
                     <div class="col-sm-6">
                         <textarea id="questionnaire.comments" type="text" name="comments" ng-model="questionnaire.comments"></textarea>
                     </div>

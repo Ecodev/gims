@@ -15,7 +15,7 @@
             <tab heading="General info" active="tabs[0]" select="selectTab(0)" >
 
                 <div class="form-group" ng-class="{'has-error':myForm.code.$invalid}">
-                    <label class="col-sm-1" for="survey.code">Code</label>
+                    <label class="control-label col-sm-1" for="survey.code">Code</label>
                     <div class="col-sm-3">
                         <input id="survey.code" type="text" name="code" ng-model="survey.code" required />
                     </div>
@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="form-group" ng-class="{'has-error': myForm.name.$invalid}">
-                    <label class="col-sm-1" for="survey.name">Name</label>
+                    <label class="control-label col-sm-1" for="survey.name">Name</label>
                     <div class="col-sm-6">
                         <input id="survey.name" type="text" name="name" ng-model="survey.name" required/>
                     </div>
@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="form-group" ng-class="{'has-error': myForm.isActive.$invalid}">
-                    <label class="col-sm-1" for="survey.isActive">Active</label>
+                    <label class="control-label col-sm-1" for="survey.isActive">Active</label>
                     <div class="col-sm-2">
                         <select id="survey.isActive" name="active" ng-model="survey.isActive" ng-options="c.value as c.text for c in actives"></select>
                     </div>
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="form-group" ng-class="{'has-error': myForm.year.$invalid}">
-                    <label class="col-sm-1" for="survey.year">Year</label>
+                    <label class="control-label col-sm-1" for="survey.year">Year</label>
                     <div class="col-sm-2">
                         <input id="survey.year" type="number" name="year" ng-model="survey.year" min="1970" max="2100" required />
                     </div>
@@ -56,21 +56,21 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-1" for="survey.comments">Comments</label>
+                    <label class="control-label col-sm-1" for="survey.comments">Comments</label>
                     <div class="col-sm-6">
                         <textarea id="survey.comments" type="text" name="comments" ng-model="survey.comments"></textarea>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-1" for="survey.dateStart">Date start</label>
+                    <label class="control-label col-sm-1" for="survey.dateStart">Date start</label>
                     <div class="col-md-2">
                         <input id="survey.dateStart" class="input-sm" type="text" ng-model="survey.dateStart" datepicker-popup="dd/MM/yyyy"/>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-1" for="survey.dateEnd">Date end</label>
+                    <label class="control-label col-sm-1" for="survey.dateEnd">Date end</label>
                     <div class="col-md-2">
                         <input id="survey.dateEnd" class="input-sm" type="text" ng-model="survey.dateEnd" datepicker-popup="dd/MM/yyyy"/>
                     </div>
