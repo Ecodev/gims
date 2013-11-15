@@ -1,7 +1,8 @@
 <?php
 
 return array(
-    'compressJS' => true,
+    'compressJavaScript' => true,
+    'bodyCssClass' => null,
     'doctrine' => array(
         'connection' => array(
             'orm_default' => array(
@@ -185,6 +186,7 @@ return array(
             'metadata' => 'Application\View\Helper\Metadata',
             'crudButtons' => 'Application\View\Helper\CrudButtons',
             'api' => 'Application\View\Helper\Api',
+            'bodyCssClass' => 'Application\View\Helper\BodyCssClass',
         ),
     ),
     'console' => Array(

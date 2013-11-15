@@ -53,7 +53,7 @@ class HeadScript extends \Zend\View\Helper\HeadScript implements ServiceLocatorA
             // If file will be concatened, use concatenation system instead
             if (is_array($fileName)) {
                 // If we are in development, actually don't concatenate anything
-                if (!$this->getServiceLocator()->getServiceLocator()->get('Config')['compressJS']) {
+                if (!$this->getServiceLocator()->getServiceLocator()->get('Config')['compressJavaScript']) {
                     foreach ($fileName[1] as $f) {
                         $this->includeDirectory('htdocs' . $f, $method, $args);
                     }
