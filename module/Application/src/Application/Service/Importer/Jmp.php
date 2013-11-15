@@ -85,7 +85,7 @@ class Jmp extends AbstractImporter
 
         foreach ($sheeNamesToImport as $i => $sheetName) {
 
-            $this->importOfficialFilters($this->ta[$sheetName]);
+            $this->importOfficialFilters($this->definitions[$sheetName]);
 
             // Also create a filterSet with same name for the first filter
             $firstFilter = reset($this->cacheFilters);
