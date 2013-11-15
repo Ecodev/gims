@@ -24,13 +24,15 @@ abstract class AbstractDatabase extends Task
 
         // Push temp file on remote and delete local copy
         self::executeLocalCommand("scp $tempFile $remote:$tempFile");
-        unlink($tempFile);
 
         // Execute remote code (who will delete itself)
         $sshCmd = <<<STRING
         ssh $remote "php $tempFile"
 STRING;
         self::executeLocalCommand($sshCmd);
+
+        // Delete file only after executing command in case we actualy are on the same machine
+        unlink($tempFile);
     }
 
     /**
