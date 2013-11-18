@@ -1442,7 +1442,7 @@ STRING;
             $includedValue = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
 
             // If it is not included, then it means we need an exclude rule
-            if ($includedValue != 'Yes') {
+            if (strtolower($includedValue) != 'yes') {
                 $this->getFilterQuestionnaireUsage($filter, $questionnaire, $this->excludeRule, $part, true);
             }
         }
