@@ -5,6 +5,8 @@
     <taskdef classname="tasks.CreateDump" name="create-dump" />
     <taskdef classname="tasks.LoadDump" name="load-dump" />
     <taskdef classname="tasks.LoadRemoteDump" name="load-remote-dump" />
+    <taskdef classname="tasks.PurgeBackup" name="purge-backup" />
+    <taskdef classname="tasks.RsyncBackup" name="rsync-backup" />
 
     <target name="dump-data">
         <propertyprompt propertyName="dumpFile" defaultValue="db.backup.gz" promptText="Path to gzipped DB dump to be created" useExistingValue="true" />
@@ -14,6 +16,15 @@
     <target name="load-data">
         <propertyprompt propertyName="dumpFile" defaultValue="db.backup.gz" promptText="Path to gzipped DB dump" useExistingValue="true" />
         <load-dump dumpfile="${dumpFile}" />
+    </target>
+
+    <target name="incremental-backup">
+        <tstamp />
+        <propertyprompt propertyName="numberOfVersions" defaultValue="30" promptText="Number of versions to keep" useExistingValue="true" />
+        <propertyprompt propertyName="backupDir" defaultValue="data/backup" promptText="Local backup directory" useExistingValue="true" />
+        <create-dump dumpFile="${backupDir}/pgdump-${DSTAMP}-${TSTAMP}.gz" />
+        <purge-backup backupDir="${backupDir}" numberOfVersions="${numberOfVersions}" />
+        <rsync-backup backupDir="${backupDir}" />
     </target>
 
     <target name="load-test-data" description="Load data for tests">

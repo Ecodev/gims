@@ -67,9 +67,14 @@ STRING;
         $dbConfig = $config['doctrine']['connection']['orm_default']['params'];
         $username = $dbConfig['user'];
         $database = $dbConfig['dbname'];
+        $password = $dbConfig['password'];
+
+        $pgpass = trim(`echo ~`) . "/.pgpass";
+        file_put_contents($pgpass, "localhost:5432:$database:$username:$password");
+        chmod($pgpass, 0600);
 
         echo "dumping $dumpFile...\n";
-        $dumpCmd = "pg_dump --host localhost --username $username --format=custom $database | gzip > \"$dumpFile\"";
+        $dumpCmd = "pg_dump --host localhost --username $username -w --format=custom $database | gzip > \"$dumpFile\"";
         exec($dumpCmd);
     }
 

@@ -32,6 +32,12 @@ return array(
             ),
         ),
     ),
+    'rsync' => array(
+        'host' => '',
+        'module' => '',
+        'username' => '',
+        'password' => '',
+    ),
     'smtp' => array(
         'name'              => 'mail.ecodev.ch',
         'host'              => 'mail.ecodev.ch',
