@@ -55,7 +55,7 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
                     {field: 'completed', displayName: 'Completed', cellTemplate: '<div class="progress" style="margin: 5px 5px 0 5px">' +
                         '<div class="progress-bar" ng-style="{width: row.entity[col.field] * 100}"></div>' +
                         '</div>'},
-                    {displayName: '', cellTemplate: '<div style="margin: 5px 5px 0 5px ">' +
+                    {displayName: '', width: '110px', cellTemplate: '<div style="margin: 5px 5px 0 5px ">' +
                         '<i class="fa fa-grid fa-comment" ng-visible="row.entity.comments" data-toggle="tooltip" title="{{row.entity.comments}}"></i>' +
                         '<i class="fa fa-grid fa-check-square-o" ng-visible="row.entity.status == \'validated\'" title="Validated"></i>' +
                         '<a class="btn btn-default btn-xs btn-edit" href="/admin/questionnaire/edit/{{row.entity.id}}?returnUrl={{returnUrl}}"><i class="fa fa-pencil fa-lg"></i></a>' +

@@ -22,8 +22,8 @@ angular.module('myApp').controller('Admin/FilterSetCtrl', function ($scope, $loc
         filterOptions: {},
         multiSelect: false,
         columnDefs: [
-            {field: 'name', displayName: 'Name', width: '750px'},
-            {displayName: '', cellTemplate: '' +
+            {field: 'name', displayName: 'Name'},
+            {displayName: '', width: '70px', cellTemplate: '' +
                         '<button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
         ]
     };
