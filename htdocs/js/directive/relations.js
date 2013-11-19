@@ -54,7 +54,7 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                 columnDefs: [
                     {field: $scope.second + '.name', displayName: capitaliseFirstLetter($scope.second)},
                     {field: $scope.third + '.name', displayName: capitaliseFirstLetter($scope.third), width: '250px'},
-                    {width: '90px', cellTemplate: '<button type="button" class="btn btn-default btn-xs" ng-click="delete(row)"><i class="fa fa-trash-o fa-lg"></i></button>'}
+                    {width: '70px', cellTemplate: '<button type="button" class="btn btn-default btn-xs" ng-click="delete(row)"><i class="fa fa-trash-o fa-lg"></i></button>'}
                 ]
             };
 

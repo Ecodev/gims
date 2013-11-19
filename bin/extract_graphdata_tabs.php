@@ -3,7 +3,7 @@
 /**
  * This script extract data from GraphData_W/GraphData_S for all known country files
  */
-require_once('vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
+require_once( __DIR__ . '/../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
 $countries = require (__DIR__ . '/countries.php');
 
 /**
@@ -93,13 +93,78 @@ function doOneCountry(array $country)
     unset($wb);
     unset($reader);
 
+    echo 'READING DONE' . PHP_EOL;
+
     $dir = 'extracted_data/';
     @mkdir($dir);
     $outputname = $dir . $country['name'];
 
-    $res = var_export($superdata, true);
-    file_put_contents($outputname . '.php', $res);
-    echo 'READING DONE' . PHP_EOL;
+    $phpCode = '<?php' . PHP_EOL . 'return ' . var_export($superdata, true) . ';' . PHP_EOL;
+    file_put_contents($outputname . '.php', $phpCode);
+}
+
+/**
+ * Re-write all CSV files from PHP files
+ */
+function fromPhpToCsv()
+{
+    foreach (glob('*.php') as $source) {
+
+        // Inject PHP tag if not there yet
+        $s = file_get_contents($source);
+        if (strpos($s, '<?php') === false) {
+            file_put_contents($source, '<?php' . PHP_EOL . 'return ' . $s . ';' . PHP_EOL);
+        }
+
+        $superdata = require($source);
+        $outputname = basename($source, '.php');
+        allToCsv($outputname, $superdata);
+    }
+}
+
+function allToCsv($outputname, $superdata)
+{
+
+    // Build a list of questionnaire across Water and Sanitation
+    $exhaustiveList = reset($superdata);
+    foreach (end($superdata) as $i => $sanitationRow) {
+        if ($sanitationRow[2] != $exhaustiveList[$i][2] || $sanitationRow[3] != $exhaustiveList[$i][3]) {
+            $exhaustiveList[] = $sanitationRow;
+        }
+    }
+
+    // Ensure that questionnaires are liste both in Water and Sanitation
+    foreach ($superdata as $name => &$originalRows) {
+
+        $newRows = array();
+
+        $i = 0;
+        $j = 0;
+        while ($i < count($exhaustiveList) || $j < count($originalRows)) {
+            if (@$exhaustiveList[$i] && @$originalRows[$j] && $exhaustiveList[$i][2] == $originalRows[$j][2] && $exhaustiveList[$i][3] == $originalRows[$j][3]) {
+                $newRows[] = $originalRows[$j];
+                $i++;
+                $j++;
+            } elseif (@$exhaustiveList[$i]) {
+
+                // If questionnaire is not in the list, inject empty entry
+                $newRows[] = array(
+                    $exhaustiveList[$i][0],
+                    $exhaustiveList[$i][1],
+                    $exhaustiveList[$i][2],
+                    $exhaustiveList[$i][3],
+                );
+                $i++;
+            } elseif (@$originalRows[$j]) {
+                $newRows[] = $originalRows[$j];
+                $j++;
+            }
+        }
+
+        $originalRows = $newRows;
+    }
+
+
     foreach ($superdata as $name => $data) {
         toCsv($outputname . ' - ' . $name, $data);
     }
@@ -156,7 +221,9 @@ function getCalculatedValueSafely(\PHPExcel_Cell $cell)
     }
 }
 
-if (isset($argv[1])) {
+if (isset($argv[1]) && $argv[1] == 'fromphp') {
+    fromPhpToCsv();
+} elseif (isset($argv[1])) {
     doOneCountry($countries[$argv[1]]);
 } else {
     doAllCountries($countries);

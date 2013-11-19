@@ -25,7 +25,7 @@
                     <div class='row'>
                         <div ng-switch="child.type" >
                             <div ng-switch-when="Chapter">
-                                <p>{{child.description}}</p>
+                                <p class='col-md-12'>{{child.description}}</p>
                             </div>
                             <div ng-switch-when="Numeric">
                                 <gims-num-question question='child' index="index"></gims-num-question>

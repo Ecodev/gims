@@ -48,12 +48,18 @@ function export(array $countries, array $onlyThose = array())
         echo `wget -O "each/questionnaire/$name - Water.csv"      "http://$hostname.local/api/table/questionnaire/foo.csv?years=1990-2011&country=$id&filterSet=2"`;
         echo `wget -O "each/questionnaire/$name - Sanitation.csv" "http://$hostname.local/api/table/questionnaire/foo.csv?years=1990-2011&country=$id&filterSet=5"`;
 
-        echo `wget -O "each/country/$name - Water.csv"      "http://$hostname.local/api/table/country/foo.csv?years=1990-2011&country=$id&filterSet=2"`;
-        echo `wget -O "each/country/$name - Sanitation.csv" "http://$hostname.local/api/table/country/foo.csv?years=1990-2011&country=$id&filterSet=5"`;
+//        echo `wget -O "each/country/$name - Water.csv"      "http://$hostname.local/api/table/country/foo.csv?years=1990-2011&country=$id&filterSet=2"`;
+//        echo `wget -O "each/country/$name - Sanitation.csv" "http://$hostname.local/api/table/country/foo.csv?years=1990-2011&country=$id&filterSet=5"`;
     }
 }
 
 $onlyThose = array(
+//    'Zambia',
+//    'Swaziland',
+//    'Pakistan',
+//    'Namibia',
+//    'Lithuania',
+//    'Brazil',
 );
 
 export($countries, $onlyThose);

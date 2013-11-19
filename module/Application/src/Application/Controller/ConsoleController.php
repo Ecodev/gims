@@ -21,6 +21,17 @@ class ConsoleController extends AbstractActionController
     }
 
     /**
+     * Import data from JMP file
+     */
+    public function importGlassAction()
+    {
+        $importer = new \Application\Service\Importer\Glass();
+        $importer->setServiceLocator($this->getServiceLocator());
+
+        return $importer->import();
+    }
+
+    /**
      * Import data from population file
      */
     public function importPopulationAction()

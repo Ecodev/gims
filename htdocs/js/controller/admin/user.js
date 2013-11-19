@@ -87,7 +87,7 @@ angular.module('myApp').controller('Admin/UserCtrl', function($scope, $location,
         columnDefs: [
             {field: 'name', displayName: 'Name', width: '250px'},
             {field: 'email', displayName: 'Email', cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a href="mailto:{{row.entity[col.field]}}">{{row.entity[col.field]}}</a></div>'},
-            {displayName: '', cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/user/edit/{{row.entity.id}}" ><i class="fa fa-pencil fa-lg"></i></a>' +
+            {displayName: '', width: '70px', cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/user/edit/{{row.entity.id}}" ><i class="fa fa-pencil fa-lg"></i></a>' +
                         '<button type="button" class="btn btn-default btn-xs" ng-click="delete(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
         ]
     };

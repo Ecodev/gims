@@ -17,9 +17,8 @@ $workbook;
 // headers
 $row = 1;
 
-
-$workbook->getActiveSheet()->mergeCells('E'.$row.':G'.$row);
-$workbook->getActiveSheet()->mergeCells('H'.$row.':J'.$row);
+$workbook->getActiveSheet()->mergeCells('E' . $row . ':G' . $row);
+$workbook->getActiveSheet()->mergeCells('H' . $row . ':J' . $row);
 $workbook->getActiveSheet()->setCellValueByColumnAndRow(NUM_URBAN, $row, 'Numerical');
 $workbook->getActiveSheet()->setCellValueByColumnAndRow(TXT_URBAN, $row, 'Text');
 
@@ -35,116 +34,118 @@ $workbook->getActiveSheet()->setCellValueByColumnAndRow(TXT_URBAN, $row, 'Urban'
 $workbook->getActiveSheet()->setCellValueByColumnAndRow(TXT_RURAL, $row, 'Rural');
 $workbook->getActiveSheet()->setCellValueByColumnAndRow(TXT_TOTAL, $row, 'Total');
 
-
 foreach ($questions as $question) {
     $row++;
 
     switch ($question['type']) {
-        case 'Chapter':
-            $workbook->getActiveSheet()->setCellValueByColumnAndRow(ID, $row, $question['id']);
-            $workbook->getActiveSheet()->setCellValueByColumnAndRow(CHAPTER, $row, $question['name']);
-            break;
+    case 'Chapter':
+        $workbook->getActiveSheet()->setCellValueByColumnAndRow(ID, $row, $question['id']);
+        $workbook->getActiveSheet()->setCellValueByColumnAndRow(CHAPTER, $row, $question['name']);
+        break;
 
-        case 'Numeric':
-            $workbook->getActiveSheet()->setCellValueByColumnAndRow(ID, $row,  $question['id']);
-            $workbook->getActiveSheet()->setCellValueByColumnAndRow(QUESTION, $row, $question['name']);
-            insertParts('num', $question, $row, $workbook);
-            break;
+    case 'Numeric':
+        $workbook->getActiveSheet()->setCellValueByColumnAndRow(ID, $row, $question['id']);
+        $workbook->getActiveSheet()->setCellValueByColumnAndRow(QUESTION, $row, $question['name']);
+        insertParts('num', $question, $row, $workbook, $questionnaire);
+        break;
 
-        case 'Text':
-            $workbook->getActiveSheet()->setCellValueByColumnAndRow(ID, $row,  $question['id']);
-            $workbook->getActiveSheet()->setCellValueByColumnAndRow(QUESTION, $row, $question['name']);
-            insertParts('txt', $question, $row, $workbook);
-            break;
+    case 'Text':
+        $workbook->getActiveSheet()->setCellValueByColumnAndRow(ID, $row, $question['id']);
+        $workbook->getActiveSheet()->setCellValueByColumnAndRow(QUESTION, $row, $question['name']);
+        insertParts('txt', $question, $row, $workbook, $questionnaire);
+        break;
 
-        case 'User':
-        case 'Choice':
-            $workbook->getActiveSheet()->setCellValueByColumnAndRow(ID, $row,  $question['id']);
-            $workbook->getActiveSheet()->setCellValueByColumnAndRow(QUESTION, $row, $question['name']);
-            insertChoices($question, $row, $workbook);
-            break;
+    case 'User':
+    case 'Choice':
+        $workbook->getActiveSheet()->setCellValueByColumnAndRow(ID, $row, $question['id']);
+        $workbook->getActiveSheet()->setCellValueByColumnAndRow(QUESTION, $row, $question['name']);
+        insertChoices($question, $row, $workbook, $questionnaire);
+        break;
     }
 }
 
-
-
-
-function insertParts($type, $question, $row, $workbook, $choice=null)
+function insertParts($type, $question, $row, $workbook, $questionnaire, $choice = null)
 {
     foreach ($question['parts'] as $part) {
 
         switch ($part['name']) {
-            case 'Urban' :
-                switch ($type) {
-                    case 'num' : $col = NUM_URBAN; break;
-                    case 'txt' : $col = TXT_URBAN; break;
-                }
+        case 'Urban' :
+            switch ($type) {
+            case 'num' :
+                $col = NUM_URBAN;
                 break;
-            case 'Rural' :
-                switch ($type) {
-                    case 'num' : $col = NUM_RURAL; break;
-                    case 'txt' : $col = TXT_RURAL; break;
-                }
+            case 'txt' :
+                $col = TXT_URBAN;
                 break;
-            case 'Total' :
-                switch ($type) {
-                    case 'num' : $col = NUM_TOTAL; break;
-                    case 'txt' : $col = TXT_TOTAL; break;
-                }
+            }
+            break;
+        case 'Rural' :
+            switch ($type) {
+            case 'num' :
+                $col = NUM_RURAL;
                 break;
+            case 'txt' :
+                $col = TXT_RURAL;
+                break;
+            }
+            break;
+        case 'Total' :
+            switch ($type) {
+            case 'num' :
+                $col = NUM_TOTAL;
+                break;
+            case 'txt' :
+                $col = TXT_TOTAL;
+                break;
+            }
+            break;
         }
-        $workbook->getActiveSheet()->setCellValueByColumnAndRow($col, $row, getAnswer($question, $part, $choice));
+        $workbook->getActiveSheet()->setCellValueByColumnAndRow($col, $row, getAnswer($question, $part, $choice, $questionnaire));
     }
 }
 
-
-
-function insertChoices ($question, &$row, $workbook)
+function insertChoices($question, &$row, $workbook, $questionnaire)
 {
-    if ($question['isMultiple']){
+    if ($question['isMultiple']) {
         foreach ($question['choices'] as $choice) {
             $row++;
             $workbook->getActiveSheet()->setCellValueByColumnAndRow(CHOICES, $row, $choice['name']);
-            insertParts('num', $question, $row, $workbook, $choice);
+            insertParts('num', $question, $row, $workbook, $questionnaire, $choice);
         }
     } else {
-        insertParts('num', $question, $row, $workbook);
+        insertParts('num', $question, $row, $workbook, $questionnaire);
     }
 }
 
-
-
-function getAnswer ($question, $part, $choice) {
+function getAnswer($question, $part, $choice, $questionnaire)
+{
 
     foreach ($question['answers'] as $answer) {
-        if ((isset($question['isMultiple']) && $question['isMultiple'] && $answer['valueChoice']['id']==$choice['id'] && $answer['part']['id']==$part['id']) ||
-            ((!isset($question['isMultiple']) || !$question['isMultiple']) && $answer['part']['id']==$part['id'])
+        if ((isset($question['isMultiple']) && $question['isMultiple'] && $answer['valueChoice']['id'] == $choice['id'] && $answer['part']['id'] == $part['id'])
+            || ((!isset($question['isMultiple']) || !$question['isMultiple']) && $answer['part']['id'] == $part['id'])
+            && $answer['questionnaire']['id'] == $questionnaire->getId()
         ) {
 
             switch ($question['type']) {
-                case 'Numeric':
-                    return $answer['valueAbsolute'];
-                    break;
+            case 'Numeric':
+                return $answer['valueAbsolute'];
+                break;
 
-                case 'Text':
-                    return $answer['valueText'];
-                    break;
+            case 'Text':
+                return $answer['valueText'];
+                break;
 
-                case 'User':
-                case 'Choice':
-                    if ($question['isMultiple']) {
-                        return 1;
-                    }else{
-                        return $answer['valuePercent'];
-                    }
-                    break;
+            case 'User':
+            case 'Choice':
+                if ($question['isMultiple']) {
+                    return 1;
+                } else {
+                    return $answer['valuePercent'];
+                }
+                break;
             }
         }
     }
+
     return '';
 }
-
-
-
-
-
