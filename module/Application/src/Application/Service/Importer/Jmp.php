@@ -21,6 +21,7 @@ class Jmp extends AbstractImporter
     private $defaultJustification = 'Imported from country files';
     private $partOffsets = array();
     private $cacheAlternateFilters = array();
+    private $cacheFilterQuestionnaireUsages = array();
     private $cacheFormulas = array();
     private $importedQuestionnaires = array();
     private $colToParts = array();
@@ -471,7 +472,7 @@ STRING;
     }
 
     /**
-     * Returns an alternate filter linked to the official either from database, or newly created
+     * Returns an alternate filter linked to the official either from memory cache, or newly created
      * @param Questionnaire $questionnaire
      * @param string $name
      * @param Filter $officialFilter
@@ -479,24 +480,14 @@ STRING;
      */
     protected function getAlternateFilter(Questionnaire $questionnaire, $name, Filter $officialFilter)
     {
-        if ($name == $officialFilter->getName())
+        if ($name == $officialFilter->getName()) {
             return $officialFilter;
+        }
 
         $key = \Application\Utility::getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheAlternateFilters)) {
             $filter = $this->cacheAlternateFilters[$key];
         } else {
-            $this->getEntityManager()->flush();
-            $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
-            $criteria = array(
-                'name' => $name,
-                'officialFilter' => $officialFilter,
-                'questionnaire' => $questionnaire,
-            );
-            $filter = $filterRepository->findOneBy($criteria);
-        }
-
-        if (!$filter) {
             $filter = new Filter();
             $this->getEntityManager()->persist($filter);
             $filter->setName($name);
@@ -576,7 +567,6 @@ STRING;
      */
     protected function getQuestionnaireUsage(\PHPExcel_Worksheet $sheet, $col, $row, $offset, Questionnaire $questionnaire, Part $part)
     {
-        $questionnaireUsageRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireUsage');
         $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
         $value = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
 
@@ -861,7 +851,6 @@ STRING;
         echo PHP_EOL;
     }
 
-
     /**
      * Create or get a filterQuestionnaireUsage
      * @param Filter $filter
@@ -873,18 +862,10 @@ STRING;
      */
     protected function getFilterQuestionnaireUsage(Filter $filter, Questionnaire $questionnaire, Rule $rule, Part $part, $isSecondLevel = false)
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterQuestionnaireUsage');
-
-        $this->getEntityManager()->flush();
-        $filterQuestionnaireUsage = $repository->findOneBy(array(
-            'questionnaire' => $questionnaire,
-            'rule' => $rule,
-            'part' => $part,
-            'filter' => $filter,
-            'isSecondLevel' => $isSecondLevel,
-        ));
-
-        if (!$filterQuestionnaireUsage) {
+        $key = \Application\Utility::getCacheKey(func_get_args());
+        if (array_key_exists($key, $this->cacheFilterQuestionnaireUsages)) {
+            $filterQuestionnaireUsage = $this->cacheFilterQuestionnaireUsages[$key];
+        } else {
             $filterQuestionnaireUsage = new FilterQuestionnaireUsage();
             $filterQuestionnaireUsage->setJustification($this->defaultJustification)
                     ->setQuestionnaire($questionnaire)
