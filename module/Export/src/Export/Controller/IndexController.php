@@ -15,15 +15,32 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
      */
     public function questionnaireAction()
     {
-
         $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($this->params('id'));
+
         $permission = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac')->isActionGranted($questionnaire, 'read');
         if ($permission) {
-            $questions = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getAllWithPermission('read', 'survey', $questionnaire->getSurvey());
+            $questions = $this->getEntityManager()
+                              ->getRepository('Application\Model\Question\AbstractQuestion')
+                              ->getAllWithPermission('read', 'survey', $questionnaire->getSurvey());
         }
-        $questions = $this->getFlatHierarchy($questions, array('type', 'filter', 'chapter', 'answers', 'answers.part', 'choices', 'parts', 'isMultiple', 'chapter'), new \Application\Service\Hydrator());
 
-        return new ExcelModel($this->params('filename'), array('questions' => $questions));
+        $questions = $this->getFlatHierarchy(
+            $questions,
+            array(
+                'type',
+                'filter',
+                'chapter',
+                'answers',
+                'answers.part',
+                'answers.questionnaire',
+                'choices',
+                'parts',
+                'isMultiple',
+                'chapter'),
+            new \Application\Service\Hydrator()
+        );
+
+        return new ExcelModel($this->params('filename'), array('questions' => $questions, 'questionnaire' => $questionnaire));
     }
 
 }
