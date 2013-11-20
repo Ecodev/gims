@@ -106,7 +106,7 @@ function insertParts($type, $question, $row, $workbook, $questionnaire, $choice 
 
 function insertChoices($question, &$row, $workbook, $questionnaire)
 {
-    if ($question['isMultiple']) {
+    if (isset($question['isMultiple']) && $question['isMultiple']) {
         foreach ($question['choices'] as $choice) {
             $row++;
             $workbook->getActiveSheet()->setCellValueByColumnAndRow(CHOICES, $row, $choice['name']);
@@ -121,9 +121,11 @@ function getAnswer($question, $part, $choice, $questionnaire)
 {
 
     foreach ($question['answers'] as $answer) {
-        if ((isset($question['isMultiple']) && $question['isMultiple'] && $answer['valueChoice']['id'] == $choice['id'] && $answer['part']['id'] == $part['id'])
-            || ((!isset($question['isMultiple']) || !$question['isMultiple']) && $answer['part']['id'] == $part['id'])
-            && $answer['questionnaire']['id'] == $questionnaire->getId()
+        if ($answer['questionnaire']['id'] == $questionnaire->getId() &&
+            (
+                (isset($question['isMultiple']) && $question['isMultiple'] && $answer['valueChoice']['id'] == $choice['id'] && $answer['part']['id'] == $part['id']) ||
+                ((!isset($question['isMultiple']) || !$question['isMultiple']) && $answer['part']['id'] == $part['id'])
+            )
         ) {
 
             switch ($question['type']) {
@@ -137,7 +139,7 @@ function getAnswer($question, $part, $choice, $questionnaire)
 
             case 'User':
             case 'Choice':
-                if ($question['isMultiple']) {
+                if (isset($question['isMultiple']) && $question['isMultiple']) {
                     return 1;
                 } else {
                     return $answer['valuePercent'];
