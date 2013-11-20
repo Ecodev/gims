@@ -59,6 +59,11 @@ class Glass extends AbstractImporter
             32 => array("Target year", 30),
             33 => array("Level of development / Implementation of plan", 30),
 
+			40 => array("To keep rural water supplies functioning over the long-term", 1),
+			41 => array("To improve the reliability and continuity of urban water supplies", 1),            
+            42 => array("To ensure drinking water quality meet national standards", 1),
+
+
             77  => array("Central government", 1),
             78  => array("Bilateral, multilateral donors", 1),
             79  => array("State, provincial, local", 1),
@@ -107,8 +112,7 @@ class Glass extends AbstractImporter
             122 => array("Ethnic minorities", 1),
             123 => array("People with disabilities", 1),
             124 => array("Other disadvantaged groups", 1),
-            125 => array("To keep rural water supplies functioning over the long-term", 1),
-            126 => array("To improve the reliability and continuity of urban water supplies", 1),
+
             127 => array("Self-supply", 1),
 
         ),
@@ -129,6 +133,10 @@ class Glass extends AbstractImporter
             31 => array("Target coverage", 30),
             32 => array("Target year", 30),
             33 => array("Level of development / Implementation of plan", 30),
+            
+            40 => array("To rehabilitate broken or disused public latrines  (e.g. in schools)", 1),
+            41 => array("To safely empty or replace latrines when full ", 1),
+            42 => array("To reuse wastewater and/or septage", 1),
 
 
 
@@ -178,9 +186,6 @@ class Glass extends AbstractImporter
             128 => array("Ethnic minorities", 1),
             129 => array("People with disabilities", 1),
             130 => array("Other disadvantaged groups", 1),
-            131 => array("To rehabilitate broken or disused public latrines  (e.g. in schools)", 1),
-            132 => array("To safely empty or replace latrines when full ", 1),
-            133 => array("To reuse wastewater and/or septage", 1),
             134 => array("Self-supply", 1),
 
 
@@ -238,12 +243,15 @@ class Glass extends AbstractImporter
             136 => array("Ethnic minorities", 1),
             137 => array("People with disabilities", 1),
             138 => array("Other disadvantaged groups", 1),
-            139 => array("To ensure drinking water quality meet national standards", 1),
-            140 => array("To address resilience to climate change", 1),
+            
+            
 
         ),
         'Tables_U' => array(
             1 => array("Undefined", null),
+            
+            40 => array("To address resilience to climate change", 1),
+            
             5 => array("Central government", 1),
             6 => array("Bilateral, multilateral donors", 1),
             7 => array("State, provincial, local", 1),
@@ -385,14 +393,15 @@ class Glass extends AbstractImporter
         $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_W'][32]);
         $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_W'][33]);
 
-//        // Elements of sustainability in policy and level of implementation
-//        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_W'][125]);
-//        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_W'][126]);
-//        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_S'][131]);
-//        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_S'][131]);
-//        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_W'][133]);
-//        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_H'][39]);
-//        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_H'][40]);
+        // Elements of sustainability in policy and level of implementation
+        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_W'][40]);
+        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_W'][41]);
+        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_S'][40]);
+        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_S'][41]);
+        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_S'][42]);
+        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_W'][42]);
+        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_U'][40]);
+
 //
 //        // Distribution of service provision for drinking-water by institutional type
 //        $this->cacheFilterSets[3]->addFilter($this->cacheFiltersGlass['Tables_W'][106]);
@@ -411,155 +420,85 @@ class Glass extends AbstractImporter
     protected function linkQuestions()
     {
 
-        /* @var $q \Application\Model\Question\AbstractAnswerableQuestion */
-        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractAnswerableQuestion');
-
-
         // Level of development and implementation of policy / plan
             // drinking water supply
                 // target coverage
-                    // urban
-                    $q = $filterRepository->findOneById(154);
-                    $q->setFilter($this->cacheFiltersGlass['Tables_W'][11]);
-                    // rural
-                    $q = $filterRepository->findOneById(159);
-                    $q->setFilter($this->cacheFiltersGlass['Tables_W'][11]);
+                $this->setFilter('W', 154 , 13); // urban
+                $this->setFilter('W', 159 , 13); // rural
 
                 // target year
-                    // urban
-                    $q = $filterRepository->findOneById(157);
-                    $q->setFilter($this->cacheFiltersGlass['Tables_W'][12]);
-                    // rural
-                    $q = $filterRepository->findOneById(162);
-                    $q->setFilter($this->cacheFiltersGlass['Tables_W'][12]);
+                $this->setFilter('W', 157 , 13); // urban
+                $this->setFilter('W', 162 , 13); // rural
 
                 // Level of development / Implementation of plan
-                $q = $filterRepository->findOneById(59);
-                $q->setFilter($this->cacheFiltersGlass['Tables_W'][13]);
+                $this->setFilter('W', 59 , 13);
 
-           // drinking water in schools
-                // target coverage
-                $q = $filterRepository->findOneById(164);
-                $q->setFilter($this->cacheFiltersGlass['Tables_W'][11]);
+            // drinking water in schools
+            $this->setFilter('W', 164 , 13); // target coverage
+            $this->setFilter('W', 167 , 13); // target year
+            $this->setFilter('W', 60 , 13); // Level of development / Implementation of plan
 
-                // target year
-                $q = $filterRepository->findOneById(167);
-                $q->setFilter($this->cacheFiltersGlass['Tables_W'][12]);
-
-                // Level of development / Implementation of plan
-                $q = $filterRepository->findOneById(60);
-                $q->setFilter($this->cacheFiltersGlass['Tables_W'][13]);
-
-           // drinking water in health facilities
-                // target coverage
-                $q = $filterRepository->findOneById(169);
-                $q->setFilter($this->cacheFiltersGlass['Tables_W'][11]);
-
-                // target year
-                $q = $filterRepository->findOneById(172);
-                $q->setFilter($this->cacheFiltersGlass['Tables_W'][12]);
-
-                // Level of development / Implementation of plan
-                $q = $filterRepository->findOneById(61);
-                $q->setFilter($this->cacheFiltersGlass['Tables_W'][13]);
-
+            // drinking water in health facilities
+            $this->setFilter('W', 169 , 13); // target coverage
+            $this->setFilter('W', 172 , 13); // target year
+            $this->setFilter('W', 61 , 13); // Level of development / Implementation of plan
 
             // Sanitation
                 // target coverage
-                    // urban
-                    $q = $filterRepository->findOneById(55);
-                    $q->setFilter($this->cacheFiltersGlass['Tables_S'][11]);
-                    // rural
-                    $q = $filterRepository->findOneById(69);
-                    $q->setFilter($this->cacheFiltersGlass['Tables_S'][11]);
+                $this->setFilter('S', 55 , 13); // urban
+                $this->setFilter('S', 69 , 13); // rural
 
                 // target year
-                    // urban
-                    $q = $filterRepository->findOneById(58);
-                    $q->setFilter($this->cacheFiltersGlass['Tables_S'][12]);
-                    // rural
-                    $q = $filterRepository->findOneById(72);
-                    $q->setFilter($this->cacheFiltersGlass['Tables_S'][12]);
+                $this->setFilter('S', 58 , 13); // urban
+                $this->setFilter('S', 72 , 13); // rural
 
                 // Level of development / Implementation of plan
-                $q = $filterRepository->findOneById(19);
-                $q->setFilter($this->cacheFiltersGlass['Tables_S'][13]);
+                $this->setFilter('S', 19 , 13);
 
-           // sanitation in schools
-                // target coverage
-                $q = $filterRepository->findOneById(77);
-                $q->setFilter($this->cacheFiltersGlass['Tables_S'][11]);
+                // sanitation in schools
+                $this->setFilter('S', 77 , 13); // target coverage
+                $this->setFilter('S', 80 , 13); // target year
+                $this->setFilter('S', 20 , 13); // Level of development / Implementation of plan
 
-                // target year
-                $q = $filterRepository->findOneById(80);
-                $q->setFilter($this->cacheFiltersGlass['Tables_S'][12]);
-
-                // Level of development / Implementation of plan
-                $q = $filterRepository->findOneById(20);
-                $q->setFilter($this->cacheFiltersGlass['Tables_S'][13]);
-
-           // sanitation in health facilities
-                // target coverage
-                $q = $filterRepository->findOneById(97);
-                $q->setFilter($this->cacheFiltersGlass['Tables_S'][11]);
-
-                // target year
-                $q = $filterRepository->findOneById(100);
-                $q->setFilter($this->cacheFiltersGlass['Tables_S'][12]);
-
-                // Level of development / Implementation of plan
-                $q = $filterRepository->findOneById(21);
-                $q->setFilter($this->cacheFiltersGlass['Tables_S'][13]);
+                // sanitation in health facilities
+                $this->setFilter('S', 97 , 13); // target coverage
+                $this->setFilter('S', 100 , 13); // target year
+                $this->setFilter('S', 21 , 13); // Level of development / Implementation of plan
 
             // Hygiene promotion
-                // target coverage
-                $q = $filterRepository->findOneById(174);
-                $q->setFilter($this->cacheFiltersGlass['Tables_H'][11]);
+            $this->setFilter('H', 174 , 13); // target coverage
+            $this->setFilter('S', 177 , 13); // target year
+            $this->setFilter('H', 62 , 13); // Level of development / Implementation of plan
 
-                // target year
-                $q = $filterRepository->findOneById(177);
-                $q->setFilter($this->cacheFiltersGlass['Tables_S'][12]);
+            // Hygiene promotion in schools
+            $this->setFilter('H', 474 , 13); // target coverage
+            $this->setFilter('H', 522 , 13); // target year
+            $this->setFilter('H', 63 , 13); // Level of development / Implementation of plan
 
-                // Level of development / Implementation of plan
-                $q = $filterRepository->findOneById(62);
-                $q->setFilter($this->cacheFiltersGlass['Tables_H'][13]);
+            // Hygiene promotion in health facilities
+            $this->setFilter('H', 478 , 13); // target coverage
+            $this->setFilter('H', 481 , 13); // target year
+            $this->setFilter('H', 64 , 13); // Level of development / Implementation of plan
 
-           // Hygiene promotion in schools
-                // target coverage
-                $q = $filterRepository->findOneById(474);
-                $q->setFilter($this->cacheFiltersGlass['Tables_H'][11]);
-
-                // target year
-                $q = $filterRepository->findOneById(522);
-                $q->setFilter($this->cacheFiltersGlass['Tables_H'][12]);
-
-                // Level of development / Implementation of plan
-                $q = $filterRepository->findOneById(63);
-                $q->setFilter($this->cacheFiltersGlass['Tables_H'][13]);
-
-           // Hygiene promotion in health facilities
-                // target coverage
-                $q = $filterRepository->findOneById(478);
-                $q->setFilter($this->cacheFiltersGlass['Tables_H'][11]);
-
-                // target year
-                $q = $filterRepository->findOneById(481);
-                $q->setFilter($this->cacheFiltersGlass['Tables_H'][12]);
-
-                // Level of development / Implementation of plan
-                $q = $filterRepository->findOneById(64);
-                $q->setFilter($this->cacheFiltersGlass['Tables_H'][13]);
-                //$this->setFilter('H', 64, 13);
-
+        // Elements of sustainability in policy and level of implementation
+        $this->setFilter('W', 64 , 13);
+        $this->setFilter('W', 64 , 13);
+        $this->setFilter('S', 64 , 13);
+        $this->setFilter('S', 64 , 13);
+        $this->setFilter('S', 64 , 13);
+        $this->setFilter('W', 64 , 13);
+        $this->setFilter('U', 64 , 13);
 
     }
 
-//    protected function setFilter($area, $question_id, $filter_index)
-//    {
-//
-//        $q = $filterRepository->findOneById($question_id);
-//        $q->setFilter($this->cacheFiltersGlass['Tables_'.$area][$filter_index]);
-//    }
+    protected function setFilter($area, $question_id, $filter_index)
+    {
+        /* @var $q \Application\Model\Question\AbstractAnswerableQuestion */
+        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractAnswerableQuestion');
+
+        $q = $filterRepository->findOneById($question_id);
+        $q->setFilter($this->cacheFiltersGlass['Tables_'.$area][$filter_index]);
+    }
 
 
 
