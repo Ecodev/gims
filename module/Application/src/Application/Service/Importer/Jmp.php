@@ -247,6 +247,11 @@ STRING;
         $knownRows = array_keys($this->cacheFilters);
         array_shift($knownRows); // Skip first filter, since it's not an actual row, but the sheet topic (eg: "Access to drinking water sources")
 
+        // Remove negative rows which were replacement filters
+        $knownRows = array_filter($knownRows, function($row) {
+            return $row > 0 && $row < 100;
+        });
+
         $answerCount = 0;
         foreach ($knownRows as $row) {
 
