@@ -41,183 +41,232 @@ class Glass extends AbstractImporter
 
     protected $filters = array(
 
-        'Tables_U' => array(
-            4 => array("Undefined", null),
-            5 => array("Central government", 4),
-            6 => array("Bilateral, multilateral donors", 4),
-            7 => array("State, provincial, local", 4),
-            8 => array("Tariffs and charges", 4),
-            9 => array("Households out-of-pocket", 4),
-            10 => array("NGOs, Lendors, Other", 4),
-            11 => array("total Central government", 4),
-            12 => array("total Bilateral, multilateral donors", 4),
-            13 => array("total State, provincial, local", 4),
-            14 => array("total Tariffs and charges", 4),
-            15 => array("total Households out-of-pocket", 4),
-            16 => array("total NGOs, Lendors, Other", 4),
-            17 => array("Identify public health priorities", 4),
-            18 => array("Response to WASH related disease outbreak", 4),
-            19 => array("Universal access for disadvantaged groups", 4),
-            20 => array("Overall coordination between WASH actors:", 4),
-
-        ),
-        'Tables_H' => array(
-            4 => array("Hygiene", null),
-            5 => array("Central government", 4),
-            6 => array("Bilateral, multilateral donors", 4),
-            7 => array("State, provincial, local", 4),
-            8 => array("Tariffs and charges", 4),
-            9 => array("Households out-of-pocket", 4),
-            10 => array("NGOs, Lendors, Other", 4),
-            11 => array("WASH HR strategy exists", 4),
-            12 => array("Current difficulties in HR for WASH", 4),
-            13 => array("Financial resources available for staff (salaries and benefits, including pensions etc.) ", 4),
-            14 => array("Insufficient education/training organisations or courses to meet demand by potential students", 4),
-            15 => array("Lack of skilled graduates from training & education institutes", 4),
-            16 => array("Preference by skilled graduates to work in other (non-WASH) sectors (e.g. Mining, Transport, Construction) within the country", 4),
-            17 => array("Emigration (temporary or permanent) of skilled workers to work abroad", 4),
-            18 => array("Skilled workers do not want to live and work in rural areas of the country", 4),
-            19 => array("Recruitment practices", 4),
-            20 => array("Other (please specify)", 4),
-            21 => array("promotion", 4),
-            22 => array("promotion in schools", 4),
-            23 => array("promotion in health facilities", 4),
-            24 => array("Govern/Regulate", 4),
-            25 => array("Provide Service", 4),
-            26 => array("Monitor/Survie", 4),
-            27 => array("Ministry of health", 4),
-            28 => array("National Water and sanitation authority (urban)", 4),
-            29 => array("Ministry of Municipalities (rural)", 4),
-            30 => array("Ministry of Education", 4),
-            31 => array("Poor populations", 4),
-            32 => array("Populations living in slums or informal settlements", 4),
-            33 => array("Remote or hard to reach areas	", 4),
-            34 => array("Indigenous population", 4),
-            35 => array("Internally displaced", 4),
-            36 => array("Ethnic minorities", 4),
-            37 => array("People with disabilities", 4),
-            38 => array("Other disadvantaged groups", 4),
-            39 => array("To ensure drinking water quality meet national standards", 4),
-            40 => array("To address resilience to climate change", 4),
-
-        ),
         'Tables_W' => array(
-            4  => array("Water", null),
-            // Glass filters
-            77  => array("Central government", 4),
-            78  => array("Bilateral, multilateral donors", 4),
-            79  => array("State, provincial, local", 4),
-            80  => array("Tariffs and charges", 4),
-            81  => array("Households out-of-pocket", 4),
-            82  => array("NGOs, Lendors, Other", 4),
-            83  => array("Expenditure", 4),
-            84  => array("Service quality", 4),
-            85  => array("Equitable Service", 4),
-            86  => array("Cost Effectiveness", 4),
-            87  => array("Functionality of systems", 4),
-            88  => array("Affordability", 4),
-            89  => array("Wastewater/septage reuse", 4),
-            90  => array("Institutional effectiveness", 4),
-            91  => array("Cost-Recovery", 4),
-            92  => array("Policy and strategy", 4),
-            93  => array("Resource allocation", 4),
-            94  => array("National standards", 4),
-            95  => array("WASH HR strategy exists", 4),
-            96  => array("Current difficulties in HR for WASH", 4),
-            97  => array("Financial resources available for staff (salaries and benefits, including pensions etc.) ", 4),
-            98  => array("Insufficient education/training organisations or courses to meet demand by potential students", 4),
-            99  => array("Lack of skilled graduates from training & education institutes", 4),
-            100 => array("Preference by skilled graduates to work in other (non-WASH) sectors (e.g. Mining, Transport, Construction) within the country", 4),
-            101 => array("Emigration (temporary or permanent) of skilled workers to work abroad", 4),
-            102 => array("Skilled workers do not want to live and work in rural areas of the country", 4),
-            103 => array("Recruitment practices", 4),
-            104 => array("Other (please specify)", 4),
-            105 => array("Drinking-water in schools", 4),
-            106 => array("Drinking-water in health facilities", 4),
-            107 => array("Formal", 4),
-            108 => array("Community-based", 4),
-            109 => array("Informal", 4),
-            110 => array("Govern/Regulate", 4),
-            111 => array("Provide Service", 4),
-            112 => array("Monitor/Survie", 4),
-            113 => array("Ministry of health", 4),
-            114 => array("National Water and sanitation authority (urban)", 4),
-            115 => array("Ministry of Municipalities (rural)", 4),
-            116 => array("Ministry of Education", 4),
-            117 => array("Poor populations", 4),
-            118 => array("Populations living in slums or informal settlements", 4),
-            119 => array("Remote or hard to reach areas	", 4),
-            120 => array("Indigenous population", 4),
-            121 => array("Internally displaced", 4),
-            122 => array("Ethnic minorities", 4),
-            123 => array("People with disabilities", 4),
-            124 => array("Other disadvantaged groups", 4),
-            125 => array("To keep rural water supplies functioning over the long-term", 4),
-            126 => array("To improve the reliability and continuity of urban water supplies", 4),
-            127 => array("Self-supply", 4),
+            1  => array("Water", null),
 
+            10 => array("Drinking-water supply", 1),
+            11 => array("Target coverage", 10),
+            12 => array("Target year", 10),
+            13 => array("Level of development / Implementation of plan", 10),
+
+            20 => array("Drinking-water in schools", 1),
+            21 => array("Target coverage", 20),
+            22 => array("Target year", 20),
+            23 => array("Level of development / Implementation of plan", 20),
+
+            30 => array("Drinking-water in health facilities", 1),
+            31 => array("Target coverage", 30),
+            32 => array("Target year", 30),
+            33 => array("Level of development / Implementation of plan", 30),
+
+            77  => array("Central government", 1),
+            78  => array("Bilateral, multilateral donors", 1),
+            79  => array("State, provincial, local", 1),
+            80  => array("Tariffs and charges", 1),
+            81  => array("Households out-of-pocket", 1),
+            82  => array("NGOs, Lendors, Other", 1),
+            83  => array("Expenditure", 1),
+            84  => array("Service quality", 1),
+            85  => array("Equitable Service", 1),
+            86  => array("Cost Effectiveness", 1),
+            87  => array("Functionality of systems", 1),
+            88  => array("Affordability", 1),
+            89  => array("Wastewater/septage reuse", 1),
+            90  => array("Institutional effectiveness", 1),
+            91  => array("Cost-Recovery", 1),
+            92  => array("Policy and strategy", 1),
+            93  => array("Resource allocation", 1),
+            94  => array("National standards", 1),
+            95  => array("WASH HR strategy exists", 1),
+            96  => array("Current difficulties in HR for WASH", 1),
+            97  => array("Financial resources available for staff (salaries and benefits, including pensions etc.) ", 1),
+            98  => array("Insufficient education/training organisations or courses to meet demand by potential students", 1),
+            99  => array("Lack of skilled graduates from training & education institutes", 1),
+            100 => array("Preference by skilled graduates to work in other (non-WASH) sectors (e.g. Mining, Transport, Construction) within the country", 1),
+            101 => array("Emigration (temporary or permanent) of skilled workers to work abroad", 1),
+            102 => array("Skilled workers do not want to live and work in rural areas of the country", 1),
+            103 => array("Recruitment practices", 1),
+            104 => array("Other (please specify)", 1),
+            105 => array("Drinking-water in schools", 1),
+            106 => array("Drinking-water in health facilities", 1),
+            107 => array("Formal", 1),
+            108 => array("Community-based", 1),
+            109 => array("Informal", 1),
+            110 => array("Govern/Regulate", 1),
+            111 => array("Provide Service", 1),
+            112 => array("Monitor/Survie", 1),
+            113 => array("Ministry of health", 1),
+            114 => array("National Water and sanitation authority (urban)", 1),
+            115 => array("Ministry of Municipalities (rural)", 1),
+            116 => array("Ministry of Education", 1),
+            117 => array("Poor populations", 1),
+            118 => array("Populations living in slums or informal settlements", 1),
+            119 => array("Remote or hard to reach areas	", 1),
+            120 => array("Indigenous population", 1),
+            121 => array("Internally displaced", 1),
+            122 => array("Ethnic minorities", 1),
+            123 => array("People with disabilities", 1),
+            124 => array("Other disadvantaged groups", 1),
+            125 => array("To keep rural water supplies functioning over the long-term", 1),
+            126 => array("To improve the reliability and continuity of urban water supplies", 1),
+            127 => array("Self-supply", 1),
 
         ),
         'Tables_S' => array(
-            4  => array("Sanitation", null),
+            1  => array("Sanitation", null),
 
-            // Glass filters
-            84 => array("Sanitation Central government", 4),
-            85 => array("Bilateral, multilateral donors", 4),
-            86 => array("State, provincial, local", 4),
-            87 => array("Tariffs and charges", 4),
-            88 => array("Households out-of-pocket", 4),
-            89 => array("NGOs, Lendors, Other", 4),
-            90 => array("Expenditure", 4),
-            91 => array("Service quality", 4),
-            92 => array("Equitable Service", 4),
-            93 => array("Cost Effectiveness", 4),
-            94 => array("Functionality of systems", 4),
-            95 => array("Affordability", 4),
-            96 => array("Wastewater/septage reuse", 4),
-            97 => array("Institutional effectiveness", 4),
-            98 => array("Cost-Recovery", 4),
-            99 => array("Policy and strategy", 4),
-            100 => array("Resource allocation", 4),
-            101 => array("WASH HR strategy exists", 4),
-            102 => array("Current difficulties in HR for WASH", 4),
-            103 => array("Financial resources available for staff (salaries and benefits, including pensions etc.) ", 4),
-            104 => array("Insufficient education/training organisations or courses to meet demand by potential students", 4),
-            105 => array("Lack of skilled graduates from training & education institutes", 4),
-            106 => array("Preference by skilled graduates to work in other (non-WASH) sectors (e.g. Mining, Transport, Construction) within the country", 4),
-            107 => array("Emigration (temporary or permanent) of skilled workers to work abroad", 4),
-            108 => array("Skilled workers do not want to live and work in rural areas of the country", 4),
-            109 => array("Recruitment practices", 4),
-            110 => array("Other (please specify)", 4),
-            111 => array("in schools", 4),
-            112 => array("in health facilities", 4),
-            113 => array("Formal", 4),
-            114 => array("Community-based", 4),
-            115 => array("Informal", 4),
-            116 => array("Govern/Regulate", 4),
-            117 => array("Provide Service", 4),
-            118 => array("Monitor/Survie", 4),
-            119 => array("Ministry of health", 4),
-            120 => array("National Water and sanitation authority (urban)", 4),
-            121 => array("Ministry of Municipalities (rural)", 4),
-            122 => array("Ministry of Education", 4),
-            123 => array("Poor populations", 4),
-            124 => array("Populations living in slums or informal settlements", 4),
-            125 => array("Remote or hard to reach areas	", 4),
-            126 => array("Indigenous population", 4),
-            127 => array("Internally displaced", 4),
-            128 => array("Ethnic minorities", 4),
-            129 => array("People with disabilities", 4),
-            130 => array("Other disadvantaged groups", 4),
-            131 => array("To rehabilitate broken or disused public latrines  (e.g. in schools)", 4),
-            132 => array("To safely empty or replace latrines when full ", 4),
-            133 => array("To reuse wastewater and/or septage", 4),
-            134 => array("Self-supply", 4),
+            10 => array("Sanitation", 1),
+            11 => array("Target coverage", 10),
+            12 => array("Target year", 10),
+            13 => array("Level of development / Implementation of plan", 10),
+
+            20 => array("Sanitation in schools", 1),
+            21 => array("Target coverage", 20),
+            22 => array("Target year", 20),
+            23 => array("Level of development / Implementation of plan", 20),
+
+            30 => array("Sanitation in health facilities", 1),
+            31 => array("Target coverage", 30),
+            32 => array("Target year", 30),
+            33 => array("Level of development / Implementation of plan", 30),
+
+
+
+            84 => array("Sanitation Central government", 1),
+            85 => array("Bilateral, multilateral donors", 1),
+            86 => array("State, provincial, local", 1),
+            87 => array("Tariffs and charges", 1),
+            88 => array("Households out-of-pocket", 1),
+            89 => array("NGOs, Lendors, Other", 1),
+            90 => array("Expenditure", 1),
+            91 => array("Service quality", 1),
+            92 => array("Equitable Service", 1),
+            93 => array("Cost Effectiveness", 1),
+            94 => array("Functionality of systems", 1),
+            95 => array("Affordability", 1),
+            96 => array("Wastewater/septage reuse", 1),
+            97 => array("Institutional effectiveness", 1),
+            98 => array("Cost-Recovery", 1),
+            99 => array("Policy and strategy", 1),
+            100 => array("Resource allocation", 1),
+            101 => array("WASH HR strategy exists", 1),
+            102 => array("Current difficulties in HR for WASH", 1),
+            103 => array("Financial resources available for staff (salaries and benefits, including pensions etc.) ", 1),
+            104 => array("Insufficient education/training organisations or courses to meet demand by potential students", 1),
+            105 => array("Lack of skilled graduates from training & education institutes", 1),
+            106 => array("Preference by skilled graduates to work in other (non-WASH) sectors (e.g. Mining, Transport, Construction) within the country", 1),
+            107 => array("Emigration (temporary or permanent) of skilled workers to work abroad", 1),
+            108 => array("Skilled workers do not want to live and work in rural areas of the country", 1),
+            109 => array("Recruitment practices", 1),
+            110 => array("Other (please specify)", 1),
+
+            113 => array("Formal", 1),
+            114 => array("Community-based", 1),
+            115 => array("Informal", 1),
+            116 => array("Govern/Regulate", 1),
+            117 => array("Provide Service", 1),
+            118 => array("Monitor/Survie", 1),
+            119 => array("Ministry of health", 1),
+            120 => array("National Water and sanitation authority (urban)", 1),
+            121 => array("Ministry of Municipalities (rural)", 1),
+            122 => array("Ministry of Education", 1),
+            123 => array("Poor populations", 1),
+            124 => array("Populations living in slums or informal settlements", 1),
+            125 => array("Remote or hard to reach areas	", 1),
+            126 => array("Indigenous population", 1),
+            127 => array("Internally displaced", 1),
+            128 => array("Ethnic minorities", 1),
+            129 => array("People with disabilities", 1),
+            130 => array("Other disadvantaged groups", 1),
+            131 => array("To rehabilitate broken or disused public latrines  (e.g. in schools)", 1),
+            132 => array("To safely empty or replace latrines when full ", 1),
+            133 => array("To reuse wastewater and/or septage", 1),
+            134 => array("Self-supply", 1),
+
+
+        ),
+        'Tables_H' => array(
+            1 => array("Hygiene", null),
+
+            10 => array("Hygiene promotion", 1),
+            11 => array("Target coverage", 10),
+            12 => array("Target year", 10),
+            13 => array("Level of development / Implementation of plan", 10),
+
+            20 => array("Hygiene promotion in schools", 1),
+            21 => array("Target coverage", 20),
+            22 => array("Target year", 20),
+            23 => array("Level of development / Implementation of plan", 20),
+
+            30 => array("Hygiene promotion in health facilities", 1),
+            31 => array("Target coverage", 30),
+            32 => array("Target year", 30),
+            33 => array("Level of development / Implementation of plan", 30),
+
+
+            15 => array("Central government", 1),
+            16 => array("Bilateral, multilateral donors", 1),
+            17 => array("State, provincial, local", 1),
+            18 => array("Tariffs and charges", 1),
+            19 => array("Households out-of-pocket", 1),
+            110 => array("NGOs, Lendors, Other", 1),
+            111 => array("WASH HR strategy exists", 1),
+            112 => array("Current difficulties in HR for WASH", 1),
+            113 => array("Financial resources available for staff (salaries and benefits, including pensions etc.) ", 1),
+            114 => array("Insufficient education/training organisations or courses to meet demand by potential students", 1),
+            115 => array("Lack of skilled graduates from training & education institutes", 1),
+            116 => array("Preference by skilled graduates to work in other (non-WASH) sectors (e.g. Mining, Transport, Construction) within the country", 1),
+            117 => array("Emigration (temporary or permanent) of skilled workers to work abroad", 1),
+            118 => array("Skilled workers do not want to live and work in rural areas of the country", 1),
+            119 => array("Recruitment practices", 1),
+            120 => array("Other (please specify)", 1),
+            121 => array("promotion", 1),
+            122 => array("promotion in schools", 1),
+            123 => array("promotion in health facilities", 1),
+            124 => array("Govern/Regulate", 1),
+            125 => array("Provide Service", 1),
+            126 => array("Monitor/Survie", 1),
+            127 => array("Ministry of health", 1),
+            128 => array("National Water and sanitation authority (urban)", 1),
+            129 => array("Ministry of Municipalities (rural)", 1),
+            130 => array("Ministry of Education", 1),
+            131 => array("Poor populations", 1),
+            132 => array("Populations living in slums or informal settlements", 1),
+            133 => array("Remote or hard to reach areas	", 1),
+            134 => array("Indigenous population", 1),
+            135 => array("Internally displaced", 1),
+            136 => array("Ethnic minorities", 1),
+            137 => array("People with disabilities", 1),
+            138 => array("Other disadvantaged groups", 1),
+            139 => array("To ensure drinking water quality meet national standards", 1),
+            140 => array("To address resilience to climate change", 1),
+
+        ),
+        'Tables_U' => array(
+            1 => array("Undefined", null),
+            5 => array("Central government", 1),
+            6 => array("Bilateral, multilateral donors", 1),
+            7 => array("State, provincial, local", 1),
+            8 => array("Tariffs and charges", 1),
+            9 => array("Households out-of-pocket", 1),
+            10 => array("NGOs, Lendors, Other", 1),
+            11 => array("total Central government", 1),
+            12 => array("total Bilateral, multilateral donors", 1),
+            13 => array("total State, provincial, local", 1),
+            14 => array("total Tariffs and charges", 1),
+            15 => array("total Households out-of-pocket", 1),
+            16 => array("total NGOs, Lendors, Other", 1),
+            17 => array("Identify public health priorities", 1),
+            18 => array("Response to WASH related disease outbreak", 1),
+            19 => array("Universal access for disadvantaged groups", 1),
+            20 => array("Overall coordination between WASH actors:", 1),
+
         ),
     );
 
     public function import()
     {
+
         $this->partUrban = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Urban');
         $this->partRural = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Rural');
         $this->partTotal = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Total');
@@ -234,6 +283,7 @@ class Glass extends AbstractImporter
         $undefinedFilterSet = $filterRepository->findOneById(4);
         $undefinedFilterSet->setName('Undefined');
 
+
         // import filters
         foreach ($tables as $area) {
             $this->importFilters($area);
@@ -249,17 +299,10 @@ class Glass extends AbstractImporter
         }
 
         $this->linkFilters();
-
+        $this->linkQuestions();
         $this->getEntityManager()->flush();
     }
 
-
-
-    protected function linkFilters()
-    {
-
-
-    }
 
 
     /**
@@ -295,9 +338,229 @@ class Glass extends AbstractImporter
             }
         }
 
+
+
         $this->getEntityManager()->flush();
         echo count($this->cacheFiltersGlass[$area]) . ' glass filters imported' . PHP_EOL;
     }
+
+
+    protected function linkFilters()
+    {
+        // Level of development and implementation of policy / plan
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_H'][10]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_H'][11]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_H'][12]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_H'][13]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_H'][20]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_H'][21]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_H'][22]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_H'][23]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_H'][30]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_H'][31]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_H'][32]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_H'][33]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_S'][10]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_S'][11]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_S'][12]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_S'][13]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_S'][20]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_S'][21]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_S'][22]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_S'][23]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_S'][30]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_S'][31]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_S'][32]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_S'][33]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_W'][10]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_W'][11]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_W'][12]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_W'][13]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_W'][20]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_W'][21]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_W'][22]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_W'][23]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_W'][30]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_W'][31]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_W'][32]);
+        $this->cacheFilterSets[0]->addFilter($this->cacheFiltersGlass['Tables_W'][33]);
+
+//        // Elements of sustainability in policy and level of implementation
+//        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_W'][125]);
+//        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_W'][126]);
+//        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_S'][131]);
+//        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_S'][131]);
+//        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_W'][133]);
+//        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_H'][39]);
+//        $this->cacheFilterSets[1]->addFilter($this->cacheFiltersGlass['Tables_H'][40]);
+//
+//        // Distribution of service provision for drinking-water by institutional type
+//        $this->cacheFilterSets[3]->addFilter($this->cacheFiltersGlass['Tables_W'][106]);
+//        $this->cacheFilterSets[3]->addFilter($this->cacheFiltersGlass['Tables_W'][107]);
+//        $this->cacheFilterSets[3]->addFilter($this->cacheFiltersGlass['Tables_W'][108]);
+//        $this->cacheFilterSets[3]->addFilter($this->cacheFiltersGlass['Tables_W'][127]);
+//
+//        // Distribution of service provision for sanitation by institutional type
+//        $this->cacheFilterSets[4]->addFilter($this->cacheFiltersGlass['Tables_W'][113]);
+//        $this->cacheFilterSets[4]->addFilter($this->cacheFiltersGlass['Tables_W'][114]);
+//        $this->cacheFilterSets[4]->addFilter($this->cacheFiltersGlass['Tables_W'][115]);
+//        $this->cacheFilterSets[4]->addFilter($this->cacheFiltersGlass['Tables_W'][134]);
+    }
+
+
+    protected function linkQuestions()
+    {
+
+        /* @var $q \Application\Model\Question\AbstractAnswerableQuestion */
+        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractAnswerableQuestion');
+
+
+        // Level of development and implementation of policy / plan
+            // drinking water supply
+                // target coverage
+                    // urban
+                    $q = $filterRepository->findOneById(154);
+                    $q->setFilter($this->cacheFiltersGlass['Tables_W'][11]);
+                    // rural
+                    $q = $filterRepository->findOneById(159);
+                    $q->setFilter($this->cacheFiltersGlass['Tables_W'][11]);
+
+                // target year
+                    // urban
+                    $q = $filterRepository->findOneById(157);
+                    $q->setFilter($this->cacheFiltersGlass['Tables_W'][12]);
+                    // rural
+                    $q = $filterRepository->findOneById(162);
+                    $q->setFilter($this->cacheFiltersGlass['Tables_W'][12]);
+
+                // Level of development / Implementation of plan
+                $q = $filterRepository->findOneById(59);
+                $q->setFilter($this->cacheFiltersGlass['Tables_W'][13]);
+
+           // drinking water in schools
+                // target coverage
+                $q = $filterRepository->findOneById(164);
+                $q->setFilter($this->cacheFiltersGlass['Tables_W'][11]);
+
+                // target year
+                $q = $filterRepository->findOneById(167);
+                $q->setFilter($this->cacheFiltersGlass['Tables_W'][12]);
+
+                // Level of development / Implementation of plan
+                $q = $filterRepository->findOneById(60);
+                $q->setFilter($this->cacheFiltersGlass['Tables_W'][13]);
+
+           // drinking water in health facilities
+                // target coverage
+                $q = $filterRepository->findOneById(169);
+                $q->setFilter($this->cacheFiltersGlass['Tables_W'][11]);
+
+                // target year
+                $q = $filterRepository->findOneById(172);
+                $q->setFilter($this->cacheFiltersGlass['Tables_W'][12]);
+
+                // Level of development / Implementation of plan
+                $q = $filterRepository->findOneById(61);
+                $q->setFilter($this->cacheFiltersGlass['Tables_W'][13]);
+
+
+            // Sanitation
+                // target coverage
+                    // urban
+                    $q = $filterRepository->findOneById(55);
+                    $q->setFilter($this->cacheFiltersGlass['Tables_S'][11]);
+                    // rural
+                    $q = $filterRepository->findOneById(69);
+                    $q->setFilter($this->cacheFiltersGlass['Tables_S'][11]);
+
+                // target year
+                    // urban
+                    $q = $filterRepository->findOneById(58);
+                    $q->setFilter($this->cacheFiltersGlass['Tables_S'][12]);
+                    // rural
+                    $q = $filterRepository->findOneById(72);
+                    $q->setFilter($this->cacheFiltersGlass['Tables_S'][12]);
+
+                // Level of development / Implementation of plan
+                $q = $filterRepository->findOneById(19);
+                $q->setFilter($this->cacheFiltersGlass['Tables_S'][13]);
+
+           // sanitation in schools
+                // target coverage
+                $q = $filterRepository->findOneById(77);
+                $q->setFilter($this->cacheFiltersGlass['Tables_S'][11]);
+
+                // target year
+                $q = $filterRepository->findOneById(80);
+                $q->setFilter($this->cacheFiltersGlass['Tables_S'][12]);
+
+                // Level of development / Implementation of plan
+                $q = $filterRepository->findOneById(20);
+                $q->setFilter($this->cacheFiltersGlass['Tables_S'][13]);
+
+           // sanitation in health facilities
+                // target coverage
+                $q = $filterRepository->findOneById(97);
+                $q->setFilter($this->cacheFiltersGlass['Tables_S'][11]);
+
+                // target year
+                $q = $filterRepository->findOneById(100);
+                $q->setFilter($this->cacheFiltersGlass['Tables_S'][12]);
+
+                // Level of development / Implementation of plan
+                $q = $filterRepository->findOneById(21);
+                $q->setFilter($this->cacheFiltersGlass['Tables_S'][13]);
+
+            // Hygiene promotion
+                // target coverage
+                $q = $filterRepository->findOneById(174);
+                $q->setFilter($this->cacheFiltersGlass['Tables_H'][11]);
+
+                // target year
+                $q = $filterRepository->findOneById(177);
+                $q->setFilter($this->cacheFiltersGlass['Tables_S'][12]);
+
+                // Level of development / Implementation of plan
+                $q = $filterRepository->findOneById(62);
+                $q->setFilter($this->cacheFiltersGlass['Tables_H'][13]);
+
+           // Hygiene promotion in schools
+                // target coverage
+                $q = $filterRepository->findOneById(474);
+                $q->setFilter($this->cacheFiltersGlass['Tables_H'][11]);
+
+                // target year
+                $q = $filterRepository->findOneById(522);
+                $q->setFilter($this->cacheFiltersGlass['Tables_H'][12]);
+
+                // Level of development / Implementation of plan
+                $q = $filterRepository->findOneById(63);
+                $q->setFilter($this->cacheFiltersGlass['Tables_H'][13]);
+
+           // Hygiene promotion in health facilities
+                // target coverage
+                $q = $filterRepository->findOneById(478);
+                $q->setFilter($this->cacheFiltersGlass['Tables_H'][11]);
+
+                // target year
+                $q = $filterRepository->findOneById(481);
+                $q->setFilter($this->cacheFiltersGlass['Tables_H'][12]);
+
+                // Level of development / Implementation of plan
+                $q = $filterRepository->findOneById(64);
+                $q->setFilter($this->cacheFiltersGlass['Tables_H'][13]);
+                //$this->setFilter('H', 64, 13);
+
+
+    }
+
+//    protected function setFilter($area, $question_id, $filter_index)
+//    {
+//
+//        $q = $filterRepository->findOneById($question_id);
+//        $q->setFilter($this->cacheFiltersGlass['Tables_'.$area][$filter_index]);
+//    }
+
 
 
     protected function createFirstFilterSet($cache)
