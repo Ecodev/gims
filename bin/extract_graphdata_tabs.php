@@ -4,6 +4,7 @@
  * This script extract data from GraphData_W/GraphData_S for all known country files
  */
 require_once( __DIR__ . '/../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
+require_once( __DIR__ . '/../module/debug.php');
 $countries = require (__DIR__ . '/countries.php');
 
 /**
@@ -101,6 +102,7 @@ function doOneCountry(array $country)
 
     $phpCode = '<?php' . PHP_EOL . 'return ' . var_export($superdata, true) . ';' . PHP_EOL;
     file_put_contents($outputname . '.php', $phpCode);
+    allToCsv($outputname, $superdata);
 }
 
 /**
