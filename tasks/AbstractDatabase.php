@@ -5,8 +5,8 @@
  * Requirements:
  * - ssh access to remote server (via ~/.ssh/config)
  * - both local and remote sites must be accesible via: /sites/MY_SITE
- * - both local and remote config/autoload/local.php files must contains the database password
- * - local database must be configured with ~/.pgpass file for prompt-free access (could be automated)
+ * - both local and remote config/autoload/local.php files must contains the database connection info
+ * - both local and remote database must be configured with ~/.pgpass file for prompt-free access
  */
 abstract class AbstractDatabase extends Task
 {
@@ -42,18 +42,12 @@ STRING;
      */
     private static function dumpDataRemotely($remote, $dumpFile)
     {
-        $remoteCode = <<<STRING
-        require_once('/sites/$remote/config/autoload/local.php');
-        \$pgpass = trim(`echo ~`) . "/.pgpass";
-        file_put_contents(\$pgpass, "localhost:5432:\$database:\$username:\$password");
-        chmod(\$pgpass, 0600);
-
-        \$dumpCmd = "pg_dump --host localhost --username \$username --format=custom \$database | gzip > $dumpFile";
-        exec(\$dumpCmd);
+        $sshCmd = <<<STRING
+        ssh $remote "cd /sites/$remote/ && ./vendor/bin/phing dump-data -DdumpFile=$dumpFile"
 STRING;
 
         echo "dumping data $dumpFile on $remote...\n";
-        self::executeRemotePhp($remote, $remoteCode);
+        self::executeLocalCommand($sshCmd);
     }
 
     /**
@@ -67,15 +61,10 @@ STRING;
         $dbConfig = $config['doctrine']['connection']['orm_default']['params'];
         $username = $dbConfig['user'];
         $database = $dbConfig['dbname'];
-        $password = $dbConfig['password'];
-
-        $pgpass = trim(`echo ~`) . "/.pgpass";
-        file_put_contents($pgpass, "localhost:5432:$database:$username:$password");
-        chmod($pgpass, 0600);
 
         echo "dumping $dumpFile...\n";
-        $dumpCmd = "pg_dump --host localhost --username $username -w --format=custom $database | gzip > \"$dumpFile\"";
-        exec($dumpCmd);
+        $dumpCmd = "pg_dump --host localhost --username $username --format=custom $database | gzip > \"$dumpFile\"";
+        self::executeLocalCommand($dumpCmd);
     }
 
     /**
