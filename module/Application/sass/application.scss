@@ -1,4 +1,5 @@
 // I gather this file is a starting point for the project.
+// I gather this file is a starting point for the project.
 @import "bootstrap";
 @import "bootstrap-customization";
 
@@ -168,6 +169,18 @@ body.demo {
 
         .navbar-brand:before {
             content: 'DEMO VERSION ';
+            font-weight: bolder;
+            color: white;
+        }
+    }
+}
+
+body.local {
+    .navbar-fixed-top {
+        @include background(repeating-linear-gradient(-45deg, $navbar-inverse-bg,$navbar-inverse-bg 30px, #075f7f 30px, #075f7f 60px));
+
+        .navbar-brand:before {
+            content: 'LOCAL VERSION ';
             font-weight: bolder;
             color: white;
         }

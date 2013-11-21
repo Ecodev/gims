@@ -20,7 +20,7 @@ return array(
     ),
     // Use uncompressed JS for development
     'compressJavaScript' => false,
-    'bodyCssClass' => 'demo',
+    'bodyCssClass' => 'local',
         // Whether or not to enable a configuration cache.
         // If enabled, the merged configuration will be cached and used in
         // subsequent requests.
@@ -31,4 +31,6 @@ return array(
         //'cache_dir' =>  './data/cache',
         // ...
         //'emailOverride' => 'example@test.com'
+
+
 );
