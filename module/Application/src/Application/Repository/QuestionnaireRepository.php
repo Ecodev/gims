@@ -50,7 +50,8 @@ class QuestionnaireRepository extends AbstractChildRepository
         $qb = $this->createQueryBuilder('questionnaire');
         $qb->select('questionnaire, survey')
                 ->join('questionnaire.survey', 'survey')
-                ->where('questionnaire.geoname = :geoname');
+                ->where('questionnaire.geoname = :geoname')
+                ->orderBy('questionnaire.id');
 
         $qb->setParameter('geoname', $geoname);
 
