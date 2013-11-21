@@ -924,12 +924,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PowerKiKi/PHPExcel.git",
-                "reference": "8263f66b51bba6358cec8c42a4670f12d20b6769"
+                "reference": "f2e24ecdd49c57ba8f7ae382099eeaf6225bd56e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PowerKiKi/PHPExcel/zipball/8263f66b51bba6358cec8c42a4670f12d20b6769",
-                "reference": "8263f66b51bba6358cec8c42a4670f12d20b6769",
+                "url": "https://api.github.com/repos/PowerKiKi/PHPExcel/zipball/f2e24ecdd49c57ba8f7ae382099eeaf6225bd56e",
+                "reference": "f2e24ecdd49c57ba8f7ae382099eeaf6225bd56e",
                 "shasum": ""
             },
             "require": {
@@ -972,9 +972,9 @@
                 "xlsx"
             ],
             "support": {
-                "source": "https://github.com/PowerKiKi/PHPExcel/tree/master"
+                "source": "https://github.com/PowerKiKi/PHPExcel/tree/issue_31"
             },
-            "time": "2013-11-20 11:29:58"
+            "time": "2013-11-21 07:04:59"
         },
         {
             "name": "symfony/console",
