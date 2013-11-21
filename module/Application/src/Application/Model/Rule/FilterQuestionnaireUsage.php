@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * FilterQuestionnaireUsage allows us to "apply" a rule to a filter-questionnaire-part triple.
  *
  * @ORM\Entity(repositoryClass="Application\Repository\Rule\FilterQuestionnaireUsageRepository")
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="filter_questionnaire_usage_unique",columns={"filter_id", "questionnaire_id", "part_id", "rule_id"})})
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="filter_questionnaire_usage_unique",columns={"filter_id", "questionnaire_id", "part_id", "rule_id", "is_second_level"})})
  */
 class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
 {
