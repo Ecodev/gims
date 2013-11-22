@@ -659,14 +659,15 @@ STRING;
         // eg: "=100-A23" => "=1-A23"
         $replacedFormula = preg_replace('/([^a-zA-Z])100-/', '${1}1-', $replacedFormula);
 
-        // Some formulas (usually estimations) hardcode values as percent between 0 - 100, we need to convert them
-        // to 0.00 - 1.00, but only for hardcoded values and not any number within more complex formula (it would be too dangerous)
-        // eg: "=29.6" => "=0.296"
-        // This is the case for Cambodge DHS05 "Bottled water with HC" estimation
+        // Some formulas, Estimations and Calculation, hardcode values as percent between 0 - 100, we need to convert them
+        // to 0.00 - 1.00, but only for very simple formula with numbers only and -/+ operations. Anything more complex
+        // formula would be too dangerous. This is the case for Cambodge DHS05 "Bottled water with HC" estimation, or
+        // Solomon Islands, Tables_W!AH88
+        // eg: "=29.6" => "=0.296", "=29.6+10" => "=0.396"
         $ruleRows = $this->definitions[$sheet->getTitle()]['questionnaireUsages'];
         if (in_array($row, $ruleRows['Estimate']) || in_array($row, $ruleRows['Calculation'])) {
-            $replacedFormula = \Application\Utility::pregReplaceUniqueCallback('/^=(-?\d+(\.\d+)?)$/', function($matches) {
-                                $number = $matches[1];
+            $replacedFormula = \Application\Utility::pregReplaceUniqueCallback('/^=[-+\.\d ]+$/', function($matches) {
+                                $number = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($matches[0]);
                                 $number = $number / 100;
 
                                 return "=$number";
