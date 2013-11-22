@@ -3,8 +3,7 @@
 /**
  * This script extract data from GraphData_W/GraphData_S for all known country files
  */
-require_once( __DIR__ . '/../vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
-require_once( __DIR__ . '/../module/debug.php');
+require __DIR__ . '/../htdocs/index.php';
 $countries = require (__DIR__ . '/countries.php');
 
 /**
@@ -108,9 +107,9 @@ function doOneCountry(array $country)
 /**
  * Re-write all CSV files from PHP files
  */
-function fromPhpToCsv()
+function fromPhpToCsv($dir)
 {
-    foreach (glob('*.php') as $source) {
+    foreach (glob($dir . '/*.php') as $source) {
 
         // Inject PHP tag if not there yet
         $s = file_get_contents($source);
@@ -119,7 +118,9 @@ function fromPhpToCsv()
         }
 
         $superdata = require($source);
-        $outputname = basename($source, '.php');
+        $outputname = str_replace('.php', '', $source);
+
+        echo $outputname . PHP_EOL;
         allToCsv($outputname, $superdata);
     }
 }
@@ -166,6 +167,14 @@ function allToCsv($outputname, $superdata)
         $originalRows = $newRows;
     }
 
+    $importer = new Application\Service\Importer\Jmp();
+    foreach ($superdata as $name => &$originalRows) {
+        foreach ($originalRows as &$row) {
+            $code = $row[2];
+            $year = $row[3];
+            $row[2] = $importer->standardizeSurveyCode($code, $year);
+        }
+    }
 
     foreach ($superdata as $name => $data) {
         toCsv($outputname . ' - ' . $name, $data);
@@ -223,8 +232,8 @@ function getCalculatedValueSafely(\PHPExcel_Cell $cell)
     }
 }
 
-if (isset($argv[1]) && $argv[1] == 'fromphp') {
-    fromPhpToCsv();
+if (isset($argv[1]) && is_dir($argv[1])) {
+    fromPhpToCsv($argv[1]);
 } elseif (isset($argv[1])) {
     doOneCountry($countries[$argv[1]]);
 } else {

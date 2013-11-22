@@ -16,5 +16,11 @@ chdir(dirname(__DIR__));
 // Setup autoloading
 require 'init_autoloader.php';
 
-// Run the application!
-Zend\Mvc\Application::init(require 'config/application.config.php')->run();
+// Init the application
+$application = Zend\Mvc\Application::init(require 'config/application.config.php');
+
+// we only run the application if this file was NOT included (otherwise, the file was included to access misc functions)
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
+{
+	$application->run();
+}

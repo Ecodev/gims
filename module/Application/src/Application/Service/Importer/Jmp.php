@@ -149,6 +149,36 @@ STRING;
     }
 
     /**
+     * Standardize Survey code
+     * @param string $code
+     * @param string $year
+     */
+    public function standardizeSurveyCode($code, $year)
+    {
+        // Sometimes code use 4-digit year instead of 2-digit, we replace it here
+        // so we can find existing survey. This is the case of Burkina Faso, survey ENA2010
+        $twoDigitsYear = substr($year, -2);
+        $code = str_replace($year, $twoDigitsYear, $code);
+
+        $codeMapping = array(
+            'ENHOGAR09-10' => 'ENHGR09-10', // Dominican Republic
+            'CEN00-02' => 'CEN02', // French Polynesia
+            'EMP10' => 'EPM10', // Madagascar
+            'CEN2006/08' => 'CEN06/08', // Martinique
+            'Census' => 'CEN09', // New Caledonia
+            'CEN' => 'CEN99', //
+        );
+
+        // Replace special cases
+        $code = trim($code);
+        if (isset($codeMapping[$code])) {
+            $code = $codeMapping[$code];
+        }
+
+        return $code;
+    }
+
+    /**
      * Import a questionnaire from the given column offset.
      * Questionnaire and Answers will always be created new. All other objects will be retrieved from database if available.
      * @param \PHPExcel_Worksheet $sheet
@@ -164,24 +194,8 @@ STRING;
             return false;
         }
 
-        // Sometimes code use 4-digit year instead of 2-digit, we replace it here
-        // so we can find existing survey. This is the case of Burkina Faso, survey ENA2010
         $year = $sheet->getCellByColumnAndRow($col + 3, 3)->getCalculatedValue();
-        $twoDigitsYear = substr($year, -2);
-        $code = str_replace($year, $twoDigitsYear, $code);
-
-        $codeMapping = array(
-            'ENHOGAR09-10' => 'ENHGR09-10', // Dominican Republic
-            'CEN00-02' => 'CEN02', // French Polynesia
-            'EMP10' => 'EPM10', // Madagascar
-            'CEN2006/08' => 'CEN06/08', // Martinique
-            'Census' => 'CEN09', // New Caledonia
-            'CEN' => 'CEN99', //
-        );
-
-        // Replace special cases
-        if (isset($codeMapping[$code]))
-            $code = $codeMapping[$code];
+        $code = $this->standardizeSurveyCode($code, $year);
 
         // Load or create survey
         $surveyRepository = $this->getEntityManager()->getRepository('Application\Model\Survey');
