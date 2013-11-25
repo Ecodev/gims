@@ -13,10 +13,10 @@ set -e
 echo "Installing PostGIS and other packages..."
 sudo apt-get -qq update
 sudo apt-get install -qq software-properties-common # to get next command: add-apt-repository
-sudo add-apt-repository --yes ppa:ubuntugis/ppa
+sudo add-apt-repository --yes ppa:ubuntugis/ubuntugis-unstable
 sudo add-apt-repository --yes ppa:chris-lea/node.js
 sudo apt-get -qq update
-sudo apt-get -qq install postgis postgresql-9.1-postgis rubygems nodejs apache2 php5-pgsql php5-cli php5-gd php5-mcrypt php5-intl
+sudo apt-get -qq install postgresql-9.1-postgis-2.0 rubygems nodejs apache2 php5-pgsql php5-cli php5-gd php5-mcrypt php5-intl
 
 echo "Installing JS testing tools..."
 sudo npm --global --quiet install karma karma-ng-scenario phantomjs uglify-js ngmin
