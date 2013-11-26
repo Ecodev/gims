@@ -17,7 +17,6 @@ use Application\Model\Geoname;
 class Jmp extends AbstractImporter
 {
 
-
     private $defaultJustification = 'Imported from country files';
     private $partOffsets = array();
     private $cacheAlternateFilters = array();
@@ -260,7 +259,6 @@ STRING;
     {
         $knownRows = array_keys($this->cacheFilters);
         array_shift($knownRows); // Skip first filter, since it's not an actual row, but the sheet topic (eg: "Access to drinking water sources")
-
         // Remove negative rows which were replacement filters
         $knownRows = array_filter($knownRows, function($row) {
             return $row > 0 && $row < 100;
@@ -600,8 +598,8 @@ STRING;
 
             // If we had an existing formula, maybe we also have an existing association
             $assoc = $questionnaire->getQuestionnaireUsages()->filter(function($usage) use ($questionnaire, $part, $rule) {
-                                return $usage->getQuestionnaire() === $questionnaire && $usage->getPart() === $part && $usage->getRule() === $rule;
-                            })->first();
+                        return $usage->getQuestionnaire() === $questionnaire && $usage->getPart() === $part && $usage->getRule() === $rule;
+                    })->first();
 
             // If association doesn't exist yet, create it
             if (!$assoc) {
@@ -667,104 +665,104 @@ STRING;
         $ruleRows = $this->definitions[$sheet->getTitle()]['questionnaireUsages'];
         if (in_array($row, $ruleRows['Estimate']) || in_array($row, $ruleRows['Calculation'])) {
             $replacedFormula = \Application\Utility::pregReplaceUniqueCallback('/^=[-+\.\d ]+$/', function($matches) {
-                                $number = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($matches[0]);
-                                $number = $number / 100;
+                        $number = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($matches[0]);
+                        $number = $number / 100;
 
-                                return "=$number";
-                            }, $replacedFormula);
+                        return "=$number";
+                    }, $replacedFormula);
         }
 
         // Expand range syntax to enumerate each cell: "A1:A5" => "{A1,A2,A3,A4,A5}"
         $expandedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern:$cellPattern/", function($matches) use ($sheet, $cell) {
 
-                            // This only expand vertical ranges, not horizontal ranges (which probably never make any sense for JMP anyway)
-                            if ($matches[2] != $matches[5]) {
-                                throw new \Exception('Horizontal range are not supported: ' . $matches[0] . ' found in ' . $sheet->getTitle() . ', cell ' . $cell->getCoordinate());
-                            }
+                    // This only expand vertical ranges, not horizontal ranges (which probably never make any sense for JMP anyway)
+                    if ($matches[2] != $matches[5]) {
+                        throw new \Exception('Horizontal range are not supported: ' . $matches[0] . ' found in ' . $sheet->getTitle() . ', cell ' . $cell->getCoordinate());
+                    }
 
-                            $expanded = array();
-                            for ($i = $matches[3]; $i <= $matches[6]; $i++) {
-                                $expanded[] = $matches[2] . $i;
-                            }
+                    $expanded = array();
+                    for ($i = $matches[3]; $i <= $matches[6]; $i++) {
+                        $expanded[] = $matches[2] . $i;
+                    }
 
-                            return '{' . join(',', $expanded) . '}';
-                        }, $replacedFormula);
+                    return '{' . join(',', $expanded) . '}';
+                }, $replacedFormula);
 
         // Replace all cell reference with our own syntax
         $convertedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern/", function($matches) use ($sheet, $questionnaire, $part, $expandedFormula) {
-                            $refCol = \PHPExcel_Cell::columnIndexFromString($matches[2]) - 1;
-                            $refRow = $matches[3];
+                    $refCol = \PHPExcel_Cell::columnIndexFromString($matches[2]) - 1;
+                    $refRow = $matches[3];
 
-                            // We first look for filter on negative indexes to find original filters in case we made
-                            // replacements (for Sanitation), because formulas always refers to the originals,
-                            // not the one we created in this script
-                            $refFilter = @$this->cacheFilters[-$refRow] ? : @$this->cacheFilters[$refRow];
+                    // We first look for filter on negative indexes to find original filters in case we made
+                    // replacements (for Sanitation), because formulas always refers to the originals,
+                    // not the one we created in this script
+                    $refFilter = @$this->cacheFilters[-$refRow] ? : @$this->cacheFilters[$refRow];
 
-                            // If couldn't find filter yet, try last chance in high filters
-                            if (!$refFilter) {
-                                foreach ($this->definitions[$sheet->getTitle()]['highFilters'] as $highFilterName => $highFilterData) {
-                                    if ($refRow == $highFilterData['row']) {
-                                        $refFilter = $this->cacheHighFilters[$highFilterName];
-                                    }
-                                }
+                    // If couldn't find filter yet, try last chance in high filters
+                    if (!$refFilter) {
+                        foreach ($this->definitions[$sheet->getTitle()]['highFilters'] as $highFilterName => $highFilterData) {
+                            if ($refRow == $highFilterData['row']) {
+                                $refFilter = $this->cacheHighFilters[$highFilterName];
+                            }
+                        }
+                    }
+
+                    $refFilterId = $refFilter ? $refFilter->getId() : null;
+
+                    if (isset($this->importedQuestionnaires[$refCol])) {
+                        $refQuestionnaireId = $this->importedQuestionnaires[$refCol]->getId();
+
+                        return "{F#$refFilterId,Q#$refQuestionnaireId}";
+                    }
+
+                    // Find out referenced Questionnaire
+                    $refData = @$this->colToParts[$refCol];
+
+                    // If reference an non-existing questionnaire, replace reference with NULL
+                    if (!$refData) {
+                        return 'NULL';
+                    }
+
+                    $refQuestionnaire = $refData['questionnaire'];
+                    if ($refQuestionnaire === $questionnaire)
+                        $refQuestionnaireId = 'current';
+                    else
+                        $refQuestionnaireId = $refQuestionnaire->getId();
+
+                    // Find out referenced Part
+                    $refPart = $refData['part'];
+                    if ($refPart === $part)
+                        $refPartId = 'current';
+                    else
+                        $refPartId = $refPart->getId();
+
+
+                    // Simple case is when we reference a filter
+                    if ($refFilterId) {
+                        return "{F#$refFilterId,Q#$refQuestionnaireId,P#$refPartId}";
+                        // More advanced case is when we reference another QuestionnaireUsage (Calculation, Estimate or Ratio)
+                    } else {
+
+                        // Find the column of the referenced questionnaire
+                        $refColQuestionnaire = array_search($refQuestionnaire, $this->importedQuestionnaires);
+
+                        $refQuestionnaireUsage = $this->getQuestionnaireUsage($sheet, $refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart);
+
+                        if ($refQuestionnaireUsage) {
+
+                            // If not ID yet, we need to save to DB to have valid ID
+                            if (!$refQuestionnaireUsage->getRule()->getId()) {
+                                $this->getEntityManager()->flush();
                             }
 
-                            $refFilterId = $refFilter ? $refFilter->getId() : null;
+                            $refRuleId = $refQuestionnaireUsage->getRule()->getId();
 
-                            if (isset($this->importedQuestionnaires[$refCol])) {
-                                $refQuestionnaireId = $this->importedQuestionnaires[$refCol]->getId();
-
-                                return "{F#$refFilterId,Q#$refQuestionnaireId}";
-                            }
-
-                            // Find out referenced Questionnaire
-                            $refData = @$this->colToParts[$refCol];
-
-                            // If reference an non-existing questionnaire, replace reference with NULL
-                            if (!$refData) {
-                                return 'NULL';
-                            }
-
-                            $refQuestionnaire = $refData['questionnaire'];
-                            if ($refQuestionnaire === $questionnaire)
-                                $refQuestionnaireId = 'current';
-                            else
-                                $refQuestionnaireId = $refQuestionnaire->getId();
-
-                            // Find out referenced Part
-                            $refPart = $refData['part'];
-                            if ($refPart === $part)
-                                $refPartId = 'current';
-                            else
-                                $refPartId = $refPart->getId();
-
-
-                            // Simple case is when we reference a filter
-                            if ($refFilterId) {
-                                return "{F#$refFilterId,Q#$refQuestionnaireId,P#$refPartId}";
-                                // More advanced case is when we reference another QuestionnaireUsage (Calculation, Estimate or Ratio)
-                            } else {
-
-                                // Find the column of the referenced questionnaire
-                                $refColQuestionnaire = array_search($refQuestionnaire, $this->importedQuestionnaires);
-
-                                $refQuestionnaireUsage = $this->getQuestionnaireUsage($sheet, $refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart);
-
-                                if ($refQuestionnaireUsage) {
-
-                                    // If not ID yet, we need to save to DB to have valid ID
-                                    if (!$refQuestionnaireUsage->getRule()->getId()) {
-                                        $this->getEntityManager()->flush();
-                                    }
-
-                                    $refRuleId = $refQuestionnaireUsage->getRule()->getId();
-
-                                    return "{R#$refRuleId,Q#$refQuestionnaireId,P#$refPartId}";
-                                } else {
-                                    return 'NULL'; // if no formula found at all, return NULL string which will behave like an empty cell in PHPExcell
-                                }
-                            }
-                        }, $expandedFormula);
+                            return "{R#$refRuleId,Q#$refQuestionnaireId,P#$refPartId}";
+                        } else {
+                            return 'NULL'; // if no formula found at all, return NULL string which will behave like an empty cell in PHPExcell
+                        }
+                    }
+                }, $expandedFormula);
 
         // In some case ISTEXT() is used to check if a number does not exist. But GIMS
         // always returns either a number or NULL, never empty string. So we adapt formula
@@ -825,7 +823,6 @@ STRING;
 
         return $rule;
     }
-
 
     /**
      * Finish high filters, by importing their exclude rules and their formulas (if any)
