@@ -322,7 +322,7 @@ use \Application\Traits\EntityManagerAware;
         _log()->debug(__FUNCTION__, array($usage->getId(), $originalFormula));
 
         // Replace {F#12,Q#34,P#56} with Filter value
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage, $alreadyUsedFormulas, $useSecondLevelRules) {
+        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)(,L#2)?\}/', function($matches) use ($usage, $alreadyUsedFormulas) {
                     $filterId = $matches[1];
                     $questionnaireId = $matches[2];
                     $partId = $matches[3];
@@ -339,6 +339,7 @@ use \Application\Traits\EntityManagerAware;
                         $partId = $usage->getPart()->getId();
                     }
 
+                    $useSecondLevelRules = isset($matches[4]) && $matches[4] == ',L#2';
                     $value = $this->computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas);
 
                     return is_null($value) ? 'NULL' : $value;

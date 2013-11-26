@@ -16,6 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     <li>
  *         Reference a Filter's value:
  *         <pre>{F#12,Q#34,P#56}</pre>
+ *         <pre>{F#12,Q#34,P#56,L#2}</pre>
  *     </li>
  *     <li>
  *         Reference an Unofficial Filter name (NOT value). It will return NULL if no
@@ -59,6 +60,7 @@ use Doctrine\ORM\Mapping as ORM;
  * - Q = Questionnaire
  * - P = Part
  * - R = Rule
+ * - L = Level, only two possibilities: absent, or exactly "L#2" to indicate Level 2
  *
  * In the first case, F, and in all cases Q and P, can have the value "current" instead of actual ID. It means
  * that the current Filter, Questionnaire or Part should be used, instead of one selected

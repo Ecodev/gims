@@ -845,7 +845,7 @@ STRING;
      */
     protected function finishHighFilters(array $filters, \PHPExcel_Worksheet $sheet)
     {
-        $complementaryTotalFormula = $this->getRule('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . '}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . '})), ({F#current,Q#current,P#' . $this->partRural->getId() . '} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . '} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, {self})');
+        $complementaryTotalFormula = $this->getRule('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . ',L#2}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . ',L#2})), ({F#current,Q#current,P#' . $this->partRural->getId() . ',L#2} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . ',L#2} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, {self})');
         // Get or create all filter
         echo 'Finishing high filters';
         foreach ($filters as $filterName => $filterData) {
