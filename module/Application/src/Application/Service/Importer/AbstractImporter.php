@@ -6,8 +6,10 @@ use Application\Model\Filter;
 
 abstract class AbstractImporter
 {
+
     use \Zend\ServiceManager\ServiceLocatorAwareTrait;
-    use \Application\Traits\EntityManagerAware;
+
+use \Application\Traits\EntityManagerAware;
 
     protected $cacheQuestions = array();
     protected $cacheFilters = array();
@@ -21,7 +23,6 @@ abstract class AbstractImporter
      * @var array
      */
     protected $definitions = array(
-
         'Tables_W' => array(
             'definitions' => array(
                 4 => array("Water", null, 0, null),
@@ -99,7 +100,17 @@ abstract class AbstractImporter
                 76 => array("DK/missing", 4, 0, null),
             ),
             'replacements' => array(
-                // No replacements to make for water
+            // No replacements to make for water
+            ),
+            'cellReplacements' => array(
+                14 => 'IF(ISNUMBER(A14), A14, SUM(A26, A34, A46))',
+                15 => 'IF(ISNUMBER(A15), A15, SUM(A27, A35, A47))',
+                16 => 'IF(ISNUMBER(A16), A16, SUM(A28, A36, A48))',
+                17 => 'IF(ISNUMBER(A17), A17, SUM(A29, A37, A49))',
+                18 => 'IF(ISNUMBER(A18), A18, SUM(A38, A50))',
+                19 => 'IF(ISNUMBER(A19), A19, SUM(A39, A51))',
+                20 => 'IF(ISNUMBER(A20), A20, SUM(A40, A52))',
+                21 => 'IF(ISNUMBER(A21), A21, SUM(A41, A53))',
             ),
             'questionnaireUsages' => array(
                 'Calculation' => array(78, 79, 80, 81, 82),
@@ -254,6 +265,9 @@ abstract class AbstractImporter
                 9 => array("to unknown place/ not sure/DK", 999, 0, null),
                 10 => array("to elsewhere", 999, 0, null),
             ),
+            'cellReplacements' => array(
+            // No cell replacements to make for sanitation
+            ),
             'questionnaireUsages' => array(
                 'Calculation' => array(85, 86, 87),
                 'Estimate' => array(88, 89, 90, 91, 92, 93),
@@ -336,7 +350,6 @@ abstract class AbstractImporter
         ),
     );
 
-
     protected function getFilter($definition)
     {
         $name = $definition[0];
@@ -358,7 +371,6 @@ abstract class AbstractImporter
 
         return $filter;
     }
-
 
     /**
      * Import official filters
@@ -415,8 +427,6 @@ abstract class AbstractImporter
         $this->getEntityManager()->flush();
         echo count($this->cacheFilters) . ' filters imported' . PHP_EOL;
     }
-
-
 
     /**
      * Import high filters, their FilterSet

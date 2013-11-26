@@ -688,6 +688,20 @@ STRING;
                     return '{' . join(',', $expanded) . '}';
                 }, $replacedFormula);
 
+        // Replace special cell reference with some hardcoded formulas
+        $expandedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern/", function($matches) use ($sheet, $cell) {
+
+                    $replacement = @$this->definitions[$sheet->getTitle()]['cellReplacements'][$matches[3]];
+                    if ($replacement) {
+                        // Use same column for replacement as the original cell reference
+                        $replacement = str_replace('A', $matches[2], $replacement);
+
+                        return '(' . $replacement . ')';
+                    } else {
+                        return $matches[0];
+                    }
+                }, $expandedFormula);
+
         // Replace all cell reference with our own syntax
         $convertedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern/", function($matches) use ($sheet, $questionnaire, $part, $expandedFormula) {
                     $refCol = \PHPExcel_Cell::columnIndexFromString($matches[2]) - 1;
