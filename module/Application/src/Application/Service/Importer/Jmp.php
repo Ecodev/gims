@@ -632,6 +632,7 @@ STRING;
      */
     protected function getRuleFromCell(\PHPExcel_Worksheet $sheet, $col, $row, $offset, Questionnaire $questionnaire, Part $part, $forcedName = null)
     {
+        $name = $forcedName ? : $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
         $cell = $sheet->getCellByColumnAndRow($col + $offset, $row);
         $originalFormula = $cell->getValue();
 
@@ -660,7 +661,7 @@ STRING;
         // Some formulas, Estimations and Calculation, hardcode values as percent between 0 - 100,
         // we need to convert them to 0.00 - 1.00
         $ruleRows = $this->definitions[$sheet->getTitle()]['questionnaireUsages'];
-        if (in_array($row, $ruleRows['Estimate']) || in_array($row, $ruleRows['Calculation'])) {
+        if ((in_array($row, $ruleRows['Estimate']) || in_array($row, $ruleRows['Calculation'])) && (!$name || strpos($name, '%HC') === false)) {
 
             // Convert very simple formula with numbers only and -/+ operations. Anything more complex
             // would be too dangerous. This is the case for Cambodge DHS05 "Bottled water with HC" estimation, or
@@ -809,8 +810,6 @@ STRING;
                 $prefix = $label . ': ';
             }
         }
-
-        $name = $forcedName ? : $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
 
         // Some countries have estimates with non-zero values but without name! (Yemen, Tables_W, DHS92, estimates line 88)
         if (!$name) {
