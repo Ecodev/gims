@@ -657,18 +657,32 @@ STRING;
         // eg: "=100-A23" => "=1-A23"
         $replacedFormula = preg_replace('/([^a-zA-Z])100-/', '${1}1-', $replacedFormula);
 
-        // Some formulas, Estimations and Calculation, hardcode values as percent between 0 - 100, we need to convert them
-        // to 0.00 - 1.00, but only for very simple formula with numbers only and -/+ operations. Anything more complex
-        // formula would be too dangerous. This is the case for Cambodge DHS05 "Bottled water with HC" estimation, or
-        // Solomon Islands, Tables_W!AH88
-        // eg: "=29.6" => "=0.296", "=29.6+10" => "=0.396"
+        // Some formulas, Estimations and Calculation, hardcode values as percent between 0 - 100,
+        // we need to convert them to 0.00 - 1.00
         $ruleRows = $this->definitions[$sheet->getTitle()]['questionnaireUsages'];
         if (in_array($row, $ruleRows['Estimate']) || in_array($row, $ruleRows['Calculation'])) {
+
+            // Convert very simple formula with numbers only and -/+ operations. Anything more complex
+            // would be too dangerous. This is the case for Cambodge DHS05 "Bottled water with HC" estimation, or
+            // Solomon Islands, Tables_W!AH88
+            // eg: "=29.6" => "=0.296", "=29.6+10" => "=0.396"
             $replacedFormula = \Application\Utility::pregReplaceUniqueCallback('/^=[-+\.\d ]+$/', function($matches) {
                         $number = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($matches[0]);
                         $number = $number / 100;
 
                         return "=$number";
+                    }, $replacedFormula);
+
+            // Convert when using a Ratio, this is the case of Thailand, Tables_W!CD88
+            // eg: "=44.6*BR102" => "=0.446*BR102"
+            $replacedFormula = \Application\Utility::pregReplaceUniqueCallback("/^=([-+\.\d ]+)(\*$cellPattern)$/", function($matches) use($ruleRows) {
+                        $number = $matches[1];
+
+                        if (in_array($matches[5], $ruleRows['Ratio'])) {
+                            $number = $number / 100;
+                        }
+
+                        return "=$number" . $matches[2];
                     }, $replacedFormula);
         }
 
