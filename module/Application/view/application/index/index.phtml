@@ -101,7 +101,7 @@
                             </div>
                             <div class="form-group" ng-class="{'has-error': loginForm.identity.$dirty && loginForm.identity.$invalid}">
                                 <label class="control-label" for="login-email"><?php echo $this->translate('Email'); ?></label>
-                                <input gims-focus type="email" name="identity" id="login-email" ng-model="login.identity" />
+                                <input gims-focus autocomplete='off' type="email" name="identity" id="login-email" ng-model="login.identity" />
                                 <span ng-show="loginForm.identity.$error.email" class="help-block"><?php echo $this->translate('Enter a valid email address'); ?></span>
                             </div>
 
