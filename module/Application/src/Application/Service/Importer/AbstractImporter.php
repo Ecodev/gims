@@ -8,8 +8,7 @@ abstract class AbstractImporter
 {
 
     use \Zend\ServiceManager\ServiceLocatorAwareTrait;
-
-use \Application\Traits\EntityManagerAware;
+    use \Application\Traits\EntityManagerAware;
 
     protected $cacheQuestions = array();
     protected $cacheFilters = array();
@@ -350,11 +349,11 @@ use \Application\Traits\EntityManagerAware;
         ),
     );
 
-    protected function getFilter($definition)
+    protected function getFilter($definition, $cache)
     {
         $name = $definition[0];
 
-        $parent = @$this->cacheFilters[$definition[1]];
+        $parent = @$cache[$definition[1]];
         $parentName = $parent ? $parent->getName() : null;
 
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
@@ -382,7 +381,7 @@ use \Application\Traits\EntityManagerAware;
         $this->cacheFilters = array();
         $this->cacheQuestions = array();
         foreach ($officialFilters['definitions'] as $row => $definition) {
-            $filter = $this->getFilter($definition);
+            $filter = $this->getFilter($definition, $this->cacheFilters);
             $this->cacheFilters[$row] = $filter;
         }
 
@@ -401,7 +400,7 @@ use \Application\Traits\EntityManagerAware;
         // Replace filters with their replacements, if any defined
         // This is a dirty trick to solve inconsistency in first filter of sanitation
         foreach ($officialFilters['replacements'] as $row => $definition) {
-            $replacementFilter = $this->getFilter($definition);
+            $replacementFilter = $this->getFilter($definition, $this->cacheFilters);
             $originalFilter = @$this->cacheFilters[$row];
 
             // If original filter actually exists, add the replacement as a summand, and replace it
