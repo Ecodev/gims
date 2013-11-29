@@ -5,9 +5,9 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function ($sc
 
     var allStatus = [
         {text: 'New', value: 'new'},
-        {text: 'Ongoing', value: 'ongoing'},
         {text: 'Completed', value: 'completed'},
-        {text: 'Validated', value: 'validated'}
+        {text: 'Validated', value: 'validated'},
+        {text: 'Rejected', value: 'rejected'}
     ];
 
     $scope.status = allStatus;
