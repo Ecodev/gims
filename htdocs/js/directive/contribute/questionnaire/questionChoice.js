@@ -24,7 +24,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function (Quest
                                 "   </td>"+
                                 "   <td><div style='padding-top:5px'>{{choice.name}}</div></td>"+
                                 "</tr>"+
-                            "</table><br/>"+
+                            "</table>"+
                         "   <span ng-show='question.isCompulsory' class='badge' ng-class=\"{'badge-danger':question.statusCode==1, 'badge-success':question.statusCode==3}\">Required</span>"+
                         "   <span ng-show='!question.isCompulsory' class='badge' ng-class=\"{'badge-warning':question.statusCode==2, 'badge-success':question.statusCode==3}\">Optional</span>"+
                         "</div>"+

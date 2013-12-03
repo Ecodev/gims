@@ -12,7 +12,7 @@ angular.module('myApp.directives').directive('gimsNumQuestion', function (Questi
                             "     <input class='col-md-12' ng-disabled='saving' type='text' ng-required='question.isCompulsory' ng-model='index[question.id+\"-\"+part.id].valueAbsolute' ng-blur='save(question,part)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'/>"+
                             "</div>"+
                         "</div>"+
-                        "<div class='col-md-12'><br/>"+
+                        "<div class='col-md-12'>"+
                         "   <span ng-show='question.isCompulsory' class='badge' ng-class=\"{'badge-danger':question.statusCode==1, 'badge-success':question.statusCode==3}\">Required</span>"+
                         "   <span ng-show='!question.isCompulsory' class='badge' ng-class=\"{'badge-warning':question.statusCode==2, 'badge-success':question.statusCode==3}\">Optional</span>"+
                         "</div>"+

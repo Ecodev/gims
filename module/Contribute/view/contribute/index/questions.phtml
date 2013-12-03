@@ -47,15 +47,13 @@
             <div ng-switch-when="Numeric" class='row'>
                 <gims-num-question question='currentQuestion' index="index"></gims-num-question>
             </div>
-
-            <div ng-switch-when="Text">
+            <div ng-switch-when="Text" class='row'>
                 <gims-text-question question='currentQuestion' index="index" ></gims-text-question>
             </div>
-
-            <div ng-switch-when="Choice">
+            <div ng-switch-when="Choice" class='row'>
                 <gims-choi-question question='currentQuestion' index="index"></gims-choi-question>
             </div>
-            <div ng-switch-when="User">
+            <div ng-switch-when="User" class='row'>
                 <gims-user-question question='currentQuestion' index="index"></gims-user-question>
             </div>
         </div>

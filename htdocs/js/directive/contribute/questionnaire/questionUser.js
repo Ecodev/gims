@@ -2,7 +2,7 @@ angular.module('myApp.directives').directive('gimsUserQuestion', function(Questi
     return {
         restrict: 'E',
         template: "<ng-form name='innerQuestionForm'> " +
-                "<div class='row show-grid'>" +
+                //"<div class='row'>" +
                 "   <div ng-repeat='part in question.parts' class='col-md-4'>" +
                 "        <div ng-switch='part.name'>" +
                 "              <div ng-switch-when='Total'>National</div>" +
@@ -18,7 +18,7 @@ angular.module('myApp.directives').directive('gimsUserQuestion', function(Questi
                 "        </div>" +
                 "        <div class='clearfix'></div>" +
                 "   </div>" +
-                "</div><br/>" +
+                //"</div>" +
                 "<div style='line-height:40px'>" +
                 "    <span ng-show='question.isCompulsory' class='badge' ng-class=\"{'badge-danger':question.statusCode==1, 'badge-success':question.statusCode==3}\">Required</span>" +
                 "    <span ng-show='!question.isCompulsory' class='badge' ng-class=\"{'badge-warning':question.statusCode==2, 'badge-success':question.statusCode==3}\">Optional</span>" +
