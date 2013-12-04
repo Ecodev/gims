@@ -7,7 +7,7 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
         replace: true,
         transclude: true,
         template: '<div>' +
-            '<div class="row">' +
+            '<div class="row show-grid">' +
             '<div class="col-md-7">' +
             '<input type="text" ng-model="gridOptions.filterOptions.filterText" placeholder="Search..." class="search" style="width: 400px"/>' +
             '</div>' +
