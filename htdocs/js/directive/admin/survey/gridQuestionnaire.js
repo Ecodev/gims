@@ -6,16 +6,22 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
         // This HTML will replace the directive.
         replace: true,
         transclude: true,
-        template: '<div>' +
-            '<div class="row">' +
-            '<div class="col-md-9">' +
-            '<input type="text" ng-model="gridOptions.filterOptions.filterText" placeholder="Search..." class="search" style="width: 400px"/>' +
-            '</div>' +
-            '<div class="col-md-3" style="text-align: right">' +
-            '<gims-link-new origin="survey" target="questionnaire" return-tab="2"/>' +
-            '</div>' +
-            '</div>' +
-            '<div ng-grid="gridOptions" class="gridStyle"></div>' +
+        template:
+            '<div>' +
+                '<div class="row show-grid">' +
+                    '<div class="col-md-6">' +
+                        '<input type="text" ng-model="gridOptions.filterOptions.filterText" placeholder="Search..." class="search" style="width: 400px"/>' +
+                    '</div>' +
+                    '<div class="col-md-6" style="text-align: right">' +
+                        '<gims-link-new origin="survey" target="questionnaire" return-tab="2" ></gims-link-new>'+
+                        '<div style="margin-left:10px" class="list-inline btn-group">'+
+                            '<button ng-click="selectAll(true)"  class="btn btn-default"><i class="fa fa-check-square-o"></i> Select all</button>'+
+                            '<button ng-click="selectAll(false)"  class="btn btn-default"><i class="fa fa-square-o"></i> Unselect all</button>'+
+                            '<a href="/export/survey/{{survey.id}}/{{survey.name}}.xslx?questionnaires={{selectedQuestionnaires}}" target="_blank" class="btn btn-default"><i class="fa fa-download"></i> Export selected</a>'+
+                        '</div>'+
+                    '</div>' +
+                '</div>' +
+                '<div ng-grid="gridOptions" class="gridStyle"></div>' +
             '</div>',
         // The linking function will add behavior to the template
         link: function () {
@@ -28,6 +34,28 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
                 $scope.returnUrl = encodeURIComponent($location.url());
             });
 
+
+//            $scope.selectedQuestionnaires = '';
+
+            var watchListener = $scope.$watch('questionnaires', function(questionnaires) {
+                if(questionnaires && questionnaires.length > 0) {
+                    angular.forEach($scope.questionnaires, function(questionnaire) {
+                        $scope.$watch(function(){
+                            return questionnaire.export;
+                        },function(){
+
+                            $scope.selectedQuestionnaires = '';
+                            angular.forEach($scope.questionnaires, function(questionnaire) {
+                                if (questionnaire.export) {
+                                    $scope.selectedQuestionnaires += questionnaire.id+',';
+                                }
+                            });
+                        });
+                    });
+                    watchListener();
+                }
+            });
+
             // Delete a questionnaire
             $scope.removeQuestionnaire = function (row) {
                 var Questionnaire = new $resource('/api/questionnaire'); // TODO: find out a way to it with restangular instead of $resource
@@ -37,6 +65,13 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
 
             // Keep track of the selected row.
             $scope.selectedRow = [];
+
+            $scope.selectAll = function($bool)
+            {
+                _.forEach($scope.questionnaires, function(questionnaire) {
+                    questionnaire.export = $bool;
+                });
+            }
 
             // Configure ng-grid.
             $scope.gridOptions = {
@@ -52,23 +87,32 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
                     {field: 'reporterNames', displayName: 'Filled by'},
                     {field: 'dateLastAnswerModification', displayName: 'Modif.', cellFilter: 'date:"dd MMM yyyy"'},
                     {field: 'validatorNames', displayName: 'Validation by'},
-                    {field: 'completed', displayName: 'Completed', cellTemplate: '<div class="progress" style="margin: 5px 5px 0 5px">' +
-                        '<div class="progress-bar" ng-style="{width: row.entity[col.field] * 100}"></div>' +
+                    {field: 'completed', displayName: 'Completed', cellTemplate:
+                        '<div class="progress" style="margin: 5px 5px 0 5px">' +
+                            '<div class="progress-bar" ng-style="{width: row.entity[col.field] * 100}"></div>' +
                         '</div>'},
-                    {displayName: '', width: '110px', cellTemplate: '<div style="margin: 5px 5px 0 5px ">' +
-                        '<i class="fa fa-grid fa-comment" ng-visible="row.entity.comments" data-toggle="tooltip" title="{{row.entity.comments}}"></i>' +
-                        '<i class="fa fa-grid fa-check-square-o" ng-visible="row.entity.status == \'validated\'" title="Validated"></i>' +
-                        '<a class="btn btn-default btn-xs btn-edit" href="/admin/questionnaire/edit/{{row.entity.id}}?returnUrl={{returnUrl}}"><i class="fa fa-pencil fa-lg"></i></a>' +
-                        '<button type="button" class="btn btn-default btn-xs" ng-click="removeQuestionnaire(row)" ><i class="fa fa-trash-o fa-lg"></i></button>' +
-                        // ng-visible="row.entity.permission.canBeDeleted" @todo add me back to line above when permission are implemented
-                        '</div>'}
+                    {displayName: '', width: '120px', cellTemplate:
+                        '<div style="margin: 5px 5px 0 5px ">' +
+                            '<i class="fa fa-grid fa-comment" ng-visible="row.entity.comments" data-toggle="tooltip" title="{{row.entity.comments}}"></i>' +
+                            '<i class="fa fa-grid fa-check-square-o" ng-visible="row.entity.status == \'validated\'" title="Validated"></i>' +
+                            '<div class="btn-group">'+
+                                '<a class="btn btn-default btn-xs btn-edit" href="/admin/questionnaire/edit/{{row.entity.id}}?returnUrl={{returnUrl}}" ng-visible="row.entity.permissions.update"><i class="fa fa-pencil fa-lg"></i></a>' +
+                                '<button type="button" class="btn btn-default btn-xs" ng-click="removeQuestionnaire(row)"  ng-visible="row.entity.permissions.delete"><i class="fa fa-trash-o fa-lg"></i></button>' +
+                            '</div>'+
+                        '</div>'
+                    },
+                    {field: 'select', displayName: 'Export', width: '60px', cellTemplate :
+                        '<div style="margin: 12px 5px 0 5px;text-align:center">' +
+                            '<input type="checkbox" ng-model="row.entity.export" />'+
+                        '</div>'
+                    }
                 ]
             };
 
             Restangular
                 .one('survey', $routeParams.id)
                 .all('questionnaire')
-                .getList({fields: 'dateLastAnswerModification,reporterNames,validatorNames,completed,spatial,comments,status'})
+                .getList({fields: 'permissions,dateLastAnswerModification,reporterNames,validatorNames,completed,spatial,comments,status'})
                 .then(function (questionnaires) {
                     $scope.questionnaires = questionnaires;
                 });

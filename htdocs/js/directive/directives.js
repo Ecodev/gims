@@ -25,7 +25,7 @@ angular.module('myApp.directives')
             restrict: "E",
             replace: true,
             link: function (scope, element, attrs) {
-                var html = sprintf('<a class="link-new" href="/admin/%s/new?returnUrl=/admin/%s/edit/%s&%s=%s"><i class="fa fa-plus-circle"></i> new %s</a>',
+                var html = sprintf('<a class="list-inline btn btn-default" href="/admin/%s/new?returnUrl=/admin/%s/edit/%s&%s=%s"><i class="fa fa-plus-circle"></i> new %s</a>',
                     attrs.target,
                     attrs.origin,
                     $routeParams.id,

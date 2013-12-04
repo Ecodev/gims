@@ -31,7 +31,6 @@ class Glass extends AbstractImporter
 //        8 => 'Human Resources',
 	    9 => 'Funding Sources',
 
-        
 //        11 => 'Sufficiency of finance to meet MDG targets',
 //        12 => 'Absorption of funds',
 //        13 => 'Existence  and extent of implementation of Finance plan',

@@ -10,6 +10,7 @@
     <form name="myForm" class="form-horizontal">
 
         <?php echo $this->crudButtons('survey'); ?>
+        <a href='/export/survey/{{survey.id}}/{{survey.name}}.xslx' target='_blank' class='btn btn-default'><i class='fa fa-download'></i> Export all questionnaires</a>
 
         <tabset style="margin-top: 20px">
             <tab heading="General info" active="tabs[0]" select="selectTab(0)" >
