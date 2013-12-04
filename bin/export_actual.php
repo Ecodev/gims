@@ -14,10 +14,10 @@ $countries = require (__DIR__ . '/countries.php');
 function export(array $countries, array $onlyThose = array())
 {
     $hostname = basename(getcwd());
-    @mkdir('each');
-    @mkdir('each/backup');
-    @mkdir('each/questionnaire');
-    @mkdir('each/country');
+    @mkdir('actual');
+    @mkdir('actual/backup');
+    @mkdir('actual/questionnaire');
+    @mkdir('actual/country');
 
     foreach ($countries as $country) {
 
@@ -34,7 +34,7 @@ function export(array $countries, array $onlyThose = array())
         }
 
         echo $path . PHP_EOL;
-        $backup = "each/backup/$name.backup.gz";
+        $backup = "actual/backup/$name.backup.gz";
 
         // Recycle backup if exists
         if (is_readable($backup)) {
@@ -45,11 +45,11 @@ function export(array $countries, array $onlyThose = array())
             echo `phing dump-data -DdumpFile="$backup"`;
         }
 
-        echo `wget -O "each/questionnaire/$name - Water.csv"      "http://$hostname.local/api/table/questionnaire/foo.csv?years=1990-2011&country=$id&filterSet=2"`;
-        echo `wget -O "each/questionnaire/$name - Sanitation.csv" "http://$hostname.local/api/table/questionnaire/foo.csv?years=1990-2011&country=$id&filterSet=5"`;
+        echo `wget -O "actual/questionnaire/$name - Water.csv"      "http://$hostname.local/api/table/questionnaire/foo.csv?years=1990-2011&country=$id&filterSet=2"`;
+        echo `wget -O "actual/questionnaire/$name - Sanitation.csv" "http://$hostname.local/api/table/questionnaire/foo.csv?years=1990-2011&country=$id&filterSet=5"`;
 
-//        echo `wget -O "each/country/$name - Water.csv"      "http://$hostname.local/api/table/country/foo.csv?years=1990-2011&country=$id&filterSet=2"`;
-//        echo `wget -O "each/country/$name - Sanitation.csv" "http://$hostname.local/api/table/country/foo.csv?years=1990-2011&country=$id&filterSet=5"`;
+//        echo `wget -O "actual/country/$name - Water.csv"      "http://$hostname.local/api/table/country/foo.csv?years=1990-2011&country=$id&filterSet=2"`;
+//        echo `wget -O "actual/country/$name - Sanitation.csv" "http://$hostname.local/api/table/country/foo.csv?years=1990-2011&country=$id&filterSet=5"`;
     }
 }
 

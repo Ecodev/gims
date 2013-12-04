@@ -95,7 +95,7 @@ function doOneCountry(array $country)
 
     echo 'READING DONE' . PHP_EOL;
 
-    $dir = 'extracted_data/';
+    $dir = 'expected/';
     @mkdir($dir);
     $outputname = $dir . $country['name'];
 
