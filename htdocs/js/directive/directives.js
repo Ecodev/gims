@@ -36,7 +36,7 @@ angular.module('myApp.directives')
                     );
                 }
 
-                var html = sprintf('<a class="list-inline btn btn-default" href="/admin/%s/new%s"><i class="fa fa-plus-circle"></i> new %s</a>',
+                var html = sprintf('<a class="link-new list-inline btn btn-default" href="/admin/%s/new%s"><i class="fa fa-plus-circle"></i> new %s</a>',
                     attrs.target,
                     returnUrl,
                     attrs.target
