@@ -53,22 +53,23 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
                 new \Application\Service\Hydrator());
         }
 
+
         if ($questions) {
 
             // Questionnaires organisation
             $askedQuestionnaires = explode(',', trim($this->params()->fromQuery('questionnaires'), ','));
             $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getAllWithPermission('read', 'survey', $survey);
             $questionnaireList = array();
-            if (count($askedQuestionnaires) > 0) {
+            if (count($askedQuestionnaires) > 1 || (count($askedQuestionnaires) == 1 && ($askedQuestionnaires[0]) > 0) ) {
                 foreach ($questionnaires as $questionnaire) {
 
                     if (in_array($questionnaire->getId(), $askedQuestionnaires)) {
                         array_push($questionnaireList, $questionnaire);
                     }
                 }
+            } else {
+                $questionnaireList = $questionnaires;
             }
-
-            //$questionnaires = $survey->getQuestionnaires();
 
             $view = new ExcelModel($this->params('filename'), array('questions' => $questions, 'questionnaires' => $questionnaireList));
             $view->setTemplate('export/index/export.excel.php');
