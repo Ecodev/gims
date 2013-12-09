@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "98d7689d07d69708c4aece694a5e4fa3",
+    "hash": "ed0a401f6edfb5cf7e92927cfe397ca9",
     "packages": [
         {
             "name": "creof/doctrine2-spatial",
@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/djlambert/doctrine2-spatial.git",
-                "reference": "2e3530f7578aca84f18b0138f64b0f535ebdc047"
+                "reference": "c70cdfd8713181b40ac8d69b227be86404eb36c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/djlambert/doctrine2-spatial/zipball/2e3530f7578aca84f18b0138f64b0f535ebdc047",
-                "reference": "2e3530f7578aca84f18b0138f64b0f535ebdc047",
+                "url": "https://api.github.com/repos/djlambert/doctrine2-spatial/zipball/c70cdfd8713181b40ac8d69b227be86404eb36c2",
+                "reference": "c70cdfd8713181b40ac8d69b227be86404eb36c2",
                 "shasum": ""
             },
             "require": {
@@ -24,9 +24,7 @@
             },
             "require-dev": {
                 "doctrine/common": ">=2.1",
-                "doctrine/dbal": ">=2.1",
-                "phpunit/phpunit": ">=3.7",
-                "rhumsaa/array_column": "~1.1"
+                "doctrine/dbal": ">=2.1"
             },
             "type": "library",
             "autoload": {
@@ -58,7 +56,7 @@
                 "postgresql",
                 "spatial"
             ],
-            "time": "2013-11-06 22:50:50"
+            "time": "2013-04-29 21:58:51"
         },
         {
             "name": "doctrine/annotations",
@@ -100,7 +98,8 @@
                 {
                     "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/"
+                    "homepage": "http://www.jwage.com/",
+                    "role": "Creator"
                 },
                 {
                     "name": "Guilherme Blanco",
@@ -239,9 +238,10 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/"
+                    "homepage": "http://www.jwage.com/",
+                    "role": "Creator"
                 },
                 {
                     "name": "Guilherme Blanco",
@@ -313,7 +313,8 @@
                 {
                     "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/"
+                    "homepage": "http://www.jwage.com/",
+                    "role": "Creator"
                 },
                 {
                     "name": "Guilherme Blanco",
@@ -607,7 +608,8 @@
                 {
                     "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/"
+                    "homepage": "http://www.jwage.com/",
+                    "role": "Creator"
                 },
                 {
                     "name": "Guilherme Blanco",
@@ -625,7 +627,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -697,12 +699,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "37aacdae6507faad03c3df1624e7d3a6e6c1b388"
+                "reference": "ce2ffa17a642267d48b9df6c5eba94e9d773e22f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/37aacdae6507faad03c3df1624e7d3a6e6c1b388",
-                "reference": "37aacdae6507faad03c3df1624e7d3a6e6c1b388",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/ce2ffa17a642267d48b9df6c5eba94e9d773e22f",
+                "reference": "ce2ffa17a642267d48b9df6c5eba94e9d773e22f",
                 "shasum": ""
             },
             "require": {
@@ -733,7 +735,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -749,7 +751,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2013-11-10 05:33:50"
+            "time": "2013-12-03 00:28:34"
         },
         {
             "name": "doctrine/orm",
@@ -833,21 +835,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/firephp/firephp-core.git",
-                "reference": "72493df5f36b0239adf7694240f91eca4bc25099"
+                "reference": "fabad0f2503f9577fe8dd2cb1d1c7cd73ed2aacf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firephp/firephp-core/zipball/72493df5f36b0239adf7694240f91eca4bc25099",
-                "reference": "72493df5f36b0239adf7694240f91eca4bc25099",
+                "url": "https://api.github.com/repos/firephp/firephp-core/zipball/fabad0f2503f9577fe8dd2cb1d1c7cd73ed2aacf",
+                "reference": "fabad0f2503f9577fe8dd2cb1d1c7cd73ed2aacf",
                 "shasum": ""
             },
             "type": "library",
             "autoload": {
                 "classmap": [
                     "lib/FirePHPCore/FirePHP.class.php",
-                    "lib/FirePHPCore/fb.php"
-                ],
-                "files": [
                     "lib/FirePHPCore/fb.php"
                 ]
             },
@@ -864,7 +863,7 @@
             ],
             "description": "Traditional FirePHPCore library for sending PHP variables to the browser.",
             "homepage": "https://github.com/firephp/firephp-core",
-            "time": "2013-11-06 16:41:22"
+            "time": "2013-04-23 15:28:20"
         },
         {
             "name": "phing/phing",
@@ -872,12 +871,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "edb6ff237e79e5a683e5a7adb0c56a4d77ca4fe1"
+                "reference": "3f7d71bf561bafea39087250f777b349438cc32e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/edb6ff237e79e5a683e5a7adb0c56a4d77ca4fe1",
-                "reference": "edb6ff237e79e5a683e5a7adb0c56a4d77ca4fe1",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/3f7d71bf561bafea39087250f777b349438cc32e",
+                "reference": "3f7d71bf561bafea39087250f777b349438cc32e",
                 "shasum": ""
             },
             "require": {
@@ -916,20 +915,20 @@
                 "task",
                 "tool"
             ],
-            "time": "2013-11-13 22:38:58"
+            "time": "2013-08-26 21:13:03"
         },
         {
             "name": "phpoffice/phpexcel",
-            "version": "dev-master",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PowerKiKi/PHPExcel.git",
-                "reference": "e581902112518c863114257d6f1433ffd26c68a2"
+                "reference": "7a90c5b88802eb10d00f3b9df76c94092bc684a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PowerKiKi/PHPExcel/zipball/e581902112518c863114257d6f1433ffd26c68a2",
-                "reference": "e581902112518c863114257d6f1433ffd26c68a2",
+                "url": "https://api.github.com/repos/PowerKiKi/PHPExcel/zipball/7a90c5b88802eb10d00f3b9df76c94092bc684a3",
+                "reference": "7a90c5b88802eb10d00f3b9df76c94092bc684a3",
                 "shasum": ""
             },
             "require": {
@@ -972,9 +971,9 @@
                 "xlsx"
             ],
             "support": {
-                "source": "https://github.com/PowerKiKi/PHPExcel/tree/master"
+                "source": "https://github.com/PowerKiKi/PHPExcel/tree/develop"
             },
-            "time": "2013-11-22 10:36:24"
+            "time": "2013-12-03 13:51:40"
         },
         {
             "name": "symfony/console",
@@ -1035,12 +1034,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/ZendDeveloperTools.git",
-                "reference": "8c38e67884268c94426cc4c8647d064ef13d100a"
+                "reference": "9b9311311fdb562494f89e62eb4649d687b58364"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/ZendDeveloperTools/zipball/8c38e67884268c94426cc4c8647d064ef13d100a",
-                "reference": "8c38e67884268c94426cc4c8647d064ef13d100a",
+                "url": "https://api.github.com/repos/zendframework/ZendDeveloperTools/zipball/9b9311311fdb562494f89e62eb4649d687b58364",
+                "reference": "9b9311311fdb562494f89e62eb4649d687b58364",
                 "shasum": ""
             },
             "require": {
@@ -1088,7 +1087,7 @@
                 "module",
                 "zf2"
             ],
-            "time": "2013-11-13 19:43:45"
+            "time": "2013-07-08 19:52:34"
         },
         {
             "name": "zendframework/zendframework",
@@ -1264,12 +1263,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ZF-Commons/ZfcRbac.git",
-                "reference": "243127d6ed9a22cd2e233f9ba20b81ef66b67386"
+                "reference": "8da6f5843a565eec39f00beb033e580a2f806fbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ZF-Commons/ZfcRbac/zipball/243127d6ed9a22cd2e233f9ba20b81ef66b67386",
-                "reference": "243127d6ed9a22cd2e233f9ba20b81ef66b67386",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcRbac/zipball/8da6f5843a565eec39f00beb033e580a2f806fbe",
+                "reference": "8da6f5843a565eec39f00beb033e580a2f806fbe",
                 "shasum": ""
             },
             "require": {
@@ -1299,7 +1298,7 @@
                 "module",
                 "zf2"
             ],
-            "time": "2013-11-04 23:14:09"
+            "time": "2013-08-15 14:01:06"
         },
         {
             "name": "zf-commons/zfc-user",
@@ -1368,12 +1367,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ZF-Commons/ZfcUserDoctrineORM.git",
-                "reference": "520c8ac621a096a1002982e73b6b909fde14bf50"
+                "reference": "08be7b2a5e1ee31a3907582261c113531d2bf964"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ZF-Commons/ZfcUserDoctrineORM/zipball/520c8ac621a096a1002982e73b6b909fde14bf50",
-                "reference": "520c8ac621a096a1002982e73b6b909fde14bf50",
+                "url": "https://api.github.com/repos/ZF-Commons/ZfcUserDoctrineORM/zipball/08be7b2a5e1ee31a3907582261c113531d2bf964",
+                "reference": "08be7b2a5e1ee31a3907582261c113531d2bf964",
                 "shasum": ""
             },
             "require": {
@@ -1408,7 +1407,7 @@
             "keywords": [
                 "zf2"
             ],
-            "time": "2013-10-16 14:51:17"
+            "time": "2013-02-08 00:41:12"
         }
     ],
     "packages-dev": [
