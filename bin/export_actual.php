@@ -53,14 +53,7 @@ function export(array $countries, array $onlyThose = array())
     }
 }
 
-$onlyThose = array(
-//    'Zambia',
-//    'Swaziland',
-//    'Pakistan',
-//    'Namibia',
-//    'Lithuania',
-//    'Brazil',
-//    'Belgium',
-);
+$onlyThose = $argv;
+array_shift($onlyThose);
 
 export($countries, $onlyThose);

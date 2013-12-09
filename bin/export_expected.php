@@ -12,21 +12,17 @@ $countries = require (__DIR__ . '/countries.php');
  */
 function doAllCountries(array $countries)
 {
-    foreach ($countries as $key => $country) {
+    foreach ($countries as $country) {
         $filename = $country['path'];
 
         if (!$filename) {
             "SKIP: mising file for " . $country['name'] . PHP_EOL;
             continue;
         }
-        echo $filename . PHP_EOL;
 
-
-        $cmd = 'php ' . __FILE__ . ' "' . $key . '"';
-        echo $cmd;
+        $cmd = 'php ' . __FILE__ . ' "' . $country['name'] . '"';
+        echo $cmd . PHP_EOL;
         echo `$cmd`;
-
-        gc_collect_cycles();
     }
 }
 
@@ -235,7 +231,14 @@ function getCalculatedValueSafely(\PHPExcel_Cell $cell)
 if (isset($argv[1]) && is_dir($argv[1])) {
     fromPhpToCsv($argv[1]);
 } elseif (isset($argv[1])) {
-    doOneCountry($countries[$argv[1]]);
+    $onlyThose = $argv;
+    array_shift($onlyThose);
+
+    foreach ($countries as $country) {
+        if (in_array($country['name'], $onlyThose)) {
+            doOneCountry($country);
+        }
+    }
 } else {
     doAllCountries($countries);
 }
