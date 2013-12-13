@@ -14,11 +14,7 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
                     '</div>' +
                     '<div class="col-md-6" style="text-align: right">' +
                         '<gims-link-new origin="survey" target="questionnaire" return-tab="2" ></gims-link-new>'+
-                        '<div style="margin-left:10px" class="list-inline btn-group">'+
-                            '<button ng-click="selectAll(true)"  class="btn btn-default"><i class="fa fa-check-square-o"></i> Select all</button>'+
-                            '<button ng-click="selectAll(false)"  class="btn btn-default"><i class="fa fa-square-o"></i> Unselect all</button>'+
-                            '<a href="/export/survey/{{survey.id}}/{{survey.name}}.xslx?questionnaires={{selectedQuestionnaires}}" target="_blank" class="btn btn-default"><i class="fa fa-download"></i> Export selected</a>'+
-                        '</div>'+
+                        '<a style="margin-left:5px" href="/export/survey/{{survey.id}}/{{survey.name}}.xslx?questionnaires={{selectedQuestionnaires}}" target="_blank" class="btn btn-default"><i class="fa fa-download"></i> Export selected</a>'+
                     '</div>' +
                 '</div>' +
                 '<div ng-grid="gridOptions" class="gridStyle"></div>' +
@@ -29,13 +25,9 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
         },
         controller: function ($scope, $location, $resource, $routeParams, Restangular, Modal) {
 
-
             $scope.$watch(function(){ return $location.url(); }, function(){
                 $scope.returnUrl = encodeURIComponent($location.url());
             });
-
-
-//            $scope.selectedQuestionnaires = '';
 
             var watchListener = $scope.$watch('questionnaires', function(questionnaires) {
                 if(questionnaires && questionnaires.length > 0) {
@@ -68,7 +60,7 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
 
             $scope.selectAll = function($bool)
             {
-                _.forEach($scope.questionnaires, function(questionnaire) {
+                angular.forEach($scope.questionnaires, function(questionnaire) {
                     questionnaire.export = $bool;
                 });
             }
@@ -90,21 +82,33 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function (
                     {field: 'completed', displayName: 'Completed', cellTemplate:
                         '<div class="progress" style="margin: 5px 5px 0 5px">' +
                             '<div class="progress-bar" ng-style="{width: row.entity[col.field] * 100}"></div>' +
-                        '</div>'},
-                    {displayName: '', width: '120px', cellTemplate:
-                        '<div style="margin: 5px 5px 0 5px ">' +
-                            '<i class="fa fa-grid fa-comment" ng-visible="row.entity.comments" data-toggle="tooltip" title="{{row.entity.comments}}"></i>' +
-                            '<i class="fa fa-grid fa-check-square-o" ng-visible="row.entity.status == \'validated\'" title="Validated"></i>' +
-                            '<div class="btn-group">'+
-                                '<a class="btn btn-default btn-xs btn-edit" href="/admin/questionnaire/edit/{{row.entity.id}}?returnUrl={{returnUrl}}" ng-visible="row.entity.permissions.update"><i class="fa fa-pencil fa-lg"></i></a>' +
-                                '<button type="button" class="btn btn-default btn-xs" ng-click="removeQuestionnaire(row)"  ng-visible="row.entity.permissions.delete"><i class="fa fa-trash-o fa-lg"></i></button>' +
-                            '</div>'+
                         '</div>'
                     },
-                    {field: 'select', displayName: 'Export', width: '60px', cellTemplate :
-                        '<div style="margin: 12px 5px 0 5px;text-align:center">' +
-                            '<input type="checkbox" ng-model="row.entity.export" />'+
-                        '</div>'
+                    {
+                        displayName: '',
+                        width: '120px',
+                        cellTemplate:
+                            '<div style="margin: 5px 5px 0 5px ">' +
+                                '<i class="fa fa-grid fa-comment" ng-visible="row.entity.comments" data-toggle="tooltip" title="{{row.entity.comments}}"></i>' +
+                                '<i class="fa fa-grid fa-check-square-o" ng-visible="row.entity.status == \'validated\'" title="Validated"></i>' +
+                                '<div class="btn-group">'+
+                                    '<a class="btn btn-default btn-xs btn-edit" href="/admin/questionnaire/edit/{{row.entity.id}}?returnUrl={{returnUrl}}" ng-visible="row.entity.permissions.update"><i class="fa fa-pencil fa-lg"></i></a>' +
+                                    '<button type="button" class="btn btn-default btn-xs" ng-click="removeQuestionnaire(row)"  ng-visible="row.entity.permissions.delete"><i class="fa fa-trash-o fa-lg"></i></button>' +
+                                '</div>'+
+                            '</div>'
+                    },
+                    {
+                        field: 'export',
+                        displayName: 'Export',
+                        width: '60px',
+                        headerCellTemplate :
+                            '<div style="margin: 12px 5px 0 5px;text-align:center">' +
+                                '<input type="checkbox" ng-model="selected" ng-change="selectAll(selected)" />'+
+                            '</div>',
+                        cellTemplate :
+                            '<div style="margin: 12px 5px 0 5px;text-align:center">' +
+                                '<input type="checkbox" ng-model="row.entity.export" />'+
+                            '</div>'
                     }
                 ]
             };
