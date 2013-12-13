@@ -1,4 +1,6 @@
-angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $location, $http, $timeout, Restangular, $modal) { 'use strict';
+angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $location, $http, $timeout, Restangular, $modal)
+{
+    'use strict';
 
     $scope.chartObj;
     $scope.pointSelected;
@@ -8,7 +10,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
     // Whenever one of the parameter is changed
     var uniqueAjaxRequest;
-    $scope.$watch('country.id + part.id + filterSet.id', function()
+    $scope.$watch('country.id + part.id + filterSet.id', function ()
     {
         if ($scope.country && $scope.part && $scope.filterSet) {
             $scope.initIgnoredElementsFromUrl();
@@ -18,10 +20,12 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
 
     // Whenever the list of excluded values is changed
-    $scope.$watch('pointSelected', function(newPointSelected) {
+    $scope.$watch('pointSelected', function (newPointSelected)
+    {
 
         // We throw an window.resize event to force Highcharts to reflow and adapt to its new size
-        $timeout(function() {
+        $timeout(function ()
+        {
             jQuery(window).resize();
         }, 0);
 
@@ -46,13 +50,13 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     });
 
 
-    $scope.loadFilters = function(parameters)
+    $scope.loadFilters = function (parameters)
     {
         $scope.isLoading = true;
-        Restangular.all('chartFilter').getList(parameters).then(function(data)
+        Restangular.all('chartFilter').getList(parameters).then(function (data)
         {
-            angular.forEach(data, function(filter, pos) {
-                filter.sorting = pos;
+            angular.forEach(data, function (filter)
+            {
                 $scope.cache(parameters.filter, parameters.questionnaire, filter, null);
             });
             $scope.isLoading = false;
@@ -60,17 +64,23 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     }
 
 
-    $scope.getExcludedFilters = function(filtersIdsOnly)
+    $scope.getExcludedFilters = function (filtersIdsOnly)
     {
-        if( !$scope.cachedElements || !$scope.cachedElements[$scope.country.id] || !$scope.cachedElements[$scope.country.id][$scope.part.id] || !$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id]) return [];
+        if (!$scope.cachedElements || !$scope.cachedElements[$scope.country.id] || !$scope.cachedElements[$scope.country.id][$scope.part.id] || !$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id]) {
+            return [];
+        }
 
         // foreach highFilter in the current combo FilterSet/Country/Part, get ignored filters
         var excludedFilters = [];
         var excludedFiltersNumbersOnly = [];
-        angular.forEach($scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id], function(hFilter,hFilterId){
-            angular.forEach(hFilter.filters, function(filter){
-                if (filter.ignored && _.indexOf(excludedFilters, hFilterId+":"+filter.filter.id) == -1) {
-                    excludedFilters.push(hFilterId+":"+filter.filter.id);
+        angular.forEach($scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id], function (hFilter, hFilterId)
+        {
+            hFilter.ignoredFilters = false;
+            angular.forEach(hFilter.filters, function (filter)
+            {
+                if (filter.ignored && _.indexOf(excludedFilters, hFilterId + ":" + filter.filter.id) == -1) {
+                    hFilter.ignoredFilters = true;
+                    excludedFilters.push(hFilterId + ":" + filter.filter.id);
                     excludedFiltersNumbersOnly.push(filter.filter.id);
                 }
             });
@@ -90,15 +100,21 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         }
     };
 
-    $scope.getExcludedQuestionnaires = function()
+    $scope.getExcludedQuestionnaires = function ()
     {
-        if( !$scope.cachedElements || !$scope.cachedElements[$scope.country.id] || !$scope.cachedElements[$scope.country.id][$scope.part.id] || !$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id]) return [];
+        if (!$scope.cachedElements || !$scope.cachedElements[$scope.country.id] || !$scope.cachedElements[$scope.country.id][$scope.part.id] || !$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id]) {
+            return [];
+        }
 
         // foreach highFilter in the current combo FilterSet/Country/Part, get ignored filters
         var excludedQuestionnaires = [];
-        angular.forEach($scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id], function(hFilter){
-            angular.forEach(hFilter.questionnaires, function(questionnaire){
+        angular.forEach($scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id], function (hFilter)
+        {
+            hFilter.ignoredQuestionnaires = false;
+            angular.forEach(hFilter.questionnaires, function (questionnaire)
+            {
                 if (questionnaire.ignored && _.indexOf(excludedQuestionnaires, questionnaire.id) == -1) {
+                    hFilter.ignoredQuestionnaires = true;
                     excludedQuestionnaires.push(questionnaire.id);
                 }
             });
@@ -114,12 +130,13 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         return excludedQuestionnaires;
     };
 
-    $scope.initIgnoredElementsFromUrl = function()
+    $scope.initIgnoredElementsFromUrl = function ()
     {
         // url excluded questionnaires
         var excludedQuestionnaires = $location.search()['excludedQuestionnaires'] ? $location.search()['excludedQuestionnaires'].split(',') : [];
         if (excludedQuestionnaires && excludedQuestionnaires.length) {
-            angular.forEach(excludedQuestionnaires, function(excludedQuestionnaire){
+            angular.forEach(excludedQuestionnaires, function (excludedQuestionnaire)
+            {
                 var ignoredElements = excludedQuestionnaire.split(':');
                 $scope.cache(ignoredElements[0], ignoredElements[1], null, null, true);
             });
@@ -128,46 +145,46 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         // url excluded filters
         var excludedFilters = $location.search()['excludedFilters'] ? $location.search()['excludedFilters'].split(',') : [];
         if (excludedFilters && excludedFilters.length) {
-            angular.forEach(excludedFilters, function(excludedFilter){
+            angular.forEach(excludedFilters, function (excludedFilter)
+            {
                 var ignoredElements = excludedFilter.split(':');
-                $scope.cache(ignoredElements[0], null, {filter : {id:ignoredElements[1]}}, null, true);
+                $scope.cache(ignoredElements[0], null, {filter: {id: ignoredElements[1]}}, null, true);
             });
 
             // once ignored filters have been cached, go take all other filter for each high filter to retrieve name and position for display
             $scope.isLoading = true;
-            Restangular.one('filterset', $scope.filterSet.id).get({fields:'filters.officialChildren,filters.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren'}).then(function(data)
+            Restangular.one('filterset', $scope.filterSet.id).get({fields: 'filters.officialChildren,filters.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren'}).then(function (data)
             {
-                angular.forEach(data.filters, function(hFilter) {
-                    angular.forEach(hFilter.officialChildren, function(filter, pos) {
-                        console.log('a', pos);
-                        pos = $scope.cacheFilters(hFilter.id, filter, pos, 0);
-                        console.log('b', pos);
+                angular.forEach(data.filters, function (hFilter)
+                {
+                    angular.forEach(hFilter.officialChildren, function (filter)
+                    {
+                        $scope.cacheFilters(hFilter.id, filter, 0);
                     });
                 });
 
                 $scope.isLoading = false;
             });
 
-        };
+        }
+        ;
     }
 
-    $scope.cacheFilters = function(hFilter, filter, pos, deep)
+    $scope.cacheFilters = function (hFilter, filter, deep)
     {
-        console.log('c', pos);
-        filter.level= deep;
-        $scope.cache(hFilter, null, {filter:filter,sorting:pos});
+        filter.level = deep;
+        $scope.cache(hFilter, null, {filter: filter});
         deep++;
-        angular.forEach(filter.officialChildren, function(filter) {
-            pos++;
-            pos = $scope.cacheFilters(hFilter, filter, pos, deep);
+        angular.forEach(filter.officialChildren, function (filter)
+        {
+            $scope.cacheFilters(hFilter, filter, deep);
         });
-        console.log('r', pos);
         delete(filter.officialChildren);
-        return pos;
     }
 
 
-    $scope.openNewFilterSet = function() {
+    $scope.openNewFilterSet = function ()
+    {
         $modal.open({
             templateUrl: 'newFilterSet.html',
             controller: 'Browse/ChartNewFilterSetCtrl',
@@ -175,11 +192,12 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         });
     };
 
-    $scope.refreshChart = function() {
-        console.log('refresh');
+    $scope.refreshChart = function ()
+    {
         $scope.isLoading = true;
         $timeout.cancel(uniqueAjaxRequest);
-        uniqueAjaxRequest = $timeout(function() {
+        uniqueAjaxRequest = $timeout(function ()
+        {
             // get chart data via Ajax, but only once per 500 milliseconds
             // (this avoid sending several request on page loading)
             $http.get('/api/chart', { params: {
@@ -189,118 +207,128 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 excludedQuestionnaires: $scope.getExcludedQuestionnaires().join(','),
                 excludedFilters: $scope.getExcludedFilters().join(',') }
 
-            }).success(function(data)
-            {
-                data.plotOptions.scatter.dataLabels.formatter = function()
+            }).success(function (data)
                 {
-//                    console.log(this);
-//                    console.log($('<span/>').css({color: !this.point.ignored ? '#DDD' : this.series.color}).text(this.point.name)[0].outerHTML);
-                    return $('<span/>').css({color: !this.point.ignored ? '#DDD' : this.series.color}).text(this.point.name)[0].outerHTML;
-                };
+                    data.plotOptions.scatter.dataLabels.formatter = function ()
+                    {
+                        //                    console.log(this);
+                        //                    console.log($('<span/>').css({color: !this.point.ignored ? '#DDD' : this.series.color}).text(this.point.name)[0].outerHTML);
+                        return $('<span/>').css({color: !this.point.ignored ? '#DDD' : this.series.color}).text(this.point.name)[0].outerHTML;
+                    };
 
-                data.plotOptions.scatter.point = {
-                    events:{
-                        click: function(e)
-                        {
-                            var ids = e.currentTarget.id.split(':');
-                            $scope.pointSelected =
+                    data.plotOptions.scatter.point = {
+                        events: {
+                            click: function (e)
                             {
-                                id: e.currentTarget.id,
-                                questionnaire: e.currentTarget.questionnaire,
-                                name: e.currentTarget.name,
-                                filter: ids[0]
-                            };
-                            $scope.$apply(); // this is needed because we are outside the AngularJS context (highcharts uses jQuery event handlers)
+                                var ids = e.currentTarget.id.split(':');
+                                $scope.pointSelected = {
+                                    id: e.currentTarget.id,
+                                    questionnaire: e.currentTarget.questionnaire,
+                                    name: e.currentTarget.name,
+                                    filter: ids[0]
+                                };
+                                $scope.$apply(); // this is needed because we are outside the AngularJS context (highcharts uses jQuery event handlers)
+                            }
                         }
-                    }
-                };
+                    };
 
-                $scope.chart = data;
-                $scope.isLoading = false;
-            });
+                    $scope.chart = data;
+                    $scope.isLoading = false;
+                });
 
         }, 500);
     };
 
-
-    $scope.hasIgnoredQuestionnaire = function(hFilterId){
-        $scope.hasIgnoredQuestionnaires = false;
-        angular.forEach($scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][hFilterId].questionnaires, function(questionnaire){
-            if(questionnaire.ignored) {
-                $scope.hasIgnoredQuestionnaires = true;
-                return true;
-            }
-        });
-        return $scope.hasIgnoredQuestionnaires;
-    }
-
-    $scope.ignoreAllFiltersForAllHighFilterQuestionnaires = function(hFilterId, bool)
+    $scope.allIgnored = false;
+    $scope.ignoreAllFiltersForAllHighFilterQuestionnaires = function (hFilterId, bool)
     {
-        if (bool===null || bool===undefined) {
-            bool = $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][hFilterId].filters[0].ignored;
+        if (bool === null || bool === undefined) {
+            bool = $scope.allIgnored = !$scope.allIgnored;
         }
-
-        if (!hFilterId) hFilterId = $scope.pointSelected.filter;
-        angular.forEach($scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][hFilterId].filters, function(filter) {
+        if (!hFilterId) {
+            hFilterId = $scope.pointSelected.filter;
+        }
+        angular.forEach($scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][hFilterId].filters, function (filter)
+        {
             filter.ignored = bool;
         });
         $scope.refreshChart();
     }
 
     // not used at the moment
-    $scope.toggleAllForOneQuestionnaire = function(hFilterId, questionnaireId) {
+    $scope.toggleAllForOneQuestionnaire = function (hFilterId, questionnaireId)
+    {
         $scope.allIgnored = !$scope.allIgnored;
-        angular.forEach($scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][hFilterId].questionnaires[questionnaireId], function(questionnaire) {
-            angular.forEach(questionnaire.filters, function(filter) {
-                 filter.ignored = $scope.allIgnored; // care, same $scope.allIgnored as toggleAllForAllQuestionnaires() function, should be changed if both functions are used in the app
+        angular.forEach($scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][hFilterId].questionnaires[questionnaireId], function (questionnaire)
+        {
+            angular.forEach(questionnaire.filters, function (filter)
+            {
+                filter.ignored = $scope.allIgnored; // care, same $scope.allIgnored as ignoreAllFiltersForAllHighFilterQuestionnaires() function, should be changed if both functions are used in the app
             });
         });
         $scope.refreshChart();
     }
 
-    $scope.toggleQuestionnaire = function(highFilterId, questionnaireId)
+    $scope.toggleQuestionnaire = function (highFilterId, questionnaireId)
     {
         var questionnaire = $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId];
         questionnaire.ignored = !questionnaire.ignored;
         $scope.refreshChart();
     }
 
-    $scope.toggleFilterForAllQuestionnaires = function(filter)
+    $scope.toggleFilterForAllQuestionnaires = function (filter)
     {
         filter.ignored = !filter.ignored;
         $scope.refreshChart();
     }
 
 
-    $scope.toggleFilterForOneQuestionnaire = function(filter)
+    $scope.toggleFilterForOneQuestionnaire = function (filter)
     {
         filter.ignored = !filter.ignored;
         $scope.refreshChart();
     }
-
-
-
-
-
-
 
 
     /**
      * Put in $scope.cacheElements the state of all objects that have been selected / viewed / ignored
      *
-     * This object is structured as followed :
-     * $scope.cachedElements[selected_country_id][selected_part_id][selected_filterSet_id][high_filter_id]['name']
-     * $scope.cachedElements[selected_country_id][selected_part_id][selected_filterSet_id][high_filter_id]['filters'] = []
-     * $scope.cachedElements[selected_country_id][selected_part_id][selected_filterSet_id][high_filter_id]['filters']['id']
-     * $scope.cachedElements[selected_country_id][selected_part_id][selected_filterSet_id][high_filter_id]['filters']['name']
-     * $scope.cachedElements[selected_country_id][selected_part_id][selected_filterSet_id][high_filter_id]['questionnaires']
-     * $scope.cachedElements[selected_country_id][selected_part_id][selected_filterSet_id][high_filter_id]['questionnaires'].filters[filter_id].filter = {id : ..., name : ...}
-     * $scope.cachedElements[selected_country_id][selected_part_id][selected_filterSet_id][high_filter_id]['questionnaires'].filters[filter_id].sorting
-     * $scope.cachedElements[selected_country_id][selected_part_id][selected_filterSet_id][high_filter_id]['questionnaires'].filters[filter_id]['values'] = []
-     * $scope.cachedElements[selected_country_id][selected_part_id][selected_filterSet_id][high_filter_id]['questionnaires'].filters[filter_id]['values']['Urban/Rural/Total'] = {}
-     * [$scope.cachedElements[selected_country_id][selected_part_id][selected_filterSet_id][high_filter_id]['questionnaires'].filters[filter_id].ignored Optional ignored attribute
-     * [$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][high_filter_id].ignored = true] Optional ignored attribute
+     * Feed an object $scope.cachedElements that is structured as followed :
      *
+     * Country : {
+     *   Part : {
+     *     Filterset : {
+     *        HighFilter : {
+     *          name : '...',
+     *          filters : {
+     *            2 : {
+     *              filter : {
+     *                id : xx,
+     *                level : xx,
+     *                name : '...'
+     *              },
+     *              ignored : true -> actually implemented (cause a filter is ignored for all questionnaires)
+     *            },
+     *            28 : {...}
+     *            39 : {...}
+     *          }
+     *          questionnaires : {
+     *              23 : {
+     *                  id : '74:02',
+     *                  name : '...'
+     *                  (ignored : true,)
+     *                  filters : {
+     *                    2 : {
+     *                      value : xxx, -> specific to questionnaire
+     *                      (ignored : true) -> not yet implemented
+     *                    },
+     *                    28 : {...}
+     *                    39 : {...}
+     *                  }
+     *              }
+     *           }
+     *       }
+     *   }
      * Some attributes like highFilter.name and questionnaire.name/code are loaded by ajax
      * These attributes correspond to objects mentionned in the url (highFilter and questionnaire).
      * They name attribute are loaded by ajax cause they're not specified in the url and are needed for display
@@ -313,9 +341,11 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * @param ignored
      * @returns current cached filterSet object (containing the list of the highfilters on chart);
      */
-    $scope.cache = function(highFilterId, questionnaireId, filter, questionnaireName, ignored)
+    $scope.cache = function (highFilterId, questionnaireId, filter, questionnaireName, ignored)
     {
-        if (!$scope.country || !$scope.part || !$scope.filterSet) return [];
+        if (!$scope.country || !$scope.part || !$scope.filterSet) {
+            return [];
+        }
 
         $scope.initiateCache();
 
@@ -330,7 +360,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         return $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id];
     }
 
-    $scope.initiateCache = function()
+    $scope.initiateCache = function ()
     {
         if (!$scope.cachedElements[$scope.country.id]) {
             $scope.cachedElements[$scope.country.id] = {};
@@ -345,30 +375,34 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         }
     }
 
-    $scope.initiateHighFilterCache = function(highFilterId)
+    $scope.initiateHighFilterCache = function (highFilterId)
     {
         if (!$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId]) {
             $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId] = {};
 
-            Restangular.one('filter', highFilterId).get().then(function(filter) {
+            Restangular.one('filter', highFilterId).get().then(function (filter)
+            {
                 $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].name = filter.name;
             });
         }
     }
 
-    $scope.initiateQuestionnaireCache = function(highFilterId, questionnaireId, questionnaireName, ignored)
+    $scope.initiateQuestionnaireCache = function (highFilterId, questionnaireId, questionnaireName, ignored)
     {
         if (questionnaireId) {
             if (!$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires) {
                 $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires = {};
             }
             if (!$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId]) {
-                $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId] = {id:highFilterId+':'+questionnaireId};
-                if(ignored) $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].ignored = ignored;
+                $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId] = {id: highFilterId + ':' + questionnaireId};
+                if (ignored) {
+                    $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].ignored = ignored;
+                }
                 if (questionnaireName) {
                     $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].name = questionnaireName;
                 } else {
-                    Restangular.one('questionnaire', questionnaireId).get({fields:'survey'}).then(function(questionnaire) {
+                    Restangular.one('questionnaire', questionnaireId).get({fields: 'survey'}).then(function (questionnaire)
+                    {
                         $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].name = questionnaire.survey.code;
                     });
                 }
@@ -376,54 +410,62 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         }
     }
 
-    $scope.initiateQuestionnaireFilterCache = function(highFilterId, questionnaireId, filter, ignored)
+    $scope.initiateQuestionnaireFilterCache = function (highFilterId, questionnaireId, filter, ignored)
     {
         if (filter) {
             if (!$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].filters) {
                 $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].filters = [];
             }
-            if (!$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].filters[filter.filter.id]){
+            if (!$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].filters[filter.filter.id]) {
                 $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].filters[filter.filter.id] = {};
             }
             $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].filters[filter.filter.id].filter = filter.filter;
-            if (filter.sorting > -1) $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].filters[filter.filter.id].sorting = filter.sorting;
-            if (ignored) $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].filters[filter.filter.id].ignored = ignored;
+            if (ignored) {
+                $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].filters[filter.filter.id].ignored = ignored;
+            }
 
             // stock filter values at questionnaire level
-            if(filter.values) {
+            if (filter.values) {
                 if (!$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].filters) {
                     $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].filters = {};
                 }
                 if (!$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].filters[filter.filter.id]) {
                     $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].filters[filter.filter.id] = {};
                 }
-                if (filter.values) { $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].filters[filter.filter.id].value = filter.values[0][$scope.part.name];}
+                if (filter.values) {
+                    $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].filters[filter.filter.id].value = filter.values[0][$scope.part.name];
+                }
             }
         }
     }
 });
 
 
-angular.module('myApp').controller('Browse/ChartNewFilterSetCtrl', function($scope, $location, $http, $timeout, $modalInstance) {
+angular.module('myApp').controller('Browse/ChartNewFilterSetCtrl', function ($scope, $location, $http, $timeout, $modalInstance)
+{
     'use strict';
     $scope.newFilterSet = {};
-    $scope.cancelNewFilterSet = function() {
+    $scope.cancelNewFilterSet = function ()
+    {
         $modalInstance.dismiss();
     };
 
-    $scope.createNewFilterSet = function() {
+    $scope.createNewFilterSet = function ()
+    {
         if ($scope.newFilterSet.name) {
             $http.post('/api/filterSet', {
                 name: $scope.newFilterSet.name,
                 originalFilterSet: $scope.filterSet.id,
                 excludedFilters: $scope.getExcludedFilters(true)
-            }).success(function(data) {
-                $location.search('filterSet', data.id);
-                // reload page
-                $timeout(function() {
-                    window.location.reload();
-                }, 0);
-            });
+            }).success(function (data)
+                {
+                    $location.search('filterSet', data.id);
+                    // reload page
+                    $timeout(function ()
+                    {
+                        window.location.reload();
+                    }, 0);
+                });
         }
     };
 });

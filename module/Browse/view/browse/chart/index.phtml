@@ -50,14 +50,14 @@
                     <table class='table'>
                         <tr>
                             <th colspan='3'>
-                                <span class='btn-link' style='margin-right:15px' ng-click="ignoreAllFiltersForAllHighFilterQuestionnaires(pointSelected.filter, !cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].filters[0].ignored)">
-                                    <span ng-show='cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].filters[0].ignored'><i class="fa fa-eye"></i> Include all</span>
-                                    <span ng-show='!cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].filters[0].ignored'><i class="fa fa-eye-slash"></i> Ignore all</span>
+                                <span class='btn-link' style='margin-right:15px' ng-click="ignoreAllFiltersForAllHighFilterQuestionnaires(pointSelected.filter, cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].filters[0].ignored)">
+                                    <span ng-show='allIgnored'><i class="fa fa-eye"></i> Include all</span>
+                                    <span ng-show='!allIgnored'><i class="fa fa-eye-slash"></i> Ignore all</span>
                                 </span>
                                 <span class="btn-link" ng-click="openNewFilterSet()"><i class="fa fa-plus-circle"></i> <?php echo $this->translate('New filter set') ?></span>
                             </th>
                         </tr>
-                        <tr ng-repeat="filter in cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].filters | orderBy:'sorting'"  ng-show="filter.filter.id" ng-class="{'unselected': filter.ignored}">
+                        <tr ng-repeat="filter in cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].filters track by $index"  ng-show="filter.filter.id" ng-class="{'unselected': filter.ignored}">
                             <td style='width:5%'><div ng-click="toggleFilterForAllQuestionnaires(filter)"><i ng-class="{'fa fa-eye':!filter.ignored, 'fa fa-eye-slash':filter.ignored}"></i></div></td>
                             <td style="padding-left:{{filter.filter.level}}em;">{{filter.filter.name}}</td>
                             <td style='width:10%'>{{cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].questionnaires[pointSelected.questionnaire].filters[filter.filter.id].value}}</td>
@@ -69,25 +69,25 @@
             <!-- Panel bottom part : ignored elements -->
             <div ng-show='ignoredFilters || ignoredQuestionnaires'>
                 <h2>Ignored elements</h2>
-                <div ng-repeat='(hFilterId, hFilter) in cachedElements[country.id][part.id][filterSet.id]'>
+                <div ng-repeat='(hFilterId, hFilter) in cachedElements[country.id][part.id][filterSet.id]' ng-show='hFilter.ignoredQuestionnaires || hFilter.ignoredFilters'>
                     <h4>{{hFilter.name}}</h4>
 
                     <div class='row show-grid'>
-                        <table class='table' ng-show='ignoredQuestionnaires'>
+                        <table class='table' ng-show='hFilter.ignoredQuestionnaires'>
                             <tr>
                                 <th colspan='3' style='padding-left:1.5em'>Questionnaires</th>
                             </tr>
-                            <tr ng-repeat="questionnaire in hFilter.questionnaires" ng-show='questionnaire.ignored' ng-class="{'unselected': filter.ignored}">
+                            <tr ng-repeat="questionnaire in hFilter.questionnaires" ng-show='questionnaire.ignored' ng-class="{'unselected': questionnaire.ignored}">
                                 <td style='width:5%'><div ng-click="questionnaire.ignored=!questionnaire.ignored;refreshChart()"><i ng-class="{'fa fa-eye':!filter.ignored, 'fa fa-eye-slash':filter.ignored}"></i></div></td>
                                 <td >{{questionnaire.name}}</td>
                             </tr>
                         </table>
 
-                        <table class='table' ng-show="ignoredFilters">
+                        <table class='table' ng-show="hFilter.ignoredFilters">
                             <tr>
                                 <th colspan='3' style='padding-left:1.4em'>Filters <span class='btn-link' style='margin-left:10px' ng-click="ignoreAllFiltersForAllHighFilterQuestionnaires(hFilterId, false)"><i class="fa fa-eye"> </i> Include all</span></th>
                             </tr>
-                            <tr ng-repeat="filter in hFilter.filters track by $index | orderBy:'sorting'" ng-show='filter.filter.id && filter.ignored' ng-class="{'unselected': filter.ignored}">
+                            <tr ng-repeat="filter in hFilter.filters track by $index" ng-show='filter.filter.id && filter.ignored' ng-class="{'unselected': filter.ignored}">
                                 <td style='width:5%'><div ng-click="filter.ignored=!filter.ignored;refreshChart()"><i ng-class="{'fa fa-eye':!filter.ignored, 'fa fa-eye-slash':filter.ignored}"></i></div></td>
                                 <td style="padding-left: {{filter.filter.level}}em;">{{filter.filter.name}}</td>
                             </tr>
