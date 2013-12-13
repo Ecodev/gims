@@ -1,50 +1,103 @@
 <div class="container">
     <form>
-        <div class="row">
+        <div class='row show-grid'>
             <div class="col-md-6">
-                <p><gims-select api="country" model="country" placeholder="<?php echo $this->translate('Select a country') ?>" format="name" style="width:100%;"/></p>
-            </div>
-            <div class="col-md-6" style="text-align: right">
                 <img src="/img/jmp-logo-black.png" alt="JMP logo" class="logo-chart"/>
                 <img src="/img/who-logo-black.png" alt="WHO logo" class="logo-chart"/>
                 <img src="/img/unicef-logo-black.png" alt="Unicef logo" class="logo-chart"/>
             </div>
         </div>
         <div class="row">
-            <span class="col-md-6">
-                <p><gims-select api="filterSet" model="filterSet" placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/></p>
-            </span>
+            <p class='col-sm-6 col-md-6'><gims-select api="country" model="country" placeholder="<?php echo $this->translate('Select a country') ?>" format="name" style="width:100%;"/></p>
         </div>
         <div class="row">
-            <span class="col-md-2">
+            <p class='col-sm-6 col-md-6'><gims-select api="filterSet" model="filterSet" placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/></p>
+        </div>
+        <div class="row show-grid">
+            <div class="col-xs-6 col-sm-4 col-md-2">
                 <p><gims-select api="part" model="part" placeholder="<?php echo $this->translate('Select a part') ?>" style="width:100%;"/></p>
-            </span>
-            <span class="col-md-2">
-                <p>&nbsp;<i class="fa fa-loading" ng-show="isLoading"></i></p>
-            </span>
+            </div>
+            <p class="col-xs-6 col-sm-2 col-md-2">
+                <i class="fa fa-loading fa-2x" ng-show="isLoading"></i>
+            </p>
         </div>
     </form>
 
     <div class="alert alert-info" ng-hide="chart"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?></div>
 
     <div class="row">
-        <div ng-class="{'col-md-12': !pointSelected, 'col-md-8': pointSelected}" >
+
+        <!-- Chart -->
+        <div ng-class="{'col-xs-12 col-sm-8 col-md-8 col-lg-10' : ignoredFilters || ignoredQuestionnaires || pointSelected, 'col-md-12' : !ignoredFilters && !ignoredQuestionnaires && !pointSelected}" >
             <chart value="chart" type="area" height="400" chart-obj="chartObj" />
         </div>
-        <div class="col-md-4" ng-show="pointSelected">
-            <div>
-                <div ng-grid="gridOptions" class="gridStyle" style="min-width: 400px"></div>
-                <div style="margin-top: 1em; text-align: center">
-                    <button class="btn btn-default" ng-click="refreshChart()" ng-class="{disabled: isLoading}"><?php echo $this->translate('Update') ?></button>
-                    <button class="btn btn-default" ng-click="ignoreQuestionnaire()" ng-class="{disabled: isLoading}"><?php echo $this->translate('Ignore questionnaire') ?></button>
-                    <button class="btn btn-default" ng-click="openNewFilterSet()"><i class="fa fa-plus-circle"></i> <?php echo $this->translate('new filter set') ?></button>
 
+        <!-- Right panel -->
+        <div id='chartPanel' ng-show='ignoredFilters || ignoredQuestionnaires || pointSelected' class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
+
+            <div ng-show='pointSelected'>
+                <button class="pull-right btn btn-default" ng-click="pointSelected=null"><i class="fa fa-times"></i></button>
+                <h3 ng-class="{'unselected':cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].questionnaires[pointSelected.questionnaire].ignored}">
+                    {{pointSelected.name}}
+                    <span class="btn btn-link" ng-click="toggleQuestionnaire(pointSelected.filter,pointSelected.questionnaire)" ng-class="{disabled: isLoading}">
+                        <span ng-show="cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].questionnaires[pointSelected.questionnaire].ignored" ><i class="fa fa-eye-slash"></i> <?php echo $this->translate('Include questionnaire') ?></span>
+                        <span ng-show="!cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].questionnaires[pointSelected.questionnaire].ignored"><i class="fa fa-eye"></i> <?php echo $this->translate('Ignore questionnaire') ?></span>
+                    </span>
+                </h3>
+                <h4>{{cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].name}}</h4>
+
+                <div class='row show-grid'>
+                    <table class='table'>
+                        <tr>
+                            <th colspan='3'>
+                                <span class='btn-link' style='margin-right:15px' ng-click="ignoreAllFiltersForAllHighFilterQuestionnaires(pointSelected.filter, !cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].filters[0].ignored)">
+                                    <span ng-show='cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].filters[0].ignored'><i class="fa fa-eye"></i> Include all</span>
+                                    <span ng-show='!cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].filters[0].ignored'><i class="fa fa-eye-slash"></i> Ignore all</span>
+                                </span>
+                                <span class="btn-link" ng-click="openNewFilterSet()"><i class="fa fa-plus-circle"></i> <?php echo $this->translate('New filter set') ?></span>
+                            </th>
+                        </tr>
+                        <tr ng-repeat="filter in cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].filters | orderBy:'sorting'"  ng-show="filter.filter.id" ng-class="{'unselected': filter.ignored}">
+                            <td style='width:5%'><div ng-click="toggleFilterForAllQuestionnaires(filter)"><i ng-class="{'fa fa-eye':!filter.ignored, 'fa fa-eye-slash':filter.ignored}"></i></div></td>
+                            <td style="padding-left:{{filter.filter.level}}em;">{{filter.filter.name}}</td>
+                            <td style='width:10%'>{{cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].questionnaires[pointSelected.questionnaire].filters[filter.filter.id].value}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Panel bottom part : ignored elements -->
+            <div ng-show='ignoredFilters || ignoredQuestionnaires'>
+                <h2>Ignored elements</h2>
+                <div ng-repeat='(hFilterId, hFilter) in cachedElements[country.id][part.id][filterSet.id]'>
+                    <h4>{{hFilter.name}}</h4>
+
+                    <div class='row show-grid'>
+                        <table class='table' ng-show='ignoredQuestionnaires'>
+                            <tr>
+                                <th colspan='3' style='padding-left:1.5em'>Questionnaires</th>
+                            </tr>
+                            <tr ng-repeat="questionnaire in hFilter.questionnaires" ng-show='questionnaire.ignored' ng-class="{'unselected': filter.ignored}">
+                                <td style='width:5%'><div ng-click="questionnaire.ignored=!questionnaire.ignored;refreshChart()"><i ng-class="{'fa fa-eye':!filter.ignored, 'fa fa-eye-slash':filter.ignored}"></i></div></td>
+                                <td >{{questionnaire.name}}</td>
+                            </tr>
+                        </table>
+
+                        <table class='table' ng-show="ignoredFilters">
+                            <tr>
+                                <th colspan='3' style='padding-left:1.4em'>Filters <span class='btn-link' style='margin-left:10px' ng-click="ignoreAllFiltersForAllHighFilterQuestionnaires(hFilterId, false)"><i class="fa fa-eye"> </i> Include all</span></th>
+                            </tr>
+                            <tr ng-repeat="filter in hFilter.filters track by $index | orderBy:'sorting'" ng-show='filter.filter.id && filter.ignored' ng-class="{'unselected': filter.ignored}">
+                                <td style='width:5%'><div ng-click="filter.ignored=!filter.ignored;refreshChart()"><i ng-class="{'fa fa-eye':!filter.ignored, 'fa fa-eye-slash':filter.ignored}"></i></div></td>
+                                <td style="padding-left: {{filter.filter.level}}em;">{{filter.filter.name}}</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 
 <!-- Modal Login Window !-->
 <script type="text/ng-template" id="newFilterSet.html">

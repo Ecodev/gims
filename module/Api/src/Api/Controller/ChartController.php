@@ -63,6 +63,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
         $chart = array(
             'chart' => array(
+                'zoomType' => 'xy',
                 'height' => 600,
                 'animation' => false,
             ),

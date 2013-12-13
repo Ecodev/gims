@@ -1,5 +1,4 @@
 // I gather this file is a starting point for the project.
-// I gather this file is a starting point for the project.
 @import "bootstrap";
 @import "bootstrap-customization";
 
@@ -157,13 +156,33 @@ div.browse .col-md-4 {
 }
 
 
-
 .badge-little {
     padding:0 !important;
     height:15px !important;
     width:15px !important;
     border:1px solid white
 }
+
+#chartPanel{
+    position:fixed;
+    @media (max-width: $screen-xs-max) {position:static}
+
+    z-index:999;
+    height:100%;
+    top:52px;
+    right:0;
+    background:white;
+    box-shadow:0px 2px 5px rgba(0,0,0,0.5);
+    overflow: scroll; overflow-x:hidden;
+    padding-bottom:100px;
+
+    tr.unselected td, h3.unselected{
+        color:#aaa;
+    }
+
+
+}
+
 
 body.demo {
     .navbar-fixed-top {

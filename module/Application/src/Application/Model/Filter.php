@@ -306,4 +306,9 @@ class Filter extends AbstractModel
         return $this;
     }
 
+
+    public function getOfficialChildren() {
+        return $this->getChildren()->filter(function($f){ return $f->isOfficial(); });
+    }
+
 }
