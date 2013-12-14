@@ -54,7 +54,7 @@
                                     <span ng-show='allIgnored'><i class="fa fa-eye"></i> Include all</span>
                                     <span ng-show='!allIgnored'><i class="fa fa-eye-slash"></i> Ignore all</span>
                                 </span>
-                                <span class="btn-link" ng-click="openNewFilterSet()"><i class="fa fa-plus-circle"></i> <?php echo $this->translate('New filter set') ?></span>
+                                <span class="btn-link" ng-click="openNewFilterSet()"><i class="fa fa-save"></i> <?php echo $this->translate('Save in new filter set') ?></span>
                             </th>
                         </tr>
                         <tr ng-repeat="filter in cachedElements[country.id][part.id][filterSet.id][pointSelected.filter].filters track by $index"  ng-show="filter.filter.id" ng-class="{'unselected': filter.ignored}">

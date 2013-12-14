@@ -1,5 +1,6 @@
 {
     "chart": {
+        "zoomType": "xy",
         "height": 600,
         "animation": false
     },
