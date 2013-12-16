@@ -366,7 +366,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             $scope.initiateQuestionnaireFilterCache(highFilterId, questionnaireId, filter, ignored);
 
         }
-        console.log($scope.cachedElements);
+        //console.log($scope.cachedElements);
         return $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id];
     }
 
@@ -406,7 +406,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             if (!$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId]) {
                 $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId] = {id: highFilterId + ':' + questionnaireId};
                 if (ignored) {
-                    console.log('ignored', questionnaireId,$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId]);
                     $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].ignored = ignored;
                 }
                 if (questionnaireName) {
