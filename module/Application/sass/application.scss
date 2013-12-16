@@ -176,7 +176,7 @@ div.browse .col-md-4 {
     overflow: scroll; overflow-x:hidden;
     padding-bottom:100px;
 
-    tr.unselected td, h3.unselected{
+    tr.unselected td, .unselected{
         color:#aaa;
     }
 
@@ -188,7 +188,7 @@ body.demo {
     .navbar-fixed-top {
         @include background(repeating-linear-gradient(-45deg, $navbar-inverse-bg,$navbar-inverse-bg 30px, #7C0400 30px, #7C0400 60px));
 
-        .navbar-brand:before {
+        .§navbar-brand:before {
             content: 'DEMO VERSION ';
             font-weight: bolder;
             color: white;

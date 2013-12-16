@@ -211,9 +211,11 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                 {
                     data.plotOptions.scatter.dataLabels.formatter = function ()
                     {
-                        //                    console.log(this);
-                        //                    console.log($('<span/>').css({color: !this.point.ignored ? '#DDD' : this.series.color}).text(this.point.name)[0].outerHTML);
-                        return $('<span/>').css({color: !this.point.ignored ? '#DDD' : this.series.color}).text(this.point.name)[0].outerHTML;
+                        var point = this.point.id.split(':');
+                        var filterSet = $scope.cache(point[0], point[1]);
+                        var highFilter = filterSet[point[0]];
+                        var questionnaire = highFilter.questionnaires[point[1]];
+                        return $('<span/>').css({color: questionnaire.ignored ? '#DDD' : this.series.color}).text(this.point.name)[0].outerHTML;
                     };
 
                     data.plotOptions.scatter.point = {
@@ -265,6 +267,14 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             {
                 filter.ignored = $scope.allIgnored; // care, same $scope.allIgnored as ignoreAllFiltersForAllHighFilterQuestionnaires() function, should be changed if both functions are used in the app
             });
+        });
+        $scope.refreshChart();
+    }
+
+    $scope.ignoreAllQuestionnairesForAllHighFilter = function(hFilterId, bool)
+    {
+        angular.forEach($scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][hFilterId].questionnaires, function (questionnaire) {
+           questionnaire.ignored = bool;
         });
         $scope.refreshChart();
     }
@@ -396,13 +406,13 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             if (!$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId]) {
                 $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId] = {id: highFilterId + ':' + questionnaireId};
                 if (ignored) {
+                    console.log('ignored', questionnaireId,$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId]);
                     $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].ignored = ignored;
                 }
                 if (questionnaireName) {
                     $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].name = questionnaireName;
                 } else {
-                    Restangular.one('questionnaire', questionnaireId).get({fields: 'survey'}).then(function (questionnaire)
-                    {
+                    Restangular.one('questionnaire', questionnaireId).get({fields: 'survey'}).then(function (questionnaire){
                         $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].name = questionnaire.survey.code;
                     });
                 }
