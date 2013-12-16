@@ -28,9 +28,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
         $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getByGeonameWithSurvey($country ? $country->getGeoname() : -1);
 
-        $calculator = new \Application\Service\Calculator\Jmp();
-        $calculator->setServiceLocator($this->getServiceLocator());
-
         $this->startYear = 1980;
         $this->endYear = 2011;
 
@@ -38,8 +35,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         if ($filterSet) {
 
             // First get series of flatten regression lines with excluded values (if any)
-            $seriesWithExcludedQuestionnaires = $this->computeExcludedQuestionnaires($questionnaires, $part, $calculator, $filterSet);
-            $seriesWithExcludedFilters = $this->computeExcludedFilters($questionnaires, $part, $calculator, $filterSet);
+            $seriesWithExcludedQuestionnaires = $this->computeExcludedQuestionnaires($questionnaires, $part);
+            $seriesWithExcludedFilters = $this->computeExcludedFilters($questionnaires, $part);
 
             // If the filterSet is a copy of an original FilterSet, then we also display the original (with light colors)
             if ($filterSet->getOriginalFilterSet()) {
