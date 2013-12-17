@@ -43,6 +43,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 return parseInt(id);
             });
 
+
             // Update URL when value changes
             if (!$route.current.$$route.reloadOnSearch || name == 'id') {
                 $scope.$watch($attrs.ngModel, function(o) {
@@ -131,9 +132,8 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                         var selectedItems = _.filter(items, function(item) {
                             return _.contains(idsFromUrl, item.id);
                         });
-
                         // If we are not multiple, we need to return an object, not an array of objects
-                        if (!$attrs.multiple) {
+                        if (_.isUndefined($attrs.multiple)) {
                             selectedItems = _.first(selectedItems);
                         }
 
