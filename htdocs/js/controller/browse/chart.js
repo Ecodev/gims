@@ -57,7 +57,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         {
             angular.forEach(data, function (filter)
             {
-                $scope.cache(parameters.filter, parameters.questionnaire, filter, null);
+                $scope.cache(parameters.filter, parameters.questionnaire, filter, null, false, true);
             });
             $scope.isLoading = false;
         });
@@ -402,16 +402,16 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             }
             if (!$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId]) {
                 $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId] = {id: highFilterId + ':' + questionnaireId};
-                if (ignored) {
-                    $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].ignored = ignored;
-                }
-                if (questionnaireName) {
-                    $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].name = questionnaireName;
-                } else if (!questionnaireName && loadName) {
-                    Restangular.one('questionnaire', questionnaireId).get({fields: 'survey'}).then(function (questionnaire){
-                        $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].name = questionnaire.survey.code;
-                    });
-                }
+            }
+            if (ignored) {
+                $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].ignored = ignored;
+            }
+            if (questionnaireName) {
+                $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].name = questionnaireName;
+            } else if (!questionnaireName && loadName) {
+                Restangular.one('questionnaire', questionnaireId).get({fields: 'survey'}).then(function (questionnaire){
+                    $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].name = questionnaire.survey.code;
+                });
             }
         }
     }
