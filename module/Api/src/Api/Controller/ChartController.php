@@ -35,8 +35,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         if ($filterSet) {
 
             // First get series of flatten regression lines with excluded values (if any)
-            $seriesWithExcludedQuestionnaires = $this->computeExcludedQuestionnaires($questionnaires, $part);
-            $seriesWithExcludedFilters = $this->computeExcludedFilters($questionnaires, $part);
+            $seriesWithExcludedElements = $this->computeExcludedElements($questionnaires, $part);
 
             // If the filterSet is a copy of an original FilterSet, then we also display the original (with light colors)
             if ($filterSet->getOriginalFilterSet()) {
@@ -52,7 +51,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
 
             // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
-            $alternativeSeries = array_merge($seriesWithExcludedQuestionnaires, $seriesWithExcludedFilters, $seriesWithOriginal);
+            $alternativeSeries = array_merge($seriesWithExcludedElements, $seriesWithOriginal);
             $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, $excludedFilters, $alternativeSeries ? $this->lightColors : $this->colors, $alternativeSeries ? 'ShortDash' : null);
 
             $series = array_merge($normalSeries, $alternativeSeries);
@@ -146,24 +145,37 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     }
 
     /**
-     * Returns all series for excluded questionnaires
+     * Returns all series for excluded questionnaires AND filters at the same time
      * @param array $questionnaires
      * @param \Application\Model\Part $part
      * @return array
      */
-    protected function computeExcludedQuestionnaires(array $questionnaires, Part $part)
+    protected function computeExcludedElements(array $questionnaires, Part $part)
     {
-        $excludedQuestionnairesByFilter = array();
+        // init excluded questionnaires array
+        $excludedElementsByFilter = array();
         foreach ($this->excludedQuestionnaires as $r) {
             list($filterId, $questionnaireId) = explode(':', $r);
-            if (!array_key_exists($filterId, $excludedQuestionnairesByFilter))
-                $excludedQuestionnairesByFilter[$filterId] = array();
-            $excludedQuestionnairesByFilter[$filterId][] = $questionnaireId;
+            if (!array_key_exists($filterId, $excludedElementsByFilter))
+                $excludedElementsByFilter[$filterId] = array('questionnaires' => array(),'filtres' => array());
+            $excludedElementsByFilter[$filterId]['questionnaires'][] = $questionnaireId;
         }
 
-        // If there are excluded questionnaire, compute an additional regression line for each filter they concern
+        // init excludes filters array
+        $params = $this->params()->fromQuery('excludedFilters');
+        if (!$params) {
+            return array();
+        }
+        $params = explode(',', $params);
+        foreach ($params as $r) {
+            list($highFilterId, $filterId) = explode(':', $r);
+            if (!array_key_exists($highFilterId, $excludedElementsByFilter))
+                $excludedElementsByFilter[$highFilterId] = array('questionnaires' => array(),'filtres' => array());
+            $excludedElementsByFilter[$highFilterId]['filters'][] = $filterId;
+        }
+
         $series = array();
-        foreach ($excludedQuestionnairesByFilter as $filterId => $excludedQuestionnaires) {
+        foreach ($excludedElementsByFilter as $filterId => $excludedElement) {
 
             $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
             $filterSetSingle = new \Application\Model\FilterSet();
@@ -171,54 +183,20 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
             $questionnairesNotExcluded = array();
             foreach ($questionnaires as $questionnaire) {
-                if (!in_array($questionnaire->getId(), $excludedQuestionnaires)) {
+                if (!in_array($questionnaire->getId(), $excludedElement['questionnaires'])) {
                     $questionnairesNotExcluded[] = $questionnaire;
                 }
             }
 
-            $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotExcluded, $part, array(), $this->colors, null, ' (ignored questionnaires)');
+            $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotExcluded, $part, $excludedElement['filters'], $this->colors, null, ' (ignored filters)');
             $series = array_merge($series, $mySeries);
         }
 
         return $series;
+
     }
 
-    /**
-     * Returns all series for excluded filters
-     * @param array $questionnaires
-     * @param \Application\Model\Part $part
-     * @return array
-     */
-    protected function computeExcludedFilters(array $questionnaires, Part $part)
-    {
-        $params = $this->params()->fromQuery('excludedFilters');
-        if (!$params) {
-            return array();
-        }
 
-        $params = explode(',', $params);
-        $excludedFiltersByHighFilters = array();
-        foreach ($params as $r) {
-            list($highFilterId, $filterId) = explode(':', $r);
-            if (!array_key_exists($highFilterId, $excludedFiltersByHighFilters))
-                $excludedFiltersByHighFilters[$highFilterId] = array();
-            $excludedFiltersByHighFilters[$highFilterId][] = $filterId;
-        }
-
-        // If there are excluded filters, compute an additional regression line for each filter they concern
-        $series = array();
-        foreach ($excludedFiltersByHighFilters as $highFilterId => $excludedFilters) {
-
-            $highFilter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($highFilterId);
-            $filterSetSingle = new \Application\Model\FilterSet();
-            $filterSetSingle->addFilter($highFilter);
-
-            $mySeries = $this->getSeries($filterSetSingle, $questionnaires, $part, $excludedFilters, $this->colors, null, ' (ignored filters)');
-            $series = array_merge($series, $mySeries);
-        }
-
-        return $series;
-    }
 
     /**
      * Get line and scatter series for the given filterSet and questionnaires
