@@ -138,7 +138,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             angular.forEach(excludedQuestionnaires, function (excludedQuestionnaire)
             {
                 var ignoredElements = excludedQuestionnaire.split(':');
-                $scope.cache(ignoredElements[0], ignoredElements[1], null, null, true);
+                $scope.cache(ignoredElements[0], ignoredElements[1], null, null, true, true);
             });
         }
 
@@ -153,12 +153,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
 
             // once ignored filters have been cached, go take all other filter for each high filter to retrieve name and position for display
             $scope.isLoading = true;
-            Restangular.one('filterset', $scope.filterSet.id).get({fields: 'filters.officialChildren,filters.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren'}).then(function (data)
-            {
-                angular.forEach(data.filters, function (hFilter)
-                {
-                    angular.forEach(hFilter.officialChildren, function (filter)
-                    {
+            Restangular.one('filterset', $scope.filterSet.id).get({fields: 'filters.officialChildren,filters.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren'}).then(function (data){
+                angular.forEach(data.filters, function (hFilter){
+                    angular.forEach(hFilter.officialChildren, function (filter){
                         $scope.cacheFilters(hFilter.id, filter, 0);
                     });
                 });
@@ -351,7 +348,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
      * @param ignored
      * @returns current cached filterSet object (containing the list of the highfilters on chart);
      */
-    $scope.cache = function (highFilterId, questionnaireId, filter, questionnaireName, ignored)
+    $scope.cache = function (highFilterId, questionnaireId, filter, questionnaireName, ignored, loadName)
     {
         if (!$scope.country || !$scope.part || !$scope.filterSet) {
             return [];
@@ -362,7 +359,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         // initiates high filter index and retrieves name for display in panel
         if (highFilterId) {
             $scope.initiateHighFilterCache(highFilterId);
-            $scope.initiateQuestionnaireCache(highFilterId, questionnaireId, questionnaireName, ignored);
+            $scope.initiateQuestionnaireCache(highFilterId, questionnaireId, questionnaireName, ignored, loadName);
             $scope.initiateQuestionnaireFilterCache(highFilterId, questionnaireId, filter, ignored);
 
         }
@@ -397,7 +394,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         }
     }
 
-    $scope.initiateQuestionnaireCache = function (highFilterId, questionnaireId, questionnaireName, ignored)
+    $scope.initiateQuestionnaireCache = function (highFilterId, questionnaireId, questionnaireName, ignored, loadName)
     {
         if (questionnaireId) {
             if (!$scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires) {
@@ -410,7 +407,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                 }
                 if (questionnaireName) {
                     $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].name = questionnaireName;
-                } else {
+                } else if (!questionnaireName && loadName) {
                     Restangular.one('questionnaire', questionnaireId).get({fields: 'survey'}).then(function (questionnaire){
                         $scope.cachedElements[$scope.country.id][$scope.part.id][$scope.filterSet.id][highFilterId].questionnaires[questionnaireId].name = questionnaire.survey.code;
                     });

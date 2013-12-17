@@ -79,7 +79,7 @@
                                 <th colspan='3' >Questionnaires <span class='btn-link' style='margin-left:10px' ng-click="ignoreAllQuestionnairesForAllHighFilter(hFilterId, false)"><i class="fa fa-eye"> </i> Include all</span></th>
                             </tr>
                             <tr ng-repeat="questionnaire in hFilter.questionnaires" ng-show='questionnaire.ignored' ng-class="{'unselected': questionnaire.ignored}">
-                                <td style='width:5%'><div ng-click="questionnaire.ignored=!questionnaire.ignored;refreshChart()"><i ng-class="{'fa fa-eye':!filter.ignored, 'fa fa-eye-slash':filter.ignored}"></i></div></td>
+                                <td style='width:5%'><div ng-click="questionnaire.ignored=!questionnaire.ignored;refreshChart()"><i ng-class="{'fa fa-eye':!questionnaire.ignored, 'fa fa-eye-slash':questionnaire.ignored}"></i></div></td>
                                 <td >{{questionnaire.name}}</td>
                             </tr>
 
