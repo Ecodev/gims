@@ -12,26 +12,25 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
         },
         controller: function($scope, $routeParams, Restangular, Answer, $timeout) {
 
-            $scope.$watch('questions', function (questions)
+            $scope.$watch('questions', function(questions)
             {
-                if (questions.length>0 && $scope.isJmp) {
+                // Re-index answers by their parts ID, instead of natural index
+                if (questions.length > 0) {
                     angular.forEach(questions, function(question) {
-                        var newAnswers = {};
+                        var answersIndexedByPart = {};
                         angular.forEach(question.answers, function(answer) {
                             if (answer.part && answer.part.id) {
-                                if(answer.part.id==3 && $scope.isJmp)
-                                    answer.part.id = 0;
-                                newAnswers[answer.part.id] = answer;
+                                answersIndexedByPart[answer.part.id] = answer;
                             }
                         });
-                        for(var i=0; i<3; i++){
-                            if( !newAnswers[i]) newAnswers[i] = {};
+                        for (var i = 1; i < 4; i++) {
+                            if (!answersIndexedByPart[i])
+                                answersIndexedByPart[i] = {};
                         }
-                        question.answers = newAnswers;
+                        question.answers = answersIndexedByPart;
                     });
                 }
             });
-            /* */
 
             // Validate Answer method
             $scope.validateAnswer = function(column, row) {
@@ -90,10 +89,8 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
                     } else {
                         // Convention:
                         // the answerIndex == part
-                        // part with id 0 == the total part
-                        if (answerIndex > 0) {
-                            answer.part = answerIndex;
-                        }
+                        answer.part = answerIndex;
+
                         answer.question = question.id;
                         answer.questionnaire = $routeParams.id;
                         answer.$create(reloadQuestion);
@@ -123,7 +120,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
                     {field: 'name', displayName: 'Question', width: '500px'},
                     {field: 'answers.1.valuePercent', displayName: 'Urban', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate}, //, cellTemplate: 'cellTemplate.html'
                     {field: 'answers.2.valuePercent', displayName: 'Rural', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
-                    {field: 'answers.0.valuePercent', displayName: 'Total', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
+                    {field: 'answers.3.valuePercent', displayName: 'Total', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
                     {displayName: '', cellTemplate: '<i class="fa fa-loading" style="display: none" />', cellClass: 'column-loading', width: '28px'}
                 ]
             };

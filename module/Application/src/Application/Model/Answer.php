@@ -115,7 +115,7 @@ class Answer extends AbstractModel
      * @param Application\Model\Question\Choice
      * @return Answer
      */
-    public function setValueChoice(\Application\Model\Question\Choice $valueChoice)
+    public function setValueChoice(\Application\Model\Question\Choice $valueChoice = null)
     {
         $this->valueChoice = $valueChoice;
 
