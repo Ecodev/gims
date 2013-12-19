@@ -19,16 +19,6 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
         // fetch part
         $partId = $questionnaireId = $this->params()->fromQuery('part');
 
-        // fetch filter set
-        $filterSetId = $questionnaireId = $this->params()->fromQuery('filterSet');
-
-        /** @var \Application\Model\FilterSet $filterSet */
-        $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($filterSetId);
-        $excludedFilters = array();
-        foreach ($filterSet->getExcludedFilters() as $excludedFilter) {
-            $excludedFilters[] = $excludedFilter->getId();
-        }
-
         // fetch filter
         $filterId = $questionnaireId = $this->params()->fromQuery('filter');
 

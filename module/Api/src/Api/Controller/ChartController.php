@@ -15,13 +15,27 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     private $startYear;
     private $endYear;
     private $excludedQuestionnaires;
+    private $usedFilters = array();
 
     public function indexAction()
     {
         $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneById($this->params()->fromQuery('country'));
 
-        /** @var \Application\Model\FilterSet $filterSet */
-        $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
+        $filterSetsName = '';
+        $filterSets = array();
+        $filterSetsIds = explode(',', $this->params()->fromQuery('filterSet'));
+        foreach ($filterSetsIds as $filterSetId) {
+            if (!empty($filterSetId)) {
+                /* @var $filterSet \Application\Model\FilterSet */
+                $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($filterSetId);
+                $filterSetsName .= $filterSet->getName() . ', ';
+                $filterSets[] = $filterSet;
+                $hFilters = $filterSet->getFilters()->map(function($el){return $el->getId();});
+                $this->usedFilters = array_merge($this->usedFilters, $hFilters->toArray());
+            }
+        }
+        $filterSetsName = trim($filterSetsName, ", ");
+
         $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
         $excludeStr = $this->params()->fromQuery('excludedQuestionnaires');
         $this->excludedQuestionnaires = $excludeStr ? explode(',', $excludeStr) : array();
@@ -32,29 +46,44 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $this->endYear = 2011;
 
         $series = array();
-        if ($filterSet) {
+        if (count($filterSets) > 0) {
 
             // First get series of flatten regression lines with excluded values (if any)
             $seriesWithExcludedElements = $this->computeExcludedElements($questionnaires, $part);
 
-            // If the filterSet is a copy of an original FilterSet, then we also display the original (with light colors)
-            if ($filterSet->getOriginalFilterSet()) {
-                $originalFilterSet = $filterSet->getOriginalFilterSet();
-                $seriesWithOriginal = $this->getSeries($originalFilterSet, $questionnaires, $part, array(), $this->colors, null, ' (original)');
-            } else {
-                $seriesWithOriginal = array();
+            foreach($filterSets as $filterSet) {
+
+                // If the filterSet is a copy of an original FilterSet, then we also display the original (with light colors)
+                if ($filterSet->getOriginalFilterSet()) {
+                    $originalFilterSet = $filterSet->getOriginalFilterSet();
+                    $seriesWithOriginal = $this->getSeries($originalFilterSet, $questionnaires, $part, array(), $this->colors, null, ' (original)');
+                } else {
+                    $seriesWithOriginal = array();
+                }
+
+                $excludedFilters = array();
+                foreach ($filterSet->getExcludedFilters() as $excludedFilter) {
+                    $excludedFilters[] = $excludedFilter->getId();
+                }
+
+                // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
+                $alternativeSeries = array_merge($seriesWithExcludedElements, $seriesWithOriginal);
+                $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, $excludedFilters, $alternativeSeries ? $this->lightColors : $this->colors, $alternativeSeries ? 'ShortDash' : null);
+
+                // insure that series are not added twice to series list
+                foreach($newSeries = array_merge($normalSeries, $alternativeSeries) as $newSerie) {
+                    $same = false;
+                    foreach ($series as $serie) {
+                        if(count(@array_diff_assoc($serie, $newSerie)) == 0) {
+                            $same = true;
+                            break;
+                        }
+                    }
+                    if (!$same) {
+                        array_push($series, $newSerie);
+                    }
+                }
             }
-
-            $excludedFilters = array();
-            foreach ($filterSet->getExcludedFilters() as $excludedFilter) {
-                $excludedFilters[] = $excludedFilter->getId();
-            }
-
-            // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
-            $alternativeSeries = array_merge($seriesWithExcludedElements, $seriesWithOriginal);
-            $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, $excludedFilters, $alternativeSeries ? $this->lightColors : $this->colors, $alternativeSeries ? 'ShortDash' : null);
-
-            $series = array_merge($normalSeries, $alternativeSeries);
         }
 
         $chart = array(
@@ -67,7 +96,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'text' => ($country ? $country->getName() : 'Unknown country') . ' - ' . ($part ? $part->getName() : 'Unkown part'),
             ),
             'subtitle' => array(
-                'text' => 'Estimated proportion of the population for ' . ($filterSet ? $filterSet->getName() : 'Unkown filterSet'),
+                'text' => 'Estimated proportion of the population for ' . (!empty($filterSetsName) ? $filterSetsName : 'Unkown filterSet'),
             ),
             'xAxis' => array(
                 'title' => array(
@@ -152,13 +181,16 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      */
     protected function computeExcludedElements(array $questionnaires, Part $part)
     {
-        // init excluded questionnaires array
         $excludedElementsByFilter = array();
+
+        // init excluded elements array
         foreach ($this->excludedQuestionnaires as $r) {
-            list($filterId, $questionnaireId) = explode(':', $r);
-            if (!array_key_exists($filterId, $excludedElementsByFilter))
-                $excludedElementsByFilter[$filterId] = array('questionnaires' => array(),'filtres' => array());
-            $excludedElementsByFilter[$filterId]['questionnaires'][] = $questionnaireId;
+            list($hFilterId, $questionnaireId) = explode(':', $r);
+            if (in_array($hFilterId, $this->usedFilters)) {
+                if (!array_key_exists($hFilterId, $excludedElementsByFilter))
+                    $excludedElementsByFilter[$hFilterId] = array('questionnaires' => array(),'filters' => array());
+                $excludedElementsByFilter[$hFilterId]['questionnaires'][] = $questionnaireId;
+            }
         }
 
         // init excludes filters array
@@ -168,10 +200,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         }
         $params = explode(',', $params);
         foreach ($params as $r) {
-            list($highFilterId, $filterId) = explode(':', $r);
-            if (!array_key_exists($highFilterId, $excludedElementsByFilter))
-                $excludedElementsByFilter[$highFilterId] = array('questionnaires' => array(),'filtres' => array());
-            $excludedElementsByFilter[$highFilterId]['filters'][] = $filterId;
+            list($hFilterId, $filterId) = explode(':', $r);
+            if(in_array($hFilterId, $this->usedFilters)) {
+                if (!array_key_exists($hFilterId, $excludedElementsByFilter))
+                    $excludedElementsByFilter[$hFilterId] = array('questionnaires' => array(),'filters' => array());
+                $excludedElementsByFilter[$hFilterId]['filters'][] = $filterId;
+            }
         }
 
         $series = array();
@@ -188,12 +222,11 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 }
             }
 
-            $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotExcluded, $part, $excludedElement['filters'], $this->colors, null, ' (ignored filters)');
+            $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotExcluded, $part, $excludedElement['filters'], $this->colors, null, ' (ignored elements)');
             $series = array_merge($series, $mySeries);
         }
 
         return $series;
-
     }
 
 
