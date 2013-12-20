@@ -19,8 +19,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             // all subobjects of the oldObj have to be not null. If they are that means that it's the first display, so don't reset excluded elements. The other vars are already empty
             if(oldObj.country && oldObj.part && oldObj.filterSet && (newObj.country != oldObj.country || newObj.part != oldObj.part || newObj.filterSet!=oldObj.filterSet)) {
                 $scope.cachedElements = {};
-                $location.search('excludedQuestionnaires', null);
-                $location.search('excludedFilters', null);
+//                $location.search('excludedQuestionnaires', null);
+//                $location.search('excludedFilters', null);
                 $scope.pointSelected = null;
             }
             $scope.initIgnoredElementsFromUrl();
