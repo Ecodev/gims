@@ -95,4 +95,17 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
         }
     }
 
+    public function testGetColor()
+    {
+        $codes = [74,75,76,78,900];
+        $ratios = [0,85,100];
+
+        foreach ($codes as $code) {
+            foreach ($ratios as $ratio) {
+                $color1 = \Application\Utility::getColor($code, $ratio);
+                $color2 = \Application\Utility::getColor($code, $ratio);
+                $this->assertEquals($color1, $color2, 'colors are not identical');
+            }
+        }
+    }
 }

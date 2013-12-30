@@ -265,6 +265,7 @@ class JmpTest extends AbstractCalculator
                             0 => 0.09778,
                             1 => 0.095560000000001,
                         ),
+                        'id' => 15
                     ),
                     1 =>
                     array(
@@ -274,6 +275,7 @@ class JmpTest extends AbstractCalculator
                             0 => NULL,
                             1 => NULL,
                         ),
+                        'id' => 16
                     ),
                     2 =>
                     array(
@@ -283,6 +285,7 @@ class JmpTest extends AbstractCalculator
                             0 => 0.097779,
                             1 => 0.095557,
                         ),
+                        'id' => 17
                     ),
                 )),
             // No questionnaires at all, to assert that structure returned is still valid
@@ -427,6 +430,7 @@ class JmpTest extends AbstractCalculator
                             0 => NULL,
                             1 => NULL,
                         ),
+                        'id' => 15
                     ),
                     1 =>
                     array(
@@ -436,6 +440,7 @@ class JmpTest extends AbstractCalculator
                             0 => NULL,
                             1 => NULL,
                         ),
+                        'id' => 16
                     ),
                     2 =>
                     array(
@@ -445,6 +450,7 @@ class JmpTest extends AbstractCalculator
                             0 => NULL,
                             1 => NULL,
                         ),
+                        'id' => 17
                     ),
                 )),
         );
@@ -481,6 +487,7 @@ class JmpTest extends AbstractCalculator
                     0 => 0.077779999999997,
                     1 => 0.05556,
                 ),
+                'id' => 15
             ),
             1 =>
             array(
@@ -490,6 +497,7 @@ class JmpTest extends AbstractCalculator
                     0 => NULL,
                     1 => NULL,
                 ),
+                'id' => 16
             ),
             2 =>
             array(
@@ -499,6 +507,7 @@ class JmpTest extends AbstractCalculator
                     0 => 0.077778999999992,
                     1 => 0.055556999999993,
                 ),
+                'id' => 17
             ),
                 ), $res3, 'after clearing cache, result reflect new values');
     }
@@ -560,6 +569,7 @@ class JmpTest extends AbstractCalculator
                     0 => 0.001100000000001,
                     1 => 0.020880000000005,
                 ),
+                'id' => 15
             ),
             array(
                 'name' => 'unimproved',
@@ -567,6 +577,7 @@ class JmpTest extends AbstractCalculator
                     NULL,
                     NULL,
                 ),
+                'id' => 16
             ),
             array(
                 'name' => 'total',
@@ -574,6 +585,7 @@ class JmpTest extends AbstractCalculator
                     0 => 0.0011109999999945,
                     1 => 0.020888999999997,
                 ),
+                'id' => 17
             ),
                 ), $r1);
 
@@ -584,6 +596,7 @@ class JmpTest extends AbstractCalculator
                     0 => 0.1,
                     1 => 0.1,
                 ),
+                'id' => 15
             ),
             array(
                 'name' => 'unimproved',
@@ -591,6 +604,7 @@ class JmpTest extends AbstractCalculator
                     NULL,
                     NULL,
                 ),
+                'id' => 16
             ),
             array(
                 'name' => 'total',
@@ -598,6 +612,7 @@ class JmpTest extends AbstractCalculator
                     0 => 0.1,
                     1 => 0.1,
                 ),
+                'id' => 17
             ),
                 ), $r2);
 
@@ -608,6 +623,7 @@ class JmpTest extends AbstractCalculator
                     0 => 0.023923076923078,
                     1 => 0.039138461538466,
                 ),
+                'id' => 15
             ),
             array(
                 'name' => 'unimproved',
@@ -615,6 +631,7 @@ class JmpTest extends AbstractCalculator
                     NULL,
                     NULL,
                 ),
+                'id' => 16
             ),
             array(
                 'name' => 'total',
@@ -622,6 +639,7 @@ class JmpTest extends AbstractCalculator
                     0 => 0.023931538461534,
                     1 => 0.039145384615382,
                 ),
+                'id' => 17
             ),
                 ), $rt);
     }
