@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "ed0a401f6edfb5cf7e92927cfe397ca9",
+    "hash": "9f1433a8b5b36320d1687b71a84f301a",
     "packages": [
         {
             "name": "creof/doctrine2-spatial",
@@ -864,6 +864,37 @@
             "description": "Traditional FirePHPCore library for sending PHP variables to the browser.",
             "homepage": "https://github.com/firephp/firephp-core",
             "time": "2013-04-23 15:28:20"
+        },
+        {
+            "name": "mischiefcollective/colorjizz",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mikeemoo/ColorJizz-PHP.git",
+                "reference": "690811252cfe4b69b93db1fd29a43c556d82d2d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mikeemoo/ColorJizz-PHP/zipball/690811252cfe4b69b93db1fd29a43c556d82d2d3",
+                "reference": "690811252cfe4b69b93db1fd29a43c556d82d2d3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "MischiefCollective": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Classes for manipulating colors, converting to different formats and finding color harmonies",
+            "homepage": "http://mikeefranklin.co.uk:8080/job/ColorJizz-PHP/",
+            "time": "2012-10-09 07:17:51"
         },
         {
             "name": "phing/phing",
@@ -1838,7 +1869,8 @@
         "doctrine/migrations": 20,
         "creof/doctrine2-spatial": 20,
         "zendframework/zend-developer-tools": 20,
-        "phpoffice/phpexcel": 20
+        "phpoffice/phpexcel": 20,
+        "mischiefcollective/colorjizz": 20
     },
     "platform": {
         "php": ">=5.4.0",
