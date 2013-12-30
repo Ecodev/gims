@@ -5,12 +5,10 @@ namespace Api\Controller;
 use Application\View\Model\NumericJsonModel;
 use Application\Model\FilterSet;
 use Application\Model\Part;
+use Application\Utility;
 
 class ChartController extends \Application\Controller\AbstractAngularActionController
 {
-
-    private $colors = array('#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce', '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a');
-    private $lightColors = array('#d4e4f7', '#d3d3d3', '#ddf1b0', '#ffa5a5', '#b6eaf6', '#d4c3e9', '#fad1b1', '#dae5f8', '#f2bbbb', '#dae8c0');
     private $symbols = array('circle', 'diamond', 'square', 'triangle', 'triangle-down');
     private $startYear;
     private $endYear;
@@ -56,7 +54,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 // If the filterSet is a copy of an original FilterSet, then we also display the original (with light colors)
                 if ($filterSet->getOriginalFilterSet()) {
                     $originalFilterSet = $filterSet->getOriginalFilterSet();
-                    $seriesWithOriginal = $this->getSeries($originalFilterSet, $questionnaires, $part, array(), $this->colors, null, ' (original)');
+                    $seriesWithOriginal = $this->getSeries($originalFilterSet, $questionnaires, $part, array(), 100, null, ' (original)');
                 } else {
                     $seriesWithOriginal = array();
                 }
@@ -68,7 +66,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
                 // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
                 $alternativeSeries = array_merge($seriesWithExcludedElements, $seriesWithOriginal);
-                $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, $excludedFilters, $alternativeSeries ? $this->lightColors : $this->colors, $alternativeSeries ? 'ShortDash' : null);
+                $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, $excludedFilters, $alternativeSeries ? 33 :100, $alternativeSeries ? 'ShortDash' : null);
 
                 // insure that series are not added twice to series list
                 foreach($newSeries = array_merge($normalSeries, $alternativeSeries) as $newSerie) {
@@ -222,7 +220,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 }
             }
 
-            $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotExcluded, $part, $excludedElement['filters'], $this->colors, null, ' (ignored elements)');
+            $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotExcluded, $part, $excludedElement['filters'], 100, null, ' (ignored elements)');
             $series = array_merge($series, $mySeries);
         }
 
@@ -242,14 +240,14 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @param string $suffix for serie name
      * @return string
      */
-    protected function getSeries(FilterSet $filterSet, array $questionnaires, Part $part, array $excludedFilters, array $colors, $dashStyle = null, $suffix = null)
+    protected function getSeries(FilterSet $filterSet, array $questionnaires, Part $part, array $excludedFilters, $ratio, $dashStyle = null, $suffix = null)
     {
         $series = array();
         $calculator = new \Application\Service\Calculator\Jmp();
         $calculator->setServiceLocator($this->getServiceLocator());
         $lines = $calculator->computeFlattenAllYears($this->startYear, $this->endYear, $filterSet, $questionnaires, $part, $excludedFilters);
         foreach ($lines as &$serie) {
-            $serie['color'] = $colors[$this->getConstantKey($serie['name']) % count($colors)];
+            $serie['color'] = Utility::getColor($serie['id'], $ratio);
             $serie['name'] .= $suffix;
             $serie['type'] = 'line';
 
@@ -270,7 +268,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $data = $calculator->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
             $scatter = array(
                 'type' => 'scatter',
-                'color' => $colors[$this->getConstantKey($filter->getName()) % count($colors)],
+                'color' => Utility::getColor($filter->getId(), $ratio),
                 'marker' => array('symbol' => $this->symbols[$this->getConstantKey($filter->getName()) % count($this->symbols)]),
                 'name' => $filter->getName() . $suffix,
                 'allowPointSelect' => false, // because we will use our own click handler

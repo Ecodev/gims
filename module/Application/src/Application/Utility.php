@@ -2,6 +2,8 @@
 
 namespace Application;
 
+use \MischiefCollective\ColorJizz\Formats\HSV;
+
 abstract class Utility
 {
 
@@ -75,8 +77,21 @@ abstract class Utility
                     }
 
                     return $replacements[$key];
-                }, $subject);
+        }, $subject);
     }
 
+
+    public static function getColor($number, $ratio)
+    {
+        // multiply number by phi (golden number constant) to ensure the number is between 0 and 1
+        $phi = (1 + sqrt(5))/2;
+        $number = $number * $phi - floor($number * $phi);
+        $number *= 360; // tsl/hsv tint is between 0° and 360°
+
+        $hsv = new HSV($number, $ratio, 85);
+        $rgb = $hsv->toRGB();
+        $hex = $rgb->toHex();
+        return '#'.$hex;
+    }
 }
 

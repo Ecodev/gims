@@ -75,6 +75,7 @@ class Jmp extends Calculator
 
             $result[] = array(
                 'name' => $filter->getName(),
+                'id' => $filter->getId(),
                 'data' => $data,
             );
         }
