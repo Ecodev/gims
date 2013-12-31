@@ -150,7 +150,6 @@ class QuestionController extends AbstractChildRestfulController
             $this->setChoices($data['choices'], $question);
             unset($data['choices']);
         }
-
         return parent::update($id, $data);
     }
 
@@ -202,13 +201,13 @@ class QuestionController extends AbstractChildRestfulController
     protected function setChoices(array $newChoices, AbstractQuestion $question)
     {
         $i = 0;
+        $newChoicesObjects = new \Doctrine\Common\Collections\ArrayCollection();
         foreach ($newChoices as $newChoice) {
 
             // If choice is incomplete, ignore it
-            if (!isset($newChoice['name']) || !isset($newChoice['value'])) {
+            if (!isset($newChoice['name'])) {
                 continue;
             }
-
             $newChoice['sorting'] = $i;
             // if no id -> create
             if (!isset($newChoice['id'])) {
@@ -219,30 +218,13 @@ class QuestionController extends AbstractChildRestfulController
                 $choiceRepository = $this->getEntityManager()->getRepository('Application\Model\Question\Choice');
                 $choice = $choiceRepository->findOneById((int) $newChoice['id']);
             }
-            $choice->setQuestion($question);
             $this->hydrator->hydrate($newChoice, $choice);
+            $newChoicesObjects->add($choice);
             $i++;
         }
 
-        // no way to detect removed choices by looping on $newChoices
-        // its necessary to loop on $actualChoices and detect which are no more in $newChoices
-        $actualChoices = $question->getChoices();
-        if (sizeof($actualChoices) > 0) {
-            foreach ($actualChoices as $choice) {
-                $exist = false;
-                foreach ($newChoices as $newChoice) {
-                    if (@$newChoice['id'] == $choice->getId()) {
-                        $exist = true;
-                        break;
-                    }
-                }
+        $question->setChoices($newChoicesObjects);
 
-                if (!$exist) {
-                    $question->getChoices()->removeElement($choice);
-                    $this->getEntityManager()->remove($choice);
-                }
-            }
-        }
     }
 
     /**

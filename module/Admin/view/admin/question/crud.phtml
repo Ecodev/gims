@@ -130,8 +130,6 @@
         </div>
         <br/>
 
-
-
         <br/>
         <div ng-repeat="choice in question.choices" ng-show="isChoices" >
             <div ng-form name='myInnerForm' class="form-group" ng-class="{'has-error': myInnerForm.choiceName.$invalid || myInnerForm.choiceValue.$invalid}">
@@ -139,9 +137,8 @@
                 <div class='col-md-6'>
                     <input id="choiceLabel" type="text" name="choiceName" ng-model="choice.name" ng-required="isChoices"/>
                 </div>
-                <div class='col-md-1'>
-                    <select ng-required="isChoices"
-                            ng-hide='question.isMultiple'
+                <div class='col-md-1' ng-hide='question.isMultiple'>
+                    <select ng-required="isChoices && question.isMultiple==0"
                             class="input-sm col-md-12"
                             name="choiceValue"
                             ng-model="choice.value"
