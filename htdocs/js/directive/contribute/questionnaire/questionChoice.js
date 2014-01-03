@@ -3,7 +3,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function (Quest
         restrict: 'E',
         template:   "<ng-form name='row show-grid innerQuestionForm'>" +
                         "<div class='col-md-12'>"+
-                            "<table>"+
+                            "<table class='show-grid'>"+
                                 "<tr>"+
                                 "   <td class='text-center' ng-repeat='part in question.parts' ng-switch='part.name'>"+
                                 "       <div ng-switch-when='Total'>National</div>"+
@@ -23,6 +23,12 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function (Quest
                                 "       </div>"+
                                 "   </td>"+
                                 "   <td><div style='padding-top:5px'>{{choice.name}}</div></td>"+
+                                "</tr>"+
+                                "<tr ng-show='!question.isMultiple'>" +
+                                "   <td ng-repeat='part in question.parts' class='text-center'>" +
+                                "       <span class='btn btn-xs btn-danger' ng-click='index[question.id+\"-\"+part.id].valueChoice.id=null; save(question,null,part)'><i class='fa fa-trash-o'></i></span>" +
+                                "   </td>" +
+                                "   <td></td>"+
                                 "</tr>"+
                             "</table>"+
                         "   <span ng-show='question.isCompulsory' class='badge' ng-class=\"{'badge-danger':question.statusCode==1, 'badge-success':question.statusCode==3}\">Required</span>"+
@@ -48,8 +54,9 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function (Quest
 
                 var newAnswer = $scope.index[identifier];
                 newAnswer.valueChoice = choice;
-                newAnswer.valuePercent = choice.value;
-
+                if(choice) {
+                    newAnswer.valuePercent = choice.value;
+                }
 
                 // if id setted on radio button, update
                 if (newAnswer.id && !$scope.question.isMultiple) {
@@ -61,9 +68,15 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function (Quest
 
                     // if id is setted on checkbox element, that means that there already is a result and we want to remove it
                 } else if (newAnswer.id && $scope.question.isMultiple) {
-                    newAnswer.remove().then(function ()
-                    {
+                    newAnswer.remove().then(function () {
                         $scope.index[identifier] = QuestionAssistant.getEmptyChoiceAnswer(question, part, choice);
+                        $scope.saving = false;
+                        QuestionAssistant.updateQuestion(question, $scope.index, false, true);
+                    });
+
+                } else if (newAnswer.id && !$scope.question.isMultiple && !choice ) {
+                    newAnswer.remove().then(function () {
+                        $scope.index[identifier] = QuestionAssistant.getEmptyChoiceAnswer(question, part, null);
                         $scope.saving = false;
                         QuestionAssistant.updateQuestion(question, $scope.index, false, true);
                     });
@@ -80,9 +93,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function (Quest
                         QuestionAssistant.updateQuestion(question, $scope.index, false, true);
                     });
                 }
-
             }
-
 
         }
     }
