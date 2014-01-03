@@ -67,6 +67,7 @@
     "series": [
         {
             "name": "Improved + shared",
+            "id": 274,
             "data": [
                 null,
                 null,
@@ -101,11 +102,12 @@
                 85.0,
                 85.1
             ],
-            "color": "#492970",
+            "color": "#00D90A",
             "type": "line"
         },
         {
             "name": "Sewerage connections",
+            "id": 275,
             "data": [
                 null,
                 null,
@@ -140,11 +142,12 @@
                 12.1,
                 12.0
             ],
-            "color": "#f28f43",
+            "color": "#D90035",
             "type": "line"
         },
         {
             "name": "Improved",
+            "id": 276,
             "data": [
                 null,
                 null,
@@ -179,11 +182,12 @@
                 55.3,
                 55.3
             ],
-            "color": "#77a1e5",
+            "color": "#0074D9",
             "type": "line"
         },
         {
             "name": "Shared",
+            "id": 277,
             "data": [
                 null,
                 null,
@@ -218,11 +222,12 @@
                 29.8,
                 29.8
             ],
-            "color": "#c42525",
+            "color": "#B3D900",
             "type": "line"
         },
         {
             "name": "Other unimproved",
+            "id": 278,
             "data": [
                 null,
                 null,
@@ -257,11 +262,12 @@
                 13.2,
                 13.4
             ],
-            "color": "#a6c96a",
+            "color": "#BF00D9",
             "type": "line"
         },
         {
             "name": "Open defecation",
+            "id": 279,
             "data": [
                 null,
                 null,
@@ -296,12 +302,12 @@
                 1.8,
                 1.5
             ],
-            "color": "#2f7ed8",
+            "color": "#00D980",
             "type": "line"
         },
         {
             "type": "scatter",
-            "color": "#492970",
+            "color": "#00D90A",
             "marker": {
                 "symbol": "circle"
             },
@@ -431,7 +437,7 @@
         },
         {
             "type": "scatter",
-            "color": "#f28f43",
+            "color": "#D90035",
             "marker": {
                 "symbol": "diamond"
             },
@@ -533,7 +539,7 @@
         },
         {
             "type": "scatter",
-            "color": "#77a1e5",
+            "color": "#0074D9",
             "marker": {
                 "symbol": "square"
             },
@@ -565,7 +571,7 @@
         },
         {
             "type": "scatter",
-            "color": "#c42525",
+            "color": "#B3D900",
             "marker": {
                 "symbol": "triangle"
             },
@@ -597,7 +603,7 @@
         },
         {
             "type": "scatter",
-            "color": "#a6c96a",
+            "color": "#BF00D9",
             "marker": {
                 "symbol": "triangle-down"
             },
@@ -741,7 +747,7 @@
         },
         {
             "type": "scatter",
-            "color": "#2f7ed8",
+            "color": "#00D980",
             "marker": {
                 "symbol": "circle"
             },

@@ -298,6 +298,7 @@ class JmpTest extends AbstractCalculator
                             0 => NULL,
                             1 => NULL,
                         ),
+                        'id' => 15
                     ),
                     1 =>
                     array(
@@ -307,6 +308,7 @@ class JmpTest extends AbstractCalculator
                             0 => NULL,
                             1 => NULL,
                         ),
+                        'id' => 16
                     ),
                     2 =>
                     array(
@@ -316,6 +318,7 @@ class JmpTest extends AbstractCalculator
                             0 => NULL,
                             1 => NULL,
                         ),
+                        'id' => 17
                     ),
                 )),
             array(1990, 2015, true, array(
@@ -351,6 +354,7 @@ class JmpTest extends AbstractCalculator
                             24 => null,
                             25 => null,
                         ),
+                        'id' => 15
                     ),
                     1 =>
                     array(
@@ -384,6 +388,7 @@ class JmpTest extends AbstractCalculator
                             24 => NULL,
                             25 => NULL,
                         ),
+                        'id' => 16
                     ),
                     2 =>
                     array(
@@ -417,6 +422,7 @@ class JmpTest extends AbstractCalculator
                             24 => null,
                             25 => null,
                         ),
+                        'id' => 17
                     ),
                 ),
             ),

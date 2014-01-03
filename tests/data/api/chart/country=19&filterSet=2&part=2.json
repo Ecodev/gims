@@ -67,6 +67,7 @@
     "series": [
         {
             "name": "Total improved",
+            "id": 74,
             "data": [
                 null,
                 null,
@@ -101,11 +102,12 @@
                 81.9,
                 82.4
             ],
-            "color": "#2f7ed8",
+            "color": "#5800D9",
             "type": "line"
         },
         {
             "name": "Piped onto premises",
+            "id": 75,
             "data": [
                 null,
                 null,
@@ -140,11 +142,12 @@
                 0.9,
                 1.0
             ],
-            "color": "#0d233a",
+            "color": "#00D919",
             "type": "line"
         },
         {
             "name": "Surface water",
+            "id": 76,
             "data": [
                 null,
                 null,
@@ -179,11 +182,12 @@
                 1.7,
                 1.6
             ],
-            "color": "#8bbc21",
+            "color": "#D90026",
             "type": "line"
         },
         {
             "name": "Other Improved",
+            "id": 77,
             "data": [
                 null,
                 null,
@@ -218,11 +222,12 @@
                 81.0,
                 81.4
             ],
-            "color": "#910000",
+            "color": "#0066D9",
             "type": "line"
         },
         {
             "name": "Other Unimproved",
+            "id": 78,
             "data": [
                 null,
                 null,
@@ -257,12 +262,12 @@
                 16.4,
                 16.0
             ],
-            "color": "#1aadce",
+            "color": "#A5D900",
             "type": "line"
         },
         {
             "type": "scatter",
-            "color": "#2f7ed8",
+            "color": "#5800D9",
             "marker": {
                 "symbol": "circle"
             },
@@ -385,7 +390,7 @@
         },
         {
             "type": "scatter",
-            "color": "#0d233a",
+            "color": "#00D919",
             "marker": {
                 "symbol": "diamond"
             },
@@ -501,7 +506,7 @@
         },
         {
             "type": "scatter",
-            "color": "#8bbc21",
+            "color": "#D90026",
             "marker": {
                 "symbol": "square"
             },
@@ -596,7 +601,7 @@
         },
         {
             "type": "scatter",
-            "color": "#910000",
+            "color": "#0066D9",
             "marker": {
                 "symbol": "triangle"
             },
@@ -733,7 +738,7 @@
         },
         {
             "type": "scatter",
-            "color": "#1aadce",
+            "color": "#A5D900",
             "marker": {
                 "symbol": "triangle-down"
             },

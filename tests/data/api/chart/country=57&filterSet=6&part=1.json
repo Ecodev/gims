@@ -67,6 +67,7 @@
     "series": [
         {
             "name": "Improved + shared",
+            "id": 274,
             "data": [
                 100.0,
                 100.0,
@@ -101,11 +102,12 @@
                 100.0,
                 100.0
             ],
-            "color": "#492970",
+            "color": "#00D90A",
             "type": "line"
         },
         {
             "name": "Improved",
+            "id": 276,
             "data": [
                 100.0,
                 100.0,
@@ -140,12 +142,12 @@
                 100.0,
                 100.0
             ],
-            "color": "#77a1e5",
+            "color": "#0074D9",
             "type": "line"
         },
         {
             "type": "scatter",
-            "color": "#492970",
+            "color": "#00D90A",
             "marker": {
                 "symbol": "circle"
             },
@@ -191,7 +193,7 @@
         },
         {
             "type": "scatter",
-            "color": "#77a1e5",
+            "color": "#0074D9",
             "marker": {
                 "symbol": "square"
             },
