@@ -224,7 +224,6 @@ class QuestionController extends AbstractChildRestfulController
         }
 
         $question->setChoices($newChoicesObjects);
-
     }
 
     /**

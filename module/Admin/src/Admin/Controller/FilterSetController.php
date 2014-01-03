@@ -12,4 +12,8 @@ class FilterSetController extends \Application\Controller\AbstractAngularActionC
         return new ViewModel();
     }
 
+    public function crudAction()
+    {
+        return new ViewModel();
+    }
 }
