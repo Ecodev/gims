@@ -43,7 +43,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
      *
      * @ORM\Column(type="boolean", nullable=false, options={"default" = TRUE})
      */
-    private $isCompulsory = true;
+    private $isCompulsory = false;
 
     /**
      * Constructor
