@@ -61,7 +61,7 @@
                         <tr ng-repeat="filter in cachedElements[pointSelected.filter].filters track by $index"  ng-show="filter.filter.id" ng-class="{'unselected': filter.ignored}">
                             <td style='width:5%'><div ng-click="toggleFilterForAllQuestionnaires(filter)"><i ng-class="{'fa fa-eye':!filter.ignored, 'fa fa-eye-slash':filter.ignored}"></i></div></td>
                             <td style="padding-left:{{filter.filter.level}}em;">{{filter.filter.name}}</td>
-                            <td style='width:10%'>{{cachedElements[pointSelected.filter].questionnaires[pointSelected.questionnaire].filters[filter.filter.id].value | percent}} %</td>
+                            <td style='width:10%'>{{cachedElements[pointSelected.filter].questionnaires[pointSelected.questionnaire].filters[filter.filter.id].value | percent}}<span ng-show='cachedElements[pointSelected.filter].questionnaires[pointSelected.questionnaire].filters[filter.filter.id].value'>&nbsp;%</span></td>
                         </tr>
                     </table>
                 </div>
