@@ -58,17 +58,8 @@ angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function ($scope,
 
 
 
-
-
-
-
-
-
-
-
-
 /**
- * Admin Survey Controller
+ * Admin filterset Controller
  */
 angular.module('myApp').controller('Admin/FilterSetCtrl', function ($scope, $location, Modal, Restangular) {
     "use strict";
@@ -91,8 +82,10 @@ angular.module('myApp').controller('Admin/FilterSetCtrl', function ($scope, $loc
         columnDefs: [
             {field: 'name', displayName: 'Name'},
             {displayName: '', width: '70px', cellTemplate: '' +
-                '<a class="btn btn-default btn-xs" href="/admin/filter-set/edit/{{row.entity.id}}"><i class="fa fa-pencil fa-lg"></i></a>'+
-                '<button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'
+                '<div class="btn-group">'+
+                '   <a class="btn btn-default btn-xs" href="/admin/filter-set/edit/{{row.entity.id}}"><i class="fa fa-pencil fa-lg"></i></a>'+
+                '   <button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'+
+                '</div>'
             }
         ]
     };
@@ -102,8 +95,8 @@ angular.module('myApp').controller('Admin/FilterSetCtrl', function ($scope, $loc
         Modal.confirmDelete(row.entity, {objects: $scope.filterSets, label: row.entity.code, returnUrl: '/admin/filter-set'});
     };
 
-//    $scope.edit = function (row) {
-//        $location.path('/admin/survey/edit/' + row.entity.id);
-//    };
+    $scope.edit = function (row) {
+        $location.path('/admin/filter-set/edit/' + row.entity.id);
+    };
 
 });
