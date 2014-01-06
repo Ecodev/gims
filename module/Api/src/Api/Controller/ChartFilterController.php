@@ -16,28 +16,28 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
         $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
         $questionnaire = $questionnaireRepository->findOneById($questionnaireId);
 
-        // fetch part
-        $partId = $questionnaireId = $this->params()->fromQuery('part');
-
-        // fetch filter
-        $filterId = $questionnaireId = $this->params()->fromQuery('filter');
-
-        /** @var \Application\Repository\FilterRepository $filterRepository */
-        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
-
-        /** @var \Application\Model\Filter $filter */
-        $filter = $filterRepository->findOneById($filterId);
-
-        // Get official filter
-        $filters = array();
-        /** @var \Application\Model\Filter $_filter */
-        foreach ($filter->getChildren() as $_filter) {
-            if ($_filter->isOfficial()) {
-                $filters[] = $_filter;
-            }
-        }
-
         if ($questionnaire) {
+
+            // fetch part
+            $partId = $questionnaireId = $this->params()->fromQuery('part');
+
+            // fetch filter
+            $filterId = $questionnaireId = $this->params()->fromQuery('filter');
+
+            /** @var \Application\Repository\FilterRepository $filterRepository */
+            $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
+
+            /** @var \Application\Model\Filter $filter */
+            $filter = $filterRepository->findOneById($filterId);
+
+            // Get official filter
+            $filters = array();
+            /** @var \Application\Model\Filter $_filter */
+            foreach ($filter->getChildren() as $_filter) {
+                if ($_filter->isOfficial()) {
+                    $filters[] = $_filter;
+                }
+            }
 
             // Fetch part
             $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($partId);
@@ -50,11 +50,12 @@ class ChartFilterController extends \Application\Controller\AbstractAngularActio
             foreach ($filters as $filter) {
                 $result = array_merge($result, $tableController->computeWithChildren($questionnaire, $filter,  array($part)));
             }
+
+            return new NumericJsonModel($result);
+
         } else {
             $this->getResponse()->setStatusCode(404);
             return new NumericJsonModel(array('message' => 'questionnaire not found'));
         }
-
-        return new NumericJsonModel($result);
     }
 }
