@@ -1,0 +1,60 @@
+<div class="container">
+
+    <h2>
+        <ul class="breadcrumb">
+            <li><a href="/admin/filter">Filters</a></li>
+            <li class="active">{{filter.name}}</li>
+        </ul>
+    </h2>
+
+    <form novalidate name="myForm" class="form-horizontal">
+
+        <?php echo $this->crudButtons('question'); ?>
+
+        <br/><br/>
+
+        <div class="form-group"  ng-class="{'has-error': myForm.name.$invalid}">
+            <label class="control-label col-md-2" for="filter.name">Label</label>
+            <div class="col-md-6">
+                <input type="text" name="name" ng-model="filter.name" required/>
+            </div>
+            <div class="col-md-2">
+                <span ng-show="myForm.name.$error.required" class="help-block">Required</span>
+            </div>
+        </div>
+
+        <div class="form-group" ng-hide="isChapter" ng-class="{'has-error': myForm.filter.$invalid}">
+            <label class="control-label col-md-2"  for="filters">Parents</label>
+            <div class="col-md-6">
+                <gims-select    name='filter'
+                                api="filter"
+                                model="filter.parents"
+                                placeholder="Select parents"
+                                style="width: 100%"
+                                multiple >
+                </gims-select>
+            </div>
+            <div class='col-md-1'>
+                <span ng-show="myForm.filter.$error.required" class="col-md-1 help-block">Required</span>
+            </div>
+        </div>
+
+
+        <div class="form-group" ng-hide="isChapter" ng-class="{'has-error': myForm.filter.$invalid}">
+            <label class="control-label col-md-2"  for="filters">Children</label>
+            <div class="col-md-6">
+                <gims-select    name='filter'
+                                api="filter"
+                                model="filter.children"
+                                placeholder="Select children"
+                                style="width: 100%"
+                                multiple >
+                </gims-select>
+            </div>
+            <div class='col-md-1'>
+                <span ng-show="myForm.filter.$error.required" class="col-md-1 help-block">Required</span>
+            </div>
+        </div>
+
+    </form>
+</div>

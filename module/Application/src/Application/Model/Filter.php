@@ -240,6 +240,26 @@ class Filter extends AbstractModel
     }
 
     /**
+     * Set new filters, replacing entirely existing children
+     * @param \Doctrine\Common\Collections\ArrayCollection $children
+     * @return $this
+     */
+    public function setChildren(\Doctrine\Common\Collections\ArrayCollection $children)
+    {
+        foreach ($this->getChildren() as $child) {
+            $child->getParents()->removeElement($this);
+        }
+
+        $this->getChildren()->clear();
+
+        foreach ($children as $child) {
+            $this->addChild($child);
+        }
+
+        return $this;
+    }
+
+    /**
      * Get parents
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
@@ -257,6 +277,26 @@ class Filter extends AbstractModel
     protected function parentAdded(Filter $parent)
     {
         $this->getParents()->add($parent);
+
+        return $this;
+    }
+
+    /**
+     * Set new filters, replacing entirely existing parents
+     * @param \Doctrine\Common\Collections\ArrayCollection $parents
+     * @return $this
+     */
+    public function setParents(\Doctrine\Common\Collections\ArrayCollection $parents)
+    {
+        foreach ($this->getParents() as $parent) {
+            $parent->getChildren()->removeElement($this);
+        }
+
+        $this->getParents()->clear();
+
+        foreach ($parents as $parent) {
+            $parent->addChild($this);
+        }
 
         return $this;
     }

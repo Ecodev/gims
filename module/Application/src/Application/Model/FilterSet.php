@@ -134,13 +134,13 @@ class FilterSet extends AbstractModel
     }
 
     /**
-     * Set new filters, replacing entirely existing choices
+     * Set new filters, replacing entirely existing filters
      * @param \Doctrine\Common\Collections\ArrayCollection $filters
      * @return $this
      */
     public function setFilters(\Doctrine\Common\Collections\ArrayCollection $filters)
     {
-        $this->filters->clear();
+        $this->getChildren()->clear();
 
         // Clean up the collection from old choices
         foreach ($filters as $filter) {

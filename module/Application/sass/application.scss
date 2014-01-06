@@ -49,6 +49,10 @@ html {
     @extend .fa-tags;
 }
 
+.fa-filters {
+    @extend .fa-tag;
+}
+
 .fa-questionnaire {
     @extend .fa-file;
 }
