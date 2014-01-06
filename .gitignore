@@ -13,3 +13,4 @@ reset.sh
 .~lock.*
 *.uml~
 .idea
+data/backup
