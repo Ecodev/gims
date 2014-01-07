@@ -15,7 +15,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
             $scope.$watch('questions', function(questions)
             {
                 // Re-index answers by their parts ID, instead of natural index
-                if (questions.length > 0) {
+                if (questions.length > 0 && $scope.isJmp) {
                     angular.forEach(questions, function(question) {
                         var answersIndexedByPart = {};
                         angular.forEach(question.answers, function(answer) {

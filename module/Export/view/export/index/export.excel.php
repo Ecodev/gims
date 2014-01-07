@@ -72,7 +72,8 @@ function insertChoices($question, $col,  &$row, $workbook, $questionnaire)
     if (isset($question['isMultiple']) && $question['isMultiple']) {
         foreach ($question['choices'] as $choice) {
             $row++;
-            $workbook->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $choice['name']);
+            $workbook->getActiveSheet()->setCellValueByColumnAndRow(CHOICES-1, $row, $choice['id']);
+            $workbook->getActiveSheet()->setCellValueByColumnAndRow(CHOICES, $row, $choice['name']);
             insertParts($question, $col, $row, $workbook, $questionnaire, $choice);
         }
     } else {

@@ -155,10 +155,8 @@ angular.module('myApp.services').factory('QuestionAssistant', function ()
             } else {
                 for (var key in question.answers) {
                     var testedAnswer = question.answers[key];
-
                     if (testedAnswer.part && testedAnswer.part.id == part.id) {
                         if (!question.isMultiple) {
-
                             return testedAnswer;
                         } else if (question.isMultiple && testedAnswer.valueChoice.id == choice.id) {
                             testedAnswer.isCheckboxChecked = true;
@@ -260,7 +258,9 @@ angular.module('myApp.services').factory('QuestionAssistant', function ()
                     isCheckboxChecked: null
                 }
                 if (choice) {
-                    answer.valueChoice = choice;
+                    answer.valueChoice = {};
+                    answer.valueChoice.id = choice.id;
+                    answer.valueChoice.value = choice.value;
                 }
                 return answer;
             }

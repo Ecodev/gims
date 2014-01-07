@@ -53,23 +53,15 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function (Quest
                 }
 
                 var newAnswer = $scope.index[identifier];
-                newAnswer.valueChoice = choice;
                 if(choice) {
+                    newAnswer.valueChoice.id = choice.id;
+                    newAnswer.valueChoice.value = choice.value;
                     newAnswer.valuePercent = choice.value;
                 }
 
                 // if id setted on radio button, update
-                if (newAnswer.id && !$scope.question.isMultiple) {
-                    newAnswer.put().then(function ()
-                    {
-                        $scope.saving = false;
-                        QuestionAssistant.updateQuestion(question, $scope.index, false, true);
-                    });
-
-                    // if id is setted on checkbox element, that means that there already is a result and we want to remove it
-                } else if (newAnswer.id && $scope.question.isMultiple) {
-                    newAnswer.remove().then(function () {
-                        $scope.index[identifier] = QuestionAssistant.getEmptyChoiceAnswer(question, part, choice);
+                if (newAnswer.id && !$scope.question.isMultiple && choice) {
+                    newAnswer.put().then(function () {
                         $scope.saving = false;
                         QuestionAssistant.updateQuestion(question, $scope.index, false, true);
                     });
@@ -81,7 +73,15 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function (Quest
                         QuestionAssistant.updateQuestion(question, $scope.index, false, true);
                     });
 
-                    // if don't exists -> create
+                // if id is setted on checkbox element, that means that there already is a result and we want to remove it
+                } else if (newAnswer.id && $scope.question.isMultiple) {
+                    newAnswer.remove().then(function () {
+                        $scope.index[identifier] = QuestionAssistant.getEmptyChoiceAnswer(question, part, choice);
+                        $scope.saving = false;
+                        QuestionAssistant.updateQuestion(question, $scope.index, false, true);
+                    });
+
+                // if don't exists -> create
                 } else if (!newAnswer.id) {
                     Restangular.all('answer').post(newAnswer).then(function (answer)
                     {
