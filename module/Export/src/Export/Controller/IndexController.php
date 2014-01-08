@@ -59,6 +59,7 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
             // Questionnaires organisation
             $askedQuestionnaires = explode(',', trim($this->params()->fromQuery('questionnaires'), ','));
             $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getAllWithPermission('read', 'survey', $survey);
+            usort($questionnaires, function($a,$b){return strcmp($a->getName(), $b->getName());});
             $questionnaireList = array();
             if (count($askedQuestionnaires) > 1 || (count($askedQuestionnaires) == 1 && ($askedQuestionnaires[0]) > 0) ) {
                 foreach ($questionnaires as $questionnaire) {

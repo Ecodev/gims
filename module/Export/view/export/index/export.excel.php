@@ -24,7 +24,7 @@ $questionnaireCol = ANSWER;
 foreach ($questionnaires as $questionnaire) {
     $row = 2;
 
-    $workbook->getActiveSheet()->setCellValueByColumnAndRow($questionnaireCol, $row-1, $questionnaire->getGeoname()->getCountry());
+    $workbook->getActiveSheet()->setCellValueByColumnAndRow($questionnaireCol, $row-1, $questionnaire->getGeoname()->getCountry()->getIso3());
     $workbook->getActiveSheet()->setCellValueByColumnAndRow($questionnaireCol, $row, $questionnaire->getGeoname()->getName());
 
     foreach ($questions as $question) {
