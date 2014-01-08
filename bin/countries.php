@@ -33,7 +33,7 @@ return array(
     array(
         'id' => 15,
         'iso3' => 'ALA',
-        'name' => 'Aland Islands',
+        'name' => 'Åland Islands',
         'path' => '',
     ),
     array(
@@ -183,13 +183,13 @@ return array(
     array(
         'id' => 29,
         'iso3' => 'BOL',
-        'name' => 'Bolivia',
+        'name' => 'Bolivia (Plurinational State of)',
         'path' => 'data/cache/country_data/bolivia_13.xlsm',
     ),
     array(
         'id' => 30,
         'iso3' => 'BES',
-        'name' => 'Bonaire, Saint Eustatius and Saba ',
+        'name' => 'Bonaire, Saint Eustatius and Saba',
         'path' => '',
     ),
     array(
@@ -231,8 +231,13 @@ return array(
     array(
         'id' => 28,
         'iso3' => 'BRN',
+<<<<<<< HEAD
         'name' => 'Brunei',
         'path' => 'data/cache/country_data/Brunei_darussalam_13.xlsm',
+=======
+        'name' => 'Brunei Darussalam',
+        'path' => 'data/cache/country_data/Brunei_darussalam_12.xlsm',
+>>>>>>> Update country names with WHO terminology #2465
     ),
     array(
         'id' => 22,
@@ -273,7 +278,7 @@ return array(
     array(
         'id' => 52,
         'iso3' => 'CPV',
-        'name' => 'Cape Verde',
+        'name' => 'Cabo Verde',
         'path' => 'data/cache/country_data/Cape_Verde_13.xlsm',
     ),
     array(
@@ -357,7 +362,7 @@ return array(
     array(
         'id' => 53,
         'iso3' => 'CUW',
-        'name' => 'Curacao',
+        'name' => 'Curaçao',
         'path' => '',
     ),
     array(
@@ -405,7 +410,7 @@ return array(
     array(
         'id' => 222,
         'iso3' => 'TLS',
-        'name' => 'East Timor',
+        'name' => 'Timor-Leste',
         'path' => 'data/cache/country_data/Timor_leste_Dem_rep_of_13.xlsm',
     ),
     array(
@@ -453,13 +458,13 @@ return array(
     array(
         'id' => 72,
         'iso3' => 'FLK',
-        'name' => 'Falkland Islands',
+        'name' => 'Falkland Islands (Malvinas)',
         'path' => 'data/cache/country_data/falkland_islands_13.xlsm',
     ),
     array(
         'id' => 74,
         'iso3' => 'FRO',
-        'name' => 'Faroe Islands',
+        'name' => 'Faeroe Islands',
         'path' => 'data/cache/country_data/Faeroe_islands_13.xlsm',
     ),
     array(
@@ -615,7 +620,7 @@ return array(
     array(
         'id' => 95,
         'iso3' => 'HKG',
-        'name' => 'Hong Kong',
+        'name' => 'China, Hong Kong SAR',
         'path' => 'data/cache/country_data/China_hong_kong_13.xlsm',
     ),
     array(
@@ -645,7 +650,7 @@ return array(
     array(
         'id' => 108,
         'iso3' => 'IRN',
-        'name' => 'Iran',
+        'name' => 'Iran (Islamic Republic of)',
         'path' => 'data/cache/country_data/Iran_islamic_rep_of_13.xlsm',
     ),
     array(
@@ -681,7 +686,7 @@ return array(
     array(
         'id' => 44,
         'iso3' => 'CIV',
-        'name' => 'Ivory Coast',
+        'name' => 'Côte d\'Ivoire',
         'path' => 'data/cache/country_data/Cote_d_Ivoire_13.xlsm',
     ),
     array(
@@ -747,7 +752,7 @@ return array(
     array(
         'id' => 127,
         'iso3' => 'LAO',
-        'name' => 'Laos',
+        'name' => 'Lao People\'s Democratic Republic',
         'path' => 'data/cache/country_data/Lao_people_dem_rep_13.xlsm',
     ),
     array(
@@ -777,7 +782,7 @@ return array(
     array(
         'id' => 137,
         'iso3' => 'LBY',
-        'name' => 'Libya',
+        'name' => 'Libyan Arab Jamahiriya',
         'path' => 'data/cache/country_data/Libyan_arab_jamahiriya_13.xlsm',
     ),
     array(
@@ -801,13 +806,13 @@ return array(
     array(
         'id' => 149,
         'iso3' => 'MAC',
-        'name' => 'Macao',
+        'name' => 'China, Macao SAR',
         'path' => 'data/cache/country_data/Macau_13.xlsm',
     ),
     array(
         'id' => 145,
         'iso3' => 'MKD',
-        'name' => 'Macedonia',
+        'name' => 'TFYR Macedonia',
         'path' => 'data/cache/country_data/Macedonia_TFYR_13.xlsm',
     ),
     array(
@@ -885,13 +890,13 @@ return array(
     array(
         'id' => 73,
         'iso3' => 'FSM',
-        'name' => 'Micronesia',
+        'name' => 'Micronesia (Fed. States of)',
         'path' => 'data/cache/country_data/Micronesia_fed_states_of_13.xlsm',
     ),
     array(
         'id' => 140,
         'iso3' => 'MDA',
-        'name' => 'Moldova',
+        'name' => 'Republic of Moldova',
         'path' => 'data/cache/country_data/Moldova_rep_of_13.xlsm',
     ),
     array(
@@ -1017,7 +1022,7 @@ return array(
     array(
         'id' => 121,
         'iso3' => 'PRK',
-        'name' => 'North Korea',
+        'name' => 'Dem. People\'s Republic of Korea',
         'path' => 'data/cache/country_data/Korea_dem_peoples_rep_of_13.xlsm',
     ),
     array(
@@ -1047,7 +1052,7 @@ return array(
     array(
         'id' => 184,
         'iso3' => 'PSE',
-        'name' => 'Palestinian Territory',
+        'name' => 'West Bank and Gaza Strip',
         'path' => 'data/cache/country_data/Palestine_13.xlsm',
     ),
     array(
@@ -1113,13 +1118,13 @@ return array(
     array(
         'id' => 42,
         'iso3' => 'COG',
-        'name' => 'Republic of the Congo',
+        'name' => 'Congo',
         'path' => 'data/cache/country_data/Congo_13.xlsm',
     ),
     array(
         'id' => 189,
         'iso3' => 'REU',
-        'name' => 'Reunion',
+        'name' => 'Réunion',
         'path' => 'data/cache/country_data/Reunion_13.xlsm',
     ),
     array(
@@ -1131,7 +1136,7 @@ return array(
     array(
         'id' => 192,
         'iso3' => 'RUS',
-        'name' => 'Russia',
+        'name' => 'Russian Federation',
         'path' => 'data/cache/country_data/Russian_fed_13.xlsm',
     ),
     array(
@@ -1143,7 +1148,7 @@ return array(
     array(
         'id' => 26,
         'iso3' => 'BLM',
-        'name' => 'Saint Barthelemy',
+        'name' => 'Saint-Barthélemy',
         'path' => '',
     ),
     array(
@@ -1167,7 +1172,7 @@ return array(
     array(
         'id' => 142,
         'iso3' => 'MAF',
-        'name' => 'Saint Martin',
+        'name' => 'Saint-Martin (French part)',
         'path' => '',
     ),
     array(
@@ -1239,7 +1244,7 @@ return array(
     array(
         'id' => 212,
         'iso3' => 'SXM',
-        'name' => 'Sint Maarten',
+        'name' => 'Sint Maarten (Dutch part)',
         'path' => '',
     ),
     array(
@@ -1281,7 +1286,7 @@ return array(
     array(
         'id' => 122,
         'iso3' => 'KOR',
-        'name' => 'South Korea',
+        'name' => 'Republic of Korea',
         'path' => 'data/cache/country_data/Korea_rep_of_13.xlsm',
     ),
     array(
@@ -1317,7 +1322,7 @@ return array(
     array(
         'id' => 203,
         'iso3' => 'SJM',
-        'name' => 'Svalbard and Jan Mayen',
+        'name' => 'Svalbard and Jan Mayen Islands',
         'path' => '',
     ),
     array(
@@ -1341,7 +1346,7 @@ return array(
     array(
         'id' => 213,
         'iso3' => 'SYR',
-        'name' => 'Syria',
+        'name' => 'Syrian Arab Republic',
         'path' => 'data/cache/country_data/Syrian_arab_rep_13.xlsm',
     ),
     array(
@@ -1449,7 +1454,7 @@ return array(
     array(
         'id' => 234,
         'iso3' => 'USA',
-        'name' => 'United States',
+        'name' => 'United States of America',
         'path' => 'data/cache/country_data/America_united_states_of_13.xlsm',
     ),
     array(
@@ -1467,7 +1472,7 @@ return array(
     array(
         'id' => 241,
         'iso3' => 'VIR',
-        'name' => 'U.S. Virgin Islands',
+        'name' => 'United States Virgin Islands',
         'path' => 'data/cache/country_data/united_states_virgin_islands_13.xlsm',
     ),
     array(
@@ -1485,25 +1490,25 @@ return array(
     array(
         'id' => 237,
         'iso3' => 'VAT',
-        'name' => 'Vatican',
+        'name' => 'Holy See',
         'path' => 'data/cache/country_data/Holy_see_13.xlsm',
     ),
     array(
         'id' => 239,
         'iso3' => 'VEN',
-        'name' => 'Venezuela',
+        'name' => 'Venezuela (Bolivarian Republic of)',
         'path' => 'data/cache/country_data/venezuela_13.xlsm',
     ),
     array(
         'id' => 242,
         'iso3' => 'VNM',
-        'name' => 'Vietnam',
+        'name' => 'Viet Nam',
         'path' => 'data/cache/country_data/Viet_Nam_13.xlsm',
     ),
     array(
         'id' => 244,
         'iso3' => 'WLF',
-        'name' => 'Wallis and Futuna',
+        'name' => 'Wallis and Futuna Islands',
         'path' => '',
     ),
     array(
