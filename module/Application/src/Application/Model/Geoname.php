@@ -3,6 +3,7 @@
 namespace Application\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Application\Model\Country;
 
 /**
  * Geoname. Data are imported from http://www.geonames.org, but only partially for
@@ -67,7 +68,7 @@ class Geoname extends AbstractModel
      *
      * @ORM\Column(type="string", length=2, nullable=true)
      */
-    private $country;
+    private $countryCode;
 
     /**
      * @var string
@@ -154,6 +155,14 @@ class Geoname extends AbstractModel
      * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
      */
     private $filterGeonameUsages;
+
+    /**
+     * @var Country
+     *
+     * @ORM\OneToOne(targetEntity="Country", mappedBy="geoname")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $country = null;
 
     /**
      * Constructor
@@ -339,12 +348,12 @@ class Geoname extends AbstractModel
     /**
      * Set country
      *
-     * @param string $country
+     * @param string $countryCode
      * @return Geoname
      */
-    public function setCountry($country)
+    public function setCountryCode($countryCode)
     {
-        $this->country = $country;
+        $this->countryCode = $countryCode;
 
         return $this;
     }
@@ -354,9 +363,9 @@ class Geoname extends AbstractModel
      *
      * @return string
      */
-    public function getCountry()
+    public function getCountryCode()
     {
-        return $this->country;
+        return $this->countryCode;
     }
 
     /**
@@ -607,6 +616,24 @@ class Geoname extends AbstractModel
     public function filterGeonameUsageAdded(Rule\FilterGeonameUsage $usage)
     {
         $this->getFilterGeonameUsages()->add($usage);
+
+        return $this;
+    }
+
+    /**
+     * @return \Application\Model\Country
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param \Application\Model\Country $country
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
 
         return $this;
     }

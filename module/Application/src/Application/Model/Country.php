@@ -3,6 +3,7 @@
 namespace Application\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Application\Model\Geoname;
 
 /**
  * Country. Data are imported from http://www.geonames.org
@@ -135,7 +136,7 @@ class Country extends AbstractModel
     /**
      * @var Geoname
      *
-     * @ORM\ManyToOne(targetEntity="Geoname")
+     * @ORM\OneToOne(targetEntity="Geoname", inversedBy="country")
      */
     private $geoname;
 
