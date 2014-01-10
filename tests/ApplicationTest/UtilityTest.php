@@ -80,7 +80,6 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
             array(-1.99999, '-200.0'),
             array(0.255, '25.5'),
             array(0.9535, '95.4'),
-            array(0.9634999999999999, '96.4'),
             array('0.9634999999999999', '96.3'), // This is actually an edge case which gives wrong result, but we tolerate this wrong result, because fixing it would only introduce other edge cases
         );
     }
