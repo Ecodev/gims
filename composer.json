@@ -13,9 +13,10 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "ext-pgsql": "*",
-        "ext-intl": "*",
         "ext-bcmath": "*",
+        "ext-intl": "*",
+        "ext-json": "*",
+        "ext-pgsql": "*",
         "zendframework/zendframework": "2.*",
         "phing/phing": "dev-master",
         "firephp/firephp-core": "dev-master",
