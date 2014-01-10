@@ -71,11 +71,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             $computed = $calculator->computeFilter($filter->getId(), $questionnaire->getId(), $part->getId());
 
             // Round the value
-            if (!is_null($computed)) {
-                $value = \Application\Utility::bcround($computed, 3);
-            } else {
-                $value = null;
-            }
+            $value = \Application\Utility::decimalToRoundedPercent($computed);
 
             $current['values'][0][$part->getName()] = $value;
         }
@@ -138,7 +134,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                             );
                         }
 
-                        $result[$questionnaireId][$columnId] = is_null($value) ? null : \Application\Utility::bcround($value * 100, 1);
+                        $result[$questionnaireId][$columnId] = \Application\Utility::decimalToRoundedPercent($value);
                     }
                 }
             }
@@ -215,7 +211,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                         $columns[$columnId] = $columnName;
 
                         $value = $filter['data'][$year];
-                        $statsData[$columnId] = is_null($value) ? null : \Application\Utility::bcround($value * 100, 1);
+                        $statsData[$columnId] = \Application\Utility::decimalToRoundedPercent($value);
 
                         $columns[$columnId . 'a'] = $columnName . 'a';
                         $statsData[$columnId . 'a'] = is_null($value) ? null : (int) ($value * $population[$year][$partId]);
@@ -233,10 +229,11 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         );
 
         $filename = $this->params('filename');
-        if ($filename)
+        if ($filename) {
             return new ExcelModel($filename, $finalResult);
-        else
+        } else {
             return new NumericJsonModel($finalResult);
+        }
     }
 
     /**
@@ -354,8 +351,9 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $partL = null;
         if (is_numeric($part)) {
             foreach ($this->parts as $partObj) {
-                if ($partObj->getId() == $part)
+                if ($partObj->getId() == $part) {
                     $partL = substr($partObj->getName(), 0, 1);
+                }
             }
         } else {
             $partL = substr($part->getName(), 0, 1);

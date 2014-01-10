@@ -8,6 +8,22 @@ abstract class Utility
 {
 
     /**
+     * Convert a percentage expressed between 0.00-1.00 to a string representation
+     * of the percentage between 0-100 (rounded to 1 decimal)
+     * Eg: 0.9634999999999999 => '96.34'
+     * @param float|null $decimal
+     * @return string|null
+     */
+    public static function decimalToRoundedPercent($decimal)
+    {
+        if (is_null($decimal)) {
+            return null;
+        } else {
+            return bcmul(self::bcround($decimal, 3), 100, 1);
+        }
+    }
+
+    /**
      * This round a number with arbitrary precision
      *
      * Once rounded, the number *MUST NOT* be converted to float anymore.

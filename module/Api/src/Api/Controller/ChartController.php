@@ -28,7 +28,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($filterSetId);
                 $filterSetsName .= $filterSet->getName() . ', ';
                 $filterSets[] = $filterSet;
-                $hFilters = $filterSet->getFilters()->map(function($el){return $el->getId();});
+                $hFilters = $filterSet->getFilters()->map(function($el) {
+                    return $el->getId();
+                });
                 $this->usedFilters = array_merge($this->usedFilters, $hFilters->toArray());
             }
         }
@@ -49,7 +51,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             // First get series of flatten regression lines with excluded values (if any)
             $seriesWithExcludedElements = $this->computeExcludedElements($questionnaires, $part);
 
-            foreach($filterSets as $filterSet) {
+            foreach ($filterSets as $filterSet) {
 
                 // If the filterSet is a copy of an original FilterSet, then we also display the original (with light colors)
                 if ($filterSet->getOriginalFilterSet()) {
@@ -69,10 +71,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, $excludedFilters, $alternativeSeries ? 33 :100, $alternativeSeries ? 'ShortDash' : null);
 
                 // insure that series are not added twice to series list
-                foreach($newSeries = array_merge($normalSeries, $alternativeSeries) as $newSerie) {
+                foreach ($newSeries = array_merge($normalSeries, $alternativeSeries) as $newSerie) {
                     $same = false;
                     foreach ($series as $serie) {
-                        if(count(@array_diff_assoc($serie, $newSerie)) == 0) {
+                        if (count(@array_diff_assoc($serie, $newSerie)) == 0) {
                             $same = true;
                             break;
                         }
@@ -186,7 +188,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             list($hFilterId, $questionnaireId) = explode(':', $r);
             if (in_array($hFilterId, $this->usedFilters)) {
                 if (!array_key_exists($hFilterId, $excludedElementsByFilter))
-                    $excludedElementsByFilter[$hFilterId] = array('questionnaires' => array(),'filters' => array());
+                    $excludedElementsByFilter[$hFilterId] = array('questionnaires' => array(), 'filters' => array());
                 $excludedElementsByFilter[$hFilterId]['questionnaires'][] = $questionnaireId;
             }
         }
@@ -199,9 +201,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $params = explode(',', $params);
         foreach ($params as $r) {
             list($hFilterId, $filterId) = explode(':', $r);
-            if(in_array($hFilterId, $this->usedFilters)) {
+            if (in_array($hFilterId, $this->usedFilters)) {
                 if (!array_key_exists($hFilterId, $excludedElementsByFilter))
-                    $excludedElementsByFilter[$hFilterId] = array('questionnaires' => array(),'filters' => array());
+                    $excludedElementsByFilter[$hFilterId] = array('questionnaires' => array(), 'filters' => array());
                 $excludedElementsByFilter[$hFilterId]['filters'][] = $filterId;
             }
         }
@@ -226,8 +228,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
         return $series;
     }
-
-
 
     /**
      * Get line and scatter series for the given filterSet and questionnaires
@@ -256,8 +256,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
 
             foreach ($serie['data'] as &$d) {
-                if (!is_null($d))
-                    $d = \Application\Utility::bcround($d * 100, 1);
+                $d = \Application\Utility::decimalToRoundedPercent($d);
             }
             $series[] = $serie;
         }
@@ -283,7 +282,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                         'id' => $idFilter . ':' . $questionnaireId,
                         'questionnaire' => $questionnaireId,
                         'x' => $data['years'][$questionnaireId],
-                        'y' => \Application\Utility::bcround($value * 100, 1),
+                        'y' => \Application\Utility::decimalToRoundedPercent($value),
                     );
                     // select the ignored values
                     if (in_array($idFilter . ':' . $questionnaireId, $this->excludedQuestionnaires)) {

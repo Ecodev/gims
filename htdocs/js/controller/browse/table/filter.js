@@ -1,7 +1,7 @@
 
 angular.module('myApp').controller('Browse/Table/FilterCtrl', function($scope, $http, $timeout, $location) {
     'use strict';
-    
+
     $scope.showOnlyTopLevel = true;
 
     var columnDefTemplateBase = {sortable: false, field: 'filter.name', displayName: 'Filter', cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><span style="padding-left: {{row.entity.filter.level}}em;">{{row.entity.filter.name}}</span></div>'};
@@ -75,7 +75,7 @@ angular.module('myApp').controller('Browse/Table/FilterCtrl', function($scope, $
                 // retrieve the questionnaire name.
                 for (var index2 in parts) {
                     var partName = parts[index2];
-                    columnDefs.push({sortable: false, field: 'values[' + index + '].' + partName, displayName: partName + ' - ' + questionnaireName, cellFilter: 'percent'});
+                    columnDefs.push({sortable: false, field: 'values[' + index + '].' + partName, displayName: partName + ' - ' + questionnaireName});
                 }
             }
             $scope.columnDefs = columnDefs;
