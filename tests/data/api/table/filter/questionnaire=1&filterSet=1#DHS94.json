@@ -7,9 +7,9 @@
         },
         "values": [
             {
-                "Urban": 0.368,
-                "Rural": 0.005,
-                "Total": 0.046
+                "Urban": 36.8,
+                "Rural": 0.5,
+                "Total": 4.6
             }
         ]
     },
@@ -21,9 +21,9 @@
         },
         "values": [
             {
-                "Urban": 0.267,
-                "Rural": 0.003,
-                "Total": 0.033
+                "Urban": 26.7,
+                "Rural": 0.3,
+                "Total": 3.3
             }
         ]
     },
@@ -35,9 +35,9 @@
         },
         "values": [
             {
-                "Urban": 0.267,
-                "Rural": 0.003,
-                "Total": 0.033
+                "Urban": 26.7,
+                "Rural": 0.3,
+                "Total": 3.3
             }
         ]
     },
@@ -63,9 +63,9 @@
         },
         "values": [
             {
-                "Urban": 0.101,
-                "Rural": 0.002,
-                "Total": 0.013
+                "Urban": 10.1,
+                "Rural": 0.2,
+                "Total": 1.3
             }
         ]
     },
@@ -91,9 +91,9 @@
         },
         "values": [
             {
-                "Urban": 0.628,
-                "Rural": 0.954,
-                "Total": 0.917
+                "Urban": 62.8,
+                "Rural": 95.4,
+                "Total": 91.7
             }
         ]
     },
@@ -105,9 +105,9 @@
         },
         "values": [
             {
-                "Urban": 0.620,
-                "Rural": 0.910,
-                "Total": 0.877
+                "Urban": 62.0,
+                "Rural": 91.0,
+                "Total": 87.7
             }
         ]
     },
@@ -245,9 +245,9 @@
         },
         "values": [
             {
-                "Urban": 0.628,
-                "Rural": 0.954,
-                "Total": 0.917
+                "Urban": 62.8,
+                "Rural": 95.4,
+                "Total": 91.7
             }
         ]
     },
@@ -301,9 +301,9 @@
         },
         "values": [
             {
-                "Urban": 0.620,
-                "Rural": 0.910,
-                "Total": 0.877
+                "Urban": 62.0,
+                "Rural": 91.0,
+                "Total": 87.7
             }
         ]
     },
@@ -357,9 +357,9 @@
         },
         "values": [
             {
-                "Urban": 0.008,
-                "Rural": 0.044,
-                "Total": 0.040
+                "Urban": 0.8,
+                "Rural": 4.4,
+                "Total": 4.0
             }
         ]
     },
@@ -777,9 +777,9 @@
         },
         "values": [
             {
-                "Urban": 0.005,
-                "Rural": 0.039,
-                "Total": 0.035
+                "Urban": 0.5,
+                "Rural": 3.9,
+                "Total": 3.5
             }
         ]
     },
@@ -791,9 +791,9 @@
         },
         "values": [
             {
-                "Urban": 0.001,
-                "Rural": 0.008,
-                "Total": 0.007
+                "Urban": 0.1,
+                "Rural": 0.8,
+                "Total": 0.7
             }
         ]
     },
@@ -833,9 +833,9 @@
         },
         "values": [
             {
-                "Urban": 0.004,
-                "Rural": 0.031,
-                "Total": 0.028
+                "Urban": 0.4,
+                "Rural": 3.1,
+                "Total": 2.8
             }
         ]
     },
@@ -931,9 +931,9 @@
         },
         "values": [
             {
-                "Urban": 0.000,
-                "Rural": 0.001,
-                "Total": 0.001
+                "Urban": 0.0,
+                "Rural": 0.1,
+                "Total": 0.1
             }
         ]
     },
@@ -973,9 +973,9 @@
         },
         "values": [
             {
-                "Urban": 0.000,
-                "Rural": 0.001,
-                "Total": 0.001
+                "Urban": 0.0,
+                "Rural": 0.1,
+                "Total": 0.1
             }
         ]
     },
@@ -1001,9 +1001,9 @@
         },
         "values": [
             {
-                "Urban": 0.000,
-                "Rural": 0.001,
-                "Total": 0.001
+                "Urban": 0.0,
+                "Rural": 0.1,
+                "Total": 0.1
             }
         ]
     }

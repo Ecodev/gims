@@ -7,9 +7,9 @@
         },
         "values": [
             {
-                "Urban": 0.455,
-                "Rural": 0.140,
-                "Total": 0.203
+                "Urban": 45.5,
+                "Rural": 14.0,
+                "Total": 20.3
             }
         ]
     },
@@ -175,9 +175,9 @@
         },
         "values": [
             {
-                "Urban": 0.133,
-                "Rural": 0.026,
-                "Total": 0.047
+                "Urban": 13.3,
+                "Rural": 2.6,
+                "Total": 4.7
             }
         ]
     },
@@ -427,9 +427,9 @@
         },
         "values": [
             {
-                "Urban": 0.837,
-                "Rural": 0.773,
-                "Total": 0.786
+                "Urban": 83.7,
+                "Rural": 77.3,
+                "Total": 78.6
             }
         ]
     },
@@ -441,9 +441,9 @@
         },
         "values": [
             {
-                "Urban": 0.322,
-                "Rural": 0.114,
-                "Total": 0.156
+                "Urban": 32.2,
+                "Rural": 11.4,
+                "Total": 15.6
             }
         ]
     },
@@ -693,9 +693,9 @@
         },
         "values": [
             {
-                "Urban": 0.515,
-                "Rural": 0.658,
-                "Total": 0.630
+                "Urban": 51.5,
+                "Rural": 65.8,
+                "Total": 63.0
             }
         ]
     },
@@ -749,9 +749,9 @@
         },
         "values": [
             {
-                "Urban": 0.226,
-                "Rural": 0.092,
-                "Total": 0.119
+                "Urban": 22.6,
+                "Rural": 9.2,
+                "Total": 11.9
             }
         ]
     },
@@ -805,9 +805,9 @@
         },
         "values": [
             {
-                "Urban": 0.289,
-                "Rural": 0.566,
-                "Total": 0.511
+                "Urban": 28.9,
+                "Rural": 56.6,
+                "Total": 51.1
             }
         ]
     },
@@ -1127,9 +1127,9 @@
         },
         "values": [
             {
-                "Urban": 0.030,
-                "Rural": 0.202,
-                "Total": 0.167
+                "Urban": 3.0,
+                "Rural": 20.2,
+                "Total": 16.7
             }
         ]
     },
