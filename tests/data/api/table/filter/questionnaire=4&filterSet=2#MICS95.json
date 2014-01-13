@@ -1,92 +1,36 @@
 [
     {
         "filter": {
-            "id": 274,
-            "name": "Improved + shared",
+            "id": 74,
+            "name": "Total improved",
             "level": 0
         },
         "values": [
             {
-                "Urban": 82.0,
-                "Rural": 62.9,
-                "Total": 20.3
+                "Urban": 83.2,
+                "Rural": 71.2,
+                "Total": 93.5
             }
         ]
     },
     {
         "filter": {
-            "id": 190,
-            "name": "to piped sewer system",
+            "id": 2,
+            "name": "Tap water",
             "level": 1
         },
         "values": [
             {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
+                "Urban": 35.1,
+                "Rural": 0.2,
+                "Total": 3.7
             }
         ]
     },
     {
         "filter": {
-            "id": 191,
-            "name": "to septic tank",
-            "level": 1
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 192,
-            "name": "to pit",
-            "level": 1
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 193,
-            "name": "to unknown place\/ not sure\/DK",
-            "level": 1
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 233,
-            "name": "Improved latrines",
-            "level": 1
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 234,
-            "name": "Ventilated Improved Pit latrine",
+            "id": 3,
+            "name": "House connections",
             "level": 2
         },
         "values": [
@@ -99,8 +43,36 @@
     },
     {
         "filter": {
-            "id": 235,
-            "name": "Pit latrine with slab\/covered latrine",
+            "id": 4,
+            "name": "Piped water into dwelling",
+            "level": 3
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 5,
+            "name": "Piped water to yard\/plot",
+            "level": 3
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 6,
+            "name": "Public tap, standpipe",
             "level": 2
         },
         "values": [
@@ -113,8 +85,92 @@
     },
     {
         "filter": {
-            "id": 257,
-            "name": "Composting toilets",
+            "id": 7,
+            "name": "Other",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 9,
+            "name": "Protected ground water (all protected wells or springs)",
+            "level": 1
+        },
+        "values": [
+            {
+                "Urban": 64.0,
+                "Rural": 92.7,
+                "Total": 89.8
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 11,
+            "name": "Undefined protected wells or springs",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 12,
+            "name": "Private",
+            "level": 3
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 13,
+            "name": "Public",
+            "level": 3
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 14,
+            "name": "Other",
+            "level": 3
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 52,
+            "name": "Covered cistern\/tank",
             "level": 1
         },
         "values": [
@@ -127,36 +183,8 @@
     },
     {
         "filter": {
-            "id": 258,
-            "name": "Composting toilet (private)",
-            "level": 2
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 259,
-            "name": "Composting toilet (shared)",
-            "level": 2
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 260,
-            "name": "Other improved",
+            "id": 55,
+            "name": "with other improved",
             "level": 1
         },
         "values": [
@@ -169,7 +197,21 @@
     },
     {
         "filter": {
-            "id": 261,
+            "id": 65,
+            "name": "Other improved sources",
+            "level": 1
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 66,
             "name": "Other 1",
             "level": 2
         },
@@ -183,7 +225,7 @@
     },
     {
         "filter": {
-            "id": 262,
+            "id": 67,
             "name": "Other 2",
             "level": 2
         },
@@ -197,8 +239,64 @@
     },
     {
         "filter": {
-            "id": 275,
-            "name": "Sewerage connections",
+            "id": 75,
+            "name": "Piped onto premises",
+            "level": 0
+        },
+        "values": [
+            {
+                "Urban": 25.5,
+                "Rural": 0.1,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 3,
+            "name": "House connections",
+            "level": 1
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 4,
+            "name": "Piped water into dwelling",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 5,
+            "name": "Piped water to yard\/plot",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 76,
+            "name": "Surface water",
             "level": 0
         },
         "values": [
@@ -211,8 +309,8 @@
     },
     {
         "filter": {
-            "id": 269,
-            "name": "to piped sewer system",
+            "id": 57,
+            "name": "Surface water",
             "level": 1
         },
         "values": [
@@ -225,50 +323,120 @@
     },
     {
         "filter": {
-            "id": 276,
-            "name": "Improved",
+            "id": 58,
+            "name": "River",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 59,
+            "name": "Lake",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 60,
+            "name": "Dam",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 61,
+            "name": "Pond",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 62,
+            "name": "Stream",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 63,
+            "name": "Irrigation channel",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 64,
+            "name": "Other",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 77,
+            "name": "Other Improved",
             "level": 0
         },
         "values": [
             {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
+                "Urban": 64.0,
+                "Rural": 92.7,
+                "Total": 89.8
             }
         ]
     },
     {
         "filter": {
-            "id": 277,
-            "name": "Shared",
-            "level": 0
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 278,
-            "name": "Other unimproved",
-            "level": 0
-        },
-        "values": [
-            {
-                "Urban": 83.7,
-                "Rural": 77.3,
-                "Total": 78.6
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 194,
-            "name": "to elsewhere",
+            "id": 6,
+            "name": "Public tap, standpipe",
             "level": 1
         },
         "values": [
@@ -281,330 +449,92 @@
     },
     {
         "filter": {
-            "id": 214,
-            "name": "Pour flush latrines",
-            "level": 1
-        },
-        "values": [
-            {
-                "Urban": 32.2,
-                "Rural": 11.4,
-                "Total": 15.6
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 215,
-            "name": "to piped sewer system",
-            "level": 2
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 216,
-            "name": "to septic tank",
-            "level": 2
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 217,
-            "name": "to pit",
-            "level": 2
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 218,
-            "name": "to unknown place\/ not sure\/DK",
-            "level": 2
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 219,
-            "name": "to elsewhere",
-            "level": 2
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 220,
-            "name": "Private pour flush latrine",
-            "level": 2
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 221,
-            "name": "to piped sewer system",
-            "level": 3
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 222,
-            "name": "to septic tank",
-            "level": 3
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 223,
-            "name": "to pit",
-            "level": 3
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 224,
-            "name": "to unknown place\/ not sure\/DK",
-            "level": 3
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 225,
-            "name": "to elsewhere",
-            "level": 3
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 226,
-            "name": "Public\/shared pour flush latrine",
-            "level": 2
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 227,
-            "name": "to piped sewer system",
-            "level": 3
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 228,
-            "name": "to septic tank",
-            "level": 3
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 229,
-            "name": "to pit",
-            "level": 3
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 230,
-            "name": "to unknown place\/ not sure\/DK",
-            "level": 3
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 231,
-            "name": "to elsewhere",
-            "level": 3
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 236,
-            "name": "Traditional latrine",
-            "level": 1
-        },
-        "values": [
-            {
-                "Urban": 22.6,
-                "Rural": 9.2,
-                "Total": 11.9
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 237,
-            "name": "Pit latrine without slab\/open pit",
-            "level": 1
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 238,
-            "name": "Hanging toilet\/hanging latrine",
-            "level": 1
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 239,
-            "name": "Bucket latrine",
-            "level": 1
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 240,
+            "id": 7,
             "name": "Other",
             "level": 1
         },
         "values": [
             {
-                "Urban": 28.9,
-                "Rural": 56.6,
-                "Total": 51.1
+                "Urban": null,
+                "Rural": null,
+                "Total": null
             }
         ]
     },
     {
         "filter": {
-            "id": 264,
-            "name": "Other unimproved",
+            "id": 9,
+            "name": "Protected ground water (all protected wells or springs)",
+            "level": 1
+        },
+        "values": [
+            {
+                "Urban": 64.0,
+                "Rural": 92.7,
+                "Total": 89.8
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 11,
+            "name": "Undefined protected wells or springs",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 12,
+            "name": "Private",
+            "level": 3
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 13,
+            "name": "Public",
+            "level": 3
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 14,
+            "name": "Other",
+            "level": 3
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 52,
+            "name": "Covered cistern\/tank",
             "level": 1
         },
         "values": [
@@ -617,7 +547,35 @@
     },
     {
         "filter": {
-            "id": 265,
+            "id": 55,
+            "name": "with other improved",
+            "level": 1
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 65,
+            "name": "Other improved sources",
+            "level": 1
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 66,
             "name": "Other 1",
             "level": 2
         },
@@ -631,7 +589,7 @@
     },
     {
         "filter": {
-            "id": 266,
+            "id": 67,
             "name": "Other 2",
             "level": 2
         },
@@ -645,29 +603,113 @@
     },
     {
         "filter": {
-            "id": 279,
-            "name": "Open defecation",
+            "id": 78,
+            "name": "Other Unimproved",
             "level": 0
         },
         "values": [
             {
-                "Urban": 3.0,
-                "Rural": 20.2,
-                "Total": 16.7
+                "Urban": 0.9,
+                "Rural": 3.6,
+                "Total": 3.3
             }
         ]
     },
     {
         "filter": {
-            "id": 263,
-            "name": "No facility, bush, field ",
+            "id": 53,
+            "name": "Uncovered cistern\/tank",
             "level": 1
         },
         "values": [
             {
-                "Urban": 3.0,
-                "Rural": 20.2,
-                "Total": 16.7
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 56,
+            "name": "without other improved",
+            "level": 1
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 68,
+            "name": "Other non-improved",
+            "level": 1
+        },
+        "values": [
+            {
+                "Urban": 0.9,
+                "Rural": 3.6,
+                "Total": 3.3
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 69,
+            "name": "Cart with small tank\/drum",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 70,
+            "name": "Tanker truck provided",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 71,
+            "name": "Other 1",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": 0.9,
+                "Rural": 3.6,
+                "Total": 3.3
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 72,
+            "name": "Other 2",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
             }
         ]
     }

@@ -26,7 +26,7 @@ class ChartControllerTest extends AbstractController
     /**
      * @dataProvider getValidDataProvider
      */
-    public function testGetValidData($params, $expectedJson, $message, $logFile)
+    public function testGetValidDataChart($params, $expectedJson, $message, $logFile)
     {
         $this->dispatch('/api/chart?' . $params, Request::METHOD_GET);
 

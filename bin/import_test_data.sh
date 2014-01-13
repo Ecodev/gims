@@ -1,14 +1,14 @@
 truncate -s 0 data/logs/all.log
 phing load-data -DdumpFile=../gims/population.backup.gz
 
-time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/South_Central_Asia/Bangladesh_12.xlsm
+time php htdocs/index.php import jmp data/cache/country_data/Bangladesh_13.xlsm
 
 # Reload partial dumps
-./vendor/bin/doctrine-module dbal:run-sql "COPY \"user\" FROM '/sites/gims_misc/sql/user.sql';"
-./vendor/bin/doctrine-module dbal:run-sql "COPY survey FROM '/sites/gims_misc/sql/survey.sql';"
-./vendor/bin/doctrine-module dbal:run-sql "COPY questionnaire FROM '/sites/gims_misc/sql/questionnaire.sql';"
-./vendor/bin/doctrine-module dbal:run-sql "COPY question FROM '/sites/gims_misc/sql/question.sql';"
-./vendor/bin/doctrine-module dbal:run-sql "COPY choice FROM '/sites/gims_misc/sql/choice.sql';"
+./vendor/bin/doctrine-module dbal:run-sql "COPY \"user\" FROM '/sites/gims/bin/sql/user.sql';"
+./vendor/bin/doctrine-module dbal:run-sql "COPY survey FROM '/sites/gims/bin/sql/survey.sql';"
+./vendor/bin/doctrine-module dbal:run-sql "COPY questionnaire FROM '/sites/gims/bin/sql/questionnaire.sql';"
+./vendor/bin/doctrine-module dbal:run-sql "COPY question FROM '/sites/gims/bin/sql/question.sql';"
+./vendor/bin/doctrine-module dbal:run-sql "COPY choice FROM '/sites/gims/bin/sql/choice.sql';"
 
 # Reset sequences values
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('answer_id_seq', MAX(id) ) FROM answer;"
@@ -33,13 +33,13 @@ time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/S
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('user_survey_id_seq', MAX(id) ) FROM user_survey;"
 
 # Import additional countries
-time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/South_Central_Asia/Afghanistan_12.xlsm # for importing NULL instead of ignoring non-existing formulas
-time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/Western_Asia/Azerbaijan_12.xlsm   # for recursive formulas and interdependence during import
-time php htdocs/index.php import jmp data/cache/country_data/Country_data_Europe/Western_Europe/Germany_12.xlsm  # for developed countries rules
-time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/Western_Asia/Saudi_arabia_12.xlsm # for no urban/rural disaggregation rules
+time php htdocs/index.php import jmp data/cache/country_data/Afghanistan_13.xlsm # for importing NULL instead of ignoring non-existing formulas
+time php htdocs/index.php import jmp data/cache/country_data/Azerbaijan_13.xlsm   # for recursive formulas and interdependence during import
+time php htdocs/index.php import jmp data/cache/country_data/Germany_13.xlsm  # for developed countries rules
+time php htdocs/index.php import jmp data/cache/country_data/Saudi_arabia_13.xlsm # for no urban/rural disaggregation rules
 
-#time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/South_Eastern_Asia/Cambodia_12.xlsm
-#time php htdocs/index.php import jmp data/cache/country_data/Country_data_Asia/South_Eastern_Asia/Lao_people_dem_rep_12.xlsm
+#time php htdocs/index.php import jmp data/cache/country_data/Cambodia_13.xlsm
+#time php htdocs/index.php import jmp data/cache/country_data/Lao_people_dem_rep_13.xlsm
 
 # Dump new database content
 phing dump-data -DdumpFile=tests/data/db.backup.gz
