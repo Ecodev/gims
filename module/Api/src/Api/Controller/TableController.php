@@ -164,6 +164,8 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         /** @var \Application\Model\FilterSet $filterSet */
         $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
         $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
+        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+
         $this->parts = $parts; // used for cache
 
         $result = array();
@@ -171,19 +173,23 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             'country' => 'Country',
             'iso3' => 'ISO-3',
             'year' => 'Year',
-            'PU' => 'PU',
-            'PR' => 'PR',
-            'PT' => 'PT'
         );
+
+        // Build population acronyms and add them to columns definition
+        $populationAcronyms = array();
+        foreach ($parts as $part) {
+            $acronym = 'P' . strtoupper($part->getName()[0]);
+            $populationAcronyms[$part->getId()] = $acronym;
+            $columns[$acronym] = $acronym;
+        }
 
         foreach ($countries as $country) {
 
-            $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findByGeoname($country->getGeoname());
+            $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getByGeonameWithSurvey($country->getGeoname());
             if (!$filterSet) {
                 continue;
             }
 
-            $population = $this->getCountryPopulation($country, $years);
             $allYearsComputed = $this->getAllYearsComputed($parts, $filterSet, $questionnaires);
             $filteredYearsComputed = $this->filterYears($allYearsComputed, $years);
 
@@ -197,9 +203,11 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                 );
 
                 // population columns
-                $populationData['PU'] = $population[$year][1];
-                $populationData['PR'] = $population[$year][2];
-                $populationData['PT'] = $population[$year][3];
+                $populationData = array();
+                foreach ($parts as $part) {
+                    $pop = $populationRepository->getOneByGeoname($country->getGeoname(), $part->getId(), $year);
+                    $populationData[$populationAcronyms[$part->getId()]] = $pop->getPopulation();
+                }
 
                 $statsData = array();
                 $count = 1;
@@ -214,7 +222,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                         $statsData[$columnId] = \Application\Utility::decimalToRoundedPercent($value);
 
                         $columns[$columnId . 'a'] = $columnName . 'a';
-                        $statsData[$columnId . 'a'] = is_null($value) ? null : (int) ($value * $population[$year][$partId]);
+                        $statsData[$columnId . 'a'] = is_null($value) ? null : (int) ($value * $populationRepository->getOneByGeoname($country->getGeoname(), $partId, $year)->getPopulation());
                         $count++;
                     }
                 }
@@ -234,33 +242,6 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         } else {
             return new NumericJsonModel($finalResult);
         }
-    }
-
-    /**
-     * @param $country
-     * @param $years
-     *
-     * @return array Population by year and by part
-     * Array (
-     *      [{partid}] => array(
-     *              [2010] => xxxx
-     *              [2012] => xxxx
-     *          )
-     * )
-     */
-    private function getCountryPopulation($country, $years)
-    {
-        /** @var \Application\Model\Population $population */
-        $populationPerYear = array();
-        foreach ($years as $year) {
-            $population = $this->getEntityManager()->getRepository('Application\Model\Population')
-                    ->findBy(array('country' => $country->getId(), 'year' => $year));
-
-            foreach ($population as $populationPart) {
-                $populationPerYear[$year][$populationPart->getPart()->getId()] = $populationPart->getPopulation();
-            }
-        }
-        return $populationPerYear;
     }
 
     /**

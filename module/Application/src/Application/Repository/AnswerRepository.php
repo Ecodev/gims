@@ -42,17 +42,19 @@ class AnswerRepository extends AbstractChildRepository
 
             // Restructure cache to be [questionnaireId => [filterId => [partId => value]]]
             foreach ($res as $data) {
-                if ($data['official_filter_id'])
+                if ($data['official_filter_id']) {
                     $this->cache[$data['questionnaire_id']][$data['official_filter_id']][$data['part_id']] = (float) $data['valuePercent'];
-                else
+                } else {
                     $this->cache[$data['questionnaire_id']][$data['filter_id']][$data['part_id']] = (float) $data['valuePercent'];
+                }
             }
         }
 
-        if (isset($this->cache[$questionnaireId][$filterId][$partId]))
+        if (isset($this->cache[$questionnaireId][$filterId][$partId])) {
             return $this->cache[$questionnaireId][$filterId][$partId];
-        else
+        } else {
             return null;
+        }
     }
 
     /**
