@@ -41,7 +41,14 @@ function export(array $countries, array $onlyThose = array())
             echo `phing load-data -DdumpFile="$backup"`;
         } else {
             echo `phing load-data -DdumpFile=../gims/population.backup.gz`;
-            echo `php htdocs/index.php import jmp $path`;
+
+
+            $returnStatus = null;
+            passthru("php htdocs/index.php import jmp $path", $returnStatus);
+            if ($returnStatus) {
+                echo "FATAL: could not import '$path', abort export for this country" . PHP_EOL;
+                continue;
+            }
             echo `phing dump-data -DdumpFile="$backup"`;
         }
 
