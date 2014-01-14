@@ -161,21 +161,21 @@ class QuestionController extends AbstractChildRestfulController
      */
     protected function reorderSiblingQuestions(AbstractQuestion $question, $newSorting)
     {
-        $survey = $question->getSurvey();
-        $questionSiblings = $question->getChapter() ? $question->getChapter()->getQuestions() : $survey->getQuestions();
+        $questionSiblings = $question->getChapter() ? $question->getChapter()->getQuestions() : $question->getSurvey()->getQuestions();
         $lastSibling = $questionSiblings->last();
         $firstSibling = $questionSiblings->first();
 
         // limit to next available sorting free number
         if ($newSorting > $lastSibling->getSorting() + 1) {
-            $newSorting = $lastSibling->getSorting() + 1;
+            $newSorting = $lastSibling->getSorting();
 
             // limit to previous available sorting free number
         } elseif ($newSorting < $firstSibling->getSorting() - 1) {
-            $newSorting = $firstSibling->getSorting() - 1;
+            $newSorting = $firstSibling->getSorting();
+        }
 
-            // true means we have to move sorting values up and down
-        } elseif ($newSorting < $question->getSorting()) { // if new sorting is lower
+        // true means we have to move sorting values up and down
+        if ($newSorting < $question->getSorting()) { // if new sorting is lower
             foreach ($questionSiblings as $questionSibling) {
                 if ($questionSibling->getSorting() >= $newSorting && $questionSibling->getSorting() < $question->getSorting()) {
                     $questionSibling->setSorting($questionSibling->getSorting() + 1);
