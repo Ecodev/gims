@@ -140,7 +140,7 @@ class FilterSet extends AbstractModel
      */
     public function setFilters(\Doctrine\Common\Collections\ArrayCollection $filters)
     {
-        $this->getChildren()->clear();
+        $this->getFilters()->clear();
 
         // Clean up the collection from old choices
         foreach ($filters as $filter) {

@@ -242,6 +242,8 @@ use \Application\Traits\EntityManagerAware;
      */
     private function computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
+        _log()->debug(__METHOD__, array($filterId, $questionnaireId, $partId, $useSecondLevelRules));
+
         // @todo for sylvain: the logic goes as follows: if the filter id is contained within excludeFilters, skip calculation.
         if (in_array($filterId, $this->excludedFilters)) {
             return null;
@@ -256,6 +258,7 @@ use \Application\Traits\EntityManagerAware;
 
         // If the filter have a specified answer, returns it (skip all computation)
         $answerValue = $this->getAnswerRepository()->getValuePercent($questionnaireId, $filterId, $partId);
+
         if (!is_null($answerValue)) {
             return $answerValue;
         }
@@ -291,6 +294,8 @@ use \Application\Traits\EntityManagerAware;
      */
     private function summer(array $filterIds, $questionnaireId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
+        _log()->debug(__METHOD__, array($filterIds, $questionnaireId, $partId, $useSecondLevelRules));
+
         $sum = null;
         foreach ($filterIds as $filterId) {
             $summandValue = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, $alreadySummedFilters);

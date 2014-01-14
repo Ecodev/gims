@@ -3,6 +3,8 @@
 angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function ($scope, $location, $routeParams, Modal, Restangular) {
     "use strict";
 
+
+
     var redirectTo = '/admin/filter-set';
     if ($routeParams.returnUrl) {
         redirectTo = $routeParams.returnUrl;

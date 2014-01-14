@@ -19,6 +19,7 @@ return array(
             'Api\Controller\Role' => 'Api\Controller\RoleController',
             'Api\Controller\Geoname' => 'Api\Controller\GeonameController',
             'Api\Controller\ChartFilter' => 'Api\Controller\ChartFilterController',
+            'Api\Controller\ChartFilterGenerator' => 'Api\Controller\ChartFilterGeneratorController',
             'Api\Controller\Chart' => 'Api\Controller\ChartController',
             'Api\Controller\Table' => 'Api\Controller\TableController',
             'Api\Controller\Note' => 'Api\Controller\NoteController',
@@ -87,7 +88,7 @@ return array(
                         'options' => array(
                             'route' => '/:controller[/:action][/:filename]',
                             'constraints' => array(
-                                'controller' => '(chartFilter|chart|table)', // Define here allowed controllers: (controller1|controller2|controller3)
+                                'controller' => '(chartFilterGenerator|chartFilter|chart|table)', // Define here allowed controllers: (controller1|controller2|controller3)
                             ),
                             'defaults' => array(
                                 '__NAMESPACE__' => 'Api\Controller',

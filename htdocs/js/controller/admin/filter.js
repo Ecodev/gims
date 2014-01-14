@@ -93,8 +93,10 @@ angular.module('myApp').controller('Admin/FilterCtrl', function ($scope, $locati
         columnDefs: [
             {field: 'name', displayName: 'Name'},
             {displayName: '', width: '70px', cellTemplate: '' +
-                '<a class="btn btn-default btn-xs" href="/admin/filter/edit/{{row.entity.id}}"><i class="fa fa-pencil fa-lg"></i></a>'+
-                '<button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'
+                '<div class="btn-group">'+
+                '   <a class="btn btn-default btn-xs" href="/admin/filter/edit/{{row.entity.id}}"><i class="fa fa-pencil fa-lg"></i></a>'+
+                '   <button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'+
+                '</div>'
             }
         ]
     };

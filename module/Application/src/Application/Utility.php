@@ -96,7 +96,14 @@ abstract class Utility
         }, $subject);
     }
 
-
+    /**
+     * Generate a color from a number and a ratio
+     *
+     * @param $number
+     * @param $ratio the color saturation from 0 to 100
+     *
+     * @return string
+     */
     public static function getColor($number, $ratio)
     {
         // multiply number by phi (golden number constant) to ensure the number is between 0 and 1

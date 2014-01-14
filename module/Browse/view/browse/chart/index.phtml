@@ -13,12 +13,17 @@
         <div class="row">
             <p class='col-sm-6 col-md-6'><gims-select api="filterSet" model="filterSet" multiple placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/></p>
         </div>
-        <div class="row show-grid">
+        <div class="row">
             <div class="col-xs-6 col-sm-4 col-md-2">
                 <p><gims-select api="part" model="part" placeholder="<?php echo $this->translate('Select a part') ?>" style="width:100%;"/></p>
             </div>
             <p class="col-xs-6 col-sm-2 col-md-2">
                 <i class="fa fa-loading fa-2x" ng-show="isLoading"></i>
+            </p>
+        </div>
+        <div class='row show-grid'>
+            <p class='col-sm-1 col-md-1'>
+                <gims-filter-generator></gims-filter-generator>
             </p>
         </div>
     </form>
