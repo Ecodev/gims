@@ -357,6 +357,7 @@ STRING;
             'Republic of Moldova' => 'Moldova',
             'TFYR Macedonia' => 'Macedonia',
             'United States of America' => 'United States',
+            'State of Palestine' => 'Palestinian Territory',
             // Unusual spelling
             'Antigua & Barbuda' => 'Antigua and Barbuda',
             'Afganistan' => 'Afghanistan',
@@ -369,7 +370,16 @@ STRING;
             'Bosnia' => 'Bosnia and Herzegovina',
             // Case mistake
             'ANGOLA' => 'Angola',
+            'BURUNDI' => 'Burundi',
+            'ETHIOPIA' => 'Ethiopia',
+            'GAMBIA' => 'Gambia',
+            'GUAM' => 'Guam',
+            'INDONESIA' => 'Indonesia',
+            'NIGERIA' => 'Nigeria',
+            'RWANDA' => 'Rwanda',
             'Saint lucia' => 'Saint Lucia',
+            'SOUTH AFRICA' => 'South Africa',
+            'ZIMBABWE' => 'Zimbabwe',
         );
 
         $developedCountries = array(
