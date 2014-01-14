@@ -231,13 +231,8 @@ return array(
     array(
         'id' => 28,
         'iso3' => 'BRN',
-<<<<<<< HEAD
-        'name' => 'Brunei',
-        'path' => 'data/cache/country_data/Brunei_darussalam_13.xlsm',
-=======
         'name' => 'Brunei Darussalam',
-        'path' => 'data/cache/country_data/Brunei_darussalam_12.xlsm',
->>>>>>> Update country names with WHO terminology #2465
+        'path' => 'data/cache/country_data/Brunei_darussalam_13.xlsm',
     ),
     array(
         'id' => 22,
