@@ -103,11 +103,11 @@ class Jmp extends AbstractImporter
             $workbook->setActiveSheetIndex($i);
             $sheet = $workbook->getSheet($i);
 
-            // Import all questionnaire found, until no questionnaire code found
-            $col = 0;
+            // Try to import the first 50 questionnaires if data found
+            // According to tab GraphData_W, maximum should be 40, but better safe than sorry
             $this->colToParts = array();
-            while ($this->importQuestionnaire($sheet, $col)) {
-                $col += 6;
+            for ($col = 0; $col < 50 * 6; $col += 6) {
+                $this->importQuestionnaire($sheet, $col);
             }
 
             // Second pass on imported questionnaires to process cross-questionnaire things
@@ -182,7 +182,7 @@ STRING;
      * Questionnaire and Answers will always be created new. All other objects will be retrieved from database if available.
      * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
-     * @return boolean whether it imported something
+     * @return void
      */
     protected function importQuestionnaire(\PHPExcel_Worksheet $sheet, $col)
     {
@@ -190,7 +190,7 @@ STRING;
 
         // If no code found, we assume no survey at all
         if (!$code) {
-            return false;
+            return;
         }
 
         $year = $sheet->getCellByColumnAndRow($col + 3, 3)->getCalculatedValue();
@@ -214,7 +214,7 @@ STRING;
             if (!$survey->getYear()) {
                 echo 'WARNING: skipped survey because there is no year. On sheet "' . $sheet->getTitle() . '" cell ' . $sheet->getCellByColumnAndRow($col + 3, 3)->getCoordinate() . PHP_EOL;
 
-                return true;
+                return;
             }
             $this->getEntityManager()->persist($survey);
             $this->getEntityManager()->flush();
@@ -227,7 +227,7 @@ STRING;
         if (!$questionnaire) {
             echo 'WARNING: skipped questionnaire because there is no country name. On sheet "' . $sheet->getTitle() . '" cell ' . $countryCell->getCoordinate() . PHP_EOL;
 
-            return true;
+            return;
         }
 
         echo 'Survey: ' . $survey->getCode() . PHP_EOL;
@@ -243,8 +243,6 @@ STRING;
             $this->colToParts[$col + $offset]['questionnaire'] = $questionnaire;
             $this->colToParts[$col + $offset]['part'] = $part;
         }
-
-        return true;
     }
 
     /**
