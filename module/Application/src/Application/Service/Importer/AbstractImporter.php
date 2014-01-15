@@ -315,7 +315,7 @@ abstract class AbstractImporter
                 "Shared" => array(
                     'row' => null,
                     'children' => array(), // based on ratio
-                    'excludes' => null, // Because Shared is a very special case, we totally ignore exclude rules
+                    'excludes' => 99,
                     'isImproved' => false,
                     'formulas' => array(
                         array(3, '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)'),
