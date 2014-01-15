@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "9f1433a8b5b36320d1687b71a84f301a",
+    "hash": "3d3043bd66d7a8e20fb0b047e764fbb0",
     "packages": [
         {
             "name": "creof/doctrine2-spatial",
@@ -954,12 +954,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PowerKiKi/PHPExcel.git",
-                "reference": "7a90c5b88802eb10d00f3b9df76c94092bc684a3"
+                "reference": "496b76e70a3851d953bdede580e7d9a4390584fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PowerKiKi/PHPExcel/zipball/7a90c5b88802eb10d00f3b9df76c94092bc684a3",
-                "reference": "7a90c5b88802eb10d00f3b9df76c94092bc684a3",
+                "url": "https://api.github.com/repos/PowerKiKi/PHPExcel/zipball/496b76e70a3851d953bdede580e7d9a4390584fa",
+                "reference": "496b76e70a3851d953bdede580e7d9a4390584fa",
                 "shasum": ""
             },
             "require": {
@@ -1004,7 +1004,7 @@
             "support": {
                 "source": "https://github.com/PowerKiKi/PHPExcel/tree/develop"
             },
-            "time": "2013-12-03 13:51:40"
+            "time": "2014-01-08 10:15:07"
         },
         {
             "name": "symfony/console",
@@ -1874,9 +1874,10 @@
     },
     "platform": {
         "php": ">=5.4.0",
-        "ext-pgsql": "*",
+        "ext-bcmath": "*",
         "ext-intl": "*",
-        "ext-bcmath": "*"
+        "ext-json": "*",
+        "ext-pgsql": "*"
     },
     "platform-dev": [
 
