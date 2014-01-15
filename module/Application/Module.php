@@ -62,11 +62,11 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
     {
         $sharedEvents = $e->getApplication()->getEventManager()->getSharedManager();
         $sharedEvents->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', function($e) {
-                    $result = $e->getResult();
-                    if ($result instanceof \Zend\View\Model\ViewModel) {
-                        $result->setTerminal(true);
-                    }
-                });
+            $result = $e->getResult();
+            if ($result instanceof \Zend\View\Model\ViewModel) {
+                $result->setTerminal(true);
+            }
+        });
     }
 
     /**
@@ -125,7 +125,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
         return array(
             'Application module commands',
             'import jmp <file>' => "Import individual country file in JMP format",
-            'import population [<urbanFile> <ruralFile> <totalFile>]' => "Import population data: urban, rural and toal at the same time. If not provided files will be downloaded",
+            'import population <file>' => "Import population data",
             'email <action> <id>' => "Send email"
         );
     }

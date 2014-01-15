@@ -212,7 +212,7 @@ return array(
                 ),
                 'import-population' => array(
                     'options' => array(
-                        'route' => 'import population [<urbanFile>] [<ruralFile>] [<totalFile>]',
+                        'route' => 'import population <file>',
                         'defaults' => array(
                             'controller' => 'Application\Controller\Console',
                             'action' => 'importPopulation'

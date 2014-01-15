@@ -22,18 +22,20 @@ class Population extends AbstractImporter
 
     /**
      * Import populaion data from three files (urban, rural, total)
-     * @param string $urbanFilename
-     * @param string $ruralFilename
-     * @param string $totalFilename
+     * @param string $filename
      * @return string
      */
-    public function import($urbanFilename, $ruralFilename, $totalFilename)
+    public function import($filename)
     {
         echo "Reading files..." . PHP_EOL;
 
-        $urbanSheet = $this->loadSheet($urbanFilename);
-        $ruralSheet = $this->loadSheet($ruralFilename);
-        $totalSheet = $this->loadSheet($totalFilename);
+        $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
+        $reader->setReadDataOnly(true);
+        $workbook = $reader->load($filename);
+
+        $urbanSheet = $workbook->getSheet(1);
+        $ruralSheet = $workbook->getSheet(2);
+        $totalSheet = $workbook->getSheet(0);
 
         $this->partUrban = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Urban');
         $this->partRural = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Rural');
@@ -42,8 +44,8 @@ class Population extends AbstractImporter
 
         $countryRepository = $this->getEntityManager()->getRepository('Application\Model\Country');
 
-        $colIso = 3;
-        $rowYear = 13;
+        $colIso = 1;
+        $rowYear = 1;
         $importedValueCount = 0;
         $row = $rowYear + 1;
         while ($countryIsoNumeric = $totalSheet->getCellByColumnAndRow($colIso, $row)->getValue()) {
@@ -56,7 +58,7 @@ class Population extends AbstractImporter
             $country = $countryRepository->findOneBy(array('isoNumeric' => $countryIsoNumeric));
             if ($country) {
                 echo 'Country: ' . $country->getName() . PHP_EOL;
-                $col = $colIso + 1;
+                $col = $colIso + 2;
                 while ($year = $totalSheet->getCellByColumnAndRow($col, $rowYear)->getCalculatedValue()) {
                     if (($totalSheet->getCellByColumnAndRow($col, $rowYear)->getValue() != $urbanSheet->getCellByColumnAndRow($col, $rowYear)->getValue()) ||
                             ($urbanSheet->getCellByColumnAndRow($col, $rowYear)->getValue() != $ruralSheet->getCellByColumnAndRow($col, $rowYear)->getValue())) {
@@ -83,25 +85,11 @@ class Population extends AbstractImporter
 
         $this->getEntityManager()->flush();
 
-        echo "Compute absolute value, based on population...";
+        echo "Compute absolute value, based on population..." . PHP_EOL;
         $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $answerRepository->updateAbsoluteValueFromPercentageValue();
 
         return "$importedValueCount population data imported" . PHP_EOL;
-    }
-
-    /**
-     * Load the first sheet
-     * @param string $filename
-     * @return \PHPExcel_Worksheet
-     */
-    protected function loadSheet($filename)
-    {
-        $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
-        $reader->setReadDataOnly(true);
-        $workbook = $reader->load($filename);
-
-        return $workbook->getSheet(0);
     }
 
     /**
