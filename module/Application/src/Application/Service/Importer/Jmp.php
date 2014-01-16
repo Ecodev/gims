@@ -335,12 +335,17 @@ STRING;
         $countryNameMapping = array(
             'Occupied Palestinian Territory' => 'West Bank and Gaza Strip',
             'Palestine' => 'West Bank and Gaza Strip',
+            'Palestinian Territory' => 'West Bank and Gaza Strip',
             'Republic of Korea' => 'Republic of Korea',
             'St. Vincent and Grenadines' => 'Saint Vincent and the Grenadines',
             'St Vincent & grenadines' => 'Saint Vincent and the Grenadines',
-            'State of Palestine' => 'Palestinian Territory',
+            'State of Palestine' => 'West Bank and Gaza Strip',
             'Libyan Arab Jamahiriya' => 'Libyan Arab Jamahiriya',
-
+            'Bolivia' => 'Bolivia (Plurinational State of)',
+            'Cape Verde' => 'Cabo Verde',
+            'Micronesia' => 'Micronesia (Fed. States of)',
+            'Reunion' => 'Réunion',
+            'Tanzania' => 'United Republic of Tanzania',
             // Unusual spelling
             'Antigua & Barbuda' => 'Antigua and Barbuda',
             'Afganistan' => 'Afghanistan',
@@ -350,7 +355,6 @@ STRING;
             'Cap Verde' => 'Cabo Verde',
             'Congo DR' => 'Democratic Republic of the Congo',
             'Bosnia' => 'Bosnia and Herzegovina',
-
             // Case mistake
             'ANGOLA' => 'Angola',
             'BURUNDI' => 'Burundi',

@@ -1359,7 +1359,7 @@ return array(
     array(
         'id' => 230,
         'iso3' => 'TZA',
-        'name' => 'Tanzania',
+        'name' => 'United Republic of Tanzania',
         'path' => 'data/cache/country_data/Tanzania_united_rep_of_13.xlsm',
     ),
     array(
