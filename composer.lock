@@ -954,12 +954,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PowerKiKi/PHPExcel.git",
-                "reference": "496b76e70a3851d953bdede580e7d9a4390584fa"
+                "reference": "a0da3e32ec3db87fe2a41d9fee70a0099de676bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PowerKiKi/PHPExcel/zipball/496b76e70a3851d953bdede580e7d9a4390584fa",
-                "reference": "496b76e70a3851d953bdede580e7d9a4390584fa",
+                "url": "https://api.github.com/repos/PowerKiKi/PHPExcel/zipball/a0da3e32ec3db87fe2a41d9fee70a0099de676bb",
+                "reference": "a0da3e32ec3db87fe2a41d9fee70a0099de676bb",
                 "shasum": ""
             },
             "require": {
@@ -1002,9 +1002,9 @@
                 "xlsx"
             ],
             "support": {
-                "source": "https://github.com/PowerKiKi/PHPExcel/tree/develop"
+                "source": "https://github.com/PowerKiKi/PHPExcel/tree/fix_SUMIF_condition_including_double_quote"
             },
-            "time": "2014-01-08 10:15:07"
+            "time": "2014-01-17 12:01:57"
         },
         {
             "name": "symfony/console",
