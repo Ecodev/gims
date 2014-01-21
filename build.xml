@@ -18,6 +18,19 @@
         <load-dump dumpfile="${dumpFile}" />
     </target>
 
+    <target name="set-permissions">
+        <echo msg="mkdir cache, logs, ..." />
+        <mkdir dir="data/cache" />
+        <mkdir dir="data/logs" />
+        <mkdir dir="htdocs/tmp" />
+        <mkdir dir="htdocs/css" />
+        <echo msg="setfacl default r/o for www-data" />
+        <exec command="setfacl -R -m u:www-data:r-x -m d:u:www-data:r-x ./" />
+        <echo msg="setfacl r/w on cache,logs for www-data" />
+        <exec command="setfacl -R -m u:www-data:rwx -m d:u:www-data:rwx data/logs data/cache" />
+        <chmod file="./" mode="0770" />
+    </target>
+
     <target name="incremental-backup">
         <tstamp />
         <propertyprompt propertyName="numberOfVersions" defaultValue="30" promptText="Number of versions to keep" useExistingValue="true" />
@@ -49,6 +62,7 @@
     <!-- ============================================  -->
     <target name="build" depends="composer-install" description="Build all assets for a fully functionnal application (DB, CSS, JS)">
         <exec command="./bin/build.sh" checkreturn="true" logoutput="/dev/stdout" />
+        <set-permissions />
     </target>
 
     <!-- ============================================  -->
