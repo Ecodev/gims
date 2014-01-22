@@ -347,6 +347,9 @@ class Filter extends AbstractModel
     }
 
 
+    /*
+     * Get only official child Filters
+     */
     public function getOfficialChildren() {
         return $this->getChildren()->filter(function($f){ return $f->isOfficial(); });
     }
