@@ -10,54 +10,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
         link: function(scope, element, attrs) {
             // nothing to do ?
         },
-        controller: function($scope, $routeParams, Restangular, Answer, $timeout) {
-
-            $scope.$watch('questions', function(questions)
-            {
-                // Re-index answers by their parts ID, instead of natural index
-                if (questions.length > 0 && $scope.isJmp) {
-                    angular.forEach(questions, function(question) {
-                        var answersIndexedByPart = {};
-                        angular.forEach(question.answers, function(answer) {
-                            if (answer.part && answer.part.id) {
-                                answersIndexedByPart[answer.part.id] = answer;
-                            }
-                        });
-                        for (var i = 1; i < 4; i++) {
-                            if (!answersIndexedByPart[i])
-                                answersIndexedByPart[i] = {};
-                        }
-                        question.answers = answersIndexedByPart;
-                    });
-                }
-            });
-
-            // Validate Answer method
-            $scope.validateAnswer = function(column, row) {
-
-                var answerIndex = /[0-9]+/g.exec(column.field)[0];
-                var answer = row.entity.answers[answerIndex];
-
-                // Try detecting whether the user has typed .12 to be converted to 0.12
-                var result = answer.valuePercent + '';
-                if (result.charAt(0) === '.') {
-                    result = '0' + result;
-                    answer.valuePercent = result - 0;
-                }
-
-                // Set 0 value is user has entered fantasist values
-                if (isNaN(parseInt(answer.valuePercent, 10))) {
-                    answer.valuePercent = 0;
-                }
-
-                // Allowed value is between [0-1]
-                if (answer.valuePercent >= 0 && answer.valuePercent <= 1) {
-                    $('.col' + column.index, row.elm).find('input').removeClass('error');
-                } else {
-                    // Get the input field to wrap it with error div
-                    $('.col' + column.index, row.elm).find('input').addClass('error');
-                }
-            };
+        controller: function($scope, Restangular, $timeout) {
 
             // Update Answer method
             $scope.updateAnswer = function(column, row) {
@@ -65,44 +18,40 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
                 var reg = new RegExp('[0-9]+', "g");
                 var answerIndex = reg.exec(column.field)[0];
                 var question = row.entity;
+                var answer = question.answers[answerIndex];
 
-                var answer = new Answer(question.answers[answerIndex]);
+                // If the answer is undefined, that means it's an invalid value that should not be saved
+                if (_.isUndefined(answer.valuePercent)) {
 
-                var reloadQuestion = function() {
-                    question = Restangular.one('question', question.id).get({fields: 'filter,answers'});
-
-                    // GUI remove the loading icon
-                    $('.fa-loading', row.elm).toggle();
-                };
-
-                // Get the field and check whether it has an error class
-                if (!$('.col' + column.index, row.elm).find('input').hasClass('error')) {
-
-                    $('.col' + column.index, row.elm).css('backgroundColor', 'inherit');
-
-                    // GUI display a loading icon
-                    $('.fa-loading', row.elm).toggle();
-
-                    // True means the answer exists and must be updated. Otherwise, create a new answer
-                    if (answer.id > 0) {
-                        answer.$update({id: answer.id}, reloadQuestion);
-                    } else {
-                        // Convention:
-                        // the answerIndex == part
-                        answer.part = answerIndex;
-
-                        answer.question = question.id;
-                        answer.questionnaire = $routeParams.id;
-                        answer.$create(reloadQuestion);
+                    // If it's an existing answer, restore valid answer from DB
+                    if (answer.id) {
+                        answer.isLoading = true;
+                        Restangular.one('answer', answer.id).get().then(function(answer) {
+                            question.answers[answerIndex] = answer;
+                        });
                     }
 
                 } else {
-                    $('.col' + column.index, row.elm).css('backgroundColor', '#FF6461');
+
+                    // If existing answer, update it
+                    answer.isLoading = true;
+                    if (answer.id) {
+                        answer.put().then(function(answer) {
+                            question.answers[answerIndex] = answer;
+                        });
+
+                        // Otherwise, create it
+                    } else {
+                        Restangular.all('answer').post(answer).then(function(answer) {
+                            question.answers[answerIndex] = answer;
+                        });
+                    }
+
                 }
             };
 
             // Template for cell editing with input "number".
-            var cellEditableTemplate = '<input ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" step="any" type="number" style="width: 90%" ng-blur="updateAnswer(col, row)" ng-keyup="validateAnswer(col, row)" />';
+            var cellEditableTemplate = '<form name="myForm" ng-class="{\'has-error\': myForm.answerValue.$invalid}" has-error><input name="answerValue" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" step="any" min="0" max="1" type="number" style="width: 90%" ng-blur="updateAnswer(col, row)" /></form>';
 
             // Keep track of the selected row.
             $scope.selectedRow = [];
@@ -121,7 +70,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
                     {field: 'answers.1.valuePercent', displayName: 'Urban', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate}, //, cellTemplate: 'cellTemplate.html'
                     {field: 'answers.2.valuePercent', displayName: 'Rural', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
                     {field: 'answers.3.valuePercent', displayName: 'Total', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
-                    {displayName: '', cellTemplate: '<i class="fa fa-loading" style="display: none" />', cellClass: 'column-loading', width: '28px'}
+                    {displayName: '', cellTemplate: '<div ng-show="row.entity.answers.1.isLoading || row.entity.answers.2.isLoading || row.entity.answers.3.isLoading"><i class="fa fa-loading" /></div>', cellClass: 'column-loading', width: '28px'}
                 ]
             };
 
@@ -134,29 +83,6 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
 
             });
 
-            // Counter of request being sent.
-            $scope.sending = 0;
-
-            // Update Data
-            $scope.updateAnswers = function() {
-                angular.forEach($scope.questions, function(question, key) {
-                    var questionOriginal = $scope.originalQuestions[key];
-
-                    // save the question only if it is different from the original
-                    if (!angular.equals(question, questionOriginal)) {
-                        $scope.sending = $scope.sending + question.answers.length;
-
-                        // create an answer
-                        angular.forEach(question.answers, function(answerObject) {
-                            var answer = new Answer(answerObject);
-                            answer.$update({id: answer.id}, function() {
-                                $scope.sending--;
-                            });
-                        });
-                    }
-                });
-            };
-
         }
-    }
+    };
 });
