@@ -152,7 +152,7 @@ class Answer extends AbstractModel
      */
     public function getValuePercent()
     {
-        return (float) $this->valuePercent;
+        return is_null($this->valuePercent) ? null : (float) $this->valuePercent;
     }
 
     /**

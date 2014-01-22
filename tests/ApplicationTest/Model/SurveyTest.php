@@ -62,4 +62,17 @@ class SurveyTest extends AbstractModel
         }
     }
 
+    public function testYearNullable()
+    {
+        $survey = new Survey();
+        $this->assertSame(null, $survey->getYear(), 'should be NULL by default');
+
+        $survey->setYear('1991');
+        $this->assertNotSame('1991', $survey->getYear(), 'should not never return string');
+        $this->assertSame(1991, $survey->getYear(), 'should always return integer');
+
+        $survey->setYear(null);
+        $this->assertSame(null, $survey->getYear(), 'should be able to re-set NULL');
+    }
+
 }

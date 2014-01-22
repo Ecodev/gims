@@ -192,7 +192,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      */
     public function getYear()
     {
-        return (int) $this->year;
+        return is_null($this->year) ? null : (int) $this->year;
     }
 
     /**
