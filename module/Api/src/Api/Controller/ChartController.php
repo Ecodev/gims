@@ -68,6 +68,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
                 // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
                 $alternativeSeries = array_merge($seriesWithExcludedElements, $seriesWithOriginal);
+
                 $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, $excludedFilters, $alternativeSeries ? 33 :100, $alternativeSeries ? 'ShortDash' : null);
 
                 // insure that series are not added twice to series list
@@ -195,18 +196,19 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
         // init excludes filters array
         $params = $this->params()->fromQuery('excludedFilters');
-        if (!$params) {
-            return array();
-        }
-        $params = explode(',', $params);
-        foreach ($params as $r) {
-            list($hFilterId, $filterId) = explode(':', $r);
-            if (in_array($hFilterId, $this->usedFilters)) {
-                if (!array_key_exists($hFilterId, $excludedElementsByFilter))
-                    $excludedElementsByFilter[$hFilterId] = array('questionnaires' => array(), 'filters' => array());
-                $excludedElementsByFilter[$hFilterId]['filters'][] = $filterId;
+        if ($params) {
+            $params = explode(',', $params);
+            foreach ($params as $r) {
+                list($hFilterId, $filterId) = explode(':', $r);
+                if (in_array($hFilterId, $this->usedFilters)) {
+                    if (!array_key_exists($hFilterId, $excludedElementsByFilter))
+                        $excludedElementsByFilter[$hFilterId] = array('questionnaires' => array(), 'filters' => array());
+                    $excludedElementsByFilter[$hFilterId]['filters'][] = $filterId;
+                }
             }
         }
+
+        //echo '('.count(array_keys($excludedElementsByFilter)).')';
 
         $series = array();
         foreach ($excludedElementsByFilter as $filterId => $excludedElement) {
@@ -221,6 +223,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     $questionnairesNotExcluded[] = $questionnaire;
                 }
             }
+
+            //v(count($questionnaires), count($questionnairesNotExcluded));
 
             $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotExcluded, $part, $excludedElement['filters'], 100, null, ' (ignored elements)');
             $series = array_merge($series, $mySeries);
