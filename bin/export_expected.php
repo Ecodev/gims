@@ -32,8 +32,21 @@ function doAllCountries(array $countries)
  */
 function doOneCountry(array $country)
 {
-
     $filename = $country['path'];
+    $sheetNamesToImport = array_merge(array('Estimates', 'GraphData_W', 'GraphData_S', 'Tables_W', 'Tables_S', 'Population'));
+
+    echo $filename . PHP_EOL;
+    $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
+    $reader->setReadDataOnly(true);
+    $reader->setLoadSheetsOnly($sheetNamesToImport);
+    $wb = $reader->load($filename);
+
+    doOneCountryQuestionnaire($country, $wb);
+    doOneCountryCountry($country, $wb);
+}
+
+function doOneCountryQuestionnaire(array $country, \PHPExcel $wb)
+{
     $def = array(
         'GraphData_W' => array(
             'suffix' => 'Water',
@@ -46,23 +59,15 @@ function doOneCountry(array $country)
             'cols' => range(1, 26),
         ),
     );
-    $sheetNamesToImport = array_merge(array_keys($def), array('Tables_W', 'Tables_S', 'Population'));
 
     $superdata = array(
         'Water' => array(),
         'Sanitation' => array(),
     );
 
-    echo $filename . PHP_EOL;
-    $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
-    $reader->setReadDataOnly(true);
-    $reader->setLoadSheetsOnly($sheetNamesToImport);
-    $wb = $reader->load($filename);
+    foreach (array_keys($def) as $sheetName) {
 
-    foreach (array_keys($def) as $i => $sheetName) {
-
-        $wb->setActiveSheetIndex($i);
-        $sheet = $wb->getSheet($i);
+        $sheet = $wb->getSheetByName($sheetName);
 
         foreach ($def[$sheetName]['rows'] as $row) {
             $cell = $sheet->getCellByColumnAndRow(reset($def[$sheetName]['cols']), $row);
@@ -73,26 +78,68 @@ function doOneCountry(array $country)
                 break;
             }
 
-            var_dump($code);
+            echo $def[$sheetName]['suffix'] . ' ' . $code . PHP_EOL;
 
             $data = [$country['name'], $country['iso3']];
             foreach ($def[$sheetName]['cols'] as $col) {
 
                 $cell = $sheet->getCellByColumnAndRow($col, $row);
                 $data[] = getCalculatedValueSafely($cell);
-                unset($cell);
             }
             $superdata[$def[$sheetName]['suffix']][] = $data;
         }
-        unset($sheet);
     }
-    unset($wb);
-    unset($reader);
 
     echo 'READING DONE' . PHP_EOL;
 
-    $dir = 'expected/';
-    @mkdir($dir);
+    $dir = 'expected/questionnaire/';
+    @mkdir($dir, 0777, true);
+    $outputname = $dir . $country['name'];
+
+    $phpCode = '<?php' . PHP_EOL . 'return ' . var_export($superdata, true) . ';' . PHP_EOL;
+    file_put_contents($outputname . '.php', $phpCode);
+
+    $superdata = sanitizeQuestionnaires($superdata);
+    allToCsv($outputname, $superdata);
+}
+
+function doOneCountryCountry(array $country, \PHPExcel $wb)
+{
+    $defs = array(
+        'Water' => array(
+            'rows' => range(6, 41),
+            'cols' => range(0, 15),
+        ),
+        'Sanitation' => array(
+            'rows' => range(6, 41),
+            'cols' => array_merge(array(0), range(16, 30)),
+        ),
+    );
+
+    $superdata = array(
+        'Water' => array(),
+        'Sanitation' => array(),
+    );
+
+    $sheet = $wb->getSheetByName('Estimates');
+    foreach ($defs as $type => $def) {
+        foreach ($def['rows'] as $row) {
+
+            $data = [$country['name'], $country['iso3']];
+            foreach ($def['cols'] as $col) {
+
+                $cell = $sheet->getCellByColumnAndRow($col, $row);
+                $data[] = getCalculatedValueSafely($cell);
+            }
+            echo $type . ' ' . $data[2] . PHP_EOL;
+            $superdata[$type][] = $data;
+        }
+    }
+
+    echo 'READING DONE' . PHP_EOL;
+
+    $dir = 'expected/country/';
+    @mkdir($dir, 0777, true);
     $outputname = $dir . $country['name'];
 
     $phpCode = '<?php' . PHP_EOL . 'return ' . var_export($superdata, true) . ';' . PHP_EOL;
@@ -101,29 +148,12 @@ function doOneCountry(array $country)
 }
 
 /**
- * Re-write all CSV files from PHP files
+ * Clean up superdata structure
+ * @param array $superdata
+ * @return array
  */
-function fromPhpToCsv($dir)
+function sanitizeQuestionnaires(array $superdata)
 {
-    foreach (glob($dir . '/*.php') as $source) {
-
-        // Inject PHP tag if not there yet
-        $s = file_get_contents($source);
-        if (strpos($s, '<?php') === false) {
-            file_put_contents($source, '<?php' . PHP_EOL . 'return ' . $s . ';' . PHP_EOL);
-        }
-
-        $superdata = require($source);
-        $outputname = str_replace('.php', '', $source);
-
-        echo $outputname . PHP_EOL;
-        allToCsv($outputname, $superdata);
-    }
-}
-
-function allToCsv($outputname, $superdata)
-{
-
     // Build a list of questionnaire across Water and Sanitation
     $exhaustiveList = reset($superdata);
     foreach (end($superdata) as $i => $sanitationRow) {
@@ -172,6 +202,11 @@ function allToCsv($outputname, $superdata)
         }
     }
 
+    return $superdata;
+}
+
+function allToCsv($outputname, $superdata)
+{
     foreach ($superdata as $name => $data) {
         toCsv($outputname . ' - ' . $name, $data);
     }
@@ -212,25 +247,24 @@ function toCsv($name, array $data)
 
 function getCalculatedValueSafely(\PHPExcel_Cell $cell)
 {
+    $value = null;
     try {
-        return $cell->getCalculatedValue();
+        $value = $cell->getCalculatedValue();
     } catch (\PHPExcel_Exception $exception) {
 
         // Fallback on cached result
         if (preg_match('/(Cyclic Reference in Formula|Formula Error)/', $exception->getMessage())) {
             $value = $cell->getOldCalculatedValue();
-
-            return $value == \PHPExcel_Calculation_Functions::NA() ? null : $value;
         } else {
             // Forward exception
             throw $exception;
         }
     }
+
+    return $value == \PHPExcel_Calculation_Functions::NA() ? null : $value;
 }
 
-if (isset($argv[1]) && is_dir($argv[1])) {
-    fromPhpToCsv($argv[1]);
-} elseif (isset($argv[1])) {
+if (isset($argv[1])) {
     $onlyThose = $argv;
     array_shift($onlyThose);
 
