@@ -248,37 +248,22 @@ class QuestionController extends AbstractChildRestfulController
      */
     public function create($data)
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Survey');
         /** @var Survey $survey */
-        $survey = $repository->findOneById((int) @$data['survey']);
+        $survey = $this->getEntityManager()->getRepository('Application\Model\Survey')->findOneById((int) @$data['survey']);
 
         // Check that we have a survey
         if (!$survey) {
             throw new \Exception('Missing or invalid survey value', 1368459230);
         }
 
-        /** @var \Doctrine\Common\Collections\ArrayCollection $questions */
-        $questions = $survey->getQuestions();
-
-        if ($questions->isEmpty()) {
-            $data['sorting'] = 1;
+        /** @var \Application\Model\Question\Chapter $chapter */
+        $chapter = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->findOneById((int) @$data['chapter']);
+        if ($chapter && $lastQuestion = $chapter->getQuestions()->last()) {
+            $data['sorting'] = $lastQuestion->getSorting() + 1;
         } else {
 
-            // get the last sibling to get last sorting number
-            $questions = $survey->getQuestions();
-            if (isset($data['chapter'])) {
-                foreach ($questions as $question) {
-                    if ($question->getId() == $data['chapter']) {
-                        $question = $question->getQuestions()->last();
-                        break;
-                    }
-                }
-            } else {
-                $question = $survey->getQuestions()->last();
-            }
-
-            if ($question) {
-                $data['sorting'] = $question->getSorting() + 1;
+            if ($lastQuestion = $survey->getQuestions()->last()) {
+                $data['sorting'] = $lastQuestion->getSorting() + 1;
             } else {
                 $data['sorting'] = 1;
             }
