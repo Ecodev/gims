@@ -143,6 +143,9 @@ class FilterRepository extends AbstractRepository
 
             $qb->setParameter('geoname', $geonameId);
 
+            // Ensure that we hit the cache next time, even if we have no results at all
+            $this->cacheUnofficialNames[$questionnaireId] = array();
+
             // Restructure cache to be [questionnaireId => [officialFilterId => name]]
             $res = $qb->getQuery()->getResult();
             foreach ($res as $filter) {

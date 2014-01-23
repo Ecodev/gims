@@ -26,7 +26,7 @@ class GeonameRepository extends AbstractRepository
                     ->setParameter('questionnaire', $questionnaireId)
                     ->getQuery()
                     ->getSingleScalarResult();
-            ;
+
             $this->cache[$questionnaireId] = $geonameId;
         }
 

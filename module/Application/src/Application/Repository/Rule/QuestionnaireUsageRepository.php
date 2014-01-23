@@ -6,6 +6,11 @@ class QuestionnaireUsageRepository extends \Application\Repository\AbstractRepos
 {
 
     /**
+     * @var array $cache [questionnaireId => [ruleId => [partId => value]]]
+     */
+    private $cache = array();
+
+    /**
      * Get all QuestionnaireUsage with any given names within the given questionnaires
      * @param array $ruleNames
      * @param array $questionnaires
@@ -64,6 +69,9 @@ class QuestionnaireUsageRepository extends \Application\Repository\AbstractRepos
             ));
 
             $res = $qb->getQuery()->getResult();
+
+            // Ensure that we hit the cache next time, even if we have no results at all
+            $this->cache[$questionnaireId] = array();
 
             // Restructure cache to be [questionnaireId => [ruleId => [partId => value]]]
             foreach ($res as $questionnaireUsage) {

@@ -44,6 +44,9 @@ class PopulationRepository extends AbstractRepository
                 'geoname' => $geoname,
             ));
 
+            // Ensure that we hit the cache next time, even if we have no results at all
+            $this->cache[$geoname->getId()] = array();
+
             foreach ($query->getResult() as $p) {
                 $this->cache[$geoname->getId()][$p->getYear()][$p->getPart()->getId()] = $p;
             }

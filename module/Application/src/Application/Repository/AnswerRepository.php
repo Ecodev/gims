@@ -5,6 +5,9 @@ namespace Application\Repository;
 class AnswerRepository extends AbstractChildRepository
 {
 
+    /**
+     * @var array $cache [questionnaireId => [filterId => [partId => value]]]
+     */
     private $cache = array();
 
     /**
@@ -39,6 +42,9 @@ class AnswerRepository extends AbstractChildRepository
             ));
 
             $res = $qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SCALAR);
+
+            // Ensure that we hit the cache next time, even if we have no results at all
+            $this->cache[$questionnaireId] = array();
 
             // Restructure cache to be [questionnaireId => [filterId => [partId => value]]]
             foreach ($res as $data) {

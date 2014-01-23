@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 class FilterQuestionnaireUsageRepository extends \Application\Repository\AbstractRepository
 {
 
+    /**
+     * @var array $cache [questionnaireId => [filterId => [partId => value]]]
+     */
     private $cache = array();
 
     /**
@@ -41,6 +44,9 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
             ));
 
             $res = $qb->getQuery()->getResult();
+
+            // Ensure that we hit the cache next time, even if we have no results at all
+            $this->cache[$questionnaireId] = array();
 
             // Restructure cache to be [questionnaireId => [filterId => [partId => value]]]
             foreach ($res as $filterQuestionnaireUsage) {

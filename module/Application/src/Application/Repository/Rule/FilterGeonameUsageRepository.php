@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 class FilterGeonameUsageRepository extends \Application\Repository\AbstractRepository
 {
 
+    /**
+     * @var array $cache [geonameId => [filterId => [partId => value]]]
+     */
     private $cache = array();
 
     /**
@@ -35,6 +38,9 @@ class FilterGeonameUsageRepository extends \Application\Repository\AbstractRepos
             ));
 
             $res = $qb->getQuery()->getResult();
+
+            // Ensure that we hit the cache next time, even if we have no results at all
+            $this->cache[$geonameId] = array();
 
             // Restructure cache to be [geonameId => [filterId => [partId => value]]]
             foreach ($res as $filterGeonameUsage) {
