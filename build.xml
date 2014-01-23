@@ -60,7 +60,7 @@
     <!-- ============================================  -->
     <!-- Target: build                                 -->
     <!-- ============================================  -->
-    <target name="build" depends="composer-install,set-permissions" description="Build all assets for a fully functionnal application (DB, CSS, JS)">
+    <target name="build" depends="composer-install" description="Build all assets for a fully functionnal application (DB, CSS, JS)">
         <exec command="./bin/build.sh" checkreturn="true" logoutput="/dev/stdout" />
     </target>
 
