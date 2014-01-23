@@ -160,9 +160,8 @@ class Geoname extends AbstractModel
      * @var Country
      *
      * @ORM\OneToOne(targetEntity="Country", mappedBy="geoname")
-     * @ORM\JoinColumn(nullable=true)
      */
-    private $country = null;
+    private $country;
 
     /**
      * Constructor
@@ -631,7 +630,7 @@ class Geoname extends AbstractModel
     /**
      * @param \Application\Model\Country $country
      */
-    public function setCountry($country)
+    public function setCountry(Country $country = null)
     {
         $this->country = $country;
 

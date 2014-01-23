@@ -20,6 +20,10 @@ class Version20140123164137 extends AbstractMigration
         // Link the countries with new geonames
         $this->addSql("UPDATE country SET geoname_id = 8505032 WHERE iso3 = 'ANT'");
         $this->addSql("UPDATE country SET geoname_id = 8505033 WHERE iso3 = 'SCG'");
+
+        // Fix the relation country-geoname, which used to have a double foreign key in both tables
+        $this->addSql("ALTER TABLE country ALTER geoname_id SET NOT NULL;");
+        $this->addSql("ALTER TABLE geoname DROP country_id;");
     }
 
     public function down(Schema $schema)

@@ -137,6 +137,7 @@ class Country extends AbstractModel
      * @var Geoname
      *
      * @ORM\OneToOne(targetEntity="Geoname", inversedBy="country")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $geoname;
 
@@ -535,7 +536,7 @@ class Country extends AbstractModel
      * @param Geoname $geoname
      * @return Country
      */
-    public function setGeoname(Geoname $geoname = null)
+    public function setGeoname(Geoname $geoname)
     {
         $this->geoname = $geoname;
 
