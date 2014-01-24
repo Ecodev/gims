@@ -260,8 +260,12 @@ function getCalculatedValueSafely(\PHPExcel_Cell $cell)
             throw $exception;
         }
     }
-
-    return $value == \PHPExcel_Calculation_Functions::NA() ? null : $value;
+    
+    if ($value == \PHPExcel_Calculation_Functions::NA() || $value == \PHPExcel_Calculation_Functions::DIV0()) {
+        return null;
+    } else {
+        return $value;
+    }
 }
 
 if (isset($argv[1])) {
