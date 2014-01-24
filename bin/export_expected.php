@@ -107,11 +107,11 @@ function doOneCountryCountry(array $country, \PHPExcel $wb)
 {
     $defs = array(
         'Water' => array(
-            'rows' => range(6, 41),
+            'rows' => range(6, 38),
             'cols' => range(0, 15),
         ),
         'Sanitation' => array(
-            'rows' => range(6, 41),
+            'rows' => range(6, 38),
             'cols' => array_merge(array(0), range(16, 30)),
         ),
     );

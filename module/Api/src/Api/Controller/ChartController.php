@@ -43,7 +43,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getByGeonameWithSurvey($country ? $country->getGeoname() : -1);
 
         $this->startYear = 1980;
-        $this->endYear = 2011;
+        $this->endYear = 2012;
 
         $series = array();
         if (count($filterSets) > 0) {
