@@ -12,9 +12,7 @@ class Jmp extends Calculator
 
     private $cacheComputeFilterForAllQuestionnaires = array();
     private $cacheComputeRegressionForAllYears = array();
-
     private $filterGeonameUsageRepository;
-
 
     /**
      * Set the filterGeonameUsage repository
@@ -40,7 +38,6 @@ class Jmp extends Calculator
 
         return $this->filterGeonameUsageRepository;
     }
-
 
     /**
      * Returns an array of all filter data, which includes name and year-regression pairs
@@ -150,12 +147,12 @@ class Jmp extends Calculator
         }
 
         $nonNullRegressions = array_reduce($allRegressions, function($result, $regression) {
-                    if (!is_null($regression)) {
-                        $result [] = $regression;
-                    }
+            if (!is_null($regression)) {
+                $result [] = $regression;
+            }
 
-                    return $result;
-                }, array());
+            return $result;
+        }, array());
 
         $minRegression = $nonNullRegressions ? min($nonNullRegressions) : null;
         $maxRegression = $nonNullRegressions ? max($nonNullRegressions) : null;
@@ -250,18 +247,18 @@ class Jmp extends Calculator
             $result = $this->computeRegressionOneYear($year + 4, $filterId, $questionnaires, $partId);
         } elseif ($year < $d['maxYear'] + 3 && $year > $d['minYear'] - 3 && $d['count'] > 1 && $d['period'] > 4) {
             $result = $this->ifNonZeroValue($d['values'], function() use ($year, $d) {
-                        return \PHPExcel_Calculation_Statistical::FORECAST($year, $d['values'], $d['years']);
-                    });
+                return \PHPExcel_Calculation_Statistical::FORECAST($year, $d['values'], $d['years']);
+            });
         } elseif ($year < $d['maxYear'] + 7 && $year > $d['minYear'] - 7 && ($d['count'] < 2 || $d['period'] < 5)) {
             $result = \PHPExcel_Calculation_Statistical::AVERAGE($d['values']);
         } elseif ($year > $d['minYear'] - 7 && $year < $d['minYear'] - 1) {
             $result = $this->ifNonZeroValue($d['values'], function() use ($d) {
-                        return \PHPExcel_Calculation_Statistical::FORECAST($d['minYear'] - 2, $d['values'], $d['years']);
-                    });
+                return \PHPExcel_Calculation_Statistical::FORECAST($d['minYear'] - 2, $d['values'], $d['years']);
+            });
         } elseif ($year > $d['maxYear'] + 1 && $year < $d['maxYear'] + 7) {
             $result = $this->ifNonZeroValue($d['values'], function() use ($d) {
-                        return \PHPExcel_Calculation_Statistical::FORECAST($d['maxYear'] + 2, $d['values'], $d['years']);
-                    });
+                return \PHPExcel_Calculation_Statistical::FORECAST($d['maxYear'] + 2, $d['values'], $d['years']);
+            });
         } else {
             $result = null;
         }
@@ -303,7 +300,7 @@ class Jmp extends Calculator
 
             if (!is_null($computed)) {
                 $yearsWithData[] = $year;
-                $result['count']++;
+                $result['count'] ++;
             }
         }
 
@@ -314,8 +311,8 @@ class Jmp extends Calculator
         $result['period'] = $result['maxYear'] - $result['minYear'] ? : 1;
 
         $result['slope'] = $result['count'] < 2 ? null : $this->ifNonZeroValue($result['values'], function() use ($result, $years) {
-                            return \PHPExcel_Calculation_Statistical::SLOPE($result['values'], $years);
-                        });
+                    return \PHPExcel_Calculation_Statistical::SLOPE($result['values'], $years);
+                });
 
         $result['average'] = $result['count'] ? \PHPExcel_Calculation_MathTrig::SUM($result['values']) / $result['count'] : null;
 
@@ -416,7 +413,7 @@ class Jmp extends Calculator
             $result = null;
         }
 
-        _log()->debug(__FUNCTION__, array($currentFilterId, $partId, $year, $rule->getId(), $rule->getName(), $originalFormula, $convertedFormulas, $result));
+        _log()->debug(__METHOD__, array($currentFilterId, $partId, $year, $rule->getId(), $rule->getName(), $originalFormula, $convertedFormulas, $result));
         return $result;
     }
 

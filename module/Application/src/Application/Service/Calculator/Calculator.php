@@ -214,7 +214,7 @@ use \Application\Traits\EntityManagerAware;
      */
     public function computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules = false, ArrayCollection $alreadyUsedFormulas = null)
     {
-        _log()->debug(__FUNCTION__, array('start', $filterId, $questionnaireId, $partId));
+        _log()->debug(__METHOD__, array('start', $filterId, $questionnaireId, $partId));
         $key = \Application\Utility::getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheComputeFilter)) {
             return $this->cacheComputeFilter[$key];
@@ -226,7 +226,7 @@ use \Application\Traits\EntityManagerAware;
         $result = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, new ArrayCollection());
 
         $this->cacheComputeFilter[$key] = $result;
-        _log()->debug(__FUNCTION__, array('end  ', $filterId, $questionnaireId, $partId, $result));
+        _log()->debug(__METHOD__, array('end  ', $filterId, $questionnaireId, $partId, $result));
         return $result;
     }
 
@@ -324,7 +324,7 @@ use \Application\Traits\EntityManagerAware;
         $alreadyUsedFormulas->add($usage);
         $originalFormula = $usage->getRule()->getFormula();
 
-        _log()->debug(__FUNCTION__, array($usage->getId(), $originalFormula));
+        _log()->debug(__METHOD__, array($usage->getId(), $originalFormula));
 
         // Replace {F#12,Q#34,P#56} with Filter value
         $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)(,L#2)?\}/', function($matches) use ($usage, $alreadyUsedFormulas) {
@@ -424,7 +424,7 @@ use \Application\Traits\EntityManagerAware;
             $result = null;
         }
 
-        _log()->debug(__FUNCTION__, array($usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormulas, $result));
+        _log()->debug(__METHOD__, array($usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormulas, $result));
         return $result;
     }
 
