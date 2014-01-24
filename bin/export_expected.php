@@ -129,7 +129,12 @@ function doOneCountryCountry(array $country, \PHPExcel $wb)
             foreach ($def['cols'] as $col) {
 
                 $cell = $sheet->getCellByColumnAndRow($col, $row);
-                $data[] = getCalculatedValueSafely($cell);
+                $value = getCalculatedValueSafely($cell);
+                if ($col != 0 && $cell->getDataType() != \PHPExcel_Cell_DataType::TYPE_FORMULA) {
+                    $value = 'HARDCODED ' . $cell->getCoordinate() . ' = ' . $value;
+                }
+                
+                $data[] = $value;
             }
             echo $type . ' ' . $data[2] . PHP_EOL;
             $superdata[$type][] = $data;
@@ -260,7 +265,7 @@ function getCalculatedValueSafely(\PHPExcel_Cell $cell)
             throw $exception;
         }
     }
-    
+
     if ($value == \PHPExcel_Calculation_Functions::NA() || $value == \PHPExcel_Calculation_Functions::DIV0()) {
         return null;
     } else {
