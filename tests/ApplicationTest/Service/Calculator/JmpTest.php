@@ -677,4 +677,62 @@ class JmpTest extends AbstractCalculator
         $this->assertEquals(4, $this->service->computeRegressionOneYear(2006, $this->filter1->getId(), $this->questionnaires, $this->part1->getId()));
     }
 
+    /**
+     * Return formula and configurator for mockCalculator
+     * @return array
+     */
+    public function computeFormulaFlattenProvider()
+    {
+        return array(
+            array('={F#345}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+            $mockedCalculator->expects($this->once())
+                    ->method('computeFlattenOneYearWithFormula')
+                    ->with($this->equalTo($year), $this->equalTo($years), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo($partId), $this->equalTo($partIds));
+        }),
+            array('={F#current}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+            $mockedCalculator->expects($this->once())
+                    ->method('computeFlattenOneYearWithFormula')
+                    ->with($this->equalTo($year), $this->equalTo($years), $this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId), $this->equalTo($partIds));
+        }),
+            array('={self}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+            $mockedCalculator->expects($this->once())
+                    ->method('computeFlattenOneYearWithFormula')
+                    ->with($this->equalTo($year), $this->equalTo($years), $this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId), $this->equalTo($partIds));
+        }),
+            array('={F#12,Q#all}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+            $mockedCalculator->expects($this->once())
+                    ->method('computeFilterForAllQuestionnaires')
+                    ->with($this->equalTo(12), $this->equalTo($questionnaires), $this->equalTo($partId))
+                    ->will($this->returnValue(array('values' => array(1))));
+        }),
+            array('={F#current,Q#all}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+            $mockedCalculator->expects($this->once())
+                    ->method('computeFilterForAllQuestionnaires')
+                    ->with($this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId))
+                    ->will($this->returnValue(array('values' => array(1))));
+        }),
+        );
+    }
+
+    /**
+     * @dataProvider computeFormulaFlattenProvider
+     */
+    public function testComputeFormulaFlatten($formula, $configurator)
+    {
+        $rule = new \Application\Model\Rule\Rule();
+        $rule->setFormula($formula);
+        $year = 2000;
+        $years = array(2000, 2001, 2002);
+        $currentFilterId = 1;
+        $questionnaires = array(2, 3);
+        $partIds = array(4, 5, 6);
+        $partId = 4;
+
+        // Test that we the custom syntax is correctly interpreted and submethods are correctly called
+        $mockedCalculator = $this->getMock('\Application\Service\Calculator\Jmp', array('computeFlattenOneYearWithFormula', 'computeFilterForAllQuestionnaires'));
+        $configurator($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds);
+
+        $mockedCalculator->computeFormulaFlatten($rule, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds);
+    }
+
 }

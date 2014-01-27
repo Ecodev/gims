@@ -91,7 +91,7 @@ class Jmp extends Calculator
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return null|float
      */
-    private function computeFlattenOneYearWithFormula($year, array $years, $filterId, array $questionnaires, $partId, array $partIds, ArrayCollection $alreadyUsedRules = null)
+    protected function computeFlattenOneYearWithFormula($year, array $years, $filterId, array $questionnaires, $partId, array $partIds, ArrayCollection $alreadyUsedRules = null)
     {
         if (!$alreadyUsedRules) {
             $alreadyUsedRules = new ArrayCollection();
@@ -101,7 +101,11 @@ class Jmp extends Calculator
         if ($questionnaires) {
             $filterGeonameUsage = $this->getFilterGeonameUsageRepository()->getFirst(reset($questionnaires)->getGeoname()->getId(), $filterId, $partId, $alreadyUsedRules);
             if ($filterGeonameUsage) {
-                return $this->computeFormulaFlatten($filterGeonameUsage->getRule(), $year, $years, $filterId, $questionnaires, $partId, $partIds, $alreadyUsedRules);
+                $oneYearResult = $this->computeFormulaFlatten($filterGeonameUsage->getRule(), $year, $years, $filterId, $questionnaires, $partId, $partIds, $alreadyUsedRules);
+
+                _log()->debug(__METHOD__, array($filterId, $partId, $year, $oneYearResult));
+
+                return $oneYearResult;
             }
         }
 
@@ -129,6 +133,8 @@ class Jmp extends Calculator
             $allRegressions = $this->computeRegressionForAllYears($years, $filterId, $questionnaires, $partId);
             $oneYearResult = $this->computeFlattenOneYear($year, $allRegressions);
         }
+
+        _log()->debug(__METHOD__, array($filterId, $partId, $year, $oneYearResult, $allRegressions));
 
         return $oneYearResult;
     }
