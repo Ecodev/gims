@@ -29,9 +29,7 @@ class FilterRepository extends AbstractRepository
      */
     public function getOneOfficialByNames($name, $parentName)
     {
-        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
-
-        $qb = $filterRepository->createQueryBuilder('f')->where('f.name = :name AND f.questionnaire IS NULL');
+        $qb = $this->createQueryBuilder('f')->where('f.name = :name AND f.questionnaire IS NULL');
         $parameters = array('name' => $name);
         if ($parentName) {
             $parameters['parentName'] = $parentName;
@@ -52,9 +50,7 @@ class FilterRepository extends AbstractRepository
 
     public function getOfficialRoots()
     {
-        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
-
-        $qb = $filterRepository->createQueryBuilder('f')->where('f.questionnaire IS NULL');
+        $qb = $this->createQueryBuilder('f')->where('f.questionnaire IS NULL');
         $qb->leftJoin('f.parents', 'p');
 
         $q = $qb->getQuery();

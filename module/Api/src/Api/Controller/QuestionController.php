@@ -12,7 +12,7 @@ use Application\Model\Question\Choice;
 class QuestionController extends AbstractChildRestfulController
 {
 
-    use \Application\Traits\FlatHierarchicQuestions;
+    use \Application\Traits\FlatHierarchic;
 
     /**
      * The new choices to be added to the newly created question
@@ -110,7 +110,15 @@ class QuestionController extends AbstractChildRestfulController
 
             return new JsonModel(array('message' => 'Cannot list all items without a valid parent. Use URL similar to: /api/parent/1/question'));
         }
-        $questions = $this->getFlatHierarchy($questions, $this->getJsonConfig(), $this->hydrator);
+
+        // prepare flat array of questions for then be reordered by Parent > childrens > childrens
+        $flatQuestions = array();
+        foreach ($questions as $question) {
+            $flatQuestion = $this->hydrator->extract($question, $this->getJsonConfig());
+            array_push($flatQuestions, $flatQuestion);
+        }
+
+        $questions = $this->getFlatHierarchy($flatQuestions, 'chapter');
 
         return new JsonModel($questions);
     }

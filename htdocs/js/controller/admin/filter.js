@@ -3,7 +3,7 @@
 angular.module('myApp').controller('Admin/Filter/CrudCtrl', function ($scope, $location, $routeParams, Modal, Restangular) {
     "use strict";
 
-    $scope.fields = {fields:'children,children.children,children.children.children,children.children.children.children,parents,parents.parents,parents.parents.parents,parents.parents.parents.parents'};
+    $scope.fields = {fields:'children,parents'};
 
     var redirectTo = '/admin/filter';
     if ($routeParams.returnUrl) {
@@ -91,12 +91,22 @@ angular.module('myApp').controller('Admin/FilterCtrl', function ($scope, $locati
         filterOptions: {},
         multiSelect: false,
         columnDefs: [
-            {field: 'name', displayName: 'Name'},
-            {displayName: '', width: '70px', cellTemplate: '' +
-                '<div class="btn-group">'+
-                '   <a class="btn btn-default btn-xs" href="/admin/filter/edit/{{row.entity.id}}"><i class="fa fa-pencil fa-lg"></i></a>'+
-                '   <button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'+
-                '</div>'
+            {
+                field: 'name',
+                displayName: 'Name',
+                cellTemplate:   ''+
+                    '<div class="ngCellText" ng-class="col.colIndex()">' +
+                    '   <span style="padding-left: {{row.entity.level}}em;">{{row.entity.name}}</span>' +
+                    '</div>'
+            },
+            {
+                displayName: '',
+                width: '70px',
+                cellTemplate: '' +
+                    '<div class="btn-group" style="margin:4px 0 0 4px;">'+
+                    '   <a class="btn btn-default btn-xs" href="/admin/filter/edit/{{row.entity.id}}"><i class="fa fa-pencil fa-lg"></i></a>'+
+                    '   <button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'+
+                    '</div>'
             }
         ]
     };

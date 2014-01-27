@@ -9,7 +9,7 @@
 
     <form novalidate name="myForm" class="form-horizontal">
 
-        <?php echo $this->crudButtons('question'); ?>
+        <?php echo $this->crudButtons('filter'); ?>
 
         <br/><br/>
 
@@ -24,9 +24,9 @@
         </div>
 
         <div class="form-group" ng-hide="isChapter" ng-class="{'has-error': myForm.filter.$invalid}">
-            <label class="control-label col-md-2"  for="filters">Parents</label>
+            <label class="control-label col-md-2"  for="parents">Parents</label>
             <div class="col-md-6">
-                <gims-select    name='filter'
+                <gims-select    name='parents'
                                 api="filter"
                                 model="filter.parents"
                                 placeholder="Select parents"
@@ -41,12 +41,29 @@
 
 
         <div class="form-group" ng-hide="isChapter" ng-class="{'has-error': myForm.filter.$invalid}">
-            <label class="control-label col-md-2"  for="filters">Children</label>
+            <label class="control-label col-md-2"  for="children">Children</label>
             <div class="col-md-6">
-                <gims-select    name='filter'
+                <gims-select    name='children'
                                 api="filter"
                                 model="filter.children"
                                 placeholder="Select children"
+                                style="width: 100%"
+                                multiple >
+                </gims-select>
+            </div>
+            <div class='col-md-1'>
+                <span ng-show="myForm.filter.$error.required" class="col-md-1 help-block">Required</span>
+            </div>
+        </div>
+
+
+        <div class="form-group" ng-hide="isChapter" ng-class="{'has-error': myForm.filter.$invalid}">
+            <label class="control-label col-md-2" for="summands">Summands</label>
+            <div class="col-md-6">
+                <gims-select    name='summands'
+                                api="filter"
+                                model="filter.summands"
+                                placeholder="Select summands"
                                 style="width: 100%"
                                 multiple >
                 </gims-select>

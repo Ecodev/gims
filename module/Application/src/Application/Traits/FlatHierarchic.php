@@ -2,7 +2,7 @@
 
 namespace Application\Traits;
 
-trait FlatHierarchicQuestions
+trait FlatHierarchic
 {
 
     /**
@@ -14,25 +14,18 @@ trait FlatHierarchicQuestions
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getFlatHierarchy($questions, $jsonConfig, $hydrator)
+    public function getFlatHierarchy($objects, $referenceObject)
     {
-        // prepare flat array of questions for then be reordered by Parent > childrens > childrens
-        $flatQuestions = array();
-        foreach ($questions as $question) {
-            $flatQuestion = $hydrator->extract($question, $jsonConfig);
-            array_push($flatQuestions, $flatQuestion);
-        }
-
         $new = array();
         $firstId = null;
-        foreach ($flatQuestions as $a) {
-            if (empty($a['chapter']['id'])) {
-                $a['chapter']['id'] = 0;
+        foreach ($objects as $a) {
+            if (empty($a[$referenceObject]['id'])) {
+                $a[$referenceObject]['id'] = 0;
             }
-            $new[$a['chapter']['id']][] = $a;
+            $new[$a[$referenceObject]['id']][] = $a;
         }
 
-        if ($flatQuestions) {
+        if ($objects) {
             $questions = $this->createTree($new, $new[0], 0);
         } else {
             $questions = array();
