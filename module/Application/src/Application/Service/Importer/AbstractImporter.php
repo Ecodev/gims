@@ -155,9 +155,9 @@ use \Application\Traits\EntityManagerAware;
                     'excludes' => null,
                     'isImproved' => false,
                     'formulas' => array(
-                        array(3, '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)'),
-                        array(4, '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)'),
-                        array(5, '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)'),
+                        array(3, '=IF(ISNUMBER(Total improved), Total improved - Piped onto premises, NULL)'),
+                        array(4, '=IF(ISNUMBER(Total improved), Total improved - Piped onto premises, NULL)'),
+                        array(5, '=IF(ISNUMBER(Total improved), Total improved - Piped onto premises, NULL)'),
                     ),
                 ),
                 "Other Unimproved" => array(
