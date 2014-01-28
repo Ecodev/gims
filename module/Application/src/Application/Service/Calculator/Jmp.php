@@ -389,14 +389,21 @@ class Jmp extends Calculator
                 }, $originalFormula);
 
         // Replace {F#12} with Filter regression value
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+|current)}/', function($matches) use ($year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+|current)(,([+-]?\d+))?}/', function($matches) use ($year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
                     $filterId = $matches[1];
+                    $yearShift = @$matches[3];
+                    $year += $yearShift;
 
                     if ($filterId == 'current') {
                         $filterId = $currentFilterId;
                     }
 
-                    $value = $this->computeFlattenOneYearWithFormula($year, $years, $filterId, $questionnaires, $partId, $partIds);
+                    // Only compute thing if in current years, to avoid infinite recursitivy in a very distant future
+                    if (in_array($year, $years)) {
+                        $value = $this->computeFlattenOneYearWithFormula($year, $years, $filterId, $questionnaires, $partId, $partIds);
+                    } else {
+                        $value = null;
+                    }
 
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);

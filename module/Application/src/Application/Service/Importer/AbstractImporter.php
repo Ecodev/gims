@@ -8,7 +8,8 @@ abstract class AbstractImporter
 {
 
     use \Zend\ServiceManager\ServiceLocatorAwareTrait;
-    use \Application\Traits\EntityManagerAware;
+
+use \Application\Traits\EntityManagerAware;
 
     protected $cacheQuestions = array();
     protected $cacheFilters = array();
@@ -143,8 +144,8 @@ abstract class AbstractImporter
                     'excludes' => 93,
                     'isImproved' => false,
                     'formulas' => array(
-                        array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, {self}), NULL)'),
-                        array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, {self}), NULL)'),
+                        array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, {self})), NULL)'),
+                        array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, {self})), NULL)'),
                         array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, {self}), NULL)'),
                     ),
                 ),

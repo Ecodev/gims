@@ -689,6 +689,16 @@ class JmpTest extends AbstractCalculator
                     ->method('computeFlattenOneYearWithFormula')
                     ->with($this->equalTo($year), $this->equalTo($years), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo($partId), $this->equalTo($partIds));
         }),
+            array('={F#345,+2}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+            $mockedCalculator->expects($this->once())
+                    ->method('computeFlattenOneYearWithFormula')
+                    ->with($this->equalTo($year + 2), $this->equalTo($years), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo($partId), $this->equalTo($partIds));
+        }),
+            array('={F#345,-1}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+            $mockedCalculator->expects($this->once())
+                    ->method('computeFlattenOneYearWithFormula')
+                    ->with($this->equalTo($year - 1), $this->equalTo($years), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo($partId), $this->equalTo($partIds));
+        }),
             array('={F#current}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
             $mockedCalculator->expects($this->once())
                     ->method('computeFlattenOneYearWithFormula')
@@ -722,7 +732,7 @@ class JmpTest extends AbstractCalculator
         $rule = new \Application\Model\Rule\Rule();
         $rule->setFormula($formula);
         $year = 2000;
-        $years = array(2000, 2001, 2002);
+        $years = array(1999, 2000, 2001, 2002);
         $currentFilterId = 1;
         $questionnaires = array(2, 3);
         $partIds = array(4, 5, 6);

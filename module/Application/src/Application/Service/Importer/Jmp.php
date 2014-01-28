@@ -991,6 +991,7 @@ STRING;
                         $id = $otherHighFilter->getId();
                         $formula = str_replace('COUNT({' . $filterNameOther, "COUNT({F#$id", $formula);
                         $formula = str_replace('AVERAGE({' . $filterNameOther, "AVERAGE({F#$id", $formula);
+                        $formula = str_replace($filterNameOther . 'LATER', "{F#$id,+1}", $formula);
                         $formula = str_replace($filterNameOther, "{F#$id}", $formula);
                     }
 

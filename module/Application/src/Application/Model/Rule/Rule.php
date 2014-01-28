@@ -36,8 +36,10 @@ use Doctrine\ORM\Mapping as ORM;
  * Regression context (Calculator\Jmp):
  * <ul>
  *     <li>
- *         Reference a Filter's regression value for same part and year:
+ *         Reference a Filter's regression value for same part and year. Or 1 year earlier, or 3 years later:
  *         <pre>{F#12}</pre>
+ *         <pre>{F#12,-1}</pre>
+ *         <pre>{F#12,+3}</pre>
  *     </li>
  *     <li>
  *         Reference a list of available filter values for all current questionnaires.
