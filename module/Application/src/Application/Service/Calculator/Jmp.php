@@ -175,6 +175,10 @@ class Jmp extends Calculator
                 $result = $flattenYearLater;
             } elseif ($flattenYearLater === $minRegression && $flattenYearLater > 0.95) {
                 $result = $flattenYearLater;
+            } elseif ($flattenYearLater === 1) {
+                $result = 1;
+            } elseif ($flattenYearLater === 0) {
+                $result = 0;
             }
         }
 
