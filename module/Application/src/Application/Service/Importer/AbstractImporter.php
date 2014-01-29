@@ -128,6 +128,7 @@ use \Application\Traits\EntityManagerAware;
                     'excludes' => 91,
                     'isImproved' => true,
                     'formulas' => array(
+                        array(5, '=IF(AND(ISNUMBER(Total improvedURBAN), ISNUMBER(Total improvedRURAL)), (Total improvedURBAN * POPULATION_URBAN + Total improvedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)'),
                     ),
                 ),
                 "Piped onto premises" => array(
@@ -136,6 +137,7 @@ use \Application\Traits\EntityManagerAware;
                     'excludes' => 92,
                     'isImproved' => true,
                     'formulas' => array(
+                        array(5, '=IF(AND(ISNUMBER(Piped onto premisesURBAN), ISNUMBER(Piped onto premisesRURAL)), (Piped onto premisesURBAN * POPULATION_URBAN + Piped onto premisesRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)'),
                     ),
                 ),
                 "Surface water" => array(
@@ -146,7 +148,7 @@ use \Application\Traits\EntityManagerAware;
                     'formulas' => array(
                         array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, {self})), NULL)'),
                         array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, {self})), NULL)'),
-                        array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, {self}), NULL)'),
+                        array(5, '=IF(Total improved = 1, 0, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                     ),
                 ),
                 "Other Improved" => array(
@@ -288,6 +290,7 @@ use \Application\Traits\EntityManagerAware;
                     'excludes' => 96,
                     'isImproved' => true,
                     'formulas' => array(
+                        array(5, '=IF(ISNUMBER(Shared), Shared + Improved, IF(AND(ISNUMBER(Improved + sharedURBAN), ISNUMBER(Improved + sharedRURAL)), (Improved + sharedURBAN * POPULATION_URBAN + Improved + sharedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                     ),
                 ),
                 "Sewerage connections" => array(
@@ -310,7 +313,7 @@ use \Application\Traits\EntityManagerAware;
                         // Normal rules
                         array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
                         array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
-                        array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                        array(5, "=IF(AND(ISNUMBER(ImprovedURBAN), ISNUMBER(ImprovedRURAL)), (ImprovedURBAN * POPULATION_URBAN + ImprovedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)"),
                     ),
                 ),
                 "Shared" => array(
@@ -321,7 +324,7 @@ use \Application\Traits\EntityManagerAware;
                     'formulas' => array(
                         array(3, '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)'),
                         array(4, '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)'),
-                        array(5, '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)'),
+                        array(5, "=IF(AND(ISNUMBER(SharedURBAN), ISNUMBER(SharedRURAL)), (SharedURBAN * POPULATION_URBAN + SharedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)"),
                     ),
                 ),
                 "Other unimproved" => array(
@@ -343,7 +346,7 @@ use \Application\Traits\EntityManagerAware;
                     'formulas' => array(
                         array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, {self}), NULL)'),
                         array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, {self}), NULL)'),
-                        array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, {self}), NULL)'),
+                        array(5, '=IF(Improved + shared = 1, 0, IF(AND(ISNUMBER(Open defecationURBAN), ISNUMBER(Open defecationRURAL)), (Open defecationURBAN * POPULATION_URBAN + Open defecationRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                     ),
                 ),
             ),

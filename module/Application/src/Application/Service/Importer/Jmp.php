@@ -991,8 +991,14 @@ STRING;
                         $id = $otherHighFilter->getId();
                         $formula = str_replace('COUNT({' . $filterNameOther, "COUNT({F#$id", $formula);
                         $formula = str_replace('AVERAGE({' . $filterNameOther, "AVERAGE({F#$id", $formula);
-                        $formula = str_replace($filterNameOther . 'LATER', "{F#$id,+1}", $formula);
-                        $formula = str_replace($filterNameOther, "{F#$id}", $formula);
+                        $formula = str_replace($filterNameOther . 'LATER', "{F#$id,P#current,Y+1}", $formula);
+                        $formula = str_replace($filterNameOther . 'URBAN', "{F#$id,P#" . $this->partUrban->getId() . ",Y0}", $formula);
+                        $formula = str_replace($filterNameOther . 'RURAL', "{F#$id,P#" . $this->partRural->getId() . ",Y0}", $formula);
+                        $formula = str_replace($filterNameOther . 'TOTAL', "{F#$id,P#" . $this->partTotal->getId() . ",Y0}", $formula);
+                        $formula = str_replace($filterNameOther, "{F#$id,P#current,Y0}", $formula);
+                        $formula = str_replace('POPULATION_URBAN', "{Q#all,P#" . $this->partUrban->getId() . "}", $formula);
+                        $formula = str_replace('POPULATION_RURAL', "{Q#all,P#" . $this->partRural->getId() . "}", $formula);
+                        $formula = str_replace('POPULATION_TOTAL', "{Q#all,P#" . $this->partTotal->getId() . "}", $formula);
                     }
 
                     $suffix = $isDevelopedFormula ? ' (for developed countries)' : '';

@@ -37,14 +37,18 @@ use Doctrine\ORM\Mapping as ORM;
  * <ul>
  *     <li>
  *         Reference a Filter's regression value for same part and year. Or 1 year earlier, or 3 years later:
- *         <pre>{F#12}</pre>
- *         <pre>{F#12,-1}</pre>
- *         <pre>{F#12,+3}</pre>
+ *         <pre>{F#12,P#current,Y0}</pre>
+ *         <pre>{F#12,P#current,Y-1}</pre>
+ *         <pre>{F#12,P#current,Y+3}</pre>
  *     </li>
  *     <li>
  *         Reference a list of available filter values for all current questionnaires.
  *         The result use Excel array constant syntax (eg: "{1,2,3,4,5}")
  *         <pre>{F#12,Q#all}</pre>
+ *     </li>
+ *     <li>
+ *         Reference the cumulated population for all current questionnaires for the given part:
+ *         <pre>{Q#all,P#56}</pre>
  *     </li>
  * </ul>
  *
@@ -63,6 +67,7 @@ use Doctrine\ORM\Mapping as ORM;
  * - P = Part
  * - R = Rule
  * - L = Level, only two possibilities: absent, or exactly "L#2" to indicate Level 2
+ * - Y = Year
  *
  * In the first case, F, and in all cases Q and P, can have the value "current" instead of actual ID. It means
  * that the current Filter, Questionnaire or Part should be used, instead of one selected

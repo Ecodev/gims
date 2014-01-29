@@ -559,97 +559,6 @@ class JmpTest extends AbstractCalculator
                 ), $this->service->computeFilterForAllQuestionnaires($this->filter1->getId(), $this->questionnaires, $this->part1->getId()));
     }
 
-    public function testComplementaryTotal()
-    {
-        $this->answer131->setPart($this->part2);
-        $this->answer132->setPart($this->partTotal);
-
-        $r1 = $this->service->computeFlattenAllYears(2000, 2001, $this->filterSet, $this->questionnaires, $this->part1);
-        $r2 = $this->service->computeFlattenAllYears(2000, 2001, $this->filterSet, $this->questionnaires, $this->part2);
-        $rt = $this->service->computeFlattenAllYears(2000, 2001, $this->filterSet, $this->questionnaires, $this->partTotal);
-
-        $this->assertEquals(array(
-            array(
-                'name' => 'improved',
-                'data' => array(
-                    0 => 0.001100000000001,
-                    1 => 0.020880000000005,
-                ),
-                'id' => 15
-            ),
-            array(
-                'name' => 'unimproved',
-                'data' => array(
-                    NULL,
-                    NULL,
-                ),
-                'id' => 16
-            ),
-            array(
-                'name' => 'total',
-                'data' => array(
-                    0 => 0.0011109999999945,
-                    1 => 0.020888999999997,
-                ),
-                'id' => 17
-            ),
-                ), $r1);
-
-        $this->assertEquals(array(
-            array(
-                'name' => 'improved',
-                'data' => array(
-                    0 => 0.1,
-                    1 => 0.1,
-                ),
-                'id' => 15
-            ),
-            array(
-                'name' => 'unimproved',
-                'data' => array(
-                    NULL,
-                    NULL,
-                ),
-                'id' => 16
-            ),
-            array(
-                'name' => 'total',
-                'data' => array(
-                    0 => 0.1,
-                    1 => 0.1,
-                ),
-                'id' => 17
-            ),
-                ), $r2);
-
-        $this->assertEquals(array(
-            array(
-                'name' => 'improved',
-                'data' => array(
-                    0 => 0.023923076923078,
-                    1 => 0.039138461538466,
-                ),
-                'id' => 15
-            ),
-            array(
-                'name' => 'unimproved',
-                'data' => array(
-                    NULL,
-                    NULL,
-                ),
-                'id' => 16
-            ),
-            array(
-                'name' => 'total',
-                'data' => array(
-                    0 => 0.023931538461534,
-                    1 => 0.039145384615382,
-                ),
-                'id' => 17
-            ),
-                ), $rt);
-    }
-
     public function testAllZeroValueShouldNotDivideByZero()
     {
         // Set everything to zero
@@ -684,42 +593,55 @@ class JmpTest extends AbstractCalculator
     public function computeFormulaFlattenProvider()
     {
         return array(
-            array('={F#345}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+            array('={F#345,P#current,Y0}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId) {
             $mockedCalculator->expects($this->once())
                     ->method('computeFlattenOneYearWithFormula')
-                    ->with($this->equalTo($year), $this->equalTo($years), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo($partId), $this->equalTo($partIds));
+                    ->with($this->equalTo($year), $this->equalTo($years), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo($partId));
         }),
-            array('={F#345,+2}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+            array('={F#345,P#current,Y+2}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId) {
             $mockedCalculator->expects($this->once())
                     ->method('computeFlattenOneYearWithFormula')
-                    ->with($this->equalTo($year + 2), $this->equalTo($years), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo($partId), $this->equalTo($partIds));
+                    ->with($this->equalTo($year + 2), $this->equalTo($years), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo($partId));
         }),
-            array('={F#345,-1}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+            array('={F#345,P#678,Y-1}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId) {
             $mockedCalculator->expects($this->once())
                     ->method('computeFlattenOneYearWithFormula')
-                    ->with($this->equalTo($year - 1), $this->equalTo($years), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo($partId), $this->equalTo($partIds));
+                    ->with($this->equalTo($year - 1), $this->equalTo($years), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo(678));
         }),
-            array('={F#current}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+            array('={F#current,P#current,Y0}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId) {
             $mockedCalculator->expects($this->once())
                     ->method('computeFlattenOneYearWithFormula')
-                    ->with($this->equalTo($year), $this->equalTo($years), $this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId), $this->equalTo($partIds));
+                    ->with($this->equalTo($year), $this->equalTo($years), $this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId));
         }),
-            array('={self}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+            array('={self}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId) {
             $mockedCalculator->expects($this->once())
                     ->method('computeFlattenOneYearWithFormula')
-                    ->with($this->equalTo($year), $this->equalTo($years), $this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId), $this->equalTo($partIds));
+                    ->with($this->equalTo($year), $this->equalTo($years), $this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId));
         }),
-            array('={F#12,Q#all}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+            array('={F#12,Q#all}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId) {
             $mockedCalculator->expects($this->once())
                     ->method('computeFilterForAllQuestionnaires')
                     ->with($this->equalTo(12), $this->equalTo($questionnaires), $this->equalTo($partId))
                     ->will($this->returnValue(array('values' => array(1))));
         }),
-            array('={F#current,Q#all}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds) {
+            array('={F#current,Q#all}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId) {
             $mockedCalculator->expects($this->once())
                     ->method('computeFilterForAllQuestionnaires')
                     ->with($this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId))
                     ->will($this->returnValue(array('values' => array(1))));
+        }),
+            array('={Q#all,P#2}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId) {
+
+            $mockedPop = $this->getMock('\Application\Repository\PopulationRepository', array('getOneByGeoname'), array(), '', false);
+
+            $mockedCalculator->setPopulationRepository($mockedPop);
+
+            foreach ($questionnaires as $q) {
+                $mockedPop->expects($this->exactly(count($questionnaires)))
+                        ->method('getOneByGeoname')
+                        ->with($this->anything(), $this->equalTo(2), $year)
+                        ->will($this->returnValue(new \Application\Model\Population()));
+            }
         }),
         );
     }
@@ -734,15 +656,14 @@ class JmpTest extends AbstractCalculator
         $year = 2000;
         $years = array(1999, 2000, 2001, 2002);
         $currentFilterId = 1;
-        $questionnaires = array(2, 3);
-        $partIds = array(4, 5, 6);
+        $questionnaires = $this->questionnaires;
         $partId = 4;
 
         // Test that we the custom syntax is correctly interpreted and submethods are correctly called
         $mockedCalculator = $this->getMock('\Application\Service\Calculator\Jmp', array('computeFlattenOneYearWithFormula', 'computeFilterForAllQuestionnaires'));
-        $configurator($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds);
+        $configurator($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId);
 
-        $mockedCalculator->computeFormulaFlatten($rule, $year, $years, $currentFilterId, $questionnaires, $partId, $partIds);
+        $mockedCalculator->computeFormulaFlatten($rule, $year, $years, $currentFilterId, $questionnaires, $partId);
     }
 
 }

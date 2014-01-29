@@ -255,17 +255,17 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $stubAnswerRepository->expects($this->any())
                 ->method('getValuePercent')
                 ->will($this->returnCallback(function($questionnaireId, $filterId, $partId) {
-                                    $questionnaire = $this->getModel('\Application\Model\Questionnaire', $questionnaireId);
-                                    foreach ($questionnaire->getAnswers() as $answer) {
-                                        $answerFilter = $answer->getQuestion()->getFilter()->getOfficialFilter() ? : $answer->getQuestion()->getFilter();
-                                        if ($answerFilter->getId() == $filterId && $answer->getPart()->getId() == $partId) {
+                            $questionnaire = $this->getModel('\Application\Model\Questionnaire', $questionnaireId);
+                            foreach ($questionnaire->getAnswers() as $answer) {
+                                $answerFilter = $answer->getQuestion()->getFilter()->getOfficialFilter() ? : $answer->getQuestion()->getFilter();
+                                if ($answerFilter->getId() == $filterId && $answer->getPart()->getId() == $partId) {
 
-                                            return $answer->getValuePercent();
-                                        }
-                                    }
+                                    return $answer->getValuePercent();
+                                }
+                            }
 
-                                    return null;
-                                })
+                            return null;
+                        })
         );
 
         return $stubAnswerRepository;
@@ -273,20 +273,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
 
     protected function getStubQuestionnaireRepository()
     {
-        $stubQuestionnaireRepository = $this->getMock('\Application\Repository\QuestionnaireRepository', array('isOnlyTotal'), array(), '', false);
-        $stubQuestionnaireRepository->expects($this->any())
-                ->method('isOnlyTotal')
-                ->will($this->returnCallback(function(array $questionnaires) {
-                                    foreach ($questionnaires as $questionnaire) {
-                                        foreach ($questionnaire->getAnswers() as $answer) {
-                                            if (!$answer->getPart()->isTotal())
-                                                return false;
-                                        }
-                                    }
-
-                                    return true;
-                                })
-        );
+        $stubQuestionnaireRepository = $this->getMock('\Application\Repository\QuestionnaireRepository', array(), array(), '', false);
 
         return $stubQuestionnaireRepository;
     }
@@ -299,18 +286,19 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
                 ->method('getFirst')
                 ->will($this->returnCallback(function($questionnaireId, $filterId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas) {
 
-                                    $filter = $this->getModel('\Application\Model\Filter', $filterId);
-                                    foreach ($filter->getFilterQuestionnaireUsages() as $filterQuestionnaireUsage) {
-                                        if (($useSecondLevelRules || !$filterQuestionnaireUsage->isSecondLevel()) && $filterQuestionnaireUsage->getRule() && $filterQuestionnaireUsage->getQuestionnaire()->getId() == $questionnaireId && $filterQuestionnaireUsage->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterQuestionnaireUsage)) {
-                                            return $filterQuestionnaireUsage;
-                                        }
-                                    }
-                                    return null;
-                                })
+                            $filter = $this->getModel('\Application\Model\Filter', $filterId);
+                            foreach ($filter->getFilterQuestionnaireUsages() as $filterQuestionnaireUsage) {
+                                if (($useSecondLevelRules || !$filterQuestionnaireUsage->isSecondLevel()) && $filterQuestionnaireUsage->getRule() && $filterQuestionnaireUsage->getQuestionnaire()->getId() == $questionnaireId && $filterQuestionnaireUsage->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterQuestionnaireUsage)) {
+                                    return $filterQuestionnaireUsage;
+                                }
+                            }
+                            return null;
+                        })
         );
 
         return $stubFilterQuestionnaireUsageRepository;
     }
+
     protected function getStubFilterGeonameUsageRepository()
     {
         // Create a stub for the FilterQuestionnaireUsageRepository class with predetermined values, so we don't have to mess with database
@@ -319,14 +307,14 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
                 ->method('getFirst')
                 ->will($this->returnCallback(function($geonameId, $filterId, $partId, ArrayCollection $alreadyUsedFormulas) {
 
-                                    $geoname = $this->getModel('\Application\Model\Geoname', $geonameId);
-                                    foreach ($geoname->getFilterGeonameUsages() as $filterGeonameUsage) {
-                                        if ($filterGeonameUsage->getRule() && $filterGeonameUsage->getFilter()->getId() == $filterId && $filterGeonameUsage->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterGeonameUsage->getRule())) {
-                                            return $filterGeonameUsage;
-                                        }
-                                    }
-                                    return null;
-                                })
+                            $geoname = $this->getModel('\Application\Model\Geoname', $geonameId);
+                            foreach ($geoname->getFilterGeonameUsages() as $filterGeonameUsage) {
+                                if ($filterGeonameUsage->getRule() && $filterGeonameUsage->getFilter()->getId() == $filterId && $filterGeonameUsage->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterGeonameUsage->getRule())) {
+                                    return $filterGeonameUsage;
+                                }
+                            }
+                            return null;
+                        })
         );
 
         return $stubFilterQuestionnaireUsageRepository;
@@ -338,38 +326,38 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
 
         $stubFilterRepository->expects($this->any())->method('getSummandIds')
                 ->will($this->returnCallback(function($filterId) {
-                                    $filter = $this->getModel('\Application\Model\Filter', $filterId);
+                            $filter = $this->getModel('\Application\Model\Filter', $filterId);
 
-                                    return $filter->getSummands()->map(function($f) {
-                                                        return $f->getId();
-                                                    })->toArray();
-                                }));
+                            return $filter->getSummands()->map(function($f) {
+                                        return $f->getId();
+                                    })->toArray();
+                        }));
 
         $stubFilterRepository->expects($this->any())->method('getChildrenIds')
                 ->will($this->returnCallback(function($filterId) {
-                                    $filter = $this->getModel('\Application\Model\Filter', $filterId);
+                            $filter = $this->getModel('\Application\Model\Filter', $filterId);
 
-                                    return $filter->getChildren()->map(function($f) {
-                                                        return $f->getId();
-                                                    })->toArray();
-                                }));
+                            return $filter->getChildren()->map(function($f) {
+                                        return $f->getId();
+                                    })->toArray();
+                        }));
 
         $stubFilterRepository->expects($this->any())
                 ->method('findOneById')
                 ->will($this->returnCallback(function($filterId) {
-                                    return $this->getModel('\Application\Model\Filter', $filterId);
-                                }));
+                            return $this->getModel('\Application\Model\Filter', $filterId);
+                        }));
 
         $stubFilterRepository->expects($this->any())
                 ->method('getUnofficialName')
                 ->will($this->returnCallback(function($officialFilterId, $questionnaireId) {
 
-                                    $filter = $this->getModel('\Application\Model\Filter', function($filter) use($officialFilterId, $questionnaireId) {
-                                                return $filter->getOfficialFilter() && $filter->getOfficialFilter()->getId() == $officialFilterId && $filter->getQuestionnaire() && $filter->getQuestionnaire()->getId() == $questionnaireId;
-                                            });
+                            $filter = $this->getModel('\Application\Model\Filter', function($filter) use($officialFilterId, $questionnaireId) {
+                                return $filter->getOfficialFilter() && $filter->getOfficialFilter()->getId() == $officialFilterId && $filter->getQuestionnaire() && $filter->getQuestionnaire()->getId() == $questionnaireId;
+                            });
 
-                                    return $filter ? $filter->getName() : null;
-                                }));
+                            return $filter ? $filter->getName() : null;
+                        }));
 
         return $stubFilterRepository;
     }
