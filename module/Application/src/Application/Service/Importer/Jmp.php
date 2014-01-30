@@ -969,11 +969,66 @@ STRING;
      */
     public function importHighFilterGeonameUsages(array $filters)
     {
+
         foreach ($this->importedQuestionnaires as $questionnaire) {
+
+            $formulaGroup = 'default';
+            $countryName = $questionnaire->getGeoname()->getCountry()->getName();
+            if (in_array($countryName, array(
+                        'American Samoa',
+                        'Antigua and Barbuda',
+                        'Aruba',
+                        'Bahamas',
+                        'Bahrain',
+                        'Barbados',
+                        'British Virgin Islands',
+                        'Cook Islands',
+                        'French Polynesia',
+                        'Guam',
+                        'Montserrat',
+                        'New Caledonia',
+                        'Niue',
+                        'Northern Mariana Islands',
+                        'Puerto Rico',
+                        'Saint Kitts and Nevis',
+                        'Saint Vincent and the Grenadines',
+                        'Saudi Arabia',
+                        'Seychelles',
+                        'Turks and Caicos Islands',
+                        'United States Virgin Islands'
+                    ))) {
+                $formulaGroup = 'onlyTotal';
+            } elseif (in_array($countryName, array(
+                        'Tokelau',
+                    ))) {
+                $formulaGroup = 'onlyRural';
+            } elseif (in_array($countryName, array(
+                        'Anguilla',
+                        'Cayman Islands',
+                        'Monaco',
+                        'Nauru',
+                        'Singapore',
+                    ))) {
+                $formulaGroup = 'onlyUrban';
+            } elseif (in_array($countryName, array(
+                        'Argentina',
+                        'Chile',
+                        'Costa Rica',
+                        'Guadeloupe',
+                        'Iraq',
+                        'Lithuania',
+                        'Martinique',
+                        'Palau',
+                        'Portugal',
+                        'Tuvalu',
+                    ))) {
+                $formulaGroup = 'popHigherThanTotal';
+            }
+
             foreach ($filters as $filterName => $filterData) {
                 $highFilter = $this->cacheHighFilters[$filterName];
 
-                foreach ($filterData['formulas'] as $formulaData) {
+                foreach ($filterData['formulas'][isset($filterData['formulas'][$formulaGroup]) ? $formulaGroup : 'default'] as $formulaData) {
 
 
                     $part = $this->partOffsets[$formulaData[0]];
@@ -1001,7 +1056,7 @@ STRING;
                         $formula = str_replace('POPULATION_TOTAL', "{Q#all,P#" . $this->partTotal->getId() . "}", $formula);
                     }
 
-                    $suffix = $isDevelopedFormula ? ' (for developed countries)' : '';
+                    $suffix = ' (' . $formulaGroup . ( $isDevelopedFormula ? ' - for developed countries' : '') . ')';
                     $rule = $this->getRule('Regression: ' . $highFilter->getName() . $suffix, $formula);
                     $this->getFilterGeonameUsage($highFilter, $questionnaire->getGeoname(), $rule, $part);
                 }
@@ -1049,7 +1104,7 @@ STRING;
         $filterImproved = @$this->cacheHighFilters['Improved'];
         $filterShared = @$this->cacheHighFilters['Shared'];
 
-        // SKip everything if we are not in Sanitation
+// SKip everything if we are not in Sanitation
         if (!$filterImproved || !$filterShared) {
             return;
         }
