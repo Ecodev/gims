@@ -140,9 +140,9 @@ Alternate Filters: $this->alternateFilterCount
 Answers          : $this->answerCount
 Rules            : $this->ruleCount
 Uses of Exclude  : $this->excludeCount
-Uses of Rule for Filter       : $this->filterQuestionnaireUsageCount
-Uses of Rule for Filter       : $this->filterGeonameUsageCount
-Uses of Rule for Questionnaire: $this->questionnaireUsageCount
+Uses of Rule for Filter-Questionnaire: $this->filterQuestionnaireUsageCount
+Uses of Rule for Filter-Geoname      : $this->filterGeonameUsageCount
+Uses of Rule for Questionnaire       : $this->questionnaireUsageCount
 
 STRING;
     }
