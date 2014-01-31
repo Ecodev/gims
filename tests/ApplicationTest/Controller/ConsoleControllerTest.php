@@ -52,7 +52,7 @@ Surveys          : 2
 Questionnaires   : 3
 Alternate Filters: 18
 Answers          : 70
-Rules            : 36
+Rules            : 41
 Uses of Exclude  : 41
 Uses of Rule for Filter-Questionnaire: 33
 Uses of Rule for Filter-Geoname      : 26
