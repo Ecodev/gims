@@ -6,6 +6,9 @@
 require __DIR__ . '/../htdocs/index.php';
 $countries = require (__DIR__ . '/countries.php');
 
+// Enable cyclic computation
+PHPExcel_Calculation::getInstance()->cyclicFormulaCount = 100;
+
 /**
  * Process all country files
  * @param array $countries
@@ -133,7 +136,7 @@ function doOneCountryCountry(array $country, \PHPExcel $wb)
                 if ($col != 0 && $cell->getDataType() != \PHPExcel_Cell_DataType::TYPE_FORMULA) {
                     $value = 'HARDCODED ' . $cell->getCoordinate() . ' = ' . $value;
                 }
-                
+
                 $data[] = $value;
             }
             echo $type . ' ' . $data[2] . PHP_EOL;
