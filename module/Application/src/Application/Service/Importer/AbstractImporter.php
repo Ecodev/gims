@@ -209,7 +209,7 @@ use \Application\Traits\EntityManagerAware;
                         'onlyTotal' => array(
                             array(3, '=Other ImprovedTOTAL'),
                             array(4, '=Other ImprovedTOTAL'),
-                            array(5, '=IF(ISNUMBER(Total improved), Total improved - Piped onto premises, NULL)'),
+                            array(5, '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)'),
                         ),
                         'onlyRural' => array(
                             array(4, '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)'),
