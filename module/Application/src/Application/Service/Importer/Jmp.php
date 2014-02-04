@@ -987,6 +987,7 @@ STRING;
                         'Guam',
                         'Montserrat',
                         'New Caledonia',
+                        'Niue',
                         'Northern Mariana Islands',
                         'Puerto Rico',
                         'Saint Kitts and Nevis',
