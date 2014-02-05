@@ -1023,13 +1023,19 @@ STRING;
                         'Tuvalu',
                     ))) {
                 $formulaGroup = 'popHigherThanTotal';
+            } elseif (in_array($countryName, array(
+                        'Belarus',
+                    ))) {
+
+                // Here each country has its own set of rules, so we use country name as formulaGroup name
+                $formulaGroup = $countryName;
             }
 
             foreach ($filters as $filterName => $filterData) {
                 $highFilter = $this->cacheHighFilters[$filterName];
 
-                foreach ($filterData['formulas'][isset($filterData['formulas'][$formulaGroup]) ? $formulaGroup : 'default'] as $formulaData) {
-
+                $actualFormulaGroup = isset($filterData['formulas'][$formulaGroup]) ? $formulaGroup : 'default';
+                foreach ($filterData['formulas'][$actualFormulaGroup] as $formulaData) {
 
                     $part = $this->partOffsets[$formulaData[0]];
                     $formula = $formulaData[1];
@@ -1056,7 +1062,7 @@ STRING;
                         $formula = str_replace('POPULATION_TOTAL', "{Q#all,P#" . $this->partTotal->getId() . "}", $formula);
                     }
 
-                    $suffix = ' (' . $formulaGroup . ( $isDevelopedFormula ? ' - for developed countries' : '') . ')';
+                    $suffix = ' (' . $actualFormulaGroup . ( $isDevelopedFormula ? ' - for developed countries' : '') . ')';
                     $rule = $this->getRule('Regression: ' . $highFilter->getName() . $suffix, $formula);
                     $this->getFilterGeonameUsage($highFilter, $questionnaire->getGeoname(), $rule, $part);
                 }
