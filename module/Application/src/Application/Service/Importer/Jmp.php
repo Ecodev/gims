@@ -1025,6 +1025,7 @@ STRING;
                 $formulaGroup = 'popHigherThanTotal';
             } elseif (in_array($countryName, array(
                         'Belarus',
+                        'TFYR Macedonia',
                     ))) {
 
                 // Here each country has its own set of rules, so we use country name as formulaGroup name
