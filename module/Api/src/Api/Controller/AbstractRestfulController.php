@@ -239,6 +239,15 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     }
 
     /**
+     * Optionnal hook to do something after the object was updated and flushed in database
+     * @param \Application\Model\AbstractModel $object
+     */
+    protected function postUpdate(AbstractModel $object, array $data)
+    {
+        // nothing to do
+    }
+
+    /**
      * @param int   $id
      * @param array $data
      *
@@ -266,7 +275,14 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $this->getEntityManager()->flush();
         $this->getResponse()->setStatusCode(201);
 
-        return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
+        $result = $this->postUpdate($object, $data);
+
+        if (!$result) {
+            $result = new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
+        }
+
+        return $result;
+
     }
 
 }
