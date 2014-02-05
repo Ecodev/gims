@@ -118,15 +118,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.2045296"
-     inkscape:cx="655.17709"
+     inkscape:cx="1809.7282"
      inkscape:cy="299.32763"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1600"
-     inkscape:window-height="845"
+     inkscape:window-height="857"
      inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      fit-margin-top="10"
      fit-margin-left="10"
@@ -150,8 +150,8 @@
      id="layer1"
      transform="translate(287.29648,292.20798)">
     <path
-       style="fill:none;stroke:#d45500;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend-1)"
-       d="m 1288.8979,38.212213 c 98.3704,0.486096 108.3137,-206.223333 199.7474,-206.558323"
+       style="fill:none;stroke:#d45500;stroke-width:0.87986171px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend-1)"
+       d="m 1336.1592,40.76287 c 75.221,0.492126 82.8243,-208.78155 152.741,-209.1207"
        id="path4312-0-1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -1173,7 +1173,7 @@
          id="tspan3248-5"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Courier New;-inkscape-font-specification:Courier New"
          x="1167.0358"
-         y="42.169209">Rules on Filter</tspan><tspan
+         y="42.169209">Rules on Filter-Geoname</tspan><tspan
          sodipodi:role="line"
          id="tspan3250-1"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Courier New;-inkscape-font-specification:Courier New"
