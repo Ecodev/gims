@@ -13,6 +13,7 @@ angular.module('myApp').controller('Browse/Table/FilterCtrl', function($scope, $
     // Configure ng-grid.
     $scope.gridOptions = {
         data: 'table',
+        enableColumnResize:true,
         plugins: [new ngGridFlexibleHeightPlugin({minHeight: 400})],
         columnDefs: 'columnDefs'
     };
@@ -75,7 +76,12 @@ angular.module('myApp').controller('Browse/Table/FilterCtrl', function($scope, $
                 // retrieve the questionnaire name.
                 for (var index2 in parts) {
                     var partName = parts[index2];
-                    columnDefs.push({sortable: false, field: 'values[' + index + '].' + partName, displayName: partName + ' - ' + questionnaireName});
+                    columnDefs.push({
+                        width:'7%',
+                        sortable: false,
+                        field: 'values[' + index + '].' + partName,
+                        displayName: partName.substr(0,1) + ' ' + questionnaireName
+                    });
                 }
             }
             $scope.columnDefs = columnDefs;
