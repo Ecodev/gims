@@ -203,6 +203,11 @@ use \Application\Traits\EntityManagerAware;
                             array(4, '=Surface waterURBAN'),
                             array(5, '=IF(Total improved = 1, 0, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
+                        'United States of America' => array(
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.993, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
+                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.936, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
+                            array(5, '=IF(Total improved = 1, 0, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
+                        ),
                     ),
                 ),
                 "Other Improved" => array(
@@ -443,6 +448,15 @@ use \Application\Traits\EntityManagerAware;
                             // Normal rules
                             array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
                             array(5, '=ImprovedURBAN'),
+                        ),
+                        'United States of America' => array(
+                            // Additionnal rules for developed countries
+                            array(3, "=IF(AND(Improved + shared > 0.995, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            array(4, "=IF(AND(Improved + shared > 0.984, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            // Normal rules
+                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(5, "=IF(AND(ISNUMBER(ImprovedURBAN), ISNUMBER(ImprovedRURAL)), (ImprovedURBAN * POPULATION_URBAN + ImprovedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)"),
                         ),
                     ),
                 ),

@@ -1026,6 +1026,7 @@ STRING;
             } elseif (in_array($countryName, array(
                         'Belarus',
                         'TFYR Macedonia',
+                        'United States of America',
                     ))) {
 
                 // Here each country has its own set of rules, so we use country name as formulaGroup name
