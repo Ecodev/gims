@@ -189,6 +189,32 @@ div.browse .col-md-4 {
     border: 1px solid rgb(212,212,212);
 }
 
+/* Extend select 2 advanced template */
+.select2list .select2-search-choice {
+    display:block !important;
+    float:none !important;
+    margin-right:5px !important;
+    margin-bottom:5px !important;
+    background:none !important;
+    border:none !important;
+    -webkit-border-radius:0 !important;
+}
+
+.select2-results .hide-in-results{
+    display:none ;
+}
+
+.select-label{
+    line-height:1.75em;
+}
+
+.select-label-with-icon{
+    padding-left: 2em !important;
+    text-indent: -0.6em !important;
+}
+
+
+/* Differs local, dev and production instances */
 
 body.demo {
     .navbar-fixed-top {

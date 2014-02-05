@@ -16,5 +16,4 @@ class ChoiceRepository extends AbstractRepository
         }
     }
 
-
 }

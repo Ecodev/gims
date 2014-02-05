@@ -208,8 +208,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
         }
 
-        //echo '('.count(array_keys($excludedElementsByFilter)).')';
-
         $series = array();
         foreach ($excludedElementsByFilter as $filterId => $excludedElement) {
 
@@ -223,8 +221,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     $questionnairesNotExcluded[] = $questionnaire;
                 }
             }
-
-            //v(count($questionnaires), count($questionnairesNotExcluded));
 
             $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotExcluded, $part, $excludedElement['filters'], 100, null, ' (ignored elements)');
             $series = array_merge($series, $mySeries);

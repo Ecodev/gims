@@ -11,6 +11,21 @@
  *
  * To specify additional GET parameter for API calls, use attribute queryparams:
  * <gims-select api="questionnaire" queryparams="questionnaireQueryParams" /></gims-select>
+ *
+ * To set advanced templates on list elements, send string template via custom-selection-template and custom-format-template attribute
+ * Dynamic content is eval() by javascript. Escape content to eval with [[expression]].
+ * Complexe structures like functions are evaluated too
+ * <gims-select custom-selection-template="This element is [[item.name]] and is is [[item.id]]." /></gims-select>
+ * <gims-select custom-result-template="[[_.map(item.paths, function(path){return '<i class=\'fa fa-filters\'></i> \'+path+\'';}).join('')]]"/></gims-select>
+ * <gims-select custom-selection-template="{{template}}"/></gims-select>
+ *
+ * The css class select2list allow to display list elements in the select2 in full with. It allows advanced styling by custom-template attribute
+ * <gims-select container-css-class="select2list" /></gims-select>
+ *
+ * current-context-element attribute is used only in custom-template. Allow to generate content using current page context id (e.g using return URL id)
+ * <gims-select current-context-element="{{filter.id}}" custom-selection-template="<a href='returnUrl=/admin/xxx/edit/[[$scope.currentContextElement]]'>edit</a>" /></gims-select>
+ *
+ * To see more about custom-template usage, see admin/filter.js controller.
  */
 angular.module('myApp.directives').directive('gimsSelect', function() {
     'use strict';
@@ -26,6 +41,10 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             name: '@',
             placeholder: '@',
             format: '@',
+            customSelectionTemplate : '@',
+            customResultTemplate : '@',
+            containerCssClass : '@',
+            currentContextElement : '@',
             queryparams: '=',
             disabled : '=',
             model: '=' // TODO: could not find a way to use real 'ng-model'. So for now we use custom 'model' attribute and bi-bind it to real ng-model. Ugly, but working
@@ -34,7 +53,6 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
         link: function(scope, element, attr, ctrl) {
         },
         controller: function($scope, $attrs, Restangular, CachedRestangular, $location, $route, $routeParams) {
-
             var api = $scope.api;
             var name = $scope.name || api; // default key to same name as route
             var fromUrl = name == 'id' ? $routeParams.id : $location.search()[name];
@@ -165,18 +183,79 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 };
             }
 
-            // Configure formatting
-            var formatSelection = function(item) {
+            // Configure selection formatting
+            var formatSelection = function(item)
+            {
+                if ($scope.customSelectionTemplate) {
+                    var result =  generateTemplate(item, $scope.customSelectionTemplate);
+                } else {
+                    var result = formatStandardTemplate(item);
+                }
+                return result;
+            };
+
+            // Configure result formatting
+            var formatResult = function(item)
+            {
+                if ($scope.customResultTemplate) {
+                    var result = generateTemplate(item, $scope.customResultTemplate);
+                } else {
+                    var result = formatStandardTemplate(item);
+                }
+
+                return result;
+            };
+
+
+            var formatStandardTemplate = function(item)
+            {
                 var result = item.name;
                 if ($scope.format == 'code')
                 {
                     result = item.code || item.id || item.name;
                 }
                 return result;
-            };
+            }
 
-            $scope.options.formatResult = formatSelection;
+
+            /**
+             * Generate custom template by finding tags [[xxx]] and evaluating them, and then replacing in the template.
+             *
+             * @param item element of list with queryparams requested. This var is used only by the custom-template string.
+             * @returns {string}
+             */
+            var generateTemplate = function(item, originalTemplate)
+            {
+                // copy orignal template to avoid remplacing elements on it
+                var template = originalTemplate;
+
+                // find tags
+                var matches = template.match(/\[\[(.*?)\]\]/gi);
+
+                // eval() each tag and replace in template without replacing original $scope.customTemplate
+                for (var matchKey in matches) {
+                    var match = matches[matchKey];
+                    var evaluatedString = eval(match.substring(2, match.length-2)); // substring remove the begining "[[" and the ending "]]"
+                    if (!evaluatedString) {
+                        evaluatedString = '';
+                    }
+                    template = template.replace(match, evaluatedString);
+                }
+
+                return template;
+            }
+
+            // override original excapeMarkup function allowing to return html content.
+            if($scope.customSelectionTemplate || $scope.customResultTemplate) {
+                $scope.options.escapeMarkup = function(m) {
+                    return m;
+                }
+            }
+
+
+            $scope.options.formatResult = formatResult;
             $scope.options.formatSelection = formatSelection;
+            $scope.options.containerCssClass = $scope.containerCssClass;
 
             // Required to be able to clear the selected value (used in directive gimsRelation)
             $scope.options.initSelection = function(element, callback) {

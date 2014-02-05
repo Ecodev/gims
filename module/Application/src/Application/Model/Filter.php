@@ -55,7 +55,7 @@ class Filter extends AbstractModel
      *
      * @ORM\ManyToOne(targetEntity="Questionnaire")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE")
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
      * })
      */
     private $questionnaire;
@@ -158,7 +158,7 @@ class Filter extends AbstractModel
      * @param Questionnaire $questionnaire
      * @return Filter
      */
-    public function setQuestionnaire(Questionnaire $questionnaire)
+    public function setQuestionnaire(Questionnaire $questionnaire = null)
     {
         $this->questionnaire = $questionnaire;
 
@@ -347,11 +347,32 @@ class Filter extends AbstractModel
     }
 
 
-    /*
+    /**
      * Get only official child Filters
      */
     public function getOfficialChildren() {
         return $this->getChildren()->filter(function($f){ return $f->isOfficial(); });
     }
 
+    /**
+     * Return a list of the ancestors paths until root
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getPaths()
+    {
+        $paths = array();
+        foreach ($this->getParents() as $parent) {
+            $parentPaths = $parent->getPaths();
+
+            if (count($parentPaths) == 0) {
+                $paths[] = $parent->getName() . ' / ';
+            } else {
+                foreach ($parentPaths as $path) {
+                    $paths[] = $path . $parent->getName() . ' / ';
+                }
+            }
+        }
+
+        return $paths;
+    }
 }

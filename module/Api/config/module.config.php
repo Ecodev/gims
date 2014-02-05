@@ -53,6 +53,20 @@ return array(
                             ),
                         ),
                     ),
+                    // This route allow to execute non-restfull actions on controllers
+                    'controller_actions' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/:controller/:action',
+                            'constraints' => array(
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ),
+                            'defaults' => array(
+                                '__NAMESPACE__' => 'Api\Controller',
+                            ),
+                        ),
+                    ),
                     // This route allow to ask for subobjects of an object
                     'subobject' => array(
                         'type' => 'Segment',
