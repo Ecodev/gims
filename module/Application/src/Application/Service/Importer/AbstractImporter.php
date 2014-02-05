@@ -176,8 +176,8 @@ use \Application\Traits\EntityManagerAware;
                     'isImproved' => false,
                     'formulas' => array(
                         'default' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, {self})), NULL)'),
-                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, {self})), NULL)'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
+                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
                             array(5, '=IF(Total improved = 1, 0, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
                         'onlyTotal' => array(
@@ -186,11 +186,11 @@ use \Application\Traits\EntityManagerAware;
                             array(5, '=IF(Total improved = 1, 0, {self})'),
                         ),
                         'onlyRural' => array(
-                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, {self})), NULL)'),
+                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
                             array(5, '=Surface waterRURAL'),
                         ),
                         'onlyUrban' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, {self})), NULL)'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
                             array(5, '=Surface waterURBAN'),
                         ),
                     ),
