@@ -15,7 +15,7 @@ class Answer extends AbstractModel
     /**
      * @var Choice
      *
-     * @ORM\ManyToOne(targetEntity="Application\Model\Question\Choice")
+     * @ORM\ManyToOne(targetEntity="Application\Model\Question\Choice", inversedBy="answers")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
      * })

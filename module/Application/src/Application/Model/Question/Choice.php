@@ -44,6 +44,13 @@ class Choice extends \Application\Model\AbstractModel
     private $name;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Application\Model\Answer", mappedBy="valueChoice")
+     */
+    private $answers;
+
+
+    /**
      * @inheritdoc
      */
     public function getJsonConfig()
@@ -142,6 +149,16 @@ class Choice extends \Application\Model\AbstractModel
     public function getRoleContext($action)
     {
         return $this->getQuestion()->getRoleContext($action);
+    }
+
+    /**
+     * Get answers
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getAnswers()
+    {
+        return $this->answers;
     }
 
 }

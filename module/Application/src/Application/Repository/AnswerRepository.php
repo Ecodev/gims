@@ -108,4 +108,23 @@ class AnswerRepository extends AbstractChildRepository
         return $this->getEntityManager()->getConnection()->executeUpdate($sql);
     }
 
+    /**
+     * Compute absolute value from percentage value, based on population (for JMP)
+     *
+     * @param \Application\Model\Answer $answer optional answer to limit on what we compute thing
+     * @return integer row modifed count
+     */
+    public function updatePercentValueFromChoiceValue(\Application\Model\Answer $answer )
+    {
+        // if we have an answer we could limit the scope of the request
+        $sql = 'UPDATE answer SET value_percent = ch.value
+                FROM choice ch
+                WHERE answer.value_choice_id = ch.id and
+                answer.id = '.$answer->getId();
+
+        $this->updateAbsoluteValueFromPercentageValue($answer);
+
+        return $this->getEntityManager()->getConnection()->executeUpdate($sql);
+    }
+
 }

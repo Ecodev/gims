@@ -18,7 +18,7 @@ class QuestionController extends AbstractChildRestfulController
      * The new choices to be added to the newly created question
      * @var array|null
      */
-    private $newChoices = null;
+    private $tempChoices = array();
 
     protected function getClosures()
     {
@@ -118,9 +118,24 @@ class QuestionController extends AbstractChildRestfulController
             array_push($flatQuestions, $flatQuestion);
         }
 
-        $questions = $this->getFlatHierarchy($flatQuestions, 'chapter');
+        $questions = $this->getFlatHierarchyWithSingleRootElement($flatQuestions, 'chapter', 0);
 
         return new JsonModel($questions);
+    }
+
+    /**
+     * Update answers percent and absolute value depending on updated choices
+     *
+     * @param \Application\Model\AbstractModel $question
+     */
+    protected function postUpdate(AbstractModel $question, array $data)
+    {
+        /** @var \Application\Repository\ChoiceRepository $choiceRepository */
+        $choiceRepository = $this->getEntityManager()->getRepository('\Application\Model\Question\Choice');
+        foreach ($this->tempChoices as $choice) {
+            /** @var \Application\Model\Question\Choice $choice */
+            $choiceRepository->updateAnswersPercentValue($choice);
+        }
     }
 
     /**
@@ -210,6 +225,7 @@ class QuestionController extends AbstractChildRestfulController
     {
         $i = 0;
         $newChoicesObjects = new \Doctrine\Common\Collections\ArrayCollection();
+        $updatedChoices = new \Doctrine\Common\Collections\ArrayCollection();
         foreach ($newChoices as $newChoice) {
 
             // If choice is incomplete, ignore it
@@ -225,10 +241,14 @@ class QuestionController extends AbstractChildRestfulController
             else {
                 $choiceRepository = $this->getEntityManager()->getRepository('Application\Model\Question\Choice');
                 $choice = $choiceRepository->findOneById((int) $newChoice['id']);
+                $updatedChoices->add($choice);
             }
             $this->hydrator->hydrate($newChoice, $choice);
             $newChoicesObjects->add($choice);
             $i++;
+        }
+        if ($updatedChoices->count()) {
+            $this->tempChoices = $updatedChoices;
         }
 
         $question->setChoices($newChoicesObjects);
@@ -241,8 +261,8 @@ class QuestionController extends AbstractChildRestfulController
      */
     protected function postCreate(AbstractModel $question, array $data)
     {
-        if ($question instanceof \Application\Model\Question\ChoiceQuestion && $this->newChoices) {
-            $this->setChoices($this->newChoices, $question);
+        if ($question instanceof \Application\Model\Question\ChoiceQuestion && count($this->tempChoices)) {
+            $this->setChoices($this->tempChoices, $question);
             $this->getEntityManager()->flush();
         }
     }
@@ -279,7 +299,7 @@ class QuestionController extends AbstractChildRestfulController
 
         // unset ['choices'] to preserve $data from hydrator and backup in a variable for use in postCreate()
         if (isset($data['choices'])) {
-            $this->newChoices = $data['choices'];
+            $this->tempChoices = $data['choices'];
             unset($data['choices']);
         }
 
