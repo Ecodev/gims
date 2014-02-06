@@ -3,18 +3,20 @@
 namespace Export\Controller;
 
 use Application\View\Model\ExcelModel;
-use Application\Traits\FlatHierarchicQuestions;
+use Application\Traits\FlatHierarchic;
 
 class IndexController extends \Application\Controller\AbstractAngularActionController
 {
 
-    use FlatHierarchicQuestions;
+    use FlatHierarchic;
 
     /**
      * @return ViewModel
      */
     public function questionnaireAction()
     {
+        $hydrator = new \Application\Service\Hydrator();
+
         $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($this->params('id'));
 
         $permission = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac')->isActionGranted($questionnaire, 'read');
@@ -22,10 +24,14 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
             $questions = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getAllWithPermission('read', 'survey', $questionnaire->getSurvey());
         }
 
-        $questions = $this->getFlatHierarchy(
-            $questions,
-            array('type', 'filter', 'chapter', 'answers', 'answers.part', 'answers.questionnaire', 'choices', 'parts', 'isMultiple', 'chapter'),
-            new \Application\Service\Hydrator());
+        // prepare flat array of questions for then be reordered by Parent > childrens > childrens
+        $flatQuestions = array();
+        foreach ($questions as $question) {
+            $flatQuestion = $hydrator->extract($question, array('type', 'filter', 'answers', 'answers.part', 'answers.questionnaire', 'choices', 'parts', 'isMultiple', 'chapter'));
+            array_push($flatQuestions, $flatQuestion);
+        }
+
+        $questions = $this->getFlatHierarchyWithSingleRootElement($flatQuestions, 'chapter' ,0);
 
 
         $view = new ExcelModel($this->params('filename'), array('questions' => $questions, 'questionnaires' => array($questionnaire)));
@@ -38,6 +44,8 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
      */
     public function surveyAction()
     {
+        $hydrator = new \Application\Service\Hydrator();
+
         /* @var $survey \Application\Model\Survey */
         $survey = $this->getEntityManager()->getRepository('Application\Model\Survey')->findOneById($this->params('id'));
 
@@ -47,12 +55,15 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
         if ($permission) {
             $questions = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getAllWithPermission('read', 'survey', $survey);
 
-            $questions = $this->getFlatHierarchy(
-                $questions,
-                array('type', 'filter', 'chapter', 'answers', 'answers.part', 'answers.questionnaire', 'choices', 'parts', 'isMultiple', 'chapter'),
-                new \Application\Service\Hydrator());
-        }
+            // prepare flat array of questions for then be reordered by Parent > childrens > childrens
+            $flatQuestions = array();
+            foreach ($questions as $question) {
+                $flatQuestion = $hydrator->extract($question, array('type', 'filter', 'answers', 'answers.part', 'answers.questionnaire', 'choices', 'parts', 'isMultiple', 'chapter'));
+                array_push($flatQuestions, $flatQuestion);
+            }
 
+            $questions = $this->getFlatHierarchyWithSingleRootElement($flatQuestions, 'chapter' ,0);
+        }
 
         if ($questions) {
 

@@ -118,7 +118,7 @@ class QuestionController extends AbstractChildRestfulController
             array_push($flatQuestions, $flatQuestion);
         }
 
-        $questions = $this->getFlatHierarchyWithSingleRootElement($flatQuestions, 'chapter', 0);
+        $questions = $this->qgetFlatHierarchyWithSingleRootElement($flatQuestions, 'chapter', 0);
 
         return new JsonModel($questions);
     }
