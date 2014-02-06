@@ -21,9 +21,13 @@ sudo apt-get -qq install postgresql-9.1-postgis-2.0 rubygems nodejs apache2 php5
 echo "Installing JS testing tools..."
 sudo npm --global --quiet install karma karma-ng-scenario phantomjs uglify-js ngmin
 
-# For Travis, we replace pre-installed PhantomJS with npm version (more recent)
+# For Travis only
 if [[ ! -z $TRAVIS ]]; then
-   sudo ln -sf "`sudo npm bin -g`/phantomjs" `which phantomjs`
+    # we replace pre-installed PhantomJS with npm version (more recent)
+    sudo ln -sf "`sudo npm bin -g`/phantomjs" `which phantomjs`
+
+    # Configure xdebug with a higher max_nesting_level
+    for file in `find /home/vagrant/.phpenv -name 'xdebug.ini'`; do echo "xdebug.max_nesting_level=5000" >> $file; done;
 fi
 
 # For Travis CI, or full local install, we need more configuration (Apache and database)
