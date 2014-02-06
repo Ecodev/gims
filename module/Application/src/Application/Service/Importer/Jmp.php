@@ -1021,6 +1021,7 @@ STRING;
                         'Palau',
                         'Portugal',
                         'Tuvalu',
+                        'Uruguay',
                     ))) {
                 $formulaGroup = 'popHigherThanTotal';
             } elseif (in_array($countryName, array(
