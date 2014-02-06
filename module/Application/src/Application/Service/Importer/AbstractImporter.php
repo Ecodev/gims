@@ -167,6 +167,10 @@ use \Application\Traits\EntityManagerAware;
                             array(4, '=IF({self} > Total improved, Total improved, {self})'),
                             array(5, '=IF(AND(ISNUMBER(Piped onto premisesURBAN), ISNUMBER(Piped onto premisesRURAL)), (Piped onto premisesURBAN * POPULATION_URBAN + Piped onto premisesRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)'),
                         ),
+                        'Tunisia' => array(
+                            array(3, '=IF(ISNUMBER({self}), {self}, Piped onto premisesEARLIER)'),
+                            array(5, '=IF(AND(ISNUMBER(Piped onto premisesURBAN), ISNUMBER(Piped onto premisesRURAL)), (Piped onto premisesURBAN * POPULATION_URBAN + Piped onto premisesRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)'),
+                        ),
                     ),
                 ),
                 "Surface water" => array(

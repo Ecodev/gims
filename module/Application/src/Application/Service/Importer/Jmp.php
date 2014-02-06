@@ -1027,6 +1027,7 @@ STRING;
                         'Belarus',
                         'TFYR Macedonia',
                         'United States of America',
+                        'Tunisia',
                     ))) {
 
                 // Here each country has its own set of rules, so we use country name as formulaGroup name
@@ -1054,6 +1055,7 @@ STRING;
                         $id = $otherHighFilter->getId();
                         $formula = str_replace('COUNT({' . $filterNameOther, "COUNT({F#$id", $formula);
                         $formula = str_replace('AVERAGE({' . $filterNameOther, "AVERAGE({F#$id", $formula);
+                        $formula = str_replace($filterNameOther . 'EARLIER', "{F#$id,P#current,Y-1}", $formula);
                         $formula = str_replace($filterNameOther . 'LATER', "{F#$id,P#current,Y+1}", $formula);
                         $formula = str_replace($filterNameOther . 'URBAN', "{F#$id,P#" . $this->partUrban->getId() . ",Y0}", $formula);
                         $formula = str_replace($filterNameOther . 'RURAL', "{F#$id,P#" . $this->partRural->getId() . ",Y0}", $formula);
