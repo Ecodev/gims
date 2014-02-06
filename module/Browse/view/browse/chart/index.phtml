@@ -46,8 +46,8 @@
                 <h4 ng-class="{'unselected':cachedElements[pointSelected.filter].questionnaires[pointSelected.questionnaire].ignored}">
                     {{pointSelected.name}}
                     <span class="btn btn-link" ng-click="toggleQuestionnaire(pointSelected.filter,pointSelected.questionnaire)" ng-class="{disabled: isLoading}">
-                        <span ng-show="cachedElements[pointSelected.filter].questionnaires[pointSelected.questionnaire].ignored" ><i class="fa fa-eye-slash"></i> <?php echo $this->translate('Include questionnaire') ?></span>
-                        <span ng-show="!cachedElements[pointSelected.filter].questionnaires[pointSelected.questionnaire].ignored"><i class="fa fa-eye"></i> <?php echo $this->translate('Ignore questionnaire') ?></span>
+                        <span ng-show="cachedElements[pointSelected.filter].questionnaires[pointSelected.questionnaire].ignored" ><i class="fa fa-eye-slash"></i> <?php echo $this->translate('Include survey') ?></span>
+                        <span ng-show="!cachedElements[pointSelected.filter].questionnaires[pointSelected.questionnaire].ignored"><i class="fa fa-eye"></i> <?php echo $this->translate('Ignore survey') ?></span>
                     </span>
                 </h4>
 

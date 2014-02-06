@@ -1,7 +1,7 @@
 angular.module('myApp.directives').directive('gimsFilterGenerator', function($modal, $timeout) {
     return {
         restrict: 'E',
-        template: "<span class='btn btn-default' ng-class=\"{'disabled':!part || !country}\" ng-click='openModal()'><i class='fa fa-bar-chart-o'></i> Add custom filter</span>",
+        template: "<span class='btn btn-default' ng-class=\"{'disabled':!part || !country}\" ng-click='openModal()'><i class='fa fa-bar-chart-o'></i> Add new dataset</span>",
         link: function(scope, element, attrs) {
             // nothing to do ?
         },
