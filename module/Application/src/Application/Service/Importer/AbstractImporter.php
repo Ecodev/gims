@@ -522,8 +522,8 @@ use \Application\Traits\EntityManagerAware;
                     'isImproved' => false,
                     'formulas' => array(
                         'default' => array(
-                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, {self}), NULL)'),
-                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, {self}), NULL)'),
+                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
+                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
                             array(5, '=IF(Improved + shared = 1, 0, IF(AND(ISNUMBER(Open defecationURBAN), ISNUMBER(Open defecationRURAL)), (Open defecationURBAN * POPULATION_URBAN + Open defecationRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
                         'onlyTotal' => array(
@@ -532,11 +532,11 @@ use \Application\Traits\EntityManagerAware;
                             array(5, '=IF(Improved + shared = 1, 0, {self})'),
                         ),
                         'onlyRural' => array(
-                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, {self}), NULL)'),
+                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
                             array(5, '=Open defecationRURAL'),
                         ),
                         'onlyUrban' => array(
-                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, {self}), NULL)'),
+                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
                             array(5, '=Open defecationURBAN'),
                         ),
                     ),
