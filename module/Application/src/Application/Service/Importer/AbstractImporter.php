@@ -389,7 +389,6 @@ use \Application\Traits\EntityManagerAware;
                         'onlyTotal' => array(
                             array(3, '=Improved + sharedTOTAL'),
                             array(4, '=Improved + sharedTOTAL'),
-                            array(5, '=IF(ISNUMBER(Shared), Shared + Improved, {self})'),
                         ),
                         'onlyRural' => array(
                             array(5, '=Improved + sharedRURAL'),
