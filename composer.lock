@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "3d3043bd66d7a8e20fb0b047e764fbb0",
+    "hash": "e11763fd5a31ff75ed43ee4ef0978900",
     "packages": [
         {
             "name": "creof/doctrine2-spatial",
@@ -1877,7 +1877,8 @@
         "ext-bcmath": "*",
         "ext-intl": "*",
         "ext-json": "*",
-        "ext-pgsql": "*"
+        "ext-pgsql": "*",
+        "ext-pdo_pgsql": "*"
     },
     "platform-dev": [
 

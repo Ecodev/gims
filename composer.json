@@ -17,6 +17,7 @@
         "ext-intl": "*",
         "ext-json": "*",
         "ext-pgsql": "*",
+        "ext-pdo_pgsql": "*",
         "zendframework/zendframework": "2.*",
         "phing/phing": "dev-master",
         "firephp/firephp-core": "dev-master",
