@@ -19,19 +19,24 @@ class GeonameRepository extends AbstractRepository
 
         if (!isset($this->cache[$questionnaireId])) {
 
-            $geonameId = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->createQueryBuilder('questionnaire')
-                    ->select('geoname.id')
-                    ->join('questionnaire.geoname', 'geoname')
-                    ->where('questionnaire = :questionnaire')
-                    ->setParameter('questionnaire', $questionnaireId)
-                    ->getQuery()
-                    ->getSingleScalarResult();
+            $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
+            $rsm->addScalarResult('questionnaire_id', 'questionnaire_id');
+            $rsm->addScalarResult('geoname_id', 'geoname_id');
 
-            $this->cache[$questionnaireId] = $geonameId;
+            $n = $this->getEntityManager()->createNativeQuery('
+SELECT questionnaire.id AS questionnaire_id, questionnaire.geoname_id AS geoname_id
+FROM questionnaire
+INNER JOIN questionnaire AS q ON questionnaire.geoname_id = q.geoname_id AND q.id = :questionnaire', $rsm);
+
+            $n->setParameter('questionnaire', $questionnaireId);
+            $res = $n->getResult();
+
+            foreach ($res as $data) {
+                $this->cache[$data['questionnaire_id']] = $data['geoname_id'];
+            }
         }
 
         return $this->cache[$questionnaireId];
     }
 
 }
-
