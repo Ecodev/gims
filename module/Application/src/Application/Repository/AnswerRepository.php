@@ -12,7 +12,7 @@ class AnswerRepository extends AbstractChildRepository
 
     /**
      * Returns the percent value of an answer if it exists.
-     * Optimized for mass querying wihtin a Questionnaire based on a cache.
+     * Optimized for mass querying wihtin a Geoname based on a cache.
      * @param integer $questionnaireId
      * @param integer $filterId
      * @param integer $partId
@@ -27,12 +27,12 @@ class AnswerRepository extends AbstractChildRepository
             $geonameId = $this->getEntityManager()->getRepository('Application\Model\Geoname')->getIdByQuestionnaireId($questionnaireId);
 
             // Then we get all data for the geoname
-            $qb = $this->createQueryBuilder('answer')
-                    ->select('answer.valuePercent, part.id AS part_id, filter.id AS filter_id, officialFilter.id AS official_filter_id, questionnaire.id AS questionnaire_id')
-                    ->join('answer.question', 'question')
-                    ->join('answer.questionnaire', 'questionnaire')
-                    ->join('answer.part', 'part')
-                    ->join('question.filter', 'filter')
+            $qb = $this->getEntityManager()->createQueryBuilder()->from('Application\Model\Questionnaire', 'questionnaire')
+                    ->select('questionnaire.id AS questionnaire_id, answers.valuePercent, part.id AS part_id, filter.id AS filter_id, officialFilter.id AS official_filter_id')
+                    ->leftJoin('questionnaire.answers', 'answers')
+                    ->leftJoin('answers.question', 'question')
+                    ->leftJoin('answers.part', 'part')
+                    ->leftJoin('question.filter', 'filter')
                     ->leftJoin('filter.officialFilter', 'officialFilter')
                     ->andWhere('questionnaire.geoname = :geoname')
             ;
@@ -114,13 +114,13 @@ class AnswerRepository extends AbstractChildRepository
      * @param \Application\Model\Answer $answer optional answer to limit on what we compute thing
      * @return integer row modifed count
      */
-    public function updatePercentValueFromChoiceValue(\Application\Model\Answer $answer )
+    public function updatePercentValueFromChoiceValue(\Application\Model\Answer $answer)
     {
         // if we have an answer we could limit the scope of the request
         $sql = 'UPDATE answer SET value_percent = ch.value
                 FROM choice ch
                 WHERE answer.value_choice_id = ch.id and
-                answer.id = '.$answer->getId();
+                answer.id = ' . $answer->getId();
 
         $this->updateAbsoluteValueFromPercentageValue($answer);
 
