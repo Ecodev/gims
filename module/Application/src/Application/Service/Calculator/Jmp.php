@@ -12,6 +12,7 @@ class Jmp extends Calculator
 
     private $cacheComputeFilterForAllQuestionnaires = array();
     private $cacheComputeRegressionForAllYears = array();
+    private $cacheComputeFlattenOneYearWithFormula = array();
     private $filterGeonameUsageRepository;
 
     /**
@@ -89,11 +90,17 @@ class Jmp extends Calculator
             $alreadyUsedRules = new ArrayCollection();
         }
 
+        $key = \Application\Utility::getCacheKey(func_get_args());
+        if (array_key_exists($key, $this->cacheComputeFlattenOneYearWithFormula)) {
+            return $this->cacheComputeFlattenOneYearWithFormula[$key];
+        }
+
         // If the filter has a formula, returns its value
         if ($questionnaires) {
             $filterGeonameUsage = $this->getFilterGeonameUsageRepository()->getFirst(reset($questionnaires)->getGeoname()->getId(), $filterId, $partId, $alreadyUsedRules);
             if ($filterGeonameUsage) {
                 $oneYearResult = $this->computeFormulaFlatten($filterGeonameUsage->getRule(), $year, $years, $filterId, $questionnaires, $partId, $alreadyUsedRules);
+                $this->cacheComputeFlattenOneYearWithFormula[$key] = $oneYearResult;
 
                 _log()->debug(__METHOD__, array($filterId, $partId, $year, $oneYearResult));
 
@@ -104,6 +111,7 @@ class Jmp extends Calculator
         // Otherwise fallback to normal computation
         $allRegressions = $this->computeRegressionForAllYears($years, $filterId, $questionnaires, $partId);
         $oneYearResult = $this->computeFlattenOneYear($year, $allRegressions);
+        $this->cacheComputeFlattenOneYearWithFormula[$key] = $oneYearResult;
 
         _log()->debug(__METHOD__, array($filterId, $partId, $year, $oneYearResult));
 
