@@ -992,7 +992,6 @@ STRING;
                         'Puerto Rico',
                         'Saint Kitts and Nevis',
                         'Saint Vincent and the Grenadines',
-                        'Saudi Arabia',
                         'Seychelles',
                         'Turks and Caicos Islands',
                         'United States Virgin Islands'
@@ -1028,6 +1027,7 @@ STRING;
                         'Belarus',
                         'TFYR Macedonia',
                         'United States of America',
+                        'Saudi Arabia',
                         'Tunisia',
                     ))) {
 
