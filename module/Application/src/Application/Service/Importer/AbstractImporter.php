@@ -163,8 +163,8 @@ use \Application\Traits\EntityManagerAware;
                             array(5, '=Piped onto premisesURBAN'),
                         ),
                         'popHigherThanTotal' => array(
-                            array(3, '=IF(AND(ISNUMBER(Total improved), {self} > Total improved), Total improved, {self})'),
-                            array(4, '=IF(AND(ISNUMBER(Total improved), {self} > Total improved), Total improved, {self})'),
+                            array(3, '=IF(AND(ISNUMBER(Total improved), {self} > Total improved), Total improved, IF(AND(ISNUMBER(Total improved), NOT(ISNUMBER({self}))), Piped onto premisesLATER, {self}))'),
+                            array(4, '=IF(AND(ISNUMBER(Total improved), {self} > Total improved), Total improved, IF(AND(ISNUMBER(Total improved), NOT(ISNUMBER({self}))), Piped onto premisesLATER, {self}))'),
                             array(5, '=IF(AND(ISNUMBER(Piped onto premisesURBAN), ISNUMBER(Piped onto premisesRURAL)), (Piped onto premisesURBAN * POPULATION_URBAN + Piped onto premisesRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)'),
                         ),
                         'Tunisia' => array(
