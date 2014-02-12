@@ -50,6 +50,10 @@ use Doctrine\ORM\Mapping as ORM;
  *         Reference the cumulated population for all current questionnaires for the given part:
  *         <pre>{Q#all,P#56}</pre>
  *     </li>
+ *     <li>
+ *         Reference the current year, this may be useful to adapt formula for exceptional cases:
+ *         <pre>{Y}</pre>
+ *     </li>
  * </ul>
  *
  * Both context:

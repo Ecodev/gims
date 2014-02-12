@@ -666,4 +666,19 @@ class JmpTest extends AbstractCalculator
         $mockedCalculator->computeFormulaFlatten($rule, $year, $years, $currentFilterId, $questionnaires, $partId);
     }
 
+    public function testComputeFormulaFlattenReturnsYear()
+    {
+        $rule = new \Application\Model\Rule\Rule();
+        $rule->setFormula('={Y}');
+        $year = 2000;
+        $years = array(1999, 2000, 2001, 2002);
+        $currentFilterId = 1;
+        $questionnaires = $this->questionnaires;
+        $partId = 4;
+
+        $result = $this->service->computeFormulaFlatten($rule, $year, $years, $currentFilterId, $questionnaires, $partId);
+
+        $this->assertEquals($year, $result, 'should return the current year');
+    }
+
 }

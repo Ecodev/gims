@@ -539,6 +539,11 @@ use \Application\Traits\EntityManagerAware;
                             array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
                             array(5, '=Open defecationURBAN'),
                         ),
+                        'Tunisia' => array(
+                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
+                            array(4, '=IF({Y} >= 2006, Open defecationEARLIER - 0.02, IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self})), NULL))'),
+                            array(5, '=IF(Improved + shared = 1, 0, IF(AND(ISNUMBER(Open defecationURBAN), ISNUMBER(Open defecationRURAL)), (Open defecationURBAN * POPULATION_URBAN + Open defecationRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
+                        ),
                     ),
                 ),
             ),

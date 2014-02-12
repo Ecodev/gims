@@ -427,6 +427,11 @@ class Jmp extends Calculator
                     return is_null($value) ? 'NULL' : $value;
                 }, $convertedFormulas);
 
+        // Replace {Y} with current year
+        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{Y\}/', function() use ($year) {
+                    return $year;
+                }, $convertedFormulas);
+
         $result = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($convertedFormulas);
 
         // In some edge cases, it may happen that we get FALSE or empty double quotes as result,
