@@ -122,9 +122,10 @@ class AnswerRepository extends AbstractChildRepository
                 WHERE answer.value_choice_id = ch.id and
                 answer.id = ' . $answer->getId();
 
-        $this->updateAbsoluteValueFromPercentageValue($answer);
 
-        return $this->getEntityManager()->getConnection()->executeUpdate($sql);
+        $res = $this->getEntityManager()->getConnection()->executeUpdate($sql);
+        $this->updateAbsoluteValueFromPercentageValue($answer);
+        return $res;
     }
 
 }
