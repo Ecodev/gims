@@ -67,7 +67,7 @@
     "series": [
         {
             "name": "Improved + shared",
-            "id": 291,
+            "id": 165,
             "data": [
                 null,
                 null,
@@ -103,12 +103,12 @@
                 84.4,
                 85.0
             ],
-            "color": "#D900C6",
+            "color": "#D90020",
             "type": "line"
         },
         {
             "name": "Sewerage connections",
-            "id": 292,
+            "id": 166,
             "data": [
                 null,
                 null,
@@ -144,12 +144,12 @@
                 12.0,
                 12.0
             ],
-            "color": "#00D9AC",
+            "color": "#005FD9",
             "type": "line"
         },
         {
             "name": "Improved",
-            "id": 293,
+            "id": 167,
             "data": [
                 null,
                 null,
@@ -185,12 +185,12 @@
                 54.8,
                 55.2
             ],
-            "color": "#D96D00",
+            "color": "#9ED900",
             "type": "line"
         },
         {
             "name": "Shared",
-            "id": 294,
+            "id": 168,
             "data": [
                 null,
                 null,
@@ -226,12 +226,12 @@
                 29.6,
                 29.8
             ],
-            "color": "#2E00D9",
+            "color": "#D400D9",
             "type": "line"
         },
         {
             "name": "Other unimproved",
-            "id": 295,
+            "id": 169,
             "data": [
                 null,
                 null,
@@ -267,12 +267,12 @@
                 15.0,
                 14.8
             ],
-            "color": "#11D900",
+            "color": "#00D995",
             "type": "line"
         },
         {
             "name": "Open defecation",
-            "id": 296,
+            "id": 170,
             "data": [
                 null,
                 null,
@@ -308,12 +308,12 @@
                 0.6,
                 0.2
             ],
-            "color": "#D90051",
+            "color": "#D95600",
             "type": "line"
         },
         {
             "type": "scatter",
-            "color": "#D900C6",
+            "color": "#D90020",
             "marker": {
                 "symbol": "circle"
             },
@@ -322,140 +322,140 @@
             "data": [
                 {
                     "name": "CEN91",
-                    "id": "291:1",
+                    "id": "165:1",
                     "questionnaire": 1,
                     "x": 1991,
                     "y": 67.3
                 },
                 {
                     "name": "DHS94",
-                    "id": "291:2",
+                    "id": "165:2",
                     "questionnaire": 2,
                     "x": 1994,
                     "y": 79.2
                 },
                 {
                     "name": "MICS94",
-                    "id": "291:3",
+                    "id": "165:3",
                     "questionnaire": 3,
                     "x": 1994,
                     "y": 74.4
                 },
                 {
                     "name": "MICS95",
-                    "id": "291:4",
+                    "id": "165:4",
                     "questionnaire": 4,
                     "x": 1995,
                     "y": 75.2
                 },
                 {
                     "name": "MICS96",
-                    "id": "291:5",
+                    "id": "165:5",
                     "questionnaire": 5,
                     "x": 1996,
                     "y": 76.3
                 },
                 {
                     "name": "DHS97",
-                    "id": "291:6",
+                    "id": "165:6",
                     "questionnaire": 6,
                     "x": 1997,
                     "y": 81.0
                 },
                 {
                     "name": "SVRS98",
-                    "id": "291:7",
+                    "id": "165:7",
                     "questionnaire": 7,
                     "x": 1998,
                     "y": 78.5
                 },
                 {
                     "name": "DHS00",
-                    "id": "291:10",
+                    "id": "165:10",
                     "questionnaire": 10,
                     "x": 2000,
                     "y": 79.3
                 },
                 {
                     "name": "HIES00",
-                    "id": "291:11",
+                    "id": "165:11",
                     "questionnaire": 11,
                     "x": 2000,
                     "y": 76.4
                 },
                 {
                     "name": "CEN01",
-                    "id": "291:12",
+                    "id": "165:12",
                     "questionnaire": 12,
                     "x": 2001,
                     "y": 77.6
                 },
                 {
                     "name": "MHS01",
-                    "id": "291:13",
+                    "id": "165:13",
                     "questionnaire": 13,
                     "x": 2001,
                     "y": 71.4
                 },
                 {
                     "name": "WHS03",
-                    "id": "291:14",
+                    "id": "165:14",
                     "questionnaire": 14,
                     "x": 2003,
                     "y": 77.0
                 },
                 {
                     "name": "DHS04",
-                    "id": "291:15",
+                    "id": "165:15",
                     "questionnaire": 15,
                     "x": 2004,
                     "y": 76.0
                 },
                 {
                     "name": "HIES05",
-                    "id": "291:16",
+                    "id": "165:16",
                     "questionnaire": 16,
                     "x": 2005,
                     "y": 77.4
                 },
                 {
                     "name": "MICS06",
-                    "id": "291:17",
+                    "id": "165:17",
                     "questionnaire": 17,
                     "x": 2006,
                     "y": 81.0
                 },
                 {
                     "name": "DHS07",
-                    "id": "291:18",
+                    "id": "165:18",
                     "questionnaire": 18,
                     "x": 2007,
                     "y": 80.2
                 },
                 {
                     "name": "MICS09",
-                    "id": "291:19",
+                    "id": "165:19",
                     "questionnaire": 19,
                     "x": 2009,
                     "y": 82.6
                 },
                 {
                     "name": "HIES10",
-                    "id": "291:20",
+                    "id": "165:20",
                     "questionnaire": 20,
                     "x": 2010,
                     "y": 86.4
                 },
                 {
                     "name": "CEN11",
-                    "id": "291:21",
+                    "id": "165:21",
                     "questionnaire": 21,
                     "x": 2011,
                     "y": 86.7
                 },
                 {
                     "name": "DHS11",
-                    "id": "291:22",
+                    "id": "165:22",
                     "questionnaire": 22,
                     "x": 2011,
                     "y": 87.6
@@ -464,7 +464,7 @@
         },
         {
             "type": "scatter",
-            "color": "#00D9AC",
+            "color": "#005FD9",
             "marker": {
                 "symbol": "diamond"
             },
@@ -473,91 +473,91 @@
             "data": [
                 {
                     "name": "DHS94",
-                    "id": "292:2",
+                    "id": "166:2",
                     "questionnaire": 2,
                     "x": 1994,
                     "y": 14.6
                 },
                 {
                     "name": "MICS94",
-                    "id": "292:3",
+                    "id": "166:3",
                     "questionnaire": 3,
                     "x": 1994,
                     "y": 9.6
                 },
                 {
                     "name": "MICS95",
-                    "id": "292:4",
+                    "id": "166:4",
                     "questionnaire": 4,
                     "x": 1995,
                     "y": 10.8
                 },
                 {
                     "name": "MICS96",
-                    "id": "292:5",
+                    "id": "166:5",
                     "questionnaire": 5,
                     "x": 1996,
                     "y": 10.5
                 },
                 {
                     "name": "DHS97",
-                    "id": "292:6",
+                    "id": "166:6",
                     "questionnaire": 6,
                     "x": 1997,
                     "y": 15.6
                 },
                 {
                     "name": "SVRS98",
-                    "id": "292:7",
+                    "id": "166:7",
                     "questionnaire": 7,
                     "x": 1998,
                     "y": 15.7
                 },
                 {
                     "name": "DHS00",
-                    "id": "292:10",
+                    "id": "166:10",
                     "questionnaire": 10,
                     "x": 2000,
                     "y": 12.9
                 },
                 {
                     "name": "MHS01",
-                    "id": "292:13",
+                    "id": "166:13",
                     "questionnaire": 13,
                     "x": 2001,
                     "y": 9.5
                 },
                 {
                     "name": "WHS03",
-                    "id": "292:14",
+                    "id": "166:14",
                     "questionnaire": 14,
                     "x": 2003,
                     "y": 13.0
                 },
                 {
                     "name": "DHS04",
-                    "id": "292:15",
+                    "id": "166:15",
                     "questionnaire": 15,
                     "x": 2004,
                     "y": 9.7
                 },
                 {
                     "name": "MICS06",
-                    "id": "292:17",
+                    "id": "166:17",
                     "questionnaire": 17,
                     "x": 2006,
                     "y": 9.4
                 },
                 {
                     "name": "DHS07",
-                    "id": "292:18",
+                    "id": "166:18",
                     "questionnaire": 18,
                     "x": 2007,
                     "y": 8.5
                 },
                 {
                     "name": "MICS09",
-                    "id": "292:19",
+                    "id": "166:19",
                     "questionnaire": 19,
                     "x": 2009,
                     "y": 18.0
@@ -566,7 +566,7 @@
         },
         {
             "type": "scatter",
-            "color": "#D96D00",
+            "color": "#9ED900",
             "marker": {
                 "symbol": "square"
             },
@@ -575,21 +575,21 @@
             "data": [
                 {
                     "name": "MICS06",
-                    "id": "293:17",
+                    "id": "167:17",
                     "questionnaire": 17,
                     "x": 2006,
                     "y": 70.3
                 },
                 {
                     "name": "DHS07",
-                    "id": "293:18",
+                    "id": "167:18",
                     "questionnaire": 18,
                     "x": 2007,
                     "y": 66.8
                 },
                 {
                     "name": "DHS11",
-                    "id": "293:22",
+                    "id": "167:22",
                     "questionnaire": 22,
                     "x": 2011,
                     "y": 57.8
@@ -598,7 +598,7 @@
         },
         {
             "type": "scatter",
-            "color": "#2E00D9",
+            "color": "#D400D9",
             "marker": {
                 "symbol": "triangle"
             },
@@ -607,21 +607,21 @@
             "data": [
                 {
                     "name": "MICS06",
-                    "id": "294:17",
+                    "id": "168:17",
                     "questionnaire": 17,
                     "x": 2006,
                     "y": 29.7
                 },
                 {
                     "name": "DHS07",
-                    "id": "294:18",
+                    "id": "168:18",
                     "questionnaire": 18,
                     "x": 2007,
                     "y": 33.2
                 },
                 {
                     "name": "DHS11",
-                    "id": "294:22",
+                    "id": "168:22",
                     "questionnaire": 22,
                     "x": 2011,
                     "y": 42.2
@@ -630,7 +630,7 @@
         },
         {
             "type": "scatter",
-            "color": "#11D900",
+            "color": "#00D995",
             "marker": {
                 "symbol": "triangle-down"
             },
@@ -639,154 +639,154 @@
             "data": [
                 {
                     "name": "CEN91",
-                    "id": "295:1",
+                    "id": "169:1",
                     "questionnaire": 1,
                     "x": 1991,
                     "y": 42.6
                 },
                 {
                     "name": "DHS94",
-                    "id": "295:2",
+                    "id": "169:2",
                     "questionnaire": 2,
                     "x": 1994,
                     "y": 45.8
                 },
                 {
                     "name": "MICS94",
-                    "id": "295:3",
+                    "id": "169:3",
                     "questionnaire": 3,
                     "x": 1994,
                     "y": 100.4
                 },
                 {
                     "name": "MICS95",
-                    "id": "295:4",
+                    "id": "169:4",
                     "questionnaire": 4,
                     "x": 1995,
                     "y": 100.5
                 },
                 {
                     "name": "MICS96",
-                    "id": "295:5",
+                    "id": "169:5",
                     "questionnaire": 5,
                     "x": 1996,
                     "y": 100.6
                 },
                 {
                     "name": "DHS97",
-                    "id": "295:6",
+                    "id": "169:6",
                     "questionnaire": 6,
                     "x": 1997,
                     "y": 45.1
                 },
                 {
                     "name": "SVRS98",
-                    "id": "295:7",
+                    "id": "169:7",
                     "questionnaire": 7,
                     "x": 1998,
                     "y": 92.3
                 },
                 {
                     "name": "MICS99",
-                    "id": "295:8",
+                    "id": "169:8",
                     "questionnaire": 8,
                     "x": 1999,
                     "y": 97.7
                 },
                 {
                     "name": "PP00",
-                    "id": "295:9",
+                    "id": "169:9",
                     "questionnaire": 9,
                     "x": 2000,
                     "y": 98.3
                 },
                 {
                     "name": "DHS00",
-                    "id": "295:10",
+                    "id": "169:10",
                     "questionnaire": 10,
                     "x": 2000,
                     "y": 61.7
                 },
                 {
                     "name": "HIES00",
-                    "id": "295:11",
+                    "id": "169:11",
                     "questionnaire": 11,
                     "x": 2000,
                     "y": 83.7
                 },
                 {
                     "name": "CEN01",
-                    "id": "295:12",
+                    "id": "169:12",
                     "questionnaire": 12,
                     "x": 2001,
                     "y": 24.1
                 },
                 {
                     "name": "MHS01",
-                    "id": "295:13",
+                    "id": "169:13",
                     "questionnaire": 13,
                     "x": 2001,
                     "y": 63.5
                 },
                 {
                     "name": "WHS03",
-                    "id": "295:14",
+                    "id": "169:14",
                     "questionnaire": 14,
                     "x": 2003,
                     "y": 62.2
                 },
                 {
                     "name": "DHS04",
-                    "id": "295:15",
+                    "id": "169:15",
                     "questionnaire": 15,
                     "x": 2004,
                     "y": 66.3
                 },
                 {
                     "name": "HIES05",
-                    "id": "295:16",
+                    "id": "169:16",
                     "questionnaire": 16,
                     "x": 2005,
                     "y": 85.0
                 },
                 {
                     "name": "MICS06",
-                    "id": "295:17",
+                    "id": "169:17",
                     "questionnaire": 17,
                     "x": 2006,
                     "y": 38.5
                 },
                 {
                     "name": "DHS07",
-                    "id": "295:18",
+                    "id": "169:18",
                     "questionnaire": 18,
                     "x": 2007,
                     "y": 37.5
                 },
                 {
                     "name": "MICS09",
-                    "id": "295:19",
+                    "id": "169:19",
                     "questionnaire": 19,
                     "x": 2009,
                     "y": 4.7
                 },
                 {
                     "name": "HIES10",
-                    "id": "295:20",
+                    "id": "169:20",
                     "questionnaire": 20,
                     "x": 2010,
                     "y": 70.8
                 },
                 {
                     "name": "CEN11",
-                    "id": "295:21",
+                    "id": "169:21",
                     "questionnaire": 21,
                     "x": 2011,
                     "y": 49.7
                 },
                 {
                     "name": "DHS11",
-                    "id": "295:22",
+                    "id": "169:22",
                     "questionnaire": 22,
                     "x": 2011,
                     "y": 25.3
@@ -795,7 +795,7 @@
         },
         {
             "type": "scatter",
-            "color": "#D90051",
+            "color": "#D95600",
             "marker": {
                 "symbol": "circle"
             },
@@ -804,119 +804,119 @@
             "data": [
                 {
                     "name": "CEN91",
-                    "id": "296:1",
+                    "id": "170:1",
                     "questionnaire": 1,
                     "x": 1991,
                     "y": 14.3
                 },
                 {
                     "name": "DHS94",
-                    "id": "296:2",
+                    "id": "170:2",
                     "questionnaire": 2,
                     "x": 1994,
                     "y": 4.8
                 },
                 {
                     "name": "DHS97",
-                    "id": "296:6",
+                    "id": "170:6",
                     "questionnaire": 6,
                     "x": 1997,
                     "y": 4.2
                 },
                 {
                     "name": "SVRS98",
-                    "id": "296:7",
+                    "id": "170:7",
                     "questionnaire": 7,
                     "x": 1998,
                     "y": 7.7
                 },
                 {
                     "name": "DHS00",
-                    "id": "296:10",
+                    "id": "170:10",
                     "questionnaire": 10,
                     "x": 2000,
                     "y": 3.0
                 },
                 {
                     "name": "HIES00",
-                    "id": "296:11",
+                    "id": "170:11",
                     "questionnaire": 11,
                     "x": 2000,
                     "y": 3.0
                 },
                 {
                     "name": "CEN01",
-                    "id": "296:12",
+                    "id": "170:12",
                     "questionnaire": 12,
                     "x": 2001,
                     "y": 6.7
                 },
                 {
                     "name": "MHS01",
-                    "id": "296:13",
+                    "id": "170:13",
                     "questionnaire": 13,
                     "x": 2001,
                     "y": 10.4
                 },
                 {
                     "name": "WHS03",
-                    "id": "296:14",
+                    "id": "170:14",
                     "questionnaire": 14,
                     "x": 2003,
                     "y": 4.4
                 },
                 {
                     "name": "DHS04",
-                    "id": "296:15",
+                    "id": "170:15",
                     "questionnaire": 15,
                     "x": 2004,
                     "y": 4.2
                 },
                 {
                     "name": "HIES05",
-                    "id": "296:16",
+                    "id": "170:16",
                     "questionnaire": 16,
                     "x": 2005,
                     "y": 2.8
                 },
                 {
                     "name": "MICS06",
-                    "id": "296:17",
+                    "id": "170:17",
                     "questionnaire": 17,
                     "x": 2006,
                     "y": 2.6
                 },
                 {
                     "name": "DHS07",
-                    "id": "296:18",
+                    "id": "170:18",
                     "questionnaire": 18,
                     "x": 2007,
                     "y": 1.7
                 },
                 {
                     "name": "MICS09",
-                    "id": "296:19",
+                    "id": "170:19",
                     "questionnaire": 19,
                     "x": 2009,
                     "y": 1.3
                 },
                 {
                     "name": "HIES10",
-                    "id": "296:20",
+                    "id": "170:20",
                     "questionnaire": 20,
                     "x": 2010,
                     "y": 0.8
                 },
                 {
                     "name": "CEN11",
-                    "id": "296:21",
+                    "id": "170:21",
                     "questionnaire": 21,
                     "x": 2011,
                     "y": 2.0
                 },
                 {
                     "name": "DHS11",
-                    "id": "296:22",
+                    "id": "170:22",
                     "questionnaire": 22,
                     "x": 2011,
                     "y": 0.9

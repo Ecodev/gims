@@ -350,21 +350,21 @@ use \Application\Traits\EntityManagerAware;
                     return is_null($value) ? 'NULL' : $value;
                 }, $originalFormula);
 
-        // Replace {F#12,Q#34} with Unofficial Filter name, or NULL if no Unofficial Filter
+        // Replace {F#12,Q#34} with Question name, or NULL if no Question/Answer
         $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+),Q#(\d+|current)\}/', function($matches) use ($usage) {
-                    $officialFilterId = $matches[1];
+                    $filterId = $matches[1];
                     $questionnaireId = $matches[2];
 
                     if ($questionnaireId == 'current') {
                         $questionnaireId = $usage->getQuestionnaire()->getId();
                     }
 
-                    $unofficialFilterName = $this->getFilterRepository()->getUnofficialName($officialFilterId, $questionnaireId);
-                    if (is_null($unofficialFilterName)) {
+                    $questionName = $this->getAnswerRepository()->getQuestionNameIfNonNullAnswer($questionnaireId, $filterId);
+                    if (is_null($questionName)) {
                         return 'NULL';
                     } else {
                         // Format string for Excel formula
-                        return '"' . str_replace('"', '""', $unofficialFilterName) . '"';
+                        return '"' . str_replace('"', '""', $questionName) . '"';
                     }
                 }, $convertedFormulas);
 

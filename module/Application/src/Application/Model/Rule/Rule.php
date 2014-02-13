@@ -19,8 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
  *         <pre>{F#12,Q#34,P#56,L#2}</pre>
  *     </li>
  *     <li>
- *         Reference an Unofficial Filter name (NOT value). It will return NULL if no
- *         Unofficial Filter is found. The ID refers to the official Filter:
+ *         Reference the Question name. It will return NULL if no non-NULL Answer is found
+ *         for the Filter and Questionnaire pair submitted.
  *         <pre>{F#12,Q#34}</pre>
  *     </li>
  *     <li>

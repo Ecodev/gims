@@ -173,20 +173,20 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
 
         $this->geoname = $this->getNewModelWithId('\Application\Model\Geoname')->setName('test geoname');
 
-        $this->filter1 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 1');
-        $this->filter11 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 1.1 (sum of 1.*.1)');
-        $this->filter12 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 1.2 (sum of 1.*.2)');
-        $this->filter13 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 1.3');
-        $this->filter131 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 1.3.1');
-        $this->filter132 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 1.3.2');
-        $this->filter14 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 1.4');
-        $this->filter141 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 1.4.1');
-        $this->filter142 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 1.4.2');
-        $this->filter2 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 2');
-        $this->filter21 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 2.1');
-        $this->filter3 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 3 (sum of 2.* but with children as default to)');
-        $this->filter31 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 3.1');
-        $this->filter32 = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 3.2');
+        $this->filter1 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 1');
+        $this->filter11 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 1.1 (sum of 1.*.1)');
+        $this->filter12 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 1.2 (sum of 1.*.2)');
+        $this->filter13 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 1.3');
+        $this->filter131 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 1.3.1');
+        $this->filter132 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 1.3.2');
+        $this->filter14 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 1.4');
+        $this->filter141 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 1.4.1');
+        $this->filter142 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 1.4.2');
+        $this->filter2 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 2');
+        $this->filter21 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 2.1');
+        $this->filter3 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 3 (sum of 2.* but with children as default to)');
+        $this->filter31 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 3.1');
+        $this->filter32 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 3.2');
 
         // Define tree structure
         $this->filter1->addChild($this->filter11)->addChild($this->filter12)->addChild($this->filter13)->addChild($this->filter14);
@@ -215,12 +215,12 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $this->question31 = new \Application\Model\Question\NumericQuestion();
         $this->question32 = new \Application\Model\Question\NumericQuestion();
 
-        $this->question131->setFilter($this->filter131);
-        $this->question132->setFilter($this->filter132);
-        $this->question141->setFilter($this->filter141);
-        $this->question142->setFilter($this->filter142);
-        $this->question31->setFilter($this->filter31);
-        $this->question32->setFilter($this->filter32);
+        $this->question131->setFilter($this->filter131)->setName('Question 1.3.1');
+        $this->question132->setFilter($this->filter132)->setName('Question 1.3.2');
+        $this->question141->setFilter($this->filter141)->setName('Question 1.4.1');
+        $this->question142->setFilter($this->filter142)->setName('Question 1.4.2');
+        $this->question31->setFilter($this->filter31)->setName('Question 3.1');
+        $this->question32->setFilter($this->filter32)->setName('Question 3.2');
 
         // Create a stub for the Part class
         $this->part1 = $this->getNewModelWithId('\Application\Model\Part')->setName('tst part 1');
@@ -251,7 +251,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     protected function getStubAnswerRepository()
     {
         // Create a stub for the AnswerRepository class with predetermined values, so we don't have to mess with database
-        $stubAnswerRepository = $this->getMock('\Application\Repository\AnswerRepository', array('getValuePercent'), array(), '', false);
+        $stubAnswerRepository = $this->getMock('\Application\Repository\AnswerRepository', array('getValuePercent', 'getQuestionNameIfNonNullAnswer'), array(), '', false);
         $stubAnswerRepository->expects($this->any())
                 ->method('getValuePercent')
                 ->will($this->returnCallback(function($questionnaireId, $filterId, $partId) {
@@ -268,6 +268,20 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
                         })
         );
 
+        $stubAnswerRepository->expects($this->any())
+                ->method('getQuestionNameIfNonNullAnswer')
+                ->will($this->returnCallback(function($questionnaireId, $filterId) {
+
+                            $questionnaire = $this->getModel('\Application\Model\Questionnaire', $questionnaireId);
+                            foreach ($questionnaire->getAnswers() as $answer) {
+                                if ($answer->getQuestion()->getFilter()->getId() == $filterId && !is_null($answer->getValuePercent())) {
+
+                                    return $answer->getQuestion()->getName();
+                                }
+                            }
+
+                            return null;
+                        }));
         return $stubAnswerRepository;
     }
 
@@ -322,7 +336,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
 
     protected function getStubFilterRepository()
     {
-        $stubFilterRepository = $this->getMock('\Application\Repository\FilterRepository', array('getUnofficialName', 'findOneById', 'getSummandIds', 'getChildrenIds'), array(), '', false);
+        $stubFilterRepository = $this->getMock('\Application\Repository\FilterRepository', array('findOneById', 'getSummandIds', 'getChildrenIds'), array(), '', false);
 
         $stubFilterRepository->expects($this->any())->method('getSummandIds')
                 ->will($this->returnCallback(function($filterId) {
@@ -346,17 +360,6 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
                 ->method('findOneById')
                 ->will($this->returnCallback(function($filterId) {
                             return $this->getModel('\Application\Model\Filter', $filterId);
-                        }));
-
-        $stubFilterRepository->expects($this->any())
-                ->method('getUnofficialName')
-                ->will($this->returnCallback(function($officialFilterId, $questionnaireId) {
-
-                            $filter = $this->getModel('\Application\Model\Filter', function($filter) use($officialFilterId, $questionnaireId) {
-                                return $filter->getOfficialFilter() && $filter->getOfficialFilter()->getId() == $officialFilterId && $filter->getQuestionnaire() && $filter->getQuestionnaire()->getId() == $questionnaireId;
-                            });
-
-                            return $filter ? $filter->getName() : null;
                         }));
 
         return $stubFilterRepository;

@@ -19,7 +19,6 @@ class Jmp extends AbstractImporter
 
     private $defaultJustification = 'Imported from country files';
     private $partOffsets = array();
-    private $cacheAlternateFilters = array();
     private $cacheFilterQuestionnaireUsages = array();
     private $cacheFormulas = array();
     private $importedQuestionnaires = array();
@@ -30,7 +29,6 @@ class Jmp extends AbstractImporter
     private $excludeCount = 0;
     private $questionnaireUsageCount = 0;
     private $ruleCount = 0;
-    private $alternateFilterCount = 0;
     private $filterQuestionnaireUsageCount = 0;
     private $filterGeonameUsageCount = 0;
 
@@ -136,7 +134,6 @@ class Jmp extends AbstractImporter
 
 Surveys          : $this->surveyCount
 Questionnaires   : $this->questionnaireCount
-Alternate Filters: $this->alternateFilterCount
 Answers          : $this->answerCount
 Rules            : $this->ruleCount
 Uses of Exclude  : $this->excludeCount
@@ -267,11 +264,8 @@ STRING;
 
             $filter = $this->cacheFilters[$row];
 
-            // Use alternate instead of official, if any
-            $alternateFilterName = $sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
-            if ($alternateFilterName) {
-                $filter = $this->getAlternateFilter($questionnaire, $alternateFilterName, $filter);
-            }
+            // Get question name, if any
+            $questionName = $sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
 
             // Import answers for each parts
             $question = null;
@@ -279,8 +273,8 @@ STRING;
                 $answerCell = $sheet->getCellByColumnAndRow($col + $offset, $row);
 
                 // Only import value which are numeric, and NOT formula,
-                // unless an alternate filter is defined, in this case we will import the formula result
-                if ($alternateFilterName || $answerCell->getDataType() == \PHPExcel_Cell_DataType::TYPE_NUMERIC) {
+                // unless an question name is defined, in this case we will import the formula result
+                if ($questionName || $answerCell->getDataType() == \PHPExcel_Cell_DataType::TYPE_NUMERIC) {
 
                     // If there is actually no value, skip it (need to be done after previous IF to avoid formula exception within PHPExcel)
                     $value = $this->getCalculatedValueSafely($answerCell);
@@ -289,7 +283,7 @@ STRING;
                     }
 
                     if (!$question) {
-                        $question = $this->getQuestion($survey, $filter);
+                        $question = $this->getQuestion($survey, $filter, $questionName ? $questionName : $filter->getName());
                     }
 
                     $answer = new Answer();
@@ -486,42 +480,13 @@ STRING;
     }
 
     /**
-     * Returns an alternate filter linked to the official either from memory cache, or newly created
-     * @param Questionnaire $questionnaire
-     * @param string $name
-     * @param Filter $officialFilter
-     * @return Filter
-     */
-    protected function getAlternateFilter(Questionnaire $questionnaire, $name, Filter $officialFilter)
-    {
-        if ($name == $officialFilter->getName()) {
-            return $officialFilter;
-        }
-
-        $key = \Application\Utility::getCacheKey(func_get_args());
-        if (array_key_exists($key, $this->cacheAlternateFilters)) {
-            $filter = $this->cacheAlternateFilters[$key];
-        } else {
-            $filter = new Filter();
-            $this->getEntityManager()->persist($filter);
-            $filter->setName($name);
-            $filter->setOfficialFilter($officialFilter);
-            $filter->setQuestionnaire($questionnaire);
-            $this->alternateFilterCount++;
-        }
-
-        $this->cacheAlternateFilters[$key] = $filter;
-
-        return $filter;
-    }
-
-    /**
      * Returns a question either from database, or newly created
      * @param Questionnaire $survey
      * @param Filter $filter
+     * @param string $questionName
      * @return NumericQuestion
      */
-    protected function getQuestion(Survey $survey, Filter $filter)
+    protected function getQuestion(Survey $survey, Filter $filter, $questionName)
     {
         $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question\NumericQuestion');
 
@@ -541,7 +506,7 @@ STRING;
             $question->setSurvey($survey);
             $question->setFilter($filter);
             $question->setSorting($survey->getQuestions()->count());
-            $question->setName($filter->getName());
+            $question->setName($questionName);
             $question->setParts(new \Doctrine\Common\Collections\ArrayCollection(array($this->partRural, $this->partUrban, $this->partTotal)));
             $question->setIsPopulation(true);
             $this->getEntityManager()->persist($question);

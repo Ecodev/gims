@@ -6,19 +6,15 @@ class AnswerRepository extends AbstractChildRepository
 {
 
     /**
-     * @var array $cache [questionnaireId => [filterId => [partId => value]]]
+     * @var array $cache [questionnaireId => [filterId => [partId => ['valuePercent' => value, 'questionName' => question]]]]
      */
     private $cache = array();
 
     /**
-     * Returns the percent value of an answer if it exists.
-     * Optimized for mass querying wihtin a Geoname based on a cache.
+     * Fill the cache for answer's valuePercent and questionName
      * @param integer $questionnaireId
-     * @param integer $filterId
-     * @param integer $partId
-     * @return float|null
      */
-    public function getValuePercent($questionnaireId, $filterId, $partId)
+    private function fillCache($questionnaireId)
     {
         // If no cache for questionnaire, fill the cache
         if (!isset($this->cache[$questionnaireId])) {
@@ -28,7 +24,7 @@ class AnswerRepository extends AbstractChildRepository
 
             // Then we get all data for the geoname
             $qb = $this->getEntityManager()->createQueryBuilder()->from('Application\Model\Questionnaire', 'questionnaire')
-                    ->select('questionnaire.id AS questionnaire_id, answers.valuePercent, part.id AS part_id, filter.id AS filter_id, officialFilter.id AS official_filter_id')
+                    ->select('questionnaire.id AS questionnaire_id, answers.valuePercent, part.id AS part_id, filter.id AS filter_id, officialFilter.id AS official_filter_id, question.name AS questionName')
                     ->leftJoin('questionnaire.answers', 'answers')
                     ->leftJoin('answers.question', 'question')
                     ->leftJoin('answers.part', 'part')
@@ -46,18 +42,59 @@ class AnswerRepository extends AbstractChildRepository
             // Ensure that we hit the cache next time, even if we have no results at all
             $this->cache[$questionnaireId] = array();
 
-            // Restructure cache to be [questionnaireId => [filterId => [partId => value]]]
+            // Restructure cache
             foreach ($res as $data) {
+                $answerData = array(
+                    'valuePercent' => is_null($data['valuePercent']) ? null : (float) $data['valuePercent'],
+                    'questionName' => $data['questionName'],
+                );
+
                 if ($data['official_filter_id']) {
-                    $this->cache[$data['questionnaire_id']][$data['official_filter_id']][$data['part_id']] = (float) $data['valuePercent'];
+                    $this->cache[$data['questionnaire_id']][$data['official_filter_id']][$data['part_id']] = $answerData;
                 } else {
-                    $this->cache[$data['questionnaire_id']][$data['filter_id']][$data['part_id']] = (float) $data['valuePercent'];
+                    $this->cache[$data['questionnaire_id']][$data['filter_id']][$data['part_id']] = $answerData;
                 }
             }
         }
+    }
+
+    /**
+     * Returns the percent value of an answer if it exists.
+     * Optimized for mass querying wihtin a Geoname based on a cache.
+     * @param integer $questionnaireId
+     * @param integer $filterId
+     * @param integer $partId
+     * @return float|null
+     */
+    public function getValuePercent($questionnaireId, $filterId, $partId)
+    {
+        $this->fillCache($questionnaireId);
 
         if (isset($this->cache[$questionnaireId][$filterId][$partId])) {
-            return $this->cache[$questionnaireId][$filterId][$partId];
+            return $this->cache[$questionnaireId][$filterId][$partId]['valuePercent'];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns Question name, but only if a non-null anwer exists. Otherwise NULL
+     * Optimized for mass querying wihtin a Geoname based on a cache.
+     * @param integer $questionnaireId
+     * @param integer $filterId
+     * @return string|null
+     */
+    public function getQuestionNameIfNonNullAnswer($questionnaireId, $filterId)
+    {
+        $this->fillCache($questionnaireId);
+
+        if (isset($this->cache[$questionnaireId][$filterId])) {
+
+            foreach ($this->cache[$questionnaireId][$filterId] as $answerData) {
+                if (!is_null($answerData['valuePercent'])) {
+                    return $answerData['questionName'];
+                }
+            }
         } else {
             return null;
         }

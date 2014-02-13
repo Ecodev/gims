@@ -176,13 +176,15 @@ class CalculatorTest extends AbstractCalculator
 
         // Unnoficial filter names
         $rule->setFormula('={F#12,Q#' . $this->questionnaire->getId() . '}');
-        $this->assertNull($service->computeFormula($filterQuestionnaireUsage), 'refering a non-existing Unofficial Filter name, returns null');
+        $this->assertNull($service->computeFormula($filterQuestionnaireUsage), 'refering a non-existing Question name, returns null');
 
         // Inject our unnofficial filter
-        $unofficialFilter = $this->getNewModelWithId('\Application\Model\Filter')->setName('unofficial with "double quotes"');
-        $unofficialFilter->setQuestionnaire($this->questionnaire)->setOfficialFilter($this->filter1);
 
-        $rule->setFormula('=ISTEXT({F#' . $unofficialFilter->getOfficialFilter()->getId() . ',Q#' . $unofficialFilter->getQuestionnaire()->getId() . '})');
+
+        $unofficialFilter = $this->getNewModelWithId('\Application\Model\Filter')->setName('unofficial with "double quotes"');
+        $unofficialFilter->setQuestionnaire($this->questionnaire)->setOfficialFilter($this->filter131);
+
+        $rule->setFormula('=ISTEXT({F#' . $this->filter131->getId() . ',Q#' . $unofficialFilter->getQuestionnaire()->getId() . '})');
         $this->assertTrue($service->computeFormula($filterQuestionnaireUsage), 'should be able to refer an Unofficial Filter name');
     }
 
