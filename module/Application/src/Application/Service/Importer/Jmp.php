@@ -19,7 +19,9 @@ class Jmp extends AbstractImporter
 
     private $defaultJustification = 'Imported from country files';
     private $partOffsets = array();
+    private $cacheSurvey = array();
     private $cacheFilterQuestionnaireUsages = array();
+    private $cacheFilterGeonameUsages = array();
     private $cacheFormulas = array();
     private $importedQuestionnaires = array();
     private $colToParts = array();
@@ -107,17 +109,21 @@ class Jmp extends AbstractImporter
             for ($col = 0; $col < 50 * 6; $col += 6) {
                 $this->importQuestionnaire($sheet, $col);
             }
+            $this->getEntityManager()->flush();
 
             // Second pass on imported questionnaires to process cross-questionnaire things
-            echo 'Importing Calculations, Estimates and Ratios';
+            echo 'Importing uses of Rule for Questionnaire';
             foreach ($this->importedQuestionnaires as $col => $questionnaire) {
                 $this->importQuestionnaireUsages($sheet, $col, $questionnaire);
                 echo '.';
             }
             echo PHP_EOL;
 
-            // Third pass to import formulas for high filters
-            $this->finishHighFilters($this->definitions[$sheetName]['highFilters'], $sheet);
+            // Third pass to import first step formulas for high filters
+            $this->importFilterQuestionnaireUsages($this->definitions[$sheetName]['highFilters'], $sheet);
+
+            // Fourth pass to import last step formulas for high filters
+            $this->importFilterGeonameUsages($this->definitions[$sheetName]['highFilters']);
 
             // Fourth pass to hardcode special cases of formulas
             echo 'Finishing special cases of Ratios';
@@ -137,9 +143,9 @@ Questionnaires   : $this->questionnaireCount
 Answers          : $this->answerCount
 Rules            : $this->ruleCount
 Uses of Exclude  : $this->excludeCount
+Uses of Rule for Questionnaire       : $this->questionnaireUsageCount
 Uses of Rule for Filter-Questionnaire: $this->filterQuestionnaireUsageCount
 Uses of Rule for Filter-Geoname      : $this->filterGeonameUsageCount
-Uses of Rule for Questionnaire       : $this->questionnaireUsageCount
 
 STRING;
     }
@@ -195,7 +201,12 @@ STRING;
 
         // Load or create survey
         $surveyRepository = $this->getEntityManager()->getRepository('Application\Model\Survey');
-        $survey = $surveyRepository->findOneBy(array('code' => $code));
+        if (array_key_exists($code, $this->cacheSurvey)) {
+            $survey = $this->cacheSurvey[$code];
+        } else {
+            $survey = $surveyRepository->findOneBy(array('code' => $code));
+        }
+
         if (!$survey) {
             $survey = new Survey();
 
@@ -214,9 +225,9 @@ STRING;
                 return;
             }
             $this->getEntityManager()->persist($survey);
-            $this->getEntityManager()->flush();
             $this->surveyCount++;
         }
+        $this->cacheSurvey[$code] = $survey;
 
         // Create questionnaire
         $countryCell = $sheet->getCellByColumnAndRow($col + 3, 1);
@@ -231,8 +242,6 @@ STRING;
         echo 'Country: ' . $questionnaire->getGeoname()->getName() . PHP_EOL;
 
         $this->importAnswers($sheet, $col, $survey, $questionnaire);
-
-        $this->getEntityManager()->flush();
 
         // Keep a trace of what column correspond to what questionnaire for second pass
         $this->importedQuestionnaires[$col] = $questionnaire;
@@ -449,7 +458,6 @@ STRING;
         $questionnaire->setComments($sheet->getCellByColumnAndRow($col + 0, 3)->getCalculatedValue());
 
         $this->getEntityManager()->persist($questionnaire);
-        $this->getEntityManager()->flush();
         $this->questionnaireCount++;
 
         return $questionnaire;
@@ -492,10 +500,10 @@ STRING;
 
         $key = \Application\Utility::getCacheKey(func_get_args());
 
+        $question = null;
         if (array_key_exists($key, $this->cacheQuestions)) {
             $question = $this->cacheQuestions[$key];
-        } else {
-            $this->getEntityManager()->flush();
+        } elseif ($survey->getId() && $filter->getId()) {
             $question = $questionRepository->findOneBy(array('survey' => $survey, 'filter' => $filter));
         }
 
@@ -798,7 +806,6 @@ STRING;
         $ruleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Rule');
 
         // Look for existing formula (to prevent duplication)
-        $this->getEntityManager()->flush();
         $rule = $ruleRepository->findOneByFormula($formula);
 
         if (!$rule) {
@@ -819,11 +826,11 @@ STRING;
      * @param array $filters
      * @param \PHPExcel_Worksheet $sheet
      */
-    protected function finishHighFilters(array $filters, \PHPExcel_Worksheet $sheet)
+    protected function importFilterQuestionnaireUsages(array $filters, \PHPExcel_Worksheet $sheet)
     {
         $complementaryTotalFormula = $this->getRule('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . ',L#2}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . ',L#2})), ({F#current,Q#current,P#' . $this->partRural->getId() . ',L#2} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . ',L#2} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, {self})');
         // Get or create all filter
-        echo 'Finishing high filters';
+        echo 'Importing uses of Rule for Filter-Questionnaire';
         foreach ($filters as $filterName => $filterData) {
 
             $highFilter = $this->cacheHighFilters[$filterName];
@@ -852,8 +859,6 @@ STRING;
             }
             echo '.';
         }
-
-        $this->importHighFilterGeonameUsages($filters);
 
         echo PHP_EOL;
     }
@@ -903,15 +908,19 @@ STRING;
      */
     protected function getFilterGeonameUsage(Filter $filter, Geoname $geoname, Rule $rule, Part $part)
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
-
-        $this->getEntityManager()->flush();
-        $filterGeonameUsage = $repository->findOneBy(array(
-            'rule' => $rule,
-            'part' => $part,
-            'filter' => $filter,
-            'geoname' => $geoname,
-        ));
+        $filterGeonameUsage = null;
+        $key = \Application\Utility::getCacheKey(func_get_args());
+        if (array_key_exists($key, $this->cacheFilterGeonameUsages)) {
+            $filterGeonameUsage = $this->cacheFilterGeonameUsages[$key];
+        } elseif ($rule->getId() && $part->getId() && $filter->getId() && $geoname->getId()) {
+            $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
+            $filterGeonameUsage = $repository->findOneBy(array(
+                'rule' => $rule,
+                'part' => $part,
+                'filter' => $filter,
+                'geoname' => $geoname,
+            ));
+        }
 
         if (!$filterGeonameUsage) {
             $filterGeonameUsage = new FilterGeonameUsage();
@@ -925,6 +934,8 @@ STRING;
             $this->filterGeonameUsageCount++;
         }
 
+        $this->cacheFilterGeonameUsages[$key] = $filterGeonameUsage;
+
         return $filterGeonameUsage;
     }
 
@@ -932,9 +943,9 @@ STRING;
      * Import FilterGeonameUsage for all highfilters
      * @param array $filters
      */
-    public function importHighFilterGeonameUsages(array $filters)
+    public function importFilterGeonameUsages(array $filters)
     {
-
+        echo 'Importing uses of Rule for Filter-Geoname';
         foreach ($this->importedQuestionnaires as $questionnaire) {
 
             $formulaGroup = 'default';
@@ -1036,8 +1047,11 @@ STRING;
                     $rule = $this->getRule('Regression: ' . $highFilter->getName() . $suffix, $formula);
                     $this->getFilterGeonameUsage($highFilter, $questionnaire->getGeoname(), $rule, $part);
                 }
+                echo '.';
             }
         }
+
+        echo PHP_EOL;
     }
 
     /**
@@ -1080,7 +1094,7 @@ STRING;
         $filterImproved = @$this->cacheHighFilters['Improved'];
         $filterShared = @$this->cacheHighFilters['Shared'];
 
-// SKip everything if we are not in Sanitation
+        // SKip everything if we are not in Sanitation
         if (!$filterImproved || !$filterShared) {
             return;
         }
