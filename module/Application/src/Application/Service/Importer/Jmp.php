@@ -20,6 +20,7 @@ class Jmp extends AbstractImporter
     private $defaultJustification = 'Imported from country files';
     private $partOffsets = array();
     private $cacheSurvey = array();
+    private $cacheQuestionnaireUsages = array();
     private $cacheFilterQuestionnaireUsages = array();
     private $cacheFilterGeonameUsages = array();
     private $cacheFormulas = array();
@@ -29,8 +30,8 @@ class Jmp extends AbstractImporter
     private $questionnaireCount = 0;
     private $answerCount = 0;
     private $excludeCount = 0;
-    private $questionnaireUsageCount = 0;
     private $ruleCount = 0;
+    private $questionnaireUsageCount = 0;
     private $filterQuestionnaireUsageCount = 0;
     private $filterGeonameUsageCount = 0;
 
@@ -126,7 +127,6 @@ class Jmp extends AbstractImporter
             $this->importFilterGeonameUsages($this->definitions[$sheetName]['highFilters']);
 
             // Fourth pass to hardcode special cases of formulas
-            echo 'Finishing special cases of Ratios';
             $this->finishRatios();
             echo PHP_EOL;
         }
@@ -566,24 +566,25 @@ STRING;
                 return null;
             }
 
-            // If we had an existing formula, maybe we also have an existing association
-            $assoc = $questionnaire->getQuestionnaireUsages()->filter(function($usage) use ($questionnaire, $part, $rule) {
+            // If we had an existing formula, maybe we also have an existing usage
+            $usage = $questionnaire->getQuestionnaireUsages()->filter(function($usage) use ($questionnaire, $part, $rule) {
                         return $usage->getQuestionnaire() === $questionnaire && $usage->getPart() === $part && $usage->getRule() === $rule;
                     })->first();
 
-            // If association doesn't exist yet, create it
-            if (!$assoc) {
-                $assoc = new QuestionnaireUsage();
-                $assoc->setJustification($this->defaultJustification)
+            // If usage doesn't exist yet, create it
+            if (!$usage) {
+                $usage = new QuestionnaireUsage();
+                $usage->setJustification($this->defaultJustification)
                         ->setQuestionnaire($questionnaire)
                         ->setRule($rule)
                         ->setPart($part);
 
-                $this->getEntityManager()->persist($assoc);
+                $this->getEntityManager()->persist($usage);
                 $this->questionnaireUsageCount++;
             }
+            $this->cacheQuestionnaireUsages[] = $usage;
 
-            return $assoc;
+            return $usage;
         }
 
         return null;
@@ -1084,13 +1085,6 @@ STRING;
      */
     protected function finishRatios()
     {
-        $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireUsage');
-        $synonyms = array(
-            'Facilités améliorées partagées / Facilités améliorées',
-            'Shared facilities / All improved facilities',
-            'Shared improved facilities/all improved facilities',
-        );
-
         $filterImproved = @$this->cacheHighFilters['Improved'];
         $filterShared = @$this->cacheHighFilters['Shared'];
 
@@ -1099,18 +1093,34 @@ STRING;
             return;
         }
 
-        $ratios = $repository->getAllByRuleName($synonyms, $this->importedQuestionnaires);
-        foreach ($ratios as $ratio) {
+        echo 'Finishing special cases of Ratios for Sanitation';
 
-            $ruleId = $ratio->getRule()->getId();
-            $questionnaireId = $ratio->getQuestionnaire()->getId();
+        $synonyms = array(
+            'Facilités améliorées partagées / Facilités améliorées',
+            'Shared facilities / All improved facilities',
+            'Shared improved facilities/all improved facilities',
+        );
+        $regexp = '-(' . join('|', $synonyms) . ')-i';
+
+        foreach ($this->cacheQuestionnaireUsages as $usage) {
+
+            if (!preg_match($regexp, $usage->getRule()->getName())) {
+                continue;
+            }
+
+            if (!$usage->getRule()->getId() || !$usage->getQuestionnaire()->getId()) {
+                $this->getEntityManager()->flush();
+            }
+
+            $ruleId = $usage->getRule()->getId();
+            $questionnaireId = $usage->getQuestionnaire()->getId();
             $ratioReference = "{R#$ruleId,Q#$questionnaireId,P#current}";
 
             $formulaImproved = "=1 - $ratioReference";
-            $this->linkRule($formulaImproved, $filterImproved, $ratio->getQuestionnaire(), $ratio->getPart());
+            $this->linkRule($formulaImproved, $filterImproved, $usage->getQuestionnaire(), $usage->getPart());
 
             $formulaShared = "=$ratioReference";
-            $this->linkRule($formulaShared, $filterShared, $ratio->getQuestionnaire(), $ratio->getPart());
+            $this->linkRule($formulaShared, $filterShared, $usage->getQuestionnaire(), $usage->getPart());
             echo '.';
         }
     }

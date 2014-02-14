@@ -11,37 +11,6 @@ class QuestionnaireUsageRepository extends \Application\Repository\AbstractRepos
     private $cache = array();
 
     /**
-     * Get all QuestionnaireUsage with any given names within the given questionnaires
-     * @param array $ruleNames
-     * @param array $questionnaires
-     * @return QuestionnaireUsage[]
-     */
-    public function getAllByRuleName(array $ruleNames, array $questionnaires)
-    {
-        $qb = $this->createQueryBuilder('qf');
-        $qb->join('qf.rule', 'rule', \Doctrine\ORM\Query\Expr\Join::WITH)
-                ->andWhere('qf.questionnaire IN (:questionnaires)')
-        ;
-
-        $params = array(
-            'questionnaires' => $questionnaires,
-        );
-        $qb->setParameters($params);
-
-        $where = array();
-        foreach ($ruleNames as $i => $word) {
-            $parameterName = 'word' . $i;
-            $where[] = 'LOWER(rule.name) LIKE LOWER(:' . $parameterName . ')';
-            $qb->setParameter($parameterName, '%' . $word . '%');
-        }
-        $qb->andWhere(join(' OR ', $where));
-
-        $questionnaireUsage = $qb->getQuery()->getResult();
-
-        return $questionnaireUsage;
-    }
-
-    /**
      * Returns a QuestionnaireUsage for the given triplet
      * @param integer $questionnaireId
      * @param integer $partId
