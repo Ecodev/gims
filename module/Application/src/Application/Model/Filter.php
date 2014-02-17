@@ -3,6 +3,7 @@
 namespace Application\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Application\Utility;
 
 /**
  * A Filter is used to organise things. They are usually defined by the answer
@@ -374,5 +375,9 @@ class Filter extends AbstractModel
         }
 
         return $paths;
+    }
+
+    public function getColor() {
+        return Utility::getColor($this->getId(), 100);
     }
 }

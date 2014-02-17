@@ -57,14 +57,14 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
      *
      * @return array a list (not tree) of all filters with their values and tree level
      */
-    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0)
+    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0, $fields = array())
     {
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
         $hydrator = new \Application\Service\Hydrator();
 
         $current = array();
-        $current['filter'] = $hydrator->extract($filter, array('name'));
+        $current['filter'] = $hydrator->extract($filter, array_merge(array('name'), $fields));
         $current['filter']['level'] = $level;
 
         foreach ($parts as $part) {
