@@ -62,7 +62,7 @@
                             <tr ng-repeat="filter in indexedElements[pointSelected.questionnaire].filters | orderBy:'filter.sorting'" ng-show="filter.filter.hFilters[hFilterId]" ng-class="{'active':filter.filter.id == hFilterId,'text-muted':filter.filter.ignored}" >
                                 <td style='width:80px'>
                                     <span>
-                                        <i class="fa fa-lg" ng-class="{'fa-eye-slash': filter.filter.ignored, 'text-primary fa-eye': !filter.filter.ignored}" ng-click="ignoreFilter(indexedElements[pointSelected.questionnaire], filter, !filter.filter.ignored, false, true)" ></i>
+                                        <i class="fa fa-lg" ng-class="{'fa-eye-slash': filter.filter.ignored, 'text-primary fa-eye': !filter.filter.ignored}" ng-click="ignoreFilter(indexedElements[pointSelected.questionnaire], filter, !filter.filter.ignored, false, true)"></i>
                                         <i class="fa fa-arrows-alt text-muted"  ng-click="reportStatusGlobally(filter, true)"></i>
                                     </span>
                                 </td>

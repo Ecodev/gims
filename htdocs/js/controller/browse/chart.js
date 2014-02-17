@@ -30,6 +30,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                         }
                     });
                 });
+                //$location.search('filters', $scope.usedFilters.join(','));
             }
 
             // allow to reset everything that is no more related to selection
@@ -204,7 +205,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         return ignoredElements;
     };
 
-
     /**
      * Retrieve ignored elements in the url following this operations.
      * This function is called after chart has been loaded.
@@ -222,7 +222,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
 
             var callback = function(ignoredQuestionnaires)
             {
-                //var arbitrarySorting = 1000;
                 _.forEach(ignoredQuestionnaires, function(ignoredElement){
                     var questionnaireDetail = ignoredElement.split(':');
                     var ignoredQuestionnaireId = questionnaireDetail[0];
@@ -234,7 +233,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                         });
                     } else {
                         _.forEach($scope.indexedElements[ignoredQuestionnaireId].filters, function(filter) {
-                            if(filter) filter.ignored = true;
+                            if(filter) filter.filter.ignored = true;
                         });
                         $scope.cache(ignoredQuestionnaireId, null, true);
                     }
@@ -249,7 +248,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             $scope.retrieveFiltersAndValues(firstQuestionnaire[0], function(){callback(ignoredQuestionnaires)});
         }
     }
-
 
     /**
      * Calls CharController to refresh charts depending on new values
@@ -273,7 +271,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                 country: $scope.country.id,
                 part: $scope.part.id,
                 filterSet: filterSets.join(','),
-                excludedElements: $scope.getIgnoredElements(refreshUrl)
+                ignoredElements: refreshUrl ? $scope.getIgnoredElements(refreshUrl).join(',') : $location.search()['ignoredElements']
                 }
             }).success(function (data){
                 data.plotOptions.scatter.dataLabels.formatter = function () {
@@ -491,6 +489,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                         return false; // work done, stop loop;
                     }
                 });
+
             // if no ignored params and no ignored status specified on filter but questionnaire has one, filter inherits questionnaire status
             } else if (ignored === undefined && $scope.indexedElements[questionnaireId].ignored !== undefined && $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.ignored === undefined) {
                 $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.ignored = $scope.indexedElements[questionnaireId].ignored;

@@ -244,8 +244,9 @@ use \Application\Traits\EntityManagerAware;
     {
         _log()->debug(__METHOD__, array($filterId, $questionnaireId, $partId, $useSecondLevelRules));
 
-        // @todo for sylvain: the logic goes as follows: if the filter id is contained within excludeFilters, skip calculation.
-        if (in_array($filterId, $this->excludedFilters)) {
+        // The logic goes as follows: if the filter id is contained within excludeFilters, skip calculation.
+        if (isset($this->excludedFilters['byQuestionnaire'][$questionnaireId]) && in_array($filterId, $this->excludedFilters['byQuestionnaire'][$questionnaireId]) ||
+            isset($this->excludedFilters['byFilterSet']) && in_array($filterId, $this->excludedFilters['byFilterSet'])) {
             return null;
         }
 

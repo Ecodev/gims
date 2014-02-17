@@ -85,7 +85,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     }
 
     /**
-     * Optionnaly return closures to override json properties
+     * Optionally return closures to override json properties
      * @return array
      */
     protected function getClosures()

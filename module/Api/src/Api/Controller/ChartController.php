@@ -12,7 +12,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     private $symbols = array('circle', 'diamond', 'square', 'triangle', 'triangle-down');
     private $startYear;
     private $endYear;
-    private $excludedQuestionnaires;
+    private $ignoredElements;
     private $usedFilters = array();
 
     public function indexAction()
@@ -37,8 +37,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $filterSetsName = trim($filterSetsName, ", ");
 
         $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
-        $excludeStr = $this->params()->fromQuery('excludedQuestionnaires');
-        $this->excludedQuestionnaires = $excludeStr ? explode(',', $excludeStr) : array();
+        $excludeStr = $this->params()->fromQuery('ignoredElements');
+        $this->ignoredElements = $excludeStr ? explode(',', $excludeStr) : array();
 
         $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getByGeonameWithSurvey($country ? $country->getGeoname() : -1);
 
@@ -68,8 +68,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
                 // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
                 $alternativeSeries = array_merge($seriesWithExcludedElements, $seriesWithOriginal);
-
-                $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, $excludedFilters, $alternativeSeries ? 33 :100, $alternativeSeries ? 'ShortDash' : null);
+                $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, array('byFilterSet' => $excludedFilters), $alternativeSeries ? 33 :100, $alternativeSeries ? 'ShortDash' : null);
 
                 // insure that series are not added twice to series list
                 foreach ($newSeries = array_merge($normalSeries, $alternativeSeries) as $newSerie) {
@@ -182,48 +181,35 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      */
     protected function computeExcludedElements(array $questionnaires, Part $part)
     {
-        $excludedElementsByFilter = array();
 
-        // init excluded elements array
-        foreach ($this->excludedQuestionnaires as $r) {
-            list($hFilterId, $questionnaireId) = explode(':', $r);
-            if (in_array($hFilterId, $this->usedFilters)) {
-                if (!array_key_exists($hFilterId, $excludedElementsByFilter))
-                    $excludedElementsByFilter[$hFilterId] = array('questionnaires' => array(), 'filters' => array());
-                $excludedElementsByFilter[$hFilterId]['questionnaires'][] = $questionnaireId;
-            }
-        }
-
-        // init excludes filters array
-        $params = $this->params()->fromQuery('excludedFilters');
-        if ($params) {
-            $params = explode(',', $params);
-            foreach ($params as $r) {
-                list($hFilterId, $filterId) = explode(':', $r);
-                if (in_array($hFilterId, $this->usedFilters)) {
-                    if (!array_key_exists($hFilterId, $excludedElementsByFilter))
-                        $excludedElementsByFilter[$hFilterId] = array('questionnaires' => array(), 'filters' => array());
-                    $excludedElementsByFilter[$hFilterId]['filters'][] = $filterId;
-                }
-            }
+        $ignoredFiltersByQuestionnaire = array();
+        foreach ($this->ignoredElements as $ignoredQuestionnaire){
+            @list($questionnaireId, $filters) = explode(':', $ignoredQuestionnaire);
+            $filters = $filters ? explode('-', $filters) : $filters = array();
+            $ignoredFiltersByQuestionnaire[$questionnaireId] = $filters;
         }
 
         $series = array();
-        foreach ($excludedElementsByFilter as $filterId => $excludedElement) {
+        if (count($ignoredFiltersByQuestionnaire) > 0) {
+            foreach ($this->usedFilters as $filterId) {
 
-            $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
-            $filterSetSingle = new \Application\Model\FilterSet();
-            $filterSetSingle->addFilter($filter);
+                $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
+                $filterSetSingle = new \Application\Model\FilterSet();
+                $filterSetSingle->addFilter($filter);
 
-            $questionnairesNotExcluded = array();
-            foreach ($questionnaires as $questionnaire) {
-                if (!in_array($questionnaire->getId(), $excludedElement['questionnaires'])) {
-                    $questionnairesNotExcluded[] = $questionnaire;
+                $questionnairesNotExcluded = array();
+                foreach ($questionnaires as $questionnaire) {
+                    // if not setted or setted and number of filters > 0 (if questionnaire is in ignored list and is empty, he's considered as excluded)
+                    if (!isset($ignoredFiltersByQuestionnaire[$questionnaire->getId()]) ||
+                        isset($ignoredFiltersByQuestionnaire[$questionnaire->getId()]) && count($ignoredFiltersByQuestionnaire[$questionnaire->getId()]) > 0
+                    ) {
+                        $questionnairesNotExcluded[] = $questionnaire;
+                    }
                 }
-            }
 
-            $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotExcluded, $part, $excludedElement['filters'], 100, null, ' (ignored elements)');
-            $series = array_merge($series, $mySeries);
+                $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotExcluded, $part, array('byQuestionnaire' => $ignoredFiltersByQuestionnaire), 100, null, ' (ignored elements)');
+                $series = array_merge($series, $mySeries);
+            }
         }
 
         return $series;
@@ -284,8 +270,18 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                         'x' => $data['years'][$questionnaireId],
                         'y' => \Application\Utility::decimalToRoundedPercent($value),
                     );
+
+                    /** @todo : old params denominations -> refresh */
                     // select the ignored values
-                    if (in_array($idFilter . ':' . $questionnaireId, $this->excludedQuestionnaires)) {
+                    $inQuestionnaires = false;
+                    foreach ($questionnaires as $questionnaire) {
+                        if ($questionnaire->getId() == $questionnaireId) {
+                            $inQuestionnaires = true;
+                            break;
+                        }
+                    }
+
+                    if (!$inQuestionnaires) {
                         $scatterData['selected'] = 'true';
                     }
                     $scatter['data'][] = $scatterData;
