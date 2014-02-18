@@ -58,17 +58,17 @@
                     <table class='table'>
 
                         <!-- filters -->
-                        <tbody ng-repeat="hFilterId in usedFilters">
-                            <tr ng-repeat="filter in indexedElements[pointSelected.questionnaire].filters | orderBy:'filter.sorting'" ng-show="filter.filter.hFilters[hFilterId]" ng-class="{'active':filter.filter.id == hFilterId,'text-muted':filter.filter.ignored}" >
+                        <tbody ng-repeat="(hFilterId, hFilter) in usedFilters">
+                            <tr ng-repeat="filter in indexedElements[pointSelected.questionnaire].filters | orderBy:'filter.sorting'" ng-show="filter.filter.hFilters[hFilterId] >= 0" ng-class="{'active':filter.filter.id == hFilterId,'text-muted':filter.filter.ignored}" >
                                 <td style='width:80px'>
                                     <span>
                                         <i class="fa fa-lg" ng-class="{'fa-eye-slash': filter.filter.ignored, 'text-primary fa-eye': !filter.filter.ignored}" ng-click="ignoreFilter(indexedElements[pointSelected.questionnaire], filter, !filter.filter.ignored, false, true)"></i>
                                         <i class="fa fa-arrows-alt text-muted"  ng-click="reportStatusGlobally(filter, true)"></i>
                                     </span>
                                 </td>
-                                <td style="padding-left:{{filter.filter.level}}em;">
-                                    {{filter.filter.name}}
-                                    <div ng-show='filter.filter.id == hFilterId' style='display:inline-block;vertical-align:middle;width:15px;height:15px;background:{{filter.filter.color}}'></div>
+                                <td>
+                                    <div style='float:left;display:inline-block;vertical-align:middle;width:5px;height:18px;background:{{usedFilters[hFilterId]}}'></div>
+                                    <div style="padding-left:{{filter.filter.hFilters[hFilterId]+1}}em;">{{filter.filter.name}}</div>
                                 </td>
                                 <td style='width:65px' class='text-right'>{{filter.values[part.name]}}<span ng-show='filter.values[part.name]'>&nbsp;%</span></td>
                             </tr>
@@ -100,8 +100,8 @@
                         </tr>
 
                         <!-- Excluded Filters -->
-                        <tbody ng-repeat="hFilterId in usedFilters">
-                            <tr ng-repeat="filter in questionnaire.filters | orderBy:'filter.sorting'"  ng-show='filter.filter.hFilters[hFilterId] && filter.filter.ignored' class='text-muted'>
+                        <tbody ng-repeat="(hFilterId, hFilter) in usedFilters">
+                            <tr ng-repeat="filter in questionnaire.filters | orderBy:'filter.sorting'"  ng-show='filter.filter.hFilters[hFilterId] >= 0 && filter.filter.ignored' class='text-muted'>
                                 <td style='width:80px'>
                                     <span>
                                         <i class="fa fa-lg fa-eye-slash" ng-class="{'text-primary': !filter.filter.ignored}" ng-click="ignoreFilter(questionnaire, filter, !filter.filter.ignored, false, true)" ></i>
@@ -109,9 +109,9 @@
                                         <i class="fa fa-plus-square" ng-class="{'text-muted': filter.usage.ignored}" ng-show='filter.usage' ></i>
                                     </span>
                                 </td>
-                                <td style="padding-left:{{filter.filter.level}}em;">
-                                    {{filter.filter.name}}
-                                    <div ng-show='filter.filter.id == hFilterId' style='display:inline-block;vertical-align:middle;width:15px;height:15px;background:{{filter.filter.color}}'></div>
+                                <td>
+                                    <div style='float:left;display:inline-block;vertical-align:middle;width:5px;height:18px;background:{{usedFilters[hFilterId]}}'></div>
+                                    <div style="padding-left:{{filter.filter.hFilters[hFilterId]+1}}em;">{{filter.filter.name}}</div>
                                 </td>
                                 <td style='width:65px' class='text-right'>{{filter.values[part.name]}}<span ng-show='filter.values[part.name]'>&nbsp;%</span></td>
                             </tr>

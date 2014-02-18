@@ -8,7 +8,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
     $scope.ignoredElements;
     $scope.indexedElements = {};
     $scope.firstExecution = true;
-    $scope.filterSetQueryParams = {fields:'filters,filters.officialChildren,filters.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren.officialChildren'}
+    $scope.filterSetQueryParams = {fields:'filters,filters.color,filters.officialChildren,filters.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren.officialChildren'}
 
     /**
      * Executes when country, part or filterset are changed
@@ -22,15 +22,12 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             // When filter filterset is changed, rebuilds the list of the hFilters used.
             // Needed to send only a request for all hFilters at once and then assign to filter to whith hFilter they are assigned.
             if (newObj.filterSet!=oldObj.filterSet) {
-                $scope.usedFilters = [];
+                $scope.usedFilters = {};
                 _.forEach($scope.filterSet, function(filterSet){
                     _.forEach(filterSet.filters, function(filter){
-                        if (_.indexOf($scope.usedFilters, filter.id) == -1) {
-                            $scope.usedFilters.push(filter.id);
-                        }
+                        $scope.usedFilters[filter.id] = filter.color;
                     });
                 });
-                //$location.search('filters', $scope.usedFilters.join(','));
             }
 
             // allow to reset everything that is no more related to selection
@@ -74,9 +71,14 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             // only launch ajax request if the filters in this questionnaire don't have values
             if (!questionnaire || !questionnaire.filters || !$scope.firstFilterHasValue(questionnaire)) {
 
+                var usedFiltersIds = [];
+                _.forEach($scope.usedFilters, function(filter, filterId){
+                    usedFiltersIds.push(filterId)
+                })
+
                 var parameters = {
                     questionnaire: questionnaireId,
-                    filters: $scope.usedFilters.join(','),
+                    filters: usedFiltersIds.join(','),
                     part: $scope.part.id,
                     fields:'color'
                 };
@@ -84,7 +86,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                 $scope.isLoading = true;
                 Restangular.all('chartFilter').getList(parameters).then(function (data)
                 {
-                    _.forEach($scope.usedFilters, function(hFilterId){
+                    _.forEach($scope.usedFilters, function(hFilter, hFilterId){
                         _.map(data[hFilterId], function(filter, index) {
                             filter.filter.sorting = index+1;
                             filter.filter.hFilters = {};
@@ -473,7 +475,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
 
             // assigns root filters to which this filter belongs to.
             _.forEach(filter.filter.hFilters, function(hFilter, hFilterId){
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.hFilters[hFilterId] = true;
+                $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.hFilters[hFilterId] = filter.filter.level;
             })
 
             if (filter.filter.sorting) {
