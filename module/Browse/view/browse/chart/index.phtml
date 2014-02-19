@@ -60,7 +60,7 @@
                         <!-- filters -->
                         <tbody ng-repeat="(hFilterId, hFilter) in usedFilters">
                             <tr ng-repeat="filter in indexedElements[pointSelected.questionnaire].filters | orderBy:'filter.sorting'" ng-show="filter.filter.hFilters[hFilterId] >= 0" ng-class="{'active':filter.filter.id == hFilterId,'text-muted':filter.filter.ignored}" >
-                                <td style='width:80px'>
+                                <td style='width:55px;padding-right:0'>
                                     <span>
                                         <i class="fa fa-lg" ng-class="{'fa-eye-slash': filter.filter.ignored, 'text-primary fa-eye': !filter.filter.ignored}" ng-click="ignoreFilter(indexedElements[pointSelected.questionnaire], filter, !filter.filter.ignored, false, true)"></i>
                                         <i class="fa fa-arrows-alt text-muted"  ng-click="reportStatusGlobally(filter, true)"></i>
@@ -87,7 +87,7 @@
 
                 <table class='table'>
                         <tr class='active'>
-                            <th style='width:80px'>
+                            <th style='width:50px'>
                                 <span>
                                     <i class="fa fa-lg fa-eye text-primary" ng-click="toggleQuestionnaire(questionnaireId, false)" ></i>
                                     <i class="fa fa-lg fa-eye-slash text-primary" ng-click="toggleQuestionnaire(questionnaireId, true)" ></i>
@@ -102,7 +102,7 @@
                         <!-- Excluded Filters -->
                         <tbody ng-repeat="(hFilterId, hFilter) in usedFilters">
                             <tr ng-repeat="filter in questionnaire.filters | orderBy:'filter.sorting'"  ng-show='filter.filter.hFilters[hFilterId] >= 0 && filter.filter.ignored' class='text-muted'>
-                                <td style='width:80px'>
+                                <td style='width:55px'>
                                     <span>
                                         <i class="fa fa-lg fa-eye-slash" ng-class="{'text-primary': !filter.filter.ignored}" ng-click="ignoreFilter(questionnaire, filter, !filter.filter.ignored, false, true)" ></i>
                                         <i class="fa fa-arrows-alt" ng-click="reportStatusGlobally(filter, true)" ></i>

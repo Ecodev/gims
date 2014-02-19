@@ -5,10 +5,8 @@ angular.module('myApp.directives').directive('gimsFilterGenerator', function($mo
         link: function(scope, element, attrs) {
             // nothing to do ?
         },
-        controller: function($scope, Restangular)
-        {
-            $scope.openModal = function()
-            {
+        controller: function($scope, Restangular) {
+            $scope.openModal = function() {
                 var modalInstance = $modal.open({
                     controller: $scope.modalController,
                     resolve: {
@@ -25,29 +23,8 @@ angular.module('myApp.directives').directive('gimsFilterGenerator', function($mo
                             return $scope.country;
                         }
                     },
-                    template: "" +
-                        "<div class='modal-header'>" +
-                        "    <button type='button' class='close' ng-click='close()'>&times;</button>" +
-                        "    <h3>Add custom filter</h3>" +
-                        "    </div>" +
-                        "<div class='modal-body'>" +
-                        '<form name="myForm">' +
-                        '   <div class="form-group" ng-class="{\'has-error\': myForm.name.$invalid}">' +
-                        '       <label class="control-label" for="line.name">Filter name</label>' +
-                        '       <input id="line.name" type="text" name="name" ng-model="line.name" required ng-minlength="3" ng-disabled="line.lastLogin" />' +
-                        '       <span ng-show="myForm.name.$error.required" class="help-block">Required</span>' +
-                        '       <span ng-show="myForm.name.$error.minlength" class="help-block">It must be at least 3 characters long</span>' +
-                        '   </div>' +
-                        '   <div class="gridStyle show-grid" ng-grid="gridOptions"></div>'+
-                        '</form>' +
-                        "</div>" +
-                        "<div class='modal-footer'>" +
-                        "   <a href='#' class='btn btn-default' ng-click='close()'>Cancel</a>" +
-                        "   <a href='#' ng-disabled='myForm.$invalid || !line.surveys[0].year || !line.surveys[0].value || !part || !country' ng-click='generate()' class='btn btn-success'>Generate filter</a>" +
-                        "</div>"
+                    template: "" + "<div class='modal-header'>" + "    <button type='button' class='close' ng-click='close()'>&times;</button>" + "    <h3>Add custom filter</h3>" + "    </div>" + "<div class='modal-body'>" + '<form name="myForm">' + '   <div class="form-group" ng-class="{\'has-error\': myForm.name.$invalid}">' + '       <label class="control-label" for="line.name">Filter name</label>' + '       <input id="line.name" type="text" name="name" ng-model="line.name" required ng-minlength="3" ng-disabled="line.lastLogin" />' + '       <span ng-show="myForm.name.$error.required" class="help-block">Required</span>' + '       <span ng-show="myForm.name.$error.minlength" class="help-block">It must be at least 3 characters long</span>' + '   </div>' + '   <div class="gridStyle show-grid" ng-grid="gridOptions"></div>' + '</form>' + "</div>" + "<div class='modal-footer'>" + "   <a href='#' class='btn btn-default' ng-click='close()'>Cancel</a>" + "   <a href='#' ng-disabled='myForm.$invalid || !line.surveys[0].year || !line.surveys[0].value || !part || !country' ng-click='generate()' class='btn btn-success'>Generate filter</a>" + "</div>"
                 });
-
-//                modalInstance.result.then(function(newLine){});
             };
 
             $scope.modalController = function($scope, $modalInstance, $location, line, Restangular, part, country) {
@@ -56,36 +33,42 @@ angular.module('myApp.directives').directive('gimsFilterGenerator', function($mo
                 $scope.part = part;
                 $scope.country = country;
 
-                if(!$scope.line.surveys) $scope.line.surveys = [{}];
+                if (!$scope.line.surveys) {
+                    $scope.line.surveys = [
+                        {}
+                    ];
+                }
 
-                $scope.$watch('line.surveys', function(){
+                $scope.$watch('line.surveys', function() {
                     $scope.addRow();
-                },true);
+                }, true);
 
                 $scope.generate = function() {
 
-                    var surveys = _.map($scope.line.surveys, function(survey){
-                        if(survey.year && survey.value)
-                            return survey.year+':'+(survey.value/100);
+                    var surveys = _.map($scope.line.surveys, function(survey) {
+                        if (survey.year && survey.value) {
+                            return survey.year + ':' + (survey.value / 100);
+                        }
                     });
                     surveys.pop();
 
                     var parameters = {
-                        name : $scope.line.name,
-                        part : part.id,
-                        country : country.id,
-                        surveys : surveys.join(',')
+                        name: $scope.line.name,
+                        part: part.id,
+                        country: country.id,
+                        surveys: surveys.join(',')
                     }
 
                     $scope.isLoading = true;
-                    Restangular.all('chartFilterGenerator').getList(parameters).then(function(filterSet)
-                    {
+                    Restangular.all('chart/generateFilter').getList(parameters).then(function(filterSet) {
+                        console.log(filterSet);
                         $scope.isLoading = false;
-                        var filterSets = $location.search()['filterSet'] ? $location.search()['filterSet'].split(',') : [];
+                        var filterSets = $location.search()['filterSet'] ? $location.search()['filterSet'].split(',') :
+                            [];
                         filterSets.push(filterSet.id);
                         $location.search('filterSet', filterSets.join(','));
 
-                        $timeout(function (){
+                        $timeout(function() {
                             window.location.reload();
                         }, 0);
                     });
@@ -96,12 +79,12 @@ angular.module('myApp.directives').directive('gimsFilterGenerator', function($mo
                     $modalInstance.close($scope.line);
                 }
 
-                $scope.deleteOption = function (index) {
+                $scope.deleteOption = function(index) {
                     $scope.line.surveys.splice(index, 1);
                 }
 
                 $scope.addRow = function() {
-                    var lastIndex = $scope.line.surveys.length-1;
+                    var lastIndex = $scope.line.surveys.length - 1;
                     if ($scope.line.surveys.length == 0 || $scope.line.surveys[lastIndex].year || $scope.line.surveys[lastIndex].value) {
                         $scope.line.surveys.push({});
                     }
@@ -118,19 +101,21 @@ angular.module('myApp.directives').directive('gimsFilterGenerator', function($mo
                         {
                             field: 'year',
                             displayName: 'Year',
-                            editableCellTemplate:'<input type="number"  min="1980" max="3000" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" required/>'
-                        },{
+                            editableCellTemplate: '<input type="number"  min="1980" max="3000" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" required/>'
+                        },
+                        {
                             field: 'value',
                             displayName: 'Percent value',
-                            enableCellEdit : true,
-                            editableCellTemplate:'<input type="number" max="100" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" required/> %',
-                            cellTemplate : '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{COL_FIELD}}</span> <span ng-show="COL_FIELD">%</span></div>'
-                        },{
+                            enableCellEdit: true,
+                            editableCellTemplate: '<input type="number" max="100" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" required/> %',
+                            cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><span ng-cell-text>{{COL_FIELD}}</span> <span ng-show="COL_FIELD">%</span></div>'
+                        },
+                        {
                             field: '',
                             displayName: '',
                             width: '60px',
-                            enableCellEdit:false,
-                            cellTemplate:'<div style="padding:5px"><div ng-hide="row.rowIndex == line.surveys.length-1" class="btn btn-default btn-xs" ng-click="deleteOption(row.rowIndex)"><i class="fa fa-trash-o"></i></div></div>'
+                            enableCellEdit: false,
+                            cellTemplate: '<div style="padding:5px"><div ng-hide="row.rowIndex == line.surveys.length-1" class="btn btn-default btn-xs" ng-click="deleteOption(row.rowIndex)"><i class="fa fa-trash-o"></i></div></div>'
                         }
                     ]
                 };

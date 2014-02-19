@@ -1,5 +1,4 @@
-angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $location, $http, $timeout, Restangular, $modal)
-{
+angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $location, $http, $timeout, Restangular, $modal) {
     'use strict';
 
     $scope.Math = window.Math;
@@ -8,23 +7,22 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
     $scope.ignoredElements;
     $scope.indexedElements = {};
     $scope.firstExecution = true;
-    $scope.filterSetQueryParams = {fields:'filters,filters.color,filters.officialChildren,filters.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren.officialChildren'}
+    $scope.filterSetQueryParams = {fields: 'filters,filters.color,filters.officialChildren,filters.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren.officialChildren'}
 
     /**
      * Executes when country, part or filterset are changed
      * When filter filterset is changed, rebuilds the list of the hFilters used.
      */
     var uniqueAjaxRequest;
-    $scope.$watch('{country:country.id, part:part.id, filterSet:filterSet}', function (newObj, oldObj)
-    {
+    $scope.$watch('{country:country.id, part:part.id, filterSet:filterSet}', function(newObj, oldObj) {
         if ($scope.country && $scope.part && $scope.filterSet) {
 
             // When filter filterset is changed, rebuilds the list of the hFilters used.
             // Needed to send only a request for all hFilters at once and then assign to filter to whith hFilter they are assigned.
-            if (newObj.filterSet!=oldObj.filterSet) {
+            if (newObj.filterSet != oldObj.filterSet) {
                 $scope.usedFilters = {};
-                _.forEach($scope.filterSet, function(filterSet){
-                    _.forEach(filterSet.filters, function(filter){
+                _.forEach($scope.filterSet, function(filterSet) {
+                    _.forEach(filterSet.filters, function(filter) {
                         $scope.usedFilters[filter.id] = filter.color;
                     });
                 });
@@ -32,7 +30,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
 
             // allow to reset everything that is no more related to selection
             // all subobjects of the oldObj have to be not null. If they are that means that it's the first display, so don't reset excluded elements. The other vars are already empty
-            if(oldObj.country && oldObj.part && oldObj.filterSet && (newObj.country != oldObj.country || newObj.part != oldObj.part || newObj.filterSet!=oldObj.filterSet)) {
+            if (oldObj.country && oldObj.part && oldObj.filterSet && (newObj.country != oldObj.country || newObj.part != oldObj.part || newObj.filterSet != oldObj.filterSet)) {
                 $scope.indexedElements = {};
                 $scope.pointSelected = null;
             }
@@ -44,10 +42,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
     /**
      * Executes when a point is selected
      */
-    $scope.$watch('pointSelected', function (pointSelected)
-    {
+    $scope.$watch('pointSelected', function(pointSelected) {
         // We throw an window.resize event to force Highcharts to reflow and adapt to its new size
-        $timeout(function (){
+        $timeout(function() {
             jQuery(window).resize();
         }, 0);
 
@@ -57,22 +54,20 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         }
     });
 
-
     /**
      * Calls ChartFilterController to recover filters data and values
      * @param questionnaireId
      * @param callback
      */
-    $scope.retrieveFiltersAndValues = function(questionnaireId, callback)
-    {
-        if(questionnaireId) {
+    $scope.retrieveFiltersAndValues = function(questionnaireId, callback) {
+        if (questionnaireId) {
             var questionnaire = $scope.cache(questionnaireId);
 
             // only launch ajax request if the filters in this questionnaire don't have values
             if (!questionnaire || !questionnaire.filters || !$scope.firstFilterHasValue(questionnaire)) {
 
                 var usedFiltersIds = [];
-                _.forEach($scope.usedFilters, function(filter, filterId){
+                _.forEach($scope.usedFilters, function(filter, filterId) {
                     usedFiltersIds.push(filterId)
                 })
 
@@ -80,17 +75,16 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                     questionnaire: questionnaireId,
                     filters: usedFiltersIds.join(','),
                     part: $scope.part.id,
-                    fields:'color'
+                    fields: 'name,color'
                 };
 
                 $scope.isLoading = true;
-                Restangular.all('chartFilter').getList(parameters).then(function (data)
-                {
-                    _.forEach($scope.usedFilters, function(hFilter, hFilterId){
+                Restangular.all('chart/getPanelFilters').getList(parameters).then(function(data) {
+                    _.forEach($scope.usedFilters, function(hFilter, hFilterId) {
                         _.map(data[hFilterId], function(filter, index) {
-                            filter.filter.sorting = index+1;
+                            filter.filter.sorting = index + 1;
                             filter.filter.hFilters = {};
-                            filter.filter.hFilters[hFilterId] = true ;
+                            filter.filter.hFilters[hFilterId] = true;
                             $scope.cache(questionnaireId, filter);
                         });
                     });
@@ -102,7 +96,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         }
     }
 
-
     /**
      *   This function set initiates all questionnaires with data loaded with first one (except values)
      *   It allows to see ignored elements if they are ignored globally before having loading the data specific to asked questionnaire
@@ -111,23 +104,26 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
      *   @param questionnaireId Reference questionnaire id
      *   @param callback function to execute when data is indexed (usefull for then change status to ignored if they're ignored in url)
      */
-    $scope.initiateEmptyQuestionnairesWithLoadedData = function(questionnaireId, callback)
-    {
-        if(questionnaireId) {
+    $scope.initiateEmptyQuestionnairesWithLoadedData = function(questionnaireId, callback) {
+        if (questionnaireId) {
             var questionnaire = $scope.cache(questionnaireId);
 
             if ($scope.firstExecution) {
                 $scope.firstExecution = false;
-                $timeout(function (){
-                    _.forEach($scope.indexedElements, function(tmpQuestionnaire, tmpQuestionnaireId){
+                $timeout(function() {
+                    _.forEach($scope.indexedElements, function(tmpQuestionnaire, tmpQuestionnaireId) {
                         if (tmpQuestionnaireId != questionnaireId) {
                             _.forEach(questionnaire.filters, function(filter) {
-                                if (filter)  $scope.cache(tmpQuestionnaireId, {filter : filter.filter});
+                                if (filter) {
+                                    $scope.cache(tmpQuestionnaireId, {filter: filter.filter});
+                                }
                             });
                         }
                     });
 
-                    if (callback) callback();
+                    if (callback) {
+                        callback();
+                    }
                     $scope.getIgnoredElements(true);
                 }, 1000);
             }
@@ -141,11 +137,10 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
      * @param questionnaire
      * @returns {boolean}
      */
-    $scope.firstFilterHasValue = function(questionnaire)
-    {
+    $scope.firstFilterHasValue = function(questionnaire) {
         var hasValue = false;
-        _.forEach(questionnaire.filters, function(filter){
-            if (filter && filter.values && filter.values[$scope.part.name]){
+        _.forEach(questionnaire.filters, function(filter) {
+            if (filter && filter.values && filter.values[$scope.part.name]) {
                 hasValue = true;
                 return false;
             }
@@ -162,19 +157,17 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
      * @param refreshUrl
      * @returns {Array}
      */
-    $scope.getIgnoredElements = function(refreshUrl)
-    {
+    $scope.getIgnoredElements = function(refreshUrl) {
         if (!$scope.indexedElements) {
             return [];
         }
 
         var ignoredElements = [];
-        _.forEach($scope.indexedElements, function (questionnaire, questionnaireId)
-        {
+        _.forEach($scope.indexedElements, function(questionnaire, questionnaireId) {
             var ignoredElementsForQuestionnaire = [];
             var allFiltersIgnored = true;
             questionnaire.hasIgnoredFilters = false;
-            _.forEach(questionnaire.filters, function (filter){
+            _.forEach(questionnaire.filters, function(filter) {
                 if (filter) {
                     if (filter.filter.ignored) {
                         questionnaire.hasIgnoredFilters = true;
@@ -198,10 +191,14 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
 
         if (ignoredElements.length > 0) {
             $scope.ignoredElements = true;
-            if (refreshUrl) $location.search('ignoredElements', ignoredElements.join(','));
+            if (refreshUrl) {
+                $location.search('ignoredElements', ignoredElements.join(','));
+            }
         } else {
             $scope.ignoredElements = false;
-            if (refreshUrl) $location.search('ignoredElements', null);
+            if (refreshUrl) {
+                $location.search('ignoredElements', null);
+            }
         }
 
         return ignoredElements;
@@ -215,39 +212,42 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
      * 2) Retrieve data (filter structure with informations -> name, and values)
      * 3) When request has come back, initiate all questionnaires to allow data display on ignored elements (mainly filter's name).
      */
-    $scope.initIgnoredElementsFromUrl = function ()
-    {
+    $scope.initIgnoredElementsFromUrl = function() {
         // url excluded questionnaires
-        var ignoredQuestionnaires = $location.search()['ignoredElements'] ? $location.search()['ignoredElements'].split(',') : [];
+        var ignoredQuestionnaires = $location.search()['ignoredElements'] ? $location.search()['ignoredElements'].split(',') :
+            [];
 
         if (ignoredQuestionnaires.length > 0) {
 
-            var callback = function(ignoredQuestionnaires)
-            {
-                _.forEach(ignoredQuestionnaires, function(ignoredElement){
+            var callback = function(ignoredQuestionnaires) {
+                _.forEach(ignoredQuestionnaires, function(ignoredElement) {
                     var questionnaireDetail = ignoredElement.split(':');
                     var ignoredQuestionnaireId = questionnaireDetail[0];
                     var ignoredFilters = questionnaireDetail[1] ? questionnaireDetail[1].split('-') : null;
 
                     if (ignoredFilters) {
                         _.forEach(ignoredFilters, function(filterId) {
-                            $scope.cache(ignoredQuestionnaireId, {filter: {id : filterId}}, true);
+                            $scope.cache(ignoredQuestionnaireId, {filter: {id: filterId}}, true);
                         });
                     } else {
                         _.forEach($scope.indexedElements[ignoredQuestionnaireId].filters, function(filter) {
-                            if(filter) filter.filter.ignored = true;
+                            if (filter) {
+                                filter.filter.ignored = true;
+                            }
                         });
                         $scope.cache(ignoredQuestionnaireId, null, true);
                     }
                 });
 
-                $timeout(function (){
+                $timeout(function() {
                     jQuery(window).resize();
                 }, 0)
             }
 
             var firstQuestionnaire = ignoredQuestionnaires[0].split(':');
-            $scope.retrieveFiltersAndValues(firstQuestionnaire[0], function(){callback(ignoredQuestionnaires)});
+            $scope.retrieveFiltersAndValues(firstQuestionnaire[0], function() {
+                callback(ignoredQuestionnaires)
+            });
         }
     }
 
@@ -257,13 +257,11 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
      * @param refreshUrl Usualy set to true before sending request but at first execution is set to false
      * @param callback
      */
-    $scope.refreshChart = function (refreshUrl, callback)
-    {
+    $scope.refreshChart = function(refreshUrl, callback) {
         $scope.isLoading = true;
         $timeout.cancel(uniqueAjaxRequest);
-        uniqueAjaxRequest = $timeout(function ()
-        {
-            var filterSets = _.map($scope.filterSet, function(filterSet){
+        uniqueAjaxRequest = $timeout(function() {
+            var filterSets = _.map($scope.filterSet, function(filterSet) {
                 return filterSet.id;
             });
 
@@ -274,19 +272,18 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                 part: $scope.part.id,
                 filterSet: filterSets.join(','),
                 ignoredElements: refreshUrl ? $scope.getIgnoredElements(refreshUrl).join(',') : $location.search()['ignoredElements']
-                }
-            }).success(function (data){
-                data.plotOptions.scatter.dataLabels.formatter = function () {
+            }
+            }).success(function(data) {
+                data.plotOptions.scatter.dataLabels.formatter = function() {
                     $scope.cache(this.point.options.questionnaire).name = this.point.name;
-                    return $('<span/>').css({color:this.series.color}).text(this.point.name)[0].outerHTML;
+                    return $('<span/>').css({color: this.series.color}).text(this.point.name)[0].outerHTML;
                 };
 
                 data.plotOptions.scatter.point = {
                     events: {
-                        click: function (e)
-                        {
+                        click: function(e) {
                             var ids = e.currentTarget.id.split(':');
-                            $scope.setPointSelected(e.currentTarget.id,e.currentTarget.questionnaire,e.currentTarget.name, ids[0]);
+                            $scope.setPointSelected(e.currentTarget.id, e.currentTarget.questionnaire, e.currentTarget.name, ids[0]);
                             $scope.$apply(); // this is needed because we are outside the AngularJS context (highcharts uses jQuery event handlers)
                         }
                     }
@@ -302,7 +299,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         }, 500);
     };
 
-    $scope.setPointSelected = function (id, questionnaireId, name, filterId){
+    $scope.setPointSelected = function(id, questionnaireId, name, filterId) {
         $scope.pointSelected = {
             id: id,
             questionnaire: questionnaireId,
@@ -311,40 +308,37 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         };
     }
 
-
-
-
-
     /**
      *  Manage filters ignored actions
      */
 
-    $scope.reportStatusGloballyForQuestionnaire = function(questionnaire)
-    {
-        _.forEach(questionnaire.filters, function(filter){
-            if (filter) $scope.reportStatusGlobally(questionnaire, filter, false);
+    $scope.reportStatusGloballyForQuestionnaire = function(questionnaire) {
+        _.forEach(questionnaire.filters, function(filter) {
+            if (filter) {
+                $scope.reportStatusGlobally(questionnaire, filter, false);
+            }
         });
 
         $scope.updateQuestionnaireIgnoredStatus(questionnaire);
         $scope.refreshChart(true);
     }
 
-    $scope.reportStatusGlobally = function(filter, refresh)
-    {
-        _.forEach($scope.indexedElements, function(questionnaire){
+    $scope.reportStatusGlobally = function(filter, refresh) {
+        _.forEach($scope.indexedElements, function(questionnaire) {
             $scope.ignoreFilter(questionnaire, questionnaire.filters[filter.filter.id], filter.filter.ignored, true, false);
             $scope.updateQuestionnaireIgnoredStatus(questionnaire);
         });
 
-        if (refresh) $scope.refreshChart(true);
+        if (refresh) {
+            $scope.refreshChart(true);
+        }
     }
 
-    $scope.toggleQuestionnaire = function(questionnaireId, ignore)
-    {
+    $scope.toggleQuestionnaire = function(questionnaireId, ignore) {
         var questionnaire = $scope.cache(questionnaireId);
         questionnaire.ignored = questionnaire.ignored === undefined ? true : !questionnaire.ignored;
 
-        _.forEach(questionnaire.filters, function(filter){
+        _.forEach(questionnaire.filters, function(filter) {
             $scope.ignoreFilter(questionnaire, filter, ignore !== undefined ? ignore : questionnaire.ignored, false, false)
         });
 
@@ -352,11 +346,12 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         $scope.refreshChart(true);
     }
 
-    $scope.ignoreFilter = function(questionnaire, filter, ignored, globally, refresh)
-    {
+    $scope.ignoreFilter = function(questionnaire, filter, ignored, globally, refresh) {
         if (filter) {
             filter.filter.ignored = ignored;
-            if (globally) filter.filter.ignoredGlobally = ignored;
+            if (globally) {
+                filter.filter.ignoredGlobally = ignored;
+            }
 
             if (refresh) {
                 $scope.updateQuestionnaireIgnoredStatus(questionnaire);
@@ -365,11 +360,10 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         }
     }
 
-    $scope.updateQuestionnaireIgnoredStatus = function(questionnaire)
-    {
+    $scope.updateQuestionnaireIgnoredStatus = function(questionnaire) {
         if (questionnaire.filters) {
             var questionnaireIgnored = true;
-            _.forEach(questionnaire.filters, function(filter){
+            _.forEach(questionnaire.filters, function(filter) {
                 if (filter && !filter.filter.ignored) {
                     questionnaireIgnored = false;
                     return false;
@@ -378,7 +372,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
             questionnaire.ignored = questionnaireIgnored;
         }
     }
-
 
     /**
      * Put in $scope.indexedElements the state of all objects that have been selected / viewed / ignored.
@@ -422,8 +415,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
      * @param ignored
      * @returns current cached highFilter object
      */
-    $scope.cache = function (questionnaireId, filter, ignored)
-    {
+    $scope.cache = function(questionnaireId, filter, ignored) {
         if (!$scope.country || !$scope.part) {
             return [];
         }
@@ -438,8 +430,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         return $scope.indexedElements[questionnaireId];
     }
 
-    $scope.indexQuestionnaireCache = function(questionnaireId, ignored)
-    {
+    $scope.indexQuestionnaireCache = function(questionnaireId, ignored) {
         if (questionnaireId) {
             if (!$scope.indexedElements[questionnaireId]) {
                 $scope.indexedElements[questionnaireId] = {};
@@ -451,8 +442,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
         }
     }
 
-    $scope.indexQuestionnaireFilterCache = function(questionnaireId, filter, ignored)
-    {
+    $scope.indexQuestionnaireFilterCache = function(questionnaireId, filter, ignored) {
         if (filter) {
             if (!$scope.indexedElements[questionnaireId].filters) {
                 $scope.indexedElements[questionnaireId].filters = [];
@@ -464,17 +454,25 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                 $scope.indexedElements[questionnaireId].filters[filter.filter.id].values = {};
             }
 
-            if (filter.filter.id) $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.id = filter.filter.id;
-            if (filter.filter.name) $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.name = filter.filter.name;
-            if (filter.filter.level) $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.level = filter.filter.level;
-            if (filter.filter.color) $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.color = filter.filter.color;
+            if (filter.filter.id) {
+                $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.id = filter.filter.id;
+            }
+            if (filter.filter.name) {
+                $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.name = filter.filter.name;
+            }
+            if (filter.filter.level) {
+                $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.level = filter.filter.level;
+            }
+            if (filter.filter.color) {
+                $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.color = filter.filter.color;
+            }
 
             if (!$scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.hFilters) {
                 $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.hFilters = {};
             }
 
             // assigns root filters to which this filter belongs to.
-            _.forEach(filter.filter.hFilters, function(hFilter, hFilterId){
+            _.forEach(filter.filter.hFilters, function(hFilter, hFilterId) {
                 $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.hFilters[hFilterId] = filter.filter.level;
             })
 
@@ -484,7 +482,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
 
             // if no ignored status specified, find if a the similar filter is globally ignored on the sibling questionnaires list.
             if (ignored === undefined && $scope.indexedElements[questionnaireId].ignored === undefined) {
-                _.forEach($scope.indexedElements, function(questionnaire, qid){
+                _.forEach($scope.indexedElements, function(questionnaire, qid) {
                     if (questionnaire && qid != questionnaireId && questionnaire.filters && questionnaire.filters[filter.filter.id] && questionnaire.filters[filter.filter.id].ignoredGlobally) {
                         $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.ignored = true;
                         $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.ignoredGlobally = true;
@@ -492,11 +490,11 @@ angular.module('myApp').controller('Browse/ChartCtrl', function ($scope, $locati
                     }
                 });
 
-            // if no ignored params and no ignored status specified on filter but questionnaire has one, filter inherits questionnaire status
+                // if no ignored params and no ignored status specified on filter but questionnaire has one, filter inherits questionnaire status
             } else if (ignored === undefined && $scope.indexedElements[questionnaireId].ignored !== undefined && $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.ignored === undefined) {
                 $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.ignored = $scope.indexedElements[questionnaireId].ignored;
 
-            // if ignored param specified, filter gets its value
+                // if ignored param specified, filter gets its value
             } else if (ignored !== undefined) {
                 $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.ignored = ignored;
             }

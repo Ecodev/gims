@@ -18,8 +18,6 @@ return array(
             'Api\Controller\UserQuestionnaire' => 'Api\Controller\UserQuestionnaireController',
             'Api\Controller\Role' => 'Api\Controller\RoleController',
             'Api\Controller\Geoname' => 'Api\Controller\GeonameController',
-            'Api\Controller\ChartFilter' => 'Api\Controller\ChartFilterController',
-            'Api\Controller\ChartFilterGenerator' => 'Api\Controller\ChartFilterGeneratorController',
             'Api\Controller\Chart' => 'Api\Controller\ChartController',
             'Api\Controller\Table' => 'Api\Controller\TableController',
             'Api\Controller\Note' => 'Api\Controller\NoteController',

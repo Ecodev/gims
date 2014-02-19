@@ -19,7 +19,7 @@ class Calculator
 use \Application\Traits\EntityManagerAware;
 
     private $cacheComputeFilter = array();
-    protected $excludedFilters = array();
+    protected $ignoredFilters = array();
     private $populationRepository;
     private $questionnaireUsageRepository;
     private $filterRepository;
@@ -212,8 +212,12 @@ use \Application\Traits\EntityManagerAware;
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
      * @return float|null null if no answer at all, otherwise the percentage value
      */
-    public function computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules = false, ArrayCollection $alreadyUsedFormulas = null)
+    public function computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules = false, ArrayCollection $alreadyUsedFormulas = null, $ignoredElementsByQuestionnaire = null)
     {
+        if ($ignoredElementsByQuestionnaire) {
+            $this->ignoredFilters = $ignoredElementsByQuestionnaire;
+        }
+
         _log()->debug(__METHOD__, array('start', $filterId, $questionnaireId, $partId));
         $key = \Application\Utility::getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheComputeFilter)) {
@@ -245,8 +249,13 @@ use \Application\Traits\EntityManagerAware;
         _log()->debug(__METHOD__, array($filterId, $questionnaireId, $partId, $useSecondLevelRules));
 
         // The logic goes as follows: if the filter id is contained within excludeFilters, skip calculation.
-        if (isset($this->excludedFilters['byQuestionnaire'][$questionnaireId]) && in_array($filterId, $this->excludedFilters['byQuestionnaire'][$questionnaireId]) ||
-            isset($this->excludedFilters['byFilterSet']) && in_array($filterId, $this->excludedFilters['byFilterSet'])) {
+        if (
+            isset($this->ignoredFilters['byQuestionnaire'])
+                && isset($this->ignoredFilters['byQuestionnaire'][$questionnaireId])
+                && in_array($filterId, $this->ignoredFilters['byQuestionnaire'][$questionnaireId])
+            || isset($this->ignoredFilters['byFilterSet'])
+                && in_array($filterId, $this->ignoredFilters['byFilterSet']))
+        {
             return null;
         }
 

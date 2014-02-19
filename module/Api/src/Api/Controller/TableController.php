@@ -29,7 +29,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                     // Do the actual computing for all filters
                     $resultOneQuestionnaire = array();
                     foreach ($filterSet->getFilters() as $filter) {
-                        $resultOneQuestionnaire = array_merge($resultOneQuestionnaire, $this->computeWithChildren($questionnaire, $filter, $parts));
+                        $resultOneQuestionnaire = array_merge($resultOneQuestionnaire, $this->computeWithChildren($questionnaire, $filter, $parts, 0, array('name')));
                     }
 
                     // Merge this questionnaire results with other questionnaire results
@@ -48,31 +48,30 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
     }
 
     /**
-     * Comput value for the given filter and all its children recursively.
+     * Compute value for the given filter and all its children recursively.
      *
      * @param \Application\Model\Questionnaire $questionnaire
      * @param \Application\Model\Filter $filter
      * @param array $parts
      * @param integer $level the level of the current filter in the filter tree
-     *
+     * @param array $fields
+     * @param array $ignoredElementsByQuestionnaire
      * @return array a list (not tree) of all filters with their values and tree level
      */
-    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0, $fields = array())
+    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0, $fields = array(), $ignoredElementsByQuestionnaire = array())
     {
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
         $hydrator = new \Application\Service\Hydrator();
 
         $current = array();
-        $current['filter'] = $hydrator->extract($filter, array_merge(array('name'), $fields));
+        $current['filter'] = $hydrator->extract($filter, $fields);
         $current['filter']['level'] = $level;
 
         foreach ($parts as $part) {
-            $computed = $calculator->computeFilter($filter->getId(), $questionnaire->getId(), $part->getId());
-
+            $computed = $calculator->computeFilter($filter->getId(), $questionnaire->getId(), $part->getId(), false, null, $ignoredElementsByQuestionnaire);
             // Round the value
             $value = \Application\Utility::decimalToRoundedPercent($computed);
-
             $current['values'][0][$part->getName()] = $value;
         }
 
@@ -80,7 +79,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $result = array($current);
         foreach ($filter->getChildren() as $child) {
             if ($child->isOfficial()) {
-                $result = array_merge($result, $this->computeWithChildren($questionnaire, $child, $parts, $level + 1));
+                $result = array_merge($result, $this->computeWithChildren($questionnaire, $child, $parts, $level + 1, $fields, $ignoredElementsByQuestionnaire));
             }
         }
 
