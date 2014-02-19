@@ -1,14 +1,21 @@
-/* Services */
+/* Services
+ *
+ * Our service Modal.confirmDelete(), prompt the end-user whether he confirms
+ * the deletion of an object and it returns immediately a promise of deletion.
+ *
+ * The promise is resolved if the object is deleted, and rejected otherwise.
+ */
 angular.module('myApp.services')
-        .factory('Modal', function($modal, $location) {
+        .factory('Modal', function($modal, $location, $q) {
             'use strict';
 
-            var confirmDeleteInternal = function(object, options) {
+            var confirmDeleteInternal = function(object, options, deferred) {
                 options = options || {};
 
                 var msg;
-                if (options.label) {
-                    msg = 'Do you want to delete "' + options.label + '" ?';
+                var label = options.label || object.code || object.name;
+                if (label) {
+                    msg = 'Do you want to delete "' + label + '" ?';
                 } else {
                     msg = 'Do you want to delete it ?';
                 }
@@ -53,24 +60,27 @@ angular.module('myApp.services')
                         if (options.returnUrl) {
                             $location.path(options.returnUrl);
                         }
+
+                        // Object was delete, so we resolve our deletion promise
+                        deferred.resolve();
                     });
+
+                }, function() {
+                    // Deletion was rejected by end-user, so we reject our deletion promise
+                    deferred.reject();
                 });
             };
 
             return {
                 confirmDelete: function(object, options) {
 
-                    // If we detect objects is a promise, wait for the promise to be completed and then show dialog
-                    if (options.objects && typeof options.objects.then == 'function') {
-                        options.objects.then(function(data) {
-                            options.objects = data;
-                            confirmDeleteInternal(object, options);
-                        });
-                    }
-                    // Otherwise show dialog directly
-                    else {
-                        confirmDeleteInternal(object, options);
-                    }
+                    var deferred = $q.defer();
+                    $q.when(options.objects).then(function(data) {
+                        options.objects = data;
+                        confirmDeleteInternal(object, options, deferred);
+                    });
+
+                    return deferred.promise;
                 }
             };
         });
