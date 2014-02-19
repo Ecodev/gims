@@ -13,7 +13,8 @@ angular.module('myApp', [
         'myApp.services',
         'myApp.directives',
         'http-auth-interceptor',
-        'chartsExample.directives'
+        'chartsExample.directives',
+        'colorpicker.module'
     ]).
     config(function ($routeProvider, $locationProvider, RestangularProvider) {
         $routeProvider.when('/home', {templateUrl: '/template/application/index/home'});

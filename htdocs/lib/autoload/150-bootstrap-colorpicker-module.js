@@ -1,0 +1,1 @@
+../angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js

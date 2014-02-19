@@ -32,6 +32,8 @@
 
     <div class="row">
 
+        <input colorpicker="rgb" type="text" ng-model="your_model" />
+
         <!-- Chart -->
         <div ng-class="{'col-xs-12 col-sm-7 col-md-7 col-lg-8' : ignoredElements || pointSelected, 'col-md-12' : !ignoredElements && !pointSelected}" >
             <chart value="chart" type="area" height="400" chart-obj="chartObj" />
