@@ -23,7 +23,33 @@ angular.module('myApp.directives').directive('gimsFilterGenerator', function($mo
                             return $scope.country;
                         }
                     },
-                    template: "" + "<div class='modal-header'>" + "    <button type='button' class='close' ng-click='close()'>&times;</button>" + "    <h3>Add custom filter</h3>" + "    </div>" + "<div class='modal-body'>" + '<form name="myForm">' + '   <div class="form-group" ng-class="{\'has-error\': myForm.name.$invalid}">' + '       <label class="control-label" for="line.name">Filter name</label>' + '       <input id="line.name" type="text" name="name" ng-model="line.name" required ng-minlength="3" ng-disabled="line.lastLogin" />' + '       <span ng-show="myForm.name.$error.required" class="help-block">Required</span>' + '       <span ng-show="myForm.name.$error.minlength" class="help-block">It must be at least 3 characters long</span>' + '   </div>' + '   <div class="gridStyle show-grid" ng-grid="gridOptions"></div>' + '</form>' + "</div>" + "<div class='modal-footer'>" + "   <a href='#' class='btn btn-default' ng-click='close()'>Cancel</a>" + "   <a href='#' ng-disabled='myForm.$invalid || !line.surveys[0].year || !line.surveys[0].value || !part || !country' ng-click='generate()' class='btn btn-success'>Generate filter</a>" + "</div>"
+                    template: "" +
+                        "<div class='modal-header'>" +
+                        "    <button type='button' class='close' ng-click='close()'>&times;</button>" +
+                        "    <h3>Add custom filter</h3>" +
+                        "    </div>" +
+                        "<div class='modal-body row'>" +
+                        '<form name="myForm" class="col-md-12">' +
+                        '   <div class="form-group" ng-class="{\'has-error\': myForm.name.$invalid}">' +
+                        '       <label class="control-label" for="line.name"><i class="fa fa-filters"></i> Filter name</label>' +
+                        '       <div class="row">'+
+                        '           <div class="col-md-10">'+
+                        '               <input id="line.name" type="text" name="name" ng-model="line.name" required ng-minlength="3" ng-disabled="line.lastLogin" />' +
+                        '           </div>'+
+                        '           <div class="col-md-2 text-right">'+
+                        '               <div class=" btn btn-default" colorpicker ng-model="line.color" style="background-color:{{line.color}}"><i class="fa fa-magic"></i></div>'+
+                        '           </div>'+
+                        '       </div>'+
+                        '       <span ng-show="myForm.name.$error.required" class="help-block">Required</span>' +
+                        '       <span ng-show="myForm.name.$error.minlength" class="help-block">It must be at least 3 characters long</span>' +
+                        '   </div>' +
+                        '   <div class="gridStyle show-grid" ng-grid="gridOptions"></div>' +
+                        '</form>' +
+                        "</div>" +
+                        "<div class='modal-footer'>" +
+                        "   <a href='#' class='btn btn-default' ng-click='close()'>Cancel</a>" +
+                        "   <a href='#' ng-disabled='myForm.$invalid || !line.surveys[0].year || !line.surveys[0].value || !part || !country' ng-click='generate()' class='btn btn-success'>Generate filter</a>" +
+                        "</div>"
                 });
             };
 

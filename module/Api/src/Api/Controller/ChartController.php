@@ -259,12 +259,15 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      */
     protected function getSeries(FilterSet $filterSet, array $questionnaires, Part $part, array $ignoredFilters, $ratio, $dashStyle = null, $suffix = null)
     {
+        //echo '(ratio ' . $ratio . ' - )';
         $series = array();
         $calculator = new \Application\Service\Calculator\Jmp();
         $calculator->setServiceLocator($this->getServiceLocator());
         $lines = $calculator->computeFlattenAllYears($this->startYear, $this->endYear, $filterSet, $questionnaires, $part, $ignoredFilters);
+        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
         foreach ($lines as &$serie) {
-            $serie['color'] = Utility::getColor($serie['id'], $ratio);
+            $filter = $filterRepository->findOneById($serie['id']);
+            $serie['color'] = $filter->getGenericColor($ratio);//Utility::getColor($serie['id'], $ratio);
             $serie['name'] .= $suffix;
             $serie['type'] = 'line';
 
@@ -284,7 +287,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $data = $calculator->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
             $scatter = array(
                 'type' => 'scatter',
-                'color' => Utility::getColor($filter->getId(), $ratio),
+                'color' => $filter->getGenericColor($ratio), //Utility::getColor($filter->getId(), $ratio),
                 'marker' => array('symbol' => $this->symbols[$this->getConstantKey($filter->getName()) % count($this->symbols)]),
                 'name' => $filter->getName() . $suffix,
                 'allowPointSelect' => false,

@@ -7,7 +7,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.ignoredElements;
     $scope.indexedElements = {};
     $scope.firstExecution = true;
-    $scope.filterSetQueryParams = {fields: 'filters,filters.color,filters.officialChildren,filters.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren.officialChildren'}
+    $scope.filterSetQueryParams = {fields: 'filters,filters.genericColor,filters.officialChildren,filters.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren.officialChildren'}
 
     /**
      * Executes when country, part or filterset are changed
@@ -23,7 +23,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 $scope.usedFilters = {};
                 _.forEach($scope.filterSet, function(filterSet) {
                     _.forEach(filterSet.filters, function(filter) {
-                        $scope.usedFilters[filter.id] = filter.color;
+                        $scope.usedFilters[filter.id] = filter.genericColor;
                     });
                 });
             }

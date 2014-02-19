@@ -3,13 +3,13 @@
 angular.module('myApp').controller('Admin/Filter/CrudCtrl', function ($scope, $location, $routeParams, Modal, Restangular) {
     "use strict";
 
-    $scope.fields = {fields:'children,children.paths,parents,parents.paths,summands,summands.paths,paths'};
-    $scope.params = {fields:'paths'};
+    $scope.fields = {fields:'children,children.paths,children.color,parents,parents.paths,parents.color,summands,summands.paths,summands.color,paths,color'};
+    $scope.params = {fields:'paths,color,genericColor'};
 
     $scope.select2Template = "" +
         "<div>" +
             "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>"+
-            "    <i class='fa fa-filters'></i> [[item.name]]"+
+            "    <i class='fa fa-filters' style='color:[[item.color]];' ></i> [[item.name]]"+
             "</div>"+
             "<div class='col-sm-7 col-md-7'>"+
             "    <small>"+
@@ -56,6 +56,7 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function ($scope, $l
         if ($scope.filter.id) {
             $scope.filter.put($scope.fields).then(function (filter) {
                 $scope.sending = false;
+                console.log(filter);
                 $scope.filter = filter;
                 if (redirectTo) {
                     $location.path(redirectTo);
@@ -84,7 +85,7 @@ angular.module('myApp').controller('Admin/FilterCtrl', function ($scope, $locati
     "use strict";
 
     // Initialize
-    $scope.filters = Restangular.all('filter').getList();
+    $scope.filters = Restangular.all('filter').getList({fields:'color'});
     $scope.params = {fields:'paths'};
 
     $scope.select2Template = "" +
@@ -130,7 +131,10 @@ angular.module('myApp').controller('Admin/FilterCtrl', function ($scope, $locati
                 displayName: 'Name',
                 cellTemplate:   ''+
                     '<div class="ngCellText" ng-class="col.colIndex()">' +
-                    '   <span style="padding-left: {{row.entity.level * 2}}em;">{{row.entity.name}}</span>' +
+                    '   <span style="padding-left: {{row.entity.level * 2}}em;">' +
+                    '       <span style="display:inline-block;vertical-align:middle;width:5px;height:18px;background:{{row.entity.color}}"></span>'+
+                    '       <span style="display:inline-block;vertical-align:middle;">{{row.entity.name}}</span>'+
+                    '   </span>' +
                     '</div>'
             },
             {

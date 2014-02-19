@@ -4,18 +4,18 @@ namespace Application\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Application\Utility;
+use \MischiefCollective\ColorJizz\Formats\HSV;
+use \MischiefCollective\ColorJizz\Formats\RGB;
+use \MischiefCollective\ColorJizz\Formats\HEX;
 
 /**
  * A Filter is used to organise things. They are usually defined by the answer
  * value if present, or else the sum of its sub-filters. But it can also have
  * custom rules, such as a list of manually specified filters to sum (summands)
  * or the use of formulas.
- *
  * There are slightly different usage from the end-user point of view:
- *
  * "Low level" filters are used to organise questions in a tree-ish way. This is
  * what used to be called categories in early versions:
- *
  * <pre>
  * Water
  *    Tap water
@@ -25,11 +25,9 @@ use Application\Utility;
  *       Good quality
  *       Bad quality
  * </pre>
- *
  * "High level" filters are used to group other filters at a higher level, and
  * often transversely across the tree above. This what use to be called
  * filterComponent in early versions:
- *
  * <pre>
  * Improved
  *    In house
@@ -38,7 +36,6 @@ use Application\Utility;
  *    Public place
  *    Bad quality
  * </pre>
- *
  * @ORM\Entity(repositoryClass="Application\Repository\FilterRepository")
  */
 class Filter extends AbstractModel
@@ -46,34 +43,30 @@ class Filter extends AbstractModel
 
     /**
      * @var string
-     *
      * @ORM\Column(type="text", nullable=false)
      */
     private $name;
 
     /**
      * @var Questionnaire
-     *
      * @ORM\ManyToOne(targetEntity="Questionnaire")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
+     * @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
      * })
      */
     private $questionnaire;
 
     /**
      * @var Filter
-     *
      * @ORM\ManyToOne(targetEntity="Filter")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="SET NULL")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      * })
      */
     private $officialFilter;
 
     /**
      * @var ArrayCollection
-     *
      * @ORM\ManyToMany(targetEntity="Filter", inversedBy="parents")
      * @ORM\OrderBy({"id" = "ASC"})
      * @ORM\JoinTable(name="filter_children",
@@ -90,7 +83,6 @@ class Filter extends AbstractModel
     /**
      * Summands are the filters which must be summed to compute this filter value
      * @var ArrayCollection
-     *
      * @ORM\ManyToMany(targetEntity="Filter")
      * @ORM\JoinTable(name="filter_summand",
      *      inverseJoinColumns={@ORM\JoinColumn(name="summand_filter_id")}
@@ -101,11 +93,16 @@ class Filter extends AbstractModel
     /**
      * Additional rules to apply to compute value
      * @var ArrayCollection
-     *
      * @ORM\OneToMany(targetEntity="\Application\Model\Rule\FilterQuestionnaireUsage", mappedBy="filter")
      * @ORM\OrderBy({"isSecondLevel" = "DESC", "sorting" = "ASC", "id" = "ASC"})
      */
     private $filterQuestionnaireUsages;
+
+    /**
+     * @var string
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $color;
 
     /**
      * Constructor
@@ -132,7 +129,6 @@ class Filter extends AbstractModel
 
     /**
      * Set name
-     *
      * @param string $name
      * @return Filter
      */
@@ -145,7 +141,6 @@ class Filter extends AbstractModel
 
     /**
      * Get name
-     *
      * @return string
      */
     public function getName()
@@ -155,7 +150,6 @@ class Filter extends AbstractModel
 
     /**
      * Set questionnaire. If a questionnaire is set, it means the Filter is unofficial
-     *
      * @param Questionnaire $questionnaire
      * @return Filter
      */
@@ -168,7 +162,6 @@ class Filter extends AbstractModel
 
     /**
      * Get questionnaire. If a questionnaire is set, it means the Filter is unofficial
-     *
      * @return Questionnaire
      */
     public function getQuestionnaire()
@@ -178,7 +171,6 @@ class Filter extends AbstractModel
 
     /**
      * Returns whether this Filter is official or unofficial (specific to one questionnaire)
-     *
      * @return boolean
      */
     public function isOfficial()
@@ -188,7 +180,6 @@ class Filter extends AbstractModel
 
     /**
      * Set officialFilter
-     *
      * @param Filter $officialFilter
      * @return Filter
      */
@@ -208,7 +199,6 @@ class Filter extends AbstractModel
 
     /**
      * Get officialFilter
-     *
      * @return Filter
      */
     public function getOfficialFilter()
@@ -347,12 +337,14 @@ class Filter extends AbstractModel
         return $this;
     }
 
-
     /**
      * Get only official child Filters
      */
-    public function getOfficialChildren() {
-        return $this->getChildren()->filter(function($f){ return $f->isOfficial(); });
+    public function getOfficialChildren()
+    {
+        return $this->getChildren()->filter(function ($f) {
+            return $f->isOfficial();
+        });
     }
 
     /**
@@ -377,7 +369,50 @@ class Filter extends AbstractModel
         return $paths;
     }
 
-    public function getColor() {
-        return Utility::getColor($this->getId(), 100);
+    /**
+     * Return color with generic replacement if no color in database
+     * @param Ration|int saturation from 0 to 100
+     * @return string
+     */
+    public function getGenericColor($ratio = 100)
+    {
+        if (!$this->color) {
+            $color = Utility::getColor($this->getId(), $ratio);
+        } else {
+            $color = $this->getColor($ratio);
+        }
+
+        return $color;
+    }
+
+    /**
+     * Get color if setted in datase
+     * @param Ration|int saturation from 0 to 100
+     * @return string
+     */
+    public function getColor($ratio = 100)
+    {
+        if ($ratio == 100) {
+            $color = $this->color;
+        } else {
+            $hex = new HEX(intval(str_replace('#', '0x', strtoupper($this->color)), 16)); //Create Hex object
+            $hsv = $hex->toHSV(); // then transform to HSV
+            $hsv->saturation *= $ratio / 100; //multiply saturation by ratio
+            $color = '#' . $hsv->toHex(); // and then transform again to Hex
+        }
+
+        return $color;
+    }
+
+    /**
+     * Set color in database
+     * @param $color string hexadecimal
+     * @return Filter
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+
+        return $this;
     }
 }
