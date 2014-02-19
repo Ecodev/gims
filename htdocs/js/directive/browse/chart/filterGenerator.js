@@ -31,7 +31,7 @@ angular.module('myApp.directives').directive('gimsFilterGenerator', function($mo
                         "<div class='modal-body row'>" +
                         '<form name="myForm" class="col-md-12">' +
                         '   <div class="form-group" ng-class="{\'has-error\': myForm.name.$invalid}">' +
-                        '       <label class="control-label" for="line.name"><i class="fa fa-filters"></i> Filter name</label>' +
+                        '       <label class="control-label" for="line.name"><i class="fa fa-gims-filter"></i> Filter name</label>' +
                         '       <div class="row">'+
                         '           <div class="col-md-10">'+
                         '               <input id="line.name" type="text" name="name" ng-model="line.name" required ng-minlength="3" ng-disabled="line.lastLogin" />' +

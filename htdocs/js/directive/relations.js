@@ -23,7 +23,7 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                 '<gims-select api="{{third}}" model="thirdValue" placeholder="Select a {{third}}" style="width:100%;"></gims-select>' +
                 '</span>' +
                 '<span class="col-md-1">' +
-                '<button class="btn btn-default" ng-click="add()" ng-class="{disabled: !secondValue || !thirdValue || exists}">Add</button> <i class="fa fa-loading" ng-show="isLoading"></i>' +
+                '<button class="btn btn-default" ng-click="add()" ng-class="{disabled: !secondValue || !thirdValue || exists}">Add</button> <i class="fa fa-gims-loading" ng-show="isLoading"></i>' +
                 '</span><span class="help-block" ng-show="exists">This relation already exists</span>' +
                 '</div>' +
                 '</div>',

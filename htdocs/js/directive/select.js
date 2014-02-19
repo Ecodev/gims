@@ -16,7 +16,7 @@
  * Dynamic content is eval() by javascript. Escape content to eval with [[expression]].
  * Complexe structures like functions are evaluated too
  * <gims-select custom-selection-template="This element is [[item.name]] and is is [[item.id]]." /></gims-select>
- * <gims-select custom-result-template="[[_.map(item.paths, function(path){return '<i class=\'fa fa-filters\'></i> \'+path+\'';}).join('')]]"/></gims-select>
+ * <gims-select custom-result-template="[[_.map(item.paths, function(path){return '<i class=\'fa fa-gims-filter\'></i> \'+path+\'';}).join('')]]"/></gims-select>
  * <gims-select custom-selection-template="{{template}}"/></gims-select>
  *
  * The css class select2list allow to display list elements in the select2 in full with. It allows advanced styling by custom-template attribute

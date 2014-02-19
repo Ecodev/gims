@@ -70,7 +70,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
                     {field: 'answers.1.valuePercent', displayName: 'Urban', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate}, //, cellTemplate: 'cellTemplate.html'
                     {field: 'answers.2.valuePercent', displayName: 'Rural', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
                     {field: 'answers.3.valuePercent', displayName: 'Total', enableCellEdit: true, cellFilter: 'percent', editableCellTemplate: cellEditableTemplate},
-                    {displayName: '', cellTemplate: '<div ng-show="row.entity.answers.1.isLoading || row.entity.answers.2.isLoading || row.entity.answers.3.isLoading"><i class="fa fa-loading" /></div>', cellClass: 'column-loading', width: '28px'}
+                    {displayName: '', cellTemplate: '<div ng-show="row.entity.answers.1.isLoading || row.entity.answers.2.isLoading || row.entity.answers.3.isLoading"><i class="fa fa-gims-loading" /></div>', cellClass: 'column-loading', width: '28px'}
                 ]
             };
 

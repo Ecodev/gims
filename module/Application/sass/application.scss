@@ -33,7 +33,7 @@ html {
     overflow-y: scroll;
 }
 
-.fa-loading {
+.fa-gims-loading {
     &.hide {
         display: none !important;
     }
@@ -42,20 +42,24 @@ html {
     @extend .fa-spin;
 }
 
-.fa-survey {
-    @extend .fa-folder-open-o;
-}
 
-.fa-filterset {
+.fa-gims-filterset {
     @extend .fa-tags;
 }
 
-.fa-filters {
+.fa-gims-filter {
     @extend .fa-tag;
 }
 
-.fa-questionnaire {
-    @extend .fa-file;
+.fa-gims-survey {
+    /*@extend .fa-edit;*/
+    @extend .fa-check-square-o;
+}
+
+
+.fa-gims-questionnaire {
+    @extend .fa-paste;
+    /*@extend .fa-check-square-o;*/
 }
 
 .column-loading {
