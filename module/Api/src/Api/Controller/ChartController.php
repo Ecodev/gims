@@ -197,7 +197,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $ignoredFiltersByQuestionnaire = $this->getIgnoredElements();
 
         $series = array();
-        if (count($ignoredFiltersByQuestionnaire) > 0) {
+        if (count($ignoredFiltersByQuestionnaire['byQuestionnaire']) > 0) {
             foreach ($this->usedFilters as $filterId) {
 
                 $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
