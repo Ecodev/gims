@@ -125,7 +125,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                         callback();
                     }
                     $scope.getIgnoredElements(true);
-                }, 1000);
+                }, 1500);
             }
         }
     }
@@ -163,27 +163,42 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         }
 
         var ignoredElements = [];
+        $scope.globalIndexedFilters = {};
+
+        // browse each questionnaire
         _.forEach($scope.indexedElements, function(questionnaire, questionnaireId) {
             var ignoredElementsForQuestionnaire = [];
-            var allFiltersIgnored = true;
+            questionnaire.ignored = true;
             questionnaire.hasIgnoredFilters = false;
+
+            // browse each filter of questionnaire
             _.forEach(questionnaire.filters, function(filter) {
                 if (filter) {
+
+                    // report globally ignored filter status on $scope.globalIndexedFilters
+                    // false = filter never ignored
+                    // true = filter ignored on all questionnaires
+                    // null = filter sometimes ignored
+                    if (filter.filter.ignored === undefined) filter.filter.ignored = false;
+                    if ($scope.globalIndexedFilters[filter.filter.id] === undefined) {
+                        $scope.globalIndexedFilters[filter.filter.id] = filter.filter.ignored;
+                    } else if (filter.filter.ignored != $scope.globalIndexedFilters[filter.filter.id] && $scope.globalIndexedFilters[filter.filter.id] !== null) {
+                        $scope.globalIndexedFilters[filter.filter.id] = null;
+                    }
+
                     if (filter.filter.ignored) {
                         questionnaire.hasIgnoredFilters = true;
                         ignoredElementsForQuestionnaire.push(filter.filter.id);
                     } else {
-                        allFiltersIgnored = false;
+                        questionnaire.ignored = false;
                     }
                 }
             });
 
             if (ignoredElementsForQuestionnaire.length > 0) {
-                if (allFiltersIgnored) {
-                    questionnaire.ignored = true;
+                if (questionnaire.ignored) {
                     ignoredElements.push(questionnaireId);
                 } else {
-                    questionnaire.ignored = false;
                     ignoredElements.push(questionnaireId + ':' + ignoredElementsForQuestionnaire.join('-'));
                 }
             }
@@ -260,6 +275,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.refreshChart = function(refreshUrl, callback) {
         $scope.isLoading = true;
         $timeout.cancel(uniqueAjaxRequest);
+        var ignoredElements = refreshUrl ? $scope.getIgnoredElements(refreshUrl).join(',') : $location.search()['ignoredElements']
         uniqueAjaxRequest = $timeout(function() {
             var filterSets = _.map($scope.filterSet, function(filterSet) {
                 return filterSet.id;
@@ -271,7 +287,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 country: $scope.country.id,
                 part: $scope.part.id,
                 filterSet: filterSets.join(','),
-                ignoredElements: refreshUrl ? $scope.getIgnoredElements(refreshUrl).join(',') : $location.search()['ignoredElements']
+                ignoredElements: ignoredElements
             }
             }).success(function(data) {
                 data.plotOptions.scatter.dataLabels.formatter = function() {
@@ -311,27 +327,13 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     /**
      *  Manage filters ignored actions
      */
-
-    $scope.reportStatusGloballyForQuestionnaire = function(questionnaire) {
-        _.forEach(questionnaire.filters, function(filter) {
-            if (filter) {
-                $scope.reportStatusGlobally(questionnaire, filter, false);
-            }
-        });
-
-        $scope.updateQuestionnaireIgnoredStatus(questionnaire);
-        $scope.refreshChart(true);
-    }
-
-    $scope.reportStatusGlobally = function(filter, refresh) {
+    $scope.reportStatusGlobally = function(filter, ignored) {
         _.forEach($scope.indexedElements, function(questionnaire) {
-            $scope.ignoreFilter(questionnaire, questionnaire.filters[filter.filter.id], filter.filter.ignored, true, false);
+            $scope.ignoreFilter(questionnaire.filters[filter.filter.id], ignored !== undefined ? ignored : filter.filter.ignored, false);
             $scope.updateQuestionnaireIgnoredStatus(questionnaire);
         });
 
-        if (refresh) {
-            $scope.refreshChart(true);
-        }
+        $scope.refreshChart(true);
     }
 
     $scope.toggleQuestionnaire = function(questionnaireId, ignore) {
@@ -339,22 +341,16 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         questionnaire.ignored = questionnaire.ignored === undefined ? true : !questionnaire.ignored;
 
         _.forEach(questionnaire.filters, function(filter) {
-            $scope.ignoreFilter(questionnaire, filter, ignore !== undefined ? ignore : questionnaire.ignored, false, false)
+            $scope.ignoreFilter( filter, ignore !== undefined ? ignore : questionnaire.ignored, false)
         });
 
-        $scope.updateQuestionnaireIgnoredStatus(questionnaire);
         $scope.refreshChart(true);
     }
 
-    $scope.ignoreFilter = function(questionnaire, filter, ignored, globally, refresh) {
+    $scope.ignoreFilter = function(filter, ignored, refresh) {
         if (filter) {
             filter.filter.ignored = ignored;
-            if (globally) {
-                filter.filter.ignoredGlobally = ignored;
-            }
-
             if (refresh) {
-                $scope.updateQuestionnaireIgnoredStatus(questionnaire);
                 $scope.refreshChart(true);
             }
         }
@@ -480,18 +476,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.sorting = filter.filter.sorting;
             }
 
-            // if no ignored status specified, find if a the similar filter is globally ignored on the sibling questionnaires list.
-            if (ignored === undefined && $scope.indexedElements[questionnaireId].ignored === undefined) {
-                _.forEach($scope.indexedElements, function(questionnaire, qid) {
-                    if (questionnaire && qid != questionnaireId && questionnaire.filters && questionnaire.filters[filter.filter.id] && questionnaire.filters[filter.filter.id].ignoredGlobally) {
-                        $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.ignored = true;
-                        $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.ignoredGlobally = true;
-                        return false; // work done, stop loop;
-                    }
-                });
-
-                // if no ignored params and no ignored status specified on filter but questionnaire has one, filter inherits questionnaire status
-            } else if (ignored === undefined && $scope.indexedElements[questionnaireId].ignored !== undefined && $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.ignored === undefined) {
+            // if no ignored params and no ignored status specified on filter but questionnaire has one, filter inherits questionnaire status
+            if (ignored === undefined && $scope.indexedElements[questionnaireId].ignored !== undefined && $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.ignored === undefined) {
                 $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.ignored = $scope.indexedElements[questionnaireId].ignored;
 
                 // if ignored param specified, filter gets its value

@@ -383,6 +383,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     public function generateFilterAction()
     {
         $name = $this->params()->fromQuery('name');
+        $color = $this->params()->fromQuery('color');
         $surveys = explode(',', $this->params()->fromQuery('surveys'));
 
         $existingSurvey = $this->getEntityManager()->getRepository('Application\Model\Survey')->findOneByName($name);
@@ -418,6 +419,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         /** @var \Application\Model\Filter $filter */
         $filter = new Filter();
         $filter->setName($name);
+        $filter->setColor($color);
         $filterSet->addFilter($filter);
         $this->getEntityManager()->persist($filter);
 

@@ -52,14 +52,17 @@ html {
 }
 
 .fa-gims-survey {
-    /*@extend .fa-edit;*/
     @extend .fa-check-square-o;
 }
 
 
 .fa-gims-questionnaire {
     @extend .fa-paste;
-    /*@extend .fa-check-square-o;*/
+}
+
+.opacity33{
+    @include opacity(0.33);
+
 }
 
 .column-loading {
