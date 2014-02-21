@@ -104,7 +104,7 @@ class AnswerRepository extends AbstractChildRepository
      * Returns all items with read access
      * @return array
      */
-    public function getAllWithPermission($action = 'read', $parentName = null, \Application\Model\AbstractModel $parent = null)
+    public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
     {
         $qb = $this->createQueryBuilder('answer')
                 ->join('answer.questionnaire', 'questionnaire', \Doctrine\ORM\Query\Expr\Join::WITH)
@@ -162,6 +162,7 @@ class AnswerRepository extends AbstractChildRepository
 
         $res = $this->getEntityManager()->getConnection()->executeUpdate($sql);
         $this->updateAbsoluteValueFromPercentageValue($answer);
+        
         return $res;
     }
 

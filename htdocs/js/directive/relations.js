@@ -13,19 +13,25 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
             third: '@',
             format: '@'
         },
-        template: '<div>' +
-                '<div ng-grid="gridOptions" class="gridStyle"></div>' +
-                '<div class="well form-group" ng-class="{\'has-error\': exists}" ng-hide="isReadOnly">' +
-                '<span class="col-md-4">' +
-                '<gims-select api="{{second}}" model="secondValue" placeholder="Select a {{second}}" style="width:100%;" format="{{format}}"></gims-select>' +
-                '</span>' +
-                '<span class="col-md-4">' +
-                '<gims-select api="{{third}}" model="thirdValue" placeholder="Select a {{third}}" style="width:100%;"></gims-select>' +
-                '</span>' +
-                '<span class="col-md-1">' +
-                '<button class="btn btn-default" ng-click="add()" ng-class="{disabled: !secondValue || !thirdValue || exists}">Add</button> <i class="fa fa-gims-loading" ng-show="isLoading"></i>' +
-                '</span><span class="help-block" ng-show="exists">This relation already exists</span>' +
-                '</div>' +
+        template:
+                '<div class="container-fluid">' +
+                '    <div class="row">' +
+                '        <div class="col-md-9">' +
+                '            <input type="text" ng-model="gridOptions.filterOptions.filterText" placeholder="Search..." class="search" style="width: 400px"/>' +
+                '        </div>' +
+                '    </div>' +
+                '    <gims-grid api="{{relation}}" parent="{{first}}" objects="relations" options="gridOptions" class="row"></gims-grid>' +
+                '    <div class="well form-group" ng-class="{\'has-error\': exists}" ng-hide="isReadOnly">' +
+                '        <span class="col-md-4">' +
+                '            <gims-select api="{{second}}" model="secondValue" placeholder="Select a {{second}}" style="width:100%;" format="{{format}}"></gims-select>' +
+                '        </span>' +
+                '        <span class="col-md-4">' +
+                '            <gims-select api="{{third}}" model="thirdValue" placeholder="Select a {{third}}" style="width:100%;"></gims-select>' +
+                '        </span>' +
+                '        <span class="col-md-1">' +
+                '            <button class="btn btn-default" ng-click="add()" ng-class="{disabled: !secondValue || !thirdValue || exists}">Add</button> <i class="fa fa-gims-loading" ng-show="isLoading"></i>' +
+                '        </span><span class="help-block" ng-show="exists">This relation already exists</span>' +
+                '    </div>' +
                 '</div>',
         // The linking function will add behavior to the template
         link: function(scope, element, attrs) {
@@ -40,21 +46,17 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
             // Configure select boxes for addition
             $scope.isReadOnly = !$routeParams.id;
 
-            // Configure ng-grid
-            $scope.relations = [];
-            if ($routeParams.id) {
-                Restangular.one($scope.first, $routeParams.id).all($scope.relation).getList().then(function(relations) {
-                    $scope.relations = relations;
-                });
-            }
             $scope.gridOptions = {
-                plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
-                data: 'relations',
-                multiSelect: false,
+                extra: {
+                    remove: function(row) {
+                        Modal.confirmDelete(row.entity, {objects: $scope.relations, label: row.entity[$scope.second].name + ' - ' + row.entity[$scope.third].name});
+            }
+                },
+                plugins: [new ngGridFlexibleHeightPlugin({minHeight: 250})],
                 columnDefs: [
                     {field: $scope.second + '.name', displayName: capitaliseFirstLetter($scope.second)},
                     {field: $scope.third + '.name', displayName: capitaliseFirstLetter($scope.third), width: '250px'},
-                    {width: '70px', cellTemplate: '<button type="button" class="btn btn-default btn-xs" ng-click="delete(row)"><i class="fa fa-trash-o fa-lg"></i></button>'}
+                    {width: '70px', cellTemplate: '<button type="button" class="btn btn-default btn-xs" ng-click="options.extra.remove(row)"><i class="fa fa-trash-o fa-lg"></i></button>'}
                 ]
             };
 
@@ -75,11 +77,6 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                     $scope.isLoading = false;
                     $scope.thirdValue = null; // Reset last select2 option
                 });
-            };
-
-            // Delete a relation
-            $scope.delete = function(row) {
-                Modal.confirmDelete(row.entity, {objects: $scope.relations, label: row.entity[$scope.second].name + ' - ' + row.entity[$scope.third].name});
             };
 
             // Prevent adding duplicated relations

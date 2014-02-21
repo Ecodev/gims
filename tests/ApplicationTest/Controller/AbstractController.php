@@ -48,7 +48,7 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
             throw new \Zend\Json\Exception\RuntimeException($exception->getMessage() . PHP_EOL . PHP_EOL . $content . PHP_EOL, $exception->getCode(), $exception);
         }
 
-        $this->assertTrue(is_array($json));
+        $this->assertTrue(is_array($json), 'server response is not JSON');
 
         return $json;
     }

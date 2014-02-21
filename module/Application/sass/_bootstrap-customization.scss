@@ -11,6 +11,12 @@ select,
 textarea
 {
     @extend .form-control;
+
+    // ... except for ng-grid pagination where we reset some things
+    .ngPagerContainer & {
+        display: initial;
+        padding: initial;
+    }
 }
 
 .nav.nav-tabs {

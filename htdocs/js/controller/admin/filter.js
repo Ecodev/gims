@@ -3,8 +3,8 @@
 angular.module('myApp').controller('Admin/Filter/CrudCtrl', function ($scope, $location, $routeParams, Modal, Restangular) {
     "use strict";
 
-    $scope.fields = {fields:'children,children.paths,children.color,parents,parents.paths,parents.color,summands,summands.paths,summands.color,paths,color'};
-    $scope.params = {fields:'paths,color,genericColor'};
+    $scope.fields = {fields: 'children,children.paths,children.color,parents,parents.paths,parents.color,summands,summands.paths,summands.color,paths,color'};
+    $scope.params = {fields: 'paths,color,genericColor'};
 
     $scope.select2Template = "" +
         "<div>" +
@@ -52,11 +52,10 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function ($scope, $l
     $scope.save = function (redirectTo) {
         $scope.sending = true;
 
-        // First case is for update a question, second is for creating
+        // First case is for update, second is for creating
         if ($scope.filter.id) {
             $scope.filter.put($scope.fields).then(function (filter) {
                 $scope.sending = false;
-                console.log(filter);
                 $scope.filter = filter;
                 if (redirectTo) {
                     $location.path(redirectTo);
@@ -81,11 +80,10 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function ($scope, $l
 /**
  * Admin filter Controller
  */
-angular.module('myApp').controller('Admin/FilterCtrl', function ($scope, $location, Modal, Restangular) {
+angular.module('myApp').controller('Admin/FilterCtrl', function($scope, $location) {
     "use strict";
 
     // Initialize
-    $scope.filters = Restangular.all('filter').getList({fields:'color'});
     $scope.params = {fields:'paths'};
 
     $scope.select2Template = "" +
@@ -106,8 +104,6 @@ angular.module('myApp').controller('Admin/FilterCtrl', function ($scope, $locati
             "<div class='clearfix'></div>"+
         "</div>";
 
-    // Keep track of the selected row.
-    $scope.selectedRow = [];
 
     $scope.$watch('selectedFilter', function(selectedFilter)
     {
@@ -116,15 +112,9 @@ angular.module('myApp').controller('Admin/FilterCtrl', function ($scope, $locati
         }
     });
 
-    // Configure ng-grid.
+    // Configure gims-grid
+    $scope.queryparams = {fields: 'color'};
     $scope.gridOptions = {
-        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 800})],
-        data: 'filters',
-        enableCellSelection: true,
-        showFooter: false,
-        selectedItems: $scope.selectedRow,
-        filterOptions: {},
-        multiSelect: false,
         columnDefs: [
             {
                 field: 'name',
@@ -147,15 +137,6 @@ angular.module('myApp').controller('Admin/FilterCtrl', function ($scope, $locati
                     '</div>'
             }
         ]
-    };
-
-    // <button type="button" class="btn btn-default btn-xs" ng-click="edit(row)" ><i class="fa fa-pencil fa-lg"></i></button>
-    $scope.remove = function (row) {
-        Modal.confirmDelete(row.entity, {objects: $scope.filters, label: row.entity.code, returnUrl: '/admin/filter'});
-    };
-
-    $scope.edit = function (row) {
-        $location.path('/admin/filter-set/edit/' + row.entity.id);
     };
 
 });

@@ -41,12 +41,12 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             name: '@',
             placeholder: '@',
             format: '@',
-            customSelectionTemplate : '@',
-            customResultTemplate : '@',
-            containerCssClass : '@',
-            currentContextElement : '@',
+            customSelectionTemplate: '@',
+            customResultTemplate: '@',
+            containerCssClass: '@',
+            currentContextElement: '@',
             queryparams: '=',
-            disabled : '=',
+            disabled: '=',
             model: '=' // TODO: could not find a way to use real 'ng-model'. So for now we use custom 'model' attribute and bi-bind it to real ng-model. Ugly, but working
         },
         // The linking function will add behavior to the template
@@ -117,7 +117,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                         results: function(data, page) { // parse the results into the format expected by Select2.
 
                             // Make sure to have Restangular object
-                            var restangularizedData = _.map(data, function(item) {
+                            var restangularizedData = _.map(data.items, function(item) {
                                 return Restangular.restangularizeElement(null, item, api);
                             });
 
@@ -187,7 +187,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             var formatSelection = function(item)
             {
                 if ($scope.customSelectionTemplate) {
-                    var result =  generateTemplate(item, $scope.customSelectionTemplate);
+                    var result = generateTemplate(item, $scope.customSelectionTemplate);
                 } else {
                     var result = formatStandardTemplate(item);
                 }
@@ -235,7 +235,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 // eval() each tag and replace in template without replacing original $scope.customTemplate
                 for (var matchKey in matches) {
                     var match = matches[matchKey];
-                    var evaluatedString = eval(match.substring(2, match.length-2)); // substring remove the begining "[[" and the ending "]]"
+                    var evaluatedString = eval(match.substring(2, match.length - 2)); // substring remove the begining "[[" and the ending "]]"
                     if (!evaluatedString) {
                         evaluatedString = '';
                     }
@@ -246,7 +246,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             }
 
             // override original excapeMarkup function allowing to return html content.
-            if($scope.customSelectionTemplate || $scope.customResultTemplate) {
+            if ($scope.customSelectionTemplate || $scope.customResultTemplate) {
                 $scope.options.escapeMarkup = function(m) {
                     return m;
                 }

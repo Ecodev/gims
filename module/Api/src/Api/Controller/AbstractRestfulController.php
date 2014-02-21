@@ -218,7 +218,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             $objects[] = $object;
         }
 
-        // if we have multiple ids to output
+        // if we have multiple IDs to output
         if (count($objects) > 1) {
             $result = new JsonModel($this->hydrator->extractArray($objects, $this->getJsonConfig()));
         } else {
@@ -233,9 +233,43 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      */
     public function getList()
     {
-        $objects = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'));
+        $objects = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), $this->params()->fromQuery('q'));
+        $jsonData = $this->paginate($objects);
 
-        return new JsonModel($this->hydrator->extractArray($objects, $this->getJsonConfig()));
+        return new JsonModel($jsonData);
+    }
+
+    /**
+     * Paginate an array of objects according to GET parameters
+     * @param array $objects
+     * @param boolean $dehydrate wether we should dehydrate objects
+     * @return array pagination metata, and a subset of objects (optionnaly extracted by Hydrator)
+     */
+    protected function paginate(array $objects, $dehydrate = true)
+    {
+        $defaultPage = 1;
+        $defautPerPage = 25;
+        $page = (int) $this->params()->fromQuery('page', $defaultPage);
+        $perPage = (int) $this->params()->fromQuery('perPage', $defautPerPage);
+
+        if ($page < 1) {
+            $page = $defaultPage;
+        }
+
+        $perPage = max(0, min(1000, $perPage));
+
+        $paginatedObjects = array_slice($objects, ($page - 1) * $perPage, $perPage);
+
+        $jsonData = array(
+            'metadata' => array(
+                'page' => $page,
+                'perPage' => $perPage,
+                'totalCount' => count($objects),
+            ),
+            'items' => $dehydrate ? $this->hydrator->extractArray($paginatedObjects, $this->getJsonConfig()) : $paginatedObjects,
+        );
+
+        return $jsonData;
     }
 
     /**
@@ -282,7 +316,6 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         }
 
         return $result;
-
     }
 
 }

@@ -6,7 +6,7 @@
         </ul>
     </h2>
 
-    <div class="row">
+    <div class="row show-grid">
         <div class="col-md-9">
             <input type="text" ng-model="gridOptions.filterOptions.filterText" placeholder="Search..." class="search" style="width: 400px"/>
         </div>
@@ -15,6 +15,6 @@
         </div>
     </div>
 
-    <div ng-grid="gridOptions" class="gridStyle"></div>
+    <gims-grid api="user" options="gridOptions"></gims-grid>
 
 </div> <!-- /container -->

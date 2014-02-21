@@ -53,9 +53,6 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
             // Template for cell editing with input "number".
             var cellEditableTemplate = '<form name="myForm" ng-class="{\'has-error\': myForm.answerValue.$invalid}" has-error><input name="answerValue" ng-class="\'colt\' + col.index" ng-input="COL_FIELD" ng-model="COL_FIELD" step="any" min="0" max="1" type="number" style="width: 90%" ng-blur="updateAnswer(col, row)" /></form>';
 
-            // Keep track of the selected row.
-            $scope.selectedRow = [];
-
             // Configure ng-grid.
             var gridLayoutPlugin = new ngGridLayoutPlugin();
             $scope.gridOptions = {
@@ -63,7 +60,6 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
                 plugins: [gridLayoutPlugin],
                 enableCellSelection: true,
                 showFooter: false,
-                selectedItems: $scope.selectedRow,
                 multiSelect: false,
                 columnDefs: [
                     {field: 'name', displayName: 'Question', width: '500px'},

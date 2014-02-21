@@ -9,7 +9,7 @@ class QuestionRepository extends AbstractChildRepository
      * Returns all items with read access
      * @return array
      */
-    public function getAllWithPermission($action = 'read', $parentName = null, \Application\Model\AbstractModel $parent = null)
+    public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
     {
         $qb = $this->createQueryBuilder('question')
                 ->join('question.survey', 'survey', \Doctrine\ORM\Query\Expr\Join::WITH)
@@ -18,6 +18,7 @@ class QuestionRepository extends AbstractChildRepository
                 ->orderBy('question.sorting')
         ;
 
+        $this->addSearch($qb, $search);
         $this->addPermission($qb, 'survey', \Application\Model\Permission::getPermissionName($this, $action));
 
         return $qb->getQuery()->getResult();

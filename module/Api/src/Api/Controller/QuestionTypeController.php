@@ -12,13 +12,16 @@ class QuestionTypeController extends AbstractRestfulController
     {
         $properties = QuestionType::getValues();
         $arrayValues = array();
-        foreach($properties as $property)
+        foreach ($properties as $property) {
             array_push($arrayValues, array(
-                                            'text' => $property->__toString(),
-                                            'value' => $property->__toString()
-                                    ));
+                'text' => $property->__toString(),
+                'value' => $property->__toString()
+            ));
+        }
+        
+        $jsonData = $this->paginate($arrayValues, false);
 
-        return new JsonModel( $arrayValues );
+        return new JsonModel($jsonData);
     }
 
     /**

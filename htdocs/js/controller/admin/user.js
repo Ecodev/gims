@@ -1,7 +1,6 @@
 /* Controllers */
 angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $routeParams, $location, Modal, Restangular) {
     'use strict';
-$scope.s = 'assaas';
 
     // Default redirect
     var returnUrl = '/admin/user';
@@ -68,32 +67,14 @@ $scope.s = 'assaas';
 angular.module('myApp').controller('Admin/UserCtrl', function($scope, $location, Restangular, Modal) {
     'use strict';
 
-    // Initialize
-
-    $scope.users = Restangular.all('user').getList();
-
-    // Keep track of the selected row.
-    $scope.selectedRow = [];
-
-    // Configure ng-grid.
+    // Configure gims-grid.
     $scope.gridOptions = {
-        data: 'users',
-        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 100})],
-        enableCellSelection: true,
-        showFooter: false,
-        selectedItems: $scope.selectedRow,
-        filterOptions: {},
-        multiSelect: false,
         columnDefs: [
             {field: 'name', displayName: 'Name', width: '250px'},
             {field: 'email', displayName: 'Email', cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a href="mailto:{{row.entity[col.field]}}">{{row.entity[col.field]}}</a></div>'},
             {displayName: '', width: '70px', cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/user/edit/{{row.entity.id}}" ><i class="fa fa-pencil fa-lg"></i></a>' +
                         '<button type="button" class="btn btn-default btn-xs" ng-click="delete(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
         ]
-    };
-
-    $scope.delete = function(row) {
-        Modal.confirmDelete(row.entity, {objects: $scope.users, label: row.entity.name});
     };
 
 });

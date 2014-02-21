@@ -66,21 +66,8 @@ angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function ($scope,
 angular.module('myApp').controller('Admin/FilterSetCtrl', function ($scope, $location, Modal, Restangular) {
     "use strict";
 
-    // Initialize
-    $scope.filterSets = Restangular.all('filter-set').getList();
-
-    // Keep track of the selected row.
-    $scope.selectedRow = [];
-
-    // Configure ng-grid.
+    // Configure gims-grid.
     $scope.gridOptions = {
-        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 800})],
-        data: 'filterSets',
-        enableCellSelection: true,
-        showFooter: false,
-        selectedItems: $scope.selectedRow,
-        filterOptions: {},
-        multiSelect: false,
         columnDefs: [
             {field: 'name', displayName: 'Name'},
             {displayName: '', width: '70px', cellTemplate: '' +
@@ -90,15 +77,6 @@ angular.module('myApp').controller('Admin/FilterSetCtrl', function ($scope, $loc
                 '</div>'
             }
         ]
-    };
-
-    // <button type="button" class="btn btn-default btn-xs" ng-click="edit(row)" ><i class="fa fa-pencil fa-lg"></i></button>
-    $scope.remove = function (row) {
-        Modal.confirmDelete(row.entity, {objects: $scope.filterSets, label: row.entity.code, returnUrl: '/admin/filter-set'});
-    };
-
-    $scope.edit = function (row) {
-        $location.path('/admin/filter-set/edit/' + row.entity.id);
     };
 
 });

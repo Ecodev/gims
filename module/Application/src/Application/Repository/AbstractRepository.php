@@ -14,9 +14,12 @@ abstract class AbstractRepository extends EntityRepository
      * @param string $action
      * @return array
      */
-    public function getAllWithPermission($action = 'read')
+    public function getAllWithPermission($action = 'read', $search = null)
     {
-        return $this->findAll();
+        $qb = $this->createQueryBuilder('object');
+        $this->addSearch($qb, $search);
+
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -50,6 +53,52 @@ abstract class AbstractRepository extends EntityRepository
         $qb->setParameter('permissionUser', $user);
         $qb->setParameter('permissionDefaultRole', $defaultRole);
         $qb->setParameter('permissionPermission', $permission);
+    }
+
+    /**
+     * Modify $qb to add a constraint to search for all words contained in $search.
+     * This will search in a few hardcoded fields if they are available.
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param string $search
+     * @param array $fields if standard fields are not enough, an array of table.field strings
+     */
+    protected function addSearch(QueryBuilder $qb, $search, array $fields = null)
+    {
+        if (!$search) {
+            return;
+        }
+
+        // If no fields specified, auto-detect them
+        if (!$fields) {
+            $aliases = $qb->getRootAliases();
+            $alias = reset($aliases);
+
+            $existingFields = $this->getClassMetadata()->getFieldNames();
+            $fields = array_intersect($existingFields, array('code', 'name'));
+            $fields = array_map(function($field) use($alias) {
+                return $alias . '.' . $field;
+            }, $fields);
+        }
+
+        // Build the WHERE clause
+        $wordWheres = array();
+        foreach (preg_split('/[[:space:]]+/', $search, -1, PREG_SPLIT_NO_EMPTY) as $i => $word) {
+            $parameterName = 'searchWord' . $i;
+
+            $fieldWheres = array();
+            foreach ($fields as $field) {
+                $fieldWheres[] = 'LOWER(' . $field . ') LIKE LOWER(:' . $parameterName . ')';
+            }
+
+            if ($fieldWheres) {
+                $wordWheres[] = '(' . join(' OR ', $fieldWheres) . ')';
+                $qb->setParameter($parameterName, '%' . $word . '%');
+            }
+        }
+
+        if ($wordWheres) {
+            $qb->andWhere('(' . join(' AND ', $wordWheres) . ')');
+        }
     }
 
 }

@@ -15,13 +15,9 @@ class NoteController extends AbstractRestfulController
         $questions = $this->params()->fromQuery('question') ? explode(',', $this->params()->fromQuery('question')) : null;
 
         $notes = $this->getEntityManager()->getRepository('\Application\Model\Note')->getAllByParent($surveys, $questionnaires, $questions);
-        $notes = $this->hydrator->extractArray($notes, array(
-            'survey',
-            'question',
-            'questionnaire'
-        ));
+        $jsonData = $this->paginate($notes);
 
-        return new JsonModel($notes);
+        return new JsonModel($jsonData);
     }
 
 }

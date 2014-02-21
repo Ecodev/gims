@@ -24,7 +24,7 @@ class EmailController extends AbstractActionController
      */
     public function getUsersByRole($questionnaire, $wantedRole)
     {
-        $users = $this->getEntityManager()->getRepository('Application\Model\UserQuestionnaire')->getAllWithPermission('validator', 'questionnaire', $questionnaire);
+        $users = $this->getEntityManager()->getRepository('Application\Model\UserQuestionnaire')->getAllWithPermission('validator', null, 'questionnaire', $questionnaire);
 
         $selectedUsers = array();
         foreach ($users as $user) {

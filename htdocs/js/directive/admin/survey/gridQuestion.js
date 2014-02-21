@@ -15,47 +15,22 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
             '<gims-link-new origin="survey" target="question" return-tab="1"/>' +
             '</div>' +
             '</div>' +
-            '<div ng-grid="gridOptions" class="gridStyle"></div>' +
+            '<gims-grid api="question" parent="survey" options="gridOptions" queryparams="queryparams"></gims-grid>' +
             '</div>',
         // The linking function will add behavior to the template
         link: function () {
             // nothing to do ?
         },
-        controller: function ($scope, $location, $resource, Modal) {
+        controller: function ($scope, $location) {
 
             $scope.$watch(function(){ return $location.url(); }, function(){
                 $scope.returnUrl = encodeURIComponent($location.url());
             });
 
-            // Delete a question
-            $scope.removeQuestion = function (row) {
-                var Question = new $resource('/api/question'); // TODO: find out a way to it with restangular instead of $resource
-                var question = new Question(row.entity);
-                Modal.confirmDelete(question, {objects: $scope.questions, label: question.name, returnUrl: $location.path()});
-            };
-
-            // Keep track of the selected row.
-            $scope.selectedRow = [];
-
             // Configure ng-grid.
+            $scope.queryparams = {fields: 'type,chapter'};
             $scope.gridOptions = {
-                plugins: [new ngGridFlexibleHeightPlugin({minHeight: 400})],
-                data: 'questions',
-                enableCellSelection: true,
-                showFooter: false,
-                selectedItems: $scope.selectedRow,
-                filterOptions: {},
-                multiSelect: false,
                 columnDefs: [
-                    // @todo : remove first column during production phase
-//                    {
-//                        field: 'id',
-//                        displayName: 'id',
-//                        width: '5%',
-//                        cellTemplate:   '<div class="ngCellText" ng-class="col.colIndex()">' +
-//                            '{{row.entity.id}}' +
-//                            '</div>'
-//                    },
                     {
                         field: 'sorting',
                         displayName: '#',
@@ -79,7 +54,7 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function () {
                                         '<a class="btn btn-default btn-xs btn-edit" href="/admin/question/edit/{{row.entity.id}}?returnUrl={{returnUrl}}">' +
                                             '<i class="fa fa-pencil fa-lg"></i>' +
                                         '</a>' +
-                                        '<button type="button" class="btn btn-default btn-xs" ng-click="removeQuestion(row)" >' +
+                                        '<button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" >' +
                                             '<i class="fa fa-trash-o fa-lg"></i>' +
                                         '</button>'+
                                        '</div>'

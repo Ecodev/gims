@@ -11,7 +11,7 @@ class QuestionnaireRepository extends AbstractChildRepository
      * Returns all items with matching search criteria
      * @return array
      */
-    public function getAllWithPermission($action = 'read', $parentName = null, \Application\Model\AbstractModel $parent = null, $search = null)
+    public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
     {
 
         $qb = $this->createQueryBuilder('questionnaire');
@@ -24,17 +24,9 @@ class QuestionnaireRepository extends AbstractChildRepository
 
         $this->addPermission($qb, 'questionnaire', \Application\Model\Permission::getPermissionName($this, $action));
 
-
         if ($search) {
             $qb->join('questionnaire.geoname', 'g', \Doctrine\ORM\Query\Expr\Join::WITH);
-            $where = array();
-            foreach (explode(' ', $search) as $i => $word) {
-                $parameterName = 'word' . $i;
-                $where[] = '(LOWER(survey.code) LIKE LOWER(:' . $parameterName . ') OR LOWER(g.name) LIKE LOWER(:' . $parameterName . '))';
-                $qb->setParameter($parameterName, '%' . $word . '%');
-            }
-            $qb->andWhere(join(' AND ', $where));
-            $qb->setMaxResults(50);
+            $this->addSearch($qb, $search, array('survey.code', 'g.name'));
         }
 
         return $qb->getQuery()->getResult();

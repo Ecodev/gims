@@ -130,10 +130,10 @@ class UserController extends AbstractRestfulController
 
     public function getList()
     {
-        $q = $this->params()->fromQuery('q');
-        $users = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), 'user', null, $q);
+        $users = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), $this->params()->fromQuery('q'), 'user');
+        $jsonData = $this->paginate($users);
 
-        return new JsonModel($this->hydrator->extractArray($users, $this->getJsonConfig()));
+        return new JsonModel($jsonData);
     }
 
     public function delete($id)

@@ -14,7 +14,7 @@ class FilterRepository extends AbstractRepository
      * Returns all items with read access
      * @return array
      */
-    public function getAllWithPermission($action = 'read')
+    public function getAllWithPermission($action = 'read', $search = null)
     {
         return $this->findAll();
     }
@@ -156,4 +156,3 @@ class FilterRepository extends AbstractRepository
     }
 
 }
-

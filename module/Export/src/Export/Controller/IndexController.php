@@ -21,7 +21,7 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
 
         $permission = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac')->isActionGranted($questionnaire, 'read');
         if ($permission) {
-            $questions = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getAllWithPermission('read', 'survey', $questionnaire->getSurvey());
+            $questions = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getAllWithPermission('read', null, 'survey', $questionnaire->getSurvey());
         }
 
         // prepare flat array of questions for then be reordered by Parent > childrens > childrens
@@ -53,7 +53,7 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
         $permission = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac')->isActionGranted($survey, 'read');
         $questions = null;
         if ($permission) {
-            $questions = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getAllWithPermission('read', 'survey', $survey);
+            $questions = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getAllWithPermission('read', null, 'survey', $survey);
 
             // prepare flat array of questions for then be reordered by Parent > childrens > childrens
             $flatQuestions = array();
@@ -69,7 +69,7 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
 
             // Questionnaires organisation
             $askedQuestionnaires = explode(',', trim($this->params()->fromQuery('questionnaires'), ','));
-            $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getAllWithPermission('read', 'survey', $survey);
+            $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getAllWithPermission('read', null, 'survey', $survey);
             usort($questionnaires, function($a,$b){return strcmp($a->getName(), $b->getName());});
             $questionnaireList = array();
             if (count($askedQuestionnaires) > 1 || (count($askedQuestionnaires) == 1 && ($askedQuestionnaires[0]) > 0) ) {

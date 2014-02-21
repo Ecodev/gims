@@ -10,12 +10,18 @@ class FilterSetRepository extends AbstractRepository
     use Traits\OrderedByName;
 
     /**
-     * Returns all items with read access
+     * Returns all items with permissions
+     * @param string $action
      * @return array
      */
-    public function getAllWithPermission($action = 'read')
+    public function getAllWithPermission($action = 'read', $search = null)
     {
-        return $this->findAll();
+        $qb = $this->createQueryBuilder('filterSet');
+        $qb->orderBy('filterSet.name', 'ASC');
+
+        $this->addSearch($qb, $search);
+
+        return $qb->getQuery()->getResult();
     }
 
     /**

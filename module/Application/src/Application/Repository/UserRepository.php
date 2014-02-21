@@ -31,13 +31,12 @@ class UserRepository extends AbstractRepository
             $counts[] = "COUNT(CASE WHEN status = '$status' THEN TRUE ELSE NULL END) AS $status";
         }
 
-        $sql = "SELECT ".join(', ', $counts)." FROM questionnaire";
+        $sql = "SELECT " . join(', ', $counts) . " FROM questionnaire";
         $quey = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $result = $quey->getSingleResult();
 
         return $result;
     }
-
 
     /**
      * Return all users with the permission on the given object
@@ -69,8 +68,7 @@ class UserRepository extends AbstractRepository
         return $qb->getQuery()->getResult();
     }
 
-
-    public function getAllWithPermission($action = 'read', $parentName = null, \Application\Model\AbstractModel $parent = null, $search = null)
+    public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
     {
         $qb = $this->createQueryBuilder('user');
 
@@ -79,16 +77,7 @@ class UserRepository extends AbstractRepository
             $qb->setParameter('parent', $parent);
         }
 
-        if ($search) {
-            $where = array();
-            foreach (explode(' ', $search) as $i => $word) {
-                $parameterName = 'word' . $i;
-                $where[] = '(LOWER(user.name) LIKE LOWER(:' . $parameterName . ') OR LOWER(user.name) LIKE LOWER(:' . $parameterName . '))';
-                $qb->setParameter($parameterName, '%' . $word . '%');
-            }
-            $qb->andWhere(join(' AND ', $where));
-            $qb->setMaxResults(50);
-        }
+        $this->addSearch($qb, $search);
 
         return $qb->getQuery()->getResult();
     }

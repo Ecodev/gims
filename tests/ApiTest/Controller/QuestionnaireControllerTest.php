@@ -25,7 +25,7 @@ class QuestionnaireControllerTest extends AbstractController
         $json = $this->getJsonResponse();
 
         // In the array of all questionnaires, we should at least found the test questionnaire
-        foreach ($json as $questionnaire) {
+        foreach ($json['items'] as $questionnaire) {
             $this->assertGreaterThan(0, $questionnaire['id']);
         }
     }
@@ -147,6 +147,27 @@ class QuestionnaireControllerTest extends AbstractController
         }
 
         return $route;
+    }
+
+    public function testSearchProvider()
+    {
+        return array(
+            array('?q=test geoname', 1), // can search by geoname
+            array('?q=code test survey', 1), // can search by survey code
+            array('?q=code test survey test geoname', 1), // can search by both
+        );
+    }
+
+    /**
+     * @group QuestionnaireApi
+     * @dataProvider testSearchProvider
+     */
+    public function testSearch($params, $count)
+    {
+        $this->dispatch($this->getRoute('getList') . $params, Request::METHOD_GET);
+        $actual = $this->getJsonResponse();
+
+        $this->assertEquals($count, $actual['metadata']['totalCount'], 'result count does not match expectation');
     }
 
 }

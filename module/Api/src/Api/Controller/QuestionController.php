@@ -99,11 +99,11 @@ class QuestionController extends AbstractChildRestfulController
         $parent = $this->getParent();
         $permission = $this->params()->fromQuery('permission', 'read');
         if ($parent instanceof \Application\Model\Question\Chapter) {
-            $questions = $this->getRepository()->getAllWithPermission($permission, 'chapter', $parent);
+            $questions = $this->getRepository()->getAllWithPermission($permission, $this->params()->fromQuery('q'), 'chapter', $parent);
         } elseif ($parent instanceof \Application\Model\Survey) {
-            $questions = $this->getRepository()->getAllWithPermission($permission, 'survey', $parent);
+            $questions = $this->getRepository()->getAllWithPermission($permission, $this->params()->fromQuery('q'), 'survey', $parent);
         } elseif ($parent instanceof \Application\Model\Questionnaire) {
-            $questions = $this->getRepository()->getAllWithPermission($permission, 'survey', $parent->getSurvey());
+            $questions = $this->getRepository()->getAllWithPermission($permission, $this->params()->fromQuery('q'), 'survey', $parent->getSurvey());
             // Cannot list all question, without specifying a questionnaire, survey or chapter
         } else {
             $this->getResponse()->setStatusCode(400);
@@ -119,8 +119,9 @@ class QuestionController extends AbstractChildRestfulController
         }
 
         $questions = $this->getFlatHierarchyWithSingleRootElement($flatQuestions, 'chapter', 0);
+        $jsonData = $this->paginate($questions, false);
 
-        return new JsonModel($questions);
+        return new JsonModel($jsonData);
     }
 
     /**

@@ -101,9 +101,10 @@ class QuestionnaireController extends AbstractChildRestfulController
     {
         $survey = $this->getParent();
         $q = $this->params()->fromQuery('q');
-        $questionnaires = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), 'survey', $survey, $q);
+        $questionnaires = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), $this->params()->fromQuery('q'), 'survey', $survey, $q);
+        $jsonData = $this->paginate($questionnaires);
 
-        return new JsonModel($this->hydrator->extractArray($questionnaires, $this->getJsonConfig()));
+        return new JsonModel($jsonData);
     }
 
     /**

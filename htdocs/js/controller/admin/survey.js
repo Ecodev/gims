@@ -59,12 +59,6 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
             $scope.survey = survey;
         });
 
-
-        Restangular.one('survey', $routeParams.id).all('question').getList({fields:'type,chapter'}).then(function(questions) {
-            $scope.questions = questions;
-        });
-
-
     } else {
         $scope.survey = {};
     }
@@ -82,24 +76,11 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
 /**
  * Admin Survey Controller
  */
-angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $location, Modal, Restangular) {
+angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope) {
     "use strict";
 
-    // Initialize
-    $scope.surveys = Restangular.all('survey').getList();
-
-    // Keep track of the selected row.
-    $scope.selectedRow = [];
-
-    // Configure ng-grid.
+    // Configure gims-grid.
     $scope.gridOptions = {
-        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 800})],
-        data: 'surveys',
-        enableCellSelection: true,
-        showFooter: false,
-        selectedItems: $scope.selectedRow,
-        filterOptions: {},
-        multiSelect: false,
         columnDefs: [
             {field: 'code', displayName: 'Code', width: '150px'},
             {field: 'name', displayName: 'Name'},
@@ -109,9 +90,4 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope, $locati
                         '<button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
         ]
     };
-
-    $scope.remove = function (row) {
-        Modal.confirmDelete(row.entity, {objects: $scope.surveys, label: row.entity.code, returnUrl: '/admin/survey'});
-    };
-
 });

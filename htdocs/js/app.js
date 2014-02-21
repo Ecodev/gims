@@ -51,6 +51,21 @@ angular.module('myApp', [
 
         RestangularProvider.setBaseUrl('/api');
 
+        // Configure Restangular for our pagination structure
+        RestangularProvider.setResponseExtractor(function(response, operation, what, url) {
+            var newResponse;
+            if (operation === "getList") {
+
+                // Here we're returning an Array which has one special property metadata with our extra information
+                newResponse = response.items;
+                newResponse.metadata = response.metadata;
+            } else {
+                // This is an element
+                newResponse = response;
+            }
+            return newResponse;
+        });
+
     });
 
 // Here we declare all our modules, so we can get them back whenever we want

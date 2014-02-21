@@ -163,7 +163,7 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
 
         // create a fake user
         $this->user = new User();
-        $this->user->setPassword('foo')->setName('test user');
+        $this->user->setPassword('foo')->setName('test user unit tests');
 
         // Get rbac service to tell who we are (simulate logged in user)
         $this->rbac = $this->getApplication()->getServiceManager()->get('ZfcRbac\Service\Rbac');

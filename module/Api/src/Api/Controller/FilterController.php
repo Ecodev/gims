@@ -6,6 +6,7 @@ use Zend\View\Model\JsonModel;
 
 class FilterController extends AbstractRestfulController
 {
+
     use \Application\Traits\FlatHierarchic;
 
     /**
@@ -13,7 +14,9 @@ class FilterController extends AbstractRestfulController
      */
     public function getList()
     {
-        return new JsonModel($this->getFlatList());
+        $jsonData = $this->paginate($this->getFlatList(), false);
+
+        return new JsonModel($jsonData);
     }
 
     /**
@@ -44,7 +47,6 @@ class FilterController extends AbstractRestfulController
 
         return $this->getFlatHierarchyWithMultipleRootElements($flatFilters, 'parents');
     }
-
 
     public function getAutoCompleteListAction()
     {
