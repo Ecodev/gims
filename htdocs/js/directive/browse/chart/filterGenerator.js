@@ -5,7 +5,7 @@ angular.module('myApp.directives').directive('gimsFilterGenerator', function($mo
         link: function(scope, element, attrs) {
             // nothing to do ?
         },
-        controller: function($scope, Restangular) {
+        controller: function($scope, Restangular, $http) {
             $scope.openModal = function() {
                 var modalInstance = $modal.open({
                     controller: $scope.modalController,
@@ -78,15 +78,16 @@ angular.module('myApp.directives').directive('gimsFilterGenerator', function($mo
                     });
                     surveys.pop();
 
-                    var parameters = {
-                        name: $scope.line.name,
-                        part: part.id,
-                        country: country.id,
-                        surveys: surveys.join(',')
-                    }
-
                     $scope.isLoading = true;
-                    Restangular.all('chart/generateFilter').getList(parameters).then(function(filterSet) {
+
+                    $http.get('/api/chart/generateFilter', {
+                        params: {
+                            name: $scope.line.name,
+                            part: part.id,
+                            country: country.id,
+                            surveys: surveys.join(',')
+                        }
+                    }).success(function(filterSet) {
                         console.log(filterSet);
                         $scope.isLoading = false;
                         var filterSets = $location.search()['filterSet'] ? $location.search()['filterSet'].split(',') :
