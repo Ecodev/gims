@@ -76,6 +76,8 @@
                                 </td>
                                 <td style="padding-left:{{indexedElements[pointSelected.questionnaire].filters[key].filter.hFilters[hFilterId].level+1}}em;">
                                     {{indexedElements[pointSelected.questionnaire].filters[key].filter.name}}
+                                    <a href='/admin/filter/edit/{{key}}' target='_blank'><i class='fa fa-pencil'></i></a>
+
                                 </td>
                                 <td style='width:85px' class='text-right'>
                                     <span ng-if='indexedElements[pointSelected.questionnaire].filters[key].ignored || !indexedElements[pointSelected.questionnaire].filters[key].ignored && indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[part.name] === undefined'>
@@ -135,6 +137,7 @@
                             </td>
                             <td style="padding-left:{{indexedElements[questionnaireId].filters[key].filter.hFilters[hFilterId].level+1}}em;">
                                 {{indexedElements[questionnaireId].filters[key].filter.name}}
+                                <a href='/admin/filter/edit/{{key}}' target='_blank'><i class='fa fa-pencil'></i></a>
                             </td>
                             <td style='width:85px' class='text-right'>
                                 <span ng-show='indexedElements[questionnaireId].filters[key].values[part.name]' class='text-danger'>
