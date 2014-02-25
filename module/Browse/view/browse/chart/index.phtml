@@ -74,7 +74,7 @@
                                     <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == false" class="fa fa-gims-questionnaire" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], true)" tooltip-placement="right" tooltip="Ignore filter for all questionnaire"></i>
                                     <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == true" class="fa fa-gims-questionnaire text-muted" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], false)" tooltip-placement="right" tooltip="Include filter for all questionnaire"></i>
                                 </td>
-                                <td style="padding-left:{{filter.filter.hFilters[hFilterId].level+1}}em;">
+                                <td style="padding-left:{{indexedElements[pointSelected.questionnaire].filters[key].filter.hFilters[hFilterId].level+1}}em;">
                                     {{indexedElements[pointSelected.questionnaire].filters[key].filter.name}}
                                 </td>
                                 <td style='width:65px' class='text-right'>{{indexedElements[pointSelected.questionnaire].filters[key].values[part.name]}}<span ng-show='indexedElements[pointSelected.questionnaire].filters[key].values[part.name]'>&nbsp;%</span></td>
@@ -113,7 +113,7 @@
                                 <i ng-if="globalIndexedFilters[key] == false" class="fa fa-gims-questionnaire" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[questionnaireId].filters[key], true)" tooltip-placement="right" tooltip="Ignore filter for all questionnaire"></i>
                                 <i ng-if="globalIndexedFilters[key] == true" class="fa fa-gims-questionnaire text-muted" ng-click="reportStatusGlobally(indexedElements[questionnaireId].filters[key], false)" tooltip-placement="right" tooltip="Include filter for all questionnaire"></i>
                             </td>
-                            <td style="padding-left:{{filter.filter.hFilters[hFilterId].level+1}}em;">
+                            <td style="padding-left:{{indexedElements[questionnaireId].filters[key].filter.hFilters[hFilterId].level+1}}em;">
                                 {{indexedElements[questionnaireId].filters[key].filter.name}}
                             </td>
                             <td style='width:65px' class='text-right'>{{indexedElements[questionnaireId].filters[key].values[part.name]}}<span ng-show='indexedElements[questionnaireId].filters[key].values[part.name]'>&nbsp;%</span></td>
