@@ -81,6 +81,7 @@ class ExcelRenderer extends \Zend\View\Renderer\PhpRenderer
             $objWriter = new \PHPExcel_Writer_CSV($workbook);
         }
 
+
         $objWriter->save('php://output');
     }
 

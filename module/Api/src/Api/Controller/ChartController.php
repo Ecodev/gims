@@ -339,11 +339,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         if ($questionnaire) {
 
             /** @var \Application\Model\Part $part */
-            $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($questionnaireId = $this->params()->fromQuery('part'));
+            $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
 
             /** @var \Application\Model\Filter $filter */
             $filters = explode(',', $this->params()->fromQuery('filters'));
             $result = array();
+            $resultWithoutIgnoredFilters = array();
 
             /**
              * This call recovers ignored questionnaires and filters.
@@ -354,8 +355,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             if (isset($ignoredFiltersByQuestionnaire['byQuestionnaire']) // if there are ignored questionnaire
                 && !isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) // and if questionnaire is not ignored
                 || isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) // or if he's ignored but he has filters (that means he's not ignored himself, but some filters are)
-                && count($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) > 0
-            ) {
+                && count($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) > 0)
+            {
                 // compute filters
                 foreach ($filters as $filterId) {
                     $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
@@ -363,7 +364,15 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
                     $tableController = new TableController();
                     $tableController->setServiceLocator($this->getServiceLocator());
-                    $result[$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, $ignoredFiltersByQuestionnaire);
+
+                    $result[$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields);
+                    $resultWithoutIgnoredFilters[$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, $ignoredFiltersByQuestionnaire);
+
+                    for ($i = 0 ; $i < count($result[$filterId]); $i++) {
+                        if ($result[$filterId][$i]['values'][0][$part->getName()] != $resultWithoutIgnoredFilters[$filterId][$i]['values'][0][$part->getName()]) {
+                            $result[$filterId][$i]['valuesWithoutIgnored'] = $resultWithoutIgnoredFilters[$filterId][$i]['values'];
+                        }
+                    }
                 }
             }
 

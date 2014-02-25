@@ -96,7 +96,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             var questionnaire = $scope.cache(questionnaireId);
 
             // only launch ajax request if the filters in this questionnaire don't have values
-            if (!questionnaire.filters || !$scope.firstFilterHasValue(questionnaire)) {
+            if (!questionnaire.filters || $scope.concatenedIgnoredElements || !$scope.firstFilterHasValue(questionnaire)) {
 
                 var usedFiltersIds = [];
                 _.forEach($scope.usedFilters, function(filter, filterId) {
@@ -104,6 +104,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 })
 
                 $scope.isLoading = true;
+                var ignoredElements = $scope.concatenedIgnoredElements ? $scope.concatenedIgnoredElements.join(',') : '';
+
 
                 if (retrieveFiltersAndValuesCanceler) {
                     retrieveFiltersAndValuesCanceler.resolve();
@@ -117,7 +119,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                             questionnaire: questionnaireId,
                             filters: usedFiltersIds.join(','),
                             part: $scope.part.id,
-                            fields: 'color'
+                            fields: 'color',
+                            ignoredElements: ignoredElements
                         }
                     }).success(function(data) {
                             _.forEach(data, function(hFilter, hFilterId) {
@@ -149,7 +152,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      *   @param callback function to execute when data is indexed (usefull for then change status to ignored if they're ignored in url)
      */
     $scope.initiateEmptyQuestionnairesWithLoadedData = function(questionnaireId, callback) {
-        console.log('initiateEmptyQuestionnairesWithLoadedData');
         if (questionnaireId) {
 
             var questionnaire = $scope.indexedElements[questionnaireId];
@@ -277,8 +279,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 $location.search('ignoredElements', null);
             }
         }
-
-        return concatenedIgnoredElements;
+        $scope.concatenedIgnoredElements = concatenedIgnoredElements
+        return $scope.concatenedIgnoredElements;
     };
 
     /**
@@ -407,7 +409,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     /**
      *  Manage filters ignored actions
      */
-    $scope.reportStatusGlobally = function(filter, ignored) {
+    $scope.reportStatusGlobally = function(filter, ignored, questionnaireId) {
         _.forEach($scope.indexedElements, function(questionnaire) {
             if (questionnaire.filters && questionnaire.filters[filter.filter.id]) {
                 $scope.ignoreFilter(questionnaire.filters[filter.filter.id], !_.isUndefined(ignored) ? ignored : filter.filter.ignored, false);
@@ -415,6 +417,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             }
         });
 
+        $scope.retrieveFiltersAndValues(questionnaireId);
         $scope.refresh(true);
     }
 
@@ -426,13 +429,15 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             $scope.ignoreFilter(filter, !_.isUndefined(ignore) ? ignore : questionnaire.ignored, false)
         });
 
+        $scope.retrieveFiltersAndValues(questionnaireId);
         $scope.refresh(true);
     }
 
-    $scope.ignoreFilter = function(filter, ignored, refresh) {
+    $scope.ignoreFilter = function(filter, ignored, refresh, questionnaireId) {
         if (filter) {
             filter.filter.ignored = ignored;
             if (refresh) {
+                if (questionnaireId) $scope.retrieveFiltersAndValues(questionnaireId);
                 $scope.refresh(true);
             }
         }
@@ -551,6 +556,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 $scope.indexedElements[questionnaireId].filters[filter.filter.id] = {};
                 $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter = {};
                 $scope.indexedElements[questionnaireId].filters[filter.filter.id].values = {};
+                $scope.indexedElements[questionnaireId].filters[filter.filter.id].valuesWithoutIgnored = {};
             }
 
             if (filter.filter.id) {
@@ -597,6 +603,11 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
             if (filter.values) {
                 $scope.indexedElements[questionnaireId].filters[filter.filter.id].values[$scope.part.name] = filter.values[0][$scope.part.name];
+            }
+            if (!_.isUndefined(filter.valuesWithoutIgnored)) {
+                $scope.indexedElements[questionnaireId].filters[filter.filter.id].valuesWithoutIgnored[$scope.part.name] = filter.valuesWithoutIgnored[0][$scope.part.name];
+            } else {
+                delete($scope.indexedElements[questionnaireId].filters[filter.filter.id].valuesWithoutIgnored[$scope.part.name]);
             }
         }
     }
