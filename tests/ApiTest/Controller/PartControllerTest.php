@@ -4,62 +4,23 @@ namespace ApiTest\Controller;
 
 use Zend\Http\Request;
 
-class PartControllerTest extends AbstractController
+/**
+ * @group Rest
+ */
+class PartControllerTest extends AbstractRestfulControllerTest
 {
 
-    /**
-     * Get suitable route for GET method.
-     *
-     * @param string $method
-     *
-     * @return string
-     */
-    private function getRoute($method)
-    {
-        switch ($method) {
-            case 'getList':
-                $route = '/api/part';
-                break;
-            case 'get':
-                $route = sprintf(
-                        '/api/part/%s', $this->part->getId()
-                );
-                break;
-            case 'post':
-                $route = '/api/part';
-                break;
-            case 'put':
-                $route = sprintf(
-                        '/api/part/%s', $this->part->getId()
-                );
-                break;
-            default:
-                $route = '';
-        }
 
-        return $route;
+    protected function getAllowedFields()
+    {
+        return array('id', 'name');
     }
 
-    /**
-     * @group PartApi
-     */
-    public function testCanGetOnePart()
+    protected function getTestedObject()
     {
-        $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
-        $this->assertResponseStatusCode(200);
-
-        $actual = $this->getJsonResponse();
-        $allowedFields = array('id', 'name');
-        foreach ($actual as $key => $value) {
-            $this->assertTrue(in_array($key, $allowedFields), "API should not return non-allowed field: '" . $key . "'");
-        }
-
-        $this->assertSame($this->part->getId(), $actual['id'], 'should be the same ID that what we asked');
+        return $this->part;
     }
 
-    /**
-     * @group PartApi
-     */
     public function testCannotCreatePart()
     {
         $data = array(
@@ -70,9 +31,6 @@ class PartControllerTest extends AbstractController
         $this->assertResponseStatusCode(403);
     }
 
-    /**
-     * @group PartApi
-     */
     public function testCannotCreatePartWithRoleAnonymous()
     {
         $data = array(
@@ -98,7 +56,6 @@ class PartControllerTest extends AbstractController
     }
 
     /**
-     * @group PartApi
      * @dataProvider testPaginationProvider
      */
     public function testPagination($params, $page, $perPage, $count)
@@ -130,7 +87,6 @@ class PartControllerTest extends AbstractController
     }
 
     /**
-     * @group PartApi
      * @dataProvider testSearchProvider
      */
     public function testSearch($params, $count)

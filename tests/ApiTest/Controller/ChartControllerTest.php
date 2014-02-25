@@ -4,7 +4,7 @@ namespace ApiTest\Controller;
 
 use Zend\Http\Request;
 
-class ChartControllerTest extends AbstractController
+class ChartControllerTest extends \ApplicationTest\Controller\AbstractController
 {
 
     public function testGetValidChartStructure()

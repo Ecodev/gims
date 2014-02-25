@@ -4,68 +4,22 @@ namespace ApiTest\Controller;
 
 use Zend\Http\Request;
 
-class UserControllerTest extends AbstractController
+/**
+ * @group Rest
+ */
+class UserControllerTest extends AbstractRestfulControllerTest
 {
 
-    /**
-     * Get suitable route for GET method.
-     *
-     * @param string $method
-     *
-     * @return string
-     */
-    private function getRoute($method)
+    protected function getAllowedFields()
     {
-        switch ($method) {
-            case 'getList':
-                $route = '/api/user';
-                break;
-            case 'get':
-                $route = sprintf(
-                        '/api/user/%s', $this->user->getId()
-                );
-                break;
-            case 'post':
-                $route = '/api/user';
-                break;
-            case 'put':
-                $route = sprintf(
-                        '/api/user/%s', $this->user->getId()
-                );
-                break;
-            default:
-                $route = '';
-        }
-
-        return $route;
+        return array('id', 'name', 'email', 'state', 'lastLogin');
     }
 
-    /**
-     * @group UserApi
-     */
-    public function testCanGetOneUser()
+    protected function getTestedObject()
     {
-        $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
-        $this->assertResponseStatusCode(200);
-
-        $actual = $this->getJsonResponse();
-        $allowedFields = array(
-            'id',
-            'name',
-            'email',
-            'state',
-            'lastLogin'
-        );
-        foreach ($actual as $key => $value) {
-            $this->assertTrue(in_array($key, $allowedFields), "API should not return non-allowed field: '" . $key . "'");
-        }
-
-        $this->assertSame($this->user->getId(), $actual['id'], 'should be the same ID that what we asked');
+        return $this->user;
     }
 
-    /**
-     * @group UserApi
-     */
     public function testCanGetNeverGetPassword()
     {
         $this->dispatch($this->getRoute('get') . '?fields=password,phone', Request::METHOD_GET);
@@ -88,7 +42,6 @@ class UserControllerTest extends AbstractController
     }
 
     /**
-     * @group UserApi
      * @dataProvider testSearchProvider
      */
     public function testSearch($params, $count)

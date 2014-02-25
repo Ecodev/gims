@@ -5,8 +5,21 @@ namespace ApiTest\Controller;
 use Application\Model\Question\NumericQuestion;
 use Zend\Http\Request;
 
-class QuestionControllerTest extends AbstractController
+/**
+ * @group Rest
+ */
+class QuestionControllerTest extends AbstractRestfulControllerTest
 {
+
+    protected function getAllowedFields()
+    {
+        return array('id', 'name', 'filter', 'answers', 'sorting');
+    }
+
+    protected function getTestedObject()
+    {
+        return $this->question;
+    }
 
     /**
      * Get suitable route for GET method.
@@ -15,7 +28,7 @@ class QuestionControllerTest extends AbstractController
      *
      * @return string
      */
-    private function getRoute($method)
+    protected function getRoute($method)
     {
         switch ($method) {
             case 'get':
@@ -40,67 +53,14 @@ class QuestionControllerTest extends AbstractController
         return $route;
     }
 
-    /**
-     * @test
-     */
-    public function methodGetReturnsStatus200()
-    {
-        $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
-        $this->assertResponseStatusCode(200);
-    }
-
-    /**
-     * @test
-     * @group AnswerModel
-     */
-    public function ensureOnlyAllowedFieldAreDisplayedInResponseForQuestion()
-    {
-        $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
-        $allowedFields = array('id', 'name', 'filter', 'answers', 'sorting');
-        foreach ($this->getJsonResponse() as $key => $value) {
-            $this->assertTrue(in_array($key, $allowedFields), "the key '$key' should not be in response");
-        }
-    }
-
-    /**
-     * @test
-     */
-    public function getFakeQuestionAndCheckWhetherIdAreCorresponding()
-    {
-        $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
-        $actual = $this->getJsonResponse();
-        $this->assertSame($this->question->getId(), $actual['id']);
-    }
-
-    /**
-     * @test
-     */
-    public function getTheFakeQuestionAndCheckWhetherItContainsTwoAnswers()
+    public function testCanRetrieveQuestionAnswers()
     {
         $this->dispatch($this->getRoute('get') . '?fields=answers', Request::METHOD_GET);
         $actual = $this->getJsonResponse();
         $this->assertCount(2, $actual['answers']);
     }
 
-    /**
-     * @test
-     */
-    public function updateQuestionAndCheckWhetherOriginalNameIsChanged()
-    {
-        $expected = $this->question->getName();
-        $data = array(
-            'name' => 'bar',
-        );
-
-        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
-        $actual = $this->getJsonResponse();
-        $this->assertNotEquals($expected, $actual['name']);
-    }
-
-    /**
-     * @test
-     */
-    public function canUpdateNameOfQuestion()
+    public function testCanUpdateNameOfQuestion()
     {
         $expected = 'bar';
         $data = array(
@@ -112,30 +72,7 @@ class QuestionControllerTest extends AbstractController
         $this->assertEquals($expected, $actual['name']);
     }
 
-    /**
-     * @test
-     */
-    public function createANewQuestionWithPostMethod()
-    {
-        // Question
-        $data = array(
-            'name' => 'name for test create a new question',
-            'type' => \Application\Model\QuestionType::$NUMERIC,
-            'sorting' => 1,
-            'survey' => $this->survey->getId(),
-            'filter' => $this->filter->getId(),
-        );
-
-        $this->dispatch($this->getRoute('post') . '?fields=type', Request::METHOD_POST, $data);
-        $actual = $this->getJsonResponse();
-        $this->assertEquals($data['name'], $actual['name']);
-        $this->assertEquals($data['type'], $actual['type']);
-    }
-
-    /**
-     * @test
-     */
-    public function modifyQuestionType()
+    public function testCanModifyQuestionType()
     {
         $data = array(
             'type' => \Application\Model\QuestionType::$CHAPTER,
@@ -145,14 +82,6 @@ class QuestionControllerTest extends AbstractController
         $this->dispatch($url, Request::METHOD_PUT, $data);
         $afterChange = $this->getJsonResponse();
         $this->assertEquals($data['type'], $afterChange['type'], 'should return new type');
-    }
-
-    /**
-     * @test
-     */
-    public function countNumberOfQuestionsReturnsByMethodGetQuestionsReturnsOne()
-    {
-        $this->assertCount(1, $this->survey->getQuestions());
     }
 
     private function getMockQuestions()
@@ -178,10 +107,7 @@ class QuestionControllerTest extends AbstractController
         return $questions;
     }
 
-    /**
-     * @test
-     */
-    public function moveSortingValueOfLastQuestionToFirstAndCheckWhetherSortingValueOfOtherQuestionsAreShifted()
+    public function testMoveSortingValueOfLastQuestionToFirstAndCheckWhetherSortingValueOfOtherQuestionsAreShifted()
     {
 
         $questions = $this->getMockQuestions();
@@ -205,10 +131,7 @@ class QuestionControllerTest extends AbstractController
         $this->assertSame($expectedSorting, $actualSorting);
     }
 
-    /**
-     * @test
-     */
-    public function moveSortingValueOfFirstQuestionToLastAndCheckWhetherSortingValueOfOtherQuestionsAreShifted()
+    public function testMoveSortingValueOfFirstQuestionToLastAndCheckWhetherSortingValueOfOtherQuestionsAreShifted()
     {
 
         $questions = $this->getMockQuestions();

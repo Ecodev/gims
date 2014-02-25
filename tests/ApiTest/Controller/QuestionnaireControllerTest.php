@@ -5,16 +5,48 @@ namespace ApiTest\Controller;
 use Application\Model\Geoname;
 use Zend\Http\Request;
 
-class QuestionnaireControllerTest extends AbstractController
+/**
+ * @group Rest
+ */
+class QuestionnaireControllerTest extends AbstractRestfulControllerTest
 {
 
-    public function testEnsureOnlyAllowedFieldAreDisplayedInResponseForQuestionnaire()
+    protected function getAllowedFields()
     {
-        $this->dispatch('/api/questionnaire/' . $this->questionnaire->getId(), Request::METHOD_GET);
-        $allowedFields = array('id', 'dateObservationStart', 'dateObservationEnd', 'survey', 'name', 'geoname', 'completed', 'spatial', 'dateLastAnswerModification', 'reporterNames', 'validatorNames', 'comments', 'status', 'permission');
-        foreach ($this->getJsonResponse() as $key => $value) {
-            $this->assertTrue(in_array($key, $allowedFields), sprintf('Field "%s" is not declared as allowed', $key));
+        return array('id', 'dateObservationStart', 'dateObservationEnd', 'survey', 'name', 'geoname', 'completed', 'spatial', 'dateLastAnswerModification', 'reporterNames', 'validatorNames', 'comments', 'status', 'permission');
+    }
+
+    protected function getTestedObject()
+    {
+        return $this->questionnaire;
+    }
+
+    /**
+     * Get suitable route for GET method.
+     *
+     * @param string $method
+     *
+     * @return string
+     */
+    protected function getRoute($method)
+    {
+        switch ($method) {
+            case 'getList':
+                $route = sprintf('/api/survey/%s/questionnaire', $this->survey->getId());
+                break;
+            case 'post':
+                $route = sprintf('/api/questionnaire');
+                break;
+            case 'get':
+            case 'put':
+            case 'delete':
+                $route = sprintf('/api/questionnaire/%s', $this->questionnaire->getId());
+                break;
+            default:
+                throw new \Exception("Unsupported route '$method' for questionnaire");
         }
+
+        return $route;
     }
 
     public function testCanListQuestionnaire()
@@ -30,19 +62,7 @@ class QuestionnaireControllerTest extends AbstractController
         }
     }
 
-    public function testCanGetQuestionnaire()
-    {
-        $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
-
-        $this->assertResponseStatusCode(200);
-        $json = $this->getJsonResponse();
-        $this->assertSame($this->questionnaire->getId(), $json['id']);
-    }
-
-    /**
-     * @test
-     */
-    public function questionnaireWithNoAnswerCanBeDeleted()
+    public function testQuestionnaireWithNoAnswerCanBeDeleted()
     {
         // Questionnaire
         $data = array(
@@ -83,7 +103,7 @@ class QuestionnaireControllerTest extends AbstractController
             'geoname' => $geoName->getId(),
         );
 
-        $this->dispatch($this->getRoute('put') . '&fields=geoname', Request::METHOD_PUT, $data);
+        $this->dispatch($this->getRoute('put') . '?fields=geoname', Request::METHOD_PUT, $data);
         $actual = $this->getJsonResponse();
         $this->assertNotEquals($expected, $actual['geoname']['id']);
     }
@@ -107,48 +127,6 @@ class QuestionnaireControllerTest extends AbstractController
         $this->assertEquals($data['survey'], $actual['survey']['id']);
     }
 
-    /**
-     * Get suitable route for GET method.
-     *
-     * @param string $method
-     *
-     * @return string
-     */
-    private function getRoute($method)
-    {
-        switch ($method) {
-            case 'getList':
-                $route = sprintf(
-                        '/api/survey/%s/questionnaire', $this->survey->getId()
-                );
-                break;
-            case 'get':
-                $route = sprintf(
-                        '/api/survey/%s/questionnaire/%s', $this->survey->getId(), $this->questionnaire->getId()
-                );
-                break;
-            case 'post':
-                $route = sprintf(
-                        '/api/questionnaire'
-                );
-                break;
-            case 'put':
-                $route = sprintf(
-                        '/api/questionnaire?id=%s', $this->questionnaire->getId()
-                );
-                break;
-            case 'delete':
-                $route = sprintf(
-                        '/api/questionnaire/%s', $this->questionnaire->getId()
-                );
-                break;
-            default:
-                $route = '';
-        }
-
-        return $route;
-    }
-
     public function testSearchProvider()
     {
         return array(
@@ -159,7 +137,6 @@ class QuestionnaireControllerTest extends AbstractController
     }
 
     /**
-     * @group QuestionnaireApi
      * @dataProvider testSearchProvider
      */
     public function testSearch($params, $count)

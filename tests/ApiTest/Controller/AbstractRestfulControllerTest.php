@@ -2,6 +2,7 @@
 
 namespace ApiTest\Controller;
 
+use Zend\Http\Request;
 use Api\Service\MetaModel;
 use Application\Model\Answer;
 use Application\Model\Filter;
@@ -15,7 +16,7 @@ use Application\Model\User;
 use Application\Model\UserSurvey;
 use Application\Model\UserQuestionnaire;
 
-abstract class AbstractController extends \ApplicationTest\Controller\AbstractController
+abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller\AbstractController
 {
 
     /**
@@ -213,4 +214,67 @@ abstract class AbstractController extends \ApplicationTest\Controller\AbstractCo
         $this->rbac->setIdentity($reloadedUser);
     }
 
+    public function testCanGetOne()
+    {
+        $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
+        $this->assertResponseStatusCode(200);
+
+        $actual = $this->getJsonResponse();
+        $allowedFields = $this->getAllowedFields();
+        foreach ($actual as $key => $value) {
+            $this->assertTrue(in_array($key, $allowedFields), "API should not return non-allowed field: '" . $key . "'");
+        }
+
+        $this->assertSame($this->getTestedObject()->getId(), $actual['id'], 'should be the same ID that what we asked');
+        $this->assertArrayNotHasKey('nonExistingField', $actual);
+    }
+
+    public function testCanGetOneWithFields()
+    {
+        $this->dispatch($this->getRoute('get') . '?fields=metadata,nonExistingField', Request::METHOD_GET);
+        $this->assertResponseStatusCode(200);
+
+        $actual = $this->getJsonResponse();
+        $this->assertSame($this->getTestedObject()->getId(), $actual['id'], 'should be the same ID that what we asked');
+        $this->assertArrayNotHasKey('nonExistingField', $actual, 'unknown fields should be silently ignored');
+
+        $metadata = array(
+            'dateCreated',
+            'dateModified',
+            'creator',
+            'modifier',
+        );
+
+        foreach ($metadata as $key => $val) {
+            $metadata = is_string($key) ? $key : $val;
+            $this->assertArrayHasKey($metadata, $actual, 'metadata shortcut should be expanded to common well-known common fields');
+        }
+    }
+
+    protected function getRoute($method)
+    {
+        $parts = explode('\\', (get_class($this->getTestedObject())));
+        $classname = lcfirst(end($parts));
+        $id = $this->getTestedObject()->getId();
+
+        switch ($method) {
+            case 'getList':
+            case 'post':
+                $route = "/api/$classname";
+                break;
+            case 'get':
+            case 'put':
+            case 'delete':
+                $route = "/api/$classname/$id";
+                break;
+            default:
+                throw new \Exception("Unsupported route '$method' for $classname");
+        }
+
+        return $route;
+    }
+
+    abstract protected function getAllowedFields();
+
+    abstract protected function getTestedObject();
 }
