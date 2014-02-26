@@ -334,6 +334,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      */
     public function getPanelFiltersAction()
     {
+        /** @var \Application\Model\Questionnaire $questionnaire */
         $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($this->params()->fromQuery('questionnaire'));
 
         if ($questionnaire) {
@@ -343,8 +344,28 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
             /** @var \Application\Model\Filter $filter */
             $filters = explode(',', $this->params()->fromQuery('filters'));
-            $result = array();
-            $resultWithoutIgnoredFilters = array();
+            $result = array('filters' => array());
+            $resultWithoutIgnoredFilters = array('filters' => array());
+
+            /** @var \Application\Service\Calculator\Calculator $calculator */
+            $calculator = new \Application\Service\Calculator\Calculator();
+            $calculator->setServiceLocator($this->getServiceLocator());
+
+            if ($this->params()->fromQuery('getQuestionnaireUsages') === 'true') {
+                $result['usages'] = array();
+                $questionnaireUsages = $questionnaire->getQuestionnaireUsages();
+                $hydrator = new \Application\Service\Hydrator();
+                foreach ($questionnaireUsages as $questionnaireUsage) {
+                    if ($questionnaireUsage->getPart() === $part) {
+                        $extractedUsage = $hydrator->extract($questionnaireUsage, array('part', 'rule', 'rule.name', 'rule.formula'));;
+                        $value = $calculator->computeFormula($questionnaireUsage);
+                        $value = \Application\Utility::decimalToRoundedPercent($value);
+                        $extractedUsage['value'] = $value;
+                        $result['usages'][] = $extractedUsage;
+                    }
+                }
+            }
+
 
             /**
              * This call recovers ignored questionnaires and filters.
@@ -365,12 +386,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     $tableController = new TableController();
                     $tableController->setServiceLocator($this->getServiceLocator());
 
-                    $result[$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields);
-                    $resultWithoutIgnoredFilters[$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, $ignoredFiltersByQuestionnaire);
+                    $result['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields);
+                    $resultWithoutIgnoredFilters['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, $ignoredFiltersByQuestionnaire);
 
-                    for ($i = 0 ; $i < count($result[$filterId]); $i++) {
-                        if ($result[$filterId][$i]['values'][0][$part->getName()] != $resultWithoutIgnoredFilters[$filterId][$i]['values'][0][$part->getName()]) {
-                            $result[$filterId][$i]['valuesWithoutIgnored'] = $resultWithoutIgnoredFilters[$filterId][$i]['values'];
+                    for ($i = 0 ; $i < count($result['filters'][$filterId]); $i++) {
+                        if ($result['filters'][$filterId][$i]['values'][0][$part->getName()] != $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values'][0][$part->getName()]) {
+                            $result['filters'][$filterId][$i]['valuesWithoutIgnored'] = $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values'];
                         }
                     }
                 }

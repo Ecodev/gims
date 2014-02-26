@@ -10,7 +10,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.countryQueryParams = {perPage: 500}
     $scope.filterSetQueryParams = {fields: 'filters,filters.genericColor,filters.officialChildren,filters.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren.officialChildren'}
 
-
     /**
      * Executes when country, part or filterset are changed
      * When filter filterset is changed, rebuilds the list of the hFilters used.
@@ -106,7 +105,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 $scope.isLoading = true;
                 var ignoredElements = $scope.concatenedIgnoredElements ? $scope.concatenedIgnoredElements.join(',') : '';
 
-
                 if (retrieveFiltersAndValuesCanceler) {
                     retrieveFiltersAndValuesCanceler.resolve();
                 }
@@ -120,16 +118,17 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                             filters: usedFiltersIds.join(','),
                             part: $scope.part.id,
                             fields: 'color',
+                            getQuestionnaireUsages: questionnaire.usages && questionnaire.usages.length ? false : true,
                             ignoredElements: ignoredElements
                         }
                     }).success(function(data) {
-                            _.forEach(data, function(hFilter, hFilterId) {
-                                _.map(data[hFilterId], function(filter, index) {
+                            _.forEach(data.filters, function(hFilter, hFilterId) {
+                                _.map(data.filters[hFilterId], function(filter, index) {
                                     if (!_.isUndefined($scope.indexedElements[questionnaireId].hFilters[hFilterId])) {
                                         filter.filter.sorting = index + 1;
                                         filter.filter.hFilters = {};
                                         filter.filter.hFilters[hFilterId] = null;
-                                        $scope.cache(questionnaireId, filter);
+                                        $scope.cache({id: questionnaireId, usages: data.usages}, filter);
                                     }
                                 });
                             });
@@ -140,7 +139,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 });
             }
         }
-    }, 300);
+    }, 500);
 
     /**
      *   This function set initiates all questionnaires with data loaded with first one (except values)
@@ -177,17 +176,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             }
         }
     }
-
-    $scope.safeApply = function(fn) {
-        var phase = this.$root.$$phase;
-        if(phase == '$apply' || phase == '$digest') {
-            if(fn && (typeof(fn) === 'function')) {
-                fn();
-            }
-        } else {
-            this.$apply(fn);
-        }
-    };
 
     /**
      * As filters are stored in an array on index relative to their Id, this function gets first filter to verify is he has a value.
@@ -293,7 +281,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      */
     $scope.initIgnoredElementsFromUrl = function() {
         // url excluded questionnaires
-        var ignoredQuestionnaires = $location.search()['ignoredElements'] ? $location.search()['ignoredElements'].split(',') : [];
+        var ignoredQuestionnaires = $location.search()['ignoredElements'] ? $location.search()['ignoredElements'].split(',') :
+            [];
 
         if (ignoredQuestionnaires.length > 0) {
 
@@ -394,8 +383,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 });
         });
 
-    }, 300);
-
+    }, 500);
 
     $scope.setPointSelected = function(id, questionnaireId, name, filterId) {
         $scope.pointSelected = {
@@ -437,7 +425,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         if (filter) {
             filter.filter.ignored = ignored;
             if (refresh) {
-                if (questionnaireId) $scope.retrieveFiltersAndValues(questionnaireId);
+                if (questionnaireId) {
+                    $scope.retrieveFiltersAndValues(questionnaireId);
+                }
                 $scope.refresh(true);
             }
         }
@@ -538,6 +528,10 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             _.forEach(questionnaire.hFilters, function(hFilter, hFilterId) {
                 $scope.indexedElements[questionnaire.id].hFilters[hFilterId] = hFilter;
             })
+
+            if (questionnaire.usages) {
+                $scope.indexedElements[questionnaire.id].usages = questionnaire.usages;
+            }
 
             if (ignored) {
                 $scope.indexedElements[questionnaire.id].ignored = true;

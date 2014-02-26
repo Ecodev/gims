@@ -55,6 +55,10 @@ html {
     @extend .fa-check-square-o;
 }
 
+.fa-gims-usage {
+    @extend .fa-gear;
+}
+
 
 .fa-gims-questionnaire {
     @extend .fa-paste;
@@ -214,6 +218,10 @@ div.browse .col-md-4 {
 .select-label-with-icon{
     padding-left: 2em !important;
     text-indent: -0.6em !important;
+}
+
+.popover-word-break + .popover .popover-content{
+    word-wrap: break-word;
 }
 
 
