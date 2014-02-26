@@ -142,7 +142,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             {
                 // Load items and re-select item based on URL params (if any)
                 var items;
-                myRestangular.all(api).getList($scope.queryparams).then(function(data) {
+                myRestangular.all(api).getList(_.merge({perPage: 1000}, $scope.queryparams)).then(function(data) {
 
                     items = data;
 
