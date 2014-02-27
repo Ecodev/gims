@@ -1,7 +1,7 @@
 {
     "name": "ecodev/gims",
     "description": "GIMS",
-    "homepage": "http://www.gims.pro/",
+    "homepage": "http://www.gimsinitiative.org",
     "repositories": [{
             "type": "vcs",
             "url": "https://github.com/mwillbanks/ZfcTwitterBootstrap"

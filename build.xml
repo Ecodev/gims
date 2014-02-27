@@ -45,7 +45,7 @@
     </target>
 
     <target name="load-remote-data" description="Load data from a remote server into local database">
-        <propertyprompt propertyName="remote" defaultValue="gims.pro" promptText="Remote host (eg: remote.hostname.com)" useExistingValue="true" />
+        <propertyprompt propertyName="remote" defaultValue="gimsinitiative.org" promptText="Remote host (eg: remote.hostname.com)" useExistingValue="true" />
         <load-remote-dump remote="${remote}" />
     </target>
 
