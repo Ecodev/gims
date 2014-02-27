@@ -69,7 +69,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 // If the filterSet is a copy of an original FilterSet, then we also display the original (with light colors)
                 if ($filterSet->getOriginalFilterSet()) {
                     $originalFilterSet = $filterSet->getOriginalFilterSet();
-                    $seriesWithOriginal = $this->getSeries($originalFilterSet, $questionnaires, $part, array(), 100, null, ' (original)');
+                    $seriesWithOriginal = $this->getSeries($originalFilterSet, $questionnaires, $part, array(), 100, null, false, ' (original)');
                 } else {
                     $seriesWithOriginal = array();
                 }
@@ -81,7 +81,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
                 // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
                 $alternativeSeries = array_merge($seriesWithIgnoredElements, $seriesWithOriginal);
-                $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, array('byFilterSet' => $ignoredFilters), $alternativeSeries ? 33 : 100, $alternativeSeries ? 'ShortDash' : null);
+                $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, array('byFilterSet' => $ignoredFilters), $alternativeSeries ? 33 : 100, $alternativeSeries ? 'ShortDash' : null, false);
 
                 // insure that series are not added twice to series list
                 foreach ($newSeries = array_merge($normalSeries, $alternativeSeries) as $newSerie) {
@@ -217,7 +217,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     }
                 }
 
-                $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotIgnored, $part, $ignoredFiltersByQuestionnaire, 100, null, ' (ignored elements)');
+                $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotIgnored, $part, $ignoredFiltersByQuestionnaire, 100, null, true, ' (ignored elements)');
                 $series = array_merge($series, $mySeries);
             }
         }
@@ -257,7 +257,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @internal param array $colors
      * @return string
      */
-    protected function getSeries(FilterSet $filterSet, array $questionnaires, Part $part, array $ignoredFilters, $ratio, $dashStyle = null, $suffix = null)
+    protected function getSeries(FilterSet $filterSet, array $questionnaires, Part $part, array $ignoredFilters, $ratio, $dashStyle = null, $isIgnored = false, $suffix = null)
     {
         //echo '(ratio ' . $ratio . ' - )';
         $series = array();
@@ -267,8 +267,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
         foreach ($lines as &$serie) {
             $filter = $filterRepository->findOneById($serie['id']);
-            $serie['color'] = $filter->getGenericColor($ratio); //Utility::getColor($serie['id'], $ratio);
+            $serie['color'] = $filter->getGenericColor($ratio);
             $serie['name'] .= $suffix;
+            $serie['isIgnored'] = $isIgnored;
+
             $serie['type'] = 'line';
 
             if ($dashStyle) {
@@ -288,10 +290,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $scatter = array(
                 'type' => 'scatter',
                 'color' => $filter->getGenericColor($ratio),
-                //Utility::getColor($filter->getId(), $ratio),
                 'marker' => array('symbol' => $this->symbols[$this->getConstantKey($filter->getName()) % count($this->symbols)]),
                 'name' => $filter->getName() . $suffix,
                 'allowPointSelect' => false,
+                'isIgnored' => $isIgnored,
                 // because we will use our own click handler
                 'data' => array(),
             );

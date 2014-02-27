@@ -91,6 +91,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      */
     var retrieveFiltersAndValuesCanceler = null;
     $scope.retrieveFiltersAndValues = _.debounce(function(questionnaireId, callback) {
+
         if (questionnaireId) {
             var questionnaire = $scope.cache(questionnaireId);
 
@@ -122,6 +123,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                             ignoredElements: ignoredElements
                         }
                     }).success(function(data) {
+
                             _.forEach(data.filters, function(hFilter, hFilterId) {
                                 _.map(data.filters[hFilterId], function(filter, index) {
                                     if (!_.isUndefined($scope.indexedElements[questionnaireId].hFilters[hFilterId])) {
@@ -204,6 +206,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * @param refreshUrl
      * @returns {Array}
      */
+    $scope.concatenedIgnoredElements = [];
     $scope.getIgnoredElements = function(refreshUrl) {
         if (!$scope.indexedElements) {
             return [];
@@ -379,6 +382,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                         callback();
                     }
                     $scope.chart = data;
+                    $scope.generateKeyIndicatorsTable(ignoredElements);
                     $scope.isLoading = false;
                 });
         });
@@ -393,6 +397,77 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             filter: filterId
         };
     }
+
+
+
+    $scope.gridOptions = {
+        columnDefs: 'columnDefs',
+        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 0})],
+        data: 'data'
+    };
+    $scope.generateKeyIndicatorsTable = function(ignoredElements) {
+
+        var data = $scope.chart;
+        $scope.isLoading = true;
+
+        $scope.columnDefs = [{
+            field: 'year',
+            displayName :'Year',
+            width:'100px'
+        }];
+
+        var arrayData = [];
+        _.forEach(data.series, function(serie){
+            if (serie.type == 'line'
+                && (ignoredElements.length == 0 && serie.isIgnored === false
+                || ignoredElements.length > 0 && serie.isIgnored === true)
+                ) {
+
+                // create a column by filter on graph
+                $scope.columnDefs.push({
+                    field: 'value'+serie.id,
+                    displayName : serie.name,
+                    bgcolor : serie.color,
+                    headerCellTemplate: ''+
+                        '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
+                        '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" style="background:{{col.colDef.bgcolor}}" popover-placement="top" popover="{{col.displayName}}">' +
+                        '       {{col.displayName}}' +
+                        '   </div>' +
+                        '</div>',
+                    cellTemplate : ''+
+                        '<div class="ngCellText text-right" ng-class="col.colIndex()"><span ng-cell-text ng-show="{{row.entity.value'+serie.id+'!==null}}">{{row.entity.value'+serie.id+'}} %</span></div>'
+                });
+
+                // retrieve data
+                _.forEach(serie.data, function(value, index){
+                    if (_.isUndefined(arrayData[index])) {
+                        arrayData[index] = {};
+                    }
+                    arrayData[index]['value'+serie.id] = value;
+                });
+
+            }
+        });
+
+        var startYear = data.plotOptions.line.pointStart;
+        // before adding date to row, create and object with same properties but all to null
+        var nullEquivalentData = _.mapValues(arrayData[0], function(){return null;});
+        arrayData = _.map(arrayData, function(row, index){ row['year'] = startYear+index; return row; });
+
+        // use the equivalent null object to keep all except with null objects
+        arrayData = _.rest(arrayData, nullEquivalentData);
+
+        // remove useless dates
+        var finalData = [];
+        angular.forEach(arrayData, function(row, index){
+            if (row['year'] % 5 == 0 && index < arrayData.length || index == arrayData.length-1){
+                finalData.push(arrayData.splice(index, 1)[0]);
+            }
+        });
+        $scope.data = finalData;
+        $scope.isLoading = false;
+    }
+
 
     /**
      *  Manage filters ignored actions

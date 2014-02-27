@@ -30,17 +30,24 @@
 
     <div class="alert alert-info" ng-hide="chart"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?></div>
 
-    <div class="row">
+    <div class="row show-grid">
 
         <!-- Chart -->
         <div ng-class="{'col-xs-12 col-sm-7 col-md-7 col-lg-8' : hasIgnoredElements || pointSelected, 'col-md-12' : !hasIgnoredElements && !pointSelected}" >
             <chart value="chart" type="area" height="400" chart-obj="chartObj" />
+
+            <h2 class="text-center">Estimated coverage</h2>
+            <div ng-grid="gridOptions" class="gridStyle"></div>
+
             <!--pre>{{pointSelected|json}}</pre>
-            <pre>{{ignoredElements|json}}</pre>
+            <pre>{{columnDefs|json}}</pre>
+            <pre>{{data|json}}</pre>
+            <!--pre>{{ignoredElements|json}}</pre>
             <pre>{{concatenedIgnoredElements|json}}</pre>
             <pre>{{globalIndexedFilters|json}}</pre>
             <pre>{{indexedElements|json}}</pre-->
         </div>
+
 
         <!-- Right panel -->
         <div id='chartPanel' class="col-xs-12 col-sm-5 col-md-5 col-lg-4" ng-show='hasIgnoredElements || pointSelected' >
@@ -174,23 +181,3 @@
         </div>
     </div>
 </div>
-
-<!-- Modal Login Window !-->
-<script type="text/ng-template" id="newFilterSet.html">
-    <form name="myForm">
-        <div class="modal-header">
-            <h3>Create new Filter Set</h3>
-        </div>
-        <div class="modal-body">
-            <div class="form-group" ng-class="{'has-error': myForm.filterSetName.$invalid}">
-                <label class="control-label" for="filterSetName">Filter name</label>
-                <input id="filterSetName" name="filterSetName" ng-model="newFilterSet.name" type="text" placeholder="Enter a filter set name..." autofocus="autofocus" required>
-                <span ng-show="myForm.filterSetName.$error.required" class="help-block">Required</span>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <a class="btn btn-default cancel" ng-click="cancelNewFilterSet()"><?php echo $this->translate('Cancel') ?></a>
-            <button class="btn btn-primary" ng-click="createNewFilterSet()" ng-disabled="myForm.$invalid"><?php echo $this->translate('Create') ?></button>
-        </div>
-    </form>
-</script>
