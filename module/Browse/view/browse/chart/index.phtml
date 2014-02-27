@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" ng-init="firstCol='4.5em';lastCol='7em';">
     <form>
         <div class='row show-grid'>
             <div class="col-md-6">
@@ -63,7 +63,7 @@
                         <tbody ng-repeat="(hFilterId, hFilter) in indexedElements[pointSelected.questionnaire].hFilters">
 
                             <tr ng-repeat="key in sort(indexedElements[pointSelected.questionnaire].filters, hFilterId)" ng-show="indexedElements[pointSelected.questionnaire].filters[key].filter.hFilters[hFilterId].level >= 0" ng-class="{'active':indexedElements[pointSelected.questionnaire].filters[key].filter.id == hFilterId,'text-muted':indexedElements[pointSelected.questionnaire].filters[key].filter.ignored}" >
-                                <td style='width:60px;padding-right:0' >
+                                <td style='width:{{firstCol}};padding-right:0' >
                                     <span ng-switch="indexedElements[pointSelected.questionnaire].filters[key].filter.ignored" ng-click="ignoreFilter(indexedElements[pointSelected.questionnaire].filters[key], !indexedElements[pointSelected.questionnaire].filters[key].filter.ignored, true, pointSelected.questionnaire)">
                                         <i ng-switch-when="true" class="fa fa-lg fa-gims-filter text-muted"></i>
                                         <i ng-switch-default class="fa fa-lg fa-gims-filter" style="color:{{usedFilters[hFilterId]}}" ></i>
@@ -72,13 +72,15 @@
                                     <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == null && !indexedElements[pointSelected.questionnaire].filters[key].filter.ignored" class="fa fa-gims-questionnaire opacity33" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], false, pointSelected.questionnaire)" tooltip-placement="right" tooltip="Include filter for all questionnaire"></i>
                                     <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == false" class="fa fa-gims-questionnaire" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], true, pointSelected.questionnaire)" tooltip-placement="right" tooltip="Ignore filter for all questionnaire"></i>
                                     <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == true" class="fa fa-gims-questionnaire text-muted" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], false, pointSelected.questionnaire)" tooltip-placement="right" tooltip="Include filter for all questionnaire"></i>
+
+                                    <i ng-if="indexedElements[pointSelected.questionnaire].filters[key].usages" class='fa fa-lg fa-gims-usage' style="color:{{usedFilters[hFilterId]}}" tooltip-placement="right" tooltip="{{indexedElements[pointSelected.questionnaire].filters[key].usages}}"></i>
                                 </td>
                                 <td style="padding-left:{{indexedElements[pointSelected.questionnaire].filters[key].filter.hFilters[hFilterId].level+1}}em;">
                                     {{indexedElements[pointSelected.questionnaire].filters[key].filter.name}}
                                     <a href='/admin/filter/edit/{{key}}' target='_blank'><i class='fa fa-pencil'></i></a>
 
                                 </td>
-                                <td style='width:7em' class='text-right'>
+                                <td style='width:{{lastCol}}' class='text-right'>
                                     <span ng-if='indexedElements[pointSelected.questionnaire].filters[key].ignored || !indexedElements[pointSelected.questionnaire].filters[key].ignored && indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[part.name] === undefined'>
                                         <span ng-show='indexedElements[pointSelected.questionnaire].filters[key].values[part.name]' class='text-success'>
                                             {{indexedElements[pointSelected.questionnaire].filters[key].values[part.name]}}&nbsp;%
@@ -105,17 +107,16 @@
                         <tbody ng-if="indexedElements[pointSelected.questionnaire].usages">
                             <tr class="active">
                                 <td>
-                                    <i class='fa fa-lg fa-gims-usage popover-word-break'></i>
+                                    <i class='fa fa-lg fa-gims-usage'></i>
                                 </td>
                                 <td colspan='2'>Questionnaire's calculations / ratios / estimates</td>
                             </tr>
                             <tr ng-repeat="usage in indexedElements[pointSelected.questionnaire].usages | orderBy:'rule.name'">
-                                <td><i class='fa fa-lg fa-gims-usage popover-word-break' popover-trigger="mouseenter" popover-placement="right" popover="{{usage.rule.formula}}" ></i></td>
+                                <td><i class='fa fa-lg fa-gims-usage'></i></td>
                                 <td colspan='1'>{{usage.rule.name}}</td>
                                 <td class='text-right'>
-                                    <span ng-show='usage.value' class='text-success'>
+                                    <span ng-show='usage.value'>
                                         {{usage.value}} %
-                                        <i class='fa fa-check-circle-o fa-fw'></i>
                                     </span>
                                 </td>
                             </tr>
@@ -134,7 +135,9 @@
 
                     <table class='table'>
                         <tr class='active'>
-                            <th style='width:60px'>
+                            <th style='width:{{firstCol}}'>
+                                <i class='fa fa-lg'> </i>
+                                <i class='fa fa-lg'> </i>
                                 <i class="fa fa-lg fa-gims-filter text-primary" ng-click="toggleQuestionnaire(questionnaireId, false)" tooltip-placement="right" tooltip="Include filters" ></i>
                             </th>
                             <th colspan='2'>
@@ -146,7 +149,7 @@
                         <!-- Excluded Filters -->
                         <tbody ng-repeat="(hFilterId, hFilter) in indexedElements[questionnaireId].hFilters">
                         <tr ng-repeat="key in sort(indexedElements[questionnaireId].filters, hFilterId)" ng-show='indexedElements[questionnaireId].filters[key].filter.hFilters[hFilterId].level >= 0 && indexedElements[questionnaireId].filters[key].filter.ignored' class='text-muted'>
-                            <td style='width:60px'>
+                            <td s>
                                 <i class="fa fa-lg fa-gims-filter text-muted" ng-click="ignoreFilter(indexedElements[questionnaireId].filters[key], !indexedElements[questionnaireId].filters[key].filter.ignored, true)"></i>
                                 <i ng-if="globalIndexedFilters[key] == null && indexedElements[questionnaireId].filters[key].filter.ignored" class="fa fa-gims-questionnaire opacity33" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[questionnaireId].filters[key], true)" tooltip-placement="right" tooltip="Ignore filter for all questionnaire"></i>
                                 <i ng-if="globalIndexedFilters[key] == null && !indexedElements[questionnaireId].filters[key].filter.ignored" class="fa fa-gims-questionnaire opacity33" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[questionnaireId].filters[key], false)" tooltip-placement="right" tooltip="Include filter for all questionnaire"></i>
@@ -157,7 +160,7 @@
                                 {{indexedElements[questionnaireId].filters[key].filter.name}}
                                 <a href='/admin/filter/edit/{{key}}' target='_blank'><i class='fa fa-pencil'></i></a>
                             </td>
-                            <td style='width:7em' class='text-right'>
+                            <td style='width:{{lastCol}}' class='text-right'>
                                 <span ng-show='indexedElements[questionnaireId].filters[key].values[part.name]' class='text-danger'>
                                     {{indexedElements[questionnaireId].filters[key].values[part.name]}}&nbsp;%
                                     <i class='fa fa-times-circle-o fa-fw'></i>

@@ -567,6 +567,10 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.hFilters = {};
             }
 
+            if (filter.usages) {
+                $scope.indexedElements[questionnaireId].filters[filter.filter.id].usages = filter.usages;
+            }
+
             // assigns root filters to which this filter belongs to.
             _.forEach(filter.filter.hFilters, function(hFilter, hFilterId) {
                 if (_.isNull(hFilter)) {

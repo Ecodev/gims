@@ -267,7 +267,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
         foreach ($lines as &$serie) {
             $filter = $filterRepository->findOneById($serie['id']);
-            $serie['color'] = $filter->getGenericColor($ratio);//Utility::getColor($serie['id'], $ratio);
+            $serie['color'] = $filter->getGenericColor($ratio); //Utility::getColor($serie['id'], $ratio);
             $serie['name'] .= $suffix;
             $serie['type'] = 'line';
 
@@ -287,7 +287,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $data = $calculator->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
             $scatter = array(
                 'type' => 'scatter',
-                'color' => $filter->getGenericColor($ratio), //Utility::getColor($filter->getId(), $ratio),
+                'color' => $filter->getGenericColor($ratio),
+                //Utility::getColor($filter->getId(), $ratio),
                 'marker' => array('symbol' => $this->symbols[$this->getConstantKey($filter->getName()) % count($this->symbols)]),
                 'name' => $filter->getName() . $suffix,
                 'allowPointSelect' => false,
@@ -351,21 +352,14 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $calculator = new \Application\Service\Calculator\Calculator();
             $calculator->setServiceLocator($this->getServiceLocator());
 
+            /** @var  \Application\Service\Hydrator $hydrator */
+            $hydrator = new \Application\Service\Hydrator();
+
             if ($this->params()->fromQuery('getQuestionnaireUsages') === 'true') {
-                $result['usages'] = array();
-                $questionnaireUsages = $questionnaire->getQuestionnaireUsages();
-                $hydrator = new \Application\Service\Hydrator();
-                foreach ($questionnaireUsages as $questionnaireUsage) {
-                    if ($questionnaireUsage->getPart() === $part) {
-                        $extractedUsage = $hydrator->extract($questionnaireUsage, array('part', 'rule', 'rule.name', 'rule.formula'));;
-                        $value = $calculator->computeFormula($questionnaireUsage);
-                        $value = \Application\Utility::decimalToRoundedPercent($value);
-                        $extractedUsage['value'] = $value;
-                        $result['usages'][] = $extractedUsage;
-                    }
+                if ($usages = $this->extractUsages($questionnaire->getQuestionnaireUsages(), null, $part, $hydrator, $calculator)) {
+                    $result['usages'] = $usages;
                 }
             }
-
 
             /**
              * This call recovers ignored questionnaires and filters.
@@ -376,8 +370,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             if (isset($ignoredFiltersByQuestionnaire['byQuestionnaire']) // if there are ignored questionnaire
                 && !isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) // and if questionnaire is not ignored
                 || isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) // or if he's ignored but he has filters (that means he's not ignored himself, but some filters are)
-                && count($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) > 0)
-            {
+                && count($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) > 0
+            ) {
                 // compute filters
                 foreach ($filters as $filterId) {
                     $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
@@ -389,9 +383,23 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     $result['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields);
                     $resultWithoutIgnoredFilters['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, $ignoredFiltersByQuestionnaire);
 
-                    for ($i = 0 ; $i < count($result['filters'][$filterId]); $i++) {
+                    for ($i = 0; $i < count($result['filters'][$filterId]); $i++) {
                         if ($result['filters'][$filterId][$i]['values'][0][$part->getName()] != $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values'][0][$part->getName()]) {
                             $result['filters'][$filterId][$i]['valuesWithoutIgnored'] = $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values'];
+                        }
+                    }
+
+                    foreach ($result['filters'][$filterId] as &$flatFilter) {
+                        $fqus = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($flatFilter['filter']['id'])->getFilterQuestionnaireUsages();
+                        foreach($fqus as $fqu){
+                            if ($fqu->getPart() === $part && $fqu->getQuestionnaire() === $questionnaire){
+                                if (!isset($flatFilter['usages'])) {
+                                    $flatFilter['usages'] = $fqu->getRule()->getName();
+                                } else {
+                                    $flatFilter['usages'] .= ', '.$fqu->getRule()->getName();
+                                }
+
+                            }
                         }
                     }
                 }
@@ -404,6 +412,28 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
             return new NumericJsonModel(array('message' => 'questionnaire not found'));
         }
+    }
+
+    protected function extractUsages($usages, $questionnaire = null, $part, $hydrator, $calculator)
+    {
+        $extractedUsages = array();
+        foreach ($usages as $usage) {
+            if ($usage->getPart() === $part
+                && (!$questionnaire || $questionnaire && $usage->getQuestionnaire() === $questionnaire)
+            ) {
+                $extractedUsage = $hydrator->extract($usage, array(
+                    'part',
+                    'rule',
+                    'rule.name',
+                ));
+                $value = $calculator->computeFormula($usage);
+                $value = \Application\Utility::decimalToRoundedPercent($value);
+                $extractedUsage['value'] = $value;
+                $extractedUsages[] = $extractedUsage;
+            }
+        }
+
+        return $extractedUsages;
     }
 
     /**
