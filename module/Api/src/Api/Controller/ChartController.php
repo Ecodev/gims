@@ -382,8 +382,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     $tableController = new TableController();
                     $tableController->setServiceLocator($this->getServiceLocator());
 
-                    $result['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields);
-                    $resultWithoutIgnoredFilters['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, $ignoredFiltersByQuestionnaire);
+                    $result['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, array(), true);
+                    $resultWithoutIgnoredFilters['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, $ignoredFiltersByQuestionnaire, true);
 
                     for ($i = 0; $i < count($result['filters'][$filterId]); $i++) {
                         if ($result['filters'][$filterId][$i]['values'][0][$part->getName()] != $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values'][0][$part->getName()]) {
