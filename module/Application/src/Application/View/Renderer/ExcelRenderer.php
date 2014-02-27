@@ -66,12 +66,6 @@ class ExcelRenderer extends \Zend\View\Renderer\PhpRenderer
         // Render the workbook
         parent::render($nameOrModel, $values);
 
-        // Send common headers
-        header("Content-Disposition: attachment; filename=\"$filename\"");
-        header("Expires: 0");
-        header("Cache-Control: must-revalidate, post-check=0,pre-check=0");
-        header("Pragma: public");
-
         // Save Excel 2007 file or CSV
         if ($extension == 'xlsx') {
             header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -81,8 +75,27 @@ class ExcelRenderer extends \Zend\View\Renderer\PhpRenderer
             $objWriter = new \PHPExcel_Writer_CSV($workbook);
         }
 
+        // Save file on disk so we can get its size
+        $dir = 'data/cache/phpexcel';
+        @mkdir($dir);
+        $tempPath = $dir . '/' . time() . '_' . $filename;
+        $objWriter->save($tempPath);
 
-        $objWriter->save('php://output');
+        // Send common headers
+        header('Content-Description: File Transfer');
+        header('Content-Transfer-Encoding: binary');
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header("Expires: 0");
+        header("Cache-Control: must-revalidate, post-check=0,pre-check=0");
+        header('Pragma: no-cache');
+        header('Content-Length: ' . filesize($tempPath));
+
+        // Send the file
+        ob_clean();
+        flush();
+        @readfile($tempPath);
+
+        unlink($tempPath);
     }
 
 }
