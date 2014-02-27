@@ -70,7 +70,7 @@
     <target name="clean">
         <echo msg="Clean..." />
         <delete includeemptydirs="true" quiet="true">
-            <fileset dir="data/logs" includes="**/*" excludes=".gitkeep" />
+            <fileset dir="data/logs" includes="**/*" excludes="**/.gitkeep" />
         </delete>
         <delete quiet="true">
             <fileset dir="data/cache">
