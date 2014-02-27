@@ -2,10 +2,7 @@
     "name": "ecodev/gims",
     "description": "GIMS",
     "homepage": "http://www.gimsinitiative.org",
-    "repositories": [{
-            "type": "vcs",
-            "url": "https://github.com/mwillbanks/ZfcTwitterBootstrap"
-        },
+    "repositories": [
         {
             "type": "vcs",
             "url": "https://github.com/PowerKiKi/PHPExcel"
