@@ -1,1 +1,1 @@
-../sprintf/sprintf.js
+../sprintf/src/sprintf.js

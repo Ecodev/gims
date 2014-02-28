@@ -1,0 +1,1 @@
+../angular-ui-select2/src/select2.js

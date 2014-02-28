@@ -1,1 +1,1 @@
-../highcharts/highcharts.src.js
+../highcharts.com/js/highcharts.src.js

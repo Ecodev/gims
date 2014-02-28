@@ -71,7 +71,7 @@
                 </div>
 
             </tab>
-            <tab heading="Users" ui-if="questionnaire.id">
+            <tab heading="Users" ng-if="questionnaire.id">
                 <gims-relations relation="UserQuestionnaire" first="questionnaire" second="user" third="role"></gims-relations>
             </tab>
         </tabset>

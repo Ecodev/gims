@@ -19,7 +19,7 @@ sudo apt-get -qq update
 sudo apt-get -qq install postgresql-9.1-postgis-2.0 rubygems nodejs apache2 php5-pgsql php5-cli php5-gd php5-mcrypt php5-intl php5-json
 
 echo "Installing JS testing tools..."
-sudo npm --global --quiet install karma karma-ng-scenario phantomjs uglify-js ngmin
+sudo npm --global --quiet install karma karma-ng-scenario phantomjs uglify-js ngmin bower
 
 # For Travis only
 if [[ ! -z $TRAVIS ]]; then

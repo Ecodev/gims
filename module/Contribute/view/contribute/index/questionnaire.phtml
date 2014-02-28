@@ -8,7 +8,7 @@
 <div class="alert alert-info" ng-hide="isLoading + questions"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select questionnaire to be answered.') ?></div>
 
 <div ng-show="questions.length">
-    <gims-contribute-questionnaire-jmp ng-show="isJmp"></gims-contribute-questionnaire-jmp>
-    <gims-contribute-questionnaire-glass ng-show="!isJmp"></gims-contribute-questionnaire-glass>
+    <gims-contribute-questionnaire-jmp ng-if="isJmp"></gims-contribute-questionnaire-jmp>
+    <gims-contribute-questionnaire-glass ng-if="!isJmp"></gims-contribute-questionnaire-glass>
 </div>
 </div>

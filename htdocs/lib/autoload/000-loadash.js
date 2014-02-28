@@ -1,1 +1,1 @@
-../lodash/lodash.js
+../lodash/dist/lodash.js

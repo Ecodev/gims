@@ -115,11 +115,11 @@
 
             </tab>
 
-            <tab heading="Surveys" ui-if="user.id">
+            <tab heading="Surveys" ng-if="user.id">
                 <gims-relations relation="UserSurvey" first="user" second="survey" third="role" format="code"></gims-relations>
             </tab>
 
-            <tab heading="Questionnaires" ui-if="user.id">
+            <tab heading="Questionnaires" ng-if="user.id">
                 <gims-relations relation="UserQuestionnaire" first="user" second="questionnaire" third="role"></gims-relations>
             </tab>
         </tabset>

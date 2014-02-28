@@ -202,7 +202,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     // Load survey if possible
     var params = $location.search();
     if (params.survey !== undefined) {
-        $scope.survey = Restangular.one('survey', params.survey).get();
+        $scope.survey = Restangular.one('survey', params.survey).get().$object;
     }
 });
 

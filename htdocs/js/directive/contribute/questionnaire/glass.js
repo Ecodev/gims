@@ -61,7 +61,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
                     });
 
                     // preparing hierarchic questions : used for nav and for validation form
-                    $scope.hierarchicQuestions = $scope.getChildren($scope.questionnaire, $scope.questions);
+                    $scope.hierarchicQuestions = $scope.getChildren(_.cloneDeep($scope.questionnaire), $scope.questions);
                     $scope.questionnaire.children = $scope.hierarchicQuestions;
                     QuestionAssistant.updateQuestion($scope.questionnaire, $scope.index, true);
                     $scope.refreshQuestion();
@@ -75,7 +75,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireGlass',
             {
                 if($scope.questionnaire.statusCode==2 || $scope.questionnaire.statusCode==3) {
                     if (newStatus === 'completed' && $scope.questionnaire.status === 'new' ||
-                        newStatus === 'validated' && $scope.questionnaire.permissions.validate && $scope.questionnaire.status === 'completed') {
+                            newStatus === 'validated' && $scope.questionnaire.permissions.validate && $scope.questionnaire.status === 'completed') {
                         $scope.questionnaire.status = newStatus;
 
                         // -> cyclic structure error -> remove children

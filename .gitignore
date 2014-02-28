@@ -5,6 +5,8 @@ data/docs/api
 data/logs
 htdocs/css
 htdocs/tmp
+htdocs/lib
+!htdocs/lib/autoload
 nbproject/private
 vendor
 reset.sh

@@ -1,1 +1,1 @@
-../restangular/restangular.js
+../restangular/dist/restangular.js

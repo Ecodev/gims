@@ -35,7 +35,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
         require: 'ngModel',
         replace: true,
         transclude: true,
-        template: '<input ui-select2="options" ng-model="model" ng-disabled="disabled"/>',
+        template: '<input type="hidden" ui-select2="options" ng-model="model" ng-disabled="disabled"/>',
         scope: {
             api: '@',
             name: '@',
@@ -53,6 +53,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
         link: function(scope, element, attr, ctrl) {
         },
         controller: function($scope, $attrs, Restangular, CachedRestangular, $location, $route, $routeParams) {
+            var items = [];
             var api = $scope.api;
             var name = $scope.name || api; // default key to same name as route
             var fromUrl = name == 'id' ? $routeParams.id : $location.search()[name];
@@ -68,7 +69,10 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
 
                     // Either get the single ID, or the multiple IDs
                     var id;
-                    if (o && o.id) {
+                    if (_.isString(o)) {
+                        id = o;
+                    }
+                    else if (o && o.id) {
                         id = o.id;
                     }
                     else if (o) {
@@ -117,11 +121,11 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                         results: function(data, page) { // parse the results into the format expected by Select2.
 
                             // Make sure to have Restangular object
-                            var restangularizedData = _.map(data.items, function(item) {
+                            items = _.map(data.items, function(item) {
                                 return Restangular.restangularizeElement(null, item, api);
                             });
 
-                            return {results: restangularizedData};
+                            return {results: items};
                         }
                     }
                 };
@@ -141,7 +145,6 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             else
             {
                 // Load items and re-select item based on URL params (if any)
-                var items;
                 myRestangular.all(api).getList(_.merge({perPage: 1000}, $scope.queryparams)).then(function(data) {
 
                     items = data;
@@ -252,14 +255,20 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 }
             }
 
-
             $scope.options.formatResult = formatResult;
             $scope.options.formatSelection = formatSelection;
             $scope.options.containerCssClass = $scope.containerCssClass;
 
             // Required to be able to clear the selected value (used in directive gimsRelation)
             $scope.options.initSelection = function(element, callback) {
-                callback($(element).data('$ngModelController').$modelValue);
+                var controller = $(element).data('$ngModelController');
+                var selectedId = controller ? controller.$modelValue : null;
+
+                var selectedItem = _.find(items, function(item) {
+                  return item.id == selectedId;
+                });
+
+                callback(selectedItem);
             };
         }
     };

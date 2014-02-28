@@ -1,1 +1,1 @@
-../jquery/jquery-2.1.0.js
+../jquery/dist/jquery.js

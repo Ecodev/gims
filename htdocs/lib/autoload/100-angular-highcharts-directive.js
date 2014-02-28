@@ -1,1 +1,1 @@
-../angular-highcharts-directive/src/directives/highchart.js
+/sites/3dparty/angular-highcharts-directive/src/directives/highchart.js

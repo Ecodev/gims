@@ -21,6 +21,9 @@ cd $DIR/..
 echo "Updating git submodules..."
 git submodule update --init --recursive --force
 
+echo "Updating Bower packages..."
+bower install
+
 echo "Updating all PHP dependencies via composer..."
 ./composer.phar install --dev
 

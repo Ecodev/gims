@@ -1,1 +1,1 @@
-../angular/angular-route.js
+../angular-route/angular-route.js

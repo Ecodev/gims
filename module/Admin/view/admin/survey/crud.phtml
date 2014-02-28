@@ -78,15 +78,15 @@
                 </div>
             </tab>
 
-            <tab heading="Questions" active="tabs[1]" select="selectTab(1)" ui-if="survey.id">
+            <tab heading="Questions" active="tabs[1]" select="selectTab(1)" ng-if="survey.id">
                 <div gims-grid-question></div>
             </tab>
 
-            <tab heading="Questionnaires" active="tabs[2]" select="selectTab(2)"  ui-if="survey.id">
+            <tab heading="Questionnaires" active="tabs[2]" select="selectTab(2)" ng-if="survey.id">
                 <div gims-grid-questionnaire></div>
             </tab>
 
-            <tab heading="Users" active="tabs[3]" select="selectTab(3)"  ui-if="survey.id">
+            <tab heading="Users" active="tabs[3]" select="selectTab(3)" ng-if="survey.id">
                 <gims-relations relation="UserSurvey" first="survey" second="user" third="role"></gims-relations>
             </tab>
         </tabset>

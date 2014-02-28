@@ -1,1 +1,1 @@
-../angular/angular-resource.js
+../angular-resource/angular-resource.js
