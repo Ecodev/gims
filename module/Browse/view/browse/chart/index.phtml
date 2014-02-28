@@ -113,15 +113,15 @@
                         <!-- Questionnaire Usages -->
                         <tbody ng-if="indexedElements[pointSelected.questionnaire].usages">
                             <tr class="active">
-                                <td>
+                                <td  style='width:{{firstCol}}'>
                                     <i class='fa fa-lg fa-gims-usage'></i>
                                 </td>
                                 <td colspan='2'>Questionnaire's calculations / ratios / estimates</td>
                             </tr>
                             <tr ng-repeat="usage in indexedElements[pointSelected.questionnaire].usages | orderBy:'rule.name'">
-                                <td><i class='fa fa-lg fa-gims-usage'></i></td>
+                                <td style='width:{{firstCol}}' ><i class='fa fa-lg fa-gims-usage'></i></td>
                                 <td colspan='1'>{{usage.rule.name}}</td>
-                                <td class='text-right'>
+                                <td style='width:{{lastCol}}' class='text-right'>
                                     <span ng-show='usage.value'>
                                         {{usage.value}} %
                                     </span>
@@ -156,7 +156,7 @@
                         <!-- Excluded Filters -->
                         <tbody ng-repeat="(hFilterId, hFilter) in indexedElements[questionnaireId].hFilters">
                         <tr ng-repeat="key in sort(indexedElements[questionnaireId].filters, hFilterId)" ng-show='indexedElements[questionnaireId].filters[key].filter.hFilters[hFilterId].level >= 0 && indexedElements[questionnaireId].filters[key].filter.ignored' class='text-muted'>
-                            <td s>
+                            <td style='width:{{firstCol}}'>
                                 <i class="fa fa-lg fa-gims-filter text-muted" ng-click="ignoreFilter(indexedElements[questionnaireId].filters[key], !indexedElements[questionnaireId].filters[key].filter.ignored, true)"></i>
                                 <i ng-if="globalIndexedFilters[key] == null && indexedElements[questionnaireId].filters[key].filter.ignored" class="fa fa-gims-questionnaire opacity33" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[questionnaireId].filters[key], true)" tooltip-placement="right" tooltip="Ignore filter for all questionnaire"></i>
                                 <i ng-if="globalIndexedFilters[key] == null && !indexedElements[questionnaireId].filters[key].filter.ignored" class="fa fa-gims-questionnaire opacity33" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[questionnaireId].filters[key], false)" tooltip-placement="right" tooltip="Include filter for all questionnaire"></i>
