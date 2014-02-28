@@ -46,6 +46,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                             })
                         }
                     });
+                    $scope.getIgnoredElements(true);
                     return false;
                 });
             }
