@@ -424,13 +424,14 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         $scope.columnDefs = [{
             field: 'year',
             displayName :'Year',
+            enableColumnResize:true,
             width:'100px'
         }];
 
         var arrayData = [];
         _.forEach(data.series, function(serie){
             if (serie.type == 'line'
-                && ((_.isUndefined(ignoredElements) || ignoredElements.length == 0) && serie.isIgnored === false
+                && ((_.isUndefined(ignoredElements) || ignoredElements.length == 0) && _.isUndefined(serie.isIgnored)
                 || ignoredElements.length > 0 && serie.isIgnored === true)
                 ) {
 
@@ -438,6 +439,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 $scope.columnDefs.push({
                     field: 'value'+serie.id,
                     displayName : serie.name,
+                    enableColumnResize:true,
                     bgcolor : serie.color,
                     headerCellTemplate: ''+
                         '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +

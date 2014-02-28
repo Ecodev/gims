@@ -269,9 +269,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $filter = $filterRepository->findOneById($serie['id']);
             $serie['color'] = $filter->getGenericColor($ratio);
             $serie['name'] .= $suffix;
-            $serie['isIgnored'] = $isIgnored;
-
             $serie['type'] = 'line';
+            if ($isIgnored) {
+                $serie['isIgnored'] = $isIgnored;
+            }
 
             if ($dashStyle) {
                 $serie['dashStyle'] = $dashStyle;
@@ -293,10 +294,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'marker' => array('symbol' => $this->symbols[$this->getConstantKey($filter->getName()) % count($this->symbols)]),
                 'name' => $filter->getName() . $suffix,
                 'allowPointSelect' => false,
-                'isIgnored' => $isIgnored,
                 // because we will use our own click handler
                 'data' => array(),
             );
+            if ($isIgnored) {
+                $scatter['isIgnored'] = $isIgnored;
+            }
 
             foreach ($data['values'] as $questionnaireId => $value) {
 
