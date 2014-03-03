@@ -54,6 +54,7 @@ angular.module('myApp.directives').directive('gimsChoiQuestion', function (Quest
 
                 var newAnswer = $scope.index[identifier];
                 if(choice) {
+                    newAnswer.valueChoice = {};
                     newAnswer.valueChoice.id = choice.id;
                     newAnswer.valueChoice.value = choice.value;
                     newAnswer.valuePercent = choice.value;
