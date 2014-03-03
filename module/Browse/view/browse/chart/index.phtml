@@ -72,7 +72,7 @@
                                     <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == false" class="fa fa-gims-questionnaire" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], true, pointSelected.questionnaire)" tooltip-placement="right" tooltip="Ignore filter for all questionnaire"></i>
                                     <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == true" class="fa fa-gims-questionnaire text-muted" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], false, pointSelected.questionnaire)" tooltip-placement="right" tooltip="Include filter for all questionnaire"></i>
 
-                                    <i ng-if="indexedElements[pointSelected.questionnaire].filters[key].usages" class='fa fa-lg fa-gims-usage' style="color:{{usedFilters[hFilterId]}}" tooltip-placement="right" tooltip="{{indexedElements[pointSelected.questionnaire].filters[key].usages}}"></i>
+                                    <i ng-if="indexedElements[pointSelected.questionnaire].filters[key].usages" class='fa fa-lg fa-gims-usage' style="color:{{usedFilters[hFilterId]}}"></i> <!--tooltip-placement="right" tooltip="{{indexedElements[pointSelected.questionnaire].filters[key].usages}}"-->
                                 </td>
                                 <td style="padding-left:{{indexedElements[pointSelected.questionnaire].filters[key].filter.hFilters[hFilterId].level+1}}em;">
                                     {{indexedElements[pointSelected.questionnaire].filters[key].filter.name}}
