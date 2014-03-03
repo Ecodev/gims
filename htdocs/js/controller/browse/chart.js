@@ -30,7 +30,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 });
                 $scope.usedFilters = newUsedFilters;
 
-                _.forEach($scope.indexedElements, function(questionnaire){
+                // remove all filters that are nos used by current usedFilters
+                _.forEach($scope.indexedElements, function(questionnaire){ // select first questionnaire they return false to break and avoid to loop all questionnaires
                     questionnaire.hFilters = {};
                     _.forEach(questionnaire.filters, function(filter){
                         var found = false;
@@ -42,7 +43,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
                         if (!found) {
                             _.forEach($scope.indexedElements, function(questionnaireBis, questionnaireBisId){
-                                delete($scope.indexedElements[questionnaireBisId].filters[filter.filter.id]);
+                                if (!_.isUndefined($scope.indexedElements[questionnaireBisId].filters)) {
+                                    delete($scope.indexedElements[questionnaireBisId].filters[filter.filter.id]);
+                                }
                             })
                         }
                     });
@@ -231,7 +234,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         // browse each questionnaire
         _.forEach($scope.indexedElements, function(questionnaire, questionnaireId) {
             var ignoredElementsForQuestionnaire = [];
-            questionnaire.ignored = true;
+            if (questionnaire.filters) questionnaire.ignored = true;
             questionnaire.hasIgnoredFilters = false;
 
             // browse each filter of questionnaire
