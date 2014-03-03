@@ -33,19 +33,12 @@
     <div class="row show-grid">
 
         <!-- Chart -->
-        <div ng-class="{'col-xs-12 col-sm-7 col-md-7 col-lg-8' : hasIgnoredElements || pointSelected, 'col-md-12' : !hasIgnoredElements && !pointSelected}" >
+        <div ng-show='chart' ng-class="{'col-xs-12 col-sm-7 col-md-7 col-lg-8' : hasIgnoredElements || pointSelected, 'col-md-12' : !hasIgnoredElements && !pointSelected}" >
             <chart value="chart" type="area" height="400" chart-obj="chartObj" />
 
             <h2 class="text-center">Estimated coverage</h2>
             <div ng-grid="gridOptions" class="gridStyle"></div>
 
-            <!--pre>{{pointSelected|json}}</pre>
-            <pre>{{columnDefs|json}}</pre>
-            <pre>{{data|json}}</pre>
-            <!--pre>{{ignoredElements|json}}</pre>
-            <pre>{{concatenedIgnoredElements|json}}</pre>
-            <pre>{{globalIndexedFilters|json}}</pre-->
-            <pre>{{indexedElements|json}}</pre>
         </div>
 
         <!-- Right panel -->
