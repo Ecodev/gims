@@ -31,18 +31,18 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 $scope.usedFilters = newUsedFilters;
 
                 // remove all filters that are nos used by current usedFilters
-                _.forEach($scope.indexedElements, function(questionnaire){ // select first questionnaire they return false to break and avoid to loop all questionnaires
+                _.forEach($scope.indexedElements, function(questionnaire) { // select first questionnaire they return false to break and avoid to loop all questionnaires
                     questionnaire.hFilters = {};
-                    _.forEach(questionnaire.filters, function(filter){
+                    _.forEach(questionnaire.filters, function(filter) {
                         var found = false;
-                        _.forEach(filter.filter.hFilters, function(hFilter, hFilterId){
+                        _.forEach(filter.filter.hFilters, function(hFilter, hFilterId) {
                             if ($scope.usedFilters[hFilterId]) {
                                 found = true;
                             }
                         })
 
                         if (!found) {
-                            _.forEach($scope.indexedElements, function(questionnaireBis, questionnaireBisId){
+                            _.forEach($scope.indexedElements, function(questionnaireBis, questionnaireBisId) {
                                 if (!_.isUndefined($scope.indexedElements[questionnaireBisId].filters)) {
                                     delete($scope.indexedElements[questionnaireBisId].filters[filter.filter.id]);
                                 }
@@ -54,8 +54,10 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 });
             }
 
-            var callback = function(){
-                if ($scope.pointSelected) $scope.retrieveFiltersAndValues($scope.pointSelected.questionnaire);
+            var callback = function() {
+                if ($scope.pointSelected) {
+                    $scope.retrieveFiltersAndValues($scope.pointSelected.questionnaire);
+                }
                 $scope.initIgnoredElementsFromUrl();
             }
             $scope.refresh(false, callback);
@@ -139,21 +141,21 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                             ignoredElements: ignoredElements
                         }
                     }).success(function(data) {
-                            _.forEach(data.filters, function(hFilter, hFilterId) {
-                                _.map(data.filters[hFilterId], function(filter, index) {
-                                    if (!_.isUndefined($scope.indexedElements[questionnaireId].hFilters[hFilterId])) {
-                                        filter.filter.sorting = index + 1;
-                                        filter.filter.hFilters = {};
-                                        filter.filter.hFilters[hFilterId] = null;
-                                        $scope.cache({id: questionnaireId, usages: data.usages}, filter);
-                                    }
-                                });
+                        _.forEach(data.filters, function(hFilter, hFilterId) {
+                            _.map(data.filters[hFilterId], function(filter, index) {
+                                if (!_.isUndefined($scope.indexedElements[questionnaireId].hFilters[hFilterId])) {
+                                    filter.filter.sorting = index + 1;
+                                    filter.filter.hFilters = {};
+                                    filter.filter.hFilters[hFilterId] = null;
+                                    $scope.cache({id: questionnaireId, usages: data.usages}, filter);
+                                }
                             });
-
-                            $scope.initiateEmptyQuestionnairesWithLoadedData(questionnaireId, callback);
-                            $scope.getIgnoredElements(true);
-                            $scope.isLoading = false;
                         });
+
+                        $scope.initiateEmptyQuestionnairesWithLoadedData(questionnaireId, callback);
+                        $scope.getIgnoredElements(true);
+                        $scope.isLoading = false;
+                    });
                 });
             }
         }
@@ -234,7 +236,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         // browse each questionnaire
         _.forEach($scope.indexedElements, function(questionnaire, questionnaireId) {
             var ignoredElementsForQuestionnaire = [];
-            if (questionnaire.filters) questionnaire.ignored = true;
+            if (questionnaire.filters) {
+                questionnaire.ignored = true;
+            }
             questionnaire.hasIgnoredFilters = false;
 
             // browse each filter of questionnaire
@@ -373,33 +377,33 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                     ignoredElements: ignoredElements
                 }
             }).success(function(data) {
-                    data.plotOptions.scatter.dataLabels.formatter = function() {
-                        var questionnaire = {hFilters: {}};
-                        var ids = this.point.id.split(':');
-                        questionnaire.id = ids[1];
-                        questionnaire.name = this.point.name;
-                        questionnaire.hFilters[ids[0]] = null;
-                        $scope.cache(questionnaire);
-                        return $('<span/>').css({color: this.series.color}).text(this.point.name)[0].outerHTML;
-                    };
+                data.plotOptions.scatter.dataLabels.formatter = function() {
+                    var questionnaire = {hFilters: {}};
+                    var ids = this.point.id.split(':');
+                    questionnaire.id = ids[1];
+                    questionnaire.name = this.point.name;
+                    questionnaire.hFilters[ids[0]] = null;
+                    $scope.cache(questionnaire);
+                    return $('<span/>').css({color: this.series.color}).text(this.point.name)[0].outerHTML;
+                };
 
-                    data.plotOptions.scatter.point = {
-                        events: {
-                            click: function(e) {
-                                var ids = e.currentTarget.id.split(':');
-                                $scope.setPointSelected(e.currentTarget.id, e.currentTarget.questionnaire, e.currentTarget.name, ids[0]);
-                                $scope.$apply(); // this is needed because we are outside the AngularJS context (highcharts uses jQuery event handlers)
-                            }
+                data.plotOptions.scatter.point = {
+                    events: {
+                        click: function(e) {
+                            var ids = e.currentTarget.id.split(':');
+                            $scope.setPointSelected(e.currentTarget.id, e.currentTarget.questionnaire, e.currentTarget.name, ids[0]);
+                            $scope.$apply(); // this is needed because we are outside the AngularJS context (highcharts uses jQuery event handlers)
                         }
-                    };
-
-                    if (callback) {
-                        callback();
                     }
-                    $scope.chart = data;
-                    $scope.generateKeyIndicatorsTable(ignoredElements);
-                    $scope.isLoading = false;
-                });
+                };
+
+                if (callback) {
+                    callback();
+                }
+                $scope.chart = data;
+                $scope.generateKeyIndicatorsTable(ignoredElements);
+                $scope.isLoading = false;
+            });
         });
 
     }, 500);
@@ -413,8 +417,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         };
     }
 
-
-
     $scope.gridOptions = {
         columnDefs: 'columnDefs',
         plugins: [new ngGridFlexibleHeightPlugin({minHeight: 0})],
@@ -424,42 +426,35 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         var data = $scope.chart;
         $scope.isLoading = true;
 
-        $scope.columnDefs = [{
-            field: 'year',
-            displayName :'Year',
-            enableColumnResize:true,
-            width:'100px'
-        }];
+        $scope.columnDefs = [
+            {
+                field: 'year',
+                displayName: 'Year',
+                enableColumnResize: true,
+                width: '100px'
+            }
+        ];
 
         var arrayData = [];
-        _.forEach(data.series, function(serie){
-            if (serie.type == 'line'
-                && ((_.isUndefined(ignoredElements) || ignoredElements.length == 0) && _.isUndefined(serie.isIgnored)
-                || ignoredElements.length > 0 && serie.isIgnored === true)
-                ) {
+        _.forEach(data.series, function(serie) {
+            if (serie.type == 'line' && ((_.isUndefined(ignoredElements) || ignoredElements.length == 0) && _.isUndefined(serie.isIgnored) || ignoredElements.length > 0 && serie.isIgnored === true)) {
 
                 // create a column by filter on graph
                 $scope.columnDefs.push({
-                    field: 'value'+serie.id,
-                    displayName : serie.name,
-                    enableColumnResize:true,
-                    bgcolor : serie.color,
-                    headerCellTemplate: ''+
-                        '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
-                        '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" style="background:{{col.colDef.bgcolor}}" popover-placement="top" popover="{{col.displayName}}">' +
-                        '       {{col.displayName}}' +
-                        '   </div>' +
-                        '</div>',
-                    cellTemplate : ''+
-                        '<div class="ngCellText text-right" ng-class="col.colIndex()"><span ng-cell-text ng-show="{{row.entity.value'+serie.id+'!==null}}">{{row.entity.value'+serie.id+'}} %</span></div>'
+                    field: 'value' + serie.id,
+                    displayName: serie.name,
+                    enableColumnResize: true,
+                    bgcolor: serie.color,
+                    headerCellTemplate: '' + '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' + '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" style="background:{{col.colDef.bgcolor}}" popover-placement="top" popover="{{col.displayName}}">' + '       {{col.displayName}}' + '   </div>' + '</div>',
+                    cellTemplate: '' + '<div class="ngCellText text-right" ng-class="col.colIndex()"><span ng-cell-text ng-show="{{row.entity.value' + serie.id + '!==null}}">{{row.entity.value' + serie.id + '}} %</span></div>'
                 });
 
                 // retrieve data
-                _.forEach(serie.data, function(value, index){
+                _.forEach(serie.data, function(value, index) {
                     if (_.isUndefined(arrayData[index])) {
                         arrayData[index] = {};
                     }
-                    arrayData[index]['value'+serie.id] = value;
+                    arrayData[index]['value' + serie.id] = value;
                 });
 
             }
@@ -467,23 +462,27 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
         var startYear = data.plotOptions.line.pointStart;
         // before adding date to row, create and object with same properties but all to null
-        var nullEquivalentData = _.mapValues(arrayData[0], function(){return null;});
-        arrayData = _.map(arrayData, function(row, index){ row['year'] = startYear+index; return row; });
+        var nullEquivalentData = _.mapValues(arrayData[0], function() {
+            return null;
+        });
+        arrayData = _.map(arrayData, function(row, index) {
+            row['year'] = startYear + index;
+            return row;
+        });
 
         // use the equivalent null object to keep all except with null objects
         arrayData = _.rest(arrayData, nullEquivalentData);
 
         // remove useless dates
         var finalData = [];
-        angular.forEach(arrayData, function(row, index){
-            if (row['year'] % 5 == 0 && index < arrayData.length || index == arrayData.length-1){
+        angular.forEach(arrayData, function(row, index) {
+            if (row['year'] % 5 == 0 && index < arrayData.length || index == arrayData.length - 1) {
                 finalData.push(arrayData.splice(index, 1)[0]);
             }
         });
         $scope.data = finalData;
         $scope.isLoading = false;
     }
-
 
     /**
      *  Manage filters ignored actions
