@@ -142,7 +142,7 @@
         <br/>
 
         <br/>
-        <div ng-repeat="choice in question.choices" ng-show="isChoices" >
+        <div class="ng-trans ng-trans-flip-y" ng-repeat="choice in question.choices" ng-show="isChoices">
             <div ng-form name='myInnerForm' class="form-group" ng-class="{'has-error': myInnerForm.choiceName.$invalid || myInnerForm.choiceValue.$invalid}">
                 <label class="control-label col-md-2" for="choiceLabel">Choice {{$index + 1}}</label>
                 <div class='col-md-6'>
@@ -185,12 +185,14 @@
         </div>
 
 
+        <!-- @todo : correct embeded ng-grid
         <div class="form-group form-horizontal" ng-show="isChapter" >
             <label class="control-label col-md-2" for="question.sorting">Included questions</label>
             <div class='col-md-8'>
                 <div gims-grid-question></div>
             </div>
         </div>
+        -->
 
     </form>
 
