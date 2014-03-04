@@ -11,16 +11,16 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
     // @TODO : manage value null and integer value
     $scope.percentages = [
         {text: '100%', value: '1.000'},
-        {text: '90%', value: '0.900'},
-        {text: '80%', value: '0.800'},
-        {text: '70%', value: '0.700'},
-        {text: '60%', value: '0.600'},
-        {text: '50%', value: '0.500'},
-        {text: '40%', value: '0.400'},
-        {text: '30%', value: '0.300'},
-        {text: '20%', value: '0.200'},
-        {text: '10%', value: '0.100'},
-        {text: '0%', value: '0.000'}
+        {text: '90%',  value: '0.900'},
+        {text: '80%',  value: '0.800'},
+        {text: '70%',  value: '0.700'},
+        {text: '60%',  value: '0.600'},
+        {text: '50%',  value: '0.500'},
+        {text: '40%',  value: '0.400'},
+        {text: '30%',  value: '0.300'},
+        {text: '20%',  value: '0.200'},
+        {text: '10%',  value: '0.100'},
+        {text: '0%',   value: '0.000'}
     ];
 
     $scope.params = {fields: 'paths'};
@@ -154,8 +154,9 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
     };
 
     $scope.chapterList = [];
-    $scope.setParentQuestions = function(surveyId) {
-        Restangular.one('survey', surveyId).all('question').getList({fields: 'chapter,level,type'}).then(function(questions) {
+
+    $scope.setParentQuestions = function (survey_id) {
+        Restangular.one('survey', survey_id).all('question').getList({fields:'chapter,level,type',perPage:1000}).then(function (questions) {
 
             angular.forEach(questions, function(question) {
                 if (question.type == 'Chapter') {
