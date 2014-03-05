@@ -21,7 +21,7 @@ angular.module('myApp.directives')
                 scope: {
                     content: '='
                 },
-                link: function(element, attrs) {
+                link: function(scope, element, attrs) {
 
                     var returnUrl = '';
                     if (attrs.origin) {
