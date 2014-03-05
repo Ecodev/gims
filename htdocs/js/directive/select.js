@@ -133,6 +133,12 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 // Reload a single or multiple items if we have its ID from URL
                 if (idsFromUrl.length == 1) {
                     myRestangular.one(api, fromUrl).get($scope.queryparams).then(function(item) {
+
+                        // If select2 is in multiple mode, we need to return an array, even if we have a single ID
+                        if (!_.isUndefined($attrs.multiple)) {
+                            item = [item];
+                        }
+
                         $scope[$attrs.ngModel] = item;
                     });
                 } else if (idsFromUrl.length > 1) {
