@@ -28,21 +28,21 @@
         </div>
     </form>
 
-    <div class="alert alert-info" ng-hide="chart"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?></div>
+    <div class="alert alert-info ng-trans ng-trans-fade-up easeInOutCubic" ng-hide="chart"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?></div>
 
     <div class="row show-grid">
 
         <!-- Chart -->
-        <div ng-show='chart' ng-class="{'col-xs-12 col-sm-7 col-md-7 col-lg-8' : hasIgnoredElements || pointSelected, 'col-md-12' : !hasIgnoredElements && !pointSelected}" >
+        <div ng-show='chart' class='ng-trans ng-trans-fade-down easeInOutCubic' ng-class="{'col-xs-12 col-sm-7 col-md-7 col-lg-8' : hasIgnoredElements || pointSelected, 'col-md-12' : !hasIgnoredElements && !pointSelected}" >
+
             <chart value="chart" type="area" height="400" chart-obj="chartObj" />
 
             <h2 class="text-center">Estimated coverage</h2>
             <div ng-grid="gridOptions" class="gridStyle"></div>
-
         </div>
 
         <!-- Right panel -->
-        <div id='chartPanel' class="col-xs-12 col-sm-5 col-md-5 col-lg-4" ng-show='hasIgnoredElements || pointSelected' >
+        <div id='chartPanel' class="ng-trans ng-trans-slide-right easeInOutSine col-xs-12 col-sm-5 col-md-5 col-lg-4"  ng-animate ng-show='hasIgnoredElements || pointSelected' >
 
             <!-- Panel top part : selected questionnaire and filters -->
             <div ng-show='pointSelected'>

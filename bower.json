@@ -20,6 +20,7 @@
     "restangular": "v1.3.1",
     "sprintf": "v0.7",
     "angular-ui-utils": "bower",
-    "autofill-event": "~1.0.0"
+    "autofill-event": "~1.0.0",
+    "angular-animate": "~1.2.14"
   }
 }

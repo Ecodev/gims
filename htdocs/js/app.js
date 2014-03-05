@@ -12,8 +12,9 @@ angular.module('myApp', [
     'myApp.directives',
     'http-auth-interceptor',
     'chartsExample.directives',
-    'colorpicker.module'
-]).
+    'colorpicker.module',
+    'ngAnimate'
+    ]).
         config(function($routeProvider, $locationProvider, RestangularProvider) {
             'use strict';
 

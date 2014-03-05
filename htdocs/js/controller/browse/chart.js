@@ -13,7 +13,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * Executes when country, part or filterset are changed
      * When filter filterset is changed, rebuilds the list of the hFilters used.
      */
-    var uniqueAjaxRequest;
     $scope.$watch('{country:country.id, part:part.id, filterSet:filterSet}', function(newObj, oldObj) {
         if ($scope.country && $scope.part && $scope.filterSet) {
 
@@ -69,7 +68,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         // We throw an window.resize event to force Highcharts to reflow and adapt to its new size
         $timeout(function() {
             jQuery(window).resize();
-        }, 0);
+        }, 350); // 350 to resize after animation of panel
 
         if (pointSelected) {
             // select point and then recover the cached questionnaire by reference
@@ -329,8 +328,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
                 $timeout(function() {
                     jQuery(window).resize();
-                }, 0);
-            };
+                }, 350)
+            }
 
             var firstQuestionnaire = ignoredQuestionnaires[0].split(':');
             $scope.retrieveFiltersAndValues(firstQuestionnaire[0], function() {
@@ -346,14 +345,15 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * @param callback
      */
     $scope.refresh = function(refreshUrl, callback) {
+
         $scope.isLoading = true;
-        $timeout.cancel(uniqueAjaxRequest);
-        var ignoredElements = refreshUrl ? $scope.getIgnoredElements(refreshUrl).join(',') : $location.search().ignoredElements;
-        $scope.refreshChart(refreshUrl, ignoredElements, callback);
+        var ignoredElements = refreshUrl ? $scope.getIgnoredElements(refreshUrl).join(',') : $location.search()['ignoredElements'];
+        $scope.refreshChart(refreshUrl, ignoredElements, callback)
     };
 
     var refreshCanceler;
     $scope.refreshChart = _.debounce(function(refreshUrl, ignoredElements, callback) {
+        //$scope.chart = null;
         var filterSets = _.map($scope.filterSet, function(filterSet) {
             return filterSet.id;
         });
