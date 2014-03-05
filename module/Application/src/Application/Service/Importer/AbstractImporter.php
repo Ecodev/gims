@@ -532,7 +532,7 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Other unimproved" => array(
                     'row' => null,
-                    'children' => array(-10, 30, 52, 53, 54, 55, 56, 80),
+                    'children' => array(80),
                     'excludes' => null,
                     'isImproved' => false,
                     'formulas' => array(

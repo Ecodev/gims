@@ -642,70 +642,42 @@
                     "id": "169:2",
                     "questionnaire": 2,
                     "x": 1994,
-                    "y": 62.5
+                    "y": 0.4
                 },
                 {
                     "name": "MICS94",
                     "id": "169:3",
                     "questionnaire": 3,
                     "x": 1994,
-                    "y": 100.9
+                    "y": 34.8
                 },
                 {
                     "name": "MICS95",
                     "id": "169:4",
                     "questionnaire": 4,
                     "x": 1995,
-                    "y": 100.8
+                    "y": 31.2
                 },
                 {
                     "name": "MICS96",
                     "id": "169:5",
                     "questionnaire": 5,
                     "x": 1996,
-                    "y": 101.6
+                    "y": 19.5
                 },
                 {
                     "name": "DHS97",
                     "id": "169:6",
                     "questionnaire": 6,
                     "x": 1997,
-                    "y": 66.7
-                },
-                {
-                    "name": "SVRS98",
-                    "id": "169:7",
-                    "questionnaire": 7,
-                    "x": 1998,
-                    "y": 71.6
-                },
-                {
-                    "name": "MICS99",
-                    "id": "169:8",
-                    "questionnaire": 8,
-                    "x": 1999,
-                    "y": 78.0
-                },
-                {
-                    "name": "PP00",
-                    "id": "169:9",
-                    "questionnaire": 9,
-                    "x": 2000,
-                    "y": 86.9
+                    "y": 0.2
                 },
                 {
                     "name": "DHS00",
                     "id": "169:10",
                     "questionnaire": 10,
                     "x": 2000,
-                    "y": 71.8
-                },
-                {
-                    "name": "HIES00",
-                    "id": "169:11",
-                    "questionnaire": 11,
-                    "x": 2000,
-                    "y": 77.3
+                    "y": 0.1
                 },
                 {
                     "name": "CEN01",
@@ -715,74 +687,25 @@
                     "y": 46.1
                 },
                 {
-                    "name": "MHS01",
-                    "id": "169:13",
-                    "questionnaire": 13,
-                    "x": 2001,
-                    "y": 68.7
-                },
-                {
                     "name": "WHS03",
                     "id": "169:14",
                     "questionnaire": 14,
                     "x": 2003,
-                    "y": 71.8
-                },
-                {
-                    "name": "DHS04",
-                    "id": "169:15",
-                    "questionnaire": 15,
-                    "x": 2004,
-                    "y": 80.4
-                },
-                {
-                    "name": "HIES05",
-                    "id": "169:16",
-                    "questionnaire": 16,
-                    "x": 2005,
-                    "y": 83.0
+                    "y": 4.6
                 },
                 {
                     "name": "MICS06",
                     "id": "169:17",
                     "questionnaire": 17,
                     "x": 2006,
-                    "y": 58.5
-                },
-                {
-                    "name": "DHS07",
-                    "id": "169:18",
-                    "questionnaire": 18,
-                    "x": 2007,
-                    "y": 54.1
+                    "y": 0.1
                 },
                 {
                     "name": "MICS09",
                     "id": "169:19",
                     "questionnaire": 19,
                     "x": 2009,
-                    "y": 13.0
-                },
-                {
-                    "name": "HIES10",
-                    "id": "169:20",
-                    "questionnaire": 20,
-                    "x": 2010,
-                    "y": 81.3
-                },
-                {
-                    "name": "CEN11",
-                    "id": "169:21",
-                    "questionnaire": 21,
-                    "x": 2011,
-                    "y": 69.0
-                },
-                {
-                    "name": "DHS11",
-                    "id": "169:22",
-                    "questionnaire": 22,
-                    "x": 2011,
-                    "y": 45.8
+                    "y": 0.9
                 }
             ]
         },
