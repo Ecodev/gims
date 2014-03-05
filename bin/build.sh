@@ -18,6 +18,9 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 cd $DIR/..
 
+echo "Installing git hooks..."
+ln -fs ../../bin/pre-commit.sh .git/hooks/pre-commit
+
 echo "Updating git submodules..."
 git submodule update --init --recursive --force
 
