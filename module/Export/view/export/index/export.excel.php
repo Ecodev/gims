@@ -14,9 +14,12 @@ $workbook;
 // headers
 $row = 2;
 $workbook->getActiveSheet()->setCellValueByColumnAndRow(ID, $row, 'ID');
-$workbook->getActiveSheet()->setCellValueByColumnAndRow(CHAPTER, $row, 'Chapter');
-$workbook->getActiveSheet()->setCellValueByColumnAndRow(QUESTION, $row, 'Question');
-$workbook->getActiveSheet()->setCellValueByColumnAndRow(CHOICES, $row, 'Choices');
+$workbook->getActiveSheet()
+    ->setCellValueByColumnAndRow(CHAPTER, $row, 'Chapter');
+$workbook->getActiveSheet()
+    ->setCellValueByColumnAndRow(QUESTION, $row, 'Question');
+$workbook->getActiveSheet()
+    ->setCellValueByColumnAndRow(CHOICES, $row, 'Choices');
 $workbook->getActiveSheet()->setCellValueByColumnAndRow(PART, $row, 'Part');
 
 $questionnaireCol = ANSWER;
@@ -24,30 +27,36 @@ $questionnaireCol = ANSWER;
 foreach ($questionnaires as $questionnaire) {
     $row = 2;
 
-    $workbook->getActiveSheet()->setCellValueByColumnAndRow($questionnaireCol, $row-1, $questionnaire->getGeoname()->getCountry()->getIso3());
-    $workbook->getActiveSheet()->setCellValueByColumnAndRow($questionnaireCol, $row, $questionnaire->getGeoname()->getName());
+    $workbook->getActiveSheet()
+        ->setCellValueByColumnAndRow($questionnaireCol, $row - 1, $questionnaire->getGeoname()
+        ->getCountry()->getIso3());
+    $workbook->getActiveSheet()
+        ->setCellValueByColumnAndRow($questionnaireCol, $row, $questionnaire->getGeoname()
+        ->getName());
 
     foreach ($questions as $question) {
         $row++;
 
         // Question labels (only if first questionnaire)
-        if($questionnaireCol == ANSWER) {
-            if ($question['type'] == 'Chapter') {
+        if ($questionnaireCol == ANSWER) {
+            if ($question['dtype'] == 'chapter') {
                 $labelCol = CHAPTER;
             } else {
                 $labelCol = QUESTION;
             }
-            $workbook->getActiveSheet()->setCellValueByColumnAndRow(ID, $row, $question['id']);
-            $workbook->getActiveSheet()->setCellValueByColumnAndRow($labelCol, $row, $question['name']);
+            $workbook->getActiveSheet()
+                ->setCellValueByColumnAndRow(ID, $row, $question['id']);
+            $workbook->getActiveSheet()
+                ->setCellValueByColumnAndRow($labelCol, $row, $question['name']);
         }
 
-        switch ($question['type']) {
-        case 'Numeric':
-        case 'Text':
+        switch ($question['dtype']) {
+        case 'numericquestion':
+        case 'textquestion':
             insertParts($question, $questionnaireCol, $row, $workbook, $questionnaire);
             break;
 
-        case 'Choice':
+        case 'choicequestion':
             insertChoices($question, $questionnaireCol, $row, $workbook, $questionnaire);
             break;
         }
@@ -57,22 +66,24 @@ foreach ($questionnaires as $questionnaire) {
 
 function insertParts($question, $col, &$row, $workbook, $questionnaire, $choice = null)
 {
-    foreach ($question['parts'] as $key =>  $part) {
+    foreach ($question['parts'] as $key => $part) {
         $workbook->getActiveSheet()->setCellValueByColumnAndRow(PART, $row, $part['name']);
-        $workbook->getActiveSheet()->setCellValueByColumnAndRow($col, $row, getAnswer($question, $part, $choice, $questionnaire));
+        if (isset($question['answers'][$part['id']][$questionnaire->getId()])) {
+            $workbook->getActiveSheet()->setCellValueByColumnAndRow($col, $row, getAnswer($question, $part, $choice, $questionnaire->getId()));
+        }
         $nbParts = count($question['parts']);
-        if ($nbParts > 1 && $key < $nbParts-1) {
+        if ($nbParts > 1 && $key < $nbParts - 1) {
             $row++;
         }
     }
 }
 
-function insertChoices($question, $col,  &$row, $workbook, $questionnaire)
+function insertChoices($question, $col, &$row, $workbook, $questionnaire)
 {
     if (isset($question['isMultiple']) && $question['isMultiple']) {
         foreach ($question['choices'] as $choice) {
             $row++;
-            $workbook->getActiveSheet()->setCellValueByColumnAndRow(CHOICES-1, $row, $choice['id']);
+            $workbook->getActiveSheet()->setCellValueByColumnAndRow(CHOICES - 1, $row, $choice['id']);
             $workbook->getActiveSheet()->setCellValueByColumnAndRow(CHOICES, $row, $choice['name']);
             insertParts($question, $col, $row, $workbook, $questionnaire, $choice);
         }
@@ -81,31 +92,28 @@ function insertChoices($question, $col,  &$row, $workbook, $questionnaire)
     }
 }
 
-function getAnswer($question, $part, $choice, $questionnaire)
+function getAnswer($question, $part, $choice, $questionnaireId)
 {
-
-    foreach ($question['answers'] as $answer) {
-        if ($answer['questionnaire']['id'] == $questionnaire->getId() &&
-            ((isset($question['isMultiple']) && $question['isMultiple'] && $answer['valueChoice']['id'] == $choice['id'] && $answer['part']['id'] == $part['id']) ||
-            ((!isset($question['isMultiple']) || !$question['isMultiple']) && $answer['part']['id'] == $part['id']))
+    foreach ($question['answers'][$part['id']][$questionnaireId] as $answer) {
+        if (((isset($question['isMultiple']) && $question['isMultiple'] && $answer['valueChoice']['id'] == $choice['id'])
+            || ((!isset($question['isMultiple']) || !$question['isMultiple'])))
         ) {
-            switch ($question['type']) {
-            case 'Numeric':
+            switch ($question['dtype']) {
+
+            case 'numericquestion':
                 return $answer['valueAbsolute'];
-                break;
 
-            case 'Text':
+            case 'textquestion':
                 return $answer['valueText'];
-                break;
 
-            case 'User':
-            case 'Choice':
+            case 'userquestion':
+            case 'choicequestion':
                 if (isset($question['isMultiple']) && $question['isMultiple']) {
                     return 1;
                 } else {
                     return $answer['valuePercent'];
                 }
-                break;
+
             }
         }
     }
