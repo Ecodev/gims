@@ -1,5 +1,5 @@
 
-angular.module('myApp').controller('Browse/Table/FilterCtrl', function($scope, $http, $timeout, $location) {
+angular.module('myApp').controller('Browse/Table/FilterCtrl', function($scope, $http, $timeout) {
     'use strict';
 
     $scope.showOnlyTopLevel = true;
@@ -13,7 +13,7 @@ angular.module('myApp').controller('Browse/Table/FilterCtrl', function($scope, $
     // Configure ng-grid.
     $scope.gridOptions = {
         data: 'table',
-        enableColumnResize:true,
+        enableColumnResize: true,
         plugins: [new ngGridFlexibleHeightPlugin({minHeight: 400})],
         columnDefs: 'columnDefs'
     };
@@ -34,7 +34,7 @@ angular.module('myApp').controller('Browse/Table/FilterCtrl', function($scope, $
 
     // Whenever one of the parameter is changed
     var uniqueAjaxRequest;
-    $scope.$watch('questionnaire + filterSet.id', function(a) {
+    $scope.$watch('questionnaire + filterSet.id', function() {
 
         var parameters = {};
         var questionnaires = [];
@@ -52,7 +52,9 @@ angular.module('myApp').controller('Browse/Table/FilterCtrl', function($scope, $
 
         // build parameters
         var ids = [];
-        for (var index in questionnaires) {
+        var index;
+
+        for (index in questionnaires) {
             ids.push(questionnaires[index].id);
         }
         parameters.questionnaire = ids.join(',');
@@ -65,7 +67,7 @@ angular.module('myApp').controller('Browse/Table/FilterCtrl', function($scope, $
             columnDefs.push(columnDefTemplateBase);
 
             // build
-            for (var index in questionnaires) {
+            for (index in questionnaires) {
 
                 var questionnaireName = '';
                 var regexp = /[\w]+/ig;
@@ -78,10 +80,10 @@ angular.module('myApp').controller('Browse/Table/FilterCtrl', function($scope, $
                 for (var index2 in parts) {
                     var partName = parts[index2];
                     columnDefs.push({
-                        width:'7%',
+                        width: '7%',
                         sortable: false,
                         field: 'values[' + index + '].' + partName,
-                        displayName: partName.substr(0,1) + ' ' + questionnaireName
+                        displayName: partName.substr(0, 1) + ' ' + questionnaireName
                     });
                 }
             }
@@ -93,13 +95,12 @@ angular.module('myApp').controller('Browse/Table/FilterCtrl', function($scope, $
 
                 // ... then, get table data via Ajax, but only once per 200 milliseconds
                 // (this avoid sending several request on page loading)
-                $http.get('/api/table/filter',
-                        {
-                            params: {
-                                questionnaire: parameters.questionnaire,
-                                filterSet: $scope.filterSet.id
-                            }
-                        }).success(function(data) {
+                $http.get('/api/table/filter', {
+                    params: {
+                        questionnaire: parameters.questionnaire,
+                        filterSet: $scope.filterSet.id
+                    }
+                }).success(function(data) {
                     originalTable = data;
                     refresh();
                     $scope.isLoading = false;

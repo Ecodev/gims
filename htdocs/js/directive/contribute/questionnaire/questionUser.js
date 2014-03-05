@@ -28,7 +28,7 @@ angular.module('myApp.directives').directive('gimsUserQuestion', function(Questi
             index: '=',
             question: '='
         },
-        link: function(scope, element, attrs) {
+        link: function() {
             // nothing to do ?
         },
         controller: function($scope, Restangular, UserModal)
@@ -86,7 +86,7 @@ angular.module('myApp.directives').directive('gimsUserQuestion', function(Questi
                     });
 
                     // if exists but empty -> remove
-                } else if (newAnswer.id && (!newAnswer.valueUser || newAnswer.valueUser == "")) {
+                } else if (newAnswer.id && (!newAnswer.valueUser || newAnswer.valueUser === '')) {
                     newAnswer.remove().then(function() {
                         $scope.index[question.id + "-" + part.id] = QuestionAssistant.getEmptyTextAnswer(question, part.id);
                         $scope.saving = false;

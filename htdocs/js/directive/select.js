@@ -50,7 +50,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             model: '=' // TODO: could not find a way to use real 'ng-model'. So for now we use custom 'model' attribute and bi-bind it to real ng-model. Ugly, but working
         },
         // The linking function will add behavior to the template
-        link: function(scope, element, attr, ctrl) {
+        link: function() {
         },
         controller: function($scope, $attrs, Restangular, CachedRestangular, $location, $route, $routeParams) {
             var items = [];
@@ -115,10 +115,10 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                     minimumInputLength: 1,
                     ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
                         url: myRestangular.all(api).getRestangularUrl(),
-                        data: function(term, page) {
+                        data: function(term) {
                             return _.merge({q: term}, $scope.queryparams);
                         },
-                        results: function(data, page) { // parse the results into the format expected by Select2.
+                        results: function(data) { // parse the results into the format expected by Select2.
 
                             // Make sure to have Restangular object
                             items = _.map(data.items, function(item) {
@@ -193,38 +193,39 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             }
 
             // Configure selection formatting
-            var formatSelection = function(item)
-            {
+            var formatSelection = function(item) {
+                var result;
                 if ($scope.customSelectionTemplate) {
-                    var result = generateTemplate(item, $scope.customSelectionTemplate);
+                    result = generateTemplate(item, $scope.customSelectionTemplate);
                 } else {
-                    var result = formatStandardTemplate(item);
+                    result = formatStandardTemplate(item);
                 }
+
                 return result;
             };
 
             // Configure result formatting
-            var formatResult = function(item)
-            {
+            var formatResult = function(item) {
+                var result;
                 if ($scope.customResultTemplate) {
-                    var result = generateTemplate(item, $scope.customResultTemplate);
+                    result = generateTemplate(item, $scope.customResultTemplate);
                 } else {
-                    var result = formatStandardTemplate(item);
+                    result = formatStandardTemplate(item);
                 }
 
                 return result;
             };
 
 
-            var formatStandardTemplate = function(item)
-            {
+            var formatStandardTemplate = function(item) {
                 var result = item.name;
                 if ($scope.format == 'code')
                 {
                     result = item.code || item.id || item.name;
                 }
+
                 return result;
-            }
+            };
 
 
             /**
@@ -252,13 +253,13 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 }
 
                 return template;
-            }
+            };
 
             // override original excapeMarkup function allowing to return html content.
             if ($scope.customSelectionTemplate || $scope.customResultTemplate) {
                 $scope.options.escapeMarkup = function(m) {
                     return m;
-                }
+                };
             }
 
             $scope.options.formatResult = formatResult;
@@ -271,7 +272,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 var selectedId = controller ? controller.$modelValue : null;
 
                 var selectedItem = _.find(items, function(item) {
-                  return item.id == selectedId;
+                    return item.id == selectedId;
                 });
 
                 callback(selectedItem);

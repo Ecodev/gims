@@ -1,14 +1,14 @@
 /**
  * End2End tests for home module
  */
-describe('home', function () {
+describe('home', function() {
 
-    beforeEach(function () {
+    beforeEach(function() {
         browser().navigateTo('/home');
     });
 
-    it('should render home when user navigates to /home', function () {
+    it('should render home when user navigates to /home', function() {
         expect(element('[ng-view] p:first').text()).
-            toMatch(/Global Information Management System/);
+                toMatch(/Global Information Management System/);
     });
 });

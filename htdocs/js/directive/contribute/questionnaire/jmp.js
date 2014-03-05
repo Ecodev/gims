@@ -7,7 +7,7 @@ angular.module('myApp.directives').directive('gimsContributeQuestionnaireJmp', f
         // This HTML will replace the directive.
         template: '<div ng-grid="gridOptions" class="gridStyle"></div>',
         // The linking function will add behavior to the template
-        link: function(scope, element, attrs) {
+        link: function() {
             // nothing to do ?
         },
         controller: function($scope, Restangular, $timeout) {

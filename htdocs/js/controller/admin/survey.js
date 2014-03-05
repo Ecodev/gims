@@ -1,5 +1,5 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $routeParams, $location, $resource, Modal, Restangular) {
+angular.module('myApp').controller('Admin/Survey/CrudCtrl', function($scope, $routeParams, $location, $resource, Modal, Restangular) {
     "use strict";
 
     $scope.sending = false;
@@ -15,21 +15,21 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
         {text: 'No', value: false}
     ];
 
-    $scope.saveAndClose = function () {
+    $scope.saveAndClose = function() {
         this.save(redirectTo);
     };
 
-    $scope.cancel = function () {
+    $scope.cancel = function() {
         $location.path(redirectTo).search('returnUrl', null).hash(null);
     };
 
-    $scope.save = function (redirectTo) {
+    $scope.save = function(redirectTo) {
 
         $scope.sending = true;
 
         // First case is for update a survey, second is for creating
         if ($scope.survey.id) {
-            $scope.survey.put().then(function () {
+            $scope.survey.put().then(function() {
                 $scope.sending = false;
 
                 if (redirectTo) {
@@ -49,7 +49,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
     };
 
     // Delete a survey
-    $scope.delete = function () {
+    $scope.delete = function() {
         Modal.confirmDelete($scope.survey, {label: $scope.survey.code, returnUrl: '/admin/survey'});
     };
 
@@ -76,7 +76,7 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function ($scope, $r
 /**
  * Admin Survey Controller
  */
-angular.module('myApp').controller('Admin/SurveyCtrl', function ($scope) {
+angular.module('myApp').controller('Admin/SurveyCtrl', function($scope) {
     "use strict";
 
     // Configure gims-grid.

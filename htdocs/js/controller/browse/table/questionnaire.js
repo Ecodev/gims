@@ -14,7 +14,7 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
 
     // Whenever one of the parameter is changed
     var uniqueAjaxRequest;
-    $scope.$watch('country + filterSet.id', function(a) {
+    $scope.$watch('country + filterSet.id', function() {
 
         // If they are all available ...
         if ($scope.country && $scope.filterSet) {
@@ -30,10 +30,9 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
 
                 // ... then, get table data via Ajax, but only once per 200 milliseconds
                 // (this avoid sending several request on page loading)
-                $http.get('/api/table/questionnaire',
-                        {
-                            params: $location.search()
-                        }).success(function(data) {
+                $http.get('/api/table/questionnaire', {
+                    params: $location.search()
+                }).success(function(data) {
                     $scope.table = data.data;
 
                     $scope.columnDefs = _.map(data.columns, function(columnName, columnKey) {

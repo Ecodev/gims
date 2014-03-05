@@ -64,7 +64,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
 /**
  * Admin User Controller
  */
-angular.module('myApp').controller('Admin/UserCtrl', function($scope, $location, Restangular, Modal) {
+angular.module('myApp').controller('Admin/UserCtrl', function($scope) {
     'use strict';
 
     // Configure gims-grid.

@@ -1,5 +1,5 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, $routeParams, $location, Restangular, Modal) {
+angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $routeParams, $location, Restangular, Modal) {
     "use strict";
 
     // Default redirect
@@ -11,37 +11,37 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     // @TODO : manage value null and integer value
     $scope.percentages = [
         {text: '100%', value: '1.000'},
-        {text: '90%',  value: '0.900'},
-        {text: '80%',  value: '0.800'},
-        {text: '70%',  value: '0.700'},
-        {text: '60%',  value: '0.600'},
-        {text: '50%',  value: '0.500'},
-        {text: '40%',  value: '0.400'},
-        {text: '30%',  value: '0.300'},
-        {text: '20%',  value: '0.200'},
-        {text: '10%',  value: '0.100'},
-        {text: '0%',   value: '0.000'},
+        {text: '90%', value: '0.900'},
+        {text: '80%', value: '0.800'},
+        {text: '70%', value: '0.700'},
+        {text: '60%', value: '0.600'},
+        {text: '50%', value: '0.500'},
+        {text: '40%', value: '0.400'},
+        {text: '30%', value: '0.300'},
+        {text: '20%', value: '0.200'},
+        {text: '10%', value: '0.100'},
+        {text: '0%', value: '0.000'}
     ];
 
-    $scope.params = {fields:'paths'};
+    $scope.params = {fields: 'paths'};
 
     $scope.select2Template = "" +
-        "<div>" +
-        "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>"+
-        "    <i class='fa fa-gims-filter'></i> [[item.name]]"+
-        "</div>"+
-        "<div class='col-sm-7 col-md-7'>"+
-        "    <small>"+
-        "       [[_.map(item.paths, function(path){return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]"+
-        "    </small>"+
-        "</div>"+
-        "<div class='col-sm-1 col-md-1 hide-in-results' >"+
-        "    <a class='btn btn-default btn-sm' href='/admin/filter/edit/[[item.id]][[$scope.currentContextElement]]'>"+
-        "        <i class='fa fa-pencil'></i>"+
-        "    </a>"+
-        "</div>"+
-        "<div class='clearfix'></div>"+
-        "</div>";
+            "<div>" +
+            "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
+            "    <i class='fa fa-gims-filter'></i> [[item.name]]" +
+            "</div>" +
+            "<div class='col-sm-7 col-md-7'>" +
+            "    <small>" +
+            "       [[_.map(item.paths, function(path){return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]" +
+            "    </small>" +
+            "</div>" +
+            "<div class='col-sm-1 col-md-1 hide-in-results' >" +
+            "    <a class='btn btn-default btn-sm' href='/admin/filter/edit/[[item.id]][[$scope.currentContextElement]]'>" +
+            "        <i class='fa fa-pencil'></i>" +
+            "    </a>" +
+            "</div>" +
+            "<div class='clearfix'></div>" +
+            "</div>";
 
     $scope.compulsory = [
         {text: 'Optional', value: 0},
@@ -53,7 +53,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
         {text: 'Multiple choices', value: true}
     ];
 
-    $scope.initChoices = function ()
+    $scope.initChoices = function()
     {
         $scope.isChoices = false;
         $scope.isChapter = false;
@@ -67,28 +67,28 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
                 $scope.save();
             }
             // Otherwise, if the question is new and no choices exists, we inject an empty one
-            else if (!$scope.question.choices || $scope.question.choices.length == 0) {
+            else if (!$scope.question.choices || $scope.question.choices.length === 0) {
                 $scope.question.choices = [{}];
             }
         }
         if ($scope.question.type == 'Chapter') {
-            $scope.isChapter=true;
+            $scope.isChapter = true;
         }
-    }
+    };
 
     $scope.removeChapter = function()
     {
         $scope.question.chapter = null;
-    }
+    };
 
-    $scope.addOption = function () {
+    $scope.addOption = function() {
         $scope.question.choices.push({});
-    }
+    };
 
 
-    $scope.deleteOption = function (index) {
+    $scope.deleteOption = function(index) {
         $scope.question.choices.splice(index, 1);
-    }
+    };
 
 
     if ($routeParams.returnUrl) {
@@ -96,31 +96,37 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     }
 
 
-    var redirect = function () {
+    var redirect = function() {
         $location.url(returnUrl);
     };
 
-    $scope.cancel = function () {
+    $scope.cancel = function() {
         redirect();
     };
 
-    $scope.saveAndClose = function () {
+    $scope.saveAndClose = function() {
         this.save(true);
     };
-    $scope.save = function (redirectAfterSave) {
+    $scope.save = function(redirectAfterSave) {
         $scope.sending = true;
 
         // First case is for update a question, second is for creating
-        if ($scope.question.filter) $scope.question.filter = $scope.question.filter.id;
-        if ($scope.question.chapter) $scope.question.chapter = $scope.question.chapter.id;
+        if ($scope.question.filter) {
+            $scope.question.filter = $scope.question.filter.id;
+        }
+        
+        if ($scope.question.chapter) {
+            $scope.question.chapter = $scope.question.chapter.id;
+        }
+
         if ($scope.question.id) {
 
             // if change type from Choice to another, remove choices from DB
-            if($scope.question.type!='Choice' && $scope.question.choices && $scope.question.choices.length>0){
+            if ($scope.question.type != 'Choice' && $scope.question.choices && $scope.question.choices.length > 0) {
                 delete $scope.question.choices;
             }
 
-            $scope.question.put(questionFields).then(function (question) {
+            $scope.question.put(questionFields).then(function(question) {
                 $scope.sending = false;
                 $scope.question = question;
                 $scope.questions = question.questions;
@@ -134,7 +140,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
             $scope.question.survey = $routeParams.survey;
 
             delete $scope.question.sorting; // let the server define the sorting value
-            Restangular.all('question').post($scope.question).then(function (question) {
+            Restangular.all('question').post($scope.question).then(function(question) {
                 $scope.sending = false;
 
                 if (redirectAfterSave) {
@@ -148,38 +154,38 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
     };
 
     $scope.chapterList = [];
-    $scope.setParentQuestions = function (survey_id) {
-        Restangular.one('survey', survey_id).all('question').getList({fields:'chapter,level,type'}).then(function (questions) {
+    $scope.setParentQuestions = function(surveyId) {
+        Restangular.one('survey', surveyId).all('question').getList({fields: 'chapter,level,type'}).then(function(questions) {
 
-            angular.forEach(questions,function(question){
+            angular.forEach(questions, function(question) {
                 if (question.type == 'Chapter') {
                     var spacer = '';
-                    for(var i=1;i<=question.level;i++){
-                        spacer+= "-- ";
+                    for (var i = 1; i <= question.level; i++) {
+                        spacer += "-- ";
                     }
-                    $scope.chapterList.push({id:question.id, name:spacer+" "+question.name});
+                    $scope.chapterList.push({id: question.id, name: spacer + " " + question.name});
                 }
             });
         });
-    }
+    };
 
 
 
     // Delete a question
-    $scope.delete = function () {
+    $scope.delete = function() {
         Modal.confirmDelete($scope.question, {label: $scope.question.name, returnUrl: $location.search().returnUrl});
     };
 
 
     // Try loading question if possible...
     if ($routeParams.id) {
-        Restangular.one('question', $routeParams.id).get(questionFields).then(function (question) {
+        Restangular.one('question', $routeParams.id).get(questionFields).then(function(question) {
             $scope.question = question;
             $scope.survey = question.survey;
             $scope.setParentQuestions($scope.question.survey.id);
             $scope.initChoices();
 
-            angular.forEach(question.questions, function(question){
+            angular.forEach(question.questions, function(question) {
                 question = Restangular.restangularizeElement(null, question, 'question');
             });
             $scope.questions = question.questions;
@@ -195,7 +201,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function ($scope, 
 
 
 
-    Restangular.all('questionType').getList().then(function (types) {
+    Restangular.all('questionType').getList().then(function(types) {
         $scope.types = types;
     });
 

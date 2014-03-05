@@ -62,7 +62,7 @@ angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $m
             {
                 $scope.invalidUsernamePassword = true;
             }
-        }).error(function(data, status, headers) {
+        }).error(function(data) {
             $scope.signing = false;
             $log.error('Server error', data);
         });
@@ -79,8 +79,9 @@ angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $m
         }).error(function(data) {
             $scope.registering = false;
 
-            if (data.message.email.recordFound)
+            if (data.message.email.recordFound) {
                 $scope.userExisting = true;
+            }
         });
     };
 

@@ -17,7 +17,7 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
 
     $scope.updateUrl = function()
     {
-        if($scope.years==''){
+        if ($scope.years === '') {
             $location.search('years', null);
         } else {
             $location.search('years', $scope.years);
@@ -27,12 +27,12 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
 
     // Build export URL
     function buildExportUrl() {
-            var filterSetName = $scope.filterSet ? ' - ' + $scope.filterSet.name : '';
-            var filename = _.pluck($scope.country, 'iso3').join(', ') + filterSetName + '.xlsx';
-            $scope.exportUrl = $location.url().replace('browse/table/country', 'api/table/country/' + filename);
+        var filterSetName = $scope.filterSet ? ' - ' + $scope.filterSet.name : '';
+        var filename = _.pluck($scope.country, 'iso3').join(', ') + filterSetName + '.xlsx';
+        $scope.exportUrl = $location.url().replace('browse/table/country', 'api/table/country/' + filename);
     }
 
-    $scope.$watch('country + filterSet.id' , function(a) {
+    $scope.$watch('country + filterSet.id', function() {
         $scope.displayTable();
     });
 
@@ -41,7 +41,7 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
     $scope.displayTable = function() {
 
         // If they are all available ...
-        if ($scope.country && $scope.filterSet && $scope.years && $scope.years.length>=4) {
+        if ($scope.country && $scope.filterSet && $scope.years && $scope.years.length >= 4) {
 
             buildExportUrl();
             $scope.isLoading = true;
@@ -52,11 +52,11 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
                 // (this avoid sending several request on page loading)
                 var params = $location.search();
                 params.years = $scope.years;
-                $http.get('/api/table/country', {params:params}).success(function(data) {
+                $http.get('/api/table/country', {params: params}).success(function(data) {
                     $scope.table = data.data;
 
                     $scope.columnDefs = _.map(data.columns, function(columnName, columnKey) {
-                        return {field: columnKey, displayName: columnName, width:'100px'};
+                        return {field: columnKey, displayName: columnName, width: '100px'};
                     });
                     $scope.isLoading = false;
                 });

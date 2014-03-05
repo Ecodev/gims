@@ -2,12 +2,12 @@ angular.module('myApp.directives').directive('gimsFilterGenerator', function($mo
     return {
         restrict: 'E',
         template: "<span class='btn btn-default' ng-class=\"{'disabled':!part || !country}\" ng-click='openModal()'><i class='fa fa-bar-chart-o'></i> Add new dataset</span>",
-        link: function(scope, element, attrs) {
+        link: function() {
             // nothing to do ?
         },
         controller: function($scope, Restangular, $http) {
             $scope.openModal = function() {
-                var modalInstance = $modal.open({
+                $modal.open({
                     controller: $scope.modalController,
                     resolve: {
                         line: function() {
@@ -24,32 +24,32 @@ angular.module('myApp.directives').directive('gimsFilterGenerator', function($mo
                         }
                     },
                     template: "" +
-                        "<div class='modal-header'>" +
-                        "    <button type='button' class='close' ng-click='close()'>&times;</button>" +
-                        "    <h3>Add custom filter</h3>" +
-                        "    </div>" +
-                        "<div class='modal-body row'>" +
-                        '<form name="myForm" class="col-md-12">' +
-                        '   <div class="form-group" ng-class="{\'has-error\': myForm.name.$invalid}">' +
-                        '       <label class="control-label" for="line.name"><i class="fa fa-gims-filter"></i> Filter name</label>' +
-                        '       <div class="row">'+
-                        '           <div class="col-md-10">'+
-                        '               <input id="line.name" type="text" name="name" ng-model="line.name" required ng-minlength="3" ng-disabled="line.lastLogin" />' +
-                        '           </div>'+
-                        '           <div class="col-md-2 text-right">'+
-                        '               <div class=" btn btn-default" colorpicker ng-model="line.color" style="background-color:{{line.color}}"><i class="fa fa-magic"></i></div>'+
-                        '           </div>'+
-                        '       </div>'+
-                        '       <span ng-show="myForm.name.$error.required" class="help-block">Required</span>' +
-                        '       <span ng-show="myForm.name.$error.minlength" class="help-block">It must be at least 3 characters long</span>' +
-                        '   </div>' +
-                        '   <div class="gridStyle show-grid" ng-grid="gridOptions"></div>' +
-                        '</form>' +
-                        "</div>" +
-                        "<div class='modal-footer'>" +
-                        "   <a href='#' class='btn btn-default' ng-click='close()'>Cancel</a>" +
-                        "   <a href='#' ng-disabled='myForm.$invalid || !line.surveys[0].year || !line.surveys[0].value || !part || !country' ng-click='generate()' class='btn btn-success'>Generate filter</a>" +
-                        "</div>"
+                            "<div class='modal-header'>" +
+                            "    <button type='button' class='close' ng-click='close()'>&times;</button>" +
+                            "    <h3>Add custom filter</h3>" +
+                            "    </div>" +
+                            "<div class='modal-body row'>" +
+                            '<form name="myForm" class="col-md-12">' +
+                            '   <div class="form-group" ng-class="{\'has-error\': myForm.name.$invalid}">' +
+                            '       <label class="control-label" for="line.name"><i class="fa fa-gims-filter"></i> Filter name</label>' +
+                            '       <div class="row">' +
+                            '           <div class="col-md-10">' +
+                            '               <input id="line.name" type="text" name="name" ng-model="line.name" required ng-minlength="3" ng-disabled="line.lastLogin" />' +
+                            '           </div>' +
+                            '           <div class="col-md-2 text-right">' +
+                            '               <div class=" btn btn-default" colorpicker ng-model="line.color" style="background-color:{{line.color}}"><i class="fa fa-magic"></i></div>' +
+                            '           </div>' +
+                            '       </div>' +
+                            '       <span ng-show="myForm.name.$error.required" class="help-block">Required</span>' +
+                            '       <span ng-show="myForm.name.$error.minlength" class="help-block">It must be at least 3 characters long</span>' +
+                            '   </div>' +
+                            '   <div class="gridStyle show-grid" ng-grid="gridOptions"></div>' +
+                            '</form>' +
+                            "</div>" +
+                            "<div class='modal-footer'>" +
+                            "   <a href='#' class='btn btn-default' ng-click='close()'>Cancel</a>" +
+                            "   <a href='#' ng-disabled='myForm.$invalid || !line.surveys[0].year || !line.surveys[0].value || !part || !country' ng-click='generate()' class='btn btn-success'>Generate filter</a>" +
+                            "</div>"
                 });
             };
 
@@ -88,10 +88,8 @@ angular.module('myApp.directives').directive('gimsFilterGenerator', function($mo
                             surveys: surveys.join(',')
                         }
                     }).success(function(filterSet) {
-                        console.log(filterSet);
                         $scope.isLoading = false;
-                        var filterSets = $location.search()['filterSet'] ? $location.search()['filterSet'].split(',') :
-                            [];
+                        var filterSets = $location.search().filterSet ? $location.search().filterSet.split(',') : [];
                         filterSets.push(filterSet.id);
                         $location.search('filterSet', filterSets.join(','));
 
@@ -100,22 +98,22 @@ angular.module('myApp.directives').directive('gimsFilterGenerator', function($mo
                         }, 0);
                     });
 
-                }
+                };
 
                 $scope.close = function() {
                     $modalInstance.close($scope.line);
-                }
+                };
 
                 $scope.deleteOption = function(index) {
                     $scope.line.surveys.splice(index, 1);
-                }
+                };
 
                 $scope.addRow = function() {
                     var lastIndex = $scope.line.surveys.length - 1;
-                    if ($scope.line.surveys.length == 0 || $scope.line.surveys[lastIndex].year || $scope.line.surveys[lastIndex].value) {
+                    if ($scope.line.surveys.length === 0 || $scope.line.surveys[lastIndex].year || $scope.line.surveys[lastIndex].value) {
                         $scope.line.surveys.push({});
                     }
-                }
+                };
 
                 $scope.gridOptions = {
                     plugins: [new ngGridFlexibleHeightPlugin({minHeight: 0})],
@@ -146,7 +144,7 @@ angular.module('myApp.directives').directive('gimsFilterGenerator', function($mo
                         }
                     ]
                 };
-            }
+            };
         }
-    }
+    };
 });

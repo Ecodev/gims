@@ -1,9 +1,9 @@
-'use strict';
-
 /* jasmine specs for controllers go here */
 
 
 describe('ContributeCtrl', function() {
+    'use strict';
+
     // load the controller's module
     beforeEach(module('myApp'));
 

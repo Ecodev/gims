@@ -53,7 +53,7 @@ angular.module('myApp.services')
                     object.remove(params).then(function() {
 
                         // remove from local storage
-                        if (toSplice != null) {
+                        if (toSplice !== null) {
                             options.objects.splice(toSplice, 1);
                         }
 

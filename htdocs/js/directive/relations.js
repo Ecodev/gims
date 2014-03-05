@@ -34,7 +34,7 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                 '    </div>' +
                 '</div>',
         // The linking function will add behavior to the template
-        link: function(scope, element, attrs) {
+        link: function() {
             // nothing to do ?
         },
         controller: function($scope, $routeParams, Restangular, Modal) {
@@ -50,7 +50,7 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                 extra: {
                     remove: function(row) {
                         Modal.confirmDelete(row.entity, {objects: $scope.relations, label: row.entity[$scope.second].name + ' - ' + row.entity[$scope.third].name});
-            }
+                    }
                 },
                 plugins: [new ngGridFlexibleHeightPlugin({minHeight: 250})],
                 columnDefs: [

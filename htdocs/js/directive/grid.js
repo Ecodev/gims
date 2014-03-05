@@ -17,7 +17,7 @@ angular.module('myApp.directives').directive('gimsGrid', function() {
             options: '='
         },
         // The linking function will add behavior to the template
-        link: function(scope, element, attr, ctrl) {
+        link: function() {
         },
         controller: function($scope, $attrs, Restangular, Modal, $routeParams) {
             $scope.objects = [];

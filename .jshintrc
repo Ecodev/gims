@@ -2,24 +2,27 @@
     "predef": [  // Custom globals.
         "angular",
         "ngGridFlexibleHeightPlugin",
-        "console",
+        "ngGridLayoutPlugin",
         "sprintf",
-        "_",
-        "$"
+        "_"
     ],
     // On-line example https://gist.github.com/connor/1597131
     "bitwise": true,    // Prohibit bitwise operators (&, |, ^, etc.).
+    "browser": true,    // Standard browser globals e.g. `window`, `document`.
     "camelcase": true,
     "curly": true,      // Require {} for every new block or scope.
-    "eqeqeq": true,     // Require triple equals i.e. `===`.
+    "evil": true,       // Allow eval() for custom template of <gims-select>
     "forin": false,     // Tolerate `for in` loops without `hasOwnPrototype`.
+    "indent": 4,        // Specify indentation spacing
+    "immed": true,
+    "jquery": true,
+    "latedef": true,
+    "newcap": true,
     "noarg": true,      // Prohibit use of `arguments.caller` and `arguments.callee`
     "noempty": true,    // Prohibit use of empty blocks.
     "nonew": true,      // Prohibit use of constructors for side-effects.
-    "undef": true,      // Require all non-global variables be declared before they are used.
-    "unused": true,
     "strict": false,    // Require `use strict` pragma  in every file.
     "trailing": true,   // Prohibit trailing whitespaces.
-    "browser": true,    // Standard browser globals e.g. `window`, `document`.
-    "ident": 4          // Specify indentation spacing
+    "undef": true,      // Require all non-global variables be declared before they are used.
+    "unused": true
 }
