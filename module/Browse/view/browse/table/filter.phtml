@@ -16,12 +16,12 @@
         <div class="row">
             <div class="col-md-6">
                 <label class="checkbox">
-                    <input type="checkbox" ng-model="showOnlyTopLevel" ng-click="refresh()" /> Show only top levels
+                    <input type="checkbox" ng-model="showOnlyTopLevel" /> Show only top levels
                 </label>
             </div>
         </div>
     </form>
-    
+
     <div class="alert alert-info" ng-hide="table"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to show table here.') ?></div>
     <div ng-grid="gridOptions" class="gridStyle"></div>
 </div>

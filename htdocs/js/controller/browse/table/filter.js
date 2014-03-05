@@ -19,7 +19,7 @@ angular.module('myApp').controller('Browse/Table/FilterCtrl', function($scope, $
     };
 
     var originalTable;
-    $scope.refresh = function() {
+    var refresh = function() {
         var result = [];
         angular.forEach(originalTable, function(e) {
             if (!$scope.showOnlyTopLevel || !e.filter.level) {
@@ -30,6 +30,7 @@ angular.module('myApp').controller('Browse/Table/FilterCtrl', function($scope, $
         $scope.table = result;
     };
 
+    $scope.$watch('showOnlyTopLevel', refresh);
 
     // Whenever one of the parameter is changed
     var uniqueAjaxRequest;
@@ -100,7 +101,7 @@ angular.module('myApp').controller('Browse/Table/FilterCtrl', function($scope, $
                             }
                         }).success(function(data) {
                     originalTable = data;
-                    $scope.refresh();
+                    refresh();
                     $scope.isLoading = false;
                 });
             }, 200);
