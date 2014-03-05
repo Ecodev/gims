@@ -28,12 +28,12 @@
         </div>
     </form>
 
-    <div class="alert alert-info ng-trans ng-trans-fade-up easeInOutCubic" ng-hide="chart"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?></div>
+    <div class="alert alert-info ng-trans ng-trans-fade-up" ng-hide="chart"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?></div>
 
     <div class="row show-grid">
 
         <!-- Chart -->
-        <div ng-show='chart' class='ng-trans ng-trans-fade-down easeInOutCubic' ng-class="{'col-xs-12 col-sm-7 col-md-7 col-lg-8' : hasIgnoredElements || pointSelected, 'col-md-12' : !hasIgnoredElements && !pointSelected}" >
+        <div ng-show='chart' class='ng-trans ng-trans-fade-down' ng-class="{'col-xs-12 col-sm-7 col-md-7 col-lg-8' : hasIgnoredElements || pointSelected, 'col-md-12' : !hasIgnoredElements && !pointSelected}" >
 
             <chart value="chart" type="area" height="400" chart-obj="chartObj" />
 

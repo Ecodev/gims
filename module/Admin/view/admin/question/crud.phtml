@@ -39,24 +39,22 @@
             </div>
         </div>
 
-        <div class="form-group" ng-show="isChoices">
-            <label class="control-label col-md-2"></label>
-            <div class='col-md-6 radio'>
-                <div><label><input type='radio' name='isMultiple' value='0' ng-model='question.isMultiple' ng-checked="1">Single choice</label></div>
-                <div><label><input type='radio' name='isMultiple' value='1' ng-model='question.isMultiple'>Multiple choices</label></div>
+        <div class="form-group ng-trans ng-trans-fade-down" ng-show="isChoices">
+            <div class='col-md-6 col-md-offset-2 radio'>
+                <div class="col-md-12"><label><input type='radio' name='isMultiple' value='0' ng-model='question.isMultiple' ng-checked="1">Single choice</label></div>
+                <div class="col-md-12"><label><input type='radio' name='isMultiple' value='1' ng-model='question.isMultiple'>Multiple choices</label></div>
             </div>
         </div>
 
-        <div class="form-group" ng-hide="isChapter">
-            <label class="control-label col-md-2" for="question.isCompulsory"></label>
-            <div class="col-md-6 radio">
-                <div><label><input type='radio' name='isCompulsory' value='0' ng-model='question.isCompulsory' ng-checked="1">Optional</label></div>
-                <div><label><input type='radio' name='isCompulsory' value='1' ng-model='question.isCompulsory'>Compulsory</label></div>
+        <div class="form-group ng-trans ng-trans-fade-down" ng-hide="isChapter">
+            <div class="col-md-6 col-md-offset-2 radio">
+                <div class="col-md-12"><label><input type='radio' name='isCompulsory' value='0' ng-model='question.isCompulsory' ng-checked="1">Optional</label></div>
+                <div class="col-md-12"><label><input type='radio' name='isCompulsory' value='1' ng-model='question.isCompulsory'>Compulsory</label></div>
             </div>
         </div>
 
 
-        <div class="form-group" ng-show="isChapter">
+        <div class="form-group ng-trans ng-trans-fade-down" ng-show="isChapter">
             <label class="control-label col-md-2" for="question.description">Description</label>
             <div class='col-md-6'>
                 <textarea type="text" name="name" ng-model="question.description"></textarea>
@@ -88,7 +86,7 @@
             </div>
         </div>
 
-        <div class="form-group" ng-show="isChapter">
+        <div class="form-group ng-trans ng-trans-fade-down" ng-show="isChapter">
             <label class="control-label col-md-2" for="question.isFinal">Display mode</label>
             <div class="col-md-6 radio">
                 <div><label><input type='radio' name='isFinal' value='0' ng-model='question.isFinal' ng-checked="1">Behaves like a folder : every subquestion is displayed on its own page</label></div>
@@ -98,7 +96,7 @@
 
 
 
-        <div class="form-group" ng-hide="isChapter" ng-class="{'has-error': myForm.filter.$invalid}">
+        <div class="form-group ng-trans ng-trans-fade-down" ng-hide="isChapter" ng-class="{'has-error': myForm.filter.$invalid}">
             <label class="control-label col-md-2" for="question.filter">Thematic</label>
             <div class="col-md-6">
                 <!--gims-select    name='filter'
@@ -125,7 +123,7 @@
         </div>
 
 
-        <div class="form-group" ng-hide="isChapter" ng-class="{'has-error': myForm.zone.$invalid}">
+        <div class="form-group ng-trans ng-trans-fade-down" ng-hide="isChapter" ng-class="{'has-error': myForm.zone.$invalid}">
             <label class="control-label col-md-2" for="question.part">Zone</label>
             <div class="col-md-4">
                 <gims-select    name="zone"
@@ -142,13 +140,13 @@
         <br/>
 
         <br/>
-        <div class="ng-trans ng-trans-flip-y" ng-repeat="choice in question.choices" ng-show="isChoices">
+        <div class="ng-trans ng-trans-fade-down" ng-repeat="choice in question.choices" ng-show="isChoices">
             <div ng-form name='myInnerForm' class="form-group" ng-class="{'has-error': myInnerForm.choiceName.$invalid || myInnerForm.choiceValue.$invalid}">
                 <label class="control-label col-md-2" for="choiceLabel">Choice {{$index + 1}}</label>
                 <div class='col-md-6'>
                     <input id="choiceLabel" type="text" name="choiceName" ng-model="choice.name" ng-required="isChoices"/>
                 </div>
-                <div class='col-md-1' ng-hide='question.isMultiple'>
+                <div class='col-md-1 ng-trans ng-trans-fade-down' ng-hide='question.isMultiple'>
                     <select ng-required="isChoices && question.isMultiple==0"
                             class="input-sm col-md-12"
                             name="choiceValue"
@@ -166,7 +164,7 @@
         </div>
 
 
-        <div class="form-group form-horizontal" ng-show="isChoices">
+        <div class="form-group form-horizontal ng-trans ng-trans-fade-down" ng-show="isChoices">
             <label class="control-label col-md-2">&nbsp;</label>
             <div class='col-md-3'>
                 <button class="btn btn-success" ng-click="addOption()"><i class="fa fa-plus"></i> Add choice</button>
@@ -177,7 +175,7 @@
 
 
 
-        <div class="form-group form-horizontal" ng-class="{'has-error': myForm.sorting.$invalid}" ng-show="question.id">
+        <div class="form-group form-horizontal ng-trans ng-trans-fade-down" ng-class="{'has-error': myForm.sorting.$invalid}" ng-show="question.id">
             <label class="control-label col-md-2" for="question.sorting">Sorting</label>
             <div class="col-md-1">
                 <input type="number" name="sorting" ng-model="question.sorting"/>

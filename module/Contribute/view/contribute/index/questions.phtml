@@ -19,7 +19,7 @@
 
         <div ng-switch="currentQuestion.type">
             <div ng-switch-when="Chapter">
-                <div ng-repeat='child in currentQuestionChildren'>
+                <div ng-repeat='child in currentQuestionChildren' class="ng-trans ng-trans-fade-down">
                     <hr/>
                     <h4>{{child.name}}</h4>
                     <div class='row'>

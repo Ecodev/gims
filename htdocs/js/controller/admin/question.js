@@ -64,6 +64,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
             // If we have no choices list at all, then we save the existing
             // question with its new type to reload actual list of choices
             if (!$scope.question.choices && $scope.question.id) {
+                $scope.question.choices = [{}];
                 $scope.save();
             }
             // Otherwise, if the question is new and no choices exists, we inject an empty one
@@ -114,7 +115,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
         if ($scope.question.filter) {
             $scope.question.filter = $scope.question.filter.id;
         }
-        
+
         if ($scope.question.chapter) {
             $scope.question.chapter = $scope.question.chapter.id;
         }
@@ -155,8 +156,8 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
 
     $scope.chapterList = [];
 
-    $scope.setParentQuestions = function (survey_id) {
-        Restangular.one('survey', survey_id).all('question').getList({fields:'chapter,level,type',perPage:1000}).then(function (questions) {
+    $scope.setParentQuestions = function (surveyId) {
+        Restangular.one('survey', surveyId).all('question').getList({fields:'chapter,level,type',perPage:1000}).then(function (questions) {
 
             angular.forEach(questions, function(question) {
                 if (question.type == 'Chapter') {
