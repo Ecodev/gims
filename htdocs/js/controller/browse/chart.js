@@ -7,7 +7,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.indexedElements = {};
     $scope.firstExecution = true;
     $scope.countryQueryParams = {perPage: 500};
-    $scope.filterSetQueryParams = {fields: 'filters,filters.genericColor,filters.officialChildren,filters.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren,filters.officialChildren.officialChildren.officialChildren.officialChildren'};
+    $scope.filterSetQueryParams = {fields: 'filters.genericColor,filters.officialChildren.__recursive'};
 
     /**
      * Executes when country, part or filterset are changed

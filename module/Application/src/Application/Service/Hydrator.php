@@ -90,7 +90,7 @@ class Hydrator
         // Function "array_unique" can not be used since loop can contains closure.
         $_properties = array();
         foreach ($properties as $key => $property) {
-            if (is_string($property) && !in_array($property, $_properties)) {
+            if (is_string($property) && !in_array($property, $_properties) && $property != '__recursive') {
                 $_properties[] = $property;
             } else {
                 $_properties[$key] = $property;
@@ -126,6 +126,7 @@ class Hydrator
     public function extract(AbstractModel $object, array $properties = array())
     {
         $properties = $this->initializePropertyStructure($properties);
+
         return $this->internalExtract($object, $properties);
     }
 
@@ -365,7 +366,11 @@ class Hydrator
                     $arr = &$arr[$key];
                 }
 
-                $arr[] = $value;
+                if ($value == '__recursive') {
+                    $arr = $value;
+                } else {
+                    $arr[] = $value;
+                }
             } else {
                 $result[$key] = $property;
             }

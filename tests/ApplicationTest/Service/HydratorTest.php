@@ -79,8 +79,8 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     public function testDot()
     {
         $closure = function () {
-                    $foo = 123;
-                };
+            return 123;
+        };
 
         $actual = $this->hydrator->expandDotsToArray(array(
             'name',
@@ -89,6 +89,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'subobject.subsubobject.name',
             'othersub.name',
             'closure' => $closure,
+            'children.__recursive',
         ));
 
         $expected = array(
@@ -103,6 +104,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
                 'name'
             ),
             'closure' => $closure,
+            'children' => '__recursive',
         );
 
         $this->assertEquals($expected, $actual);
@@ -287,20 +289,25 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     {
         $filter1 = new \Application\Model\Filter('filter 1');
         $filter2 = new \Application\Model\Filter('filter 2');
-        $filter1->setOfficialFilter($filter2);
+        $filter1->addChild($filter2);
 
-        $this->assertEquals(array(
+        $expected = array(
             'id' => null,
             'name' => 'filter 1',
-                // @todo check what to do
-//            'officialFilter' => array(
-//                'id' => null,
-//                'name' => 'filter 2',
-//                'officialFilter' => null,
-//            ),
-                ), $this->hydrator->extract($filter1, array(
-                    'name',
-                    'officialFilter' => '__recursive',
+            'color' => $filter1->getColor(),
+            'children' => array(
+                array(
+                    'id' => null,
+                    'name' => 'filter 2',
+                    'color' => $filter2->getColor(),
+                    'children' => array(),
+                ),
+            ),
+        );
+
+        $this->assertEquals($expected, $this->hydrator->extract($filter1, array(
+                    'color',
+                    'children' => '__recursive',
                 )), 'should return same properties for children and parent');
     }
 
@@ -328,8 +335,8 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'custom name' => 'Mr. John Connor',
                 ), $this->hydrator->extract($this->user, array(
                     'custom name' => function(Hydrator $hydrator, \Application\Model\User $user) {
-                        return 'Mr. ' . $user->getName() . ' Connor';
-                    },
+                return 'Mr. ' . $user->getName() . ' Connor';
+            },
                 )), 'should allow custom properties via Closure');
     }
 
