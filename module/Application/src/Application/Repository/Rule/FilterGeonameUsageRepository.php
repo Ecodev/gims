@@ -13,25 +13,21 @@ class FilterGeonameUsageRepository extends \Application\Repository\AbstractRepos
     private $cache = array();
 
     /**
-     * Return the first FilterGeonameUsage
-     * @param integer $geonameId
-     * @param integer $filterId
-     * @param integer $partId
-     * @param \Doctrine\Common\Collections\ArrayCollection $excluded
-     * @return FilterGeonameUsage|null
+     * Initates cache
+     * @param $geonameId
      */
-    public function getFirst($geonameId, $filterId, $partId, ArrayCollection $excluded)
+    private function getAll($geonameId)
     {
+
         // If no cache for geoname, fill the cache
         if (!isset($this->cache[$geonameId])) {
             $qb = $this->createQueryBuilder('filterGeonameUsage')
-                    ->select('filterGeonameUsage, geoname, filter, rule')
-                    ->join('filterGeonameUsage.geoname', 'geoname')
-                    ->join('filterGeonameUsage.filter', 'filter')
-                    ->join('filterGeonameUsage.rule', 'rule')
-                    ->andWhere('filterGeonameUsage.geoname = :geoname')
-                    ->orderBy('filterGeonameUsage.sorting, filterGeonameUsage.id')
-            ;
+                ->select('filterGeonameUsage, geoname, filter, rule')
+                ->join('filterGeonameUsage.geoname', 'geoname')
+                ->join('filterGeonameUsage.filter', 'filter')
+                ->join('filterGeonameUsage.rule', 'rule')
+                ->andWhere('filterGeonameUsage.geoname = :geoname')
+                ->orderBy('filterGeonameUsage.sorting, filterGeonameUsage.id');
 
             $qb->setParameters(array(
                 'geoname' => $geonameId,
@@ -47,19 +43,47 @@ class FilterGeonameUsageRepository extends \Application\Repository\AbstractRepos
                 $this->cache[$filterGeonameUsage->getGeoname()->getId()][$filterGeonameUsage->getFilter()->getId()][$filterGeonameUsage->getPart()->getId()][] = $filterGeonameUsage;
             }
         }
+    }
 
-        if (isset($this->cache[$geonameId][$filterId][$partId]))
+    /**
+     * Return all the rules according to parameters given
+     * @param $geoname
+     * @param $filter
+     * @param $part
+     * @return Array
+     */
+    public function getAllForGeonameAndFilter($geoname, $filter, $part)
+    {
+        $this->getAll($geoname->getId());
+
+        return isset($this->cache[$geoname->getId()][$filter->getId()][$part->getId()]) ? $this->cache[$geoname->getId()][$filter->getId()][$part->getId()] : [];
+    }
+
+    /**
+     * Return the first FilterGeonameUsage
+     * @param integer $geonameId
+     * @param integer $filterId
+     * @param integer $partId
+     * @param \Doctrine\Common\Collections\ArrayCollection $excluded
+     * @return FilterGeonameUsage|null
+     */
+    public function getFirst($geonameId, $filterId, $partId, ArrayCollection $excluded)
+    {
+        $this->getAll($geonameId);
+
+        if (isset($this->cache[$geonameId][$filterId][$partId])) {
             $possible = $this->cache[$geonameId][$filterId][$partId];
-        else
+        } else {
             $possible = array();
+        }
 
         // Returns the first non-excluded
         foreach ($possible as $filterGeonameUsage) {
-            if (!$excluded->contains($filterGeonameUsage->getRule()))
+            if (!$excluded->contains($filterGeonameUsage->getRule())) {
                 return $filterGeonameUsage;
+            }
         }
 
         return null;
     }
-
 }
