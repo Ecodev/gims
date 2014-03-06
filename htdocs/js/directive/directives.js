@@ -45,10 +45,10 @@ angular.module('myApp.directives')
         })
         .directive('gimsFocus', function($timeout) {
             return {
-                link: function(element) {
+                link: function(scope, element) {
                     $timeout(function() {
                         element.focus();
-                    });
+                    }, 100);
                 }
             };
         });
