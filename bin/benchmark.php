@@ -8,22 +8,22 @@ function benchmark()
     $hostname = basename(getcwd());
 
     $urls = array(
-        "http://$hostname.local/api/table/filter?questionnaire=1&filterSet=2",
-        "http://$hostname.local/api/table/filter?questionnaire=1&filterSet=5",
-        "http://$hostname.local/api/table/filter?questionnaire=1,2,3,4&filterSet=2",
-        "http://$hostname.local/api/table/filter?questionnaire=1,2,3,4&filterSet=5",
-        "http://$hostname.local/api/table/questionnaire?country=19&filterSet=2",
-        "http://$hostname.local/api/table/questionnaire?country=19&filterSet=5",
-        "http://$hostname.local/api/table/questionnaire?country=19,3,57&filterSet=2",
-        "http://$hostname.local/api/table/questionnaire?country=19,3,57&filterSet=5",
-        "http://$hostname.local/api/table/country?years=1980-2012&country=19&filterSet=2",
-        "http://$hostname.local/api/table/country?years=1980-2012&country=19&filterSet=5",
-        "http://$hostname.local/api/table/country?years=1980-2012&country=19,3,57&filterSet=2",
-        "http://$hostname.local/api/table/country?years=1980-2012&country=19,3,57&filterSet=5",
-        "http://$hostname.local/api/chart?country=19&filterSet=2&part=1",
-        "http://$hostname.local/api/chart?country=19&filterSet=5&part=1",
-        "http://$hostname.local/api/chart?country=19&filterSet=2&part=3",
-        "http://$hostname.local/api/chart?country=19&filterSet=5&part=3",
+        "http://$hostname.lan/api/table/filter?questionnaire=1&filterSet=2",
+        "http://$hostname.lan/api/table/filter?questionnaire=1&filterSet=5",
+        "http://$hostname.lan/api/table/filter?questionnaire=1,2,3,4&filterSet=2",
+        "http://$hostname.lan/api/table/filter?questionnaire=1,2,3,4&filterSet=5",
+        "http://$hostname.lan/api/table/questionnaire?country=19&filterSet=2",
+        "http://$hostname.lan/api/table/questionnaire?country=19&filterSet=5",
+        "http://$hostname.lan/api/table/questionnaire?country=19,3,57&filterSet=2",
+        "http://$hostname.lan/api/table/questionnaire?country=19,3,57&filterSet=5",
+        "http://$hostname.lan/api/table/country?years=1980-2012&country=19&filterSet=2",
+        "http://$hostname.lan/api/table/country?years=1980-2012&country=19&filterSet=5",
+        "http://$hostname.lan/api/table/country?years=1980-2012&country=19,3,57&filterSet=2",
+        "http://$hostname.lan/api/table/country?years=1980-2012&country=19,3,57&filterSet=5",
+        "http://$hostname.lan/api/chart?country=19&filterSet=2&part=1",
+        "http://$hostname.lan/api/chart?country=19&filterSet=5&part=1",
+        "http://$hostname.lan/api/chart?country=19&filterSet=2&part=3",
+        "http://$hostname.lan/api/chart?country=19&filterSet=5&part=3",
     );
 
     $maxSize = 0;

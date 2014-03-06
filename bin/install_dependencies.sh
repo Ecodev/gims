@@ -65,7 +65,7 @@ if [[ "$1" = "configure" ]]; then
     sudo service apache2 restart
 
     echo "Configuring custom domain..."
-    echo "127.0.0.1 gims.local" | sudo tee --append /etc/hosts
+    echo "127.0.0.1 gims.lan" | sudo tee --append /etc/hosts
 
     echo "Init database..."
     cp config/autoload/local.php.dist config/autoload/local.php

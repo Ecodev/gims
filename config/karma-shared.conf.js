@@ -8,7 +8,7 @@ module.exports = function(config) {
         logColors: true,
         browsers: ['Chrome'],
         proxies: {
-            '/': 'http://gims.local/'
+            '/': 'http://gims.lan/'
         },
         // Our custom browser 'cli' will use PhantomJS, but with a huge
         // window size to let ng-grid render as many columns as possible
