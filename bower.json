@@ -6,10 +6,11 @@
     "angular-bootstrap-colorpicker": "v3.0.5",
     "angular-highcharts-directive": "*",
     "angular-http-auth": "v1.2.1",
-    "angular-mocks": "v1.2.13",
-    "angular-resource": "v1.2.13",
-    "angular-route": "v1.2.13",
-    "angular-scenario": "v1.2.13",
+    "angular-animate": "~1.2.14",
+    "angular-mocks": "~1.2.14",
+    "angular-resource": "~1.2.14",
+    "angular-route": "~1.2.14",
+    "angular-scenario": "~1.2.14",
     "angular-bootstrap": "0.10.0",
     "angular-ui-select2": "v0.0.5",
     "highcharts.com": "v3.0.9",
@@ -20,7 +21,6 @@
     "restangular": "v1.3.1",
     "sprintf": "v0.7",
     "angular-ui-utils": "bower",
-    "autofill-event": "~1.0.0",
-    "angular-animate": "~1.2.14"
+    "autofill-event": "~1.0.0"
   }
 }
