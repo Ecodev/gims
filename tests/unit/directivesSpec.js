@@ -5,15 +5,13 @@ describe('directives', function() {
 
     beforeEach(module('myApp.directives'));
 
-    describe('app-version', function() {
-        it('should print current version', function() {
-            module(function($provide) {
-                $provide.value('version', 'TEST_VER');
-            });
-            inject(function($compile, $rootScope) {
-                var element = $compile('<span app-version></span>')($rootScope);
-                expect(element.text()).toEqual('TEST_VER');
-            });
+    describe('gims-link-new', function() {
+        it('should print link to create object', function() {
+//  TODO find out how to inject $routeParams
+//            inject(function($compile, $rootScope) {
+//                var element = $compile('<gims-link-new target="filter"></gims-link-new>')($rootScope);
+//                expect(element.text()).toEqual('new filter');
+//            });
         });
     });
 });

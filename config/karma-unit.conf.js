@@ -6,7 +6,7 @@ module.exports = function(config) {
     config.set({
         files: [
             'htdocs/lib/autoload/*',
-            'htdocs/lib/angular/angular-mocks.js',
+            'htdocs/lib/angular-mocks/angular-mocks.js',
             'htdocs/js/**/*.js',
             'tests/unit/**/*.js'
         ],
