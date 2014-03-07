@@ -39,6 +39,7 @@
             },
             "tooltip": {
                 "headerFormat": "<span style=\"font-size: 10px\">Estimate for {point.key}<\/span><br\/>",
+                "pointFormat": "<span style=\"color:{series.color}\">{point.y} {series.name}<\/span><br\/>",
                 "valueSuffix": "%"
             },
             "pointStart": 1980,
@@ -107,7 +108,7 @@
             "type": "line"
         },
         {
-            "name": "Improved",
+            "name": "Improved<br><br><b>Rules : <\/b><br\/>Regression: Improved (default - for developed countries),<br\/>Regression: Improved (default)",
             "id": 167,
             "data": [
                 100.0,

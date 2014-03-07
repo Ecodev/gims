@@ -39,6 +39,7 @@
             },
             "tooltip": {
                 "headerFormat": "<span style=\"font-size: 10px\">Estimate for {point.key}<\/span><br\/>",
+                "pointFormat": "<span style=\"color:{series.color}\">{point.y} {series.name}<\/span><br\/>",
                 "valueSuffix": "%"
             },
             "pointStart": 1980,
@@ -66,7 +67,7 @@
     },
     "series": [
         {
-            "name": "Total improved",
+            "name": "Total improved<br><br><b>Rules : <\/b><br\/>Regression: Total improved (default)",
             "id": 74,
             "data": [
                 null,
@@ -107,7 +108,7 @@
             "type": "line"
         },
         {
-            "name": "Piped onto premises",
+            "name": "Piped onto premises<br><br><b>Rules : <\/b><br\/>Regression: Piped onto premises (default)",
             "id": 75,
             "data": [
                 0.5,
@@ -148,7 +149,7 @@
             "type": "line"
         },
         {
-            "name": "Surface water",
+            "name": "Surface water<br><br><b>Rules : <\/b><br\/>Regression: Surface water (default)",
             "id": 76,
             "data": [
                 null,
@@ -189,7 +190,7 @@
             "type": "line"
         },
         {
-            "name": "Other Improved",
+            "name": "Other Improved<br><br><b>Rules : <\/b><br\/>Regression: Other Improved (default)",
             "id": 77,
             "data": [
                 null,
@@ -230,7 +231,7 @@
             "type": "line"
         },
         {
-            "name": "Other Unimproved",
+            "name": "Other Unimproved<br><br><b>Rules : <\/b><br\/>Regression: Other Unimproved (default)",
             "id": 78,
             "data": [
                 null,

@@ -39,6 +39,7 @@
             },
             "tooltip": {
                 "headerFormat": "<span style=\"font-size: 10px\">Estimate for {point.key}<\/span><br\/>",
+                "pointFormat": "<span style=\"color:{series.color}\">{point.y} {series.name}<\/span><br\/>",
                 "valueSuffix": "%"
             },
             "pointStart": 1980,
@@ -148,7 +149,7 @@
             "type": "line"
         },
         {
-            "name": "Improved",
+            "name": "Improved<br><br><b>Rules : <\/b><br\/>Regression: Improved (default)",
             "id": 167,
             "data": [
                 null,
@@ -189,7 +190,7 @@
             "type": "line"
         },
         {
-            "name": "Shared",
+            "name": "Shared<br><br><b>Rules : <\/b><br\/>Regression: Shared (default)",
             "id": 168,
             "data": [
                 null,
@@ -230,7 +231,7 @@
             "type": "line"
         },
         {
-            "name": "Other unimproved",
+            "name": "Other unimproved<br><br><b>Rules : <\/b><br\/>Regression: Other unimproved (default)",
             "id": 169,
             "data": [
                 null,
@@ -271,7 +272,7 @@
             "type": "line"
         },
         {
-            "name": "Open defecation",
+            "name": "Open defecation<br><br><b>Rules : <\/b><br\/>Regression: Open defecation (default)",
             "id": 170,
             "data": [
                 null,

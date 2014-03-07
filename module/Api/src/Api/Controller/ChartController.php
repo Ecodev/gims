@@ -145,7 +145,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                         'enabled' => false,
                     ),
                     'tooltip' => array(
-                        'useHtml' => true,
                         'headerFormat' => '<span style="font-size: 10px">Estimate for {point.key}</span><br/>',
                         'pointFormat' => '<span style="color:{series.color}">{point.y} {series.name}</span><br/>',
                         'valueSuffix' => '%',
