@@ -79,6 +79,20 @@ return array(
                             'defaults' => array(),
                         ),
                     ),
+                    // This route is same as default, but only for users
+                    // Creating a specific rule dedicated to /api/users  allow to restrict access to members only
+                    // see /config/autoload/zfcrbac.global.php
+                    'users' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/user',
+                            'constraints' => array(),
+                            'defaults' => array(
+                                '__NAMESPACE__' => 'Api\Controller',
+                                'controller' => 'user',
+                            ),
+                        ),
+                    ),
                     // This route allow to execute something on a user (eg:computing stats)
                     'user_actions' => array(
                         'type' => 'Segment',

@@ -19,6 +19,7 @@ return array(
                 // Only members can access admin and contribute angular templates
                 array('route' => 'template_admin', 'roles' => 'member'),
                 array('route' => 'template_contribute', 'roles' => 'member'),
+                array('route' => 'api/users', 'roles' => 'member'),
             ),
         ),
         'providers' => array(
