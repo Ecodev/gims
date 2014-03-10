@@ -3,7 +3,7 @@
 pass=true
 
 # Run JSHint validation before commit
-files=$(git diff --cached --name-only --diff-filter=ACMR -- *.js **/*.js)
+files=$(git diff --cached --name-only --diff-filter=ACMR | grep .js)
 if [ "$files" != "" ]; then
     for file in ${files}; do
         jshint ${file}
@@ -15,7 +15,7 @@ if [ "$files" != "" ]; then
 fi
 
 # Run php-cs-fixer validation before commit
-files=$(git diff --cached --name-only --diff-filter=ACMR -- *.php **/*.php)
+files=$(git diff --cached --name-only --diff-filter=ACMR | grep .php)
 if [ "$files" != "" ]; then
     for file in ${files}; do
         php-cs-fixer fix --dry-run --verbose --diff ${file}
