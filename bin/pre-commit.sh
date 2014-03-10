@@ -14,9 +14,18 @@ if [ "$files" != "" ]; then
     done
 fi
 
-# Run php-cs-fixer validation before commit
 files=$(git diff --cached --name-only --diff-filter=ACMR | grep .php)
 if [ "$files" != "" ]; then
+
+    # Run php syntax check before commit
+    for file in ${files}; do
+        php -l ${file}
+        if [ $? -ne 0 ]; then
+            pass=false
+        fi
+    done
+
+    # Run php-cs-fixer validation before commit
     for file in ${files}; do
         php-cs-fixer fix --dry-run --verbose --diff ${file}
         if [ $? -ne 0 ]; then
