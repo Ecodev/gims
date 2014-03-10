@@ -49,6 +49,28 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             disabled: '=',
             model: '=' // TODO: could not find a way to use real 'ng-model'. So for now we use custom 'model' attribute and bi-bind it to real ng-model. Ugly, but working
         },
+        compile: function() {
+
+            return function(scope, elm, attrs) {
+
+                // If in tag mode, open select2 when getting focus via keyboard
+                if (attrs.multiple)
+                {
+                    var select2Focus = function() {
+                        var select2 = $(this).data('select2');
+                        setTimeout(function() {
+                            if (!select2.opened()) {
+                                select2.open();
+                            }
+                        }, 0);
+                    };
+
+                    elm.one('select2-focus', select2Focus).on("select2-blur", function() {
+                        $(this).one('select2-focus', select2Focus);
+                    });
+                }
+            };
+        },
         // The linking function will add behavior to the template
         link: function() {
         },
