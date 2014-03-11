@@ -1,14 +1,18 @@
+# Exit script on any error
+set -e
+
 truncate -s 0 data/logs/all.log
-phing load-data -DdumpFile=../gims/population.backup.gz
+phing load-data -DdumpFile=population.backup.gz
 
 time php htdocs/index.php import jmp data/cache/country_data/Bangladesh_13.xlsm
 
 # Reload partial dumps
-./vendor/bin/doctrine-module dbal:run-sql "COPY \"user\" FROM '/sites/gims/bin/sql/user.sql';"
-./vendor/bin/doctrine-module dbal:run-sql "COPY survey FROM '/sites/gims/bin/sql/survey.sql';"
-./vendor/bin/doctrine-module dbal:run-sql "COPY questionnaire FROM '/sites/gims/bin/sql/questionnaire.sql';"
-./vendor/bin/doctrine-module dbal:run-sql "COPY question FROM '/sites/gims/bin/sql/question.sql';"
-./vendor/bin/doctrine-module dbal:run-sql "COPY choice FROM '/sites/gims/bin/sql/choice.sql';"
+SQL_PATH="`pwd`/tests/data/sql"
+./vendor/bin/doctrine-module dbal:run-sql "COPY \"user\" FROM '$SQL_PATH/user.sql';"
+./vendor/bin/doctrine-module dbal:run-sql "COPY survey FROM '$SQL_PATH/survey.sql';"
+./vendor/bin/doctrine-module dbal:run-sql "COPY questionnaire FROM '$SQL_PATH/questionnaire.sql';"
+./vendor/bin/doctrine-module dbal:run-sql "COPY question FROM '$SQL_PATH/question.sql';"
+./vendor/bin/doctrine-module dbal:run-sql "COPY choice FROM '$SQL_PATH/choice.sql';"
 
 # Reset sequences values
 ./vendor/bin/doctrine-module dbal:run-sql "SELECT SETVAL('answer_id_seq', MAX(id) ) FROM answer;"
@@ -38,16 +42,17 @@ time php htdocs/index.php import jmp data/cache/country_data/Azerbaijan_13.xlsm 
 time php htdocs/index.php import jmp data/cache/country_data/Germany_13.xlsm  # for developed countries rules
 time php htdocs/index.php import jmp data/cache/country_data/Saudi_arabia_13.xlsm # for no urban/rural disaggregation rules
 
-#time php htdocs/index.php import jmp data/cache/country_data/Cambodia_13.xlsm
-#time php htdocs/index.php import jmp data/cache/country_data/Lao_people_dem_rep_13.xlsm
+# Give access to everything to test user
+./vendor/bin/doctrine-module dbal:run-sql "INSERT INTO user_survey (user_id, role_id, survey_id) SELECT 1, 5, survey.id FROM SURVEY;"
+./vendor/bin/doctrine-module dbal:run-sql "INSERT INTO user_questionnaire (user_id, role_id, questionnaire_id) SELECT 1, 3, questionnaire.id FROM questionnaire;"
 
 # Dump new database content
 phing dump-data -DdumpFile=tests/data/db.backup.gz
 
 
 # Dump partial dumps (this should be used to create partial SQL)
-# COPY (SELECT * from \"user\") TO '/tmp/user.sql';
-# COPY (SELECT * from survey WHERE id = 20) TO '/tmp/survey.sql';
-# COPY (SELECT * from questionnaire WHERE survey_id = 20) TO '/tmp/questionnaire.sql';
-# COPY (SELECT * from question WHERE survey_id = 20) TO '/tmp/question.sql';
-# COPY (SELECT * from choice) TO '/tmp/choice.sql';
+# COPY (SELECT * from \"user\") TO '$SQL_PATH/user.sql';
+# COPY (SELECT * from survey WHERE id = 20) TO '$SQL_PATH/survey.sql';
+# COPY (SELECT * from questionnaire WHERE survey_id = 20) TO '$SQL_PATH/questionnaire.sql';
+# COPY (SELECT * from question WHERE survey_id = 20) TO '$SQL_PATH/question.sql';
+# COPY (SELECT * from choice) TO '$SQL_PATH/choice.sql';
