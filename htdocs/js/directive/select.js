@@ -52,7 +52,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
         // The linking function will add behavior to the template
         link: function() {
         },
-        controller: function($scope, $attrs, Restangular, CachedRestangular, $location, $route, $routeParams) {
+        controller: function($scope, $attrs, Restangular, CachedRestangular, $location, $route, $routeParams, $timeout) {
             var items = [];
             var api = $scope.api;
             var name = $scope.name || api; // default key to same name as route
@@ -62,6 +62,13 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 return parseInt(id);
             });
 
+            $scope.includeLinks = function(){
+                $timeout(function(){
+                    $('.select2list .btn[href]').off('mouseup').on('mouseup', function(){
+                        location.href = $(this).attr('href');
+                    });
+                }, 500);
+            };
 
             // Update URL when value changes
             if (!$route.current.$$route.reloadOnSearch || name == 'id') {
@@ -140,10 +147,12 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                         }
 
                         $scope[$attrs.ngModel] = item;
+                        $scope.includeLinks();
                     });
                 } else if (idsFromUrl.length > 1) {
                     myRestangular.all(api).getList(_.merge({id: fromUrl}, $scope.queryparams)).then(function(items) {
                         $scope[$attrs.ngModel] = items;
+                        $scope.includeLinks();
                     });
                 }
             }
@@ -166,6 +175,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
 
                         $scope[$attrs.ngModel] = selectedItems;
                     }
+                    $scope.includeLinks();
                 });
 
                 $scope.options = {
