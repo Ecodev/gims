@@ -3,6 +3,27 @@
 angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function($scope, $location, $routeParams, Restangular) {
     "use strict";
 
+    $scope.fields = {fields: 'filters,filters.paths,filters.children,filters.color,filter.genericColor'};
+    $scope.params = {fields: 'paths,color,genericColor'};
+    $scope.select2Template = "" +
+        "<div>" +
+        "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
+        "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +
+        "</div>" +
+        "<div class='col-sm-7 col-md-7'>" +
+        "    <small>[[console.info(item);]]" +
+        "       [[_.map(item.paths, function(path){ return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]" +
+        "    </small>" +
+        "</div>" +
+        "<div class='col-sm-1 col-md-1 hide-in-results' >" +
+        "    <a class='btn btn-default btn-sm' href='/admin/filter/edit/[[item.id]][[$scope.currentContextElement]]'>" +
+        "        <i class='fa fa-pencil'></i>" +
+        "    </a>" +
+        "</div>" +
+        "<div class='clearfix'></div>" +
+        "</div>";
+
+
     var redirectTo = '/admin/filter-set';
     if ($routeParams.returnUrl) {
         redirectTo = $routeParams.returnUrl;
@@ -18,7 +39,7 @@ angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function($scope, 
 
 
     if ($routeParams.id) {
-        Restangular.one('filter-set', $routeParams.id).get({fields: 'filters'}).then(function(filterSet) {
+        Restangular.one('filter-set', $routeParams.id).get($scope.fields).then(function(filterSet) {
             $scope.filterSet = filterSet;
         });
 
