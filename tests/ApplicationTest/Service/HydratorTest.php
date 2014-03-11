@@ -20,10 +20,6 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     private $choice2;
 
-    /**
-     * @var \Application\Model\User
-     */
-    private $user;
 
     /**
      * @var Hydrator

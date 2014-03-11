@@ -70,15 +70,6 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
      */
     private $answer2;
 
-    /**
-     * @var User
-     */
-    protected $user;
-
-    /**
-     * @var \ZfcRbac\Service\Rbac
-     */
-    protected $rbac;
 
     /**
      * @var UserSurvey
@@ -161,14 +152,6 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
                 ->setQuestion($this->question)
                 ->setQuestionnaire($this->questionnaire)
                 ->setPart($this->part2);
-
-        // create a fake user
-        $this->user = new User();
-        $this->user->setPassword('foo')->setName('test user unit tests');
-
-        // Get rbac service to tell who we are (simulate logged in user)
-        $this->rbac = $this->getApplication()->getServiceManager()->get('ZfcRbac\Service\Rbac');
-        $this->rbac->setIdentity($this->user);
 
         // Get existing roles
         $roleRepository = $this->getEntityManager()->getRepository('Application\Model\Role');

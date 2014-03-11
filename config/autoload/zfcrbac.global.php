@@ -9,12 +9,8 @@ return array(
     ),
     'zfcrbac' => array(
         'firewall_route' => true,
-        'firewall_controller' => true,
+        'firewall_controller' => false, // default to true
         'firewalls' => array(
-            'ZfcRbac\Firewall\Controller' => array(
-//                array('controller' => 'Contribute\Controller\Index', 'actions' => 'index', 'roles' => 'member'),
-//                array('controller' => 'Admin\Controller\Survey', 'actions' => 'index', 'roles' => 'member'),
-            ),
             'ZfcRbac\Firewall\Route' => array(
                 // Only members can access admin and contribute angular templates
                 array('route' => 'template_admin', 'roles' => 'member'),

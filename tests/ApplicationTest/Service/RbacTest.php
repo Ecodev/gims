@@ -67,6 +67,7 @@ class RbacTest extends \ApplicationTest\Controller\AbstractController
         /* @var $rbac \Application\Service\Rbac */
         $rbac = $this->getApplicationServiceLocator()->get('ZfcRbac\Service\Rbac');
 
+        $rbac->setIdentity(null);
         $this->assertTrue($rbac->hasRole('anonymous'), 'Not logged in users have builtin anonymous role');
         $this->assertFalse($rbac->hasRole('member'), 'Not logged in users does not have builtin member role');
 

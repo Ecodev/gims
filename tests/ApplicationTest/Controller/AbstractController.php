@@ -3,10 +3,21 @@
 namespace ApplicationTest\Controller;
 
 use Zend\Json\Json;
+use \Application\Model\User;
 use \ApplicationTest\Traits\TestWithTransaction;
 
 class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase
 {
+
+    /**
+     * @var User
+     */
+    protected $user;
+
+    /**
+     * @var \ZfcRbac\Service\Rbac
+     */
+    protected $rbac;
 
     /**
      * @var array [classname => [id => object]]
@@ -22,9 +33,8 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
         // Everything is relative to the application root now.
         chdir(__DIR__ . '/../../../');
 
-        // Config is the normal configuration, overridden by test configuration
+        // Config is the normal configuration
         $config = include 'config/application.config.php';
-        $config['module_listener_options']['config_glob_paths'][] = 'config/autoload/{,*.}{phpunit}.php';
 
         $this->setApplicationConfig($config);
 
@@ -32,6 +42,14 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
 
         // Don't forget to call trait's method
         $this->setUpTransaction();
+
+        // create a fake user
+        $this->user = new User();
+        $this->user->setPassword('foo')->setName('test user unit tests');
+
+        // Get rbac service to tell who we are (simulate logged in user)
+        $this->rbac = $this->getApplication()->getServiceManager()->get('ZfcRbac\Service\Rbac');
+        $this->rbac->setIdentity($this->user);
     }
 
     /**
