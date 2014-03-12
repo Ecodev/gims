@@ -9,7 +9,6 @@ use Application\Model\Part;
 
 /**
  * A question which can be answered by end-user, and thus may be specific to parts.
- *
  * @ORM\Entity(repositoryClass="Application\Repository\QuestionRepository")
  */
 abstract class AbstractAnswerableQuestion extends AbstractQuestion
@@ -17,8 +16,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
 
     /**
      * @var Filter
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Model\Filter", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Application\Model\Filter", fetch="EAGER", inversedBy="questions")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE")
      * })
@@ -40,7 +38,6 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
 
     /**
      * @var int
-     *
      * @ORM\Column(type="boolean", nullable=false, options={"default" = TRUE})
      */
     private $isCompulsory = false;
@@ -59,6 +56,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
      * Set filter
      *
      * @param Filter $filter
+     *
      * @return AbstractAnswerableQuestion
      */
     public function setFilter(Filter $filter)
@@ -70,7 +68,6 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
 
     /**
      * Get filter
-     *
      * @return Filter
      */
     public function getFilter()
@@ -80,7 +77,6 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
 
     /**
      * Get all answers
-     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getAnswers()
@@ -114,6 +110,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
 
     /**
      * @param boolean $isCompulsory
+     *
      * @return $this
      */
     public function setIsCompulsory($isCompulsory)
@@ -133,6 +130,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $parts
+     *
      * @return $this
      */
     public function setParts(\Doctrine\Common\Collections\ArrayCollection $parts)

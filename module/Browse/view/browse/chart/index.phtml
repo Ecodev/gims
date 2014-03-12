@@ -75,9 +75,10 @@
                                     <i ng-if="indexedElements[pointSelected.questionnaire].filters[key].usages" class='fa fa-lg fa-gims-usage' style="color:{{usedFilters[hFilterId]}}"></i> <!--tooltip-placement="right" tooltip="{{indexedElements[pointSelected.questionnaire].filters[key].usages}}"-->
                                 </td>
                                 <td style="padding-left:{{indexedElements[pointSelected.questionnaire].filters[key].filter.hFilters[hFilterId].level+1}}em;">
-                                    {{indexedElements[pointSelected.questionnaire].filters[key].filter.name}}
-                                    <a href='/admin/filter/edit/{{key}}' target='_blank'><i class='fa fa-pencil'></i></a>
-
+                                    <span tooltip="{{indexedElements[pointSelected.questionnaire].filters[key].filter.originalDenomination}}" tooltip-placement="right">
+                                        {{indexedElements[pointSelected.questionnaire].filters[key].filter.name}}
+                                        <a href='/admin/filter/edit/{{key}}' target='_blank'><i class='fa fa-pencil'></i></a>
+                                    </span>
                                 </td>
                                 <td style='width:{{lastCol}}' class='text-right'>
                                     <span ng-if='indexedElements[pointSelected.questionnaire].filters[key].ignored || !indexedElements[pointSelected.questionnaire].filters[key].ignored && indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[part.name] === undefined'>

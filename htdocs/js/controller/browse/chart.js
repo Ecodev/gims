@@ -328,8 +328,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
                 $timeout(function() {
                     jQuery(window).resize();
-                }, 350)
-            }
+                }, 350);
+            };
 
             var firstQuestionnaire = ignoredQuestionnaires[0].split(':');
             $scope.retrieveFiltersAndValues(firstQuestionnaire[0], function() {
@@ -347,8 +347,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.refresh = function(refreshUrl, callback) {
 
         $scope.isLoading = true;
-        var ignoredElements = refreshUrl ? $scope.getIgnoredElements(refreshUrl).join(',') : $location.search()['ignoredElements'];
-        $scope.refreshChart(refreshUrl, ignoredElements, callback)
+        var ignoredElements = refreshUrl ? $scope.getIgnoredElements(refreshUrl).join(',') : $location.search().ignoredElements;
+        $scope.refreshChart(refreshUrl, ignoredElements, callback);
     };
 
     var refreshCanceler;
@@ -649,6 +649,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             }
             if (filter.filter.color) {
                 $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.color = filter.filter.color;
+            }
+            if (filter.filter.originalDenomination) {
+                $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.originalDenomination = filter.filter.originalDenomination;
             }
 
             if (!$scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.hFilters) {

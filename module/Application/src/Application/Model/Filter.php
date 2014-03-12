@@ -2,11 +2,11 @@
 
 namespace Application\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Application\Utility;
-use \MischiefCollective\ColorJizz\Formats\HSV;
-use \MischiefCollective\ColorJizz\Formats\RGB;
-use \MischiefCollective\ColorJizz\Formats\HEX;
+use MischiefCollective\ColorJizz\Formats\HSV;
+use MischiefCollective\ColorJizz\Formats\HEX;
 
 /**
  * A Filter is used to organise things. They are usually defined by the answer
@@ -81,6 +81,13 @@ class Filter extends AbstractModel
     private $parents;
 
     /**
+     * Questions that have current filter assigned
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="\Application\Model\Question\AbstractAnswerableQuestion", mappedBy="filter")
+     */
+    private $questions;
+
+    /**
      * Summands are the filters which must be summed to compute this filter value
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="Filter")
@@ -106,6 +113,7 @@ class Filter extends AbstractModel
 
     /**
      * Constructor
+     *
      * @param string $name
      */
     public function __construct($name = null)
@@ -129,7 +137,9 @@ class Filter extends AbstractModel
 
     /**
      * Set name
+     *
      * @param string $name
+     *
      * @return Filter
      */
     public function setName($name)
@@ -150,7 +160,9 @@ class Filter extends AbstractModel
 
     /**
      * Set questionnaire. If a questionnaire is set, it means the Filter is unofficial
+     *
      * @param Questionnaire $questionnaire
+     *
      * @return Filter
      */
     public function setQuestionnaire(Questionnaire $questionnaire = null)
@@ -180,7 +192,9 @@ class Filter extends AbstractModel
 
     /**
      * Set officialFilter
+     *
      * @param Filter $officialFilter
+     *
      * @return Filter
      */
     public function setOfficialFilter(Filter $officialFilter = null)
@@ -217,7 +231,9 @@ class Filter extends AbstractModel
 
     /**
      * Add a child
+     *
      * @param Filter $child
+     *
      * @return Filter
      */
     public function addChild(Filter $child)
@@ -232,7 +248,9 @@ class Filter extends AbstractModel
 
     /**
      * Set new filters, replacing entirely existing children
+     *
      * @param \Doctrine\Common\Collections\ArrayCollection $children
+     *
      * @return $this
      */
     public function setChildren(\Doctrine\Common\Collections\ArrayCollection $children)
@@ -262,7 +280,9 @@ class Filter extends AbstractModel
     /**
      * Notify the child that he has a new parent.
      * This should only be called by Filter::addChild()
+     *
      * @param Filter $parent
+     *
      * @return Filter
      */
     protected function parentAdded(Filter $parent)
@@ -274,7 +294,9 @@ class Filter extends AbstractModel
 
     /**
      * Set new filters, replacing entirely existing parents
+     *
      * @param \Doctrine\Common\Collections\ArrayCollection $parents
+     *
      * @return $this
      */
     public function setParents(\Doctrine\Common\Collections\ArrayCollection $parents)
@@ -303,7 +325,9 @@ class Filter extends AbstractModel
 
     /**
      * Add a summand
+     *
      * @param Filter $summand
+     *
      * @return Filter
      */
     public function addSummand(Filter $summand)
@@ -313,6 +337,29 @@ class Filter extends AbstractModel
         }
 
         return $this;
+    }
+
+    /**
+     * Return all questions that are associated to this filter
+     *
+     * @param $survey \Application\Model\Survey restrict questions for given survey
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getQuestions(\Application\Model\Survey $survey = null)
+    {
+        $questions = new ArrayCollection();
+        if ($survey) {
+            foreach ($this->questions as $question) {
+                if ($question->getSurvey() === $survey) {
+                    $questions->add($question);
+                }
+            }
+        } else {
+            $questions = $this->questions;
+        }
+
+        return $questions;
     }
 
     /**
@@ -327,7 +374,9 @@ class Filter extends AbstractModel
     /**
      * Notify the filter that it was added to FilterQuestionnaireUsage relation.
      * This should only be called by FilterQuestionnaireUsage::setFilter()
+     *
      * @param Rule\FilterQuestionnaireUsage $usage
+     *
      * @return Filter
      */
     public function filterQuestionnaireUsageAdded(Rule\FilterQuestionnaireUsage $usage)
@@ -371,7 +420,9 @@ class Filter extends AbstractModel
 
     /**
      * Return color with generic replacement if no color in database
+     *
      * @param Ration|int saturation from 0 to 100
+     *
      * @return string
      */
     public function getGenericColor($ratio = 100)
@@ -387,7 +438,9 @@ class Filter extends AbstractModel
 
     /**
      * Get color if setted in datase
+     *
      * @param Ration|int saturation from 0 to 100
+     *
      * @return string
      */
     public function getColor($ratio = 100)
@@ -406,7 +459,9 @@ class Filter extends AbstractModel
 
     /**
      * Set color in database
+     *
      * @param $color string hexadecimal
+     *
      * @return Filter
      */
     public function setColor($color)

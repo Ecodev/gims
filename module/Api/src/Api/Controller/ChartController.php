@@ -32,9 +32,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     public function indexAction()
     {
-        $country = $this->getEntityManager()
-            ->getRepository('Application\Model\Country')
-            ->findOneById($this->params()->fromQuery('country'));
+        $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneById($this->params()->fromQuery('country'));
 
         $filterSetsName = '';
         $filterSets = array();
@@ -42,9 +40,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         foreach ($filterSetsIds as $filterSetId) {
             if (!empty($filterSetId)) {
                 /* @var $filterSet \Application\Model\FilterSet */
-                $filterSet = $this->getEntityManager()
-                    ->getRepository('Application\Model\FilterSet')
-                    ->findOneById($filterSetId);
+                $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($filterSetId);
                 $filterSetsName .= $filterSet->getName() . ', ';
                 $filterSets[] = $filterSet;
                 $hFilters = $filterSet->getFilters()->map(function ($el) {
@@ -55,13 +51,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         }
         $filterSetsName = trim($filterSetsName, ", ");
 
-        $part = $this->getEntityManager()
-            ->getRepository('Application\Model\Part')
-            ->findOneById($this->params()->fromQuery('part'));
+        $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
 
-        $questionnaires = $this->getEntityManager()
-            ->getRepository('Application\Model\Questionnaire')
-            ->getByGeonameWithSurvey($country ? $country->getGeoname() : -1);
+        $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getByGeonameWithSurvey($country ? $country->getGeoname() : -1);
 
         $this->startYear = 1980;
         $this->endYear = 2012;
@@ -181,7 +173,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     /**
      * Always returns the same integer for the same name and incrementing: 0, 1, 2...
      * @staticvar array $keys
+     *
      * @param string $filterName
+     *
      * @return integer
      */
     private function getConstantKey($filterName)
@@ -197,8 +191,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Returns all series for ignored questionnaires AND filters at the same time
-     * @param array $questionnaires
+     *
+     * @param array                   $questionnaires
      * @param \Application\Model\Part $part
+     *
      * @return array
      */
     protected function computeIgnoredElements(array $questionnaires, Part $part)
@@ -209,9 +205,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         if (count($ignoredFiltersByQuestionnaire['byQuestionnaire']) > 0) {
             foreach ($this->usedFilters as $filterId) {
 
-                $filter = $this->getEntityManager()
-                    ->getRepository('Application\Model\Filter')
-                    ->findOneById($filterId);
+                $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
                 $filterSetSingle = new \Application\Model\FilterSet();
                 $filterSetSingle->addFilter($filter);
 
@@ -258,13 +252,15 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Get line and scatter series for the given filterSet and questionnaires
+     *
      * @param \Application\Model\FilterSet $filterSet
-     * @param array $questionnaires
-     * @param \Application\Model\Part $part
-     * @param array $ignoredFilters
-     * @param $ratio
-     * @param string $dashStyle
-     * @param string $suffix for serie name
+     * @param array                        $questionnaires
+     * @param \Application\Model\Part      $part
+     * @param array                        $ignoredFilters
+     * @param                              $ratio
+     * @param string                       $dashStyle
+     * @param string                       $suffix         for serie name
+     *
      * @internal param array $colors
      * @return string
      */
@@ -301,7 +297,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
 
             if (count($usages) > 0) {
-                $serie['name'] .=  '<br><br><b>Rules : </b><br/>'.implode(',<br/>' , array_map(function($u){return $u->getRule()->getName();}, $usages));
+                $serie['name'] .= '<br><br><b>Rules : </b><br/>' . implode(',<br/>', array_map(function ($u) {
+                        return $u->getRule()->getName();
+                    }, $usages));
             }
 
             foreach ($serie['data'] as &$d) {
@@ -367,16 +365,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     public function getPanelFiltersAction()
     {
         /** @var \Application\Model\Questionnaire $questionnaire */
-        $questionnaire = $this->getEntityManager()
-            ->getRepository('Application\Model\Questionnaire')
-            ->findOneById($this->params()->fromQuery('questionnaire'));
+        $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($this->params()->fromQuery('questionnaire'));
 
         if ($questionnaire) {
 
             /** @var \Application\Model\Part $part */
-            $part = $this->getEntityManager()
-                ->getRepository('Application\Model\Part')
-                ->findOneById($this->params()->fromQuery('part'));
+            $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
 
             /** @var \Application\Model\Filter $filter */
             $filters = explode(',', $this->params()->fromQuery('filters'));
@@ -410,11 +404,11 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             ) {
                 // compute filters
                 foreach ($filters as $filterId) {
-                    $filter = $this->getEntityManager()
-                        ->getRepository('Application\Model\Filter')
-                        ->findOneById($filterId);
-                    $fields = explode(',', $this->params()
-                        ->fromQuery('fields'));
+                    $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
+                    $fields = array_merge(explode(',', $this->params()->fromQuery('fields')), array(
+                        'questions',
+                        'questions.survey'
+                    ));
 
                     $tableController = new TableController();
                     $tableController->setServiceLocator($this->getServiceLocator());
@@ -422,28 +416,34 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     $result['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, array(), true);
                     $resultWithoutIgnoredFilters['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, $ignoredFiltersByQuestionnaire, true);
 
-                    for ($i = 0; $i < count($result['filters'][$filterId]); $i++) {
+                    foreach ($result['filters'][$filterId] as $i => &$flatFilter) {
+
+                        // add computed values to filters
                         if ($result['filters'][$filterId][$i]['values'][0][$part->getName()] != $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values'][0][$part->getName()]) {
                             $result['filters'][$filterId][$i]['valuesWithoutIgnored'] = $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values'];
                         }
-                    }
 
-                    foreach ($result['filters'][$filterId] as &$flatFilter) {
-                        $fqus = $this->getEntityManager()
-                            ->getRepository('Application\Model\Filter')
-                            ->findOneById($flatFilter['filter']['id'])
-                            ->getFilterQuestionnaireUsages();
+                        // add the usages to filters
+                        $fqus = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($flatFilter['filter']['id'])->getFilterQuestionnaireUsages();
                         foreach ($fqus as $fqu) {
                             if ($fqu->getPart() === $part && $fqu->getQuestionnaire() === $questionnaire) {
                                 if (!isset($flatFilter['usages'])) {
-                                    $flatFilter['usages'] = $fqu->getRule()
-                                        ->getName();
+                                    $flatFilter['usages'] = $fqu->getRule()->getName();
                                 } else {
-                                    $flatFilter['usages'] .= ', ' . $fqu->getRule()
-                                            ->getName();
+                                    $flatFilter['usages'] .= ', ' . $fqu->getRule()->getName();
                                 }
-
                             }
+                        }
+
+                        // replace the list of questions by a single question corresponding to current questionnaire
+                        if (isset($flatFilter['filter']['questions'])) {
+                            foreach ($flatFilter['filter']['questions'] as $question) {
+                                if ($question['survey']['id'] == $questionnaire->getSurvey()->getId()) {
+                                    $flatFilter['filter']['originalDenomination'] = $question['name'];
+                                    break;
+                                }
+                            }
+                            unset($flatFilter['filter']['questions']);
                         }
                     }
                 }
@@ -490,13 +490,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $color = $this->params()->fromQuery('color');
         $surveys = explode(',', $this->params()->fromQuery('surveys'));
 
-        $existingSurvey = $this->getEntityManager()
-            ->getRepository('Application\Model\Survey')->findOneByName($name);
-        $existingFilter = $this->getEntityManager()
-            ->getRepository('Application\Model\Filter')->findOneByName($name);
-        $existingFilterSet = $this->getEntityManager()
-            ->getRepository('Application\Model\FilterSet')
-            ->findOneByName($name);
+        $existingSurvey = $this->getEntityManager()->getRepository('Application\Model\Survey')->findOneByName($name);
+        $existingFilter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneByName($name);
+        $existingFilterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneByName($name);
 
         if ($existingSurvey || $existingFilter || $existingFilterSet) {
             return new NumericJsonModel(array('message' => 'name "' . $name . '" already used'));
@@ -505,23 +501,16 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $user = User::getCurrentUser();
 
         /** get roles */
-        $roleEditor = $this->getEntityManager()
-            ->getRepository('Application\Model\Role')->findOneByName('editor');
-        $roleReporter = $this->getEntityManager()
-            ->getRepository('Application\Model\Role')
-            ->findOneByName('reporter');
+        $roleEditor = $this->getEntityManager()->getRepository('Application\Model\Role')->findOneByName('editor');
+        $roleReporter = $this->getEntityManager()->getRepository('Application\Model\Role')->findOneByName('reporter');
 
         /** @var \Application\Model\Part $part */
-        $part = $this->getEntityManager()
-            ->getRepository('Application\Model\Part')
-            ->findOneById($this->params()->fromQuery('part'));
+        $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
         $parts = new ArrayCollection();
         $parts->add($part);
 
         /** @var \Application\Model\Country $country */
-        $country = $this->getEntityManager()
-            ->getRepository('Application\Model\Country')
-            ->findOneById($this->params()->fromQuery('country'));
+        $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneById($this->params()->fromQuery('country'));
 
         /** @var \Application\Model\Geoname $geoname */
         $geoname = $country->getGeoname();
@@ -592,9 +581,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $this->getEntityManager()->persist($userQuestionnaire);
 
             /** @var \Application\Model\Population $population */
-            $population = $this->getEntityManager()
-                ->getRepository('Application\Model\Population')
-                ->getOneByGeoname($geoname, $part->getId(), $year);
+            $population = $this->getEntityManager()->getRepository('Application\Model\Population')->getOneByGeoname($geoname, $part->getId(), $year);
 
             /** @var \Application\Model\Answer $answer */
             $answer = new Answer();
