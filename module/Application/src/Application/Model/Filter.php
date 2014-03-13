@@ -88,6 +88,13 @@ class Filter extends AbstractModel
     private $questions;
 
     /**
+     * Questions that have current filter assigned
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="\Application\Model\FilterSet", mappedBy="filters")
+     */
+    private $filterSets;
+
+    /**
      * Summands are the filters which must be summed to compute this filter value
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="Filter")
@@ -351,9 +358,7 @@ class Filter extends AbstractModel
     public function addQuestion(\Application\Model\Question\AbstractAnswerableQuestion $question)
     {
         if (!$this->getQuestions()->contains($question)) {
-            //v('add question', $question->getId());
             $this->getQuestions()->add($question);
-            //v('questions', $this->getQuestions()->count());
         }
     }
 
@@ -363,9 +368,7 @@ class Filter extends AbstractModel
      */
     public function removeQuestion(\Application\Model\Question\AbstractAnswerableQuestion $question)
     {
-        if ($this->getQuestions()->contains($question)) {
-            $this->getQuestions()->remove($question);
-        }
+        $this->getQuestions()->removeElement($question);
     }
 
     /**
@@ -398,6 +401,14 @@ class Filter extends AbstractModel
         return $this->getChildren()->filter(function ($f) {
             return $f->isOfficial();
         });
+    }
+
+    /**
+     * Get only official child Filters
+     */
+    public function getFiltersets()
+    {
+        return $this->filterSets();
     }
 
     /**

@@ -70,6 +70,21 @@ class FilterTest extends AbstractModel
         $this->assertEquals($allQuestions, $filter->getQuestions(), 'filter questions are not the original questions');
         $this->assertEquals($questionsSurvey1, $filter->getQuestions($survey1), 'questions do not correspond to the ones of the 1st survey');
         $this->assertEquals($questionsSurvey2, $filter->getQuestions($survey2), 'questions do not correspond to the ones of the 2nd survey');
+
+        // change filter for question 1
+        $filter2 = new \Application\Model\Filter();
+        $q1->setFilter($filter2);
+        $this->assertSame($filter2, $q1->getFilter(), 'should have new filter');
+        $this->assertNotContains($q1, $filter->getQuestions(), 'should not contain question1');
+        $this->assertNotContains($q1, $filter->getQuestions($survey1), 'should not contain question1');
+
+        $allQuestions->removeElement($q1);
+        $questionsSurvey1->removeElement($q1);
+
+        $this->assertCount(3, $filter->getQuestions(), 'filter should have 4 less 1 question ');
+        $this->assertCount(1, $filter->getQuestions($survey1), 'filter should have 2 less 1 question');
+        $this->assertEquals($allQuestions, $filter->getQuestions(), 'questions do not correspond');
+        $this->assertEquals($questionsSurvey1->first(), $filter->getQuestions($survey1)->first(), 'questions do not correspond to the ones of the 1st survey');
     }
 
 }
