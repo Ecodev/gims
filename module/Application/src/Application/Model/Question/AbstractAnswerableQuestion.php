@@ -61,7 +61,11 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
      */
     public function setFilter(Filter $filter)
     {
+        if ($this->filter) {
+            $this->filter->removeQuestion($this);
+        }
         $this->filter = $filter;
+        $filter->addQuestion($this);
 
         return $this;
     }

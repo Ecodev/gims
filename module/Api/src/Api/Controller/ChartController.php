@@ -173,9 +173,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     /**
      * Always returns the same integer for the same name and incrementing: 0, 1, 2...
      * @staticvar array $keys
-     *
      * @param string $filterName
-     *
      * @return integer
      */
     private function getConstantKey($filterName)
@@ -191,10 +189,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Returns all series for ignored questionnaires AND filters at the same time
-     *
-     * @param array                   $questionnaires
+     * @param array $questionnaires
      * @param \Application\Model\Part $part
-     *
      * @return array
      */
     protected function computeIgnoredElements(array $questionnaires, Part $part)
@@ -252,15 +248,13 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Get line and scatter series for the given filterSet and questionnaires
-     *
      * @param \Application\Model\FilterSet $filterSet
-     * @param array                        $questionnaires
-     * @param \Application\Model\Part      $part
-     * @param array                        $ignoredFilters
-     * @param                              $ratio
-     * @param string                       $dashStyle
-     * @param string                       $suffix         for serie name
-     *
+     * @param array $questionnaires
+     * @param \Application\Model\Part $part
+     * @param array $ignoredFilters
+     * @param float $ratio
+     * @param string $dashStyle
+     * @param string $suffix for serie name
      * @internal param array $colors
      * @return string
      */
