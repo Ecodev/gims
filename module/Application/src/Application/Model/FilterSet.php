@@ -7,9 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * FilterSet is used to group filters together and make them available as
  * a choice to plot graphs or output tables.
- *
  * It doesn't have any special meaning for computing.
- *
  * @ORM\Entity(repositoryClass="Application\Repository\FilterSetRepository")
  */
 class FilterSet extends AbstractModel
@@ -17,14 +15,12 @@ class FilterSet extends AbstractModel
 
     /**
      * @var string
-     *
      * @ORM\Column(type="text", nullable=false)
      */
     private $name;
 
     /**
      * @var ArrayCollection
-     *
      * @ORM\ManyToMany(targetEntity="Filter")
      * @ORM\OrderBy({"id" = "ASC"})
      */
@@ -32,7 +28,6 @@ class FilterSet extends AbstractModel
 
     /**
      * @var FilterSet
-     *
      * @ORM\ManyToOne(targetEntity="FilterSet")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="SET NULL")
@@ -42,7 +37,6 @@ class FilterSet extends AbstractModel
 
     /**
      * @var ArrayCollection
-     *
      * @ORM\ManyToMany(targetEntity="Filter")
      * @ORM\JoinTable(name="filter_set_excluded_filter",
      *      inverseJoinColumns={@ORM\JoinColumn(name="excluded_filter_id")}
@@ -53,7 +47,6 @@ class FilterSet extends AbstractModel
 
     /**
      * Constructor
-     *
      * @param string $name
      */
     public function __construct($name = null)
@@ -75,9 +68,7 @@ class FilterSet extends AbstractModel
 
     /**
      * Set name
-     *
      * @param string $name
-     *
      * @return FilterSet
      */
     public function setName($name)
@@ -89,7 +80,6 @@ class FilterSet extends AbstractModel
 
     /**
      * Get name
-     *
      * @return string
      */
     public function getName()
@@ -99,7 +89,6 @@ class FilterSet extends AbstractModel
 
     /**
      * Get filters
-     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getFilters()
@@ -109,7 +98,6 @@ class FilterSet extends AbstractModel
 
     /**
      * Get excluded filters
-     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getExcludedFilters()
@@ -119,15 +107,14 @@ class FilterSet extends AbstractModel
 
     /**
      * Add a filter
-     *
      * @param Filter $filter
-     *
      * @return FilterSet
      */
     public function addFilter(Filter $filter)
     {
         if (!$this->getFilters()->contains($filter)) {
             $this->getFilters()->add($filter);
+            $filter->filterSetAdded($this);
         }
 
         return $this;
@@ -150,12 +137,9 @@ class FilterSet extends AbstractModel
         return $this;
     }
 
-
     /**
      * Add a filter
-     *
      * @param Filter $filter
-     *
      * @return FilterSet
      */
     public function addExcludedFilter(Filter $filter)
@@ -169,9 +153,7 @@ class FilterSet extends AbstractModel
 
     /**
      * Set originalFilterSet from which this filter set was copied
-     *
      * @param FilterSet $originalFilterSet
-     *
      * @return FilterSet
      */
     public function setOriginalFilterSet(FilterSet $originalFilterSet = null)
@@ -183,7 +165,6 @@ class FilterSet extends AbstractModel
 
     /**
      * Get originalFilterSet from which this filter set was copied
-     *
      * @return FilterSet
      */
     public function getOriginalFilterSet()

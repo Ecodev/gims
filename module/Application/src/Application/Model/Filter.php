@@ -129,6 +129,7 @@ class Filter extends AbstractModel
         $this->parents = new \Doctrine\Common\Collections\ArrayCollection();
         $this->summands = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->filterSets = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setName($name);
     }
 
@@ -308,6 +309,29 @@ class Filter extends AbstractModel
     }
 
     /**
+     * Get only official child Filters
+     */
+    public function getFilterSets()
+    {
+        return $this->filterSets;
+    }
+
+    /**
+     * Notify the filter that he has a new filterset.
+     * This should only be called by FilterSet::addFilter()
+     * @param FilterSet $filterSet
+     * @return Filter
+     */
+    public function filterSetAdded(FilterSet $filterSet)
+    {
+        if (!$this->getFilterSets()->contains($filterSet)) {
+            $this->getFilterSets()->add($filterSet);
+        }
+
+        return $this;
+    }
+
+    /**
      * Get summands
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
@@ -401,14 +425,6 @@ class Filter extends AbstractModel
         return $this->getChildren()->filter(function ($f) {
             return $f->isOfficial();
         });
-    }
-
-    /**
-     * Get only official child Filters
-     */
-    public function getFiltersets()
-    {
-        return $this->filterSets();
     }
 
     /**

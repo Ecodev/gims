@@ -87,4 +87,23 @@ class FilterTest extends AbstractModel
         $this->assertEquals($questionsSurvey1->first(), $filter->getQuestions($survey1)->first(), 'questions do not correspond to the ones of the 1st survey');
     }
 
+    public function testFilterSetRelatedToFilters()
+    {
+        $filterSet = new \Application\Model\FilterSet();
+        $this->assertCount(0, $filterSet->getFilters(), 'collection is initialized on creation');
+
+        $f1 = new \Application\Model\Filter();
+        $f2 = new \Application\Model\Filter();
+        $f3 = new \Application\Model\Filter();
+
+        $filters = new \Doctrine\Common\Collections\ArrayCollection();
+        $filters->add($f1);
+        $filters->add($f2);
+        $filters->add($f3);
+
+        $filterSet->setFilters($filters);
+        $this->assertCount(3, $filterSet->getFilters(), 'should contain the filters');
+        $this->assertEquals($filters, $filterSet->getFilters(), 'should contain the same filters');
+        $this->assertContains($filterSet, $f1->getFilterSets(), 'should contain the filterset');
+    }
 }
