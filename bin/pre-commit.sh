@@ -27,7 +27,7 @@ if [ "$files" != "" ]; then
 
     # Run php-cs-fixer validation before commit
     for file in ${files}; do
-        php-cs-fixer fix --dry-run --verbose --diff ${file}
+        php-cs-fixer fix --dry-run --verbose --diff --fixers=indentation,elseif,linefeed,trailing_spaces,visibility,return,short_tag,php_closing_tag,extra_empty_lines,psr0,controls_spaces,elseif,eof_ending ${file}
         if [ $? -ne 0 ]; then
             pass=false
         fi
