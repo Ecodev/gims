@@ -31,25 +31,4 @@ class PartRepository extends AbstractRepository
         return $part;
     }
 
-    /**
-     * Return an array of IDs for all part which are not total
-     * @return array
-     */
-    public function getIdsNonTotal()
-    {
-
-        $query = $this->getEntityManager()->createQuery('SELECT p.id
-            FROM Application\Model\Part p
-            WHERE
-            p.isTotal = false'
-        );
-
-        $ids = array();
-        foreach ($query->getArrayResult() as $data) {
-            $ids[] = $data['id'];
-        }
-
-        return $ids;
-    }
-
 }

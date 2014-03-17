@@ -64,12 +64,6 @@ class JmpTest extends AbstractCalculator
         $this->part2 = $this->getNewModelWithId('\Application\Model\Part')->setName('tst part 2');
         $this->partTotal = $this->getNewModelWithId('\Application\Model\Part', array('isTotal' => $this->returnValue(true)))->setName('tst part total');
 
-        // Create a stub for the PartRepository class, so we don't have to mess with database
-        $stubPartRepository = $this->getMock('\Application\Repository\PartRepository', array('getIdsNonTotal'), array(), '', false);
-        $stubPartRepository->expects($this->any())
-                ->method('getIdsNonTotal')
-                ->will($this->returnValue(array($this->part1->getId(), $this->part2->getId())));
-
         // Create a stub for the PopulationRepository class with predetermined values, so we don't have to mess with database
         $stubPopulationRepository = $this->getMock('\Application\Repository\PopulationRepository', array('getOneByGeoname'), array(), '', false);
         $stubPopulationRepository->expects($this->any())
@@ -96,7 +90,6 @@ class JmpTest extends AbstractCalculator
 
         $this->service = new \Application\Service\Calculator\Jmp();
         $this->service->setPopulationRepository($stubPopulationRepository);
-        $this->service->setPartRepository($stubPartRepository);
         $this->service->setAnswerRepository($this->getStubAnswerRepository());
         $this->service->setFilterRepository($this->getStubFilterRepository());
         $this->service->setFilterQuestionnaireUsageRepository($this->getStubFilterQuestionnaireUsageRepository());
