@@ -122,6 +122,10 @@
             <tab heading="Questionnaires" ng-if="user.id">
                 <gims-relations relation="UserQuestionnaire" first="user" second="questionnaire" third="role"></gims-relations>
             </tab>
+
+            <tab heading="Filter Sets" ng-if="user.id">
+                <gims-relations relation="UserFilterSet" first="user" second="filterSet" third="role"></gims-relations>
+            </tab>
         </tabset>
     </form>
     <?php echo $this->metadata('user'); ?>
