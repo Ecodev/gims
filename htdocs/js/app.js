@@ -14,7 +14,7 @@ angular.module('myApp', [
     'chartsExample.directives',
     'colorpicker.module',
     'ngAnimate'
-    ]).
+]).
         config(function($routeProvider, $locationProvider, RestangularProvider) {
             'use strict';
 
@@ -31,7 +31,7 @@ angular.module('myApp', [
             $routeProvider.when('/admin', {redirectTo: '/contribute'});
             $routeProvider.when('/admin/filter-set', {templateUrl: '/template/admin/filter-set', controller: 'Admin/FilterSetCtrl'});
             $routeProvider.when('/admin/filter-set/new', {templateUrl: '/template/admin/filter-set/crud', controller: 'Admin/FilterSet/CrudCtrl'});
-            $routeProvider.when('/admin/filter-set/edit/:id', {templateUrl: '/template/admin/filter-set/crud', controller: 'Admin/FilterSet/CrudCtrl'});
+            $routeProvider.when('/admin/filter-set/edit/:id', {templateUrl: '/template/admin/filter-set/crud', controller: 'Admin/FilterSet/CrudCtrl', reloadOnSearch: false});
             $routeProvider.when('/admin/filter', {templateUrl: '/template/admin/filter', controller: 'Admin/FilterCtrl'});
             $routeProvider.when('/admin/filter/new', {templateUrl: '/template/admin/filter/crud', controller: 'Admin/Filter/CrudCtrl'});
             $routeProvider.when('/admin/filter/edit/:id', {templateUrl: '/template/admin/filter/crud', controller: 'Admin/Filter/CrudCtrl'});

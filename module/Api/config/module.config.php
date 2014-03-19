@@ -16,6 +16,7 @@ return array(
             'Api\Controller\User' => 'Api\Controller\UserController',
             'Api\Controller\UserSurvey' => 'Api\Controller\UserSurveyController',
             'Api\Controller\UserQuestionnaire' => 'Api\Controller\UserQuestionnaireController',
+            'Api\Controller\UserFilterSet' => 'Api\Controller\UserFilterSetController',
             'Api\Controller\Role' => 'Api\Controller\RoleController',
             'Api\Controller\Geoname' => 'Api\Controller\GeonameController',
             'Api\Controller\Chart' => 'Api\Controller\ChartController',
@@ -71,7 +72,7 @@ return array(
                         'options' => array(
                             'route' => '/:parent/:idParent/:controller[/:id]',
                             'constraints' => array(
-                                'parent' => '(chapter|user|survey|role|questionnaire)',
+                                'parent' => '(chapter|user|survey|role|questionnaire|filterSet)',
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'idParent' => '[0-9]+',
                                 'id' => '[0-9]+',

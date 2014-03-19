@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * It doesn't have any special meaning for computing.
  * @ORM\Entity(repositoryClass="Application\Repository\FilterSetRepository")
  */
-class FilterSet extends AbstractModel
+class FilterSet extends AbstractModel implements \Application\Service\RoleContextInterface
 {
 
     /**
@@ -21,7 +21,7 @@ class FilterSet extends AbstractModel
 
     /**
      * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="Filter")
+     * @ORM\ManyToMany(targetEntity="Filter", inversedBy="filterSets")
      * @ORM\OrderBy({"id" = "ASC"})
      */
     private $filters;
@@ -127,9 +127,15 @@ class FilterSet extends AbstractModel
      */
     public function setFilters(\Doctrine\Common\Collections\ArrayCollection $filters)
     {
+
+        // remove filters that are no more in collection
+        foreach ($this->getFilters() as $filter) {
+            $filter->getFilterSets()->removeElement($this);
+        }
+
         $this->getFilters()->clear();
 
-        // Clean up the collection from old choices
+        // add filters
         foreach ($filters as $filter) {
             $this->addFilter($filter);
         }
@@ -170,6 +176,20 @@ class FilterSet extends AbstractModel
     public function getOriginalFilterSet()
     {
         return $this->originalFilterSet;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRoleContext($action)
+    {
+        // If we don't have ID, that mean we were not saved yet,
+        // and we cannot use ourself as context
+        if ($this->getId()) {
+            return $this;
+        } else {
+            return null;
+        }
     }
 
 }

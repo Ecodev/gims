@@ -34,6 +34,8 @@ time php htdocs/index.php import jmp data/cache/country_data/Saudi_arabia_13.xls
 # Give access to everything to test user
 ./vendor/bin/doctrine-module dbal:run-sql "INSERT INTO user_survey (user_id, role_id, survey_id) SELECT 1, 5, survey.id FROM SURVEY;"
 ./vendor/bin/doctrine-module dbal:run-sql "INSERT INTO user_questionnaire (user_id, role_id, questionnaire_id) SELECT 1, 3, questionnaire.id FROM questionnaire;"
+./vendor/bin/doctrine-module dbal:run-sql "INSERT INTO user_filter_set (role_id, user_id, filter_set_id) SELECT 6, 1, filter_set.id from filter_set;"
+./vendor/bin/doctrine-module dbal:run-sql "UPDATE filter SET creator_id=1 WHERE creator_id IS NULL;"
 
 # Dump new database content
 phing dump-data -DdumpFile=tests/data/db.backup.gz

@@ -11,7 +11,7 @@ angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function($scope, 
         "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +
         "</div>" +
         "<div class='col-sm-7 col-md-7'>" +
-        "    <small>[[console.info(item);]]" +
+        "    <small>" +
         "       [[_.map(item.paths, function(path){ return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]" +
         "    </small>" +
         "</div>" +
@@ -23,6 +23,14 @@ angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function($scope, 
         "<div class='clearfix'></div>" +
         "</div>";
 
+    $scope.tabs = [false, false];
+    $scope.selectTab = function(tab) {
+        $scope.tabs[tab] = true;
+        $location.hash(tab);
+    };
+
+    // Set the tab from URL hash if any
+    $scope.selectTab(parseInt($location.hash()));
 
     var redirectTo = '/admin/filter-set';
     if ($routeParams.returnUrl) {

@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Answer is the raw data on which all computing/graph/table are based.
- *
  * @ORM\Entity(repositoryClass="Application\Repository\AnswerRepository")
  */
 class Answer extends AbstractModel
@@ -14,7 +13,6 @@ class Answer extends AbstractModel
 
     /**
      * @var Choice
-     *
      * @ORM\ManyToOne(targetEntity="Application\Model\Question\Choice", inversedBy="answers")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
@@ -24,42 +22,36 @@ class Answer extends AbstractModel
 
     /**
      * @var float
-     *
      * @ORM\Column(type="decimal", precision=7, scale=6, nullable=true)
      */
     private $valuePercent;
 
     /**
      * @var float
-     *
      * @ORM\Column(type="float", nullable=true)
      */
     private $valueAbsolute;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="text", nullable=true)
      */
     private $valueText;
 
     /**
      * @var float
-     *
      * @ORM\Column(type="decimal", precision=3, scale=2, nullable=true)
      */
     private $quality;
 
     /**
      * @var float
-     *
      * @ORM\Column(type="decimal", precision=3, scale=2, nullable=true)
      */
     private $relevance;
 
     /**
      * @var \Application\Model\Question\AbstractAnswerableQuestion
-     *
      * @ORM\ManyToOne(targetEntity="Application\Model\Question\AbstractAnswerableQuestion", inversedBy="answers", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
@@ -69,7 +61,6 @@ class Answer extends AbstractModel
 
     /**
      * @var Questionnaire
-     *
      * @ORM\ManyToOne(targetEntity="Questionnaire", inversedBy="answers")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
@@ -79,14 +70,12 @@ class Answer extends AbstractModel
 
     /**
      * @var User
-     *
      * @ORM\ManyToOne(targetEntity="User")
      */
     private $valueUser;
 
     /**
      * @var Part
-     *
      * @ORM\ManyToOne(targetEntity="Part")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
@@ -111,7 +100,6 @@ class Answer extends AbstractModel
 
     /**
      * Set valueChoice
-     *
      * @param Application\Model\Question\Choice
      * @return Answer
      */
@@ -124,7 +112,6 @@ class Answer extends AbstractModel
 
     /**
      * Get valueChoice
-     *
      * @return Choice
      */
     public function getValueChoice()
@@ -134,7 +121,6 @@ class Answer extends AbstractModel
 
     /**
      * Set valuePercent (between 0.0 and 1.0)
-     *
      * @param float $valuePercent
      * @return Answer
      */
@@ -147,7 +133,6 @@ class Answer extends AbstractModel
 
     /**
      * Get valuePercent (between 0.0 and 1.0)
-     *
      * @return float
      */
     public function getValuePercent()
@@ -157,7 +142,6 @@ class Answer extends AbstractModel
 
     /**
      * Set valueAbsolute
-     *
      * @param float $valueAbsolute
      * @return Answer
      */
@@ -170,7 +154,6 @@ class Answer extends AbstractModel
 
     /**
      * Get valueAbsolute
-     *
      * @return float
      */
     public function getValueAbsolute()
@@ -180,7 +163,6 @@ class Answer extends AbstractModel
 
     /**
      * Set valueText
-     *
      * @param string $valueText
      * @return Answer
      */
@@ -193,7 +175,6 @@ class Answer extends AbstractModel
 
     /**
      * Get valueText
-     *
      * @return string
      */
     public function getValueText()
@@ -203,7 +184,6 @@ class Answer extends AbstractModel
 
     /**
      * Set quality (between 0.0 and 1.0)
-     *
      * @param float $quality
      * @return Answer
      */
@@ -216,7 +196,6 @@ class Answer extends AbstractModel
 
     /**
      * Get quality (between 0.0 and 1.0)
-     *
      * @return float
      */
     public function getQuality()
@@ -226,7 +205,6 @@ class Answer extends AbstractModel
 
     /**
      * Set relevance (between 0.0 and 1.0)
-     *
      * @param float $relevance
      * @return Answer
      */
@@ -239,7 +217,6 @@ class Answer extends AbstractModel
 
     /**
      * Get relevance (between 0.0 and 1.0)
-     *
      * @return float
      */
     public function getRelevance()
@@ -249,7 +226,6 @@ class Answer extends AbstractModel
 
     /**
      * Set question
-     *
      * @param \Application\Model\Question\AbstractAnswerableQuestion $question
      * @return Answer
      */
@@ -264,7 +240,6 @@ class Answer extends AbstractModel
 
     /**
      * Get question
-     *
      * @return \Application\Model\Question\AbstractAnswerableQuestion
      */
     public function getQuestion()
@@ -274,7 +249,6 @@ class Answer extends AbstractModel
 
     /**
      * Set questionnaire
-     *
      * @param Questionnaire $questionnaire
      * @return Answer
      */
@@ -288,7 +262,6 @@ class Answer extends AbstractModel
 
     /**
      * Get questionnaire
-     *
      * @return Questionnaire
      */
     public function getQuestionnaire()
@@ -298,7 +271,6 @@ class Answer extends AbstractModel
 
     /**
      * Set valueUser
-     *
      * @param User $valueUser
      * @return Answer
      */
@@ -311,7 +283,6 @@ class Answer extends AbstractModel
 
     /**
      * Get valueUser
-     *
      * @return User
      */
     public function getValueUser()
@@ -321,7 +292,6 @@ class Answer extends AbstractModel
 
     /**
      * Set part
-     *
      * @param Part $part
      * @return Answer
      */
@@ -334,7 +304,6 @@ class Answer extends AbstractModel
 
     /**
      * Get part
-     *
      * @return Part
      */
     public function getPart()
@@ -350,4 +319,8 @@ class Answer extends AbstractModel
         return $this->getQuestionnaire();
     }
 
+    public function getName()
+    {
+        return '';
+    }
 }

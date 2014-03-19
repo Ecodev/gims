@@ -5,17 +5,17 @@ namespace Application\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserQuestionnaire links a user and a questionnaire to give him a role
- * for that questionnaire (hence permissions)
- * @ORM\Entity(repositoryClass="Application\Repository\UserQuestionnaireRepository")
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="user_questionnaire_unique",columns={"user_id", "questionnaire_id", "role_id"})})
+ * UserFilterSet links a user and a filterSet to give him a role
+ * for that filterSet (hence permissions)
+ * @ORM\Entity(repositoryClass="Application\Repository\UserFilterSetRepository")
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="user_filterset_unique",columns={"user_id", "filter_set_id", "role_id"})})
  */
-class UserQuestionnaire extends AbstractUserRole
+class UserFilterSet extends AbstractUserRole
 {
 
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="userQuestionnaires")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="userFilterSets")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
@@ -23,13 +23,13 @@ class UserQuestionnaire extends AbstractUserRole
     private $user;
 
     /**
-     * @var Questionnaire
-     * @ORM\ManyToOne(targetEntity="Questionnaire")
+     * @var FilterSet
+     * @ORM\ManyToOne(targetEntity="FilterSet")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
      */
-    private $questionnaire;
+    private $filterSet;
 
     /**
      * @var Role
@@ -48,19 +48,19 @@ class UserQuestionnaire extends AbstractUserRole
         return array_merge(parent::getJsonConfig(), array(
             'user',
             'role',
-            'questionnaire',
+            'filterSet',
         ));
     }
 
     /**
      * Set "user"
      * @param User $user
-     * @return UserQuestionnaire
+     * @return UserFilterSet
      */
     public function setUser(User $user)
     {
         $this->user = $user;
-        $user->userQuestionnaireAdded($this);
+        $user->userFilterSetAdded($this);
 
         return $this;
     }
@@ -75,30 +75,30 @@ class UserQuestionnaire extends AbstractUserRole
     }
 
     /**
-     * Set questionnaire
-     * @param Questionnaire $questionnaire
-     * @return UserQuestionnaire
+     * Set filterSet
+     * @param FilterSet $filterSet
+     * @return UserFilterSet
      */
-    public function setQuestionnaire(Questionnaire $questionnaire)
+    public function setFilterSet(FilterSet $filterSet)
     {
-        $this->questionnaire = $questionnaire;
+        $this->filterSet = $filterSet;
 
         return $this;
     }
 
     /**
-     * Get questionnaire
-     * @return Questionnaire
+     * Get filterSet
+     * @return FilterSet
      */
-    public function getQuestionnaire()
+    public function getFilterSet()
     {
-        return $this->questionnaire;
+        return $this->filterSet;
     }
 
     /**
      * Set role
      * @param Role $role
-     * @return UserQuestionnaire
+     * @return UserFilterSet
      */
     public function setRole(Role $role)
     {
@@ -121,7 +121,7 @@ class UserQuestionnaire extends AbstractUserRole
      */
     public function getRoleContextInternal($action)
     {
-        return $this->getQuestionnaire()->getSurvey();
+        return $this->getFilterSet();
     }
 
 }

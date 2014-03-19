@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Application\Utility;
 use MischiefCollective\ColorJizz\Formats\HSV;
 use MischiefCollective\ColorJizz\Formats\HEX;
+use Application\Service\MultipleRoleContext;
 
 /**
  * A Filter is used to organise things. They are usually defined by the answer
@@ -283,7 +284,9 @@ class Filter extends AbstractModel
      */
     protected function parentAdded(Filter $parent)
     {
-        $this->getParents()->add($parent);
+        if (!$this->getParents()->contains($parent)) {
+            $this->getParents()->add($parent);
+        }
 
         return $this;
     }
@@ -314,6 +317,24 @@ class Filter extends AbstractModel
     public function getFilterSets()
     {
         return $this->filterSets;
+    }
+
+    /**
+     * Get only official child Filters
+     */
+    public function setFilterSets(ArrayCollection $filterSets)
+    {
+        foreach ($this->getFilterSets() as $filterSet) {
+            $filterSet->getFilters()->removeElement($this);
+        }
+
+        $this->getFilterSets()->clear();
+
+        foreach ($filterSets as $filterSet) {
+            $filterSet->addFilter($this);
+        }
+
+        return $this;
     }
 
     /**
@@ -494,5 +515,21 @@ class Filter extends AbstractModel
         $this->color = $color;
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRoleContext($action)
+    {
+        $contexts = $this->getFilterSets()->toArray();
+        foreach ($this->getParents() as $parent) {
+            $parentContexts = $parent->getRoleContext($action);
+            if ($parentContexts) {
+                $contexts = array_merge($contexts, $parentContexts->toArray());
+            }
+        }
+
+        return $contexts ? new MultipleRoleContext($contexts, true) : null;
     }
 }

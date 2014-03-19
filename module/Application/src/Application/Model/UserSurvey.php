@@ -7,16 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * UserSurvey links a user and a survey to give him a role
  * for that survey (hence permissions)
- *
  * @ORM\Entity(repositoryClass="Application\Repository\UserSurveyRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="user_survey_unique",columns={"user_id", "survey_id", "role_id"})})
  */
-class UserSurvey extends AbstractModel
+class UserSurvey extends AbstractUserRole
 {
 
     /**
      * @var User
-     *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="userSurveys")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
@@ -26,7 +24,6 @@ class UserSurvey extends AbstractModel
 
     /**
      * @var Role
-     *
      * @ORM\ManyToOne(targetEntity="Role")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
@@ -36,7 +33,6 @@ class UserSurvey extends AbstractModel
 
     /**
      * @var Survey
-     *
      * @ORM\ManyToOne(targetEntity="Survey")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
@@ -58,7 +54,6 @@ class UserSurvey extends AbstractModel
 
     /**
      * Set "user"
-     *
      * @param User $user
      * @return UserSurvey
      */
@@ -72,7 +67,6 @@ class UserSurvey extends AbstractModel
 
     /**
      * Get user
-     *
      * @return User
      */
     public function getUser()
@@ -82,7 +76,6 @@ class UserSurvey extends AbstractModel
 
     /**
      * Set role
-     *
      * @param Role $role
      * @return UserSurvey
      */
@@ -95,7 +88,6 @@ class UserSurvey extends AbstractModel
 
     /**
      * Get role
-     *
      * @return Role
      */
     public function getRole()
@@ -105,7 +97,6 @@ class UserSurvey extends AbstractModel
 
     /**
      * Set survey
-     *
      * @param Survey $survey
      * @return UserSurvey
      */
@@ -118,7 +109,6 @@ class UserSurvey extends AbstractModel
 
     /**
      * Get survey
-     *
      * @return Survey
      */
     public function getSurvey()
@@ -129,7 +119,7 @@ class UserSurvey extends AbstractModel
     /**
      * @inheritdoc
      */
-    public function getRoleContext($action)
+    public function getRoleContextInternal($action)
     {
         return $this->getSurvey();
     }

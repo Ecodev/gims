@@ -7,7 +7,6 @@ use Application\Model\Survey;
 
 /**
  * Question defines a Survey (and NOT a questionnaire).
- *
  * @ORM\Entity(repositoryClass="Application\Repository\QuestionRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\Table(name="question")
@@ -17,31 +16,27 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
 
     /**
      * @var integer
-     *
      * @ORM\Column(type="smallint", nullable=false)
      */
     private $sorting;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="text", nullable=false)
      */
     private $name;
 
     /**
      * @var Chapter
-     *
      * @ORM\ManyToOne(targetEntity="Chapter", inversedBy="questions")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="SET NULL")
+     *   @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
      * })
      */
     private $chapter;
 
     /**
      * @var Survey
-     *
      * @ORM\ManyToOne(targetEntity="Application\Model\Survey", inversedBy="questions")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
@@ -70,7 +65,6 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
 
     /**
      * Set sorting
-     *
      * @param integer $sorting
      * @return AbstractQuestion
      */
@@ -83,7 +77,6 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
 
     /**
      * Get sorting
-     *
      * @return integer
      */
     public function getSorting()
@@ -93,7 +86,6 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
 
     /**
      * Get question type.
-     *
      * @return QuestionType
      */
     public function getType()
@@ -103,7 +95,6 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
 
     /**
      * Set name
-     *
      * @param string $name
      * @return AbstractQuestion
      */
@@ -116,7 +107,6 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
 
     /**
      * Get name
-     *
      * @return string
      */
     public function getName()
@@ -126,7 +116,6 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
 
     /**
      * Set chapter
-     *
      * @param Chapter $chapter
      * @return AbstractQuestion
      */
@@ -142,7 +131,6 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
 
     /**
      * Get chapter
-     *
      * @return Chapter
      */
     public function getChapter()
@@ -152,7 +140,6 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
 
     /**
      * Set survey
-     *
      * @param Survey $survey
      * @return AbstractQuestion
      */
@@ -167,7 +154,6 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
 
     /**
      * Get survey
-     *
      * @return Survey
      */
     public function getSurvey()
@@ -186,9 +172,11 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
             $questions = $this->getSurvey()->getQuestions();
 
             $finalQuestions = new \Doctrine\Common\Collections\ArrayCollection();
-            foreach ($questions as $question)
-                if (!$question->getChapter())
+            foreach ($questions as $question) {
+                if (!$question->getChapter()) {
                     $finalQuestions->add($question);
+                }
+            }
 
             return $finalQuestions;
         }

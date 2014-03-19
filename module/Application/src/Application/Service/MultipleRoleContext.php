@@ -32,4 +32,14 @@ class MultipleRoleContext extends \Doctrine\Common\Collections\ArrayCollection i
         return $this;
     }
 
+    public function getId()
+    {
+        throw new \Exception('Not implemented');
+    }
+
+    public function getName()
+    {
+        throw new \Exception('Not implemented');
+    }
+
 }

@@ -76,7 +76,6 @@
         <hr/>
 
         <h2>Calculation</h2>
-
         <div class="form-group" ng-hide="isChapter">
             <h3><small><label class="control-label col-md-2" for="summands">Summands</label></small></h3>
             <div class="col-md-8">
@@ -94,5 +93,24 @@
                 </gims-select>
             </div>
         </div>
+
+        <hr/>
+
+        <h2>Organisation</small></h2>
+        <div class="form-group" ng-hide="isChapter">
+            <h3><small><label class="control-label col-md-2" for="parents">Filter sets</label></small></h3>
+            <div class="col-md-8">
+                <gims-select    name='parents'
+                                api="filterSet"
+                                model="filter.filterSets"
+                                placeholder="Select parent"
+                                multiple
+                                style="width: 100%">
+                </gims-select>
+            </div>
+
+        </div>
+
+
     </form>
 </div>

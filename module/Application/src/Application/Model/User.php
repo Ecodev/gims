@@ -113,6 +113,16 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      * @ORM\OneToMany(targetEntity="UserQuestionnaire", mappedBy="user")
      */
     private $userQuestionnaires;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="UserFilterSet", mappedBy="user")
+     */
+    private $userFilterSets;
+
+    /**
+     * @var \Application\Model\AbstractModel
+     */
     private $roleContext;
 
     /**
@@ -122,6 +132,8 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     {
         $this->userSurveys = new \Doctrine\Common\Collections\ArrayCollection();
         $this->userQuestionnaires = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userFilterSets = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userFilters = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -129,8 +141,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(),
-            array(
+        return array_merge(parent::getJsonConfig(), array(
                 'name',
                 'email',
                 'state',
@@ -299,6 +310,15 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     }
 
     /**
+     * Get userFilterSets
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getUserFilterSets()
+    {
+        return $this->userFilterSets;
+    }
+
+    /**
      * Notify the user that it was added to UserSurvey relation.
      * This should only be called by UserQuestionnaire::setUser()
      * @param UserQuestionnaire $userQuestionnaire
@@ -312,15 +332,25 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     }
 
     /**
+     * Notify the user that it was added to UserFilterSet relation.
+     * This should only be called by UserFilterSet::setUser()
+     * @param UserFilterSet UserFilterSet
+     * @return User
+     */
+    public function userFilterSetAdded(UserFilterSet $userFilterSet)
+    {
+        $this->getUserFilterSets()->add($userFilterSet);
+
+        return $this;
+    }
+
+    /**
      * Set roles context to then query getRoles(). This MUST be followed by resetRolesContext() as soon as possible.
      * @param \Application\Service\RoleContextInterface $context
      */
     public function setRolesContext(\Application\Service\RoleContextInterface $context)
     {
-        if (!$context->getId()) {
-            throw new \InvalidArgumentException('Context must return a valid ID. To get a valid ID from Doctrine, use: $this->getEntityManager()->persist($context);');
-        }
-
+        /** @todo  removed check ->getId() on objects to ensure it has been persisted bef */
         $this->roleContext = $context;
     }
 
@@ -342,17 +372,44 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
         // which means he has, at the very least, the hardcoded role of member
         $roles = array('member');
 
+        if ($this->roleContext instanceof \ArrayAccess) {
+            foreach ($this->roleContext as $contextElement) {
+                $roles = array_merge($roles, $this->getRolesByContext($contextElement));
+            }
+        } else {
+            $roles = array_merge($roles, $this->getRolesByContext($this->roleContext));
+        }
+
+        return $roles;
+    }
+
+    /**
+     * Return the roles currently active for this user and current role context (if any)
+     * @param $roleContext
+     * @return array
+     */
+    private function getRolesByContext(\Application\Service\RoleContextInterface $roleContext = null)
+    {
+        $roles = array();
+
         // If there is no context, or the context matches, add roles from survey
         foreach ($this->getUserSurveys() as $userSurvey) {
-            if (!$this->roleContext || $this->roleContext === $userSurvey->getSurvey()) {
+            if (!$roleContext || $roleContext === $userSurvey->getSurvey()) {
                 $roles [] = $userSurvey->getRole()->getName();
             }
         }
 
         // If there is no context, or the context matches, add roles from questionnaire
         foreach ($this->getUserQuestionnaires() as $userQuestionnaire) {
-            if (!$this->roleContext || $this->roleContext === $userQuestionnaire->getQuestionnaire()) {
+            if (!$roleContext || $roleContext === $userQuestionnaire->getQuestionnaire()) {
                 $roles [] = $userQuestionnaire->getRole()->getName();
+            }
+        }
+
+        // If there is no context, or the context matches, add roles from filterSet
+        foreach ($this->getUserFilterSets() as $userFilterSet) {
+            if (!$roleContext || $roleContext === $userFilterSet->getFilterSet()) {
+                $roles [] = $userFilterSet->getRole()->getName();
             }
         }
 

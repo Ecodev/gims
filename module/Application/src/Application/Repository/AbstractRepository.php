@@ -24,10 +24,8 @@ abstract class AbstractRepository extends EntityRepository
 
     /**
      * Modify $qb to add constraint to check for given permission in the current context.
-     *
      * This method assumes that the member $context already exists in the query, so you
      * need to do appropriate join before using this method.
-     *
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param string $context
      * @param string $permission
@@ -39,8 +37,12 @@ abstract class AbstractRepository extends EntityRepository
             $relationType = 'UserSurvey';
         } elseif ($context == 'questionnaire') {
             $relationType = 'UserQuestionnaire';
+        } elseif ($context == 'filterSet') {
+            $relationType = 'UserFilterSet';
+        } elseif ($context == 'filter') {
+            $relationType = 'UserFilter';
         } else {
-            throw new Exception("Unsupported context '$context' for automatic permission");
+            throw new \Exception("Unsupported context '$context' for automatic permission");
         }
 
         $qb->leftJoin("Application\Model\\$relationType", 'relation', Join::WITH, "relation.$context = $context AND relation.user = :permissionUser");
@@ -75,7 +77,7 @@ abstract class AbstractRepository extends EntityRepository
 
             $existingFields = $this->getClassMetadata()->getFieldNames();
             $fields = array_intersect($existingFields, array('code', 'name'));
-            $fields = array_map(function($field) use($alias) {
+            $fields = array_map(function ($field) use ($alias) {
                 return $alias . '.' . $field;
             }, $fields);
         }

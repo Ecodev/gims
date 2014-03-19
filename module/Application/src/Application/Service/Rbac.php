@@ -8,10 +8,8 @@ use Application\Assertion\AbstractAssertion;
 /**
  * This class allow us to query permission model and find out if the current
  * user is allowed to do things.
- *
  * The main method is <code>isActionGranted()</code> and should be used for most
  * cases. It automates almost everything for the most common cases.
- *
  * Then, lower-level API, <code>isGrantedWithContext()</code> and
  * <code>isGranted()</code> can be used for more specific cases.
  */
@@ -33,17 +31,16 @@ class Rbac extends \ZfcRbac\Service\Rbac
      */
     public function isActionGranted(AbstractModel $object, $action)
     {
-        /* @var $rbac \Application\Service\Rbac */
-        $rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
-
         $permission = \Application\Model\Permission::getPermissionName($object, $action);
         $context = $object->getRoleContext($action);
         $assertion = $this->getAssertion($object, $action);
 
         if ($context) {
-            $result = $rbac->isGrantedWithContext($context, $permission, $assertion);
+            $result = $this->isGrantedWithContext($context, $permission, $assertion);
+        } elseif ($object->getCreator() === $this->getIdentity()) {
+            $result = true;
         } else {
-            $result = $rbac->isGranted($permission, $assertion);
+            $result = $this->isGranted($permission, $assertion);
         }
 
         $this->setMessage($result, $object, $permission, $context, $assertion);
@@ -62,6 +59,7 @@ class Rbac extends \ZfcRbac\Service\Rbac
      */
     private function setMessage($isGranted, AbstractModel $object, $permission, RoleContextInterface $context = null, AbstractAssertion $assertion = null)
     {
+        // @todo : implement multiple contexts
         if ($isGranted) {
             $this->message = null;
         } elseif ($assertion && $assertion->getMessage()) {
@@ -72,7 +70,6 @@ class Rbac extends \ZfcRbac\Service\Rbac
             if ($user instanceof \Application\Model\User && $context) {
                 $user->setRolesContext($context);
             }
-
             $roles = implode(', ', $this->getIdentity()->getRoles());
 
             // Reset context to avoid side-effect on next usage of $this->isGranted()
@@ -80,8 +77,18 @@ class Rbac extends \ZfcRbac\Service\Rbac
                 $user->resetRolesContext();
             }
 
-            $contextMessage = $context ? 'in context "' . get_class($context) . '#' . $context->getId() . '"' : 'without any context';
-            $this->message = 'Insufficient access rights for permission "' . $permission . '" on "' . get_class($object) . '#' . $object->getId() . '" with your current roles [' . $roles . '] ' . $contextMessage;
+            if ($context instanceof \ArrayAccess) {
+                $contextMessage = ' in context ';
+                foreach ($context as $singleContext) {
+                    $contextId = $singleContext->getId() ? '#' . $singleContext->getId() : 'not persisted';
+                    $contextMessage .= '"' . get_class($singleContext) . $contextId . '" (' . $singleContext->getName() . ')' . ' and ';
+                }
+                $contextMessage = trim($contextMessage, ' and ');
+            } else {
+                $contextMessage = $context ? 'in context "' . get_class($context) . '#' . $context->getId() . '" (' . $context->getName() . ')' : 'without any context';
+            }
+
+            $this->message = 'Insufficient access rights for permission "' . $permission . '" on "' . get_class($object) . '#' . $object->getId() . ' (' . $object->getName() . ')"  with your current roles [' . $roles . '] ' . $contextMessage;
         }
     }
 
@@ -95,15 +102,40 @@ class Rbac extends \ZfcRbac\Service\Rbac
     }
 
     /**
-     * Returns true if the user has the permission in the given context.
-     *
-     * @param \Application\Service\RoleContextInterface $context
-     * @param string                          $permission
+     * Returns true if the user has the permission in the given context(s).
+     * @param \Application\Service\RoleContextInterface $context (can pass an array)
+     * @param string $permission
      * @param null|Closure|AssertionInterface $assert
      * @throws InvalidArgumentException
      * @return bool
      */
     public function isGrantedWithContext(RoleContextInterface $context, $permission, $assert = null)
+    {
+        $isGranted = false;
+
+        if ($context instanceof \ArrayAccess) {
+            foreach ($context as $singleContext) {
+                $isGranted = $this->isGrantedWithSingleContext($singleContext, $permission, $assert);
+                if ($context->getGrantOnlyIfGrantedByAllContexts() && !$isGranted) {
+                    return $isGranted;
+                }
+            }
+        } else {
+            $isGranted = $this->isGrantedWithSingleContext($context, $permission, $assert);
+        }
+
+        return $isGranted;
+    }
+
+    /**
+     * Returns true if the user has the permission in the given context.
+     * @param \Application\Service\RoleContextInterface $context
+     * @param string $permission
+     * @param null|Closure|AssertionInterface $assert
+     * @throws InvalidArgumentException
+     * @return bool
+     */
+    private function isGrantedWithSingleContext(RoleContextInterface $context, $permission, $assert = null)
     {
         // Get the user to set the context for role
         $user = $this->getIdentity();

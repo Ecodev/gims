@@ -19,6 +19,7 @@ class FilterSetRepository extends AbstractRepository
         $qb = $this->createQueryBuilder('filterSet');
         $qb->orderBy('filterSet.name', 'ASC');
 
+        $this->addPermission($qb, 'filterSet', \Application\Model\Permission::getPermissionName($this, $action));
         $this->addSearch($qb, $search);
 
         return $qb->getQuery()->getResult();
