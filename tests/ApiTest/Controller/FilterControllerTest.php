@@ -7,7 +7,7 @@ use Zend\Http\Request;
 /**
  * @group Rest
  */
-class FilterSetControllerTest extends AbstractRestfulControllerTest
+class FilterControllerTest extends AbstractRestfulControllerTest
 {
 
     protected function getAllowedFields()
@@ -17,10 +17,10 @@ class FilterSetControllerTest extends AbstractRestfulControllerTest
 
     protected function getTestedObject()
     {
-        return $this->filterSet;
+        return $this->filter;
     }
 
-    public function testCanUpdateFilterSet()
+    public function testCanUpdateFilter()
     {
         $data = array('name' => 'foo');
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
@@ -34,13 +34,11 @@ class FilterSetControllerTest extends AbstractRestfulControllerTest
         $this->assertResponseStatusCode(403);
     }
 
-    public function testCanCreateFilterSet()
+    public function testCanCreateFilter()
     {
-        // FilterSet
+        // Filter
         $data = array(
-            'name' => 'new-filterSet',
-            'excludedFilters' => array($this->filter->getId()),
-            'originalFilterSet' => $this->filterSet->getId(),
+            'name' => 'new-filter A',
         );
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
@@ -54,23 +52,23 @@ class FilterSetControllerTest extends AbstractRestfulControllerTest
         $this->assertResponseStatusCode(403);
     }
 
-    public function testCanDeleteFilterSet()
+    public function testCanDeleteFilter()
     {
         $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
         $this->assertResponseStatusCode(200);
         $this->assertEquals($this->getJsonResponse()['message'], 'Deleted successfully');
     }
 
-    public function testAnonymousCanDeleteFilterSet()
+    public function testAnonymousCanDeleteFilter()
     {
         $this->rbac->setIdentity(null);
         $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
         $this->assertResponseStatusCode(403);
     }
 
-    public function testCannotDeleteNonExistingFilterSet()
+    public function testCannotDeleteNonExistingFilter()
     {
-        $this->dispatch('/api/filterSet/713705', Request::METHOD_DELETE); // smyle, the sun shines :)
+        $this->dispatch('/api/filter/713705', Request::METHOD_DELETE); // smyle, the sun shines :)
         $this->assertResponseStatusCode(404);
     }
 

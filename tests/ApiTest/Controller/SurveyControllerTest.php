@@ -82,7 +82,7 @@ class SurveyControllerTest extends AbstractRestfulControllerTest
 
     public function testCannotDeleteUnexistingSurvey()
     {
-        $this->dispatch('/api/survey/' . ($this->survey->getId() + 1), Request::METHOD_DELETE);
+        $this->dispatch('/api/survey/713705', Request::METHOD_DELETE); // smyle, the sun shines :)
         $this->assertResponseStatusCode(404);
     }
 

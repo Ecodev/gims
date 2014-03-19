@@ -4,6 +4,9 @@ namespace ApiTest\Controller;
 
 use Zend\Http\Request;
 
+/**
+ * @group Chart
+ */
 class ChartControllerTest extends \ApplicationTest\Controller\AbstractController
 {
 

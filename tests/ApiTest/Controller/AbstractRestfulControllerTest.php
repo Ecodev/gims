@@ -70,7 +70,6 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
      */
     private $answer2;
 
-
     /**
      * @var UserSurvey
      */
@@ -85,6 +84,11 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
      * @var UserQuestionnaire
      */
     protected $userQuestionnaire2;
+
+    /**
+     * @var UserFilterSet
+     */
+    protected $userFilterSet;
 
     /**
      * @var Geoname
@@ -117,8 +121,11 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
 
         $this->geoName = new Geoname('test geoname');
 
-        $this->filter = new Filter();
-        $this->filter->setName('foo');
+        $this->filter = new Filter('foo');
+        $this->filter2 = new Filter('bar');
+
+        $this->filterSet = new FilterSet('foo filterSet');
+        $this->filterSet2 = new FilterSet('bar filterSet'); // no permissions given to this filterset
 
         $this->questionnaire = new Questionnaire();
         $this->questionnaire->setSurvey($this->survey);
@@ -127,10 +134,7 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->questionnaire->setGeoname($this->geoName);
 
         $this->question = new NumericQuestion();
-        $this->question->setSurvey($this->survey)
-                ->setSorting(1)
-                ->setFilter($this->filter)
-                ->setName('test survey');
+        $this->question->setSurvey($this->survey)->setSorting(1)->setFilter($this->filter)->setName('test survey');
 
         $this->part = new Part();
         $this->part->setName('test part 1');
@@ -142,22 +146,17 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->part3->setName('test part 3');
 
         $this->answer = new Answer();
-        $this->answer
-                ->setQuestion($this->question)
-                ->setQuestionnaire($this->questionnaire)
-                ->setPart($this->part);
+        $this->answer->setQuestion($this->question)->setQuestionnaire($this->questionnaire)->setPart($this->part);
 
         $this->answer2 = new Answer();
-        $this->answer2
-                ->setQuestion($this->question)
-                ->setQuestionnaire($this->questionnaire)
-                ->setPart($this->part2);
+        $this->answer2->setQuestion($this->question)->setQuestionnaire($this->questionnaire)->setPart($this->part2);
 
         // Get existing roles
         $roleRepository = $this->getEntityManager()->getRepository('Application\Model\Role');
         $editor = $roleRepository->findOneByName('editor');
         $reporter = $roleRepository->findOneByName('reporter');
         $validator = $roleRepository->findOneByName('validator');
+        $filterEditor = $roleRepository->findOneByName('Filter editor');
 
         // Define user as survey editor
         $this->userSurvey = new UserSurvey();
@@ -171,10 +170,13 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->userQuestionnaire2 = new UserQuestionnaire();
         $this->userQuestionnaire2->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($validator);
 
-        $this->filterSet = new FilterSet('test filterSet');
-        $this->filterSet->addFilter($this->filter);
+        // Define user as "Filter editor" for FilterSet
+        $this->userFilterSet = new \Application\Model\UserFilterSet();
+        $this->userFilterSet->setUser($this->user)->setFilterSet($this->filterSet)->setRole($filterEditor);
 
         $this->getEntityManager()->persist($this->filterSet);
+        $this->getEntityManager()->persist($this->filterSet2);
+        $this->getEntityManager()->persist($this->userFilterSet);
         $this->getEntityManager()->persist($this->user);
         $this->getEntityManager()->persist($this->userSurvey);
         $this->getEntityManager()->persist($this->userQuestionnaire1);
@@ -183,6 +185,7 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->getEntityManager()->persist($this->part2);
         $this->getEntityManager()->persist($this->part3);
         $this->getEntityManager()->persist($this->filter);
+        $this->getEntityManager()->persist($this->filter2);
         $this->getEntityManager()->persist($this->geoName);
         $this->getEntityManager()->persist($this->survey);
         $this->getEntityManager()->persist($this->questionnaire);
@@ -241,17 +244,17 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $id = $this->getTestedObject()->getId();
 
         switch ($method) {
-            case 'getList':
-            case 'post':
-                $route = "/api/$classname";
-                break;
-            case 'get':
-            case 'put':
-            case 'delete':
-                $route = "/api/$classname/$id";
-                break;
-            default:
-                throw new \Exception("Unsupported route '$method' for $classname");
+        case 'getList':
+        case 'post':
+            $route = "/api/$classname";
+            break;
+        case 'get':
+        case 'put':
+        case 'delete':
+            $route = "/api/$classname/$id";
+            break;
+        default:
+            throw new \Exception("Unsupported route '$method' for $classname");
         }
 
         return $route;
