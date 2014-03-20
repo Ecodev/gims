@@ -36,7 +36,7 @@ return array(
         ),
         'configuration' => array(
             'orm_default' => array(
-                'naming_strategy' => new \Doctrine\ORM\Mapping\UnderscoreNamingStrategy(),
+                'naming_strategy' => 'Application\Service\NamingStrategyFactory',
                 'types' => array(
                     'geometry' => 'CrEOF\Spatial\DBAL\Types\GeometryType',
                     'point' => 'CrEOF\Spatial\DBAL\Types\Geometry\PointType',
@@ -143,6 +143,7 @@ return array(
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
             'ViewExcelRenderer' => 'Application\Service\ViewExcelRendererFactory',
             'ViewExcelStrategy' => 'Application\Service\ViewExcelStrategyFactory',
+            'Application\Service\NamingStrategyFactory' => 'Application\Service\NamingStrategyFactory',
         ),
     ),
     'translator' => array(

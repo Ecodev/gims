@@ -34,6 +34,9 @@ echo "Updating database..."
 ./vendor/bin/doctrine-module migrations:migrate --no-interaction
 ./vendor/bin/doctrine-module orm:generate-proxies
 
+echo "Clean Zend cache..."
+rm -vf data/cache/*cache*.php
+
 echo "Compiling CSS..."
 compass compile -s compressed --force
 
