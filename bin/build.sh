@@ -28,7 +28,7 @@ echo "Updating Bower packages..."
 bower install
 
 echo "Updating all PHP dependencies via composer..."
-./composer.phar install --dev
+./composer.phar install --dev --optimize-autoloader
 
 echo "Updating database..."
 ./vendor/bin/doctrine-module migrations:migrate --no-interaction
