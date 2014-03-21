@@ -2,6 +2,7 @@
     "name": "ecodev/gims",
     "description": "GIMS",
     "homepage": "http://www.gimsinitiative.org",
+    "license": "MIT",
     "repositories": [
         {
             "type": "vcs",
