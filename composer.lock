@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "bdb7f27c70497977f8e53564da3a9dc2",
+    "hash": "0ae6f3d9e7bec400017d3bb47dd56214",
     "packages": [
         {
             "name": "creof/doctrine2-spatial",
