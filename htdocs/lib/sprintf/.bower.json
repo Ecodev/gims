@@ -1,0 +1,13 @@
+{
+  "name": "sprintf",
+  "homepage": "https://github.com/alexei/sprintf.js",
+  "_release": "v0.7",
+  "_resolution": {
+    "type": "tag",
+    "tag": "v0.7",
+    "commit": "ed44393c791e22df562e2b9c25d07c23d9e65531"
+  },
+  "_source": "git://github.com/alexei/sprintf.js.git",
+  "_target": "v0.7",
+  "_originalSource": "sprintf"
+}
