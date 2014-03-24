@@ -59,7 +59,6 @@ class Rbac extends \ZfcRbac\Service\Rbac
      */
     private function setMessage($isGranted, AbstractModel $object, $permission, RoleContextInterface $context = null, AbstractAssertion $assertion = null)
     {
-        // @todo : implement multiple contexts
         if ($isGranted) {
             $this->message = null;
         } elseif ($assertion && $assertion->getMessage()) {

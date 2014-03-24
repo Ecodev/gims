@@ -68,7 +68,7 @@ class SurveyTest extends AbstractModel
         $this->assertSame(null, $survey->getYear(), 'should be NULL by default');
 
         $survey->setYear('1991');
-        $this->assertNotSame('1991', $survey->getYear(), 'should not never return string');
+        $this->assertNotSame('1991', $survey->getYear(), 'should never return string');
         $this->assertSame(1991, $survey->getYear(), 'should always return integer');
 
         $survey->setYear(null);
