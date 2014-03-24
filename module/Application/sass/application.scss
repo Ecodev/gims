@@ -56,7 +56,7 @@ html {
     @extend .fa-check-square-o;
 }
 
-.fa-gims-usage {
+.fa-gims-rule {
     @extend .fa-gear;
 }
 
@@ -255,4 +255,9 @@ body.local {
             color: white;
         }
     }
+}
+
+[ui-ace] {
+    @extend .form-control;
+    min-height: 150px;
 }

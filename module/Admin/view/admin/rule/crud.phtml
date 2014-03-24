@@ -1,0 +1,55 @@
+<div class="container">
+
+    <h2>
+        <ul class="breadcrumb">
+            <li><a href="/admin/rule">Rules</a></li>
+            <li class="active">{{rule.name}}</li>
+        </ul>
+    </h2>
+
+    <form name="myForm" class="form-horizontal">
+
+        <?php echo $this->crudButtons('rule'); ?>
+
+        <tabset style="margin-top: 20px">
+            <tab heading="General info">
+
+                <div class="form-group" ng-class="{'has-error': myForm.name.$invalid}">
+                    <label class="control-label col-sm-1" for="rule.name"><?php echo $this->translate("Name"); ?></label>
+                    <div class="col-sm-6">
+                        <input id="rule.name" type="text" name="name" ng-model="rule.name" required ng-minlength="3"/>
+                    </div>
+                    <div class="col-sm-3">
+                        <span ng-show="myForm.name.$error.required" class="help-block"><?php echo $this->translate("Required"); ?></span>
+                        <span ng-show="myForm.name.$error.minlength" class="help-block"><?php echo sprintf($this->translate("It must be at least %u characters long"), 3); ?></span>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-class="{'has-error': myForm.formula.$invalid}">
+                    <label class="control-label col-sm-1" for="rule.formula"><?php echo $this->translate("Formula"); ?></label>
+                    <div class="col-sm-11">
+                        <div id="rule.formula" ui-ace="aceOptions" name="formula" ng-model="rule.formula" required ></div>
+                    </div>
+                    <div class="col-sm-3">
+                        <span ng-show="myForm.formula.$error.required" class="help-block"><?php echo $this->translate("Required"); ?></span>
+                        <span ng-show="myForm.formula.$error.formula" class="help-block"><?php echo $this->translate('Enter a valid formula'); ?></span>
+                    </div>
+                </div>
+
+            </tab>
+
+<!--            <tab heading="Surveys" ng-if="rule.id">
+                <gims-relations relation="RuleSurvey" first="rule" second="survey" third="role" format="code"></gims-relations>
+            </tab>
+
+            <tab heading="Questionnaires" ng-if="rule.id">
+                <gims-relations relation="RuleQuestionnaire" first="rule" second="questionnaire" third="role"></gims-relations>
+            </tab>
+
+            <tab heading="Filter Sets" ng-if="rule.id">
+                <gims-relations relation="RuleFilterSet" first="rule" second="filterSet" third="role"></gims-relations>
+            </tab>-->
+        </tabset>
+    </form>
+    <?php echo $this->metadata('rule'); ?>
+</div> <!-- /container -->

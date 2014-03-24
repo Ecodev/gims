@@ -22,6 +22,7 @@ return array(
             'Api\Controller\Chart' => 'Api\Controller\ChartController',
             'Api\Controller\Table' => 'Api\Controller\TableController',
             'Api\Controller\Note' => 'Api\Controller\NoteController',
+            'Api\Controller\Rule' => 'Api\Controller\RuleController',
         ),
     ),
     'router' => array(

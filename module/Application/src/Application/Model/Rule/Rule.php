@@ -148,4 +148,12 @@ class Rule extends \Application\Model\AbstractModel
         return $this->formula;
     }
 
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'name',
+            'formula',
+        ));
+    }
+
 }
