@@ -24,3 +24,6 @@ git submodule update --init --recursive --force
 echo "Updating all PHP dependencies via composer..."
 ./composer.phar install --dev --optimize-autoloader
 ./vendor/bin/doctrine-module migrations:migrate --no-interaction > /dev/null
+pg_dump --version ; pg_restore --version
+which pg_dump
+which pg_restore
