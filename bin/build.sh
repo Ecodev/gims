@@ -23,4 +23,4 @@ git submodule update --init --recursive --force
 
 echo "Updating all PHP dependencies via composer..."
 ./composer.phar install --dev --optimize-autoloader
-./vendor/bin/doctrine-module migrations:migrate --no-interaction
+./vendor/bin/doctrine-module migrations:migrate --no-interaction > /dev/null
