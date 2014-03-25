@@ -1,6 +1,8 @@
 language: php
 php:
   - "5.5"
+addons:
+  postgresql: "9.2"
 
 before_script:
   - ./bin/install_dependencies.sh configure
