@@ -18,4 +18,6 @@ if [[ "$1" = "configure" ]]; then
     echo "Init database..."
     cp config/autoload/local.php.dist config/autoload/local.php
     sudo -u postgres psql -c 'create database gims;' -U postgres
+    createuser --no-superuser --no-createdb --no-createrole gims
+    createuser --no-superuser --no-createdb --no-createrole backup
 fi
