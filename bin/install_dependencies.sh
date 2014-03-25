@@ -19,7 +19,7 @@ sudo apt-get -qq update
 sudo apt-get -qq install postgresql-9.1-postgis-2.0 rubygems nodejs apache2 php5-pgsql php5-cli php5-gd php5-mcrypt php5-intl php5-json
 
 echo "Installing JS testing tools..."
-sudo npm --global --quiet install karma karma-ng-scenario phantomjs uglify-js ngmin bower jshint
+sudo npm --global --quiet install karma@0.10.9 karma-ng-scenario@0.1.0 phantomjs uglify-js ngmin bower jshint
 
 echo "Installing php-cs-fixer..."
 sudo wget http://cs.sensiolabs.org/get/php-cs-fixer.phar -O /usr/local/bin/php-cs-fixer
