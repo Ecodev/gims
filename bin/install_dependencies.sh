@@ -68,6 +68,12 @@ if [[ "$1" = "configure" ]]; then
     echo "127.0.0.1 gims.lan" | sudo tee --append /etc/hosts
 
     echo "Init database..."
+    which pg_dump
+    pg_dump --version
+    which pg_restore
+    pg_restore --version
     cp config/autoload/local.php.dist config/autoload/local.php
     sudo -u postgres psql -c 'create database gims;' -U postgres
+    createuser --no-superuser --no-createdb --no-createrole gims
+    createuser --no-superuser --no-createdb --no-createrole backup
 fi
