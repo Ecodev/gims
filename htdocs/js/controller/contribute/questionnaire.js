@@ -11,7 +11,7 @@ angular.module('myApp').controller('Contribute/QuestionnaireCtrl', function($sco
         $scope.isLoading = true;
 
 
-        Restangular.one('questionnaire', $routeParams.id).all('question').getList({perPage: 1000, fields: 'type,filter,filter.isOfficial,answers,isCompulsory,choices,parts,isMultiple,isFinal,chapter,description'}).then(function(questions) {
+        Restangular.one('questionnaire', $routeParams.id).all('question').getList({perPage: 1000, fields: 'type,filter,answers,isCompulsory,choices,parts,isMultiple,isFinal,chapter,description'}).then(function(questions) {
 
             $scope.questions = questions;
 

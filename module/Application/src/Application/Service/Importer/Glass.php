@@ -36,7 +36,7 @@ class Glass extends AbstractImporter
 //        13 => 'Existence  and extent of implementation of Finance plan',
 //        14 => 'WASH  Expenditure in Sanitation,  Drinking-water and Hygiene',
 //        15 => 'Existence of national assessment for WASH areas',
-        
+
     );
 
 
@@ -62,34 +62,34 @@ class Glass extends AbstractImporter
             33 => array("Level of development / Implementation of plan", 30),
 
 			40 => array("To keep rural water supplies functioning over the long-term", 1),
-			41 => array("To improve the reliability and continuity of urban water supplies", 1),            
+			41 => array("To improve the reliability and continuity of urban water supplies", 1),
             42 => array("To ensure drinking water quality meet national standards", 1),
-            
+
             50 => array("Formal", 1),
             51 => array("Community-based", 1),
             52 => array("Informal", 1),
             53 => array("Self-supply", 1),
-            
+
 			60 => array("Ministry1", 1),
 			61 => array("Govern/Regulate", 60),
 			62 => array("Provide Service", 60),
 			63 => array("Monitor/Survie", 60),
-			
+
 			70 => array("Ministry2", 1),
 			71 => array("Govern/Regulate", 70),
 			72 => array("Provide Service", 70),
 			73 => array("Monitor/Survie", 70),
-			
+
 			80 => array("Ministry3", 1),
 			81 => array("Govern/Regulate", 80),
 			82 => array("Provide Service", 80),
 			83 => array("Monitor/Survie", 80),
-			
+
 			90 => array("Ministry4", 1),
 			91 => array("Govern/Regulate", 90),
 			92 => array("Provide Service", 90),
 			93 => array("Monitor/Survie", 90),
-			
+
 			100 => array("Ministry5", 1),
 			101 => array("Govern/Regulate", 100),
 			102 => array("Provide Service", 100),
@@ -104,7 +104,7 @@ class Glass extends AbstractImporter
             116 => array("People with disabilities", 1),
             117 => array("Other disadvantaged groups name", 1),
             118 => array("Other disadvantaged groups", 1),
-            
+
             120  => array("Expenditure", 1),
             121  => array("Service quality", 1),
             122  => array("Equitable Service", 1),
@@ -114,11 +114,11 @@ class Glass extends AbstractImporter
             // 126  => array("Wastewater/septage reuse", 1), // not for water
             127  => array("Institutional effectiveness", 1),
             128  => array("Cost-Recovery", 1),
-            
+
             130  => array("Policy and strategy", 1),
             131  => array("Resource allocation", 1),
             132  => array("National standards", 1),
-            
+
             140 => array("WASH HR strategy exists", 1), //
             141 => array("Current difficulties in HR for WASH", 1),
             142 => array("Financial resources available for staff (salaries and benefits, including pensions etc.) ", 1),
@@ -129,7 +129,7 @@ class Glass extends AbstractImporter
             147 => array("Skilled workers do not want to live and work in rural areas of the country", 1),
             148 => array("Recruitment practices", 1),
             149 => array("Other (please specify)", 1),
-            
+
             150  => array("Central government", 1),
             151  => array("Bilateral, multilateral donors", 1),
             152  => array("State, provincial, local", 1),
@@ -168,7 +168,7 @@ class Glass extends AbstractImporter
             31 => array("Target coverage", 30),
             32 => array("Target year", 30),
             33 => array("Level of development / Implementation of plan", 30),
-            
+
             40 => array("To rehabilitate broken or disused public latrines  (e.g. in schools)", 1),
             41 => array("To safely empty or replace latrines when full ", 1),
             42 => array("To reuse wastewater and/or septage", 1),
@@ -177,27 +177,27 @@ class Glass extends AbstractImporter
 			51 => array("Community-based", 1),
 			52 => array("Informal", 1),
             53 => array("Self-supply", 1),
-			            
+
 			60 => array("Ministry1", 1),
 			61 => array("Govern/Regulate", 60),
 			62 => array("Provide Service", 60),
 			63 => array("Monitor/Survie", 60),
-			
+
 			70 => array("Ministry2", 1),
 			71 => array("Govern/Regulate", 70),
 			72 => array("Provide Service", 70),
 			73 => array("Monitor/Survie", 70),
-			
+
 			80 => array("Ministry3", 1),
 			81 => array("Govern/Regulate", 80),
 			82 => array("Provide Service", 80),
 			83 => array("Monitor/Survie", 80),
-			
+
 			90 => array("Ministry4", 1),
 			91 => array("Govern/Regulate", 90),
 			92 => array("Provide Service", 90),
 			93 => array("Monitor/Survie", 90),
-			
+
 			100 => array("Ministry5", 1),
 			101 => array("Govern/Regulate", 100),
 			102 => array("Provide Service", 100),
@@ -275,27 +275,27 @@ class Glass extends AbstractImporter
 			61 => array("Govern/Regulate", 60),
 			62 => array("Provide Service", 60),
 			63 => array("Monitor/Survie", 60),
-			
+
 			70 => array("Ministry2", 1),
 			71 => array("Govern/Regulate", 70),
 			72 => array("Provide Service", 70),
 			73 => array("Monitor/Survie", 70),
-			
+
 			80 => array("Ministry3", 1),
 			81 => array("Govern/Regulate", 80),
 			82 => array("Provide Service", 80),
 			83 => array("Monitor/Survie", 80),
-			
+
 			90 => array("Ministry4", 1),
 			91 => array("Govern/Regulate", 90),
 			92 => array("Provide Service", 90),
 			93 => array("Monitor/Survie", 90),
-			
+
 			100 => array("Ministry5", 1),
 			101 => array("Govern/Regulate", 100),
 			102 => array("Provide Service", 100),
 			103 => array("Monitor/Survie", 100),
-			
+
 			110 => array("Poor populations", 1),
 			111 => array("Populations living in slums or informal settlements", 1),
 			112 => array("Remote or hard to reach areas	", 1),
@@ -335,9 +335,9 @@ class Glass extends AbstractImporter
         ),
         'Tables_U' => array(
             1 => array("Undefined", null),
-            
+
             40 => array("To address resilience to climate change", 1),
-            
+
             110 => array("Poor populations", 1),
             111 => array("Populations living in slums or informal settlements", 1),
             112 => array("Remote or hard to reach areas	", 1),
@@ -347,7 +347,7 @@ class Glass extends AbstractImporter
             116 => array("People with disabilities", 1),
             117 => array("Other disadvantaged groups", 1),
             118 => array("Other disadvantaged groups", 1),
-            
+
             130 => array("Identify public health priorities", 1),
             131 => array("Response to WASH related disease outbreak", 1),
 
@@ -416,15 +416,15 @@ class Glass extends AbstractImporter
 
 
     /**
-     * Import official filters
+     * Import filters
      *
-     * @param array $officialFilters
+     * @param array $area
      */
     protected function importFilters($area)
     {
         // import jmp filters
         if (isset($this->definitions[$area])) {
-            $this->importOfficialFilters($this->definitions[$area]);
+            $this->importFilters($this->definitions[$area]);
             $this->createFirstFilterSet($this->cacheFilters);
         }
 
@@ -472,9 +472,7 @@ class Glass extends AbstractImporter
         $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
         $filterSet = $filterSetRepository->getOrCreate($firstFilter->getName());
         foreach ($firstFilter->getChildren() as $child) {
-            if ($child->isOfficial()) {
-                $filterSet->addFilter($child);
-            }
+            $filterSet->addFilter($child);
         }
     }
 

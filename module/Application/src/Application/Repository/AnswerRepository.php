@@ -21,26 +21,25 @@ class AnswerRepository extends AbstractChildRepository
 
             // First we found which geoname is used for the given questionnaire
             $geonameId = $this->getEntityManager()
-                ->getRepository('Application\Model\Geoname')
-                ->getIdByQuestionnaireId($questionnaireId);
+                    ->getRepository('Application\Model\Geoname')
+                    ->getIdByQuestionnaireId($questionnaireId);
 
             // Then we get all data for the geoname
             $qb = $this->getEntityManager()->createQueryBuilder()
-                ->from('Application\Model\Questionnaire', 'questionnaire')
-                ->select('questionnaire.id AS questionnaire_id, answers.valuePercent, part.id AS part_id, filter.id AS filter_id, officialFilter.id AS official_filter_id, question.name AS questionName')
-                ->leftJoin('questionnaire.answers', 'answers')
-                ->leftJoin('answers.question', 'question')
-                ->leftJoin('answers.part', 'part')
-                ->leftJoin('question.filter', 'filter')
-                ->leftJoin('filter.officialFilter', 'officialFilter')
-                ->andWhere('questionnaire.geoname = :geoname');
+                    ->from('Application\Model\Questionnaire', 'questionnaire')
+                    ->select('questionnaire.id AS questionnaire_id, answers.valuePercent, part.id AS part_id, filter.id AS filter_id, question.name AS questionName')
+                    ->leftJoin('questionnaire.answers', 'answers')
+                    ->leftJoin('answers.question', 'question')
+                    ->leftJoin('answers.part', 'part')
+                    ->leftJoin('question.filter', 'filter')
+                    ->andWhere('questionnaire.geoname = :geoname');
 
             $qb->setParameters(array(
                 'geoname' => $geonameId,
             ));
 
             $res = $qb->getQuery()
-                ->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SCALAR);
+                    ->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SCALAR);
 
             // Ensure that we hit the cache next time, even if we have no results at all
             $this->cache[$questionnaireId] = array();
@@ -52,11 +51,7 @@ class AnswerRepository extends AbstractChildRepository
                     'questionName' => $data['questionName'],
                 );
 
-                if ($data['official_filter_id']) {
-                    $this->cache[$data['questionnaire_id']][$data['official_filter_id']][$data['part_id']] = $answerData;
-                } else {
-                    $this->cache[$data['questionnaire_id']][$data['filter_id']][$data['part_id']] = $answerData;
-                }
+                $this->cache[$data['questionnaire_id']][$data['filter_id']][$data['part_id']] = $answerData;
             }
         }
     }
@@ -110,9 +105,9 @@ class AnswerRepository extends AbstractChildRepository
     public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
     {
         $qb = $this->createQueryBuilder('answer')
-            ->join('answer.questionnaire', 'questionnaire', \Doctrine\ORM\Query\Expr\Join::WITH)
-            ->where($parentName . ' = :parent')
-            ->setParameter('parent', $parent);
+                ->join('answer.questionnaire', 'questionnaire', \Doctrine\ORM\Query\Expr\Join::WITH)
+                ->where($parentName . ' = :parent')
+                ->setParameter('parent', $parent);
 
         $this->addPermission($qb, 'questionnaire', \Application\Model\Permission::getPermissionName($this, $action));
 
@@ -167,18 +162,18 @@ class AnswerRepository extends AbstractChildRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('answer, question, questionnaire, choice, part')
-            ->from('Application\Model\Answer', 'answer')
-            ->join('answer.questionnaire', 'questionnaire')
-            ->join('answer.question', 'question')
-            ->join('answer.part', 'part')
-            ->leftJoin('answer.valueChoice', 'choice');
+                ->from('Application\Model\Answer', 'answer')
+                ->join('answer.questionnaire', 'questionnaire')
+                ->join('answer.question', 'question')
+                ->join('answer.part', 'part')
+                ->leftJoin('answer.valueChoice', 'choice');
 
         if ($questionnairesIds) {
             $qb->where($qb->expr()->in('questionnaire.id', $questionnairesIds));
         } else {
             $qb->join('questionnaire.survey', 'survey')
-                ->where('survey.id = :surveyid')
-                ->setParamter('surveyId', $survey->getId());
+                    ->where('survey.id = :surveyid')
+                    ->setParamter('surveyId', $survey->getId());
         }
 
         return $qb->getQuery()->getArrayResult();

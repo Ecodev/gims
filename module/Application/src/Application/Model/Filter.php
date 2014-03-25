@@ -49,24 +49,6 @@ class Filter extends AbstractModel
     private $name;
 
     /**
-     * @var Questionnaire
-     * @ORM\ManyToOne(targetEntity="Questionnaire")
-     * @ORM\JoinColumns({
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=true)
-     * })
-     */
-    private $questionnaire;
-
-    /**
-     * @var Filter
-     * @ORM\ManyToOne(targetEntity="Filter")
-     * @ORM\JoinColumns({
-     * @ORM\JoinColumn(onDelete="SET NULL")
-     * })
-     */
-    private $officialFilter;
-
-    /**
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="Filter", inversedBy="parents")
      * @ORM\OrderBy({"id" = "ASC"})
@@ -166,64 +148,6 @@ class Filter extends AbstractModel
     }
 
     /**
-     * Set questionnaire. If a questionnaire is set, it means the Filter is unofficial
-     * @param Questionnaire $questionnaire
-     * @return Filter
-     */
-    public function setQuestionnaire(Questionnaire $questionnaire = null)
-    {
-        $this->questionnaire = $questionnaire;
-
-        return $this;
-    }
-
-    /**
-     * Get questionnaire. If a questionnaire is set, it means the Filter is unofficial
-     * @return Questionnaire
-     */
-    public function getQuestionnaire()
-    {
-        return $this->questionnaire;
-    }
-
-    /**
-     * Returns whether this Filter is official or unofficial (specific to one questionnaire)
-     * @return boolean
-     */
-    public function isOfficial()
-    {
-        return !$this->getQuestionnaire();
-    }
-
-    /**
-     * Set officialFilter
-     * @param Filter $officialFilter
-     * @return Filter
-     */
-    public function setOfficialFilter(Filter $officialFilter = null)
-    {
-        // Copy parents from official Filter
-        if ($officialFilter) {
-            foreach ($officialFilter->getParents() as $parent) {
-                $parent->addChild($this);
-            }
-        }
-
-        $this->officialFilter = $officialFilter;
-
-        return $this;
-    }
-
-    /**
-     * Get officialFilter
-     * @return Filter
-     */
-    public function getOfficialFilter()
-    {
-        return $this->officialFilter;
-    }
-
-    /**
      * Get children
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
@@ -312,7 +236,7 @@ class Filter extends AbstractModel
     }
 
     /**
-     * Get only official child Filters
+     * Returns FilterSet
      */
     public function getFilterSets()
     {
@@ -320,7 +244,7 @@ class Filter extends AbstractModel
     }
 
     /**
-     * Get only official child Filters
+     * Set FilterSets
      */
     public function setFilterSets(ArrayCollection $filterSets)
     {
@@ -439,16 +363,6 @@ class Filter extends AbstractModel
     }
 
     /**
-     * Get only official child Filters
-     */
-    public function getOfficialChildren()
-    {
-        return $this->getChildren()->filter(function ($f) {
-            return $f->isOfficial();
-        });
-    }
-
-    /**
      * Return a list of the ancestors paths until root
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
@@ -532,4 +446,5 @@ class Filter extends AbstractModel
 
         return $contexts ? new MultipleRoleContext($contexts, true) : null;
     }
+
 }

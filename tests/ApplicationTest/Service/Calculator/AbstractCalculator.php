@@ -257,9 +257,8 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
                 ->will($this->returnCallback(function($questionnaireId, $filterId, $partId) {
                             $questionnaire = $this->getModel('\Application\Model\Questionnaire', $questionnaireId);
                             foreach ($questionnaire->getAnswers() as $answer) {
-                                $answerFilter = $answer->getQuestion()->getFilter()->getOfficialFilter() ? : $answer->getQuestion()->getFilter();
+                                $answerFilter = $answer->getQuestion()->getFilter();
                                 if ($answerFilter->getId() == $filterId && $answer->getPart()->getId() == $partId) {
-
                                     return $answer->getValuePercent();
                                 }
                             }
@@ -275,13 +274,13 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
                             $questionnaire = $this->getModel('\Application\Model\Questionnaire', $questionnaireId);
                             foreach ($questionnaire->getAnswers() as $answer) {
                                 if ($answer->getQuestion()->getFilter()->getId() == $filterId && !is_null($answer->getValuePercent())) {
-
                                     return $answer->getQuestion()->getName();
                                 }
                             }
 
                             return null;
                         }));
+
         return $stubAnswerRepository;
     }
 
@@ -306,6 +305,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
                                     return $filterQuestionnaireUsage;
                                 }
                             }
+
                             return null;
                         })
         );
@@ -327,6 +327,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
                                     return $filterGeonameUsage;
                                 }
                             }
+
                             return null;
                         })
         );
@@ -378,6 +379,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $calculator->setQuestionnaireRepository($this->getStubQuestionnaireRepository());
 
         $calculator->setServiceLocator($this->getApplicationServiceLocator());
+
         return $calculator;
     }
 

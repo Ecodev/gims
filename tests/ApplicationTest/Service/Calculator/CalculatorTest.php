@@ -49,22 +49,9 @@ class CalculatorTest extends AbstractCalculator
         $this->assertEquals($this->answer141->getValuePercent(), $this->getNewCalculator()->computeFilter($this->filter14->getId(), $this->questionnaire->getId(), $this->part1->getId()), 'should be the sum of children, but only for selected part (1)');
         $this->assertEquals($this->answer142->getValuePercent(), $this->getNewCalculator()->computeFilter($this->filter14->getId(), $this->questionnaire->getId(), $part->getId()), 'should be the sum of children, but only for selected part (2)');
 
-        // Add alternative (non-official) filter to previously unexisting answer
-        $this->filter21bis = $this->getNewModelWithId('\Application\Model\Filter')->setName('cat 2.1 bis');
-        $this->filter21bis->setOfficialFilter($this->filter21);
-        $this->question21bis = new \Application\Model\Question\NumericQuestion();
-        $this->question21bis->setFilter($this->filter21bis);
-        $this->answer21bis = new \Application\Model\Answer();
-        $this->answer21bis->setPart($this->part1)->setQuestionnaire($this->questionnaire)->setQuestion($this->question21bis)->setValuePercent(0.000000001);
-
-        // Assert that alternative filter is used for computation
-        $this->assertEquals($this->answer21bis->getValuePercent(), $this->getNewCalculator()->computeFilter($this->filter2->getId(), $this->questionnaire->getId(), $this->part1->getId()), 'should be the sum of children, including the answer which is specified with alternative filter');
-        $this->assertEquals($this->answer21bis->getValuePercent(), $this->getNewCalculator()->computeFilter($this->filter21->getId(), $this->questionnaire->getId(), $this->part1->getId()), 'should be the alternative answer, when answer is specified with alternative filter');
-        $this->assertEquals($this->answer21bis->getValuePercent(), $this->getNewCalculator()->computeFilter($this->filter3->getId(), $this->questionnaire->getId(), $this->part1->getId()), 'should be the sum of summands, when summands have answer');
-
         // Define summands to use several time cat1.4.1 (once via cat1 and once via cat1.4)
         $this->filter3->addSummand($this->filter1)->addSummand($this->filter14);
-        $this->assertEquals($this->answer21bis->getValuePercent() + $this->answer11->getValuePercent() + $this->answer13->getValuePercent() + $this->answer132->getValuePercent() + $this->answer141->getValuePercent(), $this->getNewCalculator()->computeFilter($this->filter3->getId(), $this->questionnaire->getId(), $this->part1->getId()), 'should not sum twice the same filter');
+        $this->assertEquals($this->answer11->getValuePercent() + $this->answer13->getValuePercent() + $this->answer132->getValuePercent() + $this->answer141->getValuePercent(), $this->getNewCalculator()->computeFilter($this->filter3->getId(), $this->questionnaire->getId(), $this->part1->getId()), 'should not sum twice the same filter');
     }
 
     public function testComputingFilterIsCorrect()
@@ -174,18 +161,14 @@ class CalculatorTest extends AbstractCalculator
         $rule->setFormula('=7 + {R#12,Q#current,P#current}');
         $this->assertEquals(7, $service->computeFormula($filterQuestionnaireUsage), 'should be able to refer a QuestionnaireUsage which is NULL');
 
-        // Unnoficial filter names
+        // Non-existing question names
         $rule->setFormula('={F#12,Q#' . $this->questionnaire->getId() . '}');
         $this->assertNull($service->computeFormula($filterQuestionnaireUsage), 'refering a non-existing Question name, returns null');
 
-        // Inject our unnofficial filter
-
-
-        $unofficialFilter = $this->getNewModelWithId('\Application\Model\Filter')->setName('unofficial with "double quotes"');
-        $unofficialFilter->setQuestionnaire($this->questionnaire)->setOfficialFilter($this->filter131);
-
-        $rule->setFormula('=ISTEXT({F#' . $this->filter131->getId() . ',Q#' . $unofficialFilter->getQuestionnaire()->getId() . '})');
-        $this->assertTrue($service->computeFormula($filterQuestionnaireUsage), 'should be able to refer an Unofficial Filter name');
+        // Question names with double quotes
+        $this->question131->setName('question with "double quotes"');
+        $rule->setFormula('=ISTEXT({F#' . $this->filter131->getId() . ',Q#' . $this->questionnaire->getId() . '})');
+        $this->assertTrue($service->computeFormula($filterQuestionnaireUsage), 'should be able to refer a Question name');
     }
 
     public function testFormulaSyntaxSelf()
