@@ -4,11 +4,10 @@
 describe('home', function() {
 
     beforeEach(function() {
-        browser().navigateTo('/home');
+        browser.get('/home');
     });
 
     it('should render home when user navigates to /home', function() {
-        expect(element('[ng-view] p:first').text()).
-                toMatch(/Global Information Management System/);
+        expect(element(by.css('[ng-view] p:nth-of-type(1)')).getText()).toContain("Global Information Management System");
     });
 });

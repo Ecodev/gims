@@ -84,7 +84,7 @@
         <delete dir="htdocs/tmp/" includeemptydirs="true" quiet="true"/>
     </target>
 
-    <target name="test" depends="validate-schema,phpunit,karma-unit,karma-e2e" description="Run all tests available">
+    <target name="test" depends="validate-schema,phpunit,karma-unit,protractor-e2e" description="Run all tests available">
         <echo msg="Testing done" />
     </target>
 
@@ -106,5 +106,10 @@
     <target name="karma-e2e" depends="build">
         <echo msg="Testing karma-e2e..." />
         <exec command="karma start --no-auto-watch --single-run --browsers cli config/karma-e2e.conf.js" checkreturn="true" logoutput="/dev/stdout" />
+    </target>
+
+    <target name="protractor-e2e" depends="build">
+        <echo msg="Testing protractor-e2e..." />
+        <exec command="protractor config/protractor.conf.js" checkreturn="true" logoutput="/dev/stdout" />
     </target>
 </project>
