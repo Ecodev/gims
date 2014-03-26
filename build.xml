@@ -61,7 +61,7 @@
     <!-- Target: build                                 -->
     <!-- ============================================  -->
     <target name="build" depends="composer-install" description="Build all assets for a fully functionnal application (DB, CSS, JS)">
-        <exec command="./bin/build.sh" checkreturn="true" logoutput="/dev/stdout" />
+        <exec command="./bin/build.sh" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
     </target>
 
     <!-- ============================================  -->
@@ -82,6 +82,8 @@
         <delete dir="data/docs/api/" includeemptydirs="true" quiet="true"/>
         <delete dir="htdocs/css/" includeemptydirs="true" quiet="true"/>
         <delete dir="htdocs/tmp/" includeemptydirs="true" quiet="true"/>
+        <delete dir="vendor/" includeemptydirs="true" quiet="true"/>
+        <delete dir="node_modules/" includeemptydirs="true" quiet="true"/>
     </target>
 
     <target name="test" depends="validate-schema,phpunit,karma-unit,protractor-e2e" description="Run all tests available">
@@ -90,22 +92,22 @@
 
     <target name="validate-schema" depends="build">
         <echo msg="Validating schema..." />
-        <exec command="./vendor/bin/doctrine-module orm:validate-schema" checkreturn="true" logoutput="/dev/stdout" />
+        <exec command="./vendor/bin/doctrine-module orm:validate-schema" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
     </target>
 
     <target name="phpunit" depends="build, load-test-data">
         <echo msg="Testing phpunit..." />
-        <exec command="cd tests/ ; ../vendor/bin/phpunit" checkreturn="true" logoutput="/dev/stdout" />
+        <exec command="cd tests/ ; ../vendor/bin/phpunit" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
     </target>
 
     <target name="karma-unit" depends="build">
         <echo msg="Testing karma-unit..." />
-        <exec command="karma start --no-auto-watch --single-run --browsers cli config/karma-unit.conf.js" checkreturn="true" logoutput="/dev/stdout" />
+        <exec command="./node_modules/.bin/karma start --no-auto-watch --single-run --browsers cli config/karma-unit.conf.js" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
     </target>
 
     <target name="karma-e2e" depends="build">
         <echo msg="Testing karma-e2e..." />
-        <exec command="karma start --no-auto-watch --single-run --browsers cli config/karma-e2e.conf.js" checkreturn="true" logoutput="/dev/stdout" />
+        <exec command="./node_modules/.bin/karma start --no-auto-watch --single-run --browsers cli config/karma-e2e.conf.js" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
     </target>
 
     <target name="protractor-e2e" depends="build">

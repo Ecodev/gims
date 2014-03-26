@@ -8,6 +8,7 @@ htdocs/tmp
 htdocs/lib/*
 !htdocs/lib/autoload
 nbproject/private
+node_modules
 vendor
 reset.sh
 ._*
