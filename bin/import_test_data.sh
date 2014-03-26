@@ -1,7 +1,7 @@
 # Exit script on any error
 set -e
 
-truncate -s 0 data/logs/all.log
+> data/logs/all.log
 phing load-data -DdumpFile=population.backup.gz
 
 time php htdocs/index.php import jmp data/cache/country_data/Bangladesh_13.xlsm
