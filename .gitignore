@@ -16,3 +16,5 @@ reset.sh
 *.uml~
 .idea
 data/backup/*.gz
+Population_2012_JMP.xls
+population.backup.gz

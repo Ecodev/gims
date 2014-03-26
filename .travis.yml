@@ -1,6 +1,8 @@
 language: php
 php:
   - "5.5"
+addons:
+  postgresql: "9.2"
 
 before_install:
   - export DISPLAY=:99.0
