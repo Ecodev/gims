@@ -1,8 +1,10 @@
 language: php
 php:
   - "5.5"
+
 addons:
   postgresql: "9.2"
+  firefox: "21.0"
 
 before_install:
   - export DISPLAY=:99.0

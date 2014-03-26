@@ -110,6 +110,6 @@
 
     <target name="protractor-e2e" depends="build">
         <echo msg="Testing protractor-e2e..." />
-        <exec command="protractor config/protractor.conf.js" checkreturn="true" logoutput="/dev/stdout" />
+        <exec command="protractor config/protractor.conf.js --browser='firefox'" checkreturn="true" logoutput="/dev/stdout" />
     </target>
 </project>
