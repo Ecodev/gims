@@ -14,4 +14,4 @@ before_script:
   - ./bin/install_dependencies.sh configure
   - ./bin/build.sh
 
-script: ./vendor/bin/phing load-test-data
+script: ./vendor/bin/phing test
