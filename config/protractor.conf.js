@@ -18,7 +18,8 @@ exports.config = {
     // to the location of this config. If no other method of starting selenium
     // is found, this will default to
     // node_modules/protractor/selenium/selenium-server...
-//    seleniumServerJar: '../vendor/selenium/selenium-server-standalone-2.40.0.jar',
+    // seleniumServerJar: '../vendor/selenium/selenium-server-standalone-2.40.0.jar',
+
     // The port to start the selenium server on, or null if the server should
     // find its own unused port.
     seleniumPort: 4444,
@@ -26,7 +27,8 @@ exports.config = {
     // find chromedriver. This will be passed to the selenium jar as
     // the system property webdriver.chrome.driver. If null, selenium will
     // attempt to find chromedriver using PATH.
-    chromeDriver: '../vendor/selenium/chromedriver',
+    //chromeDriver: '../vendor/selenium/chromedriver',
+
     // If true, only chromedriver will be started, not a standalone selenium.
     // Tests for browsers other than chrome will not run.
     chromeOnly: false,
@@ -73,19 +75,9 @@ exports.config = {
     // https://code.google.com/p/selenium/wiki/DesiredCapabilities
     // and
     // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
-    capabilities:
-        [
-        {
-            'browserName': 'chrome'
-        },
-        {
-            'browserName': 'firefox'
-        },
-        {
-            'browserName': 'chrome'
-            //,'phantomjs.cli.args':['--logfile=../data/logs/tests/phantomjsdriver.log', '--loglevel=DEBUG'] // Acceptable cli arugments: https://github.com/ariya/phantomjs/wiki/API-Reference#wiki-command-line-options
-        }
-    ],
+    capabilities:{
+        'browserName': 'chrome'
+    },
 
     // If you would like to run more than one instance of webdriver on the same
     // tests, use multiCapabilities, which takes an array of capabilities.

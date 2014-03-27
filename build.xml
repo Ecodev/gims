@@ -90,6 +90,10 @@
         <echo msg="Testing done" />
     </target>
 
+    <target name="travis" depends="validate-schema,phpunit,karma-unit" description="Run all tests available">
+        <echo msg="Testing done" />
+    </target>
+
     <target name="validate-schema" depends="build">
         <echo msg="Validating schema..." />
         <exec command="./vendor/bin/doctrine-module orm:validate-schema" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
@@ -112,6 +116,6 @@
 
     <target name="protractor-e2e" depends="build">
         <echo msg="Testing protractor-e2e..." />
-        <exec command="./node_modules/.bin/protractor config/protractor.conf.js --browser='firefox'" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
+        <exec command="./node_modules/.bin/protractor config/protractor.conf.js --verbose" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
     </target>
 </project>
