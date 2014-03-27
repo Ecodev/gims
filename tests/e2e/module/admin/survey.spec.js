@@ -63,7 +63,7 @@ describe('admin/survey/new', function() {
 
         panes.forEach(function(pane) {
             expect(element.all(by.xpath("//*[@ng-view]//*[contains(@class, 'nav-tabs')]//li//a[text()='" + pane.text + "']")).count()).toBe(pane.visible);
-        })
+        });
     });
 
     it('should be able to fill-in required fields', function() {
@@ -133,7 +133,7 @@ describe('admin/survey/edit', function() {
         ];
         panes.forEach(function(pane) {
             expect(element.all(by.xpath("//*[@ng-view]//*[contains(@class, 'nav-tabs')]//li//a[text()='" + pane.text + "']")).count()).toBe(pane.visible);
-        })
+        });
     });
 });
 
@@ -149,12 +149,12 @@ describe('admin/questionnaire/new', function() {
     });
 
     function select2ClickFirstItem(select2Id) {
-        var select2 = element(by.css('div#s2id_' + select2Id)).click();
+        element(by.css('div#s2id_' + select2Id)).click();
         var items = element.all(by.css('.select2-results-dept-0'));
         browser.driver.wait(function () {
             return items.count().then(function (count) {
                 return count > 0;
-            })
+            });
         });
         var item = items.get(3);
         item.click();
@@ -166,7 +166,7 @@ describe('admin/questionnaire/new', function() {
         select2ClickFirstItem('autogen1').then(function(country){
             country.getText().then(function(countryName){
                 selectedCountry = countryName;
-            })
+            });
         });
         element(by.model('questionnaire.dateObservationStart')).sendKeys('08/05/2013');
         element(by.model('questionnaire.dateObservationEnd')).sendKeys('08/05/2014');
@@ -181,7 +181,7 @@ describe('admin/questionnaire/new', function() {
 
         panes.forEach(function(pane) {
             expect(element.all(by.xpath("//*[@ng-view]//*[contains(@class, 'nav-tabs')]//li//a[text()='" + pane.text + "']")).count()).toBe(pane.visible);
-        })
+        });
     });
 
     it('should be able to fill-in required fields', function() {
@@ -203,7 +203,7 @@ describe('admin/questionnaire/new', function() {
         expect(browser.getCurrentUrl()).toContain(browser.baseUrl + '/admin/questionnaire/edit');
     });
 
-    iit('should be able to save a new questionnaire and delete it', function() {
+    it('should be able to save a new questionnaire and delete it', function() {
 
         fillQuestionnaireForm();
 
