@@ -35,6 +35,19 @@ class FilterGeonameUsage extends AbstractUsage
     private $geoname;
 
     /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'rule',
+            'filter',
+            'geoname',
+            'part',
+        ));
+    }
+
+    /**
      * Set filter
      *
      * @param Filter $filter

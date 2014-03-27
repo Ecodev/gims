@@ -448,13 +448,13 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $survey->setCode('code test survey');
         $survey->setYear(2010);
 
-        $geoName = new Geoname('test geoname');
+        $geoname = new Geoname('test geoname');
 
         $questionnaire = new Questionnaire();
         $questionnaire->setSurvey($survey);
         $questionnaire->setDateObservationStart(new \DateTime('2010-01-01T00:00:00+0100'));
         $questionnaire->setDateObservationEnd(new \DateTime('2011-01-01T00:00:00+0100'));
-        $questionnaire->setGeoname($geoName);
+        $questionnaire->setGeoname($geoname);
 
         return $survey;
     }

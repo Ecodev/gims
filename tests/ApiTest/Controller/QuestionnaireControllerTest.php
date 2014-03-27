@@ -68,7 +68,7 @@ class QuestionnaireControllerTest extends AbstractRestfulControllerTest
         $data = array(
             'dateObservationStart' => '2013-05-22T00:00:00.000Z',
             'dateObservationEnd' => '2014-05-22T00:00:00.000Z',
-            'geoname' => $this->geoName->getId(),
+            'geoname' => $this->geoname->getId(),
             'survey' => $this->survey->getId(),
         );
 
@@ -94,13 +94,13 @@ class QuestionnaireControllerTest extends AbstractRestfulControllerTest
     public function updateQuestionnaireGeoNameAndCheckWhetherGeoNameIsChanged()
     {
         // create new geoname
-        $geoName = new Geoname('foo geoname');
-        $this->getEntityManager()->persist($geoName);
+        $geoname = new Geoname('foo geoname');
+        $this->getEntityManager()->persist($geoname);
         $this->getEntityManager()->flush();
         $expected = $this->questionnaire->getGeoname()->getId();
 
         $data = array(
-            'geoname' => $geoName->getId(),
+            'geoname' => $geoname->getId(),
         );
 
         $this->dispatch($this->getRoute('put') . '?fields=geoname', Request::METHOD_PUT, $data);
@@ -117,7 +117,7 @@ class QuestionnaireControllerTest extends AbstractRestfulControllerTest
         $data = array(
             'dateObservationStart' => '2013-05-22T00:00:00.000Z',
             'dateObservationEnd' => '2014-05-22T00:00:00.000Z',
-            'geoname' => $this->geoName->getId(),
+            'geoname' => $this->geoname->getId(),
             'survey' => $this->survey->getId(),
             'status' => 'new',
         );
