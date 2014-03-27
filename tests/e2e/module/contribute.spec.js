@@ -16,7 +16,7 @@ describe('contribute', function() {
     });
 
     it('should render admin buttons', function() {
-        gimsUtility.capture('test ', browser);
+        gimsUtility.capture('test', browser);
         expect(element.all(by.css('[ng-view] .col-md-4')).count()).toBe(3);
 
         var text = element(by.css('[ng-view] .col-md-4:nth-child(1)')).getText();

@@ -4,12 +4,12 @@
 
 module.exports.logout = function() {
 
-    element(by.css("[href='/user/logout']")).isDisplayed(function(isVisible){
-        if (isVisible == true) {
+    element(by.css("[href='/user/logout']")).isDisplayed(function(isVisible) {
+        if (isVisible === true) {
             element(by.css("[href='/user/logout']")).click();
         }
     });
-}
+};
 
 module.exports.login = function(user, pass, browser) {
 
@@ -38,14 +38,19 @@ module.exports.login = function(user, pass, browser) {
 
     });
 
-}
+};
 
 module.exports.capture = function(filename, browser) {
     var fs = require('fs');
     browser.takeScreenshot().then(function(png) {
-        var stream = fs.createWriteStream('data/logs/tests/captures/' + filename + '.png');
+        var dir = 'data/logs/tests/';
+        fs.mkdirSync(dir);
+        dir = dir + 'captures/';
+        fs.mkdirSync(dir);
+
+        var stream = fs.createWriteStream(dir + filename + '.png');
         stream.write(new Buffer(png, 'base64'));
         stream.end();
     });
-}
+};
 

@@ -14,7 +14,10 @@
         "sleep",
         "angular",
         "module",
-        "inject"
+        "inject",
+        "by",
+        "require",
+        "Buffer"
     ],
     // On-line example https://gist.github.com/connor/1597131
     "bitwise": true,    // Prohibit bitwise operators (&, |, ^, etc.).
