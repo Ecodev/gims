@@ -378,8 +378,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             /** @var  \Application\Service\Hydrator $hydrator */
             $hydrator = new \Application\Service\Hydrator();
 
-            if ($this->params()->fromQuery('getQuestionnaireUsages') === 'true'
-            ) {
+            if ($this->params()->fromQuery('getQuestionnaireUsages') === 'true') {
                 if ($usages = $this->extractUsages($questionnaire->getQuestionnaireUsages(), null, $part, $hydrator, $calculator)) {
                     $result['usages'] = $usages;
                 }
@@ -411,34 +410,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     $resultWithoutIgnoredFilters['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, $ignoredFiltersByQuestionnaire, true);
 
                     foreach ($result['filters'][$filterId] as $i => &$flatFilter) {
-
-                        // add computed values to filters
-                        if ($result['filters'][$filterId][$i]['values'][0][$part->getName()] != $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values'][0][$part->getName()]) {
-                            $result['filters'][$filterId][$i]['valuesWithoutIgnored'] = $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values'];
-                        }
-
-                        // add the usages to filters
-                        $fqus = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($flatFilter['filter']['id'])->getFilterQuestionnaireUsages();
-                        foreach ($fqus as $fqu) {
-                            if ($fqu->getPart() === $part && $fqu->getQuestionnaire() === $questionnaire) {
-                                if (!isset($flatFilter['usages'])) {
-                                    $flatFilter['usages'] = $fqu->getRule()->getName();
-                                } else {
-                                    $flatFilter['usages'] .= ', ' . $fqu->getRule()->getName();
-                                }
-                            }
-                        }
-
-                        // replace the list of questions by a single question corresponding to current questionnaire
-                        if (isset($flatFilter['filter']['questions'])) {
-                            foreach ($flatFilter['filter']['questions'] as $question) {
-                                if ($question['survey']['id'] == $questionnaire->getSurvey()->getId()) {
-                                    $flatFilter['filter']['originalDenomination'] = $question['name'];
-                                    break;
-                                }
-                            }
-                            unset($flatFilter['filter']['questions']);
-                        }
+                        $flatFilter = $this->addComputedValuesToFilters($flatFilter, $part, $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values']);
+                        $flatFilter = $this->addUsagesToFilters($flatFilter, $part, $questionnaire);
+                        $flatFilter = $this->addQuestionsToFilters($flatFilter, $questionnaire);
                     }
                 }
             }
@@ -450,6 +424,69 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
             return new NumericJsonModel(array('message' => 'questionnaire not found'));
         }
+    }
+
+    /**
+     * Add values computed in case we have ignored filters to given filter ($flatFilter)
+     * @param $flatFilter
+     * @param $part
+     * @param $resultWithoutIgnoredFilters
+     * @return array $flatFilter with modifications
+     */
+    private function addComputedValuesToFilters($flatFilter, $part, $resultWithoutIgnoredFilters)
+    {
+        // add computed values to filters
+        if ($flatFilter['values'][0][$part->getName()] != $resultWithoutIgnoredFilters[0][$part->getName()]) {
+            $flatFilter['valuesWithoutIgnored'] = $resultWithoutIgnoredFilters;
+        }
+
+        return $flatFilter;
+    }
+
+    /**
+     * Add Usages to given filter ($flatFilter)
+     * @param $flatFilter
+     * @param $part
+     * @param $questionnaire
+     * @return array $flatFilter with modifications
+     */
+    private function addUsagesToFilters($flatFilter, $part, $questionnaire)
+    {
+        // add the usages to filters
+        $fqus = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($flatFilter['filter']['id'])->getFilterQuestionnaireUsages();
+        foreach ($fqus as $fqu) {
+            if ($fqu->getPart() === $part && $fqu->getQuestionnaire() === $questionnaire) {
+                if (!isset($flatFilter['usages'])) {
+                    $flatFilter['usages'] = $fqu->getRule()->getName();
+                } else {
+                    $flatFilter['usages'] .= ', ' . $fqu->getRule()->getName();
+                }
+            }
+        }
+
+        return $flatFilter;
+    }
+
+    /**
+     * Add orignial denomations (questions labels) to given filter ($flatFilter)
+     * @param $flatFilter
+     * @param $questionnaire
+     * @return array $flatFilter with modifications
+     */
+    private function addQuestionsToFilters($flatFilter, $questionnaire)
+    {
+        // replace the list of questions by a single question corresponding to current questionnaire
+        if (isset($flatFilter['filter']['questions'])) {
+            foreach ($flatFilter['filter']['questions'] as $question) {
+                if ($question['survey']['id'] == $questionnaire->getSurvey()->getId()) {
+                    $flatFilter['filter']['originalDenomination'] = $question['name'];
+                    break;
+                }
+            }
+            unset($flatFilter['filter']['questions']);
+        }
+
+        return $flatFilter;
     }
 
     protected function extractUsages($usages, $questionnaire = null, $part, $hydrator, $calculator)
