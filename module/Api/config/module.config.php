@@ -23,9 +23,9 @@ return array(
             'Api\Controller\Table' => 'Api\Controller\TableController',
             'Api\Controller\Note' => 'Api\Controller\NoteController',
             'Api\Controller\Rule' => 'Api\Controller\RuleController',
-            'Api\Controller\QuestionnaireUsage' => 'Api\Controller\QuestionnaireUsageController',
-            'Api\Controller\FilterQuestionnaireUsage' => 'Api\Controller\FilterQuestionnaireUsageController',
-            'Api\Controller\FilterGeonameUsage' => 'Api\Controller\FilterGeonameUsageController',
+            'Api\Controller\QuestionnaireUsage' => 'Api\Controller\Rule\QuestionnaireUsageController',
+            'Api\Controller\FilterQuestionnaireUsage' => 'Api\Controller\Rule\FilterQuestionnaireUsageController',
+            'Api\Controller\FilterGeonameUsage' => 'Api\Controller\Rule\FilterGeonameUsageController',
         ),
     ),
     'router' => array(

@@ -1,8 +1,9 @@
 <?php
 
-namespace Api\Controller;
+namespace Api\Controller\Rule;
 
 use Zend\View\Model\JsonModel;
+use Api\Controller\AbstractChildRestfulController;
 
 class QuestionnaireUsageController extends AbstractChildRestfulController
 {
