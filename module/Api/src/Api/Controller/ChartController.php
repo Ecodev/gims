@@ -30,76 +30,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     private $endYear;
     private $usedFilters = array();
 
-    public function indexAction()
+    private function getChart($filterSetsName, $country, $part, $series)
     {
-        $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneById($this->params()->fromQuery('country'));
-
-        $filterSetsName = '';
-        $filterSets = array();
-        $filterSetsIds = explode(',', $this->params()->fromQuery('filterSet'));
-        foreach ($filterSetsIds as $filterSetId) {
-            if (!empty($filterSetId)) {
-                /* @var $filterSet \Application\Model\FilterSet */
-                $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($filterSetId);
-                $filterSetsName .= $filterSet->getName() . ', ';
-                $filterSets[] = $filterSet;
-                $hFilters = $filterSet->getFilters()->map(function ($el) {
-                    return $el->getId();
-                });
-                $this->usedFilters = array_merge($this->usedFilters, $hFilters->toArray());
-            }
-        }
-        $filterSetsName = trim($filterSetsName, ", ");
-
-        $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
-
-        $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getByGeonameWithSurvey($country ? $country->getGeoname() : -1);
-
-        $this->startYear = 1980;
-        $this->endYear = 2012;
-
-        $series = array();
-        if (count($filterSets) > 0) {
-
-            // First get series of flatten regression lines with ignored values (if any)
-            $seriesWithIgnoredElements = $this->computeIgnoredElements($questionnaires, $part);
-
-            foreach ($filterSets as $filterSet) {
-
-                // If the filterSet is a copy of an original FilterSet, then we also display the original (with light colors)
-                if ($filterSet->getOriginalFilterSet()) {
-                    $originalFilterSet = $filterSet->getOriginalFilterSet();
-                    $seriesWithOriginal = $this->getSeries($originalFilterSet, $questionnaires, $part, array(), 100, null, false, ' (original)');
-                } else {
-                    $seriesWithOriginal = array();
-                }
-
-                $ignoredFilters = array();
-                foreach ($filterSet->getExcludedFilters() as $ignoredFilter) {
-                    $ignoredFilters[] = $ignoredFilter->getId();
-                }
-
-                // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
-                $alternativeSeries = array_merge($seriesWithIgnoredElements, $seriesWithOriginal);
-                $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, array('byFilterSet' => $ignoredFilters), $alternativeSeries ? 33 : 100, $alternativeSeries ? 'ShortDash' : null, false);
-
-                // insure that series are not added twice to series list
-                foreach ($newSeries = array_merge($normalSeries, $alternativeSeries) as $newSerie) {
-                    $same = false;
-                    foreach ($series as $serie) {
-                        if (count(@array_diff_assoc($serie, $newSerie)) == 0) {
-                            $same = true;
-                            break;
-                        }
-                    }
-                    if (!$same) {
-                        array_push($series, $newSerie);
-                    }
-                }
-            }
-        }
-
-        $chart = array(
+        return array(
             'chart' => array(
                 'zoomType' => 'xy',
                 'height' => 600,
@@ -168,6 +101,61 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             ),
             'series' => $series,
         );
+    }
+
+    public function indexAction()
+    {
+        $filterSetsNames = array();
+        $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneById($this->params()->fromQuery('country'));
+        $filterSetsIds = array_filter(explode(',', $this->params()->fromQuery('filterSet')));
+
+        $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
+        $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getByGeonameWithSurvey($country ? $country->getGeoname() : -1);
+
+        $this->startYear = 1980;
+        $this->endYear = 2012;
+
+        $series = array();
+        if (count($filterSetsIds) > 0) {
+
+            // First get series of flatten regression lines with ignored values (if any)
+            $seriesWithIgnoredElements = $this->computeIgnoredElements($questionnaires, $part);
+
+            foreach ($filterSetsIds as $filterSetId) {
+
+                /* @var $filterSet \Application\Model\FilterSet */
+                $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($filterSetId);
+                $filterSetsNames[] = $filterSet->getName();
+
+                $hFilters = $filterSet->getFilters()->map(function ($el) {
+                    return $el->getId();
+                });
+                $this->usedFilters = array_merge($this->usedFilters, $hFilters->toArray());
+
+                // If the filterSet is a copy of an original FilterSet, then we also display the original (with light colors)
+                if ($filterSet->getOriginalFilterSet()) {
+                    $originalFilterSet = $filterSet->getOriginalFilterSet();
+                    $seriesWithOriginal = $this->getSeries($originalFilterSet, $questionnaires, $part, array(), 100, null, false, ' (original)');
+                } else {
+                    $seriesWithOriginal = array();
+                }
+
+                $ignoredFilters = array();
+                foreach ($filterSet->getExcludedFilters() as $ignoredFilter) {
+                    $ignoredFilters[] = $ignoredFilter->getId();
+                }
+
+                // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
+                $alternativeSeries = array_merge($seriesWithIgnoredElements, $seriesWithOriginal);
+                $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, array('byFilterSet' => $ignoredFilters), $alternativeSeries ? 33 : 100, $alternativeSeries ? 'ShortDash' : null, false);
+
+                // insure that series are not added twice to series list
+                $series = array_merge($series, array_map("unserialize", array_unique(array_map("serialize", array_merge($normalSeries, $alternativeSeries)))));
+            }
+
+        }
+
+        $chart = $this->getChart(implode(', ', $filterSetsNames), $country, $part, $series);
 
         return new NumericJsonModel($chart);
     }
@@ -323,8 +311,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
             if (count($usages) > 0) {
                 $serie['usages'] = implode(',<br/>', array_map(function ($u) {
-                        return $u->getRule()->getName();
-                    }, $usages));
+                    return $u->getRule()->getName();
+                }, $usages));
             }
 
             foreach ($serie['data'] as &$d) {
@@ -360,7 +348,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'color' => $filter->getGenericColor($ratio),
                 'marker' => array('symbol' => $this->symbols[$this->getConstantKey($filter->getName()) % count($this->symbols)]),
                 'name' => $filter->getName() . $suffix,
-                'allowPointSelect' => false, // because we will use our own click handler
+                'allowPointSelect' => false,
+                // because we will use our own click handler
                 'data' => array(),
             );
             if ($isIgnored) {
@@ -511,7 +500,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
         }
 
-        $flatFilter['usages'] = implode(', ' , $flatFilter['usages']);
+        $flatFilter['usages'] = implode(', ', $flatFilter['usages']);
 
         return $flatFilter;
     }
