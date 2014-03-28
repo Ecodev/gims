@@ -254,16 +254,44 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @param array $ignoredFilters
      * @param float $ratio
      * @param string $dashStyle
+     * @param bool $isIgnored
      * @param string $suffix for serie name
      * @internal param array $colors
-     * @return string
+     * @return array
      */
     protected function getSeries(FilterSet $filterSet, array $questionnaires, Part $part, array $ignoredFilters, $ratio, $dashStyle = null, $isIgnored = false, $suffix = null)
     {
         $series = array();
+
         $calculator = new \Application\Service\Calculator\Jmp();
         $calculator->setServiceLocator($this->getServiceLocator());
-        $lines = $calculator->computeFlattenAllYears($this->startYear, $this->endYear, $filterSet, $questionnaires, $part, $ignoredFilters);
+
+        $lines = $this->getLinedSeries($filterSet, $questionnaires, $part, $ignoredFilters, $ratio, $dashStyle, $isIgnored, $suffix, $calculator);
+        $scatters = $this->getScatteredSeries($filterSet, $questionnaires, $part, $ratio, $isIgnored, $suffix, $calculator);
+
+        $series = array_merge($series, $lines, $scatters);
+
+        return $series;
+    }
+
+    /**
+     * Get lines series
+     * @param FilterSet $filterSet
+     * @param array $questionnaires
+     * @param Part $part
+     * @param array $ignoredFilters
+     * @param $ratio
+     * @param null $dashStyle
+     * @param $isIgnored
+     * @param $suffix
+     * @param $calculator
+     * @return array
+     */
+    private function getLinedSeries(FilterSet $filterSet, array $questionnaires, Part $part, array $ignoredFilters, $ratio, $dashStyle = null, $isIgnored, $suffix, $calculator)
+    {
+        $series = array();
+
+        /** @var \Application\Repository\Rule\FilterFilterRepository $filterRepository */
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
 
         /** @var \Application\Model\Country $country */
@@ -272,6 +300,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         /** @var \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepo */
         $filterGeonameUsageRepo = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
 
+        $lines = $calculator->computeFlattenAllYears($this->startYear, $this->endYear, $filterSet, $questionnaires, $part, $ignoredFilters);
         foreach ($lines as &$serie) {
             /** @var \Application\Model\Filter $filter */
             $filter = $filterRepository->findOneById($serie['id']);
@@ -301,6 +330,24 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
             $series[] = $serie;
         }
+
+        return $series;
+    }
+
+    /**
+     * Get scatter series
+     * @param $filterSet
+     * @param $questionnaires
+     * @param $part
+     * @param $ratio
+     * @param $isIgnored
+     * @param $suffix
+     * @param $calculator
+     * @return array
+     */
+    private function getScatteredSeries($filterSet, $questionnaires, $part, $ratio, $isIgnored, $suffix, $calculator)
+    {
+        $series = array();
 
         // Then add scatter points which are each questionnaire values
         foreach ($filterSet->getFilters() as $filter) {
