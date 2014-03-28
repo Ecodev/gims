@@ -11,106 +11,117 @@
 
         <?php echo $this->crudButtons('filter'); ?>
 
-        <hr/>
+        <tabset style="margin-top: 20px" active="panes[0].active">
+            <tab heading="General info">
 
-        <h2>Hierarchy <small> for {{filter.name}}</small></h2>
+                <h2>Hierarchy <small> for {{filter.name}}</small></h2>
 
-        <div class="form-group" ng-hide="isChapter">
-            <h3><small><label class="control-label col-md-2" for="parents">Parents</label></small></h3>
-            <div class="col-md-8">
-                <gims-select    name='parents'
-                                api="filter"
-                                queryparams="params"
-                                model="filter.parents"
-                                placeholder="Select parent"
-                                container-css-class='select2list'
-                                current-context-element='?returnUrl=/admin/filter/edit/{{filter.id}}'
-                                custom-selection-template="{{select2Template}}"
-                                custom-result-template="{{select2Template}}"
-                                multiple
-                                style="width: 100%" >
-                </gims-select>
-            </div>
-        </div>
+                <div class="form-group" ng-hide="isChapter">
+                    <h3><small><label class="control-label col-md-2" for="parents">Parents</label></small></h3>
+                    <div class="col-md-8">
+                        <gims-select    name='parents'
+                                        api="filter"
+                                        queryparams="params"
+                                        model="filter.parents"
+                                        placeholder="Select parent"
+                                        container-css-class='select2list'
+                                        current-context-element='?returnUrl=/admin/filter/edit/{{filter.id}}'
+                                        custom-selection-template="{{select2Template}}"
+                                        custom-result-template="{{select2Template}}"
+                                        multiple
+                                        style="width: 100%" >
+                        </gims-select>
+                    </div>
+                </div>
 
-        <hr/>
-        <br/>
+                <hr/>
+                <br/>
 
-        <div class="form-group"  ng-class="{'has-error': myForm.name.$invalid}">
-            <h4 class="control-label col-md-2" for="filter.name"><i class='fa fa-gims-filter' style='color:{{filter.color}}'></i> Filter Label</h4>
-            <div class="col-md-8">
-                <input type="text" name="name" ng-model="filter.name" required/>
-            </div>
-            <div class="col-md-2">
-                <div class='btn btn-default' colorpicker colorpicker-with-input="true" ng-model="filter.color" style='background-color:{{filter.color}}'><i class='fa fa-magic'></i> Color</div>
-            </div>
+                <div class="form-group"  ng-class="{'has-error': myForm.name.$invalid}">
+                    <h4 class="control-label col-md-2" for="filter.name"><i class='fa fa-gims-filter' style='color:{{filter.color}}'></i> Filter Label</h4>
+                    <div class="col-md-8">
+                        <input type="text" name="name" ng-model="filter.name" required/>
+                    </div>
+                    <div class="col-md-2">
+                        <div class='btn btn-default' colorpicker colorpicker-with-input="true" ng-model="filter.color" style='background-color:{{filter.color}}'><i class='fa fa-magic'></i> Color</div>
+                    </div>
 
-        </div>
-        <div class="form-group"  ng-class="{'has-error': myForm.name.$invalid}">
-            <h4 class="control-label col-md-2" > </h4>
-            <div class="col-md-2">
-                <span ng-show="myForm.name.$error.required" class="help-block">Required</span>
-            </div>
-        </div>
+                </div>
+                <div class="form-group"  ng-class="{'has-error': myForm.name.$invalid}">
+                    <h4 class="control-label col-md-2" > </h4>
+                    <div class="col-md-2">
+                        <span ng-show="myForm.name.$error.required" class="help-block">Required</span>
+                    </div>
+                </div>
 
-        <hr/>
+                <hr/>
 
-        <div class="form-group" ng-hide="isChapter">
-            <h3><small><label class="control-label col-md-2" for="children">Children</label></small></h3>
-            <div class="col-md-8">
-                <gims-select    name='children'
-                                api="filter"
-                                queryparams="params"
-                                model="filter.children"
-                                placeholder="Select parent"
-                                container-css-class='select2list'
-                                current-context-element='?returnUrl=/admin/filter/edit/{{filter.id}}'
-                                custom-selection-template="{{select2Template}}"
-                                custom-result-template="{{select2Template}}"
-                                multiple
-                                style="width: 100%" >
-                </gims-select>
-            </div>
-        </div>
+                <div class="form-group" ng-hide="isChapter">
+                    <h3><small><label class="control-label col-md-2" for="children">Children</label></small></h3>
+                    <div class="col-md-8">
+                        <gims-select    name='children'
+                                        api="filter"
+                                        queryparams="params"
+                                        model="filter.children"
+                                        placeholder="Select parent"
+                                        container-css-class='select2list'
+                                        current-context-element='?returnUrl=/admin/filter/edit/{{filter.id}}'
+                                        custom-selection-template="{{select2Template}}"
+                                        custom-result-template="{{select2Template}}"
+                                        multiple
+                                        style="width: 100%" >
+                        </gims-select>
+                    </div>
+                </div>
 
-        <hr/>
+                <hr/>
 
-        <h2>Calculation</h2>
-        <div class="form-group" ng-hide="isChapter">
-            <h3><small><label class="control-label col-md-2" for="summands">Summands</label></small></h3>
-            <div class="col-md-8">
-                <gims-select    name='summands'
-                                api="filter"
-                                queryparams="params"
-                                model="filter.summands"
-                                placeholder="Select parent"
-                                container-css-class='select2list'
-                                current-context-element='?returnUrl=/admin/filter/edit/{{filter.id}}'
-                                custom-selection-template="{{select2Template}}"
-                                custom-result-template="{{select2Template}}"
-                                multiple
-                                style="width: 100%" >
-                </gims-select>
-            </div>
-        </div>
+                <h2>Calculation</h2>
+                <div class="form-group" ng-hide="isChapter">
+                    <h3><small><label class="control-label col-md-2" for="summands">Summands</label></small></h3>
+                    <div class="col-md-8">
+                        <gims-select    name='summands'
+                                        api="filter"
+                                        queryparams="params"
+                                        model="filter.summands"
+                                        placeholder="Select parent"
+                                        container-css-class='select2list'
+                                        current-context-element='?returnUrl=/admin/filter/edit/{{filter.id}}'
+                                        custom-selection-template="{{select2Template}}"
+                                        custom-result-template="{{select2Template}}"
+                                        multiple
+                                        style="width: 100%" >
+                        </gims-select>
+                    </div>
+                </div>
 
-        <hr/>
+                <hr/>
 
-        <h2>Organisation</small></h2>
-        <div class="form-group" ng-hide="isChapter">
-            <h3><small><label class="control-label col-md-2" for="parents">Filter sets</label></small></h3>
-            <div class="col-md-8">
-                <gims-select    name='parents'
-                                api="filterSet"
-                                model="filter.filterSets"
-                                placeholder="Select parent"
-                                multiple
-                                style="width: 100%">
-                </gims-select>
-            </div>
+                <h2>Organisation</small></h2>
+                <div class="form-group" ng-hide="isChapter">
+                    <h3><small><label class="control-label col-md-2" for="parents">Filter sets</label></small></h3>
+                    <div class="col-md-8">
+                        <gims-select    name='parents'
+                                        api="filterSet"
+                                        model="filter.filterSets"
+                                        placeholder="Select parent"
+                                        multiple
+                                        style="width: 100%">
+                        </gims-select>
+                    </div>
 
-        </div>
+                </div>
+            </tab>
 
+            <tab heading="Rule - Questionnaire" ng-if="filter.id">
+                <gims-relations relation="FilterQuestionnaireUsage" properties="['filter', 'rule', 'questionnaire', 'part']" justification="true"></gims-relations>
+            </tab>
+
+            <tab heading="Rule - Country" ng-if="filter.id">
+                <gims-relations relation="FilterGeonameUsage" properties="['filter', 'rule', 'geoname', 'part']" justification="true"></gims-relations>
+            </tab>
+
+        </tabset>
 
     </form>
 </div>

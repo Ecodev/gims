@@ -71,6 +71,15 @@
                 </div>
 
             </tab>
+
+            <tab heading="Rule - Filter" ng-if="questionnaire.id">
+                <gims-relations relation="FilterQuestionnaireUsage" properties="['questionnaire', 'rule', 'filter', 'part']" justification="true"></gims-relations>
+            </tab>
+
+            <tab heading="Rule" ng-if="questionnaire.id">
+                <gims-relations relation="QuestionnaireUsage" properties="['questionnaire', 'rule', 'part']" justification="true"></gims-relations>
+            </tab>
+
             <tab heading="Users" ng-if="questionnaire.id">
                 <gims-relations relation="UserQuestionnaire" properties="['questionnaire', 'user', 'role']"></gims-relations>
             </tab>
