@@ -29,6 +29,11 @@
         "min": 0,
         "max": 100
     },
+    "tooltip": {
+        "options": [
+
+        ]
+    },
     "credits": {
         "enabled": false
     },
@@ -38,8 +43,9 @@
                 "enabled": false
             },
             "tooltip": {
-                "headerFormat": "<span style=\"font-size: 10px\">Estimate for {point.key}<\/span><br\/>",
-                "pointFormat": "<span style=\"color:{series.color}\">{point.y} {series.name}<\/span><br\/>",
+                "headerFormat": "<span style=\"font-size: 10px\">Estimate for {point.category}<\/span><br\/>",
+                "pointFormat": "<span style=\"color:{series.color}\">{point.y}% {series.name}<\/span><br\/>",
+                "footerFormat": "<br><br><strong>Rules : <\/strong><br><br>{series.options.usages}<\/span><br\/>",
                 "valueSuffix": "%"
             },
             "pointStart": 1980,
@@ -108,7 +114,7 @@
             "type": "line"
         },
         {
-            "name": "Improved<br><br><b>Rules : <\/b><br\/>Regression: Improved (default - for developed countries),<br\/>Regression: Improved (default)",
+            "name": "Improved",
             "id": 167,
             "data": [
                 100.0,
@@ -146,7 +152,8 @@
                 100.0
             ],
             "color": "#9ED900",
-            "type": "line"
+            "type": "line",
+            "usages": "Regression: Improved (default - for developed countries),<br\/>Regression: Improved (default)"
         },
         {
             "type": "scatter",

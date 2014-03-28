@@ -29,6 +29,11 @@
         "min": 0,
         "max": 100
     },
+    "tooltip": {
+        "options": [
+
+        ]
+    },
     "credits": {
         "enabled": false
     },
@@ -38,8 +43,9 @@
                 "enabled": false
             },
             "tooltip": {
-                "headerFormat": "<span style=\"font-size: 10px\">Estimate for {point.key}<\/span><br\/>",
-                "pointFormat": "<span style=\"color:{series.color}\">{point.y} {series.name}<\/span><br\/>",
+                "headerFormat": "<span style=\"font-size: 10px\">Estimate for {point.category}<\/span><br\/>",
+                "pointFormat": "<span style=\"color:{series.color}\">{point.y}% {series.name}<\/span><br\/>",
+                "footerFormat": "<br><br><strong>Rules : <\/strong><br><br>{series.options.usages}<\/span><br\/>",
                 "valueSuffix": "%"
             },
             "pointStart": 1980,
@@ -67,7 +73,7 @@
     },
     "series": [
         {
-            "name": "Total improved<br><br><b>Rules : <\/b><br\/>Regression: Total improved (default)",
+            "name": "Total improved",
             "id": 74,
             "data": [
                 null,
@@ -105,10 +111,11 @@
                 84.8
             ],
             "color": "#5800D9",
-            "type": "line"
+            "type": "line",
+            "usages": "Regression: Total improved (default)"
         },
         {
-            "name": "Piped onto premises<br><br><b>Rules : <\/b><br\/>Regression: Piped onto premises (default)",
+            "name": "Piped onto premises",
             "id": 75,
             "data": [
                 null,
@@ -146,10 +153,11 @@
                 9.9
             ],
             "color": "#00D919",
-            "type": "line"
+            "type": "line",
+            "usages": "Regression: Piped onto premises (default)"
         },
         {
-            "name": "Surface water<br><br><b>Rules : <\/b><br\/>Regression: Surface water (default)",
+            "name": "Surface water",
             "id": 76,
             "data": [
                 null,
@@ -187,10 +195,11 @@
                 0.3
             ],
             "color": "#D90026",
-            "type": "line"
+            "type": "line",
+            "usages": "Regression: Surface water (default)"
         },
         {
-            "name": "Other Improved<br><br><b>Rules : <\/b><br\/>Regression: Other Improved (default)",
+            "name": "Other Improved",
             "id": 77,
             "data": [
                 null,
@@ -228,10 +237,11 @@
                 74.9
             ],
             "color": "#0066D9",
-            "type": "line"
+            "type": "line",
+            "usages": "Regression: Other Improved (default)"
         },
         {
-            "name": "Other Unimproved<br><br><b>Rules : <\/b><br\/>Regression: Other Unimproved (default)",
+            "name": "Other Unimproved",
             "id": 78,
             "data": [
                 null,
@@ -269,7 +279,8 @@
                 14.9
             ],
             "color": "#A5D900",
-            "type": "line"
+            "type": "line",
+            "usages": "Regression: Other Unimproved (default)"
         },
         {
             "type": "scatter",

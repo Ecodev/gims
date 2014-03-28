@@ -29,6 +29,11 @@
         "min": 0,
         "max": 100
     },
+    "tooltip": {
+        "options": [
+
+        ]
+    },
     "credits": {
         "enabled": false
     },
@@ -38,8 +43,9 @@
                 "enabled": false
             },
             "tooltip": {
-                "headerFormat": "<span style=\"font-size: 10px\">Estimate for {point.key}<\/span><br\/>",
-                "pointFormat": "<span style=\"color:{series.color}\">{point.y} {series.name}<\/span><br\/>",
+                "headerFormat": "<span style=\"font-size: 10px\">Estimate for {point.category}<\/span><br\/>",
+                "pointFormat": "<span style=\"color:{series.color}\">{point.y}% {series.name}<\/span><br\/>",
+                "footerFormat": "<br><br><strong>Rules : <\/strong><br><br>{series.options.usages}<\/span><br\/>",
                 "valueSuffix": "%"
             },
             "pointStart": 1980,
@@ -67,7 +73,7 @@
     },
     "series": [
         {
-            "name": "Improved + shared<br><br><b>Rules : <\/b><br\/>Regression: Improved + shared (default)",
+            "name": "Improved + shared",
             "id": 165,
             "data": [
                 null,
@@ -105,7 +111,8 @@
                 85.4
             ],
             "color": "#D90020",
-            "type": "line"
+            "type": "line",
+            "usages": "Regression: Improved + shared (default)"
         },
         {
             "name": "Sewerage connections",
@@ -149,7 +156,7 @@
             "type": "line"
         },
         {
-            "name": "Improved<br><br><b>Rules : <\/b><br\/>Regression: Improved (default)",
+            "name": "Improved",
             "id": 167,
             "data": [
                 null,
@@ -187,10 +194,11 @@
                 57.0
             ],
             "color": "#9ED900",
-            "type": "line"
+            "type": "line",
+            "usages": "Regression: Improved (default)"
         },
         {
-            "name": "Shared<br><br><b>Rules : <\/b><br\/>Regression: Shared (default)",
+            "name": "Shared",
             "id": 168,
             "data": [
                 null,
@@ -228,10 +236,11 @@
                 28.3
             ],
             "color": "#D400D9",
-            "type": "line"
+            "type": "line",
+            "usages": "Regression: Shared (default)"
         },
         {
-            "name": "Other unimproved<br><br><b>Rules : <\/b><br\/>Regression: Other unimproved (default)",
+            "name": "Other unimproved",
             "id": 169,
             "data": [
                 null,
@@ -269,10 +278,11 @@
                 12.1
             ],
             "color": "#00D995",
-            "type": "line"
+            "type": "line",
+            "usages": "Regression: Other unimproved (default)"
         },
         {
-            "name": "Open defecation<br><br><b>Rules : <\/b><br\/>Regression: Open defecation (default)",
+            "name": "Open defecation",
             "id": 170,
             "data": [
                 null,
@@ -310,7 +320,8 @@
                 2.5
             ],
             "color": "#D95600",
-            "type": "line"
+            "type": "line",
+            "usages": "Regression: Open defecation (default)"
         },
         {
             "type": "scatter",

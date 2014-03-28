@@ -130,6 +130,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'min' => 0,
                 'max' => 100,
             ),
+            'tooltip' => array('options' => array()),
             'credits' => array('enabled' => false),
             'plotOptions' => array(
                 'line' => array(
@@ -137,8 +138,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                         'enabled' => false,
                     ),
                     'tooltip' => array(
-                        'headerFormat' => '<span style="font-size: 10px">Estimate for {point.key}</span><br/>',
-                        'pointFormat' => '<span style="color:{series.color}">{point.y} {series.name}</span><br/>',
+                        'headerFormat' => '<span style="font-size: 10px">Estimate for {point.category}</span><br/>',
+                        'pointFormat' => '<span style="color:{series.color}">{point.y}% {series.name}</span><br/>',
+                        'footerFormat' => '<br><br><strong>Rules : </strong><br><br>{series.options.usages}</span><br/>',
                         'valueSuffix' => '%',
                     ),
                     'pointStart' => $this->startYear,
@@ -320,7 +322,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
 
             if (count($usages) > 0) {
-                $serie['name'] .= '<br><br><b>Rules : </b><br/>' . implode(',<br/>', array_map(function ($u) {
+                $serie['usages'] = implode(',<br/>', array_map(function ($u) {
                         return $u->getRule()->getName();
                     }, $usages));
             }
@@ -358,8 +360,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'color' => $filter->getGenericColor($ratio),
                 'marker' => array('symbol' => $this->symbols[$this->getConstantKey($filter->getName()) % count($this->symbols)]),
                 'name' => $filter->getName() . $suffix,
-                'allowPointSelect' => false,
-                // because we will use our own click handler
+                'allowPointSelect' => false, // because we will use our own click handler
                 'data' => array(),
             );
             if ($isIgnored) {
