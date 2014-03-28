@@ -53,9 +53,9 @@ describe('admin/survey/new', function() {
         element(by.model('survey.dateEnd')).sendKeys('08/05/2014');
     }
 
-    it('should have tab "General info" visible but *not* tabs "question", "questionnaires" and "users"', function() {
+    it('should have tab "General" visible but *not* tabs "question", "questionnaires" and "users"', function() {
         var panes = [
-            {text: 'General info', visible: 1},
+            {text: 'General', visible: 1},
             {text: 'Questions', visible: 0},
             {text: 'Users', visible: 0},
             {text: 'Questionnaires', visible: 0}
@@ -124,9 +124,9 @@ describe('admin/survey/edit', function() {
         gimsUtility.login(undefined, undefined, browser);
     });
 
-    it('should have tabs "General info", "question", "questionnaires" and "users"', function() {
+    it('should have tabs "General", "question", "questionnaires" and "users"', function() {
         var panes = [
-            {text: 'General info', visible: 1},
+            {text: 'General', visible: 1},
             {text: 'Questions', visible: 1},
             {text: 'Questionnaires', visible: 1},
             {text: 'Users', visible: 1}
@@ -173,9 +173,9 @@ describe('admin/questionnaire/new', function() {
         element(by.model('questionnaire.comments')).sendKeys('foo bar');
     }
 
-    it('should have tab "General info" visible but *not* tab "users"', function() {
+    it('should have tab "General" visible but *not* tab "users"', function() {
         var panes = [
-            {text: 'General info', visible: 1},
+            {text: 'General', visible: 1},
             {text: 'Questionnaires', visible: 0}
         ];
 
