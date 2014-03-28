@@ -15,7 +15,7 @@ describe('contribute', function() {
         expect(element(by.css('[ng-view] p:nth-of-type(1)')).getText()).toContain("Small streams make large rivers");
     });
 
-    iit('should render admin buttons', function() {
+    it('should render admin buttons', function() {
         expect(element.all(by.css('[ng-view] .col-md-4')).count()).toBe(3);
 
         var text = element(by.css('[ng-view] .col-md-4:nth-child(1)')).getText();
