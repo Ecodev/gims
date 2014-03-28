@@ -58,7 +58,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
      * @param array $ignoredElementsByQuestionnaire
      * @return array a list (not tree) of all filters with their values and tree level
      */
-    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0, $fields = array(), $ignoredElementsByQuestionnaire = array(), $userSecondLevelRules = false )
+    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0, $fields = array(), $ignoredElementsByQuestionnaire = array(), $userSecondLevelRules = false)
     {
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
@@ -78,9 +78,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         // Compute children
         $result = array($current);
         foreach ($filter->getChildren() as $child) {
-            if ($child->isOfficial()) {
-                $result = array_merge($result, $this->computeWithChildren($questionnaire, $child, $parts, $level + 1, $fields, $ignoredElementsByQuestionnaire, $userSecondLevelRules));
-            }
+            $result = array_merge($result, $this->computeWithChildren($questionnaire, $child, $parts, $level + 1, $fields, $ignoredElementsByQuestionnaire, $userSecondLevelRules));
         }
 
         return $result;
@@ -259,6 +257,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         foreach ($parts as $part) {
             $dataPerPart[$part->getId()] = $calculator->computeFlattenAllYears(1980, 2015, $filterSet, $questionnaires, $part);
         }
+
         return $dataPerPart;
     }
 
@@ -311,6 +310,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         }
         $finalYears = array_unique($finalYears);
         sort($finalYears);
+
         return $finalYears;
     }
 

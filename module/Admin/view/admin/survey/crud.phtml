@@ -87,7 +87,7 @@
             </tab>
 
             <tab heading="Users" active="tabs[3]" select="selectTab(3)" ng-if="survey.id">
-                <gims-relations relation="UserSurvey" first="survey" second="user" third="role"></gims-relations>
+                <gims-relations relation="UserSurvey" properties="['survey', 'user', 'role']"></gims-relations>
             </tab>
         </tabset>
     </form>

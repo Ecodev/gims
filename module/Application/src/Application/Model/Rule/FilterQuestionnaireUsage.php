@@ -31,6 +31,17 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
     private $isSecondLevel = false;
 
     /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'filter',
+            'questionnaire',
+        ));
+    }
+
+    /**
      * Set filter
      *
      * @param Filter $filter

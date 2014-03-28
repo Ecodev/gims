@@ -18,29 +18,8 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'Zend\Db\Adapter\Adapter' => 'Zend\Db\Adapter\AdapterServiceFactory',
-            'Zend\Log' => function ($sm) {
-
-                // Log to file
-                $logger = new Zend\Log\Logger();
-                $writer = new Zend\Log\Writer\Stream('data/logs/all.log');
-                $logger->addWriter($writer);
-
-                // Log to browser's console
-                $firePhpWriter = new Zend\Log\Writer\FirePhp();
-                $firePhpWriter->getFirePhp()->getFirePhp()->setOption('includeLineNumbers', false);
-                $firePhpWriter->addFilter(new Application\Log\Filter\Headers());
-                $logger->addWriter($firePhpWriter);
-
-                Zend\Log\Logger::registerErrorHandler($logger, true);
-
-                return $logger;
-            },
-            'Application\DBAL\Logging\ForwardSQLLogger' => function($sm) {
-                $logger = new \Application\DBAL\Logging\ForwardSQLLogger();
-                $logger->setLogger($sm->get('Zend\Log'));
-
-                return $logger;
-            }
+            'Zend\Log' => 'Application\Service\LogFactory',
+            'Application\DBAL\Logging\ForwardSQLLogger' => 'Application\Service\ForwardSQLLoggerFactory',
         ),
     ),
 );

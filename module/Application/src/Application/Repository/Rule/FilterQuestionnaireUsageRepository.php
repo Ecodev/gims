@@ -3,9 +3,27 @@
 namespace Application\Repository\Rule;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Expr\Join;
 
 class FilterQuestionnaireUsageRepository extends \Application\Repository\AbstractRepository
 {
+
+    public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
+    {
+        $qb = $this->createQueryBuilder('fqu');
+        $qb->join('fqu.rule', 'rule', Join::WITH);
+        $qb->join('fqu.filter', 'filter', Join::WITH);
+        $qb->join('fqu.questionnaire', 'questionnaire', Join::WITH);
+        $qb->join('fqu.part', 'part', Join::WITH);
+        $qb->join('questionnaire.survey', 'survey');
+
+        $qb->where('fqu.' . $parentName . ' = :parent');
+        $qb->setParameter('parent', $parent);
+
+        $this->addSearch($qb, $search, array('filter.name', 'rule.name', 'rule.formula', 'survey.code', 'survey.name', 'part.name'));
+
+        return $qb->getQuery()->getResult();
+    }
 
     /**
      * @var array $cache [questionnaireId => [filterId => [partId => value]]]

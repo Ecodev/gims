@@ -7,7 +7,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.indexedElements = {};
     $scope.firstExecution = true;
     $scope.countryQueryParams = {perPage: 500};
-    $scope.filterSetQueryParams = {fields: 'filters.genericColor,filters.officialChildren.__recursive'};
+    $scope.filterSetQueryParams = {fields: 'filters.genericColor,filters.children.__recursive'};
 
     /**
      * Executes when country, part or filterset are changed
@@ -301,7 +301,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.initIgnoredElementsFromUrl = function() {
         // url excluded questionnaires
         var ignoredQuestionnaires = $location.search().ignoredElements ? $location.search().ignoredElements.split(',') :
-                [];
+            [];
 
         if (ignoredQuestionnaires.length > 0) {
 
@@ -375,6 +375,37 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                     ignoredElements: ignoredElements
                 }
             }).success(function(data) {
+
+                // implement tooltip formatter
+                data.tooltip.formatter = function() {
+
+                    // recover the template
+                    var template = '';
+                    template += this.series.tooltipOptions.headerFormat ? this.series.tooltipOptions.headerFormat : '';
+                    template += this.series.tooltipOptions.pointFormat ? this.series.tooltipOptions.pointFormat : '';
+                    template += this.series.tooltipOptions.footerFormat ? this.series.tooltipOptions.footerFormat : '';
+
+                    // find all fields syntax {field}
+                    var fields = template.match(/(\{.*?\})/g);
+
+                    // replace the field by his value using this.field for {field} in formatter context
+                    var evalValue = function(field){
+                        return eval('this.'+field.substring(1, field.length - 1));
+                    };
+
+                    // self design patern to avoid "this" to be in the forEach context
+                    var self = this;
+                    _.forEach(fields, function(field) {
+                        // recover value using formatter context
+                        var value = evalValue.call(self, field);
+                        // replace {field} tags by their value
+                        template = template.replace(field, value);
+                    });
+
+                    // return template
+                    return template;
+                };
+
                 data.plotOptions.scatter.dataLabels.formatter = function() {
                     var questionnaire = {hFilters: {}};
                     var ids = this.point.id.split(':');

@@ -86,16 +86,14 @@ class Jmp extends AbstractImporter
 
         foreach ($sheeNamesToImport as $i => $sheetName) {
 
-            $this->importOfficialFilters($this->definitions[$sheetName]);
+            $this->importFilters($this->definitions[$sheetName]);
 
             // Also create a filterSet with same name for the first filter
             $firstFilter = reset($this->cacheFilters);
             $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
             $filterSet = $filterSetRepository->getOrCreate($firstFilter->getName());
             foreach ($firstFilter->getChildren() as $child) {
-                if ($child->isOfficial()) {
-                    $filterSet->addFilter($child);
-                }
+                $filterSet->addFilter($child);
             }
 
             // Import high filter, but not their formula, we need them before importing QuestionnaireUsages
@@ -646,7 +644,7 @@ STRING;
 
             // Convert when using a Ratio, this is the case of Thailand, Tables_W!CD88
             // eg: "=44.6*BR102" => "=0.446*BR102"
-            $replacedFormula = \Application\Utility::pregReplaceUniqueCallback("/^=([-+\.\d ]+)(\*$cellPattern)$/", function($matches) use($ruleRows) {
+            $replacedFormula = \Application\Utility::pregReplaceUniqueCallback("/^=([-+\.\d ]+)(\*$cellPattern)$/", function($matches) use ($ruleRows) {
                         $number = $matches[1];
 
                         if (in_array($matches[5], $ruleRows['Ratio'])) {

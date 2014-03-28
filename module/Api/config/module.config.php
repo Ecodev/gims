@@ -22,6 +22,10 @@ return array(
             'Api\Controller\Chart' => 'Api\Controller\ChartController',
             'Api\Controller\Table' => 'Api\Controller\TableController',
             'Api\Controller\Note' => 'Api\Controller\NoteController',
+            'Api\Controller\Rule' => 'Api\Controller\RuleController',
+            'Api\Controller\QuestionnaireUsage' => 'Api\Controller\Rule\QuestionnaireUsageController',
+            'Api\Controller\FilterQuestionnaireUsage' => 'Api\Controller\Rule\FilterQuestionnaireUsageController',
+            'Api\Controller\FilterGeonameUsage' => 'Api\Controller\Rule\FilterGeonameUsageController',
         ),
     ),
     'router' => array(
@@ -72,7 +76,7 @@ return array(
                         'options' => array(
                             'route' => '/:parent/:idParent/:controller[/:id]',
                             'constraints' => array(
-                                'parent' => '(chapter|user|survey|role|questionnaire|filterSet)',
+                                'parent' => '(chapter|user|survey|role|questionnaire|filterSet|rule|filter|geoname)',
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'idParent' => '[0-9]+',
                                 'id' => '[0-9]+',

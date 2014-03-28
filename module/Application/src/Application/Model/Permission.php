@@ -25,10 +25,13 @@ class Permission extends AbstractModel
     {
         if ($object instanceof \Application\Model\Question\AbstractQuestion) {
             $name = 'Question'; // All questions use same permissions
-        } elseif ($object instanceof AbstractRepository) {
-            $name = str_replace('Repository', '', str_replace('Application\Repository\\', '', get_class($object)));
         } else {
-            $name = str_replace('Application\Model\\', '', get_class($object));
+            $reflect = new \ReflectionClass($object);
+            $name = $reflect->getShortName();
+
+            if ($object instanceof AbstractRepository) {
+                $name = str_replace('Repository', '', $name);
+            }
         }
 
         return $name . '-' . $action;

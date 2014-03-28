@@ -46,6 +46,18 @@ abstract class AbstractUsage extends \Application\Model\AbstractModel
     private $sorting = 0;
 
     /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'justification',
+            'rule',
+            'part',
+        ));
+    }
+
+    /**
      * Set rule
      *
      * @param Rule $rule

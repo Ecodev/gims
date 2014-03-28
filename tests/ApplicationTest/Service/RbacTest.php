@@ -194,7 +194,7 @@ class RbacTest extends \ApplicationTest\Controller\AbstractController
         $this->assertTrue($rbac->isActionGranted($filter1, 'read'));
         $this->assertNull($rbac->getMessage(), 'no message with granted action');
         $this->assertFalse($rbac->isActionGranted($filter1, 'update'));
-        $expectedMessage = 'Insufficient access rights for permission "Filter-update" on "Application\Model\Filter#' . $filter1->getId() . ' (filter 1)"  with your current roles [member, role filterset, role filterset] in context "Application\Model\FilterSet#' . $filterSet->getId() . '" (filterSet 1) and "Application\Model\FilterSet#' . $filterSet2->getId() . '" (filterSet 2) and "Application\Model\FilterSet#' . $filterSet3->getId() . '" (filterSet 3)';
+        $expectedMessage = 'Insufficient access rights for permission "Filter-update" on "Application\Model\Filter#' . $filter1->getId() . ' (filter 1)"  with your current roles [member, role filterset] in context "Application\Model\FilterSet#' . $filterSet->getId() . '" (filterSet 1) and "Application\Model\FilterSet#' . $filterSet2->getId() . '" (filterSet 2) and "Application\Model\FilterSet#' . $filterSet3->getId() . '" (filterSet 3)';
         $this->assertSame($expectedMessage, $rbac->getMessage(), 'error message for multiple context object');
 
     }

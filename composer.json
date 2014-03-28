@@ -2,12 +2,23 @@
     "name": "ecodev/gims",
     "description": "GIMS",
     "homepage": "http://www.gimsinitiative.org",
+    "license": "MIT",
     "repositories": [
         {
             "type": "vcs",
             "url": "https://github.com/PowerKiKi/PHPExcel"
         }
     ],
+    "autoload": {
+        "psr-0": {
+            "Admin\\": "module/Admin/src",
+            "Api\\": "module/Api/src",
+            "Application\\": "module/Application/src",
+            "Browse\\": "module/Browse/src",
+            "Contribute\\": "module/Contribute/src",
+            "Export\\": "module/Export/src"
+        }
+    },
     "require": {
         "php": ">=5.5.0",
         "ext-bcmath": "*",

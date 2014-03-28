@@ -142,11 +142,11 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     public function getJsonConfig()
     {
         return array_merge(parent::getJsonConfig(), array(
-                'name',
-                'email',
-                'state',
-                'lastLogin'
-            ));
+            'name',
+            'email',
+            'state',
+            'lastLogin'
+        ));
     }
 
     /**
@@ -380,6 +380,8 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
             $roles = array_merge($roles, $this->getRolesByContext($this->roleContext));
         }
 
+        $roles = array_unique($roles);
+
         return $roles;
     }
 
@@ -479,7 +481,6 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
         $this->job = $job;
 
         return $this;
-
     }
 
     /**

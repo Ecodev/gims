@@ -130,6 +130,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'min' => 0,
                 'max' => 100,
             ),
+            'tooltip' => array('options' => array()),
             'credits' => array('enabled' => false),
             'plotOptions' => array(
                 'line' => array(
@@ -137,8 +138,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                         'enabled' => false,
                     ),
                     'tooltip' => array(
-                        'headerFormat' => '<span style="font-size: 10px">Estimate for {point.key}</span><br/>',
-                        'pointFormat' => '<span style="color:{series.color}">{point.y} {series.name}</span><br/>',
+                        'headerFormat' => '<span style="font-size: 10px">Estimate for {point.category}</span><br/>',
+                        'pointFormat' => '<span style="color:{series.color}">{point.y}% {series.name}</span><br/>',
+                        'footerFormat' => '<br><br><strong>Rules : </strong><br><br>{series.options.usages}</span><br/>',
                         'valueSuffix' => '%',
                     ),
                     'pointStart' => $this->startYear,
@@ -254,16 +256,44 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @param array $ignoredFilters
      * @param float $ratio
      * @param string $dashStyle
+     * @param bool $isIgnored
      * @param string $suffix for serie name
      * @internal param array $colors
-     * @return string
+     * @return array
      */
     protected function getSeries(FilterSet $filterSet, array $questionnaires, Part $part, array $ignoredFilters, $ratio, $dashStyle = null, $isIgnored = false, $suffix = null)
     {
         $series = array();
+
         $calculator = new \Application\Service\Calculator\Jmp();
         $calculator->setServiceLocator($this->getServiceLocator());
-        $lines = $calculator->computeFlattenAllYears($this->startYear, $this->endYear, $filterSet, $questionnaires, $part, $ignoredFilters);
+
+        $lines = $this->getLinedSeries($filterSet, $questionnaires, $part, $ignoredFilters, $ratio, $dashStyle, $isIgnored, $suffix, $calculator);
+        $scatters = $this->getScatteredSeries($filterSet, $questionnaires, $part, $ratio, $isIgnored, $suffix, $calculator);
+
+        $series = array_merge($series, $lines, $scatters);
+
+        return $series;
+    }
+
+    /**
+     * Get lines series
+     * @param FilterSet $filterSet
+     * @param array $questionnaires
+     * @param Part $part
+     * @param array $ignoredFilters
+     * @param $ratio
+     * @param null $dashStyle
+     * @param $isIgnored
+     * @param $suffix
+     * @param $calculator
+     * @return array
+     */
+    private function getLinedSeries(FilterSet $filterSet, array $questionnaires, Part $part, array $ignoredFilters, $ratio, $dashStyle = null, $isIgnored, $suffix, $calculator)
+    {
+        $series = array();
+
+        /** @var \Application\Repository\Rule\FilterFilterRepository $filterRepository */
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
 
         /** @var \Application\Model\Country $country */
@@ -272,6 +302,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         /** @var \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepo */
         $filterGeonameUsageRepo = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
 
+        $lines = $calculator->computeFlattenAllYears($this->startYear, $this->endYear, $filterSet, $questionnaires, $part, $ignoredFilters);
         foreach ($lines as &$serie) {
             /** @var \Application\Model\Filter $filter */
             $filter = $filterRepository->findOneById($serie['id']);
@@ -291,7 +322,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
 
             if (count($usages) > 0) {
-                $serie['name'] .= '<br><br><b>Rules : </b><br/>' . implode(',<br/>', array_map(function ($u) {
+                $serie['usages'] = implode(',<br/>', array_map(function ($u) {
                         return $u->getRule()->getName();
                     }, $usages));
             }
@@ -302,6 +333,24 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $series[] = $serie;
         }
 
+        return $series;
+    }
+
+    /**
+     * Get scatter series
+     * @param $filterSet
+     * @param $questionnaires
+     * @param $part
+     * @param $ratio
+     * @param $isIgnored
+     * @param $suffix
+     * @param $calculator
+     * @return array
+     */
+    private function getScatteredSeries($filterSet, $questionnaires, $part, $ratio, $isIgnored, $suffix, $calculator)
+    {
+        $series = array();
+
         // Then add scatter points which are each questionnaire values
         foreach ($filterSet->getFilters() as $filter) {
             $idFilter = $filter->getId();
@@ -311,8 +360,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'color' => $filter->getGenericColor($ratio),
                 'marker' => array('symbol' => $this->symbols[$this->getConstantKey($filter->getName()) % count($this->symbols)]),
                 'name' => $filter->getName() . $suffix,
-                'allowPointSelect' => false,
-                // because we will use our own click handler
+                'allowPointSelect' => false, // because we will use our own click handler
                 'data' => array(),
             );
             if ($isIgnored) {
@@ -378,8 +426,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             /** @var  \Application\Service\Hydrator $hydrator */
             $hydrator = new \Application\Service\Hydrator();
 
-            if ($this->params()->fromQuery('getQuestionnaireUsages') === 'true'
-            ) {
+            if ($this->params()->fromQuery('getQuestionnaireUsages') === 'true') {
                 if ($usages = $this->extractUsages($questionnaire->getQuestionnaireUsages(), null, $part, $hydrator, $calculator)) {
                     $result['usages'] = $usages;
                 }
@@ -411,34 +458,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     $resultWithoutIgnoredFilters['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, $ignoredFiltersByQuestionnaire, true);
 
                     foreach ($result['filters'][$filterId] as $i => &$flatFilter) {
-
-                        // add computed values to filters
-                        if ($result['filters'][$filterId][$i]['values'][0][$part->getName()] != $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values'][0][$part->getName()]) {
-                            $result['filters'][$filterId][$i]['valuesWithoutIgnored'] = $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values'];
-                        }
-
-                        // add the usages to filters
-                        $fqus = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($flatFilter['filter']['id'])->getFilterQuestionnaireUsages();
-                        foreach ($fqus as $fqu) {
-                            if ($fqu->getPart() === $part && $fqu->getQuestionnaire() === $questionnaire) {
-                                if (!isset($flatFilter['usages'])) {
-                                    $flatFilter['usages'] = $fqu->getRule()->getName();
-                                } else {
-                                    $flatFilter['usages'] .= ', ' . $fqu->getRule()->getName();
-                                }
-                            }
-                        }
-
-                        // replace the list of questions by a single question corresponding to current questionnaire
-                        if (isset($flatFilter['filter']['questions'])) {
-                            foreach ($flatFilter['filter']['questions'] as $question) {
-                                if ($question['survey']['id'] == $questionnaire->getSurvey()->getId()) {
-                                    $flatFilter['filter']['originalDenomination'] = $question['name'];
-                                    break;
-                                }
-                            }
-                            unset($flatFilter['filter']['questions']);
-                        }
+                        $flatFilter = $this->addComputedValuesToFilters($flatFilter, $part, $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values']);
+                        $flatFilter = $this->addUsagesToFilters($flatFilter, $part, $questionnaire);
+                        $flatFilter = $this->addQuestionsToFilters($flatFilter, $questionnaire);
                     }
                 }
             }
@@ -450,6 +472,70 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
             return new NumericJsonModel(array('message' => 'questionnaire not found'));
         }
+    }
+
+    /**
+     * Add values computed in case we have ignored filters to given filter ($flatFilter)
+     * @param $flatFilter
+     * @param $part
+     * @param $resultWithoutIgnoredFilters
+     * @return array $flatFilter with modifications
+     */
+    private function addComputedValuesToFilters($flatFilter, $part, $resultWithoutIgnoredFilters)
+    {
+        // add computed values to filters
+        if ($flatFilter['values'][0][$part->getName()] != $resultWithoutIgnoredFilters[0][$part->getName()]) {
+            $flatFilter['valuesWithoutIgnored'] = $resultWithoutIgnoredFilters;
+        }
+
+        return $flatFilter;
+    }
+
+    /**
+     * Add Usages to given filter ($flatFilter)
+     * @param $flatFilter
+     * @param $part
+     * @param $questionnaire
+     * @return array $flatFilter with modifications
+     */
+    private function addUsagesToFilters($flatFilter, $part, $questionnaire)
+    {
+        $flatFilter['usages'] = array();
+
+        // add the usages to filters
+        $fqus = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($flatFilter['filter']['id'])->getFilterQuestionnaireUsages();
+        foreach ($fqus as $fqu) {
+            if ($fqu->getPart() === $part && $fqu->getQuestionnaire() === $questionnaire) {
+                $flatFilter['usages'][] = $fqu->getRule()->getName();
+            }
+
+        }
+
+        $flatFilter['usages'] = implode(', ' , $flatFilter['usages']);
+
+        return $flatFilter;
+    }
+
+    /**
+     * Add orignial denomations (questions labels) to given filter ($flatFilter)
+     * @param $flatFilter
+     * @param $questionnaire
+     * @return array $flatFilter with modifications
+     */
+    private function addQuestionsToFilters($flatFilter, $questionnaire)
+    {
+        // replace the list of questions by a single question corresponding to current questionnaire
+        if (isset($flatFilter['filter']['questions'])) {
+            foreach ($flatFilter['filter']['questions'] as $question) {
+                if ($question['survey']['id'] == $questionnaire->getSurvey()->getId()) {
+                    $flatFilter['filter']['originalDenomination'] = $question['name'];
+                    break;
+                }
+            }
+            unset($flatFilter['filter']['questions']);
+        }
+
+        return $flatFilter;
     }
 
     protected function extractUsages($usages, $questionnaire = null, $part, $hydrator, $calculator)

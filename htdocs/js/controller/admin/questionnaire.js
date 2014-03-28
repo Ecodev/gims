@@ -75,7 +75,7 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function($sco
     // Delete a questionnaire
     $scope.delete = function()
     {
-        Modal.confirmDelete($scope.questionnaire, {label: $scope.questionnaire.name, returnUrl: $location.search().returnUrl});
+        Modal.confirmDelete($scope.questionnaire, {label: $scope.questionnaire.name, returnUrl: '/admin/survey/edit/' + $location.search().survey});
     };
 
     // Create object with default value

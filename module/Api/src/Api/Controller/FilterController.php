@@ -25,7 +25,7 @@ class FilterController extends AbstractRestfulController
      */
     protected function getFlatList()
     {
-        $filters = $this->getRepository()->findBy(array('questionnaire' => null));
+        $filters = $this->getRepository()->findAll();
         $jsonConfig = array_merge($this->getJsonConfig(), array('parents'));
 
         $flatFilters = array();
@@ -56,6 +56,7 @@ class FilterController extends AbstractRestfulController
             $indexedFilters[$filter['id']] = $filter;
             $filter['name'] = $this->getParentsName($filter, $indexedFilters);
         }
+
         return new JsonModel($filters);
     }
 

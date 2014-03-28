@@ -12,9 +12,12 @@ use Application\Model\Part;
 use Application\Model\Question\NumericQuestion;
 use Application\Model\Questionnaire;
 use Application\Model\Survey;
-use Application\Model\User;
 use Application\Model\UserSurvey;
 use Application\Model\UserQuestionnaire;
+use Application\Model\Rule\Rule;
+use Application\Model\Rule\QuestionnaireUsage;
+use Application\Model\Rule\FilterQuestionnaireUsage;
+use Application\Model\Rule\FilterGeonameUsage;
 
 abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller\AbstractController
 {
@@ -93,7 +96,27 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
     /**
      * @var Geoname
      */
-    protected $geoName;
+    protected $geoname;
+
+    /**
+     * @var Rule
+     */
+    protected $rule;
+
+    /**
+     * @var QuestionnaireUsage
+     */
+    protected $questionnaireUsage;
+
+    /**
+     * @var FilterQuestionnaireUsage
+     */
+    protected $filterQuestionnaireUsage;
+
+    /**
+     * @var FilterGeonameUsage
+     */
+    protected $filterGeonameUsage;
 
     /**
      * @var metaModel
@@ -119,7 +142,7 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->survey->setCode('code test survey');
         $this->survey->setYear(2010);
 
-        $this->geoName = new Geoname('test geoname');
+        $this->geoname = new Geoname('test geoname');
 
         $this->filter = new Filter('foo');
         $this->filter2 = new Filter('bar');
@@ -131,7 +154,7 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->questionnaire->setSurvey($this->survey);
         $this->questionnaire->setDateObservationStart(new \DateTime('2010-01-01T00:00:00+0100'));
         $this->questionnaire->setDateObservationEnd(new \DateTime('2011-01-01T00:00:00+0100'));
-        $this->questionnaire->setGeoname($this->geoName);
+        $this->questionnaire->setGeoname($this->geoname);
 
         $this->question = new NumericQuestion();
         $this->question->setSurvey($this->survey)->setSorting(1)->setFilter($this->filter)->setName('test survey');
@@ -174,6 +197,18 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->userFilterSet = new \Application\Model\UserFilterSet();
         $this->userFilterSet->setUser($this->user)->setFilterSet($this->filterSet)->setRole($filterEditor);
 
+        $this->rule = new Rule();
+        $this->rule->setName('test rule')->setFormula('=2 * 3');
+
+        $this->questionnaireUsage = new QuestionnaireUsage();
+        $this->questionnaireUsage->setJustification('tests')->setRule($this->rule)->setPart($this->part)->setQuestionnaire($this->questionnaire);
+
+        $this->filterQuestionnaireUsage = new FilterQuestionnaireUsage();
+        $this->filterQuestionnaireUsage->setJustification('tests')->setRule($this->rule)->setPart($this->part)->setQuestionnaire($this->questionnaire)->setFilter($this->filter);
+
+        $this->filterGeonameUsage = new FilterGeonameUsage();
+        $this->filterGeonameUsage->setJustification('tests')->setRule($this->rule)->setPart($this->part)->setGeoname($this->geoname)->setFilter($this->filter);
+
         $this->getEntityManager()->persist($this->filterSet);
         $this->getEntityManager()->persist($this->filterSet2);
         $this->getEntityManager()->persist($this->userFilterSet);
@@ -186,12 +221,16 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->getEntityManager()->persist($this->part3);
         $this->getEntityManager()->persist($this->filter);
         $this->getEntityManager()->persist($this->filter2);
-        $this->getEntityManager()->persist($this->geoName);
+        $this->getEntityManager()->persist($this->geoname);
         $this->getEntityManager()->persist($this->survey);
         $this->getEntityManager()->persist($this->questionnaire);
         $this->getEntityManager()->persist($this->question);
         $this->getEntityManager()->persist($this->answer);
         $this->getEntityManager()->persist($this->answer2);
+        $this->getEntityManager()->persist($this->rule);
+        $this->getEntityManager()->persist($this->questionnaireUsage);
+        $this->getEntityManager()->persist($this->filterQuestionnaireUsage);
+        $this->getEntityManager()->persist($this->filterGeonameUsage);
         $this->getEntityManager()->flush();
 
         // After flushed in DB, we clear EM identiy cache, to be sure that we actually reload object from database
@@ -244,17 +283,17 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $id = $this->getTestedObject()->getId();
 
         switch ($method) {
-        case 'getList':
-        case 'post':
-            $route = "/api/$classname";
-            break;
-        case 'get':
-        case 'put':
-        case 'delete':
-            $route = "/api/$classname/$id";
-            break;
-        default:
-            throw new \Exception("Unsupported route '$method' for $classname");
+            case 'getList':
+            case 'post':
+                $route = "/api/$classname";
+                break;
+            case 'get':
+            case 'put':
+            case 'delete':
+                $route = "/api/$classname/$id";
+                break;
+            default:
+                throw new \Exception("Unsupported route '$method' for $classname");
         }
 
         return $route;

@@ -24,15 +24,24 @@ ln -fs ../../bin/pre-commit.sh .git/hooks/pre-commit
 echo "Updating git submodules..."
 git submodule update --init --recursive --force
 
+echo "Updating Node.js packages..."
+npm install
+
 echo "Updating Bower packages..."
-bower install
+./node_modules/.bin/bower install
+
+echo "Updating webdriver..."
+sudo ./node_modules/.bin/webdriver-manager update
 
 echo "Updating all PHP dependencies via composer..."
-./composer.phar install --dev
+./composer.phar install --dev --optimize-autoloader
 
 echo "Updating database..."
 ./vendor/bin/doctrine-module migrations:migrate --no-interaction
 ./vendor/bin/doctrine-module orm:generate-proxies
+
+echo "Clean Zend cache..."
+rm -vf data/cache/*cache*.php
 
 echo "Compiling CSS..."
 compass compile -s compressed --force
@@ -48,7 +57,7 @@ for jsDir in lib/autoload/ js/ ; do
         echo "$file"
         D=`dirname $file`
         mkdir -p "tmp/$D"
-        more "$file" | ngmin | uglifyjs - -o "tmp/$file" # uglify the code
+        more "$file" | ../node_modules/.bin/ngmin | ../node_modules/.bin/uglifyjs - -o "tmp/$file" # uglify the code
         cat "tmp/$file" >> $TARGET # concatenate in a single file
     done
 done

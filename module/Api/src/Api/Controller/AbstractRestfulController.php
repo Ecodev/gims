@@ -103,6 +103,10 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $class = get_called_class();
         $shortClass = preg_replace('/(.*\\\\)([^\\\\]+)(Controller$)/', '$2', $class);
 
+        if (preg_match('/Usage$/', $shortClass)) {
+            $shortClass = 'Rule\\' . $shortClass;
+        }
+
         return 'Application\Model\\' . $shortClass;
     }
 
@@ -150,6 +154,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         // If not allowed to create object, cancel everything
         if (!$this->getRbac()->isActionGranted($object, 'create')) {
             $this->getResponse()->setStatusCode(403);
+
             return new JsonModel(array('message' => $this->getRbac()->getMessage()));
         }
 
@@ -183,6 +188,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         // If not allowed to delete object, cancel everything
         if (!$this->getRbac()->isActionGranted($object, 'delete')) {
             $this->getResponse()->setStatusCode(403);
+
             return new JsonModel(array('message' => $this->getRbac()->getMessage()));
         }
 
@@ -212,6 +218,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             // If not allowed to read the object, cancel everything
             if (!$this->getRbac()->isActionGranted($object, 'read')) {
                 $this->getResponse()->setStatusCode(403);
+
                 return new JsonModel(array('message' => $this->getRbac()->getMessage()));
             }
 
@@ -301,9 +308,9 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         // If not allowed to read the object, cancel everything
         if (!$this->getRbac()->isActionGranted($object, 'update')) {
             $this->getResponse()->setStatusCode(403);
+
             return new JsonModel(array('message' => $this->getRbac()->getMessage()));
         }
-
 
         $this->hydrator->hydrate($data, $object);
         $this->getEntityManager()->flush();

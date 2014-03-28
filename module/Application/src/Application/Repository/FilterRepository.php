@@ -5,10 +5,9 @@ namespace Application\Repository;
 class FilterRepository extends AbstractRepository
 {
 
-    private $cacheDescendants = array();
-    private $cacheUnofficialNames = array();
-
     use Traits\OrderedByName;
+
+    private $cacheDescendants = array();
 
     /**
      * Returns all items with read access
@@ -20,16 +19,16 @@ class FilterRepository extends AbstractRepository
     }
 
     /**
-     * Returns one official filter
+     * Returns one filter by name
      *
      * @param string $name
      * @param string $parentName
      *
      * @return \Application\Model\Filter
      */
-    public function getOneOfficialByNames($name, $parentName)
+    public function getOneByNames($name, $parentName)
     {
-        $qb = $this->createQueryBuilder('f')->where('f.name = :name AND f.questionnaire IS NULL');
+        $qb = $this->createQueryBuilder('f')->where('f.name = :name');
         $parameters = array('name' => $name);
         if ($parentName) {
             $parameters['parentName'] = $parentName;
@@ -44,18 +43,6 @@ class FilterRepository extends AbstractRepository
         $q->setParameters($parameters);
 
         $filter = $q->getOneOrNullResult();
-
-        return $filter;
-    }
-
-    public function getOfficialRoots()
-    {
-        $qb = $this->createQueryBuilder('f')->where('f.questionnaire IS NULL');
-        $qb->leftJoin('f.parents', 'p');
-
-        $q = $qb->getQuery();
-
-        $filter = $q->getResult();
 
         return $filter;
     }
@@ -113,46 +100,11 @@ class FilterRepository extends AbstractRepository
             }
         }
 
-        if (isset($this->cacheDescendants[$filterId][$descendantType]))
+        if (isset($this->cacheDescendants[$filterId][$descendantType])) {
             return $this->cacheDescendants[$filterId][$descendantType];
-        else
+        } else {
             return array();
-    }
-
-    /**
-     * Return the unofficial name of an official filter for the given questionnaire
-     * @param integer $officialFilterId
-     * @param integer $questionnaireId
-     * @return string|null
-     */
-    public function getUnofficialName($officialFilterId, $questionnaireId)
-    {
-        if (!isset($this->cacheUnofficialNames[$questionnaireId])) {
-            $geonameId = $this->getEntityManager()->getRepository('Application\Model\Geoname')->getIdByQuestionnaireId($questionnaireId);
-
-            $qb = $this->createQueryBuilder('filter')
-                    ->select('officialFilter.id, filter.name, questionnaire.id AS questionnaire_id')
-                    ->join('filter.officialFilter', 'officialFilter')
-                    ->join('filter.questionnaire', 'questionnaire')
-                    ->andWhere('questionnaire.geoname = :geoname')
-            ;
-
-            $qb->setParameter('geoname', $geonameId);
-
-            // Ensure that we hit the cache next time, even if we have no results at all
-            $this->cacheUnofficialNames[$questionnaireId] = array();
-
-            // Restructure cache to be [questionnaireId => [officialFilterId => name]]
-            $res = $qb->getQuery()->getResult();
-            foreach ($res as $filter) {
-                $this->cacheUnofficialNames[$filter['questionnaire_id']][$filter['id']] = $filter['name'];
-            }
         }
-
-        if (isset($this->cacheUnofficialNames[$questionnaireId][$officialFilterId]))
-            return $this->cacheUnofficialNames[$questionnaireId][$officialFilterId];
-        else
-            return null;
     }
 
 }

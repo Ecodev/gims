@@ -72,7 +72,7 @@
                                     <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == false" class="fa fa-gims-questionnaire" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], true, pointSelected.questionnaire)" tooltip-placement="right" tooltip="Ignore filter for all questionnaire"></i>
                                     <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == true" class="fa fa-gims-questionnaire text-muted" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], false, pointSelected.questionnaire)" tooltip-placement="right" tooltip="Include filter for all questionnaire"></i>
 
-                                    <i ng-if="indexedElements[pointSelected.questionnaire].filters[key].usages" class='fa fa-lg fa-gims-usage' style="color:{{usedFilters[hFilterId]}}"></i> <!--tooltip-placement="right" tooltip="{{indexedElements[pointSelected.questionnaire].filters[key].usages}}"-->
+                                    <i ng-if="indexedElements[pointSelected.questionnaire].filters[key].usages" class='fa fa-lg fa-gims-rule' style="color:{{usedFilters[hFilterId]}}"></i> <!--tooltip-placement="right" tooltip="{{indexedElements[pointSelected.questionnaire].filters[key].usages}}"-->
                                 </td>
                                 <td style="padding-left:{{indexedElements[pointSelected.questionnaire].filters[key].filter.hFilters[hFilterId].level+1}}em;">
                                     <span tooltip="{{indexedElements[pointSelected.questionnaire].filters[key].filter.originalDenomination}}" tooltip-placement="right">
@@ -107,12 +107,12 @@
                         <tbody ng-if="indexedElements[pointSelected.questionnaire].usages">
                             <tr class="active">
                                 <td  style='width:{{firstCol}}'>
-                                    <i class='fa fa-lg fa-gims-usage'></i>
+                                    <i class='fa fa-lg fa-gims-rule'></i>
                                 </td>
                                 <td colspan='2'>Questionnaire's calculations / ratios / estimates</td>
                             </tr>
                             <tr ng-repeat="usage in indexedElements[pointSelected.questionnaire].usages | orderBy:'rule.name'">
-                                <td style='width:{{firstCol}}' ><i class='fa fa-lg fa-gims-usage'></i></td>
+                                <td style='width:{{firstCol}}' ><i class='fa fa-lg fa-gims-rule'></i></td>
                                 <td colspan='1'>{{usage.rule.name}}</td>
                                 <td style='width:{{lastCol}}' class='text-right'>
                                     <span ng-show='usage.value'>

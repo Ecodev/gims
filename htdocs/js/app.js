@@ -13,7 +13,8 @@ angular.module('myApp', [
     'http-auth-interceptor',
     'chartsExample.directives',
     'colorpicker.module',
-    'ngAnimate'
+    'ngAnimate',
+    'ui.ace'
 ]).
         config(function($routeProvider, $locationProvider, RestangularProvider) {
             'use strict';
@@ -45,6 +46,9 @@ angular.module('myApp', [
             $routeProvider.when('/admin/user', {templateUrl: '/template/admin/user', controller: 'Admin/UserCtrl'});
             $routeProvider.when('/admin/user/edit/:id', {templateUrl: '/template/admin/user/crud', controller: 'Admin/User/CrudCtrl'});
             $routeProvider.when('/admin/user/new', {templateUrl: '/template/admin/user/crud', controller: 'Admin/User/CrudCtrl'});
+            $routeProvider.when('/admin/rule', {templateUrl: '/template/admin/rule', controller: 'Admin/RuleCtrl'});
+            $routeProvider.when('/admin/rule/edit/:id', {templateUrl: '/template/admin/rule/crud', controller: 'Admin/Rule/CrudCtrl'});
+            $routeProvider.when('/admin/rule/new', {templateUrl: '/template/admin/rule/crud', controller: 'Admin/Rule/CrudCtrl'});
             $routeProvider.otherwise({redirectTo: '/home'});
 
             $locationProvider.html5Mode(true);

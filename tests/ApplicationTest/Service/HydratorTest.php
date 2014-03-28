@@ -20,7 +20,6 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     private $choice2;
 
-
     /**
      * @var Hydrator
      */
@@ -127,19 +126,27 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
 
     public function testDoesNotModifySubobject()
     {
-        $filter = new \Application\Model\Filter();
-        $filter->setOfficialFilter($filter);
+        $survey = new Survey();
+        $survey->setName('original name');
+        $questionnaire = new \Application\Model\Questionnaire();
+        $questionnaire->setSurvey($survey);
 
         $data = array(
-            'name' => 'original name',
-            'officialFilter' => array(
+            'comments' => 'some comments',
+            'survey' => array(
                 'id' => 12345,
                 'name' => 'this should not overwrite the original name',
             ),
         );
 
-        $this->hydrator->hydrate($data, $filter);
-        $this->assertEquals('original name', $filter->getName());
+        // Create a stub for the \Application\Service\Hydrator class, so we don't have to mess with database
+        $mockHydrator = $this->getMock('\Application\Service\Hydrator', array('getObject'), array(), '', false);
+        $mockHydrator->expects($this->any())
+                ->method('getObject')
+                ->will($this->returnValue($survey));
+
+        $mockHydrator->hydrate($data, $questionnaire);
+        $this->assertEquals('original name', $survey->getName());
     }
 
     public function testHydrateUnknownPropertiesFailSilently()
@@ -223,20 +230,31 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
 
     public function testExtractSubObject()
     {
-        $filter1 = new \Application\Model\Filter('filter 1');
-        $filter2 = new \Application\Model\Filter('filter 2');
-        $filter1->setOfficialFilter($filter2);
+        $questionnaire = new \Application\Model\Questionnaire('filter 1');
+        $questionnaire->setComments('test comments');
+        $survey = new \Application\Model\Survey();
+        $survey->setName('test survey');
+        $survey->setCode('tst');
+        $questionnaire->setSurvey($survey);
+        $questionnaire->setGeoname(new Geoname('test geoname'));
 
         $this->assertEquals(array(
             'id' => null,
-            'name' => 'filter 1',
-            'officialFilter' => array(
+            'name' => 'tst - test geoname',
+            'comments' => 'test comments',
+            'status' => 'new',
+            'survey' => array(
                 'id' => null,
-                'name' => 'filter 2',
+                'name' => 'test survey',
+                'code' => 'tst',
+                'isActive' => false,
+                'year' => null,
+                'dateStart' => null,
+                'dateEnd' => null,
             ),
-                ), $this->hydrator->extract($filter1, array(
-                    'name',
-                    'officialFilter' => array('name'),
+                ), $this->hydrator->extract($questionnaire, array(
+                    'comments',
+                    'survey' => array('name'),
                     'unkown properties' => array('foo', 'bar')
                 )), 'should return subobject, but only known one');
     }
@@ -310,13 +328,14 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     public function testExtractBooleanProperty()
     {
         $filter1 = new \Application\Model\Filter('filter 1');
+        $filter1->setColor('c0ffee');
 
         $this->assertEquals(array(
             'id' => null,
             'name' => 'filter 1',
-            'isOfficial' => true,
+            'color' => 'c0ffee',
                 ), $this->hydrator->extract($filter1, array(
-                    'isOfficial',
+                    'color',
                 )), 'should use correct getter for boolean properties');
     }
 
@@ -353,28 +372,29 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
 
     public function testHydrateAssociationWithSuboject()
     {
-        $filter1 = new \Application\Model\Filter('filter 1');
-        $filter2 = new \Application\Model\Filter('filter 2');
+        $questionnaire = new \Application\Model\Questionnaire();
+        $survey = new \Application\Model\Survey();
+        $survey->setName('test survey');
 
         // Create a stub for the \Application\Service\Hydrator class, so we don't have to mess with database
         $mockHydrator = $this->getMock('\Application\Service\Hydrator', array('getObject'), array(), '', false);
         $mockHydrator->expects($this->any())
                 ->method('getObject')
-                ->will($this->returnValue($filter2));
+                ->will($this->returnValue($survey));
 
         $mockHydrator->hydrate(array(
-            'officialFilter' => array(
+            'survey' => array(
                 'id' => 12345,
                 'name' => 'name that should not be hydrated'
             ),
-                ), $filter1);
-        $this->assertEquals($filter2, $filter1->getOfficialFilter(), 'can set subobject');
+                ), $questionnaire);
+        $this->assertEquals($survey, $questionnaire->getSurvey(), 'can set subobject');
 
-        $filter1->setOfficialFilter(null);
-        $this->assertNull($filter1->getOfficialFilter());
-        $mockHydrator->hydrate(array('officialFilter' => 12345), $filter1);
-        $this->assertEquals($filter2, $filter1->getOfficialFilter(), 'can also use short syntax with only ID');
-        $this->assertEquals('filter 2', $filter1->getOfficialFilter()->getName(), 'properties of subobject should never be modified');
+        $questionnaire = new \Application\Model\Questionnaire();
+        $this->assertNull($questionnaire->getSurvey());
+        $mockHydrator->hydrate(array('survey' => 12345), $questionnaire);
+        $this->assertEquals($survey, $questionnaire->getSurvey(), 'can also use short syntax with only ID');
+        $this->assertEquals('test survey', $questionnaire->getSurvey()->getName(), 'properties of subobject should never be modified');
     }
 
     public function testCanHydrateBoolean()
@@ -428,13 +448,13 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $survey->setCode('code test survey');
         $survey->setYear(2010);
 
-        $geoName = new Geoname('test geoname');
+        $geoname = new Geoname('test geoname');
 
         $questionnaire = new Questionnaire();
         $questionnaire->setSurvey($survey);
         $questionnaire->setDateObservationStart(new \DateTime('2010-01-01T00:00:00+0100'));
         $questionnaire->setDateObservationEnd(new \DateTime('2011-01-01T00:00:00+0100'));
-        $questionnaire->setGeoname($geoName);
+        $questionnaire->setGeoname($geoname);
 
         return $survey;
     }

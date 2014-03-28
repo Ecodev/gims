@@ -609,7 +609,7 @@ use \Application\Traits\EntityManagerAware;
         $parentName = $parent ? $parent->getName() : null;
 
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
-        $filter = $filterRepository->getOneOfficialByNames($name, $parentName);
+        $filter = $filterRepository->getOneByNames($name, $parentName);
         if (!$filter) {
 
             $filter = new Filter();
@@ -624,21 +624,21 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
-     * Import official filters
-     * @param array $officialFilters
+     * Import filters
+     * @param array $filters
      */
-    protected function importOfficialFilters(array $officialFilters)
+    protected function importFilters(array $filters)
     {
         // Import filters
         $this->cacheFilters = array();
         $this->cacheQuestions = array();
-        foreach ($officialFilters['definitions'] as $row => $definition) {
+        foreach ($filters['definitions'] as $row => $definition) {
             $filter = $this->getFilter($definition, $this->cacheFilters);
             $this->cacheFilters[$row] = $filter;
         }
 
         // Add all summands to filters
-        foreach ($officialFilters['definitions'] as $row => $definition) {
+        foreach ($filters['definitions'] as $row => $definition) {
             $filter = $this->cacheFilters[$row];
             $summands = $definition[3];
             if ($summands) {
@@ -651,7 +651,7 @@ use \Application\Traits\EntityManagerAware;
 
         // Replace filters with their replacements, if any defined
         // This is a dirty trick to solve inconsistency in first filter of sanitation
-        foreach ($officialFilters['replacements'] as $row => $definition) {
+        foreach ($filters['replacements'] as $row => $definition) {
             $replacementFilter = $this->getFilter($definition, $this->cacheFilters);
             $originalFilter = @$this->cacheFilters[$row];
 
@@ -666,7 +666,7 @@ use \Application\Traits\EntityManagerAware;
         }
 
         // Add extra summand which can be one of replacement
-        foreach ($officialFilters['definitions'] as $row => $definition) {
+        foreach ($filters['definitions'] as $row => $definition) {
             $filter = $this->cacheFilters[$row];
             $extraSummand = @$definition[4];
             if ($extraSummand) {

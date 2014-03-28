@@ -2,8 +2,26 @@
 
 namespace Application\Repository\Rule;
 
+use Doctrine\ORM\Query\Expr\Join;
+
 class QuestionnaireUsageRepository extends \Application\Repository\AbstractRepository
 {
+
+    public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
+    {
+        $qb = $this->createQueryBuilder('qu');
+        $qb->join('qu.rule', 'rule', Join::WITH);
+        $qb->join('qu.questionnaire', 'questionnaire', Join::WITH);
+        $qb->join('qu.part', 'part', Join::WITH);
+        $qb->join('questionnaire.survey', 'survey');
+
+        $qb->where('qu.' . $parentName . ' = :parent');
+        $qb->setParameter('parent', $parent);
+
+        $this->addSearch($qb, $search, array('rule.name', 'rule.formula', 'survey.code', 'survey.name', 'part.name'));
+
+        return $qb->getQuery()->getResult();
+    }
 
     /**
      * @var array $cache [questionnaireId => [ruleId => [partId => value]]]
@@ -48,10 +66,11 @@ class QuestionnaireUsageRepository extends \Application\Repository\AbstractRepos
             }
         }
 
-        if (isset($this->cache[$questionnaireId][$ruleId][$partId]))
+        if (isset($this->cache[$questionnaireId][$ruleId][$partId])) {
             return $this->cache[$questionnaireId][$ruleId][$partId];
-        else
+        } else {
             return null;
+        }
     }
 
 }

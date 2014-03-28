@@ -8,6 +8,7 @@ htdocs/tmp
 htdocs/lib/*
 !htdocs/lib/autoload
 nbproject/private
+node_modules
 vendor
 reset.sh
 ._*
@@ -16,3 +17,5 @@ reset.sh
 *.uml~
 .idea
 data/backup/*.gz
+Population_2012_JMP.xls
+population.backup.gz

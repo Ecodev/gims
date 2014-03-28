@@ -9,6 +9,7 @@ return array(
             'Admin\Controller\Questionnaire' => 'Admin\Controller\QuestionnaireController',
             'Admin\Controller\Survey' => 'Admin\Controller\SurveyController',
             'Admin\Controller\User' => 'Admin\Controller\UserController',
+            'Admin\Controller\Rule' => 'Admin\Controller\RuleController',
         ),
     ),
     'view_manager' => array(

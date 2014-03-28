@@ -16,26 +16,26 @@ abstract class AbstractChildRestfulController extends AbstractRestfulController
 {
 
     /**
-     * @var \Application\Model\AbstractModel
-     */
-    private $parent;
-
-    /**
      * Returns the parent object
      * @return \Application\Model\AbstractModel
      */
     protected function getParent()
     {
         $id = $this->params('idParent');
-        if (!$this->parent && $id) {
+        if ($id) {
             $object = ucfirst($this->params('parent'));
             if ($object == 'Chapter') {
                 $object = 'Question\\' . $object;
             }
-            $this->parent = $this->getEntityManager()->getRepository('Application\Model\\' . $object)->find($id);
+
+            if ($object == 'Rule') {
+                $object = 'Rule\\' . $object;
+            }
+
+            return $this->getEntityManager()->getRepository('Application\Model\\' . $object)->find($id);
         }
 
-        return $this->parent;
+        return null;
     }
 
     public function getList()

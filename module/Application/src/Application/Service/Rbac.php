@@ -59,7 +59,6 @@ class Rbac extends \ZfcRbac\Service\Rbac
      */
     private function setMessage($isGranted, AbstractModel $object, $permission, RoleContextInterface $context = null, AbstractAssertion $assertion = null)
     {
-        // @todo : implement multiple contexts
         if ($isGranted) {
             $this->message = null;
         } elseif ($assertion && $assertion->getMessage()) {
@@ -88,7 +87,8 @@ class Rbac extends \ZfcRbac\Service\Rbac
                 $contextMessage = $context ? 'in context "' . get_class($context) . '#' . $context->getId() . '" (' . $context->getName() . ')' : 'without any context';
             }
 
-            $this->message = 'Insufficient access rights for permission "' . $permission . '" on "' . get_class($object) . '#' . $object->getId() . ' (' . $object->getName() . ')"  with your current roles [' . $roles . '] ' . $contextMessage;
+            $name = is_callable(array($object, 'getName')) ? ' (' . $object->getName() . ')' : '';
+            $this->message = 'Insufficient access rights for permission "' . $permission . '" on "' . get_class($object) . '#' . $object->getId() . $name . '"  with your current roles [' . $roles . '] ' . $contextMessage;
         }
     }
 

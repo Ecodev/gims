@@ -6,7 +6,7 @@ pass=true
 files=$(git diff --cached --name-only --diff-filter=ACMR | grep .js)
 if [ "$files" != "" ]; then
     for file in ${files}; do
-        jshint ${file}
+        ./node_modules/.bin/jshint ${file}
 
         if [ $? -ne 0 ]; then
             pass=false
