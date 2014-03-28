@@ -377,7 +377,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             }).success(function(data) {
 
                 // implement tooltip formatter
-                data.tooltip.formatter = function(x) {
+                data.tooltip.formatter = function() {
 
                     // recover the template
                     var template = '';
@@ -404,7 +404,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
                     // return template
                     return template;
-                }
+                };
 
                 data.plotOptions.scatter.dataLabels.formatter = function() {
                     var questionnaire = {hFilters: {}};
