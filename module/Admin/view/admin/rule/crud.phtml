@@ -37,18 +37,18 @@
                 </div>
 
             </tab>
-
-<!--            <tab heading="Surveys" ng-if="rule.id">
-                <gims-relations relation="RuleSurvey" first="rule" second="survey" third="role" format="code"></gims-relations>
+            <tab heading="Filter - Questionnaire" ng-if="rule.id">
+                <gims-relations relation="FilterQuestionnaireUsage" properties="['rule', 'filter', 'questionnaire', 'part']"></gims-relations>
             </tab>
 
-            <tab heading="Questionnaires" ng-if="rule.id">
-                <gims-relations relation="RuleQuestionnaire" first="rule" second="questionnaire" third="role"></gims-relations>
+            <tab heading="Questionnaire" ng-if="rule.id">
+                <gims-relations relation="QuestionnaireUsage" properties="['rule', 'questionnaire', 'part']"></gims-relations>
             </tab>
 
-            <tab heading="Filter Sets" ng-if="rule.id">
-                <gims-relations relation="RuleFilterSet" first="rule" second="filterSet" third="role"></gims-relations>
-            </tab>-->
+
+            <tab heading="Filter - Country" ng-if="rule.id">
+                <gims-relations relation="FilterGeonameUsage" properties="['rule', 'filter', 'geoname', 'part']"></gims-relations>
+            </tab>
         </tabset>
     </form>
     <?php echo $this->metadata('rule'); ?>

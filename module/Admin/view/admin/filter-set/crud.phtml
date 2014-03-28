@@ -49,7 +49,7 @@
             </tab>
 
             <tab heading="Users" active="tabs[1]" select="selectTab(1)"  ng-if="filterSet.id">
-                <gims-relations relation="UserFilterSet" first="filterSet" second="user" third="role"></gims-relations>
+                <gims-relations relation="UserFilterSet" properties="['filterSet', 'user', 'role']"></gims-relations>
             </tab>
 
         </tabset>

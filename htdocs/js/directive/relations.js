@@ -1,4 +1,12 @@
-
+/**
+ * Directive to manage relations between three or more objects
+ * It show the list of relations and allow them to be deleted or added.
+ * Basic usage is:
+ * <gims-relations relation="UserSurvey" properties="['user', 'survey', 'role']"></gims-relations>
+ *
+ * The first property is the "main" one. All other properties will be used as columns in relations
+ * tables. And they also will be selectable to create new relation (with the current "main" property).
+ */
 angular.module('myApp.directives').directive('gimsRelations', function() {
     'use strict';
 
@@ -8,10 +16,8 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
         replace: true,
         scope: {
             relation: '@',
-            first: '@',
-            second: '@',
-            third: '@',
-            format: '@'
+            format: '@',
+            properties: '='
         },
         template:
                 '<div class="container-fluid">' +
@@ -22,14 +28,11 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                 '    </div>' +
                 '    <gims-grid api="{{relation}}" parent="{{first}}" objects="relations" options="gridOptions" class="row"></gims-grid>' +
                 '    <div class="well form-group" ng-class="{\'has-error\': exists}" ng-hide="isReadOnly">' +
-                '        <span class="col-md-4">' +
-                '            <gims-select api="{{second}}" model="secondValue" placeholder="Select a {{second}}" style="width:100%;" format="{{format}}"></gims-select>' +
-                '        </span>' +
-                '        <span class="col-md-4">' +
-                '            <gims-select api="{{third}}" model="thirdValue" placeholder="Select a {{third}}" style="width:100%;"></gims-select>' +
+                '        <span ng-repeat="prop in otherProperties" class="col-md-4">' +
+                '            <gims-select api="{{prop}}" model="values[$index]" placeholder="Select a {{prop}}" style="width:100%;"></gims-select>' +
                 '        </span>' +
                 '        <span class="col-md-1">' +
-                '            <button class="btn btn-default" ng-click="add()" ng-class="{disabled: !secondValue || !thirdValue || exists}">Add</button> <i class="fa fa-gims-loading" ng-show="isLoading"></i>' +
+                '            <button class="btn btn-default" ng-click="add()" ng-class="{disabled: !canAdd}">Add</button> <i class="fa fa-gims-loading" ng-show="isLoading"></i>' +
                 '        </span><span class="help-block" ng-show="exists">This relation already exists</span>' +
                 '    </div>' +
                 '</div>',
@@ -38,59 +41,99 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
             // nothing to do ?
         },
         controller: function($scope, $routeParams, Restangular, Modal) {
-            function capitaliseFirstLetter(string)
-            {
+
+            function capitaliseFirstLetter(string) {
                 return string.charAt(0).toUpperCase() + string.slice(1);
             }
+
+            $scope.first = _.first($scope.properties);
+            $scope.otherProperties = _.rest($scope.properties);
+            $scope.values = [];
 
             // Configure select boxes for addition
             $scope.isReadOnly = !$routeParams.id;
 
+            // Build columns definitons based on properties
+            var columnDefs = _.map($scope.otherProperties, function(p) {
+                return {
+                    field: p + '.name',
+                    displayName: capitaliseFirstLetter(p)
+                };
+            });
+            columnDefs.push({width: '70px', cellTemplate: '<button type="button" class="btn btn-default btn-xs" ng-click="options.extra.remove(row)"><i class="fa fa-trash-o fa-lg"></i></button>'});
+
             $scope.gridOptions = {
                 extra: {
                     remove: function(row) {
-                        Modal.confirmDelete(row.entity, {objects: $scope.relations, label: row.entity[$scope.second].name + ' - ' + row.entity[$scope.third].name});
+
+                        // Concatenate all properties names
+                        var label = _.map($scope.otherProperties, function(p) {
+                            return row.entity[p].name;
+                        }).join(' - ');
+
+                        Modal.confirmDelete(row.entity, {objects: $scope.relations, label: label});
                     }
                 },
                 plugins: [new ngGridFlexibleHeightPlugin({minHeight: 250})],
-                columnDefs: [
-                    {field: $scope.second + '.name', displayName: capitaliseFirstLetter($scope.second)},
-                    {field: $scope.third + '.name', displayName: capitaliseFirstLetter($scope.third), width: '250px'},
-                    {width: '70px', cellTemplate: '<button type="button" class="btn btn-default btn-xs" ng-click="options.extra.remove(row)"><i class="fa fa-trash-o fa-lg"></i></button>'}
-                ]
+                columnDefs: columnDefs
             };
 
             // Add a relation
             $scope.add = function() {
-                if (!$scope.secondValue || !$scope.thirdValue || $scope.exists) {
+                if (!$scope.canAdd) {
                     return;
                 }
 
                 $scope.isLoading = true;
                 var data = {};
                 data[$scope.first] = $routeParams.id;
-                data[$scope.second] = $scope.secondValue.id;
-                data[$scope.third] = $scope.thirdValue.id;
+                _.forEach($scope.otherProperties, function(p, index) {
+                    data[p] = $scope.values[index].id;
+                });
 
                 Restangular.all($scope.relation).post(data).then(function(newRelation) {
                     $scope.relations.push(newRelation);
                     $scope.isLoading = false;
-                    $scope.thirdValue = null; // Reset last select2 option
+
+                    // Reset last select2 option
+                    _.last($scope.otherProperties, function(p, index) {
+                        $scope.values[index] = null;
+                    });
                 });
             };
 
+            // Build an expression to watch all values and relation list
+            var watcher = _.reduce($scope.otherProperties, function(result, p, index) {
+                return result + 'values[' + index + '].id + ":" + ';
+            }, '');
+            watcher += 'relations.length';
+
             // Prevent adding duplicated relations
-            $scope.$watch('secondValue.id + ":" + thirdValue.id + ":" + relations.length', function() {
+            $scope.$watch(watcher, function() {
                 $scope.exists = false;
-                if ($scope.secondValue && $scope.thirdValue) {
+                $scope.canAdd = false;
+
+                var allValuesDefined = _.reduce($scope.otherProperties, function(result, p, index) {
+                    return result && !_.isUndefined($scope.values[index]);
+                });
+
+                if (allValuesDefined) {
 
                     angular.forEach($scope.relations, function(relation) {
-                        if (relation[$scope.second].id == $scope.secondValue.id && relation[$scope.third].id == $scope.thirdValue.id) {
+                        var isSameRelation = _.reduce($scope.otherProperties, function(result, p, index) {
+                            return result && ($scope.values[index] && relation[p].id == $scope.values[index].id);
+
+                        }, true);
+
+                        if (isSameRelation) {
                             $scope.exists = true;
                         }
                     });
+
+                    // We can add if everything is selected, and is not duplicate
+                    $scope.canAdd = !$scope.exists;
                 }
-            });
+            }, true);
 
         }
     };
