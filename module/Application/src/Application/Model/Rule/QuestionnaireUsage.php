@@ -20,9 +20,7 @@ class QuestionnaireUsage extends AbstractQuestionnaireUsage
     public function getJsonConfig()
     {
         return array_merge(parent::getJsonConfig(), array(
-            'rule',
             'questionnaire',
-            'part',
         ));
     }
 

@@ -40,10 +40,8 @@ class FilterGeonameUsage extends AbstractUsage
     public function getJsonConfig()
     {
         return array_merge(parent::getJsonConfig(), array(
-            'rule',
             'filter',
             'geoname',
-            'part',
         ));
     }
 

@@ -17,7 +17,8 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
         scope: {
             relation: '@',
             format: '@',
-            properties: '='
+            properties: '=',
+            justification: '@'
         },
         template:
                 '<div class="container-fluid">' +
@@ -31,6 +32,9 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                 '        <span ng-repeat="prop in otherProperties" class="col-md-4">' +
                 '            <gims-select api="{{prop}}" model="values[$index]" placeholder="Select a {{prop}}" style="width:100%;"></gims-select>' +
                 '        </span>' +
+                '        <span class="col-md-4" ng-show="justification">' +
+                '            <input type="text" ng-model="justificationValue" placeholder="Justification..." />' +
+                '        </span>' +
                 '        <span class="col-md-1">' +
                 '            <button class="btn btn-default" ng-click="add()" ng-class="{disabled: !canAdd}">Add</button> <i class="fa fa-gims-loading" ng-show="isLoading"></i>' +
                 '        </span><span class="help-block" ng-show="exists">This relation already exists</span>' +
@@ -41,7 +45,6 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
             // nothing to do ?
         },
         controller: function($scope, $routeParams, Restangular, Modal) {
-
             function capitaliseFirstLetter(string) {
                 return string.charAt(0).toUpperCase() + string.slice(1);
             }
@@ -53,13 +56,18 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
             // Configure select boxes for addition
             $scope.isReadOnly = !$routeParams.id;
 
-            // Build columns definitons based on properties
+            // Build columns definitions based on properties
             var columnDefs = _.map($scope.otherProperties, function(p) {
                 return {
                     field: p + '.name',
                     displayName: capitaliseFirstLetter(p)
                 };
             });
+
+            if ($scope.justification) {
+                columnDefs.push({field: 'justification', displayName: 'Justification'});
+            }
+
             columnDefs.push({width: '70px', cellTemplate: '<button type="button" class="btn btn-default btn-xs" ng-click="options.extra.remove(row)"><i class="fa fa-trash-o fa-lg"></i></button>'});
 
             $scope.gridOptions = {
@@ -91,6 +99,10 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                     data[p] = $scope.values[index].id;
                 });
 
+                if ($scope.justification) {
+                    data.justification = $scope.justificationValue;
+                }
+
                 Restangular.all($scope.relation).post(data).then(function(newRelation) {
                     $scope.relations.push(newRelation);
                     $scope.isLoading = false;
@@ -106,7 +118,7 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
             var watcher = _.reduce($scope.otherProperties, function(result, p, index) {
                 return result + 'values[' + index + '].id + ":" + ';
             }, '');
-            watcher += 'relations.length';
+            watcher += 'relations.length + justificationValue';
 
             // Prevent adding duplicated relations
             $scope.$watch(watcher, function() {
@@ -131,7 +143,7 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                     });
 
                     // We can add if everything is selected, and is not duplicate
-                    $scope.canAdd = !$scope.exists;
+                    $scope.canAdd = !$scope.exists && !$scope.justification || $scope.justificationValue;
                 }
             }, true);
 

@@ -12,7 +12,7 @@ class FilterGeonameUsageControllerTest extends AbstractChildRestfulControllerTes
 
     protected function getAllowedFields()
     {
-        return array('id', 'rule', 'filter', 'part', 'geoname');
+        return array('id', 'rule', 'filter', 'part', 'geoname', 'justification');
     }
 
     protected function getTestedObject()

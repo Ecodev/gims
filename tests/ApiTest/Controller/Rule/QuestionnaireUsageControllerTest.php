@@ -12,7 +12,7 @@ class QuestionnaireUsageControllerTest extends AbstractChildRestfulControllerTes
 
     protected function getAllowedFields()
     {
-        return array('id', 'rule', 'questionnaire', 'part');
+        return array('id', 'rule', 'questionnaire', 'part', 'justification');
     }
 
     protected function getTestedObject()

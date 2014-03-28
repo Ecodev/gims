@@ -38,16 +38,16 @@
 
             </tab>
             <tab heading="Filter - Questionnaire" ng-if="rule.id">
-                <gims-relations relation="FilterQuestionnaireUsage" properties="['rule', 'filter', 'questionnaire', 'part']"></gims-relations>
+                <gims-relations relation="FilterQuestionnaireUsage" properties="['rule', 'filter', 'questionnaire', 'part']" justification="true"></gims-relations>
             </tab>
 
             <tab heading="Questionnaire" ng-if="rule.id">
-                <gims-relations relation="QuestionnaireUsage" properties="['rule', 'questionnaire', 'part']"></gims-relations>
+                <gims-relations relation="QuestionnaireUsage" properties="['rule', 'questionnaire', 'part']" justification="true"></gims-relations>
             </tab>
 
 
             <tab heading="Filter - Country" ng-if="rule.id">
-                <gims-relations relation="FilterGeonameUsage" properties="['rule', 'filter', 'geoname', 'part']"></gims-relations>
+                <gims-relations relation="FilterGeonameUsage" properties="['rule', 'filter', 'geoname', 'part']" justification="true"></gims-relations>
             </tab>
         </tabset>
     </form>
