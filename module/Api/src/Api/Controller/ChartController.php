@@ -499,17 +499,18 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      */
     private function addUsagesToFilters($flatFilter, $part, $questionnaire)
     {
+        $flatFilter['usages'] = array();
+
         // add the usages to filters
         $fqus = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($flatFilter['filter']['id'])->getFilterQuestionnaireUsages();
         foreach ($fqus as $fqu) {
             if ($fqu->getPart() === $part && $fqu->getQuestionnaire() === $questionnaire) {
-                if (!isset($flatFilter['usages'])) {
-                    $flatFilter['usages'] = $fqu->getRule()->getName();
-                } else {
-                    $flatFilter['usages'] .= ', ' . $fqu->getRule()->getName();
-                }
+                $flatFilter['usages'][] = $fqu->getRule()->getName();
             }
+
         }
+
+        $flatFilter['usages'] = implode(', ' , $flatFilter['usages']);
 
         return $flatFilter;
     }
