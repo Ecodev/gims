@@ -64,32 +64,43 @@ class Rbac extends \ZfcRbac\Service\Rbac
         } elseif ($assertion && $assertion->getMessage()) {
             $this->message = $assertion->getMessage();
         } else {
-
-            $user = $this->getIdentity();
-            if ($user instanceof \Application\Model\User && $context) {
-                $user->setRolesContext($context);
-            }
-            $roles = implode(', ', $this->getIdentity()->getRoles());
-
-            // Reset context to avoid side-effect on next usage of $this->isGranted()
-            if ($user instanceof \Application\Model\User) {
-                $user->resetRolesContext();
-            }
-
-            if ($context instanceof \ArrayAccess) {
-                $contextMessage = ' in context ';
-                foreach ($context as $singleContext) {
-                    $contextId = $singleContext->getId() ? '#' . $singleContext->getId() : 'not persisted';
-                    $contextMessage .= '"' . get_class($singleContext) . $contextId . '" (' . $singleContext->getName() . ')' . ' and ';
-                }
-                $contextMessage = trim($contextMessage, ' and ');
-            } else {
-                $contextMessage = $context ? 'in context "' . get_class($context) . '#' . $context->getId() . '" (' . $context->getName() . ')' : 'without any context';
-            }
-
-            $name = is_callable(array($object, 'getName')) ? ' (' . $object->getName() . ')' : '';
-            $this->message = 'Insufficient access rights for permission "' . $permission . '" on "' . get_class($object) . '#' . $object->getId() . $name . '"  with your current roles [' . $roles . '] ' . $contextMessage;
+            $this->generateMessage($object, $context, $permission);
         }
+    }
+
+    /**
+     * @param $object
+     * @param $context
+     * @param $permission
+     */
+    private function generateMessage($object, $context, $permission)
+    {
+        $user = $this->getIdentity();
+
+        if ($user instanceof \Application\Model\User && $context) {
+            $user->setRolesContext($context);
+        }
+
+        $roles = implode(', ', $user->getRoles());
+
+        // Reset context to avoid side-effect on next usage of $this->isGranted()
+        if ($user instanceof \Application\Model\User) {
+            $user->resetRolesContext();
+        }
+
+        if ($context instanceof \ArrayAccess) {
+            $contextMessage = ' in context ';
+            foreach ($context as $singleContext) {
+                $contextId = $singleContext->getId() ? '#' . $singleContext->getId() : 'not persisted';
+                $contextMessage .= '"' . get_class($singleContext) . $contextId . '" (' . $singleContext->getName() . ')' . ' and ';
+            }
+            $contextMessage = trim($contextMessage, ' and ');
+        } else {
+            $contextMessage = $context ? 'in context "' . get_class($context) . '#' . $context->getId() . '" (' . $context->getName() . ')' : 'without any context';
+        }
+
+        $name = is_callable(array($object, 'getName')) ? ' (' . $object->getName() . ')' : '';
+        $this->message = 'Insufficient access rights for permission "' . $permission . '" on "' . get_class($object) . '#' . $object->getId() . $name . '"  with your current roles [' . $roles . '] ' . $contextMessage;
     }
 
     /**
