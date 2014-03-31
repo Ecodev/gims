@@ -9,6 +9,13 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.countryQueryParams = {perPage: 500};
     $scope.filterSetQueryParams = {fields: 'filters.genericColor,filters.children.__recursive'};
 
+
+    $scope.$watch(function() {
+        return $location.url();
+    }, function() {
+        $scope.returnUrl = encodeURIComponent($location.url());
+    });
+
     /**
      * Executes when country, part or filterset are changed
      * When filter filterset is changed, rebuilds the list of the hFilters used.

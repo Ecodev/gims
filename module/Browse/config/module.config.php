@@ -47,8 +47,21 @@ return array(
                             ),
                         ),
                     ),
+
+                    'sector' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/chart/sector',
+                            'constraints' => array(),
+                            'defaults' => array(
+                                '__NAMESPACE__' => 'Browse\Controller',
+                                'controller' => 'chart',
+                                'action' => 'sector'
+                            ),
+                        ),
+                    ),
                 ),
-            ),
+            )
         ),
     ),
 );

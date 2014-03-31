@@ -23,6 +23,7 @@ angular.module('myApp', [
             $routeProvider.when('/about', {templateUrl: '/template/application/index/about'});
             $routeProvider.when('/browse', {templateUrl: '/template/browse'});
             $routeProvider.when('/browse/chart', {templateUrl: '/template/browse/chart', controller: 'Browse/ChartCtrl', reloadOnSearch: false});
+            $routeProvider.when('/browse/chart/sector', {templateUrl: '/template/browse/chart/sector', controller: 'Browse/SectorCtrl', reloadOnSearch: false});
             $routeProvider.when('/browse/table/filter', {templateUrl: '/template/browse/table/filter', controller: 'Browse/Table/FilterCtrl', reloadOnSearch: false});
             $routeProvider.when('/browse/table/questionnaire', {templateUrl: '/template/browse/table/questionnaire', controller: 'Browse/Table/QuestionnaireCtrl', reloadOnSearch: false});
             $routeProvider.when('/browse/table/country', {templateUrl: '/template/browse/table/country', controller: 'Browse/Table/CountryCtrl', reloadOnSearch: false});

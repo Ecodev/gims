@@ -23,7 +23,8 @@
         </div>
         <div class='row show-grid'>
             <p class='col-sm-1 col-md-1'>
-                <gims-filter-generator></gims-filter-generator>
+                <a class='btn btn-default' ng-class="{'disabled':!part || !country}" href="/browse/chart/sector?part={{part.id}}&country={{country.id}}&returnUrl={{returnUrl}}"><i class='fa fa-bar-chart-o'></i> Add new data set</a>
+                <!--gims-filter-generator></gims-filter-generator-->
             </p>
         </div>
     </form>
