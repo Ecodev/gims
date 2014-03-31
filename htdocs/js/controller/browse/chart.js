@@ -16,6 +16,12 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         $scope.returnUrl = encodeURIComponent($location.url());
     });
 
+
+    $scope.getFilterSets = function(){
+        var filterSetsIds = _.map($scope.filterSet, function(el){ return el.id;});
+        return filterSetsIds.join(',');
+    };
+
     /**
      * Executes when country, part or filterset are changed
      * When filter filterset is changed, rebuilds the list of the hFilters used.
