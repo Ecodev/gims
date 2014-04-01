@@ -60,7 +60,8 @@ class QuestionRepository extends AbstractChildRepository
             ->leftJoin('question.chapter', 'chapter')
             ->where('question.survey = :survey')
             ->setParameter('survey', $survey)
-            ->orderBy('question.sorting')
+            ->orderBy('question.sorting', 'ASC')
+            ->addOrderBy('parts.id', 'ASC')
         ;
         $this->addPermission($qb, 'survey', \Application\Model\Permission::getPermissionName($this, $action));
         $questions = $qb->getQuery()->getArrayResult();
@@ -110,7 +111,6 @@ class QuestionRepository extends AbstractChildRepository
             $questionsIndexed[$question['id']]['isMultiple'] = $question['isMultiple'];
         }
 
-
         // answers
         $answers = $this->getEntityManager()
             ->getRepository('\Application\Model\Answer')
@@ -127,8 +127,6 @@ class QuestionRepository extends AbstractChildRepository
                 array_push($questionsIndexed[$answerQuestionId]['answers'][$answerPartId][$answerQuestionnaireId], $answer);
             }
         }
-
-       //w($questionsIndexed[55]['answers'][1][4]);
 
         return $questionsIndexed;
     }
