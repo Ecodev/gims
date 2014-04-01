@@ -28,7 +28,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     );
     private $startYear;
     private $endYear;
-    private $usedFilters = array();
 
     private function getChart($filterSetsName, $country, $part, $series)
     {
@@ -118,19 +117,20 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $series = array();
         if (count($filterSetsIds) > 0) {
 
-            // First get series of flatten regression lines with ignored values (if any)
-            $seriesWithIgnoredElements = $this->computeIgnoredElements($questionnaires, $part);
-
+            $filterSets = array();
+            $seriesWithIgnoredElements = array();
             foreach ($filterSetsIds as $filterSetId) {
 
                 /* @var $filterSet \Application\Model\FilterSet */
                 $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($filterSetId);
+                $filterSets[] = $filterSet;
                 $filterSetsNames[] = $filterSet->getName();
 
-                $hFilters = $filterSet->getFilters()->map(function ($el) {
-                    return $el->getId();
-                });
-                $this->usedFilters = array_merge($this->usedFilters, $hFilters->toArray());
+                // First get series of flatten regression lines with ignored values (if any)
+                $seriesWithIgnoredElements = array_merge($seriesWithIgnoredElements, $this->computeIgnoredElements($filterSet, $questionnaires, $part));
+            }
+
+            foreach ($filterSets as $filterSet) {
 
                 // If the filterSet is a copy of an original FilterSet, then we also display the original (with light colors)
                 if ($filterSet->getOriginalFilterSet()) {
@@ -148,13 +148,22 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
                 $alternativeSeries = array_merge($seriesWithIgnoredElements, $seriesWithOriginal);
                 $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, array('byFilterSet' => $ignoredFilters), $alternativeSeries ? 33 : 100, $alternativeSeries ? 'ShortDash' : null, false);
-
                 // insure that series are not added twice to series list
-                $series = array_merge($series, array_map("unserialize", array_unique(array_map("serialize", array_merge($normalSeries, $alternativeSeries)))));
+                foreach ($newSeries = array_merge($normalSeries, $alternativeSeries) as $newSerie) {
+                    $same = false;
+                    foreach ($series as $serie) {
+                        if (count(@array_diff_assoc($serie, $newSerie)) == 0) {
+                            $same = true;
+                            break;
+                        }
+                    }
+                    if (!$same) {
+                        array_push($series, $newSerie);
+                    }
+                }
             }
 
         }
-
         $chart = $this->getChart(implode(', ', $filterSetsNames), $country, $part, $series);
 
         return new NumericJsonModel($chart);
@@ -183,34 +192,27 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @param \Application\Model\Part $part
      * @return array
      */
-    protected function computeIgnoredElements(array $questionnaires, Part $part)
+    protected function computeIgnoredElements(FilterSet $filterSet, array $questionnaires, Part $part)
     {
         $ignoredFiltersByQuestionnaire = $this->getIgnoredElements();
 
         $series = array();
         if (count($ignoredFiltersByQuestionnaire['byQuestionnaire']) > 0) {
-            foreach ($this->usedFilters as $filterId) {
-
-                $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
-                $filterSetSingle = new \Application\Model\FilterSet();
-                $filterSetSingle->addFilter($filter);
-
-                $questionnairesNotIgnored = array();
-                foreach ($questionnaires as $questionnaire) {
-                    // if questionnaire is not in the ignored list, add to not ignored questionnaires list
-                    // or if questionnaire is in the list ignored list but has filters, he's added to not ignored questionnaires list
-                    // (a questionnaire is considered ignored if he's in the list AND he has not filters. If he has filters, they are ignored, but not the questionnaire)
-                    if (!isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()])
-                        || isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()])
-                        && count($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) > 0
-                    ) {
-                        $questionnairesNotIgnored[] = $questionnaire;
-                    }
+            $questionnairesNotIgnored = array();
+            foreach ($questionnaires as $questionnaire) {
+                // if questionnaire is not in the ignored list, add to not ignored questionnaires list
+                // or if questionnaire is in the ignored list but has filters, he's added to not ignored questionnaires list
+                // (a questionnaire is considered ignored if he's in the list AND he has not filters. If he has filters, they are ignored, but not the questionnaire)
+                if (!isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()])
+                    || isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()])
+                    && count($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) > 0
+                ) {
+                    $questionnairesNotIgnored[] = $questionnaire;
                 }
-
-                $mySeries = $this->getSeries($filterSetSingle, $questionnairesNotIgnored, $part, $ignoredFiltersByQuestionnaire, 100, null, true, ' (ignored elements)');
-                $series = array_merge($series, $mySeries);
             }
+
+            $mySeries = $this->getSeries($filterSet, $questionnairesNotIgnored, $part, $ignoredFiltersByQuestionnaire, 100, null, true, ' (ignored elements)');
+            $series = array_merge($series, $mySeries);
         }
 
         return $series;
