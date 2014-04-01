@@ -33,6 +33,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\ManyToMany(targetEntity="Application\Model\Part")
      * @ORM\JoinTable(name="question_part", joinColumns={@ORM\JoinColumn(name="question_id", onDelete="CASCADE")})
+     * @ORM\OrderBy({"id" = "ASC"})
      */
     private $parts;
 
