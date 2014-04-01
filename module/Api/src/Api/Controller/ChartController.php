@@ -128,9 +128,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
                 // First get series of flatten regression lines with ignored values (if any)
                 $seriesWithIgnoredElements = array_merge($seriesWithIgnoredElements, $this->computeIgnoredElements($filterSet, $questionnaires, $part));
-            }
-
-            foreach ($filterSets as $filterSet) {
 
                 // If the filterSet is a copy of an original FilterSet, then we also display the original (with light colors)
                 if ($filterSet->getOriginalFilterSet()) {
