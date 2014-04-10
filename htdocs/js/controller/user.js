@@ -1,4 +1,4 @@
-angular.module('myApp').controller('UserCtrl', function($scope, $http, authService, $modal) {
+angular.module('myApp').controller('UserCtrl', function($scope, $http, authService, $modal, $rootScope) {
     'use strict';
 
     // Intercept the event broadcasted by http-auth-interceptor when a request get a HTTP 401 response
@@ -24,6 +24,7 @@ angular.module('myApp').controller('UserCtrl', function($scope, $http, authServi
         modalInstance.result.then(function(user) {
             $scope.user = user;
             authService.loginConfirmed();
+            $rootScope.$emit('gims-loginConfirmed', user);
         });
     };
 
