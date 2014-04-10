@@ -8,7 +8,6 @@ use Application\Model\Country;
 /**
  * Geoname. Data are imported from http://www.geonames.org, but only partially for
  * what we actually need.
- *
  * @ORM\Entity(repositoryClass="Application\Repository\GeonameRepository")
  */
 class Geoname extends AbstractModel
@@ -16,133 +15,114 @@ class Geoname extends AbstractModel
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", length=200, nullable=true)
      */
     private $name;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", length=200, nullable=true)
      */
     private $asciiname;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", length=8000, nullable=true)
      */
     private $alternatenames;
 
     /**
      * @var float
-     *
      * @ORM\Column(type="float", nullable=true)
      */
     private $latitude;
 
     /**
      * @var float
-     *
      * @ORM\Column(type="float", nullable=true)
      */
     private $longitude;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", nullable=true)
      */
     private $fclass;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", length=10, nullable=true)
      */
     private $fcode;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", length=2, nullable=true)
      */
     private $countryCode;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", length=60, nullable=true)
      */
     private $cc2;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     private $admin1;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", length=80, nullable=true)
      */
     private $admin2;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     private $admin3;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", length=20, nullable=true)
      */
     private $admin4;
 
     /**
      * @var float
-     *
      * @ORM\Column(type="decimal", nullable=true)
      */
     private $population;
 
     /**
      * @var integer
-     *
      * @ORM\Column(type="integer", nullable=true)
      */
     private $elevation;
 
     /**
      * @var integer
-     *
      * @ORM\Column(type="integer", nullable=true)
      */
     private $gtopo30;
 
     /**
      * @var string
-     *
      * @ORM\Column(type="string", length=40, nullable=true)
      */
     private $timezone;
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(type="date", nullable=true)
      */
     private $moddate;
 
     /**
      * @var \CrEOF\Spatial\DBAL\Types\GeometryType
-     *
      * @ORM\Column(type="geometry", nullable=true)
      */
     private $geometry;
@@ -150,7 +130,6 @@ class Geoname extends AbstractModel
     /**
      * Additional formulas to apply to compute regression lines
      * @var ArrayCollection
-     *
      * @ORM\OneToMany(targetEntity="\Application\Model\Rule\FilterGeonameUsage", mappedBy="geoname")
      * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
      */
@@ -158,10 +137,15 @@ class Geoname extends AbstractModel
 
     /**
      * @var Country
-     *
      * @ORM\OneToOne(targetEntity="Country", mappedBy="geoname")
      */
     private $country;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Questionnaire", mappedBy="geoname")
+     */
+    private $questionnaires;
 
     /**
      * Constructor
@@ -185,7 +169,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set name
-     *
      * @param string $name
      * @return Geoname
      */
@@ -198,7 +181,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get name
-     *
      * @return string
      */
     public function getName()
@@ -208,7 +190,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set asciiname
-     *
      * @param string $asciiname
      * @return Geoname
      */
@@ -221,7 +202,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get asciiname
-     *
      * @return string
      */
     public function getAsciiname()
@@ -231,7 +211,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set alternatenames
-     *
      * @param string $alternatenames
      * @return Geoname
      */
@@ -244,7 +223,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get alternatenames
-     *
      * @return string
      */
     public function getAlternatenames()
@@ -254,7 +232,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set latitude
-     *
      * @param float $latitude
      * @return Geoname
      */
@@ -267,7 +244,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get latitude
-     *
      * @return float
      */
     public function getLatitude()
@@ -277,7 +253,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set longitude
-     *
      * @param float $longitude
      * @return Geoname
      */
@@ -290,7 +265,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get longitude
-     *
      * @return float
      */
     public function getLongitude()
@@ -300,7 +274,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set fclass
-     *
      * @param string $fclass
      * @return Geoname
      */
@@ -313,7 +286,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get fclass
-     *
      * @return string
      */
     public function getFclass()
@@ -323,7 +295,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set fcode
-     *
      * @param string $fcode
      * @return Geoname
      */
@@ -336,7 +307,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get fcode
-     *
      * @return string
      */
     public function getFcode()
@@ -346,7 +316,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set country
-     *
      * @param string $countryCode
      * @return Geoname
      */
@@ -359,7 +328,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get country
-     *
      * @return string
      */
     public function getCountryCode()
@@ -369,7 +337,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set cc2
-     *
      * @param string $cc2
      * @return Geoname
      */
@@ -382,7 +349,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get cc2
-     *
      * @return string
      */
     public function getCc2()
@@ -392,7 +358,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set admin1
-     *
      * @param string $admin1
      * @return Geoname
      */
@@ -405,7 +370,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get admin1
-     *
      * @return string
      */
     public function getAdmin1()
@@ -415,7 +379,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set admin2
-     *
      * @param string $admin2
      * @return Geoname
      */
@@ -428,7 +391,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get admin2
-     *
      * @return string
      */
     public function getAdmin2()
@@ -438,7 +400,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set admin3
-     *
      * @param string $admin3
      * @return Geoname
      */
@@ -451,7 +412,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get admin3
-     *
      * @return string
      */
     public function getAdmin3()
@@ -461,7 +421,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set admin4
-     *
      * @param string $admin4
      * @return Geoname
      */
@@ -474,7 +433,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get admin4
-     *
      * @return string
      */
     public function getAdmin4()
@@ -484,7 +442,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set population
-     *
      * @param float $population
      * @return Geoname
      */
@@ -497,7 +454,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get population
-     *
      * @return float
      */
     public function getPopulation()
@@ -507,7 +463,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set elevation
-     *
      * @param integer $elevation
      * @return Geoname
      */
@@ -520,7 +475,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get elevation
-     *
      * @return integer
      */
     public function getElevation()
@@ -530,7 +484,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set gtopo30
-     *
      * @param integer $gtopo30
      * @return Geoname
      */
@@ -543,7 +496,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get gtopo30
-     *
      * @return integer
      */
     public function getGtopo30()
@@ -553,7 +505,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set timezone
-     *
      * @param string $timezone
      * @return Geoname
      */
@@ -566,7 +517,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get timezone
-     *
      * @return string
      */
     public function getTimezone()
@@ -576,7 +526,6 @@ class Geoname extends AbstractModel
 
     /**
      * Set moddate
-     *
      * @param \DateTime $moddate
      * @return Geoname
      */
@@ -589,7 +538,6 @@ class Geoname extends AbstractModel
 
     /**
      * Get moddate
-     *
      * @return \DateTime
      */
     public function getModdate()
@@ -635,6 +583,14 @@ class Geoname extends AbstractModel
         $this->country = $country;
 
         return $this;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getQuestionnaires()
+    {
+        return $this->questionnaires;
     }
 
 }
