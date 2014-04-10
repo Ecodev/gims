@@ -69,7 +69,7 @@
 
         <div class="container-angular" ng-view></div>
 
-        <footer id='pagefooter' class="row">
+        <footer class='navbar navbar-default navbar-fixed-bottom'>
                 <p class="col-md-4 text-muted">
                     <small>A project by <a href="http://www.who.int/phe/en/" target="_blank">WHO - Public Health and Environment</a> - 2013</small>
                 </p>
@@ -80,7 +80,6 @@
                 <p class="col-md-4 text-muted">
                     <small><?php echo $this->translate('Designed and built by <a href="http://www.ecodev.ch" target="_blank">Ecodev</a>') ?></small>
                 </p>
-
         </footer>
 
         <!-- Modal Login Window !-->
@@ -104,7 +103,7 @@
                                 <input type="password" name="credential" id="login-password" ng-model="login.credential" />
                             </div>
 
-                            <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Sign In'); ?></button>  <i ng-show="signing" class="fa fa-gims-loading"></i>
+                            <button type="submit" name="submit" class="btn btn-primary" value=""> <i ng-show="signing" class="fa fa-gims-loading"></i> <?php echo $this->translate('Sign In'); ?></button>
 
                             <input type="hidden" name="redirect" value="{{redirect}}">
 
@@ -133,7 +132,7 @@
                                 <input type="password" name="passwordVerify" id="register-password-verify" placeholder="confirm password" required ui-validate=" '$value==register.password' " ui-validate-watch=" 'register.passwordVerify' " ng-model="register.passwordVerify">
                                 <span ng-show="registerForm.passwordVerify.$error.validator" class="help-block"><?php echo $this->translate("Passwords do not match!"); ?></span>
                             </div>
-                            <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Register') ?></button> <i ng-show="registering" class="fa fa-gims-loading"></i>
+                            <button type="submit" name="submit" class="btn btn-primary" value=""><i ng-show="registering" class="fa fa-gims-loading"></i> <?php echo $this->translate('Register') ?></button>
                         </form>
                     </div>
                 </div>
