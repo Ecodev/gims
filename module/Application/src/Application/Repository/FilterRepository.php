@@ -19,6 +19,16 @@ class FilterRepository extends AbstractRepository
     }
 
     /**
+     * Find all, sorting by given parameter, using id by default.
+     * @param array $orderBy
+     * @return array
+     */
+    public function findAll($orderBy = array('id' => 'ASC'))
+    {
+        return $this->findBy(array(), $orderBy);
+    }
+
+    /**
      * Returns one filter by name
      *
      * @param string $name
