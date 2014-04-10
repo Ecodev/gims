@@ -117,13 +117,11 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $series = array();
         if (count($filterSetsIds) > 0) {
 
-            $filterSets = array();
             $seriesWithIgnoredElements = array();
             foreach ($filterSetsIds as $filterSetId) {
 
                 /* @var $filterSet \Application\Model\FilterSet */
                 $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($filterSetId);
-                $filterSets[] = $filterSet;
                 $filterSetsNames[] = $filterSet->getName();
 
                 // First get series of flatten regression lines with ignored values (if any)

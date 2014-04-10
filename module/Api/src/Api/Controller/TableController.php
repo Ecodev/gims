@@ -12,16 +12,16 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     public function filterAction()
     {
-        $questionnaireParameter = $this->params()->fromQuery('questionnaire');
-        $idQuestionnaires = explode(',', $questionnaireParameter);
-        $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
-
-        $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
-
         $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
 
         $result = array();
         if ($filterSet) {
+
+            $questionnaireParameter = $this->params()->fromQuery('questionnaire');
+            $idQuestionnaires = explode(',', $questionnaireParameter);
+            $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
+            $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
+
             foreach ($idQuestionnaires as $idQuestionnaire) {
                 $questionnaire = $questionnaireRepository->find($idQuestionnaire);
                 if ($questionnaire) {
@@ -49,13 +49,13 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Compute value for the given filter and all its children recursively.
-     *
      * @param \Application\Model\Questionnaire $questionnaire
      * @param \Application\Model\Filter $filter
      * @param array $parts
      * @param integer $level the level of the current filter in the filter tree
      * @param array $fields
      * @param array $ignoredElementsByQuestionnaire
+     * @param bool $userSecondLevelRules
      * @return array a list (not tree) of all filters with their values and tree level
      */
     public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0, $fields = array(), $ignoredElementsByQuestionnaire = array(), $userSecondLevelRules = false)
@@ -142,20 +142,22 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         );
 
         $filename = $this->params('filename');
-        if ($filename)
+        if ($filename) {
             return new ExcelModel($filename, $finalResult);
-        else
+        } else {
             return new NumericJsonModel($finalResult);
+        }
     }
 
     public function countryAction()
     {
         $p = $this->params()->fromQuery('country');
         $years = $this->getWantedYears($this->params()->fromQuery('years'));
-        if (!$p)
+        if (!$p) {
             $countryIds = array(-1);
-        else
+        } else {
             $countryIds = explode(',', $p);
+        }
         $countries = $this->getEntityManager()->getRepository('Application\Model\Country')->findById($countryIds);
 
         /** @var \Application\Model\FilterSet $filterSet */
@@ -245,7 +247,6 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
      * @param $parts
      * @param $filterSet
      * @param $questionnaires
-     *
      * @return array all data ordered by part
      */
     private function getAllYearsComputed($parts, $filterSet, $questionnaires)
@@ -264,7 +265,6 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
     /**
      * @param $fieldParts
      * @param $years
-     *
      * @return array Filter ordered by part and with only wanted years.
      */
     private function filterYears($fieldParts, $years)
@@ -290,9 +290,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Decode the syntax of wanted years
-     *
      * @param $years
-     *
      * @return array of years
      */
     private function getWantedYears($years)
@@ -316,11 +314,9 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Retreive a code name by using two techniques : manual mapping or inversed acronym letters for the filter
-     *
      * @param $filterset
      * @param $partId
      * @param $filterName
-     *
      * @return string code name in uppercase
      */
     public function getCodeName($filterset, $part, $filterName)
