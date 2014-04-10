@@ -29,13 +29,11 @@ class QuestionController extends AbstractChildRestfulController
             // Here we use a closure to get the questions' answers, but only for the current questionnaire
 
             'answers' => function (\Application\Service\Hydrator $hydrator, AbstractQuestion $question) use (
-                    $questionnaire, $controller
-                ) {
-                    $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
-                    $answers = $answerRepository->findBy(array(
-                        'question' => $question,
-                        'questionnaire' => $questionnaire
-                    ));
+                $questionnaire, $controller
+            ) {
+                $output = null;
+                if (is_callable(array($question, 'getAnswers'))) {
+                    $answers = $question->getAnswers($questionnaire);
 
                     // special case for question, reorganize keys for the needs of NgGrid:
                     // Numerical key must correspond to the id of the part.
@@ -47,15 +45,13 @@ class QuestionController extends AbstractChildRestfulController
                             continue;
                         }
 
-                        $part = $answer->getPart();
-                        $answerData = $hydrator->extract($answer);
-                        $answerData['part'] = $hydrator->extract($part);
-
+                        $answerData = $hydrator->extract($answer, array('part'));
                         array_push($output, $answerData);
                     }
+                }
 
-                    return $output;
-                },
+                return $output;
+            },
         );
 
         return $config;
@@ -121,6 +117,7 @@ class QuestionController extends AbstractChildRestfulController
     /**
      * Update answers percent and absolute value depending on updated choices
      * @param \Application\Model\AbstractModel $question
+     * @param array $data
      */
     protected function postUpdate(AbstractModel $question, array $data)
     {
@@ -174,6 +171,7 @@ class QuestionController extends AbstractChildRestfulController
      * Reorder sibling questions to make room for the new question according to its sorting
      * @param \Application\Model\Question\AbstractQuestion $question the question BEFORE setting its new sorting
      * @param integer $newSorting the new sorting
+     * @return int
      */
     protected function reorderSiblingQuestions(AbstractQuestion $question, $newSorting)
     {
@@ -249,6 +247,7 @@ class QuestionController extends AbstractChildRestfulController
     /**
      * Create choices for the newly created question
      * @param \Application\Model\AbstractModel $question
+     * @param array $data
      */
     protected function postCreate(AbstractModel $question, array $data)
     {
@@ -260,7 +259,6 @@ class QuestionController extends AbstractChildRestfulController
 
     /**
      * @param array $data
-     * @param callable $postAction
      * @throws \Exception
      * @return mixed|void|JsonModel
      */
