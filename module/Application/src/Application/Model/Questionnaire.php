@@ -31,7 +31,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * @var Geoname
-     * @ORM\ManyToOne(targetEntity="Geoname")
+     * @ORM\ManyToOne(targetEntity="Geoname", inversedBy="questionnaires")
      * @ORM\JoinColumns({
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=false)
      * })
@@ -67,7 +67,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Additional formulas to compute interesting values which are not found in Filter tree
-     *
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="\Application\Model\Rule\QuestionnaireUsage", mappedBy="questionnaire")
      * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
@@ -89,15 +88,15 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array('name',
-            'status'));
+        return array_merge(parent::getJsonConfig(), array(
+            'name',
+            'status'
+        ));
     }
 
     /**
      * Set dateObservationStart
-     *
      * @param \DateTime $dateObservationStart
-     *
      * @return Questionnaire
      */
     public function setDateObservationStart(\DateTime $dateObservationStart)
@@ -109,7 +108,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Get dateObservationStart
-     *
      * @return \DateTime
      */
     public function getDateObservationStart()
@@ -119,9 +117,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Set dateObservationEnd
-     *
      * @param \DateTime $dateObservationEnd
-     *
      * @return Questionnaire
      */
     public function setDateObservationEnd(\DateTime $dateObservationEnd)
@@ -133,7 +129,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Get dateObservationEnd
-     *
      * @return \DateTime
      */
     public function getDateObservationEnd()
@@ -143,9 +138,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Set geoname
-     *
      * @param Geoname $geoname
-     *
      * @return Questionnaire
      */
     public function setGeoname(Geoname $geoname)
@@ -157,7 +150,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Get geoname
-     *
      * @return Geoname
      */
     public function getGeoname()
@@ -167,9 +159,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Set survey
-     *
      * @param Survey $survey
-     *
      * @return Questionnaire
      */
     public function setSurvey(Survey $survey)
@@ -183,7 +173,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Get survey
-     *
      * @return Survey
      */
     public function getSurvey()
@@ -193,7 +182,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Get answers
-     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getAnswers()
@@ -201,12 +189,9 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         return $this->answers;
     }
 
-
     /**
      * Set status
-     *
      * @param string $status
-     *
      * @return Answer
      */
     public function setStatus(QuestionnaireStatus $status)
@@ -219,7 +204,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Get status
-     *
      * @return QuestionnaireStatus
      */
     public function getStatus()
@@ -231,9 +215,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     /**
      * Notify the questionnaire that he has a new answer.
      * This should only be called by Answer::setQuestionnaire()
-     *
      * @param Answer $answer
-     *
      * @return Questionnaire
      */
     public function answerAdded(Answer $answer)
@@ -245,17 +227,15 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Return the computed name based on geoname and survey
-     *
      * @return string
      */
     public function getName()
     {
-        return $this->getSurvey()->getCode().' - '.$this->getGeoname()->getName();
+        return $this->getSurvey()->getCode() . ' - ' . $this->getGeoname()->getName();
     }
 
     /**
      * Return the computed spatial name
-     *
      * @return string
      */
     public function getSpatial()
@@ -265,7 +245,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Return percentage of answered questions
-     *
      * @return string
      */
     public function getCompleted()
@@ -298,7 +277,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * @param string $comments
-     *
      * @return Survey
      */
     public function setComments($comments)
@@ -310,7 +288,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Get formulas
-     *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getQuestionnaireUsages()
@@ -321,9 +298,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     /**
      * Notify the questionnaire that it has a new rule.
      * This should only be called by QuestionnaireUsage::setQuestionnaire()
-     *
      * @param Rule\QuestionnaireUsage $questionnaireUsage
-     *
      * @return Questionnaire
      */
     public function questionnaireUsageAdded(Rule\QuestionnaireUsage $questionnaireUsage)
@@ -360,7 +335,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         return $result;
     }
 
-
     /**
      * If questionnaire change status from Validated to Complete/New, notify Questionnaire reporters that questionnaire is again editable
      * @ORM\PostPersist
@@ -371,7 +345,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         if ($this->originalStatus == QuestionnaireStatus::$VALIDATED
             && ($this->originalStatus == QuestionnaireStatus::$VALIDATED || $this->getStatus() == QuestionnaireStatus::$NEW)
         ) {
-            Utility::executeCliCommand('email notifyQuestionnaireReporters '.$this->getId());
+            Utility::executeCliCommand('email notifyQuestionnaireReporters ' . $this->getId());
         }
     }
 
@@ -385,7 +359,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         if ($this->originalStatus == QuestionnaireStatus::$NEW
             && $this->getStatus() == QuestionnaireStatus::$COMPLETED
         ) {
-            Utility::executeCliCommand('email notifyQuestionnaireValidator '.$this->getId());
+            Utility::executeCliCommand('email notifyQuestionnaireValidator ' . $this->getId());
         }
     }
 
@@ -401,9 +375,8 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
             && $this->getPermissions()['validate']
         ) {
             echo 'a';
-            Utility::executeCliCommand('email notifyQuestionnaireCreator '.$this->getId());
+            Utility::executeCliCommand('email notifyQuestionnaireCreator ' . $this->getId());
         }
     }
-
 
 }
