@@ -23,13 +23,9 @@ angular.module('myApp', [
             $routeProvider.when('/about', {templateUrl: '/template/application/index/about'});
             $routeProvider.when('/browse', {templateUrl: '/template/browse'});
             $routeProvider.when('/browse/chart', {templateUrl: '/template/browse/chart', controller: 'Browse/ChartCtrl', reloadOnSearch: false});
-            $routeProvider.when('/browse/chart/sector', {templateUrl: '/template/browse/chart/sector', controller: 'Browse/SectorCtrl', reloadOnSearch: false});
-            $routeProvider.when('/browse/table/filter', {templateUrl: '/template/browse/table/filter', controller: 'Browse/Table/FilterCtrl', reloadOnSearch: false});
             $routeProvider.when('/browse/table/questionnaire', {templateUrl: '/template/browse/table/questionnaire', controller: 'Browse/Table/QuestionnaireCtrl', reloadOnSearch: false});
             $routeProvider.when('/browse/table/country', {templateUrl: '/template/browse/table/country', controller: 'Browse/Table/CountryCtrl', reloadOnSearch: false});
             $routeProvider.when('/contribute', {templateUrl: '/template/contribute', controller: 'ContributeCtrl'});
-            $routeProvider.when('/contribute/questionnaire', {templateUrl: '/template/contribute/questionnaire', controller: 'Contribute/QuestionnaireCtrl'});
-            $routeProvider.when('/contribute/questionnaire/:id', {templateUrl: '/template/contribute/questionnaire', controller: 'Contribute/QuestionnaireCtrl'});
             $routeProvider.when('/admin', {redirectTo: '/contribute'});
             $routeProvider.when('/admin/filter-set', {templateUrl: '/template/admin/filter-set', controller: 'Admin/FilterSetCtrl'});
             $routeProvider.when('/admin/filter-set/new', {templateUrl: '/template/admin/filter-set/crud', controller: 'Admin/FilterSet/CrudCtrl'});
@@ -50,17 +46,20 @@ angular.module('myApp', [
             $routeProvider.when('/admin/rule', {templateUrl: '/template/admin/rule', controller: 'Admin/RuleCtrl'});
             $routeProvider.when('/admin/rule/edit/:id', {templateUrl: '/template/admin/rule/crud', controller: 'Admin/Rule/CrudCtrl'});
             $routeProvider.when('/admin/rule/new', {templateUrl: '/template/admin/rule/crud', controller: 'Admin/Rule/CrudCtrl'});
+            $routeProvider.when('/browse/table/filter', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
+            $routeProvider.when('/contribute/questionnaire', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
+            $routeProvider.when('/contribute/questionnaire/glass/:id', {templateUrl: '/template/contribute/glass', controller: 'Contribute/GlassCtrl'});
+
             $routeProvider.otherwise({redirectTo: '/home'});
 
+            // general config
             $locationProvider.html5Mode(true);
-
-
             RestangularProvider.setBaseUrl('/api');
 
             // Configure Restangular for our pagination structure
             RestangularProvider.setResponseExtractor(function(response, operation) {
                 var newResponse;
-                if (operation === "getList") {
+                if (operation === "getList" && !_.isUndefined(response.metadata)) {
 
                     // Here we're returning an Array which has one special property metadata with our extra information
                     newResponse = response.items;

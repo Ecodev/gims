@@ -35,7 +35,7 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
     };
 
     $scope.cancel = function() {
-        $location.path(redirectTo).search('returnUrl', null).hash(null);
+        $location.url(redirectTo);
     };
 
 

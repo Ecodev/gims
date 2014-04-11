@@ -1,33 +1,35 @@
 <div class="container" ng-init="firstCol='4.5em';lastCol='7em';">
-    <form>
-        <div class='row show-grid'>
-            <div class="col-md-6">
-                <img src="/img/jmp-logo-black.png" alt="JMP logo" class="logo-chart"/>
-                <img src="/img/who-logo-black.png" alt="WHO logo" class="logo-chart"/>
-                <img src="/img/unicef-logo-black.png" alt="Unicef logo" class="logo-chart"/>
-            </div>
+
+    <div class='row'>
+
+        <div ng-class="{'col-xs-12 col-sm-7 col-md-7 col-lg-8' : hasIgnoredElements || pointSelected, 'col-md-12' : !hasIgnoredElements && !pointSelected}">
+            <form>
+                <div class='navbar navbar-default hidden-print'>
+                    <div class='navbar-form' id='nav-chart'>
+<!--                        <a class='btn btn-default' ng-class="{'disabled':!part || !country}" href="/contribute/questionnaire?part={{part.id}}&country={{country.id}}&filterSet={{getFilterSets()}}&returnUrl={{currentUrl}}"><i class='fa fa-plus'></i> Add new sector dataset</a>-->
+<!--                        <a class='btn btn-default' ng-class="{'disabled':!part || !country}" href="/contribute/questionnaire?part={{part.id}}&country={{country.id}}&filterSet={{getFilterSets()}}&returnUrl={{currentUrl}}"><i class='fa fa-pencil'></i> Edit sector filter</a>-->
+                        <gims-filter-generator></gims-filter-generator>
+                        <i class="fa fa-gims-loading fa-2x pull-right" ng-show="isLoading"></i>
+                    </div>
+                </div>
+
+                <div class='row show-grid'>
+                    <div class='col-md-6'>
+                        <p><gims-select api="country" model="country" queryparams='countryQueryParams' placeholder="<?php echo $this->translate('Select a country') ?>" format="name" style="width:100%;"/></p>
+                        <p><gims-select api="filterSet" model="filterSet" queryparams='filterSetQueryParams' multiple placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/></p>
+                        <p><gims-select api="part" model="part" placeholder="<?php echo $this->translate('Select a part') ?>" style="width:100%;"/></p>
+                    </div>
+                    <div class='col-md-6'>
+                        <p class='text-right'>
+                            <img src="/img/jmp-logo-black.png" alt="JMP logo" class="logo-chart"/>
+                            <img src="/img/who-logo-black.png" alt="WHO logo" class="logo-chart"/>
+                            <img src="/img/unicef-logo-black.png" alt="Unicef logo" class="logo-chart"/>
+                        </p>
+                    </div>
+                </div>
+            </form>
         </div>
-        <div class="row">
-            <p class='col-sm-6 col-md-6'><gims-select api="country" model="country" queryparams='countryQueryParams' placeholder="<?php echo $this->translate('Select a country') ?>" format="name" style="width:100%;"/></p>
-        </div>
-        <div class="row">
-            <p class='col-sm-6 col-md-6'><gims-select api="filterSet" model="filterSet" queryparams='filterSetQueryParams' multiple placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/></p>
-        </div>
-        <div class="row">
-            <div class="col-xs-6 col-sm-4 col-md-2">
-                <p><gims-select api="part" model="part" placeholder="<?php echo $this->translate('Select a part') ?>" style="width:100%;"/></p>
-            </div>
-            <p class="col-xs-6 col-sm-2 col-md-2">
-                <i class="fa fa-gims-loading fa-2x" ng-show="isLoading"></i>
-            </p>
-        </div>
-        <div class='row show-grid'>
-            <p class='col-sm-1 col-md-1'>
-<!--                <a class='btn btn-default' ng-class="{'disabled':!part || !country}" href="/browse/chart/sector?part={{part.id}}&country={{country.id}}&filterSet={{getFilterSets()}}&returnUrl={{returnUrl}}"><i class='fa fa-bar-chart-o'></i> Add new data set</a>-->
-                <gims-filter-generator></gims-filter-generator>
-            </p>
-        </div>
-    </form>
+    </div>
 
     <div class="alert alert-info ng-trans ng-trans-fade-up" ng-hide="chart"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?></div>
 

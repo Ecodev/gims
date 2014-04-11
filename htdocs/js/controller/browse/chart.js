@@ -13,7 +13,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.$watch(function() {
         return $location.url();
     }, function() {
-        $scope.returnUrl = encodeURIComponent($location.url());
+        $scope.returnUrl = $location.search().returnUrl;
+        $scope.currentUrl = encodeURIComponent($location.url());
     });
 
 
