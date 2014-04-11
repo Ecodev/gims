@@ -1,0 +1,125 @@
+<div class="container">
+
+    <div class='navbar navbar-default hidden-print'>
+        <form class='navbar-form'>
+            <div class='btn btn-default' ng-show='returnUrl' ng-click='cancel()'><i class='fa fa-gims-back'></i> Back</div>
+            <div class='form-group'>
+                <div class='btn-group'>
+                    <button class='btn btn-default' ng-click='goToPrevious();'><i class='fa fa-chevron-left'></i> Previous</button>
+                    <button class='btn btn-default' ng-click='goToNext();'>Next <i class='fa fa-chevron-right'></i></button>
+                </div>
+            </div>
+            <div class='form-group'><a href='/export/questionnaire/{{questionnaire.id}}/{{questionnaire.name}}.xslx' target='_blank' class='btn btn-default'><i class='fa fa-download'></i> Export</a></div>
+            <div class='form-group'><button class='btn btn-default' ng-click='goToPrintMode()'><i class='fa fa-print'></i> Print</button></div>
+            <div class='form-group'><button class='btn btn-default' ng-show='questionnaire.status=="new"' ng-click='markQuestionnaireAs("completed")' ng-class="{'btn-success':questionnaire.statusCode==3, 'btn-warning':questionnaire.statusCode==2, disabled:questionnaire.statusCode==1}"><i class='fa fa-check-square-o'></i> Submit for validation</button></div>
+            <div class='form-group'><button class='btn btn-default' ng-show='questionnaire.status=="completed" && questionnaire.permissions.validate' ng-click='markQuestionnaireAs("validated")' ng-class="{'btn-success':questionnaire.statusCode==3, 'btn-warning':questionnaire.statusCode==2, disabled:questionnaire.statusCode==1}"><i class='fa fa-check-square-o'></i> Validate questionnaire</button></div>
+            <i class='fa fa-gims-loading fa-2x pull-right' ng-show='isLoading' style='margin-top:5px'></i>
+       </form>
+    </div>
+
+
+
+    <div class='row show-grid'>
+        <div class='col-md-12'>
+            <h3 class='control-label'>Surveys selection <small ng-show='!selection.questionnaires.length && mode == "Browse"'>(Required)</small></h3>
+        </div>
+
+        <div class='col-md-12'>
+            <div class='row'>
+                <div class='col-md-6'>
+                    <tabset>
+                        <tab heading="Selected"></tab>
+                    </tabset>
+                </div>
+            </div>
+        </div>
+        <div class='col-md-12'>
+            <div class='row'>
+
+                <div class='col-md-6'>
+                    <gims-select disabled='true' class='hidden-print' queryparams="questionnaireQueryParams" api="questionnaire" name="id" model="questionnaire" placeholder="<?php echo $this->translate('Select a questionnaire') ?>" style="width:100%;"/></gims-select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-info" ng-hide="isLoading + questions">
+        <i class="fa fa-info-circle"></i> <?php echo $this->translate('Select questionnaire to be answered.') ?></div>
+        <div ng-show="questions.length">
+            <form novalidate name='questionnaireForm' class='row'>
+                <div class='col-md-4 hidden-print'>
+                    <gims-questions-nav id='questionnaireNav' nav='hierarchicQuestions' go-to='goTo(wantedIndex)'></gims-questions-nav>
+                </div>
+
+                <div class='col-md-8'>
+                    <div class='hidden-print' ng-repeat='parentChapter in parentChapters'>
+                        <h3>{{parentChapter.name}}</h3>
+                        <p>{{parentChapter.description}}</p>
+                        <hr/>
+                    </div>
+
+                    <h3>{{currentQuestion.name}}</h3>
+                    <p>{{currentQuestion.description}}</p>
+
+                    <div ng-switch="currentQuestion.type">
+                        <div ng-switch-when="Chapter">
+                            <div ng-repeat='child in currentQuestionChildren'>
+                                <hr/>
+                                <h4>{{child.name}}</h4>
+                                <div class='row'>
+                                    <div ng-switch="child.type" >
+                                        <div ng-switch-when="Chapter">
+                                            <p class='col-md-12'>{{child.description}}</p>
+                                        </div>
+                                        <div ng-switch-when="Numeric">
+                                            <gims-num-question question='child' index="index"></gims-num-question>
+                                        </div>
+                                        <div ng-switch-when="Text">
+                                            <gims-text-question question='child' index="index"></gims-text-question>
+                                        </div>
+                                        <div ng-switch-when="Choice">
+                                            <gims-choi-question question='child' index="index"></gims-choi-question>
+                                        </div>
+                                        <div ng-switch-when="User">
+                                            <gims-user-question question='child' index="index"></gims-user-question>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-switch-when="Numeric" class='row'>
+                            <gims-num-question question='currentQuestion' index="index"></gims-num-question>
+                        </div>
+                        <div ng-switch-when="Text" class='row'>
+                            <gims-text-question question='currentQuestion' index="index" ></gims-text-question>
+                        </div>
+                        <div ng-switch-when="Choice" class='row'>
+                            <gims-choi-question question='currentQuestion' index="index"></gims-choi-question>
+                        </div>
+                        <div ng-switch-when="User" class='row'>
+                            <gims-user-question question='currentQuestion' index="index"></gims-user-question>
+                        </div>
+                    </div>
+
+
+                    <p>
+                        <div class='btn-group pull-right'>
+                            <button class='btn btn-default' ng-click='goToPrevious();'><i class='fa fa-chevron-left'></i> Previous</button>
+                            <button class='btn btn-default' ng-click='goToNext();'>Next <i class='fa fa-chevron-right'></i></button>
+                        </div>
+                    </p>
+
+                </div>
+            </form>
+            <br/>
+            Legend :
+            <span class='badge badge-warning'>Some optional questions are empty</span>
+            <span class='badge badge-danger'>Some required questions are empty</span>
+            <span class='badge badge-success'>All questions have been answered</span>
+            <br/><br/>
+
+            <gims-questionnaire-tool-bar></gims-questionnaire-tool-bar>
+        </div>
+    </div>
+</div>

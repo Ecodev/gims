@@ -5,6 +5,7 @@
 // According to Twitter Bootstrap recommendation, add padding before responsive for .navbar-fixed-top
 body {
     padding-top: 40px;
+    height:auto !important;
 }
 
 input.error {
@@ -34,15 +35,8 @@ html {
     overflow-y: scroll;
 }
 
-
-.gims-fullweight-container{
-    padding:0 20px;
-}
-
-.tableContainer{
-    position:relative;
-    top:-2em;
-    margin-top:0 !important
+.strong{
+    font-weight:bold;
 }
 
 .fa-gims-loading {
@@ -54,6 +48,10 @@ html {
     @extend .fa-spin;
 }
 
+
+.fa-gims-back {
+    @extend .fa-reply;
+}
 
 .fa-gims-filterset {
     @extend .fa-tags;
@@ -242,8 +240,45 @@ div.browse .col-md-4 {
     height:auto;
 }
 
-/* Differs local, dev and production instances */
 
+.gims-fullweight-container{
+    padding:0 20px;
+    overflow-x:auto;
+}
+
+.tableContainer{
+    position:relative;
+    top:-2em;
+    margin-top:0 !important
+}
+
+.tableContainer .input-group-btn{
+    padding-left:4px;
+}
+
+.bigtable {
+    table-layout:fixed;
+    margin-right:50px;
+    margin-bottom:50px;
+}
+.bigtable th{
+    text-overflow:ellipsis;
+}
+.bigtable td, .bigtable th {
+    width: 150px;
+}
+
+.nav-tabs-centered ul.nav-tabs{
+    text-align:center;
+}
+.nav-tabs-centered ul.nav-tabs li{
+    display:inline-block;
+    float:none;
+}
+
+
+
+/* Differs local, dev and production instances */
 body.demo {
     .navbar-fixed-top {
         @include background(repeating-linear-gradient(-45deg, $navbar-inverse-bg,$navbar-inverse-bg 30px, #7C0400 30px, #7C0400 60px));
