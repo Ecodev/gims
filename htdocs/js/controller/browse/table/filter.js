@@ -11,7 +11,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
 
     /************************************************ Variables initialisation */
 
-        // params for ajax requests
+    // params for ajax requests
     $scope.filterParams = {fields: 'paths,color,genericColor', itemOnce: 'true'};
     $scope.filterSetFields = {fields: 'color,paths'};
     $scope.filterFields = {fields: 'color,paths'};
@@ -23,6 +23,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
     // Variables initialisations
     $scope.isLoading = false;
     $scope.expandSelection = true;
+    $scope.firstQuestionnairesRetrieve = false; // avoid to compute filters before questionnaires have been retrieved, getComputedFilters() need ready base to complete data
     $scope.selection = {};
     $scope.parts = Restangular.all('part').getList().$object;
     $scope.modes = ['Browse', 'Contribute'];
@@ -192,10 +193,17 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
      * @param filter
      * @param questionnairePermissions
      */
-    $scope.saveAnswer = function(answer, question, filter, questionnairePermissions) {
+    $scope.saveAnswer = function(answer, question, filter, questionnaire) {
 
-        // avoid to do some job if the value is not really changed
-        if (answer.initialValue === answer.valuePercent) {
+        // avoid to do some job if the value is not changed or if it's invalid (undefined)
+        if (answer.initialValue === answer.valuePercent || (_.isUndefined(answer.valuePercent) && !_.isUndefined(answer.initialValue))) {
+            answer.valuePercent = answer.initialValue;
+            return;
+        }
+
+        // avoid to save questions when its a new questionnaire / survey
+        // the save is provided by generate button for all new questionnaires, surveys, questions and answers.
+        if (_.isUndefined(questionnaire.id)) {
             return;
         }
 
@@ -216,7 +224,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
             }
 
             // create answer, if allowed by questionnaire
-        } else if (_.isUndefined(answer.id) && !_.isUndefined(answer.valuePercent) && questionnairePermissions.create) {
+        } else if (_.isUndefined(answer.id) && !_.isUndefined(answer.valuePercent) && questionnaire.permissions.create) {
             answer.isLoading = true;
 
             // if question is not created, create it before creating the answer, then assign question id to answer
@@ -226,7 +234,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
                 }
                 Restangular.all('question').post(question).then(function(question) {
                     answer.question = question.id;
-                    createAnswer(answer, questionnairePermissions);
+                    createAnswer(answer, questionnaire.permissions);
                 });
 
             } else {
@@ -234,7 +242,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
                     answer.question = question.id;
                 }
 
-                createAnswer(answer, questionnairePermissions);
+                createAnswer(answer, questionnaire.permissions);
             }
         }
     };
@@ -395,7 +403,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
             });
 
             // get data for new jmp questionnaires
-            getQuestionnaires(_.pluck(jmp, 'id'), $scope.questionnaireWithAnswersFields, prepareQuestionnaires);
+            getQuestionnaires(_.pluck(jmp, 'id'), $scope.questionnaireWithAnswersFields, function(questionnaires) {
+                $scope.firstQuestionnairesRetrieve = true;
+                prepareQuestionnaires(questionnaires);
+            });
         }
     };
 
@@ -451,6 +462,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
      */
     var getComputedFiltersCanceller = null;
     var getComputedFilters = function() {
+
+        if (!$scope.firstQuestionnairesRetrieve) {
+            return;
+        }
+
         $timeout(function() {
             var filtersIds = _.map($scope.selection.filters, function(el) {
                 return el.id;
@@ -461,6 +477,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
 
             if (filtersIds.length > 0 && questionnairesIds.length > 0) {
                 $scope.isLoading = true;
+                $scope.isComputing = true;
 
                 if (getComputedFiltersCanceller) {
                     getComputedFiltersCanceller.resolve();
@@ -502,6 +519,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
                         });
 
                         $scope.isLoading = false;
+                        $scope.isComputing = false;
                     });
             }
         }, 0);
