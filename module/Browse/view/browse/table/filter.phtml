@@ -157,7 +157,7 @@
                 <thead>
                     <tr>
                         <td style='width:35px'></td>
-                        <th style='width:350px'><a class='btn btn-success btn-xs disabled' ng-click='addQuestionnaire();' ng-show='mode != "Browse"'><i class='fa fa-plus'></i> Add new survey</a></th>
+                        <th style='width:350px'><a class='btn btn-success btn-xs' ng-click='addQuestionnaire();' ng-show='mode != "Browse"'><i class='fa fa-plus'></i> Add new survey</a></th>
                         <th class='text-center' ng-repeat='questionnaire in selection.questionnaires track by $index'><a class='btn btn-default btn-xs' ng-click='removeQuestionnaire($index)'><i class='fa fa-times'></i></a></th>
                     </tr>
                     <tr class='active'>
@@ -241,11 +241,11 @@
                                         <button type="button" class="btn btn-default dropdown-toggle"  data-toggle='dropdown-menu' ng-show='questionnaire.survey.questions[filter.id].name && toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent) || toBoolNum(questionnaire.survey.questions[filter.id].filter.values[selection.part.id]) || questionnaire.survey.questions[filter.id].answers[selection.part.id].isLoading'>
                                             <span ng-switch='!!questionnaire.survey.questions[filter.id].answers[selection.part.id].isLoading'>
                                                 <span ng-switch-when="true">
-                                                    <i ng-if='questionnaire.survey.questions[filter.id].answers[selection.part.id].isLoading' class='fa fa-gims-loading fa-fw'></i>
+                                                    <i class='fa fa-gims-loading fa-fw'></i>
                                                 </span>
                                                 <span ng-switch-when="false">
                                                     <i ng-if='questionnaire.survey.questions[filter.id].name && toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent)' class='fa fa-question fa-fw'></i>
-                                                    <i ng-if='!toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent) && toBoolNum(questionnaire.survey.questions[filter.id].filter.values[selection.part.id])' class='fa fa-cog fa-fw'></i>
+                                                    <i ng-if='!toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent) && toBoolNum(questionnaire.survey.questions[filter.id].filter.values[selection.part.id])' class='fa fa-fw' ng-class="{'fa-cog':!isComputing, 'fa-gims-loading':isComputing}"></i>
                                                 </span>
                                             </span>
 
@@ -265,9 +265,9 @@
                                            type='number'
                                            placeholder='{{questionnaire.survey.questions[filter.id].filter.values[selection.part.id]}}'
                                            ng-focus='setInitialValue(questionnaire.survey.questions[filter.id].answers[selection.part.id]); getPermissions(questionnaire.survey.questions[filter.id].answers[selection.part.id])'
-                                           ng-blur='saveAnswer(questionnaire.survey.questions[filter.id].answers[selection.part.id], questionnaire.survey.questions[filter.id], filter, questionnaire.permissions)'
+                                           ng-blur='saveAnswer(questionnaire.survey.questions[filter.id].answers[selection.part.id], questionnaire.survey.questions[filter.id], filter, questionnaire)'
                                            ng-model='questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent'
-                                           ng-disabled='isLoading || questionnaire.survey.questions[filter.id].answers[selection.part.id].permissions.update == false || !toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent) && questionnaire.permissions.create === false'
+                                           ng-disabled='questionnaire.survey.questions[filter.id].answers[selection.part.id].permissions.update == false || !toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent) && questionnaire.permissions.create === false'
                                         />
                                 </div>
                             </ng-form>
@@ -288,4 +288,3 @@
         </div>
     </div>
 </div>
-
