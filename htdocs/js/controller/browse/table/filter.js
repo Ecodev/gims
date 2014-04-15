@@ -372,11 +372,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
      */
     $scope.removeQuestionnaire = function(index) {
         $scope.selection.questionnaires.splice(index, 1);
-        $location.search('questionnaires', _.filter(_.pluck($scope.selection.questionnaires, 'id'),function(el) {
-            if (el) {
-                return el;
-            }
-        }).join(','));
+        updateUrl('questionnaires');
     };
 
     /**
@@ -385,11 +381,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
      */
     $scope.removeFilter = function(index) {
         $scope.selection.filters.splice(index, 1);
-        $location.search('filters', _.filter(_.pluck($scope.selection.filters, 'id'),function(el) {
-            if (el) {
-                return el;
-            }
-        }).join(','));
+        updateUrl('filters');
     };
 
     /**
@@ -643,7 +635,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
                 questionnairePromise.then(function(newQuestionnaire) {
                     questionnaire = newQuestionnaire;
                     questionnaire.isLoading = false;
-
+                    updateUrl('questionnaires');
 
                     // create questions
                     _.forEach(questionnaire.survey.questions, function(question) {
@@ -908,6 +900,15 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
         } else {
             $scope.expandSelection = true;
         }
+    };
+
+
+    var updateUrl = function(element){
+        $location.search(element, _.filter(_.pluck($scope.selection[element], 'id'),function(el) {
+            if (el) {
+                return el;
+            }
+        }).join(','));
     };
 
     /* Redirect functions */
