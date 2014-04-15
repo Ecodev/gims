@@ -424,6 +424,18 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
         return false;
     };
 
+
+    $scope.saveQuestion = function(question){
+        if (question.id && !_.isEmpty(question.name) && question.name != question.initialName) {
+            question.type = 'Numeric';
+            Restangular.restangularizeElement(null, 'question', question);
+            $scope.isLoading = true;
+            Restangular.one('question').put({id:question.id, name:question.name}).then(function(){
+                $scope.isLoading = false;
+            });
+        }
+    };
+
     /****************************************************** Private functions */
 
     /**
