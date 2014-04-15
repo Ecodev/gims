@@ -61,6 +61,8 @@
                                     api="survey"
                                     queryparams="surveyParams"
                                     placeholder="Select survey"
+                                    custom-selection-template="{{surveysTemplate}}"
+                                    custom-result-template="{{surveysTemplate}}"
                                     change-url = "false"
                                     disabled='isLoading'
                                     style="width: 100%">
@@ -101,8 +103,8 @@
                                     placeholder="Select filters"
                                     container-css-class='select2list'
                                     current-context-element='?returnUrl={{currentUrl}}'
-                                    custom-selection-template="{{select2Template}}"
-                                    custom-result-template="{{select2Template}}"
+                                    custom-selection-template="{{filtersTemplate}}"
+                                    custom-result-template="{{filtersTemplate}}"
                                     multiple
                                     disabled='isLoading'
                                     style="width: 100%">
@@ -127,8 +129,8 @@
                                     placeholder="Select filter"
                                     container-css-class='select2list'
                                     current-context-element='?returnUrl={{currentUrl}}'
-                                    custom-selection-template="{{select2Template}}"
-                                    custom-result-template="{{select2Template}}"
+                                    custom-selection-template="{{filtersTemplate}}"
+                                    custom-result-template="{{filtersTemplate}}"
                                     change-url = "false"
                                     disabled='isLoading'
                                     style="width: 100%">
