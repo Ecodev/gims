@@ -21,6 +21,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
     $scope.questionnaireWithAnswersFields = {fields: 'permissions,geoname.country,survey.questions,survey.questions.filter,survey.questions.answers,survey.questions.answers.questionnaire,survey.questions.answers.part'};
     $scope.surveyFields = {fields: 'questionnaires.survey,questionnaires.survey.questions,questionnaires.survey.questions.type,questionnaires.survey.questions.filter'};
 
+
     // Variables initialisations
     $scope.isLoading = false;
     $scope.expandSelection = true;
@@ -29,7 +30,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
     $scope.parts = Restangular.all('part').getList().$object;
     $scope.modes = ['Browse', 'Contribute'];
     $scope.dbSurveys = null;
-    $scope.select2Template = "" +
+    $scope.surveysTemplate = "[[item.code]] - [[item.name]]";
+    $scope.filtersTemplate = "" +
         "<div>" +
             "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
             "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +

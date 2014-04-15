@@ -193,9 +193,9 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                             var result = item.name;
                             // @todo fix me! We should have a way to define the format key. Case added for survey.
                             if (item.code !== undefined) {
-                                result = item.code;
+                                result += ' ' +item.code;
                             }
-                            var blob = (item.id + ' ' + item.name).toUpperCase();
+                            var blob = (item.id + ' ' + result).toUpperCase();
                             if (regexp.test(blob)) {
                                 data.results.push(item);
                             }
