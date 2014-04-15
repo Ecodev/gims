@@ -41,6 +41,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             name: '@',
             placeholder: '@',
             format: '@',
+            searchAttributes: '@',
             customSelectionTemplate: '@',
             customResultTemplate: '@',
             containerCssClass: '@',
@@ -178,29 +179,38 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
 
                         $scope[$attrs.ngModel] = selectedItems;
                     }
+
+                    // prepare item.searchString according to search-attributes attribute on <gims-select>
+                    var defaultSearchAttributes = ['id', 'name'];
+                    var searchAttributes = $scope.searchAttributes ? $scope.searchAttributes.split(',') : [];
+                    searchAttributes = _.uniq(defaultSearchAttributes.concat(searchAttributes));
+                    items = _.map(items, function(item){
+                        item.searchString = _.map(searchAttributes, function(attribute){
+                            if (!_.isUndefined(item[attribute])) {
+                                return item[attribute];
+                            }
+                        }).join(' ');
+                        return item;
+                    });
+
                     $scope.includeLinks();
                 });
 
+                var search = _.debounce(function(query){
+                    var regexp = new RegExp(query.term.toUpperCase());
+                    var data = {};
+                    data.results = _.filter(items, function(item){
+                        if(regexp.test(item.searchString.toUpperCase())){
+                            return item;
+                        }
+                    });
+
+                    query.callback(data);
+                }, 300);
+
                 $scope.options = {
                     query: function(query) {
-                        var data = {results: []};
-
-                        var searchTerm = query.term.toUpperCase();
-                        var regexp = new RegExp(searchTerm);
-
-                        angular.forEach(items, function(item) {
-
-                            var result = item.name;
-                            // @todo fix me! We should have a way to define the format key. Case added for survey.
-                            if (item.code !== undefined) {
-                                result += ' ' +item.code;
-                            }
-                            var blob = (item.id + ' ' + result).toUpperCase();
-                            if (regexp.test(blob)) {
-                                data.results.push(item);
-                            }
-                        });
-                        query.callback(data);
+                        search(query);
                     }
                 };
             }
