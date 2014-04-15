@@ -15,6 +15,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
     $scope.filterParams = {fields: 'paths,color,genericColor', itemOnce: 'true'};
     $scope.filterSetFields = {fields: 'color,paths'};
     $scope.filterFields = {fields: 'color,paths'};
+    $scope.countryParams = {fields: 'geoname'};
     $scope.countryFields = {fields: 'geoname.questionnaires,geoname.questionnaires.survey,geoname.questionnaires.survey.questions,geoname.questionnaires.survey.questions.type,geoname.questionnaires.survey.questions.filter'};
     $scope.questionnaireWithQTypeFields = {fields: 'survey.questions,survey.questions.type'};
     $scope.questionnaireWithAnswersFields = {fields: 'permissions,geoname.country,survey.questions,survey.questions.filter,survey.questions.answers,survey.questions.answers.questionnaire,survey.questions.answers.part'};
@@ -27,7 +28,19 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
     $scope.selection = {};
     $scope.parts = Restangular.all('part').getList().$object;
     $scope.modes = ['Browse', 'Contribute'];
-    $scope.select2Template = "" + "<div>" + "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" + "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" + "</div>" + "<div class='col-sm-7 col-md-7'>" + "    <small>" + "       [[_.map(item.paths, function(path){return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]" + "    </small>" + "</div>" + "<div class='clearfix'></div>" + "</div>";
+    $scope.dbSurveys = null;
+    $scope.select2Template = "" +
+        "<div>" +
+            "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
+            "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +
+            "</div>" +
+            "<div class='col-sm-7 col-md-7'>" +
+            "    <small>" +
+            "       [[_.map(item.paths, function(path){return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]" +
+            "    </small>" +
+            "</div>" +
+            "<div class='clearfix'></div>" +
+        "</div>";
 
     /*************************************************************** Watchers */
 
@@ -40,9 +53,9 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
 
     $scope.$watch('mode', function(mode) {
         if (!_.isUndefined(mode) && mode != 'Browse') {
-            // Make a call that require to be authenticated, then UserCtrl catch 401 response and fire event gims-loginConfirmed
+            // Make a call that require to be authenticated, then UserCtrl catch 401 and fire event gims-loginConfirmed when it's done
             Restangular.all('user').getList();
-            // listen to event gims-loginConfirmed to refresh questionnaires permissions
+            // listen to event gims-loginConfirmed to refresh questionnaires permissions, considering logged in user
             $rootScope.$on('gims-loginConfirmed', function() {
                 $scope.refresh(true, false);
             });
@@ -193,7 +206,12 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
      * @param filter
      * @param questionnairePermissions
      */
-    $scope.saveAnswer = function(answer, question, filter, questionnaire) {
+    $scope.saveAnswer = function(answer, question, filter, questionnaire, part) {
+
+        // complete question in all situations with filtername if there is no name specified
+        if (_.isUndefined(question.name)) {
+            question.name = filter.name;
+        }
 
         // avoid to do some job if the value is not changed or if it's invalid (undefined)
         if (answer.initialValue === answer.valuePercent || (_.isUndefined(answer.valuePercent) && !_.isUndefined(answer.initialValue))) {
@@ -214,7 +232,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
         if (answer.id && !$scope.toBoolNum(answer.valuePercent)) {
             $scope.removeAnswer(answer);
 
-            // update
+        // update
         } else if (answer.id) {
 
             if (answer.permissions) {
@@ -223,28 +241,78 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
                 $scope.getPermissions(answer, updateAnswer);
             }
 
-            // create answer, if allowed by questionnaire
+        // create answer, if allowed by questionnaire
         } else if (_.isUndefined(answer.id) && !_.isUndefined(answer.valuePercent) && questionnaire.permissions.create) {
             answer.isLoading = true;
-
-            // if question is not created, create it before creating the answer, then assign question id to answer
-            if (_.isUndefined(question.id)) {
-                if (_.isUndefined(question.name)) {
-                    question.name = filter.name;
-                }
-                Restangular.all('question').post(question).then(function(question) {
-                    answer.question = question.id;
-                    createAnswer(answer, questionnaire.permissions);
+            answer.questionnaire = questionnaire.id;
+            question.survey = questionnaire.survey.id;
+            // if question is not created, create it before creating the answer
+            var questionPromise = getOrSaveQuestion(question);
+            questionPromise.then(function(question) {
+                answer.question = question.id;
+                answer.part = part.id;
+                var answerPromise = createAnswer(answer);
+                answerPromise.then(function() {
+                    $scope.refresh(false, true);
                 });
 
-            } else {
-                if (_.isUndefined(answer.question)) {
-                    answer.question = question.id;
-                }
-
-                createAnswer(answer, questionnaire.permissions);
-            }
+            });
         }
+    };
+
+    /**
+     * Save one questionnaire if index is specified or all if it's not.
+     * @param index
+     */
+    $scope.saveQuestionnaires = function(index) {
+        var checkPromise = $scope.checkQuestionnairesIntegrity();
+        checkPromise.then(function() {
+            if (_.isUndefined(index)) {
+                _.forEach($scope.selection.questionnaires, function(questionnaire, index) {
+                    saveCompleteQuestionnaire($scope.selection.questionnaires[index]);
+                });
+            } else {
+                saveCompleteQuestionnaire($scope.selection.questionnaires[index]);
+            }
+        });
+    };
+
+    /**
+     * Avoid new questionnaires to have the same country for a same survey and avoid a same survey code to have two different years
+     */
+    $scope.checkQuestionnairesIntegrity = function() {
+        var deferred = $q.defer();
+
+        // check for countries
+        $timeout(function() {
+            _.forEach($scope.selection.questionnaires, function(q1, i) {
+                if (_.isUndefined(q1.id)) {
+                    q1.errors = {
+                        duplicateCountryCode: false,
+                        codeAndYearDifferent: false,
+                        countryAlreadyUsedForExistingSurvey : false
+                    };
+
+                    _.forEach($scope.selection.questionnaires, function(q2, j) {
+                        if (_.isUndefined(q2.id) && i != j) {
+                            if (q1.geoname && q2.geoname && q1.geoname.country.id == q2.geoname.country.id) {
+                                if (q1.survey.code && q2.survey.code && q1.survey.code == q2.survey.code) {
+                                    q1.errors.duplicateCountryCode = true;
+                                }
+                            } else {
+
+                                if (!!q1.survey && !!q1.survey.year && !!q2.survey && !!q2.survey.year && q1.survey.year != q2.survey.year) {
+                                    q1.errors.codeAndYearDifferent = true;
+                                }
+                            }
+                        }
+                    });
+                }
+                deferred.resolve();
+            });
+        }, 0);
+
+        return deferred.promise;
     };
 
     /**
@@ -302,7 +370,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
      */
     $scope.removeQuestionnaire = function(index) {
         $scope.selection.questionnaires.splice(index, 1);
-        $location.search('questionnaires', _.pluck($scope.selection.questionnaires, 'id').join(','));
+        $location.search('questionnaires', _.filter(_.pluck($scope.selection.questionnaires, 'id'),function(el) {
+            if (el) {
+                return el;
+            }
+        }).join(','));
     };
 
     /**
@@ -311,7 +383,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
      */
     $scope.removeFilter = function(index) {
         $scope.selection.filters.splice(index, 1);
-        $location.search('filters', _.pluck($scope.selection.filters, 'id').join(','));
+        $location.search('filters', _.filter(_.pluck($scope.selection.filters, 'id'),function(el) {
+            if (el) {
+                return el;
+            }
+        }).join(','));
     };
 
     /**
@@ -488,7 +564,9 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
                     timeout: getComputedFiltersCanceller.promise,
                     params: {
                         filters: filtersIds.join(','),
-                        questionnaires: questionnairesIds.join(',')
+                        questionnaires: _.filter(questionnairesIds,function(el) {
+                            if (el) {return el;}
+                        }).join(',')
                     }
                 }).success(function(questionnaires) {
                         _.forEach(questionnaires, function(filters, questionnaireId) {
@@ -524,6 +602,171 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
             }
         }, 0);
     };
+
+    /**
+     * Create a single questionnnaire
+     * @param questionnaire
+     */
+    var saveCompleteQuestionnaire = function(questionnaire) {
+        if (_.isUndefined(questionnaire.id) &&
+            !_.isUndefined(questionnaire.geoname) &&
+            !_.isUndefined(questionnaire.geoname.country)  &&
+            !_.isUndefined(questionnaire.survey) &&
+            !_.isEmpty(questionnaire.survey.code) &&
+            !_.isUndefined(questionnaire.survey.year) &&
+            questionnaire.errors.duplicateCountryCode === false &&
+            questionnaire.errors.codeAndYearDifferent === false
+            ) {
+            questionnaire.isLoading = true;
+
+            // get survey if exists or create
+            var surveyPromise = getOrSaveSurvey(questionnaire);
+            surveyPromise.then(function(survey) {
+                questionnaire.survey = survey;
+
+                // create questionnaire
+                var questionnairePromise = saveUnitQuestionnaire(questionnaire);
+                questionnairePromise.then(function(newQuestionnaire) {
+                    questionnaire = newQuestionnaire;
+                    questionnaire.isLoading = false;
+
+
+                    // create questions
+                    _.forEach(questionnaire.survey.questions, function(question) {
+                        if (!_.isUndefined(question.name)) {
+                            var questionPromise = getOrSaveQuestion(question);
+                            questionPromise.then(function(newQuestion) {
+                                question = newQuestion;
+                                _.forEach(question.answers, function(answer, partId) {
+                                    answer.questionnaire = questionnaire.id;
+                                    createAnswer(answer, partId);
+                                });
+                            });
+                        }
+                    });
+                });
+
+            // reject for survey creation
+            }, function(){
+                questionnaire.isLoading = false;
+            });
+        }
+    };
+
+    var saveUnitQuestionnaire = function(questionnaire) {
+        var deferred = $q.defer();
+
+        if (_.isUndefined(questionnaire.id)) {
+
+            // create a mini questionnaire object, to avoid big amounts of data to be sent to server
+            var miniQuestionnaire = {};
+            miniQuestionnaire.dateObservationStart = questionnaire.survey.year + '-01-01';
+            miniQuestionnaire.dateObservationEnd = questionnaire.survey.year + '-12-31';
+            miniQuestionnaire.geoname = questionnaire.geoname.country.geoname.id;
+            miniQuestionnaire.survey = questionnaire.survey.id;
+
+            Restangular.all('questionnaire').post(miniQuestionnaire, {fields: 'permissions'}).then(function(newQuestionnaire) {
+                questionnaire.id = newQuestionnaire.id;
+                deferred.resolve(questionnaire);
+            });
+        }
+
+        return deferred.promise;
+    };
+
+    /**
+     * Get survey, or create it if dont exist
+     * @param survey
+     */
+    var getOrSaveSurvey = function(questionnaire) {
+        var deferred = $q.defer();
+        var survey = questionnaire.survey;
+
+        var surveyPromise = getSurveys(questionnaire);
+        surveyPromise.then(
+
+        // catch resolve result
+        function(newSurvey){
+
+            // a survey exists
+            if (newSurvey) {
+                survey.id = newSurvey.id;
+
+                // init current questions id and names to match with those in the existing survey
+                _.forEach(newSurvey.questions, function(question){
+                    if (!_.isUndefined(survey.questions[question.filter.id])) {
+                        survey.questions[question.filter.id].id = question.id;
+                        survey.questions[question.filter.id].name = question.name;
+                    }
+                });
+                deferred.resolve(survey);
+
+            // no survey exists
+            } else {
+                survey.name = survey.code + " - " + survey.year;
+                Restangular.all('survey').post(survey).then(function(newSurvey) {
+                    survey.id = newSurvey.id;
+
+                    // update javascript object with relations (id or object)
+                    _.forEach(survey.questions, function(question) {
+                        question.survey = survey.id;
+                    });
+
+                    deferred.resolve(survey);
+                });
+            }
+
+        // catch reject result
+        }, function() {
+            if (_.isUndefined(questionnaire.errors)){
+                questionnaire.errors = {};
+            }
+            questionnaire.errors.countryAlreadyUsedForExistingSurvey = true;
+            deferred.reject('country already used in this survey');
+        });
+
+        return deferred.promise;
+    };
+
+    /**
+     * This function recovers surveys by searching with Q params
+     * If there is similar code, search if the country is already used
+     * @param questionnaire
+     * @returns null|survey Return null if no survey exists, returns the survey if exist or reject promise if country already used
+     */
+    var getSurveys = function(questionnaire){
+        var deferred = $q.defer();
+        var survey = questionnaire.survey;
+
+        Restangular.all('survey').getList({q: survey.code, fields:'questions,questions.filter,questionnaires,questionnaires.geoname,questionnaires.geoname.country'}).then(function(surveys) {
+            if (surveys.length === 0){
+                deferred.resolve(null);
+            } else {
+                _.forEach(surveys, function(newSurvey){
+                    if (newSurvey.code.toUpperCase() == survey.code.toUpperCase()) {
+                        var countryAlreadyUsed = false;
+                        _.forEach(newSurvey.questionnaires, function(newQuestionnaire){
+                            if (questionnaire.geoname.country.id == newQuestionnaire.geoname.country.id) {
+                                countryAlreadyUsed = true;
+                                return false;
+                            }
+                        });
+
+                        if(countryAlreadyUsed) {
+                            deferred.reject();
+                        } else {
+                            deferred.resolve(newSurvey);
+                        }
+                    } else {
+                        deferred.resolve(null);
+                    }
+                });
+            }
+        });
+
+        return deferred.promise;
+    };
+
 
     /**
      * Get and empty answer ready to be used as model and with right attributs setted
@@ -576,19 +819,58 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
     /**
      * Create answer considering *questionnaire* permissions
      * @param answer
-     * @param questionnairePermissions
      */
-    var createAnswer = function(answer, questionnairePermissions) {
-        answer.isLoading = true;
-        Restangular.all('answer').post(answer).then(function(newAnswer) {
-            answer.id = newAnswer.id;
-            answer.valuePercent = newAnswer.valuePercent;
-            answer.permission = questionnairePermissions;
-            answer.isLoading = false;
-            delete(answer.edit);
-            $scope.refresh(false, true);
+    var createAnswer = function(answer, partId) {
+        var deferred = $q.defer();
 
-        });
+        if (!_.isUndefined(answer.valuePercent) && !_.isNull(answer.valuePercent)) {
+            if (!_.isUndefined(partId)) {
+                answer.part = partId;
+            }
+
+            answer.isLoading = true;
+            Restangular.all('answer').post(answer, {fields: 'permissions'}).then(function(newAnswer) {
+                answer.id = newAnswer.id;
+                answer.isLoading = false;
+                deferred.resolve(answer);
+            });
+        } else {
+            deferred.reject('no value');
+        }
+
+        return deferred.promise;
+    };
+
+    /**
+     * use question or save if necessary and return result
+     * @param question
+     */
+    var getOrSaveQuestion = function(question) {
+        var deferred = $q.defer();
+
+        if (_.isUndefined(question.id)) {
+            var miniQuestion = {};
+            miniQuestion.name = question.name;
+            miniQuestion.survey = question.survey;
+            miniQuestion.filter = question.filter.id;
+            miniQuestion.type = 'Numeric';
+
+            Restangular.all('question').post(miniQuestion).then(function(newQuestion) {
+                question.id = newQuestion.id;
+                _.forEach(question.answers, function(answer) {
+                    answer.question = question.id;
+                });
+                deferred.resolve(question);
+            });
+
+        } else {
+            _.forEach(question.answers, function(answer) {
+                answer.question = question.id;
+            });
+            deferred.resolve(question);
+        }
+
+        return deferred.promise;
     };
 
     /**

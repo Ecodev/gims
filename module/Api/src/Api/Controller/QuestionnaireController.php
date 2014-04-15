@@ -5,6 +5,7 @@ namespace Api\Controller;
 use Application\Model\Questionnaire;
 use Application\Model\Survey;
 use Zend\View\Model\JsonModel;
+use Application\Model\AbstractModel;
 
 class QuestionnaireController extends AbstractChildRestfulController
 {
@@ -131,6 +132,21 @@ class QuestionnaireController extends AbstractChildRestfulController
         }
 
         return parent::update($id, $data);
+    }
+
+    /**
+     * Give reporter role to the user on the new questionnaire, so he can answer questions
+     * @param \Application\Model\AbstractModel $questionnaire
+     */
+    protected function postCreate(AbstractModel $questionnaire, array $data)
+    {
+        $user = $this->getRbac()->getIdentity();
+        $role = $this->getEntityManager()->getRepository('Application\Model\Role')->findOneByName('reporter');
+        $userQuestionnaire = new \Application\Model\UserQuestionnaire();
+        $userQuestionnaire->setUser($user)->setQuestionnaire($questionnaire)->setRole($role);
+
+        $this->getEntityManager()->persist($userQuestionnaire);
+        $this->getEntityManager()->flush();
     }
 
 }
