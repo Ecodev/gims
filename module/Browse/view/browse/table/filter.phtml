@@ -3,14 +3,20 @@
     <!-- Toolbar -->
     <div class='navbar navbar-default hidden-print'>
         <form class='navbar-form'>
+            <!-- Back button, if return url is specified -->
             <button class='btn btn-default' ng-show='returnUrl' ng-click='cancel();'><i class='fa fa-gims-back'></i> Cancel</button>
+            <!-- Save all the new questionniares -->
             <button class='btn btn-primary' ng-show='isEmptyQuestionnaires()' ng-click='saveQuestionnaires();' ng-disabled='selectionForm.$invalid || duplicatedquestionnairesExist || !selection.filters || selection.filters.length == 0 || !selection.questionnaires || selection.questionnaires.length == 0'><i class='fa fa-save'></i> Save new questionnaires</button>
+            <!-- Clear the selection -->
             <a href class='btn btn-default' ng-click='selection.questionnaires=[];selection.filters=[];selection.filterSet=null;selection.country=null;selection.filter=null;selection.survey=null'><i class='fa fa-eraser'></i> Clear selection</a>
+            <!-- Hide/Show selection tools and/or children filters -->
             <div class='btn-group'>
                 <button class='btn btn-default' ng-click='expandHierarchy = !expandHierarchy'><i class='fa' ng-class="{'fa-compress text-primary':expandHierarchy,'fa-expand':!expandHierarchy}"></i> Hierarchy tree</button>
                 <button class="btn btn-default" ng-click='expandSelection = !expandSelection'><i class='fa' ng-class="{'fa-compress':expandSelection,'fa-expand text-primary':!expandSelection}"></i> Selection</button>
             </div>
+            <!-- Switch navigation mode Browse/Contribute -->
             <button ng-click='nextMode()' class='btn btn-default' ><i class='fa fa-eye'></i> {{mode}}</button>
+            <!-- Loading indicator -->
             <i class="pull-right fa fa-gims-loading fa-2x" ng-show="isLoading" style='margin-top:5px'></i>
         </form>
     </div>
@@ -19,6 +25,7 @@
     <form name='selectionForm'>
         <div class="row show-grid ng-trans ng-trans-slide-up" ng-show="expandSelection" >
 
+            <!-- Questionnaires selection -->
             <div class='col-md-6'>
                 <div class='row' ng-class="{'has-error':!selection.questionnaires.length && mode == 'Browse'}">
 
@@ -76,6 +83,7 @@
                 </div>
             </div>
 
+            <!-- Filter selection -->
             <div class="col-md-6" ng-show='selection.questionnaires.length || mode != "Browse"'>
                 <div class='row' ng-class="{'has-error':!selection.filters.length}">
                     <div class='col-md-12'>
@@ -135,7 +143,7 @@
         </div>
     </form>
 
-
+    <!-- Tabs parts -->
     <tabset class="nav-tabs-centered" ng-show='selection.filters.length && (selection.questionnaires.length || mode != "Browse")'>
         <tab ng-repeat='part in parts' heading="{{part.name}}" select='selection.part = part'></tab>
     </tabset>
@@ -145,175 +153,240 @@
 
 
 
-
-
-<!-- table of filters, questionnaires and answers -->
-<div class='tableContainer' ng-class="{'gims-fullweight-container':selection.questionnaires.length >= 6, 'container' : !selection.questionnaires.length || selection.questionnaires.length < 6}" ng-show='selection.filters.length && (selection.questionnaires.length || mode != "Browse")'>
+<!-- Table of filters, questionnaires and answers. Display in full width when there are too much elements -->
+<div class='tableContainer container'
+     ng-class="{'gims-full-width-container': selection.selectedQuestionnaire && selection.questionnaires.length >=3 || selection.questionnaires.length >= 6 }"
+     ng-show='selection.filters.length && (selection.questionnaires.length || mode != "Browse")'>
 
     <div class='row'>
         <div class='col-md-12'>
-        <form name='answersForm' novalidate>
-            <table class='table table-bordered table-condensed bigtable'>
-                <thead>
-                    <tr>
-                        <td style='width:35px'></td>
-                        <th style='width:350px'><a class='btn btn-primary btn-xs' ng-click='addQuestionnaire();' ng-show='mode != "Browse"'><i class='fa fa-plus'></i> Add new survey</a></th>
-                        <th ng-repeat='questionnaire in selection.questionnaires track by $index'>
+            <form name='answersForm' novalidate>
+                <table class='table table-bordered table-condensed bigtable'>
 
-                            <a class='btn btn-default btn-xs'
-                               href='/admin/questionnaire/edit/{{questionnaire.id}}?returnUrl={{currentUrl}}'
-                               ng-show='mode != "Browse" && questionnaire.id'>
-                                <i class='fa fa-pencil'></i>
-                            </a>
+                    <!-- Head part : including country, survey code and survey year -->
+                    <thead>
 
-                            <a class='btn btn-primary btn-xs'
-                               ng-click='saveQuestionnaires($index)'
-                               ng-show='mode != "Browse" && !questionnaire.id'
-                               ng-class="{'disabled' : !questionnaire.geoname || !questionnaire.survey.code || !questionnaire.survey.year || questionnaire.errors.duplicateCountryCode || questionnaire.errors.codeAndYearDifferent ||  questionnaire.errors.countryAlreadyUsedForExistingSurvey}">
-                                <i class='fa' ng-class="{'fa-save':!questionnaire.isLoading, 'fa-gims-loading':questionnaire.isLoading}"></i>
-                            </a>
+                        <!-- Action buttons (first row) -->
+                        <tr>
+                            <td style='width:35px'></td>
 
-                            <a ng-show='questionnaire.errors.duplicateCountryCode || questionnaire.errors.codeAndYearDifferent || questionnaire.errors.countryAlreadyUsedForExistingSurvey'
-                                class='btn btn-warning btn-xs dropdown-toggle'
-                                id="dropdownMenu1"
-                                tooltip-placement='left'
-                                ng-attr-tooltip="{{questionnaire.errors.duplicateCountryCode && 'Surveys may not have the same country more than once' || questionnaire.errors.codeAndYearDifferent && 'Surveys with the same code may have the same year' || questionnaire.errors.countryAlreadyUsedForExistingSurvey && 'This country is already assigned to a survey with the same code'}}"
-                                data-toggle="dropdown">
-                                <i class='fa fa-warning'></i>
-                            </a>
-                            <a class='btn btn-default btn-xs pull-right' ng-click='removeQuestionnaire($index)'><i class='fa fa-times'></i></a>
-                        </th>
-                    </tr>
-                    <tr class='active'>
-                        <td></td>
-                        <td>Country</td>
-                        <td ng-repeat='questionnaire in selection.questionnaires track by $index'>
-                            <div ng-switch="!!questionnaire.id">
-                                <div ng-switch-when="true" class='text-center'>{{questionnaire.geoname.country.name}}</div>
-                                <div ng-switch-when="false" class='has-error'>
-                                    <ng-form name='questionnaireForm'>
-                                        <gims-select
-                                            disabled='questionnaire.id || questionnaire.isLoading'
-                                            api="country" model='questionnaire.geoname.country'
-                                            queryparams="countryParams"
-                                            placeholder="Country"
-                                            change-url = "false"
-                                            style="width: 100%"
-                                            ng-change='checkQuestionnairesIntegrity()'>
-                                        </gims-select>
-                                    </ng-form>
+                            <!-- Add a new empty questionnaire -->
+                            <th style='width:350px'>
+                                <a class='btn btn-primary btn-xs' ng-click='addQuestionnaire();' ng-show='mode != "Browse"'><i class='fa fa-plus'></i> Add new survey</a>
+                            </th>
+
+                            <!-- Label for question labels and close btn -->
+                            <th style='width:350px' ng-if='selection.selectedQuestionnaire' class='text-center'>
+                                Questions for
+                                <a class='btn btn-default btn-xs pull-right' ng-click='selection.selectedQuestionnaire = null'><i class='fa fa-times'></i></a>
+                            </th>
+                            <th ng-repeat='questionnaire in selection.questionnaires track by $index'>
+
+                                <!-- Link to questionnaire in /admin/ section -->
+                                <a class='btn btn-default btn-xs'
+                                   href='/admin/questionnaire/edit/{{questionnaire.id}}?returnUrl={{currentUrl}}'
+                                   ng-show='mode != "Browse" && questionnaire.id'>
+                                    <i class='fa fa-eye'></i>
+                                </a>
+
+                                <!-- Questions labels edition button, display an additionnal column -->
+                                <a class='btn btn-default btn-xs'
+                                   ng-click='selection.selectedQuestionnaire = questionnaire'
+                                   ng-show='questionnaire.survey'
+                                   tooltip='Edit questions labels'
+                                   tooltip-placement='left'>
+                                    <i class='fa fa-pencil'></i>
+                                </a>
+
+                                <!-- Save a single questionnaire -->
+                                <a class='btn btn-primary btn-xs'
+                                   ng-click='saveQuestionnaires($index)'
+                                   ng-show='mode != "Browse" && !questionnaire.id'
+                                   ng-class="{'disabled' : !questionnaire.geoname || !questionnaire.survey.code || !questionnaire.survey.year || questionnaire.errors.duplicateCountryCode || questionnaire.errors.codeAndYearDifferent ||  questionnaire.errors.countryAlreadyUsedForExistingSurvey}">
+                                    <i class='fa' ng-class="{'fa-save':!questionnaire.isLoading, 'fa-gims-loading':questionnaire.isLoading}"></i>
+                                </a>
+
+                                <!-- Display errors on questionnaires / surveys integrity data structure (like two different years for the same survey or two countries for the same survey -->
+                                <a ng-show='questionnaire.errors.duplicateCountryCode || questionnaire.errors.codeAndYearDifferent || questionnaire.errors.countryAlreadyUsedForExistingSurvey'
+                                    class='btn btn-warning btn-xs dropdown-toggle'
+                                    id="dropdownMenu1"
+                                    tooltip-placement='left'
+                                    ng-attr-tooltip="{{questionnaire.errors.duplicateCountryCode && 'Surveys may not have the same country more than once' || questionnaire.errors.codeAndYearDifferent && 'Surveys with the same code may have the same year' || questionnaire.errors.countryAlreadyUsedForExistingSurvey && 'This country is already assigned to a survey with the same code'}}"
+                                    data-toggle="dropdown">
+                                    <i class='fa fa-warning'></i>
+                                </a>
+                                <a class='btn btn-default btn-xs pull-right' ng-click='removeQuestionnaire($index)'><i class='fa fa-times'></i></a>
+                            </th>
+                        </tr>
+
+                        <!-- Questionnaire's geoname -->
+                        <tr class='active'>
+                            <td></td>
+                            <td></td>
+                            <td ng-if='selection.selectedQuestionnaire' class='text-center'>{{selection.selectedQuestionnaire.geoname.country.name}}</td>
+                            <td ng-repeat='questionnaire in selection.questionnaires track by $index'>
+                                <div ng-switch="!!questionnaire.id">
+                                    <div ng-switch-when="true" class='text-center'>{{questionnaire.geoname.country.name}}</div>
+                                    <div ng-switch-when="false" class='has-error'>
+                                        <ng-form name='questionnaireForm'>
+                                            <gims-select
+                                                disabled='questionnaire.id || questionnaire.isLoading'
+                                                api="country" model='questionnaire.geoname.country'
+                                                queryparams="countryParams"
+                                                placeholder="Country"
+                                                change-url = "false"
+                                                style="width: 100%"
+                                                ng-change='checkQuestionnairesIntegrity()'>
+                                            </gims-select>
+                                        </ng-form>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class='active' >
-                        <td></td>
-                        <td>qID</td>
-                        <td ng-repeat='questionnaire in selection.questionnaires track by $index' class='text-center'>{{questionnaire.id}}</td>
-                    </tr>
-                    <tr class='active' >
-                        <td></td>
-                        <td>sID</td>
-                        <td ng-repeat='questionnaire in selection.questionnaires track by $index' class='text-center'>{{questionnaire.survey.id}}</td>
-                    </tr>
-                    <tr class='active' >
-                        <td></td>
-                        <td>Code</td>
-                        <td ng-repeat='questionnaire in selection.questionnaires track by $index' class='text-center'>
-                            <ng-form name='questionnaireForm' class='input-group-sm' >
-                                <input ng-disabled='questionnaire.id || questionnaire.isLoading' type='text' class='text-center' ng-model='questionnaire.survey.code' name='code' required ng-class="{'error':questionnaire.errors.duplicateCountryCode || questionnaire.errors.codeAndYearDifferent || questionnaireForm.code.$invalid}" ng-blur='checkQuestionnairesIntegrity()'/>
-                            </ng-form>
-                        </td>
-                    </tr>
-                    <tr class='active'>
-                        <td></td>
-                        <td>Year</td>
-                        <td ng-repeat='questionnaire in selection.questionnaires track by $index'>
-                            <ng-form name='questionnaireForm' class='input-group-sm'>
-                                <input ng-disabled='questionnaire.id || questionnaire.isLoading' type='number' class='text-center' ng-model='questionnaire.survey.year' name='year' min='1980' max='2015' size="4" required ng-class="{'error': questionnaire.error.codeAndYearDifferent || questionnaireForm.year.$invalid}" ng-blur='checkQuestionnairesIntegrity()'/>
-                           </ng-form>
-                       </td>
-                    </tr>
-                    <tr ng-show='selection.filters && selection.questionnaires.length'>
-                        <td></td>
-                       <td><!-- population --></td>
-                       <td class='text-center' ng-repeat='questionnaire in selection.questionnaires track by $index'></td>
-                    </tr>
-                </thead>
-                <tbody ng-repeat="filter in selection.filters track by $index" ng-show='selection.filters && selection.questionnaires.length'>
-                    <tr ng-hide='!expandHierarchy && filter.level > selection.filters[0].level'>
-                        <td>
-                            <i class='btn btn-default btn-xs' ng-click='removeFilter($index)'><i class='fa fa-times'></i></i>
-                        </td>
-                        <td>
-                            <div style='margin-left:{{filter.level - selection.filters[0].level}}em;' ng-class="{'strong':filter.level == selection.filters[0].level}">
-                                <i class='fa fa-gims-filter' style='color:{{filter.color}}'></i>
-                                {{filter.name}}
-                                <a href='/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}' ng-show='mode != "Browse"'><i class='fa fa-pencil'></i></a>
-                            </div>
-                        </td>
-                        <td ng-repeat='questionnaire in selection.questionnaires track by $index' >
-                            <div class='text-center' ng-if='mode == "Browse" && !isLoading' >
-                                <div ng-if='toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent)'>
-                                    <i ng-if='questionnaire.survey.questions[filter.id].name' class='fa fa-question fa-fw text-muted' tooltip='{{questionnaire.survey.questions[filter.id].name}}'></i>
-                                    {{questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent|percent}} %
+                            </td>
+                        </tr>
+
+                        <!-- Survey's code -->
+                        <tr class='active' >
+                            <td></td>
+                            <td></td>
+                            <td ng-if='selection.selectedQuestionnaire' class='text-center'>{{selection.selectedQuestionnaire.survey.code}}</td>
+                            <td ng-repeat='questionnaire in selection.questionnaires track by $index' class='text-center'>
+                                <ng-form name='questionnaireForm' class='input-group-sm' >
+                                    <input ng-disabled='questionnaire.id || questionnaire.isLoading' type='text' class='text-center' placeholder='Code' ng-model='questionnaire.survey.code' name='code' required ng-class="{'error':questionnaire.errors.duplicateCountryCode || questionnaire.errors.codeAndYearDifferent || questionnaireForm.code.$invalid}" ng-blur='checkQuestionnairesIntegrity()'/>
+                                </ng-form>
+                            </td>
+                        </tr>
+
+                        <!-- Survey's year -->
+                        <tr class='active'>
+                            <td></td>
+                            <td></td>
+                            <td ng-if='selection.selectedQuestionnaire' class='text-center'>{{selection.selectedQuestionnaire.survey.year}}</td>
+                            <td ng-repeat='questionnaire in selection.questionnaires track by $index'>
+                                <ng-form name='questionnaireForm' class='input-group-sm'>
+                                    <input ng-disabled='questionnaire.id || questionnaire.isLoading' type='number' class='text-center' placeholder='Year' ng-model='questionnaire.survey.year' name='year' min='1980' max='2015' size="4" required ng-class="{'error': questionnaire.error.codeAndYearDifferent || questionnaireForm.year.$invalid}" ng-blur='checkQuestionnairesIntegrity()'/>
+                               </ng-form>
+                           </td>
+                        </tr>
+
+                    </thead>
+                    <!-- End of table header-->
+
+
+                    <!-- Population row -->
+<!--                    <tbody>-->
+<!--                        <tr ng-show='selection.filters && selection.questionnaires.length'>-->
+<!--                           <td></td>-->
+<!--                           <td>Population</td>-->
+<!--                           <td ng-if='selection.selectedQuestionnaire'></td>-->
+<!--                           <td class='text-center' ng-repeat='questionnaire in selection.questionnaires track by $index'></td>-->
+<!--                        </tr>-->
+<!--                    </tbody>-->
+
+
+                    <!-- Filters and answers rows -->
+                    <tbody ng-repeat="filter in selection.filters track by $index" ng-show='selection.filters && selection.questionnaires.length'>
+                        <tr ng-hide='!expandHierarchy && filter.level > selection.filters[0].level'>
+
+                            <!-- Remove Filter from selection -->
+                            <td><i class='btn btn-default btn-xs' ng-click='removeFilter($index)'><i class='fa fa-times'></i></i></td>
+
+                            <!-- Filter name column-->
+                            <td>
+                                <div style='margin-left:{{filter.level - selection.filters[0].level}}em;' ng-class="{'strong':filter.level == selection.filters[0].level}">
+                                    <i class='fa fa-gims-filter' style='color:{{filter.color}}'></i>
+                                    {{filter.name}}
+                                    <a href='/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}' ng-show='mode != "Browse"'><i class='fa fa-pencil'></i></a>
                                 </div>
-                                <div ng-if='!toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent) && toBoolNum(questionnaire.survey.questions[filter.id].filter.values[selection.part.id])'>
-                                    <i class='fa fa-cog fa-fw text-muted'></i>
-                                    {{questionnaire.survey.questions[filter.id].filter.values[selection.part.id]|percent}} %
+                            </td>
+
+                            <!-- Questions labels column -->
+                            <td ng-if='selection.selectedQuestionnaire'>
+                                <ng-form name='labelForm' ng-if='mode != "Browse"'>
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-btn"></span>
+                                        <input class='form-control'
+                                               ng-model="selection.selectedQuestionnaire.survey.questions[filter.id].name"
+                                               ng-focus='selection.selectedQuestionnaire.survey.questions[filter.id].initialName = selection.selectedQuestionnaire.survey.questions[filter.id].name'
+                                               ng-blur='saveQuestion(selection.selectedQuestionnaire.survey.questions[filter.id])'
+                                               name="label"
+                                               ng-required="selection.selectedQuestionnaire.survey.questions[filter.id].answers[part.id].valuePercent"
+                                               ng-class="{'error': labelForm.label.$invalid}"/>
+                                    </div>
+                                </ng-form>
+                            </td>
+
+                            <!-- Questionnaires columns -->
+                            <td ng-repeat='questionnaire in selection.questionnaires track by $index' >
+
+                                <!-- Display answers / formulas in *browse* mode -->
+                                <div class='text-center' ng-if='mode == "Browse" && !isLoading' >
+                                    <div ng-if='toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent)'>
+                                        <i ng-if='questionnaire.survey.questions[filter.id].name' class='fa fa-question fa-fw text-muted' tooltip='{{questionnaire.survey.questions[filter.id].name}}'></i>
+                                        {{questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent|percent}} %
+                                    </div>
+                                    <div ng-if='!toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent) && toBoolNum(questionnaire.survey.questions[filter.id].filter.values[selection.part.id])'>
+                                        <i class='fa fa-cog fa-fw text-muted'></i>
+                                        {{questionnaire.survey.questions[filter.id].filter.values[selection.part.id]|percent}} %
+                                    </div>
                                 </div>
-                            </div>
-                            <ng-form name='valueForm' ng-if='mode != "Browse"'>
-                                <!-- answers -->
-                                <div class="input-group input-group-sm">
-                                     <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default dropdown-toggle"  data-toggle='dropdown-menu' ng-show='questionnaire.survey.questions[filter.id].name && toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent) || toBoolNum(questionnaire.survey.questions[filter.id].filter.values[selection.part.id]) || questionnaire.survey.questions[filter.id].answers[selection.part.id].isLoading'>
-                                            <span ng-switch='!!questionnaire.survey.questions[filter.id].answers[selection.part.id].isLoading'>
-                                                <span ng-switch-when="true">
-                                                    <i class='fa fa-gims-loading fa-fw'></i>
+
+                                <!-- Display answers / formulas in 3contribute* mode -->
+                                <ng-form name='valueForm' ng-if='mode != "Browse"'>
+                                    <div class="input-group input-group-sm">
+
+                                        <!-- add-on buttons on input fields -->
+                                         <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default dropdown-toggle"  data-toggle='dropdown-menu' ng-show='questionnaire.survey.questions[filter.id].name && toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent) || toBoolNum(questionnaire.survey.questions[filter.id].filter.values[selection.part.id]) || questionnaire.survey.questions[filter.id].answers[selection.part.id].isLoading'>
+                                                <span ng-switch='!!questionnaire.survey.questions[filter.id].answers[selection.part.id].isLoading'>
+                                                    <span ng-switch-when="true">
+                                                        <i class='fa fa-gims-loading fa-fw'></i>
+                                                    </span>
+                                                    <span ng-switch-when="false">
+                                                        <i ng-if='questionnaire.survey.questions[filter.id].name && toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent)' class='fa fa-question fa-fw'></i>
+                                                        <i ng-if='!toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent) && toBoolNum(questionnaire.survey.questions[filter.id].filter.values[selection.part.id])' class='fa fa-fw' ng-class="{'fa-cog':!isComputing, 'fa-gims-loading':isComputing}"></i>
+                                                    </span>
                                                 </span>
-                                                <span ng-switch-when="false">
-                                                    <i ng-if='questionnaire.survey.questions[filter.id].name && toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent)' class='fa fa-question fa-fw'></i>
-                                                    <i ng-if='!toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent) && toBoolNum(questionnaire.survey.questions[filter.id].filter.values[selection.part.id])' class='fa fa-fw' ng-class="{'fa-cog':!isComputing, 'fa-gims-loading':isComputing}"></i>
-                                                </span>
-                                            </span>
 
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li ng-if='questionnaire.survey.questions[filter.id].name'><a><i class='fa fa-question fa-fw'></i> {{questionnaire.survey.questions[filter.id].name}}</a></li>
-                                            <li ng-if='questionnaire.survey.questions[filter.id].answers[selection.part.id].id'><a href='#' ng-click='removeAnswer(questionnaire.survey.questions[filter.id].answers[selection.part.id], questionnaire.permissions)'><i class='fa fa-trash-o fa-fw'></i> Remove answer</a></li>
-                                            <li ng-if='!toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent) && toBoolNum(questionnaire.survey.questions[filter.id].filter.values[selection.part.id])'><a><i class='fa fa-cog fa-fw'></i></a></li>
-                                        </ul>
-                                    </span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li ng-if='questionnaire.survey.questions[filter.id].name'><a><i class='fa fa-question fa-fw'></i> {{questionnaire.survey.questions[filter.id].name}}</a></li>
+                                                <li ng-if='questionnaire.survey.questions[filter.id].answers[selection.part.id].id'><a href='#' ng-click='removeAnswer(questionnaire.survey.questions[filter.id].answers[selection.part.id], questionnaire.permissions)'><i class='fa fa-trash-o fa-fw'></i> Remove answer</a></li>
+                                                <li ng-if='!toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent) && toBoolNum(questionnaire.survey.questions[filter.id].filter.values[selection.part.id])'><a><i class='fa fa-cog fa-fw'></i></a></li>
+                                            </ul>
+                                        </span>
 
-                                    <input class='form-control text-center'
-                                           ng-class="{'error': valueForm.value.$invalid}"
-                                           min='0'
-                                           max='1'
-                                           name='value'
-                                           type='number'
-                                           placeholder='{{questionnaire.survey.questions[filter.id].filter.values[selection.part.id]}}'
-                                           ng-focus='setInitialValue(questionnaire.survey.questions[filter.id].answers[selection.part.id]); getPermissions(questionnaire.survey.questions[filter.id].answers[selection.part.id])'
-                                           ng-blur='saveAnswer(questionnaire.survey.questions[filter.id].answers[selection.part.id], questionnaire.survey.questions[filter.id], filter, questionnaire, selection.part)'
-                                           ng-model='questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent'
-                                           ng-disabled='questionnaire.survey.questions[filter.id].answers[selection.part.id].permissions.update == false || !toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent) && questionnaire.permissions.create === false'
-                                        />
-                                </div>
-                            </ng-form>
-                        </td>
-                    </tr>
-<!--                            <tr ng-repeat="question in questions track by $index">-->
-<!--                                <td class='table-label'><div style='margin-left:{{filter.level}}em;'>{{question.name}}</div></td>-->
-<!--                                <td ng-repeat='questionnaire in selection.questionnaires track by $index'>-->
-<!--                                    <ng-form name='valueForm' ng-class="{'has-error':valueForm.value.$invalid}">-->
-<!--                                        <input  type='number' ng-disabled='!questionnaire.year || !filter' min='0' name='value' ng-model='values[filter.id][selection.part.id][question.name][$index]'/>-->
-<!--                                    </ng-form>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-                </tbody>
-            </table>
+                                        <!-- input for edit answer -->
+                                        <input class='form-control text-center'
+                                               ng-class="{'error': valueForm.value.$invalid}"
+                                               min='0'
+                                               max='1'
+                                               name='value'
+                                               type='number'
+                                               placeholder='{{questionnaire.survey.questions[filter.id].filter.values[selection.part.id]}}'
+                                               ng-focus='setInitialValue(questionnaire.survey.questions[filter.id].answers[selection.part.id]); getPermissions(questionnaire.survey.questions[filter.id].answers[selection.part.id])'
+                                               ng-blur='saveAnswer(questionnaire.survey.questions[filter.id].answers[selection.part.id], questionnaire.survey.questions[filter.id], filter, questionnaire, selection.part)'
+                                               ng-model='questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent'
+                                               ng-disabled='questionnaire.survey.questions[filter.id].answers[selection.part.id].permissions.update == false || !toBoolNum(questionnaire.survey.questions[filter.id].answers[selection.part.id].valuePercent) && questionnaire.permissions.create === false'
+                                            />
+                                    </div>
+                                </ng-form>
+                            </td>
+                        </tr>
 
-        </form>
+<!--                         Multiplier for sector filters -->
+<!--                        <tr ng-repeat="question in questions track by $index">-->
+<!--                            <td class='table-label'><div style='margin-left:{{filter.level}}em;'>{{question.name}}</div></td>-->
+<!--                            <td ng-repeat='questionnaire in selection.questionnaires track by $index'>-->
+<!--                                <ng-form name='valueForm' ng-class="{'has-error':valueForm.value.$invalid}">-->
+<!--                                    <input  type='number' ng-disabled='!questionnaire.year || !filter' min='0' name='value' ng-model='values[filter.id][selection.part.id][question.name][$index]'/>-->
+<!--                                </ng-form>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+
+                    </tbody>
+                </table>
+
+            </form>
         </div>
     </div>
 </div>
