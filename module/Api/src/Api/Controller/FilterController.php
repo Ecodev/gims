@@ -129,6 +129,14 @@ class FilterController extends AbstractChildRestfulController
         return $filter['name'];
     }
 
+    public function createFiltersAction()
+    {
+        $filters = $this->params()->fromQuery('filters');
+        print_r($filters);
+
+        return new JsonModel($filters);
+    }
+
     public function getComputedFiltersAction()
     {
         $filterIds = explode(',', trim($this->params()->fromQuery('filters'), ','));
@@ -144,7 +152,9 @@ class FilterController extends AbstractChildRestfulController
             foreach ($filterIds as $filterId) {
                 $result[$questionnaireId][$filterId] = array();
                 foreach ($parts as $part) {
-                    $value = $calculator->computeFilter($filterId, $questionnaireId, $part->getId());
+                    $value = array();
+                    $value['first'] = $calculator->computeFilter($filterId, $questionnaireId, $part->getId(), false);
+                    $value['second'] = $calculator->computeFilter($filterId, $questionnaireId, $part->getId(), true);
                     $result[$questionnaireId][$filterId][$part->getId()] = $value;
                 }
             }
