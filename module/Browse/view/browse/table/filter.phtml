@@ -214,7 +214,7 @@
 
 <!-- Table of filters, questionnaires and answers. Display in full width when there are too much elements -->
 <div class='tableContainer container'
-     ng-class="{'gims-full-width-container': tabs.selectedQuestionnaire && tabs.questionnaires.length >=5 || tabs.questionnaires.length >= 6 }"
+     ng-class="{'gims-full-width-container': tabs.selectedQuestionnaire && tabs.questionnaires.length >= 3 || tabs.questionnaires.length >= 6 }"
      >
 
     <div class='row'>
@@ -372,7 +372,7 @@
                                 <a href='/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}' ng-show='mode != "Browse" && !filter.sectorChild'><i class='fa fa-pencil'></i></a>
                             </div>
                             <div ng-show='!isValidId(filter) && !filter.sectorChild'>
-                                <ng-form name='filterName' class="input-group input-group-sm" ng-class="{'has-error':filterName.$invalid}">
+                                <ng-form name='filterName' class="input-group" ng-class="{'has-error':filterName.$invalid}">
                                      <span class="input-group-btn">
                                         <button type="button" class="btn btn-default"><i class='fa' ng-class="{'fa-star':!filter.isLoading,'fa-gims-loading':filter.isLoading,'text-primary':!filterName.$invalid, 'text-danger':filterName.$invalid}"></i></button>
                                      </span>
@@ -420,7 +420,7 @@
 
                                     <!-- add-on buttons on input fields -->
                                      <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default dropdown-toggle"  data-toggle='dropdown-menu' ng-show='questionnaire.survey.questions[filter.id].name && toBoolNum(questionnaire.survey.questions[filter.id].answers[tabs.part.id].valuePercent) || toBoolNum(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id]) || questionnaire.survey.questions[filter.id].answers[tabs.part.id].isLoading'>
+                                        <button type="button" class="btn btn-default dropdown-toggle"  data-toggle='dropdown-menu' ng-show='questionnaire.survey.questions[filter.id].name && toBoolNum(questionnaire.survey.questions[filter.id].answers[tabs.part.id].valuePercent) || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].isLoading'>
                                             <span ng-switch='!!questionnaire.survey.questions[filter.id].answers[tabs.part.id].isLoading'>
                                                 <span ng-switch-when="true">
                                                     <i class='fa fa-gims-loading fa-fw'></i>
