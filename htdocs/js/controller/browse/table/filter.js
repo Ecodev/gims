@@ -847,11 +847,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
 
                 // create questions
                 var nbQuestionsSaved = 0;
-                var questionsForSave = _.filter(questionnaire.survey.questions, function(q) {
-                    if (q.name) {
-                        return q;
-                    }
-                });
+                var questionsForSave = _.filter(questionnaire.survey.questions, function(q) {if (q.name) {return q;}});
                 if (questionsForSave.length === 0) {
                     deferred.notify();
                 } else {
@@ -898,11 +894,13 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
      */
     var saveAllQuestionnairesWhenQuestionsAreSaved = function(questionnaires, index) {
         if (questionnaires[index]) {
-            saveCompleteQuestionnaire(questionnaires[index]).then(function() {
-            }, function() {
-            }, function() {
+            $scope.isLoading = true;
+            saveCompleteQuestionnaire(questionnaires[index]).then(function() {}, function() {}, function() {
                 saveAllQuestionnairesWhenQuestionsAreSaved(questionnaires, index + 1);
             });
+
+        } else {
+            $scope.isLoading = false;
         }
     };
 
@@ -1308,6 +1306,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
                 $location.search('sectorChildren', null);
                 $scope.sector = false;
                 $scope.expandHierarchy = true;
+                $scope.refresh(false, true);
                 updateUrl('filters');
                 deferred.resolve();
             });
@@ -1328,7 +1327,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
             filter.oldId = filter.id;
         }
         filter.isLoading = true;
-        Restangular.all('filter').post({name: filter.name, parents: filter.parents}).then(function(newFilter) {
+        Restangular.all('filter').post({name: filter.name, parents: filter.parents, filterSets: filter.filterSets}).then(function(newFilter) {
             filter.id = newFilter.id;
             filter.isLoading = false;
             delete(filter.sector);
