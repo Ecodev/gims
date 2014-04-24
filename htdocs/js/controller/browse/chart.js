@@ -36,12 +36,12 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 var newUsedFilters = {};
                 _.forEach($scope.filterSet, function(filterSet) {
                     _.forEach(filterSet.filters, function(filter) {
-                        newUsedFilters[filter.id] = filter.genericColor;
+                        newUsedFilters[filter.id] = filter;
                     });
                 });
                 $scope.usedFilters = newUsedFilters;
 
-                // remove all filters that are nos used by current usedFilters
+                // remove all filters that are not used by current usedFilters
                 _.forEach($scope.indexedElements, function(questionnaire) { // select first questionnaire they return false to break and avoid to loop all questionnaires
                     questionnaire.hFilters = {};
                     _.forEach(questionnaire.filters, function(filter) {

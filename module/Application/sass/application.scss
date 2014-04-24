@@ -277,7 +277,9 @@ div.browse .col-md-4 {
     display:inline-block;
     float:none;
 }
-
+.text-lined-through{
+    text-decoration: line-through;
+}
 
 
 /* Differs local, dev and production instances */

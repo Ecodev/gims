@@ -65,6 +65,11 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 return parseInt(id);
             });
 
+            // in case we don't want url to be affected, we don't don't want neither to display received info, so remove it after retrieve it above
+            if (!changeUrl) {
+                $location.search(name, null);
+            }
+
             $scope.includeLinks = function() {
                 $timeout(function() {
                     $('.select2list .btn[href]').off('mouseup').on('mouseup', function() {
@@ -206,7 +211,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                     });
 
                     query.callback(data);
-                }, 300);
+                }, 150);
 
                 $scope.options = {
                     query: function(query) {

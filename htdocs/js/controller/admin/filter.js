@@ -4,7 +4,7 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
     "use strict";
 
     $scope.fields = {fields: 'filterSets,children,children.paths,children.color,parents,parents.paths,parents.color,summands,summands.paths,summands.color,paths,color'};
-    $scope.params = {fields: 'paths,color,genericColor'};
+    $scope.params = {fields: 'paths,color,genericColor', itemOnce: 'true'};
 
     $scope.select2Template = "" +
             "<div>" +
@@ -84,7 +84,7 @@ angular.module('myApp').controller('Admin/FilterCtrl', function($scope, $locatio
     "use strict";
 
     // Initialize
-    $scope.params = {fields: 'paths'};
+    $scope.params = {fields: 'paths', itemOnce: 'true'};
 
     $scope.select2Template = "" +
             "<div>" +
@@ -122,7 +122,7 @@ angular.module('myApp').controller('Admin/FilterCtrl', function($scope, $locatio
                 cellTemplate: '' +
                         '<div class="ngCellText" ng-class="col.colIndex()">' +
                         '   <span style="padding-left: {{row.entity.level * 2}}em;">' +
-                        '       <span style="display:inline-block;vertical-align:middle;width:5px;height:18px;background:{{row.entity.color}}"></span>' +
+                        '       <span style="display:inline-block;vertical-align:middle;"><i class="fa fa-gims-filter" style="color:{{row.entity.color}}"></i></span>' +
                         '       <span style="display:inline-block;vertical-align:middle;">{{row.entity.name}}</span>' +
                         '   </span>' +
                         '</div>'

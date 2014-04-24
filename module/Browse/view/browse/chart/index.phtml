@@ -3,31 +3,74 @@
     <div class='row'>
 
         <div ng-class="{'col-xs-12 col-sm-7 col-md-7 col-lg-8' : hasIgnoredElements || pointSelected, 'col-md-12' : !hasIgnoredElements && !pointSelected}">
-            <form>
-                <div class='navbar navbar-default hidden-print'>
-                    <div class='navbar-form' id='nav-chart'>
-<!--                        <a class='btn btn-default' ng-class="{'disabled':!part || !country}" href="/contribute/questionnaire?part={{part.id}}&country={{country.id}}&filterSet={{getFilterSets()}}&returnUrl={{currentUrl}}"><i class='fa fa-plus'></i> Add new sector dataset</a>-->
-<!--                        <a class='btn btn-default' ng-class="{'disabled':!part || !country}" href="/contribute/questionnaire?part={{part.id}}&country={{country.id}}&filterSet={{getFilterSets()}}&returnUrl={{currentUrl}}"><i class='fa fa-pencil'></i> Edit sector filter</a>-->
-                        <gims-filter-generator></gims-filter-generator>
-                        <i class="fa fa-gims-loading fa-2x pull-right" ng-show="isLoading"></i>
-                    </div>
-                </div>
+<!--            <div class='navbar navbar-default hidden-print'>-->
+<!--                <div class='navbar-form' id='nav-chart'>-->
+<!--                    <a class='btn btn-default' ng-class="{'disabled': !country}" href="/contribute/questionnaire?sector&country={{country.id}}&returnUrl={{currentUrl}}"><i class='fa fa-plus'></i> Add new sector dataset</a>-->
+<!--                    <a class='btn btn-default' ng-class="{'disabled': !country || !filterSet}" href="/contribute/questionnaire?&country={{country.id}}&filterSet={{getFilterSets()}}&returnUrl={{currentUrl}}"><i class='fa fa-pencil'></i> Edit used filters</a>-->
+<!--                    <a class='btn btn-default' ng-class="{'disabled': !country || !editableFilter}" href="/contribute/questionnaire?&country={{country.id}}&filter={{editableFilter}}&returnUrl={{currentUrl}}"><i class='fa fa-pencil'></i> Edit selected filter</a>-->
+<!--                </div>-->
+<!--            </div>-->
 
-                <div class='row show-grid'>
+            <div class='row show-grid'>
+                <form>
+
                     <div class='col-md-6'>
-                        <p><gims-select api="country" model="country" queryparams='countryQueryParams' placeholder="<?php echo $this->translate('Select a country') ?>" format="name" style="width:100%;"/></p>
-                        <p><gims-select api="filterSet" model="filterSet" queryparams='filterSetQueryParams' multiple placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/></p>
-                        <p><gims-select api="part" model="part" placeholder="<?php echo $this->translate('Select a part') ?>" style="width:100%;"/></p>
+                        <h2>
+                            Select data
+                            <i class="fa fa-gims-loading pull-right" ng-show="isLoading"></i>
+                        </h2>
+                        <div class='form-group'>
+                            <label class='form-label'>Country</label>
+                            <gims-select api="country" model="country" queryparams='countryQueryParams' placeholder="<?php echo $this->translate('Select a country') ?>" format="name" style="width:100%;"/>
+                        </div>
+                        <div class='form-group'>
+                            <label class='form-label'>Part</label>
+                            <gims-select api="part" model="part" placeholder="<?php echo $this->translate('Select a part') ?>" style="width:100%;"/>
+                        </div>
+
+                        <div class='form-group'>
+                            <label class='form-label'>Filter sets</label>
+                            <gims-select api="filterSet" model="filterSet" queryparams='filterSetQueryParams' multiple placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/>
+                        </div>
+
                     </div>
-                    <div class='col-md-6'>
-                        <p class='text-right'>
-                            <img src="/img/jmp-logo-black.png" alt="JMP logo" class="logo-chart"/>
-                            <img src="/img/who-logo-black.png" alt="WHO logo" class="logo-chart"/>
-                            <img src="/img/unicef-logo-black.png" alt="Unicef logo" class="logo-chart"/>
-                        </p>
+                    <div class='col-md-6' ng-show='country'>
+                        <h2>Manipulate data</h2>
+                        <div class='form-group' ng-show='usedFilters'>
+                            <div class='row show-grid'>
+                                <div class='col-md-12'>
+                                    <label class='form-label'>New dataset</label>
+                                </div>
+                                <div class='col-md-12'>
+                                    <a class='btn btn-default' ng-class="{'disabled': !country}" href="/contribute/questionnaire?sectorChildren=Equipement,People&returnUrl={{currentUrl}}"><i class='fa fa-plus'></i> Create new dataset</a>
+                                </div>
+                            </div>
+                            <div class='row show-grid' ng-show='filterSet'>
+                                <div class='col-md-12'>
+                                    <label class='form-label'>Edit existing</label>
+                                </div>
+                                <div class='col-md-12'>
+
+                                    <ul class='list-unstyled'>
+                                        <li class='pull-left' style='margin-bottom:5px;margin-right:5px;'><a class='btn btn-primary' ng-class="{'disabled': !country || !filterSet}" href="/contribute/questionnaire?&country={{country.id}}&filterSet={{getFilterSets()}}&returnUrl={{currentUrl}}"><i class='fa fa-pencil'></i> Edit all</a></li>
+                                        <li ng-repeat="filter in usedFilters" class='pull-left' style='margin-bottom:5px;margin-right:5px;'>
+                                            <a class='btn btn-default' href="/contribute/questionnaire?&country={{country.id}}&filter={{filter.id}}&returnUrl={{currentUrl}}"><i class='fa fa-pencil' style='color:{{filter.genericColor}}'></i> {{filter.name}}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+
+                <!--                <div class='col-md-6'>-->
+<!--                    <p class='text-right'>-->
+<!--                        <img src="/img/jmp-logo-black.png" alt="JMP logo" class="logo-chart"/>-->
+<!--                        <img src="/img/who-logo-black.png" alt="WHO logo" class="logo-chart"/>-->
+<!--                        <img src="/img/unicef-logo-black.png" alt="Unicef logo" class="logo-chart"/>-->
+<!--                    </p>-->
+<!--                </div>-->
+            </div>
         </div>
     </div>
 
@@ -68,14 +111,14 @@
                                 <td style='width:{{firstCol}};padding-right:0' >
                                     <span ng-switch="indexedElements[pointSelected.questionnaire].filters[key].filter.ignored" ng-click="ignoreFilter(indexedElements[pointSelected.questionnaire].filters[key], !indexedElements[pointSelected.questionnaire].filters[key].filter.ignored, true, pointSelected.questionnaire)">
                                         <i ng-switch-when="true" class="fa fa-lg fa-gims-filter text-muted"></i>
-                                        <i ng-switch-default class="fa fa-lg fa-gims-filter" style="color:{{usedFilters[hFilterId]}}" ></i>
+                                        <i ng-switch-default class="fa fa-lg fa-gims-filter" style="color:{{usedFilters[hFilterId].genericColor}}" ></i>
                                     </span>
-                                    <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == null && indexedElements[pointSelected.questionnaire].filters[key].filter.ignored" class="fa fa-gims-questionnaire opacity33" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], true, pointSelected.questionnaire)" tooltip-placement="right" tooltip="Ignore filter for all questionnaire"></i>
-                                    <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == null && !indexedElements[pointSelected.questionnaire].filters[key].filter.ignored" class="fa fa-gims-questionnaire opacity33" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], false, pointSelected.questionnaire)" tooltip-placement="right" tooltip="Include filter for all questionnaire"></i>
-                                    <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == false" class="fa fa-gims-questionnaire" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], true, pointSelected.questionnaire)" tooltip-placement="right" tooltip="Ignore filter for all questionnaire"></i>
+                                    <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == null && indexedElements[pointSelected.questionnaire].filters[key].filter.ignored" class="fa fa-gims-questionnaire opacity33" style="color:{{usedFilters[hFilterId].genericColor}}" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], true, pointSelected.questionnaire)" tooltip-placement="right" tooltip="Ignore filter for all questionnaire"></i>
+                                    <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == null && !indexedElements[pointSelected.questionnaire].filters[key].filter.ignored" class="fa fa-gims-questionnaire opacity33" style="color:{{usedFilters[hFilterId].genericColor}}" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], false, pointSelected.questionnaire)" tooltip-placement="right" tooltip="Include filter for all questionnaire"></i>
+                                    <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == false" class="fa fa-gims-questionnaire" style="color:{{usedFilters[hFilterId].genericColor}}" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], true, pointSelected.questionnaire)" tooltip-placement="right" tooltip="Ignore filter for all questionnaire"></i>
                                     <i ng-if="globalIndexedFilters[indexedElements[pointSelected.questionnaire].filters[key].filter.id] == true" class="fa fa-gims-questionnaire text-muted" ng-click="reportStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], false, pointSelected.questionnaire)" tooltip-placement="right" tooltip="Include filter for all questionnaire"></i>
 
-                                    <i ng-if="indexedElements[pointSelected.questionnaire].filters[key].usages" class='fa fa-lg fa-gims-rule' style="color:{{usedFilters[hFilterId]}}"></i> <!--tooltip-placement="right" tooltip="{{indexedElements[pointSelected.questionnaire].filters[key].usages}}"-->
+                                    <i ng-if="indexedElements[pointSelected.questionnaire].filters[key].usages" class='fa fa-lg fa-gims-rule' style="color:{{usedFilters[hFilterId].genericColor}}"></i> <!--tooltip-placement="right" tooltip="{{indexedElements[pointSelected.questionnaire].filters[key].usages}}"-->
                                 </td>
                                 <td style="padding-left:{{indexedElements[pointSelected.questionnaire].filters[key].filter.hFilters[hFilterId].level+1}}em;">
                                     <span tooltip="{{indexedElements[pointSelected.questionnaire].filters[key].filter.originalDenomination}}" tooltip-placement="right">
@@ -153,9 +196,9 @@
                         <tr ng-repeat="key in sort(indexedElements[questionnaireId].filters, hFilterId)" ng-show='indexedElements[questionnaireId].filters[key].filter.hFilters[hFilterId].level >= 0 && indexedElements[questionnaireId].filters[key].filter.ignored' class='text-muted'>
                             <td style='width:{{firstCol}}'>
                                 <i class="fa fa-lg fa-gims-filter text-muted" ng-click="ignoreFilter(indexedElements[questionnaireId].filters[key], !indexedElements[questionnaireId].filters[key].filter.ignored, true)"></i>
-                                <i ng-if="globalIndexedFilters[key] == null && indexedElements[questionnaireId].filters[key].filter.ignored" class="fa fa-gims-questionnaire opacity33" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[questionnaireId].filters[key], true)" tooltip-placement="right" tooltip="Ignore filter for all questionnaire"></i>
-                                <i ng-if="globalIndexedFilters[key] == null && !indexedElements[questionnaireId].filters[key].filter.ignored" class="fa fa-gims-questionnaire opacity33" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[questionnaireId].filters[key], false)" tooltip-placement="right" tooltip="Include filter for all questionnaire"></i>
-                                <i ng-if="globalIndexedFilters[key] == false" class="fa fa-gims-questionnaire" style="color:{{usedFilters[hFilterId]}}" ng-click="reportStatusGlobally(indexedElements[questionnaireId].filters[key], true)" tooltip-placement="right" tooltip="Ignore filter for all questionnaire"></i>
+                                <i ng-if="globalIndexedFilters[key] == null && indexedElements[questionnaireId].filters[key].filter.ignored" class="fa fa-gims-questionnaire opacity33" style="color:{{usedFilters[hFilterId].genericColor}}" ng-click="reportStatusGlobally(indexedElements[questionnaireId].filters[key], true)" tooltip-placement="right" tooltip="Ignore filter for all questionnaire"></i>
+                                <i ng-if="globalIndexedFilters[key] == null && !indexedElements[questionnaireId].filters[key].filter.ignored" class="fa fa-gims-questionnaire opacity33" style="color:{{usedFilters[hFilterId].genericColor}}" ng-click="reportStatusGlobally(indexedElements[questionnaireId].filters[key], false)" tooltip-placement="right" tooltip="Include filter for all questionnaire"></i>
+                                <i ng-if="globalIndexedFilters[key] == false" class="fa fa-gims-questionnaire" style="color:{{usedFilters[hFilterId].genericColor}}" ng-click="reportStatusGlobally(indexedElements[questionnaireId].filters[key], true)" tooltip-placement="right" tooltip="Ignore filter for all questionnaire"></i>
                                 <i ng-if="globalIndexedFilters[key] == true" class="fa fa-gims-questionnaire text-muted" ng-click="reportStatusGlobally(indexedElements[questionnaireId].filters[key], false)" tooltip-placement="right" tooltip="Include filter for all questionnaire"></i>
                             </td>
                             <td style="padding-left:{{indexedElements[questionnaireId].filters[key].filter.hFilters[hFilterId].level+1}}em;">
