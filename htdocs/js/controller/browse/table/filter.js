@@ -326,6 +326,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
                 } else {
                     if ($scope.checkIfSavableQuestionnaire($scope.tabs.questionnaires[index])) {
                         saveCompleteQuestionnaire($scope.tabs.questionnaires[index]);
+                        $scope.firstQuestionnairesRetrieve = true;
+                        getComputedFilters();
                     }
                 }
             });
@@ -780,14 +782,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
         if (!$scope.firstQuestionnairesRetrieve || $scope.sector) {
             return;
         }
-
         $timeout(function() {
-            var filtersIds = _.map($scope.tabs.filters, function(el) {
-                return el.id;
-            });
-            var questionnairesIds = _.map($scope.tabs.questionnaires, function(el) {
-                return el.id;
-            });
+
+            var filtersIds = _.map($scope.tabs.filters, function(el) {return el.id;});
+            var questionnairesIds = _.map($scope.tabs.questionnaires, function(el) {return el.id;});
 
             if (filtersIds.length > 0 && questionnairesIds.length > 0) {
                 $scope.isLoading = true;
@@ -900,6 +898,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
             });
 
         } else {
+            $timeout(function(){
+                $scope.firstQuestionnairesRetrieve = true;
+                getComputedFilters();
+            },1000);
             $scope.isLoading = false;
         }
     };
