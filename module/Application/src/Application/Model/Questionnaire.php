@@ -74,10 +74,19 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     private $questionnaireUsages;
 
     /**
+     * Additional rules to apply to compute value
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="\Application\Model\Rule\FilterQuestionnaireUsage", mappedBy="questionnaire")
+     * @ORM\OrderBy({"isSecondLevel" = "DESC", "sorting" = "ASC", "id" = "ASC"})
+     */
+    private $filterQuestionnaireUsages;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
+        $this->filterQuestionnaireUsages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->answers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questionnaireUsages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setStatus(QuestionnaireStatus::$NEW);
@@ -374,9 +383,30 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
             && $this->getStatus() == QuestionnaireStatus::$VALIDATED
             && $this->getPermissions()['validate']
         ) {
-            echo 'a';
             Utility::executeCliCommand('email notifyQuestionnaireCreator ' . $this->getId());
         }
+    }
+
+    /**
+     * Get rules
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getFilterQuestionnaireUsages()
+    {
+        return $this->filterQuestionnaireUsages;
+    }
+
+    /**
+     * Notify the filter that it was added to FilterQuestionnaireUsage relation.
+     * This should only be called by FilterQuestionnaireUsage::setFilter()
+     * @param Rule\FilterQuestionnaireUsage $usage
+     * @return Filter
+     */
+    public function filterQuestionnaireUsageAdded(Rule\FilterQuestionnaireUsage $usage)
+    {
+        $this->getFilterQuestionnaireUsages()->add($usage);
+
+        return $this;
     }
 
 }

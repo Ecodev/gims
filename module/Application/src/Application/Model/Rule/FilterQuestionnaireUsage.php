@@ -42,6 +42,20 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
     }
 
     /**
+     * Set questionnaire
+     *
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @return QuestionnaireUsage
+     */
+    public function setQuestionnaire(\Application\Model\Questionnaire $questionnaire)
+    {
+        parent::setQuestionnaire($questionnaire);
+        $questionnaire->filterQuestionnaireUsageAdded($this);
+
+        return $this;
+    }
+
+    /**
      * Set filter
      *
      * @param Filter $filter
