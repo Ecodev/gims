@@ -3,6 +3,8 @@
 namespace Api\Controller;
 
 use Zend\View\Model\JsonModel;
+use Application\Model\Rule\FilterQuestionnaireUsage;
+use Application\Model\Rule\Rule;
 
 class FilterController extends AbstractChildRestfulController
 {
@@ -161,6 +163,54 @@ class FilterController extends AbstractChildRestfulController
         }
 
         return new JsonModel($result);
+    }
+
+    public function createUsagesAction()
+    {
+        $filters = explode(',', $this->params()->fromQuery('filters'));
+        $questionnaires = explode(',', $this->params()->fromQuery('questionnaires'));
+
+        $parts = $this->getEntityManager()->getRepository('\Application\Model\Part')->findAll();
+        $filterRepo = $this->getEntityManager()->getRepository('\Application\Model\Filter');
+
+        foreach ($filters as $filter) {
+            list($parentFilter, $children) = explode(':', $filter);
+            $children = explode('-', $children);
+            $parent = $filterRepo->findOneById($parentFilter);
+            $child1 = $filterRepo->findOneById($children[0]);
+            $child2 = $filterRepo->findOneById($children[1]);
+
+            foreach ($questionnaires as $questionnaire) {
+                $questionnaire = $this->getEntityManager()->getRepository('\Application\Model\Questionnaire')->findOneById($questionnaire);
+
+                foreach ($parts as $part) {
+                    $child1Form = '{F#' . $child1->getId() . ',Q#' . $questionnaire->getId() . ',P#' . $part->getId() . '}';
+                    $child2Form = '{F#' . $child2->getId() . ',Q#' . $questionnaire->getId() . ',P#' . $part->getId() . '}';
+                    $questionnaireForm = '{Q#' . $questionnaire->getId() . ',P#' . $part->getId() . '}';
+                    $completeForm = '=(' . $child1Form . '*' . $child2Form . '/' . $questionnaireForm . ')';
+
+                    $rule = new Rule();
+                    $rule->setName('Sector for "' . $parent->getName() + '"');
+                    $rule->setFormula($completeForm);
+
+                    $fqu = new FilterQuestionnaireUsage();
+                    $fqu->setQuestionnaire($questionnaire);
+                    $fqu->setFilter($parent);
+                    $fqu->setRule($rule);
+                    $fqu->setPart($part);
+                    $fqu->setJustification('Sector for "' . $parent->getName() + '"');
+
+                    $this->getEntityManager()->persist($rule);
+                    $this->getEntityManager()->persist($fqu);
+                }
+            }
+
+        }
+
+        $this->getEntityManager()->flush();
+
+        return new JsonModel(array());
+
     }
 
 }

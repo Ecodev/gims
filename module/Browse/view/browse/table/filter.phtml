@@ -5,7 +5,7 @@
             <!-- Back button, if return url is specified -->
             <button class='btn btn-default' ng-show='returnUrl' ng-click='cancel();'><i class='fa fa-gims-back'></i> Cancel</button>
             <!-- Save all the new questionniares -->
-            <button class='btn btn-primary' ng-show='isEmptyQuestionnaires() || isEmptyFilters()' ng-click='saveQuestionnaires();' ng-disabled='!tabs.filters && !tabs.questionnaires'><i class='fa fa-asterisk'></i> Save all new elements</button>
+            <button class='btn btn-primary' ng-show='isEmptyQuestionnaires() || isEmptyFilters()' ng-click='saveQuestionnaires();' ng-disabled='isLoading || !tabs.filters && !tabs.questionnaires'><i class='fa fa-asterisk'></i> Save all new elements</button>
             <!-- Clear the selection -->
             <a href class='btn btn-default' ng-click='tabs.questionnaires=[];tabs.filters=[];tabs.filterSet=null;tabs.country=null;tabs.filter=null;tabs.survey=null'><i class='fa fa-eraser'></i> Clear selection</a>
             <!-- Hide/Show selection tools and/or children filters -->
@@ -218,14 +218,14 @@
                 <table class='table table-bordered table-condensed bigtable'>
 
                     <!-- Head part : including country, survey code and survey year -->
-                    <thead>
+                    <tbody>
 
                         <!-- Action buttons (first row) -->
                         <tr>
                             <td style='width:35px'></td>
 
                             <!-- Add a new empty questionnaire -->
-                            <th style='width:350px'>
+                            <td style='width:350px'>
                                 <a class='btn btn-default btn-xs'
                                    ng-click='addFilter();'
                                    ng-show='mode != "Browse" && sector'
@@ -237,61 +237,103 @@
                                    ng-show='mode != "Browse"'>
                                     <i class='fa fa-plus'></i> Add new survey
                                 </a>
-                            </th>
+                            </td>
 
                             <!-- Label for question labels and close btn -->
-                            <th style='width:350px' ng-if='tabs.selectedQuestionnaireForLabels' class='text-center'>
+                            <td style='width:350px' ng-if='tabs.selectedQuestionnaireForLabels' class='text-center'>
                                 <i class='fa fa-question'></i>
                                 Questions for
                                 <a class='btn btn-default btn-xs pull-right' ng-click='tabs.selectedQuestionnaireForLabels = null'><i class='fa fa-times'></i></a>
-                            </th>
+                            </td>
 
-                            <th ng-repeat='questionnaire in tabs.questionnaires track by $index'>
-
-                                <!-- Link to questionnaire in /admin/ section -->
-                                <a class='btn btn-default btn-xs'
-                                   href='/admin/questionnaire/edit/{{questionnaire.id}}?returnUrl={{currentUrl}}'
-                                   ng-show='mode != "Browse" && questionnaire.id'>
-                                    <i class='fa fa-eye'></i>
-                                </a>
-
-                                <!-- Questions labels edition button, display an additionnal column -->
-                                <a class='btn btn-default btn-xs'
-                                   ng-click='tabs.selectedQuestionnaireForLabels = questionnaire;'
-                                   ng-show='questionnaire.survey'
-                                   tooltip='Edit questions labels'
-                                   tooltip-placement='left'>
-                                    <i class='fa fa-question' ng-class="{'text-primary':questionnaire.id && tabs.selectedQuestionnaireForLabels.id == questionnaire.id}"></i>
-                                </a>
-
-                                <!-- Edit questionnaire comment, display an additionnal column -->
-                                <a class='btn btn-default btn-xs'
-                                   ng-click='tabs.selectedQuestionnaireForComments = questionnaire;'
-                                   tooltip='Edit questionnaire comments'
-                                   tooltip-placement='left'>
-                                    <i class='fa fa-comment' ng-class="{'text-primary':questionnaire.id && tabs.selectedQuestionnaireForComments.id == questionnaire.id}"></i>
-                                </a>
-
-                                <!-- Save a single questionnaire -->
-                                <a class='btn btn-primary btn-xs'
-                                   ng-click='saveQuestionnaires($index)'
-                                   ng-show='mode != "Browse" && !questionnaire.id'
-                                   ng-class="{'disabled' : !checkIfSavableQuestionnaire(questionnaire)}">
-                                    <i class='fa' ng-class="{'fa-save':!questionnaire.isLoading, 'fa-gims-loading':questionnaire.isLoading}"></i>
-                                </a>
+                            <td ng-repeat='questionnaire in tabs.questionnaires track by $index'>
 
                                 <!-- Display errors on questionnaires / surveys integrity data structure (like two different years for the same survey or two countries for the same survey -->
                                 <a class='btn btn-warning btn-xs' ng-show='questionnaire.errors.duplicateCountryCode' tooltip='Surveys may not have the same country more than once' tooltip-placement='left'><i class='fa fa-warning'></i></a>
                                 <a class='btn btn-warning btn-xs' ng-show='questionnaire.errors.codeAndYearDifferent' tooltip='Surveys with the same code may have the same year' tooltip-placement='left'><i class='fa fa-warning'></i></a>
                                 <a class='btn btn-warning btn-xs' ng-show='questionnaire.errors.countryAlreadyUsedForExistingSurvey' tooltip='This country is already assigned to a survey with the same code' tooltip-placement='left'><i class='fa fa-warning'></i></a>
-                                <a class='btn btn-warning btn-xs' ng-show='questionnaire.errors.surveyExistWithDifferentYear' tooltip='This survey already exists with different year : {{questionnaire.survey.existingYear}}' tooltip-placement='left'><i class='fa fa-warning'></i></a>
+                                <a class='btn btn-warning btn-xs' ng-show='questionnaire.errors.surveyxistWithDifferentYear' tooltip='This survey already exists with different year : {{questionnaire.survey.existingYear}}' tooltip-placement='left'><i class='fa fa-warning'></i></a>
                                 <a class='btn btn-warning btn-xs' ng-show='sector && questionnaire.id' tooltip="Can't edit existing survey in sector creation mode" tooltip-placement='left'><i class='fa fa-warning'></i></a>
 
-                                <!-- mark new questionnaire -->
-                                <a class='btn btn-xs' ng-show="!questionnaire.id" tooltip='New survey' tooltip-placement='left' ><i class='fa fa-asterisk'></i></a>
+                                <!-- mark new questionnaire / is loading -->
+                                <a class='btn btn-xs' ng-show="!questionnaire.id || questionnaire.isLoading" tooltip='New survey' tooltip-placement='left' ><i class='fa fa-lg' ng-class="{'fa-asterisk':!questionnaire.isLoading, 'fa-gims-loading':questionnaire.isLoading}"></i></a>
 
-                                <a class='btn btn-default btn-xs pull-right' ng-click='removeQuestionnaire($index)'><i class='fa fa-times'></i></a>
-                            </th>
+
+                                <div class="btn-group pull-right">
+                                    <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                                        <i class='fa fa-angle-down'></i>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right" role="menu">
+
+                                        <!-- Save a single questionnaire -->
+                                        <li>
+                                            <a ng-click='saveQuestionnaires($index)'
+                                               ng-show='mode != "Browse" && !questionnaire.id'
+                                               ng-class="{'disabled' : !checkIfSavableQuestionnaire(questionnaire)}"
+                                               tooltip='When this questionnaire will be saved, it will be possible to duplicate formulas from other questionnaires'
+                                               tooltip-placement='left'
+                                                href>
+                                                <i class='fa fa-fw fa-save'></i>
+                                                Save this questionnaire
+                                            </a>
+                                        </li>
+
+                                        <li ng-show='mode != "Browse" && !questionnaire.id' class="divider"></li>
+
+                                        <!-- Link to questionnaire in /admin/ section -->
+                                        <li>
+                                            <a  href='/admin/questionnaire/edit/{{questionnaire.id}}?returnUrl={{currentUrl}}'
+                                                ng-show='mode != "Browse" && questionnaire.id'>
+                                                <i class='fa fa-gims-survey fa-fw'></i>
+                                                Edit Survey
+                                            </a>
+                                        </li>
+
+                                        <!-- Link to questionnaire in /admin/ section -->
+                                        <li>
+                                            <a href='/admin/survey/edit/{{questionnaire.survey.id}}?returnUrl={{currentUrl}}'
+                                               ng-show='mode != "Browse" && questionnaire.survey.id'>
+                                                <i class='fa fa-gims-questionnaire fa-fw'></i>
+                                                Edit Questionnnaire
+                                            </a>
+                                        </li>
+
+                                        <li class="divider" ng-show='mode != "Browse" && ( questionnaire.id || questionnaire.survey.id )'></li>
+
+                                        <!-- Questions labels edition button, display an additionnal column -->
+                                        <li>
+                                            <a ng-click='tabs.selectedQuestionnaireForLabels = questionnaire;'
+                                               ng-show='questionnaire.survey'
+                                               href>
+                                                <i class='fa fa-question fa-fw'></i>
+                                                Edit question labels
+                                            </a>
+                                        </li>
+
+                                        <!-- Edit questionnaire comment, display an additionnal column -->
+                                        <li>
+                                            <a ng-click='tabs.selectedQuestionnaireForComments = questionnaire;'
+                                                href>
+                                                <i class='fa fa-comment fa-fw'></i>
+                                                Edit questionnaire comments
+                                            </a>
+                                        </li>
+
+                                        <li class="divider"></li>
+
+                                        <!-- Duplicate rules -->
+                                        <li ng-if='questionnairesWithUsages && !questionnaire.filterQuestionnaireUsages && questionnaire.id' class="dropdown-header"><i class='fa fa-cog fa-fw fa-lg'></i> Suggested formulas</li>
+                                        <li ng-repeat='q in questionnairesWithUsages' ng-if='questionnaire.id && q.id && !questionnaire.filterQuestionnaireUsages' tooltip-placement='left' tooltip='Click to use the same formulas on this questionnaire'>
+                                            <a href ng-click='copyFilterUsages(questionnaire, q)'><i class='fa fa-gims-questionnaire fa-fw'></i> {{q.geoname.country.name}} - {{q.survey.name}}</a>
+                                        </li>
+
+                                        <li ng-if='questionnairesWithUsages && !questionnaire.filterQuestionnaireUsages && questionnaire.id' class="divider"></li>
+
+                                        <li><a href ng-click='removeQuestionnaire($index)'><i class='fa fa-times fa-fw'></i> Remove questionnaire from table</a></li>
+                                        <li><a href><i class='fa fa-angle-up fa-fw'></i> Close</a></li>
+                                    </ul>
+                                </div>
+                            </td>
                         </tr>
 
                         <!-- Questionnaire's geoname -->
@@ -350,7 +392,7 @@
                            </td>
                         </tr>
 
-                    </thead>
+                    </tbody>
                     <!-- End of table header-->
 
 
@@ -377,23 +419,24 @@
 
                     <!-- Label for questionnaire comments and close btn -->
                     <tbody ng-if='tabs.selectedQuestionnaireForComments'>
-                        <td><a class='btn btn-default btn-xs' ng-click='tabs.selectedQuestionnaireForComments = null'><i class='fa fa-times'></i></a></td>
-                        <td><i class='fa fa-comment'></i> Comments for {{tabs.selectedQuestionnaireForComments.geoname.country.name}}, {{tabs.selectedQuestionnaireForComments.survey.code}}, {{tabs.selectedQuestionnaireForComments.survey.year}}</td>
+                        <tr>
+                            <td><a class='btn btn-default btn-xs' ng-click='tabs.selectedQuestionnaireForComments = null'><i class='fa fa-times'></i></a></td>
+                            <td><i class='fa fa-comment'></i> Comments for {{tabs.selectedQuestionnaireForComments.geoname.country.name}}, {{tabs.selectedQuestionnaireForComments.survey.code}}, {{tabs.selectedQuestionnaireForComments.survey.year}}</td>
 
-                        <td ng-attr-colspan="{{!tabs.selectedQuestionnaireForLabels && tabs.questionnaires.length || tabs.selectedQuestionnaireForLabels && (tabs.questionnaires.length+1)}}" ng-if='tabs.selectedQuestionnaireForComments' class='text-center'>
+                            <td ng-attr-colspan="{{!tabs.selectedQuestionnaireForLabels && tabs.questionnaires.length || tabs.selectedQuestionnaireForLabels && (tabs.questionnaires.length+1)}}" ng-if='tabs.selectedQuestionnaireForComments' class='text-center'>
 
-                            <ng-form name='labelForm' ng-if='mode != "Browse"'>
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"><i class='fa fa-comment'></i></span>
-                                    <textarea class='form-control'
-                                           ng-model="tabs.selectedQuestionnaireForComments.comments"
-                                           ng-focus='tabs.selectedQuestionnaireForComments.initialComments = tabs.selectedQuestionnaireForComments.comments'
-                                           ng-blur='saveComment(tabs.selectedQuestionnaireForComments)'
-                                           name="label"></textarea>
-                                </div>
-                            </ng-form>
-                        </td>
-
+                                <ng-form name='labelForm' ng-if='mode != "Browse"'>
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-addon"><i class='fa fa-comment'></i></span>
+                                        <textarea class='form-control'
+                                               ng-model="tabs.selectedQuestionnaireForComments.comments"
+                                               ng-focus='tabs.selectedQuestionnaireForComments.initialComments = tabs.selectedQuestionnaireForComments.comments'
+                                               ng-blur='saveComment(tabs.selectedQuestionnaireForComments)'
+                                               name="label"></textarea>
+                                    </div>
+                                </ng-form>
+                            </td>
+                        </tr>
                     </tbody>
 
                     <tbody>

@@ -3,6 +3,8 @@
 namespace Application\Repository;
 
 use Doctrine\ORM\Query\Expr\Join;
+use Application\Model\Rule\Rule;
+use Application\Model\Rule\FilterQuestionnaireUsage;
 
 class QuestionnaireRepository extends AbstractChildRepository
 {
@@ -50,4 +52,33 @@ class QuestionnaireRepository extends AbstractChildRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function copyFilterUsages(\Application\Model\Questionnaire $destQ, \Application\Model\Questionnaire $srcQ)
+    {
+
+        $fqus = $srcQ->getFilterQuestionnaireUsages();
+
+        foreach ($fqus as $fqu) {
+
+            // replace questionnaire id in formula
+            $formula = $fqu->getRule()->getFormula();
+            $newFormula = str_replace('Q#' . $srcQ->getId(), 'Q#' . $destQ->getId(), $formula);
+
+            $newRule = new Rule();
+            $newRule->setName($fqu->getRule()->getName());
+            $newRule->setFormula($newFormula);
+
+            $newFqu = new FilterQuestionnaireUsage();
+            $newFqu->setFilter($fqu->getFilter());
+            $newFqu->setQuestionnaire($destQ);
+            $newFqu->setPart($fqu->getPart());
+            $newFqu->setRule($newRule);
+            $newFqu->setJustification($fqu->getJustification());
+
+            $this->getEntityManager()->persist($newRule);
+            $this->getEntityManager()->persist($newFqu);
+        }
+
+        $this->getEntityManager()->flush();
+
+    }
 }
