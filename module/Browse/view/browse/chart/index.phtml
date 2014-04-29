@@ -36,13 +36,13 @@
                     </div>
                     <div class='col-md-6' ng-show='country'>
                         <h2>Manipulate data</h2>
-                        <div class='form-group' ng-show='usedFilters'>
+                        <div class='form-group'>
                             <div class='row show-grid'>
                                 <div class='col-md-12'>
                                     <label class='form-label'>New dataset</label>
                                 </div>
                                 <div class='col-md-12'>
-                                    <a class='btn btn-default' ng-class="{'disabled': !country}" href="/contribute/questionnaire?sectorChildren=Equipement,People&returnUrl={{currentUrl}}"><i class='fa fa-plus'></i> Create new dataset</a>
+                                    <a class='btn btn-default' href="/contribute/questionnaire?sectorChildren&returnUrl={{currentUrl}}"><i class='fa fa-plus'></i> Create new dataset</a>
                                 </div>
                             </div>
                             <div class='row show-grid' ng-show='filterSet'>
