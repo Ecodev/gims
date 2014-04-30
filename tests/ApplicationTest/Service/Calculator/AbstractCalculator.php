@@ -251,9 +251,9 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     protected function getStubAnswerRepository()
     {
         // Create a stub for the AnswerRepository class with predetermined values, so we don't have to mess with database
-        $stubAnswerRepository = $this->getMock('\Application\Repository\AnswerRepository', array('getValuePercent', 'getQuestionNameIfNonNullAnswer'), array(), '', false);
+        $stubAnswerRepository = $this->getMock('\Application\Repository\AnswerRepository', array('getValue', 'getQuestionNameIfNonNullAnswer'), array(), '', false);
         $stubAnswerRepository->expects($this->any())
-                ->method('getValuePercent')
+                ->method('getValue')
                 ->will($this->returnCallback(function($questionnaireId, $filterId, $partId) {
                             $questionnaire = $this->getModel('\Application\Model\Questionnaire', $questionnaireId);
                             foreach ($questionnaire->getAnswers() as $answer) {

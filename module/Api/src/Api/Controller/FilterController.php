@@ -206,11 +206,9 @@ class FilterController extends AbstractChildRestfulController
             }
 
         }
-
         $this->getEntityManager()->flush();
 
         return new JsonModel(array());
-
     }
 
 }

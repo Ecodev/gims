@@ -6,7 +6,7 @@ class AnswerRepository extends AbstractChildRepository
 {
 
     /**
-     * @var array $cache [questionnaireId => [filterId => [partId => ['valuePercent' => value, 'questionName' => question]]]]
+     * @var array $cache [questionnaireId => [filterId => [partId => ['value' => value, 'questionName' => question]]]]
      */
     private $cache = array();
 
@@ -27,7 +27,7 @@ class AnswerRepository extends AbstractChildRepository
             // Then we get all data for the geoname
             $qb = $this->getEntityManager()->createQueryBuilder()
                     ->from('Application\Model\Questionnaire', 'questionnaire')
-                    ->select('questionnaire.id AS questionnaire_id, answers.valuePercent, part.id AS part_id, filter.id AS filter_id, question.name AS questionName')
+                    ->select('questionnaire.id AS questionnaire_id, answers.valuePercent, answers.valueAbsolute, part.id AS part_id, filter.id AS filter_id, question.name AS questionName')
                     ->leftJoin('questionnaire.answers', 'answers')
                     ->leftJoin('answers.question', 'question')
                     ->leftJoin('answers.part', 'part')
@@ -38,17 +38,21 @@ class AnswerRepository extends AbstractChildRepository
                 'geoname' => $geonameId,
             ));
 
-            $res = $qb->getQuery()
-                    ->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SCALAR);
+            $res = $qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SCALAR);
 
             // Ensure that we hit the cache next time, even if we have no results at all
             $this->cache[$questionnaireId] = array();
 
             // Restructure cache
             foreach ($res as $data) {
+
+                $valuePercent = is_null($data['valuePercent']) ? null : (float) $data['valuePercent'];
+                $valueAbsolute = is_null($data['valueAbsolute']) ? null : (float) $data['valueAbsolute'];
+                $value = $valuePercent ? $valuePercent : $valueAbsolute;
+
                 $answerData = array(
-                    'valuePercent' => is_null($data['valuePercent']) ? null : (float) $data['valuePercent'],
-                    'questionName' => $data['questionName'],
+                    'value' => $value,
+                    'questionName' => $data['questionName']
                 );
 
                 $this->cache[$data['questionnaire_id']][$data['filter_id']][$data['part_id']] = $answerData;
@@ -64,12 +68,12 @@ class AnswerRepository extends AbstractChildRepository
      * @param integer $partId
      * @return float|null
      */
-    public function getValuePercent($questionnaireId, $filterId, $partId)
+    public function getValue($questionnaireId, $filterId, $partId)
     {
         $this->fillCache($questionnaireId);
 
         if (isset($this->cache[$questionnaireId][$filterId][$partId])) {
-            return $this->cache[$questionnaireId][$filterId][$partId]['valuePercent'];
+            return $this->cache[$questionnaireId][$filterId][$partId]['value'];
         } else {
             return null;
         }
@@ -89,7 +93,7 @@ class AnswerRepository extends AbstractChildRepository
         if (isset($this->cache[$questionnaireId][$filterId])) {
 
             foreach ($this->cache[$questionnaireId][$filterId] as $answerData) {
-                if (!is_null($answerData['valuePercent'])) {
+                if (!is_null($answerData['value'])) {
                     return $answerData['questionName'];
                 }
             }
