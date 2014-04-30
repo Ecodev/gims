@@ -37,6 +37,13 @@
             </div>
         </div>
 
+        <div class="form-group ng-trans ng-trans-fade-down" ng-show="question.type == 'Numeric'">
+            <div class='col-md-6 col-md-offset-2 radio'>
+                <div class="col-md-12"><label><input type='radio' name='isAbsolute' value='0' ng-model='question.isAbsolute' ng-checked="1">Value in percent (max 1)</label></div>
+                <div class="col-md-12"><label><input type='radio' name='isAbsolute' value='1' ng-model='question.isAbsolute'>Value absolute (no maximum limit)</label></div>
+            </div>
+        </div>
+
         <div class="form-group ng-trans ng-trans-fade-down" ng-show="isChoices">
             <div class='col-md-6 col-md-offset-2 radio'>
                 <div class="col-md-12"><label><input type='radio' name='isMultiple' value='0' ng-model='question.isMultiple' ng-checked="1">Single choice</label></div>

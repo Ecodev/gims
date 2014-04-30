@@ -231,6 +231,7 @@ use \Application\Traits\EntityManagerAware;
 
         $this->cacheComputeFilter[$key] = $result;
         _log()->debug(__METHOD__, array('end  ', $filterId, $questionnaireId, $partId, $result));
+
         return $result;
     }
 
@@ -267,7 +268,7 @@ use \Application\Traits\EntityManagerAware;
         }
 
         // If the filter have a specified answer, returns it (skip all computation)
-        $answerValue = $this->getAnswerRepository()->getValuePercent($questionnaireId, $filterId, $partId);
+        $answerValue = $this->getAnswerRepository()->getValue($questionnaireId, $filterId, $partId);
 
         if (!is_null($answerValue)) {
             return $answerValue;
@@ -294,7 +295,7 @@ use \Application\Traits\EntityManagerAware;
 
     /**
      * Summer to sum values of given filters, but only if non-null (to preserve null value if no answer at all)
-     * @param \IteratorAggregate $filterIds
+     * @param array|\IteratorAggregate $filterIds
      * @param integer $questionnaireId
      * @param integer $partId
      * @param boolean $useSecondLevelRules
@@ -321,9 +322,9 @@ use \Application\Traits\EntityManagerAware;
      * Compute the value of a formula based on GIMS syntax.
      * For details about syntax, @see \Application\Model\Rule\Rule
      * @param \Application\Model\Rule\AbstractQuestionnaireUsage $usage
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
      * @param boolean $useSecondLevelRules
      * @return null|float
-     * @throws \Exception
      */
     public function computeFormula(AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas = null, $useSecondLevelRules = false)
     {
@@ -435,7 +436,7 @@ use \Application\Traits\EntityManagerAware;
         }
 
         _log()->debug(__METHOD__, array($usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormulas, $result));
+
         return $result;
     }
-
 }
