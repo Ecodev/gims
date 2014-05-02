@@ -14,6 +14,16 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
 {
 
     /**
+     * @var Questionnaire
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Model\Questionnaire", inversedBy="filterQuestionnaireUsages"))
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
+     * })
+     */
+    protected $questionnaire;
+
+    /**
      * @var Filter
      *
      * @ORM\ManyToOne(targetEntity="Application\Model\Filter", inversedBy="filterQuestionnaireUsages")

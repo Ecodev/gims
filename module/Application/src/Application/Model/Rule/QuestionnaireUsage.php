@@ -25,6 +25,16 @@ class QuestionnaireUsage extends AbstractQuestionnaireUsage
     }
 
     /**
+     * @var Questionnaire
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Model\Questionnaire", inversedBy="questionnaireUsages"))
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
+     * })
+     */
+    protected $questionnaire;
+
+    /**
      * Set questionnaire
      *
      * @param \Application\Model\Questionnaire $questionnaire
