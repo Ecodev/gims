@@ -191,16 +191,44 @@ div.browse .col-md-4 {
 
 #chartPanel{
     position:fixed;
-    @media (max-width: $screen-xs-max) {position:static;}
-
     z-index:999;
+    width:450px;
     height:100%;
     top:52px;
-    right:0;
+    right: -435px;
     background:white;
     box-shadow:0px 2px 5px rgba(0,0,0,0.5);
-    overflow: scroll; overflow-x:hidden;
-    padding-bottom:100px;
+    padding:20px 0 100px 0;
+
+    @media (max-width: $screen-xs-max) {
+        position:static;
+        width:100%;
+    }
+
+
+    &.visible{
+        right:0;
+    }
+}
+
+#chartOpenBtn{
+    position:absolute;
+    top:19px;
+    left:-40px;
+    width:40px;
+    padding:7px;
+    -webkit-box-shadow:-2px 0px 2px rgba(0,0,0,0.3);
+    -moz-box-shadow:-2px 0px 2px rgba(0,0,0,0.3);
+    box-shadow:-2px 0px 2px rgba(0,0,0,0.3);
+    border-top-left-radius:5px;
+    border-bottom-left-radius:5px;
+    background:white;
+    cursor:pointer;
+}
+
+#panelContent{
+    overflow: scroll;
+    overflow-x:hidden;
 }
 
 .gridStyle{

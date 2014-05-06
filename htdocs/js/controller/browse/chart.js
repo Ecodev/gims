@@ -8,6 +8,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.firstExecution = true;
     $scope.countryQueryParams = {perPage: 500};
     $scope.filterSetQueryParams = {fields: 'filters.genericColor,filters.children.__recursive'};
+    $scope.filterParams = {fields: 'paths,color,genericColor', itemOnce: 'true'};
     $scope.filtersTemplate = "" +
             "<div>" +
             "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
@@ -17,6 +18,14 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             "    <small>" +
             "       [[_.map(item.paths, function(path){return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]" +
             "    </small>" +
+            "</div>" +
+            "<div class='clearfix'></div>" +
+            "</div>";
+
+    $scope.filtersTemplate2 = "" +
+            "<div>" +
+            "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
+            "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +
             "</div>" +
             "<div class='clearfix'></div>" +
             "</div>";
@@ -87,6 +96,13 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             $scope.refresh(false, callback);
         }
     }, true);
+
+
+    $scope.$watch('chartOpened', function(){
+        $timeout(function() {
+            jQuery(window).resize();
+        }, 350); // 350 to resize after animation of panel
+    });
 
     /**
      * Executes when a point is selected
