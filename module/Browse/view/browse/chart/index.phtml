@@ -2,7 +2,7 @@
 
     <div class='row'>
 
-        <div ng-class="{'col-xs-12 col-sm-7 col-md-7 col-lg-8' : hasIgnoredElements || pointSelected, 'col-md-12' : !hasIgnoredElements && !pointSelected}">
+        <div class="col-md-12">
             <div class='row show-grid'>
                 <form class='form-horizontal'>
                     <div class='col-md-6'>
@@ -33,7 +33,7 @@
                     </div>
                 </form>
 
-<!--                <div class='col-md-6'>-->
+<!--                <div class='col-md-4'>-->
 <!--                    <p class='text-right'>-->
 <!--                        <img src="/img/jmp-logo-black.png" alt="JMP logo" class="logo-chart"/>-->
 <!--                        <img src="/img/who-logo-black.png" alt="WHO logo" class="logo-chart"/>-->
@@ -49,7 +49,7 @@
     <div class="row show-grid">
 
         <!-- Chart -->
-        <div ng-show='chart' class='ng-trans ng-trans-fade-down' ng-class="{'col-xs-12 col-sm-7 col-md-7 col-lg-8' : chartOpened, 'col-md-12' : !chartOpened}" >
+        <div ng-show='chart' class='ng-trans ng-trans-fade-down' ng-class="{'col-xs-12 col-sm-7 col-md-7 col-lg-10' : chartOpened, 'col-md-12' : !chartOpened}" >
 
             <tabset class="nav-tabs-centered">
                 <tab heading='Chart'>
@@ -132,30 +132,10 @@
                             </tr>
                             </tbody>
 
-                            <!-- Questionnaire Usages -->
-                            <tbody ng-if="indexedElements[pointSelected.questionnaire].usages">
-                            <tr class="active">
-                                <td  style='width:{{firstCol}}'>
-                                    <i class='fa fa-lg fa-gims-rule'></i>
-                                </td>
-                                <td colspan='2'>Questionnaire's calculations / ratios / estimates</td>
-                            </tr>
-                            <tr ng-repeat="usage in indexedElements[pointSelected.questionnaire].usages | orderBy:'rule.name'">
-                                <td style='width:{{firstCol}}' ><i class='fa fa-lg fa-gims-rule'></i></td>
-                                <td colspan='1'>{{usage.rule.name}}</td>
-                                <td style='width:{{lastCol}}' class='text-right'>
-                                <span ng-show='usage.value'>
-                                    {{usage.value}} %
-                                </span>
-                                </td>
-                            </tr>
-                            </tbody>
-
                         </table>
                     </div>
-
                 </tab>
-                <tab heading='Ignored elements'>
+                <tab heading='Ignored'>
 
                     <!-- Panel bottom part : ignored elements -->
                     <div class='col-md-12'>
@@ -199,6 +179,41 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </tab>
+                <tab heading='Formulas'>
+
+                    <!-- Panel top part : selected questionnaire and filters -->
+                    <div ng-show='pointSelected'>
+                        <div class='col-md-12'>
+                            <h3 ng-class="{'text-muted': indexedElements[pointSelected.questionnaire].ignored}">
+                                <i class="fa fa-gims-questionnaire"
+                                   ng-class="{'text-primary fa-eye': !indexedElements[pointSelected.questionnaire].ignored}"
+                                   ng-click="toggleQuestionnaire(pointSelected.questionnaire)"></i>
+                                {{indexedElements[pointSelected.questionnaire].name}}<br/>
+                                <small>Calculations / ratios / estimates</small>
+                            </h3>
+                        </div>
+                        <table class='table'>
+                            <!-- Questionnaire Usages -->
+                            <tbody ng-if="indexedElements[pointSelected.questionnaire].usages">
+                            <tr class="active">
+                                <td  style='width:{{firstCol}}'>
+                                    <i class='fa fa-lg fa-gims-rule'></i>
+                                </td>
+                                <td colspan='2'>Questionnaire's calculations / ratios / estimates</td>
+                            </tr>
+                            <tr ng-repeat="usage in indexedElements[pointSelected.questionnaire].usages | orderBy:'rule.name'">
+                                <td style='width:{{firstCol}}' ><i class='fa fa-lg fa-gims-rule'></i></td>
+                                <td colspan='1'>{{usage.rule.name}}</td>
+                                <td style='width:{{lastCol}}' class='text-right'>
+                                <span ng-show='usage.value'>
+                                    {{usage.value}} %
+                                </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </tab>
                 <tab heading='Actions'>

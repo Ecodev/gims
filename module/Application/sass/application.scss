@@ -205,7 +205,6 @@ div.browse .col-md-4 {
         width:100%;
     }
 
-
     &.visible{
         right:0;
     }
@@ -227,8 +226,8 @@ div.browse .col-md-4 {
 }
 
 #panelContent{
-    overflow: scroll;
-    overflow-x:hidden;
+    overflow-y: scroll;
+    height:100%;
 }
 
 .gridStyle{
