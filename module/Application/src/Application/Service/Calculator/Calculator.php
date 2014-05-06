@@ -20,6 +20,7 @@ use \Application\Traits\EntityManagerAware;
 
     private $cacheComputeFilter = array();
     protected $ignoredFilters = array();
+    protected $overridenFilters = array();
     private $populationRepository;
     private $questionnaireUsageRepository;
     private $filterRepository;
@@ -204,28 +205,42 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
+     * Set the filter which must be overriden with given value
+     * @param array $overridenFilters [questionnaireId => [filterId => [partId => value]]]
+     * @return \Application\Service\Calculator\Calculator
+     */
+    public function setOverridenFilters(array $overridenFilters)
+    {
+        $this->overridenFilters = $overridenFilters;
+
+        return $this;
+    }
+
+    /**
      * Returns the computed value of the given filter, based on the questionnaire's available answers
      * @param integer $filterId
      * @param integer $questionnaireId
      * @param integer $partId
      * @param boolean $useSecondLevelRules
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
+     * @param array $ignoredFilters
      * @return float|null null if no answer at all, otherwise the percentage value
      */
-    public function computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules = false, ArrayCollection $alreadyUsedFormulas = null, $ignoredElementsByQuestionnaire = null)
+    public function computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules = false, ArrayCollection $alreadyUsedFormulas = null, array $ignoredFilters = null)
     {
-        if ($ignoredElementsByQuestionnaire) {
-            $this->ignoredFilters = $ignoredElementsByQuestionnaire;
+        if ($ignoredFilters) {
+            $this->ignoredFilters = $ignoredFilters;
         }
 
         _log()->debug(__METHOD__, array('start', $filterId, $questionnaireId, $partId));
-        $key = \Application\Utility::getCacheKey(func_get_args());
+        $key = \Application\Utility::getCacheKey([func_get_args(), $this->overridenFilters]);
         if (array_key_exists($key, $this->cacheComputeFilter)) {
             return $this->cacheComputeFilter[$key];
         }
 
-        if (!$alreadyUsedFormulas)
+        if (!$alreadyUsedFormulas) {
             $alreadyUsedFormulas = new ArrayCollection();
+        }
 
         $result = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, new ArrayCollection());
 
@@ -250,13 +265,11 @@ use \Application\Traits\EntityManagerAware;
         _log()->debug(__METHOD__, array($filterId, $questionnaireId, $partId, $useSecondLevelRules));
 
         // The logic goes as follows: if the filter id is contained within excludeFilters, skip calculation.
-        if (
-            isset($this->ignoredFilters['byQuestionnaire'])
-                && isset($this->ignoredFilters['byQuestionnaire'][$questionnaireId])
-                && in_array($filterId, $this->ignoredFilters['byQuestionnaire'][$questionnaireId])
-            || isset($this->ignoredFilters['byFilterSet'])
-                && in_array($filterId, $this->ignoredFilters['byFilterSet']))
-        {
+        if (isset($this->ignoredFilters['byQuestionnaire']) &&
+                isset($this->ignoredFilters['byQuestionnaire'][$questionnaireId]) &&
+                in_array($filterId, $this->ignoredFilters['byQuestionnaire'][$questionnaireId]) ||
+                isset($this->ignoredFilters['byFilterSet']) &&
+                in_array($filterId, $this->ignoredFilters['byFilterSet'])) {
             return null;
         }
 
@@ -265,6 +278,11 @@ use \Application\Traits\EntityManagerAware;
             return null;
         } else {
             $alreadySummedFilters->add($filterId);
+        }
+
+        // If the filter has an overriding value, use the override
+        if (isset($this->overridenFilters[$questionnaireId][$filterId][$partId])) {
+            return $this->overridenFilters[$questionnaireId][$filterId][$partId];
         }
 
         // If the filter have a specified answer, returns it (skip all computation)
@@ -439,4 +457,5 @@ use \Application\Traits\EntityManagerAware;
 
         return $result;
     }
+
 }

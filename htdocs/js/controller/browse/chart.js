@@ -8,7 +8,18 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.firstExecution = true;
     $scope.countryQueryParams = {perPage: 500};
     $scope.filterSetQueryParams = {fields: 'filters.genericColor,filters.children.__recursive'};
-
+    $scope.filtersTemplate = "" +
+            "<div>" +
+            "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
+            "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +
+            "</div>" +
+            "<div class='col-sm-7 col-md-7'>" +
+            "    <small>" +
+            "       [[_.map(item.paths, function(path){return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]" +
+            "    </small>" +
+            "</div>" +
+            "<div class='clearfix'></div>" +
+            "</div>";
 
     $scope.$watch(function() {
         return $location.url();
@@ -18,8 +29,10 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     });
 
 
-    $scope.getFilterSets = function(){
-        var filterSetsIds = _.map($scope.filterSet, function(el){ return el.id;});
+    $scope.getFilterSets = function() {
+        var filterSetsIds = _.map($scope.filterSet, function(el) {
+            return el.id;
+        });
         return filterSetsIds.join(',');
     };
 
@@ -314,8 +327,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      */
     $scope.initIgnoredElementsFromUrl = function() {
         // url excluded questionnaires
-        var ignoredQuestionnaires = $location.search().ignoredElements ? $location.search().ignoredElements.split(',') :
-            [];
+        var ignoredQuestionnaires = $location.search().ignoredElements ? $location.search().ignoredElements.split(',') : [];
 
         if (ignoredQuestionnaires.length > 0) {
 
@@ -353,9 +365,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     };
 
     /**
-     * Calls CharController to refresh charts depending on new values
+     * Calls ChartController to refresh charts depending on new values
      *
-     * @param refreshUrl Usualy set to true before sending request but at first execution is set to false
+     * @param refreshUrl Usually set to true before sending request but at first execution is set to false
      * @param callback
      */
     $scope.refresh = function(refreshUrl, callback) {
@@ -386,7 +398,10 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                     country: $scope.country.id,
                     part: $scope.part.id,
                     filterSet: filterSets.join(','),
-                    ignoredElements: ignoredElements
+                    ignoredElements: ignoredElements,
+                    reference: $scope.reference ? $scope.reference.id : null,
+                    target: $scope.reference ? $scope.target.id : null,
+                    overridable: $scope.reference ? $scope.overridable.id : null
                 }
             }).success(function(data) {
 
@@ -403,8 +418,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                     var fields = template.match(/(\{.*?\})/g);
 
                     // replace the field by his value using this.field for {field} in formatter context
-                    var evalValue = function(field){
-                        return eval('this.'+field.substring(1, field.length - 1));
+                    var evalValue = function(field) {
+                        return eval('this.' + field.substring(1, field.length - 1));
                     };
 
                     // self design patern to avoid "this" to be in the forEach context

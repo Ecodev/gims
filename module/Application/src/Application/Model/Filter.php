@@ -71,7 +71,7 @@ class Filter extends AbstractModel
     private $questions;
 
     /**
-     * Questions that have current filter assigned
+     * FilterSets that have current filter assigned
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="\Application\Model\FilterSet", mappedBy="filters")
      */

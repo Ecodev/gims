@@ -200,4 +200,23 @@ class CalculatorTest extends AbstractCalculator
         $this->assertEquals(16, $this->getNewCalculator()->computeFilter($this->filter1->getId(), $this->questionnaire->getId(), $this->part1->getId()), 'should fallback to second formula');
     }
 
+    public function testOveriddenFilters()
+    {
+        $calculator = $this->getNewCalculator();
+        $this->assertEquals($this->answer32->getValuePercent(), $calculator->computeFilter($this->filter32->getId(), $this->questionnaire->getId(), $this->part1->getId()), 'should be the answer, when answer specified');
+
+        $overridenValue = 345;
+        $calculator->setOverridenFilters([
+            $this->questionnaire->getId() => [
+                $this->filter32->getId() => [
+                    $this->part1->getId() => $overridenValue,
+                ],
+            ],
+        ]);
+        $this->assertEquals($overridenValue, $calculator->computeFilter($this->filter32->getId(), $this->questionnaire->getId(), $this->part1->getId()), 'exact same call should now return overriden value');
+
+        $calculator->setOverridenFilters([]);
+        $this->assertEquals($this->answer32->getValuePercent(), $calculator->computeFilter($this->filter32->getId(), $this->questionnaire->getId(), $this->part1->getId()), 'after reseting overrides, should return original value, from cache');
+    }
+
 }

@@ -191,7 +191,7 @@ div.browse .col-md-4 {
 
 #chartPanel{
     position:fixed;
-    @media (max-width: $screen-xs-max) {position:static}
+    @media (max-width: $screen-xs-max) {position:static;}
 
     z-index:999;
     height:100%;

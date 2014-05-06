@@ -10,9 +10,39 @@
 <!--                    <a class='btn btn-default' ng-class="{'disabled': !country || !editableFilter}" href="/contribute/questionnaire?&country={{country.id}}&filter={{editableFilter}}&returnUrl={{currentUrl}}"><i class='fa fa-pencil'></i> Edit selected filter</a>-->
 <!--                </div>-->
 <!--            </div>-->
-
+<pre>{{chart.overridenFilters|json}}</pre>
             <div class='row show-grid'>
                 <form>
+                    <gims-select
+                        model="reference"
+                        name="reference"
+                        api="filter"
+                        placeholder="Select filter to be moved"
+                        custom-selection-template="{{filtersTemplate}}"
+                        custom-result-template="{{filtersTemplate}}"
+                        disabled='isLoading'
+                        style="width: 100%">
+                    </gims-select>
+                    <gims-select
+                        model="overridable"
+                        name="overridable"
+                        api="filter"
+                        placeholder="Select filter to be modified"
+                        custom-selection-template="{{filtersTemplate}}"
+                        custom-result-template="{{filtersTemplate}}"
+                        disabled='isLoading'
+                        style="width: 100%">
+                    </gims-select>
+                    <gims-select
+                        model="target"
+                        name="target"
+                        api="filter"
+                        placeholder="Select filter to target"
+                        custom-selection-template="{{filtersTemplate}}"
+                        custom-result-template="{{filtersTemplate}}"
+                        disabled='isLoading'
+                        style="width: 100%">
+                    </gims-select>
 
                     <div class='col-md-6'>
                         <h2>

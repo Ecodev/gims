@@ -6,7 +6,7 @@ class debug
     protected static function varDump($var)
     {
         if (php_sapi_name() == 'cli') {
-            var_dump($var);
+            var_export($var);
         } else {
             ob_start();
             var_dump($var);
@@ -84,8 +84,6 @@ class debug
         return $ret_map;
     }
 
-//method
-
     /**
      * Dump any kind of variable in a table (array, object, etc..)
      *
@@ -94,15 +92,17 @@ class debug
      */
     public static function dump($data, $firstLevel = true)
     {
+        if (php_sapi_name() == 'cli') {
+            var_export($data);
+            echo PHP_EOL;
+
+            return;
+        }
         if (ini_get('xdebug.overload_var_dump'))
             return var_dump($data);
 
         if ($firstLevel && count($data) == 1)
             $data = $data[0];
-
-        if (php_sapi_name() == 'cli') {
-            return self::varDump($data);
-        }
 
         if (is_object($data)) {
             return self::dump(self::parseObject($data), false);
@@ -144,7 +144,6 @@ function w()
     echo "" . ($isHtml ? '</pre>' : '') . "_________________________________________________________________________________________________________________________" . ($isHtml ? '</br>' : '') . "\n";
     die("script aborted on purpose.\n");
 }
-
 
 /**
  * Returns logger

@@ -90,7 +90,7 @@ class Jmp extends Calculator
             $alreadyUsedRules = new ArrayCollection();
         }
 
-        $key = \Application\Utility::getCacheKey(func_get_args());
+        $key = \Application\Utility::getCacheKey([func_get_args(), $this->overridenFilters]);
         if (array_key_exists($key, $this->cacheComputeFlattenOneYearWithFormula)) {
             return $this->cacheComputeFlattenOneYearWithFormula[$key];
         }
@@ -207,7 +207,7 @@ class Jmp extends Calculator
      */
     private function computeRegressionForAllYears(array $years, $filterId, array $questionnaires, $partId)
     {
-        $key = \Application\Utility::getCacheKey(func_get_args());
+        $key = \Application\Utility::getCacheKey([func_get_args(), $this->overridenFilters]);
         if (array_key_exists($key, $this->cacheComputeRegressionForAllYears)) {
             return $this->cacheComputeRegressionForAllYears[$key];
         }
@@ -268,7 +268,7 @@ class Jmp extends Calculator
      */
     public function computeFilterForAllQuestionnaires($filterId, array $questionnaires, $partId)
     {
-        $key = \Application\Utility::getCacheKey(func_get_args());
+        $key = \Application\Utility::getCacheKey([func_get_args(), $this->overridenFilters]);
 
         if (array_key_exists($key, $this->cacheComputeFilterForAllQuestionnaires)) {
             return $this->cacheComputeFilterForAllQuestionnaires[$key];
@@ -442,6 +442,7 @@ class Jmp extends Calculator
         }
 
         _log()->debug(__METHOD__, array($currentFilterId, $currentPartId, $year, $rule->getId(), $rule->getName(), $originalFormula, $convertedFormulas, $result));
+
         return $result;
     }
 
