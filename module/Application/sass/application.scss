@@ -186,7 +186,26 @@ div.browse .col-md-4 {
     padding:0 !important;
     height:15px !important;
     width:15px !important;
-    border:1px solid white
+    border:1px solid white;
+}
+
+
+#chartExternalLayout{
+    table-layout:fixed;
+    width:100%;
+
+   #panelTamponZone{
+       display:none;
+       width:450px !important;
+       &.chartOpened{
+        display:table-cell;
+       }
+
+       @media (max-width: $screen-xs-max) {display:none !important;};
+
+   }
+
+
 }
 
 #chartPanel{

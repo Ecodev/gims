@@ -2,6 +2,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     'use strict';
 
     $scope.Math = window.Math;
+    $scope.panelTabs = {};
     $scope.usedFilters = {};
     $scope.ignoredElements = [];
     $scope.indexedElements = {};
@@ -408,6 +409,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         refreshCanceler = $q.defer();
 
         $scope.$apply(function() {
+
             $http.get('/api/chart', {
                 timeout: refreshCanceler.promise,
                 params: {
@@ -415,9 +417,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                     part: $scope.part.id,
                     filterSet: filterSets.join(','),
                     ignoredElements: ignoredElements,
-                    reference: $scope.reference ? $scope.reference.id : null,
-                    target: $scope.reference ? $scope.target.id : null,
-                    overridable: $scope.reference ? $scope.overridable.id : null
+                    reference: $scope.panelTabs.reference ? $scope.panelTabs.reference.id : null,
+                    target: $scope.panelTabs.reference ? $scope.panelTabs.target.id : null,
+                    overridable: $scope.panelTabs.reference ? $scope.panelTabs.overridable.id : null
                 }
             }).success(function(data) {
 
