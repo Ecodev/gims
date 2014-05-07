@@ -165,7 +165,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         }
 
         $chart = $this->getChart(implode(', ', $filterSetsNames), $series, $country, $part);
-        $chart['overridenFilters'] = $adjusted['overridenFilters'];
+        if (isset($adjusted['overridenFilters']) && $adjusted['overridenFilters']) {
+            $chart['overridenFilters'] = $adjusted['overridenFilters'];
+        }
 
         return new NumericJsonModel($chart);
     }
