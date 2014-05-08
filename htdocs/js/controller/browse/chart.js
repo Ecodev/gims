@@ -46,6 +46,22 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         return filterSetsIds.join(',');
     };
 
+    $scope.$watch('panelTabs.target', function(){
+        $location.search('target', $scope.panelTabs.target);
+    });
+
+    $scope.$watch('panelTabs.overridable', function(){
+        $location.search('overridable', $scope.panelTabs.overridable);
+    });
+
+    $scope.$watch('panelTabs.reference', function(){
+        if ($scope.panelTabs.reference) {
+            Restangular.one('filter', $scope.panelTabs.reference.id).get({fields:'children'}).then(function(filters){
+                $scope.panelTabs.referenceChildren = filters.children;
+            });
+        }
+    });
+
     /**
      * Executes when country, part or filterset are changed
      * When filter filterset is changed, rebuilds the list of the hFilters used.
@@ -63,6 +79,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                     });
                 });
                 $scope.usedFilters = newUsedFilters;
+                $scope.panelTabs.usedFilters = newUsedFilters;
 
                 // remove all filters that are not used by current usedFilters
                 _.forEach($scope.indexedElements, function(questionnaire) { // select first questionnaire they return false to break and avoid to loop all questionnaires
@@ -388,7 +405,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * @param callback
      */
     $scope.refresh = function(refreshUrl, callback) {
-
         $scope.isLoading = true;
         var ignoredElements = refreshUrl ? $scope.getIgnoredElements(refreshUrl).join(',') : $location.search().ignoredElements;
         $scope.refreshChart(refreshUrl, ignoredElements, callback);
@@ -396,7 +412,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
     var refreshCanceler;
     $scope.refreshChart = _.debounce(function(refreshUrl, ignoredElements, callback) {
-        //$scope.chart = null;
         var filterSets = _.map($scope.filterSet, function(filterSet) {
             return filterSet.id;
         });
@@ -418,8 +433,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                     filterSet: filterSets.join(','),
                     ignoredElements: ignoredElements,
                     reference: $scope.panelTabs.reference ? $scope.panelTabs.reference.id : null,
-                    target: $scope.panelTabs.reference ? $scope.panelTabs.target.id : null,
-                    overridable: $scope.panelTabs.reference ? $scope.panelTabs.overridable.id : null
+                    target: $scope.panelTabs.reference ? $scope.panelTabs.target : null,
+                    overridable: $scope.panelTabs.reference ? $scope.panelTabs.overridable : null
                 }
             }).success(function(data) {
 
@@ -477,6 +492,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                     callback();
                 }
                 $scope.chart = data;
+                $scope.panelTabs.series = data.series;
                 $scope.generateKeyIndicatorsTable(ignoredElements);
                 $scope.isLoading = false;
             });

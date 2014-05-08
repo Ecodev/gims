@@ -680,28 +680,33 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      */
     private function getAdjustedSeries(array $questionnaires, Part $part)
     {
-        $reference = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($this->params()->fromQuery('reference'));
-        $overridable = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($this->params()->fromQuery('overridable'));
-        $target = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($this->params()->fromQuery('target'));
-
         $series = array();
         $overridenFilters = array();
-        if ($reference && $overridable && $target) {
-            $adjustator = new \Application\Service\Calculator\Adjustator();
-            $filterSet = new FilterSet();
-            $filterSet->addFilter($reference);
 
-            $calculator = new \Application\Service\Calculator\Jmp();
-            $calculator->setServiceLocator($this->getServiceLocator());
-            $adjustator->setCalculator($calculator);
+        if ($this->params()->fromQuery('reference') && $this->params()->fromQuery('overridable') && $this->params()->fromQuery('target')) {
 
-            $overridenFilters = $adjustator->findOverridenFilters($target, $reference, $overridable, $questionnaires, $part);
-            $series = $this->getSeries($filterSet, $questionnaires, $part, array(), 100, null, false, ' (adjusted)', $overridenFilters);
+            $reference = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($this->params()->fromQuery('reference'));
+            $overridable = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($this->params()->fromQuery('overridable'));
+            $target = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($this->params()->fromQuery('target'));
+
+            if ($reference && $overridable && $target) {
+                $adjustator = new \Application\Service\Calculator\Adjustator();
+                $filterSet = new FilterSet();
+                $filterSet->addFilter($reference);
+
+                $calculator = new \Application\Service\Calculator\Jmp();
+                $calculator->setServiceLocator($this->getServiceLocator());
+                $adjustator->setCalculator($calculator);
+
+                $overridenFilters = $adjustator->findOverridenFilters($target, $reference, $overridable, $questionnaires, $part);
+                $series = $this->getSeries($filterSet, $questionnaires, $part, array(), 100, null, false, ' (adjusted)', $overridenFilters);
+            }
+
         }
 
         return array(
             'series' => $series,
-            'overridenFilters' => $overridenFilters,
+            'overridenFilters' => $overridenFilters
         );
     }
 

@@ -276,15 +276,10 @@
                                                     queryparams='filterParams'
                                                     custom-selection-template="{{filtersTemplate2}}"
                                                     custom-result-template="{{filtersTemplate}}"
-                                                    disabled='isLoading'
                                                     style="width: 100%">
                                                 </gims-select>
                                             </div>
                                         </div>
-
-<!--                                        <div class='text-center'>-->
-<!--                                            <i class='fa fa-arrow-down text-muted fa-lg'></i>-->
-<!--                                        </div>-->
 
                                         <div class='row show-grid'>
                                             <div class='col-md-12'>
@@ -293,43 +288,30 @@
                                                 </label>
                                             </div>
                                             <div class='col-md-12'>
-                                                <gims-select
-                                                    model="panelTabs.target"
-                                                    name="target"
-                                                    api="filter"
-                                                    placeholder="Select filter to target"
-                                                    queryparams='filterParams'
-                                                    custom-selection-template="{{filtersTemplate2}}"
-                                                    custom-result-template="{{filtersTemplate}}"
-                                                    disabled='isLoading'
-                                                    style="width: 100%">
-                                                </gims-select>
+
+                                                <select ui-select2 ng-model="panelTabs.target" data-placeholder="Select filter to target"  style="width: 100%" >
+                                                    <option value="{{null}}"></option>
+                                                    <option ng-repeat='serie in panelTabs.usedFilters' value='{{serie.id}}'>{{serie.name}}</option><!-- ng-if="serie.type == 'line'" -->
+                                                </select>
                                             </div>
                                         </div>
 
                                         <div class='row show-grid'>
                                             <div class='col-md-12'>
                                                 <label class='form-label'>
-                                                    <i class='fa fa-dashboard'></i> ... computing filter value after projection
+                                                    <i class='fa fa-dashboard'></i> ... computing value after projection
                                                 </label>
                                             </div>
                                             <div class='col-md-12'>
-                                                <gims-select
-                                                    model="panelTabs.overridable"
-                                                    name="overridable"
-                                                    api="filter"
-                                                    placeholder="Select filter to be modified"
-                                                    queryparams='filterParams'
-                                                    custom-selection-template="{{filtersTemplate2}}"
-                                                    custom-result-template="{{filtersTemplate}}"
-                                                    disabled='isLoading'
-                                                    style="width: 100%">
-                                                </gims-select>
+                                                <select ui-select2 ng-model="panelTabs.overridable" data-placeholder="Select filter to be modified"  style="width: 100%">
+                                                    <option value="{{null}}"></option>
+                                                    <option ng-repeat='filter in panelTabs.referenceChildren' value='{{filter.id}}'>{{filter.name}}</option>
+                                                </select>
                                             </div>
                                         </div>
 
                                     </div>
-                                    <button class='btn btn-default' ng-click='refresh(false)'><i class='fa fa-cog'></i> Apply</button>
+                                    <button class='btn btn-default' ng-click='refresh(false)' ng-class="{'disabled': !panelTabs.overridable || !panelTabs.target || !panelTabs.overridable}">Apply</button>
                                 </div>
                             </tab>
                         </tabset>
@@ -342,3 +324,4 @@
     </tr>
 </table>
 </div>
+
