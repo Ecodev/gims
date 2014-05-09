@@ -1,13 +1,5 @@
 <div class='container' ng-class="{'gims-full-width-container':chartOpened}">
 
-<!--                <div class='col-md-4'>-->
-<!--                    <p class='text-right'>-->
-<!--                        <img src="/img/jmp-logo-black.png" alt="JMP logo" class="logo-chart"/>-->
-<!--                        <img src="/img/who-logo-black.png" alt="WHO logo" class="logo-chart"/>-->
-<!--                        <img src="/img/unicef-logo-black.png" alt="Unicef logo" class="logo-chart"/>-->
-<!--                    </p>-->
-<!--                </div>-->
-
 <table id='chartExternalLayout'>
     <tr>
         <td>
@@ -15,7 +7,7 @@
                 <div class='row'>
                     <div class="col-md-12">
                             <form class='form-horizontal'>
-                                <div ng-class="{'col-lg-10 col-md-11':chartOpened, 'col-lg-8 col-md-9':!chartOpened}">
+                                <div ng-class="{'col-lg-9 col-md-10':chartOpened, 'col-lg-7 col-md-8':!chartOpened}">
                                     <div class='row'>
                                         <div class='form-group'>
                                             <label class='col-md-2 control-label'>Country</label>
@@ -40,6 +32,9 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class='col-md-1'>
+                                    <div class='fa fa-gims-loading fa-2x' ng-show='isLoading'></div>
                                 </div>
                             </form>
                         </div>
