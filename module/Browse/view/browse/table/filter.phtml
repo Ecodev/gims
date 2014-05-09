@@ -295,10 +295,10 @@
                                             </a>
                                         </li>
 
-                                        <li ng-show='questionnairesWithUsages.length && !questionnaire.filterQuestionnaireUsages' class="divider"></li>
+                                        <li ng-show='questionnairesWithUsages.length && !questionnaire.filterQuestionnaireUsages.length' class="divider"></li>
 
                                         <!-- Duplicate rules -->
-                                        <li ng-if='q.id && (!questionnaire.filterQuestionnaireUsages || !questionnaire.filterQuestionnaireUsages.length)' class="dropdown-header"><i class='fa fa-cog fa-fw fa-lg'></i> Suggested formulas</li>
+                                        <li ng-if='questionnairesWithUsages.length && !questionnaire.filterQuestionnaireUsages.length' class="dropdown-header"><i class='fa fa-cog fa-fw fa-lg'></i> Suggested formulas</li>
                                         <li ng-repeat='q in questionnairesWithUsages'
                                             ng-if='q.id && (!questionnaire.filterQuestionnaireUsages || !questionnaire.filterQuestionnaireUsages.length)'
                                             ng-attr-tooltip="{{!questionnaire.id && 'When the survey is saved, click here to report the same formulas'}}"
