@@ -13,7 +13,7 @@ use Application\Assertion\AbstractAssertion;
  * Then, lower-level API, <code>isGrantedWithContext()</code> and
  * <code>isGranted()</code> can be used for more specific cases.
  */
-class Rbac extends \ZfcRbac\Service\Rbac
+class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
 {
 
     use \Zend\ServiceManager\ServiceLocatorAwareTrait;
@@ -37,7 +37,7 @@ class Rbac extends \ZfcRbac\Service\Rbac
 
         if ($context) {
             $result = $this->isGrantedWithContext($context, $permission, $assertion);
-        } elseif ($object->getCreator() === $this->getIdentity()) {
+        } elseif ($this->getIdentity() && $object->getCreator() === $this->getIdentity()) {
             $result = true;
         } else {
             $result = $this->isGranted($permission, $assertion);
@@ -76,15 +76,10 @@ class Rbac extends \ZfcRbac\Service\Rbac
     private function generateMessage($object, $context, $permission)
     {
         $user = $this->getIdentity();
-
+        $roles = 'anonymous';
         if ($user instanceof \Application\Model\User && $context) {
             $user->setRolesContext($context);
-        }
-
-        $roles = implode(', ', $user->getRoles());
-
-        // Reset context to avoid side-effect on next usage of $this->isGranted()
-        if ($user instanceof \Application\Model\User) {
+            $roles = implode(', ', $user->getRoles());
             $user->resetRolesContext();
         }
 

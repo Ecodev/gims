@@ -236,7 +236,7 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         // After flushed in DB, we clear EM identiy cache, to be sure that we actually reload object from database
         $this->getEntityManager()->clear();
         $reloadedUser = $this->getEntityManager()->merge($this->user);
-        $this->rbac->setIdentity($reloadedUser);
+        $this->identityProvider->setIdentity($reloadedUser);
     }
 
     public function testCanGetOne()

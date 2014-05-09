@@ -14,7 +14,7 @@ class FilterSetController extends AbstractRestfulController
          * Give "Filter editor" role to the user on the new survey, so he can
          * modify filterset, create filters etc..
          */
-        $user = $this->getRbac()->getIdentity();
+        $user = $this->getAuth()->getIdentity();
         $role = $this->getEntityManager()->getRepository('Application\Model\Role')->findOneByName('Filter editor');
         $userFilterSet = new \Application\Model\UserFilterSet();
         $userFilterSet->setUser($user)->setFilterSet($newFilterSet)->setRole($role);

@@ -15,9 +15,9 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
     protected $user;
 
     /**
-     * @var \ZfcRbac\Service\Rbac
+     * @var \ApplicationTest\Service\FakeIdentityProvider
      */
-    protected $rbac;
+    protected $identityProvider;
 
     /**
      * @var array [classname => [id => object]]
@@ -33,8 +33,11 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
         // Everything is relative to the application root now.
         chdir(__DIR__ . '/../../../');
 
-        // Config is the normal configuration
+        // Config is the normal configuration, overridden by test configuration
         $config = include 'config/application.config.php';
+        $config['module_listener_options']['config_glob_paths'][] = 'config/autoload/{,*.}{phpunit}.php';
+
+        $this->setApplicationConfig($config);
 
         $this->setApplicationConfig($config);
 
@@ -48,8 +51,8 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
         $this->user->setPassword('foo')->setName('test user unit tests');
 
         // Get rbac service to tell who we are (simulate logged in user)
-        $this->rbac = $this->getApplication()->getServiceManager()->get('ZfcRbac\Service\Rbac');
-        $this->rbac->setIdentity($this->user);
+        $this->identityProvider = $this->getApplicationServiceLocator()->get('ApplicationTest\Service\FakeIdentityProvider');
+        $this->identityProvider->setIdentity($this->user);
     }
 
     /**

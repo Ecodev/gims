@@ -16,7 +16,7 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
     public function questionnaireAction()
     {
         $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($this->params('id'));
-        $permission = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac')->isActionGranted($questionnaire, 'read');
+        $permission = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService')->isActionGranted($questionnaire, 'read');
 
         if ($permission) {
             $flatQuestions = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getAllWithPermissionWithAnswers('read', $questionnaire->getSurvey(), array($questionnaire->getId()));
@@ -41,7 +41,7 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
         $survey = $this->getEntityManager()->getRepository('Application\Model\Survey')->findOneById($this->params('id'));
 
         // Questions permissions and organisation
-        $permission = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac')->isActionGranted($survey, 'read');
+        $permission = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService')->isActionGranted($survey, 'read');
         $questions = null;
         if ($permission) {
 

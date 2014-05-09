@@ -9,16 +9,13 @@ use Application\View\UnauthorizedStrategy;
 class UnauthorizedStrategyFactory implements FactoryInterface
 {
     /**
-     * @param  ServiceLocatorInterface $sl
-     * @return UnauthorizedStrategy
+     * {@inheritDoc}
      */
-    public function createService(ServiceLocatorInterface $sl)
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $rbacService = $sl->get('ZfcRbac\Service\Rbac');
+        /* @var \ZfcRbac\Options\ModuleOptions $moduleOptions */
+        $moduleOptions = $serviceLocator->get('ZfcRbac\Options\ModuleOptions');
 
-        $strategy = new UnauthorizedStrategy();
-        $strategy->setUnauthorizedTemplate($rbacService->getOptions()->getTemplate());
-
-        return $strategy;
+        return new UnauthorizedStrategy($moduleOptions->getUnauthorizedStrategy());
     }
 }

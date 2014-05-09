@@ -13,9 +13,9 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     use EntityManagerAware;
 
     /**
-     * @var \Application\Service\Rbac
+     * @var \Application\Service\AuthorizationService
      */
-    private $rbac;
+    private $auth;
 
     /**
      * @var MetaModel
@@ -28,16 +28,16 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     protected $hydrator;
 
     /**
-     * Returns RBAC service
-     * @return \Application\Service\Rbac
+     * Returns Authorization service
+     * @return \Application\Service\AuthorizationService
      */
-    protected function getRbac()
+    protected function getAuth()
     {
-        if (!$this->rbac) {
-            $this->rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
+        if (!$this->auth) {
+            $this->auth = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
         }
 
-        return $this->rbac;
+        return $this->auth;
     }
 
     /**
@@ -152,10 +152,10 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $this->hydrator->hydrate($data, $object);
 
         // If not allowed to create object, cancel everything
-        if (!$this->getRbac()->isActionGranted($object, 'create')) {
+        if (!$this->getAuth()->isActionGranted($object, 'create')) {
             $this->getResponse()->setStatusCode(403);
 
-            return new JsonModel(array('message' => $this->getRbac()->getMessage()));
+            return new JsonModel(array('message' => $this->getAuth()->getMessage()));
         }
 
         $this->getEntityManager()->persist($object);
@@ -186,10 +186,10 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         }
 
         // If not allowed to delete object, cancel everything
-        if (!$this->getRbac()->isActionGranted($object, 'delete')) {
+        if (!$this->getAuth()->isActionGranted($object, 'delete')) {
             $this->getResponse()->setStatusCode(403);
 
-            return new JsonModel(array('message' => $this->getRbac()->getMessage()));
+            return new JsonModel(array('message' => $this->getAuth()->getMessage()));
         }
 
         $this->getEntityManager()->remove($object);
@@ -216,10 +216,10 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             }
 
             // If not allowed to read the object, cancel everything
-            if (!$this->getRbac()->isActionGranted($object, 'read')) {
+            if (!$this->getAuth()->isActionGranted($object, 'read')) {
                 $this->getResponse()->setStatusCode(403);
 
-                return new JsonModel(array('message' => $this->getRbac()->getMessage()));
+                return new JsonModel(array('message' => $this->getAuth()->getMessage()));
             }
 
             $objects[] = $object;
@@ -306,10 +306,10 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         }
 
         // If not allowed to read the object, cancel everything
-        if (!$this->getRbac()->isActionGranted($object, 'update')) {
+        if (!$this->getAuth()->isActionGranted($object, 'update')) {
             $this->getResponse()->setStatusCode(403);
 
-            return new JsonModel(array('message' => $this->getRbac()->getMessage()));
+            return new JsonModel(array('message' => $this->getAuth()->getMessage()));
         }
 
         $this->hydrator->hydrate($data, $object);

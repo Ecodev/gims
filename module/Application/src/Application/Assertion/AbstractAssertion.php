@@ -2,13 +2,14 @@
 
 namespace Application\Assertion;
 
-use ZfcRbac\Service\Rbac;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Abstract class to handle message in case of failed assertion
  */
 abstract class AbstractAssertion implements \ZfcRbac\Assertion\AssertionInterface
 {
+
     /**
      * Explanation message in case of false assertion
      * @var string
@@ -18,12 +19,12 @@ abstract class AbstractAssertion implements \ZfcRbac\Assertion\AssertionInterfac
     /**
      * Dynamic assertion.
      *
-     * @param \ZfcRbac\Service\Rbac $rbac
+     * @param \ZfcRbac\Service\AuthorizationService $authorizationService
      * @return boolean
      */
-    public function assert(Rbac $rbac)
+    public function assert(AuthorizationService $authorizationService)
     {
-        $result = $this->internalAssert($rbac);
+        $result = $this->internalAssert($authorizationService);
         $this->message = $result ? null : $this->getInternalMessage();
 
         return $result;
@@ -48,10 +49,8 @@ abstract class AbstractAssertion implements \ZfcRbac\Assertion\AssertionInterfac
     /**
      * Returns whether the assertion is true
      *
-     * @param \ZfcRbac\Service\Rbac $rbac
+     * @param \ZfcRbac\Service\AuthorizationService $authorizationService
      * @return boolean
      */
-    abstract protected function internalAssert(Rbac $rbac);
-
-
+    abstract protected function internalAssert(AuthorizationService $authorizationService);
 }

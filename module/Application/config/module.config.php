@@ -48,6 +48,16 @@ return array(
                 'generate_proxies' => false,
             ),
         ),
+
+        // migrations configuration
+        'migrations_configuration' => array(
+            'orm_default' => array(
+                'directory' => 'data/migrations',
+                'name'      => 'GIMS Migrations',
+                'namespace' => 'DoctrineMigrations',
+                'table'     => 'version',
+            ),
+        ),
     ),
     'router' => array(
         'routes' => array(

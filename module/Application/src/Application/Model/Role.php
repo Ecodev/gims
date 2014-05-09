@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Application\Repository\RoleRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="role_unique", columns={"name"})})
  */
-class Role extends AbstractModel
+class Role extends AbstractModel implements \Rbac\Role\RoleInterface
 {
 
     /**
@@ -129,6 +129,21 @@ class Role extends AbstractModel
         $this->permissions->removeElement($permission);
 
         return $this;
+    }
+
+    public function hasPermission($permission)
+    {
+        if ($permission instanceof Permission) {
+            $permission = $permission->getName();
+        }
+
+        foreach ($this->permissions as $existingPermission) {
+            if ($permission == $existingPermission->getName()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

@@ -223,16 +223,16 @@ abstract class AbstractModel
      * Returns an array of common actions and whether they are allowed for current user
      *
      * This should NOT be used in our own code, because it is suboptimal,
-     * instead a direct, single call to Rbac service is prefered. It exists here
+     * instead a direct, single call to Authorization service is prefered. It exists here
      * only for ease of use for REST API.
      * @return array
      */
     public function getPermissions()
     {
-        $rbac = Module::getServiceManager()->get('ZfcRbac\Service\Rbac');
+        $auth = Module::getServiceManager()->get('ZfcRbac\Service\AuthorizationService');
         $result = array();
         foreach (array('create', 'read', 'update', 'delete') as $action) {
-            $result[$action] = $rbac->isActionGranted($this, $action);
+            $result[$action] = $auth->isActionGranted($this, $action);
         }
 
         return $result;

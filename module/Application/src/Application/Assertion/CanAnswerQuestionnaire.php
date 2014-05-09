@@ -2,7 +2,7 @@
 
 namespace Application\Assertion;
 
-use ZfcRbac\Service\Rbac;
+use ZfcRbac\Service\AuthorizationService;
 
 class CanAnswerQuestionnaire extends AbstractAssertion
 {
@@ -26,7 +26,7 @@ class CanAnswerQuestionnaire extends AbstractAssertion
         return 'Answers cannot be modified when questionnaire is marked as ' . \Application\Model\QuestionnaireStatus::$VALIDATED;
     }
 
-    protected function internalAssert(Rbac $rbac)
+    protected function internalAssert(AuthorizationService $authorizationService)
     {
         return $this->answer->getQuestionnaire()->getStatus() != \Application\Model\QuestionnaireStatus::$VALIDATED;
     }

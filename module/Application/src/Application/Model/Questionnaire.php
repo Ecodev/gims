@@ -334,11 +334,11 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     public function getPermissions()
     {
-        $rbac = \Application\Module::getServiceManager()->get('ZfcRbac\Service\Rbac');
+        $auth = \Application\Module::getServiceManager()->get('ZfcRbac\Service\AuthorizationService');
 
         $result = parent::getPermissions();
         foreach (array('validate') as $action) {
-            $result[$action] = $rbac->isActionGranted($this, $action);
+            $result[$action] = $auth->isActionGranted($this, $action);
         }
 
         return $result;
