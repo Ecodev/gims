@@ -283,7 +283,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
 
         // delete answer if no value
         if (answer.id && !$scope.toBoolNum(answer[question.value])) {
-            $scope.removeAnswer(answer);
+            $scope.removeAnswer(question, answer);
 
         // update
         } else if (answer.id) {
@@ -492,7 +492,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
      * @param answer
      */
     $scope.removeAnswer = function(question, answer) {
-        Restangular.restangularizeElement(null, answer, 'answer');
+        Restangular.restangularizeElement(null, answer, 'Answer');
         if (_.isUndefined(answer.permissions)) {
             $scope.getPermissions(question, answer, deleteAnswer);
         } else {
