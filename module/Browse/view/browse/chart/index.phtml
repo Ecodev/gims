@@ -68,7 +68,7 @@
                     <div id='chartPanel' class="ng-trans ng-trans-slide-right easeInOutSine" ng-animate ng-class="{'visible':chartOpened}" >
 
                         <div id='chartOpenBtn' ng-click='chartOpened = !chartOpened'>
-                            <i class='fa fa-sign-out fa-2x' ng-class="{'fa-rotate-180':!chartOpened}"></i>
+                            <i class='fa fa-sign-out fa-2x' ng-class="{'fa-rotate-180':!chartOpened, 'text-primary':pointSelected && !chartOpened}"></i>
                         </div>
 
                         <tabset id='panelContent' class='nav-tabs-centered'>

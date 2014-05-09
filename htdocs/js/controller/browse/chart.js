@@ -36,6 +36,17 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     }, function() {
         $scope.returnUrl = $location.search().returnUrl;
         $scope.currentUrl = encodeURIComponent($location.url());
+
+        var overridable = $location.search().overridable ? $location.search().overridable : null;
+        if (overridable) {
+            $scope.panelTabs.overridable = overridable;
+        }
+
+        var target = $location.search().target ? $location.search().target : null;
+        if (target) {
+            $scope.panelTabs.target = target;
+        }
+
     });
 
 
