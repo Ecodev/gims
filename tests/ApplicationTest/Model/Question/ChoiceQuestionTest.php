@@ -5,7 +5,7 @@ namespace ApplicationTest\Model\Question;
 use Application\Model\Question\ChoiceQuestion;
 use Application\Model\Question\Choice;
 
-class ChoiceQuestionTest extends AbstractModel
+class ChoiceQuestionTest extends \ApplicationTest\Model\AbstractModel
 {
 
     public function testChoicesRelation()

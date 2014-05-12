@@ -2,7 +2,7 @@
 
 namespace ApplicationTest\Model\Rule;
 
-class FilterGeonameUsageTest extends AbstractModel
+class FilterGeonameUsageTest extends \ApplicationTest\Model\AbstractModel
 {
 
     public function testFilterRelation()
