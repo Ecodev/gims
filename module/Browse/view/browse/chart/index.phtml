@@ -56,10 +56,26 @@
                                 <div ng-grid="gridOptions" class="gridStyle"></div>
 
                             </tab>
-                            <tab heading='Difference'>
-                                <div class="alert alert-info ng-trans ng-trans-fade-up" ><i class="fa fa-info-circle"></i> <?php echo $this->translate('Coming soon') ?></div>
+                            <tab heading='Difference' ng-if='chart.originalFilters && chart.overridenFilters'>
+                                <table class='table'>
+                                    <thead>
+                                        <tr>
+                                            <th>Questionnaire</th>
+                                            <th>Before projection</th>
+                                            <th>After projection</th>
+                                            <th>Difference</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat='(questionnaireId, questionnaire) in chart.overridenFilters'>
+                                            <td>{{indexedElements[questionnaireId].name}}</td>
+                                            <td class='text-warning'>{{getFirstAttribute(chart.originalFilters[questionnaireId])['content'][part.id]|integer}}</td>
+                                            <td class='text-success'>{{getFirstAttribute(questionnaire)['content'][part.id]|integer}}</td>
+                                            <td>{{getFirstAttribute(questionnaire)['content'][part.id] - getFirstAttribute(chart.originalFilters[questionnaireId])['content'][part.id]|integer}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
-                                <!--                                <pre>{{chart.overridenFilters|json}}</pre>-->
                             </tab>
                         </tabset>
                     </div>
@@ -260,8 +276,23 @@
 
                                         <div class='row show-grid'>
                                             <div class='col-md-12'>
-                                                <label class='form-label' tooltip-placement='right' tooltip='This filter will be projected on the filter below and their respective regression lines will superimpose.'>
-                                                    Make a projection of this filter ...
+
+                                                <label class='form-label'>
+                                                    <i class='fa fa-gims-filter'></i> Select sector filter (optional)
+                                                </label>
+                                            </div>
+                                            <div class='col-md-12'>
+                                                <select ui-select2 ng-model="panelTabs.sector" data-placeholder="Select filter to target"  style="width: 100%" >
+                                                    <option value="">No selection</option>
+                                                    <option ng-repeat='serie in panelTabs.usedFilters' value='{{serie.id}}'>{{serie.name}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class='row show-grid' ng-if='!panelTabs.sector'>
+                                            <div class='col-md-12'>
+                                                <label class='form-label' tooltip-placement='right' tooltip='This filter will be projected on the bellow filter and their respective regression lines will superimpose.'>
+                                                    <i class='fa fa-arrows-v'></i> or select a filter for projection
                                                 </label>
                                             </div>
                                             <div class='col-md-12'>
@@ -278,30 +309,43 @@
                                             </div>
                                         </div>
 
-                                        <div class='row show-grid'>
+                                        <div class='row show-grid' ng-if='panelTabs.sector'>
                                             <div class='col-md-12'>
-                                                <label class='form-label' tooltip-placement='right' tooltip='This filter is the target on which the above filter will be projected.'>
-                                                    ... onto this filter ...
+                                                <label class='form-label'>
+                                                    <i class='fa fa-arrows-v'></i> Equipment for projection
                                                 </label>
                                             </div>
                                             <div class='col-md-12'>
-
-                                                <select ui-select2 ng-model="panelTabs.target" data-placeholder="Select filter to target"  style="width: 100%" >
-                                                    <option value="{{null}}"></option>
-                                                    <option ng-repeat='serie in panelTabs.usedFilters' value='{{serie.id}}'>{{serie.name}}</option><!-- ng-if="serie.type == 'line'" -->
+                                                <select ui-select2 ng-model="panelTabs.reference" data-placeholder="Select filter to be modified"  style="width: 100%">
+                                                    <option value="">No selection</option>
+                                                    <option ng-repeat='filter in panelTabs.sectorChildren' value='{{filter.id}}'>{{filter.name}}</option>
                                                 </select>
                                             </div>
                                         </div>
 
-                                        <div class='row show-grid'>
+                                        <div class='row show-grid' ng-if='panelTabs.reference'>
                                             <div class='col-md-12'>
-                                                <label class='form-label' tooltip-placement='right' tooltip="This filter's variations will be available for comparaison after projection.">
-                                                    ... by varying this filter
+                                                <label class='form-label' tooltip-placement='right' tooltip='This filter is the model on which the above filter will be projected.'>
+                                                    <i class='fa fa-crosshairs'></i> Target of projection
+                                                </label>
+                                            </div>
+                                            <div class='col-md-12'>
+                                                <select ui-select2 ng-model="panelTabs.target" data-placeholder="Select filter to target"  style="width: 100%" >
+                                                    <option value="">No selection</option>
+                                                    <option ng-repeat='serie in panelTabs.series' value='{{serie.id}}' ng-if="serie.type == 'line' && serie.id != panelTabs.sector">{{serie.name}}</option><!-- ng-if="serie.type == 'line'" -->
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class='row show-grid' ng-if='panelTabs.target'>
+                                            <div class='col-md-12'>
+                                                <label class='form-label'>
+                                                    <i class='fa fa-dashboard'></i> Compute value after projection
                                                 </label>
                                             </div>
                                             <div class='col-md-12'>
                                                 <select ui-select2 ng-model="panelTabs.overridable" data-placeholder="Select filter to be modified"  style="width: 100%">
-                                                    <option value="{{null}}"></option>
+                                                    <option value="">No selection</option>
                                                     <option ng-repeat='filter in panelTabs.referenceChildren' value='{{filter.id}}'>{{filter.name}}</option>
                                                 </select>
                                             </div>

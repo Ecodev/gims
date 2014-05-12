@@ -49,6 +49,15 @@ class Adjustator
         $this->calculator = $calculator;
     }
 
+    private function initObjects(Filter $target, Filter $reference, Filter $overridable, array $questionnaires, Part $part)
+    {
+        $this->target = $target;
+        $this->reference = $reference;
+        $this->overridable = $overridable;
+        $this->questionnaires = $questionnaires;
+        $this->part = $part;
+    }
+
     /**
      * Returns an array containing values that should be used to override filter,
      * in order to "move" $reference as close as possible to $target, by overriding $overridable
@@ -61,11 +70,8 @@ class Adjustator
      */
     public function findOverridenFilters(Filter $target, Filter $reference, Filter $overridable, array $questionnaires, Part $part)
     {
-        $this->target = $target;
-        $this->reference = $reference;
-        $this->overridable = $overridable;
-        $this->questionnaires = $questionnaires;
-        $this->part = $part;
+
+        $this->initObjects($target, $reference, $overridable, $questionnaires, $part);
 
         $referenceQuestionnaires = $this->getReferenceQuestionnaires();
         if (!$referenceQuestionnaires) {
@@ -82,6 +88,25 @@ class Adjustator
         }
 
         return $overridenFilters;
+    }
+
+    public function getOriginalOverrideValues(Filter $target, Filter $reference, Filter $overridable, array $questionnaires, Part $part)
+    {
+        $this->initObjects($target, $reference, $overridable, $questionnaires, $part);
+
+        $referenceQuestionnaires = $this->getReferenceQuestionnaires();
+        if (!$referenceQuestionnaires) {
+            return array();
+        }
+
+        $originalValues = [];
+        foreach ($referenceQuestionnaires as $q) {
+            $this->calculator->setOverridenFilters(array());
+            $originalValue = $this->calculator->computeFilter($this->overridable->getId(), $q->getId(), $this->part->getId());
+            $originalValues[$q->getId()][$this->overridable->getId()][$this->part->getId()] = $originalValue;
+        }
+
+        return $originalValues;
     }
 
     /**

@@ -118,6 +118,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $series = array();
         if (count($filterSetsIds) > 0) {
 
+            // Compute adjusted series if we asked any
+            $adjusted = $this->getAdjustedSeries($questionnaires, $part);
+            $adjustedSeries = $adjusted['series'];
+
             $seriesWithIgnoredElements = array();
             foreach ($filterSetsIds as $filterSetId) {
 
@@ -141,10 +145,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     $ignoredFilters[] = $ignoredFilter->getId();
                 }
 
-                // Compute adjusted series if we asked any
-                $adjusted = $this->getAdjustedSeries($questionnaires, $part);
-                $adjustedSeries = $adjusted['series'];
-
                 // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
                 $alternativeSeries = array_merge($seriesWithIgnoredElements, $seriesWithOriginal, $adjustedSeries);
                 $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, array('byFilterSet' => $ignoredFilters), $alternativeSeries ? 33 : 100, $alternativeSeries ? 'ShortDash' : null, false);
@@ -167,6 +167,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $chart = $this->getChart(implode(', ', $filterSetsNames), $series, $country, $part);
         if (isset($adjusted['overridenFilters']) && $adjusted['overridenFilters']) {
             $chart['overridenFilters'] = $adjusted['overridenFilters'];
+        }
+        if (isset($adjusted['originalFilters']) && $adjusted['originalFilters']) {
+            $chart['originalFilters'] = $adjusted['originalFilters'];
         }
 
         return new NumericJsonModel($chart);
@@ -561,6 +564,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     {
         $series = array();
         $overridenFilters = array();
+        $originalFilters = array();
 
         if ($this->params()->fromQuery('reference') && $this->params()->fromQuery('overridable') && $this->params()->fromQuery('target')) {
 
@@ -578,14 +582,30 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $adjustator->setCalculator($calculator);
 
                 $overridenFilters = $adjustator->findOverridenFilters($target, $reference, $overridable, $questionnaires, $part);
-                $series = $this->getSeries($filterSet, $questionnaires, $part, array(), 100, null, false, ' (adjusted)', $overridenFilters);
-            }
+                $originalFilters = $adjustator->getOriginalOverrideValues($target, $reference, $overridable, $questionnaires, $part);
 
+                $ajustedSeries = $this->getSeries($filterSet, $questionnaires, $part, array(), 100, null, false, ' (adjusted)', $overridenFilters);
+                $originalSeries = $this->getSeries($filterSet, $questionnaires, $part, array(), 33, 'ShortDash', false, ' (original)' );
+
+                $topLevelFilters = $reference->getRootAncestors();
+
+                $topLevelFiltersSeries = array();
+                foreach ($topLevelFilters as $filter) {
+                    $filterSet = new FilterSet();
+                    $filterSet->addFilter($filter);
+
+                    $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries($filterSet, $questionnaires, $part, array(), 100, null, false, ' (adjusted)', $overridenFilters));
+                    $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries($filterSet, $questionnaires, $part, array(), 33, 'ShortDash', false));
+                }
+
+                $series = array_merge($ajustedSeries, $originalSeries, $topLevelFiltersSeries);
+            }
         }
 
         return array(
             'series' => $series,
-            'overridenFilters' => $overridenFilters
+            'overridenFilters' => $overridenFilters,
+            'originalFilters' => $originalFilters
         );
     }
 

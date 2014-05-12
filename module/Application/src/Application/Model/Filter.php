@@ -385,6 +385,28 @@ class Filter extends AbstractModel
     }
 
     /**
+     * Return a list of related top level filters
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getRootAncestors()
+    {
+        $rootAncestors = new ArrayCollection();
+
+        foreach ($this->getParents() as $parent) {
+            $grandParents = $parent->getRootAncestors();
+            if (count($grandParents) == 0) {
+                $rootAncestors->add($parent);
+            } else {
+                foreach ($grandParents as $gp) {
+                    $rootAncestors->add($gp);
+                }
+            }
+        }
+
+        return $rootAncestors;
+    }
+
+    /**
      * Return color with generic replacement if no color in database
      * @param Ration|int saturation from 0 to 100
      * @return string

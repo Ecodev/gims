@@ -37,6 +37,11 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         $scope.returnUrl = $location.search().returnUrl;
         $scope.currentUrl = encodeURIComponent($location.url());
 
+        var sector = $location.search().sector ? $location.search().sector : null;
+        if (sector) {
+            $scope.panelTabs.sector = sector;
+        }
+
         var overridable = $location.search().overridable ? $location.search().overridable : null;
         if (overridable) {
             $scope.panelTabs.overridable = overridable;
@@ -45,6 +50,16 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         var target = $location.search().target ? $location.search().target : null;
         if (target) {
             $scope.panelTabs.target = target;
+        }
+
+        // gims-select auto selects from url, but there is custom ui-select2 that need to be initiated when sector filter is picked
+        var reference = $location.search().reference ? $location.search().reference : null;
+        if (reference) {
+            if (sector){
+                $scope.panelTabs.reference = reference;
+            } else {
+                $scope.panelTabs.reference = {id: reference};
+            }
         }
 
     });
@@ -65,10 +80,24 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         $location.search('overridable', $scope.panelTabs.overridable);
     });
 
+    $scope.$watch('panelTabs.sector', function(){
+        $location.search('sector', $scope.panelTabs.sector);
+    });
+
     $scope.$watch('panelTabs.reference', function(){
         if ($scope.panelTabs.reference) {
-            Restangular.one('filter', $scope.panelTabs.reference.id).get({fields:'children'}).then(function(filters){
+            var id = $scope.panelTabs.reference.id ? $scope.panelTabs.reference.id : $scope.panelTabs.reference;
+            $location.search('reference', id);
+            Restangular.one('filter', id).get({fields:'children'}).then(function(filters){
                 $scope.panelTabs.referenceChildren = filters.children;
+            });
+        }
+    });
+
+    $scope.$watch('panelTabs.sector', function(){
+        if ($scope.panelTabs.sector) {
+            Restangular.one('filter', $scope.panelTabs.sector).get({fields:'children'}).then(function(filters){
+                $scope.panelTabs.sectorChildren = filters.children;
             });
         }
     });
@@ -435,7 +464,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         refreshCanceler = $q.defer();
 
         $scope.$apply(function() {
-
             $http.get('/api/chart', {
                 timeout: refreshCanceler.promise,
                 params: {
@@ -443,9 +471,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                     part: $scope.part.id,
                     filterSet: filterSets.join(','),
                     ignoredElements: ignoredElements,
-                    reference: $scope.panelTabs.reference ? $scope.panelTabs.reference.id : null,
-                    target: $scope.panelTabs.reference ? $scope.panelTabs.target : null,
-                    overridable: $scope.panelTabs.reference ? $scope.panelTabs.overridable : null
+                    reference: $scope.panelTabs.reference ? $scope.panelTabs.reference.id ? $scope.panelTabs.reference.id : $scope.panelTabs.reference : null,
+                    target: $scope.panelTabs.target ? $scope.panelTabs.target : null,
+                    overridable: $scope.panelTabs.overridable ? $scope.panelTabs.overridable : null
                 }
             }).success(function(data) {
 
@@ -504,7 +532,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 }
                 $scope.chart = data;
                 $scope.panelTabs.series = data.series;
-                $scope.generateKeyIndicatorsTable(ignoredElements);
+                $scope.computeEstimates(ignoredElements);
                 $scope.isLoading = false;
             });
         });
@@ -525,7 +553,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         plugins: [new ngGridFlexibleHeightPlugin({minHeight: 0})],
         data: 'data'
     };
-    $scope.generateKeyIndicatorsTable = function(ignoredElements) {
+    $scope.computeEstimates = function(ignoredElements) {
         var data = $scope.chart;
         $scope.isLoading = true;
 
@@ -637,6 +665,13 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             });
             questionnaire.ignored = questionnaireIgnored;
         }
+    };
+
+    $scope.getFirstAttribute = function(obj) {
+        return {
+            attribute: Object.keys(obj)[0],
+            content: obj[Object.keys(obj)[0]]
+        };
     };
 
     /**
