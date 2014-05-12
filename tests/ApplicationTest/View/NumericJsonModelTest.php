@@ -1,6 +1,6 @@
 <?php
 
-namespace ApplicationTest;
+namespace ApplicationTest\View;
 
 class NumericJsonModelTest extends \ApplicationTest\Controller\AbstractController
 {

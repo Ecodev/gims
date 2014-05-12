@@ -1,6 +1,6 @@
 <?php
 
-namespace ApplicationTest\Model;
+namespace ApplicationTest\Model\Rule;
 
 class FilterGeonameUsageTest extends AbstractModel
 {

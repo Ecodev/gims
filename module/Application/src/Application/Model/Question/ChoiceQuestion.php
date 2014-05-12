@@ -65,6 +65,7 @@ class ChoiceQuestion extends AbstractPopulationQuestion
                 \Application\Module::getEntityManager()->remove($choice);
             }
         }
+
         return $this;
     }
 

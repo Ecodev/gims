@@ -1,11 +1,11 @@
 <?php
 
-namespace ApplicationTest\Model;
+namespace ApplicationTest\Model\Question;
 
 use Application\Model\Question\ChoiceQuestion;
 use Application\Model\Question\Choice;
 
-class QuestionTest extends AbstractModel
+class ChoiceQuestionTest extends AbstractModel
 {
 
     public function testChoicesRelation()

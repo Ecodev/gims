@@ -32,6 +32,7 @@ class EmailController extends AbstractActionController
                 array_push($selectedUsers, $user->getUser());
             }
         }
+
         return $selectedUsers;
     }
 
@@ -95,7 +96,6 @@ class EmailController extends AbstractActionController
 
         $this->sendMail($users, $subject, new ViewModel($mailParams));
     }
-
 
     public function sendMail($users, $subject, ViewModel $model)
     {

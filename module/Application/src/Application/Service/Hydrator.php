@@ -20,6 +20,7 @@ class Hydrator
     public function extractArray($objects, array $properties = array())
     {
         $properties = $this->initializePropertyStructure($properties);
+
         return $this->internalExtractArray($objects, $properties);
     }
 

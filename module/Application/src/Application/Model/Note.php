@@ -42,7 +42,6 @@ class Note extends AbstractModel
      */
     private $survey;
 
-
     /**
      * @inheritdoc
      */
@@ -110,7 +109,6 @@ class Note extends AbstractModel
         $this->question = $question;
 
         return $this;
-
     }
 
     /**

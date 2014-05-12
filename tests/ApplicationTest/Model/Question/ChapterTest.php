@@ -1,6 +1,6 @@
 <?php
 
-namespace ApplicationTest\Model;
+namespace ApplicationTest\Model\Question;
 
 use Application\Model\Question\Chapter;
 use Application\Model\Question\NumericQuestion;

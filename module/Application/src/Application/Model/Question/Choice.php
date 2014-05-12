@@ -49,7 +49,6 @@ class Choice extends \Application\Model\AbstractModel
      */
     private $answers;
 
-
     /**
      * @inheritdoc
      */
