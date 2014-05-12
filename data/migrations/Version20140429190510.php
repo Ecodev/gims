@@ -10,6 +10,7 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20140429190510 extends AbstractMigration
 {
+
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
@@ -21,4 +22,5 @@ class Version20140429190510 extends AbstractMigration
     {
         $this->throwIrreversibleMigrationException();
     }
+
 }

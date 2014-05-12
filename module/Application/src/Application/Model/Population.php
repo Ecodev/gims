@@ -5,10 +5,13 @@ namespace Application\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Population data for each country-year-part triple. Imported from http://esa.un.org/unpd/wup/
+ * Population data for each country-year-part triple.
  *
  * @ORM\Entity(repositoryClass="Application\Repository\PopulationRepository")
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="population_unique",columns={"year", "country_id", "part_id"})})
+ * @ORM\Table(uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="population_unique_official",columns={"year", "country_id", "part_id"}, where="questionnaire_id IS NULL"),
+ *     @ORM\UniqueConstraint(name="population_unique_non_official",columns={"year", "country_id", "part_id", "questionnaire_id"}, where="questionnaire_id IS NOT NULL")
+ * })
  */
 class Population extends AbstractModel
 {
@@ -48,10 +51,20 @@ class Population extends AbstractModel
     private $part;
 
     /**
+     * @var Questionnaire
+     *
+     * @ORM\ManyToOne(targetEntity="Questionnaire")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(onDelete="CASCADE")
+     * })
+     */
+    private $questionnaire;
+
+    /**
      * Set year
      *
      * @param integer $year
-     * @return Population
+     * @return self
      */
     public function setYear($year)
     {
@@ -74,7 +87,7 @@ class Population extends AbstractModel
      * Set country
      *
      * @param Country $country
-     * @return Population
+     * @return self
      */
     public function setCountry(Country $country)
     {
@@ -97,7 +110,7 @@ class Population extends AbstractModel
      * Set population
      *
      * @param integer $population
-     * @return Population
+     * @return self
      */
     public function setPopulation($population)
     {
@@ -120,7 +133,7 @@ class Population extends AbstractModel
      * Set part
      *
      * @param Part $part
-     * @return Answer
+     * @return self
      */
     public function setPart(Part $part)
     {
@@ -137,6 +150,30 @@ class Population extends AbstractModel
     public function getPart()
     {
         return $this->part;
+    }
+
+    /**
+     * Set questionnaire
+     *
+     * @param Questionnaire $questionnaire
+     * @return self
+     */
+    public function setQuestionnaire(Questionnaire $questionnaire = null)
+    {
+        $this->questionnaire = $questionnaire;
+
+        return $this;
+    }
+
+    /**
+     * Get optionnal questionnaire.
+     * If exists, means that the population is only used for that Questionnaire.
+     *
+     * @return Questionnaire|null
+     */
+    public function getQuestionnaire()
+    {
+        return $this->questionnaire;
     }
 
 }

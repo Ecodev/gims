@@ -411,7 +411,7 @@ class Jmp extends Calculator
                     $population = 0;
                     foreach ($questionnaires as $questionnaire) {
 
-                        $population += $this->getPopulationRepository()->getOneByGeoname($questionnaire->getGeoname(), $partId, $year)->getPopulation();
+                        $population += $this->getPopulationRepository()->getOneByGeoname($questionnaire->getGeoname(), $partId, $year, $questionnaire->getId())->getPopulation();
                     }
 
                     return $population;

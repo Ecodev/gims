@@ -93,7 +93,7 @@ class debug
     public static function dump($data, $firstLevel = true)
     {
         if (php_sapi_name() == 'cli') {
-            var_export($data);
+            var_dump($data);
             echo PHP_EOL;
 
             return;

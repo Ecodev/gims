@@ -267,15 +267,15 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $stubPopulationRepository->expects($this->any())
                 ->method('getOneByGeoname')
                 ->will($this->returnValueMap(array(
-                            array($this->geoname, $this->part1->getId(), 2000, (new \Application\Model\Population())->setPopulation(10)),
-                            array($this->geoname, $this->part1->getId(), 2001, (new \Application\Model\Population())->setPopulation(10)),
-                            array($this->geoname, $this->part1->getId(), 2005, (new \Application\Model\Population())->setPopulation(15)),
-                            array($this->geoname, $this->part2->getId(), 2000, (new \Application\Model\Population())->setPopulation(3)),
-                            array($this->geoname, $this->part2->getId(), 2001, (new \Application\Model\Population())->setPopulation(3)),
-                            array($this->geoname, $this->part2->getId(), 2005, (new \Application\Model\Population())->setPopulation(3)),
-                            array($this->geoname, $this->partTotal->getId(), 2000, (new \Application\Model\Population())->setPopulation(7)),
-                            array($this->geoname, $this->partTotal->getId(), 2001, (new \Application\Model\Population())->setPopulation(7)),
-                            array($this->geoname, $this->partTotal->getId(), 2005, (new \Application\Model\Population())->setPopulation(12)),
+                            array($this->geoname, $this->part1->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(10)),
+                            array($this->geoname, $this->part1->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(10)),
+                            array($this->geoname, $this->part1->getId(), 2005, null, (new \Application\Model\Population())->setPopulation(15)),
+                            array($this->geoname, $this->part2->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(3)),
+                            array($this->geoname, $this->part2->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(3)),
+                            array($this->geoname, $this->part2->getId(), 2005, null, (new \Application\Model\Population())->setPopulation(3)),
+                            array($this->geoname, $this->partTotal->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(7)),
+                            array($this->geoname, $this->partTotal->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(7)),
+                            array($this->geoname, $this->partTotal->getId(), 2005, null, (new \Application\Model\Population())->setPopulation(12)),
         )));
 
         return $stubPopulationRepository;
