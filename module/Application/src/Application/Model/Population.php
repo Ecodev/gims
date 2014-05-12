@@ -61,6 +61,17 @@ class Population extends AbstractModel
     private $questionnaire;
 
     /**
+     * @inheritdoc
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'year',
+            'population',
+        ));
+    }
+
+    /**
      * Set year
      *
      * @param integer $year
@@ -174,6 +185,14 @@ class Population extends AbstractModel
     public function getQuestionnaire()
     {
         return $this->questionnaire;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRoleContext($action)
+    {
+        return $this->getQuestionnaire() ? : new \Application\Service\MissingRequiredRoleContext('questionnaire');
     }
 
 }

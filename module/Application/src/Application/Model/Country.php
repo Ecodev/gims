@@ -163,6 +163,18 @@ class Country extends AbstractModel
     }
 
     /**
+     * Set code
+     *
+     * @return Country
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
      * Set iso3
      *
      * @param string $iso3

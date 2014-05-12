@@ -22,6 +22,27 @@ class Version20140509160547 extends AbstractMigration
         $this->addSql("CREATE INDEX IDX_B449A008CE07E8FF ON population (questionnaire_id)");
         $this->addSql("CREATE UNIQUE INDEX population_unique_official ON population (year, country_id, part_id) WHERE questionnaire_id IS NULL");
         $this->addSql("CREATE UNIQUE INDEX population_unique_non_official ON population (year, country_id, part_id, questionnaire_id) WHERE questionnaire_id IS NOT NULL");
+
+        $objects = array(
+            'Population' => array(
+                'create' => array('reporter'),
+                'read' => array('anonymous', 'member'),
+                'update' => array('reporter'),
+                'delete' => array('reporter'),
+            ),
+        );
+
+        foreach ($objects as $object => $actions) {
+            foreach ($actions as $action => $roles) {
+                $name = $object . '-' . $action;
+                $this->addSql('INSERT INTO permission (date_created, name) VALUES (NOW(), ?);', array($name));
+
+                // Give access to defined roles
+                foreach ($roles as $role) {
+                    $this->addSql("INSERT INTO role_permission (role_id, permission_id) SELECT role.id, permission.id FROM role CROSS JOIN permission WHERE (role.name = ?)AND permission.name = ?;", array($role, $name));
+                }
+            }
+        }
     }
 
     public function down(Schema $schema)

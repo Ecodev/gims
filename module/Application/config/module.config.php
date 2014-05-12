@@ -46,16 +46,24 @@ return array(
                 ),
                 'proxy_dir' => 'data/cache/DoctrineORMModule/Proxy',
                 'generate_proxies' => false,
+                'datetime_functions' => array(
+                    'CAST' => 'Application\ORM\AST\Functions\CastFunction',
+                ),
+                'string_functions' => array(
+                    'CAST' => 'Application\ORM\AST\Functions\CastFunction',
+                ),
+                'numeric_functions' => array(
+                    'CAST' => 'Application\ORM\AST\Functions\CastFunction',
+                ),
             ),
         ),
-
         // migrations configuration
         'migrations_configuration' => array(
             'orm_default' => array(
                 'directory' => 'data/migrations',
-                'name'      => 'GIMS Migrations',
+                'name' => 'GIMS Migrations',
                 'namespace' => 'DoctrineMigrations',
-                'table'     => 'version',
+                'table' => 'version',
             ),
         ),
     ),

@@ -2,8 +2,25 @@
 
 namespace Application\Repository;
 
-class PopulationRepository extends AbstractRepository
+use Doctrine\ORM\Query\Expr\Join;
+
+class PopulationRepository extends AbstractChildRepository
 {
+
+    public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
+    {
+        $qb = $this->createQueryBuilder('population');
+        $qb->join('population.country', 'country', Join::WITH);
+        $qb->join('population.part', 'part', Join::WITH);
+        $qb->join('population.questionnaire', 'questionnaire', Join::WITH);
+
+        $qb->where('population.' . $parentName . ' = :parent');
+        $qb->setParameter('parent', $parent);
+
+        $this->addSearch($qb, $search, ['population.year']);
+
+        return $qb->getQuery()->getResult();
+    }
 
     /**
      * @var array $cache [geonameId => [year => [partId => [questionnaireId => population]]]]
