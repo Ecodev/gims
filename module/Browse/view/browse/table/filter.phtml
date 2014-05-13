@@ -344,13 +344,14 @@
                                 <div ng-switch="!!questionnaire.id">
                                     <div ng-switch-when="true" class='text-center'>
                                         <div name='questionnaireForm' class='input-group input-group-sm'>
-                                            <div class='input-group-addon'><i class='fa fa-gims-questionnaire'></i></div>
+                                            <div class='input-group-addon'><i class='fa fa-fw fa-gims-questionnaire'></i></div>
                                             <input ng-disabled='true' type='text' class='text-center' placeholder='Country' ng-model='questionnaire.geoname.country.name' name='country' />
                                         </div>
                                     </div>
                                     <div ng-switch-when="false" class='has-error'>
                                         <ng-form name='questionnaireForm'>
                                             <gims-select
+                                                required
                                                 disabled='questionnaire.id || questionnaire.isLoading'
                                                 api="country" model='questionnaire.geoname.country'
                                                 queryparams="countryParams"
@@ -371,8 +372,8 @@
                             <td></td>
                             <td ng-if='tabs.selectedQuestionnaireForLabels' class='text-center'>{{tabs.selectedQuestionnaireForLabels.survey.code}}</td>
                             <td ng-repeat='questionnaire in tabs.questionnaires track by $index' class='text-center'>
-                                <ng-form name='questionnaireForm' class='input-group input-group-sm'>
-                                    <div class='input-group-addon'><i class='fa fa-gims-survey'></i></div>
+                                <ng-form name='questionnaireForm' class='input-group input-group-sm' ng-class="{'has-error':questionnaireForm.code.$invalid}">
+                                    <div class='input-group-addon'><i class='fa fa-fw fa-gims-survey'></i></div>
                                     <input ng-disabled='questionnaire.survey.id || questionnaire.isLoading' type='text' class='text-center' placeholder='Code' ng-model='questionnaire.survey.code' name='code' required ng-class="{'error':questionnaire.errors.duplicateCountryCode || questionnaire.errors.codeAndYearDifferent || questionnaireForm.code.$invalid}" ng-blur='checkQuestionnairesIntegrity();completeQuestionnaire(questionnaire);'/>
                                 </ng-form>
                             </td>
@@ -384,36 +385,28 @@
                             <td></td>
                             <td ng-if='tabs.selectedQuestionnaireForLabels' class='text-center'>{{tabs.selectedQuestionnaireForLabels.survey.year}}</td>
                             <td ng-repeat='questionnaire in tabs.questionnaires track by $index'>
-                                <ng-form name='questionnaireForm' class='input-group input-group-sm'>
-                                    <div class='input-group-addon'><i class='fa fa-gims-survey'></i></div>
+                                <ng-form name='questionnaireForm' class='input-group input-group-sm' ng-class="{'has-error':questionnaireForm.year.$invalid}">
+                                    <div class='input-group-addon'><i class='fa fa-fw fa-gims-survey'></i></div>
                                     <input ng-disabled='questionnaire.survey.id || questionnaire.isLoading' type='number' class='text-center' placeholder='Year' ng-model='questionnaire.survey.year' name='year' min='1980' max='2015' size="4" required ng-class="{'error': questionnaire.errors.codeAndYearDifferent || questionnaireForm.year.$invalid}" ng-blur='checkQuestionnairesIntegrity();completeQuestionnaire(questionnaire);'/>
                                </ng-form>
                            </td>
                         </tr>
 
+                        <!-- Population row -->
+                        <tr class='active' ng-show='sector && tabs.questionnaires.length'>
+                            <td></td>
+                            <td></td>
+                            <td ng-if='tabs.selectedQuestionnaireForLabels'></td>
+                            <td class='text-center' ng-repeat='questionnaire in tabs.questionnaires track by $index'>
+                                <ng-form name='valueForm' class="input-group input-group-sm" ng-class="{'has-error':valueForm.value.$invalid}" tooltip="Leave empty to use official population data">
+                                    <div class='input-group-addon'><i class='fa fa-fw fa-male'></i></div>
+                                    <input ng-disabled='questionnaire.survey.id || questionnaire.isLoading' type='number' class='text-center' placeholder="Population" ng-model='questionnaire.populations[tabs.part.id].population' min='0' name='value' />
+                                </ng-form>
+                            </td>
+                        </tr>
+
                     </tbody>
                     <!-- End of table header-->
-
-
-                    <!-- Population row -->
-<!--                    <tbody ng-show='sector'>-->
-<!--                        <tr ng-show='tabs.filters && tabs.questionnaires.length'>-->
-<!--                           <td></td>-->
-<!--                           <td class='strong'>Population</td>-->
-<!--                           <td ng-if='tabs.selectedQuestionnaireForLabels'></td>-->
-<!--                           <td class='text-center' ng-repeat='questionnaire in tabs.questionnaires track by $index'>-->
-<!--                               <ng-form name='valueForm' ng-class="{'has-error':valueForm.value.$invalid}">-->
-<!--                                   <div class="input-group input-group-sm">-->
-<!--                                       <span class="input-group-btn"></span>-->
-<!--                                       <input  type='number'-->
-<!--                                               min='0'-->
-<!--                                               name='value'-->
-<!--                                               ng-model='questionnaire.population'/>-->
-<!--                                   </div>-->
-<!--                               </ng-form>-->
-<!--                           </td>-->
-<!--                        </tr>-->
-<!--                    </tbody>-->
 
 
                     <!-- Label for questionnaire comments and close btn -->
@@ -456,9 +449,7 @@
                                 </div>
                                 <div ng-show='!isValidId(filter) && !filter.sectorChild'>
                                     <ng-form name='filterName' class="input-group" ng-class="{'has-error':filterName.$invalid}">
-                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default"><i class='fa' ng-class="{'fa-asterisk':!filter.isLoading,'fa-gims-loading':filter.isLoading,'text-primary':!filterName.$invalid, 'text-danger':filterName.$invalid}"></i></button>
-                                         </span>
+                                        <div class='input-group-addon'><i class='fa' ng-class="{'fa-asterisk':!filter.isLoading,'fa-gims-loading':filter.isLoading,'text-primary':!filterName.$invalid}"></i></div>
                                         <input type='text' name='name' ng-model='filter.name' placeholder='Filter name' required />
                                     </ng-form>
                                 </div>

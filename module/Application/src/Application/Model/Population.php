@@ -53,7 +53,7 @@ class Population extends AbstractModel
     /**
      * @var Questionnaire
      *
-     * @ORM\ManyToOne(targetEntity="Questionnaire")
+     * @ORM\ManyToOne(targetEntity="Questionnaire", inversedBy="populations")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE")
      * })
@@ -172,6 +172,7 @@ class Population extends AbstractModel
     public function setQuestionnaire(Questionnaire $questionnaire = null)
     {
         $this->questionnaire = $questionnaire;
+        $this->questionnaire->populationAdded($this);
 
         return $this;
     }

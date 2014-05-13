@@ -82,6 +82,12 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     private $filterQuestionnaireUsages;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Application\Model\Population", mappedBy="questionnaire")
+     */
+    private $populations;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -89,6 +95,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         $this->filterQuestionnaireUsages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->answers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questionnaireUsages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->populations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setStatus(QuestionnaireStatus::$NEW);
     }
 
@@ -351,9 +358,8 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     public function notifyReporters()
     {
-        if ($this->originalStatus == QuestionnaireStatus::$VALIDATED
-            && ($this->originalStatus == QuestionnaireStatus::$VALIDATED || $this->getStatus() == QuestionnaireStatus::$NEW)
-        ) {
+        if ($this->originalStatus == QuestionnaireStatus::$VALIDATED &&
+                ($this->originalStatus == QuestionnaireStatus::$VALIDATED || $this->getStatus() == QuestionnaireStatus::$NEW)) {
             Utility::executeCliCommand('email notifyQuestionnaireReporters ' . $this->getId());
         }
     }
@@ -365,9 +371,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     public function notifyValidator()
     {
-        if ($this->originalStatus == QuestionnaireStatus::$NEW
-            && $this->getStatus() == QuestionnaireStatus::$COMPLETED
-        ) {
+        if ($this->originalStatus == QuestionnaireStatus::$NEW && $this->getStatus() == QuestionnaireStatus::$COMPLETED) {
             Utility::executeCliCommand('email notifyQuestionnaireValidator ' . $this->getId());
         }
     }
@@ -379,9 +383,9 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     public function notifyCreator()
     {
-        if ($this->originalStatus == QuestionnaireStatus::$COMPLETED
-            && $this->getStatus() == QuestionnaireStatus::$VALIDATED
-            && $this->getPermissions()['validate']
+        if ($this->originalStatus == QuestionnaireStatus::$COMPLETED &&
+                $this->getStatus() == QuestionnaireStatus::$VALIDATED &&
+                $this->getPermissions()['validate']
         ) {
             Utility::executeCliCommand('email notifyQuestionnaireCreator ' . $this->getId());
         }
@@ -405,6 +409,28 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function filterQuestionnaireUsageAdded(Rule\FilterQuestionnaireUsage $usage)
     {
         $this->getFilterQuestionnaireUsages()->add($usage);
+
+        return $this;
+    }
+
+    /**
+     * Get populations if any specific population for this questionnaire
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getPopulations()
+    {
+        return $this->populations;
+    }
+
+    /**
+     * Notify the questionnaire that it has a new specific population.
+     * This should only be called by Population::setQuestionnaire()
+     * @param Population $population
+     * @return self
+     */
+    public function populationAdded(Population $population)
+    {
+        $this->getPopulations()->add($population);
 
         return $this;
     }

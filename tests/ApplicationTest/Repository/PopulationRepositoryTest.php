@@ -2,8 +2,6 @@
 
 namespace ApplicationTest\Repository;
 
-use \Application\Model\QuestionnaireStatus;
-
 class PopulationRepositoryTest extends AbstractRepository
 {
 

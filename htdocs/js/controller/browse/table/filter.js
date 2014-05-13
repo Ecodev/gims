@@ -755,6 +755,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
                     question.answers = answers;
                 }
             });
+
             questionnaire.survey.questions = _.map(questionnaire.survey.questions, function(q) {
                 if (q.isAbsolute) {
                     q.value = 'valueAbsolute';
@@ -765,6 +766,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
                 }
                 return q;
             });
+
             questionnaire.survey.questions = _.indexBy(questionnaire.survey.questions, function(q) {
                 return q.filter.id;
             });
@@ -799,6 +801,16 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
 
                 if (_.isUndefined(questionnaire.survey.questions)) {
                     questionnaire.survey.questions = {};
+                }
+
+                // Create empty population indexed by the part ID
+                if (_.isUndefined(questionnaire.populations)) {
+                    questionnaire.populations = [];
+                    _.forEach($scope.parts, function(part) {
+                        questionnaire.populations[part.id] = {
+                            part: part.id
+                        };
+                    });
                 }
 
                 _.forEach($scope.tabs.filters, function(filter) {
@@ -911,6 +923,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
                 questionnaire.isLoading = true;
                 propagateSurvey(survey);
                 updateUrl('questionnaires');
+                savePopulations(questionnaire);
 
                 // create questions
                 var questionsForSave = _.filter(questionnaire.survey.questions, function(q) {if (q.name) {return true;}});
@@ -960,7 +973,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
 
     /**
      * Recursive function that save all questionnaires
-     * Instaed of saving all questionnaires at the same time, wait for the questions to be saved in case a future questionnaire use the same survey and the same questions.
+     * Instead of saving all questionnaires at the same time, wait for the questions to be saved in case a future questionnaire use the same survey and the same questions.
      * This avoid try to create questions twice and cause conflict.
      * @param questionnaires
      * @param index
@@ -1062,6 +1075,27 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
         }
 
         return deferred.promise;
+    };
+
+    /**
+     * Save valid new population data for the given questionnaire
+     * @param questionnaire
+     * @returns void
+     */
+    var savePopulations = function(questionnaire) {
+        angular.forEach(questionnaire.populations, function(population) {
+            if (_.isUndefined(population.id) && _.isNumber(population.population)) {
+
+                // Be sure that population data are in sync with other data from questionnaire/survey
+                population.questionnaire = questionnaire.id;
+                population.year = questionnaire.survey.year;
+                population.country = questionnaire.geoname.country.id;
+
+                Restangular.all('population').post(population).then(function(newPopulation) {
+                    population.id = newPopulation.id;
+                });
+            }
+        });
     };
 
     /**
