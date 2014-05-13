@@ -57,6 +57,9 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
     }, function() {
         if ($location.search().sectorChildren) {
             $scope.sector = true;
+            if (!$scope.tabs.questionnaires)    {
+                $scope.addQuestionnaire();
+            }
         } else {
             $scope.sector = false;
         }
@@ -105,6 +108,9 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
                 if (filters) {
                     $scope.tabs.filters = filters;
                     $scope.tabs.filterSet = null;
+                    if ($scope.sector) {
+                        $scope.addFilter();
+                    }
                 }
                 $scope.isLoading = false;
                 checkSelectionExpand();
