@@ -3,9 +3,9 @@
     <div class='navbar navbar-default hidden-print'>
         <form class='navbar-form'>
             <!-- Back button, if return url is specified -->
-            <button class='btn btn-default' ng-show='returnUrl' ng-click='cancel();'><i class='fa fa-gims-back'></i> Cancel</button>
+            <button class='btn btn-default' ng-show='returnUrl' ng-click='cancel();'><i class='fa fa-gims-back'></i> Back</button>
             <!-- Save all the new questionniares -->
-            <button class='btn btn-primary' ng-show='isEmptyQuestionnaires() || isEmptyFilters()' ng-click='saveQuestionnaires();' ng-disabled='isLoading || !tabs.filters && !tabs.questionnaires'><i class='fa fa-asterisk'></i> Save all new elements</button>
+            <button class='btn btn-primary' ng-show='isEmptyQuestionnaires() || isEmptyFilters()' ng-click='saveQuestionnaires();' ng-disabled='isLoading || !tabs.filters && !tabs.questionnaires'><i class='fa fa-save'></i> Save all new elements</button>
             <!-- Clear the selection -->
             <a href class='btn btn-default' ng-click='tabs.questionnaires=[];tabs.filters=[];tabs.filterSet=null;tabs.country=null;tabs.filter=null;tabs.survey=null'><i class='fa fa-eraser'></i> Clear selection</a>
             <!-- Hide/Show selection tools and/or children filters -->
@@ -32,7 +32,7 @@
                     <div ng-show='sector'>
                         <div class='col-md-12'>
                             <h3 class='control-label'>Creation mode</h3>
-                            <p>In this page you will be able to add custom data. You can create filters, questionnaires and then add answers and comments to them. When they are created, take care to not create them again. Use instead <a href='/contribute/questionnaire?returnUrl={{currentUrl}}'>questionnaires edition page</a> or <a href='/admin/filter'>filters management page</a>.<p>
+                            <p>On this page you will be able to add custom data. You can create filters, questionnaires and then add answers and comments to them. When they are created, take care to not create them again. Use instead <a href='/contribute/questionnaire?returnUrl={{currentUrl}}'>questionnaires edition page</a> or <a href='/admin/filter'>filters management page</a>.<p>
                             <p>First of all select a root filter in the right panel or create a new one. For each child filter of the selected one, some sub-children will be created. Then the result of <i>"child1 * child2 / country population"</i> will be assigned to their parent.</p>
                         </div>
                     </div>
