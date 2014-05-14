@@ -22,7 +22,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
     $scope.countryParams = {fields: 'geoname'};
     $scope.countryFields = {fields: 'geoname.questionnaires,geoname.questionnaires.survey,geoname.questionnaires.survey.questions,geoname.questionnaires.survey.questions.type,geoname.questionnaires.survey.questions.filter'};
     $scope.questionnaireWithQTypeFields = {fields: 'survey.questions,survey.questions.type'};
-    $scope.questionnaireWithAnswersFields = {fields: 'filterQuestionnaireUsages,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.answers,survey.questions.answers.questionnaire,survey.questions.answers.part'};
+    $scope.questionnaireWithAnswersFields = {fields: 'filterQuestionnaireUsages,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.answers,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part'};
     $scope.surveyFields = {fields: 'questionnaires.survey,questionnaires.survey.questions,questionnaires.survey.questions.type,questionnaires.survey.questions.filter'};
 
     // Variables initialisations
@@ -417,12 +417,24 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
      * Set the value of a input (ng-model) before the value is changed
      * Used in function saveAnswer().
      * Avoid to do some ajax requests when we just blur field without changing value.
+     * @param question
      * @param answer
      */
-    $scope.setInitialValue = function(question, questionnaire, answer) {
+    $scope.setAnswerInitialValue = function(question, answer) {
         if (answer[question.value]) {
             answer.initialValue = answer[question.value];
         }
+    };
+
+    /**
+     * Set the value of a input (ng-model) before the value is changed
+     * Used in function savePopulation().
+     * Avoid to do some ajax requests when we just blur field without changing value.
+     * @param model
+     * @param value
+     */
+    $scope.setInitialValue = function(model, value) {
+        model.initialValue = value;
     };
 
     /**
@@ -742,7 +754,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
     };
 
     /**
-     * Index answers by part and questions by filters on questionnaire that have data from DB
+     * Index answers and populations by part and questions by filters on questionnaire that have data from DB
      * @param questionnaires
      */
     var prepareDataQuestionnaires = function(questionnaires) {
@@ -750,7 +762,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
 
             _.forEach(questionnaire.survey.questions, function(question) {
                 if (question.answers) {
-                    // class answers by part id
+                    // index answers by part id
                     var answers = {};
                     _.forEach(question.answers, function(answer) {
                         if (!_.isUndefined(answer.questionnaire) && answer.questionnaire.id == questionnaire.id) {
@@ -761,6 +773,14 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
                     question.answers = answers;
                 }
             });
+
+            // Index population by part id
+            var indexedPopulations = [];
+            _.forEach(questionnaire.populations, function(population) {
+                Restangular.restangularizeElement(null, population, 'population');
+                indexedPopulations[population.part.id] = population;
+            });
+            questionnaire.populations = indexedPopulations;
 
             questionnaire.survey.questions = _.map(questionnaire.survey.questions, function(q) {
                 if (q.isAbsolute) {
@@ -929,7 +949,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
                 questionnaire.isLoading = true;
                 propagateSurvey(survey);
                 updateUrl('questionnaires');
-                savePopulations(questionnaire);
+
+                // Save all populations
+                angular.forEach(questionnaire.populations, function(population) {
+                    $scope.savePopulation(questionnaire, population);
+                });
 
                 // create questions
                 var questionsForSave = _.filter(questionnaire.survey.questions, function(q) {if (q.name) {return true;}});
@@ -1086,22 +1110,46 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
     /**
      * Save valid new population data for the given questionnaire
      * @param questionnaire
+     * @param population
      * @returns void
      */
-    var savePopulations = function(questionnaire) {
-        angular.forEach(questionnaire.populations, function(population) {
-            if (_.isUndefined(population.id) && _.isNumber(population.population)) {
+    $scope.savePopulation = function(questionnaire, population) {
 
-                // Be sure that population data are in sync with other data from questionnaire/survey
-                population.questionnaire = questionnaire.id;
-                population.year = questionnaire.survey.year;
-                population.country = questionnaire.geoname.country.id;
+        // Do nothing if the value did not change (avoid useless ajax)
+        if (population.initialValue === population.population) {
+            return;
+        }
+        $scope.setInitialValue(population, population.population);
 
-                Restangular.all('population').post(population).then(function(newPopulation) {
-                    population.id = newPopulation.id;
-                });
-            }
-        });
+        // Be sure that population data are in sync with other data from questionnaire/survey
+        population.questionnaire = questionnaire.id;
+        population.year = questionnaire.survey.year;
+        population.country = questionnaire.geoname.country.id;
+
+        // If new population with value, create it
+        if (_.isUndefined(population.id) && _.isNumber(population.population)) {
+
+            population.isLoading = true;
+            Restangular.all('population').post(population).then(function(newPopulation) {
+                population.id = newPopulation.id;
+                population.isLoading = false;
+            });
+        }
+        // If existing population with new value, update it
+        else if (population.id && _.isNumber(population.population)) {
+            population.isLoading = true;
+            population.put().then(function() {
+                population.isLoading = false;
+            });
+        }
+        // If existing population with deleted value, delete it
+        else if (population.id && !_.isNumber(population.population)) {
+            population.isLoading = true;
+            population.remove().then(function() {
+                delete population.id;
+                population.isLoading = false;
+            });
+        }
     };
 
     /**

@@ -393,14 +393,17 @@
                         </tr>
 
                         <!-- Population row -->
-                        <tr class='active' ng-show='sector && tabs.questionnaires.length'>
+                        <tr class='active' ng-show='tabs.questionnaires.length'>
                             <td></td>
                             <td></td>
                             <td ng-if='tabs.selectedQuestionnaireForLabels'></td>
                             <td class='text-center' ng-repeat='questionnaire in tabs.questionnaires track by $index'>
                                 <ng-form name='valueForm' class="input-group input-group-sm" ng-class="{'has-error':valueForm.value.$invalid}" tooltip="Leave empty to use official population data">
-                                    <div class='input-group-addon'><i class='fa fa-fw fa-male'></i></div>
-                                    <input ng-disabled='questionnaire.survey.id || questionnaire.isLoading' type='number' class='text-center' placeholder="Population" ng-model='questionnaire.populations[tabs.part.id].population' min='0' name='value' />
+                                    <div class='input-group-addon'><i class='fa fa-fw' ng-class="{'fa-male':!questionnaire.populations[tabs.part.id].isLoading,'fa-gims-loading':questionnaire.populations[tabs.part.id].isLoading}"></i></div>
+                                    <input ng-disabled='questionnaire.isLoading' type='number' class='text-center' placeholder="Population" ng-model='questionnaire.populations[tabs.part.id].population' min='0' name='value'
+                                        ng-focus='setInitialValue(questionnaire.populations[tabs.part.id], questionnaire.populations[tabs.part.id].population)'
+                                        ng-blur='savePopulation(questionnaire, questionnaire.populations[tabs.part.id])'
+                                           />
                                 </ng-form>
                             </td>
                         </tr>
@@ -546,7 +549,7 @@
                                                name='value'
                                                type='number'
                                                placeholder='{{questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first}}'
-                                               ng-focus='setInitialValue(questionnaire.survey.questions[filter.id], questionnaire, questionnaire.survey.questions[filter.id].answers[tabs.part.id]); getPermissions(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id])'
+                                               ng-focus='setAnswerInitialValue(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id]); getPermissions(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id])'
                                                ng-blur='saveAnswer(questionnaire.survey.questions[filter.id].answers[tabs.part.id], questionnaire.survey.questions[filter.id], filter, questionnaire, tabs.part)'
                                                ng-model='questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]'
                                                ng-disabled='questionnaire.survey.questions[filter.id].answers[tabs.part.id].permissions.update == false ||
