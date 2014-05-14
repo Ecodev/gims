@@ -3,7 +3,7 @@ php:
   - "5.5"
 
 addons:
-  postgresql: "9.2"
+  postgresql: "9.3"
 
 before_install:
   - export DISPLAY=:99.0
