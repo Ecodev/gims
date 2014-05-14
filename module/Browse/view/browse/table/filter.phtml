@@ -311,19 +311,19 @@
 
                                         <!-- Links to admin -->
                                         <li ng-show='mode != "Browse" && questionnaire.id' class="dropdown-header">
-                                            <i class='fa fa-external-link fa-fw fa-lg'></i> Links to admin section
+                                            Links to admin section
                                         </li>
 
-                                        <li ng-show='mode != "Browse" && questionnaire.id'>
-                                            <a  href='/admin/questionnaire/edit/{{questionnaire.id}}?returnUrl={{currentUrl}}'>
+                                        <li  ng-show='mode != "Browse" && questionnaire.survey.id'>
+                                            <a href='/admin/survey/edit/{{questionnaire.survey.id}}?returnUrl={{currentUrl}}'>
                                                 <i class='fa fa-gims-survey fa-fw'></i>
                                                 Edit Survey
                                             </a>
                                         </li>
 
                                         <!-- Link to questionnaire in /admin/ section -->
-                                        <li  ng-show='mode != "Browse" && questionnaire.survey.id'>
-                                            <a href='/admin/survey/edit/{{questionnaire.survey.id}}?returnUrl={{currentUrl}}'>
+                                        <li ng-show='mode != "Browse" && questionnaire.id'>
+                                            <a  href='/admin/questionnaire/edit/{{questionnaire.id}}?returnUrl={{currentUrl}}'>
                                                 <i class='fa fa-gims-questionnaire fa-fw'></i>
                                                 Edit Questionnnaire
                                             </a>
