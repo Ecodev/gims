@@ -4,12 +4,13 @@ namespace Application\Model\Question;
 
 use Doctrine\ORM\Mapping as ORM;
 use Application\Model\Survey;
+use Application\Model\Questionnaire;
 
 /**
  * Question defines a Survey (and NOT a questionnaire).
  * @ORM\Entity(repositoryClass="Application\Repository\QuestionRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\Table(name="question")
+ * @ORM\Table(name="question", uniqueConstraints={@ORM\UniqueConstraint(name="answerable_question_must_have_unique_filter_within_same_survey",columns={"survey_id", "filter_id"})})
  */
 abstract class AbstractQuestion extends \Application\Model\AbstractModel
 {
@@ -18,13 +19,20 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
      * @var integer
      * @ORM\Column(type="smallint", nullable=false)
      */
-    private $sorting;
+    private $sorting = 1;
 
     /**
      * @var string
      * @ORM\Column(type="text", nullable=false)
      */
     private $name;
+
+    /**
+     * An array of alternate names: [questionnaireId => "my alternate name"]
+     * @var array
+     * @ORM\Column(type="json_array", nullable=false, options={"default" = "[]"})
+     */
+    private $alternateNames = array();
 
     /**
      * @var Chapter
@@ -46,6 +54,7 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
 
     /**
      * Constructor
+     * @param string $name
      */
     public function __construct($name = null)
     {
@@ -66,7 +75,7 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
     /**
      * Set sorting
      * @param integer $sorting
-     * @return AbstractQuestion
+     * @return self
      */
     public function setSorting($sorting)
     {
@@ -96,7 +105,7 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
     /**
      * Set name
      * @param string $name
-     * @return AbstractQuestion
+     * @return self
      */
     public function setName($name)
     {
@@ -115,9 +124,51 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
     }
 
     /**
+     * Set all alternate names at once
+     * @param array $alternateNames
+     * @return self
+     */
+    public function setAlternameNames(array $alternateNames)
+    {
+        $this->alternateNames = $alternateNames;
+
+        return $this;
+    }
+
+    /**
+     * Get all alternate names
+     * @return array
+     */
+    public function getAlternateNames()
+    {
+        return $this->alternateNames;
+    }
+
+    /**
+     *
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @param string $alternateName
+     * @throws \Exception
+     * @return self
+     */
+    public function addAlternateName(Questionnaire $questionnaire, $alternateName)
+    {
+        $id = $questionnaire->getId();
+        if (!$id) {
+            throw new \Exception('Questionnaire must have an ID');
+        }
+
+        $alternateNames = $this->getAlternateNames();
+        $alternateNames[$id] = $alternateName;
+        $this->setAlternameNames($alternateNames);
+
+        return $this;
+    }
+
+    /**
      * Set chapter
      * @param Chapter $chapter
-     * @return AbstractQuestion
+     * @return self
      */
     public function setChapter(Chapter $chapter = null)
     {
@@ -141,7 +192,7 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
     /**
      * Set survey
      * @param Survey $survey
-     * @return AbstractQuestion
+     * @return self
      */
     public function setSurvey(Survey $survey)
     {

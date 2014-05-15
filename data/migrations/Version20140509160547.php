@@ -43,6 +43,10 @@ class Version20140509160547 extends AbstractMigration
                 }
             }
         }
+
+        $this->addSql("ALTER TABLE question ADD alternate_names JSON DEFAULT '[]' NOT NULL;");
+        $this->addSql("ALTER TABLE question ALTER description SET DEFAULT '';");
+        $this->addSql("CREATE UNIQUE INDEX answerable_question_must_have_unique_filter_within_same_survey ON question (survey_id, filter_id);");
     }
 
     public function down(Schema $schema)

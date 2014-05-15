@@ -77,9 +77,11 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
 
     /**
      * Constructor
+     * @param string $name
      */
-    public function __construct()
+    public function __construct($name = null)
     {
+        $this->setName($name);
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questionnaires = new \Doctrine\Common\Collections\ArrayCollection();
     }

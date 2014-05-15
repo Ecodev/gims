@@ -355,12 +355,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PowerKiKi/dbal.git",
-                "reference": "2d87de562304047b534c1da830ea91aa4861b42b"
+                "reference": "0ea923e3cee65b2b2924b4be58b2ad579f8fedbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PowerKiKi/dbal/zipball/2d87de562304047b534c1da830ea91aa4861b42b",
-                "reference": "2d87de562304047b534c1da830ea91aa4861b42b",
+                "url": "https://api.github.com/repos/PowerKiKi/dbal/zipball/0ea923e3cee65b2b2924b4be58b2ad579f8fedbe",
+                "reference": "0ea923e3cee65b2b2924b4be58b2ad579f8fedbe",
                 "shasum": ""
             },
             "archive": {
@@ -428,7 +428,7 @@
             "support": {
                 "source": "https://github.com/PowerKiKi/dbal/tree/master"
             },
-            "time": "2014-05-12 01:55:19"
+            "time": "2014-05-15 02:41:25"
         },
         {
             "name": "doctrine/doctrine-module",
