@@ -25,33 +25,6 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     private $hydrator;
 
-    /**
-     * @var array
-     */
-    private $fieldSet1 = array(
-        'foo',
-        'name',
-        'questionnaires',
-        'metadata',
-        'questionnaires.foo',
-        'questionnaires.name',
-        'questionnaires.status',
-        'questionnaires.metadata',
-        'questionnaires.answers',
-        'questionnaires.answers.foo',
-        'questionnaires.answers.metadata',
-        'questionnaires.answers.valuePercent',
-        'questionnaires.answers.valueAbsolute',
-    );
-
-    /**
-     * @var array
-     */
-    private $fieldSet2 = array(
-        'name',
-        'questionnaires',
-    );
-
     public function setUp()
     {
         parent::setUp();
@@ -122,6 +95,25 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $actual = $this->hydrator->extract($this->user, array('name', 'email'));
         unset($actual['id']);
         $this->assertEquals($data, $actual, 'it must be exactly same as input, except the id');
+    }
+
+    public function testCanHydrateAndExtractJSONproperty()
+    {
+        $data = [
+            'alternateNames' => [
+                123 => 'alternate 1',
+                456 => 'alternate 2',
+            ],
+        ];
+
+        $question = new \Application\Model\Question\NumericQuestion('tst question');
+        $this->assertEquals([], $question->getAlternateNames());
+
+        $this->hydrator->hydrate($data, $question);
+        $this->assertEquals($data['alternateNames'], $question->getAlternateNames());
+
+        $actual = $this->hydrator->extract($question, array('alternateNames'));
+        $this->assertEquals($data['alternateNames'], $actual['alternateNames'], 'it must be exactly same as input');
     }
 
     public function testDoesNotModifySubobject()

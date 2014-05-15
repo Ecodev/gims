@@ -128,7 +128,7 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
      * @param array $alternateNames
      * @return self
      */
-    public function setAlternameNames(array $alternateNames)
+    public function setAlternateNames(array $alternateNames)
     {
         $this->alternateNames = $alternateNames;
 

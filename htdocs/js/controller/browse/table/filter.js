@@ -20,10 +20,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
     $scope.filterSetFields = {fields: 'color,paths'};
     $scope.filterFields = {fields: 'color,paths'};
     $scope.countryParams = {fields: 'geoname'};
-    $scope.countryFields = {fields: 'geoname.questionnaires,geoname.questionnaires.survey,geoname.questionnaires.survey.questions,geoname.questionnaires.survey.questions.type,geoname.questionnaires.survey.questions.filter'};
-    $scope.questionnaireWithQTypeFields = {fields: 'survey.questions,survey.questions.type'};
-    $scope.questionnaireWithAnswersFields = {fields: 'filterQuestionnaireUsages,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.answers,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part'};
-    $scope.surveyFields = {fields: 'questionnaires.survey,questionnaires.survey.questions,questionnaires.survey.questions.type,questionnaires.survey.questions.filter'};
+    var countryFields = {fields: 'geoname.questionnaires,geoname.questionnaires.survey,geoname.questionnaires.survey.questions,geoname.questionnaires.survey.questions.type,geoname.questionnaires.survey.questions.filter'};
+    var questionnaireWithQTypeFields = {fields: 'survey.questions,survey.questions.type'};
+    var questionnaireWithAnswersFields = {fields: 'filterQuestionnaireUsages,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part'};
+    var surveyFields = {fields: 'questionnaires.survey,questionnaires.survey.questions,questionnaires.survey.questions.type,questionnaires.survey.questions.filter'};
 
     // Variables initialisations
     $scope.isLoading = false;
@@ -121,7 +121,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
     $scope.$watch('tabs.country', function() {
         if ($scope.tabs.country) {
             $scope.isLoading = true;
-            Restangular.one('country', $scope.tabs.country.id).get(_.merge($scope.countryFields, {perPage: 1000})).then(function(country) {
+            Restangular.one('country', $scope.tabs.country.id).get(_.merge(countryFields, {perPage: 1000})).then(function(country) {
                 $scope.tabs.questionnaires = country.geoname.questionnaires;
                 $scope.tabs.survey = null;
                 $scope.isLoading = false;
@@ -133,7 +133,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
     $scope.$watch('tabs.survey', function() {
         if ($scope.tabs.survey) {
             $scope.isLoading = true;
-            Restangular.one('survey', $scope.tabs.survey.id).get(_.merge($scope.surveyFields, {perPage: 1000})).then(function(survey) {
+            Restangular.one('survey', $scope.tabs.survey.id).get(_.merge(surveyFields, {perPage: 1000})).then(function(survey) {
                 $scope.isLoading = false;
                 $scope.tabs.questionnaires = survey.questionnaires;
                 $scope.tabs.country = null;
@@ -161,7 +161,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
         newQuestionnaires = newQuestionnaires ? newQuestionnaires : [];
 
         if (!_.isEmpty(newQuestionnaires)) {
-            getQuestionnaires(newQuestionnaires, $scope.questionnaireWithQTypeFields).then(function(questionnaires) {
+            getQuestionnaires(newQuestionnaires, questionnaireWithQTypeFields).then(function(questionnaires) {
                 checkGlassQuestionnaires(questionnaires);
             });
         }
@@ -448,25 +448,39 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
         }
         return false;
     };
+
     /**
      * Save question if it has a name
      * @param question
-     * @param survey
+     * @param questionnaire
      */
-    $scope.saveQuestion = function(question, survey) {
+    $scope.saveQuestion = function(question, questionnaire) {
 
-        propagateQuestions(survey, false, true);
+        // If the question is new and does not have an official name use it the alternative as real one
+        var alternateName = question.alternateNames[questionnaire.id];
+        if (!question.name) {
+            question.name = alternateName;
+        }
 
-        if (!_.isEmpty(question.name) && question.name != question.initialName && question.id) {
+        // If we deleted the alternative name, or it is the same as official one, delete the alternative
+        if (!alternateName || alternateName === question.name) {
+            delete question.alternateNames[questionnaire.id];
+        }
+
+        propagateQuestions(questionnaire.survey, false, true);
+        if (question.id) {
             Restangular.restangularizeElement(null, question, 'question');
             $scope.isLoading = true;
             question.isLoading = true;
             question.put().then(function() {
-                propagateQuestions(survey, true, false);
+                propagateQuestions(questionnaire.survey, true, false);
                 question.isLoading = false;
                 $scope.isLoading = false;
-            });
 
+                if (!question.alternateNames[questionnaire.id]) {
+                    question.alternateNames[questionnaire.id] = question.name;
+                }
+            });
         }
     };
 
@@ -486,7 +500,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
 
                     questionnaire.id = data.questionnaire.id;
                     questionnaire.survey.id = data.survey.id;
-                    getQuestionnaires([data.questionnaire.id], $scope.questionnaireWithAnswersFields).then(function(questionnaires) {
+                    getQuestionnaires([data.questionnaire.id], questionnaireWithAnswersFields).then(function(questionnaires) {
                         $scope.firstQuestionnairesRetrieve = true;
                         prepareDataQuestionnaires(questionnaires);
                         updateUrl('questionnaires');
@@ -745,7 +759,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
             });
 
             // get data for new jmp questionnaires
-            getQuestionnaires(_.pluck(jmp, 'id'), $scope.questionnaireWithAnswersFields).then(function(questionnaires) {
+            getQuestionnaires(_.pluck(jmp, 'id'), questionnaireWithAnswersFields).then(function(questionnaires) {
                 $scope.firstQuestionnairesRetrieve = true;
                 listQuestionnairesWithFilterUsages(questionnaires);
                 prepareDataQuestionnaires(questionnaires);
@@ -790,6 +804,15 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
                     q.value = 'valuePercent';
                     q.max = 1;
                 }
+
+                // Default alternate name to official one, so we can always display something
+                if (_.isEmpty(q.alternateNames)) {
+                    q.alternateNames = {};
+                }
+                if (!q.alternateNames[questionnaire.id]) {
+                    q.alternateNames[questionnaire.id] = q.name;
+                }
+
                 return q;
             });
 
@@ -1036,8 +1059,9 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $routeP
      * Multiple questionnaires may have the same survey, but the questions are linked to questionnaires with the right answers.
      * So questions may be in multiple questionnaires but they have to be synced for labels and id. A filter is supposed to have only one question.
      * This function propagates modifications on other questionnaires that have the same code.
-     * @param questionnaire
-     * @param questions
+     * @param survey the source of the question
+     * @param {boolean} propagateId
+     * @param {boolean} propagateName
      */
     var propagateQuestions = function(survey, propagateId, propagateName) {
 

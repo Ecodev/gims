@@ -462,11 +462,10 @@
                             <td ng-if='tabs.selectedQuestionnaireForLabels'>
                                 <ng-form name='labelForm' ng-if='mode != "Browse"'>
                                     <div class="input-group input-group-sm">
-                                        <span class="input-group-addon"><i class='fa fa-question'></i></span>
+                                        <span class="input-group-addon"><i class='fa' ng-class="{'fa-question':!tabs.selectedQuestionnaireForLabels.survey.questions[filter.id].isLoading,'fa-gims-loading':tabs.selectedQuestionnaireForLabels.survey.questions[filter.id].isLoading}"></i></span>
                                         <input class='form-control'
-                                               ng-model="tabs.selectedQuestionnaireForLabels.survey.questions[filter.id].name"
-                                               ng-focus='tabs.selectedQuestionnaireForLabels.survey.questions[filter.id].initialName = tabs.selectedQuestionnaireForLabels.survey.questions[filter.id].name'
-                                               ng-blur='saveQuestion(tabs.selectedQuestionnaireForLabels.survey.questions[filter.id], tabs.selectedQuestionnaireForLabels.survey)'
+                                               ng-model="tabs.selectedQuestionnaireForLabels.survey.questions[filter.id].alternateNames[tabs.selectedQuestionnaireForLabels.id]"
+                                               ng-blur='saveQuestion(tabs.selectedQuestionnaireForLabels.survey.questions[filter.id], tabs.selectedQuestionnaireForLabels)'
                                                name="label"
                                                ng-required="tabs.selectedQuestionnaireForLabels.survey.questions[filter.id].answers[part.id][questionnaire.survey.questions[filter.id].value]"
                                                ng-class="{'error': labelForm.label.$invalid}"/>
