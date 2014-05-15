@@ -132,22 +132,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 // First get series of flatten regression lines with ignored values (if any)
                 $seriesWithIgnoredElements = array_merge($seriesWithIgnoredElements, $this->computeIgnoredElements($filterSet, $questionnaires, $part));
 
-                // If the filterSet is a copy of an original FilterSet, then we also display the original (with light colors)
-                if ($filterSet->getOriginalFilterSet()) {
-                    $originalFilterSet = $filterSet->getOriginalFilterSet();
-                    $seriesWithOriginal = $this->getSeries($originalFilterSet, $questionnaires, $part, array(), 100, null, false, ' (original)');
-                } else {
-                    $seriesWithOriginal = array();
-                }
-
-                $ignoredFilters = array();
-                foreach ($filterSet->getExcludedFilters() as $ignoredFilter) {
-                    $ignoredFilters[] = $ignoredFilter->getId();
-                }
-
                 // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
-                $alternativeSeries = array_merge($seriesWithIgnoredElements, $seriesWithOriginal, $adjustedSeries);
-                $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, array('byFilterSet' => $ignoredFilters), $alternativeSeries ? 33 : 100, $alternativeSeries ? 'ShortDash' : null, false);
+                $alternativeSeries = array_merge($seriesWithIgnoredElements, $adjustedSeries);
+                $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, array(), $alternativeSeries ? 33 : 100, $alternativeSeries ? 'ShortDash' : null, false);
                 // insure that series are not added twice to series list
                 foreach ($newSeries = array_merge($normalSeries, $alternativeSeries) as $newSerie) {
                     $same = false;

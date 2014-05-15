@@ -39,8 +39,6 @@ class FilterSetControllerTest extends AbstractRestfulControllerTest
         // FilterSet
         $data = array(
             'name' => 'new-filterSet',
-            'excludedFilters' => array($this->filter->getId()),
-            'originalFilterSet' => $this->filterSet->getId(),
         );
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
