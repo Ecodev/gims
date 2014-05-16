@@ -17,7 +17,7 @@ class QuestionRepository extends AbstractChildRepository
             ->join('question.survey', 'survey', Join::WITH)
             ->where('question.' . $parentName . ' = :parent')
             ->setParameter('parent', $parent)->orderBy('question.sorting')
-            ->groupBy('question');
+            ->groupBy('question.id');
 
         $this->addSearch($qb, $search);
         $this->addPermission($qb, 'survey', \Application\Model\Permission::getPermissionName($this, $action));
