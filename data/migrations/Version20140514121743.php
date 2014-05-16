@@ -19,7 +19,6 @@ class Version20140514121743 extends AbstractMigration
         $this->addSql("ALTER TABLE filter_set DROP CONSTRAINT fk_1c0a40ef2b18a39");
         $this->addSql("DROP INDEX idx_1c0a40ef2b18a39");
         $this->addSql("ALTER TABLE filter_set DROP original_filter_set_id");
-        $this->addSql("CREATE UNIQUE INDEX population_unique_non_official ON population (year, country_id, part_id, questionnaire_id) WHERE questionnaire_id IS NOT NULL");
     }
 
     public function down(Schema $schema)
