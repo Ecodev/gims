@@ -49,7 +49,7 @@ class FilterGeonameUsage extends AbstractUsage
      * Set filter
      *
      * @param Filter $filter
-     * @return FilterGeonameUsage
+     * @return self
      */
     public function setFilter(Filter $filter)
     {

@@ -56,7 +56,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
     /**
      * Set filter
      * @param Filter $filter
-     * @return AbstractAnswerableQuestion
+     * @return self
      */
     public function setFilter(Filter $filter)
     {
@@ -99,7 +99,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
      * Notify the question that it was added to the answer.
      * This should only be called by Answer::setQuestion()
      * @param Answer $answer
-     * @return AbstractAnswerableQuestion
+     * @return self
      */
     public function answerAdded(Answer $answer)
     {
@@ -119,7 +119,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
 
     /**
      * @param boolean $isCompulsory
-     * @return $this
+     * @return self
      */
     public function setIsCompulsory($isCompulsory)
     {
@@ -138,7 +138,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $parts
-     * @return $this
+     * @return self
      */
     public function setParts(\Doctrine\Common\Collections\ArrayCollection $parts)
     {

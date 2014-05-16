@@ -18,7 +18,7 @@ class QuestionRepositoryTest extends AbstractRepository
             2 => 'alternate name 2',
             6 => 'alternate name 6',
         );
-        $question->setAlternameNames($alternateNames);
+        $question->setAlternateNames($alternateNames);
 
         $this->getEntityManager()->persist($survey);
         $this->getEntityManager()->persist($filter);

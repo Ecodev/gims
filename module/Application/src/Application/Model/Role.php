@@ -63,7 +63,7 @@ class Role extends AbstractModel implements \Rbac\Role\RoleInterface
      * Set name
      *
      * @param string $name
-     * @return Role
+     * @return self
      */
     public function setName($name)
     {
@@ -86,7 +86,7 @@ class Role extends AbstractModel implements \Rbac\Role\RoleInterface
      * Set parent
      *
      * @param Role $parent
-     * @return Role
+     * @return self
      */
     public function setParent(Role $parent = null)
     {
@@ -98,7 +98,7 @@ class Role extends AbstractModel implements \Rbac\Role\RoleInterface
     /**
      * Get parent
      *
-     * @return Role
+     * @return self
      */
     public function getParent()
     {
@@ -109,7 +109,7 @@ class Role extends AbstractModel implements \Rbac\Role\RoleInterface
      * Add permission
      *
      * @param Permission $permission
-     * @return Role
+     * @return self
      */
     public function addPermission(Permission $permission)
     {
@@ -122,7 +122,7 @@ class Role extends AbstractModel implements \Rbac\Role\RoleInterface
      * Remove permission
      *
      * @param Permission $permission
-     * @return Role
+     * @return self
      */
     public function removePermission(Permission $permission)
     {

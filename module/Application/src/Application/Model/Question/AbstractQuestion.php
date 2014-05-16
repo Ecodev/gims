@@ -160,7 +160,7 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
 
         $alternateNames = $this->getAlternateNames();
         $alternateNames[$id] = $alternateName;
-        $this->setAlternameNames($alternateNames);
+        $this->setAlternateNames($alternateNames);
 
         return $this;
     }

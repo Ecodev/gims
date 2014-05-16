@@ -101,7 +101,7 @@ class Answer extends AbstractModel
     /**
      * Set valueChoice
      * @param Application\Model\Question\Choice
-     * @return Answer
+     * @return self
      */
     public function setValueChoice(\Application\Model\Question\Choice $valueChoice = null)
     {
@@ -122,7 +122,7 @@ class Answer extends AbstractModel
     /**
      * Set valuePercent (between 0.0 and 1.0)
      * @param float $valuePercent
-     * @return Answer
+     * @return self
      */
     public function setValuePercent($valuePercent)
     {
@@ -143,7 +143,7 @@ class Answer extends AbstractModel
     /**
      * Set valueAbsolute
      * @param float $valueAbsolute
-     * @return Answer
+     * @return self
      */
     public function setValueAbsolute($valueAbsolute)
     {
@@ -164,7 +164,7 @@ class Answer extends AbstractModel
     /**
      * Set valueText
      * @param string $valueText
-     * @return Answer
+     * @return self
      */
     public function setValueText($valueText)
     {
@@ -185,7 +185,7 @@ class Answer extends AbstractModel
     /**
      * Set quality (between 0.0 and 1.0)
      * @param float $quality
-     * @return Answer
+     * @return self
      */
     public function setQuality($quality)
     {
@@ -206,7 +206,7 @@ class Answer extends AbstractModel
     /**
      * Set relevance (between 0.0 and 1.0)
      * @param float $relevance
-     * @return Answer
+     * @return self
      */
     public function setRelevance($relevance)
     {
@@ -227,7 +227,7 @@ class Answer extends AbstractModel
     /**
      * Set question
      * @param \Application\Model\Question\AbstractAnswerableQuestion $question
-     * @return Answer
+     * @return self
      */
     public function setQuestion(\Application\Model\Question\AbstractAnswerableQuestion $question)
     {
@@ -250,7 +250,7 @@ class Answer extends AbstractModel
     /**
      * Set questionnaire
      * @param Questionnaire $questionnaire
-     * @return Answer
+     * @return self
      */
     public function setQuestionnaire(Questionnaire $questionnaire)
     {
@@ -272,7 +272,7 @@ class Answer extends AbstractModel
     /**
      * Set valueUser
      * @param User $valueUser
-     * @return Answer
+     * @return self
      */
     public function setValueUser(User $valueUser = null)
     {
@@ -293,7 +293,7 @@ class Answer extends AbstractModel
     /**
      * Set part
      * @param Part $part
-     * @return Answer
+     * @return self
      */
     public function setPart(Part $part)
     {

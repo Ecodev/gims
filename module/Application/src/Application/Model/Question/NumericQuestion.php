@@ -29,7 +29,7 @@ class NumericQuestion extends AbstractPopulationQuestion
 
     /**
      * @param int $isAbsolute
-     * @return $this
+     * @return self
      */
     public function setIsAbsolute($isAbsolute)
     {

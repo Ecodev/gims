@@ -129,7 +129,7 @@ class Filter extends AbstractModel
     /**
      * Set name
      * @param string $name
-     * @return Filter
+     * @return self
      */
     public function setName($name)
     {
@@ -159,7 +159,7 @@ class Filter extends AbstractModel
     /**
      * Add a child
      * @param Filter $child
-     * @return Filter
+     * @return self
      */
     public function addChild(Filter $child)
     {
@@ -174,7 +174,7 @@ class Filter extends AbstractModel
     /**
      * Set new filters, replacing entirely existing children
      * @param \Doctrine\Common\Collections\ArrayCollection $children
-     * @return $this
+     * @return self
      */
     public function setChildren(\Doctrine\Common\Collections\ArrayCollection $children)
     {
@@ -204,7 +204,7 @@ class Filter extends AbstractModel
      * Notify the child that he has a new parent.
      * This should only be called by Filter::addChild()
      * @param Filter $parent
-     * @return Filter
+     * @return self
      */
     protected function parentAdded(Filter $parent)
     {
@@ -218,7 +218,7 @@ class Filter extends AbstractModel
     /**
      * Set new filters, replacing entirely existing parents
      * @param \Doctrine\Common\Collections\ArrayCollection $parents
-     * @return $this
+     * @return self
      */
     public function setParents(\Doctrine\Common\Collections\ArrayCollection $parents)
     {
@@ -265,7 +265,7 @@ class Filter extends AbstractModel
      * Notify the filter that he has a new filterset.
      * This should only be called by FilterSet::addFilter()
      * @param FilterSet $filterSet
-     * @return Filter
+     * @return self
      */
     public function filterSetAdded(FilterSet $filterSet)
     {
@@ -288,7 +288,7 @@ class Filter extends AbstractModel
     /**
      * Add a summand
      * @param Filter $summand
-     * @return Filter
+     * @return self
      */
     public function addSummand(Filter $summand)
     {
@@ -353,7 +353,7 @@ class Filter extends AbstractModel
      * Notify the filter that it was added to FilterQuestionnaireUsage relation.
      * This should only be called by FilterQuestionnaireUsage::setFilter()
      * @param Rule\FilterQuestionnaireUsage $usage
-     * @return Filter
+     * @return self
      */
     public function filterQuestionnaireUsageAdded(Rule\FilterQuestionnaireUsage $usage)
     {
@@ -444,7 +444,7 @@ class Filter extends AbstractModel
     /**
      * Set color in database
      * @param $color string hexadecimal
-     * @return Filter
+     * @return self
      */
     public function setColor($color)
     {

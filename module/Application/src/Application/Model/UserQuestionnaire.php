@@ -55,7 +55,7 @@ class UserQuestionnaire extends AbstractUserRole
     /**
      * Set "user"
      * @param User $user
-     * @return UserQuestionnaire
+     * @return self
      */
     public function setUser(User $user)
     {
@@ -77,7 +77,7 @@ class UserQuestionnaire extends AbstractUserRole
     /**
      * Set questionnaire
      * @param Questionnaire $questionnaire
-     * @return UserQuestionnaire
+     * @return self
      */
     public function setQuestionnaire(Questionnaire $questionnaire)
     {
@@ -98,7 +98,7 @@ class UserQuestionnaire extends AbstractUserRole
     /**
      * Set role
      * @param Role $role
-     * @return UserQuestionnaire
+     * @return self
      */
     public function setRole(Role $role)
     {

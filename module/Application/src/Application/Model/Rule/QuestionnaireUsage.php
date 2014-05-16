@@ -38,7 +38,7 @@ class QuestionnaireUsage extends AbstractQuestionnaireUsage
      * Set questionnaire
      *
      * @param \Application\Model\Questionnaire $questionnaire
-     * @return QuestionnaireUsage
+     * @return self
      */
     public function setQuestionnaire(\Application\Model\Questionnaire $questionnaire)
     {

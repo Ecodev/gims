@@ -62,7 +62,7 @@ class Choice extends \Application\Model\AbstractModel
     }
 
     /**
-     * @return ChoiceQuestion
+     * @return selfQuestion
      */
     public function getQuestion()
     {
@@ -71,7 +71,7 @@ class Choice extends \Application\Model\AbstractModel
 
     /**
      * @param ChoiceQuestion $question
-     * @return $this
+     * @return self
      */
     public function setQuestion(ChoiceQuestion $question)
     {
@@ -114,7 +114,7 @@ class Choice extends \Application\Model\AbstractModel
 
     /**
      * @param float $value
-     * @return $this
+     * @return self
      */
     public function setValue($value)
     {
@@ -133,7 +133,7 @@ class Choice extends \Application\Model\AbstractModel
 
     /**
      * @param string $name
-     * @return $this
+     * @return self
      */
     public function setName($name)
     {

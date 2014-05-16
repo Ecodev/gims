@@ -69,7 +69,7 @@ class FilterSet extends AbstractModel implements \Application\Service\RoleContex
     /**
      * Set name
      * @param string $name
-     * @return FilterSet
+     * @return self
      */
     public function setName($name)
     {
@@ -108,7 +108,7 @@ class FilterSet extends AbstractModel implements \Application\Service\RoleContex
     /**
      * Add a filter
      * @param Filter $filter
-     * @return FilterSet
+     * @return self
      */
     public function addFilter(Filter $filter)
     {
@@ -123,7 +123,7 @@ class FilterSet extends AbstractModel implements \Application\Service\RoleContex
     /**
      * Set new filters, replacing entirely existing filters
      * @param \Doctrine\Common\Collections\ArrayCollection $filters
-     * @return $this
+     * @return self
      */
     public function setFilters(\Doctrine\Common\Collections\ArrayCollection $filters)
     {
@@ -146,7 +146,7 @@ class FilterSet extends AbstractModel implements \Application\Service\RoleContex
     /**
      * Add a filter
      * @param Filter $filter
-     * @return FilterSet
+     * @return self
      */
     public function addExcludedFilter(Filter $filter)
     {
@@ -160,7 +160,7 @@ class FilterSet extends AbstractModel implements \Application\Service\RoleContex
     /**
      * Set originalFilterSet from which this filter set was copied
      * @param FilterSet $originalFilterSet
-     * @return FilterSet
+     * @return self
      */
     public function setOriginalFilterSet(FilterSet $originalFilterSet = null)
     {
@@ -171,7 +171,7 @@ class FilterSet extends AbstractModel implements \Application\Service\RoleContex
 
     /**
      * Get originalFilterSet from which this filter set was copied
-     * @return FilterSet
+     * @return self
      */
     public function getOriginalFilterSet()
     {

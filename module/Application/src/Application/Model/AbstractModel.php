@@ -70,7 +70,7 @@ abstract class AbstractModel
      *
      * @param \DateTime $dateCreated
      *
-     * @return AbstractModel
+     * @return self
      */
     private function setDateCreated(\DateTime $dateCreated = null)
     {
@@ -94,7 +94,7 @@ abstract class AbstractModel
      *
      * @param \DateTime $dateModified
      *
-     * @return AbstractModel
+     * @return self
      */
     private function setDateModified(\DateTime $dateModified = null)
     {
@@ -118,7 +118,7 @@ abstract class AbstractModel
      *
      * @param User $creator
      *
-     * @return AbstractModel
+     * @return self
      */
     private function setCreator(User $creator = null)
     {
@@ -142,7 +142,7 @@ abstract class AbstractModel
      *
      * @param User $modifier
      *
-     * @return AbstractModel
+     * @return self
      */
     private function setModifier(User $modifier = null)
     {

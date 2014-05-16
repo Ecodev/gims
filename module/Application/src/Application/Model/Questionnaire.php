@@ -113,7 +113,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     /**
      * Set dateObservationStart
      * @param \DateTime $dateObservationStart
-     * @return Questionnaire
+     * @return self
      */
     public function setDateObservationStart(\DateTime $dateObservationStart)
     {
@@ -134,7 +134,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     /**
      * Set dateObservationEnd
      * @param \DateTime $dateObservationEnd
-     * @return Questionnaire
+     * @return self
      */
     public function setDateObservationEnd(\DateTime $dateObservationEnd)
     {
@@ -155,7 +155,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     /**
      * Set geoname
      * @param Geoname $geoname
-     * @return Questionnaire
+     * @return self
      */
     public function setGeoname(Geoname $geoname)
     {
@@ -176,7 +176,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     /**
      * Set survey
      * @param Survey $survey
-     * @return Questionnaire
+     * @return self
      */
     public function setSurvey(Survey $survey)
     {
@@ -220,7 +220,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Get status
-     * @return QuestionnaireStatus
+     * @return selfStatus
      */
     public function getStatus()
     {
@@ -232,7 +232,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      * Notify the questionnaire that he has a new answer.
      * This should only be called by Answer::setQuestionnaire()
      * @param Answer $answer
-     * @return Questionnaire
+     * @return self
      */
     public function answerAdded(Answer $answer)
     {
@@ -315,7 +315,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      * Notify the questionnaire that it has a new rule.
      * This should only be called by QuestionnaireUsage::setQuestionnaire()
      * @param Rule\QuestionnaireUsage $questionnaireUsage
-     * @return Questionnaire
+     * @return self
      */
     public function questionnaireUsageAdded(Rule\QuestionnaireUsage $questionnaireUsage)
     {

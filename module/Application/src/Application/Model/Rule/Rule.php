@@ -106,7 +106,7 @@ class Rule extends \Application\Model\AbstractModel
      * Set name
      *
      * @param string $name
-     * @return Rule
+     * @return self
      */
     public function setName($name)
     {

@@ -69,7 +69,7 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
      * Set filter
      *
      * @param Filter $filter
-     * @return FilterQuestionnaireUsage
+     * @return self
      */
     public function setFilter(\Application\Model\Filter $filter)
     {

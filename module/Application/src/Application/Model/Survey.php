@@ -106,7 +106,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @param string $name
      *
-     * @return Survey
+     * @return self
      */
     public function setName($name)
     {
@@ -130,7 +130,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @param string $code
      *
-     * @return Survey
+     * @return self
      */
     public function setCode($code)
     {
@@ -154,7 +154,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @param boolean $isActive
      *
-     * @return Survey
+     * @return self
      */
     public function setIsActive($isActive)
     {
@@ -178,7 +178,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @param integer $year
      *
-     * @return Survey
+     * @return self
      */
     public function setYear($year)
     {
@@ -208,7 +208,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * @param string $comments
      *
-     * @return Survey
+     * @return self
      */
     public function setComments($comments)
     {
@@ -228,7 +228,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * @param \DateTime $dateStart
      *
-     * @return Survey
+     * @return self
      */
     public function setDateStart(\DateTime $dateStart = null)
     {
@@ -248,7 +248,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * @param \DateTime $dateEnd
      *
-     * @return Survey
+     * @return self
      */
     public function setDateEnd(\DateTime $dateEnd = null)
     {
@@ -273,7 +273,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @param \Application\Model\Question\AbstractQuestion $question
      *
-     * @return Survey
+     * @return self
      */
     public function questionAdded(\Application\Model\Question\AbstractQuestion $question)
     {
@@ -296,7 +296,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @param Questionnaire $questionnaire
      *
-     * @return Survey
+     * @return self
      */
     public function questionnaireAdded(Questionnaire $questionnaire)
     {

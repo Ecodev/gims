@@ -82,7 +82,7 @@ class Chapter extends AbstractQuestion
      *
      * @param \Application\Model\Question\AbstractQuestion $question
      *
-     * @return Chapter
+     * @return self
      */
     public function questionAdded(\Application\Model\Question\AbstractQuestion $question)
     {

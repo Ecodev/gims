@@ -47,7 +47,7 @@ class Part extends AbstractModel
      * Set name
      *
      * @param string $name
-     * @return Part
+     * @return self
      */
     public function setName($name)
     {

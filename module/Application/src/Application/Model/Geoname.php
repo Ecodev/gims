@@ -170,7 +170,7 @@ class Geoname extends AbstractModel
     /**
      * Set name
      * @param string $name
-     * @return Geoname
+     * @return self
      */
     public function setName($name)
     {
@@ -191,7 +191,7 @@ class Geoname extends AbstractModel
     /**
      * Set asciiname
      * @param string $asciiname
-     * @return Geoname
+     * @return self
      */
     public function setAsciiname($asciiname)
     {
@@ -212,7 +212,7 @@ class Geoname extends AbstractModel
     /**
      * Set alternatenames
      * @param string $alternatenames
-     * @return Geoname
+     * @return self
      */
     public function setAlternatenames($alternatenames)
     {
@@ -233,7 +233,7 @@ class Geoname extends AbstractModel
     /**
      * Set latitude
      * @param float $latitude
-     * @return Geoname
+     * @return self
      */
     public function setLatitude($latitude)
     {
@@ -254,7 +254,7 @@ class Geoname extends AbstractModel
     /**
      * Set longitude
      * @param float $longitude
-     * @return Geoname
+     * @return self
      */
     public function setLongitude($longitude)
     {
@@ -275,7 +275,7 @@ class Geoname extends AbstractModel
     /**
      * Set fclass
      * @param string $fclass
-     * @return Geoname
+     * @return self
      */
     public function setFclass($fclass)
     {
@@ -296,7 +296,7 @@ class Geoname extends AbstractModel
     /**
      * Set fcode
      * @param string $fcode
-     * @return Geoname
+     * @return self
      */
     public function setFcode($fcode)
     {
@@ -317,7 +317,7 @@ class Geoname extends AbstractModel
     /**
      * Set country
      * @param string $countryCode
-     * @return Geoname
+     * @return self
      */
     public function setCountryCode($countryCode)
     {
@@ -338,7 +338,7 @@ class Geoname extends AbstractModel
     /**
      * Set cc2
      * @param string $cc2
-     * @return Geoname
+     * @return self
      */
     public function setCc2($cc2)
     {
@@ -359,7 +359,7 @@ class Geoname extends AbstractModel
     /**
      * Set admin1
      * @param string $admin1
-     * @return Geoname
+     * @return self
      */
     public function setAdmin1($admin1)
     {
@@ -380,7 +380,7 @@ class Geoname extends AbstractModel
     /**
      * Set admin2
      * @param string $admin2
-     * @return Geoname
+     * @return self
      */
     public function setAdmin2($admin2)
     {
@@ -401,7 +401,7 @@ class Geoname extends AbstractModel
     /**
      * Set admin3
      * @param string $admin3
-     * @return Geoname
+     * @return self
      */
     public function setAdmin3($admin3)
     {
@@ -422,7 +422,7 @@ class Geoname extends AbstractModel
     /**
      * Set admin4
      * @param string $admin4
-     * @return Geoname
+     * @return self
      */
     public function setAdmin4($admin4)
     {
@@ -443,7 +443,7 @@ class Geoname extends AbstractModel
     /**
      * Set population
      * @param float $population
-     * @return Geoname
+     * @return self
      */
     public function setPopulation($population)
     {
@@ -464,7 +464,7 @@ class Geoname extends AbstractModel
     /**
      * Set elevation
      * @param integer $elevation
-     * @return Geoname
+     * @return self
      */
     public function setElevation($elevation)
     {
@@ -485,7 +485,7 @@ class Geoname extends AbstractModel
     /**
      * Set gtopo30
      * @param integer $gtopo30
-     * @return Geoname
+     * @return self
      */
     public function setGtopo30($gtopo30)
     {
@@ -506,7 +506,7 @@ class Geoname extends AbstractModel
     /**
      * Set timezone
      * @param string $timezone
-     * @return Geoname
+     * @return self
      */
     public function setTimezone($timezone)
     {
@@ -527,7 +527,7 @@ class Geoname extends AbstractModel
     /**
      * Set moddate
      * @param \DateTime $moddate
-     * @return Geoname
+     * @return self
      */
     public function setModdate($moddate)
     {
