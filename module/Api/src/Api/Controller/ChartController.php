@@ -134,7 +134,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
                 // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
                 $alternativeSeries = array_merge($seriesWithIgnoredElements, $adjustedSeries);
-                $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, array(), $alternativeSeries ? 33 : 100, $alternativeSeries ? 'ShortDash' : null, false);
+                $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, $alternativeSeries ? 33 : 100, $alternativeSeries ? 'ShortDash' : null, false);
                 // insure that series are not added twice to series list
                 foreach ($newSeries = array_merge($normalSeries, $alternativeSeries) as $newSerie) {
                     $same = false;
@@ -152,8 +152,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         }
 
         $chart = $this->getChart(implode(', ', $filterSetsNames), $series, $country, $part);
-        if (isset($adjusted['overridenFilters']) && $adjusted['overridenFilters']) {
-            $chart['overridenFilters'] = $adjusted['overridenFilters'];
+        if (isset($adjusted['overriddenFilters']) && $adjusted['overriddenFilters']) {
+            $chart['overriddenFilters'] = $adjusted['overriddenFilters'];
         }
         if (isset($adjusted['originalFilters']) && $adjusted['originalFilters']) {
             $chart['originalFilters'] = $adjusted['originalFilters'];
@@ -181,30 +181,30 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Returns all series for ignored questionnaires AND filters at the same time
+     * @param \Application\Model\FilterSet $filterSet
      * @param array $questionnaires
      * @param \Application\Model\Part $part
      * @return array
      */
     protected function computeIgnoredElements(FilterSet $filterSet, array $questionnaires, Part $part)
     {
-        $ignoredFiltersByQuestionnaire = $this->getIgnoredElements();
+        $overriddenFilters = $this->getIgnoredElements($part);
 
         $series = array();
-        if (count($ignoredFiltersByQuestionnaire['byQuestionnaire']) > 0) {
+        if (count($overriddenFilters) > 0) {
             $questionnairesNotIgnored = array();
             foreach ($questionnaires as $questionnaire) {
                 // if questionnaire is not in the ignored list, add to not ignored questionnaires list
                 // or if questionnaire is in the ignored list but has filters, he's added to not ignored questionnaires list
                 // (a questionnaire is considered ignored if he's in the list AND he has not filters. If he has filters, they are ignored, but not the questionnaire)
-                if (!isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) ||
-                        isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) &&
-                        count($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) > 0
+                if (!isset($overriddenFilters[$questionnaire->getId()])
+                    || isset($overriddenFilters[$questionnaire->getId()]) && $overriddenFilters[$questionnaire->getId()] !== null
                 ) {
                     $questionnairesNotIgnored[] = $questionnaire;
                 }
             }
 
-            $mySeries = $this->getSeries($filterSet, $questionnairesNotIgnored, $part, $ignoredFiltersByQuestionnaire, 100, null, true, ' (ignored elements)');
+            $mySeries = $this->getSeries($filterSet, $questionnairesNotIgnored, $part, 100, null, true, ' (ignored elements)', $overriddenFilters);
             $series = array_merge($series, $mySeries);
         }
 
@@ -214,21 +214,28 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     /**
      * Retrieve ignored elements and return un associative array where
      * key is questionnaire Id and value is a list of ignored filters
+     * @param \Application\Model\Part $part
      * @return array
      */
-    public function getIgnoredElements()
+    public function getIgnoredElements(Part $part)
     {
         $excludeStr = $this->params()->fromQuery('ignoredElements');
-        $ignoredElements = $excludeStr ? explode(',', $excludeStr) : array();
+        $overriddenElements = $excludeStr ? explode(',', $excludeStr) : array();
 
-        $ignoredFiltersByQuestionnaire = array();
-        foreach ($ignoredElements as $ignoredQuestionnaire) {
+        $overriddenFilters = array();
+        foreach ($overriddenElements as $ignoredQuestionnaire) {
             @list($questionnaireId, $filters) = explode(':', $ignoredQuestionnaire);
             $filters = $filters ? explode('-', $filters) : $filters = array();
-            $ignoredFiltersByQuestionnaire[$questionnaireId] = $filters;
+            if (count($filters) == 0) {
+                $overriddenFilters[$questionnaireId] = null;
+            } else {
+                foreach ($filters as $filterId) {
+                    $overriddenFilters[$questionnaireId][$filterId][$part->getId()] = null;
+                }
+            }
         }
 
-        return array('byQuestionnaire' => $ignoredFiltersByQuestionnaire);
+        return $overriddenFilters;
     }
 
     /**
@@ -236,21 +243,21 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @param \Application\Model\FilterSet $filterSet
      * @param array $questionnaires
      * @param \Application\Model\Part $part
-     * @param array $ignoredFilters
      * @param float $ratio
      * @param string $dashStyle
      * @param bool $isIgnored
      * @param string $suffix for serie name
+     * @param array $overriddenFilters
      * @internal param array $colors
      * @return array
      */
-    protected function getSeries(FilterSet $filterSet, array $questionnaires, Part $part, array $ignoredFilters, $ratio, $dashStyle = null, $isIgnored = false, $suffix = null, array $overridenFilters = array())
+    protected function getSeries(FilterSet $filterSet, array $questionnaires, Part $part, $ratio, $dashStyle = null, $isIgnored = false, $suffix = null, array $overriddenFilters = array())
     {
         $calculator = new \Application\Service\Calculator\Jmp();
         $calculator->setServiceLocator($this->getServiceLocator());
-        $calculator->setOverridenFilters($overridenFilters);
+        $calculator->setoverriddenFilters($overriddenFilters);
 
-        $lines = $this->getLinedSeries($filterSet, $questionnaires, $part, $ignoredFilters, $ratio, $dashStyle, $isIgnored, $suffix, $calculator);
+        $lines = $this->getLinedSeries($filterSet, $questionnaires, $part, $ratio, $dashStyle, $isIgnored, $suffix, $calculator);
         $scatters = $this->getScatteredSeries($filterSet, $questionnaires, $part, $ratio, $isIgnored, $suffix, $calculator);
 
         $series = array_merge($lines, $scatters);
@@ -263,15 +270,15 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @param FilterSet $filterSet
      * @param array $questionnaires
      * @param Part $part
-     * @param array $ignoredFilters
      * @param $ratio
      * @param null $dashStyle
      * @param $isIgnored
      * @param $suffix
      * @param $calculator
+     * @internal param array $ignoredFilters
      * @return array
      */
-    private function getLinedSeries(FilterSet $filterSet, array $questionnaires, Part $part, array $ignoredFilters, $ratio, $dashStyle = null, $isIgnored, $suffix, $calculator)
+    private function getLinedSeries(FilterSet $filterSet, array $questionnaires, Part $part, $ratio, $dashStyle = null, $isIgnored, $suffix, $calculator)
     {
         $series = array();
 
@@ -284,7 +291,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         /** @var \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepo */
         $filterGeonameUsageRepo = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
 
-        $lines = $calculator->computeFlattenAllYears($this->startYear, $this->endYear, $filterSet, $questionnaires, $part, $ignoredFilters);
+        $lines = $calculator->computeFlattenAllYears($this->startYear, $this->endYear, $filterSet, $questionnaires, $part);
         foreach ($lines as &$serie) {
             /** @var \Application\Model\Filter $filter */
             $filter = $filterRepository->findOneById($serie['id']);
@@ -305,8 +312,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
             if (count($usages) > 0) {
                 $serie['usages'] = implode(',<br/>', array_map(function ($u) {
-                            return $u->getRule()->getName();
-                        }, $usages));
+                    return $u->getRule()->getName();
+                }, $usages));
             }
 
             foreach ($serie['data'] as &$d) {
@@ -410,7 +417,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $hydrator = new \Application\Service\Hydrator();
 
             if ($this->params()->fromQuery('getQuestionnaireUsages') === 'true') {
-                if ($usages = $this->extractUsages($questionnaire->getQuestionnaireUsages(), null, $part, $hydrator, $calculator)) {
+                $usages = $this->extractUsages($questionnaire->getQuestionnaireUsages(), null, $part, $hydrator, $calculator);
+                if ($usages) {
                     $result['usages'] = $usages;
                 }
             }
@@ -420,31 +428,24 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
              * In order to follow the logic : panel displays info to understand chart,
              * If the questionnaire requested is ignored all filters should be null (cause no value is used) on chart
              */
-            $ignoredFiltersByQuestionnaire = $this->getIgnoredElements();
-            if (isset($ignoredFiltersByQuestionnaire['byQuestionnaire']) // if there are ignored questionnaire
-                    && !isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) // and if questionnaire is not ignored
-                    || isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) // or if he's ignored but he has filters (that means he's not ignored himself, but some filters are)
-                    && count($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) > 0
-            ) {
-                // compute filters
-                foreach ($filters as $filterId) {
-                    $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
-                    $fields = array_merge(explode(',', $this->params()->fromQuery('fields')), array(
-                        'questions',
-                        'questions.survey'
-                    ));
+            $overriddenElements = $this->getIgnoredElements($part);
+            foreach ($filters as $filterId) {
+                $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
+                $fields = array_merge(explode(',', $this->params()->fromQuery('fields')), array(
+                    'questions',
+                    'questions.survey'
+                ));
 
-                    $tableController = new TableController();
-                    $tableController->setServiceLocator($this->getServiceLocator());
+                $tableController = new TableController();
+                $tableController->setServiceLocator($this->getServiceLocator());
 
-                    $result['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, array(), true);
-                    $resultWithoutIgnoredFilters['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, $ignoredFiltersByQuestionnaire, true);
+                $result['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, array(), true);
+                $resultWithoutIgnoredFilters['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, $overriddenElements, true);
 
-                    foreach ($result['filters'][$filterId] as $i => &$flatFilter) {
-                        $flatFilter = $this->addComputedValuesToFilters($flatFilter, $part, $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values']);
-                        $flatFilter = $this->addUsagesToFilters($flatFilter, $part, $questionnaire);
-                        $flatFilter = $this->addQuestionsToFilters($flatFilter, $questionnaire);
-                    }
+                foreach ($result['filters'][$filterId] as $i => &$flatFilter) {
+                    $flatFilter = $this->addComputedValuesToFilters($flatFilter, $part, $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values']);
+                    $flatFilter = $this->addUsagesToFilters($flatFilter, $part, $questionnaire);
+                    $flatFilter = $this->addQuestionsToFilters($flatFilter, $questionnaire);
                 }
             }
 
@@ -523,8 +524,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     {
         $extractedUsages = array();
         foreach ($usages as $usage) {
-            if ($usage->getPart() === $part &&
-                    (!$questionnaire || $questionnaire && $usage->getQuestionnaire() === $questionnaire)
+            if ($usage->getPart() === $part
+                && (!$questionnaire || $questionnaire && $usage->getQuestionnaire() === $questionnaire)
             ) {
                 $extractedUsage = $hydrator->extract($usage, array(
                     'part',
@@ -542,15 +543,15 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     }
 
     /**
-     * Return an array of series and overriden filters, if were asked to do it
+     * Return an array of series and overridden filters, if were asked to do it
      * @param array $questionnaires
      * @param \Application\Model\Part $part
-     * @return array ['series' => series, 'overridenFilters' => overridenFilters]
+     * @return array ['series' => series, 'overriddenFilters' => overriddenFilters]
      */
     private function getAdjustedSeries(array $questionnaires, Part $part)
     {
         $series = array();
-        $overridenFilters = array();
+        $overriddenFilters = array();
         $originalFilters = array();
 
         if ($this->params()->fromQuery('reference') && $this->params()->fromQuery('overridable') && $this->params()->fromQuery('target')) {
@@ -568,11 +569,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $calculator->setServiceLocator($this->getServiceLocator());
                 $adjustator->setCalculator($calculator);
 
-                $overridenFilters = $adjustator->findOverridenFilters($target, $reference, $overridable, $questionnaires, $part);
                 $originalFilters = $adjustator->getOriginalOverrideValues($target, $reference, $overridable, $questionnaires, $part);
+                $overriddenFilters = $adjustator->findoverriddenFilters($target, $reference, $overridable, $questionnaires, $part);
+                $calculator->setoverriddenFilters($overriddenFilters);
 
-                $ajustedSeries = $this->getSeries($filterSet, $questionnaires, $part, array(), 100, null, false, ' (adjusted)', $overridenFilters);
-                $originalSeries = $this->getSeries($filterSet, $questionnaires, $part, array(), 33, 'ShortDash', false, ' (original)' );
+                $ajustedSeries = $this->getSeries($filterSet, $questionnaires, $part, 100, null, false, ' (adjusted)', $overriddenFilters);
+                $originalSeries = $this->getSeries($filterSet, $questionnaires, $part, 33, 'ShortDash', false, ' (original)');
 
                 $topLevelFilters = $reference->getRootAncestors();
 
@@ -581,8 +583,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     $filterSet = new FilterSet();
                     $filterSet->addFilter($filter);
 
-                    $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries($filterSet, $questionnaires, $part, array(), 100, null, false, ' (adjusted)', $overridenFilters));
-                    $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries($filterSet, $questionnaires, $part, array(), 33, 'ShortDash', false));
+                    $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries($filterSet, $questionnaires, $part, 100, null, false, ' (adjusted)', $overriddenFilters));
+                    $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries($filterSet, $questionnaires, $part, 33, 'ShortDash', false));
                 }
 
                 $series = array_merge($ajustedSeries, $originalSeries, $topLevelFiltersSeries);
@@ -591,7 +593,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
         return array(
             'series' => $series,
-            'overridenFilters' => $overridenFilters,
+            'overriddenFilters' => $overriddenFilters,
             'originalFilters' => $originalFilters
         );
     }

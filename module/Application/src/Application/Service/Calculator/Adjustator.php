@@ -70,7 +70,6 @@ class Adjustator
      */
     public function findOverridenFilters(Filter $target, Filter $reference, Filter $overridable, array $questionnaires, Part $part)
     {
-
         $this->initObjects($target, $reference, $overridable, $questionnaires, $part);
 
         $referenceQuestionnaires = $this->getReferenceQuestionnaires();
