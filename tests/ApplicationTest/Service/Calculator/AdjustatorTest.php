@@ -109,9 +109,9 @@ class AdjustatorTest extends AbstractCalculator
         $a = new \Application\Service\Calculator\Adjustator();
         $calculator = $this->getNewJmp();
         $a->setCalculator($calculator);
-        $overridenFilters = $a->findOverridenFilters($this->filterTarget, $this->filterReference, $this->filterChangeable, $this->questionnaires, $this->part1);
+        $overridenFilters = $a->findOverriddenFilters($this->filterTarget, $this->filterReference, $this->filterChangeable, $this->questionnaires, $this->part1);
 
-        $calculator->setOverridenFilters($overridenFilters);
+        $calculator->setOverriddenFilters($overridenFilters);
         $actual = $calculator->computeFlattenAllYears(2000, 2005, (new FilterSet())->addFilter($this->filterReference), $this->questionnaires, $this->part1);
 
         $this->assertEquals(array(

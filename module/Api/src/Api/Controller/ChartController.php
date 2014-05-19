@@ -255,7 +255,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     {
         $calculator = new \Application\Service\Calculator\Jmp();
         $calculator->setServiceLocator($this->getServiceLocator());
-        $calculator->setoverriddenFilters($overriddenFilters);
+        $calculator->setOverriddenFilters($overriddenFilters);
 
         $lines = $this->getLinedSeries($filterSet, $questionnaires, $part, $ratio, $dashStyle, $isIgnored, $suffix, $calculator);
         $scatters = $this->getScatteredSeries($filterSet, $questionnaires, $part, $ratio, $isIgnored, $suffix, $calculator);
@@ -558,7 +558,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
             $reference = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($this->params()->fromQuery('reference'));
             $overridable = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($this->params()->fromQuery('overridable'));
-            $target = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($this->params()->fromQuery('target'));
+
+            @list($targetId, $includeIgnoredElements) = explode(':', $this->params()->fromQuery('target'));
+            $target = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($targetId);
 
             if ($reference && $overridable && $target) {
                 $adjustator = new \Application\Service\Calculator\Adjustator();
@@ -570,24 +572,20 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $adjustator->setCalculator($calculator);
 
                 $originalFilters = $adjustator->getOriginalOverrideValues($target, $reference, $overridable, $questionnaires, $part);
-                $overriddenFilters = $adjustator->findoverriddenFilters($target, $reference, $overridable, $questionnaires, $part);
-                $calculator->setoverriddenFilters($overriddenFilters);
 
-                $ajustedSeries = $this->getSeries($filterSet, $questionnaires, $part, 100, null, false, ' (adjusted)', $overriddenFilters);
-                $originalSeries = $this->getSeries($filterSet, $questionnaires, $part, 33, 'ShortDash', false, ' (original)');
-
-                $topLevelFilters = $reference->getRootAncestors();
-
-                $topLevelFiltersSeries = array();
-                foreach ($topLevelFilters as $filter) {
-                    $filterSet = new FilterSet();
-                    $filterSet->addFilter($filter);
-
-                    $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries($filterSet, $questionnaires, $part, 100, null, false, ' (adjusted)', $overriddenFilters));
-                    $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries($filterSet, $questionnaires, $part, 33, 'ShortDash', false));
+                if ($includeIgnoredElements) {
+                    $ignoredElements = $this->getIgnoredElements($part);
+                    $calculator->setOverriddenFilters($ignoredElements);
                 }
 
-                $series = array_merge($ajustedSeries, $originalSeries, $topLevelFiltersSeries);
+                $overriddenFilters = $adjustator->findOverriddenFilters($target, $reference, $overridable, $questionnaires, $part);
+                $calculator->setOverriddenFilters($overriddenFilters);
+
+                $adjustedSeries = $this->getSeries($filterSet, $questionnaires, $part, 100, null, false, ' (adjusted)', $overriddenFilters);
+                $originalSeries = $this->getSeries($filterSet, $questionnaires, $part, 33, 'ShortDash', false, ' (original)');
+                $ancestorsLines = $this->getAncestorsLines($reference, $questionnaires, $part, $overriddenFilters);
+
+                $series = array_merge($adjustedSeries, $originalSeries, $ancestorsLines);
             }
         }
 
@@ -596,6 +594,29 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             'overriddenFilters' => $overriddenFilters,
             'originalFilters' => $originalFilters
         );
+    }
+
+    /**
+     * Return parents trend lines of the projected filter
+     * @param $reference
+     * @param $questionnaires
+     * @param $part
+     * @param $overriddenFilters
+     * @return array
+     */
+    private function getAncestorsLines($reference, $questionnaires, $part, $overriddenFilters)
+    {
+        $topLevelFilters = $reference->getRootAncestors();
+        $topLevelFiltersSeries = array();
+        foreach ($topLevelFilters as $filter) {
+            $filterSet = new FilterSet();
+            $filterSet->addFilter($filter);
+
+            $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries($filterSet, $questionnaires, $part, 100, null, false, ' (adjusted)', $overriddenFilters));
+            $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries($filterSet, $questionnaires, $part, 33, 'ShortDash', false));
+        }
+
+        return $topLevelFiltersSeries;
     }
 
 }

@@ -63,12 +63,12 @@ class Adjustator
      * in order to "move" $reference as close as possible to $target, by overriding $overridable
      * @param \Application\Model\Filter $target The filter to move close to
      * @param \Application\Model\Filter $reference The filter that will move
-     * @param \Application\Model\Filter $overridable The filter that will be overriden in order to move $reference
+     * @param \Application\Model\Filter $overridable The filter that will be overridden in order to move $reference
      * @param array $questionnaires
      * @param \Application\Model\Part $part
      * @return array
      */
-    public function findOverridenFilters(Filter $target, Filter $reference, Filter $overridable, array $questionnaires, Part $part)
+    public function findOverriddenFilters(Filter $target, Filter $reference, Filter $overridable, array $questionnaires, Part $part)
     {
         $this->initObjects($target, $reference, $overridable, $questionnaires, $part);
 
@@ -80,13 +80,13 @@ class Adjustator
         $targetValues = $this->getTargetValues($referenceQuestionnaires);
 
         // foreach years-target, find best value for reference
-        $overridenFilters = [];
+        $overriddenFilters = [];
         foreach ($referenceQuestionnaires as $q) {
             $overrideValue = $this->findBestOverrideValue($q, $targetValues[$q->getSurvey()->getYear()]);
-            $overridenFilters[$q->getId()][$this->overridable->getId()][$this->part->getId()] = $overrideValue;
+            $overriddenFilters[$q->getId()][$this->overridable->getId()][$this->part->getId()] = $overrideValue;
         }
 
-        return $overridenFilters;
+        return $overriddenFilters;
     }
 
     public function getOriginalOverrideValues(Filter $target, Filter $reference, Filter $overridable, array $questionnaires, Part $part)
@@ -99,8 +99,8 @@ class Adjustator
         }
 
         $originalValues = [];
+        $this->calculator->setOverriddenFilters(array());
         foreach ($referenceQuestionnaires as $q) {
-            $this->calculator->setOverridenFilters(array());
             $originalValue = $this->calculator->computeFilter($this->overridable->getId(), $q->getId(), $this->part->getId());
             $originalValues[$q->getId()][$this->overridable->getId()][$this->part->getId()] = $originalValue;
         }
@@ -166,7 +166,7 @@ class Adjustator
      */
     private function findBestOverrideValue(Questionnaire $questionnaire, $targetValue)
     {
-        $this->calculator->setOverridenFilters(array());
+        $this->calculator->setOverriddenFilters(array());
         $margin = 0.02 * $targetValue; // Give us a margin of +/-2% around the target
         $lowerLimit = 0;
         $currentValue = $this->calculator->computeFilter($this->reference->getId(), $questionnaire->getId(), $this->part->getId());
@@ -192,8 +192,8 @@ class Adjustator
             }
 
             $overrideValue = ($lowerLimit + $higherLimit) / 2;
-            $overridenFilters = [$questionnaire->getId() => [$this->overridable->getId() => [$this->part->getId() => $overrideValue]]];
-            $this->calculator->setOverridenFilters($overridenFilters);
+            $overriddenFilters = [$questionnaire->getId() => [$this->overridable->getId() => [$this->part->getId() => $overrideValue]]];
+            $this->calculator->setOverriddenFilters($overriddenFilters);
             $currentValue = $this->calculator->computeFilter($this->reference->getId(), $questionnaire->getId(), $this->part->getId());
             $attempt++;
         }

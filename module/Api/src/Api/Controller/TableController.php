@@ -62,7 +62,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
     {
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
-        $calculator->setOverridenFilters($overridenFilters);
+        $calculator->setOverriddenFilters($overridenFilters);
         $hydrator = new \Application\Service\Hydrator();
 
         $current = array();

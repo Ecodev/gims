@@ -37,11 +37,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         $scope.returnUrl = $location.search().returnUrl;
         $scope.currentUrl = encodeURIComponent($location.url());
 
-        var sector = $location.search().sector ? $location.search().sector : null;
-        if (sector) {
-            $scope.panelTabs.sector = sector;
-        }
-
         var overridable = $location.search().overridable ? $location.search().overridable : null;
         if (overridable) {
             $scope.panelTabs.overridable = overridable;
@@ -50,16 +45,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         var target = $location.search().target ? $location.search().target : null;
         if (target) {
             $scope.panelTabs.target = target;
-        }
-
-        // gims-select auto selects from url, but there is custom ui-select2 that need to be initiated when sector filter is picked
-        var reference = $location.search().reference ? $location.search().reference : null;
-        if (reference) {
-            if (sector){
-                $scope.panelTabs.reference = reference;
-            } else {
-                $scope.panelTabs.reference = {id: reference};
-            }
         }
 
     });
@@ -80,24 +65,12 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         $location.search('overridable', $scope.panelTabs.overridable);
     });
 
-    $scope.$watch('panelTabs.sector', function(){
-        $location.search('sector', $scope.panelTabs.sector);
-    });
-
     $scope.$watch('panelTabs.reference', function(){
         if ($scope.panelTabs.reference) {
             var id = $scope.panelTabs.reference.id ? $scope.panelTabs.reference.id : $scope.panelTabs.reference;
             $location.search('reference', id);
             Restangular.one('filter', id).get({fields:'children'}).then(function(filters){
                 $scope.panelTabs.referenceChildren = filters.children;
-            });
-        }
-    });
-
-    $scope.$watch('panelTabs.sector', function(){
-        if ($scope.panelTabs.sector) {
-            Restangular.one('filter', $scope.panelTabs.sector).get({fields:'children'}).then(function(filters){
-                $scope.panelTabs.sectorChildren = filters.children;
             });
         }
     });

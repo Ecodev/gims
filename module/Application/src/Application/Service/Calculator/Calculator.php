@@ -19,7 +19,7 @@ class Calculator
 use \Application\Traits\EntityManagerAware;
 
     private $cacheComputeFilter = array();
-    protected $overridenFilters = array();
+    protected $overriddenFilters = array();
     private $populationRepository;
     private $questionnaireUsageRepository;
     private $filterRepository;
@@ -204,13 +204,13 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
-     * Set the filter which must be overriden with given value
-     * @param array $overridenFilters [questionnaireId => [filterId => [partId => value]]]
+     * Set the filter which must be overridden with given value
+     * @param array $overriddenFilters [questionnaireId => [filterId => [partId => value]]]
      * @return \Application\Service\Calculator\Calculator
      */
-    public function setOverridenFilters(array $overridenFilters)
+    public function setOverriddenFilters(array $overriddenFilters)
     {
-        $this->overridenFilters = $overridenFilters;
+        $this->overriddenFilters = $overriddenFilters;
 
         return $this;
     }
@@ -222,13 +222,12 @@ use \Application\Traits\EntityManagerAware;
      * @param integer $partId
      * @param boolean $useSecondLevelRules
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
-     * @param array $ignoredFilters
      * @return float|null null if no answer at all, otherwise the percentage value
      */
     public function computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules = false, ArrayCollection $alreadyUsedFormulas = null)
     {
         _log()->debug(__METHOD__, array('start', $filterId, $questionnaireId, $partId));
-        $key = \Application\Utility::getCacheKey([func_get_args(), $this->overridenFilters]);
+        $key = \Application\Utility::getCacheKey([func_get_args(), $this->overriddenFilters]);
         if (array_key_exists($key, $this->cacheComputeFilter)) {
             return $this->cacheComputeFilter[$key];
         }
@@ -267,16 +266,16 @@ use \Application\Traits\EntityManagerAware;
         }
 
         // If the all filters of a questionnaire have an overriding value
-        // use array_key_exists() function cause overriden value may contain null that return false with isset()
-        if (array_key_exists($questionnaireId, $this->overridenFilters) ) {
+        // use array_key_exists() function cause overridden value may contain null that return false with isset()
+        if (array_key_exists($questionnaireId, $this->overriddenFilters) ) {
 
-            if (!is_array($this->overridenFilters[$questionnaireId])) {
-                return $this->overridenFilters[$questionnaireId];
+            if (!is_array($this->overriddenFilters[$questionnaireId])) {
+                return $this->overriddenFilters[$questionnaireId];
             }
 
             // If the specific filter has an overriding value, use the override
-            if (isset($this->overridenFilters[$questionnaireId][$filterId]) && array_key_exists($partId, $this->overridenFilters[$questionnaireId][$filterId])) {
-                return $this->overridenFilters[$questionnaireId][$filterId][$partId];
+            if (isset($this->overriddenFilters[$questionnaireId][$filterId]) && array_key_exists($partId, $this->overriddenFilters[$questionnaireId][$filterId])) {
+                return $this->overriddenFilters[$questionnaireId][$filterId][$partId];
             }
         }
 
