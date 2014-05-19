@@ -290,6 +290,11 @@ use \Application\Traits\EntityManagerAware;
                     ),
                 ),
             ),
+            'extras' => [
+                104 => '[Water] Number of people covered by the questionnaire',
+                105 => '[Water] Number of households covered by the questionnaire',
+                106 => '[Water] Total population',
+            ],
         ),
         'Tables_S' => array(
             'definitions' => array(
@@ -598,6 +603,11 @@ use \Application\Traits\EntityManagerAware;
                     ),
                 ),
             ),
+            'extras' => [
+                108 => '[Sanitation] Number of people covered by the questionnaire',
+                109 => '[Sanitation] Number of households covered by the questionnaire',
+                110 => '[Sanitation] Total population',
+            ],
         ),
     );
 

@@ -61,9 +61,9 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * @var string
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text", options={"default" = ""})
      */
-    private $comments;
+    private $comments = '';
 
     /**
      * Additional formulas to compute interesting values which are not found in Filter tree
@@ -293,11 +293,32 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * @param string $comments
-     * @return Survey
+     * @return self
      */
     public function setComments($comments)
     {
         $this->comments = $comments;
+
+        return $this;
+    }
+
+    /**
+     * Append a comment to existing comments
+     * @param string $comment
+     * @return self
+     */
+    public function appendComment($comment)
+    {
+        $comment = trim($comment);
+        if ($comment) {
+            $comments = trim($this->getComments());
+            if ($comments) {
+                $comments .= PHP_EOL . PHP_EOL;
+            }
+
+            $comments = $comments . $comment;
+            $this->setComments($comments);
+        }
 
         return $this;
     }

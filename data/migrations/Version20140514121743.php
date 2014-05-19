@@ -19,6 +19,9 @@ class Version20140514121743 extends AbstractMigration
         $this->addSql("ALTER TABLE filter_set DROP CONSTRAINT fk_1c0a40ef2b18a39");
         $this->addSql("DROP INDEX idx_1c0a40ef2b18a39");
         $this->addSql("ALTER TABLE filter_set DROP original_filter_set_id");
+        $this->addSql("UPDATE questionnaire SET comments = '' WHERE comments IS NULL");
+        $this->addSql("ALTER TABLE questionnaire ALTER comments SET NOT NULL;");
+        $this->addSql("ALTER TABLE questionnaire ALTER comments SET DEFAULT '';");
     }
 
     public function down(Schema $schema)
