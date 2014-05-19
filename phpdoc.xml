@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <parser>
+        <target>data/docs/api</target>
+    </parser>
+    <transformer>
+        <target>data/docs/api</target>
+    </transformer>
+    <files>
+        <directory>bin</directory>
+        <directory>config</directory>
+        <directory>module</directory>
+        <directory>tasks</directory>
+        <directory>tests</directory>
+        <ignore>*.phtml</ignore>
+    </files>
+</phpdoc>
