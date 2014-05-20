@@ -428,7 +428,7 @@ class JmpTest extends AbstractCalculator
      */
     public function testComputeFlatten($yearStart, $yearEnd, $useQuestionnaires, $expected)
     {
-        $actual = $this->service->computeFlattenAllYears($yearStart, $yearEnd, $this->filterSet, $useQuestionnaires ? $this->questionnaires : array(), $this->part1);
+        $actual = $this->service->computeFlattenAllYears($yearStart, $yearEnd, $this->filterSet->getFilters(), $useQuestionnaires ? $this->questionnaires : array(), $this->part1);
         $this->assertEquals($expected, $actual);
     }
 
@@ -436,13 +436,13 @@ class JmpTest extends AbstractCalculator
     {
         $tmp = $this->flattenProvider();
         $data = reset($tmp);
-        $res1 = $this->service->computeFlattenAllYears($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part1);
+        $res1 = $this->service->computeFlattenAllYears($data[0], $data[1], $this->filterSet->getFilters(), $this->questionnaires, $this->part1);
 
         $this->answer131->setValuePercent((0.2));
-        $res2 = $this->service->computeFlattenAllYears($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part1);
+        $res2 = $this->service->computeFlattenAllYears($data[0], $data[1], $this->filterSet->getFilters(), $this->questionnaires, $this->part1);
         $this->assertEquals($res1, $res2, 'result should be cached and therefore be the same');
 
-        $res3 = $this->service2->computeFlattenAllYears($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part1);
+        $res3 = $this->service2->computeFlattenAllYears($data[0], $data[1], $this->filterSet->getFilters(), $this->questionnaires, $this->part1);
 
         $this->assertNotEquals($res1, $res3, 'after clearing cache, result differs');
         $this->assertEquals(array(

@@ -246,18 +246,18 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * @param $parts
-     * @param $filterSet
-     * @param $questionnaires
+     * @param \Application\Model\FilterSet $filterSet
+     * @param array $questionnaires
      * @return array all data ordered by part
      */
-    private function getAllYearsComputed($parts, $filterSet, $questionnaires)
+    private function getAllYearsComputed($parts, \Application\Model\FilterSet $filterSet, array $questionnaires)
     {
         $calculator = new \Application\Service\Calculator\Jmp();
         $calculator->setServiceLocator($this->getServiceLocator());
 
         $dataPerPart = array();
         foreach ($parts as $part) {
-            $dataPerPart[$part->getId()] = $calculator->computeFlattenAllYears(1980, 2015, $filterSet, $questionnaires, $part);
+            $dataPerPart[$part->getId()] = $calculator->computeFlattenAllYears(1980, 2015, $filterSet->getFilters(), $questionnaires, $part);
         }
 
         return $dataPerPart;

@@ -4,7 +4,7 @@ namespace Application\Service\Calculator;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Model\Part;
-use Application\Model\FilterSet;
+use Application\Model\Filter;
 use Application\Model\Rule\Rule;
 
 class Jmp extends Calculator
@@ -45,17 +45,17 @@ class Jmp extends Calculator
      * This is the highest level of computation, the "main" computation method.
      * @param integer $yearStart
      * @param integer $yearEnd
-     * @param \Application\Model\FilterSet $filterSet
+     * @param \Application\Model\Filter[] $filters
      * @param array $questionnaires
      * @param \Application\Model\Part $part
      * @return array [[name => filterName, data => [year => flattenedRegression]]]]
      */
-    public function computeFlattenAllYears($yearStart, $yearEnd, FilterSet $filterSet, array $questionnaires, Part $part)
+    public function computeFlattenAllYears($yearStart, $yearEnd, $filters, array $questionnaires, Part $part)
     {
 
         $result = array();
         $years = range($yearStart, $yearEnd);
-        foreach ($filterSet->getFilters() as $filter) {
+        foreach ($filters as $filter) {
 
             $data = array();
             foreach ($years as $year) {

@@ -112,7 +112,7 @@ class AdjustatorTest extends AbstractCalculator
         $overridenFilters = $a->findOverriddenFilters($this->filterTarget, $this->filterReference, $this->filterChangeable, $this->questionnaires, $this->part1);
 
         $calculator->setOverriddenFilters($overridenFilters);
-        $actual = $calculator->computeFlattenAllYears(2000, 2005, (new FilterSet())->addFilter($this->filterReference), $this->questionnaires, $this->part1);
+        $actual = $calculator->computeFlattenAllYears(2000, 2005, [$this->filterReference], $this->questionnaires, $this->part1);
 
         $this->assertEquals(array(
             array(

@@ -141,9 +141,7 @@ class Adjustator
         $yearMin = min($allYears);
         $yearMax = max($allYears);
 
-        $filterSet = new FilterSet();
-        $filterSet->addFilter($this->target);
-        $flattenValues = $this->calculator->computeFlattenAllYears($yearMin, $yearMax, $filterSet, $this->questionnaires, $this->part);
+        $flattenValues = $this->calculator->computeFlattenAllYears($yearMin, $yearMax, [$this->target], $this->questionnaires, $this->part);
 
         $targetValues = [];
         $i = 0;
