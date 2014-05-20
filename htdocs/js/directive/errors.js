@@ -25,7 +25,7 @@ angular.module('myApp.directives').directive('gimsErrors', function(requestNotif
             };
 
             requestNotification.subscribeOnResponseError(function(response) {
-                if (response.status != 401) {
+                if (response.status !== 0 && response.status != 401) {
                     $scope.errors.push(response);
 
                 }
