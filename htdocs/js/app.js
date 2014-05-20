@@ -1,7 +1,6 @@
 // Declare app level module which depends on filters, and services
 angular.module('myApp', [
     'ngRoute',
-    'ngResource',
     'restangular',
     'ui.utils',
     'ui.select2',
@@ -16,7 +15,7 @@ angular.module('myApp', [
     'ngAnimate',
     'ui.ace'
 ]).
-        config(function($routeProvider, $locationProvider, RestangularProvider) {
+        config(function($routeProvider, $locationProvider, RestangularProvider, $httpProvider, requestNotificationProvider) {
             'use strict';
 
             $routeProvider.when('/home', {templateUrl: '/template/application/index/home'});
@@ -71,9 +70,27 @@ angular.module('myApp', [
                 return newResponse;
             });
 
+            // Configure requestNotificationProvider
+            $httpProvider.defaults.transformRequest.push(function(data) {
+                requestNotificationProvider.fireRequestStarted();
+                return data;
+            });
+            $httpProvider.defaults.transformResponse.push(function(data) {
+                requestNotificationProvider.fireRequestEnded();
+                return data;
+            });
+            $httpProvider.interceptors.push(function($q) {
+                return {
+                    responseError: function(rejection) {
+                        requestNotificationProvider.fireResponseError(rejection);
+                        return $q.reject(rejection);
+                    }
+                };
+            });
+
         });
 
 // Here we declare all our modules, so we can get them back whenever we want
 angular.module('myApp.filters', []);
-angular.module('myApp.services', ['ngResource']);
+angular.module('myApp.services', []);
 angular.module('myApp.directives', []);
