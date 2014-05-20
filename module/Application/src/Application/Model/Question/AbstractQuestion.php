@@ -62,7 +62,7 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -234,7 +234,7 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRoleContext($action)
     {

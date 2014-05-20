@@ -63,6 +63,7 @@ class Jmp extends AbstractImporter
 
     /**
      * Import data from file
+     * @param string $filename
      */
     public function import($filename)
     {

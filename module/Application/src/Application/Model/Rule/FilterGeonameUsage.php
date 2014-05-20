@@ -35,7 +35,7 @@ class FilterGeonameUsage extends AbstractUsage
     private $geoname;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {

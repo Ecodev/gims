@@ -6,6 +6,9 @@ use \Application\Model\AbstractModel;
 use \Zend\Code\Reflection\MethodReflection;
 use \Application\Module;
 
+/**
+ * Used to extract object properties into an array or to hydrate an object from an array.
+ */
 class Hydrator
 {
 

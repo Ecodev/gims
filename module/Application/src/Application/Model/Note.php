@@ -43,7 +43,7 @@ class Note extends AbstractModel
     private $survey;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {

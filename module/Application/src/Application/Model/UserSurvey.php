@@ -41,7 +41,7 @@ class UserSurvey extends AbstractUserRole
     private $survey;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -117,7 +117,7 @@ class UserSurvey extends AbstractUserRole
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRoleContextInternal($action)
     {

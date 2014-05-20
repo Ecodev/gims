@@ -36,7 +36,7 @@ class FilterSet extends AbstractModel implements \Application\Service\RoleContex
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -114,7 +114,7 @@ class FilterSet extends AbstractModel implements \Application\Service\RoleContex
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRoleContext($action)
     {

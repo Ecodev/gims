@@ -87,7 +87,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -306,7 +306,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRoleContext($action)
     {

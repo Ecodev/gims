@@ -15,7 +15,7 @@ class QuestionnaireUsage extends AbstractQuestionnaireUsage
 {
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {

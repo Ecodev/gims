@@ -138,6 +138,8 @@ class QuestionnaireControllerTest extends AbstractRestfulControllerTest
 
     /**
      * @dataProvider testSearchProvider
+     * @param string $params
+     * @param integer $count
      */
     public function testSearch($params, $count)
     {

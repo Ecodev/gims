@@ -142,7 +142,7 @@ class Country extends AbstractModel
     private $geoname;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -165,6 +165,7 @@ class Country extends AbstractModel
     /**
      * Set code
      *
+     * @param string $code
      * @return self
      */
     public function setCode($code)

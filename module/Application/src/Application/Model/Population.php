@@ -17,6 +17,7 @@ class Population extends AbstractModel
 {
 
     /**
+     * The year
      * @var integer
      *
      * @ORM\Column(type="decimal", precision=4, scale=0)
@@ -24,6 +25,7 @@ class Population extends AbstractModel
     private $year;
 
     /**
+     * The country
      * @var Country
      *
      * @ORM\ManyToOne(targetEntity="Country")
@@ -34,6 +36,7 @@ class Population extends AbstractModel
     private $country;
 
     /**
+     * The absolute number of people
      * @var integer
      *
      * @ORM\Column(type="integer")
@@ -41,6 +44,7 @@ class Population extends AbstractModel
     private $population;
 
     /**
+     * The part of the country
      * @var Part
      *
      * @ORM\ManyToOne(targetEntity="Part")
@@ -51,6 +55,8 @@ class Population extends AbstractModel
     private $part;
 
     /**
+     * Optionnal questionnaire.
+     * If exists, means that the population is only used for that Questionnaire.
      * @var Questionnaire
      *
      * @ORM\ManyToOne(targetEntity="Questionnaire", inversedBy="populations")
@@ -61,7 +67,7 @@ class Population extends AbstractModel
     private $questionnaire;
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     public function getJsonConfig()
     {
@@ -189,7 +195,7 @@ class Population extends AbstractModel
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
      */
     public function getRoleContext($action)
     {

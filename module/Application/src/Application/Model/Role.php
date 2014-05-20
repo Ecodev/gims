@@ -50,7 +50,7 @@ class Role extends AbstractModel implements \Rbac\Role\RoleInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -131,6 +131,11 @@ class Role extends AbstractModel implements \Rbac\Role\RoleInterface
         return $this;
     }
 
+    /**
+     * Returns whether this role has the permission
+     * @param Permission|string $permission
+     * @return boolean
+     */
     public function hasPermission($permission)
     {
         if ($permission instanceof Permission) {

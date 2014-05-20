@@ -84,7 +84,7 @@ class Answer extends AbstractModel
     private $part;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -312,7 +312,7 @@ class Answer extends AbstractModel
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRoleContext($action)
     {

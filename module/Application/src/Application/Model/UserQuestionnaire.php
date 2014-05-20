@@ -41,7 +41,7 @@ class UserQuestionnaire extends AbstractUserRole
     private $role;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -117,7 +117,7 @@ class UserQuestionnaire extends AbstractUserRole
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRoleContextInternal($action)
     {

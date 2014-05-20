@@ -41,7 +41,7 @@ class UserFilterSet extends AbstractUserRole
     private $role;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -117,7 +117,7 @@ class UserFilterSet extends AbstractUserRole
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRoleContextInternal($action)
     {

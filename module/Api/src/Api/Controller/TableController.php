@@ -54,7 +54,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
      * @param array $parts
      * @param integer $level the level of the current filter in the filter tree
      * @param array $fields
-     * @param array $ignoredElementsByQuestionnaire
+     * @param array $overridenFilters
      * @param bool $userSecondLevelRules
      * @return array a list (not tree) of all filters with their values and tree level
      */
@@ -314,13 +314,13 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
     }
 
     /**
-     * Retreive a code name by using two techniques : manual mapping or inversed acronym letters for the filter
-     * @param $filterset
-     * @param $partId
-     * @param $filterName
+     * Retrieve a code name by using two techniques : manual mapping or inversed acronym letters for the filter
+     * @param \Application\Model\FilterSet $filterset
+     * @param \Application\Model\Part|integer $part
+     * @param string $filterName
      * @return string code name in uppercase
      */
-    public function getCodeName($filterset, $part, $filterName)
+    public function getCodeName(\Application\Model\FilterSet $filterset, $part, $filterName)
     {
         // first letter of the Filterset (care, if some have W, the all will start the same way)
         $filtersetL = substr($filterset->getName(), 0, 1);

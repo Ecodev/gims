@@ -137,7 +137,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {

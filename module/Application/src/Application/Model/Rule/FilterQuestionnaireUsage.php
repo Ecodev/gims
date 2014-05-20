@@ -41,7 +41,7 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
     private $isSecondLevel = false;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {

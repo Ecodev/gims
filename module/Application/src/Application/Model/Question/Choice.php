@@ -50,7 +50,7 @@ class Choice extends \Application\Model\AbstractModel
     private $answers;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -143,7 +143,7 @@ class Choice extends \Application\Model\AbstractModel
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRoleContext($action)
     {

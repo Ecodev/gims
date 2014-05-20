@@ -12,6 +12,7 @@ abstract class AbstractRepository extends EntityRepository
     /**
      * Returns all items with permissions
      * @param string $action
+     * @param string $search
      * @return array
      */
     public function getAllWithPermission($action = 'read', $search = null)

@@ -100,7 +100,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -346,7 +346,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRoleContext($action)
     {
@@ -358,7 +358,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getPermissions()
     {
