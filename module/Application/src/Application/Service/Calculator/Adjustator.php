@@ -88,6 +88,15 @@ class Adjustator
         return $overriddenFilters;
     }
 
+    /**
+     * Return an array containing original values before projection in order to allow difference computation
+     * @param Filter $target
+     * @param Filter $reference
+     * @param Filter $overridable
+     * @param array $questionnaires
+     * @param Part $part
+     * @return array$
+     */
     public function getOriginalOverrideValues(Filter $target, Filter $reference, Filter $overridable, array $questionnaires, Part $part)
     {
         $this->initObjects($target, $reference, $overridable, $questionnaires, $part);
