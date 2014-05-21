@@ -2,8 +2,6 @@
 
 namespace ApplicationTest\Service\Calculator;
 
-use Application\Model\FilterSet;
-
 class AdjustatorTest extends AbstractCalculator
 {
 
@@ -22,72 +20,43 @@ class AdjustatorTest extends AbstractCalculator
      */
     protected $filterChangeable;
 
-    public function setUp()
+    /**
+     * @var \Application\Model\Filter
+     */
+    protected $filterOther;
+
+    /**
+     * Create filters, surveys, questionnaires and answers according to supplied data
+     * @param array $data
+     */
+    private function populateSurveys(array $data)
     {
-        parent::setUp();
         $this->questionnaires = [];
         $this->filterTarget = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter target');
         $this->filterReference = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter reference');
-        $this->filterChangeable = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter changeable ');
+        $this->filterChangeable = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter changeable');
+        $this->filterOther = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter other');
 
-        $data = [
-            2000 => [
-                [
-                    'filter' => $this->filterTarget,
-                    'value' => 0.1,
-                ],
-                [
-                    'filter' => $this->filterReference,
-                    'value' => 'formula',
-                ],
-                [
-                    'filter' => $this->filterChangeable,
-                    'value' => 0.0005,
-                ],
-            ],
-            2002 => [
-                [
-                    'filter' => $this->filterReference,
-                    'value' => 'formula',
-                ],
-                [
-                    'filter' => $this->filterChangeable,
-                    'value' => 0.0015,
-                ],
-            ],
-            2005 => [
-                [
-                    'filter' => $this->filterTarget,
-                    'value' => 0.2,
-                ],
-                [
-                    'filter' => $this->filterReference,
-                    'value' => 'formula',
-                ],
-                [
-                    'filter' => $this->filterChangeable,
-                    'value' => 0.003,
-                ],
-            ],
-        ];
+        // Reference has two children
+        $this->filterReference->addChild($this->filterChangeable)->addChild($this->filterOther);
 
         $rule = new \Application\Model\Rule\Rule();
         $rule->setFormula('={F#' . $this->filterChangeable->getId() . ',Q#current,P#current} * 100');
 
         // Create Surveys and Questionnaires based on data above
-        foreach ($data as $year => $d) {
+        foreach ($data as $year => $values) {
 
             $survey = new \Application\Model\Survey();
             $survey->setCode('tst ' . $year)->setName('Test survey ' . $year)->setYear($year);
             $questionnaire = $this->getNewModelWithId('\Application\Model\Questionnaire');
             $questionnaire->setSurvey($survey)->setGeoname($this->geoname);
 
-            foreach ($d as $dd) {
+            foreach ($values as $filterName => $value) {
 
                 $question = new \Application\Model\Question\NumericQuestion();
-                $question->setFilter($dd['filter']);
+                $question->setFilter($this->$filterName);
 
-                if ($dd['value'] == 'formula') {
+                if ($value == 'formula') {
                     $usage = new \Application\Model\Rule\FilterQuestionnaireUsage();
                     $usage->setFilter($this->filterReference)
                             ->setQuestionnaire($questionnaire)
@@ -96,7 +65,7 @@ class AdjustatorTest extends AbstractCalculator
                     ;
                 } else {
                     $answer = new \Application\Model\Answer();
-                    $answer->setPart($this->part1)->setQuestionnaire($questionnaire)->setQuestion($question)->setValuePercent($dd['value']);
+                    $answer->setPart($this->part1)->setQuestionnaire($questionnaire)->setQuestion($question)->setValuePercent($value);
                 }
 
                 $this->questionnaires[] = $questionnaire;
@@ -104,32 +73,107 @@ class AdjustatorTest extends AbstractCalculator
         }
     }
 
-    public function testComputeFormulaFlattenReturnsYear()
+    public function findOverriddenFiltersDataProvider()
     {
-        $a = new \Application\Service\Calculator\Adjustator();
+        return [
+            [
+                'standard case should get good results',
+                [
+                    2000 => [
+                        'filterTarget' => 0.1,
+                        'filterReference' => 'formula',
+                        'filterChangeable' => 0.0005,
+                    ],
+                    2002 => [
+                        'filterReference' => 'formula',
+                        'filterChangeable' => 0.0015,
+                    ],
+                    2005 => [
+                        'filterTarget' => 0.2,
+                        'filterReference' => 'formula',
+                        'filterChangeable' => 0.003,
+                    ],
+                ],
+                [
+                    2 => [
+                        20 => [
+                            1 => 0.0009949951171875,
+                        ],
+                    ],
+                    3 => [
+                        20 => [
+                            1 => 0.001388671875,
+                        ],
+                    ],
+                    4 => [
+                        20 => [
+                            1 => 0.00199713134765625,
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'if another filter prevent to reach a low target, then overrides should be 0',
+                [
+                    2000 => [
+                        'filterTarget' => 0.01,
+                        'filterChangeable' => 0.01,
+                        'filterOther' => 0.01,
+                    ],
+                    2002 => [
+                        'filterTarget' => 0.01,
+                        'filterChangeable' => 0.09,
+                        'filterOther' => 0.02,
+                    ],
+                ],
+                [
+                    2 => [
+                        20 => [
+                            1 => 0,
+                        ],
+                    ],
+                    3 => [
+                        20 => [
+                            1 => 0,
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'if a survey originally has no value, should not be used in overridden things',
+                [
+                    2000 => [
+                        // here, only specify target, on purpose
+                        'filterTarget' => 0.01,
+                    ],
+                    2002 => [
+                        'filterTarget' => 0.01,
+                        'filterChangeable' => 0.05,
+                    ],
+                ],
+                [
+                    3 => [
+                        20 => [
+                            1 => 0.009960937500000003,
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider findOverriddenFiltersDataProvider
+     */
+    public function testCanFindOverriddenFilters($description, array $data, array $expected)
+    {
+        $this->populateSurveys($data);
+        $adjustator = new \Application\Service\Calculator\Adjustator();
         $calculator = $this->getNewJmp();
-        $a->setCalculator($calculator);
-        $overridenFilters = $a->findOverriddenFilters($this->filterTarget, $this->filterReference, $this->filterChangeable, $this->questionnaires, $this->part1);
+        $adjustator->setCalculator($calculator);
+        $overridenFilters = $adjustator->findOverriddenFilters($this->filterTarget, $this->filterReference, $this->filterChangeable, $this->questionnaires, $this->part1);
 
-        $calculator->setOverriddenFilters($overridenFilters);
-        $actual = $calculator->computeFlattenAllYears(2000, 2005, [$this->filterReference], $this->questionnaires, $this->part1);
-
-        $this->assertEquals(array(
-            array(
-                'name' => 'Filter reference',
-                'id' => 19,
-                'data' =>
-                array(
-                    0 => 0.09915096885279695,
-                    1 => 0.1192283228824067,
-                    2 => 0.13930567691200935,
-                    3 => 0.15938303094161199,
-                    4 => 0.17946038497122174,
-                    5 => 0.19953773900082439,
-                ),
-            ),
-                )
-                , $actual);
+        $this->assertEquals($expected, $overridenFilters, $description);
     }
 
 }

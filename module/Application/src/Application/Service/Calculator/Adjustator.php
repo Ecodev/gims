@@ -5,7 +5,6 @@ namespace Application\Service\Calculator;
 use Application\Model\Questionnaire;
 use Application\Model\Part;
 use Application\Model\Filter;
-use Application\Model\FilterSet;
 
 /**
  * Class used to "adjust" a trend line over another one by overriding some values.
@@ -165,14 +164,14 @@ class Adjustator
     private function findBestOverrideValue(Questionnaire $questionnaire, $targetValue)
     {
         $this->calculator->setOverriddenFilters(array());
-        $margin = 0.02 * $targetValue; // Give us a margin of +/-2% around the target
+        $margin = 0.01 * $targetValue; // Give us a margin of +/-1% around the target
         $lowerLimit = 0;
         $currentValue = $this->calculator->computeFilter($this->reference->getId(), $questionnaire->getId(), $this->part->getId());
         $overrideValue = $this->calculator->computeFilter($this->overridable->getId(), $questionnaire->getId(), $this->part->getId());
         $higherLimit = $overrideValue * 4; // We assume that the it's usually less than 4 times bigger than current value
 
         $attempt = 0;
-        while (($currentValue > $targetValue + $margin || $currentValue < $targetValue - $margin) && $attempt < 100) {
+        while (($currentValue > $targetValue + $margin || $currentValue < $targetValue - $margin) && $attempt < 100 && $overrideValue != 0) {
 
             // If we are too high, try lower
             if ($currentValue > $targetValue + $margin) {
@@ -190,6 +189,13 @@ class Adjustator
             }
 
             $overrideValue = ($lowerLimit + $higherLimit) / 2;
+
+            // If the overriden value is almost zero, we force it to be exactly zero
+            // to allow us to break the loop early, because we will never go lower than zero
+            if (0 === bccomp($overrideValue, 0, 5)) {
+                $overrideValue = 0;
+            }
+
             $overriddenFilters = [$questionnaire->getId() => [$this->overridable->getId() => [$this->part->getId() => $overrideValue]]];
             $this->calculator->setOverriddenFilters($overriddenFilters);
             $currentValue = $this->calculator->computeFilter($this->reference->getId(), $questionnaire->getId(), $this->part->getId());
