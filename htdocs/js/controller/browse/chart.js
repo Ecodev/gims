@@ -192,7 +192,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             // only launch ajax request if the filters in this questionnaire don't have values
             if (!questionnaire.filters || $scope.concatenedIgnoredElements || !$scope.firstFilterHasValue(questionnaire)) {
 
-                $scope.isLoading = true;
                 var ignoredElements = $scope.concatenedIgnoredElements ? $scope.concatenedIgnoredElements.join(',') : '';
 
                 if (retrieveFiltersAndValuesCanceler) {
@@ -225,7 +224,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
                         $scope.initiateEmptyQuestionnairesWithLoadedData(questionnaireId, callback);
                         $scope.getIgnoredElements(true);
-                        $scope.isLoading = false;
                     });
                 });
             }
@@ -418,7 +416,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * @param callback
      */
     $scope.refresh = function(refreshUrl, callback) {
-        $scope.isLoading = true;
         var ignoredElements = refreshUrl ? $scope.getIgnoredElements(refreshUrl).join(',') : $location.search().ignoredElements;
         $scope.refreshChart(refreshUrl, ignoredElements, callback);
     };
@@ -506,7 +503,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 $scope.chart = data;
                 $scope.panelTabs.series = data.series;
                 $scope.computeEstimates(ignoredElements);
-                $scope.isLoading = false;
             });
         });
 
@@ -528,7 +524,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     };
     $scope.computeEstimates = function(ignoredElements) {
         var data = $scope.chart;
-        $scope.isLoading = true;
 
         $scope.columnDefs = [
             {
@@ -585,7 +580,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             }
         });
         $scope.data = finalData;
-        $scope.isLoading = false;
     };
 
     /**
