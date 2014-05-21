@@ -846,12 +846,16 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 // Create empty population indexed by the part ID
                 if (_.isUndefined(questionnaire.populations)) {
                     questionnaire.populations = [];
-                    _.forEach($scope.parts, function(part) {
-                        questionnaire.populations[part.id] = {
+                }
+                _.forEach($scope.parts, function(part) {
+                    if (_.isUndefined(questionnaire.populations[part.id])) {
+                        var emptyPopulation = {
                             part: part.id
                         };
-                    });
-                }
+                        Restangular.restangularizeElement(null, emptyPopulation, 'population');
+                        questionnaire.populations[part.id] = emptyPopulation;
+                    }
+                });
 
                 _.forEach($scope.tabs.filters, function(filter) {
                     if (_.isUndefined(questionnaire.survey.questions[filter.id])) {
@@ -1432,7 +1436,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     return true;
                 }
             });
-            
+
             var sectorChildrenNames = $scope.sectorChildren.split(',');
 
             _.forEachRight(sectorFilters, function(filter) {
