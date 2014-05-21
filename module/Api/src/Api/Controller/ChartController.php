@@ -31,6 +31,25 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     private $endYear;
 
     /**
+     * @var \Application\Service\Calculator\Jmp
+     */
+    private $calculator;
+
+    /**
+     * Get the JMP calculator shared instance
+     * @return \Application\Service\Calculator\Jmp
+     */
+    private function getCalculator()
+    {
+        if (!$this->calculator) {
+            $this->calculator = new \Application\Service\Calculator\Jmp();
+            $this->calculator->setServiceLocator($this->getServiceLocator());
+        }
+
+        return $this->calculator;
+    }
+
+    /**
      * Return the entire structure to draw the chart
      * @param array $series
      * @param \Application\Model\Country $country
@@ -259,12 +278,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      */
     private function getSeries($filters, array $questionnaires, Part $part, $ratio, $dashStyle = null, $isIgnored = false, $suffix = null, array $overriddenFilters = array())
     {
-        $calculator = new \Application\Service\Calculator\Jmp();
-        $calculator->setServiceLocator($this->getServiceLocator());
-        $calculator->setOverriddenFilters($overriddenFilters);
+        $this->getCalculator()->setOverriddenFilters($overriddenFilters);
 
-        $lines = $this->getLinedSeries($filters, $questionnaires, $part, $ratio, $dashStyle, $isIgnored, $suffix, $calculator);
-        $scatters = $this->getScatteredSeries($filters, $questionnaires, $part, $ratio, $isIgnored, $suffix, $calculator);
+        $lines = $this->getLinedSeries($filters, $questionnaires, $part, $ratio, $dashStyle, $isIgnored, $suffix);
+        $scatters = $this->getScatteredSeries($filters, $questionnaires, $part, $ratio, $isIgnored, $suffix);
 
         $series = array_merge($lines, $scatters);
 
@@ -280,11 +297,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @param null $dashStyle
      * @param $isIgnored
      * @param $suffix
-     * @param \Application\Service\Calculator\Jmp $calculator
      * @internal param array $ignoredFilters
      * @return array
      */
-    private function getLinedSeries($filters, array $questionnaires, Part $part, $ratio, $dashStyle = null, $isIgnored, $suffix, $calculator)
+    private function getLinedSeries($filters, array $questionnaires, Part $part, $ratio, $dashStyle = null, $isIgnored, $suffix)
     {
         $series = array();
 
@@ -297,7 +313,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         /** @var \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepo */
         $filterGeonameUsageRepo = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
 
-        $lines = $calculator->computeFlattenAllYears($this->startYear, $this->endYear, $filters, $questionnaires, $part);
+        $lines = $this->getCalculator()->computeFlattenAllYears($this->startYear, $this->endYear, $filters, $questionnaires, $part);
         foreach ($lines as &$serie) {
             /** @var \Application\Model\Filter $filter */
             $filter = $filterRepository->findOneById($serie['id']);
@@ -339,17 +355,16 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @param $ratio
      * @param $isIgnored
      * @param $suffix
-     * @param \Application\Service\Calculator\Jmp $calculator
      * @return array
      */
-    private function getScatteredSeries($filters, array $questionnaires, Part $part, $ratio, $isIgnored, $suffix, \Application\Service\Calculator\Jmp $calculator)
+    private function getScatteredSeries($filters, array $questionnaires, Part $part, $ratio, $isIgnored, $suffix)
     {
         $series = array();
 
         // Then add scatter points which are each questionnaire values
         foreach ($filters as $filter) {
             $idFilter = $filter->getId();
-            $data = $calculator->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
+            $data = $this->getCalculator()->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
             $scatter = array(
                 'type' => 'scatter',
                 'color' => $filter->getGenericColor($ratio),
@@ -415,15 +430,11 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $result = array('filters' => array());
             $resultWithoutIgnoredFilters = array('filters' => array());
 
-            /** @var \Application\Service\Calculator\Calculator $calculator */
-            $calculator = new \Application\Service\Calculator\Calculator();
-            $calculator->setServiceLocator($this->getServiceLocator());
-
             /** @var  \Application\Service\Hydrator $hydrator */
             $hydrator = new \Application\Service\Hydrator();
 
             if ($this->params()->fromQuery('getQuestionnaireUsages') === 'true') {
-                $usages = $this->extractUsages($questionnaire->getQuestionnaireUsages(), null, $part, $hydrator, $calculator);
+                $usages = $this->extractUsages($questionnaire->getQuestionnaireUsages(), null, $part, $hydrator);
                 if ($usages) {
                     $result['usages'] = $usages;
                 }
@@ -526,7 +537,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         return $flatFilter;
     }
 
-    protected function extractUsages($usages, $questionnaire = null, $part, $hydrator, $calculator)
+    protected function extractUsages($usages, $questionnaire = null, $part, $hydrator)
     {
         $extractedUsages = array();
         foreach ($usages as $usage) {
@@ -537,7 +548,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     'rule',
                     'rule.name',
                 ));
-                $value = $calculator->computeFormula($usage);
+                $value = $this->getCalculator()->computeFormula($usage);
                 $value = \Application\Utility::decimalToRoundedPercent($value);
                 $extractedUsage['value'] = $value;
                 $extractedUsages[] = $extractedUsage;
@@ -569,19 +580,17 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
             if ($reference && $overridable && $target) {
                 $adjustator = new \Application\Service\Calculator\Adjustator();
-                $calculator = new \Application\Service\Calculator\Jmp();
-                $calculator->setServiceLocator($this->getServiceLocator());
-                $adjustator->setCalculator($calculator);
+                $adjustator->setCalculator($this->getCalculator());
 
                 $originalFilters = $adjustator->getOriginalOverrideValues($target, $reference, $overridable, $questionnaires, $part);
 
                 if ($includeIgnoredElements) {
                     $ignoredElements = $this->getIgnoredElements($part);
-                    $calculator->setOverriddenFilters($ignoredElements);
+                    $this->getCalculator()->setOverriddenFilters($ignoredElements);
                 }
 
                 $overriddenFilters = $adjustator->findOverriddenFilters($target, $reference, $overridable, $questionnaires, $part);
-                $calculator->setOverriddenFilters($overriddenFilters);
+                $this->getCalculator()->setOverriddenFilters($overriddenFilters);
 
                 $adjustedSeries = $this->getSeries([$reference], $questionnaires, $part, 100, null, false, ' (adjusted)', $overriddenFilters);
                 $originalSeries = $this->getSeries([$reference], $questionnaires, $part, 33, 'ShortDash', false, ' (original)');
