@@ -9,12 +9,10 @@ angular.module('myApp.directives').directive('gimsNetworkActivity', function(req
             element.hide();
 
             //subscribe to listen when a request starts
-            requestNotification.subscribeOnRequestStarted(function() {
+            requestNotification.subscribeOnRequest(function() {
                 // show the spinner!
                 element.show();
-            });
-
-            requestNotification.subscribeOnRequestEnded(function() {
+            }, function() {
                 // hide the spinner if there are no more pending requests
                 if (requestNotification.getRequestCount() === 0) {
                     element.hide();

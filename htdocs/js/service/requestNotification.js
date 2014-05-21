@@ -24,9 +24,10 @@ angular.module('myApp.services').provider('requestNotification', function() {
         }
     };
 
-    // Subscribe to be notified when request starts
-    this.subscribeOnRequestStarted = function(listener) {
-        onRequestStartedListeners.push(listener);
+    // Subscribe to be notified when request starts and ends
+    this.subscribeOnRequest = function(listenerStarted, listenerEnded) {
+        onRequestStartedListeners.push(listenerStarted);
+        onRequestEndedListeners.push(listenerEnded);
     };
 
     // Tell the provider, that the request has started.
@@ -35,11 +36,6 @@ angular.module('myApp.services').provider('requestNotification', function() {
         angular.forEach(onRequestStartedListeners, function(listener) {
             listener();
         });
-    };
-
-    // this is a complete analogy to the Request START
-    this.subscribeOnRequestEnded = function(listener) {
-        onRequestEndedListeners.push(listener);
     };
 
     this.fireRequestEnded = function() {
@@ -64,8 +60,7 @@ angular.module('myApp.services').provider('requestNotification', function() {
         var that = this;
         // just pass all the
         return {
-            subscribeOnRequestStarted: that.subscribeOnRequestStarted,
-            subscribeOnRequestEnded: that.subscribeOnRequestEnded,
+            subscribeOnRequest: that.subscribeOnRequest,
             subscribeOnResponseError: that.subscribeOnResponseError,
             fireRequestEnded: that.fireRequestEnded,
             fireRequestStarted: that.fireRequestStarted,

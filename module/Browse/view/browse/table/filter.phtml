@@ -2,9 +2,9 @@
     <!-- Toolbar -->
     <div class='navbar navbar-default hidden-print'>
         <form class='navbar-form'>
-            <!-- Back button, if return url is specified -->
+            <!-- Back button, if return URL is specified -->
             <button class='btn btn-default' ng-show='returnUrl' ng-click='cancel();'><i class='fa fa-gims-back'></i> Back</button>
-            <!-- Save all the new questionniares -->
+            <!-- Save all the new questionnaires -->
             <button class='btn btn-primary' ng-show='isEmptyQuestionnaires() || isEmptyFilters()' ng-click='saveQuestionnaires();' ng-disabled='isLoading || !tabs.filters && !tabs.questionnaires'><i class='fa fa-save'></i> Save all new elements</button>
             <!-- Clear the selection -->
             <a href class='btn btn-default' ng-click='tabs.questionnaires=[];tabs.filters=[];tabs.filterSet=null;tabs.country=null;tabs.filter=null;tabs.survey=null'><i class='fa fa-eraser'></i> Clear selection</a>
@@ -15,9 +15,6 @@
             </div>
             <!-- Switch navigation mode Browse/Contribute -->
             <button ng-click='nextMode()' class='btn btn-default' ><i class='fa fa-eye'></i> {{mode}}</button>
-
-            <!-- Loading indicator -->
-            <i class="pull-right fa fa-gims-loading fa-2x" ng-show="isLoading" style='margin-top:5px'></i>
         </form>
     </div>
 
