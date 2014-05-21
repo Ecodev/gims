@@ -4,7 +4,6 @@ namespace Application\Service\Calculator;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Model\Part;
-use Application\Model\Filter;
 use Application\Model\Rule\Rule;
 
 class Jmp extends Calculator
@@ -110,8 +109,6 @@ class Jmp extends Calculator
         $allRegressions = $this->computeRegressionForAllYears($years, $filterId, $questionnaires, $partId);
         $oneYearResult = $this->computeFlattenOneYear($year, $allRegressions);
         $this->cacheComputeFlattenOneYearWithFormula[$key] = $oneYearResult;
-
-        _log()->debug(__METHOD__, array($filterId, $partId, $year, $oneYearResult));
 
         return $oneYearResult;
     }

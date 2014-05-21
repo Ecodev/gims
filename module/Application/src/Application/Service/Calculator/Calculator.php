@@ -226,7 +226,6 @@ use \Application\Traits\EntityManagerAware;
      */
     public function computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules = false, ArrayCollection $alreadyUsedFormulas = null)
     {
-        _log()->debug(__METHOD__, array('start', $filterId, $questionnaireId, $partId));
         $key = \Application\Utility::getCacheKey([func_get_args(), $this->overriddenFilters]);
         if (array_key_exists($key, $this->cacheComputeFilter)) {
             return $this->cacheComputeFilter[$key];
@@ -239,7 +238,6 @@ use \Application\Traits\EntityManagerAware;
         $result = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, new ArrayCollection());
 
         $this->cacheComputeFilter[$key] = $result;
-        _log()->debug(__METHOD__, array('end  ', $filterId, $questionnaireId, $partId, $result));
 
         return $result;
     }
@@ -256,7 +254,6 @@ use \Application\Traits\EntityManagerAware;
      */
     private function computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
-        _log()->debug(__METHOD__, array($filterId, $questionnaireId, $partId, $useSecondLevelRules));
 
         // Avoid duplicates
         if ($alreadySummedFilters->contains($filterId)) {
@@ -317,8 +314,6 @@ use \Application\Traits\EntityManagerAware;
      */
     private function summer(array $filterIds, $questionnaireId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
-        _log()->debug(__METHOD__, array($filterIds, $questionnaireId, $partId, $useSecondLevelRules));
-
         $sum = null;
         foreach ($filterIds as $filterId) {
             $summandValue = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, $alreadySummedFilters);
