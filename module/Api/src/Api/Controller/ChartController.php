@@ -593,7 +593,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $this->getCalculator()->setOverriddenFilters($overriddenFilters);
 
                 $adjustedSeries = $this->getSeries([$reference], $questionnaires, $part, 100, null, false, ' (adjusted)', $overriddenFilters);
-                $originalSeries = $this->getSeries([$reference], $questionnaires, $part, 33, 'ShortDash', false, ' (original)');
+                $originalSeries = $this->getSeries([$reference], $questionnaires, $part, 33, 'ShortDash', false);
                 $ancestorsLines = $this->getAncestorsLines($reference, $questionnaires, $part, $overriddenFilters);
 
                 $series = array_merge($adjustedSeries, $originalSeries, $ancestorsLines);
