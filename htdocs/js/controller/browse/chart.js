@@ -1,16 +1,17 @@
 angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $location, $http, $timeout, Restangular, $q) {
     'use strict';
 
-    $scope.Math = window.Math;
+    $scope.chart = {};
+    $scope.chartObj = {};
+    $scope.tabs = {};
     $scope.panelTabs = {};
-    $scope.usedFilters = {};
     $scope.ignoredElements = [];
     $scope.indexedElements = {};
     $scope.firstExecution = true;
-    $scope.countryQueryParams = {perPage: 500};
-    $scope.filterSetQueryParams = {fields: 'filters.genericColor,filters.children.__recursive'};
-    $scope.filterParams = {fields: 'paths,color,genericColor', itemOnce: 'true'};
-    $scope.filtersTemplate = "" +
+    $scope.tabs.countryParams = {perPage: 500};
+    $scope.tabs.filterSetParams = {fields: 'filters.genericColor,filters.color'};
+    $scope.tabs.filterParams = {fields: 'paths,color,genericColor', itemOnce: 'true'};
+    $scope.tabs.filtersTemplate = "" +
             "<div>" +
             "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
             "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +
@@ -23,10 +24,10 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             "<div class='clearfix'></div>" +
             "</div>";
 
-    $scope.filtersTemplate2 = "" +
+    $scope.tabs.filtersTemplate2 = "" +
             "<div>" +
-            "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
-            "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +
+            "<div class='col-sm-12 col-md-12 select-label select-label-with-icon'>" +
+            "    <i class='fa fa-gims-filter' style='color:[[item.genericColor]];' ></i> [[item.name]]" +
             "</div>" +
             "<div class='clearfix'></div>" +
             "</div>";
@@ -47,76 +48,83 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             $scope.panelTabs.target = target;
         }
 
+        var panelOpened = $location.search().panelOpened ? $location.search().panelOpened : false;
+        if (panelOpened) {
+            $scope.panelOpened = panelOpened;
+        }
+
     });
 
-
-    $scope.getFilterSets = function() {
-        var filterSetsIds = _.map($scope.filterSet, function(el) {
-            return el.id;
-        });
-        return filterSetsIds.join(',');
+    $scope.getFiltersIds = function() {
+        return _.pluck($scope.tabs.filters, 'id').join(',');
     };
 
-    $scope.$watch('panelTabs.target', function(){
+    $scope.$watch('panelTabs.target', function() {
         $location.search('target', $scope.panelTabs.target);
     });
 
-    $scope.$watch('panelTabs.overridable', function(){
+    $scope.$watch('panelTabs.overridable', function() {
         $location.search('overridable', $scope.panelTabs.overridable);
     });
 
-    $scope.$watch('panelTabs.reference', function(){
+    $scope.$watch('panelTabs.reference', function() {
         if ($scope.panelTabs.reference) {
             var id = $scope.panelTabs.reference.id ? $scope.panelTabs.reference.id : $scope.panelTabs.reference;
             $location.search('reference', id);
-            Restangular.one('filter', id).get({fields:'children'}).then(function(filters){
+            Restangular.one('filter', id).get({fields: 'children'}).then(function(filters) {
                 $scope.panelTabs.referenceChildren = filters.children;
             });
         }
     });
 
+    $scope.$watch('tabs.filterSets', function() {
+        var filters = [];
+        _.forEach($scope.tabs.filterSets, function(filterSet) {
+            _.forEach(filterSet.filters, function(filter) {
+                if (!_.find(filters, {id: filter.id})) {
+                    filters.push(filter);
+                }
+            });
+        });
+
+        $scope.tabs.filters = filters;
+    });
+
+    $scope.$watch('tabs.filters', function(newFilters, oldFilters) {
+        var removedFilters = _.difference(_.pluck(oldFilters, 'id'), _.pluck(newFilters, 'id'));
+        var addedFilters = _.difference(_.pluck(newFilters, 'id'), _.pluck(oldFilters, 'id'));
+
+        // remove unused filters to avoid them to be displayed in panel after removing
+        _.forEach(removedFilters, function(removedFilterId) {
+
+            // unlink unused filters in questionnaires to avoid to display related filters on side panel
+            _.forEach($scope.indexedElements, function(questionnaire) {
+                delete(questionnaire.hFilters[removedFilterId]);
+            });
+        });
+
+        // filter series that are no more used in chart (need to clone $scope.chart to fire $watch event on highchart directive
+        removeSeries(removedFilters);
+
+        if (addedFilters.length > 0) {
+            initIgnoredElements(addedFilters);
+        }
+
+        if ($scope.pointSelected) {
+            $scope.retrieveFiltersAndValues($scope.pointSelected.questionnaire);
+        }
+
+    });
+
     /**
-     * Executes when country, part or filterset are changed
-     * When filter filterset is changed, rebuilds the list of the hFilters used.
+     * Executes when country, part or filter set are changed
      */
-    $scope.$watch('{country:country.id, part:part.id, filterSet:filterSet}', function(newObj, oldObj) {
-        if ($scope.country && $scope.part && $scope.filterSet) {
+    $scope.$watch('{country:tabs.country.id, part:tabs.part.id}', function() {
+        initIgnoredElements(null);
+    }, true);
 
-            // When filter filterset is changed, rebuilds the list of the hFilters used.
-            // Needed to send only a request for all hFilters at once and then assign to filter to whith hFilter they are assigned.
-            if (newObj.filterSet != oldObj.filterSet) {
-                var newUsedFilters = {};
-                _.forEach($scope.filterSet, function(filterSet) {
-                    _.forEach(filterSet.filters, function(filter) {
-                        newUsedFilters[filter.id] = filter;
-                    });
-                });
-                $scope.usedFilters = newUsedFilters;
-                $scope.panelTabs.usedFilters = newUsedFilters;
-
-                // remove all filters that are not used by current usedFilters
-                _.forEach($scope.indexedElements, function(questionnaire) { // select first questionnaire they return false to break and avoid to loop all questionnaires
-                    questionnaire.hFilters = {};
-                    _.forEach(questionnaire.filters, function(filter) {
-                        var found = false;
-                        _.forEach(filter.filter.hFilters, function(hFilter, hFilterId) {
-                            if ($scope.usedFilters[hFilterId]) {
-                                found = true;
-                            }
-                        });
-
-                        if (!found) {
-                            _.forEach($scope.indexedElements, function(questionnaireBis, questionnaireBisId) {
-                                if (!_.isUndefined($scope.indexedElements[questionnaireBisId].filters)) {
-                                    delete($scope.indexedElements[questionnaireBisId].filters[filter.filter.id]);
-                                }
-                            });
-                        }
-                    });
-                    $scope.getIgnoredElements(true);
-                    return false;
-                });
-            }
+    var initIgnoredElements = function(filters) {
+        if ($scope.tabs.country && $scope.tabs.part && $scope.tabs.filters) {
 
             var callback = function() {
                 if ($scope.pointSelected) {
@@ -124,15 +132,16 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 }
                 $scope.initIgnoredElementsFromUrl();
             };
-            $scope.refresh(false, callback);
+            $scope.refresh(filters, false, callback);
         }
-    }, true);
+    };
 
-
-    $scope.$watch('chartOpened', function(){
+    $scope.$watch('panelOpened', function() {
         $timeout(function() {
             jQuery(window).resize();
         }, 350); // 350 to resize after animation of panel
+
+        $location.search('panelOpened', $scope.panelOpened ? true : undefined);
     });
 
     /**
@@ -179,6 +188,19 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     };
 
     /**
+     * Get one of selected filters by id, to recover its color from template
+     * @param id
+     * @returns {*}
+     */
+    $scope.getHFilter = function(id) {
+        return _.find($scope.tabs.filters, function(f) {
+            if (f.id == id) {
+                return true;
+            }
+        });
+    };
+
+    /**
      * Calls ChartFilterController to recover filters data and values
      *
      * @param questionnaireId
@@ -186,8 +208,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      */
     var retrieveFiltersAndValuesCanceler = null;
     $scope.retrieveFiltersAndValues = _.debounce(function(questionnaireId, callback) {
-        if (questionnaireId && $scope.filterSet.length > 0) {
-            var questionnaire = $scope.cache(questionnaireId);
+        if (questionnaireId && $scope.tabs.filters.length > 0) {
+            var questionnaire = cache(questionnaireId);
 
             // only launch ajax request if the filters in this questionnaire don't have values
             if (!questionnaire.filters || $scope.concatenedIgnoredElements || !$scope.firstFilterHasValue(questionnaire)) {
@@ -204,27 +226,27 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                         timeout: retrieveFiltersAndValuesCanceler.promise,
                         params: {
                             questionnaire: questionnaireId,
-                            filters: _.keys($scope.usedFilters).join(','),
-                            part: $scope.part.id,
+                            filters: _.pluck($scope.tabs.filters, 'id').join(','),
+                            part: $scope.tabs.part.id,
                             fields: 'color',
                             getQuestionnaireUsages: questionnaire.usages && questionnaire.usages.length ? false : true,
                             ignoredElements: ignoredElements
                         }
                     }).success(function(data) {
-                        _.forEach(data.filters, function(hFilter, hFilterId) {
-                            _.map(data.filters[hFilterId], function(filter, index) {
-                                if (!_.isUndefined($scope.indexedElements[questionnaireId].hFilters[hFilterId])) {
-                                    filter.filter.sorting = index + 1;
-                                    filter.filter.hFilters = {};
-                                    filter.filter.hFilters[hFilterId] = null;
-                                    $scope.cache({id: questionnaireId, usages: data.usages}, filter);
-                                }
+                            _.forEach(data.filters, function(hFilter, hFilterId) {
+                                _.forEach(data.filters[hFilterId], function(filter, index) {
+                                    if (!_.isUndefined($scope.indexedElements[questionnaireId].hFilters[hFilterId])) {
+                                        filter.filter.sorting = index + 1;
+                                        filter.filter.hFilters = {};
+                                        filter.filter.hFilters[hFilterId] = null;
+                                        cache({id: questionnaireId, usages: data.usages}, filter);
+                                    }
+                                });
                             });
-                        });
 
-                        $scope.initiateEmptyQuestionnairesWithLoadedData(questionnaireId, callback);
-                        $scope.getIgnoredElements(true);
-                    });
+                            $scope.initiateEmptyQuestionnairesWithLoadedData(questionnaireId, callback);
+                            $scope.getIgnoredElements(true);
+                        });
                 });
             }
         }
@@ -241,9 +263,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      */
     $scope.initiateEmptyQuestionnairesWithLoadedData = function(questionnaireId, callback) {
         if (questionnaireId) {
-
             var questionnaire = $scope.indexedElements[questionnaireId];
-
             if ($scope.firstExecution) {
                 $scope.firstExecution = false;
                 _.forEach($scope.indexedElements, function(tmpQuestionnaire, tmpQuestionnaireId) {
@@ -251,7 +271,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                         _.forEach(tmpQuestionnaire.hFilters, function(hFilter, hFilterId) {
                             _.forEach(questionnaire.filters, function(filter) {
                                 if (filter && !_.isUndefined(filter.filter.hFilters[hFilterId])) {
-                                    $scope.cache(tmpQuestionnaireId, {filter: filter.filter});
+                                    cache(tmpQuestionnaireId, {filter: filter.filter});
                                 }
                             });
                         });
@@ -275,7 +295,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.firstFilterHasValue = function(questionnaire) {
         var hasValue = false;
         _.forEach(questionnaire.filters, function(filter) {
-            if (filter && filter.values && filter.values[$scope.part.name]) {
+            if (filter && filter.values && filter.values[$scope.tabs.part.name]) {
                 hasValue = true;
                 return false;
             }
@@ -294,6 +314,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      */
     $scope.concatenedIgnoredElements = [];
     $scope.getIgnoredElements = function(refreshUrl) {
+
         if (!$scope.indexedElements) {
             return [];
         }
@@ -358,6 +379,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 $location.search('ignoredElements', null);
             }
         }
+
         $scope.concatenedIgnoredElements = concatenedIgnoredElements;
         return $scope.concatenedIgnoredElements;
     };
@@ -371,8 +393,10 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * 3) When request has come back, initiate all questionnaires to allow data display on ignored elements (mainly filter's name).
      */
     $scope.initIgnoredElementsFromUrl = function() {
+
         // url excluded questionnaires
-        var ignoredQuestionnaires = $location.search().ignoredElements ? $location.search().ignoredElements.split(',') : [];
+        var ignoredQuestionnaires = $location.search().ignoredElements ? $location.search().ignoredElements.split(',') :
+            [];
 
         if (ignoredQuestionnaires.length > 0) {
 
@@ -383,7 +407,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                     var ignoredFilters = questionnaireDetail[1] ? questionnaireDetail[1].split('-') : null;
                     if (ignoredFilters && ignoredFilters.length > 0) {
                         _.forEach(ignoredFilters, function(filterId) {
-                            $scope.cache(ignoredQuestionnaireId, {filter: {id: filterId}}, true);
+                            cache(ignoredQuestionnaireId, {filter: {id: filterId}}, true);
                         });
                     } else {
                         _.forEach($scope.indexedElements[ignoredQuestionnaireId].filters, function(filter) {
@@ -391,7 +415,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                                 filter.filter.ignored = true;
                             }
                         });
-                        $scope.cache(ignoredQuestionnaireId, null, true);
+                        cache(ignoredQuestionnaireId, null, true);
                     }
 
                     $scope.getIgnoredElements(false);
@@ -415,98 +439,190 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * @param refreshUrl Usually set to true before sending request but at first execution is set to false
      * @param callback
      */
-    $scope.refresh = function(refreshUrl, callback) {
+    $scope.refresh = function(filters, refreshUrl, callback) {
         var ignoredElements = refreshUrl ? $scope.getIgnoredElements(refreshUrl).join(',') : $location.search().ignoredElements;
-        $scope.refreshChart(refreshUrl, ignoredElements, callback);
+        return $scope.refreshChart(filters, ignoredElements, callback);
     };
 
+    // get chart data via Ajax, but only once per 500 milliseconds
+    // (this avoid sending several request on page loading)
     var refreshCanceler;
-    $scope.refreshChart = _.debounce(function(refreshUrl, ignoredElements, callback) {
-        var filterSets = _.map($scope.filterSet, function(filterSet) {
-            return filterSet.id;
-        });
+    $scope.refreshChart = _.debounce(function(filters, ignoredElements, callback) {
 
-        // get chart data via Ajax, but only once per 500 milliseconds
-        // (this avoid sending several request on page loading)
-        if (refreshCanceler) {
-            refreshCanceler.resolve();
+        var resetSeries = false;
+        if (filters === null) {
+            resetSeries = true;
+            filters = _.pluck($scope.tabs.filters, 'id');
         }
-        refreshCanceler = $q.defer();
 
-        $scope.$apply(function() {
-            $http.get('/api/chart', {
-                timeout: refreshCanceler.promise,
-                params: {
-                    country: $scope.country.id,
-                    part: $scope.part.id,
-                    filterSet: filterSets.join(','),
-                    ignoredElements: ignoredElements,
-                    reference: $scope.panelTabs.reference ? $scope.panelTabs.reference.id ? $scope.panelTabs.reference.id : $scope.panelTabs.reference : null,
-                    target: $scope.panelTabs.target ? $scope.panelTabs.target : null,
-                    overridable: $scope.panelTabs.overridable ? $scope.panelTabs.overridable : null
-                }
-            }).success(function(data) {
+        if (filters.length > 0) {
 
-                // implement tooltip formatter
-                data.tooltip.formatter = function() {
+            if (refreshCanceler) {
+                refreshCanceler.resolve();
+            }
+            refreshCanceler = $q.defer();
 
-                    // recover the template
-                    var template = '';
-                    template += this.series.tooltipOptions.headerFormat ? this.series.tooltipOptions.headerFormat : '';
-                    template += this.series.tooltipOptions.pointFormat ? this.series.tooltipOptions.pointFormat : '';
-                    template += this.series.tooltipOptions.footerFormat ? this.series.tooltipOptions.footerFormat : '';
-
-                    // find all fields syntax {field}
-                    var fields = template.match(/(\{.*?\})/g);
-
-                    // replace the field by his value using this.field for {field} in formatter context
-                    var evalValue = function(field) {
-                        return eval('this.' + field.substring(1, field.length - 1));
-                    };
-
-                    // self design patern to avoid "this" to be in the forEach context
-                    var self = this;
-                    _.forEach(fields, function(field) {
-                        // recover value using formatter context
-                        var value = evalValue.call(self, field);
-                        // replace {field} tags by their value
-                        template = template.replace(field, value);
-                    });
-
-                    // return template
-                    return template;
-                };
-
-                data.plotOptions.scatter.dataLabels.formatter = function() {
-                    var questionnaire = {hFilters: {}};
-                    var ids = this.point.id.split(':');
-                    questionnaire.id = ids[1];
-                    questionnaire.name = this.point.name;
-                    questionnaire.hFilters[ids[0]] = null;
-                    $scope.cache(questionnaire);
-                    return $('<span/>').css({color: this.series.color}).text(this.point.name)[0].outerHTML;
-                };
-
-                data.plotOptions.scatter.point = {
-                    events: {
-                        click: function(e) {
-                            var ids = e.currentTarget.id.split(':');
-                            $scope.setPointSelected(e.currentTarget.id, e.currentTarget.questionnaire, e.currentTarget.name, ids[0]);
-                            $scope.$apply(); // this is needed because we are outside the AngularJS context (highcharts uses jQuery event handlers)
-                        }
+            $scope.$apply(function() {
+                $http.get('/api/chart', {
+                    timeout: refreshCanceler.promise,
+                    params: {
+                        country: $scope.tabs.country.id,
+                        part: $scope.tabs.part.id,
+                        filters: filters.join(','),
+                        ignoredElements: ignoredElements,
+                        reference: $scope.panelTabs.reference ? $scope.panelTabs.reference.id ? $scope.panelTabs.reference.id : $scope.panelTabs.reference : null,
+                        target: $scope.panelTabs.target ? $scope.panelTabs.target : null,
+                        overridable: $scope.panelTabs.overridable ? $scope.panelTabs.overridable : null
                     }
-                };
+                }).success(function(data) {
 
-                if (callback) {
-                    callback();
-                }
-                $scope.chart = data;
-                $scope.panelTabs.series = data.series;
-                $scope.computeEstimates(ignoredElements);
+                        // implement tooltip formatter
+                        data.tooltip.formatter = function() {
+                            return highChartTooltipFormatter.call(this);
+                        };
+
+                        data.plotOptions.scatter.dataLabels.formatter = function() {
+                            return highChartScatterFormatter.call(this);
+                        };
+
+                        data.plotOptions.scatter.point = {
+                            events: {
+                                click: function(e) {
+                                    var ids = e.currentTarget.id.split(':');
+                                    $scope.setPointSelected(e.currentTarget.id, e.currentTarget.questionnaire, e.currentTarget.name, ids[0]);
+                                    $scope.$apply(); // this is needed because we are outside the AngularJS context (highcharts uses jQuery event handlers)
+                                }
+                            }
+                        };
+
+                        if (callback) {
+                            callback();
+                        }
+
+                        if (resetSeries) {
+                            $scope.chart.series = [];
+                        }
+
+                        var actualSeries = [];
+                        if ($scope.chart && $scope.chart.series.length) {
+                            actualSeries = $scope.chart.series;
+                        }
+
+                        var newSeries = data.series;
+                        delete(data.series);
+                        $scope.chart = data;
+                        $scope.chart.series = actualSeries;
+                        addSeries(newSeries);
+
+                        $scope.computeEstimates(ignoredElements);
+                    });
             });
-        });
+        }
 
     }, 500);
+
+    var highChartTooltipFormatter = function() {
+        // recover the template
+        var template = '';
+        template += this.series.tooltipOptions.headerFormat ? this.series.tooltipOptions.headerFormat : '';
+        template += this.series.tooltipOptions.pointFormat ? this.series.tooltipOptions.pointFormat : '';
+        template += this.series.tooltipOptions.footerFormat ? this.series.tooltipOptions.footerFormat : '';
+
+        // find all fields syntax {field}
+        var fields = template.match(/(\{.*?\})/g);
+
+        // replace the field by his value using this.field for {field} in formatter context
+        var evalValue = function(field) {
+            return eval('this.' + field.substring(1, field.length - 1));
+        };
+
+        // self design pattern to avoid "this" to be in the forEach context
+        var self = this;
+        _.forEach(fields, function(field) {
+            // recover value using formatter context
+            var value = evalValue.call(self, field);
+
+            if (_.isUndefined(value) || _.isNull(value)) {
+                value = '';
+            }
+
+            // replace {field} tags by their value
+            template = template.replace(field, value);
+        });
+
+        // return template
+        return template;
+    };
+
+    var highChartScatterFormatter = function() {
+        var questionnaire = {hFilters: {}};
+        var ids = this.point.id.split(':');
+        questionnaire.id = ids[1];
+        questionnaire.name = this.point.name;
+        questionnaire.hFilters[ids[0]] = null;
+        cache(questionnaire);
+        return $('<span/>').css({color: this.series.color}).text(this.point.name)[0].outerHTML;
+    };
+
+    /**
+     * Add series and update inserted ones
+     * @param series
+     */
+    var addSeries = function(seriesToAdd) {
+
+        if (seriesToAdd.length > 0) {
+
+            var data = _.clone($scope.chart);
+
+            _.forEachRight(seriesToAdd, function(serieToAdd, index) {
+                // if exist, remove and add new one
+                if (_.contains(data.series, {id: serieToAdd.id, isIgnored: serieToAdd.isIgnored})) {
+                    data.series.splice(index, 1);
+                }
+                data.series.push(serieToAdd);
+            });
+
+            $scope.chart = data;
+        }
+    };
+
+    /**
+     * Remove passed series
+     * @param series
+     */
+    var removeSeries = function(seriesToRemove, affectAdjusted) {
+
+        if (seriesToRemove.length > 0) {
+
+            if (_.isUndefined(affectAdjusted)) {
+                affectAdjusted = false;
+            }
+
+            var data = _.clone($scope.chart);
+            _.forEach(seriesToRemove, function(serieToRemoveId) {
+                _.forEachRight(data.series, function(existingSerie, index) {
+                    if (existingSerie.id == serieToRemoveId && (affectAdjusted && existingSerie.isAdjusted || !affectAdjusted && !existingSerie.isAdjusted)) {
+                        data.series.splice(index, 1);
+                    }
+                });
+            });
+
+            $scope.chart = data;
+        }
+    };
+
+    $scope.removeAdjustedSeries = function() {
+        var adjustedSeries = _.uniq(_.pluck(_.filter($scope.chart.series, function(s) {
+            if (s.isAdjusted) {
+                return true;
+            }
+        }), 'id'));
+        removeSeries(adjustedSeries, true);
+        $scope.panelTabs.target = undefined;
+        $scope.panelTabs.overridable = undefined;
+        $scope.panelTabs.reference = undefined;
+        $scope.refresh(null, false);
+    };
 
     $scope.setPointSelected = function(id, questionnaireId, name, filterId) {
         $scope.pointSelected = {
@@ -594,11 +710,11 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         });
 
         $scope.retrieveFiltersAndValues(questionnaireId);
-        $scope.refresh(true);
+        $scope.refresh(null, true);
     };
 
     $scope.toggleQuestionnaire = function(questionnaireId, ignore) {
-        var questionnaire = $scope.cache(questionnaireId);
+        var questionnaire = cache(questionnaireId);
         questionnaire.ignored = _.isUndefined(questionnaire.ignored) ? true : !questionnaire.ignored;
 
         _.forEach(questionnaire.filters, function(filter) {
@@ -606,7 +722,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         });
 
         $scope.retrieveFiltersAndValues(questionnaireId);
-        $scope.refresh(true);
+        $scope.refresh(null, true);
     };
 
     $scope.ignoreFilter = function(filter, ignored, refresh, questionnaireId) {
@@ -616,7 +732,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 if (questionnaireId) {
                     $scope.retrieveFiltersAndValues(questionnaireId);
                 }
-                $scope.refresh(true);
+                $scope.refresh(null, true);
             }
         }
     };
@@ -683,8 +799,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * @param ignored
      * @returns current cached highFilter object
      */
-    $scope.cache = function(questionnaire, filter, ignored) {
-        if (!$scope.country || !$scope.part) {
+    var cache = function(questionnaire, filter, ignored) {
+        if (!$scope.tabs.country || !$scope.tabs.part) {
             return [];
         }
 
@@ -693,12 +809,12 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         }
 
         // initiates high filter index and retrieves name for display in panel
-        questionnaire = $scope.indexQuestionnaireCache(questionnaire, ignored && !filter ? ignored : false);
-        $scope.indexQuestionnaireFilterCache(questionnaire.id, filter, ignored);
+        questionnaire = indexQuestionnaire(questionnaire, ignored && !filter ? ignored : false);
+        indexQuestionnaireAndFilter(questionnaire.id, filter, ignored);
         return questionnaire;
     };
 
-    $scope.indexQuestionnaireCache = function(questionnaire, ignored) {
+    var indexQuestionnaire = function(questionnaire, ignored) {
         if (questionnaire) {
 
             if (!_.isObject(questionnaire)) {
@@ -735,7 +851,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         }
     };
 
-    $scope.indexQuestionnaireFilterCache = function(questionnaireId, filter, ignored) {
+    var indexQuestionnaireAndFilter = function(questionnaireId, filter, ignored) {
         if (filter) {
             if (!$scope.indexedElements[questionnaireId].filters) {
                 $scope.indexedElements[questionnaireId].filters = {};
@@ -798,12 +914,12 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             }
 
             if (filter.values) {
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].values[$scope.part.name] = filter.values[0][$scope.part.name];
+                $scope.indexedElements[questionnaireId].filters[filter.filter.id].values[$scope.tabs.part.name] = filter.values[0][$scope.tabs.part.name];
             }
             if (!_.isUndefined(filter.valuesWithoutIgnored)) {
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].valuesWithoutIgnored[$scope.part.name] = filter.valuesWithoutIgnored[0][$scope.part.name];
+                $scope.indexedElements[questionnaireId].filters[filter.filter.id].valuesWithoutIgnored[$scope.tabs.part.name] = filter.valuesWithoutIgnored[0][$scope.tabs.part.name];
             } else {
-                delete($scope.indexedElements[questionnaireId].filters[filter.filter.id].valuesWithoutIgnored[$scope.part.name]);
+                delete($scope.indexedElements[questionnaireId].filters[filter.filter.id].valuesWithoutIgnored[$scope.tabs.part.name]);
             }
         }
     };

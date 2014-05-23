@@ -197,7 +197,7 @@ div.browse .col-md-4 {
     #panelTamponZone{
         display:none;
         width:450px !important;
-        &.chartOpened{
+        &.panelOpened{
             display:table-cell;
         }
 

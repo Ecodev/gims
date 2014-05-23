@@ -284,9 +284,10 @@
         },
         {
             "type": "scatter",
+            "id": 74,
             "color": "#5800D9",
             "marker": {
-                "symbol": "circle"
+                "symbol": "diamond"
             },
             "name": "Total improved",
             "allowPointSelect": false,
@@ -428,9 +429,10 @@
         },
         {
             "type": "scatter",
+            "id": 75,
             "color": "#00D919",
             "marker": {
-                "symbol": "diamond"
+                "symbol": "square"
             },
             "name": "Piped onto premises",
             "allowPointSelect": false,
@@ -565,9 +567,10 @@
         },
         {
             "type": "scatter",
+            "id": 76,
             "color": "#D90026",
             "marker": {
-                "symbol": "square"
+                "symbol": "triangle"
             },
             "name": "Surface water",
             "allowPointSelect": false,
@@ -681,9 +684,10 @@
         },
         {
             "type": "scatter",
+            "id": 77,
             "color": "#0066D9",
             "marker": {
-                "symbol": "triangle"
+                "symbol": "triangle-down"
             },
             "name": "Other Improved",
             "allowPointSelect": false,
@@ -839,9 +843,10 @@
         },
         {
             "type": "scatter",
+            "id": 78,
             "color": "#A5D900",
             "marker": {
-                "symbol": "triangle-down"
+                "symbol": "circle"
             },
             "name": "Other Unimproved",
             "allowPointSelect": false,
