@@ -15,7 +15,7 @@ class QuestionnaireUsage extends AbstractQuestionnaireUsage
 {
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -25,10 +25,20 @@ class QuestionnaireUsage extends AbstractQuestionnaireUsage
     }
 
     /**
+     * @var Questionnaire
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Model\Questionnaire", inversedBy="questionnaireUsages"))
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
+     * })
+     */
+    protected $questionnaire;
+
+    /**
      * Set questionnaire
      *
      * @param \Application\Model\Questionnaire $questionnaire
-     * @return QuestionnaireUsage
+     * @return self
      */
     public function setQuestionnaire(\Application\Model\Questionnaire $questionnaire)
     {

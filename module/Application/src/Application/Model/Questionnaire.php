@@ -61,9 +61,9 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * @var string
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text", options={"default" = ""})
      */
-    private $comments;
+    private $comments = '';
 
     /**
      * Additional formulas to compute interesting values which are not found in Filter tree
@@ -82,6 +82,12 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     private $filterQuestionnaireUsages;
 
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Application\Model\Population", mappedBy="questionnaire")
+     */
+    private $populations;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -89,11 +95,12 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         $this->filterQuestionnaireUsages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->answers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questionnaireUsages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->populations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setStatus(QuestionnaireStatus::$NEW);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -106,7 +113,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     /**
      * Set dateObservationStart
      * @param \DateTime $dateObservationStart
-     * @return Questionnaire
+     * @return self
      */
     public function setDateObservationStart(\DateTime $dateObservationStart)
     {
@@ -127,7 +134,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     /**
      * Set dateObservationEnd
      * @param \DateTime $dateObservationEnd
-     * @return Questionnaire
+     * @return self
      */
     public function setDateObservationEnd(\DateTime $dateObservationEnd)
     {
@@ -148,7 +155,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     /**
      * Set geoname
      * @param Geoname $geoname
-     * @return Questionnaire
+     * @return self
      */
     public function setGeoname(Geoname $geoname)
     {
@@ -169,7 +176,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     /**
      * Set survey
      * @param Survey $survey
-     * @return Questionnaire
+     * @return self
      */
     public function setSurvey(Survey $survey)
     {
@@ -213,7 +220,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Get status
-     * @return QuestionnaireStatus
+     * @return selfStatus
      */
     public function getStatus()
     {
@@ -225,7 +232,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      * Notify the questionnaire that he has a new answer.
      * This should only be called by Answer::setQuestionnaire()
      * @param Answer $answer
-     * @return Questionnaire
+     * @return self
      */
     public function answerAdded(Answer $answer)
     {
@@ -286,11 +293,32 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * @param string $comments
-     * @return Survey
+     * @return self
      */
     public function setComments($comments)
     {
         $this->comments = $comments;
+
+        return $this;
+    }
+
+    /**
+     * Append a comment to existing comments
+     * @param string $comment
+     * @return self
+     */
+    public function appendComment($comment)
+    {
+        $comment = trim($comment);
+        if ($comment) {
+            $comments = trim($this->getComments());
+            if ($comments) {
+                $comments .= PHP_EOL . PHP_EOL;
+            }
+
+            $comments = $comments . $comment;
+            $this->setComments($comments);
+        }
 
         return $this;
     }
@@ -308,7 +336,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      * Notify the questionnaire that it has a new rule.
      * This should only be called by QuestionnaireUsage::setQuestionnaire()
      * @param Rule\QuestionnaireUsage $questionnaireUsage
-     * @return Questionnaire
+     * @return self
      */
     public function questionnaireUsageAdded(Rule\QuestionnaireUsage $questionnaireUsage)
     {
@@ -318,7 +346,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRoleContext($action)
     {
@@ -330,15 +358,15 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getPermissions()
     {
-        $rbac = \Application\Module::getServiceManager()->get('ZfcRbac\Service\Rbac');
+        $auth = \Application\Module::getServiceManager()->get('ZfcRbac\Service\AuthorizationService');
 
         $result = parent::getPermissions();
         foreach (array('validate') as $action) {
-            $result[$action] = $rbac->isActionGranted($this, $action);
+            $result[$action] = $auth->isActionGranted($this, $action);
         }
 
         return $result;
@@ -351,9 +379,8 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     public function notifyReporters()
     {
-        if ($this->originalStatus == QuestionnaireStatus::$VALIDATED
-            && ($this->originalStatus == QuestionnaireStatus::$VALIDATED || $this->getStatus() == QuestionnaireStatus::$NEW)
-        ) {
+        if ($this->originalStatus == QuestionnaireStatus::$VALIDATED &&
+                ($this->originalStatus == QuestionnaireStatus::$VALIDATED || $this->getStatus() == QuestionnaireStatus::$NEW)) {
             Utility::executeCliCommand('email notifyQuestionnaireReporters ' . $this->getId());
         }
     }
@@ -365,9 +392,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     public function notifyValidator()
     {
-        if ($this->originalStatus == QuestionnaireStatus::$NEW
-            && $this->getStatus() == QuestionnaireStatus::$COMPLETED
-        ) {
+        if ($this->originalStatus == QuestionnaireStatus::$NEW && $this->getStatus() == QuestionnaireStatus::$COMPLETED) {
             Utility::executeCliCommand('email notifyQuestionnaireValidator ' . $this->getId());
         }
     }
@@ -379,9 +404,9 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     public function notifyCreator()
     {
-        if ($this->originalStatus == QuestionnaireStatus::$COMPLETED
-            && $this->getStatus() == QuestionnaireStatus::$VALIDATED
-            && $this->getPermissions()['validate']
+        if ($this->originalStatus == QuestionnaireStatus::$COMPLETED &&
+                $this->getStatus() == QuestionnaireStatus::$VALIDATED &&
+                $this->getPermissions()['validate']
         ) {
             Utility::executeCliCommand('email notifyQuestionnaireCreator ' . $this->getId());
         }
@@ -405,6 +430,28 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function filterQuestionnaireUsageAdded(Rule\FilterQuestionnaireUsage $usage)
     {
         $this->getFilterQuestionnaireUsages()->add($usage);
+
+        return $this;
+    }
+
+    /**
+     * Get populations if any specific population for this questionnaire
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getPopulations()
+    {
+        return $this->populations;
+    }
+
+    /**
+     * Notify the questionnaire that it has a new specific population.
+     * This should only be called by Population::setQuestionnaire()
+     * @param Population $population
+     * @return self
+     */
+    public function populationAdded(Population $population)
+    {
+        $this->getPopulations()->add($population);
 
         return $this;
     }

@@ -24,14 +24,6 @@
 
             <section id="point1">
 
-                <script type="text/javascript">
-                    $(document).ready(function () {
-                        $('.read-more').click(function (e) {
-                            $('.hidden-read-more').toggle();
-                            e.preventDefault();
-                        });
-                    });
-                </script>
                 <h2>Background</h2>
 
                 <p>Environmental determinants are critical components of human health. It is currently estimated that a
@@ -41,12 +33,11 @@
                     mechanisms
                     in place include The WHO/UNICEF Joint Monitoring Programme (JMP) for Water Supply and Sanitation and
                     The
-                    UN-Water Global Analysis and Assessment of Sanitation and Drinking-Water (GLAAS). <a href="#"
-                                                                                                         class="read-more">Read
-                        more</a>...
+                    UN-Water Global Analysis and Assessment of Sanitation and Drinking-Water (GLAAS).
+                    <a href="#" class="read-more" ng-click="showHidden = !showHidden">Read more</a>...
                 </p>
 
-                <p class="hidden-read-more" style="display: none">These two reporting mechanisms represent a
+                <p class="ng-trans ng-trans-fade-up" ng-class="{'ng-hide': !showHidden}">These two reporting mechanisms represent a
                     complementary set of information on water and
                     development. The JMP is the official mechanism of the UN system mandated to monitor global progress
                     towards the Millenium Development Goals (MDG). JMP monitors outcomes by reporting on access and

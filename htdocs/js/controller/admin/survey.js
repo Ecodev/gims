@@ -1,5 +1,5 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/Survey/CrudCtrl', function($scope, $routeParams, $location, $resource, Modal, Restangular) {
+angular.module('myApp').controller('Admin/Survey/CrudCtrl', function($scope, $routeParams, $location, Modal, Restangular) {
     "use strict";
 
     $scope.sending = false;

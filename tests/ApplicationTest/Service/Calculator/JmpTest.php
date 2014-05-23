@@ -6,16 +6,6 @@ class JmpTest extends AbstractCalculator
 {
 
     /**
-     * @var \Application\Model\Part
-     */
-    private $part2;
-
-    /**
-     * @var \Application\Model\Part
-     */
-    private $partTotal;
-
-    /**
      * @var \Application\Model\FilterSet
      */
     private $filterSet;
@@ -61,25 +51,13 @@ class JmpTest extends AbstractCalculator
                 ->addFilter($this->highFilter2)
                 ->addFilter($this->highFilter3);
 
-        $this->part2 = $this->getNewModelWithId('\Application\Model\Part')->setName('tst part 2');
-        $this->partTotal = $this->getNewModelWithId('\Application\Model\Part', array('isTotal' => $this->returnValue(true)))->setName('tst part total');
+        $this->service = $this->getNewJmp();
+        $this->service2 = $this->getNewJmp();
+    }
 
-        // Create a stub for the PopulationRepository class with predetermined values, so we don't have to mess with database
-        $stubPopulationRepository = $this->getMock('\Application\Repository\PopulationRepository', array('getOneByGeoname'), array(), '', false);
-        $stubPopulationRepository->expects($this->any())
-                ->method('getOneByGeoname')
-                ->will($this->returnValueMap(array(
-                            array($this->geoname, $this->part1->getId(), 2000, (new \Application\Model\Population())->setPopulation(10)),
-                            array($this->geoname, $this->part1->getId(), 2001, (new \Application\Model\Population())->setPopulation(10)),
-                            array($this->geoname, $this->part1->getId(), 2005, (new \Application\Model\Population())->setPopulation(15)),
-                            array($this->geoname, $this->part2->getId(), 2000, (new \Application\Model\Population())->setPopulation(3)),
-                            array($this->geoname, $this->part2->getId(), 2001, (new \Application\Model\Population())->setPopulation(3)),
-                            array($this->geoname, $this->part2->getId(), 2005, (new \Application\Model\Population())->setPopulation(3)),
-                            array($this->geoname, $this->partTotal->getId(), 2000, (new \Application\Model\Population())->setPopulation(7)),
-                            array($this->geoname, $this->partTotal->getId(), 2001, (new \Application\Model\Population())->setPopulation(7)),
-                            array($this->geoname, $this->partTotal->getId(), 2005, (new \Application\Model\Population())->setPopulation(12)),
-        )));
-
+    public function testStubPopulation()
+    {
+        $stubPopulationRepository = $this->getStubPopulationRepository();
         $this->assertEquals(10, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part1->getId(), 2000)->getPopulation());
         $this->assertEquals(3, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part2->getId(), 2000)->getPopulation());
         $this->assertEquals(7, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->partTotal->getId(), 2000)->getPopulation());
@@ -87,16 +65,6 @@ class JmpTest extends AbstractCalculator
         $this->assertEquals(15, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part1->getId(), 2005)->getPopulation());
         $this->assertEquals(3, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part2->getId(), 2005)->getPopulation());
         $this->assertEquals(12, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->partTotal->getId(), 2005)->getPopulation());
-
-        $this->service = new \Application\Service\Calculator\Jmp();
-        $this->service->setPopulationRepository($stubPopulationRepository);
-        $this->service->setAnswerRepository($this->getStubAnswerRepository());
-        $this->service->setFilterRepository($this->getStubFilterRepository());
-        $this->service->setFilterQuestionnaireUsageRepository($this->getStubFilterQuestionnaireUsageRepository());
-        $this->service->setQuestionnaireRepository($this->getStubQuestionnaireRepository());
-        $this->service->setFilterGeonameUsageRepository($this->getStubFilterGeonameUsageRepository());
-
-        $this->service2 = clone $this->service;
     }
 
     public function testComputeFilterForAllQuestionnaires()
@@ -460,7 +428,7 @@ class JmpTest extends AbstractCalculator
      */
     public function testComputeFlatten($yearStart, $yearEnd, $useQuestionnaires, $expected)
     {
-        $actual = $this->service->computeFlattenAllYears($yearStart, $yearEnd, $this->filterSet, $useQuestionnaires ? $this->questionnaires : array(), $this->part1);
+        $actual = $this->service->computeFlattenAllYears($yearStart, $yearEnd, $this->filterSet->getFilters(), $useQuestionnaires ? $this->questionnaires : array(), $this->part1);
         $this->assertEquals($expected, $actual);
     }
 
@@ -468,13 +436,13 @@ class JmpTest extends AbstractCalculator
     {
         $tmp = $this->flattenProvider();
         $data = reset($tmp);
-        $res1 = $this->service->computeFlattenAllYears($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part1);
+        $res1 = $this->service->computeFlattenAllYears($data[0], $data[1], $this->filterSet->getFilters(), $this->questionnaires, $this->part1);
 
         $this->answer131->setValuePercent((0.2));
-        $res2 = $this->service->computeFlattenAllYears($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part1);
+        $res2 = $this->service->computeFlattenAllYears($data[0], $data[1], $this->filterSet->getFilters(), $this->questionnaires, $this->part1);
         $this->assertEquals($res1, $res2, 'result should be cached and therefore be the same');
 
-        $res3 = $this->service2->computeFlattenAllYears($data[0], $data[1], $this->filterSet, $this->questionnaires, $this->part1);
+        $res3 = $this->service2->computeFlattenAllYears($data[0], $data[1], $this->filterSet->getFilters(), $this->questionnaires, $this->part1);
 
         $this->assertNotEquals($res1, $res3, 'after clearing cache, result differs');
         $this->assertEquals(array(

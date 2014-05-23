@@ -68,10 +68,6 @@ class NoteRepository extends AbstractRepository
         $qb->addOrderBy('note.questionnaire', 'ASC');
         $qb->addOrderBy('note.question', 'ASC');
 
-        //
-//        echo $qb->getQuery()->getSQL();
-//        exit();
-
         return $qb->getQuery()->getResult();
     }
 

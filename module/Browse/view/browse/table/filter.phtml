@@ -2,10 +2,10 @@
     <!-- Toolbar -->
     <div class='navbar navbar-default hidden-print'>
         <form class='navbar-form'>
-            <!-- Back button, if return url is specified -->
-            <button class='btn btn-default' ng-show='returnUrl' ng-click='cancel();'><i class='fa fa-gims-back'></i> Cancel</button>
-            <!-- Save all the new questionniares -->
-            <button class='btn btn-primary' ng-show='isEmptyQuestionnaires() || isEmptyFilters()' ng-click='saveQuestionnaires();' ng-disabled='isLoading || !tabs.filters && !tabs.questionnaires'><i class='fa fa-asterisk'></i> Save all new elements</button>
+            <!-- Back button, if return URL is specified -->
+            <button class='btn btn-default' ng-show='returnUrl' ng-click='cancel();'><i class='fa fa-gims-back'></i> Back</button>
+            <!-- Save all the new questionnaires -->
+            <button class='btn btn-primary' ng-show='isEmptyQuestionnaires() || isEmptyFilters()' ng-click='saveQuestionnaires();' ng-disabled='isLoading || !tabs.filters && !tabs.questionnaires'><i class='fa fa-save'></i> Save all new elements</button>
             <!-- Clear the selection -->
             <a href class='btn btn-default' ng-click='tabs.questionnaires=[];tabs.filters=[];tabs.filterSet=null;tabs.country=null;tabs.filter=null;tabs.survey=null'><i class='fa fa-eraser'></i> Clear selection</a>
             <!-- Hide/Show selection tools and/or children filters -->
@@ -15,9 +15,6 @@
             </div>
             <!-- Switch navigation mode Browse/Contribute -->
             <button ng-click='nextMode()' class='btn btn-default' ><i class='fa fa-eye'></i> {{mode}}</button>
-
-            <!-- Loading indicator -->
-            <i class="pull-right fa fa-gims-loading fa-2x" ng-show="isLoading" style='margin-top:5px'></i>
         </form>
     </div>
 
@@ -32,7 +29,7 @@
                     <div ng-show='sector'>
                         <div class='col-md-12'>
                             <h3 class='control-label'>Creation mode</h3>
-                            <p>In this page you will be able to add custom data. You can create filters, questionnaires and then add answers and comments to them. When they are created, take care to not create them again. Use instead <a href='/contribute/questionnaire?returnUrl={{currentUrl}}'>questionnaires edition page</a> or <a href='/admin/filter'>filters management page</a>.<p>
+                            <p>On this page you will be able to add custom data. You can create filters, questionnaires and then add answers and comments to them. When they are created, take care to not create them again. Use instead <a href='/contribute/questionnaire?returnUrl={{currentUrl}}'>questionnaires edition page</a> or <a href='/admin/filter'>filters management page</a>.<p>
                             <p>First of all select a root filter in the right panel or create a new one. For each child filter of the selected one, some sub-children will be created. Then the result of <i>"child1 * child2 / country population"</i> will be assigned to their parent.</p>
                         </div>
                     </div>
@@ -211,7 +208,7 @@
 
 
 <!-- Table of filters, questionnaires and answers. Display in full width when there are too much elements -->
-<div ng-hide='sector && !tabs.filter' class='tableContainer container' ng-class="{'gims-full-width-container': tabs.selectedQuestionnaireForLabels && tabs.questionnaires.length >= 3 || tabs.questionnaires.length >= 6 }">
+<div ng-hide='sector && !tabs.filter' class='container' ng-class="{'gims-full-width-container': tabs.selectedQuestionnaireForLabels && tabs.questionnaires.length >= 3 || tabs.questionnaires.length >= 6 }">
 
     <div class='row'>
         <div class='col-md-12'>
@@ -295,12 +292,12 @@
                                             </a>
                                         </li>
 
-                                        <li ng-show='questionnairesWithUsages.length && !questionnaire.filterQuestionnaireUsages' class="divider"></li>
+                                        <li ng-show='questionnairesWithUsages.length && !questionnaire.filterQuestionnaireUsages.length' class="divider"></li>
 
                                         <!-- Duplicate rules -->
-                                        <li ng-if='questionnairesWithUsages.length && !questionnaire.filterQuestionnaireUsages' class="dropdown-header"><i class='fa fa-cog fa-fw fa-lg'></i> Suggested formulas</li>
+                                        <li ng-if='questionnairesWithUsages.length && !questionnaire.filterQuestionnaireUsages.length' class="dropdown-header"><i class='fa fa-cog fa-fw fa-lg'></i> Suggested formulas</li>
                                         <li ng-repeat='q in questionnairesWithUsages'
-                                            ng-if='q.id && !questionnaire.filterQuestionnaireUsages'
+                                            ng-if='q.id && (!questionnaire.filterQuestionnaireUsages || !questionnaire.filterQuestionnaireUsages.length)'
                                             ng-attr-tooltip="{{!questionnaire.id && 'When the survey is saved, click here to report the same formulas'}}"
                                             tooltip-placement='left'>
                                             <a href ng-click='copyFilterUsages(questionnaire, q)'><i class='fa fa-gims-questionnaire fa-fw' ng-class="{'disabled':!questionnaire.id}"></i> {{q.geoname.country.name}} - {{q.survey.name}}</a>
@@ -311,19 +308,19 @@
 
                                         <!-- Links to admin -->
                                         <li ng-show='mode != "Browse" && questionnaire.id' class="dropdown-header">
-                                            <i class='fa fa-external-link fa-fw fa-lg'></i> Links to admin section
+                                            Links to admin section
                                         </li>
 
-                                        <li ng-show='mode != "Browse" && questionnaire.id'>
-                                            <a  href='/admin/questionnaire/edit/{{questionnaire.id}}?returnUrl={{currentUrl}}'>
+                                        <li  ng-show='mode != "Browse" && questionnaire.survey.id'>
+                                            <a href='/admin/survey/edit/{{questionnaire.survey.id}}?returnUrl={{currentUrl}}'>
                                                 <i class='fa fa-gims-survey fa-fw'></i>
                                                 Edit Survey
                                             </a>
                                         </li>
 
                                         <!-- Link to questionnaire in /admin/ section -->
-                                        <li  ng-show='mode != "Browse" && questionnaire.survey.id'>
-                                            <a href='/admin/survey/edit/{{questionnaire.survey.id}}?returnUrl={{currentUrl}}'>
+                                        <li ng-show='mode != "Browse" && questionnaire.id'>
+                                            <a  href='/admin/questionnaire/edit/{{questionnaire.id}}?returnUrl={{currentUrl}}'>
                                                 <i class='fa fa-gims-questionnaire fa-fw'></i>
                                                 Edit Questionnnaire
                                             </a>
@@ -344,13 +341,14 @@
                                 <div ng-switch="!!questionnaire.id">
                                     <div ng-switch-when="true" class='text-center'>
                                         <div name='questionnaireForm' class='input-group input-group-sm'>
-                                            <div class='input-group-addon'><i class='fa fa-gims-questionnaire'></i></div>
+                                            <div class='input-group-addon'><i class='fa fa-fw fa-gims-questionnaire'></i></div>
                                             <input ng-disabled='true' type='text' class='text-center' placeholder='Country' ng-model='questionnaire.geoname.country.name' name='country' />
                                         </div>
                                     </div>
                                     <div ng-switch-when="false" class='has-error'>
                                         <ng-form name='questionnaireForm'>
                                             <gims-select
+                                                required
                                                 disabled='questionnaire.id || questionnaire.isLoading'
                                                 api="country" model='questionnaire.geoname.country'
                                                 queryparams="countryParams"
@@ -371,8 +369,8 @@
                             <td></td>
                             <td ng-if='tabs.selectedQuestionnaireForLabels' class='text-center'>{{tabs.selectedQuestionnaireForLabels.survey.code}}</td>
                             <td ng-repeat='questionnaire in tabs.questionnaires track by $index' class='text-center'>
-                                <ng-form name='questionnaireForm' class='input-group input-group-sm'>
-                                    <div class='input-group-addon'><i class='fa fa-gims-survey'></i></div>
+                                <ng-form name='questionnaireForm' class='input-group input-group-sm' ng-class="{'has-error':questionnaireForm.code.$invalid}">
+                                    <div class='input-group-addon'><i class='fa fa-fw fa-gims-survey'></i></div>
                                     <input ng-disabled='questionnaire.survey.id || questionnaire.isLoading' type='text' class='text-center' placeholder='Code' ng-model='questionnaire.survey.code' name='code' required ng-class="{'error':questionnaire.errors.duplicateCountryCode || questionnaire.errors.codeAndYearDifferent || questionnaireForm.code.$invalid}" ng-blur='checkQuestionnairesIntegrity();completeQuestionnaire(questionnaire);'/>
                                 </ng-form>
                             </td>
@@ -384,36 +382,31 @@
                             <td></td>
                             <td ng-if='tabs.selectedQuestionnaireForLabels' class='text-center'>{{tabs.selectedQuestionnaireForLabels.survey.year}}</td>
                             <td ng-repeat='questionnaire in tabs.questionnaires track by $index'>
-                                <ng-form name='questionnaireForm' class='input-group input-group-sm'>
-                                    <div class='input-group-addon'><i class='fa fa-gims-survey'></i></div>
+                                <ng-form name='questionnaireForm' class='input-group input-group-sm' ng-class="{'has-error':questionnaireForm.year.$invalid}">
+                                    <div class='input-group-addon'><i class='fa fa-fw fa-gims-survey'></i></div>
                                     <input ng-disabled='questionnaire.survey.id || questionnaire.isLoading' type='number' class='text-center' placeholder='Year' ng-model='questionnaire.survey.year' name='year' min='1980' max='2015' size="4" required ng-class="{'error': questionnaire.errors.codeAndYearDifferent || questionnaireForm.year.$invalid}" ng-blur='checkQuestionnairesIntegrity();completeQuestionnaire(questionnaire);'/>
                                </ng-form>
                            </td>
                         </tr>
 
+                        <!-- Population row -->
+                        <tr class='active' ng-show='tabs.questionnaires.length'>
+                            <td></td>
+                            <td></td>
+                            <td ng-if='tabs.selectedQuestionnaireForLabels'></td>
+                            <td class='text-center' ng-repeat='questionnaire in tabs.questionnaires track by $index'>
+                                <ng-form name='valueForm' class="input-group input-group-sm" ng-class="{'has-error':valueForm.value.$invalid}" tooltip="Leave empty to use official population data">
+                                    <div class='input-group-addon'><i class='fa fa-fw' ng-class="{'fa-male':!questionnaire.populations[tabs.part.id].isLoading,'fa-gims-loading':questionnaire.populations[tabs.part.id].isLoading}"></i></div>
+                                    <input ng-disabled='questionnaire.isLoading' type='number' class='text-center' placeholder="Population" ng-model='questionnaire.populations[tabs.part.id].population' min='0' name='value'
+                                        ng-focus='setInitialValue(questionnaire.populations[tabs.part.id], questionnaire.populations[tabs.part.id].population)'
+                                        ng-blur='savePopulation(questionnaire, questionnaire.populations[tabs.part.id])'
+                                           />
+                                </ng-form>
+                            </td>
+                        </tr>
+
                     </tbody>
                     <!-- End of table header-->
-
-
-                    <!-- Population row -->
-<!--                    <tbody ng-show='sector'>-->
-<!--                        <tr ng-show='tabs.filters && tabs.questionnaires.length'>-->
-<!--                           <td></td>-->
-<!--                           <td class='strong'>Population</td>-->
-<!--                           <td ng-if='tabs.selectedQuestionnaireForLabels'></td>-->
-<!--                           <td class='text-center' ng-repeat='questionnaire in tabs.questionnaires track by $index'>-->
-<!--                               <ng-form name='valueForm' ng-class="{'has-error':valueForm.value.$invalid}">-->
-<!--                                   <div class="input-group input-group-sm">-->
-<!--                                       <span class="input-group-btn"></span>-->
-<!--                                       <input  type='number'-->
-<!--                                               min='0'-->
-<!--                                               name='value'-->
-<!--                                               ng-model='questionnaire.population'/>-->
-<!--                                   </div>-->
-<!--                               </ng-form>-->
-<!--                           </td>-->
-<!--                        </tr>-->
-<!--                    </tbody>-->
 
 
                     <!-- Label for questionnaire comments and close btn -->
@@ -456,9 +449,7 @@
                                 </div>
                                 <div ng-show='!isValidId(filter) && !filter.sectorChild'>
                                     <ng-form name='filterName' class="input-group" ng-class="{'has-error':filterName.$invalid}">
-                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default"><i class='fa' ng-class="{'fa-asterisk':!filter.isLoading,'fa-gims-loading':filter.isLoading,'text-primary':!filterName.$invalid, 'text-danger':filterName.$invalid}"></i></button>
-                                         </span>
+                                        <div class='input-group-addon'><i class='fa' ng-class="{'fa-asterisk':!filter.isLoading,'fa-gims-loading':filter.isLoading,'text-primary':!filterName.$invalid}"></i></div>
                                         <input type='text' name='name' ng-model='filter.name' placeholder='Filter name' required />
                                     </ng-form>
                                 </div>
@@ -468,11 +459,10 @@
                             <td ng-if='tabs.selectedQuestionnaireForLabels'>
                                 <ng-form name='labelForm' ng-if='mode != "Browse"'>
                                     <div class="input-group input-group-sm">
-                                        <span class="input-group-addon"><i class='fa fa-question'></i></span>
+                                        <span class="input-group-addon"><i class='fa' ng-class="{'fa-question':!tabs.selectedQuestionnaireForLabels.survey.questions[filter.id].isLoading,'fa-gims-loading':tabs.selectedQuestionnaireForLabels.survey.questions[filter.id].isLoading}"></i></span>
                                         <input class='form-control'
-                                               ng-model="tabs.selectedQuestionnaireForLabels.survey.questions[filter.id].name"
-                                               ng-focus='tabs.selectedQuestionnaireForLabels.survey.questions[filter.id].initialName = tabs.selectedQuestionnaireForLabels.survey.questions[filter.id].name'
-                                               ng-blur='saveQuestion(tabs.selectedQuestionnaireForLabels.survey.questions[filter.id], tabs.selectedQuestionnaireForLabels.survey)'
+                                               ng-model="tabs.selectedQuestionnaireForLabels.survey.questions[filter.id].alternateNames[tabs.selectedQuestionnaireForLabels.id]"
+                                               ng-blur='saveQuestion(tabs.selectedQuestionnaireForLabels.survey.questions[filter.id], tabs.selectedQuestionnaireForLabels)'
                                                name="label"
                                                ng-required="tabs.selectedQuestionnaireForLabels.survey.questions[filter.id].answers[part.id][questionnaire.survey.questions[filter.id].value]"
                                                ng-class="{'error': labelForm.label.$invalid}"/>
@@ -555,7 +545,7 @@
                                                name='value'
                                                type='number'
                                                placeholder='{{questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first}}'
-                                               ng-focus='setInitialValue(questionnaire.survey.questions[filter.id], questionnaire, questionnaire.survey.questions[filter.id].answers[tabs.part.id]); getPermissions(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id])'
+                                               ng-focus='setAnswerInitialValue(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id]); getPermissions(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id])'
                                                ng-blur='saveAnswer(questionnaire.survey.questions[filter.id].answers[tabs.part.id], questionnaire.survey.questions[filter.id], filter, questionnaire, tabs.part)'
                                                ng-model='questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]'
                                                ng-disabled='questionnaire.survey.questions[filter.id].answers[tabs.part.id].permissions.update == false ||

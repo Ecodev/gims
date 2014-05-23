@@ -63,6 +63,7 @@ class Jmp extends AbstractImporter
 
     /**
      * Import data from file
+     * @param string $filename
      */
     public function import($filename)
     {
@@ -240,6 +241,7 @@ STRING;
         echo 'Country: ' . $questionnaire->getGeoname()->getName() . PHP_EOL;
 
         $this->importAnswers($sheet, $col, $survey, $questionnaire);
+        $this->importExtras($sheet, $col, $questionnaire);
 
         // Keep a trace of what column correspond to what questionnaire for second pass
         $this->importedQuestionnaires[$col] = $questionnaire;
@@ -250,12 +252,49 @@ STRING;
     }
 
     /**
-     * Import all answers found at given column offset.
+     * Import extra data in questionnaire comments
      * Questions will only be created if an answer exists.
      * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
      * @param Questionnaire $questionnaire
-     * @return integer imported answer count
+     */
+    protected function importExtras(\PHPExcel_Worksheet $sheet, $col, Questionnaire $questionnaire)
+    {
+        foreach ($this->definitions[$sheet->getTitle()]['extras'] as $row => $title) {
+
+            $comment = $title . ':' . PHP_EOL;
+            $shouldAppend = false;
+
+            foreach ($this->partOffsets as $offset => $part) {
+                $value = $sheet->getCellByColumnAndRow($col + $offset, $row)->getCalculatedValue();
+
+                // Remove second dot in number (eg: '123.456.789' => '123.456789')
+                $value = preg_replace('/(\.[^.]*)(\.)/', '$1', $value);
+
+                if ($value == 'NA') {
+                    $value = '';
+                }
+
+                if ($value != '') {
+                    $shouldAppend = true;
+                }
+
+                $comment .= '* ' . $part->getName() . ': ' . $value . PHP_EOL;
+            }
+
+            if ($shouldAppend) {
+                $questionnaire->appendComment($comment);
+            }
+        }
+    }
+
+    /**
+     * Import all answers found at given column offset.
+     * Questions will only be created if an answer exists.
+     * @param \PHPExcel_Worksheet $sheet
+     * @param integer $col
+     * @param Survey $survey
+     * @param Questionnaire $questionnaire
      */
     protected function importAnswers(\PHPExcel_Worksheet $sheet, $col, Survey $survey, Questionnaire $questionnaire)
     {
@@ -271,8 +310,8 @@ STRING;
 
             $filter = $this->cacheFilters[$row];
 
-            // Get question name, if any
-            $questionName = $sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
+            // Get alternate question name, if any
+            $alternateName = trim($sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue());
 
             // Import answers for each parts
             $question = null;
@@ -281,7 +320,7 @@ STRING;
 
                 // Only import value which are numeric, and NOT formula,
                 // unless an question name is defined, in this case we will import the formula result
-                if ($questionName || $answerCell->getDataType() == \PHPExcel_Cell_DataType::TYPE_NUMERIC) {
+                if ($alternateName || $answerCell->getDataType() == \PHPExcel_Cell_DataType::TYPE_NUMERIC) {
 
                     // If there is actually no value, skip it (need to be done after previous IF to avoid formula exception within PHPExcel)
                     $value = $this->getCalculatedValueSafely($answerCell);
@@ -290,7 +329,7 @@ STRING;
                     }
 
                     if (!$question) {
-                        $question = $this->getQuestion($survey, $filter, $questionName ? $questionName : $filter->getName());
+                        $question = $this->getQuestion($survey, $filter, $questionnaire, $alternateName);
                     }
 
                     $answer = new Answer();
@@ -453,7 +492,7 @@ STRING;
         $questionnaire->setDateObservationStart(new \DateTime($survey->getYear() . '-01-01'));
         $questionnaire->setDateObservationEnd(new \DateTime($survey->getYear() . '-12-31T23:59:59'));
         $questionnaire->setGeoname($geoname);
-        $questionnaire->setComments($sheet->getCellByColumnAndRow($col + 0, 3)->getCalculatedValue());
+        $questionnaire->appendComment($sheet->getCellByColumnAndRow($col + 0, 3)->getCalculatedValue());
 
         $this->getEntityManager()->persist($questionnaire);
         $this->questionnaireCount++;
@@ -489,14 +528,15 @@ STRING;
      * Returns a question either from database, or newly created
      * @param Questionnaire $survey
      * @param Filter $filter
-     * @param string $questionName
+     * @param Questionnaire $questionnaire
+     * @param string|null $alternateName
      * @return NumericQuestion
      */
-    protected function getQuestion(Survey $survey, Filter $filter, $questionName)
+    protected function getQuestion(Survey $survey, Filter $filter, Questionnaire $questionnaire, $alternateName)
     {
         $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question\NumericQuestion');
 
-        $key = \Application\Utility::getCacheKey(func_get_args());
+        $key = \Application\Utility::getCacheKey([$survey, $filter]);
 
         $question = null;
         if (array_key_exists($key, $this->cacheQuestions)) {
@@ -512,10 +552,17 @@ STRING;
             $question->setSurvey($survey);
             $question->setFilter($filter);
             $question->setSorting($survey->getQuestions()->count());
-            $question->setName($questionName);
+            $question->setName($filter->getName());
             $question->setParts(new \Doctrine\Common\Collections\ArrayCollection(array($this->partRural, $this->partUrban, $this->partTotal)));
             $question->setIsPopulation(true);
             $this->getEntityManager()->persist($question);
+        }
+
+        if ($alternateName) {
+            if (!$questionnaire->getId()) {
+                $this->getEntityManager()->flush();
+            }
+            $question->addAlternateName($questionnaire, $alternateName);
         }
 
         $this->cacheQuestions[$key] = $question;

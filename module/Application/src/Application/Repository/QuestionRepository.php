@@ -17,7 +17,7 @@ class QuestionRepository extends AbstractChildRepository
             ->join('question.survey', 'survey', Join::WITH)
             ->where('question.' . $parentName . ' = :parent')
             ->setParameter('parent', $parent)->orderBy('question.sorting')
-            ->groupBy('question');
+            ->groupBy('question.id');
 
         $this->addSearch($qb, $search);
         $this->addPermission($qb, 'survey', \Application\Model\Permission::getPermissionName($this, $action));
@@ -28,9 +28,9 @@ class QuestionRepository extends AbstractChildRepository
     /**
      * Changer question type directly in database
      * @todo : find a way to change type with doctrine (transform a doctrine object to another)
-     * @param $id
+     * @param integer $id
      * @param \Application\Model\QuestionType $questionType
-     * @return $this
+     * @return self
      */
     public function changeType($id, \Application\Model\QuestionType $questionType)
     {

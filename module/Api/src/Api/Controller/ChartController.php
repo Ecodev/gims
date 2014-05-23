@@ -19,6 +19,7 @@ use Application\Model\UserQuestionnaire;
 
 class ChartController extends \Application\Controller\AbstractAngularActionController
 {
+
     private $symbols = array(
         'circle',
         'diamond',
@@ -29,7 +30,33 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     private $startYear;
     private $endYear;
 
-    private function getChart($filterSetsName, $country, $part, $series)
+    /**
+     * @var \Application\Service\Calculator\Jmp
+     */
+    private $calculator;
+
+    /**
+     * Get the JMP calculator shared instance
+     * @return \Application\Service\Calculator\Jmp
+     */
+    private function getCalculator()
+    {
+        if (!$this->calculator) {
+            $this->calculator = new \Application\Service\Calculator\Jmp();
+            $this->calculator->setServiceLocator($this->getServiceLocator());
+        }
+
+        return $this->calculator;
+    }
+
+    /**
+     * Return the entire structure to draw the chart
+     * @param array $series
+     * @param \Application\Model\Country $country
+     * @param \Application\Model\Part $part
+     * @return array
+     */
+    private function getChart(array $series, \Application\Model\Country $country = null, Part $part = null)
     {
         return array(
             'chart' => array(
@@ -41,7 +68,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'text' => ($country ? $country->getName() : 'Unknown country') . ' - ' . ($part ? $part->getName() : 'Unkown part'),
             ),
             'subtitle' => array(
-                'text' => 'Estimated proportion of the population for ' . (!empty($filterSetsName) ? $filterSetsName : 'Unkown filterSet'),
+                'text' => 'Estimated proportion of the population',
             ),
             'xAxis' => array(
                 'title' => array(
@@ -104,9 +131,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     public function indexAction()
     {
-        $filterSetsNames = array();
         $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneById($this->params()->fromQuery('country'));
-        $filterSetsIds = array_filter(explode(',', $this->params()->fromQuery('filterSet')));
+        $filtersIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
+
+        $filters = array_map(function($filterId){
+            return $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
+        }, $filtersIds);
 
         $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
         $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getByGeonameWithSurvey($country ? $country->getGeoname() : -1);
@@ -114,52 +144,41 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $this->startYear = 1980;
         $this->endYear = 2012;
 
+        // Compute adjusted series if we asked any
+        $adjusted = $this->getAdjustedSeries($questionnaires, $part);
+        $adjustedSeries = $adjusted['series'];
+
+        // First get series of flatten regression lines with ignored values (if any)
+        $seriesWithIgnoredElements = $this->computeIgnoredElements($filters, $questionnaires, $part);
+
+        // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
+        $alternativeSeries = array_merge($seriesWithIgnoredElements, $adjustedSeries);
+        $normalSeries = $this->getSeries($filters, $questionnaires, $part, $alternativeSeries ? 33 : 100, $alternativeSeries ? 'ShortDot' : null, false);
+
+        $newSeries = array_merge($normalSeries, $alternativeSeries);
+
+        // Ensure that series are not added twice to series list
         $series = array();
-        if (count($filterSetsIds) > 0) {
-
-            $seriesWithIgnoredElements = array();
-            foreach ($filterSetsIds as $filterSetId) {
-
-                /* @var $filterSet \Application\Model\FilterSet */
-                $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($filterSetId);
-                $filterSetsNames[] = $filterSet->getName();
-
-                // First get series of flatten regression lines with ignored values (if any)
-                $seriesWithIgnoredElements = array_merge($seriesWithIgnoredElements, $this->computeIgnoredElements($filterSet, $questionnaires, $part));
-
-                // If the filterSet is a copy of an original FilterSet, then we also display the original (with light colors)
-                if ($filterSet->getOriginalFilterSet()) {
-                    $originalFilterSet = $filterSet->getOriginalFilterSet();
-                    $seriesWithOriginal = $this->getSeries($originalFilterSet, $questionnaires, $part, array(), 100, null, false, ' (original)');
-                } else {
-                    $seriesWithOriginal = array();
-                }
-
-                $ignoredFilters = array();
-                foreach ($filterSet->getExcludedFilters() as $ignoredFilter) {
-                    $ignoredFilters[] = $ignoredFilter->getId();
-                }
-
-                // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
-                $alternativeSeries = array_merge($seriesWithIgnoredElements, $seriesWithOriginal);
-                $normalSeries = $this->getSeries($filterSet, $questionnaires, $part, array('byFilterSet' => $ignoredFilters), $alternativeSeries ? 33 : 100, $alternativeSeries ? 'ShortDash' : null, false);
-                // insure that series are not added twice to series list
-                foreach ($newSeries = array_merge($normalSeries, $alternativeSeries) as $newSerie) {
-                    $same = false;
-                    foreach ($series as $serie) {
-                        if (count(@array_diff_assoc($serie, $newSerie)) == 0) {
-                            $same = true;
-                            break;
-                        }
-                    }
-                    if (!$same) {
-                        array_push($series, $newSerie);
-                    }
+        foreach ($newSeries as $newSerie) {
+            $same = false;
+            foreach ($series as $serie) {
+                if (count(@array_diff_assoc($serie, $newSerie)) == 0) {
+                    $same = true;
+                    break;
                 }
             }
-
+            if (!$same) {
+                array_push($series, $newSerie);
+            }
         }
-        $chart = $this->getChart(implode(', ', $filterSetsNames), $country, $part, $series);
+
+        $chart = $this->getChart($series, $country, $part);
+        if (isset($adjusted['overriddenFilters']) && $adjusted['overriddenFilters']) {
+            $chart['overriddenFilters'] = $adjusted['overriddenFilters'];
+        }
+        if (isset($adjusted['originalFilters']) && $adjusted['originalFilters']) {
+            $chart['originalFilters'] = $adjusted['originalFilters'];
+        }
 
         return new NumericJsonModel($chart);
     }
@@ -183,30 +202,29 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Returns all series for ignored questionnaires AND filters at the same time
+     * @param \Application\Model\Filter[] $filters
      * @param array $questionnaires
      * @param \Application\Model\Part $part
      * @return array
      */
-    protected function computeIgnoredElements(FilterSet $filterSet, array $questionnaires, Part $part)
+    protected function computeIgnoredElements($filters, array $questionnaires, Part $part)
     {
-        $ignoredFiltersByQuestionnaire = $this->getIgnoredElements();
+        $overriddenFilters = $this->getIgnoredElements($part);
 
         $series = array();
-        if (count($ignoredFiltersByQuestionnaire['byQuestionnaire']) > 0) {
+        if (count($overriddenFilters) > 0) {
             $questionnairesNotIgnored = array();
             foreach ($questionnaires as $questionnaire) {
                 // if questionnaire is not in the ignored list, add to not ignored questionnaires list
                 // or if questionnaire is in the ignored list but has filters, he's added to not ignored questionnaires list
                 // (a questionnaire is considered ignored if he's in the list AND he has not filters. If he has filters, they are ignored, but not the questionnaire)
-                if (!isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()])
-                    || isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()])
-                    && count($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) > 0
+                if (!isset($overriddenFilters[$questionnaire->getId()]) || isset($overriddenFilters[$questionnaire->getId()]) && $overriddenFilters[$questionnaire->getId()] !== null
                 ) {
                     $questionnairesNotIgnored[] = $questionnaire;
                 }
             }
 
-            $mySeries = $this->getSeries($filterSet, $questionnairesNotIgnored, $part, $ignoredFiltersByQuestionnaire, 100, null, true, ' (ignored elements)');
+            $mySeries = $this->getSeries($filters, $questionnairesNotIgnored, $part, 100, null, true, ' (ignored elements)', $overriddenFilters);
             $series = array_merge($series, $mySeries);
         }
 
@@ -216,65 +234,70 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     /**
      * Retrieve ignored elements and return un associative array where
      * key is questionnaire Id and value is a list of ignored filters
+     * @param \Application\Model\Part $part
      * @return array
      */
-    public function getIgnoredElements()
+    public function getIgnoredElements(Part $part)
     {
         $excludeStr = $this->params()->fromQuery('ignoredElements');
-        $ignoredElements = $excludeStr ? explode(',', $excludeStr) : array();
+        $overriddenElements = $excludeStr ? explode(',', $excludeStr) : array();
 
-        $ignoredFiltersByQuestionnaire = array();
-        foreach ($ignoredElements as $ignoredQuestionnaire) {
+        $overriddenFilters = array();
+        foreach ($overriddenElements as $ignoredQuestionnaire) {
             @list($questionnaireId, $filters) = explode(':', $ignoredQuestionnaire);
             $filters = $filters ? explode('-', $filters) : $filters = array();
-            $ignoredFiltersByQuestionnaire[$questionnaireId] = $filters;
+            if (count($filters) == 0) {
+                $overriddenFilters[$questionnaireId] = null;
+            } else {
+                foreach ($filters as $filterId) {
+                    $overriddenFilters[$questionnaireId][$filterId][$part->getId()] = null;
+                }
+            }
         }
 
-        return array('byQuestionnaire' => $ignoredFiltersByQuestionnaire);
+        return $overriddenFilters;
     }
 
     /**
      * Get line and scatter series for the given filterSet and questionnaires
-     * @param \Application\Model\FilterSet $filterSet
+     * @param \Application\Model\Filter[] $filters
      * @param array $questionnaires
      * @param \Application\Model\Part $part
-     * @param array $ignoredFilters
      * @param float $ratio
      * @param string $dashStyle
      * @param bool $isIgnored
      * @param string $suffix for serie name
+     * @param array $overriddenFilters
      * @internal param array $colors
      * @return array
      */
-    protected function getSeries(FilterSet $filterSet, array $questionnaires, Part $part, array $ignoredFilters, $ratio, $dashStyle = null, $isIgnored = false, $suffix = null)
+    private function getSeries($filters, array $questionnaires, Part $part, $ratio, $dashStyle = null, $isIgnored = false, $suffix = null, array $overriddenFilters = array(), $isAdjusted = false)
     {
-        $series = array();
+        $this->getCalculator()->setOverriddenFilters($overriddenFilters);
 
-        $calculator = new \Application\Service\Calculator\Jmp();
-        $calculator->setServiceLocator($this->getServiceLocator());
+        $lines = $this->getLinedSeries($filters, $questionnaires, $part, $ratio, $dashStyle, $isIgnored, $suffix, $isAdjusted);
+        $scatters = $this->getScatteredSeries($filters, $questionnaires, $part, $ratio, $isIgnored, $suffix, $isAdjusted);
 
-        $lines = $this->getLinedSeries($filterSet, $questionnaires, $part, $ignoredFilters, $ratio, $dashStyle, $isIgnored, $suffix, $calculator);
-        $scatters = $this->getScatteredSeries($filterSet, $questionnaires, $part, $ratio, $isIgnored, $suffix, $calculator);
-
-        $series = array_merge($series, $lines, $scatters);
+        $series = array_merge($lines, $scatters);
 
         return $series;
     }
 
     /**
      * Get lines series
-     * @param FilterSet $filterSet
+     * @param \Application\Model\Filter[] $filters
      * @param array $questionnaires
      * @param Part $part
-     * @param array $ignoredFilters
      * @param $ratio
      * @param null $dashStyle
      * @param $isIgnored
      * @param $suffix
-     * @param $calculator
+     * @param bool $isAdjusted
+     * @internal param \Application\Service\Calculator\Jmp $calculator
+     * @internal param array $ignoredFilters
      * @return array
      */
-    private function getLinedSeries(FilterSet $filterSet, array $questionnaires, Part $part, array $ignoredFilters, $ratio, $dashStyle = null, $isIgnored, $suffix, $calculator)
+    private function getLinedSeries($filters, array $questionnaires, Part $part, $ratio, $dashStyle = null, $isIgnored, $suffix, $isAdjusted = false)
     {
         $series = array();
 
@@ -287,7 +310,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         /** @var \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepo */
         $filterGeonameUsageRepo = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
 
-        $lines = $calculator->computeFlattenAllYears($this->startYear, $this->endYear, $filterSet, $questionnaires, $part, $ignoredFilters);
+        $lines = $this->getCalculator()->computeFlattenAllYears($this->startYear, $this->endYear, $filters, $questionnaires, $part);
         foreach ($lines as &$serie) {
             /** @var \Application\Model\Filter $filter */
             $filter = $filterRepository->findOneById($serie['id']);
@@ -302,14 +325,17 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             if ($isIgnored) {
                 $serie['isIgnored'] = $isIgnored;
             }
+            if ($isAdjusted) {
+                $serie['isAdjusted'] = $isAdjusted;
+            }
             if ($dashStyle) {
                 $serie['dashStyle'] = $dashStyle;
             }
 
             if (count($usages) > 0) {
                 $serie['usages'] = implode(',<br/>', array_map(function ($u) {
-                    return $u->getRule()->getName();
-                }, $usages));
+                            return $u->getRule()->getName();
+                        }, $usages));
             }
 
             foreach ($serie['data'] as &$d) {
@@ -323,34 +349,37 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Get scatter series
-     * @param $filterSet
-     * @param $questionnaires
-     * @param $part
+     * @param \Application\Model\Filter[] $filters
+     * @param array $questionnaires
+     * @param Part $part
      * @param $ratio
      * @param $isIgnored
      * @param $suffix
-     * @param $calculator
+     * @param bool $isAdjusted
      * @return array
      */
-    private function getScatteredSeries($filterSet, $questionnaires, $part, $ratio, $isIgnored, $suffix, $calculator)
+    private function getScatteredSeries($filters, array $questionnaires, Part $part, $ratio, $isIgnored, $suffix, $isAdjusted = false)
     {
         $series = array();
 
         // Then add scatter points which are each questionnaire values
-        foreach ($filterSet->getFilters() as $filter) {
+        foreach ($filters as $filter) {
             $idFilter = $filter->getId();
-            $data = $calculator->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
+            $data = $this->getCalculator()->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
             $scatter = array(
                 'type' => 'scatter',
+                'id' => $filter->getId(),
                 'color' => $filter->getGenericColor($ratio),
                 'marker' => array('symbol' => $this->symbols[$this->getConstantKey($filter->getName()) % count($this->symbols)]),
                 'name' => $filter->getName() . $suffix,
                 'allowPointSelect' => false,
-                // because we will use our own click handler
-                'data' => array(),
+                'data' => array(),  // because we will use our own click handler
             );
             if ($isIgnored) {
                 $scatter['isIgnored'] = $isIgnored;
+            }
+            if ($isAdjusted) {
+                $scatter['isAdjusted'] = $isAdjusted;
             }
 
             foreach ($data['values'] as $questionnaireId => $value) {
@@ -400,20 +429,21 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             /** @var \Application\Model\Part $part */
             $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
 
-            /** @var \Application\Model\Filter $filter */
-            $filters = explode(',', $this->params()->fromQuery('filters'));
+            // create filters objects
+            $filtersIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
+            $filters = array_map(function($filterId){
+                return $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
+            }, $filtersIds);
+
             $result = array('filters' => array());
             $resultWithoutIgnoredFilters = array('filters' => array());
-
-            /** @var \Application\Service\Calculator\Calculator $calculator */
-            $calculator = new \Application\Service\Calculator\Calculator();
-            $calculator->setServiceLocator($this->getServiceLocator());
 
             /** @var  \Application\Service\Hydrator $hydrator */
             $hydrator = new \Application\Service\Hydrator();
 
             if ($this->params()->fromQuery('getQuestionnaireUsages') === 'true') {
-                if ($usages = $this->extractUsages($questionnaire->getQuestionnaireUsages(), null, $part, $hydrator, $calculator)) {
+                $usages = $this->extractUsages($questionnaire->getQuestionnaireUsages(), null, $part, $hydrator);
+                if ($usages) {
                     $result['usages'] = $usages;
                 }
             }
@@ -423,36 +453,27 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
              * In order to follow the logic : panel displays info to understand chart,
              * If the questionnaire requested is ignored all filters should be null (cause no value is used) on chart
              */
-            $ignoredFiltersByQuestionnaire = $this->getIgnoredElements();
-            if (isset($ignoredFiltersByQuestionnaire['byQuestionnaire']) // if there are ignored questionnaire
-                && !isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) // and if questionnaire is not ignored
-                || isset($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) // or if he's ignored but he has filters (that means he's not ignored himself, but some filters are)
-                && count($ignoredFiltersByQuestionnaire['byQuestionnaire'][$questionnaire->getId()]) > 0
-            ) {
-                // compute filters
-                foreach ($filters as $filterId) {
-                    $filter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
-                    $fields = array_merge(explode(',', $this->params()->fromQuery('fields')), array(
-                        'questions',
-                        'questions.survey'
-                    ));
+            $overriddenElements = $this->getIgnoredElements($part);
+            foreach ($filters as $filter) {
+                $fields = array_merge(explode(',', $this->params()->fromQuery('fields')), array(
+                    'questions',
+                    'questions.survey'
+                ));
 
-                    $tableController = new TableController();
-                    $tableController->setServiceLocator($this->getServiceLocator());
+                $tableController = new TableController();
+                $tableController->setServiceLocator($this->getServiceLocator());
 
-                    $result['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, array(), true);
-                    $resultWithoutIgnoredFilters['filters'][$filterId] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, $ignoredFiltersByQuestionnaire, true);
+                $result['filters'][$filter->getId()] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, array(), true);
+                $resultWithoutIgnoredFilters['filters'][$filter->getId()] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, $overriddenElements, true);
 
-                    foreach ($result['filters'][$filterId] as $i => &$flatFilter) {
-                        $flatFilter = $this->addComputedValuesToFilters($flatFilter, $part, $resultWithoutIgnoredFilters['filters'][$filterId][$i]['values']);
-                        $flatFilter = $this->addUsagesToFilters($flatFilter, $part, $questionnaire);
-                        $flatFilter = $this->addQuestionsToFilters($flatFilter, $questionnaire);
-                    }
+                foreach ($result['filters'][$filter->getId()] as $i => &$flatFilter) {
+                    $flatFilter = $this->addComputedValuesToFilters($flatFilter, $part, $resultWithoutIgnoredFilters['filters'][$filter->getId()][$i]['values']);
+                    $flatFilter = $this->addUsagesToFilters($flatFilter, $part, $questionnaire);
+                    $flatFilter = $this->addQuestionsToFilters($flatFilter, $questionnaire);
                 }
             }
 
             return new NumericJsonModel($result);
-
         } else {
             $this->getResponse()->setStatusCode(404);
 
@@ -494,7 +515,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             if ($fqu->getPart() === $part && $fqu->getQuestionnaire() === $questionnaire) {
                 $flatFilter['usages'][] = $fqu->getRule()->getName();
             }
-
         }
 
         $flatFilter['usages'] = implode(', ', $flatFilter['usages']);
@@ -524,19 +544,18 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         return $flatFilter;
     }
 
-    protected function extractUsages($usages, $questionnaire = null, $part, $hydrator, $calculator)
+    protected function extractUsages($usages, $questionnaire = null, $part, $hydrator)
     {
         $extractedUsages = array();
         foreach ($usages as $usage) {
-            if ($usage->getPart() === $part
-                && (!$questionnaire || $questionnaire && $usage->getQuestionnaire() === $questionnaire)
+            if ($usage->getPart() === $part && (!$questionnaire || $questionnaire && $usage->getQuestionnaire() === $questionnaire)
             ) {
                 $extractedUsage = $hydrator->extract($usage, array(
                     'part',
                     'rule',
                     'rule.name',
                 ));
-                $value = $calculator->computeFormula($usage);
+                $value = $this->getCalculator()->computeFormula($usage);
                 $value = \Application\Utility::decimalToRoundedPercent($value);
                 $extractedUsage['value'] = $value;
                 $extractedUsages[] = $extractedUsage;
@@ -547,124 +566,72 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     }
 
     /**
-     * Generates a filterset, a filter and a survey by year with a question associated to a the filter and to answers
-     * @return NumericJsonModel
+     * Return an array of series and overridden filters, if were asked to do it
+     * @param array $questionnaires
+     * @param \Application\Model\Part $part
+     * @return array ['series' => series, 'overriddenFilters' => overriddenFilters]
      */
-    public function generateFilterAction()
+    private function getAdjustedSeries(array $questionnaires, Part $part)
     {
-        $name = $this->params()->fromQuery('name');
-        $color = $this->params()->fromQuery('color');
-        $surveys = explode(',', $this->params()->fromQuery('surveys'));
+        $series = array();
+        $overriddenFilters = array();
+        $originalFilters = array();
 
-        $existingSurvey = $this->getEntityManager()->getRepository('Application\Model\Survey')->findOneByName($name);
-        $existingFilter = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneByName($name);
-        $existingFilterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneByName($name);
+        if ($this->params()->fromQuery('reference') && $this->params()->fromQuery('overridable') && $this->params()->fromQuery('target')) {
 
-        if ($existingSurvey || $existingFilter || $existingFilterSet) {
-            return new NumericJsonModel(array('message' => 'name "' . $name . '" already used'));
+            $reference = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($this->params()->fromQuery('reference'));
+            $overridable = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($this->params()->fromQuery('overridable'));
+
+            @list($targetId, $includeIgnoredElements) = explode(':', $this->params()->fromQuery('target'));
+            $target = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($targetId);
+
+            if ($reference && $overridable && $target) {
+                $adjustator = new \Application\Service\Calculator\Adjustator();
+                $adjustator->setCalculator($this->getCalculator());
+
+                $originalFilters = $adjustator->getOriginalOverrideValues($target, $reference, $overridable, $questionnaires, $part);
+
+                if ($includeIgnoredElements) {
+                    $ignoredElements = $this->getIgnoredElements($part);
+                    $this->getCalculator()->setOverriddenFilters($ignoredElements);
+                }
+
+                $overriddenFilters = $adjustator->findOverriddenFilters($target, $reference, $overridable, $questionnaires, $part);
+                $this->getCalculator()->setOverriddenFilters($overriddenFilters);
+
+                $adjustedSeries = $this->getSeries([$reference], $questionnaires, $part, 100, null, false, ' (adjusted)', $overriddenFilters, true);
+                $originalSeries = $this->getSeries([$reference], $questionnaires, $part, 33, 'ShortDot', false, '', array(), true);
+                $ancestorsSeries = $this->getAncestorsSeries($reference, $questionnaires, $part, $overriddenFilters);
+
+                $series = array_merge($adjustedSeries, $originalSeries, $ancestorsSeries);
+            }
         }
 
-        $user = User::getCurrentUser();
+        return array(
+            'series' => $series,
+            'overriddenFilters' => $overriddenFilters,
+            'originalFilters' => $originalFilters,
+        );
+    }
 
-        /** get roles */
-        $roleEditor = $this->getEntityManager()->getRepository('Application\Model\Role')->findOneByName('editor');
-        $roleReporter = $this->getEntityManager()->getRepository('Application\Model\Role')->findOneByName('reporter');
-
-        /** @var \Application\Model\Part $part */
-        $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
-        $parts = new ArrayCollection();
-        $parts->add($part);
-
-        /** @var \Application\Model\Country $country */
-        $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneById($this->params()->fromQuery('country'));
-
-        /** @var \Application\Model\Geoname $geoname */
-        $geoname = $country->getGeoname();
-
-        /** @var \Application\Model\FilterSet $filterSet */
-        $filterSet = new FilterSet();
-        $filterSet->setName($name);
-        $this->getEntityManager()->persist($filterSet);
-
-        /** @var \Application\Model\Filter $filter */
-        $filter = new Filter();
-        $filter->setName($name);
-        $filter->setColor($color);
-        $filterSet->addFilter($filter);
-        $this->getEntityManager()->persist($filter);
-
-        foreach ($surveys as $s) {
-
-            list($year, $value) = explode(':', $s);
-
-            /** @var \Application\Model\Survey $survey */
-            $survey = new Survey();
-            $survey->setCode($name . ' ' . $year);
-            $survey->setName($name . ' ' . $year);
-            $survey->setYear($year);
-            $survey->setIsActive(1);
-            $this->getEntityManager()->persist($survey);
-
-            /** @var \Application\Model\UserSurvey $userSurvey */
-            $userSurvey = new UserSurvey();
-            $userSurvey->setUser($user);
-            $userSurvey->setSurvey($survey);
-            $userSurvey->setRole($roleEditor);
-            $this->getEntityManager()->persist($userSurvey);
-
-            /** @var \Application\Model\NumericQuestion $question */
-            $question = new NumericQuestion();
-            $question->setName($name);
-            $question->setFilter($filter);
-            $question->setSurvey($survey);
-            $question->setParts($parts);
-            $question->setSorting(1);
-            $question->setIsPopulation(true);
-            $question->setIsCompulsory(true);
-            $this->getEntityManager()->persist($question);
-
-            /** @var \Application\Model\Questionnaire $questionnaire */
-            $questionnaire = new Questionnaire();
-            $questionnaire->setSurvey($survey);
-            $questionnaire->setGeoname($geoname);
-            $questionnaire->setDateObservationStart(new \DateTime($year . '-01-01'));
-            $questionnaire->setDateObservationEnd(new \DateTime($year . '-12-31'));
-            $this->getEntityManager()->persist($questionnaire);
-
-            /** @var \Application\Model\UserQuestionnaire $userQuestionnaire */
-            $userQuestionnaire = new UserQuestionnaire();
-            $userQuestionnaire->setUser($user);
-            $userQuestionnaire->setQuestionnaire($questionnaire);
-            $userQuestionnaire->setRole($roleEditor);
-            $this->getEntityManager()->persist($userQuestionnaire);
-            $this->getEntityManager()->persist($questionnaire);
-
-            /** @var \Application\Model\UserQuestionnaire $userQuestionnaire */
-            $userQuestionnaire = new UserQuestionnaire();
-            $userQuestionnaire->setUser($user);
-            $userQuestionnaire->setQuestionnaire($questionnaire);
-            $userQuestionnaire->setRole($roleReporter);
-            $this->getEntityManager()->persist($userQuestionnaire);
-
-            /** @var \Application\Model\Population $population */
-            $population = $this->getEntityManager()->getRepository('Application\Model\Population')->getOneByGeoname($geoname, $part->getId(), $year);
-
-            /** @var \Application\Model\Answer $answer */
-            $answer = new Answer();
-            $answer->setQuestion($question);
-            $answer->setQuestionnaire($questionnaire);
-            $answer->setPart($part);
-            $answer->setValuePercent($value);
-            $answer->setValueAbsolute($value * $population->getPopulation());
-            $this->getEntityManager()->persist($answer);
+    /**
+     * Return parents trend lines of the projected filter
+     * @param Filter $reference
+     * @param array $questionnaires
+     * @param Part $part
+     * @param array $overriddenFilters
+     * @return array
+     */
+    private function getAncestorsSeries(Filter $reference, array $questionnaires, Part $part, array $overriddenFilters)
+    {
+        $topLevelFilters = $reference->getRootAncestors();
+        $topLevelFiltersSeries = array();
+        foreach ($topLevelFilters as $filter) {
+            $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries([$filter], $questionnaires, $part, 100, null, false, ' (adjusted)', $overriddenFilters, true));
+            $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries([$filter], $questionnaires, $part, 33, 'ShortDot', false, '', array(), true));
         }
 
-        $this->getEntityManager()->flush();
-        $this->getResponse()->setStatusCode(201);
-
-        $hydrator = new \Application\Service\Hydrator();
-
-        return new NumericJsonModel($hydrator->extract($filterSet));
+        return $topLevelFiltersSeries;
     }
 
 }

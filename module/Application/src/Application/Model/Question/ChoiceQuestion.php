@@ -49,7 +49,7 @@ class ChoiceQuestion extends AbstractPopulationQuestion
     /**
      * Set new choices, replacing entirely existing choices
      * @param \Doctrine\Common\Collections\ArrayCollection $choices
-     * @return $this
+     * @return self
      */
     public function setChoices(\Doctrine\Common\Collections\ArrayCollection $choices)
     {
@@ -65,6 +65,7 @@ class ChoiceQuestion extends AbstractPopulationQuestion
                 \Application\Module::getEntityManager()->remove($choice);
             }
         }
+
         return $this;
     }
 
@@ -74,7 +75,7 @@ class ChoiceQuestion extends AbstractPopulationQuestion
      *
      * @param Choice $choice
      *
-     * @return ChoiceQuestion
+     * @return self
      */
     public function choiceAdded(Choice $choice)
     {

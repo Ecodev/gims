@@ -29,7 +29,7 @@ class FilterControllerTest extends AbstractRestfulControllerTest
         $this->assertEquals($data['name'], $actual['name']);
 
         // anonymous
-        $this->rbac->setIdentity(null);
+        $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(403);
     }
@@ -47,7 +47,7 @@ class FilterControllerTest extends AbstractRestfulControllerTest
         $this->assertEquals($data['name'], $actual['name']);
 
         // anonymous
-        $this->rbac->setIdentity(null);
+        $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(403);
     }
@@ -61,7 +61,7 @@ class FilterControllerTest extends AbstractRestfulControllerTest
 
     public function testAnonymousCanDeleteFilter()
     {
-        $this->rbac->setIdentity(null);
+        $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
         $this->assertResponseStatusCode(403);
     }

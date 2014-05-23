@@ -4,7 +4,6 @@ namespace Application\Service\Calculator;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Model\Part;
-use Application\Model\FilterSet;
 use Application\Model\Rule\Rule;
 
 class Jmp extends Calculator
@@ -45,19 +44,17 @@ class Jmp extends Calculator
      * This is the highest level of computation, the "main" computation method.
      * @param integer $yearStart
      * @param integer $yearEnd
-     * @param \Application\Model\FilterSet $filterSet
+     * @param \Application\Model\Filter[] $filters
      * @param array $questionnaires
      * @param \Application\Model\Part $part
      * @return array [[name => filterName, data => [year => flattenedRegression]]]]
      */
-    public function computeFlattenAllYears($yearStart, $yearEnd, FilterSet $filterSet, array $questionnaires, Part $part, $ignoredFilters = array())
+    public function computeFlattenAllYears($yearStart, $yearEnd, $filters, array $questionnaires, Part $part)
     {
-        // @todo for sylvain. Property excluded filters is used in parent class. Check out @method computeFilterInternal
-        $this->ignoredFilters = $ignoredFilters;
 
         $result = array();
         $years = range($yearStart, $yearEnd);
-        foreach ($filterSet->getFilters() as $filter) {
+        foreach ($filters as $filter) {
 
             $data = array();
             foreach ($years as $year) {
@@ -90,7 +87,7 @@ class Jmp extends Calculator
             $alreadyUsedRules = new ArrayCollection();
         }
 
-        $key = \Application\Utility::getCacheKey(func_get_args());
+        $key = \Application\Utility::getCacheKey([func_get_args(), $this->overriddenFilters]);
         if (array_key_exists($key, $this->cacheComputeFlattenOneYearWithFormula)) {
             return $this->cacheComputeFlattenOneYearWithFormula[$key];
         }
@@ -112,8 +109,6 @@ class Jmp extends Calculator
         $allRegressions = $this->computeRegressionForAllYears($years, $filterId, $questionnaires, $partId);
         $oneYearResult = $this->computeFlattenOneYear($year, $allRegressions);
         $this->cacheComputeFlattenOneYearWithFormula[$key] = $oneYearResult;
-
-        _log()->debug(__METHOD__, array($filterId, $partId, $year, $oneYearResult));
 
         return $oneYearResult;
     }
@@ -207,7 +202,7 @@ class Jmp extends Calculator
      */
     private function computeRegressionForAllYears(array $years, $filterId, array $questionnaires, $partId)
     {
-        $key = \Application\Utility::getCacheKey(func_get_args());
+        $key = \Application\Utility::getCacheKey([func_get_args(), $this->overriddenFilters]);
         if (array_key_exists($key, $this->cacheComputeRegressionForAllYears)) {
             return $this->cacheComputeRegressionForAllYears[$key];
         }
@@ -268,7 +263,7 @@ class Jmp extends Calculator
      */
     public function computeFilterForAllQuestionnaires($filterId, array $questionnaires, $partId)
     {
-        $key = \Application\Utility::getCacheKey(func_get_args());
+        $key = \Application\Utility::getCacheKey([func_get_args(), $this->overriddenFilters]);
 
         if (array_key_exists($key, $this->cacheComputeFilterForAllQuestionnaires)) {
             return $this->cacheComputeFilterForAllQuestionnaires[$key];
@@ -411,7 +406,7 @@ class Jmp extends Calculator
                     $population = 0;
                     foreach ($questionnaires as $questionnaire) {
 
-                        $population += $this->getPopulationRepository()->getOneByGeoname($questionnaire->getGeoname(), $partId, $year)->getPopulation();
+                        $population += $this->getPopulationRepository()->getOneByGeoname($questionnaire->getGeoname(), $partId, $year, $questionnaire->getId())->getPopulation();
                     }
 
                     return $population;
@@ -442,6 +437,7 @@ class Jmp extends Calculator
         }
 
         _log()->debug(__METHOD__, array($currentFilterId, $currentPartId, $year, $rule->getId(), $rule->getName(), $originalFormula, $convertedFormulas, $result));
+
         return $result;
     }
 

@@ -19,7 +19,7 @@ class Calculator
 use \Application\Traits\EntityManagerAware;
 
     private $cacheComputeFilter = array();
-    protected $ignoredFilters = array();
+    protected $overriddenFilters = array();
     private $populationRepository;
     private $questionnaireUsageRepository;
     private $filterRepository;
@@ -204,6 +204,18 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
+     * Set the filter which must be overridden with given value
+     * @param array $overriddenFilters [questionnaireId => [filterId => [partId => value]]]
+     * @return \Application\Service\Calculator\Calculator
+     */
+    public function setOverriddenFilters(array $overriddenFilters)
+    {
+        $this->overriddenFilters = $overriddenFilters;
+
+        return $this;
+    }
+
+    /**
      * Returns the computed value of the given filter, based on the questionnaire's available answers
      * @param integer $filterId
      * @param integer $questionnaireId
@@ -212,25 +224,20 @@ use \Application\Traits\EntityManagerAware;
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
      * @return float|null null if no answer at all, otherwise the percentage value
      */
-    public function computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules = false, ArrayCollection $alreadyUsedFormulas = null, $ignoredElementsByQuestionnaire = null)
+    public function computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules = false, ArrayCollection $alreadyUsedFormulas = null)
     {
-        if ($ignoredElementsByQuestionnaire) {
-            $this->ignoredFilters = $ignoredElementsByQuestionnaire;
-        }
-
-        _log()->debug(__METHOD__, array('start', $filterId, $questionnaireId, $partId));
-        $key = \Application\Utility::getCacheKey(func_get_args());
+        $key = \Application\Utility::getCacheKey([func_get_args(), $this->overriddenFilters]);
         if (array_key_exists($key, $this->cacheComputeFilter)) {
             return $this->cacheComputeFilter[$key];
         }
 
-        if (!$alreadyUsedFormulas)
+        if (!$alreadyUsedFormulas) {
             $alreadyUsedFormulas = new ArrayCollection();
+        }
 
         $result = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, new ArrayCollection());
 
         $this->cacheComputeFilter[$key] = $result;
-        _log()->debug(__METHOD__, array('end  ', $filterId, $questionnaireId, $partId, $result));
 
         return $result;
     }
@@ -247,24 +254,26 @@ use \Application\Traits\EntityManagerAware;
      */
     private function computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
-        _log()->debug(__METHOD__, array($filterId, $questionnaireId, $partId, $useSecondLevelRules));
-
-        // The logic goes as follows: if the filter id is contained within excludeFilters, skip calculation.
-        if (
-            isset($this->ignoredFilters['byQuestionnaire'])
-                && isset($this->ignoredFilters['byQuestionnaire'][$questionnaireId])
-                && in_array($filterId, $this->ignoredFilters['byQuestionnaire'][$questionnaireId])
-            || isset($this->ignoredFilters['byFilterSet'])
-                && in_array($filterId, $this->ignoredFilters['byFilterSet']))
-        {
-            return null;
-        }
 
         // Avoid duplicates
         if ($alreadySummedFilters->contains($filterId)) {
             return null;
         } else {
             $alreadySummedFilters->add($filterId);
+        }
+
+        // If the all filters of a questionnaire have an overriding value
+        // use array_key_exists() function cause overridden value may contain null that return false with isset()
+        if (array_key_exists($questionnaireId, $this->overriddenFilters) ) {
+
+            if (!is_array($this->overriddenFilters[$questionnaireId])) {
+                return $this->overriddenFilters[$questionnaireId];
+            }
+
+            // If the specific filter has an overriding value, use the override
+            if (isset($this->overriddenFilters[$questionnaireId][$filterId]) && array_key_exists($partId, $this->overriddenFilters[$questionnaireId][$filterId])) {
+                return $this->overriddenFilters[$questionnaireId][$filterId][$partId];
+            }
         }
 
         // If the filter have a specified answer, returns it (skip all computation)
@@ -305,8 +314,6 @@ use \Application\Traits\EntityManagerAware;
      */
     private function summer(array $filterIds, $questionnaireId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
-        _log()->debug(__METHOD__, array($filterIds, $questionnaireId, $partId, $useSecondLevelRules));
-
         $sum = null;
         foreach ($filterIds as $filterId) {
             $summandValue = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, $alreadySummedFilters);
@@ -439,4 +446,5 @@ use \Application\Traits\EntityManagerAware;
 
         return $result;
     }
+
 }

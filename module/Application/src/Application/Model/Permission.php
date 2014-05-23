@@ -54,7 +54,7 @@ class Permission extends AbstractModel
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -67,7 +67,7 @@ class Permission extends AbstractModel
      * Set name
      *
      * @param string $name
-     * @return Permission
+     * @return self
      */
     public function setName($name)
     {

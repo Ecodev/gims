@@ -167,6 +167,16 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
      */
     protected $part1;
 
+    /**
+     * @var \Application\Model\Part
+     */
+    protected $part2;
+
+    /**
+     * @var \Application\Model\Part
+     */
+    protected $partTotal;
+
     public function setUp()
     {
         parent::setUp();
@@ -224,6 +234,8 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
 
         // Create a stub for the Part class
         $this->part1 = $this->getNewModelWithId('\Application\Model\Part')->setName('tst part 1');
+        $this->part2 = $this->getNewModelWithId('\Application\Model\Part')->setName('tst part 2');
+        $this->partTotal = $this->getNewModelWithId('\Application\Model\Part', array('isTotal' => $this->returnValue(true)))->setName('tst part total');
 
         $this->answer131 = new \Application\Model\Answer();
         $this->answer132 = new \Application\Model\Answer();
@@ -246,6 +258,27 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $this->highFilter1->addChild($this->filter1);
         $this->highFilter2->addChild($this->filter2);
         $this->highFilter3->addChild($this->filter1)->addChild($this->filter2)->addChild($this->filter3);
+    }
+
+    protected function getStubPopulationRepository()
+    {
+        // Create a stub for the PopulationRepository class with predetermined values, so we don't have to mess with database
+        $stubPopulationRepository = $this->getMock('\Application\Repository\PopulationRepository', array('getOneByGeoname'), array(), '', false);
+        $stubPopulationRepository->expects($this->any())
+                ->method('getOneByGeoname')
+                ->will($this->returnValueMap(array(
+                            array($this->geoname, $this->part1->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(10)),
+                            array($this->geoname, $this->part1->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(10)),
+                            array($this->geoname, $this->part1->getId(), 2005, null, (new \Application\Model\Population())->setPopulation(15)),
+                            array($this->geoname, $this->part2->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(3)),
+                            array($this->geoname, $this->part2->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(3)),
+                            array($this->geoname, $this->part2->getId(), 2005, null, (new \Application\Model\Population())->setPopulation(3)),
+                            array($this->geoname, $this->partTotal->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(7)),
+                            array($this->geoname, $this->partTotal->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(7)),
+                            array($this->geoname, $this->partTotal->getId(), 2005, null, (new \Application\Model\Population())->setPopulation(12)),
+        )));
+
+        return $stubPopulationRepository;
     }
 
     protected function getStubAnswerRepository()
@@ -381,6 +414,23 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $calculator->setServiceLocator($this->getApplicationServiceLocator());
 
         return $calculator;
+    }
+
+    /**
+     *
+     * @return \Application\Service\Calculator\Jmp
+     */
+    protected function getNewJmp()
+    {
+        $service = new \Application\Service\Calculator\Jmp();
+        $service->setPopulationRepository($this->getStubPopulationRepository());
+        $service->setAnswerRepository($this->getStubAnswerRepository());
+        $service->setFilterRepository($this->getStubFilterRepository());
+        $service->setFilterQuestionnaireUsageRepository($this->getStubFilterQuestionnaireUsageRepository());
+        $service->setQuestionnaireRepository($this->getStubQuestionnaireRepository());
+        $service->setFilterGeonameUsageRepository($this->getStubFilterGeonameUsageRepository());
+
+        return $service;
     }
 
 }

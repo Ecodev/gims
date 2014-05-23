@@ -46,7 +46,7 @@ abstract class AbstractUsage extends \Application\Model\AbstractModel
     private $sorting = 0;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {

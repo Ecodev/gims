@@ -42,7 +42,7 @@ class HeadScript extends \Zend\View\Helper\HeadScript implements ServiceLocatorA
      * Compiled and concatened files must pre-exist (compiled by external tools).
      * @param string $method
      * @param array $args
-     * @return HeadScript
+     * @return self
      */
     public function __call($method, $args)
     {

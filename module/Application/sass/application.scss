@@ -94,7 +94,7 @@ div.browse .col-md-4 {
     }
 }
 
-.container-angular > .container {
+.container-angular {
     margin-top: 2em;
 }
 
@@ -186,21 +186,67 @@ div.browse .col-md-4 {
     padding:0 !important;
     height:15px !important;
     width:15px !important;
-    border:1px solid white
+    border:1px solid white;
+}
+
+
+#chartExternalLayout{
+    table-layout:fixed;
+    width:100%;
+
+    #panelTamponZone{
+        display:none;
+        width:450px !important;
+        &.panelOpened{
+            display:table-cell;
+        }
+
+        @media (max-width: $screen-xs-max) {display:none !important;};
+
+    }
+
+
 }
 
 #chartPanel{
     position:fixed;
-    @media (max-width: $screen-xs-max) {position:static}
-
     z-index:999;
+    width:450px;
     height:100%;
     top:52px;
-    right:0;
+    right: -435px;
     background:white;
     box-shadow:0px 2px 5px rgba(0,0,0,0.5);
-    overflow: scroll; overflow-x:hidden;
-    padding-bottom:100px;
+    padding:20px 0 100px 0;
+
+    @media (max-width: $screen-xs-max) {
+        position:static;
+        width:100%;
+    }
+
+    &.visible{
+        right:0;
+    }
+}
+
+#chartOpenBtn{
+    position:absolute;
+    top:19px;
+    left:-40px;
+    width:40px;
+    padding:7px;
+    -webkit-box-shadow:-2px 0px 2px rgba(0,0,0,0.3);
+    -moz-box-shadow:-2px 0px 2px rgba(0,0,0,0.3);
+    box-shadow:-2px 0px 2px rgba(0,0,0,0.3);
+    border-top-left-radius:5px;
+    border-bottom-left-radius:5px;
+    background:white;
+    cursor:pointer;
+}
+
+#panelContent{
+    overflow-y: scroll;
+    height:100%;
 }
 
 .gridStyle{
@@ -248,12 +294,6 @@ div.browse .col-md-4 {
     overflow-x:auto;
 }
 
-.tableContainer{
-    position:relative;
-    top:-2em;
-    margin-top:0 !important
-}
-
 .tableContainer .input-group-btn{
     padding-left:4px;
 }
@@ -287,7 +327,7 @@ body.demo {
     .navbar-fixed-top {
         @include background(repeating-linear-gradient(-45deg, $navbar-inverse-bg,$navbar-inverse-bg 30px, #7C0400 30px, #7C0400 60px));
 
-        .§navbar-brand:before {
+        .navbar-brand:before {
             content: 'DEMO VERSION ';
             font-weight: bolder;
             color: white;
@@ -310,4 +350,10 @@ body.local {
 [ui-ace] {
     @extend .form-control;
     min-height: 150px;
+}
+
+.navbar-nav .navbar-text.loading-widget {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: white;
 }

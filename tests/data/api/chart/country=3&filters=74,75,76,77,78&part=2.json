@@ -5,10 +5,10 @@
         "animation": false
     },
     "title": {
-        "text": "Afghanistan - Urban"
+        "text": "Afghanistan - Rural"
     },
     "subtitle": {
-        "text": "Estimated proportion of the population for Water: use of improved and unimproved sources (JMP data)"
+        "text": "Estimated proportion of the population"
     },
     "xAxis": {
         "title": {
@@ -76,39 +76,39 @@
             "name": "Total improved",
             "id": 74,
             "data": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                14.0,
-                14.0,
-                14.0,
-                14.0,
-                14.0,
-                18.4,
-                22.9,
-                27.4,
-                31.8,
-                36.3,
-                40.8,
-                45.2,
-                49.7,
-                54.1,
-                58.6,
-                63.1,
-                67.5,
-                72.0,
-                76.5,
-                80.9,
-                85.4,
-                89.9
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                5.9,
+                9.0,
+                12.2,
+                15.3,
+                18.5,
+                21.6,
+                24.7,
+                27.9,
+                31.0,
+                34.2,
+                37.3,
+                40.4,
+                43.6,
+                46.7,
+                49.9,
+                53.0,
+                56.1
             ],
             "color": "#5800D9",
             "type": "line"
@@ -117,39 +117,39 @@
             "name": "Piped onto premises",
             "id": 75,
             "data": [
-                3.1,
-                3.1,
-                3.1,
-                3.1,
-                3.1,
-                3.1,
-                3.1,
-                3.1,
-                3.1,
-                3.1,
-                3.1,
-                3.1,
-                3.1,
-                3.1,
-                3.1,
-                3.1,
-                4.5,
-                6.0,
-                7.5,
-                8.9,
-                10.4,
-                11.9,
-                13.3,
-                14.8,
-                16.3,
-                17.7,
-                19.2,
-                20.7,
-                22.1,
-                23.6,
-                25.0,
-                26.5,
-                28.0
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.3,
+                0.7,
+                1.0,
+                1.3,
+                1.7,
+                2.0,
+                2.3,
+                2.7,
+                3.0,
+                3.3,
+                3.7,
+                4.0
             ],
             "color": "#00D919",
             "type": "line"
@@ -158,39 +158,39 @@
             "name": "Surface water",
             "id": 76,
             "data": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                12.9,
-                12.9,
-                12.9,
-                12.9,
-                12.9,
-                12.3,
-                11.8,
-                11.2,
-                10.6,
-                10.0,
-                9.5,
-                8.9,
-                8.3,
-                7.7,
-                7.1,
-                6.6,
-                6.0,
-                5.4,
-                4.8,
-                4.3,
-                3.7,
-                3.1
+                48.1,
+                48.1,
+                48.1,
+                48.1,
+                48.1,
+                48.1,
+                48.1,
+                48.1,
+                48.1,
+                48.1,
+                48.1,
+                48.1,
+                48.1,
+                48.1,
+                48.1,
+                48.1,
+                45.9,
+                43.7,
+                41.5,
+                39.3,
+                37.0,
+                34.8,
+                32.6,
+                30.4,
+                28.2,
+                26.0,
+                23.8,
+                21.6,
+                19.3,
+                17.1,
+                14.9,
+                12.7,
+                10.5
             ],
             "color": "#D90026",
             "type": "line",
@@ -200,39 +200,39 @@
             "name": "Other Improved",
             "id": 77,
             "data": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                10.9,
-                10.9,
-                10.9,
-                10.9,
-                10.9,
-                13.9,
-                16.9,
-                19.9,
-                22.9,
-                25.9,
-                28.9,
-                31.9,
-                34.9,
-                37.9,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                2.8,
+                5.9,
+                9.0,
+                12.2,
+                15.3,
+                18.5,
+                21.3,
+                24.1,
+                26.9,
+                29.7,
+                32.5,
+                35.3,
+                38.1,
                 40.9,
-                43.9,
-                46.9,
-                49.9,
-                52.9,
-                55.9,
-                58.9,
-                61.9
+                43.7,
+                46.5,
+                49.3,
+                52.1
             ],
             "color": "#0066D9",
             "type": "line",
@@ -242,39 +242,39 @@
             "name": "Other Unimproved",
             "id": 78,
             "data": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                73.1,
-                73.1,
-                73.1,
-                73.1,
-                73.1,
-                69.2,
-                65.3,
-                61.4,
-                57.6,
-                53.7,
-                49.8,
-                45.9,
-                42.0,
-                38.1,
-                34.2,
-                30.4,
-                26.5,
-                22.6,
-                18.7,
-                14.8,
-                10.9,
-                7.0
+                49.1,
+                49.1,
+                49.1,
+                49.1,
+                49.1,
+                49.1,
+                49.1,
+                49.1,
+                49.1,
+                49.1,
+                49.1,
+                49.1,
+                49.1,
+                49.1,
+                49.1,
+                49.1,
+                48.2,
+                47.3,
+                46.4,
+                45.4,
+                44.5,
+                43.6,
+                42.6,
+                41.7,
+                40.8,
+                39.9,
+                38.9,
+                38.0,
+                37.1,
+                36.1,
+                35.2,
+                34.3,
+                33.4
             ],
             "color": "#A5D900",
             "type": "line",
@@ -282,9 +282,10 @@
         },
         {
             "type": "scatter",
+            "id": 74,
             "color": "#5800D9",
             "marker": {
-                "symbol": "circle"
+                "symbol": "diamond"
             },
             "name": "Total improved",
             "allowPointSelect": false,
@@ -294,43 +295,51 @@
                     "id": "74:24",
                     "questionnaire": 24,
                     "x": 1997,
-                    "y": 16.9
+                    "y": 6.8
                 },
                 {
                     "name": "MICS03",
                     "id": "74:26",
                     "questionnaire": 26,
                     "x": 2003,
-                    "y": 56.7
+                    "y": 27.4
+                },
+                {
+                    "name": "NRVA03",
+                    "id": "74:27",
+                    "questionnaire": 27,
+                    "x": 2003,
+                    "y": 33.7
                 },
                 {
                     "name": "NRVS05",
                     "id": "74:28",
                     "questionnaire": 28,
                     "x": 2005,
-                    "y": 63.7
+                    "y": 32.1
                 },
                 {
                     "name": "MS10",
                     "id": "74:31",
                     "questionnaire": 31,
                     "x": 2010,
-                    "y": 77.9
+                    "y": 50.6
                 },
                 {
                     "name": "MICS11",
                     "id": "74:32",
                     "questionnaire": 32,
                     "x": 2011,
-                    "y": 82.3
+                    "y": 51.2
                 }
             ]
         },
         {
             "type": "scatter",
+            "id": 75,
             "color": "#00D919",
             "marker": {
-                "symbol": "diamond"
+                "symbol": "square"
             },
             "name": "Piped onto premises",
             "allowPointSelect": false,
@@ -340,43 +349,44 @@
                     "id": "75:24",
                     "questionnaire": 24,
                     "x": 1997,
-                    "y": 7.7
+                    "y": 0.0
                 },
                 {
                     "name": "MICS03",
                     "id": "75:26",
                     "questionnaire": 26,
                     "x": 2003,
-                    "y": 14.0
+                    "y": 0.0
                 },
                 {
                     "name": "NRVS05",
                     "id": "75:28",
                     "questionnaire": 28,
                     "x": 2005,
-                    "y": 15.4
+                    "y": 0.8
                 },
                 {
                     "name": "MS10",
                     "id": "75:31",
                     "questionnaire": 31,
                     "x": 2010,
-                    "y": 21.8
+                    "y": 2.6
                 },
                 {
                     "name": "MICS11",
                     "id": "75:32",
                     "questionnaire": 32,
                     "x": 2011,
-                    "y": 31.2
+                    "y": 5.3
                 }
             ]
         },
         {
             "type": "scatter",
+            "id": 76,
             "color": "#D90026",
             "marker": {
-                "symbol": "square"
+                "symbol": "triangle"
             },
             "name": "Surface water",
             "allowPointSelect": false,
@@ -386,43 +396,51 @@
                     "id": "76:24",
                     "questionnaire": 24,
                     "x": 1997,
-                    "y": 10.7
+                    "y": 50.6
                 },
                 {
                     "name": "MICS03",
                     "id": "76:26",
                     "questionnaire": 26,
                     "x": 2003,
-                    "y": 13.7
+                    "y": 33.0
+                },
+                {
+                    "name": "NRVA03",
+                    "id": "76:27",
+                    "questionnaire": 27,
+                    "x": 2003,
+                    "y": 20.5
                 },
                 {
                     "name": "NRVS05",
                     "id": "76:28",
                     "questionnaire": 28,
                     "x": 2005,
-                    "y": 2.6
+                    "y": 19.4
                 },
                 {
                     "name": "MS10",
                     "id": "76:31",
                     "questionnaire": 31,
                     "x": 2010,
-                    "y": 3.0
+                    "y": 15.9
                 },
                 {
                     "name": "MICS11",
                     "id": "76:32",
                     "questionnaire": 32,
                     "x": 2011,
-                    "y": 5.1
+                    "y": 18.7
                 }
             ]
         },
         {
             "type": "scatter",
+            "id": 77,
             "color": "#0066D9",
             "marker": {
-                "symbol": "triangle"
+                "symbol": "triangle-down"
             },
             "name": "Other Improved",
             "allowPointSelect": false,
@@ -432,102 +450,131 @@
                     "id": "77:24",
                     "questionnaire": 24,
                     "x": 1997,
-                    "y": 8.2
+                    "y": 2.8
+                },
+                {
+                    "name": "MICS00",
+                    "id": "77:25",
+                    "questionnaire": 25,
+                    "x": 2000,
+                    "y": 42.4
                 },
                 {
                     "name": "MICS03",
                     "id": "77:26",
                     "questionnaire": 26,
                     "x": 2003,
-                    "y": 35.6
+                    "y": 25.7
+                },
+                {
+                    "name": "NRVA03",
+                    "id": "77:27",
+                    "questionnaire": 27,
+                    "x": 2003,
+                    "y": 30.4
                 },
                 {
                     "name": "NRVS05",
                     "id": "77:28",
                     "questionnaire": 28,
                     "x": 2005,
-                    "y": 43.3
+                    "y": 30.0
                 },
                 {
                     "name": "NVRA08",
                     "id": "77:29",
                     "questionnaire": 29,
                     "x": 2008,
-                    "y": 58.0
+                    "y": 20.0
                 },
                 {
                     "name": "MIS09",
                     "id": "77:30",
                     "questionnaire": 30,
                     "x": 2009,
-                    "y": 76.0
+                    "y": 80.1
                 },
                 {
                     "name": "MS10",
                     "id": "77:31",
                     "questionnaire": 31,
                     "x": 2010,
-                    "y": 56.1
+                    "y": 48.0
                 },
                 {
                     "name": "MICS11",
                     "id": "77:32",
                     "questionnaire": 32,
                     "x": 2011,
-                    "y": 51.1
+                    "y": 45.9
                 }
             ]
         },
         {
             "type": "scatter",
+            "id": 78,
             "color": "#A5D900",
             "marker": {
-                "symbol": "triangle-down"
+                "symbol": "circle"
             },
             "name": "Other Unimproved",
             "allowPointSelect": false,
             "data": [
                 {
+                    "name": "MICS00",
+                    "id": "78:25",
+                    "questionnaire": 25,
+                    "x": 2000,
+                    "y": 0.3
+                },
+                {
                     "name": "MICS03",
                     "id": "78:26",
                     "questionnaire": 26,
                     "x": 2003,
-                    "y": 0.7
+                    "y": 1.1
+                },
+                {
+                    "name": "NRVA03",
+                    "id": "78:27",
+                    "questionnaire": 27,
+                    "x": 2003,
+                    "y": 0.8
                 },
                 {
                     "name": "NRVS05",
                     "id": "78:28",
                     "questionnaire": 28,
                     "x": 2005,
-                    "y": 1.5
+                    "y": 0.9
                 },
                 {
                     "name": "NVRA08",
                     "id": "78:29",
                     "questionnaire": 29,
                     "x": 2008,
-                    "y": 42.0
+                    "y": 80.0
                 },
                 {
                     "name": "MIS09",
                     "id": "78:30",
                     "questionnaire": 30,
                     "x": 2009,
-                    "y": 13.5
+                    "y": 6.3
                 },
                 {
                     "name": "MS10",
                     "id": "78:31",
                     "questionnaire": 31,
                     "x": 2010,
-                    "y": 8.5
+                    "y": 4.1
                 },
                 {
                     "name": "MICS11",
                     "id": "78:32",
                     "questionnaire": 32,
                     "x": 2011,
-                    "y": 4.0
+                    "y": 2.7
                 }
             ]
         }

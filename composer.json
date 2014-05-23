@@ -7,6 +7,14 @@
         {
             "type": "vcs",
             "url": "https://github.com/PowerKiKi/PHPExcel"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/PowerKiKi/dbal"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/PowerKiKi/doctrine2"
         }
     ],
     "autoload": {
@@ -33,6 +41,8 @@
         "zf-commons/zfc-rbac": "dev-master",
         "doctrine/doctrine-orm-module": "0.*",
         "doctrine/migrations": "dev-master",
+        "doctrine/dbal": "dev-master",
+        "doctrine/orm": "dev-master",
         "creof/doctrine2-spatial": "dev-master",
         "zendframework/zend-developer-tools": "dev-master",
         "phpoffice/phpexcel": "dev-develop",

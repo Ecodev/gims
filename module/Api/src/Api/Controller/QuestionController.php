@@ -41,7 +41,7 @@ class QuestionController extends AbstractChildRestfulController
                     foreach ($answers as $answer) {
 
                         // If does not have access to answer, skip silently
-                        if (!$controller->getRbac()->isActionGranted($answer, 'read')) {
+                        if (!$controller->getAuth()->isActionGranted($answer, 'read')) {
                             continue;
                         }
 
@@ -146,13 +146,13 @@ class QuestionController extends AbstractChildRestfulController
 
         // If not allowed to read the object, cancel everything
         $question = $questionRepository->findOneById($id);
-        if ($this->getRbac()->isActionGranted($question, 'update')) {
+        if ($this->getAuth()->isActionGranted($question, 'update')) {
             $this->getEntityManager()->getConnection()->commit();
         } else {
             $this->getEntityManager()->getConnection()->rollback();
             $this->getResponse()->setStatusCode(403);
 
-            return new JsonModel(array('message' => $this->getRbac()->getMessage()));
+            return new JsonModel(array('message' => $this->getAuth()->getMessage()));
         }
 
         if (isset($data['sorting'])) {

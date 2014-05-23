@@ -2,45 +2,40 @@
 
 namespace Application\View;
 
-use ZfcRbac\Service\Rbac;
+use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
 
-class UnauthorizedStrategy extends \ZfcRbac\View\UnauthorizedStrategy
+class UnauthorizedStrategy extends \ZfcRbac\View\Strategy\UnauthorizedStrategy
 {
 
     /**
      * Override parent to work well with angular-http-auth
      *
-     * @param  MvcEvent $e
+     * @param  MvcEvent $event
      * @return void
      */
-    public function prepareUnauthorizedViewModel(MvcEvent $e)
+    public function onError(MvcEvent $event)
     {
-        parent::prepareUnauthorizedViewModel($e);
+        parent::onError($event);
 
-        // Do nothing if the result is a response object
-        $result = $e->getResult();
-        if ($result instanceof Response) {
-            return;
-        }
+        $response = $event->getResponse();
+        $result = $event->getResult();
 
-        // Do nothing if our parent did nothing
-        if (!in_array($e->getError(), array(
-                    Rbac::ERROR_CONTROLLER_UNAUTHORIZED,
-                    Rbac::ERROR_ROUTE_UNAUTHORIZED)) ||
-                !$e->getResult() instanceof ViewModel) {
+        // Do nothing if response is not HTTP response
+        if (!($response instanceof HttpResponse)) {
             return;
         }
 
         // If the identity is not a real user, it means we are not logged in,
         // thus we return a 401 to tell angular to prompt for login
-        $response = $e->getResponse();
-        if (!$e->getParam('identity') instanceof \Application\Model\User) {
+        if ($response->getStatusCode() == 403 && !$event->getParam('identity') instanceof \Application\Model\User) {
             $response->setStatusCode(401);
         }
 
-        $e->getResult()->setVariable('statusCode', $response->getStatusCode());
+        if ($result instanceof ViewModel) {
+            $result->setVariable('statusCode', $response->getStatusCode());
+        }
     }
 
 }

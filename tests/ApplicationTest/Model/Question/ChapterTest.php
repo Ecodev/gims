@@ -1,11 +1,11 @@
 <?php
 
-namespace ApplicationTest\Model;
+namespace ApplicationTest\Model\Question;
 
 use Application\Model\Question\Chapter;
 use Application\Model\Question\NumericQuestion;
 
-class ChapterTest extends AbstractModel
+class ChapterTest extends \ApplicationTest\Model\AbstractModel
 {
 
     public function testQuestionsRelation()

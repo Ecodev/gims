@@ -1,8 +1,8 @@
 <?php
 
-namespace ApplicationTest\Model;
+namespace ApplicationTest\Model\Rule;
 
-class FilterQuestionnaireUsageTest extends AbstractModel
+class FilterQuestionnaireUsageTest extends \ApplicationTest\Model\AbstractModel
 {
 
     public function testFilterRelation()

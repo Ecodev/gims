@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Application\Repository\RoleRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="role_unique", columns={"name"})})
  */
-class Role extends AbstractModel
+class Role extends AbstractModel implements \Rbac\Role\RoleInterface
 {
 
     /**
@@ -50,7 +50,7 @@ class Role extends AbstractModel
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -63,7 +63,7 @@ class Role extends AbstractModel
      * Set name
      *
      * @param string $name
-     * @return Role
+     * @return self
      */
     public function setName($name)
     {
@@ -86,7 +86,7 @@ class Role extends AbstractModel
      * Set parent
      *
      * @param Role $parent
-     * @return Role
+     * @return self
      */
     public function setParent(Role $parent = null)
     {
@@ -98,7 +98,7 @@ class Role extends AbstractModel
     /**
      * Get parent
      *
-     * @return Role
+     * @return self
      */
     public function getParent()
     {
@@ -109,7 +109,7 @@ class Role extends AbstractModel
      * Add permission
      *
      * @param Permission $permission
-     * @return Role
+     * @return self
      */
     public function addPermission(Permission $permission)
     {
@@ -122,13 +122,33 @@ class Role extends AbstractModel
      * Remove permission
      *
      * @param Permission $permission
-     * @return Role
+     * @return self
      */
     public function removePermission(Permission $permission)
     {
         $this->permissions->removeElement($permission);
 
         return $this;
+    }
+
+    /**
+     * Returns whether this role has the permission
+     * @param Permission|string $permission
+     * @return boolean
+     */
+    public function hasPermission($permission)
+    {
+        if ($permission instanceof Permission) {
+            $permission = $permission->getName();
+        }
+
+        foreach ($this->permissions as $existingPermission) {
+            if ($permission == $existingPermission->getName()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

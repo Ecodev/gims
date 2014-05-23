@@ -52,6 +52,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
 
         $this->detectBrowserLocale($e);
         $this->deactivateLayout($e);
+
+        // Register a strategy to control what happens when access is denied
+        $t = $e->getTarget();
+        $t->getEventManager()->attach(
+                $t->getServiceManager()->get('ZfcRbac\View\Strategy\UnauthorizedStrategy')
+        );
     }
 
     /**

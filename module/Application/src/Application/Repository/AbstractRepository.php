@@ -12,6 +12,7 @@ abstract class AbstractRepository extends EntityRepository
     /**
      * Returns all items with permissions
      * @param string $action
+     * @param string $search
      * @return array
      */
     public function getAllWithPermission($action = 'read', $search = null)
@@ -89,7 +90,7 @@ abstract class AbstractRepository extends EntityRepository
 
             $fieldWheres = array();
             foreach ($fields as $field) {
-                $fieldWheres[] = 'LOWER(' . $field . ') LIKE LOWER(:' . $parameterName . ')';
+                $fieldWheres[] = 'LOWER(CAST(' . $field . ' AS text)) LIKE LOWER(:' . $parameterName . ')';
             }
 
             if ($fieldWheres) {

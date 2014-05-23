@@ -56,7 +56,7 @@ class SurveyControllerTest extends AbstractRestfulControllerTest
             'year' => 2013,
         );
 
-        $this->rbac->setIdentity(null);
+        $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(403);
     }
@@ -68,7 +68,7 @@ class SurveyControllerTest extends AbstractRestfulControllerTest
             'name' => $expected,
         );
 
-        $this->rbac->setIdentity(null);
+        $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(403);
     }

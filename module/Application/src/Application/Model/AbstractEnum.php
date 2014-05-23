@@ -54,7 +54,7 @@ abstract class AbstractEnum
     /**
      * Returns the Enum object corresponding to value given
      * @param string $value
-     * @return AbstractEnum
+     * @return self
      * @throws \InvalidArgumentException
      */
     public static function get($value)

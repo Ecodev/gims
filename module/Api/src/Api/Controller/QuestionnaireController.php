@@ -124,10 +124,10 @@ class QuestionnaireController extends AbstractChildRestfulController
                 $data['status'] != $questionnaire->getStatus() &&
                 ($data['status'] == \Application\Model\QuestionnaireStatus::$VALIDATED ||
                 $questionnaire->getStatus() == \Application\Model\QuestionnaireStatus::$VALIDATED)) {
-            if (!$this->getRbac()->isActionGranted($questionnaire, 'validate')) {
+            if (!$this->getAuth()->isActionGranted($questionnaire, 'validate')) {
                 $this->getResponse()->setStatusCode(401);
 
-                return new JsonModel(array('message' => $this->getRbac()->getMessage()));
+                return new JsonModel(array('message' => $this->getAuth()->getMessage()));
             }
         }
 
@@ -140,7 +140,7 @@ class QuestionnaireController extends AbstractChildRestfulController
      */
     protected function postCreate(AbstractModel $questionnaire, array $data)
     {
-        $user = $this->getRbac()->getIdentity();
+        $user = $this->getAuth()->getIdentity();
         $role = $this->getEntityManager()->getRepository('Application\Model\Role')->findOneByName('reporter');
         $userQuestionnaire = new \Application\Model\UserQuestionnaire();
         $userQuestionnaire->setUser($user)->setQuestionnaire($questionnaire)->setRole($role);

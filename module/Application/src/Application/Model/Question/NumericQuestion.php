@@ -15,7 +15,7 @@ class NumericQuestion extends AbstractPopulationQuestion
     /**
      * @var int
      *
-     * @ORM\Column(type="boolean", nullable=false, options={"default" = FALSE})
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
      */
     private $isAbsolute = false;
 
@@ -29,7 +29,7 @@ class NumericQuestion extends AbstractPopulationQuestion
 
     /**
      * @param int $isAbsolute
-     * @return $this
+     * @return self
      */
     public function setIsAbsolute($isAbsolute)
     {

@@ -5,10 +5,12 @@ namespace ApiTest\Controller;
 use Zend\Http\Request;
 use Api\Service\MetaModel;
 use Application\Model\Answer;
+use Application\Model\Country;
 use Application\Model\Filter;
 use Application\Model\FilterSet;
 use Application\Model\Geoname;
 use Application\Model\Part;
+use Application\Model\Population;
 use Application\Model\Question\NumericQuestion;
 use Application\Model\Questionnaire;
 use Application\Model\Survey;
@@ -119,6 +121,16 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
     protected $filterGeonameUsage;
 
     /**
+     * @var Country
+     */
+    protected $country;
+
+    /**
+     * @var Population
+     */
+    protected $population;
+
+    /**
      * @var metaModel
      */
     protected $metaModel;
@@ -209,6 +221,12 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->filterGeonameUsage = new FilterGeonameUsage();
         $this->filterGeonameUsage->setJustification('tests')->setRule($this->rule)->setPart($this->part)->setGeoname($this->geoname)->setFilter($this->filter);
 
+        $this->country = new Country();
+        $this->country->setName('tst country')->setCode('tstctry')->setGeoname($this->geoname);
+
+        $this->population = new Population();
+        $this->population->setCountry($this->country)->setPart($this->part)->setYear(2000)->setPopulation(55555)->setQuestionnaire($this->questionnaire);
+
         $this->getEntityManager()->persist($this->filterSet);
         $this->getEntityManager()->persist($this->filterSet2);
         $this->getEntityManager()->persist($this->userFilterSet);
@@ -231,12 +249,14 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->getEntityManager()->persist($this->questionnaireUsage);
         $this->getEntityManager()->persist($this->filterQuestionnaireUsage);
         $this->getEntityManager()->persist($this->filterGeonameUsage);
+        $this->getEntityManager()->persist($this->country);
+        $this->getEntityManager()->persist($this->population);
         $this->getEntityManager()->flush();
 
         // After flushed in DB, we clear EM identiy cache, to be sure that we actually reload object from database
         $this->getEntityManager()->clear();
         $reloadedUser = $this->getEntityManager()->merge($this->user);
-        $this->rbac->setIdentity($reloadedUser);
+        $this->identityProvider->setIdentity($reloadedUser);
     }
 
     public function testCanGetOne()

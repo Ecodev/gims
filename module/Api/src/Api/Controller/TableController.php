@@ -54,14 +54,15 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
      * @param array $parts
      * @param integer $level the level of the current filter in the filter tree
      * @param array $fields
-     * @param array $ignoredElementsByQuestionnaire
+     * @param array $overridenFilters
      * @param bool $userSecondLevelRules
      * @return array a list (not tree) of all filters with their values and tree level
      */
-    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0, $fields = array(), $ignoredElementsByQuestionnaire = array(), $userSecondLevelRules = false)
+    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0, $fields = array(), $overridenFilters = array(), $userSecondLevelRules = false)
     {
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
+        $calculator->setOverriddenFilters($overridenFilters);
         $hydrator = new \Application\Service\Hydrator();
 
         $current = array();
@@ -69,7 +70,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $current['filter']['level'] = $level;
 
         foreach ($parts as $part) {
-            $computed = $calculator->computeFilter($filter->getId(), $questionnaire->getId(), $part->getId(), $userSecondLevelRules, null, $ignoredElementsByQuestionnaire);
+            $computed = $calculator->computeFilter($filter->getId(), $questionnaire->getId(), $part->getId(), $userSecondLevelRules, null);
             // Round the value
             $value = \Application\Utility::decimalToRoundedPercent($computed);
             $current['values'][0][$part->getName()] = $value;
@@ -78,7 +79,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         // Compute children
         $result = array($current);
         foreach ($filter->getChildren() as $child) {
-            $result = array_merge($result, $this->computeWithChildren($questionnaire, $child, $parts, $level + 1, $fields, $ignoredElementsByQuestionnaire, $userSecondLevelRules));
+            $result = array_merge($result, $this->computeWithChildren($questionnaire, $child, $parts, $level + 1, $fields, $overridenFilters, $userSecondLevelRules));
         }
 
         return $result;
@@ -245,18 +246,18 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * @param $parts
-     * @param $filterSet
-     * @param $questionnaires
+     * @param \Application\Model\FilterSet $filterSet
+     * @param array $questionnaires
      * @return array all data ordered by part
      */
-    private function getAllYearsComputed($parts, $filterSet, $questionnaires)
+    private function getAllYearsComputed($parts, \Application\Model\FilterSet $filterSet, array $questionnaires)
     {
         $calculator = new \Application\Service\Calculator\Jmp();
         $calculator->setServiceLocator($this->getServiceLocator());
 
         $dataPerPart = array();
         foreach ($parts as $part) {
-            $dataPerPart[$part->getId()] = $calculator->computeFlattenAllYears(1980, 2015, $filterSet, $questionnaires, $part);
+            $dataPerPart[$part->getId()] = $calculator->computeFlattenAllYears(1980, 2015, $filterSet->getFilters(), $questionnaires, $part);
         }
 
         return $dataPerPart;
@@ -313,13 +314,13 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
     }
 
     /**
-     * Retreive a code name by using two techniques : manual mapping or inversed acronym letters for the filter
-     * @param $filterset
-     * @param $partId
-     * @param $filterName
+     * Retrieve a code name by using two techniques : manual mapping or inversed acronym letters for the filter
+     * @param \Application\Model\FilterSet $filterset
+     * @param \Application\Model\Part|integer $part
+     * @param string $filterName
      * @return string code name in uppercase
      */
-    public function getCodeName($filterset, $part, $filterName)
+    public function getCodeName(\Application\Model\FilterSet $filterset, $part, $filterName)
     {
         // first letter of the Filterset (care, if some have W, the all will start the same way)
         $filtersetL = substr($filterset->getName(), 0, 1);

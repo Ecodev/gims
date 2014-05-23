@@ -1,8 +1,8 @@
 <?php
 
-namespace ApplicationTest\Model;
+namespace ApplicationTest\Model\Rule;
 
-class QuestionnaireUsageTest extends AbstractModel
+class QuestionnaireUsageTest extends \ApplicationTest\Model\AbstractModel
 {
 
     public function testQuestionnaireRelation()

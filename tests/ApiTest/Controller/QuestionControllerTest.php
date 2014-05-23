@@ -91,12 +91,14 @@ class QuestionControllerTest extends AbstractRestfulControllerTest
         $questions[1] = $this->getEntityManager()->merge($this->question);
         foreach (array(2, 3, 4, 5) as $value) {
 
+            $filter = new \Application\Model\Filter('tst filter ' . $value);
             $question = new NumericQuestion();
             $question->setSurvey($this->getEntityManager()->merge($this->survey))
                     ->setSorting($value)
-                    ->setFilter($this->getEntityManager()->merge($this->filter))
+                    ->setFilter($filter)
                     ->setName('bar');
 
+            $this->getEntityManager()->persist($filter);
             $this->getEntityManager()->persist($question);
             $questions[$value] = $question;
         }
@@ -157,12 +159,16 @@ class QuestionControllerTest extends AbstractRestfulControllerTest
 
     public function testCreatingQuestionWithChoices()
     {
+        $filter = new \Application\Model\Filter('tst filter ');
+        $this->getEntityManager()->persist($filter);
+        $this->getEntityManager()->flush();
+
         // Question
         $data = array(
             'name' => 'Question with choices',
             'type' => \Application\Model\QuestionType::$CHOICE,
             'survey' => $this->survey->getId(),
-            'filter' => $this->filter->getId(),
+            'filter' => $filter->getId(),
             'choices' => array(
                 array(
                     'name' => 'choice 1',

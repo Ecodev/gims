@@ -8,7 +8,7 @@
         "text": "Bangladesh - Rural"
     },
     "subtitle": {
-        "text": "Estimated proportion of the population for Sanitation: use of improved and unimproved facilities (JMP data)"
+        "text": "Estimated proportion of the population"
     },
     "xAxis": {
         "title": {
@@ -324,6 +324,7 @@
         },
         {
             "type": "scatter",
+            "id": 165,
             "color": "#D90020",
             "marker": {
                 "symbol": "circle"
@@ -468,6 +469,7 @@
         },
         {
             "type": "scatter",
+            "id": 166,
             "color": "#005FD9",
             "marker": {
                 "symbol": "diamond"
@@ -570,6 +572,7 @@
         },
         {
             "type": "scatter",
+            "id": 167,
             "color": "#9ED900",
             "marker": {
                 "symbol": "square"
@@ -602,6 +605,7 @@
         },
         {
             "type": "scatter",
+            "id": 168,
             "color": "#D400D9",
             "marker": {
                 "symbol": "triangle"
@@ -634,6 +638,7 @@
         },
         {
             "type": "scatter",
+            "id": 169,
             "color": "#00D995",
             "marker": {
                 "symbol": "triangle-down"
@@ -722,6 +727,7 @@
         },
         {
             "type": "scatter",
+            "id": 170,
             "color": "#D95600",
             "marker": {
                 "symbol": "circle"

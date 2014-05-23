@@ -10,7 +10,6 @@ use Zend\Http\Request;
 class PartControllerTest extends AbstractRestfulControllerTest
 {
 
-
     protected function getAllowedFields()
     {
         return array('id', 'name');
@@ -37,7 +36,7 @@ class PartControllerTest extends AbstractRestfulControllerTest
             'name' => 'this will fail',
         );
 
-        $this->rbac->setIdentity(null);
+        $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(403);
     }

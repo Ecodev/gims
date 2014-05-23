@@ -42,7 +42,7 @@ class UserRepository extends AbstractRepository
      * Return all users with the permission on the given object
      *
      * @param \Application\Service\RoleContextInterface $context
-     * @param type $permission
+     * @param string $permission
      *
      * @throws Exception
      */
@@ -68,6 +68,15 @@ class UserRepository extends AbstractRepository
         return $qb->getQuery()->getResult();
     }
 
+
+    /**
+     * {@inheritdoc}
+     * @param string $action
+     * @param string $search
+     * @param string $parentName
+     * @param \Application\Model\AbstractModel $parent
+     * @return User[]
+     */
     public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
     {
         $qb = $this->createQueryBuilder('user');

@@ -14,7 +14,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * Returns currently logged user or null
-     * @return User|null
+     * @return self|null
      */
     public static function getCurrentUser()
     {
@@ -137,7 +137,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -152,7 +152,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     /**
      * Set name
      * @param string $name
-     * @return User
+     * @return self
      */
     public function setName($name)
     {
@@ -173,7 +173,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     /**
      * Set email
      * @param string $email
-     * @return User
+     * @return self
      */
     public function setEmail($email)
     {
@@ -194,7 +194,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     /**
      * Set password
      * @param string $password
-     * @return User
+     * @return self
      */
     public function setPassword($password)
     {
@@ -215,7 +215,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     /**
      * Set state
      * @param integer $state
-     * @return User
+     * @return self
      */
     public function setState($state)
     {
@@ -291,7 +291,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      * Notify the user that it was added to UserSurvey relation.
      * This should only be called by UserSurvey::setUser()
      * @param UserSurvey $userSurvey
-     * @return User
+     * @return self
      */
     public function userSurveyAdded(UserSurvey $userSurvey)
     {
@@ -322,7 +322,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      * Notify the user that it was added to UserSurvey relation.
      * This should only be called by UserQuestionnaire::setUser()
      * @param UserQuestionnaire $userQuestionnaire
-     * @return User
+     * @return self
      */
     public function userQuestionnaireAdded(UserQuestionnaire $userQuestionnaire)
     {
@@ -335,7 +335,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      * Notify the user that it was added to UserFilterSet relation.
      * This should only be called by UserFilterSet::setUser()
      * @param UserFilterSet UserFilterSet
-     * @return User
+     * @return self
      */
     public function userFilterSetAdded(UserFilterSet $userFilterSet)
     {
@@ -436,7 +436,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param string $phone
-     * @return User
+     * @return self
      */
     public function setPhone($phone)
     {
@@ -455,7 +455,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param string $skype
-     * @return User
+     * @return self
      */
     public function setSkype($skype)
     {
@@ -474,7 +474,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param string $job
-     * @return User
+     * @return self
      */
     public function setJob($job)
     {
@@ -493,7 +493,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param string $ministry
-     * @return User
+     * @return self
      */
     public function setMinistry($ministry)
     {
@@ -512,7 +512,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param string $address
-     * @return User
+     * @return self
      */
     public function setAddress($address)
     {
@@ -531,7 +531,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param string $zip
-     * @return User
+     * @return self
      */
     public function setZip($zip)
     {
@@ -550,7 +550,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param string $city
-     * @return User
+     * @return self
      */
     public function setCity($city)
     {
@@ -569,7 +569,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param \Application\Model\Country $country
-     * @return User
+     * @return self
      */
     public function setCountry($country)
     {
@@ -588,7 +588,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param int $lastLogin
-     * @return User
+     * @return self
      */
     public function setLastLogin($lastLogin)
     {

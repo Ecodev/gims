@@ -42,9 +42,8 @@ class Note extends AbstractModel
      */
     private $survey;
 
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -110,7 +109,6 @@ class Note extends AbstractModel
         $this->question = $question;
 
         return $this;
-
     }
 
     /**

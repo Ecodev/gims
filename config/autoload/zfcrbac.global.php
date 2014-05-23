@@ -1,34 +1,31 @@
 <?php
 
-return array(
-    'service_manager' => array(
-        'factories' => array(
-            'ZfcRbac\Service\Rbac' => 'Application\Service\RbacFactory',
-            'ZfcRbac\View\UnauthorizedStrategy' => 'Application\Service\UnauthorizedStrategyFactory',
-        ),
-    ),
-    'zfcrbac' => array(
-        'firewall_route' => true,
-        'firewall_controller' => false, // default to true
-        'firewalls' => array(
-            'ZfcRbac\Firewall\Route' => array(
+return [
+    'service_manager' => [
+        'factories' => [
+            'ZfcRbac\Service\AuthorizationService' => 'Application\Service\AuthorizationServiceFactory',
+            'ZfcRbac\View\Strategy\UnauthorizedStrategy' => 'Application\Service\UnauthorizedStrategyFactory',
+        ],
+        'aliases' => [
+            'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service'
+        ],
+    ],
+    'zfc_rbac' => [
+        'guest_role' => 'anonymous',
+        'role_provider' => [
+            'ZfcRbac\Role\ObjectRepositoryRoleProvider' => [
+                'object_manager' => 'doctrine.entitymanager.orm_default', // alias for doctrine ObjectManager
+                'class_name' => 'Application\Model\Role', // FQCN for your role entity class
+                'role_name_property' => 'name', // Name to show
+            ],
+        ],
+        'guards' => [
+            'ZfcRbac\Guard\RouteGuard' => [
                 // Only members can access admin and contribute angular templates
-                array('route' => 'template_admin', 'roles' => 'member'),
-                array('route' => 'template_contribute', 'roles' => 'member'),
-                array('route' => 'api/users', 'roles' => 'member'),
-            ),
-        ),
-        'providers' => array(
-            'ZfcRbac\Provider\AdjacencyList\Role\DoctrineDbal' => array(
-                'connection' => 'doctrine.connection.orm_default',
-                'options' => array(
-                    'join_column' => 'parent_id',
-                ),
-            ),
-            'ZfcRbac\Provider\Generic\Permission\DoctrineDbal' => array(
-                'connection' => 'doctrine.connection.orm_default',
-            ),
-        ),
-        'identity_provider' => 'zfcuser_auth_service',
-    ),
-);
+                'template_admin' => ['member'],
+                'template_contribute' => ['member'],
+                'api/users' => ['member'],
+            ],
+        ],
+    ],
+];

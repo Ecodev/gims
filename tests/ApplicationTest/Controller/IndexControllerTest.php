@@ -91,7 +91,7 @@ class IndexControllerTest extends AbstractController
         $this->assertNotQuery('html > head');
 
         // Template URL should return partial HTML fragment for AngularJS template system via ajax for Browse module
-        $this->rbac->setIdentity(null);
+        $this->identityProvider->setIdentity(null);
         $this->dispatch('/api/user');
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('api');

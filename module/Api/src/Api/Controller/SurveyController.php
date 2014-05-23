@@ -13,7 +13,7 @@ class SurveyController extends AbstractRestfulController
      */
     protected function postCreate(AbstractModel $survey, array $data)
     {
-        $user = $this->getRbac()->getIdentity();
+        $user = $this->getAuth()->getIdentity();
         $role = $this->getEntityManager()->getRepository('Application\Model\Role')->findOneByName('editor');
         $userSurvey = new \Application\Model\UserSurvey();
         $userSurvey->setUser($user)->setSurvey($survey)->setRole($role);

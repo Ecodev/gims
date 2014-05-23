@@ -7,6 +7,14 @@ use Doctrine\ORM\Query\Expr\Join;
 class UserQuestionnaireRepository extends AbstractChildRepository
 {
 
+    /**
+     * {@inheritdoc}
+     * @param string $action
+     * @param string $search
+     * @param string $parentName
+     * @param \Application\Model\AbstractModel $parent
+     * @return UserQuestionnaire[]
+     */
     public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
     {
         $qb = $this->createQueryBuilder('uq');

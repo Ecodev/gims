@@ -51,6 +51,7 @@
                         <li>
 
                             <div class="pull-right" ng-controller="UserCtrl">
+                                <gims-network-activity class="loading-widget navbar-text" tooltip="Pending requests: {{getRequestCount()}}" tooltip-placement="bottom"><i class="fa fa-2x fa-gims-loading"></i></gims-network-activity>
                                 <p ng-show="user" class="navbar-text loggedInUser">
                                 <ng-switch on="user.gravatar==undefined">
                                     <img ng-switch-when="false" ng-src="{{user.gravatar}}?s=50" />
@@ -67,11 +68,14 @@
             </div>
         </header>
 
-        <div class="container-angular" ng-view></div>
+        <div class="container-angular">
+            <gims-errors></gims-errors>
+            <div ng-view></div>
+        </div>
 
         <footer class='navbar navbar-default navbar-fixed-bottom'>
                 <p class="col-md-4 text-muted">
-                    <small>A project by <a href="http://www.who.int/phe/en/" target="_blank">WHO - Public Health and Environment</a> - 2013</small>
+                    <small>A project by <a href="http://www.who.int/phe/en/" target="_blank">WHO - Public Health and Environment</a></small>
                 </p>
 
                 <p class="col-md-4 text-muted">

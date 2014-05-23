@@ -8,7 +8,7 @@
         "text": "Germany - Urban"
     },
     "subtitle": {
-        "text": "Estimated proportion of the population for Sanitation: use of improved facilities (JMP data)"
+        "text": "Estimated proportion of the population"
     },
     "xAxis": {
         "title": {
@@ -157,6 +157,7 @@
         },
         {
             "type": "scatter",
+            "id": 165,
             "color": "#D90020",
             "marker": {
                 "symbol": "circle"
@@ -203,6 +204,7 @@
         },
         {
             "type": "scatter",
+            "id": 167,
             "color": "#9ED900",
             "marker": {
                 "symbol": "square"

@@ -125,8 +125,8 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
 
     public function testGetColor()
     {
-        $codes = [74,75,76,78,900];
-        $ratios = [0,85,100];
+        $codes = [74, 75, 76, 78, 900];
+        $ratios = [0, 85, 100];
 
         foreach ($codes as $code) {
             foreach ($ratios as $ratio) {
@@ -136,4 +136,5 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
             }
         }
     }
+
 }

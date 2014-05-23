@@ -59,14 +59,15 @@ abstract class Utility
     {
         $key = '';
         foreach ($args as $arg) {
-            if (is_null($arg))
+            if (is_null($arg)) {
                 $key .= '[[NULL]]';
-            else if (is_object($arg)) {
+            } elseif (is_object($arg)) {
                 $key .= spl_object_hash($arg);
-            } else if (is_array($arg))
+            } elseif (is_array($arg)) {
                 $key .= '[[ARRAY|' . self::getCacheKey($arg) . ']]';
-            else
+            } else {
                 $key .= $arg;
+            }
 
             $key .= '|';
         }
@@ -84,15 +85,16 @@ abstract class Utility
     public static function pregReplaceUniqueCallback($pattern, \Closure $callback, $subject)
     {
         $replacements = array();
+
         return preg_replace_callback($pattern, function($matches) use ($callback, &$replacements) {
-                    $key = $matches[0];
+            $key = $matches[0];
 
-                    if (!isset($replacements[$key])) {
-                        $replacement = $callback($matches);
-                        $replacements[$key] = $replacement;
-                    }
+            if (!isset($replacements[$key])) {
+                $replacement = $callback($matches);
+                $replacements[$key] = $replacement;
+            }
 
-                    return $replacements[$key];
+            return $replacements[$key];
         }, $subject);
     }
 
@@ -107,14 +109,15 @@ abstract class Utility
     public static function getColor($number, $ratio)
     {
         // multiply number by phi (golden number constant) to ensure the number is between 0 and 1
-        $phi = (1 + sqrt(5))/2;
+        $phi = (1 + sqrt(5)) / 2;
         $number = $number * $phi - floor($number * $phi);
         $number *= 360; // tsl/hsv tint is between 0° and 360°
 
         $hsv = new HSV($number, $ratio, 85);
         $rgb = $hsv->toRGB();
         $hex = $rgb->toHex();
-        return '#'.$hex;
-    }
-}
 
+        return '#' . $hex;
+    }
+
+}

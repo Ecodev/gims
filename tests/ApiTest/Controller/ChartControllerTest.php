@@ -12,7 +12,7 @@ class ChartControllerTest extends \ApplicationTest\Controller\AbstractController
 
     public function testGetValidChartStructure()
     {
-        $this->dispatch('/api/chart', Request::METHOD_GET);
+        $this->dispatch('/api/chart?part=1', Request::METHOD_GET);
 
         $this->assertResponseStatusCode(200);
 

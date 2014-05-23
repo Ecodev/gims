@@ -142,7 +142,7 @@ class Country extends AbstractModel
     private $geoname;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -163,10 +163,23 @@ class Country extends AbstractModel
     }
 
     /**
+     * Set code
+     *
+     * @param string $code
+     * @return self
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
      * Set iso3
      *
      * @param string $iso3
-     * @return Country
+     * @return self
      */
     public function setIso3($iso3)
     {
@@ -189,7 +202,7 @@ class Country extends AbstractModel
      * Set isoNumeric
      *
      * @param integer $isoNumeric
-     * @return Country
+     * @return self
      */
     public function setIsoNumeric($isoNumeric)
     {
@@ -212,7 +225,7 @@ class Country extends AbstractModel
      * Set fips
      *
      * @param string $fips
-     * @return Country
+     * @return self
      */
     public function setFips($fips)
     {
@@ -235,7 +248,7 @@ class Country extends AbstractModel
      * Set name
      *
      * @param string $name
-     * @return Country
+     * @return self
      */
     public function setName($name)
     {
@@ -258,7 +271,7 @@ class Country extends AbstractModel
      * Set capital
      *
      * @param string $capital
-     * @return Country
+     * @return self
      */
     public function setCapital($capital)
     {
@@ -281,7 +294,7 @@ class Country extends AbstractModel
      * Set area
      *
      * @param float $area
-     * @return Country
+     * @return self
      */
     public function setArea($area)
     {
@@ -304,7 +317,7 @@ class Country extends AbstractModel
      * Set continent
      *
      * @param string $continent
-     * @return Country
+     * @return self
      */
     public function setContinent($continent)
     {
@@ -327,7 +340,7 @@ class Country extends AbstractModel
      * Set tld
      *
      * @param string $tld
-     * @return Country
+     * @return self
      */
     public function setTld($tld)
     {
@@ -350,7 +363,7 @@ class Country extends AbstractModel
      * Set currencyCode
      *
      * @param string $currencyCode
-     * @return Country
+     * @return self
      */
     public function setCurrencyCode($currencyCode)
     {
@@ -373,7 +386,7 @@ class Country extends AbstractModel
      * Set currencyName
      *
      * @param string $currencyName
-     * @return Country
+     * @return self
      */
     public function setCurrencyName($currencyName)
     {
@@ -396,7 +409,7 @@ class Country extends AbstractModel
      * Set phone
      *
      * @param string $phone
-     * @return Country
+     * @return self
      */
     public function setPhone($phone)
     {
@@ -419,7 +432,7 @@ class Country extends AbstractModel
      * Set postalCodeFormat
      *
      * @param string $postalCodeFormat
-     * @return Country
+     * @return self
      */
     public function setPostalCodeFormat($postalCodeFormat)
     {
@@ -442,7 +455,7 @@ class Country extends AbstractModel
      * Set postalCodeRegexp
      *
      * @param string $postalCodeRegexp
-     * @return Country
+     * @return self
      */
     public function setPostalCodeRegexp($postalCodeRegexp)
     {
@@ -465,7 +478,7 @@ class Country extends AbstractModel
      * Set languages
      *
      * @param string $languages
-     * @return Country
+     * @return self
      */
     public function setLanguages($languages)
     {
@@ -488,7 +501,7 @@ class Country extends AbstractModel
      * Set neighbors
      *
      * @param string $neighbors
-     * @return Country
+     * @return self
      */
     public function setNeighbors($neighbors)
     {
@@ -511,7 +524,7 @@ class Country extends AbstractModel
      * Set equivalentFipsCode
      *
      * @param string $equivalentFipsCode
-     * @return Country
+     * @return self
      */
     public function setEquivalentFipsCode($equivalentFipsCode)
     {
@@ -534,7 +547,7 @@ class Country extends AbstractModel
      * Set geoname
      *
      * @param Geoname $geoname
-     * @return Country
+     * @return self
      */
     public function setGeoname(Geoname $geoname)
     {

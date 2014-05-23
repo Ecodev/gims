@@ -14,6 +14,16 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
 {
 
     /**
+     * @var Questionnaire
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Model\Questionnaire", inversedBy="filterQuestionnaireUsages"))
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
+     * })
+     */
+    protected $questionnaire;
+
+    /**
      * @var Filter
      *
      * @ORM\ManyToOne(targetEntity="Application\Model\Filter", inversedBy="filterQuestionnaireUsages")
@@ -31,7 +41,7 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
     private $isSecondLevel = false;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -59,7 +69,7 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
      * Set filter
      *
      * @param Filter $filter
-     * @return FilterQuestionnaireUsage
+     * @return self
      */
     public function setFilter(\Application\Model\Filter $filter)
     {

@@ -63,7 +63,7 @@ class QuestionType extends AbstractEnum
     /**
      * Returns the QuestionType corresponding to the className
      * @param string $className
-     * @return QuestionType
+     * @return self
      * @throws \Exception
      */
     public static function getType($className)

@@ -75,7 +75,7 @@ class AnswerControllerTest extends AbstractRestfulControllerTest
             ),
         );
 
-        $this->rbac->setIdentity(null);
+        $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(403);
     }
@@ -101,7 +101,7 @@ class AnswerControllerTest extends AbstractRestfulControllerTest
             'valuePercent' => $expected,
         );
 
-        $this->rbac->setIdentity(null);
+        $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(403);
     }

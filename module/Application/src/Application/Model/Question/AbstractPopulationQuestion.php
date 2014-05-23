@@ -32,7 +32,7 @@ abstract class AbstractPopulationQuestion extends AbstractAnswerableQuestion
 
     /**
      * @param boolean $isPopulation
-     * @return $this
+     * @return self
      */
     public function setIsPopulation($isPopulation)
     {

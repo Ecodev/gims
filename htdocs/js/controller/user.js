@@ -1,5 +1,6 @@
-angular.module('myApp').controller('UserCtrl', function($scope, $http, authService, $modal, $rootScope) {
+angular.module('myApp').controller('UserCtrl', function($scope, $http, authService, $modal, $rootScope, requestNotification) {
     'use strict';
+    $scope.getRequestCount = requestNotification.getRequestCount;
 
     // Intercept the event broadcasted by http-auth-interceptor when a request get a HTTP 401 response
     $scope.$on('event:auth-loginRequired', function() {
@@ -34,8 +35,7 @@ angular.module('myApp').controller('UserCtrl', function($scope, $http, authServi
 angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $modalInstance, $log) {
     'use strict';
 
-    function resetErrors()
-    {
+    function resetErrors() {
         $scope.invalidUsernamePassword = false;
         $scope.userExisting = false;
     }

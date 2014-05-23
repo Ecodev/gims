@@ -20,7 +20,6 @@ require 'init_autoloader.php';
 $application = Zend\Mvc\Application::init(require 'config/application.config.php');
 
 // we only run the application if this file was NOT included (otherwise, the file was included to access misc functions)
-if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME']))
-{
-	$application->run();
+if (realpath(__FILE__) == realpath($_SERVER['SCRIPT_FILENAME'])) {
+    $application->run();
 }
