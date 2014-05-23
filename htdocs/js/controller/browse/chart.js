@@ -1,8 +1,8 @@
 angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $location, $http, $timeout, Restangular, $q) {
     'use strict';
 
-    $scope.chart = {};
-    $scope.chartObj = {};
+    $scope.chart = null;
+    $scope.chartObj = null;
     $scope.tabs = {};
     $scope.panelTabs = {};
     $scope.ignoredElements = [];
@@ -476,46 +476,46 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                     }
                 }).success(function(data) {
 
-                        // implement tooltip formatter
-                        data.tooltip.formatter = function() {
-                            return highChartTooltipFormatter.call(this);
-                        };
+                    // implement tooltip formatter
+                    data.tooltip.formatter = function() {
+                        return highChartTooltipFormatter.call(this);
+                    };
 
-                        data.plotOptions.scatter.dataLabels.formatter = function() {
-                            return highChartScatterFormatter.call(this);
-                        };
+                    data.plotOptions.scatter.dataLabels.formatter = function() {
+                        return highChartScatterFormatter.call(this);
+                    };
 
-                        data.plotOptions.scatter.point = {
-                            events: {
-                                click: function(e) {
-                                    var ids = e.currentTarget.id.split(':');
-                                    $scope.setPointSelected(e.currentTarget.id, e.currentTarget.questionnaire, e.currentTarget.name, ids[0]);
-                                    $scope.$apply(); // this is needed because we are outside the AngularJS context (highcharts uses jQuery event handlers)
-                                }
+                    data.plotOptions.scatter.point = {
+                        events: {
+                            click: function(e) {
+                                var ids = e.currentTarget.id.split(':');
+                                $scope.setPointSelected(e.currentTarget.id, e.currentTarget.questionnaire, e.currentTarget.name, ids[0]);
+                                $scope.$apply(); // this is needed because we are outside the AngularJS context (highcharts uses jQuery event handlers)
                             }
-                        };
-
-                        if (callback) {
-                            callback();
                         }
+                    };
 
-                        if (resetSeries) {
-                            $scope.chart.series = [];
-                        }
+                    if (callback) {
+                        callback();
+                    }
 
-                        var actualSeries = [];
-                        if ($scope.chart && $scope.chart.series.length) {
-                            actualSeries = $scope.chart.series;
-                        }
+                    if (resetSeries) {
+                        $scope.chart.series = [];
+                    }
 
-                        var newSeries = data.series;
-                        delete(data.series);
-                        $scope.chart = data;
-                        $scope.chart.series = actualSeries;
-                        addSeries(newSeries);
+                    var actualSeries = [];
+                    if ($scope.chart && $scope.chart.series && $scope.chart.series.length) {
+                        actualSeries = $scope.chart.series;
+                    }
 
-                        $scope.computeEstimates(ignoredElements);
-                    });
+                    var newSeries = data.series;
+                    delete(data.series);
+                    $scope.chart = data;
+                    $scope.chart.series = actualSeries;
+                    addSeries(newSeries);
+
+                    $scope.computeEstimates(ignoredElements);
+                });
             });
         }
 
