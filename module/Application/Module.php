@@ -130,6 +130,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
     {
         return array(
             'Application module commands',
+            'import glass' => "Import filters for GLASS and affect them to existing question",
             'import jmp <file>' => "Import individual country file in JMP format",
             'import population <file>' => "Import population data",
             'email <action> <id>' => "Send email"

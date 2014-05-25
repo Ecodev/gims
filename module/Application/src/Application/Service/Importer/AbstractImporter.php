@@ -11,10 +11,7 @@ abstract class AbstractImporter
 
 use \Application\Traits\EntityManagerAware;
 
-    protected $cacheQuestions = array();
     protected $cacheFilters = array();
-    protected $cacheFilterSets = array();
-    protected $cacheHighFilters = array();
 
     /**
      * sheet name =>
@@ -641,7 +638,6 @@ use \Application\Traits\EntityManagerAware;
     {
         // Import filters
         $this->cacheFilters = array();
-        $this->cacheQuestions = array();
         foreach ($filters['definitions'] as $row => $definition) {
             $filter = $this->getFilter($definition, $this->cacheFilters);
             $this->cacheFilters[$row] = $filter;
@@ -688,53 +684,4 @@ use \Application\Traits\EntityManagerAware;
         $this->getEntityManager()->flush();
         echo count($this->cacheFilters) . ' filters imported' . PHP_EOL;
     }
-
-    /**
-     * Import high filters, their FilterSet
-     * @param array $filterSetNames
-     * @param array $filters
-     */
-    protected function importHighFilters(array $filterSetNames, array $filters)
-    {
-        $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
-        $filterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedUnimprovedName']);
-        $improvedFilterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedName']);
-        $this->getEntityManager()->flush();
-
-        // Get or create all filter
-        echo 'Importing high filters';
-        foreach ($filters as $filterName => $filterData) {
-
-            // Look for existing high filter...
-            $highFilter = null;
-            foreach ($filterSet->getFilters() as $f) {
-                if ($f->getName() == $filterName) {
-                    $highFilter = $f;
-                    break;
-                }
-            }
-
-            // .. or create it
-            if (!$highFilter) {
-                $highFilter = new Filter($filterName);
-                $filterSet->addFilter($highFilter);
-                $this->getEntityManager()->persist($highFilter);
-
-                if ($filterData['isImproved']) {
-                    $improvedFilterSet->addFilter($highFilter);
-                }
-            }
-
-            // Affect children filters
-            foreach ($filterData['children'] as $child) {
-                $highFilter->addChild($this->cacheFilters[$child]);
-            }
-
-            $this->cacheHighFilters[$filterName] = $highFilter;
-            echo '.';
-        }
-
-        echo PHP_EOL;
-    }
-
 }

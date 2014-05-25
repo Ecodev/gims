@@ -24,6 +24,8 @@ class Jmp extends AbstractImporter
     private $cacheFilterQuestionnaireUsages = array();
     private $cacheFilterGeonameUsages = array();
     private $cacheFormulas = array();
+    private $cacheQuestions = array();
+    private $cacheHighFilters = array();
     private $importedQuestionnaires = array();
     private $colToParts = array();
     private $surveyCount = 0;
@@ -87,6 +89,7 @@ class Jmp extends AbstractImporter
 
         foreach ($sheeNamesToImport as $i => $sheetName) {
 
+            $this->cacheQuestions = array();
             $this->importFilters($this->definitions[$sheetName]);
 
             // Also create a filterSet with same name for the first filter
@@ -186,7 +189,7 @@ STRING;
      * @param integer $col
      * @return void
      */
-    protected function importQuestionnaire(\PHPExcel_Worksheet $sheet, $col)
+    private function importQuestionnaire(\PHPExcel_Worksheet $sheet, $col)
     {
         $code = trim($sheet->getCellByColumnAndRow($col + 2, 1)->getCalculatedValue());
 
@@ -258,7 +261,7 @@ STRING;
      * @param integer $col
      * @param Questionnaire $questionnaire
      */
-    protected function importExtras(\PHPExcel_Worksheet $sheet, $col, Questionnaire $questionnaire)
+    private function importExtras(\PHPExcel_Worksheet $sheet, $col, Questionnaire $questionnaire)
     {
         foreach ($this->definitions[$sheet->getTitle()]['extras'] as $row => $title) {
 
@@ -296,7 +299,7 @@ STRING;
      * @param Survey $survey
      * @param Questionnaire $questionnaire
      */
-    protected function importAnswers(\PHPExcel_Worksheet $sheet, $col, Survey $survey, Questionnaire $questionnaire)
+    private function importAnswers(\PHPExcel_Worksheet $sheet, $col, Survey $survey, Questionnaire $questionnaire)
     {
         $knownRows = array_keys($this->cacheFilters);
         array_shift($knownRows); // Skip first filter, since it's not an actual row, but the sheet topic (eg: "Access to drinking water sources")
@@ -361,7 +364,7 @@ STRING;
      * @return null|\Application\Model\Questionnaire
      * @throws \Exception
      */
-    protected function getQuestionnaire(\PHPExcel_Worksheet $sheet, $col, Survey $survey, \PHPExcel_Cell $countryCell)
+    private function getQuestionnaire(\PHPExcel_Worksheet $sheet, $col, Survey $survey, \PHPExcel_Cell $countryCell)
     {
         // If we already imported a questionnaire on that column with same Survey,
         // returns it directly. That means we are on second tab (Sanitation) and we
@@ -506,7 +509,7 @@ STRING;
      * @return type
      * @throws \PHPExcel_Exception
      */
-    protected function getCalculatedValueSafely(\PHPExcel_Cell $cell)
+    private function getCalculatedValueSafely(\PHPExcel_Cell $cell)
     {
         try {
             return $cell->getCalculatedValue();
@@ -532,7 +535,7 @@ STRING;
      * @param string|null $alternateName
      * @return NumericQuestion
      */
-    protected function getQuestion(Survey $survey, Filter $filter, Questionnaire $questionnaire, $alternateName)
+    private function getQuestion(Survey $survey, Filter $filter, Questionnaire $questionnaire, $alternateName)
     {
         $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question\NumericQuestion');
 
@@ -576,7 +579,7 @@ STRING;
      * @param integer $col
      * @param Questionnaire $questionnaire
      */
-    protected function importQuestionnaireUsages(\PHPExcel_Worksheet $sheet, $col, Questionnaire $questionnaire)
+    private function importQuestionnaireUsages(\PHPExcel_Worksheet $sheet, $col, Questionnaire $questionnaire)
     {
         foreach ($this->definitions[$sheet->getTitle()]['questionnaireUsages'] as $group) {
             foreach ($group as $row) {
@@ -597,7 +600,7 @@ STRING;
      * @param Part $part
      * @return QuestionnaireUsage|null
      */
-    protected function getQuestionnaireUsage(\PHPExcel_Worksheet $sheet, $col, $row, $offset, Questionnaire $questionnaire, Part $part)
+    private function getQuestionnaireUsage(\PHPExcel_Worksheet $sheet, $col, $row, $offset, Questionnaire $questionnaire, Part $part)
     {
         $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
         $value = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
@@ -646,7 +649,7 @@ STRING;
      * @param string $forcedName
      * @return null|Rule
      */
-    protected function getRuleFromCell(\PHPExcel_Worksheet $sheet, $col, $row, $offset, Questionnaire $questionnaire, Part $part, $forcedName = null)
+    private function getRuleFromCell(\PHPExcel_Worksheet $sheet, $col, $row, $offset, Questionnaire $questionnaire, Part $part, $forcedName = null)
     {
         $cell = $sheet->getCellByColumnAndRow($col + $offset, $row);
         $originalFormula = $cell->getValue();
@@ -842,7 +845,7 @@ STRING;
      * @param string $formula
      * @return Rule
      */
-    protected function getRule($name, $formula)
+    private function getRule($name, $formula)
     {
         $key = \Application\Utility::getCacheKey(array($formula));
         if (array_key_exists($key, $this->cacheFormulas)) {
@@ -872,7 +875,7 @@ STRING;
      * @param array $filters
      * @param \PHPExcel_Worksheet $sheet
      */
-    protected function importFilterQuestionnaireUsages(array $filters, \PHPExcel_Worksheet $sheet)
+    private function importFilterQuestionnaireUsages(array $filters, \PHPExcel_Worksheet $sheet)
     {
         $complementaryTotalFormula = $this->getRule('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . ',L#2}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . ',L#2})), ({F#current,Q#current,P#' . $this->partRural->getId() . ',L#2} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . ',L#2} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, {self})');
         // Get or create all filter
@@ -918,7 +921,7 @@ STRING;
      * @param boolean $isSecondLevel
      * @return FilterQuestionnaireUsage
      */
-    protected function getFilterQuestionnaireUsage(Filter $filter, Questionnaire $questionnaire, Rule $rule, Part $part, $isSecondLevel = false)
+    private function getFilterQuestionnaireUsage(Filter $filter, Questionnaire $questionnaire, Rule $rule, Part $part, $isSecondLevel = false)
     {
         $key = \Application\Utility::getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheFilterQuestionnaireUsages)) {
@@ -952,7 +955,7 @@ STRING;
      * @param Part $part
      * @return FilterGeonameUsage
      */
-    protected function getFilterGeonameUsage(Filter $filter, Geoname $geoname, Rule $rule, Part $part)
+    private function getFilterGeonameUsage(Filter $filter, Geoname $geoname, Rule $rule, Part $part)
     {
         $filterGeonameUsage = null;
         $key = \Application\Utility::getCacheKey(func_get_args());
@@ -989,7 +992,7 @@ STRING;
      * Import FilterGeonameUsage for all highfilters
      * @param array $filters
      */
-    public function importFilterGeonameUsages(array $filters)
+    private function importFilterGeonameUsages(array $filters)
     {
         echo 'Importing uses of Rule for Filter-Geoname';
         foreach ($this->importedQuestionnaires as $questionnaire) {
@@ -1106,7 +1109,7 @@ STRING;
      * @param integer $col
      * @param Questionnaire $questionnaire
      */
-    protected function importExcludes(\PHPExcel_Worksheet $sheet, $col, Questionnaire $questionnaire, Filter $filter, array $filterData)
+    private function importExcludes(\PHPExcel_Worksheet $sheet, $col, Questionnaire $questionnaire, Filter $filter, array $filterData)
     {
         $row = $filterData['excludes'];
         if (!$row) {
@@ -1128,7 +1131,7 @@ STRING;
      * We define those filter as being the Ratio itself
      * @return void
      */
-    protected function finishRatios()
+    private function finishRatios()
     {
         $filterImproved = @$this->cacheHighFilters['Improved'];
         $filterShared = @$this->cacheHighFilters['Shared'];
@@ -1177,11 +1180,58 @@ STRING;
      * @param Questionnaire $questionnaire
      * @param Part $part
      */
-    protected function linkRule($formula, Filter $filter, Questionnaire $questionnaire, Part $part)
+    private function linkRule($formula, Filter $filter, Questionnaire $questionnaire, Part $part)
     {
         $name = $filter->getName() . ' (' . $questionnaire->getName() . ', ' . $part->getName() . ')';
         $rule = $this->getRule($name, $formula);
         $this->getFilterQuestionnaireUsage($filter, $questionnaire, $rule, $part, true);
     }
 
+    /**
+     * Import high filters, their FilterSet
+     * @param array $filterSetNames
+     * @param array $filters
+     */
+    private function importHighFilters(array $filterSetNames, array $filters)
+    {
+        $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
+        $filterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedUnimprovedName']);
+        $improvedFilterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedName']);
+        $this->getEntityManager()->flush();
+
+        // Get or create all filter
+        echo 'Importing high filters';
+        foreach ($filters as $filterName => $filterData) {
+
+            // Look for existing high filter...
+            $highFilter = null;
+            foreach ($filterSet->getFilters() as $f) {
+                if ($f->getName() == $filterName) {
+                    $highFilter = $f;
+                    break;
+                }
+            }
+
+            // .. or create it
+            if (!$highFilter) {
+                $highFilter = new Filter($filterName);
+                $filterSet->addFilter($highFilter);
+                $this->getEntityManager()->persist($highFilter);
+
+                if ($filterData['isImproved']) {
+                    $improvedFilterSet->addFilter($highFilter);
+                }
+            }
+
+            // Affect children filters
+            foreach ($filterData['children'] as $child) {
+                $highFilter->addChild($this->cacheFilters[$child]);
+            }
+
+            $this->cacheHighFilters[$filterName] = $highFilter;
+            echo '.';
+        }
+
+        echo PHP_EOL;
+    }
 }
