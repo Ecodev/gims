@@ -608,7 +608,13 @@ use \Application\Traits\EntityManagerAware;
         ),
     );
 
-    protected function getFilter($definition, $cache)
+    /**
+     * Get or create a filter and link it to its parent
+     * @param array $definition
+     * @param array $cache
+     * @return \Application\Model\Filter
+     */
+    protected function getFilter(array $definition, array $cache)
     {
         $name = $definition[0];
 
