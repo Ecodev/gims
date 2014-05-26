@@ -205,6 +205,7 @@ return array(
             'metadata' => 'Application\View\Helper\Metadata',
             'crudButtons' => 'Application\View\Helper\CrudButtons',
             'bodyCssClass' => 'Application\View\Helper\BodyCssClass',
+            'version' => 'Application\View\Helper\Version',
         ),
     ),
     'console' => Array(
