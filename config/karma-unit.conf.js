@@ -1,9 +1,25 @@
-var sharedConfig = require('./karma-shared.conf');
-
 module.exports = function(config) {
-    sharedConfig(config);
-
     config.set({
+        frameworks: ['jasmine'],
+        autoWatch: true,
+        basePath: '../',
+        urlRoot: '/__karma/',
+        logLevel: config.LOG_INFO,
+        logColors: true,
+        browsers: ['Chrome'],
+        proxies: {
+            '/': 'http://gims.lan/'
+        },
+        // Our custom browser 'cli' will use PhantomJS, but with a huge
+        // window size to let ng-grid render as many columns as possible
+        customLaunchers: {
+            'cli': {
+                base: 'PhantomJS',
+                options: {
+                    viewportSize: {width: 1900, height: 1200}
+                }
+            }
+        },
         files: [
             'htdocs/lib/autoload/*',
             'htdocs/lib/angular-mocks/angular-mocks.js',
@@ -14,5 +30,6 @@ module.exports = function(config) {
             outputFile: 'data/logs/karma-unit.xml',
             suite: 'unit'
         }
-    });
+    }
+    );
 };

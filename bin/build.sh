@@ -39,7 +39,7 @@ echo "Updating Bower packages..."
 ./node_modules/.bin/bower install
 
 echo "Updating webdriver..."
-sudo ./node_modules/.bin/webdriver-manager update
+./node_modules/.bin/webdriver-manager update
 
 echo "Updating all PHP dependencies via composer..."
 ./composer.phar install --dev --optimize-autoloader

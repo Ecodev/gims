@@ -8,14 +8,14 @@
     "jscs": "~1.4.5"
   },
   "devDependencies": {
-    "karma": "^0.12.1",
+    "karma": "~0.12.16",
     "karma-cli": "0.0.4",
-    "karma-ng-scenario": "^0.1.0",
-    "karma-phantomjs-launcher": "^0.1.2",
-    "karma-chrome-launcher": "^0.1.2",
-    "karma-firefox-launcher": "^0.1.3",
-    "phantomjs": "^1.9.7-1",
-    "karma-jasmine": "^0.1.5",
-    "protractor": "^0.20.1"
+    "karma-ng-scenario": "~0.1.0",
+    "karma-phantomjs-launcher": "~0.1.4",
+    "karma-chrome-launcher": "~0.1.4",
+    "karma-firefox-launcher": "~0.1.3",
+    "phantomjs": "~1.9.7-8",
+    "karma-jasmine": "~0.1.5",
+    "protractor": "~0.23.1"
   }
 }

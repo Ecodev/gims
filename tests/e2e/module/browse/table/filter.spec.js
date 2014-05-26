@@ -9,11 +9,11 @@ describe('browse/table', function() {
     });
 
     it('should render a grid', function() {
-        expect(element.all(by.css('[ng-view] .ngViewport')).count()).toBe(1);
+        expect(element.all(by.css('[ng-view] .table.table-bordered.table-condensed.bigtable')).count()).toBe(1);
     });
 
-    it('should render select for questionnaires and filterSets', function() {
-        expect(element.all(by.css('[ng-view] .select2-container')).count()).toBe(2);
+    it('should render select for survey selectinon and filter selection', function() {
+        expect(element.all(by.css('[ng-view] .select2-container')).count()).toBe(7);
     });
 
 });
