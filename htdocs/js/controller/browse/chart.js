@@ -187,11 +187,12 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
     /**
      * Get one of selected filters by id, to recover its color from template
-     * @param id
+     * @param list of elements containing id attribute
+     * @param id to find
      * @returns {*}
      */
-    $scope.getHFilter = function(id) {
-        return _.find($scope.tabs.filters, function(f) {
+    $scope.findById = function(list, id) {
+        return _.find(list, function(f) {
             if (f.id == id) {
                 return true;
             }
@@ -498,7 +499,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                         callback();
                     }
 
-                    if (resetSeries) {
+                    if (resetSeries && $scope.chart) {
                         $scope.chart.series = [];
                     }
 
