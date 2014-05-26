@@ -93,7 +93,7 @@ class Jmp extends AbstractImporter
             $this->importFilters($this->definitions[$sheetName]);
 
             // Also create a filterSet with same name for the first filter
-            $firstFilter = reset($this->cacheFilters);
+            $firstFilter = $this->cacheFilters[4];
             $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
             $filterSet = $filterSetRepository->getOrCreate($firstFilter->getName());
             foreach ($firstFilter->getChildren() as $child) {
@@ -302,7 +302,8 @@ STRING;
     private function importAnswers(\PHPExcel_Worksheet $sheet, $col, Survey $survey, Questionnaire $questionnaire)
     {
         $knownRows = array_keys($this->cacheFilters);
-        array_shift($knownRows); // Skip first filter, since it's not an actual row, but the sheet topic (eg: "Access to drinking water sources")
+        array_shift($knownRows); // Skip first filter, since it's not an actual row, but the common "JMP" filter
+        array_shift($knownRows); // Skip second filter, since it's not an actual row, but the sheet topic (eg: "Access to drinking water sources")
         // Remove negative rows which were replacement filters
         $knownRows = array_filter($knownRows, function($row) {
             return $row > 0 && $row < 100;
@@ -480,7 +481,6 @@ STRING;
         if (!$countryName) {
             return null;
         }
-
 
         $countryRepository = $this->getEntityManager()->getRepository('Application\Model\Country');
         $country = $countryRepository->findOneBy(array('name' => $countryName));
@@ -778,11 +778,11 @@ STRING;
 
                     // Find out referenced Part
                     $refPart = $refData['part'];
-                    if ($refPart === $part)
+                    if ($refPart === $part) {
                         $refPartId = 'current';
-                    else
+                    } else {
                         $refPartId = $refPart->getId();
-
+                    }
 
                     // Simple case is when we reference a filter
                     if ($refFilterId) {
@@ -1234,4 +1234,5 @@ STRING;
 
         echo PHP_EOL;
     }
+
 }

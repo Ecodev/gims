@@ -74,7 +74,7 @@
     "series": [
         {
             "name": "Total improved",
-            "id": 74,
+            "id": 75,
             "data": [
                 null,
                 null,
@@ -110,12 +110,12 @@
                 85.4,
                 89.9
             ],
-            "color": "#5800D9",
+            "color": "#00D919",
             "type": "line"
         },
         {
             "name": "Piped onto premises",
-            "id": 75,
+            "id": 76,
             "data": [
                 3.1,
                 3.1,
@@ -151,12 +151,12 @@
                 26.5,
                 28.0
             ],
-            "color": "#00D919",
+            "color": "#D90026",
             "type": "line"
         },
         {
             "name": "Surface water",
-            "id": 76,
+            "id": 77,
             "data": [
                 null,
                 null,
@@ -192,13 +192,13 @@
                 3.7,
                 3.1
             ],
-            "color": "#D90026",
+            "color": "#0066D9",
             "type": "line",
             "usages": "Regression: Surface water (default)"
         },
         {
             "name": "Other Improved",
-            "id": 77,
+            "id": 78,
             "data": [
                 null,
                 null,
@@ -234,13 +234,13 @@
                 58.9,
                 61.9
             ],
-            "color": "#0066D9",
+            "color": "#A5D900",
             "type": "line",
             "usages": "Regression: Other Improved (default)"
         },
         {
             "name": "Other Unimproved",
-            "id": 78,
+            "id": 79,
             "data": [
                 null,
                 null,
@@ -276,14 +276,14 @@
                 10.9,
                 7.0
             ],
-            "color": "#A5D900",
+            "color": "#CE00D9",
             "type": "line",
             "usages": "Regression: Other Unimproved (default)"
         },
         {
             "type": "scatter",
-            "id": 74,
-            "color": "#5800D9",
+            "id": 75,
+            "color": "#00D919",
             "marker": {
                 "symbol": "diamond"
             },
@@ -292,35 +292,35 @@
             "data": [
                 {
                     "name": "MICS97",
-                    "id": "74:24",
+                    "id": "75:24",
                     "questionnaire": 24,
                     "x": 1997,
                     "y": 16.9
                 },
                 {
                     "name": "MICS03",
-                    "id": "74:26",
+                    "id": "75:26",
                     "questionnaire": 26,
                     "x": 2003,
                     "y": 56.7
                 },
                 {
                     "name": "NRVS05",
-                    "id": "74:28",
+                    "id": "75:28",
                     "questionnaire": 28,
                     "x": 2005,
                     "y": 63.7
                 },
                 {
                     "name": "MS10",
-                    "id": "74:31",
+                    "id": "75:31",
                     "questionnaire": 31,
                     "x": 2010,
                     "y": 77.9
                 },
                 {
                     "name": "MICS11",
-                    "id": "74:32",
+                    "id": "75:32",
                     "questionnaire": 32,
                     "x": 2011,
                     "y": 82.3
@@ -329,8 +329,8 @@
         },
         {
             "type": "scatter",
-            "id": 75,
-            "color": "#00D919",
+            "id": 76,
+            "color": "#D90026",
             "marker": {
                 "symbol": "square"
             },
@@ -339,35 +339,35 @@
             "data": [
                 {
                     "name": "MICS97",
-                    "id": "75:24",
+                    "id": "76:24",
                     "questionnaire": 24,
                     "x": 1997,
                     "y": 7.7
                 },
                 {
                     "name": "MICS03",
-                    "id": "75:26",
+                    "id": "76:26",
                     "questionnaire": 26,
                     "x": 2003,
                     "y": 14.0
                 },
                 {
                     "name": "NRVS05",
-                    "id": "75:28",
+                    "id": "76:28",
                     "questionnaire": 28,
                     "x": 2005,
                     "y": 15.4
                 },
                 {
                     "name": "MS10",
-                    "id": "75:31",
+                    "id": "76:31",
                     "questionnaire": 31,
                     "x": 2010,
                     "y": 21.8
                 },
                 {
                     "name": "MICS11",
-                    "id": "75:32",
+                    "id": "76:32",
                     "questionnaire": 32,
                     "x": 2011,
                     "y": 31.2
@@ -376,8 +376,8 @@
         },
         {
             "type": "scatter",
-            "id": 76,
-            "color": "#D90026",
+            "id": 77,
+            "color": "#0066D9",
             "marker": {
                 "symbol": "triangle"
             },
@@ -386,35 +386,35 @@
             "data": [
                 {
                     "name": "MICS97",
-                    "id": "76:24",
+                    "id": "77:24",
                     "questionnaire": 24,
                     "x": 1997,
                     "y": 10.7
                 },
                 {
                     "name": "MICS03",
-                    "id": "76:26",
+                    "id": "77:26",
                     "questionnaire": 26,
                     "x": 2003,
                     "y": 13.7
                 },
                 {
                     "name": "NRVS05",
-                    "id": "76:28",
+                    "id": "77:28",
                     "questionnaire": 28,
                     "x": 2005,
                     "y": 2.6
                 },
                 {
                     "name": "MS10",
-                    "id": "76:31",
+                    "id": "77:31",
                     "questionnaire": 31,
                     "x": 2010,
                     "y": 3.0
                 },
                 {
                     "name": "MICS11",
-                    "id": "76:32",
+                    "id": "77:32",
                     "questionnaire": 32,
                     "x": 2011,
                     "y": 5.1
@@ -423,8 +423,8 @@
         },
         {
             "type": "scatter",
-            "id": 77,
-            "color": "#0066D9",
+            "id": 78,
+            "color": "#A5D900",
             "marker": {
                 "symbol": "triangle-down"
             },
@@ -433,49 +433,49 @@
             "data": [
                 {
                     "name": "MICS97",
-                    "id": "77:24",
+                    "id": "78:24",
                     "questionnaire": 24,
                     "x": 1997,
                     "y": 8.2
                 },
                 {
                     "name": "MICS03",
-                    "id": "77:26",
+                    "id": "78:26",
                     "questionnaire": 26,
                     "x": 2003,
                     "y": 35.6
                 },
                 {
                     "name": "NRVS05",
-                    "id": "77:28",
+                    "id": "78:28",
                     "questionnaire": 28,
                     "x": 2005,
                     "y": 43.3
                 },
                 {
                     "name": "NVRA08",
-                    "id": "77:29",
+                    "id": "78:29",
                     "questionnaire": 29,
                     "x": 2008,
                     "y": 58.0
                 },
                 {
                     "name": "MIS09",
-                    "id": "77:30",
+                    "id": "78:30",
                     "questionnaire": 30,
                     "x": 2009,
                     "y": 76.0
                 },
                 {
                     "name": "MS10",
-                    "id": "77:31",
+                    "id": "78:31",
                     "questionnaire": 31,
                     "x": 2010,
                     "y": 56.1
                 },
                 {
                     "name": "MICS11",
-                    "id": "77:32",
+                    "id": "78:32",
                     "questionnaire": 32,
                     "x": 2011,
                     "y": 51.1
@@ -484,8 +484,8 @@
         },
         {
             "type": "scatter",
-            "id": 78,
-            "color": "#A5D900",
+            "id": 79,
+            "color": "#CE00D9",
             "marker": {
                 "symbol": "circle"
             },
@@ -494,42 +494,42 @@
             "data": [
                 {
                     "name": "MICS03",
-                    "id": "78:26",
+                    "id": "79:26",
                     "questionnaire": 26,
                     "x": 2003,
                     "y": 0.7
                 },
                 {
                     "name": "NRVS05",
-                    "id": "78:28",
+                    "id": "79:28",
                     "questionnaire": 28,
                     "x": 2005,
                     "y": 1.5
                 },
                 {
                     "name": "NVRA08",
-                    "id": "78:29",
+                    "id": "79:29",
                     "questionnaire": 29,
                     "x": 2008,
                     "y": 42.0
                 },
                 {
                     "name": "MIS09",
-                    "id": "78:30",
+                    "id": "79:30",
                     "questionnaire": 30,
                     "x": 2009,
                     "y": 13.5
                 },
                 {
                     "name": "MS10",
-                    "id": "78:31",
+                    "id": "79:31",
                     "questionnaire": 31,
                     "x": 2010,
                     "y": 8.5
                 },
                 {
                     "name": "MICS11",
-                    "id": "78:32",
+                    "id": "79:32",
                     "questionnaire": 32,
                     "x": 2011,
                     "y": 4.0

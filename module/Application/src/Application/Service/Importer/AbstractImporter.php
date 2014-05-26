@@ -22,7 +22,8 @@ use \Application\Traits\EntityManagerAware;
     protected $definitions = array(
         'Tables_W' => array(
             'definitions' => array(
-                4 => array("Water", null, 0, null),
+                3 => array("JMP", null, 0, null),
+                4 => array("Water", 3, 0, null),
                 5 => array("Tap water", 4, 0, null),
                 6 => array("House connections", 5, 0, null),
                 7 => array("Piped water into dwelling", 6, 0, null),
@@ -295,7 +296,8 @@ use \Application\Traits\EntityManagerAware;
         ),
         'Tables_S' => array(
             'definitions' => array(
-                4 => array("Sanitation", null, 0, null),
+                3 => array("JMP", null, 0, null),
+                4 => array("Sanitation", 3, 0, null),
                 5 => array("Flush and pour flush", 4, 2, array(11, 30), 999),
                 6 => array("to piped sewer system", 5, 1, array(12, 31)),
                 7 => array("to septic tank", 5, 1, array(13, 32)),
@@ -690,4 +692,5 @@ use \Application\Traits\EntityManagerAware;
         $this->getEntityManager()->flush();
         echo count($this->cacheFilters) . ' filters imported' . PHP_EOL;
     }
+
 }

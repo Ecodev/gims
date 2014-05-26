@@ -163,7 +163,8 @@ class Glass extends AbstractImporter
     ];
     private $filters = array(
         'Tables_W' => array(
-            1 => array("Water", null),
+            0 => array("GLASS", null),
+            1 => array("Water", 0),
             9 => array("Level of development and implementation of policy / plan", 1), // kind of unique parent to avoid conflits between other Drinking water supply filters and this one
             10 => array("Drinking-water supply", 9),
             11 => array("Target coverage", 10),
@@ -252,7 +253,8 @@ class Glass extends AbstractImporter
             1106 => array("Drinking-water in health facilities", 1)
         ),
         'Tables_S' => array(
-            1 => array("Sanitation", null),
+            0 => array("GLASS", null),
+            1 => array("Sanitation", 0),
             9 => array("Level of development and implementation of policy / plan", 1), // kind of unique parent to avoid conflits between other Sanitation filters and this one
             10 => array("Sanitation", 9),
             11 => array("Target coverage", 10),
@@ -336,7 +338,8 @@ class Glass extends AbstractImporter
         //            1122 => array("Ministry of Education", 1),
         ),
         'Tables_H' => array(
-            1 => array("Hygiene", null),
+            0 => array("GLASS", null),
+            1 => array("Hygiene", 0),
             9 => array("Level of development and implementation of policy / plan", 1), // kind of unique parent to avoid conflits between other Hygiene promotio filters and this one
             10 => array("Hygiene promotion", 9),
             11 => array("Target coverage", 10),
@@ -402,7 +405,8 @@ class Glass extends AbstractImporter
 //            1130 => array("Ministry of Education", 1),
         ),
         'Tables_U' => array(
-            1 => array("Undefined", null),
+            0 => array("GLASS", null),
+            1 => array("Undefined", 0),
             40 => array("To address resilience to climate change", 1),
             110 => array("Poor populations", 1),
             111 => array("Populations living in slums or informal settlements", 1),
