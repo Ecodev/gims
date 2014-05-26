@@ -50,7 +50,6 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
         Modal.confirmDelete($scope.user, {label: $scope.user.name, returnUrl: returnUrl});
     };
 
-
     // Load user if possible
     if ($routeParams.id) {
         Restangular.one('user', $routeParams.id).get({fields: 'metadata,phone,skype,job,ministry,address,zip,city,country'}).then(function(user) {
@@ -72,8 +71,7 @@ angular.module('myApp').controller('Admin/UserCtrl', function($scope) {
         columnDefs: [
             {field: 'name', displayName: 'Name', width: '250px'},
             {field: 'email', displayName: 'Email', cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a href="mailto:{{row.entity[col.field]}}">{{row.entity[col.field]}}</a></div>'},
-            {displayName: '', width: '70px', cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/user/edit/{{row.entity.id}}" ><i class="fa fa-pencil fa-lg"></i></a>' +
-                        '<button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
+            {displayName: '', width: '70px', cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/user/edit/{{row.entity.id}}" ><i class="fa fa-pencil fa-lg"></i></a><button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
         ]
     };
 

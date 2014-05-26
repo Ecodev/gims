@@ -2,12 +2,20 @@
 
 pass=true
 
-# Run JSHint validation before commit
 files=$(git diff --cached --name-only --diff-filter=ACMR | grep .js)
 if [ "$files" != "" ]; then
+
+    # Run JSHint validation before commit
     for file in ${files}; do
         ./node_modules/.bin/jshint ${file}
+        if [ $? -ne 0 ]; then
+            pass=false
+        fi
+    done
 
+    # Run JSCS validation before commit
+    for file in ${files}; do
+        ./node_modules/.bin/jscs ${file}
         if [ $? -ne 0 ]; then
             pass=false
         fi

@@ -25,7 +25,6 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function()
         },
         controller: function($scope, $location) {
 
-
             var watchListener = $scope.$watch('questionnaires', function(questionnaires) {
                 if (questionnaires && questionnaires.length > 0) {
                     angular.forEach($scope.questionnaires, function(questionnaire) {

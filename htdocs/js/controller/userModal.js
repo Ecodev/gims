@@ -9,10 +9,8 @@ angular.module('myApp').controller('UserModalCtrl', function($scope, $modalInsta
         $modalInstance.dismiss();
     };
 
-
     $scope.localUser = user;
     var userQueryParams = {fields: 'phone,skype,job,ministry,address,zip,city,country'};
-
 
     // Load all information if editing existing user
     if (user && user.id) {

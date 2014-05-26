@@ -44,8 +44,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.parts = Restangular.all('part').getList().$object;
     $scope.modes = ['Browse', 'Contribute'];
     $scope.surveysTemplate = "[[item.code]] - [[item.name]]";
-    $scope.filtersTemplate = "" +
-            "<div>" +
+    $scope.filtersTemplate = "<div>" +
             "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
             "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +
             "</div>" +
@@ -180,7 +179,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * Refreshing page means :
      *  - Recover all questionnaires permissions (in case user swith from browse to contribute/full view and need to be logged in)
      *  - Recompute filters, after some changes on answers. Can be done automatically after each answer change, but is heavy.
-     * @param questionnaires
+     * @param questionnairesPermissions
+     * @param filtersComputing
      */
     $scope.refresh = function(questionnairesPermissions, filtersComputing) {
 
@@ -197,6 +197,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     /**
      * Call api to get answer permissions
+     * @param question
      * @param answer
      * @param callback
      */
@@ -264,7 +265,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param answer
      * @param question
      * @param filter
-     * @param questionnairePermissions
+     * @param questionnaire
+     * @param part
      */
     $scope.saveAnswer = function(answer, question, filter, questionnaire, part) {
 
@@ -518,6 +520,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     /**
      * Remove question after retrieving permissions from server if not yet done
+     * @param question
      * @param answer
      */
     $scope.removeAnswer = function(question, answer) {
@@ -651,7 +654,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             });
         }
     };
-
 
     $scope.toggleQuestionAbsolute = function(questionnaire, question) {
         var bool = !question.isAbsolute;
@@ -1167,16 +1169,14 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 population.id = newPopulation.id;
                 population.isLoading = false;
             });
-        }
-        // If existing population with new value, update it
-        else if (population.id && _.isNumber(population.population)) {
+        } else if (population.id && _.isNumber(population.population)) {
+            // If existing population with new value, update it
             population.isLoading = true;
             population.put().then(function() {
                 population.isLoading = false;
             });
-        }
-        // If existing population with deleted value, delete it
-        else if (population.id && !_.isNumber(population.population)) {
+        } else if (population.id && !_.isNumber(population.population)) {
+            // If existing population with deleted value, delete it
             population.isLoading = true;
             population.remove().then(function() {
                 delete population.id;
@@ -1187,7 +1187,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     /**
      * Get survey, or create it if dont exist
-     * @param survey
+     * @param questionnaire
      */
     var getOrSaveSurvey = function(questionnaire) {
         var deferred = $q.defer();
@@ -1312,6 +1312,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /**
      * Update answers considering answer permissions
      * @param answer
+     * @param question
+     * @param questionnaire
      */
     var updateAnswer = function(answer, question, questionnaire) {
         if (answer.id && (answer.permissions && answer.permissions.update || questionnaire && questionnaire.permissions && questionnaire.permissions.update)) {
@@ -1324,9 +1326,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             });
         }
     };
+
     /**
      * Update question considering questionnaire permissions
-     * @param answer
+     * @param questionnaire
+     * @param question
      */
     var updateQuestion = function(questionnaire, question) {
         if (question.id && questionnaire.permissions.update) {
@@ -1337,6 +1341,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     /**
      * Delete answer considering answer permissions
+     * @param question
      * @param answer
      */
     var deleteAnswer = function(question, answer) {
@@ -1352,7 +1357,9 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     /**
      * Create answer considering *questionnaire* permissions
+     * @param question
      * @param answer
+     * @param partId
      */
     var createAnswer = function(question, answer, partId) {
         var deferred = $q.defer();
@@ -1659,7 +1666,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     /**
      * Questionnaires with usages
-     * @param element
+     * @param questionnaires
      */
     var listQuestionnairesWithFilterUsages = function(questionnaires) {
         $scope.questionnairesWithUsages = _.filter(questionnaires, function(q) {
@@ -1668,7 +1675,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             }
         });
     };
-
 
     /**
      * Update parameters on url exlucding empty ids to avoid multiple consecutive commas that cause problems on server side.

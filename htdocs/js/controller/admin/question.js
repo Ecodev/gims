@@ -25,8 +25,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
 
     $scope.params = {fields: 'paths'};
 
-    $scope.select2Template = "" +
-            "<div>" +
+    $scope.select2Template = "<div>" +
             "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
             "    <i class='fa fa-gims-filter'></i> [[item.name]]" +
             "</div>" +
@@ -56,9 +55,10 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
             if (!$scope.question.choices && $scope.question.id) {
                 $scope.question.choices = [{}];
                 $scope.save();
-            }
-            // Otherwise, if the question is new and no choices exists, we inject an empty one
-            else if (!$scope.question.choices || $scope.question.choices.length === 0) {
+
+            } else if (!$scope.question.choices || $scope.question.choices.length === 0) {
+                // Otherwise, if the question is new and no choices exists, we inject an empty one
+
                 $scope.question.choices = [{}];
             }
         }
@@ -76,16 +76,13 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
         $scope.question.choices.push({});
     };
 
-
     $scope.deleteOption = function(index) {
         $scope.question.choices.splice(index, 1);
     };
 
-
     if ($routeParams.returnUrl) {
         returnUrl = $routeParams.returnUrl;
     }
-
 
     var redirect = function() {
         $location.url(returnUrl);
@@ -126,8 +123,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
                     redirect();
                 }
             });
-        }
-        else {
+        } else {
             $scope.question.survey = $routeParams.survey;
 
             delete $scope.question.sorting; // let the server define the sorting value
@@ -160,8 +156,6 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
             });
         });
     };
-
-
 
     // Delete a question
     $scope.delete = function() {
@@ -214,10 +208,6 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
         setParentQuestions($routeParams.survey);
     }
 
-
-
-
-
     Restangular.all('questionType').getList().then(function(types) {
         $scope.types = types;
     });
@@ -228,4 +218,3 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
         $scope.survey = Restangular.one('survey', params.survey).get().$object;
     }
 });
-

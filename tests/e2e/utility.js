@@ -53,4 +53,3 @@ module.exports.capture = function(filename, browser) {
         stream.end();
     });
 };
-

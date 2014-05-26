@@ -31,7 +31,6 @@ angular.module('myApp').controller('UserCtrl', function($scope, $http, authServi
 
 });
 
-
 angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $modalInstance, $log) {
     'use strict';
 
@@ -41,7 +40,8 @@ angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $m
     }
     resetErrors();
 
-    $scope.cancelLogin = function() {
+    $scope.cancelLogin = function()
+    {
         $modalInstance.dismiss();
     };
 
@@ -58,8 +58,7 @@ angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $m
                 $scope.invalidUsernamePassword = false;
                 $scope.user = data;
                 $modalInstance.close(data);
-            }
-            else if (data.status == 'failed')
+            } else if (data.status == 'failed')
             {
                 $scope.invalidUsernamePassword = true;
             }
@@ -87,4 +86,3 @@ angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $m
     };
 
 });
-

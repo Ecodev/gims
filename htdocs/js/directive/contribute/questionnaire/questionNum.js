@@ -66,4 +66,3 @@ angular.module('myApp.directives').directive('gimsNumQuestion', function(Questio
         }
     };
 });
-

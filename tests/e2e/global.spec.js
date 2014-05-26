@@ -2,7 +2,7 @@
 
 var gimsUtility = require('./utility');
 
-describe("Xdebug tests", function () {
+describe("Xdebug tests", function() {
 
     var pages = [
         '/home',
@@ -22,23 +22,23 @@ describe("Xdebug tests", function () {
     browser.get('/home');
     gimsUtility.login(undefined, undefined, browser);
 
-    pages.forEach(function(page){
-        it('should not have error on page '+page, function () {
+    pages.forEach(function(page) {
+        it('should not have error on page ' + page, function() {
             browser.get(page);
-            expect(browser.getCurrentUrl()).toBe(browser.baseUrl+page);
+            expect(browser.getCurrentUrl()).toBe(browser.baseUrl + page);
             expect(element.all(by.css('.xdebug-error')).count()).toBe(0);
         });
-    })
+    });
 });
 
 /**
  * End2End tests my app
  */
-describe('my app', function () {
+describe('my app', function() {
     'use strict';
 
-    it('should automatically redirect to /home when location hash/fragment is empty', function () {
+    it('should automatically redirect to /home when location hash/fragment is empty', function() {
         browser.get('../../');
-        expect(browser.getCurrentUrl()).toBe(browser.baseUrl+"/home");
+        expect(browser.getCurrentUrl()).toBe(browser.baseUrl + "/home");
     });
 });

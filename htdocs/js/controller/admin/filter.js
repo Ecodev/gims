@@ -6,8 +6,7 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
     $scope.fields = {fields: 'filterSets,children,children.paths,children.color,parents,parents.paths,parents.color,summands,summands.paths,summands.color,paths,color'};
     $scope.params = {fields: 'paths,color,genericColor', itemOnce: 'true'};
 
-    $scope.select2Template = "" +
-            "<div>" +
+    $scope.select2Template = "<div>" +
             "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
             "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +
             "</div>" +
@@ -24,7 +23,6 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
             "<div class='clearfix'></div>" +
             "</div>";
 
-
     var redirectTo = '/admin/filter';
     if ($routeParams.returnUrl) {
         redirectTo = $routeParams.returnUrl;
@@ -38,7 +36,6 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
         $location.url(redirectTo);
     };
 
-
     if ($routeParams.id) {
         Restangular.one('filter', $routeParams.id).get($scope.fields).then(function(filter) {
             $scope.filter = filter;
@@ -47,7 +44,6 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
     } else {
         $scope.filter = {};
     }
-
 
     $scope.save = function(redirectTo) {
         $scope.sending = true;
@@ -61,8 +57,7 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
                     $location.path(redirectTo);
                 }
             });
-        }
-        else {
+        } else {
             Restangular.all('filter').post($scope.filter).then(function(filter) {
                 $scope.sending = false;
                 if (!redirectTo) {
@@ -75,8 +70,6 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
 
 });
 
-
-
 /**
  * Admin filter Controller
  */
@@ -86,8 +79,7 @@ angular.module('myApp').controller('Admin/FilterCtrl', function($scope, $locatio
     // Initialize
     $scope.params = {fields: 'paths', itemOnce: 'true'};
 
-    $scope.select2Template = "" +
-            "<div>" +
+    $scope.select2Template = "<div>" +
             "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
             "    <i class='fa fa-gims-filter'></i> [[item.name]]" +
             "</div>" +
@@ -104,7 +96,6 @@ angular.module('myApp').controller('Admin/FilterCtrl', function($scope, $locatio
             "<div class='clearfix'></div>" +
             "</div>";
 
-
     $scope.$watch('selectedFilter', function(selectedFilter)
     {
         if (selectedFilter) {
@@ -119,8 +110,7 @@ angular.module('myApp').controller('Admin/FilterCtrl', function($scope, $locatio
             {
                 field: 'name',
                 displayName: 'Name',
-                cellTemplate: '' +
-                        '<div class="ngCellText" ng-class="col.colIndex()">' +
+                cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">' +
                         '   <span style="padding-left: {{row.entity.level * 2}}em;">' +
                         '       <span style="display:inline-block;vertical-align:middle;"><i class="fa fa-gims-filter" style="color:{{row.entity.color}}"></i></span>' +
                         '       <span style="display:inline-block;vertical-align:middle;">{{row.entity.name}}</span>' +
@@ -130,8 +120,7 @@ angular.module('myApp').controller('Admin/FilterCtrl', function($scope, $locatio
             {
                 displayName: '',
                 width: '70px',
-                cellTemplate: '' +
-                        '<div class="btn-group" style="margin:4px 0 0 4px;">' +
+                cellTemplate: '<div class="btn-group" style="margin:4px 0 0 4px;">' +
                         '   <a class="btn btn-default btn-xs" href="/admin/filter/edit/{{row.entity.id}}"><i class="fa fa-pencil fa-lg"></i></a>' +
                         '   <button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>' +
                         '</div>'

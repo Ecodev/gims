@@ -4,7 +4,6 @@
 
 ace.define('ace/mode/excel', ['require', 'exports', 'module', 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/excel_highlight_rules', 'ace/range'], function(require, exports, module) {
 
-
     var oop = require("../lib/oop");
     var TextMode = require("./text").Mode;
     var Tokenizer = require("../tokenizer").Tokenizer;
@@ -28,7 +27,6 @@ ace.define('ace/mode/excel', ['require', 'exports', 'module', 'ace/lib/oop', 'ac
 });
 
 ace.define('ace/mode/excel_highlight_rules', ['require', 'exports', 'module', 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
-
 
     var oop = require("../lib/oop");
     var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
@@ -64,8 +62,8 @@ ace.define('ace/mode/excel_highlight_rules', ['require', 'exports', 'module', 'a
                 'SMALL|SQRT|SQRTPI|STANDARDIZE|STDEV|STDEVA|STDEVP|STDEVPA|STEYX|SUBSTITUTE|SUBTOTAL|SUM|SUMIF|SUMIFS|SUMPRODUCT|SUMSQ|SUMX2MY2|' +
                 'SUMX2PY2|SUMXMY2|SYD|T|TAN|TANH|TBILLEQ|TBILLPRICE|TBILLYIELD|TDIST|TEXT|TIME|TIMEVALUE|TINV|TODAY|TRANSPOSE|TREND|TRIM|' +
                 'TRIMMEAN|TRUE|TRUNC|TTEST|TYPE|UPPER|USDOLLAR|VALUE|VAR|VARA|VARP|VARPA|VDB|VERSION|VLOOKUP|WEEKDAY|WEEKNUM|WEIBULL|WORKDAY|' +
-                'XIRR|XNPV|YEAR|YEARFRAC|YIELD|YIELDDISC|YIELDMAT|ZTEST'
-                ;
+                'XIRR|XNPV|YEAR|YEARFRAC|YIELD|YIELDDISC|YIELDMAT|ZTEST';
+
         var keywordMapper = this.createKeywordMapper({
             "support.function": builtinFunctions,
             "keyword": keywords,
@@ -73,7 +71,8 @@ ace.define('ace/mode/excel_highlight_rules', ['require', 'exports', 'module', 'a
         }, "identifier", true);
 
         this.$rules = {
-            "start": [{
+            "start": [
+                {
                     token: "comment",
                     regex: "--.*$"
                 }, {
@@ -104,7 +103,8 @@ ace.define('ace/mode/excel_highlight_rules', ['require', 'exports', 'module', 'a
                 }, {
                     token: "text",
                     regex: "\\s+"
-                }]
+                }
+            ]
         };
         this.normalizeRules();
     };
@@ -113,4 +113,3 @@ ace.define('ace/mode/excel_highlight_rules', ['require', 'exports', 'module', 'a
 
     exports.ExcelHighlightRules = ExcelHighlightRules;
 });
-

@@ -1,5 +1,4 @@
-angular.module('myApp.services').factory('QuestionAssistant', function()
-{
+angular.module('myApp.services').factory('QuestionAssistant', function() {
     'use strict';
 
     var indexQuestion = function(QuestionAssistant, question, firstExecution, index)
@@ -31,12 +30,14 @@ angular.module('myApp.services').factory('QuestionAssistant', function()
             var id = question.id + '-' + part.id;
             var answer = findOneAnswerPerPartAnswer(QuestionAssistant, question, index, firstExecution, valueField, part.id);
             if (!answer) {
+                // if compulsory, all parts have to have answer
                 if (question.isCompulsory) {
                     status = 1;
-                } // if compulsory, all parts have to have answer
-                else if (!question.isCompulsory) {
+                } else if (!question.isCompulsory) {
                     status = 2;
-                } // if not compulsory, just notify that there are unanswered fields.
+                }
+
+                // if not compulsory, just notify that there are unanswered fields.
                 if (firstExecution) {
                     index[id] = QuestionAssistant.getEmptyTextAnswer(question, part.id);
                 }
@@ -51,7 +52,6 @@ angular.module('myApp.services').factory('QuestionAssistant', function()
 
         return question.statusCode;
     };
-
 
     var findOneAnswerPerPartAnswer = function(QuestionAssistant, question, index, firstExecution, valueField, pid)
     {
@@ -75,7 +75,6 @@ angular.module('myApp.services').factory('QuestionAssistant', function()
         }
         return false;
     };
-
 
     // multiple + compulsory    -> 1 if no answer found, 3 if (at least) one answer found
     // multiple + !compulsory   -> 2 if no answer found, 3 if (at least) one answer found

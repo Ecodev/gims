@@ -12,6 +12,6 @@ describe('admin', function() {
     });
 
     it('should redirect to /contribute when user navigates to /admin', function() {
-        expect(browser.getCurrentUrl()).toEqual(browser.baseUrl+'/contribute');
+        expect(browser.getCurrentUrl()).toEqual(browser.baseUrl + '/contribute');
     });
 });

@@ -1,6 +1,4 @@
 /* jasmine specs for controllers go here */
-
-
 describe('ContributeCtrl', function() {
     'use strict';
 
@@ -15,7 +13,6 @@ describe('ContributeCtrl', function() {
             $scope: scope
         });
     }));
-
 
     it('should ....', function() {
         //spec body

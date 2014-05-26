@@ -26,7 +26,7 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function() {
             // Configure ng-grid.
             $scope.queryparams = {fields: 'type,chapter'};
             $scope.gridOptions = {
-                extra : {},
+                extra: {},
                 columnDefs: [
                     {
                         field: 'sorting',

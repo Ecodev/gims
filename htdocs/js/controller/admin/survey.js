@@ -86,8 +86,7 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function($scope) {
             {field: 'name', displayName: 'Name'},
             {field: 'isActive', displayName: 'Active', cellFilter: 'checkmark', width: '100px'},
             {field: 'year', displayName: 'Year', width: '100px'},
-            {displayName: '', width: '70px', cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/survey/edit/{{row.entity.id}}"><i class="fa fa-pencil fa-lg"></i></a>' +
-                        '<button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
+            {displayName: '', width: '70px', cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/survey/edit/{{row.entity.id}}"><i class="fa fa-pencil fa-lg"></i></a><button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
         ]
     };
 });

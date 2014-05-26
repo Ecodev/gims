@@ -137,7 +137,6 @@ describe('admin/survey/edit', function() {
     });
 });
 
-
 /**
  * End2End test for admin survey module
  */
@@ -151,8 +150,8 @@ describe('admin/questionnaire/new', function() {
     function select2ClickFirstItem(select2Id) {
         element(by.css('div#s2id_' + select2Id)).click();
         var items = element.all(by.css('.select2-results-dept-0'));
-        browser.driver.wait(function () {
-            return items.count().then(function (count) {
+        browser.driver.wait(function() {
+            return items.count().then(function(count) {
                 return count > 0;
             });
         });
@@ -163,8 +162,8 @@ describe('admin/questionnaire/new', function() {
 
     var selectedCountry;
     function fillQuestionnaireForm() {
-        select2ClickFirstItem('autogen1').then(function(country){
-            country.getText().then(function(countryName){
+        select2ClickFirstItem('autogen1').then(function(country) {
+            country.getText().then(function(countryName) {
                 selectedCountry = countryName;
             });
         });
@@ -231,7 +230,6 @@ describe('admin/questionnaire/new', function() {
         });
     });
 });
-
 
 //@todo test create new questionnaire
 //@todo test create new question

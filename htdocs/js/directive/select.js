@@ -89,7 +89,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                     } else if (o && o.id) {
                         id = o.id;
                     } else if (o) {
-                        id = _.map(o,function(a) {
+                        id = _.map(o, function(a) {
                             return a.id;
                         }).join(',');
                     }
@@ -159,9 +159,9 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                         $scope.includeLinks();
                     });
                 }
-            }
-            // Otherwise, default to standard mode (list fully loaded)
-            else {
+
+            } else { // Otherwise, default to standard mode (list fully loaded)
+
                 // Load items and re-select item based on URL params (if any)
                 myRestangular.all(api).getList(_.merge({perPage: 1000}, $scope.queryparams)).then(function(data) {
 
@@ -189,8 +189,8 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                     var defaultSearchAttributes = ['id', 'name'];
                     var searchAttributes = $scope.searchAttributes ? $scope.searchAttributes.split(',') : [];
                     searchAttributes = _.uniq(defaultSearchAttributes.concat(searchAttributes));
-                    items = _.map(items, function(item){
-                        item.searchString = _.map(searchAttributes, function(attribute){
+                    items = _.map(items, function(item) {
+                        item.searchString = _.map(searchAttributes, function(attribute) {
                             if (!_.isUndefined(item[attribute])) {
                                 return item[attribute];
                             }
@@ -201,11 +201,11 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                     $scope.includeLinks();
                 });
 
-                var search = _.debounce(function(query){
+                var search = _.debounce(function(query) {
                     var regexp = new RegExp(query.term.toUpperCase());
                     var data = {};
-                    data.results = _.filter(items, function(item){
-                        if(regexp.test(item.searchString.toUpperCase())){
+                    data.results = _.filter(items, function(item) {
+                        if (regexp.test(item.searchString.toUpperCase())) {
                             return item;
                         }
                     });

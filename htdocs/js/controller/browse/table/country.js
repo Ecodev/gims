@@ -6,14 +6,12 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
     $scope.columnDefs = [];
     $scope.years = $location.search().years;
 
-
     // Configure ng-grid.
     $scope.gridOptions = {
         data: 'table',
         plugins: [new ngGridFlexibleHeightPlugin({minHeight: 400})],
         columnDefs: 'columnDefs'
     };
-
 
     $scope.updateUrl = function()
     {

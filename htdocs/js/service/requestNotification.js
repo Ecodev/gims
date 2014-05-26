@@ -70,4 +70,3 @@ angular.module('myApp.services').provider('requestNotification', function() {
         };
     };
 });
-

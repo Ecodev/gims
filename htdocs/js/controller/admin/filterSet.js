@@ -5,23 +5,22 @@ angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function($scope, 
 
     $scope.fields = {fields: 'filters,filters.paths,filters.children,filters.color,filter.genericColor'};
     $scope.params = {fields: 'paths,color,genericColor'};
-    $scope.select2Template = "" +
-        "<div>" +
-        "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
-        "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +
-        "</div>" +
-        "<div class='col-sm-7 col-md-7'>" +
-        "    <small>" +
-        "       [[_.map(item.paths, function(path){ return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]" +
-        "    </small>" +
-        "</div>" +
-        "<div class='col-sm-1 col-md-1 hide-in-results' >" +
-        "    <a class='btn btn-default btn-sm' href='/admin/filter/edit/[[item.id]][[$scope.currentContextElement]]'>" +
-        "        <i class='fa fa-pencil'></i>" +
-        "    </a>" +
-        "</div>" +
-        "<div class='clearfix'></div>" +
-        "</div>";
+    $scope.select2Template = "<div>" +
+            "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
+            "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +
+            "</div>" +
+            "<div class='col-sm-7 col-md-7'>" +
+            "    <small>" +
+            "       [[_.map(item.paths, function(path){ return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]" +
+            "    </small>" +
+            "</div>" +
+            "<div class='col-sm-1 col-md-1 hide-in-results' >" +
+            "    <a class='btn btn-default btn-sm' href='/admin/filter/edit/[[item.id]][[$scope.currentContextElement]]'>" +
+            "        <i class='fa fa-pencil'></i>" +
+            "    </a>" +
+            "</div>" +
+            "<div class='clearfix'></div>" +
+            "</div>";
 
     $scope.tabs = [false, false];
     $scope.selectTab = function(tab) {
@@ -45,7 +44,6 @@ angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function($scope, 
         $location.path(redirectTo).search('returnUrl', null).hash(null);
     };
 
-
     if ($routeParams.id) {
         Restangular.one('filter-set', $routeParams.id).get($scope.fields).then(function(filterSet) {
             $scope.filterSet = filterSet;
@@ -54,7 +52,6 @@ angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function($scope, 
     } else {
         $scope.filterSet = {};
     }
-
 
     $scope.save = function(redirectTo) {
         $scope.sending = true;
@@ -68,8 +65,7 @@ angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function($scope, 
                     $location.path(redirectTo);
                 }
             });
-        }
-        else {
+        } else {
             Restangular.all('filter-set').post($scope.filterSet).then(function(filterSet) {
                 $scope.sending = false;
                 if (!redirectTo) {
@@ -82,11 +78,6 @@ angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function($scope, 
 
 });
 
-
-
-
-
-
 /**
  * Admin filterset Controller
  */
@@ -97,8 +88,10 @@ angular.module('myApp').controller('Admin/FilterSetCtrl', function($scope) {
     $scope.gridOptions = {
         columnDefs: [
             {field: 'name', displayName: 'Name'},
-            {displayName: '', width: '70px', cellTemplate: '' +
-                        '<div class="btn-group">' +
+            {
+                displayName: '',
+                width: '70px',
+                cellTemplate: '<div class="btn-group">' +
                         '   <a class="btn btn-default btn-xs" href="/admin/filter-set/edit/{{row.entity.id}}"><i class="fa fa-pencil fa-lg"></i></a>' +
                         '   <button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>' +
                         '</div>'

@@ -11,8 +11,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.tabs.countryParams = {perPage: 500};
     $scope.tabs.filterSetParams = {fields: 'filters.genericColor,filters.color'};
     $scope.tabs.filterParams = {fields: 'paths,color,genericColor', itemOnce: 'true'};
-    $scope.tabs.filtersTemplate = "" +
-            "<div>" +
+    $scope.tabs.filtersTemplate = "<div>" +
             "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
             "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +
             "</div>" +
@@ -24,8 +23,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             "<div class='clearfix'></div>" +
             "</div>";
 
-    $scope.tabs.filtersTemplate2 = "" +
-            "<div>" +
+    $scope.tabs.filtersTemplate2 = "<div>" +
             "<div class='col-sm-12 col-md-12 select-label select-label-with-icon'>" +
             "    <i class='fa fa-gims-filter' style='color:[[item.genericColor]];' ></i> [[item.name]]" +
             "</div>" +
@@ -233,20 +231,20 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                             ignoredElements: ignoredElements
                         }
                     }).success(function(data) {
-                            _.forEach(data.filters, function(hFilter, hFilterId) {
-                                _.forEach(data.filters[hFilterId], function(filter, index) {
-                                    if (!_.isUndefined($scope.indexedElements[questionnaireId].hFilters[hFilterId])) {
-                                        filter.filter.sorting = index + 1;
-                                        filter.filter.hFilters = {};
-                                        filter.filter.hFilters[hFilterId] = null;
-                                        cache({id: questionnaireId, usages: data.usages}, filter);
-                                    }
-                                });
+                        _.forEach(data.filters, function(hFilter, hFilterId) {
+                            _.forEach(data.filters[hFilterId], function(filter, index) {
+                                if (!_.isUndefined($scope.indexedElements[questionnaireId].hFilters[hFilterId])) {
+                                    filter.filter.sorting = index + 1;
+                                    filter.filter.hFilters = {};
+                                    filter.filter.hFilters[hFilterId] = null;
+                                    cache({id: questionnaireId, usages: data.usages}, filter);
+                                }
                             });
-
-                            $scope.initiateEmptyQuestionnairesWithLoadedData(questionnaireId, callback);
-                            $scope.getIgnoredElements(true);
                         });
+
+                        $scope.initiateEmptyQuestionnairesWithLoadedData(questionnaireId, callback);
+                        $scope.getIgnoredElements(true);
+                    });
                 });
             }
         }
@@ -396,7 +394,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
         // url excluded questionnaires
         var ignoredQuestionnaires = $location.search().ignoredElements ? $location.search().ignoredElements.split(',') :
-            [];
+                [];
 
         if (ignoredQuestionnaires.length > 0) {
 
@@ -436,6 +434,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     /**
      * Calls ChartController to refresh charts depending on new values
      *
+     * @param filters
      * @param refreshUrl Usually set to true before sending request but at first execution is set to false
      * @param callback
      */
@@ -566,7 +565,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
     /**
      * Add series and update inserted ones
-     * @param series
+     * @param seriesToAdd
      */
     var addSeries = function(seriesToAdd) {
 
@@ -588,7 +587,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
     /**
      * Remove passed series
-     * @param series
+     * @param seriesToRemove
+     * @param affectAdjusted
      */
     var removeSeries = function(seriesToRemove, affectAdjusted) {
 
@@ -660,8 +660,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                     displayName: serie.name,
                     enableColumnResize: true,
                     bgcolor: serie.color,
-                    headerCellTemplate: '' + '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' + '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" style="background:{{col.colDef.bgcolor}}" popover-placement="top" popover="{{col.displayName}}">' + '       {{col.displayName}}' + '   </div>' + '</div>',
-                    cellTemplate: '' + '<div class="ngCellText text-right" ng-class="col.colIndex()"><span ng-cell-text ng-show="{{row.entity.value' + serie.id + '!==null}}">{{row.entity.value' + serie.id + '}} %</span></div>'
+                    headerCellTemplate: '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' + '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" style="background:{{col.colDef.bgcolor}}" popover-placement="top" popover="{{col.displayName}}">' + '       {{col.displayName}}' + '   </div>' + '</div>',
+                    cellTemplate: '<div class="ngCellText text-right" ng-class="col.colIndex()"><span ng-cell-text ng-show="{{row.entity.value' + serie.id + '!==null}}">{{row.entity.value' + serie.id + '}} %</span></div>'
                 });
 
                 // retrieve data
@@ -793,9 +793,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * They name attribute are loaded by ajax cause they're not specified in the url and are needed for display
      * The app can't wait the user to click on a point to retrieve this data from pointSelected.name attribute
      *
-     * @param questionnaireId
+     * @param questionnaire
      * @param filter
-     * @param questionnaireName
      * @param ignored
      * @returns current cached highFilter object
      */

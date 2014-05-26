@@ -62,7 +62,7 @@ angular.module('myApp.directives')
                 restrict: 'A',
                 require: 'ngModel',
                 link: function(scope, elem, attr, ctrl) {
-                    scope.$watch(attr.ngMin, function(){
+                    scope.$watch(attr.ngMin, function() {
                         ctrl.$setViewValue(ctrl.$viewValue);
                     });
                     var minValidator = function(value) {
@@ -86,7 +86,7 @@ angular.module('myApp.directives')
                 restrict: 'A',
                 require: 'ngModel',
                 link: function(scope, elem, attr, ctrl) {
-                    scope.$watch(attr.ngMax, function(){
+                    scope.$watch(attr.ngMax, function() {
                         ctrl.$setViewValue(ctrl.$viewValue);
                     });
                     var maxValidator = function(value) {
@@ -105,6 +105,3 @@ angular.module('myApp.directives')
                 }
             };
         });
-
-
-
