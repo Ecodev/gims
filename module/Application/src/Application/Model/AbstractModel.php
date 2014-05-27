@@ -30,7 +30,7 @@ abstract class AbstractModel
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetimetz", nullable=true)
+     * @ORM\Column(type="datetimetz", options={"default" = "NOW()"})
      */
     private $dateCreated;
 
@@ -72,7 +72,7 @@ abstract class AbstractModel
      *
      * @return self
      */
-    private function setDateCreated(\DateTime $dateCreated = null)
+    private function setDateCreated(\DateTime $dateCreated)
     {
         $this->dateCreated = $dateCreated;
 
