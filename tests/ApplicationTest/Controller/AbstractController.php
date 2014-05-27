@@ -39,8 +39,6 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
 
         $this->setApplicationConfig($config);
 
-        $this->setApplicationConfig($config);
-
         parent::setUp();
 
         // Don't forget to call trait's method
