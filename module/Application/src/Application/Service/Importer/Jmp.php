@@ -1216,6 +1216,7 @@ STRING;
             if (!$highFilter) {
                 $highFilter = new Filter($filterName);
                 $filterSet->addFilter($highFilter);
+                reset($this->cacheFilters)->addChild($highFilter);
                 $this->getEntityManager()->persist($highFilter);
 
                 if ($filterData['isImproved']) {
