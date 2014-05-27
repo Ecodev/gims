@@ -11,8 +11,6 @@ abstract class AbstractImporter
 
 use \Application\Traits\EntityManagerAware;
 
-    protected $cacheFilters = array();
-
     /**
      * sheet name =>
      *      defintions =>
@@ -637,60 +635,4 @@ use \Application\Traits\EntityManagerAware;
 
         return $filter;
     }
-
-    /**
-     * Import filters
-     * @param array $filters
-     */
-    protected function importFilters(array $filters)
-    {
-        // Import filters
-        $this->cacheFilters = array();
-        foreach ($filters['definitions'] as $row => $definition) {
-            $filter = $this->getFilter($definition, $this->cacheFilters);
-            $this->cacheFilters[$row] = $filter;
-        }
-
-        // Add all summands to filters
-        foreach ($filters['definitions'] as $row => $definition) {
-            $filter = $this->cacheFilters[$row];
-            $summands = $definition[3];
-            if ($summands) {
-                foreach ($summands as $summand) {
-                    $s = $this->cacheFilters[$summand];
-                    $filter->addSummand($s);
-                }
-            }
-        }
-
-        // Replace filters with their replacements, if any defined
-        // This is a dirty trick to solve inconsistency in first filter of sanitation
-        foreach ($filters['replacements'] as $row => $definition) {
-            $replacementFilter = $this->getFilter($definition, $this->cacheFilters);
-            $originalFilter = @$this->cacheFilters[$row];
-
-            // If original filter actually exists, add the replacement as a summand, and replace it
-            if ($originalFilter) {
-                $originalFilter->addSummand($replacementFilter);
-            }
-            $this->cacheFilters[$row] = $replacementFilter;
-
-            // Keep original filter available on negative indexes
-            $this->cacheFilters[-$row] = $originalFilter;
-        }
-
-        // Add extra summand which can be one of replacement
-        foreach ($filters['definitions'] as $row => $definition) {
-            $filter = $this->cacheFilters[$row];
-            $extraSummand = @$definition[4];
-            if ($extraSummand) {
-                $s = $this->cacheFilters[$extraSummand];
-                $filter->addSummand($s);
-            }
-        }
-
-        $this->getEntityManager()->flush();
-        echo count($this->cacheFilters) . ' filters imported' . PHP_EOL;
-    }
-
 }

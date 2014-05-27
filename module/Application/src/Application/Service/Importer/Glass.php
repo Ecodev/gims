@@ -727,12 +727,6 @@ FilterSets linked            : $this->linkedFilterSetCount
      */
     private function importGlassFilters($table)
     {
-        // Import jmp filters
-        if (isset($this->definitions[$table])) {
-            $this->importFilters($this->definitions[$table]);
-            $this->createFirstFilterSet($this->cacheFilters);
-        }
-
         // Import glass filters
         foreach ($this->filters[$table] as $row => $definition) {
             $filter = $this->getFilter($definition, $this->cacheFiltersGlass[$table]);
