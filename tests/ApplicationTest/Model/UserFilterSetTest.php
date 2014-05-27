@@ -13,7 +13,7 @@ class UserFilterSetTest extends AbstractModel
 
         $userFilterSet->setUser($user);
         $this->assertCount(1, $user->getUserFilterSets(), 'user must be notified when userQuestionnaire is added');
-        $this->assertSame($userFilterSet, $user->getUserFilterSets()->first(), 'original userQuestionnaire can be retreived from user');
+        $this->assertSame($userFilterSet, $user->getUserFilterSets()->first(), 'original userQuestionnaire can be retrieved from user');
     }
 
 }

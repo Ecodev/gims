@@ -13,7 +13,7 @@ class PopulationTest extends \ApplicationTest\Model\AbstractModel
 
         $population->setQuestionnaire($questionnaire);
         $this->assertCount(1, $questionnaire->getPopulations(), 'questionnaire must be notified when population is added');
-        $this->assertSame($population, $questionnaire->getPopulations()->first(), 'original population can be retreived from questionnaire');
+        $this->assertSame($population, $questionnaire->getPopulations()->first(), 'original population can be retrieved from questionnaire');
     }
 
 }

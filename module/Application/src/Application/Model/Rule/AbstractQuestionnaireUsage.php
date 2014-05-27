@@ -41,4 +41,15 @@ abstract class AbstractQuestionnaireUsage extends AbstractUsage
      * @return Filter|null
      */
     abstract public function getFilter();
+
+    /**
+     * Returns role context
+     * @param string $action
+     * @return \Application\Model\Questionnaire
+     */
+    public function getRoleContext($action)
+    {
+        return $this->getQuestionnaire();
+    }
+
 }

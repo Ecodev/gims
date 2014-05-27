@@ -14,6 +14,16 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
 {
 
     /**
+     * @var Rule
+     *
+     * @ORM\ManyToOne(targetEntity="Rule", inversedBy="filterQuestionnaireUsages"))
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
+     * })
+     */
+    protected $rule;
+
+    /**
      * @var Questionnaire
      *
      * @ORM\ManyToOne(targetEntity="Application\Model\Questionnaire", inversedBy="filterQuestionnaireUsages"))

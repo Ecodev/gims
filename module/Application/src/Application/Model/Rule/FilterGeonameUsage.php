@@ -16,6 +16,16 @@ class FilterGeonameUsage extends AbstractUsage
 {
 
     /**
+     * @var Rule
+     *
+     * @ORM\ManyToOne(targetEntity="Rule", inversedBy="filterGeonameUsages")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
+     * })
+     */
+    protected $rule;
+
+    /**
      * @var Filter
      *
      * @ORM\ManyToOne(targetEntity="Application\Model\Filter")
@@ -91,6 +101,16 @@ class FilterGeonameUsage extends AbstractUsage
     public function getGeoname()
     {
         return $this->geoname;
+    }
+
+    /**
+     * Returns role contexts, which are all related questionnaires
+     * @param string $action
+     * @return \Application\Service\MultipleRoleContext
+     */
+    public function getRoleContext($action)
+    {
+        return new \Application\Service\MultipleRoleContext($this->getGeoname()->getQuestionnaires()->toArray(), true);
     }
 
 }

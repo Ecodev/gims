@@ -3,6 +3,7 @@
 namespace Application\Model\Rule;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Rule is a way to define a value as a custom formula.
@@ -103,6 +104,39 @@ class Rule extends \Application\Model\AbstractModel
     private $formula;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="FilterQuestionnaireUsage", mappedBy="rule")
+     * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
+     */
+    private $filterQuestionnaireUsages;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="QuestionnaireUsage", mappedBy="rule")
+     * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
+     */
+    private $questionnaireUsages;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="FilterGeonameUsage", mappedBy="rule")
+     * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
+     */
+    private $filterGeonameUsages;
+
+    /**
+     * Constructor
+     * @param string $name
+     */
+    public function __construct($name = null)
+    {
+        $this->filterQuestionnaireUsages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->questionnaireUsages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->filterGeonameUsages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->setName($name);
+    }
+
+    /**
      * Set name
      *
      * @param string $name
@@ -148,12 +182,88 @@ class Rule extends \Application\Model\AbstractModel
         return $this->formula;
     }
 
+    /**
+     * Get filterQuestionnaireUsages
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getFilterQuestionnaireUsages()
+    {
+        return $this->filterQuestionnaireUsages;
+    }
+
+    /**
+     * Get questionnaireUsages
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getQuestionnaireUsages()
+    {
+        return $this->questionnaireUsages;
+    }
+
+    /**
+     * Get filterGeonameUsages
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getFilterGeonameUsages()
+    {
+        return $this->filterGeonameUsages;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getJsonConfig()
     {
         return array_merge(parent::getJsonConfig(), array(
             'name',
             'formula',
         ));
+    }
+
+    /**
+     * Returns role contexts, which are all related questionnaires
+     * @param string $action
+     * @return \Application\Service\MultipleRoleContext
+     */
+    public function getRoleContext($action)
+    {
+        $contexts = new \Application\Service\MultipleRoleContext([], true);
+
+        foreach ($this->getFilterQuestionnaireUsages() as $usage) {
+            $contexts->add($usage->getQuestionnaire());
+        }
+
+        foreach ($this->getQuestionnaireUsages() as $usage) {
+            $contexts->add($usage->getQuestionnaire());
+        }
+
+        foreach ($this->getFilterGeonameUsages() as $usage) {
+            foreach ($usage->getGeoname()->getQuestionnaires() as $questionnaire) {
+
+                $contexts->add($questionnaire);
+            }
+        }
+
+        return $contexts->count() ? $contexts : null;
+    }
+
+    /**
+     * Notify the rule that it was added to Usage relation.
+     * This should only be called by AbstractUsage::setRule()
+     * @param AbstractUsage $usage
+     * @return self
+     */
+    public function usageAdded(AbstractUsage $usage)
+    {
+        if ($usage instanceof FilterQuestionnaireUsage) {
+            $this->getFilterQuestionnaireUsages()->add($usage);
+        } elseif ($usage instanceof QuestionnaireUsage) {
+            $this->getQuestionnaireUsages()->add($usage);
+        } elseif ($usage instanceof FilterGeonameUsage) {
+            $this->getFilterGeonameUsages()->add($usage);
+        }
+
+        return $this;
     }
 
 }

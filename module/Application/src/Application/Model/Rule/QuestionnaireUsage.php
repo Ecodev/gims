@@ -15,14 +15,14 @@ class QuestionnaireUsage extends AbstractQuestionnaireUsage
 {
 
     /**
-     * {@inheritdoc}
+     * @var Rule
+     *
+     * @ORM\ManyToOne(targetEntity="Rule", inversedBy="questionnaireUsages"))
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
+     * })
      */
-    public function getJsonConfig()
-    {
-        return array_merge(parent::getJsonConfig(), array(
-            'questionnaire',
-        ));
-    }
+    protected $rule;
 
     /**
      * @var Questionnaire
@@ -55,6 +55,16 @@ class QuestionnaireUsage extends AbstractQuestionnaireUsage
     public function getFilter()
     {
         return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'questionnaire',
+        ));
     }
 
 }

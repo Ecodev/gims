@@ -1,8 +1,9 @@
 <?php
 
-namespace Api\Controller;
+namespace Api\Controller\Rule;
 
 use Zend\View\Model\JsonModel;
+use Api\Controller\AbstractRestfulController;
 
 class RuleController extends AbstractRestfulController
 {

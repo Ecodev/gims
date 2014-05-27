@@ -22,7 +22,7 @@ return array(
             'Api\Controller\Chart' => 'Api\Controller\ChartController',
             'Api\Controller\Table' => 'Api\Controller\TableController',
             'Api\Controller\Note' => 'Api\Controller\NoteController',
-            'Api\Controller\Rule' => 'Api\Controller\RuleController',
+            'Api\Controller\Rule' => 'Api\Controller\Rule\RuleController',
             'Api\Controller\Population' => 'Api\Controller\PopulationController',
             'Api\Controller\QuestionnaireUsage' => 'Api\Controller\Rule\QuestionnaireUsageController',
             'Api\Controller\FilterQuestionnaireUsage' => 'Api\Controller\Rule\FilterQuestionnaireUsageController',

@@ -272,10 +272,8 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
 
         $this->assertSame($this->getTestedObject()->getId(), $actual['id'], 'should be the same ID that what we asked');
         $this->assertArrayNotHasKey('nonExistingField', $actual);
-    }
 
-    public function testCanGetOneWithFields()
-    {
+        // Then test we can get specific fields
         $this->dispatch($this->getRoute('get') . '?fields=metadata,nonExistingField', Request::METHOD_GET);
         $this->assertResponseStatusCode(200);
 
