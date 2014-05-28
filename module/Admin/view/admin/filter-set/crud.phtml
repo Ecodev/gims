@@ -28,18 +28,13 @@
                 <div class="form-group" ng-hide="isChapter" ng-class="{'has-error': myForm.filter.$invalid}">
                     <label class="control-label col-md-2"  for="filters">Thematics</label>
                     <div class="col-md-8">
-                        <gims-select    name="filter"
-                                        api="filter"
-                                        model="filterSet.filters"
-                                        queryparams="params"
-                                        placeholder="Select a thematic"
-                                        container-css-class='select2list'
-                                        current-context-element='?returnUrl=/admin/filter/edit/{{filter.id}}'
-                                        custom-selection-template="{{select2Template}}"
-                                        custom-result-template="{{select2Template}}"
-                                        style="width: 100%"
-                                        multiple >
-                        </gims-select>
+                        <gims-filter model="filterSet.filters"
+                                     show-selection-path="true"
+                                     show-edit-button="true"
+                                     current-url="/admin/filter/edit/{{filter.id}}"
+                                     multiple>
+                        </gims-filter>
+
                     </div>
                     <div class='col-md-1'>
                         <span ng-show="myForm.filter.$error.required" class="col-md-1 help-block">Required</span>

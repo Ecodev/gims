@@ -19,18 +19,12 @@
                 <div class="form-group" ng-hide="isChapter">
                     <h3><small><label class="control-label col-md-2" for="parents">Parents</label></small></h3>
                     <div class="col-md-8">
-                        <gims-select    name='parents'
-                                        api="filter"
-                                        queryparams="params"
-                                        model="filter.parents"
-                                        placeholder="Select parent"
-                                        container-css-class='select2list'
-                                        current-context-element='?returnUrl=/admin/filter/edit/{{filter.id}}'
-                                        custom-selection-template="{{select2Template}}"
-                                        custom-result-template="{{select2Template}}"
-                                        multiple
-                                        style="width: 100%" >
-                        </gims-select>
+                        <gims-filter model='filter.parents'
+                                     name="parents"
+                                     show-selection-path="true"
+                                     show-edit-button="true"
+                                     multiple>
+                        </gims-filter>
                     </div>
                 </div>
 
@@ -59,18 +53,12 @@
                 <div class="form-group" ng-hide="isChapter">
                     <h3><small><label class="control-label col-md-2" for="children">Children</label></small></h3>
                     <div class="col-md-8">
-                        <gims-select    name='children'
-                                        api="filter"
-                                        queryparams="params"
-                                        model="filter.children"
-                                        placeholder="Select parent"
-                                        container-css-class='select2list'
-                                        current-context-element='?returnUrl=/admin/filter/edit/{{filter.id}}'
-                                        custom-selection-template="{{select2Template}}"
-                                        custom-result-template="{{select2Template}}"
-                                        multiple
-                                        style="width: 100%" >
-                        </gims-select>
+                        <gims-filter model="filter.children"
+                                     name="children"
+                                     show-selection-path="true"
+                                     show-edit-button="true"
+                                     multiple>
+                        </gims-filter>
                     </div>
                 </div>
 
@@ -80,18 +68,12 @@
                 <div class="form-group" ng-hide="isChapter">
                     <h3><small><label class="control-label col-md-2" for="summands">Summands</label></small></h3>
                     <div class="col-md-8">
-                        <gims-select    name='summands'
-                                        api="filter"
-                                        queryparams="params"
-                                        model="filter.summands"
-                                        placeholder="Select parent"
-                                        container-css-class='select2list'
-                                        current-context-element='?returnUrl=/admin/filter/edit/{{filter.id}}'
-                                        custom-selection-template="{{select2Template}}"
-                                        custom-result-template="{{select2Template}}"
-                                        multiple
-                                        style="width: 100%" >
-                        </gims-select>
+                        <gims-filter model="filter.summands"
+                                     name="summands"
+                                     show-selection-path="true"
+                                     show-edit-button="true"
+                                     multiple>
+                        </gims-filter>
                     </div>
                 </div>
 
@@ -109,7 +91,6 @@
                                         style="width: 100%">
                         </gims-select>
                     </div>
-
                 </div>
             </tab>
 

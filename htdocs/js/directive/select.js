@@ -34,7 +34,6 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
         restrict: 'E', // Only usage possible is with element
         require: 'ngModel',
         replace: true,
-        transclude: true,
         template: '<input type="hidden" ui-select2="options" ng-model="model" ng-disabled="disabled"/>',
         scope: {
             api: '@',
@@ -45,15 +44,13 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             customSelectionTemplate: '@',
             customResultTemplate: '@',
             containerCssClass: '@',
-            currentContextElement: '@',
+            currentVar: '@',
             changeUrl: '=',
             queryparams: '=',
             disabled: '=',
             model: '=' // TODO: could not find a way to use real 'ng-model'. So for now we use custom 'model' attribute and bi-bind it to real ng-model. Ugly, but working
         },
-        // The linking function will add behavior to the template
-        link: function() {
-        },
+
         controller: function($scope, $attrs, Restangular, CachedRestangular, $location, $route, $routeParams, $timeout) {
             var items = [];
             var api = $scope.api;

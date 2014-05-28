@@ -4,24 +4,6 @@ angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function($scope, 
     "use strict";
 
     $scope.fields = {fields: 'filters,filters.paths,filters.children,filters.color,filter.genericColor'};
-    $scope.params = {fields: 'paths,color,genericColor'};
-    $scope.select2Template = "<div>" +
-            "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
-            "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +
-            "</div>" +
-            "<div class='col-sm-7 col-md-7'>" +
-            "    <small>" +
-            "       [[_.map(item.paths, function(path){ return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]" +
-            "    </small>" +
-            "</div>" +
-            "<div class='col-sm-1 col-md-1 hide-in-results' >" +
-            "    <a class='btn btn-default btn-sm' href='/admin/filter/edit/[[item.id]][[$scope.currentContextElement]]'>" +
-            "        <i class='fa fa-pencil'></i>" +
-            "    </a>" +
-            "</div>" +
-            "<div class='clearfix'></div>" +
-            "</div>";
-
     $scope.tabs = [false, false];
     $scope.selectTab = function(tab) {
         $scope.tabs[tab] = true;

@@ -23,25 +23,6 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
         {text: '0%', value: '0.000'}
     ];
 
-    $scope.params = {fields: 'paths'};
-
-    $scope.select2Template = "<div>" +
-            "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
-            "    <i class='fa fa-gims-filter'></i> [[item.name]]" +
-            "</div>" +
-            "<div class='col-sm-7 col-md-7'>" +
-            "    <small>" +
-            "       [[_.map(item.paths, function(path){return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]" +
-            "    </small>" +
-            "</div>" +
-            "<div class='col-sm-1 col-md-1 hide-in-results' >" +
-            "    <a class='btn btn-default btn-sm' href='/admin/filter/edit/[[item.id]][[$scope.currentContextElement]]'>" +
-            "        <i class='fa fa-pencil'></i>" +
-            "    </a>" +
-            "</div>" +
-            "<div class='clearfix'></div>" +
-            "</div>";
-
     $scope.initChoices = function()
     {
         $scope.isChoices = false;
