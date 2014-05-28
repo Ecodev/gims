@@ -3,7 +3,6 @@
 namespace ApiTest\Controller;
 
 use Zend\Http\Request;
-use Api\Service\MetaModel;
 use Application\Model\Answer;
 use Application\Model\Country;
 use Application\Model\Filter;
@@ -45,6 +44,11 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
     protected $filter;
 
     /**
+     * @var Filter
+     */
+    protected $filterParent;
+
+    /**
      * @var FilterSet
      */
     protected $filterSet;
@@ -68,12 +72,6 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
      * @var Answer
      */
     protected $answer;
-
-    /**
-     * Answer without part
-     * @var Answer
-     */
-    private $answer2;
 
     /**
      * @var UserSurvey
@@ -130,11 +128,6 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
      */
     protected $population;
 
-    /**
-     * @var metaModel
-     */
-    protected $metaModel;
-
     public function setUp()
     {
         parent::setUp();
@@ -146,8 +139,6 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
      */
     protected function populateStorage()
     {
-        $this->metaModel = new MetaModel();
-
         $this->survey = new Survey();
         $this->survey->setIsActive(true);
         $this->survey->setName('test survey');
@@ -157,9 +148,11 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->geoname = new Geoname('test geoname');
 
         $this->filter = new Filter('foo');
-        $this->filter2 = new Filter('bar');
+        $this->filterParent = new Filter('bar');
+        $this->filterParent->addChild($this->filter);
 
         $this->filterSet = new FilterSet('foo filterSet');
+        $this->filterSet->addFilter($this->filter);
         $this->filterSet2 = new FilterSet('bar filterSet'); // no permissions given to this filterset
 
         $this->questionnaire = new Questionnaire();
@@ -169,7 +162,7 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->questionnaire->setGeoname($this->geoname);
 
         $this->question = new NumericQuestion();
-        $this->question->setSurvey($this->survey)->setSorting(1)->setFilter($this->filter)->setName('test survey');
+        $this->question->setSurvey($this->survey)->setSorting(1)->setFilter($this->filter)->setName('test question');
 
         $this->part = new Part();
         $this->part->setName('test part 1');
@@ -181,10 +174,7 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->part3->setName('test part 3');
 
         $this->answer = new Answer();
-        $this->answer->setQuestion($this->question)->setQuestionnaire($this->questionnaire)->setPart($this->part);
-
-        $this->answer2 = new Answer();
-        $this->answer2->setQuestion($this->question)->setQuestionnaire($this->questionnaire)->setPart($this->part2);
+        $this->answer->setQuestion($this->question)->setQuestionnaire($this->questionnaire)->setPart($this->part)->setValuePercent(0.55);
 
         // Get existing roles
         $roleRepository = $this->getEntityManager()->getRepository('Application\Model\Role');
@@ -201,7 +191,7 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->userQuestionnaire1 = new UserQuestionnaire();
         $this->userQuestionnaire1->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($reporter);
 
-        // Define user as questionnaire validator (the guy who answer can validate if user is correct)
+        // Define user as questionnaire validator (the guy who can validate if questionnaire is correct)
         $this->userQuestionnaire2 = new UserQuestionnaire();
         $this->userQuestionnaire2->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($validator);
 
@@ -238,13 +228,12 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->getEntityManager()->persist($this->part2);
         $this->getEntityManager()->persist($this->part3);
         $this->getEntityManager()->persist($this->filter);
-        $this->getEntityManager()->persist($this->filter2);
+        $this->getEntityManager()->persist($this->filterParent);
         $this->getEntityManager()->persist($this->geoname);
         $this->getEntityManager()->persist($this->survey);
         $this->getEntityManager()->persist($this->questionnaire);
         $this->getEntityManager()->persist($this->question);
         $this->getEntityManager()->persist($this->answer);
-        $this->getEntityManager()->persist($this->answer2);
         $this->getEntityManager()->persist($this->rule);
         $this->getEntityManager()->persist($this->questionnaireUsage);
         $this->getEntityManager()->persist($this->filterQuestionnaireUsage);
@@ -256,10 +245,20 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         // After flushed in DB, we clear EM identiy cache, to be sure that we actually reload object from database
         $this->getEntityManager()->clear();
         $reloadedUser = $this->getEntityManager()->merge($this->user);
+        $this->user = $reloadedUser;
         $this->identityProvider->setIdentity($reloadedUser);
     }
 
-    public function testCanGetOne()
+    public function testCommonRestActions()
+    {
+        $this->subtestGetOne();
+        $this->subtestGetOneWithFields();
+        $this->subtestAnonymousCannotDelete();
+        $this->subtestMemberCanDelete();
+        $this->subtestMemberCannotDeleteNonExisting();
+    }
+
+    protected function subtestGetOne()
     {
         $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
         $this->assertResponseStatusCode(200);
@@ -272,7 +271,10 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
 
         $this->assertSame($this->getTestedObject()->getId(), $actual['id'], 'should be the same ID that what we asked');
         $this->assertArrayNotHasKey('nonExistingField', $actual);
+    }
 
+    protected function subtestGetOneWithFields()
+    {
         // Then test we can get specific fields
         $this->dispatch($this->getRoute('get') . '?fields=metadata,nonExistingField', Request::METHOD_GET);
         $this->assertResponseStatusCode(200);
@@ -294,10 +296,38 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         }
     }
 
+    protected function subtestAnonymousCannotDelete()
+    {
+        // Anonymous should not be able to delete anything
+        $this->identityProvider->setIdentity(null);
+        $route = $this->getRoute('delete');
+        $this->dispatch($route, Request::METHOD_DELETE);
+        $this->assertResponseStatusCode(403);
+    }
+
+    protected function subtestMemberCanDelete()
+    {
+        // Logged user should be able to delete
+        $this->identityProvider->setIdentity($this->user);
+        $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
+        $this->assertResponseStatusCode(200);
+        $this->assertEquals($this->getJsonResponse()['message'], 'Deleted successfully');
+    }
+
+    public function subtestMemberCannotDeleteNonExisting()
+    {
+        $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
+        $this->assertResponseStatusCode(404);
+    }
+
     protected function getRoute($method)
     {
         $parts = explode('\\', (get_class($this->getTestedObject())));
         $classname = lcfirst(end($parts));
+        if ($classname == 'numericQuestion') {
+            $classname = 'question';
+        }
+
         $id = $this->getTestedObject()->getId();
 
         switch ($method) {

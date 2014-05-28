@@ -8,7 +8,7 @@ use Zend\Http\Request;
 /**
  * @group Rest
  */
-class QuestionControllerTest extends AbstractRestfulControllerTest
+class QuestionControllerTest extends AbstractChildRestfulControllerTest
 {
 
     protected function getAllowedFields()
@@ -21,67 +21,47 @@ class QuestionControllerTest extends AbstractRestfulControllerTest
         return $this->question;
     }
 
+    protected function getPossibleParents()
+    {
+        return [
+            $this->survey,
+            'unidirectional' => $this->questionnaire,
+        ];
+    }
+
     /**
      * Get suitable route for GET method.
      *
      * @param string $method
-     *
      * @return string
      */
     protected function getRoute($method)
     {
-        switch ($method) {
-            case 'get':
-                $route = sprintf(
-                        '/api/questionnaire/%s/question/%s', $this->questionnaire->getId(), $this->question->getId()
-                );
-                break;
-            case 'post':
-                $route = sprintf(
-                        '/api/questionnaire/%s/question', $this->questionnaire->getId()
-                );
-                break;
-            case 'put':
-                $route = sprintf(
-                        '/api/questionnaire/%s/question/%s', $this->questionnaire->getId(), $this->question->getId()
-                );
-                break;
-            default:
-                $route = '';
+        if ($method == 'getWithAnswers') {
+            return sprintf('/api/questionnaire/%s/question/%s', $this->questionnaire->getId(), $this->question->getId());
+        } else {
+            return parent::getRoute($method);
         }
-
-        return $route;
     }
 
     public function testCanRetrieveQuestionAnswers()
     {
-        $this->dispatch($this->getRoute('get') . '?fields=answers', Request::METHOD_GET);
+        $this->dispatch($this->getRoute('getWithAnswers') . '?fields=answers', Request::METHOD_GET);
         $actual = $this->getJsonResponse();
-        $this->assertCount(2, $actual['answers']);
+        $this->assertCount(1, $actual['answers']);
     }
 
-    public function testCanUpdateNameOfQuestion()
-    {
-        $expected = 'bar';
-        $data = array(
-            'name' => $expected,
-        );
-
-        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
-        $actual = $this->getJsonResponse();
-        $this->assertEquals($expected, $actual['name']);
-    }
-
-    public function testCanModifyQuestionType()
+    public function testCanUpdateQuestionType()
     {
         $data = array(
+            'name' => 'bar',
             'type' => \Application\Model\QuestionType::$CHAPTER,
         );
 
-        $url = $this->getRoute('put') . '?fields=type';
-        $this->dispatch($url, Request::METHOD_PUT, $data);
-        $afterChange = $this->getJsonResponse();
-        $this->assertEquals($data['type'], $afterChange['type'], 'should return new type');
+        $this->dispatch($this->getRoute('put') . '?fields=type', Request::METHOD_PUT, $data);
+        $actual = $this->getJsonResponse();
+        $this->assertEquals($data['name'], $actual['name'], 'name should be updated');
+        $this->assertEquals($data['type'], $actual['type'], 'type should be updated');
     }
 
     private function getMockQuestions()
@@ -111,13 +91,8 @@ class QuestionControllerTest extends AbstractRestfulControllerTest
 
     public function testMoveSortingValueOfLastQuestionToFirstAndCheckWhetherSortingValueOfOtherQuestionsAreShifted()
     {
-
         $questions = $this->getMockQuestions();
-
-        $route = $route = sprintf(
-                '/api/question?id=%s', $questions[5]->getId()
-        );
-
+        $route = sprintf('/api/question?id=%s', $questions[5]->getId());
         $data = array(
             'sorting' => 1,
         );
@@ -135,13 +110,8 @@ class QuestionControllerTest extends AbstractRestfulControllerTest
 
     public function testMoveSortingValueOfFirstQuestionToLastAndCheckWhetherSortingValueOfOtherQuestionsAreShifted()
     {
-
         $questions = $this->getMockQuestions();
-
-        $route = $route = sprintf(
-                '/api/question?id=%s', $questions[1]->getId()
-        );
-
+        $route = sprintf('/api/question?id=%s', $questions[1]->getId());
         $data = array(
             'sorting' => 5,
         );

@@ -8,7 +8,7 @@ use Zend\Http\Request;
 /**
  * @group Rest
  */
-class QuestionnaireControllerTest extends AbstractRestfulControllerTest
+class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
 {
 
     protected function getAllowedFields()
@@ -21,6 +21,13 @@ class QuestionnaireControllerTest extends AbstractRestfulControllerTest
         return $this->questionnaire;
     }
 
+    protected function getPossibleParents()
+    {
+        return [
+            $this->survey,
+        ];
+    }
+
     /**
      * Get suitable route for GET method.
      *
@@ -30,28 +37,16 @@ class QuestionnaireControllerTest extends AbstractRestfulControllerTest
      */
     protected function getRoute($method)
     {
-        switch ($method) {
-            case 'getList':
-                $route = sprintf('/api/survey/%s/questionnaire', $this->survey->getId());
-                break;
-            case 'post':
-                $route = sprintf('/api/questionnaire');
-                break;
-            case 'get':
-            case 'put':
-            case 'delete':
-                $route = sprintf('/api/questionnaire/%s', $this->questionnaire->getId());
-                break;
-            default:
-                throw new \Exception("Unsupported route '$method' for questionnaire");
+        if ($method == 'getListSurvey') {
+            return sprintf('/api/survey/%s/questionnaire', $this->survey->getId());
+        } else {
+            return parent::getRoute($method);
         }
-
-        return $route;
     }
 
     public function testCanListQuestionnaire()
     {
-        $this->dispatch($this->getRoute('getList'), Request::METHOD_GET);
+        $this->dispatch($this->getRoute('getListSurvey'), Request::METHOD_GET);
 
         $this->assertResponseStatusCode(200);
         $json = $this->getJsonResponse();
@@ -62,36 +57,7 @@ class QuestionnaireControllerTest extends AbstractRestfulControllerTest
         }
     }
 
-    public function testQuestionnaireWithNoAnswerCanBeDeleted()
-    {
-        // Questionnaire
-        $data = array(
-            'dateObservationStart' => '2013-05-22T00:00:00.000Z',
-            'dateObservationEnd' => '2014-05-22T00:00:00.000Z',
-            'geoname' => $this->geoname->getId(),
-            'survey' => $this->survey->getId(),
-        );
-
-        $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
-        $actual = $this->getJsonResponse();
-
-        // Should be able to delete once
-        $this->dispatch('/api/questionnaire/' . $actual['id'], Request::METHOD_DELETE);
-        $this->assertResponseStatusCode(200);
-        $this->getJsonResponse();
-        $this->assertJsonStringEqualsJsonString(
-                '{"message":"Deleted successfully"}', $this->getResponse()->getContent()
-        );
-
-        // Should not be able to delete the same resource again
-        $this->dispatch('/api/questionnaire/' . $actual['id'], Request::METHOD_DELETE);
-        $this->assertResponseStatusCode(404);
-    }
-
-    /**
-     * @test
-     */
-    public function updateQuestionnaireGeoNameAndCheckWhetherGeoNameIsChanged()
+    public function testCanUpdateQuestionnaireGeoname()
     {
         // create new geoname
         $geoname = new Geoname('foo geoname');
@@ -108,10 +74,7 @@ class QuestionnaireControllerTest extends AbstractRestfulControllerTest
         $this->assertNotEquals($expected, $actual['geoname']['id']);
     }
 
-    /**
-     * @test
-     */
-    public function createANewQuestionnaireWithPostMethod()
+    public function testCanCreateQuestionnaire()
     {
         // Questionnaire
         $data = array(
@@ -143,7 +106,7 @@ class QuestionnaireControllerTest extends AbstractRestfulControllerTest
      */
     public function testSearch($params, $count)
     {
-        $this->dispatch($this->getRoute('getList') . $params, Request::METHOD_GET);
+        $this->dispatch($this->getRoute('getListSurvey') . $params, Request::METHOD_GET);
         $actual = $this->getJsonResponse();
 
         $this->assertEquals($count, $actual['metadata']['totalCount'], 'result count does not match expectation');

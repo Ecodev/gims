@@ -20,6 +20,29 @@ class UserControllerTest extends AbstractRestfulControllerTest
         return $this->user;
     }
 
+    protected function subtestAnonymousCannotDelete()
+    {
+        // Actually cannot delete user
+        $this->identityProvider->setIdentity($this->user);
+        $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
+        $this->assertResponseStatusCode(500);
+    }
+
+    protected function subtestMemberCanDelete()
+    {
+        // Actually cannot delete user
+        $this->identityProvider->setIdentity($this->user);
+        $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
+        $this->assertResponseStatusCode(500);
+    }
+
+    public function subtestMemberCannotDeleteNonExisting()
+    {
+        // Actually cannot delete part
+        $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
+        $this->assertResponseStatusCode(500);
+    }
+
     public function testCanGetNeverGetPassword()
     {
         $this->dispatch($this->getRoute('get') . '?fields=password,phone', Request::METHOD_GET);

@@ -24,7 +24,7 @@ abstract class AbstractUserRole extends AbstractModel
     public function getRoleContext($action)
     {
         if ($this->getId()) {
-            return $this->getRoleContextInternal();
+            return $this->getRoleContextInternal($action);
         } else {
             return null;
         }

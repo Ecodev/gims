@@ -8,6 +8,7 @@ use Application\Model\Rule\Rule;
 
 class FilterController extends AbstractChildRestfulController
 {
+
     use \Application\Traits\FlatHierarchic;
 
     /**
@@ -38,11 +39,11 @@ class FilterController extends AbstractChildRestfulController
                     $filterChildren = array($filter);
                     $filterChildren = array_merge($filterChildren, $this->getAllChildren($filter));
                     $filterChildren = $this->flattenFilters($filterChildren);
-                    unset($filterChildren[0]['parents']);
+                    unset($filterChildren[0]['_parent']);
                     for ($i = 1; $i < $filter->getParents()->count(); $i++) {
                         unset($filterChildren[$i]);
                     }
-                    $filterChildren = $this->getFlatHierarchyWithSingleRootElement($filterChildren, 'parents');
+                    $filterChildren = $this->getFlatHierarchyWithSingleRootElement($filterChildren, '_parent');
                     $filters = array_merge($filters, $filterChildren);
                 }
 
@@ -50,7 +51,7 @@ class FilterController extends AbstractChildRestfulController
             } else {
                 $filters = $this->getAllChildren($parent);
                 $filters = $this->flattenFilters($filters);
-                $filters = $this->getFlatHierarchyWithSingleRootElement($filters, 'parents', $this->params('idParent'));
+                $filters = $this->getFlatHierarchyWithSingleRootElement($filters, '_parent', $this->params('idParent'));
             }
 
             // no parent, get all filters
@@ -58,7 +59,7 @@ class FilterController extends AbstractChildRestfulController
             $itemOnce = $this->params()->fromQuery('itemOnce') == 'true' ? true : false;
             $filters = $this->getRepository()->findAll();
             $filters = $this->flattenFilters($filters, $itemOnce);
-            $filters = $this->getFlatHierarchyWithMultipleRootElements($filters, 'parents');
+            $filters = $this->getFlatHierarchyWithMultipleRootElements($filters, '_parent');
         }
 
         return $filters;
@@ -73,32 +74,31 @@ class FilterController extends AbstractChildRestfulController
      */
     private function flattenFilters($filters, $itemOnce = false)
     {
-        $jsonConfig = array_merge($this->getJsonConfig(), array('parents'));
+        $jsonConfig = $this->getJsonConfig();
         $flatFilters = array();
         foreach ($filters as $filter) {
             $flatFilter = $this->hydrator->extract($filter, $jsonConfig);
-            if (count($flatFilter['parents']) > 0 && !$itemOnce) {
-                $parents = $flatFilter['parents'];
-                unset($flatFilter['parents']);
-                // add multiple times the filter to list if he has multiple parents
+            $parents = $this->hydrator->extractArray($filter->getParents(), ['id']);
+
+            if ($parents) {
                 foreach ($parents as $parent) {
-                    $filter = $flatFilter;
-                    $filter['parents'] = $parent;
-                    array_push($flatFilters, $filter);
+                    $flatFilter['_parent'] = $parent;
+                    $flatFilters[] = $flatFilter;
+
+                    // If we don't want duplicated items for each parents, break the loop
+                    if ($itemOnce) {
+                        break;
+                    }
                 }
-            } elseif (count($flatFilter['parents']) > 0 && $itemOnce) {
-                $flatFilter['parents'] = $flatFilter['parents'][0];
-                array_push($flatFilters, $flatFilter);
             } else {
-                unset($flatFilter['parents']);
-                array_push($flatFilters, $flatFilter);
+                $flatFilters[] = $flatFilter;
             }
         }
 
         return $flatFilters;
     }
 
-    private function getAllChildren($filter)
+    private function getAllChildren(\Application\Model\Filter $filter)
     {
         $children = $filter->getChildren()->toArray();
         foreach ($children as $child) {
@@ -129,14 +129,6 @@ class FilterController extends AbstractChildRestfulController
         }
 
         return $filter['name'];
-    }
-
-    public function createFiltersAction()
-    {
-        $filters = $this->params()->fromQuery('filters');
-        print_r($filters);
-
-        return new JsonModel($filters);
     }
 
     public function getComputedFiltersAction()
@@ -204,7 +196,6 @@ class FilterController extends AbstractChildRestfulController
                     $this->getEntityManager()->persist($fqu);
                 }
             }
-
         }
         $this->getEntityManager()->flush();
 

@@ -29,29 +29,29 @@ class QuestionController extends AbstractChildRestfulController
             // Here we use a closure to get the questions' answers, but only for the current questionnaire
 
             'answers' => function (\Application\Service\Hydrator $hydrator, AbstractQuestion $question) use (
-                $questionnaire, $controller
+            $questionnaire, $controller
             ) {
-                $output = null;
-                if (is_callable(array($question, 'getAnswers'))) {
-                    $answers = $question->getAnswers($questionnaire);
+        $output = null;
+        if (is_callable(array($question, 'getAnswers'))) {
+            $answers = $question->getAnswers($questionnaire);
 
-                    // special case for question, reorganize keys for the needs of NgGrid:
-                    // Numerical key must correspond to the id of the part.
-                    $output = array();
-                    foreach ($answers as $answer) {
+            // special case for question, reorganize keys for the needs of NgGrid:
+            // Numerical key must correspond to the id of the part.
+            $output = array();
+            foreach ($answers as $answer) {
 
-                        // If does not have access to answer, skip silently
-                        if (!$controller->getAuth()->isActionGranted($answer, 'read')) {
-                            continue;
-                        }
-
-                        $answerData = $hydrator->extract($answer, array('part'));
-                        array_push($output, $answerData);
-                    }
+                // If does not have access to answer, skip silently
+                if (!$controller->getAuth()->isActionGranted($answer, 'read')) {
+                    continue;
                 }
 
-                return $output;
-            },
+                $answerData = $hydrator->extract($answer, array('part'));
+                array_push($output, $answerData);
+            }
+        }
+
+        return $output;
+    },
         );
 
         return $config;
@@ -85,7 +85,6 @@ class QuestionController extends AbstractChildRestfulController
 
     public function getList()
     {
-
         $parent = $this->getParent();
         $permission = $this->params()->fromQuery('permission', 'read');
         if ($parent instanceof \Application\Model\Question\Chapter) {
@@ -105,10 +104,11 @@ class QuestionController extends AbstractChildRestfulController
         $flatQuestions = array();
         foreach ($questions as $question) {
             $flatQuestion = $this->hydrator->extract($question, $this->getJsonConfig());
+            $flatQuestion['_chapter'] = $question->getChapter() ? $this->hydrator->extract($question->getChapter(), ['id']) : null;
             array_push($flatQuestions, $flatQuestion);
         }
 
-        $questions = $this->getFlatHierarchyWithSingleRootElement($flatQuestions, 'chapter', 0);
+        $questions = $this->getFlatHierarchyWithSingleRootElement($flatQuestions, '_chapter', 0);
         $jsonData = $this->paginate($questions, false);
 
         return new JsonModel($jsonData);

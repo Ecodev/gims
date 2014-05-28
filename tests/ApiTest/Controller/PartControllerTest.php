@@ -20,6 +20,21 @@ class PartControllerTest extends AbstractRestfulControllerTest
         return $this->part;
     }
 
+    protected function subtestMemberCanDelete()
+    {
+        // Actually cannot delete part
+        $this->identityProvider->setIdentity($this->user);
+        $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
+        $this->assertResponseStatusCode(403);
+    }
+
+    public function subtestMemberCannotDeleteNonExisting()
+    {
+        // Actually cannot delete part
+        $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
+        $this->assertResponseStatusCode(403);
+    }
+
     public function testCannotCreatePart()
     {
         $data = array(
@@ -28,14 +43,8 @@ class PartControllerTest extends AbstractRestfulControllerTest
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(403);
-    }
 
-    public function testCannotCreatePartWithRoleAnonymous()
-    {
-        $data = array(
-            'name' => 'this will fail',
-        );
-
+        // Anonymous will also fail
         $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(403);

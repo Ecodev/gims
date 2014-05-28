@@ -8,19 +8,22 @@ trait FlatHierarchic
     /**
      * Get a tree of elements from a single root element relative to a parent relation
      * @param array $objects a list of prepared elements in assoc array with reference to parent
-     * @param $referenceObject key of the reference to parent
-     * @param int $rootElementId default id of root parent element
-     * @internal param $questions
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @param string $referenceObject key of the reference to parent
+     * @param integer $rootElementId default id of root parent element
+     * @return array
      */
     public function getFlatHierarchyWithSingleRootElement(array $objects, $referenceObject, $rootElementId = 0)
     {
         $objectsByParent = array();
         foreach ($objects as $object) {
             if (!isset($object[$referenceObject]['id']) || empty($object[$referenceObject]['id'])) {
-                $object[$referenceObject]['id'] = $rootElementId;
+                $parentId = $rootElementId;
+            } else {
+                $parentId = $object[$referenceObject]['id'];
             }
-            $objectsByParent[$object[$referenceObject]['id']][] = $object;
+
+            unset($object[$referenceObject]);
+            $objectsByParent[$parentId][] = $object;
         }
 
         if ($objects) {
@@ -36,54 +39,38 @@ trait FlatHierarchic
      * When retrieving tree with single element root, the top level elements refers to the parent.
      * That behavior may be unwanted and this function removes the reference to the single root element on top hierarchic elements
      * @param array $objects a list of prepared elements in assoc array with reference to parent
-     * @param $referenceObject key of the reference to parent
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @param string $referenceObject key of the reference to parent
+     * @return array
      */
-    public function getFlatHierarchyWithMultipleRootElements2(array $objects, $referenceObject)
-    {
-        $elements = $this->getFlatHierarchyWithSingleRootElement($objects, $referenceObject);
-        $elements = array_map(function ($el) use ($referenceObject) {
-            if ($el[$referenceObject]['id'] == 0) {
-                unset($el[$referenceObject]);
-
-                return $el;
-            }
-
-            return $el;
-
-        }, $elements);
-
-        return $elements;
-    }
-
-    public function getFlatHierarchyWithMultipleRootElements($objects, $referenceObject)
+    public function getFlatHierarchyWithMultipleRootElements(array $objects, $referenceObject)
     {
         $rootElements = array();
         $objectsByParent = array();
-        $objectsById = array();
+        $knownIds = array();
 
         foreach ($objects as $object) {
-            $objectsById[$object['id']][] = $object;
+            $knownIds[] = $object['id'];
         }
 
         foreach ($objects as $object) {
+            $parentId = @$object[$referenceObject]['id'];
+            unset($object[$referenceObject]);
+
             // if object has no parent reference or if parent is not in given objects list, add object to rootElement
-            if (!isset($object[$referenceObject]['id'])
-                || isset($object[$referenceObject]['id']) && !isset($objectsById[$object[$referenceObject]['id']])
-            ) {
+            if (!$parentId || !in_array($parentId, $knownIds)) {
                 $rootElements[$object['id']] = $object;
             } else {
-                $objectsByParent[$object[$referenceObject]['id']][] = $object;
+                $objectsByParent[$parentId][] = $object;
             }
         }
 
         if ($objects) {
             $elements = array();
-            foreach ($rootElements as $parentId => $rootElement) {
+            foreach ($rootElements as $rootId => $rootElement) {
                 $rootElement['level'] = 0;
                 array_push($elements, $rootElement);
-                if (isset($objectsByParent[$parentId])) {
-                    $elements = array_merge($elements, $this->createTree($objectsByParent, $objectsByParent[$parentId], 1));
+                if (isset($objectsByParent[$rootId])) {
+                    $elements = array_merge($elements, $this->createTree($objectsByParent, $objectsByParent[$rootId], 1));
                 }
             }
         } else {
@@ -95,12 +82,12 @@ trait FlatHierarchic
 
     /**
      * Generate tree from given root element
-     * @param $objectsByParent
-     * @param $parent
-     * @param $deep
+     * @param array $objectsByParent
+     * @param array$parent
+     * @param integer $deep
      * @return array
      */
-    private function createTree(&$objectsByParent, $parent, $deep)
+    private function createTree(array &$objectsByParent, array $parent, $deep)
     {
         $tree = array();
         foreach ($parent as $child) {

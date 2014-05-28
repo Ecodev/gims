@@ -53,24 +53,4 @@ class RuleControllerTest extends AbstractRestfulControllerTest
         $this->assertResponseStatusCode(403);
     }
 
-    public function testCanDeleteRule()
-    {
-        $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
-        $this->assertResponseStatusCode(200);
-        $this->assertEquals($this->getJsonResponse()['message'], 'Deleted successfully');
-    }
-
-    public function testAnonymousCanDeleteRule()
-    {
-        $this->identityProvider->setIdentity(null);
-        $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
-        $this->assertResponseStatusCode(403);
-    }
-
-    public function testCannotDeleteNonExistingRule()
-    {
-        $this->dispatch('/api/rule/713705', Request::METHOD_DELETE); // smyle, the sun shines :)
-        $this->assertResponseStatusCode(404);
-    }
-
 }

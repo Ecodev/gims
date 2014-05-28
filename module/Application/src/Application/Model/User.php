@@ -19,9 +19,9 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     public static function getCurrentUser()
     {
         $sm = \Application\Module::getServiceManager();
-        $auth = $sm->get('zfcuser_auth_service');
+        $identityProvider = $sm->get('ZfcRbac\Service\AuthorizationService');
 
-        return $auth->getIdentity();
+        return $identityProvider->getIdentity();
     }
 
     /**
