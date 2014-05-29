@@ -7,17 +7,15 @@ class FilterQuestionnaireUsageRepositoryTest extends AbstractRepository
 
     public function testCanSaveConcreteRuleAndReload()
     {
-        $survey = new \Application\Model\Survey();
+        $survey = new \Application\Model\Survey('test survey');
         $survey->setCode('test code');
-        $survey->setName('test survey');
-        $geoname = new \Application\Model\Geoname();
+        $geoname = new \Application\Model\Geoname('tst geoname');
         $questionnaire = new \Application\Model\Questionnaire();
         $questionnaire->setSurvey($survey)->setGeoname($geoname)->setDateObservationStart(new \DateTime())->setDateObservationEnd(new \DateTime());
         $filter = new \Application\Model\Filter('test filter');
         $part = new \Application\Model\Part('unit test parts');
         $usage = new \Application\Model\Rule\FilterQuestionnaireUsage();
-        $rule = new \Application\Model\Rule\Rule();
-        $rule->setName('test rule');
+        $rule = new \Application\Model\Rule\Rule('test rule');
         $usage->setJustification('unit tests')
                 ->setFilter($filter)
                 ->setQuestionnaire($questionnaire)

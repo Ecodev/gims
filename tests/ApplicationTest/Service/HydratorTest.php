@@ -29,8 +29,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     {
         parent::setUp();
 
-        $this->user = new \Application\Model\User();
-        $this->user->setName('John');
+        $this->user = new \Application\Model\User('John');
         $this->choice1 = new \Application\Model\Question\Choice();
         $this->choice2 = new \Application\Model\Question\Choice();
 
@@ -118,8 +117,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
 
     public function testDoesNotModifySubobject()
     {
-        $survey = new Survey();
-        $survey->setName('original name');
+        $survey = new Survey('original name');
         $questionnaire = new \Application\Model\Questionnaire();
         $questionnaire->setSurvey($survey);
 
@@ -224,8 +222,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     {
         $questionnaire = new \Application\Model\Questionnaire('filter 1');
         $questionnaire->setComments('test comments');
-        $survey = new \Application\Model\Survey();
-        $survey->setName('test survey');
+        $survey = new \Application\Model\Survey('test survey');
         $survey->setCode('tst');
         $questionnaire->setSurvey($survey);
         $questionnaire->setGeoname(new Geoname('test geoname'));
@@ -365,8 +362,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     public function testHydrateAssociationWithSuboject()
     {
         $questionnaire = new \Application\Model\Questionnaire();
-        $survey = new \Application\Model\Survey();
-        $survey->setName('test survey');
+        $survey = new \Application\Model\Survey('test survey');
 
         // Create a stub for the \Application\Service\Hydrator class, so we don't have to mess with database
         $mockHydrator = $this->getMock('\Application\Service\Hydrator', array('getObject'), array(), '', false);
@@ -433,10 +429,8 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     private function getFakeSurvey()
     {
-
-        $survey = new Survey();
+        $survey = new Survey('test survey');
         $survey->setIsActive(true);
-        $survey->setName('test survey');
         $survey->setCode('code test survey');
         $survey->setYear(2010);
 

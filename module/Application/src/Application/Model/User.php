@@ -127,13 +127,15 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * Constructor
+     * @param string $name
      */
-    public function __construct()
+    public function __construct($name = null)
     {
         $this->userSurveys = new \Doctrine\Common\Collections\ArrayCollection();
         $this->userQuestionnaires = new \Doctrine\Common\Collections\ArrayCollection();
         $this->userFilterSets = new \Doctrine\Common\Collections\ArrayCollection();
         $this->userFilters = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->setName($name);
     }
 
     /**

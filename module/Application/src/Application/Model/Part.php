@@ -28,6 +28,10 @@ class Part extends AbstractModel
      */
     private $isTotal = false;
 
+    /**
+     * Constructor
+     * @param string $name
+     */
     public function __construct($name = null)
     {
         $this->setName($name);

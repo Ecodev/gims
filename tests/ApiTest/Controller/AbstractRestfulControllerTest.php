@@ -139,9 +139,8 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
      */
     protected function populateStorage()
     {
-        $this->survey = new Survey();
+        $this->survey = new Survey('test survey');
         $this->survey->setIsActive(true);
-        $this->survey->setName('test survey');
         $this->survey->setCode('code test survey');
         $this->survey->setYear(2010);
 
@@ -161,17 +160,12 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->questionnaire->setDateObservationEnd(new \DateTime('2011-01-01T00:00:00+0100'));
         $this->questionnaire->setGeoname($this->geoname);
 
-        $this->question = new NumericQuestion();
-        $this->question->setSurvey($this->survey)->setSorting(1)->setFilter($this->filter)->setName('test question');
+        $this->question = new NumericQuestion('test question');
+        $this->question->setSurvey($this->survey)->setSorting(1)->setFilter($this->filter);
 
-        $this->part = new Part();
-        $this->part->setName('test part 1');
-
-        $this->part2 = new Part();
-        $this->part2->setName('test part 2');
-
-        $this->part3 = new Part();
-        $this->part3->setName('test part 3');
+        $this->part = new Part('test part 1');
+        $this->part2 = new Part('test part 2');
+        $this->part3 = new Part('test part 3');
 
         $this->answer = new Answer();
         $this->answer->setQuestion($this->question)->setQuestionnaire($this->questionnaire)->setPart($this->part)->setValuePercent(0.55);
@@ -199,8 +193,8 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->userFilterSet = new \Application\Model\UserFilterSet();
         $this->userFilterSet->setUser($this->user)->setFilterSet($this->filterSet)->setRole($filterEditor);
 
-        $this->rule = new Rule();
-        $this->rule->setName('test rule')->setFormula('=2 * 3');
+        $this->rule = new Rule('test rule');
+        $this->rule->setFormula('=2 * 3');
 
         $this->questionnaireUsage = new QuestionnaireUsage();
         $this->questionnaireUsage->setJustification('tests')->setRule($this->rule)->setPart($this->part)->setQuestionnaire($this->questionnaire);
@@ -211,8 +205,8 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->filterGeonameUsage = new FilterGeonameUsage();
         $this->filterGeonameUsage->setJustification('tests')->setRule($this->rule)->setPart($this->part)->setGeoname($this->geoname)->setFilter($this->filter);
 
-        $this->country = new Country();
-        $this->country->setName('tst country')->setCode('tstctry')->setGeoname($this->geoname);
+        $this->country = new Country('tst country');
+        $this->country->setCode('tstctry')->setGeoname($this->geoname);
 
         $this->population = new Population();
         $this->population->setCountry($this->country)->setPart($this->part)->setYear(2000)->setPopulation(55555)->setQuestionnaire($this->questionnaire);

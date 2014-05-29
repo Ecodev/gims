@@ -211,26 +211,26 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $this->filter3->addSummand($this->filter21);
 
         // Define questionnaire with answers for leaf filters only
-        $survey = new \Application\Model\Survey();
-        $survey->setCode('tst 1')->setName('Test survey 1')->setYear(2000);
+        $survey = new \Application\Model\Survey('Test survey 1');
+        $survey->setCode('tst 1')->setYear(2000);
 
         // Create a stub for the Questionnaire class with fake ID, so we don't have to mess with database
         $this->questionnaire = $this->getNewModelWithId('\Application\Model\Questionnaire');
         $this->questionnaire->setSurvey($survey)->setGeoname($this->geoname);
 
-        $this->question131 = new \Application\Model\Question\NumericQuestion();
-        $this->question132 = new \Application\Model\Question\NumericQuestion();
-        $this->question141 = new \Application\Model\Question\NumericQuestion();
-        $this->question142 = new \Application\Model\Question\NumericQuestion();
-        $this->question31 = new \Application\Model\Question\NumericQuestion();
-        $this->question32 = new \Application\Model\Question\NumericQuestion();
+        $this->question131 = new \Application\Model\Question\NumericQuestion('Question 1.3.1');
+        $this->question132 = new \Application\Model\Question\NumericQuestion('Question 1.3.2');
+        $this->question141 = new \Application\Model\Question\NumericQuestion('Question 1.4.1');
+        $this->question142 = new \Application\Model\Question\NumericQuestion('Question 1.4.2');
+        $this->question31 = new \Application\Model\Question\NumericQuestion('Question 3.1');
+        $this->question32 = new \Application\Model\Question\NumericQuestion('Question 3.2');
 
-        $this->question131->setFilter($this->filter131)->setName('Question 1.3.1');
-        $this->question132->setFilter($this->filter132)->setName('Question 1.3.2');
-        $this->question141->setFilter($this->filter141)->setName('Question 1.4.1');
-        $this->question142->setFilter($this->filter142)->setName('Question 1.4.2');
-        $this->question31->setFilter($this->filter31)->setName('Question 3.1');
-        $this->question32->setFilter($this->filter32)->setName('Question 3.2');
+        $this->question131->setFilter($this->filter131);
+        $this->question132->setFilter($this->filter132);
+        $this->question141->setFilter($this->filter141);
+        $this->question142->setFilter($this->filter142);
+        $this->question31->setFilter($this->filter31);
+        $this->question32->setFilter($this->filter32);
 
         // Create a stub for the Part class
         $this->part1 = $this->getNewModelWithId('\Application\Model\Part')->setName('tst part 1');

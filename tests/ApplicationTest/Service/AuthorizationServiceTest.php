@@ -7,16 +7,16 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
 
     public function testAuthorizationService()
     {
-        $geoname = new \Application\Model\Geoname();
+        $geoname = new \Application\Model\Geoname('tst geoname');
 
-        $user = new \Application\Model\User();
-        $user->setPassword('foo')->setName('test user');
+        $user = new \Application\Model\User('test user');
+        $user->setPassword('foo');
 
-        $survey = new \Application\Model\Survey();
-        $survey->setName('test survey')->setIsActive(true)->setCode('test code');
+        $survey = new \Application\Model\Survey('test survey');
+        $survey->setCode('test code');
 
-        $survey2 = new \Application\Model\Survey();
-        $survey2->setName('test survey2')->setIsActive(true)->setCode('test code2');
+        $survey2 = new \Application\Model\Survey('test survey2');
+        $survey2->setCode('test code2');
 
         $questionnaire = new \Application\Model\Questionnaire();
         $questionnaire->setDateObservationStart(new \DateTime())->setDateObservationEnd(new \DateTime())->setSurvey($survey)->setGeoname($geoname);

@@ -211,11 +211,10 @@ STRING;
         }
 
         if (!$survey) {
-            $survey = new Survey();
+            $survey = new Survey($sheet->getCellByColumnAndRow($col + 0, 2)->getCalculatedValue());
 
             $survey->setIsActive(true);
             $survey->setCode($code);
-            $survey->setName($sheet->getCellByColumnAndRow($col + 0, 2)->getCalculatedValue());
             $survey->setYear($year);
 
             if (!$survey->getName()) {
@@ -550,13 +549,12 @@ STRING;
         }
 
         if (!$question) {
-            $question = new NumericQuestion();
+            $question = new NumericQuestion($filter->getName());
             $this->getEntityManager()->persist($question);
 
             $question->setSurvey($survey);
             $question->setFilter($filter);
             $question->setSorting($survey->getQuestions()->count());
-            $question->setName($filter->getName());
             $question->setParts(new \Doctrine\Common\Collections\ArrayCollection(array($this->partRural, $this->partUrban, $this->partTotal)));
             $question->setIsPopulation(true);
             $this->getEntityManager()->persist($question);
@@ -859,9 +857,8 @@ STRING;
         $rule = $ruleRepository->findOneByFormula($formula);
 
         if (!$rule) {
-            $rule = new Rule();
-            $rule->setName($name)
-                    ->setFormula($formula);
+            $rule = new Rule($name);
+            $rule->setFormula($formula);
             $this->getEntityManager()->persist($rule);
             $this->ruleCount++;
         }

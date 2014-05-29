@@ -50,6 +50,15 @@ class Choice extends \Application\Model\AbstractModel
     private $answers;
 
     /**
+     * Constructor
+     * @param string $name
+     */
+    public function __construct($name = null)
+    {
+        $this->setName($name);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getJsonConfig()

@@ -7,9 +7,8 @@ class PopulationRepositoryTest extends AbstractRepository
 
     public function testCanSaveAllQuestionnaireStatusesInDatabase()
     {
-        $survey = new \Application\Model\Survey();
+        $survey = new \Application\Model\Survey('test survey');
         $survey->setCode('test code');
-        $survey->setName('test survey');
         $survey->setYear(2000);
 
         $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneBy(['iso3' => 'CHE']);

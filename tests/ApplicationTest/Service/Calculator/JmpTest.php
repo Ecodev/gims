@@ -28,8 +28,8 @@ class JmpTest extends AbstractCalculator
         // Create a stub for the Questionnaire class with fake ID, so we don't have to mess with database
         $questionnaire2 = $this->getNewModelWithId('\Application\Model\Questionnaire');
 
-        $survey2 = new \Application\Model\Survey();
-        $survey2->setCode('tst 2')->setName('Test survey 2')->setYear(2005);
+        $survey2 = new \Application\Model\Survey('Test survey 2');
+        $survey2->setCode('tst 2')->setYear(2005);
         $questionnaire2->setSurvey($survey2)->setGeoname($this->geoname);
 
         $question131 = new \Application\Model\Question\NumericQuestion();

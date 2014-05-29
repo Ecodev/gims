@@ -63,8 +63,7 @@ class QuestionnaireRepository extends AbstractChildRepository
             $formula = $fqu->getRule()->getFormula();
             $newFormula = str_replace('Q#' . $srcQ->getId(), 'Q#' . $destQ->getId(), $formula);
 
-            $newRule = new Rule();
-            $newRule->setName($fqu->getRule()->getName());
+            $newRule = new Rule($fqu->getRule()->getName());
             $newRule->setFormula($newFormula);
 
             $newFqu = new FilterQuestionnaireUsage();

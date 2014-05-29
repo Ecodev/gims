@@ -625,9 +625,8 @@ use \Application\Traits\EntityManagerAware;
         $filter = $filterRepository->getOneByNames($name, $parentName);
         if (!$filter) {
 
-            $filter = new Filter();
+            $filter = new Filter($name);
             $this->getEntityManager()->persist($filter);
-            $filter->setName($name);
             if ($parent) {
                 $parent->addChild($filter);
             }

@@ -9,10 +9,9 @@ class QuestionnaireRepositoryTest extends AbstractRepository
 
     public function testCanSaveAllQuestionnaireStatusesInDatabase()
     {
-        $survey = new \Application\Model\Survey();
+        $survey = new \Application\Model\Survey('test survey');
         $survey->setCode('test code');
-        $survey->setName('test survey');
-        $geoname = new \Application\Model\Geoname();
+        $geoname = new \Application\Model\Geoname('tst geoname');
         $questionnaire = new \Application\Model\Questionnaire();
         $questionnaire->setSurvey($survey)->setGeoname($geoname)->setDateObservationStart(new \DateTime())->setDateObservationEnd(new \DateTime());
         $this->getEntityManager()->persist($survey);

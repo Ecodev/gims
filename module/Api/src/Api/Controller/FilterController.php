@@ -181,8 +181,7 @@ class FilterController extends AbstractChildRestfulController
                     $questionnaireForm = '{Q#' . $questionnaire->getId() . ',P#' . $part->getId() . '}';
                     $completeForm = '=(' . $child1Form . '*' . $child2Form . '/' . $questionnaireForm . ')';
 
-                    $rule = new Rule();
-                    $rule->setName('Sector for "' . $parent->getName() + '"');
+                    $rule = new Rule('Sector for "' . $parent->getName() + '"');
                     $rule->setFormula($completeForm);
 
                     $fqu = new FilterQuestionnaireUsage();

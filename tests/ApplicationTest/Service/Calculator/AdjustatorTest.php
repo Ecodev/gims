@@ -46,8 +46,8 @@ class AdjustatorTest extends AbstractCalculator
         // Create Surveys and Questionnaires based on data above
         foreach ($data as $year => $values) {
 
-            $survey = new \Application\Model\Survey();
-            $survey->setCode('tst ' . $year)->setName('Test survey ' . $year)->setYear($year);
+            $survey = new \Application\Model\Survey('Test survey ' . $year);
+            $survey->setCode('tst ' . $year)->setYear($year);
             $questionnaire = $this->getNewModelWithId('\Application\Model\Questionnaire');
             $questionnaire->setSurvey($survey)->setGeoname($this->geoname);
 

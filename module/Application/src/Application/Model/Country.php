@@ -142,6 +142,15 @@ class Country extends AbstractModel
     private $geoname;
 
     /**
+     * Constructor
+     * @param string $name
+     */
+    public function __construct($name = null)
+    {
+        $this->setName($name);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getJsonConfig()

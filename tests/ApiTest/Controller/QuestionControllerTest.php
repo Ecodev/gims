@@ -72,11 +72,10 @@ class QuestionControllerTest extends AbstractChildRestfulControllerTest
         foreach (array(2, 3, 4, 5) as $value) {
 
             $filter = new \Application\Model\Filter('tst filter ' . $value);
-            $question = new NumericQuestion();
+            $question = new NumericQuestion('bar');
             $question->setSurvey($this->getEntityManager()->merge($this->survey))
                     ->setSorting($value)
-                    ->setFilter($filter)
-                    ->setName('bar');
+                    ->setFilter($filter);
 
             $this->getEntityManager()->persist($filter);
             $this->getEntityManager()->persist($question);
