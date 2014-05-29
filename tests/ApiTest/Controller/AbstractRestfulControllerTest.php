@@ -333,7 +333,7 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         // Logged user should be able to delete
         $this->identityProvider->setIdentity($this->user);
         $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(204);
         $this->assertEquals($this->getJsonResponse()['message'], 'Deleted successfully');
     }
 

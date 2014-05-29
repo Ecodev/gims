@@ -194,7 +194,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
 
         $this->getEntityManager()->remove($object);
         $this->getEntityManager()->flush();
-        $this->getResponse()->setStatusCode(200);
+        $this->getResponse()->setStatusCode(204);
 
         return new JsonModel(array('message' => 'Deleted successfully'));
     }
