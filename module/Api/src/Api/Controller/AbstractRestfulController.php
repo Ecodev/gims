@@ -224,6 +224,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
 
             $objects[] = $object;
         }
+        $this->getResponse()->setStatusCode(200);
 
         // if we have multiple IDs to output
         if (count($objects) > 1) {
@@ -305,14 +306,16 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             return new JsonModel(array('message' => 'No object found'));
         }
 
-        // If not allowed to read the object, cancel everything
+        // First, hydrate the object in case the hydration changes the context used for ACL evaluation
+        $this->hydrator->hydrate($data, $object);
+
+        // If not allowed to update the object, cancel everything
         if (!$this->getAuth()->isActionGranted($object, 'update')) {
             $this->getResponse()->setStatusCode(403);
 
             return new JsonModel(array('message' => $this->getAuth()->getMessage()));
         }
 
-        $this->hydrator->hydrate($data, $object);
         $this->getEntityManager()->flush();
         $this->getResponse()->setStatusCode(201);
 

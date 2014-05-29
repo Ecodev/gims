@@ -2,12 +2,10 @@
 
 namespace ApiTest\Controller\Rule;
 
-use ApiTest\Controller\AbstractChildRestfulControllerTest;
-
 /**
  * @group Rest
  */
-class QuestionnaireUsageControllerTest extends AbstractChildRestfulControllerTest
+class QuestionnaireUsageControllerTest extends AbstractUsageControllerTest
 {
 
     protected function getAllowedFields()

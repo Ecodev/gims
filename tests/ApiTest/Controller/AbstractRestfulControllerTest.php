@@ -246,6 +246,32 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->identityProvider->setIdentity($reloadedUser);
     }
 
+    /**
+     * Create a second questionnaire on which we don't have access
+     * @return \Application\Model\Questionnaire
+     */
+    protected function createAnotherQuestionnaire()
+    {
+        // Reload things from DB
+        $this->survey = $this->getEntityManager()->merge($this->survey);
+        $this->geoname = $this->getEntityManager()->merge($this->geoname);
+        $this->part = $this->getEntityManager()->merge($this->part);
+        $this->rule = $this->getEntityManager()->merge($this->rule);
+
+        $questionnaire = new Questionnaire();
+        $questionnaire->setSurvey($this->survey);
+        $questionnaire->setDateObservationStart(new \DateTime('2010-01-01T00:00:00+0100'));
+        $questionnaire->setDateObservationEnd(new \DateTime('2011-01-01T00:00:00+0100'));
+        $questionnaire->setGeoname($this->geoname);
+        $this->getEntityManager()->persist($questionnaire);
+
+        $this->identityProvider->setIdentity(null);
+        $this->getEntityManager()->flush();
+        $this->identityProvider->setIdentity($this->user);
+
+        return $questionnaire;
+    }
+
     public function testCommonRestActions()
     {
         $this->subtestGetOne();

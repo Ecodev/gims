@@ -9,9 +9,13 @@ class MultipleRoleContext extends \Doctrine\Common\Collections\ArrayCollection i
 
     public function __construct(array $elements = array(), $grantOnlyIfGrantedByAllContexts = false)
     {
-        $elements = array_unique($elements);
         $this->setGrantOnlyIfGrantedByAllContexts($grantOnlyIfGrantedByAllContexts);
-        parent::__construct($elements);
+        parent::__construct();
+
+        // Keep things unique
+        foreach ($elements as $element) {
+            $this->add($element);
+        }
     }
 
     /**
