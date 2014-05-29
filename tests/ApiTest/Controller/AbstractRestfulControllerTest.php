@@ -234,6 +234,9 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->getEntityManager()->persist($this->filterGeonameUsage);
         $this->getEntityManager()->persist($this->country);
         $this->getEntityManager()->persist($this->population);
+
+        // Prevent new objects to be created by the current user, otherwise it would bypass all ACL checks if we are the creator
+        $this->identityProvider->setIdentity(null);
         $this->getEntityManager()->flush();
 
         // After flushed in DB, we clear EM identiy cache, to be sure that we actually reload object from database

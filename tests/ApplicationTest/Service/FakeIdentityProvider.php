@@ -13,9 +13,9 @@ class FakeIdentityProvider implements \ZfcRbac\Identity\IdentityProviderInterfac
     private $identity;
 
     /**
-     *
+     * Set the identity
      * @param \Application\Model\User $identity
-     * @return \Application\Service\A
+     * @return self
      */
     public function setIdentity(User $identity = null)
     {
@@ -25,7 +25,7 @@ class FakeIdentityProvider implements \ZfcRbac\Identity\IdentityProviderInterfac
     }
 
     /**
-     *
+     * Gets the identity
      * @return User
      */
     public function getIdentity()
