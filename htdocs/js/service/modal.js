@@ -72,7 +72,7 @@ angular.module('myApp.services').factory('Modal', function($modal, $location, $q
 
     return {
         confirmDelete: function(object, options) {
-
+            options = options || {};
             var deferred = $q.defer();
             $q.when(options.objects).then(function(data) {
                 options.objects = data;

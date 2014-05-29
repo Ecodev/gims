@@ -1,6 +1,6 @@
 /* Controllers */
 
-angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function($scope, $location, $routeParams, Restangular) {
+angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function($scope, $location, $routeParams, Restangular, Modal) {
     "use strict";
 
     $scope.fields = {fields: 'filters,filters.paths,filters.children,filters.color,filter.genericColor'};
@@ -31,17 +31,17 @@ angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function($scope, 
     // Set the tab from URL hash if any
     $scope.selectTab(parseInt($location.hash()));
 
-    var redirectTo = '/admin/filter-set';
+    var returnUrl = '/admin/filter-set';
     if ($routeParams.returnUrl) {
-        redirectTo = $routeParams.returnUrl;
+        returnUrl = $routeParams.returnUrl;
     }
 
     $scope.saveAndClose = function() {
-        this.save(redirectTo);
+        this.save(returnUrl);
     };
 
     $scope.cancel = function() {
-        $location.path(redirectTo).search('returnUrl', null).hash(null);
+        $location.path(returnUrl).search('returnUrl', null).hash(null);
     };
 
     if ($routeParams.id) {
@@ -76,6 +76,10 @@ angular.module('myApp').controller('Admin/FilterSet/CrudCtrl', function($scope, 
         }
     };
 
+    // Delete a FilterSet
+    $scope.delete = function() {
+        Modal.confirmDelete($scope.filterSet, {returnUrl: returnUrl});
+    };
 });
 
 /**

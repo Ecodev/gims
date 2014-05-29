@@ -23,17 +23,17 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
             "<div class='clearfix'></div>" +
             "</div>";
 
-    var redirectTo = '/admin/filter';
+    var returnUrl = '/admin/filter';
     if ($routeParams.returnUrl) {
-        redirectTo = $routeParams.returnUrl;
+        returnUrl = $routeParams.returnUrl;
     }
 
     $scope.saveAndClose = function() {
-        this.save(redirectTo);
+        this.save(returnUrl);
     };
 
     $scope.cancel = function() {
-        $location.url(redirectTo);
+        $location.url(returnUrl);
     };
 
     if ($routeParams.id) {
@@ -68,6 +68,10 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
         }
     };
 
+    // Delete a Filter
+    $scope.delete = function() {
+        Modal.confirmDelete($scope.filter, {returnUrl: returnUrl});
+    };
 });
 
 /**
