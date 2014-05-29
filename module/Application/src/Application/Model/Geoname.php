@@ -154,6 +154,7 @@ class Geoname extends AbstractModel
     public function __construct($name = null)
     {
         $this->filterGeonameUsages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->questionnaires = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setName($name);
     }
 
@@ -558,7 +559,7 @@ class Geoname extends AbstractModel
      * Notify the Geoname that it was added to FilterGeonameUsage relation.
      * This should only be called by FilterGeonameUsage::setGeoname()
      * @param Rule\FilterGeonameUsage $usage
-     * @return Filter
+     * @return self
      */
     public function filterGeonameUsageAdded(Rule\FilterGeonameUsage $usage)
     {
@@ -591,6 +592,19 @@ class Geoname extends AbstractModel
     public function getQuestionnaires()
     {
         return $this->questionnaires;
+    }
+
+    /**
+     * Notify the Geoname that it was added to Questionnaire.
+     * This should only be called by Questionnaire::setGeoname()
+     * @param Questionnaire $questionnaire
+     * @return self
+     */
+    public function questionnaireAdded(Questionnaire $questionnaire)
+    {
+        $this->getQuestionnaires()->add($questionnaire);
+
+        return $this;
     }
 
 }

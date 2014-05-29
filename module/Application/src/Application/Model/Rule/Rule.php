@@ -261,6 +261,8 @@ class Rule extends \Application\Model\AbstractModel
             $this->getQuestionnaireUsages()->add($usage);
         } elseif ($usage instanceof FilterGeonameUsage) {
             $this->getFilterGeonameUsages()->add($usage);
+        } else {
+            throw new \Exception('Unsupported usage added');
         }
 
         return $this;

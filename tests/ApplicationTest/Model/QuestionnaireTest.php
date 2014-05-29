@@ -36,4 +36,23 @@ class QuestionnaireTest extends AbstractModel
         $this->assertSame($expected, $questionnaire->getComments(), 'should be able to get comments that we appended');
     }
 
+    public function testRelations()
+    {
+        $questionnaire = new \Application\Model\Questionnaire();
+
+        // Test Geoname
+        $geoname = new \Application\Model\Geoname();
+        $this->assertCount(0, $geoname->getQuestionnaires(), 'collection is initialized on creation');
+        $questionnaire->setGeoname($geoname);
+        $this->assertCount(1, $geoname->getQuestionnaires(), 'geoname must be notified when questionnaire is added');
+        $this->assertSame($questionnaire, $geoname->getQuestionnaires()->first(), 'original questionnaire can be retrieved from geoname');
+
+        // Test Survey
+        $survey = new \Application\Model\Survey();
+        $this->assertCount(0, $survey->getQuestionnaires(), 'collection is initialized on creation');
+        $questionnaire->setSurvey($survey);
+        $this->assertCount(1, $survey->getQuestionnaires(), 'survey must be notified when questionnaire is added');
+        $this->assertSame($questionnaire, $survey->getQuestionnaires()->first(), 'original questionnaire can be retrieved from survey');
+    }
+
 }

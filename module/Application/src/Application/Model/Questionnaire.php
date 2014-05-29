@@ -160,6 +160,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function setGeoname(Geoname $geoname)
     {
         $this->geoname = $geoname;
+        $geoname->questionnaireAdded($this);
 
         return $this;
     }
@@ -425,7 +426,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      * Notify the filter that it was added to FilterQuestionnaireUsage relation.
      * This should only be called by FilterQuestionnaireUsage::setFilter()
      * @param Rule\FilterQuestionnaireUsage $usage
-     * @return Filter
+     * @return self
      */
     public function filterQuestionnaireUsageAdded(Rule\FilterQuestionnaireUsage $usage)
     {

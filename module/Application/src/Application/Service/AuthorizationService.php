@@ -69,11 +69,11 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
     }
 
     /**
-     * @param $object
-     * @param $context
-     * @param $permission
+     * @param AbstractModel $object
+     * @param RoleContextInterface $context
+     * @param string $permission
      */
-    private function generateMessage($object, $context, $permission)
+    private function generateMessage(AbstractModel $object, RoleContextInterface $context = null, $permission)
     {
         $user = $this->getIdentity();
         $roles = 'anonymous';
@@ -83,19 +83,26 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
             $user->resetRolesContext();
         }
 
-        if ($context instanceof \ArrayAccess) {
-            $contextMessage = ' in context ';
-            foreach ($context as $singleContext) {
-                $contextId = $singleContext->getId() ? '#' . $singleContext->getId() : 'not persisted';
-                $contextMessage .= '"' . get_class($singleContext) . $contextId . '" (' . $singleContext->getName() . ')' . ' and ';
-            }
-            $contextMessage = trim($contextMessage, ' and ');
+        if (is_null($context)) {
+            $context = [];
+        } elseif (!$context instanceof \Traversable) {
+            $context = [$context];
+        }
+
+        $contextMessages = [];
+        foreach ($context as $singleContext) {
+            $contextId = $singleContext->getId() ? '#' . $singleContext->getId() : '#null';
+            $contextMessages[] = '"' . get_class($singleContext) . $contextId . '" (' . $singleContext->getName() . ')';
+        }
+
+        if ($contextMessages) {
+            $contextMessage = 'with contexts ' . implode(' and ', $contextMessages);
         } else {
-            $contextMessage = $context ? 'in context "' . get_class($context) . '#' . $context->getId() . '" (' . $context->getName() . ')' : 'without any context';
+            $contextMessage = 'without any context';
         }
 
         $name = is_callable(array($object, 'getName')) ? ' (' . $object->getName() . ')' : '';
-        $this->message = 'Insufficient access rights for permission "' . $permission . '" on "' . get_class($object) . '#' . $object->getId() . $name . '"  with your current roles [' . $roles . '] ' . $contextMessage;
+        $this->message = 'Insufficient access rights for permission "' . $permission . '" on "' . get_class($object) . '#' . $object->getId() . $name . '" with your current roles [' . $roles . '] ' . $contextMessage;
     }
 
     /**

@@ -9,6 +9,7 @@ class MultipleRoleContext extends \Doctrine\Common\Collections\ArrayCollection i
 
     public function __construct(array $elements = array(), $grantOnlyIfGrantedByAllContexts = false)
     {
+        $elements = array_unique($elements);
         $this->setGrantOnlyIfGrantedByAllContexts($grantOnlyIfGrantedByAllContexts);
         parent::__construct($elements);
     }
@@ -40,6 +41,20 @@ class MultipleRoleContext extends \Doctrine\Common\Collections\ArrayCollection i
     public function getName()
     {
         throw new \Exception('Not implemented');
+    }
+
+    /**
+     * Override parent to ensure unicity of elements
+     * @param mixed $value
+     * @return boolean
+     */
+    public function add($value)
+    {
+        if (!$this->contains($value)) {
+            parent::add($value);
+        }
+
+        return true;
     }
 
 }
