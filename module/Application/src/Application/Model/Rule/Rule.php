@@ -8,6 +8,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Rule is a way to define a value as a custom formula.
  *
+ * Data integrity when deleting referenced objects is guaranteed by database
+ * layer via triggers. And thus if the syntax change, the triggers must be
+ * updated accordingly.
+ *
  * Syntax is based on Excel formula syntax. Except cell references (eg: A2, B3)
  * must be entirely replaced with following syntax. There is different syntax
  * for the two different context.

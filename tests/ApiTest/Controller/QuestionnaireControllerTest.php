@@ -11,6 +11,8 @@ use Zend\Http\Request;
 class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
 {
 
+    use \ApiTest\Controller\Traits\ReferenceableInRule;
+
     protected function getAllowedFields()
     {
         return array('id', 'dateObservationStart', 'dateObservationEnd', 'survey', 'name', 'geoname', 'completed', 'spatial', 'dateLastAnswerModification', 'reporterNames', 'validatorNames', 'comments', 'status', 'permission');

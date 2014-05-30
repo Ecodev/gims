@@ -14,6 +14,8 @@ use Application\Model\Rule\FilterGeonameUsage;
 class RuleControllerTest extends AbstractRestfulControllerTest
 {
 
+    use \ApiTest\Controller\Traits\ReferenceableInRule;
+
     protected function getAllowedFields()
     {
         return array('id', 'name', 'formula');

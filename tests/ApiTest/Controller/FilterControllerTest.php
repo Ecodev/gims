@@ -10,6 +10,8 @@ use Zend\Http\Request;
 class FilterControllerTest extends AbstractChildRestfulControllerTest
 {
 
+    use \ApiTest\Controller\Traits\ReferenceableInRule;
+
     protected function getAllowedFields()
     {
         return array('id', 'name');
