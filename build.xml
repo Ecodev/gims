@@ -101,7 +101,7 @@
 
     <target name="phpunit" depends="build, load-test-data">
         <echo msg="Testing phpunit..." />
-        <exec command="cd tests/ ; ../vendor/bin/phpunit" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
+        <exec command="cd tests/ ; ../vendor/bin/phpunit --coverage-clover ../data/logs/tests/coverage-clover.xml" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
     </target>
 
     <target name="karma-unit" depends="build">
