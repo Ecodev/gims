@@ -1,0 +1,4 @@
+tools:
+    external_code_coverage:
+        timeout: 3000  # Timeout in seconds
+        runs: 6        # Scrutinizer will wait for code coverage submissions for every TEST_GROUP declared in .travis.yml

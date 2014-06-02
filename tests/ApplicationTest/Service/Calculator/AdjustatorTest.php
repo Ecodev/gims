@@ -2,6 +2,9 @@
 
 namespace ApplicationTest\Service\Calculator;
 
+/**
+ * @group Calculator
+ */
 class AdjustatorTest extends AbstractCalculator
 {
 

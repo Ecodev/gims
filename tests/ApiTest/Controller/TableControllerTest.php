@@ -4,6 +4,9 @@ namespace ApiTest\Controller;
 
 use Zend\Http\Request;
 
+/**
+ * @group ApiComputing
+ */
 class TableControllerTest extends \ApplicationTest\Controller\AbstractController
 {
 
@@ -14,6 +17,7 @@ class TableControllerTest extends \ApplicationTest\Controller\AbstractController
 
     /**
      * @dataProvider getValidDataFilterProvider
+     * @group LongTest
      */
     public function testGetValidDataFilter($params, $expectedJson, $message, $logFile)
     {
@@ -30,6 +34,7 @@ class TableControllerTest extends \ApplicationTest\Controller\AbstractController
 
     /**
      * @dataProvider getValidDataQuestionnaireProvider
+     * @group LongTest
      */
     public function testGetValidDataQuestionnaire($params, $expectedJson, $message, $logFile)
     {

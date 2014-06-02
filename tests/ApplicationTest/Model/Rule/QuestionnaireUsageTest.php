@@ -2,6 +2,9 @@
 
 namespace ApplicationTest\Model\Rule;
 
+/**
+ * @group Model
+ */
 class QuestionnaireUsageTest extends \ApplicationTest\Model\AbstractModel
 {
 

@@ -2,6 +2,9 @@
 
 namespace ApplicationTest\Model;
 
+/**
+ * @group Model
+ */
 class UserFilterSetTest extends AbstractModel
 {
 

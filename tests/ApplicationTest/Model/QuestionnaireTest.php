@@ -4,6 +4,9 @@ namespace ApplicationTest\Model;
 
 use Application\Model\Questionnaire;
 
+/**
+ * @group Model
+ */
 class QuestionnaireTest extends AbstractModel
 {
 

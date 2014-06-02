@@ -4,6 +4,9 @@ namespace ApplicationTest\Repository;
 
 use \Application\Model\QuestionnaireStatus;
 
+/**
+ * @group Repository
+ */
 class QuestionnaireRepositoryTest extends AbstractRepository
 {
 

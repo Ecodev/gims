@@ -5,6 +5,9 @@ namespace ApplicationTest\Model\Question;
 use Application\Model\Question\Chapter;
 use Application\Model\Question\NumericQuestion;
 
+/**
+ * @group Model
+ */
 class ChapterTest extends \ApplicationTest\Model\AbstractModel
 {
 

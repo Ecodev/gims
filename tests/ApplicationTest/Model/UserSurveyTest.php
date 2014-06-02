@@ -2,6 +2,9 @@
 
 namespace ApplicationTest\Model;
 
+/**
+ * @group Model
+ */
 class UserSurveyTest extends AbstractModel
 {
 

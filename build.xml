@@ -28,7 +28,7 @@
         <exec command="sudo setfacl -R -m u:www-data:r-x -m d:u:www-data:r-x ./" />
         <echo msg="setfacl r/w on cache,logs for www-data" />
         <exec command="sudo setfacl -R -m u:www-data:rwx -m d:u:www-data:rwx data/logs data/cache" />
-	<exec command="sudo chmod 0770 ./" />
+        <exec command="sudo chmod 0770 ./" />
     </target>
 
     <target name="incremental-backup">
@@ -101,7 +101,20 @@
 
     <target name="phpunit" depends="build, load-test-data">
         <echo msg="Testing phpunit..." />
-        <exec command="cd tests/ ; ../vendor/bin/phpunit --coverage-clover ../data/logs/tests/coverage-clover.xml" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
+        <property environment="env" />
+
+        <if>
+            <isset property="env.TEST_GROUP"/>
+            <then>
+                <property name="group_argument" value="--group ${env.TEST_GROUP}" />
+            </then>
+            <else>
+                <property name="group_argument" value="" />
+            </else>
+        </if>
+
+        <echo message="TEST_GROUP: ${group_argument}" />
+        <exec command="cd tests/ ; ../vendor/bin/phpunit ${group_argument} --coverage-clover ../data/logs/tests/coverage-clover.xml" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
     </target>
 
     <target name="karma-unit" depends="build">

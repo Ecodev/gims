@@ -2,6 +2,9 @@
 
 namespace ApplicationTest;
 
+/**
+ * @group Service
+ */
 class UtilityTest extends \ApplicationTest\Controller\AbstractController
 {
 

@@ -7,6 +7,9 @@ use Application\Model\Questionnaire;
 use Application\Model\Survey;
 use Application\Service\Hydrator;
 
+/**
+ * @group Service
+ */
 class HydratorTest extends \ApplicationTest\Controller\AbstractController
 {
 

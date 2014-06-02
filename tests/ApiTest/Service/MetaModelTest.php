@@ -4,6 +4,9 @@ namespace ApiTest\Service;
 
 use Api\Service\MetaModel;
 
+/**
+ * @group Service
+ */
 class MetaModelTest extends \ApplicationTest\Controller\AbstractController
 {
 

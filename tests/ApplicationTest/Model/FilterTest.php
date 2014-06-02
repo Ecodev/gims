@@ -6,6 +6,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Application\Model\Filter;
 use Application\Model\FilterSet;
 
+/**
+ * @group Model
+ */
 class FilterTest extends AbstractModel
 {
 

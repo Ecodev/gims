@@ -2,6 +2,9 @@
 
 namespace ApplicationTest\Model\Rule;
 
+/**
+ * @group Model
+ */
 class FilterQuestionnaireUsageTest extends \ApplicationTest\Model\AbstractModel
 {
 

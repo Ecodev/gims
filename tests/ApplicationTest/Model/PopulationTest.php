@@ -2,6 +2,9 @@
 
 namespace ApplicationTest\Model;
 
+/**
+ * @group Model
+ */
 class PopulationTest extends \ApplicationTest\Model\AbstractModel
 {
 

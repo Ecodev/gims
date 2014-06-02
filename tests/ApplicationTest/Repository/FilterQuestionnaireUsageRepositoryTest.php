@@ -2,6 +2,9 @@
 
 namespace ApplicationTest\Repository;
 
+/**
+ * @group Repository
+ */
 class FilterQuestionnaireUsageRepositoryTest extends AbstractRepository
 {
 

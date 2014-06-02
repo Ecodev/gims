@@ -6,7 +6,7 @@ use Zend\Json\Json;
 use \Application\Model\User;
 use \ApplicationTest\Traits\TestWithTransaction;
 
-class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase
+abstract class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase
 {
 
     /**

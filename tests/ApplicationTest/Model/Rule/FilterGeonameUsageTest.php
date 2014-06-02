@@ -2,6 +2,9 @@
 
 namespace ApplicationTest\Model\Rule;
 
+/**
+ * @group Model
+ */
 class FilterGeonameUsageTest extends \ApplicationTest\Model\AbstractModel
 {
 

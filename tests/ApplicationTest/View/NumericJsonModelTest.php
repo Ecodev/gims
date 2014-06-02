@@ -2,6 +2,9 @@
 
 namespace ApplicationTest\View;
 
+/**
+ * @group Service
+ */
 class NumericJsonModelTest extends \ApplicationTest\Controller\AbstractController
 {
 

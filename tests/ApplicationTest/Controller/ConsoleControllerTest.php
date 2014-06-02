@@ -4,6 +4,9 @@ namespace ApplicationTest\Controller;
 
 use \ApplicationTest\Traits\TestWithTransaction;
 
+/**
+ * @group Console
+ */
 class ConsoleControllerTest extends \Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase
 {
 

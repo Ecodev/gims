@@ -5,6 +5,9 @@ namespace ApplicationTest\Model\Question;
 use Application\Model\Question\ChoiceQuestion;
 use Application\Model\Question\Choice;
 
+/**
+ * @group Model
+ */
 class ChoiceQuestionTest extends \ApplicationTest\Model\AbstractModel
 {
 

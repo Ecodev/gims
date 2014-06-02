@@ -5,6 +5,14 @@ php:
 addons:
   postgresql: "9.3"
 
+env:
+  - TEST_GROUP=ApiComputing
+  - TEST_GROUP=Console,Repository
+  - TEST_GROUP=Rest
+  - TEST_GROUP=Model
+  - TEST_GROUP=Calculator
+  - TEST_GROUP=Service,__nogroup__
+
 before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start

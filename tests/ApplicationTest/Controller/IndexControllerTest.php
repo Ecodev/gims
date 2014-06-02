@@ -2,6 +2,9 @@
 
 namespace ApplicationTest\Controller;
 
+/**
+ * @group Service
+ */
 class IndexControllerTest extends AbstractController
 {
 

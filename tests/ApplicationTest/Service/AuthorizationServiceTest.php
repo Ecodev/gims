@@ -2,6 +2,9 @@
 
 namespace ApplicationTest\Service;
 
+/**
+ * @group Service
+ */
 class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractController
 {
 

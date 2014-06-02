@@ -5,6 +5,9 @@ namespace ApplicationTest\Model;
 use Application\Model\Survey;
 use Application\Model\Question\NumericQuestion;
 
+/**
+ * @group Model
+ */
 class SurveyTest extends AbstractModel
 {
 

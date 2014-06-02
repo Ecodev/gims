@@ -5,6 +5,7 @@ namespace ApiTest\Controller;
 use Zend\Http\Request;
 
 /**
+ * @group ApiComputing
  * @group Chart
  */
 class ChartControllerTest extends \ApplicationTest\Controller\AbstractController
@@ -28,6 +29,7 @@ class ChartControllerTest extends \ApplicationTest\Controller\AbstractController
 
     /**
      * @dataProvider getValidDataProvider
+     * @group LongTest
      */
     public function testGetValidDataChart($params, $expectedJson, $message, $logFile)
     {

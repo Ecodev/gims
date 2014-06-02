@@ -4,6 +4,9 @@ namespace ApplicationTest\Service;
 
 use \Application\Model\User;
 
+/**
+ * @group Service
+ */
 class FakeIdentityProvider implements \ZfcRbac\Identity\IdentityProviderInterface
 {
 
