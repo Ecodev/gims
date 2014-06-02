@@ -69,6 +69,7 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
     }
 
     /**
+     * Generate the message explaining why the permission was denied
      * @param AbstractModel $object
      * @param RoleContextInterface $context
      * @param string $permission
@@ -83,8 +84,21 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
             $user->resetRolesContext();
         }
 
+        $contextMessages = $this->getContextMessages($context);
+
+        $name = is_callable(array($object, 'getName')) ? ' (' . $object->getName() . ')' : '';
+        $this->message = 'Insufficient access rights for permission "' . $permission . '" on "' . get_class($object) . '#' . $object->getId() . $name . '" with your current roles [' . $roles . '] ' . $contextMessages;
+    }
+
+    /**
+     * Return a string explaining the contexts
+     * @param \Application\Service\RoleContextInterface $context
+     * @return string
+     */
+    private function getContextMessages(RoleContextInterface $context = null)
+    {
         if (is_null($context)) {
-            $context = [];
+            return 'without any context';
         } elseif (!$context instanceof \Traversable) {
             $context = [$context];
         }
@@ -95,14 +109,7 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
             $contextMessages[] = '"' . get_class($singleContext) . $contextId . '" (' . $singleContext->getName() . ')';
         }
 
-        if ($contextMessages) {
-            $contextMessage = 'with contexts ' . implode(' and ', $contextMessages);
-        } else {
-            $contextMessage = 'without any context';
-        }
-
-        $name = is_callable(array($object, 'getName')) ? ' (' . $object->getName() . ')' : '';
-        $this->message = 'Insufficient access rights for permission "' . $permission . '" on "' . get_class($object) . '#' . $object->getId() . $name . '" with your current roles [' . $roles . '] ' . $contextMessage;
+        return 'with contexts ' . implode(' and ', $contextMessages);
     }
 
     /**
