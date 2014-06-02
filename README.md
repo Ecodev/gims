@@ -1,6 +1,6 @@
 GIMS
 =======================
-Master: [![Build Status](https://api.travis-ci.org/Ecodev/gims.svg?branch=master)](http://travis-ci.org/Ecodev/gims) Develop: [![Build Status](https://api.travis-ci.org/Ecodev/gims.svg?branch=develop)](http://travis-ci.org/Ecodev/gims)
+Master: [![Build Status](https://api.travis-ci.org/Ecodev/gims.svg?branch=master)](http://travis-ci.org/Ecodev/gims) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Ecodev/gims/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Ecodev/gims/?branch=master) Develop: [![Build Status](https://api.travis-ci.org/Ecodev/gims.svg?branch=develop)](http://travis-ci.org/Ecodev/gims) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Ecodev/gims/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/Ecodev/gims/?branch=develop)
 
 Introduction
 ------------
