@@ -110,7 +110,7 @@ class FilterGeonameUsage extends AbstractUsage
      */
     public function getRoleContext($action)
     {
-        return new \Application\Service\MultipleRoleContext($this->getGeoname()->getQuestionnaires()->toArray(), true);
+        return new \Application\Service\MultipleRoleContext($this->getGeoname()->getQuestionnaires());
     }
 
 }

@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Application\Repository\PartRepository")
  */
-class Part extends AbstractModel
+class Part extends AbstractModel implements Rule\ReferencableInterface
 {
 
     /**

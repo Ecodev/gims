@@ -5,7 +5,6 @@ namespace Application\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Application\Utility;
-use MischiefCollective\ColorJizz\Formats\HSV;
 use MischiefCollective\ColorJizz\Formats\HEX;
 use Application\Service\MultipleRoleContext;
 
@@ -39,7 +38,7 @@ use Application\Service\MultipleRoleContext;
  * </pre>
  * @ORM\Entity(repositoryClass="Application\Repository\FilterRepository")
  */
-class Filter extends AbstractModel
+class Filter extends AbstractModel implements Rule\ReferencableInterface
 {
 
     /**
@@ -458,15 +457,21 @@ class Filter extends AbstractModel
      */
     public function getRoleContext($action)
     {
-        $contexts = $this->getFilterSets()->toArray();
+        $contexts = new MultipleRoleContext($this->getFilterSets());
         foreach ($this->getParents() as $parent) {
-            $parentContexts = $parent->getRoleContext($action);
-            if ($parentContexts) {
-                $contexts = array_merge($contexts, $parentContexts->toArray());
+            $contexts->merge($parent->getRoleContext($action));
+        }
+
+        // If we try to delete a filter, we must also consider the side-effect it may have on Rules that use this filter
+        if ($action == 'delete') {
+            $repository = \Application\Module::getEntityManager()->getRepository('Application\Model\Rule\Rule');
+            $rulesWithReference = $repository->getAllReferencing($this);
+            foreach ($rulesWithReference as $rule) {
+                $contexts->merge($rule->getRoleContext($action));
             }
         }
 
-        return $contexts ? new MultipleRoleContext($contexts, true) : null;
+        return $contexts->count() ? $contexts : null;
     }
 
 }

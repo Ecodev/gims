@@ -90,7 +90,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @ORM\Entity(repositoryClass="Application\Repository\Rule\RuleRepository")
  */
-class Rule extends \Application\Model\AbstractModel
+class Rule extends \Application\Model\AbstractModel implements ReferencableInterface
 {
 
     /**
@@ -231,7 +231,7 @@ class Rule extends \Application\Model\AbstractModel
      */
     public function getRoleContext($action)
     {
-        $contexts = new \Application\Service\MultipleRoleContext([], true);
+        $contexts = new \Application\Service\MultipleRoleContext();
 
         foreach ($this->getFilterQuestionnaireUsages() as $usage) {
             $contexts->add($usage->getQuestionnaire());
@@ -243,8 +243,16 @@ class Rule extends \Application\Model\AbstractModel
 
         foreach ($this->getFilterGeonameUsages() as $usage) {
             foreach ($usage->getGeoname()->getQuestionnaires() as $questionnaire) {
-
                 $contexts->add($questionnaire);
+            }
+        }
+
+        // If we try to delete a rule, we must also consider the side-effect it may have on other Rules that use this rule
+        if ($action == 'delete') {
+            $repository = \Application\Module::getEntityManager()->getRepository('Application\Model\Rule\Rule');
+            $rulesWithReference = $repository->getAllReferencing($this);
+            foreach ($rulesWithReference as $rule) {
+                $contexts->merge($rule->getRoleContext($action));
             }
         }
 

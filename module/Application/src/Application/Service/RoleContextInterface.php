@@ -7,6 +7,7 @@ namespace Application\Service;
  */
 interface RoleContextInterface
 {
+
     public function getId();
 
     public function getName();
