@@ -81,7 +81,7 @@ class Jmp extends Calculator
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return null|float
      */
-    protected function computeFlattenOneYearWithFormula($year, array $years, $filterId, array $questionnaires, $partId, ArrayCollection $alreadyUsedRules = null)
+    public function computeFlattenOneYearWithFormula($year, array $years, $filterId, array $questionnaires, $partId, ArrayCollection $alreadyUsedRules = null)
     {
         if (!$alreadyUsedRules) {
             $alreadyUsedRules = new ArrayCollection();
@@ -346,88 +346,8 @@ class Jmp extends Calculator
         $alreadyUsedRules->add($rule);
 
         $originalFormula = $rule->getFormula();
-
-        // Replace {F#12,Q#all} with a list of Filter values for all questionnaires
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+|current),Q#all}/', function($matches) use ($currentFilterId, $questionnaires, $currentPartId) {
-                    $filterId = $matches[1];
-
-                    if ($filterId == 'current') {
-                        $filterId = $currentFilterId;
-                    }
-
-                    $data = $this->computeFilterForAllQuestionnaires($filterId, $questionnaires, $currentPartId);
-
-                    $values = array();
-                    foreach ($data['values'] as $v) {
-                        if (!is_null($v)) {
-                            $values[] = $v;
-                        }
-                    }
-
-                    $values = '{' . implode(', ', $values) . '}';
-
-                    return $values;
-                }, $originalFormula);
-
-        // Replace {F#12,#P34,Y+0} with Filter regression value
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+|current),P#(\d+|current),Y([+-]?\d+)}/', function($matches) use ($year, $years, $currentFilterId, $questionnaires, $currentPartId) {
-                    $filterId = $matches[1];
-                    $partId = $matches[2];
-                    $yearShift = $matches[3];
-                    $year += $yearShift;
-
-                    if ($filterId == 'current') {
-                        $filterId = $currentFilterId;
-                    }
-
-                    if ($partId == 'current') {
-                        $partId = $currentPartId;
-                    }
-
-                    // Only compute thing if in current years, to avoid infinite recursitivy in a very distant future
-                    if (in_array($year, $years)) {
-                        $value = $this->computeFlattenOneYearWithFormula($year, $years, $filterId, $questionnaires, $partId);
-                    } else {
-                        $value = null;
-                    }
-
-                    return is_null($value) ? 'NULL' : $value;
-                }, $convertedFormulas);
-
-
-        // Replace {Q#all,P#12} with cumulated population
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{Q#all,P#(\d+|current)}/', function($matches) use ($questionnaires, $currentPartId, $year) {
-                    $partId = $matches[1];
-
-                    if ($partId == 'current') {
-                        $partId = $currentPartId;
-                    }
-
-                    $population = 0;
-                    foreach ($questionnaires as $questionnaire) {
-
-                        $population += $this->getPopulationRepository()->getOneByGeoname($questionnaire->getGeoname(), $partId, $year, $questionnaire->getId())->getPopulation();
-                    }
-
-                    return $population;
-                }, $convertedFormulas);
-
-
-        // Replace {self} with computed value without this formula
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{self\}/', function() use ($year, $years, $currentFilterId, $questionnaires, $currentPartId, $alreadyUsedRules) {
-
-
-                    $value = $this->computeFlattenOneYearWithFormula($year, $years, $currentFilterId, $questionnaires, $currentPartId, $alreadyUsedRules);
-
-                    return is_null($value) ? 'NULL' : $value;
-                }, $convertedFormulas);
-
-        // Replace {Y} with current year
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{Y\}/', function() use ($year) {
-                    return $year;
-                }, $convertedFormulas);
-
-        $result = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($convertedFormulas);
+        $convertedFormula = $this->getParser()->convertRegression($this, $originalFormula, $currentFilterId, $questionnaires, $currentPartId, $year, $years, $alreadyUsedRules);
+        $result = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($convertedFormula);
 
         // In some edge cases, it may happen that we get FALSE or empty double quotes as result,
         // we need to convert it to NULL, otherwise it will be converted to
@@ -436,7 +356,7 @@ class Jmp extends Calculator
             $result = null;
         }
 
-        _log()->debug(__METHOD__, array($currentFilterId, $currentPartId, $year, $rule->getId(), $rule->getName(), $originalFormula, $convertedFormulas, $result));
+        _log()->debug(__METHOD__, array($currentFilterId, $currentPartId, $year, $rule->getId(), $rule->getName(), $originalFormula, $convertedFormula, $result));
 
         return $result;
     }

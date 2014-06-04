@@ -27,6 +27,7 @@ use \Application\Traits\EntityManagerAware;
     private $partRepository;
     private $answerRepository;
     private $filterQuestionnaireUsageRepository;
+    private $parser;
 
     /**
      * Set the population repository
@@ -204,6 +205,19 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
+     * Get the syntax parser
+     * @return \Application\Service\Syntax\Parser
+     */
+    public function getParser()
+    {
+        if (!$this->parser) {
+            $this->parser = new \Application\Service\Syntax\Parser();
+        }
+
+        return $this->parser;
+    }
+
+    /**
      * Set the filter which must be overridden with given value
      * @param array $overriddenFilters [questionnaireId => [filterId => [partId => value]]]
      * @return \Application\Service\Calculator\Calculator
@@ -264,7 +278,7 @@ use \Application\Traits\EntityManagerAware;
 
         // If the all filters of a questionnaire have an overriding value
         // use array_key_exists() function cause overridden value may contain null that return false with isset()
-        if (array_key_exists($questionnaireId, $this->overriddenFilters) ) {
+        if (array_key_exists($questionnaireId, $this->overriddenFilters)) {
 
             if (!is_array($this->overriddenFilters[$questionnaireId])) {
                 return $this->overriddenFilters[$questionnaireId];
@@ -344,96 +358,8 @@ use \Application\Traits\EntityManagerAware;
 
         _log()->debug(__METHOD__, array($usage->getId(), $originalFormula));
 
-        // Replace {F#12,Q#34,P#56} with Filter value
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)(,L#2)?\}/', function($matches) use ($usage, $alreadyUsedFormulas) {
-                    $filterId = $matches[1];
-                    $questionnaireId = $matches[2];
-                    $partId = $matches[3];
-
-                    if ($filterId == 'current') {
-                        $filterId = $usage->getFilter()->getId();
-                    }
-
-                    if ($questionnaireId == 'current') {
-                        $questionnaireId = $usage->getQuestionnaire()->getId();
-                    }
-
-                    if ($partId == 'current') {
-                        $partId = $usage->getPart()->getId();
-                    }
-
-                    $useSecondLevelRules = isset($matches[4]) && $matches[4] == ',L#2';
-                    $value = $this->computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas);
-
-                    return is_null($value) ? 'NULL' : $value;
-                }, $originalFormula);
-
-        // Replace {F#12,Q#34} with Question name, or NULL if no Question/Answer
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+),Q#(\d+|current)\}/', function($matches) use ($usage) {
-                    $filterId = $matches[1];
-                    $questionnaireId = $matches[2];
-
-                    if ($questionnaireId == 'current') {
-                        $questionnaireId = $usage->getQuestionnaire()->getId();
-                    }
-
-                    $questionName = $this->getAnswerRepository()->getQuestionNameIfNonNullAnswer($questionnaireId, $filterId);
-                    if (is_null($questionName)) {
-                        return 'NULL';
-                    } else {
-                        // Format string for Excel formula
-                        return '"' . str_replace('"', '""', $questionName) . '"';
-                    }
-                }, $convertedFormulas);
-
-        // Replace {R#12,Q#34,P#56} with QuestionnaireUsage value
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{R#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage, $alreadyUsedFormulas) {
-                    $ruleId = $matches[1];
-                    $questionnaireId = $matches[2];
-                    $partId = $matches[3];
-
-                    if ($questionnaireId == 'current') {
-                        $questionnaireId = $usage->getQuestionnaire()->getId();
-                    }
-
-                    if ($partId == 'current') {
-                        $partId = $usage->getPart()->getId();
-                    }
-
-                    $questionnaireUsage = $this->getQuestionnaireUsageRepository()->getOneByQuestionnaire($questionnaireId, $partId, $ruleId);
-
-                    if (!$questionnaireUsage) {
-                        throw new \Exception('Reference to non existing QuestionnaireUsage ' . $matches[0] . ' in  Rule#' . $usage->getRule()->getId() . ', "' . $usage->getRule()->getName() . '": ' . $usage->getRule()->getFormula());
-                    }
-
-                    $value = $this->computeFormula($questionnaireUsage, $alreadyUsedFormulas);
-
-                    return is_null($value) ? 'NULL' : $value;
-                }, $convertedFormulas);
-
-        // Replace {Q#34,P#56} with population data
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage) {
-                    $questionnaireId = $matches[1];
-                    $partId = $matches[2];
-
-                    $questionnaire = $questionnaireId == 'current' ? $usage->getQuestionnaire() : $this->getQuestionnaireRepository()->findOneById($questionnaireId);
-
-                    if ($partId == 'current') {
-                        $partId = $usage->getPart()->getId();
-                    }
-
-                    return $this->getPopulationRepository()->getOneByQuestionnaire($questionnaire, $partId)->getPopulation();
-                }, $convertedFormulas);
-
-        // Replace {self} with computed value without this formula
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{self\}/', function() use ($usage, $alreadyUsedFormulas, $useSecondLevelRules) {
-
-                    $value = $this->computeFilter($usage->getFilter()->getId(), $usage->getQuestionnaire()->getId(), $usage->getPart()->getId(), $useSecondLevelRules, $alreadyUsedFormulas);
-
-                    return is_null($value) ? 'NULL' : $value;
-                }, $convertedFormulas);
-
-        $result = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($convertedFormulas);
+        $convertedFormula = $this->getParser()->convertBasic($this, $originalFormula, $usage, $alreadyUsedFormulas, $useSecondLevelRules);
+        $result = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($convertedFormula);
 
         // In some edge cases, it may happen that we get FALSE or empty double quotes as result,
         // we need to convert it to NULL, otherwise it will be converted to
@@ -442,7 +368,7 @@ use \Application\Traits\EntityManagerAware;
             $result = null;
         }
 
-        _log()->debug(__METHOD__, array($usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormulas, $result));
+        _log()->debug(__METHOD__, array($usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormula, $result));
 
         return $result;
     }
