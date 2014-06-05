@@ -122,6 +122,8 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
                 if (redirectAfterSave) {
                     redirect();
                 }
+            }, function() {
+                $scope.sending = false;
             });
         } else {
             $scope.question.survey = $routeParams.survey;
@@ -136,6 +138,8 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
                     // redirect to edit URL
                     $location.path(sprintf('admin/question/edit/%s', question.id));
                 }
+            }, function() {
+                $scope.sending = false;
             });
         }
     };

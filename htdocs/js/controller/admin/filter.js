@@ -56,6 +56,8 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
                 if (redirectTo) {
                     $location.path(redirectTo);
                 }
+            }, function() {
+                $scope.sending = false;
             });
         } else {
             Restangular.all('filter').post($scope.filter).then(function(filter) {
@@ -64,6 +66,8 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
                     redirectTo = '/admin/filter/edit/' + filter.id;
                 }
                 $location.path(redirectTo);
+            }, function() {
+                $scope.sending = false;
             });
         }
     };

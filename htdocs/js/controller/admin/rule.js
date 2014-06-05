@@ -48,6 +48,8 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
                 if (redirectTo) {
                     $location.path(redirectTo);
                 }
+            }, function() {
+                $scope.sending = false;
             });
         } else {
             Restangular.all('rule').post($scope.rule).then(function(rule) {
@@ -57,6 +59,8 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
                     redirectTo = '/admin/rule/edit/' + rule.id;
                 }
                 $location.path(redirectTo);
+            }, function() {
+                $scope.sending = false;
             });
         }
     };

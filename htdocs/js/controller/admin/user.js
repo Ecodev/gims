@@ -32,6 +32,8 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
                 if (redirectTo) {
                     $location.path(redirectTo);
                 }
+            }, function() {
+                $scope.sending = false;
             });
         } else {
             Restangular.all('user').post($scope.user).then(function(user) {
@@ -41,6 +43,8 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
                     redirectTo = '/admin/user/edit/' + user.id;
                 }
                 $location.path(redirectTo);
+            }, function() {
+                $scope.sending = false;
             });
         }
     };

@@ -45,19 +45,19 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function($sco
         var geoname = $scope.questionnaire.geoname;
         $scope.questionnaire.geoname = $scope.questionnaire.geoname.id;
         if ($scope.questionnaire.id) {
-            $scope.questionnaire.put().then(function()
-            {
+            $scope.questionnaire.put().then(function() {
                 $scope.sending = false;
 
                 if (redirectAfterSave) {
                     redirect();
                 }
+            }, function() {
+                $scope.sending = false;
             });
         } else {
             $scope.questionnaire.survey = $routeParams.survey;
             $scope.questionnaire.status = 'new';
-            Restangular.all('questionnaire').post($scope.questionnaire).then(function(questionnaire)
-            {
+            Restangular.all('questionnaire').post($scope.questionnaire).then(function(questionnaire) {
                 $scope.sending = false;
 
                 if (redirectAfterSave) {
@@ -67,6 +67,8 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function($sco
                     $location.path(sprintf('admin/questionnaire/edit/%s', questionnaire.id));
 
                 }
+            }, function() {
+                $scope.sending = false;
             });
         }
         $scope.questionnaire.geoname = geoname;

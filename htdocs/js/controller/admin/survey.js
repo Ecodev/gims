@@ -35,6 +35,8 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function($scope, $ro
                 if (redirectTo) {
                     $location.path(redirectTo);
                 }
+            }, function() {
+                $scope.sending = false;
             });
         } else {
             Restangular.all('survey').post($scope.survey).then(function(survey) {
@@ -44,6 +46,8 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function($scope, $ro
                     redirectTo = '/admin/survey/edit/' + survey.id;
                 }
                 $location.path(redirectTo);
+            }, function() {
+                $scope.sending = false;
             });
         }
     };
