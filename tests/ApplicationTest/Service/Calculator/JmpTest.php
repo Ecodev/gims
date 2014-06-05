@@ -554,7 +554,7 @@ class JmpTest extends AbstractCalculator
      * Return formula and configurator for mockCalculator
      * @return array
      */
-    public function computeFormulaFlattenProvider()
+    public function computeFormulaRegressionProvider()
     {
         return array(
             array('={F#345,P#current,Y0}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId) {
@@ -611,9 +611,9 @@ class JmpTest extends AbstractCalculator
     }
 
     /**
-     * @dataProvider computeFormulaFlattenProvider
+     * @dataProvider computeFormulaRegressionProvider
      */
-    public function testComputeFormulaFlatten($formula, $configurator)
+    public function testcomputeFormulaRegression($formula, $configurator)
     {
         $rule = new \Application\Model\Rule\Rule();
         $rule->setFormula($formula);
@@ -627,10 +627,10 @@ class JmpTest extends AbstractCalculator
         $mockedCalculator = $this->getMock('\Application\Service\Calculator\Jmp', array('computeFlattenOneYearWithFormula', 'computeFilterForAllQuestionnaires'));
         $configurator($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId);
 
-        $mockedCalculator->computeFormulaFlatten($rule, $year, $years, $currentFilterId, $questionnaires, $partId);
+        $mockedCalculator->computeFormulaRegression($rule, $year, $years, $currentFilterId, $questionnaires, $partId);
     }
 
-    public function testComputeFormulaFlattenReturnsYear()
+    public function testcomputeFormulaRegressionReturnsYear()
     {
         $rule = new \Application\Model\Rule\Rule();
         $rule->setFormula('={Y}');
@@ -640,7 +640,7 @@ class JmpTest extends AbstractCalculator
         $questionnaires = $this->questionnaires;
         $partId = 4;
 
-        $result = $this->service->computeFormulaFlatten($rule, $year, $years, $currentFilterId, $questionnaires, $partId);
+        $result = $this->service->computeFormulaRegression($rule, $year, $years, $currentFilterId, $questionnaires, $partId);
 
         $this->assertEquals($year, $result, 'should return the current year');
     }

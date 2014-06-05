@@ -9,7 +9,13 @@ angular.module('myApp.directives').directive('gimsErrors', function(requestNotif
         template: '<div class="container">' +
                 '<div ng-repeat="error in errors" class="alert alert-danger ng-trans ng-trans-fade-up">' +
                 '<button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="dismiss($index)">&times;</button>' +
-                '<strong>Oops!</strong> Something went wrong ({{error.config.method}} {{error.config.url}} {{error.status}}), <a ng-click="reload()" href="">try reloading the page</a>.</div>' +
+                '<strong>{{error.data.title || "Oops"}}!</strong> ' +
+                '<span ng-if="error.data.detail && !error.data.messages">{{error.data.detail}}</span>' +
+                '<ul ng-if="error.data.messages">' +
+                '<li ng-repeat="message in error.data.messages">{{message}}</li>' +
+                '</ul>' +
+                '<span ng-if="!error.data.detail">Something went wrong ({{error.config.method}} {{error.config.url}} {{error.status}}), <a ng-click="reload()" href="">try reloading the page</a>.</span>' +
+                '</div>' +
                 '<div/>',
         // The linking function will add behavior to the template
         link: function() {

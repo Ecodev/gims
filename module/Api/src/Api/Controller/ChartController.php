@@ -555,7 +555,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     'rule',
                     'rule.name',
                 ));
-                $value = $this->getCalculator()->computeFormula($usage);
+                $value = $this->getCalculator()->computeFormulaBasic($usage);
                 $value = \Application\Utility::decimalToRoundedPercent($value);
                 $extractedUsage['value'] = $value;
                 $extractedUsages[] = $extractedUsage;

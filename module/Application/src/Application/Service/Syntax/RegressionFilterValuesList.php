@@ -13,7 +13,7 @@ class RegressionFilterValuesList extends AbstractRegressionToken
 
     public function getPattern()
     {
-        return '/\{F#(\d+|current),Q#all}/';
+        return '/\{F#(\d+|current),Q#all\}/';
     }
 
     public function replace(Jmp $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)

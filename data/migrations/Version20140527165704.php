@@ -95,6 +95,10 @@ STRING
         $this->addSql("CREATE TRIGGER cascade_delete_rules_with_references_to_questionnaires AFTER DELETE ON questionnaire FOR EACH ROW EXECUTE PROCEDURE cascade_delete_rules_with_references();");
         $this->addSql("CREATE TRIGGER cascade_delete_rules_with_references_to_parts AFTER DELETE ON part FOR EACH ROW EXECUTE PROCEDURE cascade_delete_rules_with_references();");
         $this->addSql("CREATE TRIGGER cascade_delete_rules_with_references_to_rules AFTER DELETE ON rule FOR EACH ROW EXECUTE PROCEDURE cascade_delete_rules_with_references();");
+
+        $this->addSql("UPDATE rule SET formula = '=' WHERE formula IS NULL;");
+        $this->addSql("ALTER TABLE rule ALTER formula SET DEFAULT '=';");
+        $this->addSql("ALTER TABLE rule ALTER formula SET NOT NULL;");
     }
 
     public function down(Schema $schema)

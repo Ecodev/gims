@@ -6,14 +6,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Application\Service\Calculator\Jmp;
 
 /**
- * Replace {F#12,#P34,Y+0} with Filter regression value
+ * Replace {F#12,P#34,Y+0} with Filter regression value
  */
 class RegressionFilterValue extends AbstractRegressionToken
 {
 
     public function getPattern()
     {
-        return '/\{F#(\d+|current),P#(\d+|current),Y([+-]?\d+)}/';
+        return '/\{F#(\d+|current),P#(\d+|current),Y([+-]?\d+)\}/';
     }
 
     public function replace(Jmp $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)

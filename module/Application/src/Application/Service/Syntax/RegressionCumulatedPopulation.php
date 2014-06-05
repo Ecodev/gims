@@ -13,7 +13,7 @@ class RegressionCumulatedPopulation extends AbstractRegressionToken
 
     public function getPattern()
     {
-        return '/\{Q#all,P#(\d+|current)}/';
+        return '/\{Q#all,P#(\d+|current)\}/';
     }
 
     public function replace(Jmp $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)

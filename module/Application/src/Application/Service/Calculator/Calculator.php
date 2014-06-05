@@ -300,7 +300,7 @@ use \Application\Traits\EntityManagerAware;
         // If the filter has a formula, returns its value
         $filterQuestionnaireUsage = $this->getFilterQuestionnaireUsageRepository()->getFirst($questionnaireId, $filterId, $partId, $useSecondLevelRules, $alreadyUsedFormulas);
         if ($filterQuestionnaireUsage) {
-            return $this->computeFormula($filterQuestionnaireUsage, $alreadyUsedFormulas, $useSecondLevelRules);
+            return $this->computeFormulaBasic($filterQuestionnaireUsage, $alreadyUsedFormulas, $useSecondLevelRules);
         }
 
         // First, attempt to sum summands
@@ -347,26 +347,16 @@ use \Application\Traits\EntityManagerAware;
      * @param boolean $useSecondLevelRules
      * @return null|float
      */
-    public function computeFormula(AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas = null, $useSecondLevelRules = false)
+    public function computeFormulaBasic(AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas = null, $useSecondLevelRules = false)
     {
         if (!$alreadyUsedFormulas) {
             $alreadyUsedFormulas = new ArrayCollection();
         }
-
         $alreadyUsedFormulas->add($usage);
+
         $originalFormula = $usage->getRule()->getFormula();
-
-        _log()->debug(__METHOD__, array($usage->getId(), $originalFormula));
-
         $convertedFormula = $this->getParser()->convertBasic($this, $originalFormula, $usage, $alreadyUsedFormulas, $useSecondLevelRules);
-        $result = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($convertedFormula);
-
-        // In some edge cases, it may happen that we get FALSE or empty double quotes as result,
-        // we need to convert it to NULL, otherwise it will be converted to
-        // 0 later, which is not correct. Eg: '=IF(FALSE, NULL, NULL)', or '=IF(FALSE,NULL,"")'
-        if ($result === false || $result === '""') {
-            $result = null;
-        }
+        $result = $this->getParser()->computeExcelFormula($convertedFormula);
 
         _log()->debug(__METHOD__, array($usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormula, $result));
 

@@ -37,7 +37,7 @@ class QuestionnaireUsageValue extends AbstractBasicToken
             throw new \Exception('Reference to non existing QuestionnaireUsage ' . $matches[0] . ' in  Rule#' . $usage->getRule()->getId() . ', "' . $usage->getRule()->getName() . '": ' . $usage->getRule()->getFormula());
         }
 
-        $value = $calculator->computeFormula($questionnaireUsage, $alreadyUsedFormulas);
+        $value = $calculator->computeFormulaBasic($questionnaireUsage, $alreadyUsedFormulas);
 
         return is_null($value) ? 'NULL' : $value;
     }

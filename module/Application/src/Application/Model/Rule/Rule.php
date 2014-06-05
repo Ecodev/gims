@@ -89,6 +89,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * <pre>=IF(ISTEXT({F#12,Q#current}), SUM({F#12,Q#current,P#current}, {R#2,Q#current,P#current}), {R#2,Q#current,P#current})</pre>
  *
  * @ORM\Entity(repositoryClass="Application\Repository\Rule\RuleRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Rule extends \Application\Model\AbstractModel implements ReferencableInterface
 {
@@ -103,9 +104,9 @@ class Rule extends \Application\Model\AbstractModel implements ReferencableInter
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=true, length=4096)
+     * @ORM\Column(type="string", length=4096, options={"default" = "="})
      */
-    private $formula;
+    private $formula = '=';
 
     /**
      * @var ArrayCollection
@@ -278,6 +279,21 @@ class Rule extends \Application\Model\AbstractModel implements ReferencableInter
         }
 
         return $this;
+    }
+
+    /**
+     * Validate the object and throw an exception if invalid.
+     * This is called automtically by Doctrine.
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     * @throws \Application\Validator\Exception
+     */
+    public function validate()
+    {
+        $validator = new \Application\Validator\Rule();
+        if (!$validator->isValid($this)) {
+            throw new \Application\Validator\Exception($validator->getMessages());
+        }
     }
 
 }

@@ -96,7 +96,7 @@ class Jmp extends Calculator
         if ($questionnaires) {
             $filterGeonameUsage = $this->getFilterGeonameUsageRepository()->getFirst(reset($questionnaires)->getGeoname()->getId(), $filterId, $partId, $alreadyUsedRules);
             if ($filterGeonameUsage) {
-                $oneYearResult = $this->computeFormulaFlatten($filterGeonameUsage->getRule(), $year, $years, $filterId, $questionnaires, $partId, $alreadyUsedRules);
+                $oneYearResult = $this->computeFormulaRegression($filterGeonameUsage->getRule(), $year, $years, $filterId, $questionnaires, $partId, $alreadyUsedRules);
                 $this->cacheComputeFlattenOneYearWithFormula[$key] = $oneYearResult;
 
                 _log()->debug(__METHOD__, array($filterId, $partId, $year, $oneYearResult));
@@ -338,7 +338,7 @@ class Jmp extends Calculator
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return null|float
      */
-    public function computeFormulaFlatten(Rule $rule, $year, array $years, $currentFilterId, array $questionnaires, $currentPartId, ArrayCollection $alreadyUsedRules = null)
+    public function computeFormulaRegression(Rule $rule, $year, array $years, $currentFilterId, array $questionnaires, $currentPartId, ArrayCollection $alreadyUsedRules = null)
     {
         if (!$alreadyUsedRules) {
             $alreadyUsedRules = new ArrayCollection();
@@ -347,14 +347,7 @@ class Jmp extends Calculator
 
         $originalFormula = $rule->getFormula();
         $convertedFormula = $this->getParser()->convertRegression($this, $originalFormula, $currentFilterId, $questionnaires, $currentPartId, $year, $years, $alreadyUsedRules);
-        $result = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($convertedFormula);
-
-        // In some edge cases, it may happen that we get FALSE or empty double quotes as result,
-        // we need to convert it to NULL, otherwise it will be converted to
-        // 0 later, which is not correct. Eg: '=IF(FALSE, NULL, NULL)', or '=IF(FALSE,NULL,"")'
-        if ($result === false || $result === '""') {
-            $result = null;
-        }
+        $result = $this->getParser()->computeExcelFormula($convertedFormula);
 
         _log()->debug(__METHOD__, array($currentFilterId, $currentPartId, $year, $rule->getId(), $rule->getName(), $originalFormula, $convertedFormula, $result));
 
