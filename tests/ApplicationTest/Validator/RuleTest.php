@@ -25,6 +25,10 @@ class RuleTest extends \ApplicationTest\Controller\AbstractController
             2');
         $this->assertTrue($validator->isValid($rule), 'Multiline formula is valid');
 
+        $rule->setFormula('=2{self}');
+        $this->assertFalse($validator->isValid($rule), 'GIMS syntax sticked to numbers without any operator is invalid');
+        $this->assertArrayHasKey(Rule::INVALID_SYNTAX, $validator->getMessages());
+
         $rule->setFormula('=SUM({F#12,Q#34,P#56}) + IF(ISTEXT({F#12,Q#34}), {Q#34,P#56}, {self})');
         $this->assertTrue($validator->isValid($rule), 'Correct use of Excel and GIMS syntax is ok');
 

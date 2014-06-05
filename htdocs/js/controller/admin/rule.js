@@ -23,6 +23,26 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
                 }
     };
 
+    // Validate formula but not too often
+    var validate = _.debounce(function() {
+
+        var success = function() {
+            $scope.messages = [];
+        };
+
+        var fail = function(response) {
+            $scope.messages = response.data.messages;
+        };
+
+        if ($scope.rule && $scope.rule.id) {
+            $scope.rule.put({validate: true}).then(success, fail);
+        } else {
+            Restangular.all('rule').post($scope.rule, {validate: true}).then(success, fail);
+        }
+    }, 300);
+
+    $scope.$watch('rule.formula', validate);
+
     // Default redirect
     var returnUrl = '/admin/rule';
     if ($routeParams.returnUrl) {

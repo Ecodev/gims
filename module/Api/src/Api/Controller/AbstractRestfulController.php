@@ -59,6 +59,15 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     }
 
     /**
+     * Returns wether client asked to do only validation
+     * @return boolean
+     */
+    protected function isOnlyValidation()
+    {
+        return !is_null($this->params()->fromQuery('validate'));
+    }
+
+    /**
      * Must return an array of properties that will be exposed publicly via JSON.
      * If a property is actually an object itself, it must have a sub-array of properties
      *
@@ -156,6 +165,14 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             $this->getResponse()->setStatusCode(403);
 
             return new JsonModel(array('message' => $this->getAuth()->getMessage()));
+        }
+
+        // If only want to validate, do it then return empty data
+        if ($this->isOnlyValidation()) {
+            $object->validate();
+            $this->getResponse()->setStatusCode(200);
+
+            return new JsonModel(array());
         }
 
         $this->getEntityManager()->persist($object);
@@ -314,6 +331,17 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             $this->getResponse()->setStatusCode(403);
 
             return new JsonModel(array('message' => $this->getAuth()->getMessage()));
+        }
+
+        // If only want to validate, do it then return original object
+        if ($this->isOnlyValidation()) {
+            $object->validate();
+            $this->getResponse()->setStatusCode(200);
+
+            // Reload the object from database
+            $this->getEntityManager()->refresh($object);
+
+            return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
         }
 
         $this->getEntityManager()->flush();

@@ -107,7 +107,7 @@ class Rule extends \Zend\Validator\AbstractValidator
                             $this->basicTokenUsed = true;
                         }
 
-                        return 1;
+                        return '(1)';
                     }, $formula);
         }
 
@@ -118,7 +118,7 @@ class Rule extends \Zend\Validator\AbstractValidator
                             $this->regressionTokenUsed = true;
                         }
 
-                        return 1;
+                        return '(1)';
                     }, $formula);
         }
 

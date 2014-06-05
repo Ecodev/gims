@@ -25,14 +25,18 @@
                     </div>
                 </div>
 
-                <div class="form-group" ng-class="{'has-error': myForm.formula.$invalid}">
+                <div class="form-group" ng-class="{'has-error': messages.length}">
                     <label class="control-label col-sm-1" for="rule.formula"><?php echo $this->translate("Formula"); ?></label>
                     <div class="col-sm-11">
-                        <div id="rule.formula" ui-ace="aceOptions" name="formula" ng-model="rule.formula" required ></div>
+                        <div id="rule.formula" class="form-control" ui-ace="aceOptions" name="formula" ng-model="rule.formula" required ></div>
                     </div>
-                    <div class="col-sm-3">
-                        <span ng-show="myForm.formula.$error.required" class="help-block"><?php echo $this->translate("Required"); ?></span>
-                        <span ng-show="myForm.formula.$error.formula" class="help-block"><?php echo $this->translate('Enter a valid formula'); ?></span>
+                    <div class="form-group" ng-class="{'has-error': messages}">
+                        <span class="control-label col-sm-1" ></span>
+                        <div class="col-sm-11">
+                            <ul class="help-block">
+                                <li ng-repeat="message in messages" class="">{{message}}</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 

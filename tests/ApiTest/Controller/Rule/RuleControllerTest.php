@@ -118,4 +118,59 @@ class RuleControllerTest extends AbstractRestfulControllerTest
         $this->assertResponseStatusCode(403);
     }
 
+    public function testCanValidateRuleOnCreation()
+    {
+        // Rule
+        $validData = array(
+            'name' => 'new-rule A',
+        );
+
+        $this->dispatch($this->getRoute('post') . '?validate', Request::METHOD_POST, $validData);
+        $this->assertResponseStatusCode(200);
+        $actual = $this->getJsonResponse();
+        $this->assertEquals([], $actual, 'new object should not be created');
+
+        $invalidData = array(
+            'name' => 'new-rule A',
+            'formula' => 'invalid syntax',
+        );
+
+        $this->dispatch($this->getRoute('post') . '?validate', Request::METHOD_POST, $invalidData);
+        $this->assertResponseStatusCode(403);
+        $actual = $this->getJsonResponse();
+        $this->assertEquals('Object is not valid', $actual['title'], 'error should be returned');
+        $this->assertArrayHasKey('messages', $actual, 'messages should be present to detail what is invalid');
+    }
+
+    public function testCanValidateRuleOnUpdate()
+    {
+        // Rule
+        $validData = array(
+            'name' => 'new-rule A',
+            'formula' => '= 1 * 2 * 3',
+        );
+
+        $expected = [
+            'id' => $this->rule->getId(),
+            'name' => $this->rule->getName(),
+            'formula' => $this->rule->getFormula(),
+        ];
+
+        $this->dispatch($this->getRoute('put') . '?validate', Request::METHOD_PUT, $validData);
+        $this->assertResponseStatusCode(200);
+        $actual = $this->getJsonResponse();
+        $this->assertEquals($expected, $actual, 'returned object must NOT be modified');
+
+        $invalidData = array(
+            'name' => 'new-rule A',
+            'formula' => 'invalid syntax',
+        );
+
+        $this->dispatch($this->getRoute('put') . '?validate', Request::METHOD_PUT, $invalidData);
+        $this->assertResponseStatusCode(403);
+        $actual = $this->getJsonResponse();
+        $this->assertEquals('Object is not valid', $actual['title'], 'error should be returned');
+        $this->assertArrayHasKey('messages', $actual, 'messages should be present to detail what is invalid');
+    }
+
 }

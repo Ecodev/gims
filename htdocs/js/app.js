@@ -82,7 +82,12 @@ angular.module('myApp', [
             $httpProvider.interceptors.push(function($q) {
                 return {
                     responseError: function(rejection) {
-                        requestNotificationProvider.fireResponseError(rejection);
+
+                        // If there error did not happen because we specifically asked for validation, then fire the event
+                        if (!_.has(rejection.config.params, 'validate')) {
+                            requestNotificationProvider.fireResponseError(rejection);
+                        }
+
                         return $q.reject(rejection);
                     }
                 };
