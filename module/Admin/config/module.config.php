@@ -3,6 +3,7 @@
 return array(
     'controllers' => array(
         'invokables' => array(
+            'Admin\Controller\Index' => 'Admin\Controller\IndexController',
             'Admin\Controller\FilterSet' => 'Admin\Controller\FilterSetController',
             'Admin\Controller\Filter' => 'Admin\Controller\FilterController',
             'Admin\Controller\Question' => 'Admin\Controller\QuestionController',
