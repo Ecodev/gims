@@ -78,7 +78,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * - L = Level, only two possibilities: absent, or exactly "L#2" to indicate Level 2
  * - Y = Year
  *
- * In the first case, F, and in all cases Q and P, can have the value "current" instead of actual ID. It means
+ * F, Q and P, can have the value "current" instead of actual ID. It means
  * that the current Filter, Questionnaire or Part should be used, instead of one selected
  * by its ID. This syntax should be prefered when possible to maximise Rule re-use.
  *

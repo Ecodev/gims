@@ -1,30 +1,187 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $routeParams, $location, Modal, Restangular) {
+angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $routeParams, $location, Modal, Restangular, $timeout) {
     'use strict';
-
+    var aceEditor;
     ace.config.set('basePath', '/lib/ace-builds/src-noconflict');
     ace.config.set('modePath', '/ace-custom');
     $scope.aceOptions = {
         theme: 'clouds',
         onLoad:
-                function(_editor) {
+                function(editor) {
+                    aceEditor = editor; // Keep a reference to editor for later
 
                     // Editor part
-                    var _session = _editor.getSession();
-                    var _renderer = _editor.renderer;
-
+                    var _session = aceEditor.getSession();
+                    var _renderer = aceEditor.renderer;
                     // Options
-                    _editor.setReadOnly(true);
-                    _editor.setFontSize('14px');
-                    _editor.setShowPrintMargin(false);
+                    aceEditor.setReadOnly(true);
+                    aceEditor.setFontSize('14px');
+                    aceEditor.setShowPrintMargin(false);
                     _renderer.setShowGutter(false);
 //                    _session.setMode("ace/mode/sql");
                     _session.setMode("ace/mode/excel");
                 }
     };
 
+    $scope.currentValue = {
+        id: 'current',
+        name: 'Current'
+    };
+
+    $scope.token = {
+        filter: $scope.currentValue,
+        questionnaire: $scope.currentValue,
+        part: $scope.currentValue,
+        year: 0
+    };
+
+    $scope.availableTokens = [
+        {
+            name: 'Filter value',
+            description: "Reference a filter value.",
+            filter: true,
+            questionnaire: true,
+            part: true,
+            rule: false,
+            level: true,
+            year: false,
+            toString: function(config) {
+                return '{F#' + config.filter.id + ',Q#' + config.questionnaire.id + ',P#' + config.part.id + (config.level ? ',#L2' : '') + '}';
+            }
+        },
+        {
+            name: 'Question label',
+            description: 'Reference a question label. If the question has no answer, it will return NULL. When used with ISTEXT(), it can be used to detect if an answer exists.',
+            filter: true,
+            questionnaire: true,
+            part: false,
+            rule: false,
+            level: false,
+            year: false,
+            toString: function(config) {
+                return '{F#' + config.filter.id + ',Q#' + config.questionnaire.id + '}';
+            }
+        },
+        {
+            name: 'Rule value (Calculations/Estimations/Ratios)',
+            description: 'Reference a rule value. Typically used to reference a Calculation, Estimation or Ratio. WARNING: The referenced rule must exist and be applied to the specified questionnaire and part, otherwise computation will fail.',
+            filter: false,
+            questionnaire: true,
+            part: true,
+            rule: true,
+            level: false,
+            year: false,
+            toString: function(config) {
+                return '{R#' + config.rule.id + ',Q#' + config.questionnaire.id + ',P#' + config.part.id + '}';
+            }
+        },
+        {
+            name: 'Population value',
+            description: 'Reference the population data of the questionnaire\'s country. This is an absolute value expressed in number of persons.',
+            filter: false,
+            questionnaire: true,
+            part: true,
+            rule: false,
+            level: false,
+            year: false,
+            toString: function(config) {
+                return '{Q#' + config.questionnaire.id + ',P#' + config.part.id + '}';
+            }
+        },
+        {
+            name: 'Regression: Filter value',
+            description: 'Reference a Filter regression value for a specific part and year. The year is defined by the year currently being computed plus a user-defined offset. To express "1 year earlier" the offset would be -1, and for "3 years later", it would be +3. To stay on the same year, use an offset of 0.',
+            filter: true,
+            questionnaire: false,
+            part: true,
+            rule: false,
+            level: false,
+            year: true,
+            toString: function(config) {
+                var year = config.year > 0 ? '+' + config.year : config.year;
+                return '{F#' + config.filter.id + ',P#' + config.part.id + ',Y' + year + '}';
+            }
+        },
+        {
+            name: 'Regression: List of all filter values',
+            description: 'Reference a list of available filter values for all questionnaires. The result use Excel array constant syntax (eg: "{1,2,3}"). This should be used with Excel functions such as COUNT() and AVERAGE().',
+            filter: true,
+            questionnaire: false,
+            part: false,
+            rule: false,
+            level: false,
+            year: false,
+            toString: function(config) {
+                return '{F#' + config.filter.id + ',Q#all}';
+            }
+        },
+        {
+            name: 'Regression: Cumulated population',
+            description: 'Reference the cumulated population for all current questionnaires for the specified part.',
+            filter: false,
+            questionnaire: false,
+            part: true,
+            rule: false,
+            level: false,
+            year: false,
+            toString: function(config) {
+                return '{Q#all,P#' + config.part.id + '}';
+            }
+        },
+        {
+            name: 'Regression: Current year',
+            description: 'Reference the year we are currently computing. This may be useful for very exceptional edge cases, but should be avoided as much as possible.',
+            filter: false,
+            questionnaire: false,
+            part: false,
+            rule: false,
+            level: false,
+            year: false,
+            toString: function() {
+                return '{Y}';
+            }
+        },
+        {
+            name: 'Value if this rule is ignored',
+            description: 'Reference the value if computed without this rule. It allows to conditionally apply a rule with syntaxes such as "IF(can_apply_my_rule, compute_some_result, {self})".',
+            filter: false,
+            questionnaire: false,
+            part: false,
+            rule: false,
+            level: false,
+            year: false,
+            toString: function() {
+                return '{self}';
+            }
+        }
+    ];
+
+    $scope.tokenCanBeInserted = function() {
+
+        if (!$scope.token.selected) {
+            return false;
+        }
+
+        if ($scope.token.selected.rule && !$scope.token.rule) {
+            return false;
+        }
+
+        return true;
+    };
+
+    $scope.insertToken = function() {
+        $timeout(function() {
+            var tokenString = $scope.token.selected.toString($scope.token);
+            aceEditor.insert(tokenString);
+        });
+    };
+
     // Validate formula but not too often
     var validate = _.debounce(function() {
+
+        if (!$scope.rule) {
+            return;
+        }
 
         var success = function() {
             $scope.messages = [];
@@ -34,7 +191,7 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             $scope.messages = response.data.messages;
         };
 
-        if ($scope.rule && $scope.rule.id) {
+        if ($scope.rule.id) {
             $scope.rule.put({validate: true}).then(success, fail);
         } else {
             Restangular.all('rule').post($scope.rule, {validate: true}).then(success, fail);

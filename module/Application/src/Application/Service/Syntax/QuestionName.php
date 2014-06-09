@@ -14,13 +14,17 @@ class QuestionName extends AbstractBasicToken
 
     public function getPattern()
     {
-        return '/\{F#(\d+),Q#(\d+|current)\}/';
+        return '/\{F#(\d+|current),Q#(\d+|current)\}/';
     }
 
     public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules)
     {
         $filterId = $matches[1];
         $questionnaireId = $matches[2];
+
+        if ($filterId == 'current') {
+            $filterId = $usage->getFilter()->getId();
+        }
 
         if ($questionnaireId == 'current') {
             $questionnaireId = $usage->getQuestionnaire()->getId();

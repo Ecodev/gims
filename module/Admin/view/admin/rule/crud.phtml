@@ -25,6 +25,7 @@
                     </div>
                 </div>
 
+
                 <div class="form-group" ng-class="{'has-error': messages.length}">
                     <label class="control-label col-sm-1" for="rule.formula"><?php echo $this->translate("Formula"); ?></label>
                     <div class="col-sm-11">
@@ -36,6 +37,145 @@
                             <ul class="help-block">
                                 <li ng-repeat="message in messages" class="">{{message}}</li>
                             </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container-fluid">
+                    <div class=" col-sm-1" ></div>
+                    <div class="col-md-8">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Syntax wizard</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div name="token" class="container-fluid">
+
+                                    <div class="form-group" ng-class="{'has-error': myForm.token.$invalid}">
+                                        <label class="control-label col-sm-2" for="token.selected"><?php echo $this->translate("Syntax"); ?></label>
+                                        <select class="col-sm-8"
+                                                name="token" id="token.selected"
+                                                ng-model="token.selected"
+                                                ng-options="t.name for t in availableTokens">
+                                            <option style="display:none" value="">Select a syntax to insert</option>
+                                        </select>
+                                        <p class="help-block col-sm-12 ng-trans ng-trans-fade-up" ng-show="token.selected.description">{{token.selected.description}}</p>
+                                    </div>
+
+                                    <div class="form-group ng-trans ng-trans-fade-up" ng-show="token.selected.rule" ng-class="{'has-error': myForm.rule.$invalid}">
+                                        <label class="control-label col-sm-2" for="token.rule"><?php echo $this->translate("Rule"); ?></label>
+                                        <div class="col-sm-10">
+                                            <gims-select name="rule" id="token.rule"
+                                                         api="rule"
+                                                         model="token.rule"
+                                                         placeholder="Select a rule"
+                                                         style="width: 100%"
+                                                         >
+                                            </gims-select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group ng-trans ng-trans-fade-up" ng-show="token.selected.filter" ng-class="{'has-error': myForm.filter.$invalid}">
+                                        <label class="control-label col-sm-2" for="token.filter"><?php echo $this->translate("Filter"); ?></label>
+                                        <div class="col-sm-10">
+                                            <div class="radio">
+                                                <label><input type="radio" ng-model="token.filter" ng-value="currentValue"/>
+                                                    {{currentValue.name}}
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" ng-checked="currentValue != token.filter" />
+                                                    <gims-select name="filter" id="token.filter"
+                                                                 api="filter"
+                                                                 model="token.filter"
+                                                                 placeholder="Select a filter"
+                                                                 style="width: 100%"
+                                                                 >
+                                                    </gims-select>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group ng-trans ng-trans-fade-up" ng-show="token.selected.questionnaire" ng-class="{'has-error': myForm.questionnaire.$invalid}">
+                                        <label class="control-label col-sm-2" for="token.questionnaire"><?php echo $this->translate("Questionnaire"); ?></label>
+                                        <div class="col-sm-10">
+                                            <div class="radio">
+                                                <label><input type="radio" ng-model="token.questionnaire" ng-value="currentValue"/>
+                                                    {{currentValue.name}}
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" ng-checked="currentValue != token.questionnaire" />
+                                                    <gims-select name="questionnaire" id="token.questionnaire"
+                                                                 api="questionnaire"
+                                                                 model="token.questionnaire"
+                                                                 placeholder="Select a questionnaire"
+                                                                 style="width: 100%"
+                                                                 >
+                                                    </gims-select>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group ng-trans ng-trans-fade-up" ng-show="token.selected.part" ng-class="{'has-error': myForm.part.$invalid}">
+                                        <label class="control-label col-sm-2" for="token.part"><?php echo $this->translate("Part"); ?></label>
+                                        <div class="col-sm-10">
+                                            <div class="radio">
+                                                <label><input type="radio" ng-model="token.part" ng-value="currentValue"/>
+                                                    {{currentValue.name}}
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" ng-checked="currentValue != token.part" />
+                                                    <gims-select name="part" id="token.part"
+                                                                 api="part"
+                                                                 model="token.part"
+                                                                 placeholder="Select a part"
+                                                                 style="width: 100%"
+                                                                 >
+                                                    </gims-select>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group ng-trans ng-trans-fade-up" ng-show="token.selected.year" ng-class="{'has-error': myForm.year.$invalid}">
+                                        <label class="control-label col-sm-2" for="token.year"><?php echo $this->translate("Year offset"); ?></label>
+                                        <div class="col-sm-10">
+                                            <input type="number" name="year" id="token.year"
+                                                   min="-50"
+                                                   max="50"
+                                                   step="1"
+                                                   ng-model="token.year"
+                                                   placeholder="Select a year"
+                                                   required
+                                                   />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group ng-trans ng-trans-fade-up" ng-show="token.selected.level" ng-class="{'has-error': myForm.level.$invalid}">
+                                        <label class="control-label col-sm-2" for="token.level"><?php echo $this->translate("Level 2"); ?></label>
+                                        <div class="col-sm-10">
+                                            <input type="checkbox" name="level" id="token.level"
+                                                   ng-model="token.level"
+                                                   />
+                                            <p class="help-block">Levels correspond to Tables_W/Tables_S (level 1) and GraphData_W/GraphData_S (level 2). In most cases the filter value referenced should be the value of Tables_W/Tables_S, so the checkbox should be left unchecked.</p>
+                                        </div>
+                                    </div>
+
+                                    <p class="help-block ng-trans ng-trans-fade-up" ng-show="token.selected.filter || token.selected.questionnaire || token.selected.part">
+                                        <i>Current</i> refers to the context where the rule is applied. If a rule is applied on the filter "Total improved" then the current filter will be evaluated as "Total improved". And if the same rule is also applied to "Piped onto premises", then the current filter will be evaluated as "Piped onto premises" for that application. While optional, the usage of <i>Current</i> allow to share a single rule for multiple applications, so it should be favored as much as possible.
+                                    </p>
+                                    <button class="btn btn-default pull-right" ng-click="insertToken()" ng-disabled="!tokenCanBeInserted()">Insert at cursor position</button>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
