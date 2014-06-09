@@ -23,7 +23,9 @@ return [
             'ZfcRbac\Guard\RouteGuard' => [
                 // Only members can access admin and contribute angular templates
                 'template_admin' => ['member'],
+                'template_admin/default' => ['member'],
                 'template_contribute' => ['member'],
+                'template_contribute/default' => ['member'],
                 'api/users' => ['member'],
             ],
         ],
