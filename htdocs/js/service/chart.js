@@ -98,8 +98,13 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                     field: 'value' + serie.id,
                     displayName: serie.name,
                     enableColumnResize: true,
-                    bgcolor: serie.color,
-                    headerCellTemplate: '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' + '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" style="background:{{col.colDef.bgcolor}}" popover-placement="top" popover="{{col.displayName}}">' + '       {{col.displayName}}' + '   </div>' + '</div>',
+                    color: serie.color,
+                    headerCellTemplate: " " +
+                        '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
+                        '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" popover-placement="top" popover="{{col.displayName}}">' +
+                        '       <i class="fa fa-gims-filter" style="color:{{col.colDef.color}};"></i> {{col.displayName}}' +
+                        '   </div>' +
+                        '</div>',
                     cellTemplate: '<div class="ngCellText text-right" ng-class="col.colIndex()"><span ng-cell-text ng-show="{{row.entity.value' + serie.id + '!==null}}">{{row.entity.value' + serie.id + '}} %</span></div>'
                 });
 
@@ -131,7 +136,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         // remove useless dates
         var finalData = [];
         angular.forEach(arrayData, function(row, index) {
-            if (row.year % 5 === 0 && index < arrayData.length || index == arrayData.length - 1) {
+            if ((row.year % 5 === 0 && index < arrayData.length || index == arrayData.length - 1) && row.year > 1985) {
                 finalData.push(arrayData.splice(index, 1)[0]);
             }
         });
