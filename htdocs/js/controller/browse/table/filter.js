@@ -44,17 +44,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.parts = Restangular.all('part').getList().$object;
     $scope.modes = ['Browse', 'Contribute'];
     $scope.surveysTemplate = "[[item.code]] - [[item.name]]";
-    $scope.filtersTemplate = "<div>" +
-            "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
-            "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +
-            "</div>" +
-            "<div class='col-sm-7 col-md-7'>" +
-            "    <small>" +
-            "       [[_.map(item.paths, function(path){return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]" +
-            "    </small>" +
-            "</div>" +
-            "<div class='clearfix'></div>" +
-            "</div>";
 
     /**************************************************************************/
     /*************************************************************** Watchers */
@@ -539,7 +528,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         if (_.isUndefined($scope.tabs.questionnaires)) {
             $scope.tabs.questionnaires = [];
         }
-        $scope.tabs.questionnaires.push({});
+        $scope.tabs.questionnaires.splice(0,0, {});
         fillMissingElements();
         updateUrl('questionnaires');
     };

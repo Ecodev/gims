@@ -6,7 +6,7 @@ Usage :
      name="filters"             -> optional name (reported on url)
      show-result-path="true"    -> show filters paths on autocompletion list
      show-selection-path="false"-> show filters paths on selected list
-     generic-color="true"       -> if true, show a color for each filter (genericColor property), if false, show only color property
+     generic-color="false"       -> if true, show a color for each filter (genericColor property), if false, show only color property
      multiple                   -> select2 in tag mode (missing means single selection on select2)
      query-params="queryParams" -> params for query. color,genericColor,paths are automatically added depending on above attributes values
      change-url="true"          -> update url with ids on selection change

@@ -36,21 +36,46 @@
 
                     <div ng-hide='sector'>
                         <div class='col-md-12'>
-                            <h3 class='control-label'>Surveys selection <small ng-show='!tabs.questionnaires.length && mode == "Browse"'>(Required)</small></h3>
+                            <h3 class='control-label'>Questionnaires selection (columns) <small ng-show='!tabs.questionnaires.length && mode == "Browse"'>(Required)</small></h3>
                         </div>
 
                         <div class='col-md-12'>
                             <tabset>
+                                <tab heading="By country">
+                                    <gims-select
+                                            model="tabs.country"
+                                            api="country"
+                                            queryparams="countryParams"
+                                            placeholder="Select a country"
+                                            change-url = "false"
+                                            disabled='isLoading'
+                                            style="width: 100%">
+                                    </gims-select>
+                                </tab>
+                                <!--<tab heading="By survey">-->
+                                    <!--<gims-select-->
+                                        <!--model="tabs.survey"-->
+                                        <!--api="survey"-->
+                                        <!--queryparams="surveyParams"-->
+                                        <!--placeholder="Select survey"-->
+                                        <!--search-attributes='code,name'-->
+                                        <!--custom-selection-template="{{surveysTemplate}}"-->
+                                        <!--custom-result-template="{{surveysTemplate}}"-->
+                                        <!--change-url = "false"-->
+                                        <!--disabled='isLoading'-->
+                                        <!--style="width: 100%">-->
+                                    <!--</gims-select>-->
+                                <!--</tab>-->
                                 <tab heading="Selected">
                                     <gims-select
-                                        model="tabs.questionnaires"
-                                        name='questionnaires'
-                                        api="questionnaire"
-                                        queryparams="questionnaireParams"
-                                        placeholder="Select questionnaires"
-                                        disabled='isLoading'
-                                        multiple
-                                        style="width: 100%">
+                                            model="tabs.questionnaires"
+                                            name='questionnaires'
+                                            api="questionnaire"
+                                            queryparams="questionnaireParams"
+                                            placeholder="Select questionnaires"
+                                            disabled='isLoading'
+                                            multiple
+                                            style="width: 100%">
                                     </gims-select>
                                 </tab>
                                 <tab ng-show='tabs.glass.length'>
@@ -60,31 +85,6 @@
                                     <ul class='list-unstyled'>
                                         <li ng-repeat='q in tabs.glass'><a href='/contribute/questionnaire/glass/{{q.id}}?returnUrl={{currentUrl}}'><i class='fa fa-external-link'></i> {{q.name}}</a></li>
                                     </ul>
-                                </tab>
-                                <tab heading="By survey">
-                                    <gims-select
-                                        model="tabs.survey"
-                                        api="survey"
-                                        queryparams="surveyParams"
-                                        placeholder="Select survey"
-                                        search-attributes='code,name'
-                                        custom-selection-template="{{surveysTemplate}}"
-                                        custom-result-template="{{surveysTemplate}}"
-                                        change-url = "false"
-                                        disabled='isLoading'
-                                        style="width: 100%">
-                                    </gims-select>
-                                </tab>
-                                <tab heading="By country">
-                                    <gims-select
-                                        model="tabs.country"
-                                        api="country"
-                                        queryparams="countryParams"
-                                        placeholder="Select a country"
-                                        change-url = "false"
-                                        disabled='isLoading'
-                                        style="width: 100%">
-                                    </gims-select>
                                 </tab>
                             </tabset>
                         </div>
@@ -96,27 +96,11 @@
             <div class="col-md-6" ng-show='(tabs.questionnaires.length || mode != "Browse") && !sector'>
                 <div class='row' ng-class="{'has-error':!tabs.filters.length}">
                     <div class='col-md-12'>
-                        <h3 class='control-label'>Filter selection <small ng-show='!tabs.filters.length'>(Required)</small></h3>
+                        <h3 class='control-label'>Filter selection (rows) <small ng-show='!tabs.filters.length'>(Required)</small></h3>
                     </div>
 
                     <div class='col-md-12'>
                         <tabset>
-                            <tab heading="Selection">
-                                <gims-select
-                                    model="tabs.filters"
-                                    name="filters"
-                                    api="filter"
-                                    queryparams="filterParams"
-                                    placeholder="Select filters"
-                                    container-css-class='select2list'
-                                    current-context-element='?returnUrl={{currentUrl}}'
-                                    custom-selection-template="{{filtersTemplate}}"
-                                    custom-result-template="{{filtersTemplate}}"
-                                    multiple
-                                    disabled='isLoading'
-                                    style="width: 100%">
-                                </gims-select>
-                            </tab>
                             <tab heading="By filter set">
                                 <gims-select
                                     model="tabs.filterSet"
@@ -129,19 +113,19 @@
                                 </gims-select>
                             </tab>
                             <tab heading="By filter's children">
-                                <gims-select
-                                    model="tabs.filter"
-                                    api="filter"
-                                    queryparams="filterParams"
-                                    placeholder="Select filter"
-                                    container-css-class='select2list'
-                                    current-context-element='?returnUrl={{currentUrl}}'
-                                    custom-selection-template="{{filtersTemplate}}"
-                                    custom-result-template="{{filtersTemplate}}"
-                                    change-url = "false"
-                                    disabled='isLoading'
-                                    style="width: 100%">
-                                </gims-select>
+                                <gims-filter
+                                        model="tabs.filter"
+                                        name="filter"
+                                        show-selection-path="true">
+                                </gims-filter>
+                            </tab>
+                            <tab heading="Selected">
+                                <gims-filter
+                                        model="tabs.filters"
+                                        name="filters"
+                                        show-selection-path="true"
+                                        multiple>
+                                </gims-filter>
                             </tab>
                         </tabset>
                     </div>
