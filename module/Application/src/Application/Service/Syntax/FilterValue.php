@@ -19,21 +19,9 @@ class FilterValue extends AbstractBasicToken
 
     public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules)
     {
-        $filterId = $matches[1];
-        $questionnaireId = $matches[2];
-        $partId = $matches[3];
-
-        if ($filterId == 'current') {
-            $filterId = $usage->getFilter()->getId();
-        }
-
-        if ($questionnaireId == 'current') {
-            $questionnaireId = $usage->getQuestionnaire()->getId();
-        }
-
-        if ($partId == 'current') {
-            $partId = $usage->getPart()->getId();
-        }
+        $filterId = $this->getFilterId($matches[1], $usage);
+        $questionnaireId = $this->getQuestionnaireId($matches[2], $usage);
+        $partId = $this->getPartId($matches[3], $usage);
 
         $useSecondLevelRules = isset($matches[4]) && $matches[4] == ',L#2';
         $value = $calculator->computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas);

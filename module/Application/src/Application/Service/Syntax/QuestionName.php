@@ -19,16 +19,8 @@ class QuestionName extends AbstractBasicToken
 
     public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules)
     {
-        $filterId = $matches[1];
-        $questionnaireId = $matches[2];
-
-        if ($filterId == 'current') {
-            $filterId = $usage->getFilter()->getId();
-        }
-
-        if ($questionnaireId == 'current') {
-            $questionnaireId = $usage->getQuestionnaire()->getId();
-        }
+        $filterId = $this->getFilterId($matches[1], $usage);
+        $questionnaireId = $this->getQuestionnaireId($matches[2], $usage);
 
         $questionName = $calculator->getAnswerRepository()->getQuestionNameIfNonNullAnswer($questionnaireId, $filterId);
         if (is_null($questionName)) {

@@ -18,18 +18,10 @@ class RegressionFilterValue extends AbstractRegressionToken
 
     public function replace(Jmp $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
     {
-        $filterId = $matches[1];
-        $partId = $matches[2];
+        $filterId = $this->getId($matches[1], $currentFilterId);
+        $partId = $this->getId($matches[2], $currentPartId);
         $yearShift = $matches[3];
         $year += $yearShift;
-
-        if ($filterId == 'current') {
-            $filterId = $currentFilterId;
-        }
-
-        if ($partId == 'current') {
-            $partId = $currentPartId;
-        }
 
         // Only compute thing if in current years, to avoid infinite recursitivy in a very distant future
         if (in_array($year, $years)) {

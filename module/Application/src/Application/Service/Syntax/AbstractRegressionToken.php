@@ -9,6 +9,21 @@ abstract class AbstractRegressionToken extends AbstractToken
 {
 
     /**
+     * Returns the ID according to 'current' syntax
+     * @param string|integer $id
+     * @param integer $currentId
+     * @return integer
+     */
+    protected function getId($id, $currentId)
+    {
+        if ($id == 'current') {
+            return $currentId;
+        } else {
+            return $id;
+        }
+    }
+
+    /**
      *
      * @param \Application\Service\Calculator\Jmp $calculator
      * @param array $matches

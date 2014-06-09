@@ -20,13 +20,9 @@ class PopulationValue extends AbstractBasicToken
     public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules)
     {
         $questionnaireId = $matches[1];
-        $partId = $matches[2];
+        $partId = $this->getPartId($matches[2], $usage);
 
         $questionnaire = $questionnaireId == 'current' ? $usage->getQuestionnaire() : $calculator->getQuestionnaireRepository()->findOneById($questionnaireId);
-
-        if ($partId == 'current') {
-            $partId = $usage->getPart()->getId();
-        }
 
         return $calculator->getPopulationRepository()->getOneByQuestionnaire($questionnaire, $partId)->getPopulation();
     }

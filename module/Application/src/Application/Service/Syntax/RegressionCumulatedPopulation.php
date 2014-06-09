@@ -18,11 +18,7 @@ class RegressionCumulatedPopulation extends AbstractRegressionToken
 
     public function replace(Jmp $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
     {
-        $partId = $matches[1];
-
-        if ($partId == 'current') {
-            $partId = $currentPartId;
-        }
+        $partId = $this->getId($matches[1], $currentPartId);
 
         $population = 0;
         foreach ($questionnaires as $questionnaire) {

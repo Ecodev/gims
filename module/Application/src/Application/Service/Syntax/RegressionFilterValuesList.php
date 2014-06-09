@@ -18,11 +18,7 @@ class RegressionFilterValuesList extends AbstractRegressionToken
 
     public function replace(Jmp $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
     {
-        $filterId = $matches[1];
-
-        if ($filterId == 'current') {
-            $filterId = $currentFilterId;
-        }
+        $filterId = $this->getId($matches[1], $currentFilterId);
 
         $data = $calculator->computeFilterForAllQuestionnaires($filterId, $questionnaires, $currentPartId);
 
