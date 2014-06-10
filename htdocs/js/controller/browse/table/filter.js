@@ -1,4 +1,4 @@
-angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $location, $http, $timeout, Restangular, $q, $rootScope, requestNotification) {
+angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $location, $http, $timeout, Restangular, $q, $rootScope, requestNotification, $filter) {
     'use strict';
 
     /**************************************************************************/
@@ -15,7 +15,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /*********************************************** Variables initialisation */
     /**************************************************************************/
 
-    // params for ajax requests
+        // params for ajax requests
     $scope.filterParams = {fields: 'paths,color,genericColor', itemOnce: 'true'};
     $scope.filterSetFields = {fields: 'color,paths'};
     $scope.filterFields = {fields: 'color,paths'};
@@ -152,6 +152,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         if (!_.isEmpty(newQuestionnaires)) {
             getQuestionnaires(newQuestionnaires, questionnaireWithQTypeFields).then(function(questionnaires) {
                 checkGlassQuestionnaires(questionnaires);
+                $scope.orderQuestionnaires(false);
             });
         }
 
@@ -182,6 +183,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         if (filtersComputing) {
             getComputedFilters();
         }
+    };
+
+    $scope.orderQuestionnaires = function(reverse) {
+        $scope.tabs.questionnaires = $filter('orderBy')($scope.tabs.questionnaires, 'survey.year', reverse);
+        $scope.questionnairesAreSorted = true;
     };
 
     /**
@@ -488,7 +494,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
                     questionnaire.id = data.questionnaire.id;
                     questionnaire.survey.id = data.survey.id;
-                    getQuestionnaires([data.questionnaire.id], questionnaireWithAnswersFields).then(function(questionnaires) {
+                    getQuestionnaires([data.questionnaire.id
+                    ], questionnaireWithAnswersFields).then(function(questionnaires) {
                         $scope.firstQuestionnairesRetrieve = true;
                         prepareDataQuestionnaires(questionnaires);
                         updateUrl('questionnaires');
@@ -528,7 +535,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         if (_.isUndefined($scope.tabs.questionnaires)) {
             $scope.tabs.questionnaires = [];
         }
-        $scope.tabs.questionnaires.splice(0,0, {});
+        $scope.tabs.questionnaires.splice(0, 0, {});
+        $scope.questionnairesAreSorted = false;
         fillMissingElements();
         updateUrl('questionnaires');
     };
@@ -637,7 +645,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     dest: dest.id,
                     src: src.id
                 }
-            }).success(function() {
+            }).success(function()
+            {
                 dest.isLoading = false;
                 $scope.refresh(false, true);
             });
@@ -728,7 +737,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         if (glass.length === 1 && $scope.tabs.questionnaires.length === 1) {
             $location.url('/contribute/questionnaire/glass/' + glass[0].id + "?returnUrl=" + $location.path());
 
-        // else list glass questionnaires apart
+            // else list glass questionnaires apart
         } else {
             $scope.tabs.glass = glass;
 
@@ -924,13 +933,14 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     timeout: getComputedFiltersCanceller.promise,
                     params: {
                         filters: filtersIds.join(','),
-                        questionnaires: _.filter(questionnairesIds, function(el) {
+                        questionnaires: _.filter(questionnairesIds,function(el) {
                             if (el) {
                                 return true;
                             }
                         }).join(',')
                     }
-                }).success(function(questionnaires) {
+                }).success(function(questionnaires)
+                {
                     _.forEach($scope.tabs.questionnaires, function(scopeQuestionnaire) {
                         if (questionnaires[scopeQuestionnaire.id]) {
                             _.forEach(questionnaires[scopeQuestionnaire.id], function(values, filterId) {
@@ -1625,7 +1635,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                         return true;
                     }
                 });
-                return filter.id + ':' + _.map(children, function(f) {
+                return filter.id + ':' + _.map(children,function(f) {
                     return f.id;
                 }).join('-');
             });
@@ -1645,7 +1655,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     filters: filters.join(','),
                     questionnaires: questionnaires.join(',')
                 }
-            }).success(function() {
+            }).success(function()
+            {
                 $scope.firstQuestionnairesRetrieve = true;
                 $scope.refresh(false, true);
             });
@@ -1670,7 +1681,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param element
      */
     var updateUrl = function(element) {
-        $location.search(element, _.filter(_.pluck($scope.tabs[element], 'id'), function(el) {
+        $location.search(element, _.filter(_.pluck($scope.tabs[element], 'id'),function(el) {
             if (el) {
                 return true;
             }

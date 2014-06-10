@@ -41,7 +41,7 @@
 
                         <div class='col-md-12'>
                             <tabset>
-                                <tab heading="By country">
+                                <tab heading="Country">
                                     <gims-select
                                             model="tabs.country"
                                             api="country"
@@ -52,20 +52,20 @@
                                             style="width: 100%">
                                     </gims-select>
                                 </tab>
-                                <!--<tab heading="By survey">-->
-                                    <!--<gims-select-->
-                                        <!--model="tabs.survey"-->
-                                        <!--api="survey"-->
-                                        <!--queryparams="surveyParams"-->
-                                        <!--placeholder="Select survey"-->
-                                        <!--search-attributes='code,name'-->
-                                        <!--custom-selection-template="{{surveysTemplate}}"-->
-                                        <!--custom-result-template="{{surveysTemplate}}"-->
-                                        <!--change-url = "false"-->
-                                        <!--disabled='isLoading'-->
-                                        <!--style="width: 100%">-->
-                                    <!--</gims-select>-->
-                                <!--</tab>-->
+                                <tab heading="Survey">
+                                    <gims-select
+                                        model="tabs.survey"
+                                        api="survey"
+                                        queryparams="surveyParams"
+                                        placeholder="Select survey"
+                                        search-attributes='code,name'
+                                        custom-selection-template="{{surveysTemplate}}"
+                                        custom-result-template="{{surveysTemplate}}"
+                                        change-url = "false"
+                                        disabled='isLoading'
+                                        style="width: 100%">
+                                    </gims-select>
+                                </tab>
                                 <tab heading="Selected">
                                     <gims-select
                                             model="tabs.questionnaires"
@@ -101,7 +101,7 @@
 
                     <div class='col-md-12'>
                         <tabset>
-                            <tab heading="By filter set">
+                            <tab heading="Filter set">
                                 <gims-select
                                     model="tabs.filterSet"
                                     api="filterSet"
@@ -112,7 +112,7 @@
                                     style="width: 100%">
                                 </gims-select>
                             </tab>
-                            <tab heading="By filter's children">
+                            <tab heading="Filter's children">
                                 <gims-filter
                                         model="tabs.filter"
                                         name="filter"
@@ -217,8 +217,9 @@
                                 <a class='btn btn-default btn-xs'
                                    ng-click='addQuestionnaire();'
                                    ng-show='mode != "Browse"'>
-                                    <i class='fa fa-plus'></i> Add new survey
+                                    <i class='fa fa-plus'></i> Add new questionnaire
                                 </a>
+                                <a class='btn btn-default btn-xs pull-right' ng-hide='questionnairesAreSorted' ng-click='orderQuestionnaires(false)'>A <i class='fa fa-signal'></i> Z</a>
                             </td>
 
                             <!-- Label for question labels and close btn -->
