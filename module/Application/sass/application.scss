@@ -357,3 +357,15 @@ body.local {
     margin-bottom: 10px;
     color: white;
 }
+
+
+/* hides the spin-button for firefox */
+input[type=number] {
+    -moz-appearance:textfield;
+}
+/* hides the spin-button for chrome*/
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
