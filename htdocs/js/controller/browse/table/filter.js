@@ -724,11 +724,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         });
 
         // if there is only 1 glass in all selected questionnaires, consider that user want to edit this one, and redirect to glass template
-        // no action is possible on multiple glass questionnaires (neigther browse or contribute)
+        // no action is possible on multiple glass questionnaires (neither browse or contribute)
         if (glass.length === 1 && $scope.tabs.questionnaires.length === 1) {
             $location.url('/contribute/questionnaire/glass/' + glass[0].id + "?returnUrl=" + $location.path());
 
-            // else list glass questionnaires apart
+        // else list glass questionnaires apart
         } else {
             $scope.tabs.glass = glass;
 
