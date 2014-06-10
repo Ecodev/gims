@@ -3,19 +3,9 @@
 namespace Api\Controller;
 
 use Application\View\Model\NumericJsonModel;
-use Application\Model\FilterSet;
 use Application\Model\Part;
 use Application\Utility;
-use Doctrine\Common\Collections\ArrayCollection;
-use Application\Model\Question\NumericQuestion;
-use Application\Model\Geoname;
-use Application\Model\Answer;
-use Application\Model\Questionnaire;
 use Application\Model\Filter;
-use Application\Model\Survey;
-use Application\Model\User;
-use Application\Model\UserSurvey;
-use Application\Model\UserQuestionnaire;
 
 class ChartController extends \Application\Controller\AbstractAngularActionController
 {
@@ -259,7 +249,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     }
 
     /**
-     * Get line and scatter series for the given filterSet and questionnaires
+     * Get line and scatter series for the given filters and questionnaires
      * @param \Application\Model\Filter[] $filters
      * @param array $questionnaires
      * @param \Application\Model\Part $part
@@ -339,7 +329,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
 
             foreach ($serie['data'] as &$d) {
-                $d = \Application\Utility::decimalToRoundedPercent($d);
+                $d = Utility::decimalToRoundedPercent($d);
             }
             $series[] = $serie;
         }
@@ -390,7 +380,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                         'id' => $idFilter . ':' . $questionnaireId,
                         'questionnaire' => $questionnaireId,
                         'x' => $data['years'][$questionnaireId],
-                        'y' => \Application\Utility::decimalToRoundedPercent($value),
+                        'y' => Utility::decimalToRoundedPercent($value),
                     );
 
                     /** @todo : old params denominations -> refresh */
@@ -556,7 +546,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     'rule.name',
                 ));
                 $value = $this->getCalculator()->computeFormulaBasic($usage);
-                $value = \Application\Utility::decimalToRoundedPercent($value);
+                $value = Utility::decimalToRoundedPercent($value);
                 $extractedUsage['value'] = $value;
                 $extractedUsages[] = $extractedUsage;
             }
