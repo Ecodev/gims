@@ -52,6 +52,11 @@ class QuestionnaireRepository extends AbstractChildRepository
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * Duplicate all usages related to source questionnaire and replacing formula with destination questionnaire
+     * @param \Application\Model\Questionnaire $destQ
+     * @param \Application\Model\Questionnaire $srcQ
+     */
     public function copyFilterUsages(\Application\Model\Questionnaire $destQ, \Application\Model\Questionnaire $srcQ)
     {
 
