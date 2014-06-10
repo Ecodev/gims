@@ -407,11 +407,11 @@
 
                     <tbody>
                         <!-- Filters and answers rows -->
-                        <tr ng-repeat="filter in tabs.filters track by $index" ng-show="expandHierarchy || filter.level <= tabs.filters[0].level || sector" ng-class="{'active':sector && !filter.sectorChild}">
+                        <tr ng-repeat="filter in tabs.filters track by $index" ng-show="expandHierarchy || filter.level <= tabs.filters[0].level || sector" ng-class="{'active':sector && !filter.sectorChild}" ng-mouseenter="filter.hover=true" ng-mouseleave="filter.hover=false">
 
                             <!-- Remove Filter from selection -->
                             <td>
-                                <div class="btn btn-default btn-xs" ng-click="removeFilter($index)" ng-show="!filter.sectorChild"><i class="fa fa-times"></i></div>
+                                <div class="btn btn-default btn-xs" ng-click="removeFilter($index)" ng-show="!filter.sectorChild && filter.hover"><i class="fa fa-times"></i></div>
                             </td>
 
                             <!-- Filter name column-->
@@ -419,7 +419,7 @@
                                 <div ng-show="isValidId(filter) || filter.sectorChild" ng-class="{'strong':filter.level == tabs.filters[0].level && !filter.sectorChild}" style="margin-left:{{filter.level - tabs.filters[0].level}}em;">
                                     <i class="fa" style="color:{{filter.color}}" ng-class="{'text-muted':filter.sectorChild, 'fa-gims-filter':!filter.isLoading && !filter.sectorChild, 'fa-asterisk text-primary':!filter.isLoading && filter.sectorChild, 'fa-gims-loading':filter.isLoading}"></i>
                                     {{filter.name}}
-                                    <a href="/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}" ng-show="mode != 'browse' && !filter.sectorChild"><i class="fa fa-pencil"></i></a>
+                                    <a href="/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}" ng-show="mode != 'browse' && !filter.sectorChild && filter.hover"><i class="fa fa-pencil"></i></a>
                                 </div>
                                 <div ng-show="!isValidId(filter) && !filter.sectorChild">
                                     <ng-form name="filterName" class="input-group" ng-class="{'has-error':filterName.$invalid}">
