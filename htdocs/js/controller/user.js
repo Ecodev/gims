@@ -85,4 +85,13 @@ angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $m
         });
     };
 
+    $scope.toLowerCase = function() {
+        if ($scope.login.identity) {
+            $scope.login.identity = $scope.login.identity.toLowerCase();
+        }
+
+        if ($scope.register.email) {
+            $scope.register.email = $scope.register.email.toLowerCase();
+        }
+    };
 });

@@ -99,7 +99,7 @@
                             </div>
                             <div class="form-group" ng-class="{'has-error': loginForm.identity.$dirty && loginForm.identity.$invalid}">
                                 <label class="control-label" for="login-email"><?php echo $this->translate('Email'); ?></label>
-                                <input gims-focus type="email" name="identity" id="login-email" ng-model="login.identity" />
+                                <input gims-focus type="email" name="identity" id="login-email" ng-model="login.identity" ng-blur="toLowerCase()" />
                                 <span ng-show="loginForm.identity.$error.email" class="help-block"><?php echo $this->translate('Enter a valid email address'); ?></span>
                             </div>
 
@@ -119,7 +119,7 @@
                         <form class="modal-form" name="registerForm" ng-submit="sendRegister()">
                             <div class="form-group" ng-class="{'has-error': userExisting || (registerForm.email.$dirty && registerForm.email.$error.email)}">
                                 <label class="control-label" for="register-email"><?php echo $this->translate('Email'); ?></label>
-                                <input type="email" name="email" id="register-email" required ng-model="register.email">
+                                <input type="email" name="email" id="register-email" required ng-model="register.email" ng-blur="toLowerCase()">
                                 <span ng-show="registerForm.email.$error.email" class="help-block"><?php echo $this->translate('Enter a valid email address'); ?></span>
                                 <span ng-show="userExisting" class="help-block"><?php echo $this->translate('There is already an account with this email address'); ?></span>
                             </div>
