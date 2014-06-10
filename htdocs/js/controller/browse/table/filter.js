@@ -15,8 +15,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /*********************************************** Variables initialisation */
     /**************************************************************************/
 
-        // params for ajax requests
-    $scope.filterParams = {fields: 'paths,color,genericColor', itemOnce: 'true'};
+    // params for ajax requests
     $scope.filterSetFields = {fields: 'color,paths'};
     $scope.filterFields = {fields: 'color,paths'};
     $scope.countryParams = {fields: 'geoname'};

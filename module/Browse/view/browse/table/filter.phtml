@@ -36,7 +36,7 @@
 
                     <div ng-hide="sector">
                         <div class="col-md-12">
-                            <h3 class="control-label">Questionnaires selection (columns) <small ng-show="!tabs.questionnaires.length && mode == 'browse'">(Required)</small></h3>
+                            <h3 class="control-label">Questionnaires (columns) <small ng-show="!tabs.questionnaires.length && mode == 'browse'">(Required)</small></h3>
                         </div>
 
                         <div class="col-md-12">
@@ -96,7 +96,7 @@
             <div class="col-md-6" ng-show="(tabs.questionnaires.length || mode != 'Browse') && !sector">
                 <div class="row" ng-class="{'has-error':!tabs.filters.length}">
                     <div class="col-md-12">
-                        <h3 class="control-label">Filter selection (rows) <small ng-show="!tabs.filters.length">(Required)</small></h3>
+                        <h3 class="control-label">Filter (rows) <small ng-show="!tabs.filters.length">(Required)</small></h3>
                     </div>
 
                     <div class="col-md-12">
@@ -138,7 +138,7 @@
             <div class="col-md-6" ng-show="sector">
                 <div class="row">
                     <div class="col-md-12" ng-class="{'has-error':!tabs.filter.length}">
-                        <h3 class="control-label">Filter selection <small ng-show="!tabs.filter.length">(Required)</small></h3>
+                        <h3 class="control-label">Filter (rows) <small ng-show="!tabs.filter.length">(Required)</small></h3>
                     </div>
 
                     <div class="col-md-12">
@@ -163,7 +163,7 @@
                                 </ng-form>
                             </tab>
                             <tab heading="Selected filter" heading="tabs.view" disabled="tabs.viewDisabled">
-                                <gims-filter model="tabls.filter" change-url="false"></gims-filter>
+                                <gims-filter model="tabs.filter"></gims-filter>
                             </tab>
                         </tabset>
                     </div>
