@@ -104,4 +104,41 @@ angular.module('myApp.directives')
                     ctrl.$formatters.push(maxValidator);
                 }
             };
+        })
+        .directive('percent', function() {
+            return {
+                restrict: 'A',
+                require: 'ngModel',
+                link: function(scope, element, attr, ngModel) {
+
+                    function round3decimals(val) {
+                        if (val) {
+                            return Math.round(val * 1000) / 1000;
+                        }
+                        return null;
+                    }
+
+                    function fromUser(val) {
+                        if (val) {
+                            return val / 100;
+                        }
+
+                        return null;
+                    }
+
+                    function toUser(val) {
+                        if (val) {
+                            return round3decimals(val * 100);
+                        }
+                        return null;
+                    }
+
+                    element.bind('blur', function() {
+                        element.val(round3decimals(element.val()));
+                    });
+
+                    ngModel.$parsers.push(fromUser);
+                    ngModel.$formatters.push(toUser);
+                }
+            };
         });

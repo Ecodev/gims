@@ -15,7 +15,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /*********************************************** Variables initialisation */
     /**************************************************************************/
 
-        // params for ajax requests
+    // params for ajax requests
     $scope.filterFields = {fields: 'color,paths'};
     $scope.countryParams = {fields: 'geoname'};
     var countryFields = {fields: 'geoname.questionnaires,geoname.questionnaires.survey,geoname.questionnaires.survey.questions,geoname.questionnaires.survey.questions.type,geoname.questionnaires.survey.questions.filter'};

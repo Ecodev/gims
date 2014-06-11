@@ -483,6 +483,9 @@
                                                         <li ng-if="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]">
                                                             <a><i class="fa fa-question fa-fw"></i> {{questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]}}</a>
                                                         </li>
+                                                        <li ng-if="isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value])" >
+                                                            <a><i class="fa fa-save fa-fw"></i> Stored value : {{questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]}}</a>
+                                                        </li>
                                                         <!--<li ng-if="!isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) && isValidNumber(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second)"><a><i class="fa fa-cog fa-fw"></i></a></li>-->
                                                         <li ng-if="questionnaire.permissions.update && questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id" class="divider"></li>
                                                         <li ng-if="questionnaire.permissions.update" class="dropdown-header">Actions</li>
@@ -510,14 +513,17 @@
                                                        ng-max="questionnaire.survey.questions[filter.id].max"
                                                        name="value"
                                                        type="number"
+                                                       percent
                                                        placeholder="{{questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first}}"
                                                        ng-focus="setAnswerInitialValue(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id]); getPermissions(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id])"
                                                        ng-blur="saveAnswer(questionnaire.survey.questions[filter.id].answers[tabs.part.id], questionnaire.survey.questions[filter.id], filter, questionnaire, tabs.part)"
                                                        ng-model="questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]"
                                                        ng-disabled="questionnaire.survey.questions[filter.id].answers[tabs.part.id].permissions.update == false ||
                                                                     !isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) && questionnaire.permissions.create === false ||
-                                                                    sector && questionnaire.id"
-                                                    />
+                                                                    sector && questionnaire.id" />
+
+                                                <span ng-if="questionnaire.survey.questions[filter.id] && !questionnaire.survey.questions[filter.id].isAbsolute" class="input-group-addon" tooltip="Enter a number between 0 and 100%" tooltip-placement="left"><i class="fa fa-fw">%</i></span>
+                                                <span ng-if="questionnaire.survey.questions[filter.id] && questionnaire.survey.questions[filter.id].isAbsolute" class="input-group-addon" tooltip="Enter a positive number" tooltip-placement="left"><i class="fa fa-plus-square-o fa-fw"></i></span>
                                             </div>
                                         </ng-form>
                                     </div>
