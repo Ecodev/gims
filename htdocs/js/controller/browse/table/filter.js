@@ -15,8 +15,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /*********************************************** Variables initialisation */
     /**************************************************************************/
 
-    // params for ajax requests
-    $scope.filterSetFields = {fields: 'color,paths'};
+        // params for ajax requests
     $scope.filterFields = {fields: 'color,paths'};
     $scope.countryParams = {fields: 'geoname'};
     var countryFields = {fields: 'geoname.questionnaires,geoname.questionnaires.survey,geoname.questionnaires.survey.questions,geoname.questionnaires.survey.questions.type,geoname.questionnaires.survey.questions.filter'};
@@ -112,6 +111,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     $scope.$watch('tabs.country', function() {
         if ($scope.tabs.country) {
+            $scope.tabs.questionnaires = [];
             Restangular.one('country', $scope.tabs.country.id).get(_.merge(countryFields, {perPage: 1000})).then(function(country) {
                 $scope.tabs.questionnaires = country.geoname.questionnaires;
                 $scope.tabs.survey = null;
@@ -122,6 +122,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     $scope.$watch('tabs.survey', function() {
         if ($scope.tabs.survey) {
+            $scope.tabs.questionnaires = [];
             Restangular.one('survey', $scope.tabs.survey.id).get(_.merge(surveyFields, {perPage: 1000})).then(function(survey) {
                 $scope.tabs.questionnaires = survey.questionnaires;
                 $scope.tabs.country = null;
@@ -195,7 +196,9 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param answer
      * @param callback
      */
-    $scope.getPermissions = function(question, answer, callback) {
+    $scope.getPermissions = function(question, answer) {
+
+        var deferred = $q.defer();
 
         if (answer.id && _.isUndefined(answer.permissions)) {
             Restangular.one('answer', answer.id).get({fields: 'permissions'}).then(function(newAnswer) {
@@ -205,9 +208,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 if (!answer.permissions.update) {
                     answer[question.value] = newAnswer[question.value];
                 }
-                if (callback) {
-                    callback(answer);
-                }
+
+                deferred.resolve(answer);
 
             }, function() {
                 answer.isLoading = false;
@@ -217,8 +219,12 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     update: false,
                     delete: false
                 };
+
+                deferred.resolve(answer);
             });
         }
+
+        return deferred.promise;
     };
 
     /**
@@ -285,20 +291,21 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         Restangular.restangularizeElement(null, question, 'question');
 
         // delete answer if no value
-        if (answer.id && !$scope.toBoolNum(answer[question.value])) {
+        if (answer.id && !$scope.isValidNumber(answer[question.value])) {
             $scope.removeAnswer(question, answer);
 
             // update
         } else if (answer.id) {
-
             if (answer.permissions) {
-                updateAnswer(answer, question);
+                updateAnswer(answer, question, part);
             } else {
-                $scope.getPermissions(question, answer, updateAnswer);
+                $scope.getPermissions(question, answer).then(function() {
+                    updateAnswer(answer, question, part);
+                });
             }
 
             // create answer, if allowed by questionnaire
-        } else if (_.isUndefined(answer.id) && !_.isUndefined(answer[question.value]) && questionnaire.permissions.create) {
+        } else if (_.isUndefined(answer.id) && $scope.isValidNumber(answer[question.value]) && questionnaire.permissions.create) {
             answer.isLoading = true;
             answer.questionnaire = questionnaire.id;
             question.survey = questionnaire.survey.id;
@@ -307,7 +314,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             getOrSaveQuestion(question).then(function(question) {
                 answer.question = question.id;
                 answer.part = part.id;
-                createAnswer(question, answer).then(function() {
+                createAnswer(question, answer, part).then(function() {
                     $scope.refresh(false, true);
                 });
 
@@ -416,9 +423,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param answer
      */
     $scope.setAnswerInitialValue = function(question, answer) {
-        if (answer[question.value]) {
-            answer.initialValue = answer[question.value];
-        }
+        answer.initialValue = answer[question.value];
     };
 
     /**
@@ -437,7 +442,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param val
      * @returns {boolean}
      */
-    $scope.toBoolNum = function(val) {
+    $scope.isValidNumber = function(val) {
         if (_.isNumber(val) && val >= 0) {
             return true;
         }
@@ -463,6 +468,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         }
 
         propagateQuestions(questionnaire.survey, false, true);
+
         if (question.id) {
             Restangular.restangularizeElement(null, question, 'question');
             question.isLoading = true;
@@ -474,6 +480,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     question.alternateNames[questionnaire.id] = question.name;
                 }
             });
+        } else {
+            getOrSaveQuestion(question);
         }
     };
 
@@ -520,8 +528,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      */
     $scope.removeAnswer = function(question, answer) {
         Restangular.restangularizeElement(null, answer, 'Answer');
+        answer.isLoading = true;
         if (_.isUndefined(answer.permissions)) {
-            $scope.getPermissions(question, answer, deleteAnswer);
+            $scope.getPermissions(question, answer).then(function() {
+                deleteAnswer(question, answer);
+            });
         } else {
             deleteAnswer(question, answer);
         }
@@ -644,8 +655,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     dest: dest.id,
                     src: src.id
                 }
-            }).success(function()
-            {
+            }).success(function() {
                 dest.isLoading = false;
                 $scope.refresh(false, true);
             });
@@ -794,14 +804,14 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     q.value = 'valuePercent';
                     q.max = 1;
                 }
-
-                // Default alternate name to official one, so we can always display something
-                if (_.isEmpty(q.alternateNames)) {
-                    q.alternateNames = {};
-                }
-                if (!q.alternateNames[questionnaire.id]) {
-                    q.alternateNames[questionnaire.id] = q.name;
-                }
+                //
+                //                // Default alternate name to official one, so we can always display something
+                //                if (_.isEmpty(q.alternateNames)) {
+                //                    q.alternateNames = {};
+                //                }
+                //                if (!q.alternateNames[questionnaire.id]) {
+                //                    q.alternateNames[questionnaire.id] = q.name;
+                //                }
 
                 return q;
             });
@@ -846,6 +856,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 if (_.isUndefined(questionnaire.populations)) {
                     questionnaire.populations = [];
                 }
+
                 _.forEach($scope.parts, function(part) {
                     if (_.isUndefined(questionnaire.populations[part.id])) {
                         var emptyPopulation = {
@@ -861,7 +872,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                         questionnaire.survey.questions[filter.id] = {
                             filter: {id: filter.id},
                             parts: [1, 2, 3],
-                            type: 'Numeric'
+                            type: 'Numeric',
+                            alternateNames: {}
                         };
                     }
                     if (filter.sectorChild) {
@@ -938,8 +950,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                             }
                         }).join(',')
                     }
-                }).success(function(questionnaires)
-                {
+                }).success(function(questionnaires) {
                     _.forEach($scope.tabs.questionnaires, function(scopeQuestionnaire) {
                         if (questionnaires[scopeQuestionnaire.id]) {
                             _.forEach(questionnaires[scopeQuestionnaire.id], function(values, filterId) {
@@ -1343,11 +1354,13 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param answer
      */
     var deleteAnswer = function(question, answer) {
+
         if (answer.id && answer.permissions.delete) {
             answer.remove().then(function() {
                 delete(answer.id);
                 delete(answer[question.value]);
                 delete(answer.edit);
+                answer.isLoading = false;
                 $scope.refresh(false, true);
             });
         }
@@ -1395,6 +1408,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             miniQuestion.filter = question.filter.id;
             miniQuestion.type = 'Numeric';
             miniQuestion.isAbsolute = question.isAbsolute;
+            miniQuestion.alternateNames = question.alternateNames;
 
             Restangular.all('question').post(miniQuestion).then(function(newQuestion) {
                 question.id = newQuestion.id;
@@ -1654,8 +1668,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     filters: filters.join(','),
                     questionnaires: questionnaires.join(',')
                 }
-            }).success(function()
-            {
+            }).success(function() {
                 $scope.firstQuestionnairesRetrieve = true;
                 $scope.refresh(false, true);
             });
