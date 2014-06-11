@@ -104,6 +104,7 @@ STRING;
         self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP RULE IF EXISTS geometry_columns_delete ON geometry_columns CASCADE;"');
         self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP RULE IF EXISTS geometry_columns_insert ON geometry_columns CASCADE;"');
         self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP RULE IF EXISTS geometry_columns_update ON geometry_columns CASCADE;"');
+        self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP FUNCTION IF EXISTS cascade_delete_rules_with_references() CASCADE;"');
         self::executeLocalCommand("gunzip -c \"$dumpFile\" | pg_restore --host localhost --username $username --no-owner --dbname=$database");
         self::executeLocalCommand('./vendor/bin/doctrine-module migrations:migrate --no-interaction');
     }
