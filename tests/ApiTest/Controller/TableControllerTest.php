@@ -10,6 +10,12 @@ use Zend\Http\Request;
 class TableControllerTest extends \ApplicationTest\Controller\AbstractController
 {
 
+    public function setUp()
+    {
+        parent::setUp();
+        $this->getEntityManager()->flush();
+    }
+
     public function getValidDataFilterProvider()
     {
         return new \ApiTest\JsonFileIterator('data/api/table/filter');

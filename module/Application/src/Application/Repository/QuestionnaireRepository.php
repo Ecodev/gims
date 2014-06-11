@@ -41,19 +41,22 @@ class QuestionnaireRepository extends AbstractChildRepository
     }
 
     /**
-     * Returns all questionnaires for th given geoname (and load their surveys)
+     * Returns all questionnaires for the given geoname (and load their surveys)
      * @param \Application\Model\Geoname|integer $geoname
      * @return Questionnaires[]
      */
-    public function getByGeonameWithSurvey($geoname)
+    public function getAllForComputing($geoname)
     {
+        $questionnairesWithReadAccess = $this->getAllWithPermission();
         $qb = $this->createQueryBuilder('questionnaire');
         $qb->select('questionnaire, survey')
                 ->join('questionnaire.survey', 'survey')
                 ->where('questionnaire.geoname = :geoname')
+                ->andWhere('questionnaire IN (:questionnairesWithReadAccess)')
                 ->orderBy('questionnaire.id');
 
         $qb->setParameter('geoname', $geoname);
+        $qb->setParameter('questionnairesWithReadAccess', $questionnairesWithReadAccess);
 
         return $qb->getQuery()->getResult();
     }

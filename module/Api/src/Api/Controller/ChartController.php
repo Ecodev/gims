@@ -129,7 +129,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         }, $filtersIds);
 
         $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
-        $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getByGeonameWithSurvey($country ? $country->getGeoname() : -1);
+        $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getAllForComputing($country ? $country->getGeoname() : -1);
 
         $this->startYear = 1980;
         $this->endYear = 2012;

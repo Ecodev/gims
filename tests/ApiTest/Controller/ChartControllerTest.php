@@ -11,6 +11,12 @@ use Zend\Http\Request;
 class ChartControllerTest extends \ApplicationTest\Controller\AbstractController
 {
 
+    public function setUp()
+    {
+        parent::setUp();
+        $this->getEntityManager()->flush();
+    }
+
     public function testGetValidChartStructure()
     {
         $this->dispatch('/api/chart?part=1', Request::METHOD_GET);
