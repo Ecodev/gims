@@ -39,23 +39,10 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
      */
     protected function getRoute($method)
     {
-        if ($method == 'getListSurvey') {
+        if ($method == 'getListViaSurvey') {
             return sprintf('/api/survey/%s/questionnaire', $this->survey->getId());
         } else {
             return parent::getRoute($method);
-        }
-    }
-
-    public function testCanListQuestionnaire()
-    {
-        $this->dispatch($this->getRoute('getListSurvey'), Request::METHOD_GET);
-
-        $this->assertResponseStatusCode(200);
-        $json = $this->getJsonResponse();
-
-        // In the array of all questionnaires, we should at least found the test questionnaire
-        foreach ($json['items'] as $questionnaire) {
-            $this->assertGreaterThan(0, $questionnaire['id']);
         }
     }
 
@@ -108,7 +95,7 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
      */
     public function testSearch($params, $count)
     {
-        $this->dispatch($this->getRoute('getListSurvey') . $params, Request::METHOD_GET);
+        $this->dispatch($this->getRoute('getListViaSurvey') . $params, Request::METHOD_GET);
         $actual = $this->getJsonResponse();
 
         $this->assertEquals($count, $actual['metadata']['totalCount'], 'result count does not match expectation');
