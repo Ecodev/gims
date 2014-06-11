@@ -33,20 +33,17 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
     {
         $permission = \Application\Model\Permission::getPermissionName($object, $action);
         $context = $object->getRoleContext($action);
-        $assertion = $this->getAssertion($object, $action);
+        $this->setCurrentAssertion($object, $permission);
 
-        // In the very specific case of a published questionnaire, bypass all security for read
-        if ($action == 'read' && $object instanceof \Application\Model\Questionnaire && $object->getStatus() == \Application\Model\QuestionnaireStatus::$PUBLISHED) {
-            $result = true;
-        } elseif ($context) {
-            $result = $this->isGrantedWithContext($context, $permission, $assertion);
+        if ($context) {
+            $result = $this->isGrantedWithContext($context, $permission);
         } elseif ($this->getIdentity() && $object->getCreator() === $this->getIdentity()) {
             $result = true;
         } else {
-            $result = $this->isGranted($permission, $assertion);
+            $result = $this->isGranted($permission);
         }
 
-        $this->setMessage($result, $object, $permission, $context, $assertion);
+        $this->setMessage($result, $object, $permission, $context);
 
         return $result;
     }
@@ -57,27 +54,27 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
      * @param AbstractModel $object
      * @param string $permission
      * @param RoleContextInterface $context
-     * @param AbstractAssertion $assertion
-     * @return void
      */
-    private function setMessage($isGranted, AbstractModel $object, $permission, RoleContextInterface $context = null, AbstractAssertion $assertion = null)
+    private function setMessage($isGranted, AbstractModel $object, $permission, RoleContextInterface $context = null)
     {
+        $assertion = $this->getAssertion($permission);
+
         if ($isGranted) {
             $this->message = null;
         } elseif ($assertion && $assertion->getMessage()) {
             $this->message = $assertion->getMessage();
         } else {
-            $this->generateMessage($object, $context, $permission);
+            $this->generateMessage($object, $permission, $context);
         }
     }
 
     /**
      * Generate the message explaining why the permission was denied
      * @param AbstractModel $object
-     * @param RoleContextInterface $context
      * @param string $permission
+     * @param RoleContextInterface $context
      */
-    private function generateMessage(AbstractModel $object, RoleContextInterface $context = null, $permission)
+    private function generateMessage(AbstractModel $object, $permission, RoleContextInterface $context = null)
     {
         $user = $this->getIdentity();
         $roles = 'anonymous';
@@ -126,25 +123,24 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
 
     /**
      * Returns true if the user has the permission in the given context(s).
-     * @param \Application\Service\RoleContextInterface $context (can pass an array)
+     * @param \Application\Service\RoleContextInterface $context (can pass multiple roles with MultipleRoleContext)
      * @param string $permission
-     * @param null|Closure|AssertionInterface $assert
      * @throws InvalidArgumentException
      * @return bool
      */
-    public function isGrantedWithContext(RoleContextInterface $context, $permission, $assert = null)
+    public function isGrantedWithContext(RoleContextInterface $context, $permission)
     {
         $isGranted = false;
 
-        if ($context instanceof \ArrayAccess) {
+        if ($context instanceof MultipleRoleContext) {
             foreach ($context as $singleContext) {
-                $isGranted = $this->isGrantedWithSingleContext($singleContext, $permission, $assert);
+                $isGranted = $this->isGrantedWithSingleContext($singleContext, $permission);
                 if ($context->getGrantOnlyIfGrantedByAllContexts() && !$isGranted) {
                     return $isGranted;
                 }
             }
         } else {
-            $isGranted = $this->isGrantedWithSingleContext($context, $permission, $assert);
+            $isGranted = $this->isGrantedWithSingleContext($context, $permission);
         }
 
         return $isGranted;
@@ -154,11 +150,10 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
      * Returns true if the user has the permission in the given context.
      * @param \Application\Service\RoleContextInterface $context
      * @param string $permission
-     * @param null|Closure|AssertionInterface $assert
      * @throws InvalidArgumentException
      * @return bool
      */
-    private function isGrantedWithSingleContext(RoleContextInterface $context, $permission, $assert = null)
+    private function isGrantedWithSingleContext(RoleContextInterface $context, $permission)
     {
         // Get the user to set the context for role
         $user = $this->getIdentity();
@@ -166,7 +161,7 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
             $user->setRolesContext($context);
         }
 
-        $result = $this->isGranted($permission, $assert);
+        $result = $this->isGranted($permission);
 
         // Reset context to avoid side-effect on next usage of $this->isGranted()
         if ($user instanceof \Application\Model\User) {
@@ -177,19 +172,35 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
     }
 
     /**
-     * Returns an assertion if necessary
-     * @param \Application\Model\AbstractModel $object
-     * @param string $action
+     * Get an assertion for given permission
+     *
+     * @param string|\Rbac\Permission\PermissionInterface $permission
      * @return \Application\Assertion\AbstractAssertion|null
      */
-    protected function getAssertion(AbstractModel $object, $action)
+    public function getAssertion($permission)
     {
+        if ($this->hasAssertion($permission)) {
+            return $this->assertions[(string) $permission];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Set the assertion for the current $action
+     * @param \Application\Model\AbstractModel $object
+     * @param string $permission
+     */
+    private function setCurrentAssertion(AbstractModel $object, $permission)
+    {
+        $assertion = null;
+
         // Every action which is not read on answer must check if questionnaire status is not VALIDATED
-        if ($object instanceof \Application\Model\Answer && $action != 'read') {
-            return new \Application\Assertion\CanAnswerQuestionnaire($object);
+        if ($object instanceof \Application\Model\Answer && $permission != 'Answer-read') {
+            $assertion = new \Application\Assertion\CanAnswerQuestionnaire($object);
         }
 
-        return null;
+        $this->setAssertion($permission, $assertion);
     }
 
 }

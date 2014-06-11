@@ -23,12 +23,17 @@ class CanAnswerQuestionnaire extends AbstractAssertion
 
     protected function getInternalMessage()
     {
-        return 'Answers cannot be modified when questionnaire is marked as ' . \Application\Model\QuestionnaireStatus::$VALIDATED;
+        return 'Answers cannot be modified when questionnaire is marked as ' . $this->answer->getQuestionnaire()->getStatus();
     }
 
     protected function internalAssert(AuthorizationService $authorizationService)
     {
-        return $this->answer->getQuestionnaire()->getStatus() != \Application\Model\QuestionnaireStatus::$VALIDATED;
+        $statusForbiddingModification = [
+            \Application\Model\QuestionnaireStatus::$VALIDATED,
+            \Application\Model\QuestionnaireStatus::$PUBLISHED,
+        ];
+
+        return !in_array($this->answer->getQuestionnaire()->getStatus(), $statusForbiddingModification);
     }
 
 }

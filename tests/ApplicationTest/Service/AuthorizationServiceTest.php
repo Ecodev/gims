@@ -54,6 +54,7 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
         $permissionSurvey = new \Application\Model\Permission('permission survey');
         $permissionQuestionnaire = new \Application\Model\Permission('permission questionnaire');
         $permissionFilterSet = new \Application\Model\Permission('permission filterset');
+        $permissionAnswer = $this->getEntityManager()->getRepository('Application\Model\Permission')->findOneByName('Answer-update');
 
         $role->addPermission($permission);
         $role->addPermission($permissionSurvey);
@@ -65,6 +66,7 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
 
         $roleQuestionnaire->addPermission($permission);
         $roleQuestionnaire->addPermission($permissionQuestionnaire);
+        $roleQuestionnaire->addPermission($permissionAnswer);
 
         $roleFilterSet->addPermission($permission);
         $roleFilterSet->addPermission($permissionFilterSet);
@@ -204,6 +206,14 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
         $this->assertFalse($auth->isActionGranted($filter1, 'update'));
         $expectedMessage = 'Insufficient access rights for permission "Filter-update" on "Application\Model\Filter#' . $filter1->getId() . ' (filter 1)" with your current roles [member, role filterset] with contexts "Application\Model\FilterSet#' . $filterSet->getId() . '" (filterSet 1) and "Application\Model\FilterSet#' . $filterSet2->getId() . '" (filterSet 2) and "Application\Model\FilterSet#' . $filterSet3->getId() . '" (filterSet 3)';
         $this->assertSame($expectedMessage, $auth->getMessage(), 'error message for multiple context object');
+
+        // Test that we can modify an answer, but only for non-validated questionnaire
+        $answer = new \Application\Model\Answer();
+        $answer->setQuestionnaire($questionnaire);
+        $this->assertTrue($auth->isActionGranted($answer, 'update'), 'Answers can be modified if questionnaire status is "new"');
+        $questionnaire->setStatus(\Application\Model\QuestionnaireStatus::$VALIDATED);
+        $this->assertFalse($auth->isActionGranted($answer, 'update'), 'Answers cannot be modified if questionnaire status "validated"');
+        $this->assertEquals('Answers cannot be modified when questionnaire is marked as validated', $auth->getMessage(), 'Answers cannot be modified if questionnaire status "validated"');
     }
 
 }
