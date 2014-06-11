@@ -15,6 +15,9 @@ use Application\Utility;
 class Questionnaire extends AbstractModel implements \Application\Service\RoleContextInterface, Rule\ReferencableInterface
 {
 
+    /**
+     * @var QuestionnaireStatus
+     */
     private $originalStatus;
 
     /**
@@ -221,11 +224,10 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
 
     /**
      * Get status
-     * @return selfStatus
+     * @return QuestionnaireStatus
      */
     public function getStatus()
     {
-        // cast value
         return $this->status;
     }
 
@@ -364,6 +366,11 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
             }
 
             return $contexts;
+        } elseif ($action == 'read') {
+
+            // if trying to read a questionnaire, we must consider any context available.
+            // So both reporter people and editor people can read the questionnaire
+            return new \Application\Service\MultipleRoleContext([$this->getSurvey(), $this], false);
         } else {
             return $this->getSurvey();
         }

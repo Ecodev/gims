@@ -7,6 +7,7 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function($sco
         {text: 'New', value: 'new'},
         {text: 'Completed', value: 'completed'},
         {text: 'Validated', value: 'validated'},
+        {text: 'Published', value: 'published'},
         {text: 'Rejected', value: 'rejected'}
     ];
 

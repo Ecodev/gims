@@ -24,7 +24,13 @@ class QuestionnaireRepository extends AbstractChildRepository
             $qb->setParameter('parent', $parent);
         }
 
-        $this->addPermission($qb, 'questionnaire', \Application\Model\Permission::getPermissionName($this, $action));
+        if ($action == 'read') {
+            $exceptionDql = "questionnaire.status = 'published'";
+        } else {
+            $exceptionDql = null;
+        }
+
+        $this->addPermission($qb, 'questionnaire', \Application\Model\Permission::getPermissionName($this, $action), $exceptionDql);
 
         if ($search) {
             $qb->join('questionnaire.geoname', 'g', \Doctrine\ORM\Query\Expr\Join::WITH);
@@ -83,6 +89,6 @@ class QuestionnaireRepository extends AbstractChildRepository
         }
 
         $this->getEntityManager()->flush();
-
     }
+
 }

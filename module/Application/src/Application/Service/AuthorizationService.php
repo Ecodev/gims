@@ -35,7 +35,10 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
         $context = $object->getRoleContext($action);
         $assertion = $this->getAssertion($object, $action);
 
-        if ($context) {
+        // In the very specific case of a published questionnaire, bypass all security for read
+        if ($action == 'read' && $object instanceof \Application\Model\Questionnaire && $object->getStatus() == \Application\Model\QuestionnaireStatus::$PUBLISHED) {
+            $result = true;
+        } elseif ($context) {
             $result = $this->isGrantedWithContext($context, $permission, $assertion);
         } elseif ($this->getIdentity() && $object->getCreator() === $this->getIdentity()) {
             $result = true;

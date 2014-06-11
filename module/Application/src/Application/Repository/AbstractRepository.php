@@ -30,9 +30,10 @@ abstract class AbstractRepository extends EntityRepository
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param string $context
      * @param string $permission
+     * @param null|string $exceptionDql an condition expressed in DQL to bypass all security check. This should almost never be used !
      * @throws Exception
      */
-    protected function addPermission(QueryBuilder $qb, $context, $permission)
+    protected function addPermission(QueryBuilder $qb, $context, $permission, $exceptionDql = null)
     {
         if ($context == 'survey') {
             $relationType = 'UserSurvey';
@@ -46,7 +47,11 @@ abstract class AbstractRepository extends EntityRepository
             throw new \Exception("Unsupported context '$context' for automatic permission");
         }
 
-        $qb->leftJoin("Application\Model\\$relationType", 'relation', Join::WITH, "relation.$context = $context AND relation.user = :permissionUser");
+        if ($exceptionDql) {
+            $exceptionDql = ' OR (' . $exceptionDql . ')';
+        }
+
+        $qb->leftJoin("Application\Model\\$relationType", 'relation', Join::WITH, "(relation.$context = $context AND relation.user = :permissionUser)" . $exceptionDql);
         $qb->join('Application\Model\Role', 'role', Join::WITH, "relation.role = role OR role.name = :permissionDefaultRole");
         $qb->join('Application\Model\Permission', 'permission', Join::WITH, "permission MEMBER OF role.permissions AND permission.name = :permissionPermission");
 

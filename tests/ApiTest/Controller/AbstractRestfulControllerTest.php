@@ -315,7 +315,7 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
 
         foreach ($metadata as $key => $val) {
             $metadata = is_string($key) ? $key : $val;
-            $this->assertArrayHasKey($metadata, $actual, 'metadata shortcut should be expanded to common well-known common fields');
+            $this->assertArrayHasKey($metadata, $actual, 'metadata shortcut should be expanded to common well-known fields');
         }
     }
 

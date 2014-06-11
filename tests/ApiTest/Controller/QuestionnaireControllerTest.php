@@ -101,4 +101,27 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
         $this->assertEquals($count, $actual['metadata']['totalCount'], 'result count does not match expectation');
     }
 
+    public function testAnonymousCanGetPublishedQuestionnaire()
+    {
+        // Anonymous should not be able to get a questionnaire on which he has no access
+        $this->identityProvider->setIdentity(null);
+        $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
+        $this->assertResponseStatusCode(403);
+        $this->dispatch($this->getRoute('getListViaSurvey'), Request::METHOD_GET);
+        $actual = $this->getJsonResponse();
+        $this->assertEquals(0, $actual['metadata']['totalCount'], 'should be not able to be listed');
+
+        // Publish the questionnaire
+        $this->questionnaire = $this->getEntityManager()->merge($this->questionnaire);
+        $this->questionnaire->setStatus(\Application\Model\QuestionnaireStatus::$PUBLISHED);
+        $this->getEntityManager()->flush();
+
+        // Should be able to get it now
+        $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
+        $this->assertResponseStatusCode(200);
+        $this->dispatch($this->getRoute('getListViaSurvey'), Request::METHOD_GET);
+        $actual = $this->getJsonResponse();
+        $this->assertEquals(1, $actual['metadata']['totalCount'], 'should be able to be listed');
+    }
+
 }
