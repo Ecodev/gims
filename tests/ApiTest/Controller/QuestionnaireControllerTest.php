@@ -2,8 +2,9 @@
 
 namespace ApiTest\Controller;
 
-use Application\Model\Geoname;
 use Zend\Http\Request;
+use Application\Model\Geoname;
+use Application\Model\UserQuestionnaire;
 
 /**
  * @group Rest
@@ -59,6 +60,7 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
         );
 
         $this->dispatch($this->getRoute('put') . '?fields=geoname', Request::METHOD_PUT, $data);
+        $this->assertResponseStatusCode(201);
         $actual = $this->getJsonResponse();
         $this->assertNotEquals($expected, $actual['geoname']['id']);
     }
@@ -75,6 +77,7 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
         );
 
         $this->dispatch($this->getRoute('post') . '?fields=survey', Request::METHOD_POST, $data);
+        $this->assertResponseStatusCode(201);
         $actual = $this->getJsonResponse();
         $this->assertEquals($data['survey'], $actual['survey']['id']);
     }
@@ -122,6 +125,48 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
         $this->dispatch($this->getRoute('getListViaSurvey'), Request::METHOD_GET);
         $actual = $this->getJsonResponse();
         $this->assertEquals(1, $actual['metadata']['totalCount'], 'should be able to be listed');
+    }
+
+    public function testCanValidateAndPublishQuestionnaire()
+    {
+        $roleRepository = $this->getEntityManager()->getRepository('Application\Model\Role');
+        $validator = $roleRepository->findOneByName('validator');
+        $publisher = $roleRepository->findOneByName('Questionnaire publisher');
+
+        $data = ['status' => 'validated'];
+        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
+        $this->assertResponseStatusCode(401);
+
+        // Define user as questionnaire validator (the guy who can validate if questionnaire is correct)
+        $userQuestionnaire = new UserQuestionnaire();
+        $this->questionnaire = $this->getEntityManager()->merge($this->questionnaire);
+        $userQuestionnaire->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($validator);
+        $this->getEntityManager()->persist($userQuestionnaire);
+        $this->getEntityManager()->flush();
+
+        // Now that we have proper role, it should be allowed
+        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
+        $this->assertResponseStatusCode(201);
+        $actual = $this->getJsonResponse();
+        $this->assertEquals($data['status'], $actual['status'], 'status should have been modified');
+
+        // Now test publishing
+        $data = ['status' => 'published'];
+        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
+        $this->assertResponseStatusCode(401);
+
+        // Define user as questionnaire publisher
+        $userQuestionnaire2 = new UserQuestionnaire();
+        $this->questionnaire = $this->getEntityManager()->merge($this->questionnaire);
+        $userQuestionnaire2->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($publisher);
+        $this->getEntityManager()->persist($userQuestionnaire2);
+        $this->getEntityManager()->flush();
+
+        // Now that we have proper role, it should be allowed
+        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
+        $this->assertResponseStatusCode(201);
+        $actual = $this->getJsonResponse();
+        $this->assertEquals($data['status'], $actual['status'], 'status should have been modified');
     }
 
 }

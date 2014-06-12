@@ -13,9 +13,22 @@ class Version20140610142709 extends AbstractMigration
 
     public function up(Schema $schema)
     {
+        $this->addSql('INSERT INTO role (date_created, name) VALUES (NOW(), \'Questionnaire publisher\');');
+
         $objects = array(
             'Questionnaire' => array(
-                'read' => array('editor', 'reporter', 'validator'),
+                'read' => array('editor', 'reporter', 'validator', 'Questionnaire publisher'),
+                'publish' => array('Questionnaire publisher'),
+                'update' => array('validator', 'Questionnaire publisher'),
+            ),
+            'Answer' => array(
+                'read' => array('Questionnaire publisher'),
+            ),
+            'Choice' => array(
+                'read' => array('Questionnaire publisher'),
+            ),
+            'Survey' => array(
+                'read' => array('Questionnaire publisher'),
             ),
         );
 
@@ -23,8 +36,13 @@ class Version20140610142709 extends AbstractMigration
         foreach ($objects as $object => $actions) {
             foreach ($actions as $action => $roles) {
                 $name = $object . '-' . $action;
-                $this->addSql('DELETE FROM permission WHERE name = ?;', array($name));
-                $this->addSql('INSERT INTO permission (date_created, name) VALUES (NOW(), ?);', array($name));
+
+                if ($name == 'Questionnaire-read') {
+                    $this->addSql('DELETE FROM permission WHERE name = ?;', array($name));
+                }
+
+                // Create non-existing permissions
+                $this->addSql('INSERT INTO permission (date_created, name) SELECT NOW(), ? WHERE NOT EXISTS (SELECT 1 FROM permission WHERE name = ?);', array($name, $name));
 
                 // Give access to defined roles
                 foreach ($roles as $role) {

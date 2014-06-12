@@ -353,9 +353,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     public function getRoleContext($action)
     {
-        if ($action == 'validate') {
-            return $this;
-        } elseif ($action == 'delete') {
+        if ($action == 'delete') {
             $contexts = new \Application\Service\MultipleRoleContext($this->getSurvey());
 
             // If we try to delete a questionnaire, we must also consider the side-effect it may have on Rules that use this questionnaire
@@ -366,13 +364,10 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
             }
 
             return $contexts;
-        } elseif ($action == 'read') {
-
-            // if trying to read a questionnaire, we must consider any context available.
+        } else {
+            // We must consider any context available.
             // So both reporter people and editor people can read the questionnaire
             return new \Application\Service\MultipleRoleContext([$this->getSurvey(), $this], false);
-        } else {
-            return $this->getSurvey();
         }
     }
 
@@ -384,7 +379,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         $auth = \Application\Module::getServiceManager()->get('ZfcRbac\Service\AuthorizationService');
 
         $result = parent::getPermissions();
-        foreach (array('validate') as $action) {
+        foreach (array('validate', 'publish') as $action) {
             $result[$action] = $auth->isActionGranted($this, $action);
         }
 

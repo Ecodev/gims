@@ -3,6 +3,8 @@
 namespace Application\Service;
 
 use Application\Model\AbstractModel;
+use Application\Model\Questionnaire;
+use Application\Model\QuestionnaireStatus;
 use Application\Assertion\AbstractAssertion;
 
 /**
@@ -35,7 +37,11 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
         $context = $object->getRoleContext($action);
         $this->setCurrentAssertion($object, $permission);
 
-        if ($context) {
+        if ($action == 'read' && $object instanceof Questionnaire && $object->getStatus() == QuestionnaireStatus::$PUBLISHED) {
+
+            // Anybody can read a published questionnaire
+            $result = true;
+        } elseif ($context) {
             $result = $this->isGrantedWithContext($context, $permission);
         } elseif ($this->getIdentity() && $object->getCreator() === $this->getIdentity()) {
             $result = true;
@@ -130,14 +136,17 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
      */
     public function isGrantedWithContext(RoleContextInterface $context, $permission)
     {
-        $isGranted = false;
-
         if ($context instanceof MultipleRoleContext) {
+            $isGranted = true;
             foreach ($context as $singleContext) {
-                $isGranted = $this->isGrantedWithSingleContext($singleContext, $permission);
-                if ($context->getGrantOnlyIfGrantedByAllContexts() && !$isGranted) {
-                    return $isGranted;
+                $singleIsGranted = $this->isGrantedWithSingleContext($singleContext, $permission);
+
+                // If at at least one grant is enough, then we can return early
+                if ($singleIsGranted && !$context->getGrantOnlyIfGrantedByAllContexts()) {
+                    return $singleIsGranted;
                 }
+
+                $isGranted = $isGranted && $singleIsGranted;
             }
         } else {
             $isGranted = $this->isGrantedWithSingleContext($context, $permission);

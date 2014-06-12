@@ -97,9 +97,14 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function($sco
     // Only show 'validated' option if it is already validated, or if the user has enough permission to select it
     $scope.$watch('questionnaire', function(questionnaire)
     {
-        $scope.status = _.filter(allStatus, function(status)
-        {
-            return status.value != 'validated' || questionnaire.status == 'validated' || (questionnaire.permissions && questionnaire.permissions.validate);
+        $scope.status = _.filter(allStatus, function(status) {
+            if (status.value == 'validated') {
+                return questionnaire.status == 'validated' || (questionnaire.permissions && questionnaire.permissions.validate);
+            } else if (status.value == 'published') {
+                return questionnaire.status == 'published' || (questionnaire.permissions && questionnaire.permissions.publish);
+            }
+
+            return true;
         });
     });
 

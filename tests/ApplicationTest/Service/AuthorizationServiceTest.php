@@ -192,7 +192,8 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
 
         // Test with non persistent context
         $nonPersistedSurvey = new \Application\Model\Survey();
-        $userSurvey->setUser($user)->setSurvey($nonPersistedSurvey)->setRole($roleSurvey);
+        $userSurvey2 = new \Application\Model\UserSurvey();
+        $userSurvey2->setUser($user)->setSurvey($nonPersistedSurvey)->setRole($roleSurvey);
         $this->assertTrue($auth->isGrantedWithContext($nonPersistedSurvey, $permission->getName()), 'permission with non persistent context is granted');
 
         // Test error messages
@@ -207,13 +208,25 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
         $expectedMessage = 'Insufficient access rights for permission "Filter-update" on "Application\Model\Filter#' . $filter1->getId() . ' (filter 1)" with your current roles [member, role filterset] with contexts "Application\Model\FilterSet#' . $filterSet->getId() . '" (filterSet 1) and "Application\Model\FilterSet#' . $filterSet2->getId() . '" (filterSet 2) and "Application\Model\FilterSet#' . $filterSet3->getId() . '" (filterSet 3)';
         $this->assertSame($expectedMessage, $auth->getMessage(), 'error message for multiple context object');
 
-        // Test that we can modify an answer, but only for non-validated questionnaire
+        // Test assertions, that we can modify an answer, but only for non-validated questionnaire
         $answer = new \Application\Model\Answer();
         $answer->setQuestionnaire($questionnaire);
         $this->assertTrue($auth->isActionGranted($answer, 'update'), 'Answers can be modified if questionnaire status is "new"');
         $questionnaire->setStatus(\Application\Model\QuestionnaireStatus::$VALIDATED);
         $this->assertFalse($auth->isActionGranted($answer, 'update'), 'Answers cannot be modified if questionnaire status "validated"');
         $this->assertEquals('Answers cannot be modified when questionnaire is marked as validated', $auth->getMessage(), 'Answers cannot be modified if questionnaire status "validated"');
+
+        // Test MultipleRoleContext
+        $multiWithSingleContext = new \Application\Service\MultipleRoleContext([$survey]);
+        $this->assertTrue($auth->isGrantedWithContext($multiWithSingleContext, $permissionSurvey->getName()), 'should be granted, because multiRoleContext actually has only a single context');
+        $multiAllMustBeGranted = new \Application\Service\MultipleRoleContext([$survey, $survey2], true);
+        $this->assertFalse($auth->isGrantedWithContext($multiAllMustBeGranted, $permissionSurvey->getName()), 'should be denied, because multiRoleContext include survey2 on which we don\'t have access');
+        $multiAllMustBeGranted = new \Application\Service\MultipleRoleContext([$survey2, $survey], true);
+        $this->assertFalse($auth->isGrantedWithContext($multiAllMustBeGranted, $permissionSurvey->getName()), 'should be denied, because multiRoleContext include survey2 on which we don\'t have access');
+        $multiAtLeastOneMustBeGranted = new \Application\Service\MultipleRoleContext([$survey, $survey2], false);
+        $this->assertTrue($auth->isGrantedWithContext($multiAtLeastOneMustBeGranted, $permissionSurvey->getName()), 'should be denied, because multiRoleContext include survey2 on which we don\'t have access');
+        $multiAtLeastOneMustBeGranted = new \Application\Service\MultipleRoleContext([$survey2, $survey], false);
+        $this->assertTrue($auth->isGrantedWithContext($multiAtLeastOneMustBeGranted, $permissionSurvey->getName()), 'should be denied, because multiRoleContext include survey2 on which we don\'t have access');
     }
 
 }

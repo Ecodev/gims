@@ -84,11 +84,6 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
     protected $userQuestionnaire1;
 
     /**
-     * @var UserQuestionnaire
-     */
-    protected $userQuestionnaire2;
-
-    /**
      * @var UserFilterSet
      */
     protected $userFilterSet;
@@ -174,7 +169,6 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $roleRepository = $this->getEntityManager()->getRepository('Application\Model\Role');
         $editor = $roleRepository->findOneByName('editor');
         $reporter = $roleRepository->findOneByName('reporter');
-        $validator = $roleRepository->findOneByName('validator');
         $filterEditor = $roleRepository->findOneByName('Filter editor');
 
         // Define user as survey editor
@@ -184,10 +178,6 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         // Define user as questionnaire reporter (the guy who answer the questionnaire)
         $this->userQuestionnaire1 = new UserQuestionnaire();
         $this->userQuestionnaire1->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($reporter);
-
-        // Define user as questionnaire validator (the guy who can validate if questionnaire is correct)
-        $this->userQuestionnaire2 = new UserQuestionnaire();
-        $this->userQuestionnaire2->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($validator);
 
         // Define user as "Filter editor" for FilterSet
         $this->userFilterSet = new \Application\Model\UserFilterSet();
@@ -217,7 +207,6 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->getEntityManager()->persist($this->user);
         $this->getEntityManager()->persist($this->userSurvey);
         $this->getEntityManager()->persist($this->userQuestionnaire1);
-        $this->getEntityManager()->persist($this->userQuestionnaire2);
         $this->getEntityManager()->persist($this->part);
         $this->getEntityManager()->persist($this->part2);
         $this->getEntityManager()->persist($this->part3);

@@ -26,12 +26,4 @@ class UserQuestionnaireControllerTest extends AbstractChildRestfulControllerTest
         ];
     }
 
-    public function testCanGetViaAllParents()
-    {
-        $this->getEntityManager()->remove($this->getEntityManager()->merge($this->userQuestionnaire2));
-        $this->getEntityManager()->flush();
-
-        parent::testCanGetViaAllParents();
-    }
-
 }
