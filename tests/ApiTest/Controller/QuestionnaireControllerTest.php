@@ -130,7 +130,7 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
     public function testCanValidateAndPublishQuestionnaire()
     {
         $roleRepository = $this->getEntityManager()->getRepository('Application\Model\Role');
-        $validator = $roleRepository->findOneByName('validator');
+        $validator = $roleRepository->findOneByName('Questionnaire validator');
         $publisher = $roleRepository->findOneByName('Questionnaire publisher');
 
         $data = ['status' => 'validated'];

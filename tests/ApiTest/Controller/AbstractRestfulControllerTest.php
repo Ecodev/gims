@@ -184,8 +184,8 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
 
         // Get existing roles
         $roleRepository = $this->getEntityManager()->getRepository('Application\Model\Role');
-        $this->surveyEditor = $roleRepository->findOneByName('editor');
-        $this->questionnaireReporter = $roleRepository->findOneByName('reporter');
+        $this->surveyEditor = $roleRepository->findOneByName('Survey editor');
+        $this->questionnaireReporter = $roleRepository->findOneByName('Questionnaire reporter');
         $this->filterEditor = $roleRepository->findOneByName('Filter editor');
 
         // Define user as survey editor

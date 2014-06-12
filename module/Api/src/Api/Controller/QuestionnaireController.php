@@ -51,7 +51,7 @@ class QuestionnaireController extends AbstractChildRestfulController
 
             // @todo find a way making sure we have a role reporter
             /** @var \Application\Model\Role $role */
-            $role = $roleRepository->findOneByName('reporter');
+            $role = $roleRepository->findOneByName('Questionnaire reporter');
 
             $userQuestionnaireRepository = $controller->getEntityManager()->getRepository(
                     'Application\Model\UserQuestionnaire'
@@ -78,7 +78,7 @@ class QuestionnaireController extends AbstractChildRestfulController
 
             // @todo find a way making sure we have a role reporter
             /** @var \Application\Model\Role $role */
-            $role = $roleRepository->findOneByName('validator');
+            $role = $roleRepository->findOneByName('Questionnaire validator');
 
             $userQuestionnaireRepository = $controller->getEntityManager()->getRepository('Application\Model\UserQuestionnaire');
             $criteria = array(
@@ -146,7 +146,7 @@ class QuestionnaireController extends AbstractChildRestfulController
     protected function postCreate(AbstractModel $questionnaire, array $data)
     {
         $user = $this->getAuth()->getIdentity();
-        $role = $this->getEntityManager()->getRepository('Application\Model\Role')->findOneByName('reporter');
+        $role = $this->getEntityManager()->getRepository('Application\Model\Role')->findOneByName('Questionnaire reporter');
         $userQuestionnaire = new \Application\Model\UserQuestionnaire();
         $userQuestionnaire->setUser($user)->setQuestionnaire($questionnaire)->setRole($role);
 

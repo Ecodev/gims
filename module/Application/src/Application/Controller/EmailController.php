@@ -24,7 +24,7 @@ class EmailController extends AbstractActionController
      */
     public function getUsersByRole($questionnaire, $wantedRole)
     {
-        $users = $this->getEntityManager()->getRepository('Application\Model\UserQuestionnaire')->getAllWithPermission('validator', null, 'questionnaire', $questionnaire);
+        $users = $this->getEntityManager()->getRepository('Application\Model\UserQuestionnaire')->getAllWithPermission('read', null, 'questionnaire', $questionnaire);
 
         $selectedUsers = array();
         foreach ($users as $user) {
@@ -44,7 +44,7 @@ class EmailController extends AbstractActionController
         $questionnaireId = $this->getRequest()->getParam('id');
         $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($questionnaireId);
 
-        $users = $this->getUsersByRole($questionnaire, 'editor');
+        $users = $this->getUsersByRole($questionnaire, 'Survey editor');
 
         $subject = 'GIMS - Questionnaire opened : ' . $questionnaire->getName();
         $mailParams = array(
@@ -63,7 +63,7 @@ class EmailController extends AbstractActionController
         $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($questionnaireId);
 
         //$users = array($questionnaire->getCreator()); // swap with next line to change between selecting the questionnaire creator and the users that have editor role
-        $users = $this->getUsersByRole($questionnaire, 'editor');
+        $users = $this->getUsersByRole($questionnaire, 'Survey editor');
 
         $subject = 'GIMS - Questionnaire validated: ' . $questionnaire->getName();
         $mailParams = array(
@@ -80,7 +80,7 @@ class EmailController extends AbstractActionController
         $questionnaireId = $this->getRequest()->getParam('id');
         $questionnaire = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findOneById($questionnaireId);
 
-        $users = $this->getUsersByRole($questionnaire, 'validator');
+        $users = $this->getUsersByRole($questionnaire, 'Questionnaire validator');
 
         // The below lines replace the above line (and the method getUsersByRole of this class).
         // They replace the role based feature by a permissions based feature. Instead of notifying Validators, notify everybody that can Validate.
