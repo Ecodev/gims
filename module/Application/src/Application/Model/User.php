@@ -398,21 +398,21 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
         // If there is no context, or the context matches, add roles from survey
         foreach ($this->getUserSurveys() as $userSurvey) {
-            if (!$roleContext || $roleContext === $userSurvey->getSurvey()) {
+            if (!$roleContext || $roleContext === $userSurvey->getSurvey() && $userSurvey->getId()) {
                 $roles [] = $userSurvey->getRole()->getName();
             }
         }
 
         // If there is no context, or the context matches, add roles from questionnaire
         foreach ($this->getUserQuestionnaires() as $userQuestionnaire) {
-            if (!$roleContext || $roleContext === $userQuestionnaire->getQuestionnaire()) {
+            if (!$roleContext || $roleContext === $userQuestionnaire->getQuestionnaire() && $userQuestionnaire->getId()) {
                 $roles [] = $userQuestionnaire->getRole()->getName();
             }
         }
 
         // If there is no context, or the context matches, add roles from filterSet
         foreach ($this->getUserFilterSets() as $userFilterSet) {
-            if (!$roleContext || $roleContext === $userFilterSet->getFilterSet()) {
+            if (!$roleContext || $roleContext === $userFilterSet->getFilterSet() && $userFilterSet->getId()) {
                 $roles [] = $userFilterSet->getRole()->getName();
             }
         }

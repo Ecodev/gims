@@ -13,8 +13,10 @@ use Application\Model\Population;
 use Application\Model\Question\NumericQuestion;
 use Application\Model\Questionnaire;
 use Application\Model\Survey;
+use Application\Model\User;
 use Application\Model\UserSurvey;
 use Application\Model\UserQuestionnaire;
+use Application\Model\Role;
 use Application\Model\Rule\Rule;
 use Application\Model\Rule\QuestionnaireUsage;
 use Application\Model\Rule\FilterQuestionnaireUsage;
@@ -123,6 +125,21 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
      */
     protected $population;
 
+    /**
+     * @var Role
+     */
+    protected $filterEditor;
+
+    /**
+     * @var Role
+     */
+    protected $surveyEditor;
+
+    /**
+     * @var Role
+     */
+    protected $questionnaireReporter;
+
     public function setUp()
     {
         parent::setUp();
@@ -167,21 +184,21 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
 
         // Get existing roles
         $roleRepository = $this->getEntityManager()->getRepository('Application\Model\Role');
-        $editor = $roleRepository->findOneByName('editor');
-        $reporter = $roleRepository->findOneByName('reporter');
-        $filterEditor = $roleRepository->findOneByName('Filter editor');
+        $this->surveyEditor = $roleRepository->findOneByName('editor');
+        $this->questionnaireReporter = $roleRepository->findOneByName('reporter');
+        $this->filterEditor = $roleRepository->findOneByName('Filter editor');
 
         // Define user as survey editor
         $this->userSurvey = new UserSurvey();
-        $this->userSurvey->setUser($this->user)->setSurvey($this->survey)->setRole($editor);
+        $this->userSurvey->setUser($this->user)->setSurvey($this->survey)->setRole($this->surveyEditor);
 
         // Define user as questionnaire reporter (the guy who answer the questionnaire)
         $this->userQuestionnaire1 = new UserQuestionnaire();
-        $this->userQuestionnaire1->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($reporter);
+        $this->userQuestionnaire1->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($this->questionnaireReporter);
 
         // Define user as "Filter editor" for FilterSet
         $this->userFilterSet = new \Application\Model\UserFilterSet();
-        $this->userFilterSet->setUser($this->user)->setFilterSet($this->filterSet)->setRole($filterEditor);
+        $this->userFilterSet->setUser($this->user)->setFilterSet($this->filterSet)->setRole($this->filterEditor);
 
         $this->rule = new Rule('test rule');
         $this->rule->setFormula('=2 * 3');
@@ -259,6 +276,21 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->identityProvider->setIdentity($this->user);
 
         return $questionnaire;
+    }
+
+    /**
+     * Create a second user and login with him
+     * @return \Application\Model\User
+     */
+    protected function createAnotherUser()
+    {
+        $anotherUser = new User('another test user');
+        $anotherUser->setPassword('123');
+        $this->getEntityManager()->persist($anotherUser);
+        $this->getEntityManager()->flush();
+        $this->identityProvider->setIdentity($anotherUser);
+
+        return $anotherUser;
     }
 
     public function testCommonRestActions()

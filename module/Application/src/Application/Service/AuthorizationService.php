@@ -35,7 +35,7 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
     {
         $permission = \Application\Model\Permission::getPermissionName($object, $action);
         $context = $object->getRoleContext($action);
-        $this->setCurrentAssertion($object, $permission);
+        $this->setCurrentAssertion($object, $permission, $action);
 
         if ($action == 'read' && $object instanceof Questionnaire && $object->getStatus() == QuestionnaireStatus::$PUBLISHED) {
 
@@ -199,14 +199,17 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
      * Set the assertion for the current $action
      * @param \Application\Model\AbstractModel $object
      * @param string $permission
+     * @param string $action
      */
-    private function setCurrentAssertion(AbstractModel $object, $permission)
+    private function setCurrentAssertion(AbstractModel $object, $permission, $action)
     {
         $assertion = null;
 
         // Every action which is not read on answer must check if questionnaire status is not VALIDATED
         if ($object instanceof \Application\Model\Answer && $permission != 'Answer-read') {
             $assertion = new \Application\Assertion\CanAnswerQuestionnaire($object);
+        } elseif ($object instanceof \Application\Model\AbstractUserRole && in_array($action, ['create', 'update'])) {
+            $assertion = new \Application\Assertion\CanAttributeRole($object);
         }
 
         $this->setAssertion($permission, $assertion);

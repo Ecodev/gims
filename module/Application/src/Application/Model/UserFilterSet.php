@@ -20,7 +20,7 @@ class UserFilterSet extends AbstractUserRole
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
      */
-    private $user;
+    protected $user;
 
     /**
      * @var FilterSet
@@ -30,15 +30,6 @@ class UserFilterSet extends AbstractUserRole
      * })
      */
     private $filterSet;
-
-    /**
-     * @var Role
-     * @ORM\ManyToOne(targetEntity="Role")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * })
-     */
-    private $role;
 
     /**
      * {@inheritdoc}
@@ -59,19 +50,10 @@ class UserFilterSet extends AbstractUserRole
      */
     public function setUser(User $user)
     {
-        $this->user = $user;
+        parent::setUser($user);
         $user->userFilterSetAdded($this);
 
         return $this;
-    }
-
-    /**
-     * Get "user"
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 
     /**
@@ -96,30 +78,9 @@ class UserFilterSet extends AbstractUserRole
     }
 
     /**
-     * Set role
-     * @param Role $role
-     * @return self
-     */
-    public function setRole(Role $role)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * Get role
-     * @return Role
-     */
-    public function getRole()
-    {
-        return $this->role;
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function getRoleContextInternal($action)
+    public function getRoleContext($action)
     {
         return $this->getFilterSet();
     }

@@ -190,12 +190,6 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
         $this->assertCount(2, $filter22->getRoleContext(''), 'filter 22 should have 2 filterSets');
         $this->assertTrue($auth->isGrantedWithContext($filter22->getRoleContext(''), $permissionFilterSet->getName()), 'with filterset 21 , permission is granted');
 
-        // Test with non persistent context
-        $nonPersistedSurvey = new \Application\Model\Survey();
-        $userSurvey2 = new \Application\Model\UserSurvey();
-        $userSurvey2->setUser($user)->setSurvey($nonPersistedSurvey)->setRole($roleSurvey);
-        $this->assertTrue($auth->isGrantedWithContext($nonPersistedSurvey, $permission->getName()), 'permission with non persistent context is granted');
-
         // Test error messages
         $this->assertTrue($auth->isActionGranted($filterSet, 'read'));
         $this->assertNull($auth->getMessage(), 'no message with granted action');
@@ -227,6 +221,12 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
         $this->assertTrue($auth->isGrantedWithContext($multiAtLeastOneMustBeGranted, $permissionSurvey->getName()), 'should be denied, because multiRoleContext include survey2 on which we don\'t have access');
         $multiAtLeastOneMustBeGranted = new \Application\Service\MultipleRoleContext([$survey2, $survey], false);
         $this->assertTrue($auth->isGrantedWithContext($multiAtLeastOneMustBeGranted, $permissionSurvey->getName()), 'should be denied, because multiRoleContext include survey2 on which we don\'t have access');
+
+        // Test with non persistent context
+        $nonPersistedSurvey = new \Application\Model\Survey();
+        $userSurvey2 = new \Application\Model\UserSurvey();
+        $userSurvey->setUser($user)->setSurvey($nonPersistedSurvey)->setRole($roleSurvey);
+        $this->assertTrue($auth->isGrantedWithContext($nonPersistedSurvey, $permission->getName()), 'permission with non persistent context is granted');
     }
 
 }
