@@ -5,17 +5,23 @@ namespace Application\Repository;
 class RoleRepository extends AbstractRepository
 {
 
-    public function findAll()
+    /**
+     * Returns all roles except built-in roles
+     * @param string $action
+     * @param string $search
+     * @return array
+     */
+    public function getAllWithPermission($action = 'read', $search = null)
     {
+        $qb = $this->createQueryBuilder('role');
 
-        $query = $this->getEntityManager()->createQuery("SELECT r
-            FROM Application\Model\Role r
-            WHERE
-            r.name NOT IN ('anonymous', 'member')
-            ORDER BY r.name ASC"
-        );
+        // Never list built-in roles, because they should not be used by end-user to define permissions
+        $qb->where('role.name NOT IN(:roles)');
+        $qb->setParameter('roles', ['anonymous', 'member']);
 
-        return $query->getResult();
+        $this->addSearch($qb, $search);
+
+        return $qb->getQuery()->getResult();
     }
 
 }

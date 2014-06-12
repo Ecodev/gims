@@ -358,7 +358,7 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->assertEquals($this->getJsonResponse()['message'], 'Deleted successfully');
     }
 
-    public function subtestMemberCannotDeleteNonExisting()
+    protected function subtestMemberCannotDeleteNonExisting()
     {
         $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
         $this->assertResponseStatusCode(404);
