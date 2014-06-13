@@ -72,10 +72,10 @@ use \Application\Traits\EntityManagerAware;
                 52 => array("Public", 50, 0, null),
                 53 => array("Other", 50, 0, null),
                 54 => array("Rainwater", 4, 0, null),
-                55 => array("Covered cistern/tank", 54, 0, null),
+                55 => array("Rainwater into covered cistern/tank", 54, 0, null),
                 56 => array("Uncovered cistern/tank", 54, 0, null),
                 57 => array("Bottled water", 4, 0, null),
-                58 => array("with other improved", 57, 0, null),
+                58 => array("Bottled water with other improved", 57, 0, null),
                 59 => array("without other improved", 57, 0, null),
                 60 => array("Surface water", 4, 0, null),
                 61 => array("River", 60, 0, null),
@@ -634,4 +634,5 @@ use \Application\Traits\EntityManagerAware;
 
         return $filter;
     }
+
 }
