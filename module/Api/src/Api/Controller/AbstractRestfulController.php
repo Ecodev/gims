@@ -41,6 +41,19 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     }
 
     /**
+     * Throw an exception if action is denied
+     * @param \Application\Model\AbstractModel $object
+     * @param string $action
+     * @throws \Application\Service\PermissionDeniedException
+     */
+    protected function checkActionGranted(AbstractModel $object, $action)
+    {
+        if (!$this->getAuth()->isActionGranted($object, $action)) {
+            throw new \Application\Service\PermissionDeniedException($this->getAuth()->getMessage());
+        }
+    }
+
+    /**
      * Returns MetaModel service
      * @return \Api\Service\MetaModel
      */
@@ -161,11 +174,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $this->hydrator->hydrate($data, $object);
 
         // If not allowed to create object, cancel everything
-        if (!$this->getAuth()->isActionGranted($object, 'create')) {
-            $this->getResponse()->setStatusCode(403);
-
-            return new JsonModel(array('message' => $this->getAuth()->getMessage()));
-        }
+        $this->checkActionGranted($object, 'create');
 
         // If only want to validate, do it then return empty data
         if ($this->isOnlyValidation()) {
@@ -203,11 +212,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         }
 
         // If not allowed to delete object, cancel everything
-        if (!$this->getAuth()->isActionGranted($object, 'delete')) {
-            $this->getResponse()->setStatusCode(403);
-
-            return new JsonModel(array('message' => $this->getAuth()->getMessage()));
-        }
+        $this->checkActionGranted($object, 'delete');
 
         $this->getEntityManager()->remove($object);
         $this->getEntityManager()->flush();
@@ -233,11 +238,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             }
 
             // If not allowed to read the object, cancel everything
-            if (!$this->getAuth()->isActionGranted($object, 'read')) {
-                $this->getResponse()->setStatusCode(403);
-
-                return new JsonModel(array('message' => $this->getAuth()->getMessage()));
-            }
+            $this->checkActionGranted($object, 'read');
 
             $objects[] = $object;
         }
@@ -327,11 +328,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $this->hydrator->hydrate($data, $object);
 
         // If not allowed to update the object, cancel everything
-        if (!$this->getAuth()->isActionGranted($object, 'update')) {
-            $this->getResponse()->setStatusCode(403);
-
-            return new JsonModel(array('message' => $this->getAuth()->getMessage()));
-        }
+        $this->checkActionGranted($object, 'update');
 
         // If only want to validate, do it then return original object
         if ($this->isOnlyValidation()) {

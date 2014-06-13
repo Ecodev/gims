@@ -5,7 +5,7 @@ namespace Application\Service;
 use Application\Model\AbstractModel;
 use Application\Model\Questionnaire;
 use Application\Model\QuestionnaireStatus;
-use Application\Assertion\AbstractAssertion;
+use Application\Utility;
 
 /**
  * This class allow us to query permission model and find out if the current
@@ -93,7 +93,7 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
         $contextMessages = $this->getContextMessages($context);
 
         $name = is_callable(array($object, 'getName')) ? ' (' . $object->getName() . ')' : '';
-        $this->message = 'Insufficient access rights for permission "' . $permission . '" on "' . get_class($object) . '#' . $object->getId() . $name . '" with your current roles [' . $roles . '] ' . $contextMessages;
+        $this->message = 'Insufficient access rights for permission "' . $permission . '" on "' . Utility::getShortClassName($object) . '#' . $object->getId() . $name . '" with your current roles [' . $roles . '] ' . $contextMessages;
     }
 
     /**
@@ -112,10 +112,10 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
         $contextMessages = [];
         foreach ($context as $singleContext) {
             $contextId = $singleContext->getId() ? '#' . $singleContext->getId() : '#null';
-            $contextMessages[] = '"' . get_class($singleContext) . $contextId . '" (' . $singleContext->getName() . ')';
+            $contextMessages[] = '' . Utility::getShortClassName($singleContext) . $contextId . ' (' . $singleContext->getName() . ')';
         }
 
-        return 'with contexts ' . implode(' and ', $contextMessages);
+        return 'in contexts [' . implode(', ', $contextMessages) . ']';
     }
 
     /**

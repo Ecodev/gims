@@ -4,6 +4,7 @@ namespace Api\Controller;
 
 use Application\Model\Questionnaire;
 use Application\Model\Survey;
+use \Application\Model\QuestionnaireStatus;
 use Zend\View\Model\JsonModel;
 use Application\Model\AbstractModel;
 
@@ -120,19 +121,16 @@ class QuestionnaireController extends AbstractChildRestfulController
         $questionnaire = $this->getRepository()->findOneById($id);
 
         // If trying to validate, or un-validate, a questionnaire, we must check the permission to do that
-        if (isset($data['status']) && $data['status'] != $questionnaire->getStatus()) {
-            if (($data['status'] == \Application\Model\QuestionnaireStatus::$VALIDATED ||
-                    $questionnaire->getStatus() == \Application\Model\QuestionnaireStatus::$VALIDATED) &&
-                    !$this->getAuth()->isActionGranted($questionnaire, 'validate')) {
-                $this->getResponse()->setStatusCode(401);
+        $oldStatus = $questionnaire->getStatus();
+        $newStatus = isset($data['status']) ? $data['status'] : null;
+        if (!is_null($newStatus) && $oldStatus != $newStatus) {
 
-                return new JsonModel(array('message' => $this->getAuth()->getMessage()));
-            } elseif (($data['status'] == \Application\Model\QuestionnaireStatus::$PUBLISHED ||
-                    $questionnaire->getStatus() == \Application\Model\QuestionnaireStatus::$PUBLISHED) &&
-                    !$this->getAuth()->isActionGranted($questionnaire, 'publish')) {
-                $this->getResponse()->setStatusCode(401);
+            if ($oldStatus == QuestionnaireStatus::$PUBLISHED || $newStatus == QuestionnaireStatus::$PUBLISHED) {
+                $this->checkActionGranted($questionnaire, 'publish');
+            }
 
-                return new JsonModel(array('message' => $this->getAuth()->getMessage()));
+            if ($oldStatus == QuestionnaireStatus::$VALIDATED || $newStatus == QuestionnaireStatus::$VALIDATED) {
+                $this->checkActionGranted($questionnaire, 'validate');
             }
         }
 

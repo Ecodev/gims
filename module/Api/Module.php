@@ -40,27 +40,27 @@ class Module
         $events->attach(MvcEvent::EVENT_RENDER, array($this, 'onRenderError'));
     }
 
-    public function onRenderError($e)
+    public function onRenderError(MvcEvent $event)
     {
         // must be an error
-        if (!$e->isError()) {
+        if (!$event->isError()) {
             return;
         }
 
         // Only do something for HTTP
-        $request = $e->getRequest();
+        $request = $event->getRequest();
         if (!$request instanceof HttpRequest) {
             return;
         }
 
         // if we have a JsonModel in the result, then do nothing
-        $currentModel = $e->getResult();
+        $currentModel = $event->getResult();
         if ($currentModel instanceof JsonModel) {
             return;
         }
 
         // create a new JsonModel - use application/api-problem+json fields.
-        $response = $e->getResponse();
+        $response = $event->getResponse();
         $json = new JsonModel(array(
             'status' => $response->getStatusCode(),
             'title' => $response->getReasonPhrase(),
@@ -91,22 +91,27 @@ class Module
         $exception = $currentModel->getVariable('exception');
         if ($exception) {
             if ($exception->getCode()) {
-                $e->getResponse()->setStatusCode($exception->getCode());
+                $event->getResponse()->setStatusCode($exception->getCode());
             }
             $json->detail = $exception->getMessage();
 
             if ($exception instanceof \Application\Validator\Exception) {
-                $e->getResponse()->setStatusCode(403);
+                $event->getResponse()->setStatusCode(403);
                 $json->status = 403;
                 $json->title = 'Object is not valid';
                 $json->messages = $exception->getMessages();
+            } elseif ($exception instanceof \Application\Service\PermissionDeniedException) {
+                $event->getResponse()->setStatusCode(403);
+                $json->status = 403;
+                $json->title = 'Denied';
             }
         }
 
         // set our new view model
         $json->setTerminal(true);
-        $e->setResult($json);
-        $e->setViewModel($json);
+        $event->setResult($json);
+        $event->setViewModel($json);
+        $event->setError(false);
     }
 
 }

@@ -146,14 +146,8 @@ class QuestionController extends AbstractChildRestfulController
 
         // If not allowed to read the object, cancel everything
         $question = $questionRepository->findOneById($id);
-        if ($this->getAuth()->isActionGranted($question, 'update')) {
-            $this->getEntityManager()->getConnection()->commit();
-        } else {
-            $this->getEntityManager()->getConnection()->rollback();
-            $this->getResponse()->setStatusCode(403);
-
-            return new JsonModel(array('message' => $this->getAuth()->getMessage()));
-        }
+        $this->checkActionGranted($question, 'update');
+        $this->getEntityManager()->getConnection()->commit();
 
         if (isset($data['sorting'])) {
             $data['sorting'] = $this->reorderSiblingQuestions($question, $data['sorting']);

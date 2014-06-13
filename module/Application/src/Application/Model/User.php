@@ -352,7 +352,6 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      */
     public function setRolesContext(\Application\Service\RoleContextInterface $context)
     {
-        /** @todo  removed check ->getId() on objects to ensure it has been persisted bef */
         $this->roleContext = $context;
     }
 

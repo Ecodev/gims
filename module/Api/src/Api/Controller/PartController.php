@@ -14,9 +14,7 @@ class PartController extends AbstractRestfulController
      */
     public function delete($id)
     {
-        $this->getResponse()->setStatusCode(403);
-
-        return new JsonModel(array('message' => 'Nobody can delete part'));
+        throw new \Application\Service\PermissionDeniedException('Nobody can delete part');
     }
 
 }

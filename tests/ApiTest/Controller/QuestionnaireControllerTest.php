@@ -135,7 +135,7 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
 
         $data = ['status' => 'validated'];
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
-        $this->assertResponseStatusCode(401);
+        $this->assertResponseStatusCode(403);
 
         // Define user as questionnaire validator (the guy who can validate if questionnaire is correct)
         $userQuestionnaire = new UserQuestionnaire();
@@ -153,13 +153,15 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
         // Now test publishing
         $data = ['status' => 'published'];
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
-        $this->assertResponseStatusCode(401);
+        $this->assertResponseStatusCode(403);
 
         // Define user as questionnaire publisher
+
         $userQuestionnaire2 = new UserQuestionnaire();
         $this->questionnaire = $this->getEntityManager()->merge($this->questionnaire);
         $userQuestionnaire2->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($publisher);
         $this->getEntityManager()->persist($userQuestionnaire2);
+        $this->getEntityManager()->remove($userQuestionnaire);
         $this->getEntityManager()->flush();
 
         // Now that we have proper role, it should be allowed

@@ -194,12 +194,12 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
         $this->assertTrue($auth->isActionGranted($filterSet, 'read'));
         $this->assertNull($auth->getMessage(), 'no message with granted action');
         $this->assertFalse($auth->isActionGranted($filterSet, 'update'));
-        $expectedMessage = 'Insufficient access rights for permission "FilterSet-update" on "Application\Model\FilterSet#' . $filterSet->getId() . ' (filterSet 1)" with your current roles [member, role filterset] with contexts "Application\Model\FilterSet#' . $filterSet->getId() . '" (filterSet 1)';
+        $expectedMessage = 'Insufficient access rights for permission "FilterSet-update" on "FilterSet#' . $filterSet->getId() . ' (filterSet 1)" with your current roles [member, role filterset] in contexts [FilterSet#' . $filterSet->getId() . ' (filterSet 1)]';
         $this->assertSame($expectedMessage, $auth->getMessage(), 'error message for single context object');
         $this->assertTrue($auth->isActionGranted($filter1, 'read'));
         $this->assertNull($auth->getMessage(), 'no message with granted action');
         $this->assertFalse($auth->isActionGranted($filter1, 'update'));
-        $expectedMessage = 'Insufficient access rights for permission "Filter-update" on "Application\Model\Filter#' . $filter1->getId() . ' (filter 1)" with your current roles [member, role filterset] with contexts "Application\Model\FilterSet#' . $filterSet->getId() . '" (filterSet 1) and "Application\Model\FilterSet#' . $filterSet2->getId() . '" (filterSet 2) and "Application\Model\FilterSet#' . $filterSet3->getId() . '" (filterSet 3)';
+        $expectedMessage = 'Insufficient access rights for permission "Filter-update" on "Filter#' . $filter1->getId() . ' (filter 1)" with your current roles [member, role filterset] in contexts [FilterSet#' . $filterSet->getId() . ' (filterSet 1), FilterSet#' . $filterSet2->getId() . ' (filterSet 2), FilterSet#' . $filterSet3->getId() . ' (filterSet 3)]';
         $this->assertSame($expectedMessage, $auth->getMessage(), 'error message for multiple context object');
 
         // Test assertions, that we can modify an answer, but only for non-validated questionnaire

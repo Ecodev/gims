@@ -18,6 +18,7 @@ class Version20140610142709 extends AbstractMigration
         $objects = array(
             'Questionnaire' => array(
                 'read' => array('editor', 'reporter', 'validator', 'Questionnaire publisher'),
+                'validate' => array('Questionnaire publisher'), // A publisher can also validate, so he is able to un-publish something but keep it validated
                 'publish' => array('Questionnaire publisher'),
                 'update' => array('validator', 'Questionnaire publisher'),
             ),
@@ -50,6 +51,11 @@ class Version20140610142709 extends AbstractMigration
                 }
             }
         }
+
+        // Rename existing roles
+        $this->addSql("UPDATE role SET name = 'Questionnaire reporter' WHERE name = 'reporter'");
+        $this->addSql("UPDATE role SET name = 'Questionnaire validator' WHERE name = 'validator'");
+        $this->addSql("UPDATE role SET name = 'Survey editor' WHERE name = 'editor'");
 
         // Since ALTER TYPE cannot be within transaction, we have to forcefully close the current one
         $this->addSql("COMMIT TRANSACTION;");

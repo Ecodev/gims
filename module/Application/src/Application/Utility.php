@@ -120,4 +120,16 @@ abstract class Utility
         return '#' . $hex;
     }
 
+    /**
+     * Returns the short class name of any object, eg: Application\Model\Survey => Survey
+     * @param object $object
+     * @return string
+     */
+    public static function getShortClassName($object)
+    {
+        $reflect = new \ReflectionClass($object);
+
+        return $reflect->getShortName();
+    }
+
 }
