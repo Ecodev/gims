@@ -1288,7 +1288,7 @@ return array(
         'id' => 198,
         'iso3' => 'SSD',
         'name' => 'South Sudan',
-        'path' => 'data/cache/country_data/South_Sudan_13.xlsm',
+        'path' => 'data/cache/country_data/South_Sudan_13_All_Pop.xlsm',
     ),
     array(
         'id' => 68,
