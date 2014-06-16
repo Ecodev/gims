@@ -103,7 +103,10 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
 
         $allKeys = array();
         $allKeys[] = \Application\Utility::getCacheKey(array());
+        $allKeys[] = \Application\Utility::getCacheKey(array(''));
         $allKeys[] = \Application\Utility::getCacheKey(array('', ''));
+        $allKeys[] = \Application\Utility::getCacheKey(array(false));
+        $allKeys[] = \Application\Utility::getCacheKey(array(true));
         $allKeys[] = \Application\Utility::getCacheKey(array(0));
         $allKeys[] = \Application\Utility::getCacheKey(array(null));
         $allKeys[] = \Application\Utility::getCacheKey(array(null, null));

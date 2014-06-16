@@ -65,6 +65,8 @@ abstract class Utility
                 $key .= spl_object_hash($arg);
             } elseif (is_array($arg)) {
                 $key .= '[[ARRAY|' . self::getCacheKey($arg) . ']]';
+            } elseif (is_bool($arg)) {
+                $key .= '[[BOOL|' . $arg . ']]';
             } else {
                 $key .= $arg;
             }
