@@ -941,6 +941,8 @@ STRING;
             } else {
                 $this->filterQuestionnaireUsageCount++;
             }
+
+            $this->cacheFilterQuestionnaireUsages[$key] = $filterQuestionnaireUsage;
         }
 
         return $filterQuestionnaireUsage;
