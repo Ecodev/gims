@@ -45,6 +45,7 @@ class RegressionFilterValue extends AbstractRegressionToken
             'filter' => $this->getFilterName($matches[1], $parser),
             'part' => $this->getPartName($matches[2], $parser),
             'year' => (string) $year,
+            'color' => $this->getFilterColor($matches[1], $parser),
         ];
     }
 

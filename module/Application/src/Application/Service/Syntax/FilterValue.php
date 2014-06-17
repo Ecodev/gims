@@ -37,6 +37,7 @@ class FilterValue extends AbstractBasicToken
             'questionnaire' => $this->getQuestionnaireName($matches[2], $parser),
             'part' => $this->getPartName($matches[3], $parser),
             'level' => isset($matches[4]) && $matches[4] == ',L#2',
+            'color' => $this->getFilterColor($matches[1], $parser),
         ];
     }
 

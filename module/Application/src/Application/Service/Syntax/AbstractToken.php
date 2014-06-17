@@ -21,6 +21,21 @@ abstract class AbstractToken
     }
 
     /**
+     * Returns the color according to 'current' syntax
+     * @param string|integer $filterId
+     * @param \Application\Service\Parser $parser
+     * @return string
+     */
+    protected function getFilterColor($filterId, Parser $parser)
+    {
+        if ($filterId == 'current') {
+            return null;
+        } else {
+            return $parser->getFilterRepository()->findOneById($filterId)->getGenericColor();
+        }
+    }
+
+    /**
      * Returns the name according to 'current' syntax
      * @param string|integer $questionnaireId
      * @param \Application\Service\Parser $parser
