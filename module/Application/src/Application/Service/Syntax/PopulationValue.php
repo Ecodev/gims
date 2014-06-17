@@ -27,4 +27,12 @@ class PopulationValue extends AbstractBasicToken
         return $calculator->getPopulationRepository()->getOneByQuestionnaire($questionnaire, $partId)->getPopulation();
     }
 
+    public function getStructure(array $matches, Parser $parser)
+    {
+        return [
+            'type' => 'populationValue',
+            'questionnaire' => $this->getQuestionnaireName($matches[1], $parser),
+            'part' => $this->getPartName($matches[2], $parser),
+        ];
+    }
 }

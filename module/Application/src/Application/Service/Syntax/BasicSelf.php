@@ -24,4 +24,10 @@ class BasicSelf extends AbstractBasicToken
         return is_null($value) ? 'NULL' : $value;
     }
 
+    public function getStructure(array $matches, Parser $parser)
+    {
+        return [
+            'type' => 'self',
+        ];
+    }
 }

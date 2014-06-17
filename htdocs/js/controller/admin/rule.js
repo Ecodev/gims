@@ -1,6 +1,8 @@
 /* Controllers */
 angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $routeParams, $location, Modal, Restangular, $timeout) {
     'use strict';
+    var fields = {fields: 'metadata,structure'};
+
     var aceEditor;
     ace.config.set('basePath', '/lib/ace-builds/src-noconflict');
     ace.config.set('modePath', '/ace-custom');
@@ -183,18 +185,21 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             return;
         }
 
-        var success = function() {
+        var success = function(a) {
             $scope.messages = [];
+            $scope.rule = a;
         };
 
         var fail = function(response) {
             $scope.messages = response.data.messages;
         };
 
+        var validateFields = fields;
+        validateFields.validate = true;
         if ($scope.rule.id) {
-            $scope.rule.put({validate: true}).then(success, fail);
+            $scope.rule.put(validateFields).then(success, fail);
         } else {
-            Restangular.all('rule').post($scope.rule, {validate: true}).then(success, fail);
+            Restangular.all('rule').post($scope.rule, validateFields).then(success, fail);
         }
     }, 300);
 
@@ -219,7 +224,7 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
 
         // First case is for update a rule, second is for creating
         if ($scope.rule.id) {
-            $scope.rule.put().then(function() {
+            $scope.rule.put(fields).then(function() {
                 $scope.sending = false;
 
                 if (redirectTo) {
@@ -249,7 +254,7 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
 
     // Load rule if possible
     if ($routeParams.id) {
-        Restangular.one('rule', $routeParams.id).get({fields: 'metadata'}).then(function(rule) {
+        Restangular.one('rule', $routeParams.id).get(fields).then(function(rule) {
             $scope.rule = rule;
         });
     } else {

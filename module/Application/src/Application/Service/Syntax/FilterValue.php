@@ -29,4 +29,15 @@ class FilterValue extends AbstractBasicToken
         return is_null($value) ? 'NULL' : $value;
     }
 
+    public function getStructure(array $matches, Parser $parser)
+    {
+        return [
+            'type' => 'filterValue',
+            'filter' => $this->getFilterName($matches[1], $parser),
+            'questionnaire' => $this->getQuestionnaireName($matches[2], $parser),
+            'part' => $this->getPartName($matches[3], $parser),
+            'level' => isset($matches[4]) && $matches[4] == ',L#2',
+        ];
+    }
+
 }

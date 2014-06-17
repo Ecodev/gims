@@ -28,4 +28,12 @@ class RegressionCumulatedPopulation extends AbstractRegressionToken
         return $population;
     }
 
+    public function getStructure(array $matches, Parser $parser)
+    {
+        return [
+            'type' => 'regressionCumulatedPopulation',
+            'part' => $this->getPartName($matches[1], $parser),
+        ];
+    }
+
 }

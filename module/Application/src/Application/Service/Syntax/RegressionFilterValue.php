@@ -33,4 +33,19 @@ class RegressionFilterValue extends AbstractRegressionToken
         return is_null($value) ? 'NULL' : $value;
     }
 
+    public function getStructure(array $matches, Parser $parser)
+    {
+        $year = (int) $matches[3];
+        if ($year > 0) {
+            $year = '+' . $year;
+        }
+
+        return [
+            'type' => 'regressionFilterValue',
+            'filter' => $this->getFilterName($matches[1], $parser),
+            'part' => $this->getPartName($matches[2], $parser),
+            'year' => (string) $year,
+        ];
+    }
+
 }

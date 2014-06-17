@@ -21,4 +21,11 @@ class RegressionYear extends AbstractRegressionToken
         return $year;
     }
 
+    public function getStructure(array $matches, Parser $parser)
+    {
+        return [
+            'type' => 'regressionYear',
+        ];
+    }
+
 }

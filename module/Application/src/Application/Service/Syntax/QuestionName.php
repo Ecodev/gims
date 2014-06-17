@@ -31,4 +31,12 @@ class QuestionName extends AbstractBasicToken
         }
     }
 
+    public function getStructure(array $matches, Parser $parser)
+    {
+        return [
+            'type' => 'questionName',
+            'filter' => $this->getFilterName($matches[1], $parser),
+            'questionnaire' => $this->getQuestionnaireName($matches[2], $parser),
+        ];
+    }
 }

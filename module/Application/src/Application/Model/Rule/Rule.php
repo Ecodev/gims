@@ -222,4 +222,12 @@ class Rule extends \Application\Model\AbstractModel implements ReferencableInter
         }
     }
 
+    public function getStructure()
+    {
+        $parser = new \Application\Service\Syntax\Parser();
+        $parser->setServiceLocator(\Application\Module::getServiceManager());
+
+        return $parser->getStructure($this->getFormula());
+    }
+
 }

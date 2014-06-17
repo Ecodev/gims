@@ -23,4 +23,11 @@ class RegressionSelf extends AbstractRegressionToken
         return is_null($value) ? 'NULL' : $value;
     }
 
+    public function getStructure(array $matches, Parser $parser)
+    {
+        return [
+            'type' => 'self',
+        ];
+    }
+
 }

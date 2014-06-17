@@ -109,8 +109,9 @@ abstract class AbstractController extends \Zend\Test\PHPUnit\Controller\Abstract
      */
     protected function getNewModelWithId($classname, $mockedMethods = array())
     {
-        if (!isset($this->identity[$classname]))
+        if (!isset($this->identity[$classname])) {
             $this->identity[$classname] = array();
+        }
 
         $id = count($this->identity[$classname]) + 1;
         $mockedMethods ['getId'] = $this->returnValue($id);

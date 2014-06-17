@@ -330,13 +330,10 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         // If not allowed to update the object, cancel everything
         $this->checkActionGranted($object, 'update');
 
-        // If only want to validate, do it then return original object
+        // If only want to validate, do it then return modified object
         if ($this->isOnlyValidation()) {
             $object->validate();
             $this->getResponse()->setStatusCode(200);
-
-            // Reload the object from database
-            $this->getEntityManager()->refresh($object);
 
             return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
         }

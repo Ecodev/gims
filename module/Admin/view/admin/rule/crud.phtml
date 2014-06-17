@@ -25,7 +25,6 @@
                     </div>
                 </div>
 
-
                 <div class="form-group" ng-class="{'has-error': messages.length}">
                     <label class="control-label col-sm-1" for="rule.formula"><?php echo $this->translate("Formula"); ?></label>
                     <div class="col-sm-11">
@@ -37,6 +36,10 @@
                             <ul class="help-block">
                                 <li ng-repeat="message in messages" class="">{{message}}</li>
                             </ul>
+
+                            <div ng-if="!messages.length">
+                                <gims-formula structure="rule.structure"></gims-formula>
+                            </div>
                         </div>
                     </div>
                 </div>

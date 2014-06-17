@@ -34,4 +34,17 @@ class QuestionnaireUsageValue extends AbstractBasicToken
         return is_null($value) ? 'NULL' : $value;
     }
 
+    public function getStructure(array $matches, Parser $parser)
+    {
+        $usage = $parser->getQuestionnaireUsageRepository()->findOneById($matches[1]);
+        $rule = $usage->getRule();
+
+        return [
+            'type' => 'ruleValue',
+            'rule' => $rule->getName(),
+            'questionnaire' => $this->getQuestionnaireName($matches[2], $parser),
+            'part' => $this->getPartName($matches[3], $parser),
+        ];
+    }
+
 }

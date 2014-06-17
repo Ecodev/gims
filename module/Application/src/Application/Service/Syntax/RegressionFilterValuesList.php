@@ -34,4 +34,11 @@ class RegressionFilterValuesList extends AbstractRegressionToken
         return $values;
     }
 
+    public function getStructure(array $matches, Parser $parser)
+    {
+        return [
+            'type' => 'regressionFilterValuesList',
+            'filter' => $this->getFilterName($matches[1], $parser),
+        ];
+    }
 }

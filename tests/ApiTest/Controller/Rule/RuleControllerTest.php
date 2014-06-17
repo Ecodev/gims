@@ -150,16 +150,12 @@ class RuleControllerTest extends AbstractRestfulControllerTest
             'formula' => '= 1 * 2 * 3',
         );
 
-        $expected = [
-            'id' => $this->rule->getId(),
-            'name' => $this->rule->getName(),
-            'formula' => $this->rule->getFormula(),
-        ];
+        $expected = array_merge(['id' => $this->rule->getId()], $validData);
 
         $this->dispatch($this->getRoute('put') . '?validate', Request::METHOD_PUT, $validData);
         $this->assertResponseStatusCode(200);
         $actual = $this->getJsonResponse();
-        $this->assertEquals($expected, $actual, 'returned object must NOT be modified');
+        $this->assertEquals($expected, $actual, 'returned object must be the modified but non-persisted version');
 
         $invalidData = array(
             'name' => 'new-rule A',
