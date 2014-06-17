@@ -19,6 +19,7 @@ angular.module('myApp.directives').directive('percent', function() {
                     val = Math.round(val * 1000) / 1000;
                     return val;
                 }
+                return '';
             }
 
             /**

@@ -1357,14 +1357,15 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     var updateAnswer = function(answer, question, questionnaire) {
         var deferred = $q.defer();
         if (answer.id && (answer.permissions && answer.permissions.update || questionnaire && questionnaire.permissions && questionnaire.permissions.update)) {
+            delete(answer.error);
             Restangular.restangularizeElement(null, answer, 'Answer');
             answer.isLoading = true;
             answer.put().then(function() {
                 answer.isLoading = false;
-                //                answer[question.value] = newAnswer[question.value];
                 deferred.resolve();
                 $scope.refresh(false, true);
-            }, function() {
+            }, function(data) {
+                answer.error = data;
                 deferred.reject();
             });
         } else {
@@ -1418,16 +1419,18 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             }
 
             answer.isLoading = true;
+            delete(answer.error);
             Restangular.all('answer').post(answer, {fields: 'permissions'}).then(function(newAnswer) {
                 answer.id = newAnswer.id;
                 answer[question.value] = newAnswer[question.value];
                 answer.isLoading = false;
                 deferred.resolve(answer);
-            }, function() {
+            }, function(data) {
+                answer.error = data;
                 answer.isLoading = false;
             });
         } else {
-            deferred.reject('no value');
+            deferred.reject();
         }
 
         return deferred.promise;
