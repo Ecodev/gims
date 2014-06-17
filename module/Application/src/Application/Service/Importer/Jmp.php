@@ -654,8 +654,8 @@ STRING;
         $cell = $sheet->getCellByColumnAndRow($col + $offset, $row);
         $originalFormula = $cell->getValue();
 
-        // if we have nothing at all, cannot do anything
-        if (is_null($originalFormula) || $originalFormula == '') {
+        // if we have nothing at all, or stricly only letters, cannot do anything
+        if (is_null($originalFormula) || $originalFormula == '' || preg_match('/^[a-zA-Z]+$/', $originalFormula)) {
             return null;
             // if the formula is actually not a formula, transform into formula
         } elseif (@$originalFormula[0] != '=') {
