@@ -191,7 +191,12 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
         };
 
         var fail = function(response) {
-            $scope.messages = response.data.messages;
+            if (response.data.messages) {
+                $scope.messages = response.data.messages;
+            } else {
+                // If PHPExcel threw fatal errors, we default to generic message
+                $scope.messages = ['Formula syntax is invalid and cannot be computed.'];
+            }
         };
 
         var validateFields = fields;
