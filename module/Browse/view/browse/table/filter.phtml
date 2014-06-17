@@ -56,7 +56,6 @@
                                     <gims-select
                                         model="tabs.survey"
                                         api="survey"
-                                        queryparams="surveyParams"
                                         placeholder="Select survey"
                                         search-attributes="code,name"
                                         custom-selection-template="{{surveysTemplate}}"
@@ -490,7 +489,7 @@
                                                         <li ng-if="questionnaire.permissions.update && questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id" class="divider"></li>
                                                         <li ng-if="questionnaire.permissions.update" class="dropdown-header">Actions</li>
                                                         <li ng-if="questionnaire.permissions.update">
-                                                            <a href ng-click="toggleQuestionAbsolute(questionnaire, questionnaire.survey.questions[filter.id], filter)"><i class="fa fa-fw">%</i>
+                                                            <a href ng-click="toggleQuestionAbsolute(questionnaire, questionnaire.survey.questions[filter.id],questionnaire.survey.questions[filter.id].answers[tabs.part.id])"><i class="fa fa-fw">%</i>
                                                                 Set question as
                                                                 <span ng-if="questionnaire.survey.questions[filter.id].isAbsolute">percent</span>
                                                                 <span ng-if="!questionnaire.survey.questions[filter.id].isAbsolute">absolute</span>
@@ -509,25 +508,28 @@
                                                 <input ng-if="questionnaire.survey.questions[filter.id].value"
                                                        class="form-control text-center"
                                                        ng-class="{'error': valueForm.value.$invalid}"
-                                                       min="0"
-                                                       ng-max="questionnaire.survey.questions[filter.id].max"
                                                        name="value"
                                                        type="number"
-                                                       percent
-                                                       placeholder="{{questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first}}"
-                                                       ng-focus="setAnswerInitialValue(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id]); getPermissions(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id])"
+                                                       min="0"
+                                                       ng-max="questionnaire.survey.questions[filter.id].max"
+                                                       percent="questionnaire.survey.questions[filter.id].isAbsolute"
+                                                       question="questionnaire.survey.questions[filter.id]"
+                                                       ng-focus="initQuestionAbsolute(questionnaire.survey.questions[filter.id]);setAnswerInitialValue(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id]); getPermissions(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id])"
                                                        ng-blur="saveAnswer(questionnaire.survey.questions[filter.id].answers[tabs.part.id], questionnaire.survey.questions[filter.id], filter, questionnaire, tabs.part)"
+                                                       percent-placeholder="{{questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first}}"
                                                        ng-model="questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]"
                                                        ng-disabled="questionnaire.survey.questions[filter.id].answers[tabs.part.id].permissions.update == false ||
                                                                     !isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) && questionnaire.permissions.create === false ||
                                                                     sector && questionnaire.id" />
 
-                                                <span ng-if="questionnaire.survey.questions[filter.id] && !questionnaire.survey.questions[filter.id].isAbsolute" class="input-group-addon" tooltip="Enter a number between 0 and 100%" tooltip-placement="left"><i class="fa fa-fw">%</i></span>
-                                                <span ng-if="questionnaire.survey.questions[filter.id] && questionnaire.survey.questions[filter.id].isAbsolute" class="input-group-addon" tooltip="Enter a positive number" tooltip-placement="left"><i class="fa fa-plus-square-o fa-fw"></i></span>
+                                                <span class="input-group-addon" ng-if="!isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) && (!!questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second || !!questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first)" tooltip="Percent value (between 0 and 100)" tooltip-placement="left"><i class="fa fa-fw">%</i></span>
+                                                <span class="input-group-addon" ng-if="questionnaire.survey.questions[filter.id].isAbsolute === false && isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value])" tooltip="Percent value (between 0 and 100)" tooltip-placement="left"><i class="fa fa-fw">%</i></span>
+                                                <span class="input-group-addon" ng-if="questionnaire.survey.questions[filter.id].isAbsolute === true  && isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value])" tooltip="Positive number" tooltip-placement="left"><i class="fa fa-plus-square-o fa-fw"></i></span>
                                             </div>
                                         </ng-form>
                                     </div>
                                 </div>
+                                <pre>{{questionnaire.survey.questions[filter.id].filter|json}}</pre>
                             </td>
                         </tr>
                     </tbody>

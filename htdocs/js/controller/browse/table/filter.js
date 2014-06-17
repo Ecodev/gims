@@ -15,11 +15,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /*********************************************** Variables initialisation */
     /**************************************************************************/
 
-    // params for ajax requests
+        // params for ajax requests
     $scope.filterFields = {fields: 'color,paths'};
     $scope.countryParams = {fields: 'geoname'};
     var countryFields = {fields: 'geoname.questionnaires,geoname.questionnaires.survey,geoname.questionnaires.survey.questions,geoname.questionnaires.survey.questions.type,geoname.questionnaires.survey.questions.filter'};
-    var questionnaireWithQTypeFields = {fields: 'survey.questions,survey.questions.type'};
+    var questionnaireWithQTypeFields = {fields: 'survey.questions,survey.questions.type,survey.questions.isAbsolute'};
     var questionnaireWithAnswersFields = {fields: 'filterQuestionnaireUsages,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part'};
     var surveyFields = {fields: 'questionnaires.survey,questionnaires.survey.questions,questionnaires.survey.questions.type,questionnaires.survey.questions.filter'};
 
@@ -66,7 +66,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         if ($scope.sector) {
             $scope.max = 10000000000;
         } else {
-            $scope.max = 1;
+            $scope.max = 100;
         }
     });
 
@@ -256,6 +256,19 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             return true;
         } else {
             return false;
+        }
+    };
+
+    /**
+     * If a question has no value for isAbsolute attribute, set is by percent by default
+     * @todo adapt to sector, default to absolute and replace everywhere where those values are setted
+     * @param question
+     */
+    $scope.initQuestionAbsolute = function(question) {
+        if (_.isUndefined(question.isAbsolute)) {
+            question.isAbsolute = false;
+            question.value = 'valuePercent';
+            question.max = 100;
         }
     };
 
@@ -662,22 +675,34 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         }
     };
 
-    $scope.toggleQuestionAbsolute = function(questionnaire, question) {
-        var bool = !question.isAbsolute;
+    $scope.toggleQuestionAbsolute = function(questionnaire, question, answer) {
+
+        var isAbsolute = !question.isAbsolute;
         var questionnaires = getSurveysWithSameCode(questionnaire.survey.code);
+
         _.forEach(questionnaires, function(questionnaire) {
             question = questionnaire.survey.questions[question.filter.id];
-            if (bool) {
+
+            var value = 'valuePercent';
+            var max = 100;
+
+            if (isAbsolute) {
                 question.isAbsolute = true;
-                question.value = 'valueAbsolute';
-                question.max = 10000000000000000;
+                value = 'valueAbsolute';
+                max = 10000000000000000;
             } else {
                 question.isAbsolute = false;
-                question.value = 'valuePercent';
-                question.max = 1;
             }
-            updateQuestion(questionnaire, question);
-            transfertValue(question, questionnaire, true);
+
+            $timeout(function() {
+                question.value = value;
+                question.max = max;
+                transferValue(question, questionnaire, answer).then(function() {
+                    updateQuestion(questionnaire, question);
+                });
+
+            }, 0);
+
         });
     };
 
@@ -685,19 +710,35 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /****************************************************** Private functions */
     /**************************************************************************/
 
-    var transfertValue = function(question, questionnaire, updateAnswers) {
+    var transferValue = function(question, questionnaire, directedAnswer) {
+        var deferred = $q.defer();
+
+        var val;
+        var answers = [];
         _.forEach(question.answers, function(answer) {
             if (question.isAbsolute) {
-                answer.valueAbsolute = answer.valuePercent;
+                val = answer.valuePercent;
+                if (answer.id != directedAnswer.id) {
+                    val *= 100;
+                }
+                answer.valueAbsolute = val;
                 answer.valuePercent = null;
             } else {
-                answer.valuePercent = answer.valueAbsolute;
+                val = answer.valueAbsolute;
+                if (answer.id != directedAnswer.id) {
+                    val /= 100;
+                }
+                answer.valuePercent = val;
                 answer.valueAbsolute = null;
             }
-            if (updateAnswers) {
-                updateAnswer(answer, question, questionnaire);
-            }
+            answers.push(updateAnswer(answer, question, questionnaire));
         });
+
+        $q.all(answers).then(function() {
+            deferred.resolve();
+        });
+
+        return deferred.promise;
     };
 
     /**
@@ -802,16 +843,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     q.max = 10000000000000000;
                 } else {
                     q.value = 'valuePercent';
-                    q.max = 1;
+                    q.max = 100;
                 }
-                //
-                //                // Default alternate name to official one, so we can always display something
-                //                if (_.isEmpty(q.alternateNames)) {
-                //                    q.alternateNames = {};
-                //                }
-                //                if (!q.alternateNames[questionnaire.id]) {
-                //                    q.alternateNames[questionnaire.id] = q.name;
-                //                }
 
                 return q;
             });
@@ -878,8 +911,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     }
                     if (filter.sectorChild) {
                         questionnaire.survey.questions[filter.id].isAbsolute = true;
-                    } else if (_.isUndefined(questionnaire.survey.questions[filter.id].isAbsolute)) {
-                        questionnaire.survey.questions[filter.id].isAbsolute = false;
                     }
 
                     if (questionnaire.survey.questions[filter.id].isAbsolute) {
@@ -887,7 +918,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                         questionnaire.survey.questions[filter.id].max = 10000000000000000;
                     } else {
                         questionnaire.survey.questions[filter.id].value = 'valuePercent';
-                        questionnaire.survey.questions[filter.id].max = 1;
+                        questionnaire.survey.questions[filter.id].max = 100;
                     }
 
                     if (_.isUndefined(questionnaire.survey.questions[filter.id].answers)) {
@@ -958,7 +989,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                             });
                         }
                     });
-
                     $scope.isComputing = false;
                 });
             }
@@ -1107,10 +1137,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     };
 
     var getSurveysWithSameCode = function(code) {
-        if (code) {
+        if (!_.isUndefined(code)) {
             var c2 = _.isNumber(code) ? code : code.toUpperCase();
             var questionnaires = _.filter($scope.tabs.questionnaires, function(q) {
-                if (q.survey.code) {
+                if (!_.isUndefined(q.survey.code)) {
                     var c1 = _.isNumber(q.survey.code) ? q.survey.code : q.survey.code.toUpperCase();
                     if (c1 == c2) {
                         return true;
@@ -1325,15 +1355,23 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param questionnaire
      */
     var updateAnswer = function(answer, question, questionnaire) {
+        var deferred = $q.defer();
         if (answer.id && (answer.permissions && answer.permissions.update || questionnaire && questionnaire.permissions && questionnaire.permissions.update)) {
             Restangular.restangularizeElement(null, answer, 'Answer');
             answer.isLoading = true;
-            answer.put().then(function(newAnswer) {
+            answer.put().then(function() {
                 answer.isLoading = false;
-                answer[question.value] = newAnswer[question.value];
+                //                answer[question.value] = newAnswer[question.value];
+                deferred.resolve();
                 $scope.refresh(false, true);
+            }, function() {
+                deferred.reject();
             });
+        } else {
+            deferred.resolve();
         }
+
+        return deferred.promise;
     };
 
     /**
@@ -1385,6 +1423,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 answer[question.value] = newAnswer[question.value];
                 answer.isLoading = false;
                 deferred.resolve(answer);
+            }, function() {
+                answer.isLoading = false;
             });
         } else {
             deferred.reject('no value');
@@ -1672,7 +1712,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 $scope.firstQuestionnairesRetrieve = true;
                 $scope.refresh(false, true);
             });
-
         }
     };
 
