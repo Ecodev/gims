@@ -1,0 +1,44 @@
+/**
+ * Custom GIMS icons
+ */
+
+.fa-grid {
+    padding-right: 10px;
+}
+
+.fa-gims-loading {
+    &.hide {
+        display: none !important;
+    }
+
+    @extend .fa-refresh;
+    @extend .fa-spin;
+}
+
+.fa-gims-back {
+    @extend .fa-reply;
+}
+
+.fa-gims-filterset {
+    @extend .fa-tags;
+}
+
+.fa-gims-filter {
+    @extend .fa-tag;
+}
+
+.fa-gims-survey {
+    @extend .fa-pencil-square-o;
+}
+
+.fa-gims-rule {
+    @extend .fa-gear;
+}
+
+.fa-gims-questionnaire {
+    @extend .fa-paste;
+}
+
+.fa-gims-population {
+    @extend .fa-male;
+}

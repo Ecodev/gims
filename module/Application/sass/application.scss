@@ -31,6 +31,7 @@ input.error {
 @import "colorpicker";
 @import "ng-trans";
 @import "rule";
+@import "icons";
 
 // Force vertical scrollbar
 html {
@@ -39,41 +40,6 @@ html {
 
 .strong{
     font-weight:bold;
-}
-
-.fa-gims-loading {
-    &.hide {
-        display: none !important;
-    }
-
-    @extend .fa-refresh;
-    @extend .fa-spin;
-}
-
-
-.fa-gims-back {
-    @extend .fa-reply;
-}
-
-.fa-gims-filterset {
-    @extend .fa-tags;
-}
-
-.fa-gims-filter {
-    @extend .fa-tag;
-}
-
-.fa-gims-survey {
-    @extend .fa-pencil-square-o;
-}
-
-.fa-gims-rule {
-    @extend .fa-gear;
-}
-
-
-.fa-gims-questionnaire {
-    @extend .fa-paste;
 }
 
 .opacity33{
@@ -113,10 +79,6 @@ div.browse .col-md-4 {
 
 .tab-content {
     overflow: visible;
-}
-
-.fa-grid {
-    padding-right: 10px;
 }
 
 .logo-chart {

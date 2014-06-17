@@ -361,7 +361,7 @@
                             <td ng-if="tabs.selectedQuestionnaireForLabels"></td>
                             <td class="text-center" ng-repeat="questionnaire in tabs.questionnaires track by $index">
                                 <ng-form name="valueForm" class="input-group input-group-sm" ng-class="{'has-error':valueForm.value.$invalid}" tooltip="Leave empty to use official population data">
-                                    <div class="input-group-addon"><i class="fa fa-fw" ng-class="{'fa-male':!questionnaire.populations[tabs.part.id].isLoading,'fa-gims-loading':questionnaire.populations[tabs.part.id].isLoading}"></i></div>
+                                    <div class="input-group-addon"><i class="fa fa-fw" ng-class="{'fa-gims-population':!questionnaire.populations[tabs.part.id].isLoading,'fa-gims-loading':questionnaire.populations[tabs.part.id].isLoading}"></i></div>
                                     <input ng-disabled="questionnaire.isLoading" type="number" class="text-center" placeholder="Population" ng-model="questionnaire.populations[tabs.part.id].population" min="0" name="value"
                                         ng-focus="setInitialValue(questionnaire.populations[tabs.part.id], questionnaire.populations[tabs.part.id].population)"
                                         ng-blur="savePopulation(questionnaire, questionnaire.populations[tabs.part.id])"
