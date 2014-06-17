@@ -7,7 +7,7 @@
 
     <!-- Example row of columns -->
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-sm-6">
             <h2>Data</h2>
             <ul class="nav nav-pills nav-pills-icon">
                 <li>
@@ -18,15 +18,24 @@
                 </li>
             </ul>
         </div>
-        <div class="col-md-4">
+        <div class="col-sm-6">
             <h2>Statistics</h2>
             <p>Questionnaires</p>
             <div class="progress">
-                <div class="progress-bar progress-bar-info" style="width: {{statistics.new / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.new}} / {{statistics.total}} new questionnaires"></div>
-                <div class="progress-bar progress-bar-warning" style="width: {{statistics.completed / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.completed}} / {{statistics.total}} completed questionnaires"></div>
-                <div class="progress-bar progress-bar-success" style="width: {{statistics.validated / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.validated}} / {{statistics.total}} validated questionnaires"></div>
+                <div class="progress-bar" style="width: {{statistics.new / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.new}} / {{statistics.total}} new questionnaires"></div>
+                <div class="progress-bar progress-bar-info" style="width: {{statistics.completed / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.completed}} / {{statistics.total}} completed questionnaires"></div>
+                <div class="progress-bar progress-bar-warning" style="width: {{statistics.validated / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.validated}} / {{statistics.total}} validated questionnaires"></div>
+                <div class="progress-bar progress-bar-success" style="width: {{statistics.published / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.published}} / {{statistics.total}} published questionnaires"></div>
                 <div class="progress-bar progress-bar-danger" style="width: {{statistics.rejected / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.rejected}} / {{statistics.total}} rejected questionnaires"></div>
             </div>
+
+            <ul>
+                <li>{{statistics.new}} new</li>
+                <li>{{statistics.completed}} completed</li>
+                <li>{{statistics.validated}} validated</li>
+                <li>{{statistics.published}} published</li>
+                <li>{{statistics.rejected}} rejected</li>
+            </ul>
 
         </div>
     </div>

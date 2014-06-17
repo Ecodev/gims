@@ -12,6 +12,7 @@ angular.module('myApp').controller('UserCtrl', function($scope, $http, authServi
         if (data.status == 'logged')
         {
             $scope.user = data;
+            $rootScope.user = $scope.user;
         }
     });
 
@@ -24,6 +25,7 @@ angular.module('myApp').controller('UserCtrl', function($scope, $http, authServi
 
         modalInstance.result.then(function(user) {
             $scope.user = user;
+            $rootScope.user = $scope.user;
             authService.loginConfirmed();
             $rootScope.$emit('gims-loginConfirmed', user);
         });
@@ -31,7 +33,7 @@ angular.module('myApp').controller('UserCtrl', function($scope, $http, authServi
 
 });
 
-angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $modalInstance, $log) {
+angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $modalInstance, $log, $rootScope) {
     'use strict';
 
     function resetErrors() {
@@ -57,6 +59,7 @@ angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $m
             {
                 $scope.invalidUsernamePassword = false;
                 $scope.user = data;
+                $rootScope.user = $scope.user;
                 $modalInstance.close(data);
             } else if (data.status == 'failed')
             {

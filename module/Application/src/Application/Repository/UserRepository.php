@@ -13,14 +13,11 @@ class UserRepository extends AbstractRepository
     /**
      * Return statistics for the specified user
      * Currently it's the count questionnaire by status, but it could be more info
-     *
      * @param \Application\Model\User $user
-     *
      * @return array
      */
-    public function getStatistics(\Application\Model\User $user = null)
+    public function getStatistics(\Application\Model\User $user)
     {
-
         $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
         $rsm->addScalarResult('total', 'total');
 
@@ -31,9 +28,14 @@ class UserRepository extends AbstractRepository
             $counts[] = "COUNT(CASE WHEN status = '$status' THEN TRUE ELSE NULL END) AS $status";
         }
 
-        $sql = "SELECT " . join(', ', $counts) . " FROM questionnaire";
-        $quey = $this->getEntityManager()->createNativeQuery($sql, $rsm);
-        $result = $quey->getSingleResult();
+        $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
+        $questionnaires = $questionnaireRepository->getAllWithPermission();
+
+        $sql = "SELECT " . join(', ', $counts) . " FROM questionnaire WHERE id IN (:questionnaires)";
+
+        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+        $query->setParameter('questionnaires', $questionnaires);
+        $result = $query->getSingleResult();
 
         return $result;
     }
@@ -67,7 +69,6 @@ class UserRepository extends AbstractRepository
 
         return $qb->getQuery()->getResult();
     }
-
 
     /**
      * {@inheritdoc}
