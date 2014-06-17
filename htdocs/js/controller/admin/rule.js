@@ -39,6 +39,7 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
 
     $scope.availableTokens = [
         {
+            group: 'Basic',
             name: 'Filter value',
             description: "Reference a filter value.",
             filter: true,
@@ -52,6 +53,7 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             }
         },
         {
+            group: 'Basic',
             name: 'Question label',
             description: 'Reference a question label. If the question has no answer, it will return NULL. When used with ISTEXT(), it can be used to detect if an answer exists.',
             filter: true,
@@ -65,6 +67,7 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             }
         },
         {
+            group: 'Basic',
             name: 'Rule value (Calculations/Estimations/Ratios)',
             description: 'Reference a rule value. Typically used to reference a Calculation, Estimation or Ratio. WARNING: The referenced rule must exist and be applied to the specified questionnaire and part, otherwise computation will fail.',
             filter: false,
@@ -78,6 +81,7 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             }
         },
         {
+            group: 'Basic',
             name: 'Population value',
             description: 'Reference the population data of the questionnaire\'s country. This is an absolute value expressed in number of persons.',
             filter: false,
@@ -91,7 +95,8 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             }
         },
         {
-            name: 'Regression: Filter value',
+            group: 'Regression',
+            name: 'Filter value',
             description: 'Reference a Filter regression value for a specific part and year. The year is defined by the year currently being computed plus a user-defined offset. To express "1 year earlier" the offset would be -1, and for "3 years later", it would be +3. To stay on the same year, use an offset of 0.',
             filter: true,
             questionnaire: false,
@@ -105,7 +110,8 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             }
         },
         {
-            name: 'Regression: List of all filter values',
+            group: 'Regression',
+            name: 'List of all filter values',
             description: 'Reference a list of available filter values for all questionnaires. The result use Excel array constant syntax (eg: "{1,2,3}"). This should be used with Excel functions such as COUNT() and AVERAGE().',
             filter: true,
             questionnaire: false,
@@ -118,7 +124,8 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             }
         },
         {
-            name: 'Regression: Cumulated population',
+            group: 'Regression',
+            name: 'Cumulated population',
             description: 'Reference the cumulated population for all current questionnaires for the specified part.',
             filter: false,
             questionnaire: false,
@@ -131,7 +138,8 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             }
         },
         {
-            name: 'Regression: Current year',
+            group: 'Regression',
+            name: 'Current year',
             description: 'Reference the year we are currently computing. This may be useful for very exceptional edge cases, but should be avoided as much as possible.',
             filter: false,
             questionnaire: false,
@@ -144,6 +152,7 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             }
         },
         {
+            group: null,
             name: 'Value if this rule is ignored',
             description: 'Reference the value if computed without this rule. It allows to conditionally apply a rule with syntaxes such as "IF(can_apply_my_rule, compute_some_result, {self})".',
             filter: false,

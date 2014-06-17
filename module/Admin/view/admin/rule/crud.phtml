@@ -61,7 +61,7 @@
                                         <select class="col-sm-8"
                                                 name="token" id="token.selected"
                                                 ng-model="token.selected"
-                                                ng-options="t.name for t in availableTokens">
+                                                ng-options="t.name group by t.group for t in availableTokens">
                                             <option style="display:none" value="">Select a syntax to insert</option>
                                         </select>
                                         <p class="help-block col-sm-12 ng-trans ng-trans-fade-up" ng-show="token.selected.description">{{token.selected.description}}</p>
