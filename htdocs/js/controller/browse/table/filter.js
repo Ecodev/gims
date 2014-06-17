@@ -19,9 +19,9 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.filterFields = {fields: 'color,paths'};
     $scope.countryParams = {fields: 'geoname'};
     var countryFields = {fields: 'geoname.questionnaires,geoname.questionnaires.survey,geoname.questionnaires.survey.questions,geoname.questionnaires.survey.questions.type,geoname.questionnaires.survey.questions.filter'};
-    var questionnaireWithQTypeFields = {fields: 'survey.questions,survey.questions.type,survey.questions.isAbsolute'};
-    var questionnaireWithAnswersFields = {fields: 'filterQuestionnaireUsages,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part'};
-    var surveyFields = {fields: 'questionnaires.survey,questionnaires.survey.questions,questionnaires.survey.questions.type,questionnaires.survey.questions.filter'};
+    var questionnaireWithQTypeFields = {fields: 'status,survey.questions,survey.questions.type,survey.questions.isAbsolute'};
+    var questionnaireWithAnswersFields = {fields: 'status,filterQuestionnaireUsages,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part'};
+    var surveyFields = {fields: 'questionnaires.status,questionnaires.survey,questionnaires.survey.questions,questionnaires.survey.questions.type,questionnaires.survey.questions.filter'};
 
     // Subscribe to listen when there is network activity
     $scope.isLoading = false;
@@ -42,6 +42,13 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.parts = Restangular.all('part').getList().$object;
     $scope.modes = ['Browse', 'Contribute'];
     $scope.surveysTemplate = "[[item.code]] - [[item.name]]";
+    $scope.questionnairesStatus = {
+        validated: false,
+        published: false,
+        completed: true,
+        rejected: true,
+        'new': true
+    };
 
     /**************************************************************************/
     /*************************************************************** Watchers */
@@ -318,7 +325,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             }
 
             // create answer, if allowed by questionnaire
-        } else if (_.isUndefined(answer.id) && $scope.isValidNumber(answer[question.value]) && questionnaire.permissions.create) {
+        } else if (_.isUndefined(answer.id) && $scope.isValidNumber(answer[question.value]) && $scope.questionnairesStatus[questionnaire.status]) {
             answer.isLoading = true;
             answer.questionnaire = questionnaire.id;
             question.survey = questionnaire.survey.id;

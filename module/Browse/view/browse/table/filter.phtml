@@ -240,6 +240,11 @@
 
                                         <li class="divider"></li>
 
+                                        <li ng-if="questionnairesWithUsages.length && !questionnaire.filterQuestionnaireUsages.length" class="dropdown-header">Status</li>
+                                        <li><a><i class="fa fa-fw fa-flag"></i> {{questionnaire.status|capital}}</a></li>
+
+                                        <li class="divider"></li>
+
                                         <!-- Questions labels edition button, display an additionnal column -->
                                         <li>
                                             <a ng-click="questionnaire.showLabels = true" href>
@@ -259,7 +264,7 @@
                                         <li ng-show="questionnairesWithUsages.length && !questionnaire.filterQuestionnaireUsages.length" class="divider"></li>
 
                                         <!-- Duplicate rules -->
-                                        <li ng-if="questionnairesWithUsages.length && !questionnaire.filterQuestionnaireUsages.length" class="dropdown-header"><i class="fa fa-cog fa-fw fa-lg"></i> Suggested formulas</li>
+                                        <li ng-if="questionnairesWithUsages.length && !questionnaire.filterQuestionnaireUsages.length" class="dropdown-header">Suggested formulas</li>
                                         <li ng-repeat="q in questionnairesWithUsages"
                                             ng-if="q.id && (!questionnaire.filterQuestionnaireUsages || !questionnaire.filterQuestionnaireUsages.length)"
                                             ng-attr-tooltip="{{!questionnaire.id && 'When the survey is saved, click here to report the same formulas'}}"
@@ -526,7 +531,7 @@
                                                        ng-blur="saveAnswer(questionnaire.survey.questions[filter.id].answers[tabs.part.id], questionnaire.survey.questions[filter.id], filter, questionnaire, tabs.part)"
                                                        percent-placeholder="{{questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first}}"
                                                        ng-model="questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]"
-                                                       ng-disabled="questionnaire.survey.questions[filter.id].answers[tabs.part.id].permissions.update == false ||
+                                                       ng-disabled="!questionnairesStatus[questionnaire.status] ||
                                                                     !isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) && questionnaire.permissions.create === false ||
                                                                     sector && questionnaire.id" />
 

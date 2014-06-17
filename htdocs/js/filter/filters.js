@@ -25,4 +25,16 @@ angular.module('myApp.filters').filter('interpolate', function(version) {
 
         return Math.round(number);
     };
-});
+}).filter('capital', function() {
+    'use strict';
+
+    return function(text) {
+
+        if (text.length > 0) {
+            return text.charAt(0).toUpperCase() + text.slice(1);
+        }
+
+        return text;
+    };
+})
+;
