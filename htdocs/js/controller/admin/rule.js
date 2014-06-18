@@ -208,7 +208,7 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             }
         };
 
-        var validateFields = fields;
+        var validateFields = _.clone(fields);
         validateFields.validate = true;
         if ($scope.rule.id) {
             $scope.rule.put(validateFields).then(success, fail);
