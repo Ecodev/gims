@@ -228,6 +228,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      */
     public function get($id)
     {
+        /* @todo : when retrieving multiple objects, return correct objects instead of an error (404 or access not granted) as soon as there is a single error */
         $objects = array();
         foreach (explode(',', $id) as $id) {
             $object = $this->getRepository()->findOneById($id);
@@ -344,7 +345,10 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $result = $this->postUpdate($object, $data);
 
         if (!$result) {
+            _log()->debug('nothing received from post update');
             $result = new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
+        } else {
+            _log()->debug('youpi !!');
         }
 
         return $result;

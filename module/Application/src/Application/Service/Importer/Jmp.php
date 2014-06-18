@@ -137,7 +137,7 @@ class Jmp extends AbstractImporter
         $this->getEntityManager()->flush();
 
         $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
-        $answerRepository->updateAbsoluteValueFromPercentageValue();
+        $answerRepository->completePopulationAnswer();
 
         return <<<STRING
 

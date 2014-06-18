@@ -496,18 +496,14 @@
                                                             <a><i class="fa fa-save fa-fw"></i> Stored value : {{questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]}}</a>
                                                         </li>
                                                         <li ng-if="questionnaire.survey.questions[filter.id].answers[tabs.part.id].error">
-                                                            <a><i class="fa fa-warning text-warning"></i> {{questionnaire.survey.questions[filter.id].answers[tabs.part.id].error.data.detail}}</a>
+                                                            <a><i class="fa fa-warning text-warning"></i> This answer has not been saved.</a>
                                                         </li>
                                                         <!--<li ng-if="!isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) && isValidNumber(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second)"><a><i class="fa fa-cog fa-fw"></i></a></li>-->
-                                                        <li ng-if="questionnaire.permissions.update && questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id" class="divider"></li>
-                                                        <li ng-if="questionnaire.permissions.update" class="dropdown-header">Actions</li>
-                                                        <li ng-if="questionnaire.permissions.update">
-                                                            <a href ng-click="toggleQuestionAbsolute(questionnaire, questionnaire.survey.questions[filter.id],questionnaire.survey.questions[filter.id].answers[tabs.part.id])"><i class="fa fa-fw">%</i>
-                                                                Set question as
-                                                                <span ng-if="questionnaire.survey.questions[filter.id].isAbsolute">percent</span>
-                                                                <span ng-if="!questionnaire.survey.questions[filter.id].isAbsolute">absolute</span>
-                                                                value
-                                                            </a>
+                                                        <li ng-if="questionnairesStatus[questionnaire.status] && questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id" class="divider"></li>
+                                                        <li ng-if="questionnairesStatus[questionnaire.status]" class="dropdown-header">Actions</li>
+                                                        <li ng-if="questionnairesStatus[questionnaire.status]">
+                                                            <a href ng-if="questionnaire.survey.questions[filter.id].isAbsolute" ng-click="toggleQuestionAbsolute(questionnaire, questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id])"><i class="fa fa-fw">%</i> Set question as percent value</a>
+                                                            <a href ng-if="!questionnaire.survey.questions[filter.id].isAbsolute" ng-click="toggleQuestionAbsolute(questionnaire, questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id])"><i class="fa fa-fw fa-plus-square-o"></i> Set question as absolute value</a>
                                                         </li>
                                                         <li ng-if="questionnaire.survey.questions[filter.id].answers[tabs.part.id].id">
                                                             <a href ng-click="removeAnswer(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id], questionnaire.permissions)">
@@ -532,7 +528,7 @@
                                                        percent-placeholder="{{questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first}}"
                                                        ng-model="questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]"
                                                        ng-disabled="!questionnairesStatus[questionnaire.status] ||
-                                                                    !isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) && questionnaire.permissions.create === false ||
+                                                                    questionnaire.survey.questions[filter.id].answers[tabs.part.id].permissions.update === false ||
                                                                     sector && questionnaire.id" />
 
                                                 <span class="input-group-addon" ng-if="!isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) && (!!questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second || !!questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first)" tooltip="Percent value (between 0 and 100)" tooltip-placement="left"><i class="fa fa-fw">%</i></span>

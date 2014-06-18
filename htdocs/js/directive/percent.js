@@ -19,6 +19,7 @@ angular.module('myApp.directives').directive('percent', function() {
                     val = Math.round(val * 1000) / 1000;
                     return val;
                 }
+
                 return '';
             }
 
@@ -46,6 +47,8 @@ angular.module('myApp.directives').directive('percent', function() {
                     }
                     return round3decimals(val);
                 }
+
+                return val;
             }
 
             /**
@@ -60,12 +63,11 @@ angular.module('myApp.directives').directive('percent', function() {
                     ngModel.$formatters.push(toInput);
                     ngModel.$modelValue = toInput(ngModel.$modelValue);
                     ngModel.$render();
-                } else {
-                    ngModel.$setViewValue(ngModel.$viewValue);
                 }
             });
 
             scope.$watch('percentPlaceholder', function() {
+                /** @todo : all rules are considered as percent, so *100 is hardcoded. Ideally should not be, but we can't know if the result of a formula is percent or absolute */
                 var placeholder = !_.isUndefined(scope.percentPlaceholder) ? round3decimals(scope.percentPlaceholder * 100) : '';
                 element.attr('placeholder', placeholder);
             });

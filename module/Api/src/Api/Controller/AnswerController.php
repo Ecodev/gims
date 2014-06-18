@@ -12,29 +12,34 @@ class AnswerController extends AbstractChildRestfulController
      * Compute absolute values based on percentage values of newly created answer
      * @param \Application\Model\AbstractModel $answer
      * @param array $data
+     * @return void|\Zend\View\Model\JsonModel
      */
     protected function postCreate(AbstractModel $answer, array $data)
     {
-        $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
-        $answerRepository->updateAbsoluteValueFromPercentageValue($answer);
+        return $this->completePopulationAnswer($answer, $data);
     }
 
     /**
-     * @param int   $id
+     * Compute absolute values based on percentage values of newly created answer
+     * @param \Application\Model\AbstractModel $answer
      * @param array $data
-     *
-     * @return mixed|JsonModel
+     * @return void|\Zend\View\Model\JsonModel
      */
-    public function update($id, $data)
+    protected function postUpdate(AbstractModel $answer, array $data)
     {
-        $result = parent::update($id, $data);
+        return $this->completePopulationAnswer($answer, $data);
+    }
 
-        // Compute absolute values based on percentage values
-        $answerRepository = $this->getRepository();
-        $answer = $answerRepository->findOneById($id);
-        $answerRepository->updateAbsoluteValueFromPercentageValue($answer);
+    protected function completePopulationAnswer(AbstractModel $answer)
+    {
+        $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
+        $answerRepository->completePopulationAnswer($answer);
+        $this->getEntityManager()->clear('Application\Model\Answer'); // clear answers to recover new values
+        $answer = $answerRepository->findOneById($answer->getId());
 
-        return $result;
+        $result = $this->hydrator->extract($answer, $this->getJsonConfig());
+
+        return new JsonModel($result);
     }
 
 }
