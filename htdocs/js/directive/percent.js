@@ -56,9 +56,11 @@ angular.module('myApp.directives').directive('percent', function() {
              * Then just set viewValue as new viewValue (happens when swap between percent and value)
              *  -> when changing, viewValue stay the same but the modelValue changes
              */
-            scope.$watch('percent', function(newAbsolute, oldAbsolute) {
+            var added = false;
+            scope.$watch('percent', function(newAbsolute) {
                 scope.isPercent = !_.isUndefined(newAbsolute) ? !newAbsolute : newAbsolute;
-                if (!_.isUndefined(scope.isPercent) && _.isUndefined(oldAbsolute)) {
+                if (!_.isUndefined(scope.isPercent) && !added) {
+                    added = true;
                     ngModel.$parsers.push(toModel);
                     ngModel.$formatters.push(toInput);
                     ngModel.$modelValue = toInput(ngModel.$modelValue);
