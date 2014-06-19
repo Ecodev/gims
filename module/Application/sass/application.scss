@@ -24,7 +24,9 @@ input.error {
     font-size: 80%;
 }
 
-@import "font-awesome";
+$fa-font-path: "../lib/fontawesome/fonts";
+
+@import "../../../htdocs/lib/fontawesome/scss/font-awesome.scss";
 @import "ng-grid";
 @import "splash";
 @import "sticky-footer";
