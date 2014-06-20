@@ -2,16 +2,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     'use strict';
 
     /**************************************************************************/
-    /***************************************** First execution initialisation */
-    /**************************************************************************/
-
-    if ($location.$$path.indexOf('/contribute') >= 0) {
-        $scope.mode = 'Contribute';
-    } else if ($location.$$path.indexOf('/browse') >= 0) {
-        $scope.mode = 'Browse';
-    }
-
-    /**************************************************************************/
     /*********************************************** Variables initialisation */
     /**************************************************************************/
 
@@ -40,11 +30,40 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         'new': true
     };
 
+    $scope.modes = [
+        {
+            name: 'Browse',
+            isContribute: false,
+            isSector: false
+        },
+        {
+            name: 'Contribute : JMP',
+            isContribute: true,
+            isSector: false
+        }
+        /* @todo : implement full sector view, and not just create */
+        //        ,{
+        //            name : 'Contribute : NSA',
+        //            isContribute : true,
+        //            isSector : true
+        //        }
+    ];
+
+    /**************************************************************************/
+    /***************************************** First execution initialisation */
+    /**************************************************************************/
+
+    if ($location.$$path.indexOf('/contribute') >= 0) {
+        $scope.mode = $scope.modes[1];
+    } else if ($location.$$path.indexOf('/browse') >= 0) {
+        $scope.mode = $scope.modes[0];
+    }
+
     /**************************************************************************/
     /*************************************************************** Watchers */
     /**************************************************************************/
 
-        // Subscribe to listen when there is network activity
+    // Subscribe to listen when there is network activity
     $scope.isLoading = false;
     requestNotification.subscribeOnRequest(function() {
         $scope.isLoading = true;
@@ -180,6 +199,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /**************************************************************************/
     /******************************************************** Scope functions */
     /**************************************************************************/
+
+    $scope.setMode = function(i) {
+        $scope.mode = $scope.modes[i];
+    };
 
     /**
      * Refreshing page means :
@@ -433,23 +456,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         }, 0);
 
         return deferred.promise;
-    };
-
-    /**
-     * Select next view mode
-     */
-    $scope.nextMode = function() {
-        _.forEach($scope.modes, function(mode, index) {
-            if (mode === $scope.mode) {
-                if (index === $scope.modes.length - 1) {
-                    $scope.mode = $scope.modes[0];
-                } else {
-                    $scope.mode = $scope.modes[index + 1];
-                }
-
-                return false;
-            }
-        });
     };
 
     /**
