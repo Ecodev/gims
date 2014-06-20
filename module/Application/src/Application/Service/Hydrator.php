@@ -80,7 +80,7 @@ class Hydrator
     /**
      * Merge with default properties
      *
-     * @param string $className
+     * @param AbstractModel $object
      * @param array  $properties
      *
      * @return array

@@ -299,6 +299,21 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
     }
 
     /**
+     * Set new summands, replacing entirely existing summands
+     * @param \Doctrine\Common\Collections\ArrayCollection $summands
+     * @return self
+     */
+    public function setSummands(\Doctrine\Common\Collections\ArrayCollection $summands)
+    {
+        $this->getSummands()->clear();
+        foreach ($summands as $summand) {
+            $this->addSummand($summand);
+        }
+
+        return $this;
+    }
+
+    /**
      * Return all questions that are associated to this filter
      * @param $survey \Application\Model\Survey restrict questions for given survey
      * @return \Doctrine\Common\Collections\ArrayCollection
