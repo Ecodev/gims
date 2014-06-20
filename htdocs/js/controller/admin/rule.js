@@ -194,9 +194,9 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             return;
         }
 
-        var success = function(a) {
+        var success = function(validatedRule) {
             $scope.messages = [];
-            $scope.rule = a;
+            $scope.rule = validatedRule;
         };
 
         var fail = function(response) {
@@ -272,7 +272,7 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             $scope.rule = rule;
         });
     } else {
-        $scope.rule = {};
+        $scope.rule = {formula: '='};
     }
 });
 

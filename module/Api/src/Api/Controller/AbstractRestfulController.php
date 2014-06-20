@@ -178,7 +178,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             $object->validate();
             $this->getResponse()->setStatusCode(200);
 
-            return new JsonModel(array());
+            return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
         }
 
         // If not allowed to create object, cancel everything
