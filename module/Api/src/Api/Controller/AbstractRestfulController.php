@@ -173,9 +173,6 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $object = new $modelName();
         $this->hydrator->hydrate($data, $object);
 
-        // If not allowed to create object, cancel everything
-        $this->checkActionGranted($object, 'create');
-
         // If only want to validate, do it then return empty data
         if ($this->isOnlyValidation()) {
             $object->validate();
@@ -183,6 +180,9 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
 
             return new JsonModel(array());
         }
+
+        // If not allowed to create object, cancel everything
+        $this->checkActionGranted($object, 'create');
 
         $this->getEntityManager()->persist($object);
         $this->getEntityManager()->flush();
@@ -328,16 +328,20 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         // First, hydrate the object in case the hydration changes the context used for ACL evaluation
         $this->hydrator->hydrate($data, $object);
 
-        // If not allowed to update the object, cancel everything
-        $this->checkActionGranted($object, 'update');
-
         // If only want to validate, do it then return modified object
         if ($this->isOnlyValidation()) {
+
+            // If not allowed to read the object, cancel the validation
+            $this->checkActionGranted($object, 'read');
+
             $object->validate();
             $this->getResponse()->setStatusCode(200);
 
             return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
         }
+
+        // If not allowed to update the object, cancel everything
+        $this->checkActionGranted($object, 'update');
 
         $this->getEntityManager()->flush();
         $this->getResponse()->setStatusCode(201);
