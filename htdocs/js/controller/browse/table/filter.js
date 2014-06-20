@@ -105,6 +105,15 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         if ($scope.tabs.filter) {
             Restangular.one('filter', $scope.tabs.filter.id).getList('children', _.merge($scope.filterFields, {perPage: 1000})).then(function(filters) {
                 if (filters) {
+
+                    // Inject parent as first filter, so we are able to see the "main" value
+                    _.forEach(filters, function(filter) {
+                        filter.level++;
+                    });
+                    var parent = _.clone($scope.tabs.filter);
+                    parent.level = 0;
+                    filters.unshift(parent);
+
                     $scope.tabs.filters = filters;
                     $scope.tabs.filterSet = null;
                     if ($scope.sector) {
