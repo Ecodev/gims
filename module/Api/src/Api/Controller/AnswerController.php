@@ -34,9 +34,7 @@ class AnswerController extends AbstractChildRestfulController
     {
         $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $answerRepository->completePopulationAnswer($answer);
-        $this->getEntityManager()->clear('Application\Model\Answer'); // clear answers to recover new values
-        $answer = $answerRepository->findOneById($answer->getId());
-
+        $this->getEntityManager()->refresh($answer);
         $result = $this->hydrator->extract($answer, $this->getJsonConfig());
 
         return new JsonModel($result);
