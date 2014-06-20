@@ -14,6 +14,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     var surveyFields = {fields: 'questionnaires.status,questionnaires.survey,questionnaires.survey.questions,questionnaires.survey.questions.type,questionnaires.survey.questions.filter'};
 
     // Variables initialisations
+    $scope.expandHierarchy = true;
     $scope.expandSelection = true;
     $scope.lastFilterId = 1;
     $scope.firstQuestionnairesRetrieve = false; // avoid to compute filters before questionnaires have been retrieved, getComputedFilters() need ready base to complete data
