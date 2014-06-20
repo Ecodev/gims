@@ -10,6 +10,20 @@ class RuleRepository extends \Application\Repository\AbstractRepository
     const FORMULA_COMPONENT_PATTERN = '(Q\#|F\#|R\#|P\#|L\#|Y[+-]?|\d+|current|all|,)*';
 
     /**
+     * Returns all items with permissions
+     * @param string $action
+     * @param string $search
+     * @return array
+     */
+    public function getAllWithPermission($action = 'read', $search = null)
+    {
+        $qb = $this->createQueryBuilder('rule');
+        $this->addSearch($qb, $search, ['rule.name', 'rule.formula']);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
      * Returns the single character identifying the type of object in formula
      * @param \Application\Model\Rule\ReferencableInterface $reference
      * @return string single character to be used in formula
