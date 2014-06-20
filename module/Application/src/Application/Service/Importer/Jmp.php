@@ -157,6 +157,7 @@ STRING;
      * Standardize Survey code
      * @param string $code
      * @param string $year
+     * @return string standardized code
      */
     public function standardizeSurveyCode($code, $year)
     {
@@ -178,6 +179,13 @@ STRING;
         $code = trim($code);
         if (isset($codeMapping[$code])) {
             $code = $codeMapping[$code];
+        }
+
+        // Sometimes the year and code does not match, we fix it here. Eg: JMP99, 1998 => JMP98, 1998
+        if ($code == 'JMP99' && $year == 1998) {
+            $code = 'JMP98';
+        } elseif ($code == 'CEN93' && $year == 1990) {
+            $code = 'CEN90';
         }
 
         return $code;
