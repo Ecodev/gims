@@ -36,8 +36,7 @@ class QuestionnaireUsageValue extends AbstractBasicToken
 
     public function getStructure(array $matches, Parser $parser)
     {
-        $usage = $parser->getQuestionnaireUsageRepository()->findOneById($matches[1]);
-        $rule = $usage->getRule();
+        $rule = $parser->getRuleRepository()->findOneById($matches[1]);
 
         return [
             'type' => 'ruleValue',

@@ -36,7 +36,7 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
         $parser->setFilterRepository($this->getStubFilterRepository('Filter'));
         $parser->setQuestionnaireRepository($this->getStubFilterRepository('Questionnaire'));
         $parser->setPartRepository($this->getStubFilterRepository('Part'));
-        $parser->setQuestionnaireUsageRepository($this->getStubFilterRepository('Rule\QuestionnaireUsage'));
+        $parser->setRuleRepository($this->getStubFilterRepository('Rule\Rule'));
 
         $f1 = $this->getNewModelWithId('\Application\Model\Filter');
         $f1->setName('filter 1');
@@ -55,7 +55,8 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
 
 
         $q = $this->getNewModelWithId('\Application\Model\Rule\QuestionnaireUsage');
-        $rule = new \Application\Model\Rule\Rule('test rule');
+        $rule = $this->getNewModelWithId('\Application\Model\Rule\Rule');
+        $rule->setName('test rule');
         $q->setRule($rule);
 
 

@@ -20,7 +20,7 @@ use \Application\Traits\EntityManagerAware;
     private $filterRepository;
     private $questionnaireRepository;
     private $partRepository;
-    private $questionnaireUsageRepository;
+    private $ruleRepository;
 
     /**
      * @var array
@@ -130,28 +130,28 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
-     * Set the questionnaireusage repository
-     * @param \Application\Repository\Rule\QuestionnaireUsageRepository $questionnaireUsageRepository
+     * Set the rule repository
+     * @param \Application\Repository\Rule\RuleRepository $ruleRepository
      * @return \Application\Service\Calculator\Calculator
      */
-    public function setQuestionnaireUsageRepository(\Application\Repository\Rule\QuestionnaireUsageRepository $questionnaireUsageRepository)
+    public function setRuleRepository(\Application\Repository\Rule\RuleRepository $ruleRepository)
     {
-        $this->questionnaireUsageRepository = $questionnaireUsageRepository;
+        $this->ruleRepository = $ruleRepository;
 
         return $this;
     }
 
     /**
-     * Get the questionnaireusage repository
-     * @return \Application\Repository\Rule\QuestionnaireUsageRepository
+     * Get the rule repository
+     * @return \Application\Repository\Rule\RuleRepository
      */
-    public function getQuestionnaireUsageRepository()
+    public function getRuleRepository()
     {
-        if (!$this->questionnaireUsageRepository) {
-            $this->questionnaireUsageRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireUsage');
+        if (!$this->ruleRepository) {
+            $this->ruleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Rule');
         }
 
-        return $this->questionnaireUsageRepository;
+        return $this->ruleRepository;
     }
 
     /**
