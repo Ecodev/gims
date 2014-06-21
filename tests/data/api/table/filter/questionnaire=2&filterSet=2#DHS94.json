@@ -170,7 +170,7 @@
     {
         "filter": {
             "id": 53,
-            "name": "Covered cistern\/tank",
+            "name": "Rainwater into covered cistern\/tank",
             "level": 1
         },
         "values": [
@@ -184,7 +184,7 @@
     {
         "filter": {
             "id": 56,
-            "name": "with other improved",
+            "name": "Bottled water with other improved",
             "level": 1
         },
         "values": [
@@ -534,7 +534,7 @@
     {
         "filter": {
             "id": 53,
-            "name": "Covered cistern\/tank",
+            "name": "Rainwater into covered cistern\/tank",
             "level": 1
         },
         "values": [
@@ -548,7 +548,7 @@
     {
         "filter": {
             "id": 56,
-            "name": "with other improved",
+            "name": "Bottled water with other improved",
             "level": 1
         },
         "values": [

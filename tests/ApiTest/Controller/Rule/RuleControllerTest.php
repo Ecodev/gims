@@ -124,11 +124,16 @@ class RuleControllerTest extends AbstractRestfulControllerTest
         $validData = array(
             'name' => 'new-rule A',
         );
+        $expected = [
+            'id' => null,
+            'name' => 'new-rule A',
+            'formula' => '=',
+        ];
 
         $this->dispatch($this->getRoute('post') . '?validate', Request::METHOD_POST, $validData);
         $this->assertResponseStatusCode(200);
         $actual = $this->getJsonResponse();
-        $this->assertEquals([], $actual, 'new object should not be created');
+        $this->assertEquals($expected, $actual, 'new object should not be created, but still returned');
 
         $invalidData = array(
             'name' => 'new-rule A',
