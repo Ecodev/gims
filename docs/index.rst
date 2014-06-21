@@ -14,6 +14,7 @@ Contents:
     content/introduction
     content/rule
     content/computing
+    content/rest
     content/glossary
 
 Indices and tables
