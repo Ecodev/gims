@@ -421,7 +421,7 @@
 
                             <!-- Filter name column-->
                             <td>
-                                <div ng-show="isValidId(filter) || filter.sectorChild" ng-class="{'strong':filter.level == tabs.filters[0].level && !filter.sectorChild}" style="margin-left:{{filter.level - tabs.filters[0].level}}em;">
+                                <div ng-show="isValidId(filter) || filter.sectorChild" ng-class="{'strong':filter.level == tabs.filters[0].level && !filter.sectorChild}" style="margin-left:{{(filter.level - tabs.filters[0].level) * 2}}em;">
                                     <i class="fa" style="color:{{filter.color}}" ng-class="{'text-muted':filter.sectorChild, 'fa-gims-filter':!filter.isLoading && !filter.sectorChild, 'fa-asterisk text-primary':!filter.isLoading && filter.sectorChild, 'fa-gims-loading':filter.isLoading}"></i>
                                     {{filter.name}}
                                     <a href="/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}" ng-show="mode.name != 'Browse' && !filter.sectorChild && filter.hover"><i class="fa fa-pencil"></i></a>
