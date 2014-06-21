@@ -16,6 +16,7 @@ class QuestionnaireRepository extends AbstractChildRepository
     public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
     {
         $qb = $this->createQueryBuilder('questionnaire');
+        $qb->join('questionnaire.survey', 'survey', \Doctrine\ORM\Query\Expr\Join::WITH);
 
         if ($parent) {
             $qb->where($parentName . ' = :parent');
@@ -31,8 +32,8 @@ class QuestionnaireRepository extends AbstractChildRepository
         $this->addPermission($qb, 'questionnaire', \Application\Model\Permission::getPermissionName($this, $action), $exceptionDql);
 
         if ($search) {
-            $qb->join('questionnaire.geoname', 'g', \Doctrine\ORM\Query\Expr\Join::WITH);
-            $this->addSearch($qb, $search, array('survey.code', 'g.name'));
+            $qb->join('questionnaire.geoname', 'geoname', \Doctrine\ORM\Query\Expr\Join::WITH);
+            $this->addSearch($qb, $search, array('survey.code', 'geoname.name'));
         }
 
         return $qb->getQuery()->getResult();
