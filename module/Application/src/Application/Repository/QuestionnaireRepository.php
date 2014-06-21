@@ -15,9 +15,7 @@ class QuestionnaireRepository extends AbstractChildRepository
      */
     public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
     {
-
         $qb = $this->createQueryBuilder('questionnaire');
-        $qb->join('questionnaire.survey', 'survey', \Doctrine\ORM\Query\Expr\Join::WITH);
 
         if ($parent) {
             $qb->where($parentName . ' = :parent');

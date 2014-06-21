@@ -133,6 +133,7 @@ class QuestionRepository extends AbstractChildRepository
 
     /**
      * Get one question, without taking into consideration its type
+     * @param integer $id
      */
     public function getOneById($id)
     {

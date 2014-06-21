@@ -30,7 +30,7 @@ abstract class AbstractRepository extends EntityRepository
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param string $context
      * @param string $permission
-     * @param null|string $exceptionDql an condition expressed in DQL to bypass all security check. This should almost never be used !
+     * @param null|string $exceptionDql a condition expressed in DQL to bypass all security check. This should almost never be used !
      * @throws Exception
      */
     protected function addPermission(QueryBuilder $qb, $context, $permission, $exceptionDql = null)
@@ -48,12 +48,17 @@ abstract class AbstractRepository extends EntityRepository
         }
 
         if ($exceptionDql) {
-            $exceptionDql = ' OR (' . $exceptionDql . ')';
+            $exceptionDql = '(' . $exceptionDql . ') OR ';
         }
 
-        $qb->leftJoin("Application\Model\\$relationType", 'relation', Join::WITH, "(relation.$context = $context AND relation.user = :permissionUser)" . $exceptionDql);
-        $qb->join('Application\Model\Role', 'role', Join::WITH, "relation.role = role OR role.name = :permissionDefaultRole");
-        $qb->join('Application\Model\Permission', 'permission', Join::WITH, "permission MEMBER OF role.permissions AND permission.name = :permissionPermission");
+        $qb->andWhere("($exceptionDql
+            EXISTS (
+                SELECT relation.id FROM Application\Model\\$relationType relation
+                INNER JOIN Application\Model\Role role WITH relation.role = role OR role.name = :permissionDefaultRole
+                INNER JOIN Application\Model\Permission permission WITH permission MEMBER OF role.permissions AND permission.name = :permissionPermission
+                WHERE relation.user = :permissionUser AND relation.$context = $context.id
+            )
+        )");
 
         $user = \Application\Model\User::getCurrentUser();
         $defaultRole = $user ? 'member' : 'anonymous';
