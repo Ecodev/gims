@@ -184,42 +184,42 @@ use \Application\Traits\EntityManagerAware;
                     'isImproved' => false,
                     'formulas' => array(
                         'default' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
-                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
-                            array(5, '=IF(Total improved = 1, 0, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
+                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
+                            array(5, '=IF(Total improved = 100%, 0%, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
                         'onlyTotal' => array(
                             array(3, '=Surface waterTOTAL'),
                             array(4, '=Surface waterTOTAL'),
-                            array(5, '=IF(Total improved = 1, 0, {self})'),
+                            array(5, '=IF(Total improved = 100%, 0%, {self})'),
                         ),
                         'onlyRural' => array(
-                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
+                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
                             array(5, '=Surface waterRURAL'),
                         ),
                         'onlyUrban' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
                             array(5, '=Surface waterURBAN'),
                         ),
                         'Belarus' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
-                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.99, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
-                            array(5, '=IF(Total improved = 1, 0, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
+                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
+                            array(5, '=IF(Total improved = 100%, 0%, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
                         'TFYR Macedonia' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
                             array(4, '=Surface waterURBAN'),
-                            array(5, '=IF(Total improved = 1, 0, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
+                            array(5, '=IF(Total improved = 100%, 0%, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
                         'United States of America' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.993, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
-                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.936, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
-                            array(5, '=IF(Total improved = 1, 0, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.3%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
+                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 93.6%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
+                            array(5, '=IF(Total improved = 100%, 0%, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
                         'Saudi Arabia' => array(
                             array(3, '=Surface waterTOTAL'),
                             array(4, '=Surface waterTOTAL'),
-                            array(5, '=IF(Total improved = 1, 0, {self})'),
+                            array(5, '=IF(Total improved = 100%, 0%, {self})'),
                         ),
                     ),
                 ),
@@ -261,27 +261,27 @@ use \Application\Traits\EntityManagerAware;
                     'isImproved' => false,
                     'formulas' => array(
                         'default' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
-                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
-                            array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
+                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
+                            array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
                         ),
                         'onlyTotal' => array(
                             array(3, '=Other UnimprovedTOTAL'),
                             array(4, '=Other UnimprovedTOTAL'),
-                            array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
+                            array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
                         ),
                         'onlyRural' => array(
-                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
+                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
                             array(5, '=Other UnimprovedRURAL'),
                         ),
                         'onlyUrban' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
                             array(5, '=Other UnimprovedURBAN'),
                         ),
                         'Saudi Arabia' => array(
                             array(3, '=Other UnimprovedTOTAL'),
                             array(4, '=Other UnimprovedTOTAL'),
-                            array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
+                            array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
                         ),
                     ),
                 ),
@@ -459,45 +459,45 @@ use \Application\Traits\EntityManagerAware;
                     'formulas' => array(
                         'default' => array(
                             // Additionnal rules for developed countries
-                            array(3, "=IF(AND(Improved + shared > 0.995, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
-                            array(4, "=IF(AND(Improved + shared > 0.995, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            array(3, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            array(4, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
-                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                             array(5, "=IF(AND(ISNUMBER(ImprovedURBAN), ISNUMBER(ImprovedRURAL)), (ImprovedURBAN * POPULATION_URBAN + ImprovedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)"),
                         ),
                         'onlyTotal' => array(
                             array(3, '=ImprovedTOTAL'),
                             array(4, '=ImprovedTOTAL'),
-                            array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                         ),
                         'onlyRural' => array(
                             // Additionnal rules for developed countries
-                            array(4, "=IF(AND(Improved + shared > 0.995, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            array(4, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                             array(5, '=ImprovedRURAL'),
                         ),
                         'onlyUrban' => array(
                             // Additionnal rules for developed countries
-                            array(3, "=IF(AND(Improved + shared > 0.995, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            array(3, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                             array(5, '=ImprovedURBAN'),
                         ),
                         'United States of America' => array(
                             // Additionnal rules for developed countries
-                            array(3, "=IF(AND(Improved + shared > 0.995, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
-                            array(4, "=IF(AND(Improved + shared > 0.984, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            array(3, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            array(4, "=IF(AND(Improved + shared > 98.4%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
-                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                             array(5, "=IF(AND(ISNUMBER(ImprovedURBAN), ISNUMBER(ImprovedRURAL)), (ImprovedURBAN * POPULATION_URBAN + ImprovedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)"),
                         ),
                         'Saudi Arabia' => array(
                             array(3, '=ImprovedTOTAL'),
                             array(4, '=ImprovedTOTAL'),
-                            array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                         ),
                     ),
                 ),
@@ -539,27 +539,27 @@ use \Application\Traits\EntityManagerAware;
                     'isImproved' => false,
                     'formulas' => array(
                         'default' => array(
-                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation), NULL)'),
-                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation), NULL)'),
-                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared + Open defecation >= 1, 0, IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation)), NULL)'),
+                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation), NULL)'),
+                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation), NULL)'),
+                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared + Open defecation >= 100%, 0%, IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation)), NULL)'),
                         ),
                         'onlyTotal' => array(
                             array(3, '=Other unimprovedTOTAL'),
                             array(4, '=Other unimprovedTOTAL'),
-                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared + Open defecation >= 1, 0, IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation)), NULL)'),
+                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared + Open defecation >= 100%, 0%, IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation)), NULL)'),
                         ),
                         'onlyRural' => array(
-                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation), NULL)'),
+                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation), NULL)'),
                             array(5, '=Other unimprovedRURAL'),
                         ),
                         'onlyUrban' => array(
-                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation), NULL)'),
+                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation), NULL)'),
                             array(5, '=Other unimprovedURBAN'),
                         ),
                         'Saudi Arabia' => array(
                             array(3, '=Other unimprovedTOTAL'),
                             array(4, '=Other unimprovedTOTAL'),
-                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared + Open defecation >= 1, 0, IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation)), NULL)'),
+                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared + Open defecation >= 100%, 0%, IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation)), NULL)'),
                         ),
                     ),
                 ),
@@ -570,32 +570,32 @@ use \Application\Traits\EntityManagerAware;
                     'isImproved' => false,
                     'formulas' => array(
                         'default' => array(
-                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
-                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
-                            array(5, '=IF(Improved + shared = 1, 0, IF(AND(ISNUMBER(Open defecationURBAN), ISNUMBER(Open defecationRURAL)), (Open defecationURBAN * POPULATION_URBAN + Open defecationRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
+                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), 100% - Improved + shared, {self}))), NULL)'),
+                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), 100% - Improved + shared, {self}))), NULL)'),
+                            array(5, '=IF(Improved + shared = 100%, 0%, IF(AND(ISNUMBER(Open defecationURBAN), ISNUMBER(Open defecationRURAL)), (Open defecationURBAN * POPULATION_URBAN + Open defecationRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
                         'onlyTotal' => array(
                             array(3, '=Open defecationTOTAL'),
                             array(4, '=Open defecationTOTAL'),
-                            array(5, '=IF(Improved + shared = 1, 0, {self})'),
+                            array(5, '=IF(Improved + shared = 100%, 0%, {self})'),
                         ),
                         'onlyRural' => array(
-                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
+                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), 100% - Improved + shared, {self}))), NULL)'),
                             array(5, '=Open defecationRURAL'),
                         ),
                         'onlyUrban' => array(
-                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
+                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), 100% - Improved + shared, {self}))), NULL)'),
                             array(5, '=Open defecationURBAN'),
                         ),
                         'Tunisia' => array(
-                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
-                            array(4, '=IF({Y} >= 2006, Open defecationEARLIER - 0.02, IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self})), NULL))'),
-                            array(5, '=IF(Improved + shared = 1, 0, IF(AND(ISNUMBER(Open defecationURBAN), ISNUMBER(Open defecationRURAL)), (Open defecationURBAN * POPULATION_URBAN + Open defecationRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
+                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), 100% - Improved + shared, {self}))), NULL)'),
+                            array(4, '=IF({Y} >= 2006, Open defecationEARLIER - 2%, IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 99.5%, 0%, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), 100% - Improved + shared, {self})), NULL))'),
+                            array(5, '=IF(Improved + shared = 100%, 0%, IF(AND(ISNUMBER(Open defecationURBAN), ISNUMBER(Open defecationRURAL)), (Open defecationURBAN * POPULATION_URBAN + Open defecationRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
                         'Saudi Arabia' => array(
                             array(3, '=Open defecationTOTAL'),
                             array(4, '=Open defecationTOTAL'),
-                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 1, 0, IF(OR(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), NOT(ISNUMBER({self}))), 1 - Improved + shared, {self})), NULL)'),
+                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 100%, 0%, IF(OR(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), NOT(ISNUMBER({self}))), 100% - Improved + shared, {self})), NULL)'),
                         ),
                     ),
                 ),

@@ -681,8 +681,8 @@ STRING;
             $replacedFormula = $originalFormula;
 
         // For the same reason, we need to replace complementary computing based on 100, to be based on 1
-        // eg: "=100-A23" => "=1-A23"
-        $replacedFormula = preg_replace('/([^a-zA-Z])100-/', '${1}1-', $replacedFormula);
+        // eg: "=100-A23" => "=100%-A23"
+        $replacedFormula = preg_replace('/([^a-zA-Z])100-/', '${1}100%-', $replacedFormula);
 
         // Some formulas, Estimations and Calculation, hardcode values as percent between 0 - 100,
         // we need to convert them to 0.00 - 1.00
@@ -692,24 +692,40 @@ STRING;
             // Convert very simple formula with numbers only and -/+ operations. Anything more complex
             // would be too dangerous. This is the case for Cambodge DHS05 "Bottled water with HC" estimation, or
             // Solomon Islands, Tables_W!AH88
-            // eg: "=29.6" => "=0.296", "=29.6+10" => "=0.396"
+            // eg: "=29.6" => "=29.6%", "=29.6+10" => "=39.6%"
             $replacedFormula = \Application\Utility::pregReplaceUniqueCallback('/^=[-+\.\d ]+$/', function($matches) {
                         $number = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($matches[0]);
-                        $number = $number / 100;
+                        $number = $number . '%';
 
                         return "=$number";
                     }, $replacedFormula);
 
             // Convert when using a Ratio, this is the case of Thailand, Tables_W!CD88
-            // eg: "=44.6*BR102" => "=0.446*BR102"
+            // eg: "=44.6*BR102" => "=44.6%*BR102"
             $replacedFormula = \Application\Utility::pregReplaceUniqueCallback("/^=([-+\.\d ]+)(\*$cellPattern)$/", function($matches) use ($ruleRows) {
                         $number = $matches[1];
 
                         if (in_array($matches[5], $ruleRows['Ratio'])) {
-                            $number = $number / 100;
+                            $number = $number . '%';
                         }
 
                         return "=$number" . $matches[2];
+                    }, $replacedFormula);
+        }
+
+        // Some formulas, Ratios, hardcode values as percent between 0.00 - 1.00,
+        // while this is technically correct, we prefer the notation with %, so we convert them here
+        $ruleRows = $this->definitions[$sheet->getTitle()]['questionnaireUsages'];
+        if (in_array($row, $ruleRows['Ratio'])) {
+
+            // Convert very simple formula with numbers only. Anything more complex
+            // would be too dangerous.
+            // eg: "=0.296" => "=29.6%", "=0.296+0.10" => "=39.6%"
+            $replacedFormula = \Application\Utility::pregReplaceUniqueCallback('/^=[-+\/\*\.\d ]+$/', function($matches) {
+                        $number = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($matches[0]);
+                        $number = ($number * 100) . '%';
+
+                        return "=$number";
                     }, $replacedFormula);
         }
 
@@ -1173,7 +1189,7 @@ STRING;
             $questionnaireId = $usage->getQuestionnaire()->getId();
             $ratioReference = "{R#$ruleId,Q#$questionnaireId,P#current}";
 
-            $formulaImproved = "=1 - $ratioReference";
+            $formulaImproved = "=100% - $ratioReference";
             $this->linkRule($formulaImproved, $filterImproved, $usage->getQuestionnaire(), $usage->getPart());
 
             $formulaShared = "=$ratioReference";

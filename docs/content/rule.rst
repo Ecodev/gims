@@ -1,8 +1,9 @@
 Rule
 ====
 
-Rules provide a way to define custom calculation. One rule is defined by its formula and can shared in many places. Rules can be used in
-three different ways:
+Rules provide a way to define custom calculation. One rule is defined by its
+formula and can be shared in many places. Rules can be used in three different
+ways:
 
 #. On a :term:`filter` - :term:`questionnaire` - :term:`part` triplet
 #. On a :term:`questionnaire` - :term:`part` pair
@@ -14,13 +15,25 @@ answer should not be computed the usual way, then we can customize it to be
 anything we want.
 
 The second application is used to compute any arbitrary values within a
-questionnaire. Typical usage would be compute what is called Estimations,
+questionnaire. Typical usage would be to compute what is called Estimations,
 Calculations and Ratios in original Excel country files.
 
 Finally, the third application is used much later in :doc:`computing process<computing>`,
 after the regression step. This can be used to defines that values should not be
 over 100%. Conceptually it would be things like ``Other Unimproved`` is actually
 ``100% - Total improved - Surface water``.
+
+
+.. note::
+
+    While final results are displayed as percentage between 0 and 100, internally
+    it is always computed between 0.00 and 1.00. Therefore formulas must be written
+    to work between 0.00 and 1.00. The recommended way to do that, to avoid any
+    possible confusion, is to explicitly use `%` symbol. For example:
+
+        .. code-block:: lua
+
+            =12.5% + 8%
 
 
 Formula syntax
@@ -130,7 +143,7 @@ Value if this rule is ignored
     Reference the value if computed without this rule. It allows to conditionally
     apply a rule with syntaxes such as ``IF(can_apply_my_rule, compute_some_result, {self})``.
 
-  .. code-block:: lua
+    .. code-block:: lua
 
         {self}
 
