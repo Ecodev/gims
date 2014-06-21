@@ -4,10 +4,15 @@ namespace Application\Repository;
 
 class CountryRepository extends AbstractRepository
 {
-    use Traits\OrderedByName;
 
     public function getAllWithPermission($action = 'read', $search = null)
     {
-        return $this->findAll();
+        $qb = $this->createQueryBuilder('country')
+                ->orderBy('country.name');
+
+        $this->addSearch($qb, $search);
+
+        return $qb->getQuery()->getResult();
     }
+
 }
