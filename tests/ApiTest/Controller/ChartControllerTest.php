@@ -11,6 +11,8 @@ use Zend\Http\Request;
 class ChartControllerTest extends \ApplicationTest\Controller\AbstractController
 {
 
+    use Traits\SupressDataSetOutput;
+
     public function setUp()
     {
         parent::setUp();

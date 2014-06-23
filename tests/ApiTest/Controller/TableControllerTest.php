@@ -10,6 +10,8 @@ use Zend\Http\Request;
 class TableControllerTest extends \ApplicationTest\Controller\AbstractController
 {
 
+    use Traits\SupressDataSetOutput;
+
     public function setUp()
     {
         parent::setUp();
