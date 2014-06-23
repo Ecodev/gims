@@ -222,28 +222,48 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     }
 
     /**
+     * Returns one object or a list of objects
+     * If more than one object is wanted, return valid objects excluding those who have errors
+     * If a single object is wanted and has an error (access not granted or not found) an error is returned
+     * @todo : maybe return errored objects and valid objects in order to give information to client side
      * @param int $id
-     *
      * @return JsonModel
      */
     public function get($id)
     {
-        /* @todo : when retrieving multiple objects, return correct objects instead of an error (404 or access not granted) as soon as there is a single error */
         $objects = array();
-        foreach (explode(',', $id) as $id) {
+        $notFound = array();
+        $notGranted = array();
+        $ids = explode(',', $id);
+
+        foreach ($ids as $id) {
             $object = $this->getRepository()->findOneById($id);
             if (!$object) {
-                $this->getResponse()->setStatusCode(404);
-
-                return new JsonModel(array('message' => 'No object found'));
+                $notFound[] = $id;
+                continue;
             }
 
             // If not allowed to read the object, cancel everything
-            $this->checkActionGranted($object, 'read');
-
-            $objects[] = $object;
+            if ($this->getAuth()->isActionGranted($object, 'read')) {
+                $objects[] = $object;
+            } else {
+                $notGranted[] = $id;
+                if (count($ids) == 1) {
+                    $objects[] = $object;
+                }
+            }
         }
-        $this->getResponse()->setStatusCode(200);
+
+        if (count($notFound) == count($ids)) {
+            $this->getResponse()->setStatusCode(404);
+
+            return new JsonModel(array('message' => 'No object found'));
+
+        } elseif (count($notGranted) == count($ids)) {
+            $this->checkActionGranted($objects[0], 'read');
+        } else {
+            $this->getResponse()->setStatusCode(200);
+        }
 
         // if we have multiple IDs to output
         if (count($objects) > 1) {

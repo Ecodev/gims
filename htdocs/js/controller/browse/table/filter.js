@@ -7,7 +7,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
         // params for ajax requests
     $scope.filterFields = {fields: 'color,paths'};
-    $scope.countryParams = {fields: 'geoname'};
+//    $scope.countryParams = {fields: 'geoname'};
     var countryFields = {fields: 'geoname.questionnaires,geoname.questionnaires.survey,geoname.questionnaires.survey.questions,geoname.questionnaires.survey.questions.type,geoname.questionnaires.survey.questions.filter'};
     var questionnaireWithQTypeFields = {fields: 'status,survey.questions,survey.questions.type,survey.questions.isAbsolute'};
     var questionnaireWithAnswersFields = {fields: 'status,filterQuestionnaireUsages,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part'};
@@ -758,8 +758,17 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             });
         } else if (questionnaires.length > 1) {
             Restangular.all('questionnaire').getList(_.merge({id: questionnaires.join(',')}, fields)).then(function(questionnaires) {
-                deferred.resolve(questionnaires);
 
+                // when retrieve questionnaire with read permissions, remove pré-selected questionnaires from list if they're not received
+                var removedQuestionnaires = _.difference(_.pluck($scope.tabs.questionnaires, 'id'), _.pluck(questionnaires, 'id'));
+                _.forEach(removedQuestionnaires, function(questionnaireId) {
+                    var index = _.findIndex($scope.tabs.questionnaires, {id: questionnaireId});
+                    if (index >= 0) {
+                        $scope.tabs.questionnaires.splice(index, 1);
+                    }
+                });
+
+                deferred.resolve(questionnaires);
             });
         }
 
@@ -767,7 +776,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     };
 
     /**
-     * Check glass questiionnaires and add them to a specific array that add a tab
+     * Check glass questionnaires and add them to a specific array that add a tab
      * If there is only one Glass questionnaire and no JMP, a redirection display the questionnaire
      * @param questionnaires
      */

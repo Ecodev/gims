@@ -11,6 +11,10 @@ class QuestionnaireRepository extends AbstractChildRepository
 
     /**
      * Returns all items with matching search criteria
+     * @param string $action
+     * @param null $search
+     * @param null $parentName
+     * @param \Application\Model\AbstractModel $parent
      * @return array
      */
     public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
