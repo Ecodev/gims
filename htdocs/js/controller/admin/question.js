@@ -3,7 +3,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
     "use strict";
 
     // Default redirect
-    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,chapter,isCompulsory,isMultiple,isFinal,description,questions,isAbsolute,alternateNames'};
+    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,chapter,isCompulsory,isPopulation,isMultiple,isFinal,description,questions,isAbsolute,alternateNames'};
     var returnUrl = '/';
 
     $scope.sending = false;

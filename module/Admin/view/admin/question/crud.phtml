@@ -40,10 +40,16 @@
                     </div>
                 </div>
 
+                <div class="form-group ng-trans ng-trans-fade-down" ng-show="isChoices || question.type == 'Numeric'">
+                    <div class='col-md-6 col-md-offset-2 checkbox'>
+                        <div class="col-md-12"><label><input type='checkbox' name='isPopulation' ng-model='question.isPopulation'>Represent a population</label></div>
+                    </div>
+                </div>
+
                 <div class="form-group ng-trans ng-trans-fade-down" ng-show="question.type == 'Numeric'">
                     <div class='col-md-6 col-md-offset-2 radio'>
-                        <div class="col-md-12"><label><input type='radio' name='isAbsolute' value='0' ng-model='question.isAbsolute' ng-checked="1">Value in percent (max 1)</label></div>
-                        <div class="col-md-12"><label><input type='radio' name='isAbsolute' value='1' ng-model='question.isAbsolute'>Value absolute (no maximum limit)</label></div>
+                        <div class="col-md-12"><label><input type='radio' name='isAbsolute' value='0' ng-model='question.isAbsolute' ng-checked="1">Answer is a percentage (0% - 100%)</label></div>
+                        <div class="col-md-12"><label><input type='radio' name='isAbsolute' value='1' ng-model='question.isAbsolute'>Answer is an absolute number</label></div>
                     </div>
                 </div>
 
@@ -105,10 +111,10 @@
                 </div>
 
 
-                <div class="form-group ng-trans ng-trans-fade-down" ng-hide="isChapter" ng-class="{'has-error': myForm.zone.$invalid}">
-                    <label class="control-label col-md-2" for="question.part">Zone</label>
+                <div class="form-group ng-trans ng-trans-fade-down" ng-hide="isChapter" ng-class="{'has-error': myForm.part.$invalid}">
+                    <label class="control-label col-md-2" for="question.part">Part</label>
                     <div class="col-md-4">
-                        <gims-select    name="zone"
+                        <gims-select    name="part"
                                         api="part"
                                         model="question.parts"
                                         multiple="multiple"
@@ -116,7 +122,7 @@
                         </gims-select>
                     </div>
                     <div class='col-md-1'>
-                        <span ng-show="myForm.zone.$error.required" class="col-md-1 help-block">Required</span>
+                        <span ng-show="myForm.part.$error.required" class="col-md-1 help-block">Required</span>
                     </div>
                 </div>
                 <br/>
