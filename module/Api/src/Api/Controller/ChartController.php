@@ -124,7 +124,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneById($this->params()->fromQuery('country'));
         $filtersIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
 
-        $filters = array_map(function($filterId){
+        $filters = array_map(function($filterId) {
             return $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
         }, $filtersIds);
 
@@ -323,10 +323,13 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
 
             if (count($usages) > 0) {
-                $serie['usages'] = implode(',<br/>', array_map(function ($u) {
+                $usageList = implode(',<br/>', array_map(function ($u) {
                             return $u->getRule()->getName();
                         }, $usages));
+            } else {
+                $usageList = '(none)';
             }
+            $serie['usages'] = $usageList;
 
             foreach ($serie['data'] as &$d) {
                 $d = Utility::decimalToRoundedPercent($d);
@@ -363,7 +366,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'marker' => array('symbol' => $this->symbols[$this->getConstantKey($filter->getName()) % count($this->symbols)]),
                 'name' => $filter->getName() . $suffix,
                 'allowPointSelect' => false,
-                'data' => array(),  // because we will use our own click handler
+                'data' => array(), // because we will use our own click handler
             );
             if ($isIgnored) {
                 $scatter['isIgnored'] = $isIgnored;
@@ -421,7 +424,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
             // create filters objects
             $filtersIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
-            $filters = array_map(function($filterId){
+            $filters = array_map(function($filterId) {
                 return $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
             }, $filtersIds);
 
