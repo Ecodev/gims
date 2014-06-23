@@ -126,6 +126,7 @@
                                         name="filter"
                                         show-selection-path="true"
                                         change-url="false"
+                                        disabled="isLoading"
                                         >
                                 </gims-filter>
                             </tab>
@@ -134,6 +135,7 @@
                                         model="tabs.filters"
                                         name="filters"
                                         show-selection-path="true"
+                                        disabled="isLoading"
                                         multiple>
                                 </gims-filter>
                             </tab>
@@ -357,7 +359,7 @@
                         <!-- Survey's year row -->
                         <tr class="active" ng-show="tabs.questionnaires.length">
                             <td></td>
-                            <td><a class="btn btn-default btn-xs pull-right" ng-hide="questionnairesAreSorted" ng-click="orderQuestionnaires(false)"><i class="fa fa-sort-amount-asc fa-rotate-270"></i> Sort years</a></td>
+                            <td><a class="btn btn-default btn-xs pull-right" ng-hide="questionnairesAreSorted" ng-click="orderQuestionnaires(false)"><i class="fa fa-sort-amount-asc fa-rotate-270"></i> Sort by year</a></td>
                             <td ng-if="tabs.selectedQuestionnaireForLabels" class="text-center">{{tabs.selectedQuestionnaireForLabels.survey.year}}</td>
                             <td ng-repeat="questionnaire in tabs.questionnaires track by $index">
                                 <ng-form name="questionnaireForm" class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.year.$invalid}">
