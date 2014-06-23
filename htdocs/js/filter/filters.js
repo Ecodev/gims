@@ -30,7 +30,7 @@ angular.module('myApp.filters').filter('interpolate', function(version) {
 
     return function(text) {
 
-        if (text.length > 0) {
+        if (text) {
             return text.charAt(0).toUpperCase() + text.slice(1);
         }
 
