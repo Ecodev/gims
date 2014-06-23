@@ -143,15 +143,14 @@ class AnswerRepository extends AbstractChildRepository
      */
     public function completePopulationAnswer(\Application\Model\Answer $answer = null)
     {
+        $isAbsolute = $answer->getQuestion() instanceof \Application\Model\Question\NumericQuestion && $answer->getQuestion()->isAbsolute();
 
-        if ($answer && $answer->getQuestion()->isAbsolute()) {
+        if ($answer && $isAbsolute) {
             $computing = "value_percent = value_absolute / p.population";
             $whereClause = 'answer.id = ' . $answer->getId();
-
-        } elseif ($answer && !$answer->getQuestion()->isAbsolute()) {
+        } elseif ($answer && !$isAbsolute) {
             $computing = "value_absolute = p.population * value_percent";
             $whereClause = 'answer.id = ' . $answer->getId();
-
         } elseif (!$answer) {
             $computing = "value_percent = value_absolute / p.population";
             $whereClause = 'answer.value_percent IS NULL';
