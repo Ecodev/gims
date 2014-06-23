@@ -51,10 +51,19 @@ abstract class AbstractRepository extends EntityRepository
             $exceptionDql = '(' . $exceptionDql . ') OR ';
         }
 
+        // here there are 3 different case to consider:
+        // 1. published objects are always accessible via DQL exception (like questionnaire)
+        // 2. default roles of anonymous and member may give access to objects even without specific rights on them
+        // 3. specific rights applied to one specific object
         $qb->andWhere("($exceptionDql
             EXISTS (
+                SELECT roleDefaultRole.id FROM Application\Model\Role roleDefaultRole
+                INNER JOIN Application\Model\Permission permissionDefaultRole WITH permissionDefaultRole MEMBER OF roleDefaultRole.permissions AND permissionDefaultRole.name = :permissionPermission
+                WHERE roleDefaultRole.name = :permissionDefaultRole
+            ) OR
+            EXISTS (
                 SELECT relation.id FROM Application\Model\\$relationType relation
-                INNER JOIN Application\Model\Role role WITH relation.role = role OR role.name = :permissionDefaultRole
+                INNER JOIN Application\Model\Role role WITH relation.role = role
                 INNER JOIN Application\Model\Permission permission WITH permission MEMBER OF role.permissions AND permission.name = :permissionPermission
                 WHERE relation.user = :permissionUser AND relation.$context = $context.id
             )
