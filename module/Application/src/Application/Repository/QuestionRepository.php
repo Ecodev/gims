@@ -47,7 +47,7 @@ class QuestionRepository extends AbstractChildRepository
      * Returns all items with read access and answers and choices related
      * @return array
      */
-    public function getAllWithPermissionWithAnswers($action = 'read', \Application\Model\Survey $survey = null, $questionnairesIds = null)
+    public function getAllWithPermissionWithAnswers($action = 'read', \Application\Model\Survey $survey = null, array $questionnairesIds = null)
     {
         /** @var \Doctrine\ORM\QueryBuilder $qb */
 

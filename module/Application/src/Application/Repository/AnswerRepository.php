@@ -191,7 +191,7 @@ class AnswerRepository extends AbstractChildRepository
         return $res;
     }
 
-    public function getAllAnswersInQuestionnaires(\Application\Model\Survey $survey, $questionnairesIds)
+    public function getAllAnswersInQuestionnaires(\Application\Model\Survey $survey, array $questionnairesIds)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('answer, question, questionnaire, choice, part')
@@ -202,7 +202,8 @@ class AnswerRepository extends AbstractChildRepository
                 ->leftJoin('answer.valueChoice', 'choice');
 
         if ($questionnairesIds) {
-            $qb->where($qb->expr()->in('questionnaire.id', $questionnairesIds));
+            $qb->where('questionnaire IN (:questionnaireIds)');
+            $qb->setParameter('questionnaireIds', $questionnairesIds);
         } else {
             $qb->join('questionnaire.survey', 'survey')
                     ->where('survey.id = :surveyid')
