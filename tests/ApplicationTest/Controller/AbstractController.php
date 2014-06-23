@@ -93,6 +93,15 @@ abstract class AbstractController extends \Zend\Test\PHPUnit\Controller\Abstract
         $prettyActualWithString = json_encode($actualObject, JSON_PRETTY_PRINT);
         $prettyActualWithFloat = \Application\View\Model\NumericJsonModel::stringToNumeric($prettyActualWithString);
 
+        // Very special case for PHP lower than 5.5.12 with wrong JSON prettyfier
+        $prettyActualWithFloat = str_replace('[
+
+            ]', '[]', $prettyActualWithFloat);
+
+        $prettyActualWithFloat = str_replace('[
+
+]', '[]', $prettyActualWithFloat);
+
         // Overwrite log  with given JSON to file for easy comparaison/replacement of existing expected JSON files
         if ($logFile) {
             file_put_contents($logFile, $prettyActualWithFloat);
