@@ -29,11 +29,6 @@
         "min": 0,
         "max": 100
     },
-    "tooltip": {
-        "options": [
-
-        ]
-    },
     "credits": {
         "enabled": false
     },
@@ -111,7 +106,8 @@
                 89.9
             ],
             "color": "#00D919",
-            "type": "line"
+            "type": "line",
+            "usages": "(none)"
         },
         {
             "name": "Piped onto premises",
@@ -152,7 +148,8 @@
                 28.0
             ],
             "color": "#D90026",
-            "type": "line"
+            "type": "line",
+            "usages": "(none)"
         },
         {
             "name": "Surface water",

@@ -79,7 +79,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'min' => 0,
                 'max' => 100,
             ),
-            'tooltip' => array('options' => array()),
             'credits' => array('enabled' => false),
             'plotOptions' => array(
                 'line' => array(

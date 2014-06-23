@@ -100,11 +100,11 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                     enableColumnResize: true,
                     color: serie.color,
                     headerCellTemplate: " " +
-                        '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
-                        '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" popover-placement="top" popover="{{col.displayName}}">' +
-                        '       <i class="fa fa-gims-filter" style="color:{{col.colDef.color}};"></i> {{col.displayName}}' +
-                        '   </div>' +
-                        '</div>',
+                            '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
+                            '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" popover-placement="top" popover="{{col.displayName}}">' +
+                            '       <i class="fa fa-gims-filter" style="color:{{col.colDef.color}};"></i> {{col.displayName}}' +
+                            '   </div>' +
+                            '</div>',
                     cellTemplate: '<div class="ngCellText text-right" ng-class="col.colIndex()"><span ng-cell-text ng-show="{{row.entity.value' + serie.id + '!==null}}">{{row.entity.value' + serie.id + '}} %</span></div>'
                 });
 
@@ -262,8 +262,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         var deferred = $q.defer();
 
         // url excluded questionnaires
-        var ignoredQuestionnaires = $location.search().ignoredElements ? $location.search().ignoredElements.split(',') :
-            [];
+        var ignoredQuestionnaires = $location.search().ignoredElements ? $location.search().ignoredElements.split(',') : [];
         if (ignoredQuestionnaires.length > 0) {
 
             var firstQuestionnaire = ignoredQuestionnaires[0].split(':');
@@ -304,8 +303,10 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         }).success(function(data) {
 
             // implement tooltip formatter
-            data.tooltip.formatter = function() {
-                return HighChartFormatter.tooltipFormatter.call(this);
+            data.tooltip = {
+                formatter: function() {
+                    return HighChartFormatter.tooltipFormatter.call(this);
+                }
             };
 
             data.plotOptions.scatter.dataLabels.formatter = function() {

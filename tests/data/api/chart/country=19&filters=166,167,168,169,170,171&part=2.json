@@ -29,11 +29,6 @@
         "min": 0,
         "max": 100
     },
-    "tooltip": {
-        "options": [
-
-        ]
-    },
     "credits": {
         "enabled": false
     },
@@ -111,7 +106,8 @@
                 85.5
             ],
             "color": "#005FD9",
-            "type": "line"
+            "type": "line",
+            "usages": "(none)"
         },
         {
             "name": "Sewerage connections",
@@ -152,7 +148,8 @@
                 0.2
             ],
             "color": "#9ED900",
-            "type": "line"
+            "type": "line",
+            "usages": "(none)"
         },
         {
             "name": "Improved",
