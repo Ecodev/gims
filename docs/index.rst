@@ -16,6 +16,7 @@ Contents:
     content/computing
     content/rest
     content/glossary
+    content/technical_presentation
 
 Indices and tables
 ==================
