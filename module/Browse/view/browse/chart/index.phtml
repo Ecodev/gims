@@ -228,13 +228,13 @@
                                 </div>
 
                                 <div class="col-md-12" ng-show="!pointSelected">
-                                    <div class="alert alert-info ng-trans ng-trans-fade-up" ><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select a survey on chart to display filters') ?></div>
+                                    <div class="alert alert-info ng-trans ng-trans-fade-up" ><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select a questionnaire on chart to display filters') ?></div>
                                 </div>
 
                             </tab>
 
                             <tab>
-                                <tab-heading><i class="fa fa-cog"></i> Formulas</tab-heading>
+                                <tab-heading><i class="fa fa-cog"></i> Rules</tab-heading>
                                 <!-- Panel top part : selected questionnaire and filters -->
                                 <div ng-show="pointSelected">
                                     <div class="col-md-12">
@@ -243,18 +243,12 @@
                                                ng-class="{'text-primary fa-eye': !indexedElements[pointSelected.questionnaire].ignored}"
                                                ng-click="toggleQuestionnaire(pointSelected.questionnaire)"></i>
                                                 {{indexedElements[pointSelected.questionnaire].name}}<br/>
-                                            <small>Calculations / ratios / estimates</small>
+                                            <small>Calculations / Estimations / Ratios</small>
                                         </h3>
                                     </div>
                                     <table class="table">
                                         <!-- Questionnaire Usages -->
                                         <tbody ng-if="indexedElements[pointSelected.questionnaire].usages">
-                                        <tr class="active">
-                                            <td  style="width:{{firstCol}}">
-                                                <i class="fa fa-lg fa-gims-rule"></i>
-                                            </td>
-                                            <td colspan="2">Questionnaire's calculations / ratios / estimates</td>
-                                        </tr>
                                         <tr ng-repeat="usage in indexedElements[pointSelected.questionnaire].usages | orderBy:'rule.name'">
                                             <td style="width:{{firstCol}}"><i class="fa fa-lg fa-gims-rule"></i></td>
                                             <td>{{usage.rule.name}}</td>
@@ -269,14 +263,16 @@
                                 </div>
 
                                 <div class="col-md-12" ng-show="!pointSelected">
-                                    <div class="alert alert-info ng-trans ng-trans-fade-up" ><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select a survey on chart to display formulas') ?></div>
+                                    <div class="alert alert-info ng-trans ng-trans-fade-up" ><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select a questionnaire on chart to display Calculations / Estimations / Ratios') ?></div>
                                 </div>
                             </tab>
 
                             <!-- Panel : Ignored elements -->
                             <tab>
                                 <tab-heading><i class="fa fa-times-circle-o"></i> Ignored</tab-heading>
-
+                                <div class="col-md-12">
+                                    <h3>Ignored elements</h3>
+                                </div>
                                 <div class="col-md-12">
 
                                     <!-- foreach hFilter -->
