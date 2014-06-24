@@ -189,7 +189,7 @@
                                                            tooltip="Include filter for all questionnaires"></i>
                                                         <i ng-if="indexedElements[pointSelected.questionnaire].filters[key].usages"
                                                            class="fa fa-lg fa-gims-rule"
-                                                           style="color:{{findById(tabs.filters, hFilterId).genericColor}}"></i>
+                                                           style="color:{{findById(tabs.filters, hFilterId).genericColor}}" tooltip-placement="right" tooltip="At least one rule is involved in this value"></i>
                                                     </td>
                                                     <td style="padding-left:{{indexedElements[pointSelected.questionnaire].filters[key].filter.hFilters[hFilterId].level+1}}em;">
                                                         <span tooltip="{{indexedElements[pointSelected.questionnaire].filters[key].filter.originalDenomination}}"
@@ -238,7 +238,7 @@
                             </tab>
 
                             <tab>
-                                <tab-heading><i class="fa fa-cog"></i> Rules</tab-heading>
+                                <tab-heading><i class="fa fa-gims-rule"></i> Rules</tab-heading>
                                 <!-- Panel top part : selected questionnaire and filters -->
                                 <div ng-show="pointSelected">
                                     <div class="col-md-12">
