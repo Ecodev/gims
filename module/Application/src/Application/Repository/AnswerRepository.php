@@ -143,17 +143,18 @@ class AnswerRepository extends AbstractChildRepository
      */
     public function completePopulationAnswer(\Application\Model\Answer $answer = null)
     {
-        $isAbsolute = $answer->getQuestion() instanceof \Application\Model\Question\NumericQuestion && $answer->getQuestion()->isAbsolute();
+        $isAbsolute = $answer && $answer->getQuestion() instanceof \Application\Model\Question\NumericQuestion && $answer->getQuestion()->isAbsolute();
 
-        if ($answer && $isAbsolute) {
+        if ($isAbsolute) {
             $computing = "value_percent = value_absolute / p.population";
-            $whereClause = 'answer.id = ' . $answer->getId();
-        } elseif ($answer && !$isAbsolute) {
+        } else {
             $computing = "value_absolute = p.population * value_percent";
+        }
+
+        if ($answer) {
             $whereClause = 'answer.id = ' . $answer->getId();
-        } elseif (!$answer) {
-            $computing = "value_percent = value_absolute / p.population";
-            $whereClause = 'answer.value_percent IS NULL';
+        } else {
+            $whereClause = 'question.is_absolute = FALSE';
         }
 
         $sql = sprintf('UPDATE answer SET %s
@@ -167,7 +168,7 @@ class AnswerRepository extends AbstractChildRepository
                     AND answer.part_id = p.part_id
                     AND answer.questionnaire_id = q.id
                     AND answer.question_id = question.id
-                    AND question.is_population = true', $computing, $whereClause);
+                    AND question.is_population = TRUE', $computing, $whereClause);
 
         return $this->getEntityManager()->getConnection()->executeUpdate($sql);
     }
