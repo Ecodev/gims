@@ -12,6 +12,12 @@ Contents:
     :maxdepth: 2
 
     content/introduction
+    content/basics    
+    content/data_input
+    content/data_processing
+    content/data_visualisation
+    content/data_output
+     
     content/rule
     content/computing
     content/rest

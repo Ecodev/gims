@@ -1,4 +1,12 @@
 Introduction
 ============
 
-GIMS is a web application to gather data around the world and analyze them.
+**GIMS** stands for Global Information Management System on Environment and Health.
+
+This project, initiated by the `World Health Organization (WHO) Public Health and Environment Department <http://www.who.int/phe/en/>`_, aims at helping gather data in a decentralized yet structured way so as to be able to perform meaningful analysis that help decision makers initiate appropriate actions on the field.
+
+For further information, see the `gimsinitiative.org website <http://www.gimsinitiative.org/about>`_ and take a look at the `short presentation <http://dev.gimsinitiative.org/intro>`_ of what this web application can do.
+
+Interested in the **technical aspects** of this open source system?  Take a look at the :doc:`short technical presentation <technical_presentation>` or dive into the code on `GitHub <https://github.com/Ecodev/gims>`_.
+
+The documentation below provides a step by step basic presentation of how GIMS works as well as detailed chapters for specific users. 
