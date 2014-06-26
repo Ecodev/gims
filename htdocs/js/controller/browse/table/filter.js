@@ -5,7 +5,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /*********************************************** Variables initialisation */
     /**************************************************************************/
 
-        // params for ajax requests
+    // My future self will hate me for this, but we hardcode the exclude
+    // rule ID to make it easier to find it
+    var excludeRuleId = 1;
+
+    // params for ajax requests
     $scope.filterFields = {fields: 'color,paths'};
 //    $scope.countryParams = {fields: 'geoname'};
     var countryFields = {fields: 'geoname.questionnaires,geoname.questionnaires.survey,geoname.questionnaires.survey.questions,geoname.questionnaires.survey.questions.type,geoname.questionnaires.survey.questions.filter'};
@@ -864,12 +868,73 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 return q.filter.id;
             });
 
+            // Indexes usages by filter and part
+            var usagesByFilter = {};
+            _.forEach(questionnaire.filterQuestionnaireUsages, function(usage) {
+
+                if (!usagesByFilter[usage.filter.id]) {
+                    usagesByFilter[usage.filter.id] = {};
+                }
+
+                if (!usagesByFilter[usage.filter.id][usage.part.id]) {
+                    usagesByFilter[usage.filter.id][usage.part.id] = [];
+                }
+                usagesByFilter[usage.filter.id][usage.part.id].push(usage);
+            });
+            questionnaire.filterQuestionnaireUsagesByFilterAndPart = usagesByFilter;
+
             // update $scope with modified questionnaire
             $scope.tabs.questionnaires[_.findIndex($scope.tabs.questionnaires, {id: questionnaire.id})] = questionnaire;
         });
 
         fillMissingElements();
         getComputedFilters();
+    };
+
+    /**
+     * Returns wether the special Exclude rule exists in the given usage
+     * @param {array} usages
+     * @returns {boolean}
+     */
+    $scope.excludeRuleExists = function(usages) {
+        return !!_.find(usages, function(usage) {
+            return usage.rule.id == excludeRuleId;
+        });
+    };
+
+    /**
+     * Toggle the existence of the special Exclude rule, if exists removes it, if not add it
+     * @param {questionnaire} questionnaire
+     * @param {integer} filterId
+     * @param {integer} partId
+     */
+    $scope.toggleExcludeRule = function(questionnaire, filterId, partId) {
+
+        var usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId];
+        if ($scope.excludeRuleExists(usages)) {
+            _.forEach(usages, function(usage) {
+                if (usage.rule.id == excludeRuleId) {
+                    Restangular.restangularizeElement(null, usage, 'filterQuestionnaireUsage');
+                    usage.remove().then(function() {
+                        questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId] = _.without(usages, usage);
+                    });
+                }
+            });
+        } else {
+            var usage = {
+                isSecondLevel: true,
+                filter: filterId,
+                questionnaire: questionnaire.id,
+                part: partId,
+                rule: excludeRuleId,
+                justification: '', // should have something meaningful
+                sorting: -1 // guarantee that the rule overrides all other existing rules
+            };
+
+            Restangular.all('filterQuestionnaireUsage').post(usage).then(function(newUsage) {
+                usages.push(newUsage);
+            });
+        }
     };
 
     /**
@@ -983,7 +1048,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     timeout: getComputedFiltersCanceller.promise,
                     params: {
                         filters: filtersIds.join(','),
-                        questionnaires: _.filter(questionnairesIds,function(el) {
+                        questionnaires: _.filter(questionnairesIds, function(el) {
                             if (el) {
                                 return true;
                             }
@@ -1713,7 +1778,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                         return true;
                     }
                 });
-                return filter.id + ':' + _.map(children,function(f) {
+                return filter.id + ':' + _.map(children, function(f) {
                     return f.id;
                 }).join('-');
             });
@@ -1757,7 +1822,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param element
      */
     var updateUrl = function(element) {
-        $location.search(element, _.filter(_.pluck($scope.tabs[element], 'id'),function(el) {
+        $location.search(element, _.filter(_.pluck($scope.tabs[element], 'id'), function(el) {
             if (el) {
                 return true;
             }
