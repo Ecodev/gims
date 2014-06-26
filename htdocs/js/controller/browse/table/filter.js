@@ -910,6 +910,14 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      */
     $scope.toggleExcludeRule = function(questionnaire, filterId, partId) {
 
+        // Ensure that we have indeed some usages
+        if (!questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId]) {
+            questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId] = {};
+        }
+        if (!questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId]) {
+            questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId] = [];
+        }
+
         var usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId];
         if ($scope.excludeRuleExists(usages)) {
             _.forEach(usages, function(usage) {
