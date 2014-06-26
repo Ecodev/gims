@@ -23,6 +23,7 @@
     "angular-ui-utils": "bower",
     "autofill-event": "~1.0.0",
     "angular-ui-ace": "bower",
-    "fontawesome": "v4.1.0"
+    "fontawesome": "v4.1.0",
+    "impress.js": "~0.5.3"
   }
 }

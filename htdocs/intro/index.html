@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>GIMS presentation</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=1024" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link href="/css/impress.css" rel="stylesheet" />
+
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
+
+    </head>
+    <body>
+        <!--
+            For example this fallback message is only visible when there is `impress-not-supported` class on body.
+        -->
+        <div class="fallback-message">
+            <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+            <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+        </div>
+
+        <div id="impress" data-transition-duration="500">
+
+            <div class="step" data-x="2000" data-y="-3500" data-scale="4">
+                <h1 style="font-size: 4em;">GIMS</h1>
+                <ol>
+                    <li>Gather data</li>
+                    <li>Analyze</li>
+                    <li>Reconciliate</li>
+                    <li>Publish</li>
+                </ol>
+            </div>
+
+            <div  class="step " data-x="-1000" data-y="-1500">
+                <h1>Editor <a href="/admin/survey/new">create a new survey</a></h1>
+
+                <i class="fa fa-gims-survey"></i> Survey 1
+                <ul class="fields">
+                    <li>DHS11</li>
+                    <li>Demographic and Health Survey</li>
+                    <li>2011</li>
+                </ul>
+            </div>
+
+            <div class="step " data-x="-1000" data-y="-1500" data-z="-2000">
+
+                <h1>... and create questions</h1>
+
+                <ul class="objects questions">
+                    <li><i class="fa fa-question"></i> How many people have tap water ?</li>
+                    <li><i class="fa fa-question"></i> How many people per equipment ?</li>
+                    <li><i class="fa fa-question"></i> What about satisfaction ?</li>
+                </ul>
+
+            </div>
+
+            <div class="step" data-x="0" data-y="-1500">
+                <h1>Dispatch survey to countries as questionnaires</h1>
+                <div>
+                    <div style="display: inline-block; width: 30%; position: relative; top: -1em">
+
+                        <div class="card">
+                            <i class="fa fa-gims-survey"></i><strong> Survey 1</strong>
+
+                            <ul class="objects">
+                                <li><small><i class="fa fa-question"></i> Question 1 </small></li>
+                                <li><small><i class="fa fa-question"></i> Question 2 </small></li>
+                                <li><small><i class="fa fa-question"></i> Question 3 </small></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="display: inline-block; width: 22%; position: relative; top: -2em">
+                        <img src="arrows.svg">
+                    </div>
+                    <div style="display: inline-block; width: 40%">
+                        <div class="card">
+                            <i class="fa fa-gims-questionnaire"></i><strong> Questionnaire 1</strong>
+                            <ul class="fields">
+                                <li><small>Bangladesh</small></li>
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <i class="fa fa-gims-questionnaire"></i><strong> Questionnaire 2</strong>
+                            <ul class="fields">
+                                <li><small>France</small></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step" data-x="1000" data-y="-1500" data-rotate="-90">
+
+                <h1>Country <a href="/contribute/questionnaire">answer the questionnaire</a></h1>
+                <i class="fa fa-gims-questionnaire"></i> Questionnaire 1 - Bangladesh
+
+                <ul class="objects ">
+                    <li>Answer 1: 34%</li>
+                    <li>Answer 2: 10 people</li>
+                    <li>Answer 3: good</li>
+                </ul>
+            </div>
+
+            <div class="step" data-x="2000" data-y="-1500">
+
+                <h1>Editor validate questionnaire</h1>
+                <p style="text-align: center"><i class="fa fa-4x fa-check-square-o" ></i></p>
+            </div>
+
+            <div class="step" data-x="3000" data-y="-1500" data-rotate="360">
+                <h1>Rinse and repeat</h1>
+                <div style="font-size: 0.7em;">
+
+                    <div style="display: inline-block; width: 25%; position: relative; top: -4em;">
+
+                        <div class="card" >
+                            <i class="fa fa-gims-survey"></i><strong> Survey 1</strong>
+                            <br><small>DHS11</small>
+
+                            <ul class="objects">
+                                <li><small><i class="fa fa-question"></i> Question 1 </small></li>
+                                <li><small><i class="fa fa-question"></i> Question 2 </small></li>
+                                <li><small><i class="fa fa-question"></i> Question 3 </small></li>
+                            </ul>
+                        </div>
+                        <div class="card" >
+                            <i class="fa fa-gims-survey"></i><strong> Survey 2</strong>
+                            <br><small>MICS99</small>
+
+                            <ul class="objects">
+                                <li><small><i class="fa fa-question"></i> Question 4 </small></li>
+                                <li><small><i class="fa fa-question"></i> Question 5 </small></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="display: inline-block; width: 22%; position: relative; top: -8em">
+                        <img src="arrows2.svg">
+                    </div>
+                    <div style="display: inline-block; width: 40%">
+                        <div class="card">
+                            <i class="fa fa-gims-questionnaire"></i><strong> Questionnaire 1</strong>
+                            <br><small>Bangladesh</small>
+
+                            <ul class="objects">
+                                <li><small>Answer 1 (Question 1): 34%</small></li>
+                                <li><small>Answer 2 (Question 2): 10</small></li>
+                                <li><small>Answer 3 (Question 3): good</small></li>
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <i class="fa fa-gims-questionnaire"></i><strong> Questionnaire 2</strong>
+                            <br><small>France</small>
+
+                            <ul class="objects">
+                                <li><small>Answer 4 (Question 1): 98%</small></li>
+                                <li><small>Answer 5 (Question 2): N/A</small></li>
+                                <li><small>Answer 6 (Question 3): ok</small></li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <i class="fa fa-gims-questionnaire"></i><strong> Questionnaire 3</strong>
+                            <br><small>Bangladesh</small>
+
+                            <ul class="objects">
+                                <li><small>Answer 7 (Question 4): 65%</small></li>
+                                <li><small>Answer 8 (Question 5): 12%</small></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step" data-x="4000" data-y="-1500">
+                <p>Anybody can <a href="/admin/survey/new">create surveys</a>.</p>
+                <p>Your data are accessible only to <strong>you</strong>, until you decide to <strong>share</strong> them.</p>
+            </div>
+
+
+
+            <div class="step " data-x="-1000" data-y="-500">
+                <h1>Visualize trend lines on <a href="/browse/chart">chart</a></h1>
+                <p style="text-align: center"><a href="/browse/chart"><i class="fa fa-4x fa-bar-chart-o" ></i></a></p>
+            </div>
+
+            <div class="step " data-x="0" data-y="-500">
+                <h1 style="text-align: center; white-space: nowrap;">View and export detailed data</h1>
+                <p style="text-align: center"><i class="fa fa-4x fa-table" ></i></p>
+                <p style="text-align: center">for <a href="/browse/table/filter" title="Raw data per questionnaire">each</a> <a href="/browse/table/questionnaire" title="Results per questionnaire">steps</a> of <a href="/browse/table/country" title="Evolution of one country over the years">calculation</a></p>
+            </div>
+
+            <div class="step " data-x="1000" data-y="-500">
+                <p style="text-align: center">Quickly <a href="/contribute/questionnaire?sectorChildren">input your own data</a> to  compare and <strong>reconciliate</strong> with official data.</p>
+            </div>
+
+            <div class="step " data-x="1000" data-y="500">
+                <p style="text-align: center">Learn more with the <a href="http://gims.readthedocs.org/">complete documentation</a>.</p>
+            </div>
+
+            <div class="step " data-x="1000" data-y="500" data-rotate-x="90">
+                <p style="text-align: center">Oh, did we mention it's entirely <a style="white-space: nowrap;" href="http://github.com/Ecodev/gims">open source</a> ?</p>
+                <p style="text-align: center"><a href="http://github.com/Ecodev/gims"><i class="fa fa-4x fa-github"></i></a></p>
+            </div>
+
+            <div id="overview" class="step" data-x="1500" data-y="-2000" data-scale="6">
+            </div>
+
+        </div>
+
+        <!--
+
+            Hint is not related to impress.js in any way.
+
+            But it can show you how to use impress.js features in creative way.
+
+            When the presentation step is shown (selected) its element gets the class of "active" and the body element
+            gets the class based on active step id `impress-on-ID` (where ID is the step's id)... It may not be
+            so clear because of all these "ids" in previous sentence, so for example when the first step (the one with
+            the id of `bored`) is active, body element gets a class of `impress-on-bored`.
+
+            This class is used by this hint below. Check CSS file to see how it's shown with delayed CSS animation when
+            the first step of presentation is visible for a couple of seconds.
+
+            ...
+
+            And when it comes to this piece of JavaScript below ... kids, don't do this at home ;)
+            It's just a quick and dirty workaround to get different hint text for touch devices.
+            In a real world it should be at least placed in separate JS file ... and the touch content should be
+            probably just hidden somewhere in HTML - not hard-coded in the script.
+
+            Just sayin' ;)
+
+        -->
+        <div class="hint">
+            Use spacebar or arrow keys to navigate
+        </div>
+        <script>
+            if ("ontouchstart" in document.documentElement) {
+                document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+            }
+        </script>
+
+        <script src="/lib/impress.js/js/impress.js"></script>
+        <script>impress().init();</script>
+    </body>
+</html>
