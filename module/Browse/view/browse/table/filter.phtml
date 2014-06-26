@@ -459,8 +459,8 @@
                                             </div>
                                             <div ng-if="!isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) && (questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second)">
                                                 <i class="fa fa-cog fa-fw text-muted"></i>
-                                                <span ng-show="!isValidNumber(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second) && isValidNumber(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first)" class="text-lined-through" >{{questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first|percent}}</span>
-                                                <span ng-show="isValidNumber(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second)">{{questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second|percent}}</span>
+                                                <span ng-if="excludeRuleExists(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id])" class="excluded-from-computing" tooltip="Excluded from further computing">{{questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first | percent}}</span>
+                                                <span ng-if="!excludeRuleExists(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id])">{{questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second | percent}}</span>
                                                 %
                                             </div>
                                         </div>
