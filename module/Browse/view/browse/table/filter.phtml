@@ -448,10 +448,10 @@
                                     {{filter.name}}
                                     <a href="/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}" ng-if="mode.isContribute && !filter.sectorChild && filter.hover"><i class="fa fa-pencil"></i></a>
                                 </span>
-                                <div ng-if="!isValidId(filter) && mode.isSector && filter.level == 1" style="display:inline-block;vertical-align:top;width:90%;margin-left:{{(filter.level - tabs.filters[0].level) * 2}}em;">
+                                <div ng-if="!isValidId(filter) && mode.isSector && filter.level == 1" style="display:inline-block;vertical-align:top;width:80%;margin-left:{{(filter.level - tabs.filters[0].level) * 2}}em;">
                                     <ng-form name="filterName" class="input-group" ng-class="{'has-error':filterName.$invalid}">
                                         <span class="input-group-addon"><i class="fa" ng-class="{'fa-asterisk':!filter.isLoading,'fa-gims-loading':filter.isLoading,'text-primary':!filterName.$invalid}"></i></span>
-                                        <input type="text" name="name" ng-model="filter.name" placeholder="Filter name" required />
+                                        <input type="text" name="name" ng-model="filter.name" placeholder="Facility name" required />
                                     </ng-form>
                                 </div>
                             </td>
@@ -475,7 +475,7 @@
                                     <div ng-class="{'col-md-4': questionnaire.showLabels, 'col-md-12' : !questionnaire.showLabels}">
 
                                         <!-- Display answers / formulas in *contribute* mode -->
-                                        <ng-form name="valueForm" ng-if="!mode.isSector || filter.level > 0">
+                                        <ng-form name="valueForm">
                                             <div class="input-group input-group-sm">
                                                 <!-- add-on buttons on input fields -->
                                                  <span class="input-group-btn">
@@ -570,7 +570,7 @@
                                 <a class="btn btn-default btn-sm"
                                    ng-click="addEquipment();"
                                    ng-class="{'disabled': getFiltersByLevel(0).length != 1}">
-                                    <i class="fa fa-plus-circle"></i> Add new equipment
+                                    <i class="fa fa-plus-circle"></i> Add new facility
                                 </a>
                             </td>
                         </tr>

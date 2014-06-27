@@ -356,8 +356,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             return deferred.promise;
         }
 
-        answer.initialValue = answer[question.value];
-
         Restangular.restangularizeElement(null, answer, 'answer');
         Restangular.restangularizeElement(null, question, 'question');
 
@@ -371,11 +369,13 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
             if (answer.permissions) {
                 updateAnswer(answer, questionnaire).then(function() {
+                    answer.initialValue = answer[question.value];
                     deferred.resolve(answer);
                 });
             } else {
                 $scope.getPermissions(question, answer).then(function() {
                     updateAnswer(answer, questionnaire).then(function() {
+                        answer.initialValue = answer[question.value];
                         deferred.resolve(answer);
                     });
                 });
@@ -389,6 +389,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             // if question is not created, create it before creating the answer
             getOrSaveQuestion(question).then(function(question) {
                 createAnswer(answer, question, {part: part}).then(function() {
+                    answer.initialValue = answer[question.value];
                     deferred.resolve(answer);
                     $scope.refresh(false, true);
                 });
@@ -407,16 +408,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         $scope.checkQuestionnairesIntegrity().then(function() {
             saveFilters().then(function(savedEquipments) {
                 var questionnairesToSave = !_.isUndefined(questionnaire) ? [questionnaire] : _.filter($scope.tabs.questionnaires, $scope.checkIfSavableQuestionnaire);
-                if (questionnairesToSave.length) {
-                    saveQuestionnaires(questionnairesToSave, savedEquipments);
-                } else if (questionnairesToSave.length === 0 && savedEquipments.length > 0) {
-                    var existingQuestionnaires = _.filter($scope.tabs.questionnaires, function(q) {
-                        if (q.id) {
-                            return true;
-                        }
-                    });
-                    saveQuestionnaires(existingQuestionnaires, savedEquipments);
-                }
+                var existingQuestionnaires = _.filter($scope.tabs.questionnaires, 'id');
+
+                saveQuestionnaires(questionnairesToSave, savedEquipments);
+                saveQuestionnaires(existingQuestionnaires, savedEquipments);
             });
         });
     };
@@ -806,26 +801,17 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             return q.survey.code;
         });
 
-        var questionnairesPromisses = [];
         _.forEach(questionnairesToSaveBySurvey, function(questionnaires) {
 
             // save the first questionnaire (and his questions)
-            questionnairesPromisses.push(saveCompleteQuestionnaire(questionnaires.shift()).then(function() {
+            saveCompleteQuestionnaire(questionnaires.shift(), savedEquipments).then(function() {
             }, function() {
             }, function() {
-
                 // then, once the questions have been created, save all other questionnaires
                 _.forEach(questionnaires, function(questionnaire) {
-                    questionnairesPromisses.push(saveCompleteQuestionnaire(questionnaire).then(function() {
-                    }));
+                    saveCompleteQuestionnaire(questionnaire, savedEquipments);
                 });
-
-                if (questionnairesToSave.length == questionnairesPromisses.length) {
-                    $q.all(questionnairesPromisses).then(function() {
-                        createQuestionnaireFilterUsages(savedEquipments);
-                    });
-                }
-            }));
+            });
         });
     };
 
@@ -1198,15 +1184,20 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * Create a questionnaire, recovering or creating related survey and questions
      * @param questionnaire
      */
-    var saveCompleteQuestionnaire = function(questionnaire) {
+    var saveCompleteQuestionnaire = function(questionnaire, savedEquipments) {
         var Qdeferred = $q.defer();
 
         // get survey if exists or create
         getOrSaveSurvey(questionnaire).then(function(survey) {
             questionnaire.survey = survey;
 
+            if (!questionnaire.id) {
+                savedEquipments = $scope.getFiltersByLevel(1);
+            }
+
             // create questionnaire
             getOrSaveUnitQuestionnaire(questionnaire).then(function(newQuestionnaire) {
+
                 questionnaire.id = newQuestionnaire.id;
                 propagateSurvey(survey);
                 updateUrl('questionnaires');
@@ -1222,6 +1213,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                         return true;
                     }
                 });
+
                 if (questionsForSave.length === 0) {
                     Qdeferred.notify();
                     Qdeferred.resolve(questionnaire);
@@ -1244,6 +1236,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     // once all questions have been saved, notify next questionnaire to start saving
                     // and add listener on all answers promises to notify end of full saved questionnaire
                     $q.all(questionsPromises).then(function() {
+                        createQuestionnaireFilterUsages(savedEquipments);
                         propagateSurvey(survey);
                         Qdeferred.notify('Questions recovered'); // says to promise listener he can save next questionnaire (notification)
                         $q.all(answersPromises).then(function() {
