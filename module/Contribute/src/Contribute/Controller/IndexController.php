@@ -14,7 +14,7 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
         ));
     }
 
-    public function glassAction()
+    public function glaasAction()
     {
         return new ViewModel();
     }

@@ -50,8 +50,8 @@ angular.module('myApp', [
             $routeProvider.when('/browse/table/filter', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
             $routeProvider.when('/contribute/jmp', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
             $routeProvider.when('/contribute/nsa', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
-            $routeProvider.when('/contribute/glaas/', {templateUrl: '/template/contribute/glaas', controller: 'Contribute/GlassCtrl'});
-            $routeProvider.when('/contribute/glaas/:id', {templateUrl: '/template/contribute/glaas', controller: 'Contribute/GlassCtrl'});
+            $routeProvider.when('/contribute/glaas/', {templateUrl: '/template/contribute/glaas', controller: 'Contribute/GlaasCtrl'});
+            $routeProvider.when('/contribute/glaas/:id', {templateUrl: '/template/contribute/glaas', controller: 'Contribute/GlaasCtrl'});
 
             $routeProvider.otherwise({redirectTo: '/home'});
 
