@@ -23,7 +23,7 @@ WHERE S.relkind = 'S'
     AND D.refobjid = C.attrelid
     AND D.refobjsubid = C.attnum
     AND T.relname = PGT.tablename
-ORDER BY S.relname;" | grep -o "'SELECT.*'" | sed "s/'/\"/g" | sed "s/&#39;/'/g" | xargs -L 1 ./vendor/bin/doctrine-module dbal:run-sql
+ORDER BY S.relname;" | grep -oP "SELECT.*;" | sed 's/\(.*\)/"\1"/g' | sed "s/&#39;/'/g" | xargs -L 1 ./vendor/bin/doctrine-module dbal:run-sql
 
 # Import additional countries
 time php htdocs/index.php import jmp data/cache/country_data/Afghanistan_13.xlsm # for importing NULL instead of ignoring non-existing formulas
