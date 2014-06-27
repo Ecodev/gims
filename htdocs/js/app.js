@@ -13,7 +13,9 @@ angular.module('myApp', [
     'chartsExample.directives',
     'colorpicker.module',
     'ngAnimate',
-    'ui.ace'
+    'ui.ace',
+    'angulartics',
+    'angulartics.google.analytics'
 ]).
         config(function($routeProvider, $locationProvider, RestangularProvider, $httpProvider, requestNotificationProvider) {
             'use strict';

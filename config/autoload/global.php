@@ -12,6 +12,10 @@
  * file.
  */
 return array(
+    // Because Google Analytics is set up to filter by hostname,
+    // we can share the same tracking code for all version of the site.
+    // However it can still be overriden locally if needed (to disable it)
+    'googleAnalyticsTrackingCode' => 'UA-52338137-1',
     'db' => array(
         'driver' => 'Pdo',
     ),
