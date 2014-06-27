@@ -328,22 +328,18 @@
                                     <div class="form-group">
                                         <div class="row show-grid">
                                             <div class="col-md-12">
-                                                <label class="form-label">New dataset</label>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <a class="btn btn-default" href="/contribute/questionnaire?sectorChildren&returnUrl={{currentUrl}}"><i class="fa fa-plus"></i> Create new dataset</a>
                                             </div>
                                         </div>
-                                        <div class="row show-grid" ng-show="filterSet">
-                                            <div class="col-md-12">
-                                                <label class="form-label">Edit dataset</label>
-                                            </div>
-                                            <div class="col-md-12">
 
+                                        <h2>Filter edition</h2>
+
+                                        <div class="row show-grid" ng-show="tabs.filters">
+                                            <div class="col-md-12">
                                                 <ul class="list-unstyled">
-                                                    <li class="pull-left" style="margin-bottom:5px;margin-right:5px;"><a class="btn btn-primary" ng-class="{'disabled': !country || !filterSet}" href="/contribute/questionnaire?&country={{country.id}}&filterSet={{getFiltersIds()}}&returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i> Edit all</a></li>
+                                                    <li class="pull-left" style="margin-bottom:5px;margin-right:5px;"><a class="btn btn-success" href="/contribute/nsa?returnUrl={{currentUrl}}"><i class="fa fa-plus-circle"></i> Create a new NSA data</a></li>
+                                                    <li class="pull-left" style="margin-bottom:5px;margin-right:5px;"><a class="btn btn-primary" ng-class="{'disabled': !tabs.country || !tabs.filters}" href="/contribute/jmp?&country={{country.id}}&filterSet={{getFiltersIds()}}&returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i> Edit all</a></li>
                                                     <li ng-repeat="filter in tabs.filters" class="pull-left" style="margin-bottom:5px;margin-right:5px;">
-                                                        <a class="btn btn-default" href="/contribute/questionnaire?&country={{country.id}}&filter={{filter.id}}&returnUrl={{currentUrl}}"><i class="fa fa-pencil" style="color:{{filter.genericColor}}"></i> {{filter.name}}</a>
+                                                        <a class="btn btn-default" href="/contribute/jmp?&country={{country.id}}&filter={{filter.id}}&returnUrl={{currentUrl}}"><i class="fa fa-pencil" style="color:{{filter.genericColor}}"></i> Edit {{filter.name}}</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -351,7 +347,7 @@
 
                                         <hr/>
 
-                                        <h3 class="text-center">Filter projection</h3>
+                                        <h2>Filter projection</h2>
 
                                         <div class="row show-grid">
                                             <div class="col-md-12">
