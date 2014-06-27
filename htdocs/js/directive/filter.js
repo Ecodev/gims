@@ -31,7 +31,7 @@ angular.module('myApp.directives').directive('gimsFilter', function() {
                       'custom-selection-template="{{selectionTemplate}}" ' +
                       'custom-result-template="{{resultTemplate}}" ' +
                       'custom-var="{{currentUrl}}" ' +
-                      'changeUrl="changeUrl" ' +
+                      'change-url="changeUrl" ' +
                       'disabled="disabled" ' +
                       'style="width: 100%"> ' +
                   '</gims-select></div>',
