@@ -7,7 +7,7 @@
  * <gims-select api="filterSet" model="mySelectedFilterSet" name="myFilterName" placeholder="Select a questionnaire" style="width:100%;"></gims-select>
  *
  * To enable "ID mode", specify name="id" in element. This will reload the current URL
- * with the ID of the selected item instead of GET parameter (see for example: /contribute/questionnaire)
+ * with the ID of the selected item instead of GET parameter (see for example: /contribute/jmp)
  *
  * To specify additional GET parameter for API calls, use attribute queryparams:
  * <gims-select api="questionnaire" queryparams="questionnaireQueryParams" /></gims-select>
