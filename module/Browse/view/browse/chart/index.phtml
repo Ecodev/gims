@@ -3,6 +3,9 @@
 <!-- Toolbar -->
 <div class="navbar navbar-default hidden-print">
     <a class="navbar-brand" href="#">Chart</a>
+    <form class="navbar-form">
+        <a class="btn btn-default" ng-if="tabs.country" href="/contribute/nsa?usedCountry={{tabs.country.id}}&returnUrl={{currentUrl}}"><i class="fa fa-plus-circle"></i> Create sector dataset</a>
+    </form>
 </div>
 
 <table id="chartExternalLayout">
@@ -241,7 +244,7 @@
                                 </div>
 
                                 <div class="col-md-12" ng-show="!pointSelected">
-                                    <div class="alert alert-info ng-trans ng-trans-fade-up" ><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select a questionnaire on chart to display filters') ?></div>
+                                    <div class="alert alert-warning ng-trans ng-trans-fade-up" ><i class="fa fa-warning"></i> <?php echo $this->translate('Select a questionnaire on chart to display filters') ?></div>
                                 </div>
 
                             </tab>
@@ -276,7 +279,7 @@
                                 </div>
 
                                 <div class="col-md-12" ng-show="!pointSelected">
-                                    <div class="alert alert-info ng-trans ng-trans-fade-up" ><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select a questionnaire on chart to display Calculations / Estimations / Ratios') ?></div>
+                                    <div class="alert alert-warning ng-trans ng-trans-fade-up" ><i class="fa fa-warning"></i> <?php echo $this->translate('Select a questionnaire on chart to display Calculations / Estimations / Ratios') ?></div>
                                 </div>
                             </tab>
 
@@ -340,12 +343,12 @@
                                             </div>
                                         </div>
 
-                                        <h2>Filter edition</h2>
 
                                         <div class="row show-grid" ng-show="tabs.filters">
                                             <div class="col-md-12">
+                                                <h2>Filter edition</h2>
+
                                                 <ul class="list-unstyled">
-                                                    <li class="pull-left" style="margin-bottom:5px;margin-right:5px;"><a class="btn btn-success" href="/contribute/nsa?returnUrl={{currentUrl}}"><i class="fa fa-plus-circle"></i> Create a new NSA data</a></li>
                                                     <li class="pull-left" style="margin-bottom:5px;margin-right:5px;"><a class="btn btn-primary" ng-class="{'disabled': !tabs.country || !tabs.filters}" href="/contribute/jmp?&country={{country.id}}&filterSet={{getFiltersIds()}}&returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i> Edit all</a></li>
                                                     <li ng-repeat="filter in tabs.filters" class="pull-left" style="margin-bottom:5px;margin-right:5px;">
                                                         <a class="btn btn-default" href="/contribute/jmp?&country={{country.id}}&filter={{filter.id}}&returnUrl={{currentUrl}}"><i class="fa fa-pencil" style="color:{{filter.genericColor}}"></i> Edit {{filter.name}}</a>

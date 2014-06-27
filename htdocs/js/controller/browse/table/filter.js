@@ -612,7 +612,17 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         if (_.isUndefined($scope.tabs.questionnaires)) {
             $scope.tabs.questionnaires = [];
         }
-        $scope.tabs.questionnaires.splice(0, 0, {});
+
+        var questionnaire = {};
+        if ($location.search().usedCountry) {
+            questionnaire = {
+                geoname: {
+                    country: $location.search().usedCountry
+                }
+            };
+        }
+
+        $scope.tabs.questionnaires.splice(0, 0, questionnaire);
         $scope.questionnairesAreSorted = false;
         fillMissingElements();
         updateUrl('questionnaires');
