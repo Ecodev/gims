@@ -160,7 +160,7 @@ class IndexControllerTest extends AbstractController
             array(
                 'contribute',
                 'index',
-                '/template/contribute/glass',
+                '/template/contribute/glaas',
                 'template_contribute/default'
             ),
         );

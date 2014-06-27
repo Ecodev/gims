@@ -2,10 +2,16 @@
 
     <h2>
         <ul class="breadcrumb">
-            <i class="active fa fa-gims-survey pull-right"></i>
-            <li class="active"><a href="/admin/survey">Surveys</a></li>
+
+            <li class="active"><a href="/admin/survey"><i class="fa fa-gims-survey"></i> Surveys</a></li>
+
+            <button class="btn pull-right" ng-class="{'btn-info':showHelp, 'btn-default':!showHelp}" ng-click="showHelp = !showHelp"><i class='fa fa-question'></i></button>
         </ul>
     </h2>
+
+    <div class="alert alert-info" ng-if="showHelp">
+        <p><i class="fa fa-info-circle"></i> Edit an existing survey or create a new one. For further info, see the <a href="http://gims.readthedocs.org/en/develop/content/data_input.html">detailed documentation.</a></p>
+    </div>
 
     <div class="row show-grid">
         <div class="col-md-9">

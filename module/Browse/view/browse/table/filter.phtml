@@ -1,8 +1,8 @@
 <div class="container" >
     <!-- Toolbar -->
-    <div class="navbar navbar-default hidden-print">
-        <a class="navbar-brand" href="#">{{mode.name}}</a>
 
+    <div class="navbar navbar-default hidden-print">
+        <a class="navbar-brand" href="#">{{mode.name}} filters</a>
 
         <form class="navbar-form">
             <!-- Back button, if return URL is specified -->
@@ -17,8 +17,13 @@
             <!-- Hide/Show selection tools and/or children filters -->
             <button class="btn btn-default" ng-click="expandSelection = !expandSelection"><i class="fa" ng-class="{'fa-compress':expandSelection,'fa-expand text-primary':!expandSelection}"></i> Selection</button>
 
+            <!--<button class="btn pull-right" ng-class="{'btn-info':showHelp, 'btn-default':!showHelp}" ng-click="showHelp = !showHelp"><i class='fa fa-question'></i></button>-->
         </form>
     </div>
+
+    <!--<div class="alert alert-info" ng-if="showHelp">-->
+        <!--<p><i class="fa fa-info-circle"></i> Lorem ipsum</p>-->
+    <!--</div>-->
 
     <!-- Selection panel for filters and questionnaires -->
     <form name="selectionForm">
@@ -76,7 +81,7 @@
                                     <p>Some selected surveys are only available in advanced edition mode and one at a time.</p>
                                     <p>Click to edit.</p>
                                     <ul class="list-unstyled">
-                                        <li ng-repeat="q in tabs.glass"><a href="/contribute/glass/{{q.id}}?returnUrl={{currentUrl}}"><i class="fa fa-external-link"></i> {{q.name}}</a></li>
+                                        <li ng-repeat="q in tabs.glass"><a href="/contribute/glaas/{{q.id}}?returnUrl={{currentUrl}}"><i class="fa fa-external-link"></i> {{q.name}}</a></li>
                                     </ul>
                                 </tab>
                             </tabset>

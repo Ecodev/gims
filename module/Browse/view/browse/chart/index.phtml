@@ -1,5 +1,10 @@
 <div class="container" ng-class="{'gims-full-width-container':panelOpened}">
 
+<!-- Toolbar -->
+<div class="navbar navbar-default hidden-print">
+    <a class="navbar-brand" href="#">Chart</a>
+</div>
+
 <table id="chartExternalLayout">
     <tr>
         <td>
@@ -80,7 +85,11 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="alert alert-info ng-trans ng-trans-fade-up" ng-hide="tabs.filters.length && tabs.country && tabs.part"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?></div>
+                        <div class="alert alert-warning ng-trans ng-trans-fade-up" ng-hide="tabs.filters.length && tabs.country && tabs.part">
+                            <p>
+                                <i class="fa fa-warning"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?>
+                            </p>
+                        </div>
                     </div>
                 </div>
 

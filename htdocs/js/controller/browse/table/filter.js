@@ -41,12 +41,12 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             isSector: false
         },
         {
-            name: 'Contribute : JMP',
+            name: 'Contribute JMP',
             isContribute: true,
             isSector: false
         },
         {
-            name: 'Contribute : NSA',
+            name: 'Contribute NSA',
             isContribute: true,
             isSector: true
         }
@@ -930,7 +930,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         // if there is only 1 glass in all selected questionnaires, consider that user want to edit this one, and redirect to glass template
         // no action is possible on multiple glass questionnaires (neither browse or contribute)
         if (glass.length === 1 && $scope.tabs.questionnaires.length === 1) {
-            $location.url('/contribute/glass/' + glass[0].id + "?returnUrl=" + $location.path());
+            $location.url('/contribute/glaas/' + glass[0].id + "?returnUrl=" + $location.path());
 
             // else list glass questionnaires apart
         } else {
