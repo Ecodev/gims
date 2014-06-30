@@ -15,8 +15,8 @@ answer should not be computed the usual way, then we can customize it to be
 anything we want.
 
 The second application is used to compute any arbitrary values within a
-questionnaire. Typical usage would be to compute what is called Estimations,
-Calculations and Ratios in original Excel country files.
+questionnaire. Typical usage would be to compute what is called Calculations,
+Estimations and Ratios in original Excel country files.
 
 Finally, the third application is used much later in :doc:`computing process<computing>`,
 after the regression step. This can be used to defines that values should not be
