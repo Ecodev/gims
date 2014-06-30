@@ -76,7 +76,7 @@ class AnswerRepository extends AbstractChildRepository
 
     /**
      * Returns the percent value of an answer if it exists.
-     * Optimized for mass querying wihtin a Geoname based on a cache.
+     * Optimized for mass querying within a Geoname based on a cache.
      * @param integer $questionnaireId
      * @param integer $filterId
      * @param integer $partId
