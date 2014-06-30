@@ -899,6 +899,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 });
 
                 deferred.resolve(questionnaires);
+            }, function() {
+                $scope.tabs.questionnaires = [];
             });
         }
 

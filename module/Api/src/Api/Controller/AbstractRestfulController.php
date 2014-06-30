@@ -260,7 +260,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             return new JsonModel(array('message' => 'No object found'));
 
         } elseif (count($notGranted) == count($ids)) {
-            $this->checkActionGranted($objects[0], 'read');
+            $this->checkActionGranted($this->getRepository()->findOneById($ids[0]), 'read');
         } else {
             $this->getResponse()->setStatusCode(200);
         }
