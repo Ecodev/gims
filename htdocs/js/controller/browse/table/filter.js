@@ -23,7 +23,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.lastFilterId = 1;
     $scope.firstQuestionnairesRetrieve = false; // avoid to compute filters before questionnaires have been retrieved, getComputedFilters() need ready base to complete data
     $scope.tabs = {};
-    $scope.sectorChildren = 'Number of equipement,Persons per equipement';
+    $scope.sectorChildren = 'Number of facilities,Persons per facilities';
     $scope.parts = Restangular.all('part').getList().$object;
     $scope.surveysTemplate = "[[item.code]] - [[item.name]]";
     $scope.questionnairesStatus = {
