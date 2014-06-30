@@ -266,7 +266,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         }
 
         // if we have multiple IDs to output
-        if (count($objects) > 1) {
+        if (count($ids) > 1) {
             $result = new JsonModel($this->hydrator->extractArray($objects, $this->getJsonConfig()));
         } else {
             $result = new JsonModel($this->hydrator->extract($objects[0], $this->getJsonConfig()));
