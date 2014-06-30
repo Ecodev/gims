@@ -261,7 +261,7 @@
                                             </a>
                                         </li>
 
-                                        <li><a href ng-click="removeQuestionnaire($index)"><i class="fa fa-times fa-fw"></i> Remove survey from table</a></li>
+                                        <li><a href ng-click="removeQuestionnaire($index)"><i class="fa fa-times fa-fw"></i> Hide this column</a></li>
 
                                         <li class="divider"></li>
 
@@ -441,7 +441,7 @@
 
                             <!-- Filter name column-->
                             <td>
-                                <span class="btn btn-default btn-xs" style="vertical-align:top;" ng-click="removeFilter(filter)" ng-class="{'invisible':!mode.isContribute || !(!mode.isSector || mode.isSector && filter.level <= 1) || !filter.hover}"><i class="fa fa-times"></i></span>
+                                <span class="btn btn-default btn-xs" style="vertical-align:top;" ng-click="removeFilter(filter)" ng-class="{'invisible':!mode.isContribute || !(!mode.isSector || mode.isSector && filter.level <= 1) || !filter.hover}" tooltip="Hide this row and its children" tooltip-placement="right"><i class="fa fa-times"></i></span>
 
                                 <span ng-if="isValidId(filter) || mode.isSector && filter.level == 2" ng-class="{'strong':filter.level == tabs.filters[0].level && !filter.sectorChild}" style="margin-left:{{(filter.level - tabs.filters[0].level) * 2}}em;">
                                     <i class="fa" style="color:{{filter.color}}" ng-class="{'fa-gims-filter':!filter.isLoading && isValidId(filter), 'fa-asterisk text-primary':!filter.isLoading && !isValidId(filter), 'fa-gims-loading':filter.isLoading}"></i>
