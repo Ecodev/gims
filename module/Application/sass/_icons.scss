@@ -48,6 +48,10 @@ $fa-font-path: "../lib/fontawesome/fonts";
     @extend .fa-male;
 }
 
+.fa-gims-help {
+    @extend .fa-question-circle;
+}
+
 // Compatibility with glyphicons
 .glyphicon {
     @extend .fa;

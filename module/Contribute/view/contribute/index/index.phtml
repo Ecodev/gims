@@ -31,8 +31,7 @@
             </ul>
         </div>
         <div class="col-sm-6">
-            <h2>Statistics</h2>
-            <p>Questionnaires</p>
+            <h2>Questionnaire statistics</h2>
             <div class="progress">
                 <div class="progress-bar" style="width: {{statistics.new / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.new}} / {{statistics.total}} new questionnaires"></div>
                 <div class="progress-bar progress-bar-info" style="width: {{statistics.completed / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.completed}} / {{statistics.total}} completed questionnaires"></div>
@@ -41,14 +40,16 @@
                 <div class="progress-bar progress-bar-danger" style="width: {{statistics.rejected / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.rejected}} / {{statistics.total}} rejected questionnaires"></div>
             </div>
 
-            <ul>
-                <li>{{statistics.new}} new</li>
-                <li>{{statistics.completed}} completed</li>
-                <li>{{statistics.validated}} validated</li>
-                <li>{{statistics.published}} published</li>
-                <li>{{statistics.rejected}} rejected</li>
-            </ul>
-
+            <div ng-if="statistics" class="ng-trans ng-trans-fade-up">
+                <ul >
+                    <li>{{statistics.new}} new, waiting to be answered</li>
+                    <li>{{statistics.completed}} completed</li>
+                    <li>{{statistics.validated}} validated</li>
+                    <li>{{statistics.published}} published</li>
+                    <li>{{statistics.rejected}} rejected</li>
+                </ul>
+                <a href="http://gims.readthedocs.org/en/latest/content/data_input.html#questionnaires" class="pull-right text-muted" tooltip="Read about questionnaire statuses"><i class="fa fa-gims-help"></i> help</a>
+            </div>
         </div>
     </div>
 
