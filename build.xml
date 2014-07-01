@@ -124,10 +124,9 @@ ORDER BY S.relname;&quot; | grep -oP &quot;SELECT.*;&quot; | sed 's/\(.*\)/&quot
 
         <!--Give Questionnaire Reporter role only to published questionnaires-->
         <exec command="./vendor/bin/doctrine-module dbal:run-sql &quot;INSERT INTO user_questionnaire (user_id, role_id, questionnaire_id) SELECT \&quot;user\&quot;.id, 3, questionnaire.id FROM questionnaire, \&quot;user\&quot; WHERE \&quot;user\&quot;.email = 'gims@gims.pro' AND questionnaire.status = 'published';&quot;" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
-        <exec command="./vendor/bin/doctrine-module dbal:run-sql &quot;INSERT INTO user_filter_set (user_id, role_id, filter_set_id) SELECT \&quot;user\&quot;.id, 6, filter_set.id from filter_set, \&quot;user\&quot; WHERE \&quot;user\&quot;.email = 'gims@gims.pro';&quot;" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
 
         <!--Give Filter Editor role to all filterSet-->
-        <exec command="" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
+        <exec command="./vendor/bin/doctrine-module dbal:run-sql &quot;INSERT INTO user_filter_set (user_id, role_id, filter_set_id) SELECT \&quot;user\&quot;.id, 6, filter_set.id from filter_set, \&quot;user\&quot; WHERE \&quot;user\&quot;.email = 'gims@gims.pro';&quot;" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
     </target>
 
     <target name="phpunit" depends="build, load-test-data">
