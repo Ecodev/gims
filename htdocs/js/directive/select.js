@@ -108,8 +108,13 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
 
             // define what mode should be used for what type of item
             var config = {
-                questionnaire: 'ajax',
                 user: 'ajax',
+                survey: 'ajax',
+                questionnaire: 'ajax',
+                filterSet: 'ajax',
+                filter: 'ajax',
+                rule: 'ajax',
+                geoname: 'ajax',
                 country: 'cached',
                 part: 'cached'
             };
