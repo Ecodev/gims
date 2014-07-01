@@ -99,7 +99,7 @@
         <exec command="./vendor/bin/doctrine-module orm:validate-schema" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
     </target>
 
-    <target name="reset-sequences" depends="">
+    <target name="reset-sequences">
         <echo msg="Reseting all sequence values..." />
         <exec command="./vendor/bin/doctrine-module dbal:run-sql --ansi &quot;SELECT  'SELECT SETVAL(' ||quote_literal(quote_ident(PGT.schemaname)|| '.'||quote_ident(S.relname))|| ', COALESCE(MAX(' ||quote_ident(C.attname)|| '), 1), MAX(' ||quote_ident(C.attname)|| ') IS NOT NULL) FROM ' ||quote_ident(PGT.schemaname)|| '.'||quote_ident(T.relname)|| ';'
 FROM pg_class AS S, pg_depend AS D, pg_class AS T, pg_attribute AS C, pg_tables AS PGT
@@ -110,6 +110,24 @@ WHERE S.relkind = 'S'
     AND D.refobjsubid = C.attnum
     AND T.relname = PGT.tablename
 ORDER BY S.relname;&quot; | grep -oP &quot;SELECT.*;&quot; | sed 's/\(.*\)/&quot;\1&quot;/g' | sed &quot;s/&amp;#39;/'/g&quot; | xargs -L 1 ./vendor/bin/doctrine-module dbal:run-sql" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
+    </target>
+
+    <target name="insert-test-user">
+        <echo msg="Inserting a test user with full access on published data..." />
+
+        <!--Create test user-->
+        <exec command="./vendor/bin/doctrine-module dbal:run-sql &quot;DELETE FROM \&quot;user\&quot; WHERE email = 'gims@gims.pro'&quot;" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
+        <exec command="./vendor/bin/doctrine-module dbal:run-sql &quot;INSERT INTO \&quot;user\&quot; (name, email, password) VALUES ('Test user', 'gims@gims.pro', '\$2y\$14\$14RCodMvODT60.O2FlzWwOm4/SepVzPh6Pl4vFFpKwN5tUso7RIJ6');&quot;" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
+
+        <!--Give Survey Editor role to survey with strictly only published questionnaires-->
+        <exec command="./vendor/bin/doctrine-module dbal:run-sql &quot;INSERT INTO user_survey (user_id, role_id, survey_id) SELECT \&quot;user\&quot;.id, 7, survey.id FROM survey, \&quot;user\&quot; WHERE \&quot;user\&quot;.email = 'gims@gims.pro' AND survey.id NOT IN (SELECT survey_id FROM questionnaire WHERE questionnaire.status != 'published');&quot;" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
+
+        <!--Give Questionnaire Reporter role only to published questionnaires-->
+        <exec command="./vendor/bin/doctrine-module dbal:run-sql &quot;INSERT INTO user_questionnaire (user_id, role_id, questionnaire_id) SELECT \&quot;user\&quot;.id, 3, questionnaire.id FROM questionnaire, \&quot;user\&quot; WHERE \&quot;user\&quot;.email = 'gims@gims.pro' AND questionnaire.status = 'published';&quot;" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
+        <exec command="./vendor/bin/doctrine-module dbal:run-sql &quot;INSERT INTO user_filter_set (user_id, role_id, filter_set_id) SELECT \&quot;user\&quot;.id, 6, filter_set.id from filter_set, \&quot;user\&quot; WHERE \&quot;user\&quot;.email = 'gims@gims.pro';&quot;" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
+
+        <!--Give Filter Editor role to all filterSet-->
+        <exec command="" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
     </target>
 
     <target name="phpunit" depends="build, load-test-data">
