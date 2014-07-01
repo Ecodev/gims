@@ -2,7 +2,7 @@
 set -e
 
 > data/logs/all.log
-phing load-data -DdumpFile=population.backup.gz
+./vendor/bin/phing load-data -DdumpFile=population.backup.gz
 
 time php htdocs/index.php import jmp data/cache/country_data/Bangladesh_13.xlsm
 
@@ -15,15 +15,7 @@ SQL_PATH="`pwd`/tests/data/sql"
 ./vendor/bin/doctrine-module dbal:run-sql "COPY choice FROM '$SQL_PATH/choice.sql';"
 
 # Reset sequences values
-./vendor/bin/doctrine-module dbal:run-sql --ansi "SELECT  'SELECT SETVAL(' ||quote_literal(quote_ident(PGT.schemaname)|| '.'||quote_ident(S.relname))|| ', COALESCE(MAX(' ||quote_ident(C.attname)|| '), 1), MAX(' ||quote_ident(C.attname)|| ') IS NOT NULL) FROM ' ||quote_ident(PGT.schemaname)|| '.'||quote_ident(T.relname)|| ';'
-FROM pg_class AS S, pg_depend AS D, pg_class AS T, pg_attribute AS C, pg_tables AS PGT
-WHERE S.relkind = 'S'
-    AND S.oid = D.objid
-    AND D.refobjid = T.oid
-    AND D.refobjid = C.attrelid
-    AND D.refobjsubid = C.attnum
-    AND T.relname = PGT.tablename
-ORDER BY S.relname;" | grep -oP "SELECT.*;" | sed 's/\(.*\)/"\1"/g' | sed "s/&#39;/'/g" | xargs -L 1 ./vendor/bin/doctrine-module dbal:run-sql
+./vendor/bin/phing reset-sequences
 
 # Import additional countries
 time php htdocs/index.php import jmp data/cache/country_data/Afghanistan_13.xlsm # for importing NULL instead of ignoring non-existing formulas
@@ -39,7 +31,7 @@ time php htdocs/index.php import jmp data/cache/country_data/Saudi_arabia_13.xls
 ./vendor/bin/doctrine-module dbal:run-sql "UPDATE filter SET creator_id=1 WHERE creator_id IS NULL;"
 
 # Dump new database content
-phing dump-data -DdumpFile=tests/data/db.backup.gz
+./vendor/bin/phing dump-data -DdumpFile=tests/data/db.backup.gz
 
 
 # Dump partial dumps (this should be used to create partial SQL)
