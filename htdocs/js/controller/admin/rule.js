@@ -49,7 +49,7 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             level: true,
             year: false,
             toString: function(config) {
-                return '{F#' + config.filter.id + ',Q#' + config.questionnaire.id + ',P#' + config.part.id + (config.level ? ',#L2' : '') + '}';
+                return '{F#' + config.filter.id + ',Q#' + config.questionnaire.id + ',P#' + config.part.id + (config.level ? ',L#2' : '') + '}';
             }
         },
         {
