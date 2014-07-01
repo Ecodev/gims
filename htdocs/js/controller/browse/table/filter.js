@@ -345,14 +345,14 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         // avoid to do some job if the value is not changed or if it's invalid (undefined)
         if (answer.initialValue === answer[question.value] || _.isUndefined(answer[question.value]) && !_.isUndefined(answer.initialValue)) {
             answer[question.value] = answer.initialValue;
-            deferred.reject();
+            deferred.resolve();
             return deferred.promise;
         }
 
         // avoid to save questions when its a new questionnaire / survey
         // the save is provided by generate button for all new questionnaires, surveys, questions and answers.
         if (_.isUndefined(questionnaire.id)) {
-            deferred.reject();
+            deferred.resolve();
             return deferred.promise;
         }
 
@@ -406,12 +406,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.saveAll = function(questionnaire) {
 
         $scope.checkQuestionnairesIntegrity().then(function() {
-            saveFilters().then(function(savedEquipments) {
-                var questionnairesToSave = !_.isUndefined(questionnaire) ? [questionnaire] : _.filter($scope.tabs.questionnaires, $scope.checkIfSavableQuestionnaire);
+            saveFilters().then(function(savedFacilities) {
+                var questionnairesToCreate = !_.isUndefined(questionnaire) ? [questionnaire] : _.filter($scope.tabs.questionnaires, $scope.checkIfSavableQuestionnaire);
                 var existingQuestionnaires = _.filter($scope.tabs.questionnaires, 'id');
-
-                saveQuestionnaires(questionnairesToSave, savedEquipments);
-                saveQuestionnaires(existingQuestionnaires, savedEquipments);
+                saveQuestionnaires(questionnairesToCreate.concat(existingQuestionnaires), savedFacilities);
             });
         });
     };
@@ -793,23 +791,33 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * Then, other questionnaires are saved, without questions
      * Answers are always saved if needed
      * @param questionnairesToSave
-     * @param savedEquipments
+     * @param savedFacilities
      */
-    var saveQuestionnaires = function(questionnairesToSave, savedEquipments) {
+    var saveQuestionnaires = function(questionnairesToSave, savedFacilities) {
 
         var questionnairesToSaveBySurvey = _.groupBy(questionnairesToSave, function(q) {
             return q.survey.code;
         });
 
         _.forEach(questionnairesToSaveBySurvey, function(questionnaires) {
-
             // save the first questionnaire (and his questions)
-            saveCompleteQuestionnaire(questionnaires.shift(), savedEquipments).then(function() {
+            var questionnaire = questionnaires.shift();
+            if (!questionnaire.id) {
+                savedFacilities = $scope.getFiltersByLevel(1);
+            }
+            saveCompleteQuestionnaire(questionnaire).then(function(questionnaire) {
+                createQuestionnaireFilterUsages(questionnaire, savedFacilities);
             }, function() {
             }, function() {
+                // notification when questions have been safed
                 // then, once the questions have been created, save all other questionnaires
                 _.forEach(questionnaires, function(questionnaire) {
-                    saveCompleteQuestionnaire(questionnaire, savedEquipments);
+                    if (!questionnaire.id) {
+                        savedFacilities = $scope.getFiltersByLevel(1);
+                    }
+                    saveCompleteQuestionnaire(questionnaire).then(function(questionnaire) {
+                        createQuestionnaireFilterUsages(questionnaire, savedFacilities);
+                    });
                 });
             });
         });
@@ -945,7 +953,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             // get data for new jmp questionnaires
             getQuestionnaires(_.pluck(jmp, 'id'), questionnaireWithAnswersFields).then(function(questionnaires) {
                 $scope.firstQuestionnairesRetrieve = true;
-                listQuestionnairesWithFilterUsages(questionnaires);
+//                listQuestionnairesWithFilterUsages(questionnaires);
                 prepareDataQuestionnaires(questionnaires);
             });
         }
@@ -1186,16 +1194,12 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * Create a questionnaire, recovering or creating related survey and questions
      * @param questionnaire
      */
-    var saveCompleteQuestionnaire = function(questionnaire, savedEquipments) {
+    var saveCompleteQuestionnaire = function(questionnaire) {
         var Qdeferred = $q.defer();
 
         // get survey if exists or create
         getOrSaveSurvey(questionnaire).then(function(survey) {
             questionnaire.survey = survey;
-
-            if (!questionnaire.id) {
-                savedEquipments = $scope.getFiltersByLevel(1);
-            }
 
             // create questionnaire
             getOrSaveUnitQuestionnaire(questionnaire).then(function(newQuestionnaire) {
@@ -1225,12 +1229,13 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                         var qdeferred = $q.defer();
                         getOrSaveQuestion(question).then(function(newQuestion) {
                             question = newQuestion;
-                            qdeferred.resolve(question);
                             propagateSurvey(survey);
 
                             _.forEach(question.answers, function(answer) {
                                 answersPromises.push($scope.saveAnswer(answer, question, undefined, questionnaire));
                             });
+
+                            qdeferred.resolve(question);
                         });
                         return qdeferred.promise;
                     });
@@ -1238,12 +1243,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     // once all questions have been saved, notify next questionnaire to start saving
                     // and add listener on all answers promises to notify end of full saved questionnaire
                     $q.all(questionsPromises).then(function() {
-                        createQuestionnaireFilterUsages(savedEquipments);
                         propagateSurvey(survey);
-                        Qdeferred.notify('Questions recovered'); // says to promise listener he can save next questionnaire (notification)
                         $q.all(answersPromises).then(function() {
                             Qdeferred.resolve(questionnaire);
                         });
+                        Qdeferred.notify('Questions recovered'); // says to promise listener he can save next questionnaire (notification)
                     });
                 }
             });
@@ -1863,26 +1867,25 @@ git      * @param questionnaire
     /**
      * Create usages only if we are in sector mode
      * As we cancel sector mode at
+     * @param questionnaire
      * @param filters
      */
-    var createQuestionnaireFilterUsages = function(filters) {
+    var createQuestionnaireFilterUsages = function(questionnaire, filters) {
         if ($scope.mode.isSector) {
             var equipments = _.map($scope.getFiltersByLevel(1, filters), function(filter) {
                 return filter.id + ':' + _.pluck(getChildren(filter), 'id').join('-');
             });
 
-            var questionnaires = _.compact(_.pluck($scope.tabs.questionnaires, 'id'));
-
             _.forEach($scope.tabs.questionnaires, function(questionnaire) {
                 questionnaire.filterQuestionnaireUsages = 1;
             });
 
-            listQuestionnairesWithFilterUsages($scope.tabs.questionnaires);
+//            listQuestionnairesWithFilterUsages($scope.tabs.questionnaires);
 
             $http.get('/api/filter/createUsages', {
                 params: {
                     filters: equipments.join(','),
-                    questionnaires: questionnaires.join(',')
+                    questionnaires: questionnaire.id
                 }
             }).success(function() {
                 $scope.firstQuestionnairesRetrieve = true;
@@ -1895,13 +1898,14 @@ git      * @param questionnaire
      * Questionnaires with usages
      * @param questionnaires
      */
-    var listQuestionnairesWithFilterUsages = function(questionnaires) {
-        $scope.questionnairesWithUsages = _.filter(questionnaires, function(q) {
-            if (!_.isEmpty(q.filterQuestionnaireUsages) || _.isNumber(q.filterQuestionnaireUsages)) {
-                return true;
-            }
-        });
-    };
+//    Disabled for the moment, because add buttons that are not required since the news NSA view has been added, but works
+//    var listQuestionnairesWithFilterUsages = function(questionnaires) {
+//        $scope.questionnairesWithUsages = _.filter(questionnaires, function(q) {
+//            if (!_.isEmpty(q.filterQuestionnaireUsages) || _.isNumber(q.filterQuestionnaireUsages)) {
+//                return true;
+//            }
+//        });
+//    };
 
     /**
      * Update parameters on url exlucding empty ids to avoid multiple consecutive commas that cause problems on server side.
