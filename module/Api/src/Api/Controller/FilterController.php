@@ -180,6 +180,9 @@ class FilterController extends AbstractChildRestfulController
                 'gtopo30',
                 'population'
             ]);
+            $geonameData['iso_numeric'] = $geoname->getCountry()->getIsoNumeric();
+            $geonameData['iso3'] = $geoname->getCountry()->getIso3();
+
             foreach ($parts as $part) {
                 $geonameData['calculations'][$part->getId()] = $calculator->computeFlattenAllYears(1980, 2014, $filters, $questionnaires, $part);
             }
