@@ -1088,8 +1088,8 @@ STRING;
             foreach ($filters as $filterName => $filterData) {
                 $highFilter = $this->cacheHighFilters[$filterName];
 
-                $actualFormulaGroup = isset($filterData['formulas'][$formulaGroup]) ? $formulaGroup : 'default';
-                foreach ($filterData['formulas'][$actualFormulaGroup] as $formulaData) {
+                $actualFormulaGroup = isset($filterData['regressionRules'][$formulaGroup]) ? $formulaGroup : 'default';
+                foreach ($filterData['regressionRules'][$actualFormulaGroup] as $formulaData) {
 
                     $part = $this->partOffsets[$formulaData[0]];
                     $formula = $formulaData[1];
@@ -1100,22 +1100,8 @@ STRING;
                         continue;
                     }
 
-                    // Replace our filter name with actual ID in formulas
-                    foreach ($filters as $filterNameOther => $foo) {
-                        $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
-                        $id = $otherHighFilter->getId();
-                        $formula = str_replace('COUNT({' . $filterNameOther, "COUNT({F#$id", $formula);
-                        $formula = str_replace('AVERAGE({' . $filterNameOther, "AVERAGE({F#$id", $formula);
-                        $formula = str_replace($filterNameOther . 'EARLIER', "{F#$id,P#current,Y-1}", $formula);
-                        $formula = str_replace($filterNameOther . 'LATER', "{F#$id,P#current,Y+1}", $formula);
-                        $formula = str_replace($filterNameOther . 'URBAN', "{F#$id,P#" . $this->partUrban->getId() . ",Y0}", $formula);
-                        $formula = str_replace($filterNameOther . 'RURAL', "{F#$id,P#" . $this->partRural->getId() . ",Y0}", $formula);
-                        $formula = str_replace($filterNameOther . 'TOTAL', "{F#$id,P#" . $this->partTotal->getId() . ",Y0}", $formula);
-                        $formula = str_replace($filterNameOther, "{F#$id,P#current,Y0}", $formula);
-                        $formula = str_replace('POPULATION_URBAN', "{Q#all,P#" . $this->partUrban->getId() . "}", $formula);
-                        $formula = str_replace('POPULATION_RURAL', "{Q#all,P#" . $this->partRural->getId() . "}", $formula);
-                        $formula = str_replace('POPULATION_TOTAL', "{Q#all,P#" . $this->partTotal->getId() . "}", $formula);
-                    }
+                    // Translate our custom import syntax into real GIMS syntax
+                    $formula = $this->replaceHighFilterNamesWithId($filters, $formula);
 
                     $suffix = ' (' . $actualFormulaGroup . ( $isDevelopedFormula ? ' - for developed countries' : '') . ')';
                     $rule = $this->getRule('Regression: ' . $highFilter->getName() . $suffix, $formula);
@@ -1126,6 +1112,33 @@ STRING;
         }
 
         echo PHP_EOL;
+    }
+
+    /**
+     * Replace high filter names found in formula by their IDs. Also replace a few custom syntax.
+     * @param array $filters the high filters
+     * @param string $formula
+     * @return string
+     */
+    private function replaceHighFilterNamesWithId(array $filters, $formula)
+    {
+        foreach ($filters as $filterNameOther => $foo) {
+            $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
+            $id = $otherHighFilter->getId();
+            $formula = str_replace('COUNT({' . $filterNameOther, "COUNT({F#$id", $formula);
+            $formula = str_replace('AVERAGE({' . $filterNameOther, "AVERAGE({F#$id", $formula);
+            $formula = str_replace($filterNameOther . 'EARLIER', "{F#$id,P#current,Y-1}", $formula);
+            $formula = str_replace($filterNameOther . 'LATER', "{F#$id,P#current,Y+1}", $formula);
+            $formula = str_replace($filterNameOther . 'URBAN', "{F#$id,P#" . $this->partUrban->getId() . ",Y0}", $formula);
+            $formula = str_replace($filterNameOther . 'RURAL', "{F#$id,P#" . $this->partRural->getId() . ",Y0}", $formula);
+            $formula = str_replace($filterNameOther . 'TOTAL', "{F#$id,P#" . $this->partTotal->getId() . ",Y0}", $formula);
+            $formula = str_replace($filterNameOther, "{F#$id,P#current,Y0}", $formula);
+            $formula = str_replace('POPULATION_URBAN', "{Q#all,P#" . $this->partUrban->getId() . "}", $formula);
+            $formula = str_replace('POPULATION_RURAL', "{Q#all,P#" . $this->partRural->getId() . "}", $formula);
+            $formula = str_replace('POPULATION_TOTAL', "{Q#all,P#" . $this->partTotal->getId() . "}", $formula);
+        }
+
+        return $formula;
     }
 
     /**
