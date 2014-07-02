@@ -228,6 +228,7 @@ use \Application\Traits\EntityManagerAware;
                     'children' => array(9, 10, 12, 55, 58, 68),
                     'excludes' => null,
                     'isImproved' => false,
+                    'rule' => '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)',
                     'regressionRules' => array(
                         'default' => array(
                             array(3, '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)'),
@@ -259,6 +260,7 @@ use \Application\Traits\EntityManagerAware;
                     'children' => array(56, 59, 71),
                     'excludes' => null,
                     'isImproved' => false,
+                    'rule' => '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Surface water)), 100% - Total improved - Surface water, NULL)',
                     'regressionRules' => array(
                         'default' => array(
                             array(3, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
@@ -537,6 +539,7 @@ use \Application\Traits\EntityManagerAware;
                     'children' => array(80),
                     'excludes' => null,
                     'isImproved' => false,
+                    'rule' => '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Open defecation)), 100% - Improved + shared - Open defecation, NULL)',
                     'regressionRules' => array(
                         'default' => array(
                             array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation), NULL)'),

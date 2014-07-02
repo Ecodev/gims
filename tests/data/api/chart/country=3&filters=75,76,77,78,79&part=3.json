@@ -433,35 +433,35 @@
                     "id": "78:24",
                     "questionnaire": 24,
                     "x": 1997,
-                    "y": 3.9
+                    "y": 7.3
                 },
                 {
                     "name": "MICS03",
                     "id": "78:26",
                     "questionnaire": 26,
                     "x": 2003,
-                    "y": 27.8
+                    "y": 30.7
                 },
                 {
                     "name": "NRVS05",
                     "id": "78:28",
                     "questionnaire": 28,
                     "x": 2005,
-                    "y": 32.9
+                    "y": 35.1
                 },
                 {
                     "name": "NVRA08",
                     "id": "78:29",
                     "questionnaire": 29,
                     "x": 2008,
-                    "y": 28.6
+                    "y": 27.0
                 },
                 {
                     "name": "MIS09",
                     "id": "78:30",
                     "questionnaire": 30,
                     "x": 2009,
-                    "y": 79.2
+                    "y": 78.5
                 },
                 {
                     "name": "MS10",
@@ -490,46 +490,53 @@
             "allowPointSelect": false,
             "data": [
                 {
+                    "name": "MICS97",
+                    "id": "79:24",
+                    "questionnaire": 24,
+                    "x": 1997,
+                    "y": 48.5
+                },
+                {
                     "name": "MICS03",
                     "id": "79:26",
                     "questionnaire": 26,
                     "x": 2003,
-                    "y": 1.0
+                    "y": 37.5
                 },
                 {
                     "name": "NRVS05",
                     "id": "79:28",
                     "questionnaire": 28,
                     "x": 2005,
-                    "y": 1.1
+                    "y": 45.2
                 },
                 {
                     "name": "NVRA08",
                     "id": "79:29",
                     "questionnaire": 29,
                     "x": 2008,
-                    "y": 71.4
+                    "y": 73.0
                 },
                 {
                     "name": "MIS09",
                     "id": "79:30",
                     "questionnaire": 30,
                     "x": 2009,
-                    "y": 8.0
+                    "y": 8.8
                 },
                 {
                     "name": "MS10",
                     "id": "79:31",
                     "questionnaire": 31,
                     "x": 2010,
-                    "y": 5.1
+                    "y": 30.2
                 },
                 {
                     "name": "MICS11",
                     "id": "79:32",
                     "questionnaire": 32,
                     "x": 2011,
-                    "y": 3.0
+                    "y": 26.0
                 }
             ]
         }

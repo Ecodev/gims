@@ -433,35 +433,21 @@
                     "id": "78:24",
                     "questionnaire": 24,
                     "x": 1997,
-                    "y": 8.2
+                    "y": 9.2
                 },
                 {
                     "name": "MICS03",
                     "id": "78:26",
                     "questionnaire": 26,
                     "x": 2003,
-                    "y": 35.6
+                    "y": 42.7
                 },
                 {
                     "name": "NRVS05",
                     "id": "78:28",
                     "questionnaire": 28,
                     "x": 2005,
-                    "y": 43.3
-                },
-                {
-                    "name": "NVRA08",
-                    "id": "78:29",
-                    "questionnaire": 29,
-                    "x": 2008,
-                    "y": 58.0
-                },
-                {
-                    "name": "MIS09",
-                    "id": "78:30",
-                    "questionnaire": 30,
-                    "x": 2009,
-                    "y": 76.0
+                    "y": 48.3
                 },
                 {
                     "name": "MS10",
@@ -490,46 +476,39 @@
             "allowPointSelect": false,
             "data": [
                 {
+                    "name": "MICS97",
+                    "id": "79:24",
+                    "questionnaire": 24,
+                    "x": 1997,
+                    "y": 72.4
+                },
+                {
                     "name": "MICS03",
                     "id": "79:26",
                     "questionnaire": 26,
                     "x": 2003,
-                    "y": 0.7
+                    "y": 29.6
                 },
                 {
                     "name": "NRVS05",
                     "id": "79:28",
                     "questionnaire": 28,
                     "x": 2005,
-                    "y": 1.5
-                },
-                {
-                    "name": "NVRA08",
-                    "id": "79:29",
-                    "questionnaire": 29,
-                    "x": 2008,
-                    "y": 42.0
-                },
-                {
-                    "name": "MIS09",
-                    "id": "79:30",
-                    "questionnaire": 30,
-                    "x": 2009,
-                    "y": 13.5
+                    "y": 33.7
                 },
                 {
                     "name": "MS10",
                     "id": "79:31",
                     "questionnaire": 31,
                     "x": 2010,
-                    "y": 8.5
+                    "y": 19.1
                 },
                 {
                     "name": "MICS11",
                     "id": "79:32",
                     "questionnaire": 32,
                     "x": 2011,
-                    "y": 4.0
+                    "y": 12.6
                 }
             ]
         }

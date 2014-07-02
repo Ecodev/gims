@@ -259,8 +259,8 @@
         },
         "values": [
             {
-                "Urban": 0.1,
-                "Rural": 0.1,
+                "Urban": 16.4,
+                "Rural": 20.4,
                 "Total": null
             }
         ]

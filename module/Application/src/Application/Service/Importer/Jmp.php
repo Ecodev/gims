@@ -925,6 +925,13 @@ STRING;
                             $this->getFilterQuestionnaireUsage($highFilter, $questionnaire, $rule, $part);
                         }
                     }
+
+                    // If the high filter has some hardcoded formula, import them as well, but only for non-total
+                    if (isset($filterData['rule']) && $part != $this->partTotal) {
+                        $formula = $this->replaceHighFilterNamesWithIdForBasic($filters, $filterData['rule']);
+                        $rule = $this->getRule(($sheet->getTitle() == 'Tables_W' ? 'Water - ' : 'Sanitation - ') . $filterName, $formula);
+                        $this->getFilterQuestionnaireUsage($highFilter, $questionnaire, $rule, $part);
+                    }
                 }
 
                 $this->importExcludes($sheet, $col, $questionnaire, $highFilter, $filterData);
@@ -1101,7 +1108,7 @@ STRING;
                     }
 
                     // Translate our custom import syntax into real GIMS syntax
-                    $formula = $this->replaceHighFilterNamesWithId($filters, $formula);
+                    $formula = $this->replaceHighFilterNamesWithIdForRegression($filters, $formula);
 
                     $suffix = ' (' . $actualFormulaGroup . ( $isDevelopedFormula ? ' - for developed countries' : '') . ')';
                     $rule = $this->getRule('Regression: ' . $highFilter->getName() . $suffix, $formula);
@@ -1120,7 +1127,7 @@ STRING;
      * @param string $formula
      * @return string
      */
-    private function replaceHighFilterNamesWithId(array $filters, $formula)
+    private function replaceHighFilterNamesWithIdForRegression(array $filters, $formula)
     {
         foreach ($filters as $filterNameOther => $foo) {
             $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
@@ -1136,6 +1143,23 @@ STRING;
             $formula = str_replace('POPULATION_URBAN', "{Q#all,P#" . $this->partUrban->getId() . "}", $formula);
             $formula = str_replace('POPULATION_RURAL', "{Q#all,P#" . $this->partRural->getId() . "}", $formula);
             $formula = str_replace('POPULATION_TOTAL', "{Q#all,P#" . $this->partTotal->getId() . "}", $formula);
+        }
+
+        return $formula;
+    }
+
+    /**
+     * Replace high filter names found in formula by their IDs.
+     * @param array $filters the high filters
+     * @param string $formula
+     * @return string
+     */
+    private function replaceHighFilterNamesWithIdForBasic(array $filters, $formula)
+    {
+        foreach ($filters as $filterNameOther => $foo) {
+            $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
+            $id = $otherHighFilter->getId();
+            $formula = str_replace($filterNameOther, "{F#$id,Q#current,P#current,L#2}", $formula);
         }
 
         return $formula;
