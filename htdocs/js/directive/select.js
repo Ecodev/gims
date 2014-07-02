@@ -111,8 +111,6 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 user: 'ajax',
                 survey: 'ajax',
                 questionnaire: 'ajax',
-                filterSet: 'ajax',
-                filter: 'ajax',
                 rule: 'ajax',
                 geoname: 'ajax',
                 country: 'cached',
