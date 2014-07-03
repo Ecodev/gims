@@ -54,10 +54,10 @@ class ConsoleControllerTest extends \Zend\Test\PHPUnit\Controller\AbstractConsol
 Surveys          : 2
 Questionnaires   : 3
 Answers          : 70
-Rules            : 41
+Rules            : 44
 Uses of Exclude  : 41
 Uses of Rule for Questionnaire       : 20
-Uses of Rule for Filter-Questionnaire: 33
+Uses of Rule for Filter-Questionnaire: 45
 Uses of Rule for Filter-Geoname      : 26
 STRING;
         $this->assertConsoleOutputContains($expected);
