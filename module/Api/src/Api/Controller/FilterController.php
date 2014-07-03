@@ -57,7 +57,7 @@ class FilterController extends AbstractChildRestfulController
             // no parent, get all filters
         } else {
             $itemOnce = $this->params()->fromQuery('itemOnce') == 'true' ? true : false;
-            $filters = $this->getRepository()->findAll();
+            $filters = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), $this->params()->fromQuery('q'));
             $filters = $this->flattenFilters($filters, $itemOnce);
             $filters = $this->getFlatHierarchyWithMultipleRootElements($filters, '_parent');
         }
