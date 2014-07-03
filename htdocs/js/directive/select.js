@@ -107,13 +107,17 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             }
 
             // define what mode should be used for what type of item
+            // Items with small quantity should be cached once and for all,
+            // items with large quantity should use ajax.
             var config = {
                 user: 'ajax',
                 survey: 'ajax',
                 questionnaire: 'ajax',
                 rule: 'ajax',
-                geoname: 'ajax',
+                filter: 'ajax',
+                filterSet: 'cached',
                 country: 'cached',
+                geoname: 'cached',
                 part: 'cached'
             };
 

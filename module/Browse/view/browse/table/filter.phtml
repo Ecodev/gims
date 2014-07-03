@@ -97,7 +97,7 @@
                         <h3 class="control-label">Filter (rows) <small ng-if="!tabs.filters.length">(Required)</small></h3>
                     </div>
 
-                    <div class="col-md-12" ng-hide="mode.isSector">
+                    <div class="col-md-12" ng-if="!mode.isSector">
                         <tabset>
                             <tab heading="Filter set" >
                                 <gims-select
@@ -128,7 +128,7 @@
                             </tab>
                         </tabset>
                     </div>
-                    <div class="col-md-12" ng-show="mode.isSector">
+                    <div class="col-md-12" ng-if="mode.isSector">
                         <tabset>
                             <tab heading="Select NSA container">
                                 <gims-filter
