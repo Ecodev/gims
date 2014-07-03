@@ -130,15 +130,6 @@
                     </div>
                     <div class="col-md-12" ng-if="mode.isSector">
                         <tabset>
-                            <tab heading="Select NSA container">
-                                <gims-filter
-                                        model="tabs.filter"
-                                        name="filter"
-                                        show-selection-path="true"
-                                        change-url="false"
-                                        disabled="isLoading">
-                                </gims-filter>
-                            </tab>
                             <tab heading="Create NSA container">
                                 <ng-form ng-class="{'has-error':filterSetForm.filterSet.$invalid}" name="filterSetForm">
                                     <div class="row">
@@ -157,6 +148,15 @@
                                         </div>
                                     </div>
                                 </ng-form>
+                            </tab>
+                            <tab heading="Select NSA container">
+                                <gims-filter
+                                        model="tabs.filter"
+                                        name="filter"
+                                        show-selection-path="true"
+                                        change-url="false"
+                                        disabled="isLoading">
+                                </gims-filter>
                             </tab>
                         </tabset>
                     </div>
