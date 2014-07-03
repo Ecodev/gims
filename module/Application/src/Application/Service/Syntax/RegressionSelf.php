@@ -3,7 +3,7 @@
 namespace Application\Service\Syntax;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Application\Service\Calculator\Jmp;
+use Application\Service\Calculator\Calculator;
 
 /**
  * Replace {self} with computed value without this formula
@@ -16,7 +16,7 @@ class RegressionSelf extends AbstractRegressionToken
         return '/\{self\}/';
     }
 
-    public function replace(Jmp $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
+    public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
     {
         $value = $calculator->computeFlattenOneYearWithFormula($year, $years, $currentFilterId, $questionnaires, $currentPartId, $alreadyUsedRules);
 

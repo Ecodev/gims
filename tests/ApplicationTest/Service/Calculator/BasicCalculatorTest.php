@@ -5,7 +5,7 @@ namespace ApplicationTest\Service\Calculator;
 /**
  * @group Calculator
  */
-class CalculatorTest extends AbstractCalculator
+class BasicCalculatorTest extends AbstractCalculator
 {
 
     /**

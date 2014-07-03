@@ -96,29 +96,6 @@ Population value
 Regression context
 ^^^^^^^^^^^^^^^^^^
 
-Filter value
-    Reference a Filter regression value for a specific part and year. The year
-    is defined by the year currently being computed plus a user-defined offset.
-    To express "1 year earlier" the offset would be -1, and for "3 years later",
-    it would be +3. To stay on the same year, use an offset of 0.
-
-    .. code-block:: lua
-
-        {F#12,P#current,Y0}
-        {F#12,P#current,Y-1}
-        {F#12,P#current,Y+3}
-
-
-List of all filter values
-    Reference a list of available filter values for all questionnaires. The
-    result use Excel array constant syntax (eg: "{1,2,3}"). This should be used
-    with Excel functions such as ``COUNT()`` and ``AVERAGE()``.
-
-    .. code-block:: lua
-
-        {F#12,Q#all}
-
-
 Cumulated population
     Reference the cumulated population for all current questionnaires for the
     specified part.
@@ -138,6 +115,20 @@ Current year
 
 Both contexts
 ^^^^^^^^^^^^^
+
+Filter value after regression
+    Reference a Filter regression value for a specific part and year. By default
+    the year is the one currently computed (in basic context: the questionnaire's
+    year, and in regression context: the current year as returned by ``{Y}``).
+    However it is possible to define an offset from that year. To express "1 year
+    earlier" the offset would be -1, and for "3 years later", it would be +3. To
+    stay on the same year, use an offset of 0.
+
+    .. code-block:: lua
+
+        {F#12,P#current,Y0}
+        {F#12,P#current,Y-1}
+        {F#12,P#current,Y+3}
 
 Value if this rule is ignored
     Reference the value if computed without this rule. It allows to conditionally

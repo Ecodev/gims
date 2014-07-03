@@ -3,7 +3,7 @@
 namespace Application\Service\Syntax;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Application\Service\Calculator\Jmp;
+use Application\Service\Calculator\Calculator;
 
 abstract class AbstractRegressionToken extends AbstractToken
 {
@@ -25,7 +25,7 @@ abstract class AbstractRegressionToken extends AbstractToken
 
     /**
      *
-     * @param \Application\Service\Calculator\Jmp $calculator
+     * @param \Application\Service\Calculator\Calculator $calculator
      * @param array $matches
      * @param integer $currentFilterId
      * @param array $questionnaires
@@ -35,5 +35,5 @@ abstract class AbstractRegressionToken extends AbstractToken
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return float|string
      */
-    abstract public function replace(Jmp $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules);
+    abstract public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules);
 }

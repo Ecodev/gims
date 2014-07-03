@@ -3,7 +3,7 @@
 namespace Application\Service\Syntax;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Application\Service\Calculator\Jmp;
+use Application\Service\Calculator\Calculator;
 
 /**
  * Replace {F#12,Q#all} with a list of Filter values for all questionnaires
@@ -16,7 +16,7 @@ class RegressionFilterValuesList extends AbstractRegressionToken
         return '/\{F#(\d+|current),Q#all\}/';
     }
 
-    public function replace(Jmp $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
+    public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
     {
         $filterId = $this->getId($matches[1], $currentFilterId);
 

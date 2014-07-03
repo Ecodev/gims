@@ -4,11 +4,12 @@ namespace Application\Service\Syntax;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Service\Calculator\Calculator;
+use Application\Model\Rule\AbstractQuestionnaireUsage;
 
 /**
  * Replace {F#12,P#34,Y+0} with Filter regression value
  */
-class RegressionFilterValue extends AbstractRegressionToken
+class FilterValueAfterRegression extends AbstractBasicToken
 {
 
     public function getPattern()
@@ -16,12 +17,15 @@ class RegressionFilterValue extends AbstractRegressionToken
         return '/\{F#(\d+|current),P#(\d+|current),Y([+-]?\d+)\}/';
     }
 
-    public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
+    public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules)
     {
-        $filterId = $this->getId($matches[1], $currentFilterId);
-        $partId = $this->getId($matches[2], $currentPartId);
+        $filterId = $this->getFilterId($matches[1], $usage);
+        $partId = $this->getPartId($matches[2], $usage);
         $yearOffset = $matches[3];
-        $year += $yearOffset;
+        $year = $usage->getQuestionnaire()->getSurvey()->getYear() + $yearOffset;
+
+        $years = range(1980, 2012);
+        $questionnaires = $calculator->getQuestionnaireRepository()->getAllForComputing($usage->getQuestionnaire()->getGeoname());
 
         // Only compute thing if in current years, to avoid infinite recursitivy in a very distant future
         if (in_array($year, $years)) {

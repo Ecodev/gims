@@ -464,27 +464,22 @@ use \Application\Traits\EntityManagerAware;
                             array(3, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             array(4, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
-                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                             array(5, "=IF(AND(ISNUMBER(ImprovedURBAN), ISNUMBER(ImprovedRURAL)), (ImprovedURBAN * POPULATION_URBAN + ImprovedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)"),
                         ),
                         'onlyTotal' => array(
                             array(3, '=ImprovedTOTAL'),
                             array(4, '=ImprovedTOTAL'),
-                            array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                         ),
                         'onlyRural' => array(
                             // Additionnal rules for developed countries
                             array(4, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                             array(5, '=ImprovedRURAL'),
                         ),
                         'onlyUrban' => array(
                             // Additionnal rules for developed countries
                             array(3, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                             array(5, '=ImprovedURBAN'),
                         ),
                         'United States of America' => array(
@@ -492,14 +487,11 @@ use \Application\Traits\EntityManagerAware;
                             array(3, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             array(4, "=IF(AND(Improved + shared > 98.4%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
-                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                             array(5, "=IF(AND(ISNUMBER(ImprovedURBAN), ISNUMBER(ImprovedRURAL)), (ImprovedURBAN * POPULATION_URBAN + ImprovedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)"),
                         ),
                         'Saudi Arabia' => array(
                             array(3, '=ImprovedTOTAL'),
                             array(4, '=ImprovedTOTAL'),
-                            array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                         ),
                     ),
                 ),

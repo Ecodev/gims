@@ -103,7 +103,7 @@ class Rule extends \Zend\Validator\AbstractValidator
         foreach ($this->parser->getBasicTokens() as $token) {
             $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token) {
 
-                        if (!$token instanceof \Application\Service\Syntax\BasicSelf) {
+                        if (!$token instanceof \Application\Service\Syntax\BasicSelf && !$token instanceof \Application\Service\Syntax\FilterValueAfterRegression) {
                             $this->basicTokenUsed = true;
                         }
 
@@ -114,7 +114,7 @@ class Rule extends \Zend\Validator\AbstractValidator
         foreach ($this->parser->getRegressionTokens() as $token) {
             $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token) {
 
-                        if (!$token instanceof \Application\Service\Syntax\RegressionSelf) {
+                        if (!$token instanceof \Application\Service\Syntax\RegressionSelf && !$token instanceof \Application\Service\Syntax\RegressionFilterValue) {
                             $this->regressionTokenUsed = true;
                         }
 

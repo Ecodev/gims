@@ -159,7 +159,7 @@ class FilterController extends AbstractChildRestfulController
 
     public function getComputedWorldAction()
     {
-        $calculator = new \Application\Service\Calculator\Jmp();
+        $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
 
         $filterIds = explode(',', trim($this->params()->fromQuery('filters'), ','));

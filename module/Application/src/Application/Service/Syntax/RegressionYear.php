@@ -3,7 +3,7 @@
 namespace Application\Service\Syntax;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Application\Service\Calculator\Jmp;
+use Application\Service\Calculator\Calculator;
 
 /**
  * Replace {Y} with current year
@@ -16,7 +16,7 @@ class RegressionYear extends AbstractRegressionToken
         return '/\{Y\}/';
     }
 
-    public function replace(Jmp $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
+    public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
     {
         return $year;
     }

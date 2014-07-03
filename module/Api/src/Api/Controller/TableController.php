@@ -98,7 +98,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         /** @var \Application\Model\FilterSet $filterSet */
         $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
         $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
-        $calculator = new \Application\Service\Calculator\Jmp();
+        $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
 
         $result = array();
@@ -252,7 +252,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
      */
     private function getAllYearsComputed($parts, \Application\Model\FilterSet $filterSet, array $questionnaires)
     {
-        $calculator = new \Application\Service\Calculator\Jmp();
+        $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
 
         $dataPerPart = array();

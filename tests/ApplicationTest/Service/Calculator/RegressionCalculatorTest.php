@@ -5,7 +5,7 @@ namespace ApplicationTest\Service\Calculator;
 /**
  * @group Calculator
  */
-class JmpTest extends AbstractCalculator
+class RegressionCalculatorTest extends AbstractCalculator
 {
 
     /**
@@ -14,12 +14,12 @@ class JmpTest extends AbstractCalculator
     private $filterSet;
 
     /**
-     * @var \Application\Service\Calculator\Jmp
+     * @var \Application\Service\Calculator\Calculator
      */
     private $service;
 
     /**
-     * @var \Application\Service\Calculator\Jmp
+     * @var \Application\Service\Calculator\Calculator
      */
     private $service2;
 
@@ -484,7 +484,7 @@ class JmpTest extends AbstractCalculator
 
     public function testRealRepositoriesCanBeFound()
     {
-        $service = new \Application\Service\Calculator\Jmp();
+        $service = new \Application\Service\Calculator\Calculator();
         $service->setServiceLocator($this->getApplicationServiceLocator());
 
         $this->assertInstanceOf('Application\Repository\PopulationRepository', $service->getPopulationRepository());
@@ -624,7 +624,7 @@ class JmpTest extends AbstractCalculator
         $partId = 4;
 
         // Test that we the custom syntax is correctly interpreted and submethods are correctly called
-        $mockedCalculator = $this->getMock('\Application\Service\Calculator\Jmp', array('computeFlattenOneYearWithFormula', 'computeFilterForAllQuestionnaires'));
+        $mockedCalculator = $this->getMock('\Application\Service\Calculator\Calculator', array('computeFlattenOneYearWithFormula', 'computeFilterForAllQuestionnaires'));
         $configurator($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId);
 
         $mockedCalculator->computeFormulaRegression($rule, $year, $years, $currentFilterId, $questionnaires, $partId);

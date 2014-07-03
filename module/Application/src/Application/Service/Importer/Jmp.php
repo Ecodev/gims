@@ -130,7 +130,7 @@ class Jmp extends AbstractImporter
             $this->importFilterGeonameUsages($this->definitions[$sheetName]['highFilters']);
 
             // Fourth pass to hardcode special cases of formulas
-            $this->finishRatios();
+            $this->finishRatios($this->definitions[$sheetName]['highFilters']);
             echo PHP_EOL;
         }
 
@@ -1159,6 +1159,7 @@ STRING;
         foreach ($filters as $filterNameOther => $foo) {
             $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
             $id = $otherHighFilter->getId();
+            $formula = str_replace($filterNameOther . 'REGRESSION', "{F#$id,P#current,Y+0}", $formula);
             $formula = str_replace($filterNameOther, "{F#$id,Q#current,P#current,L#2}", $formula);
         }
 
@@ -1191,9 +1192,9 @@ STRING;
     /**
      * Finish the special cases of ratio used for high filters: "Sanitation - Improved" and "Sanitation - Shared"
      * We define those filter as being the Ratio itself
-     * @return void
+     * @param array $filters
      */
-    private function finishRatios()
+    private function finishRatios(array $filters)
     {
         $filterImproved = @$this->cacheHighFilters['Improved'];
         $filterShared = @$this->cacheHighFilters['Shared'];
@@ -1212,6 +1213,22 @@ STRING;
         );
         $regexp = '-(' . join('|', $synonyms) . ')-i';
 
+        // Collect all available ratios from all questionnaires
+        $allRatioReferences = [
+            $this->partUrban->getId() => [
+                'part' => $this->partUrban,
+                'ratios' => [],
+            ],
+            $this->partRural->getId() => [
+                'part' => $this->partRural,
+                'ratios' => [],
+            ],
+            $this->partTotal->getId() => [
+                'part' => $this->partTotal,
+                'ratios' => [],
+            ],
+        ];
+
         foreach ($this->cacheQuestionnaireUsages as $usage) {
 
             if (!preg_match($regexp, $usage->getRule()->getName())) {
@@ -1226,27 +1243,34 @@ STRING;
             $questionnaireId = $usage->getQuestionnaire()->getId();
             $ratioReference = "{R#$ruleId,Q#$questionnaireId,P#current}";
 
-            $formulaImproved = "=100% - $ratioReference";
-            $this->linkRule($formulaImproved, $filterImproved, $usage->getQuestionnaire(), $usage->getPart());
-
-            $formulaShared = "=$ratioReference";
-            $this->linkRule($formulaShared, $filterShared, $usage->getQuestionnaire(), $usage->getPart());
-            echo '.';
+            $allRatioReferences[$usage->getPart()->getId()]['ratios'][] = $ratioReference;
         }
-    }
 
-    /**
-     * Create (or get) a rule and link it to the given filter
-     * @param string $formula
-     * @param Filter $filter
-     * @param Questionnaire $questionnaire
-     * @param Part $part
-     */
-    private function linkRule($formula, Filter $filter, Questionnaire $questionnaire, Part $part)
-    {
-        $name = $filter->getName() . ' (' . $questionnaire->getName() . ', ' . $part->getName() . ')';
-        $rule = $this->getRule($name, $formula);
-        $this->getFilterQuestionnaireUsage($filter, $questionnaire, $rule, $part, true);
+        // If found any, create the rule with the average of them
+        foreach ($allRatioReferences as $data) {
+            if ($data['ratios']) {
+
+                // Build the formulas
+                $average = 'AVERAGE(' . implode(', ', $data['ratios']) . ')';
+                $formulaImproved = $this->replaceHighFilterNamesWithIdForBasic($filters, "=Improved + sharedREGRESSION * (100% - $average)");
+                $formulaShared = $this->replaceHighFilterNamesWithIdForBasic($filters, "=Improved + sharedREGRESSION * $average");
+
+                $part = $data['part'];
+                $countryName = $this->cacheQuestionnaireUsages[0]->getQuestionnaire()->getGeoname()->getName();
+                $suffix = ' (' . $countryName . ', ' . $part->getName() . ') XXXX';
+
+                // Create rules
+                $ruleImproved = $this->getRule($filterImproved->getName() . $suffix, $formulaImproved);
+                $ruleShared = $this->getRule($filterShared->getName() . $suffix, $formulaShared);
+
+                // Actually use rules
+                foreach ($this->importedQuestionnaires as $questionnaire) {
+                    $this->getFilterQuestionnaireUsage($filterImproved, $questionnaire, $ruleImproved, $part, true);
+                    $this->getFilterQuestionnaireUsage($filterShared, $questionnaire, $ruleShared, $part, true);
+                    echo '.';
+                }
+            }
+        }
     }
 
     /**

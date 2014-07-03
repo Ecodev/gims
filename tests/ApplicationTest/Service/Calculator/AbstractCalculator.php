@@ -418,11 +418,11 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
 
     /**
      *
-     * @return \Application\Service\Calculator\Jmp
+     * @return \Application\Service\Calculator\Calculator
      */
     protected function getNewJmp()
     {
-        $service = new \Application\Service\Calculator\Jmp();
+        $service = new \Application\Service\Calculator\Calculator();
         $service->setPopulationRepository($this->getStubPopulationRepository());
         $service->setAnswerRepository($this->getStubAnswerRepository());
         $service->setFilterRepository($this->getStubFilterRepository());
