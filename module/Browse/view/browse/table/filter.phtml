@@ -29,69 +29,8 @@
     <form name="selectionForm">
         <div class="row show-grid ng-trans ng-trans-slide-up" ng-show="expandSelection" >
 
-            <!-- Questionnaires selection -->
-            <div class="col-md-6">
-                <div class="row" ng-class="{'has-error':!tabs.questionnaires.length && !mode.isContribute}">
-
-                    <div>
-                        <div class="col-md-12">
-                            <h3 class="control-label">Questionnaires (columns) <small ng-if="!tabs.questionnaires.length && !mode.isContribute">(Required)</small></h3>
-                        </div>
-
-                        <div class="col-md-12">
-                            <tabset>
-                                <tab heading="Country">
-                                    <gims-select
-                                            model="tabs.country"
-                                            api="country"
-                                            queryparams="countryParams"
-                                            placeholder="Select a country"
-                                            change-url = "false"
-                                            disabled="isLoading"
-                                            style="width: 100%">
-                                    </gims-select>
-                                </tab>
-                                <tab heading="Survey">
-                                    <gims-select
-                                        model="tabs.survey"
-                                        api="survey"
-                                        placeholder="Select survey"
-                                        search-attributes="code,name"
-                                        custom-selection-template="{{surveysTemplate}}"
-                                        custom-result-template="{{surveysTemplate}}"
-                                        change-url="false"
-                                        disabled="isLoading"
-                                        style="width: 100%">
-                                    </gims-select>
-                                </tab>
-                                <tab heading="Selected">
-                                    <gims-select
-                                            model="tabs.questionnaires"
-                                            name="questionnaires"
-                                            api="questionnaire"
-                                            queryparams="questionnaireParams"
-                                            placeholder="Select questionnaires"
-                                            disabled="isLoading"
-                                            multiple
-                                            style="width: 100%">
-                                    </gims-select>
-                                </tab>
-                                <tab ng-if="tabs.glass.length">
-                                    <tab-heading><span class="text-warning"><i class="fa fa-exclamation-triangle" ></i> Others</span></tab-heading>
-                                    <p>Some selected surveys are only available in advanced edition mode and one at a time.</p>
-                                    <p>Click to edit.</p>
-                                    <ul class="list-unstyled">
-                                        <li ng-repeat="q in tabs.glass"><a href="/contribute/glaas/{{q.id}}?returnUrl={{currentUrl}}"><i class="fa fa-external-link"></i> {{q.name}}</a></li>
-                                    </ul>
-                                </tab>
-                            </tabset>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Filter selection -->
-            <div class="col-md-6" ng-show="tabs.questionnaires.length || mode.isContribute">
+            <div class="col-md-6" nsg-show="tabs.questionnaires.length || mode.isContribute">
                 <div class="row" ng-class="{'has-error':!tabs.filters.length}">
                     <div class="col-md-12">
                         <h3 class="control-label">Filter (rows) <small ng-if="!tabs.filters.length">(Required)</small></h3>
@@ -159,6 +98,67 @@
                                 </gims-filter>
                             </tab>
                         </tabset>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questionnaires selection -->
+            <div class="col-md-6">
+                <div class="row" ng-class="{'has-error':!tabs.questionnaires.length && !mode.isContribute}">
+
+                    <div>
+                        <div class="col-md-12">
+                            <h3 class="control-label">Questionnaires (columns) <small ng-if="!tabs.questionnaires.length && !mode.isContribute">(Required)</small></h3>
+                        </div>
+
+                        <div class="col-md-12">
+                            <tabset>
+                                <tab heading="Country">
+                                    <gims-select
+                                            model="tabs.country"
+                                            api="country"
+                                            queryparams="countryParams"
+                                            placeholder="Select a country"
+                                            change-url = "false"
+                                            disabled="isLoading"
+                                            style="width: 100%">
+                                    </gims-select>
+                                </tab>
+                                <tab heading="Survey">
+                                    <gims-select
+                                        model="tabs.survey"
+                                        api="survey"
+                                        placeholder="Select survey"
+                                        search-attributes="code,name"
+                                        custom-selection-template="{{surveysTemplate}}"
+                                        custom-result-template="{{surveysTemplate}}"
+                                        change-url="false"
+                                        disabled="isLoading"
+                                        style="width: 100%">
+                                    </gims-select>
+                                </tab>
+                                <tab heading="Selected">
+                                    <gims-select
+                                            model="tabs.questionnaires"
+                                            name="questionnaires"
+                                            api="questionnaire"
+                                            queryparams="questionnaireParams"
+                                            placeholder="Select questionnaires"
+                                            disabled="isLoading"
+                                            multiple
+                                            style="width: 100%">
+                                    </gims-select>
+                                </tab>
+                                <tab ng-if="tabs.glass.length">
+                                    <tab-heading><span class="text-warning"><i class="fa fa-exclamation-triangle" ></i> Others</span></tab-heading>
+                                    <p>Some selected surveys are only available in advanced edition mode and one at a time.</p>
+                                    <p>Click to edit.</p>
+                                    <ul class="list-unstyled">
+                                        <li ng-repeat="q in tabs.glass"><a href="/contribute/glaas/{{q.id}}?returnUrl={{currentUrl}}"><i class="fa fa-external-link"></i> {{q.name}}</a></li>
+                                    </ul>
+                                </tab>
+                            </tabset>
+                        </div>
                     </div>
                 </div>
             </div>
