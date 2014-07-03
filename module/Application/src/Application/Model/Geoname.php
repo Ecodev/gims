@@ -148,6 +148,16 @@ class Geoname extends AbstractModel
     private $questionnaires;
 
     /**
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="Geoname")
+     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\JoinTable(name="geoname_children",
+     *      inverseJoinColumns={@ORM\JoinColumn(name="child_geoname_id", onDelete="CASCADE")}
+     *      )
+     */
+    private $children;
+
+    /**
      * Constructor
      * @param string $name
      */
@@ -155,6 +165,7 @@ class Geoname extends AbstractModel
     {
         $this->filterGeonameUsages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questionnaires = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setName($name);
     }
 
@@ -605,6 +616,15 @@ class Geoname extends AbstractModel
         $this->getQuestionnaires()->add($questionnaire);
 
         return $this;
+    }
+
+    /**
+     * Get children
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
 
 }
