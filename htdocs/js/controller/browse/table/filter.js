@@ -657,7 +657,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /**
      * Add a filter to list
      * Filters that have been added must have and ID because the questions are indexed on their filter id,
-     * This function assigns an arbitrary ID starting with and anderscore that is replaced on save.
+     * This function assigns an arbitrary ID starting with and underscore that is replaced on save.
      * This underscored id is used for children filters that need a reference to parents.
      */
     $scope.addEquipment = function() {
@@ -692,6 +692,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 $scope.tabs.viewDisabled = false;
                 $scope.tabs.create = false;
                 $scope.tabs.createDisabled = true;
+
+                // Automatically insert empty questionnaire and equipement
+                $scope.addQuestionnaire();
+                $timeout($scope.addEquipment, 800); // TODO, this is absolutely terrible, I think I need timeout because the new sector filter did not load its children yet, but I am not sure. Samuel, help !
             });
         });
     };
@@ -1075,7 +1079,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     /**
      * Called when a new questionnaire is added or filters are changed.
-     * Ensure there is empty objects to grand app to work fine (e.g emptyanswers have to exist before ng-model assigns a value)
+     * Ensure there is empty objects to grant app to work fine (e.g emptyanswers have to exist before ng-model assigns a value)
      */
     var fillMissingElements = function() {
         if ($scope.tabs.questionnaires && $scope.tabs.filters) {
