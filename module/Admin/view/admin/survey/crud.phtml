@@ -2,11 +2,21 @@
 
     <h2>
         <ul class="breadcrumb">
-            <i class="active fa fa-gims-survey pull-right"></i>
-            <li><a href="/admin/survey">Surveys</a></li>
-            <li class="active">{{survey.code}}</li>
+            <li><a href="/admin/survey"><i class="fa fa-gims-survey"></i> Surveys</a></li>
+            <li class="active"> {{survey.code}}</li>
+            <button class="btn pull-right" ng-class="{'btn-info':showHelp, 'btn-default':!showHelp}" ng-click="showHelp = !showHelp"><i class='fa fa-question'></i></button>
         </ul>
     </h2>
+
+    <div class="alert alert-info" ng-if="showHelp">
+        <p><i class="fa fa-info-circle"></i>
+            Name your survey, create questions and questionnaires and give access to users. For further info, see how to edit the
+            <a href="http://gims.readthedocs.org/en/develop/content/data_input.html#survey">survey</a>,
+            <a href="http://gims.readthedocs.org/en/develop/content/data_input.html#questions">questions</a> and
+            <a href="http://gims.readthedocs.org/en/develop/content/data_input.html#questions">questionnaires</a>.
+        </p>
+    </div>
+
 
     <form name="myForm" class="form-horizontal">
 

@@ -21,18 +21,18 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     private $endYear;
 
     /**
-     * @var \Application\Service\Calculator\Jmp
+     * @var \Application\Service\Calculator\Calculator
      */
     private $calculator;
 
     /**
      * Get the JMP calculator shared instance
-     * @return \Application\Service\Calculator\Jmp
+     * @return \Application\Service\Calculator\Calculator
      */
     private function getCalculator()
     {
         if (!$this->calculator) {
-            $this->calculator = new \Application\Service\Calculator\Jmp();
+            $this->calculator = new \Application\Service\Calculator\Calculator();
             $this->calculator->setServiceLocator($this->getServiceLocator());
         }
 
@@ -282,7 +282,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @param $isIgnored
      * @param $suffix
      * @param bool $isAdjusted
-     * @internal param \Application\Service\Calculator\Jmp $calculator
+     * @internal param \Application\Service\Calculator\Calculator $calculator
      * @internal param array $ignoredFilters
      * @return array
      */

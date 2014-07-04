@@ -15,8 +15,13 @@ answer should not be computed the usual way, then we can customize it to be
 anything we want.
 
 The second application is used to compute any arbitrary values within a
+<<<<<<< HEAD
 questionnaire. Typical usage would be to compute Estimations,
 Calculations and Ratios as done in former JMP Excel country files.
+=======
+questionnaire. Typical usage would be to compute what is called Calculations,
+Estimations and Ratios in original Excel country files.
+>>>>>>> FETCH_HEAD
 
 Finally, the third application is used much later in the JMP :doc:`computing process<computing>`,
 after the regression step. This can be used to define that values should not be
@@ -110,6 +115,7 @@ Basic context
 Regression context
 ^^^^^^^^^^^^^^^^^^
 
+<<<<<<< HEAD
 **Filter value**
     Reference a Filter regression value for a specific part and year. The year
     is defined by the year currently being computed plus a user-defined offset.
@@ -134,6 +140,9 @@ Regression context
 
 
 **Cumulated population**
+=======
+Cumulated population
+>>>>>>> FETCH_HEAD
     Reference the cumulated population for all current questionnaires for the
     specified part.
 
@@ -153,7 +162,25 @@ Regression context
 Both contexts
 ^^^^^^^^^^^^^
 
+<<<<<<< HEAD
 **Value if this rule is ignored**
+=======
+Filter value after regression
+    Reference a Filter regression value for a specific part and year. By default
+    the year is the one currently computed (in basic context: the questionnaire's
+    year, and in regression context: the current year as returned by ``{Y}``).
+    However it is possible to define an offset from that year. To express "1 year
+    earlier" the offset would be -1, and for "3 years later", it would be +3. To
+    stay on the same year, use an offset of 0.
+
+    .. code-block:: lua
+
+        {F#12,P#current,Y0}
+        {F#12,P#current,Y-1}
+        {F#12,P#current,Y+3}
+
+Value if this rule is ignored
+>>>>>>> FETCH_HEAD
     Reference the value if computed without this rule. It allows to conditionally
     apply a rule with syntaxes such as ``IF(can_apply_my_rule, compute_some_result, {self})``.
 

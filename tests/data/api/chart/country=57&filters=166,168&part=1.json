@@ -149,7 +149,7 @@
             ],
             "color": "#D400D9",
             "type": "line",
-            "usages": "Regression: Improved (default - for developed countries),<br\/>Regression: Improved (default)"
+            "usages": "Regression: Improved (default - for developed countries)"
         },
         {
             "type": "scatter",

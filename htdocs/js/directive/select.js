@@ -7,7 +7,7 @@
  * <gims-select api="filterSet" model="mySelectedFilterSet" name="myFilterName" placeholder="Select a questionnaire" style="width:100%;"></gims-select>
  *
  * To enable "ID mode", specify name="id" in element. This will reload the current URL
- * with the ID of the selected item instead of GET parameter (see for example: /contribute/questionnaire)
+ * with the ID of the selected item instead of GET parameter (see for example: /contribute/jmp)
  *
  * To specify additional GET parameter for API calls, use attribute queryparams:
  * <gims-select api="questionnaire" queryparams="questionnaireQueryParams" /></gims-select>
@@ -107,10 +107,17 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             }
 
             // define what mode should be used for what type of item
+            // Items with small quantity should be cached once and for all,
+            // items with large quantity should use ajax.
             var config = {
-                questionnaire: 'ajax',
                 user: 'ajax',
+                survey: 'ajax',
+                questionnaire: 'ajax',
+                rule: 'ajax',
+                filter: 'ajax',
+                filterSet: 'cached',
                 country: 'cached',
+                geoname: 'cached',
                 part: 'cached'
             };
 

@@ -123,7 +123,7 @@ use \Application\Traits\EntityManagerAware;
                     'children' => array(5, 12, 55, 58, 68),
                     'excludes' => 91,
                     'isImproved' => true,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
                             array(5, '=IF(AND(ISNUMBER(Total improvedURBAN), ISNUMBER(Total improvedRURAL)), (Total improvedURBAN * POPULATION_URBAN + Total improvedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)'),
                         ),
@@ -148,7 +148,7 @@ use \Application\Traits\EntityManagerAware;
                     'children' => array(6),
                     'excludes' => 92,
                     'isImproved' => true,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
                             array(5, '=IF(AND(ISNUMBER(Piped onto premisesURBAN), ISNUMBER(Piped onto premisesRURAL)), (Piped onto premisesURBAN * POPULATION_URBAN + Piped onto premisesRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)'),
                         ),
@@ -182,7 +182,7 @@ use \Application\Traits\EntityManagerAware;
                     'children' => array(60),
                     'excludes' => 93,
                     'isImproved' => false,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
                             array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
                             array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
@@ -228,7 +228,8 @@ use \Application\Traits\EntityManagerAware;
                     'children' => array(9, 10, 12, 55, 58, 68),
                     'excludes' => null,
                     'isImproved' => false,
-                    'formulas' => array(
+                    'rule' => '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)',
+                    'regressionRules' => array(
                         'default' => array(
                             array(3, '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)'),
                             array(4, '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)'),
@@ -259,7 +260,8 @@ use \Application\Traits\EntityManagerAware;
                     'children' => array(56, 59, 71),
                     'excludes' => null,
                     'isImproved' => false,
-                    'formulas' => array(
+                    'rule' => '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Surface water)), 100% - Total improved - Surface water, NULL)',
+                    'regressionRules' => array(
                         'default' => array(
                             array(3, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
                             array(4, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
@@ -407,7 +409,7 @@ use \Application\Traits\EntityManagerAware;
                     'children' => array(-6, -7, -8, -9, 49, 73, 76),
                     'excludes' => 96,
                     'isImproved' => true,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
                             array(5, '=IF(ISNUMBER(Shared), Shared + Improved, IF(AND(ISNUMBER(Improved + sharedURBAN), ISNUMBER(Improved + sharedRURAL)), (Improved + sharedURBAN * POPULATION_URBAN + Improved + sharedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
@@ -432,7 +434,7 @@ use \Application\Traits\EntityManagerAware;
                     'children' => array(6),
                     'excludes' => 97,
                     'isImproved' => false,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
                         ),
                         'onlyTotal' => array(
@@ -456,33 +458,28 @@ use \Application\Traits\EntityManagerAware;
                     'children' => array(), // based on ratio
                     'excludes' => null,
                     'isImproved' => true,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
                             // Additionnal rules for developed countries
                             array(3, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             array(4, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
-                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                             array(5, "=IF(AND(ISNUMBER(ImprovedURBAN), ISNUMBER(ImprovedRURAL)), (ImprovedURBAN * POPULATION_URBAN + ImprovedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)"),
                         ),
                         'onlyTotal' => array(
                             array(3, '=ImprovedTOTAL'),
                             array(4, '=ImprovedTOTAL'),
-                            array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                         ),
                         'onlyRural' => array(
                             // Additionnal rules for developed countries
                             array(4, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                             array(5, '=ImprovedRURAL'),
                         ),
                         'onlyUrban' => array(
                             // Additionnal rules for developed countries
                             array(3, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                             array(5, '=ImprovedURBAN'),
                         ),
                         'United States of America' => array(
@@ -490,14 +487,11 @@ use \Application\Traits\EntityManagerAware;
                             array(3, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             array(4, "=IF(AND(Improved + shared > 98.4%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
-                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                             array(5, "=IF(AND(ISNUMBER(ImprovedURBAN), ISNUMBER(ImprovedRURAL)), (ImprovedURBAN * POPULATION_URBAN + ImprovedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)"),
                         ),
                         'Saudi Arabia' => array(
                             array(3, '=ImprovedTOTAL'),
                             array(4, '=ImprovedTOTAL'),
-                            array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (100% - AVERAGE({Shared,Q#all})), NULL)"),
                         ),
                     ),
                 ),
@@ -506,7 +500,7 @@ use \Application\Traits\EntityManagerAware;
                     'children' => array(), // based on ratio
                     'excludes' => 99,
                     'isImproved' => false,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
                             array(3, '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)'),
                             array(4, '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)'),
@@ -537,7 +531,8 @@ use \Application\Traits\EntityManagerAware;
                     'children' => array(80),
                     'excludes' => null,
                     'isImproved' => false,
-                    'formulas' => array(
+                    'rule' => '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Open defecation)), 100% - Improved + shared - Open defecation, NULL)',
+                    'regressionRules' => array(
                         'default' => array(
                             array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation), NULL)'),
                             array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation), NULL)'),
@@ -568,7 +563,7 @@ use \Application\Traits\EntityManagerAware;
                     'children' => array(79),
                     'excludes' => 98,
                     'isImproved' => false,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
                             array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), 100% - Improved + shared, {self}))), NULL)'),
                             array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), 100% - Improved + shared, {self}))), NULL)'),

@@ -11,7 +11,9 @@ if [ "$files" != "" ]; then
         if [ $? -ne 0 ]; then
             pass=false
         fi
+        echo -n .
     done
+    echo
 
     # Run JSCS validation before commit
     for file in ${files}; do

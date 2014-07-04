@@ -14,7 +14,7 @@ class Adjustator
 {
 
     /**
-     * @var Jmp
+     * @var Calculator
      */
     private $calculator;
 
@@ -43,7 +43,7 @@ class Adjustator
      */
     private $part;
 
-    public function setCalculator(Jmp $calculator)
+    public function setCalculator(Calculator $calculator)
     {
         $this->calculator = $calculator;
     }

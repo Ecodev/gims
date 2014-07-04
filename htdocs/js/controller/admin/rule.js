@@ -49,7 +49,7 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             level: true,
             year: false,
             toString: function(config) {
-                return '{F#' + config.filter.id + ',Q#' + config.questionnaire.id + ',P#' + config.part.id + (config.level ? ',#L2' : '') + '}';
+                return '{F#' + config.filter.id + ',Q#' + config.questionnaire.id + ',P#' + config.part.id + (config.level ? ',L#2' : '') + '}';
             }
         },
         {
@@ -96,21 +96,6 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
         },
         {
             group: 'Regression',
-            name: 'Filter value',
-            description: 'Reference a Filter regression value for a specific part and year. The year is defined by the year currently being computed plus a user-defined offset. To express "1 year earlier" the offset would be -1, and for "3 years later", it would be +3. To stay on the same year, use an offset of 0.',
-            filter: true,
-            questionnaire: false,
-            part: true,
-            rule: false,
-            level: false,
-            year: true,
-            toString: function(config) {
-                var year = config.year > 0 ? '+' + config.year : config.year;
-                return '{F#' + config.filter.id + ',P#' + config.part.id + ',Y' + year + '}';
-            }
-        },
-        {
-            group: 'Regression',
             name: 'List of all filter values',
             description: 'Reference a list of available filter values for all questionnaires. The result use Excel array constant syntax (eg: "{1,2,3}"). This should be used with Excel functions such as COUNT() and AVERAGE().',
             filter: true,
@@ -149,6 +134,21 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
             year: false,
             toString: function() {
                 return '{Y}';
+            }
+        },
+        {
+            group: null,
+            name: 'Filter value after regression',
+            description: 'Reference a Filter regression value for a specific part and year. The year is defined by the year currently being computed plus a user-defined offset. To express "1 year earlier" the offset would be -1, and for "3 years later", it would be +3. To stay on the same year, use an offset of 0.',
+            filter: true,
+            questionnaire: false,
+            part: true,
+            rule: false,
+            level: false,
+            year: true,
+            toString: function(config) {
+                var year = config.year > 0 ? '+' + config.year : config.year;
+                return '{F#' + config.filter.id + ',P#' + config.part.id + ',Y' + year + '}';
             }
         },
         {

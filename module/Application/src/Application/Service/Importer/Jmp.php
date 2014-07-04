@@ -130,7 +130,7 @@ class Jmp extends AbstractImporter
             $this->importFilterGeonameUsages($this->definitions[$sheetName]['highFilters']);
 
             // Fourth pass to hardcode special cases of formulas
-            $this->finishRatios();
+            $this->finishRatios($this->definitions[$sheetName]['highFilters']);
             echo PHP_EOL;
         }
 
@@ -925,6 +925,13 @@ STRING;
                             $this->getFilterQuestionnaireUsage($highFilter, $questionnaire, $rule, $part);
                         }
                     }
+
+                    // If the high filter has some hardcoded formula, import them as well, but only for non-total
+                    if (isset($filterData['rule']) && $part != $this->partTotal) {
+                        $formula = $this->replaceHighFilterNamesWithIdForBasic($filters, $filterData['rule']);
+                        $rule = $this->getRule(($sheet->getTitle() == 'Tables_W' ? 'Water - ' : 'Sanitation - ') . $filterName, $formula);
+                        $this->getFilterQuestionnaireUsage($highFilter, $questionnaire, $rule, $part);
+                    }
                 }
 
                 $this->importExcludes($sheet, $col, $questionnaire, $highFilter, $filterData);
@@ -1088,8 +1095,8 @@ STRING;
             foreach ($filters as $filterName => $filterData) {
                 $highFilter = $this->cacheHighFilters[$filterName];
 
-                $actualFormulaGroup = isset($filterData['formulas'][$formulaGroup]) ? $formulaGroup : 'default';
-                foreach ($filterData['formulas'][$actualFormulaGroup] as $formulaData) {
+                $actualFormulaGroup = isset($filterData['regressionRules'][$formulaGroup]) ? $formulaGroup : 'default';
+                foreach ($filterData['regressionRules'][$actualFormulaGroup] as $formulaData) {
 
                     $part = $this->partOffsets[$formulaData[0]];
                     $formula = $formulaData[1];
@@ -1100,22 +1107,8 @@ STRING;
                         continue;
                     }
 
-                    // Replace our filter name with actual ID in formulas
-                    foreach ($filters as $filterNameOther => $foo) {
-                        $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
-                        $id = $otherHighFilter->getId();
-                        $formula = str_replace('COUNT({' . $filterNameOther, "COUNT({F#$id", $formula);
-                        $formula = str_replace('AVERAGE({' . $filterNameOther, "AVERAGE({F#$id", $formula);
-                        $formula = str_replace($filterNameOther . 'EARLIER', "{F#$id,P#current,Y-1}", $formula);
-                        $formula = str_replace($filterNameOther . 'LATER', "{F#$id,P#current,Y+1}", $formula);
-                        $formula = str_replace($filterNameOther . 'URBAN', "{F#$id,P#" . $this->partUrban->getId() . ",Y0}", $formula);
-                        $formula = str_replace($filterNameOther . 'RURAL', "{F#$id,P#" . $this->partRural->getId() . ",Y0}", $formula);
-                        $formula = str_replace($filterNameOther . 'TOTAL', "{F#$id,P#" . $this->partTotal->getId() . ",Y0}", $formula);
-                        $formula = str_replace($filterNameOther, "{F#$id,P#current,Y0}", $formula);
-                        $formula = str_replace('POPULATION_URBAN', "{Q#all,P#" . $this->partUrban->getId() . "}", $formula);
-                        $formula = str_replace('POPULATION_RURAL', "{Q#all,P#" . $this->partRural->getId() . "}", $formula);
-                        $formula = str_replace('POPULATION_TOTAL', "{Q#all,P#" . $this->partTotal->getId() . "}", $formula);
-                    }
+                    // Translate our custom import syntax into real GIMS syntax
+                    $formula = $this->replaceHighFilterNamesWithIdForRegression($filters, $formula);
 
                     $suffix = ' (' . $actualFormulaGroup . ( $isDevelopedFormula ? ' - for developed countries' : '') . ')';
                     $rule = $this->getRule('Regression: ' . $highFilter->getName() . $suffix, $formula);
@@ -1126,6 +1119,51 @@ STRING;
         }
 
         echo PHP_EOL;
+    }
+
+    /**
+     * Replace high filter names found in formula by their IDs. Also replace a few custom syntax.
+     * @param array $filters the high filters
+     * @param string $formula
+     * @return string
+     */
+    private function replaceHighFilterNamesWithIdForRegression(array $filters, $formula)
+    {
+        foreach ($filters as $filterNameOther => $foo) {
+            $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
+            $id = $otherHighFilter->getId();
+            $formula = str_replace('COUNT({' . $filterNameOther, "COUNT({F#$id", $formula);
+            $formula = str_replace('AVERAGE({' . $filterNameOther, "AVERAGE({F#$id", $formula);
+            $formula = str_replace($filterNameOther . 'EARLIER', "{F#$id,P#current,Y-1}", $formula);
+            $formula = str_replace($filterNameOther . 'LATER', "{F#$id,P#current,Y+1}", $formula);
+            $formula = str_replace($filterNameOther . 'URBAN', "{F#$id,P#" . $this->partUrban->getId() . ",Y0}", $formula);
+            $formula = str_replace($filterNameOther . 'RURAL', "{F#$id,P#" . $this->partRural->getId() . ",Y0}", $formula);
+            $formula = str_replace($filterNameOther . 'TOTAL', "{F#$id,P#" . $this->partTotal->getId() . ",Y0}", $formula);
+            $formula = str_replace($filterNameOther, "{F#$id,P#current,Y0}", $formula);
+            $formula = str_replace('POPULATION_URBAN', "{Q#all,P#" . $this->partUrban->getId() . "}", $formula);
+            $formula = str_replace('POPULATION_RURAL', "{Q#all,P#" . $this->partRural->getId() . "}", $formula);
+            $formula = str_replace('POPULATION_TOTAL', "{Q#all,P#" . $this->partTotal->getId() . "}", $formula);
+        }
+
+        return $formula;
+    }
+
+    /**
+     * Replace high filter names found in formula by their IDs.
+     * @param array $filters the high filters
+     * @param string $formula
+     * @return string
+     */
+    private function replaceHighFilterNamesWithIdForBasic(array $filters, $formula)
+    {
+        foreach ($filters as $filterNameOther => $foo) {
+            $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
+            $id = $otherHighFilter->getId();
+            $formula = str_replace($filterNameOther . 'REGRESSION', "{F#$id,P#current,Y+0}", $formula);
+            $formula = str_replace($filterNameOther, "{F#$id,Q#current,P#current,L#2}", $formula);
+        }
+
+        return $formula;
     }
 
     /**
@@ -1154,9 +1192,9 @@ STRING;
     /**
      * Finish the special cases of ratio used for high filters: "Sanitation - Improved" and "Sanitation - Shared"
      * We define those filter as being the Ratio itself
-     * @return void
+     * @param array $filters
      */
-    private function finishRatios()
+    private function finishRatios(array $filters)
     {
         $filterImproved = @$this->cacheHighFilters['Improved'];
         $filterShared = @$this->cacheHighFilters['Shared'];
@@ -1175,6 +1213,22 @@ STRING;
         );
         $regexp = '-(' . join('|', $synonyms) . ')-i';
 
+        // Collect all available ratios from all questionnaires
+        $allRatioReferences = [
+            $this->partUrban->getId() => [
+                'part' => $this->partUrban,
+                'ratios' => [],
+            ],
+            $this->partRural->getId() => [
+                'part' => $this->partRural,
+                'ratios' => [],
+            ],
+            $this->partTotal->getId() => [
+                'part' => $this->partTotal,
+                'ratios' => [],
+            ],
+        ];
+
         foreach ($this->cacheQuestionnaireUsages as $usage) {
 
             if (!preg_match($regexp, $usage->getRule()->getName())) {
@@ -1189,27 +1243,34 @@ STRING;
             $questionnaireId = $usage->getQuestionnaire()->getId();
             $ratioReference = "{R#$ruleId,Q#$questionnaireId,P#current}";
 
-            $formulaImproved = "=100% - $ratioReference";
-            $this->linkRule($formulaImproved, $filterImproved, $usage->getQuestionnaire(), $usage->getPart());
-
-            $formulaShared = "=$ratioReference";
-            $this->linkRule($formulaShared, $filterShared, $usage->getQuestionnaire(), $usage->getPart());
-            echo '.';
+            $allRatioReferences[$usage->getPart()->getId()]['ratios'][] = $ratioReference;
         }
-    }
 
-    /**
-     * Create (or get) a rule and link it to the given filter
-     * @param string $formula
-     * @param Filter $filter
-     * @param Questionnaire $questionnaire
-     * @param Part $part
-     */
-    private function linkRule($formula, Filter $filter, Questionnaire $questionnaire, Part $part)
-    {
-        $name = $filter->getName() . ' (' . $questionnaire->getName() . ', ' . $part->getName() . ')';
-        $rule = $this->getRule($name, $formula);
-        $this->getFilterQuestionnaireUsage($filter, $questionnaire, $rule, $part, true);
+        // If found any, create the rule with the average of them
+        foreach ($allRatioReferences as $data) {
+            if ($data['ratios']) {
+
+                // Build the formulas
+                $average = 'AVERAGE(' . implode(', ', $data['ratios']) . ')';
+                $formulaImproved = $this->replaceHighFilterNamesWithIdForBasic($filters, "=Improved + sharedREGRESSION * (100% - $average)");
+                $formulaShared = $this->replaceHighFilterNamesWithIdForBasic($filters, "=Improved + sharedREGRESSION * $average");
+
+                $part = $data['part'];
+                $countryName = $this->cacheQuestionnaireUsages[0]->getQuestionnaire()->getGeoname()->getName();
+                $suffix = ' (' . $countryName . ', ' . $part->getName() . ') XXXX';
+
+                // Create rules
+                $ruleImproved = $this->getRule($filterImproved->getName() . $suffix, $formulaImproved);
+                $ruleShared = $this->getRule($filterShared->getName() . $suffix, $formulaShared);
+
+                // Actually use rules
+                foreach ($this->importedQuestionnaires as $questionnaire) {
+                    $this->getFilterQuestionnaireUsage($filterImproved, $questionnaire, $ruleImproved, $part, true);
+                    $this->getFilterQuestionnaireUsage($filterShared, $questionnaire, $ruleShared, $part, true);
+                    echo '.';
+                }
+            }
+        }
     }
 
     /**

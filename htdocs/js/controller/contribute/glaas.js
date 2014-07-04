@@ -1,4 +1,4 @@
-angular.module('myApp').controller('Contribute/GlassCtrl', function($scope, $routeParams, $location, Restangular, QuestionAssistant) {
+angular.module('myApp').controller('Contribute/GlaasCtrl', function($scope, $routeParams, $location, Restangular, QuestionAssistant) {
     'use strict';
 
     $scope.questionnaireQueryParams = {permission: 'update', fields: 'permissions'};

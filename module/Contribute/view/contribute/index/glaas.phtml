@@ -1,6 +1,8 @@
 <div class="container">
 
     <div class='navbar navbar-default hidden-print'>
+        <a class="navbar-brand" href="#">Contribute Glaas</a>
+
         <form class='navbar-form'>
             <div class='btn btn-default' ng-show='returnUrl' ng-click='cancel()'><i class='fa fa-gims-back'></i> Back</div>
             <div class='form-group'>
@@ -37,7 +39,7 @@
             <div class='row'>
 
                 <div class='col-md-6'>
-                    <gims-select disabled='true' class='hidden-print' queryparams="questionnaireQueryParams" api="questionnaire" name="id" model="questionnaire" placeholder="<?php echo $this->translate('Select a questionnaire') ?>" style="width:100%;"/></gims-select>
+                    <gims-select class='hidden-print' queryparams="questionnaireQueryParams" api="questionnaire" name="id" model="questionnaire" placeholder="<?php echo $this->translate('Select a questionnaire') ?>" style="width:100%;"/></gims-select>
                 </div>
             </div>
         </div>

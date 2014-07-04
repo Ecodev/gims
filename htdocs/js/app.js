@@ -13,7 +13,9 @@ angular.module('myApp', [
     'chartsExample.directives',
     'colorpicker.module',
     'ngAnimate',
-    'ui.ace'
+    'ui.ace',
+    'angulartics',
+    'angulartics.google.analytics'
 ]).
         config(function($routeProvider, $locationProvider, RestangularProvider, $httpProvider, requestNotificationProvider) {
             'use strict';
@@ -46,8 +48,10 @@ angular.module('myApp', [
             $routeProvider.when('/admin/rule/edit/:id', {templateUrl: '/template/admin/rule/crud', controller: 'Admin/Rule/CrudCtrl'});
             $routeProvider.when('/admin/rule/new', {templateUrl: '/template/admin/rule/crud', controller: 'Admin/Rule/CrudCtrl'});
             $routeProvider.when('/browse/table/filter', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
-            $routeProvider.when('/contribute/questionnaire', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
-            $routeProvider.when('/contribute/questionnaire/glass/:id', {templateUrl: '/template/contribute/glass', controller: 'Contribute/GlassCtrl'});
+            $routeProvider.when('/contribute/jmp', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
+            $routeProvider.when('/contribute/nsa', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
+            $routeProvider.when('/contribute/glaas/', {templateUrl: '/template/contribute/glaas', controller: 'Contribute/GlaasCtrl'});
+            $routeProvider.when('/contribute/glaas/:id', {templateUrl: '/template/contribute/glaas', controller: 'Contribute/GlaasCtrl'});
 
             $routeProvider.otherwise({redirectTo: '/home'});
 

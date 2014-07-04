@@ -58,10 +58,17 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
 
             // Build columns definitions based on properties
             var columnDefs = _.map($scope.otherProperties, function(p) {
-                return {
+                var def = {
                     field: p + '.name',
                     displayName: capitaliseFirstLetter(p)
                 };
+
+                // If editable objects, make them a link to their admin page
+                if (_.contains(['user', 'survey', 'questionnaire', 'filterSet', 'filter', 'rule'], p)) {
+                    def.cellTemplate = '<div class="ngCellText"><a href="/admin/' + p + '/edit/{{row.entity.' + p + '.id}}">{{row.entity.' + p + '.name}}</a></div>';
+                }
+
+                return def;
             });
 
             if ($scope.justification) {

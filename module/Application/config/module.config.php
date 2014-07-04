@@ -206,6 +206,7 @@ return array(
             'crudButtons' => 'Application\View\Helper\CrudButtons',
             'bodyCssClass' => 'Application\View\Helper\BodyCssClass',
             'version' => 'Application\View\Helper\Version',
+            'googleAnalytics' => 'Application\View\Helper\GoogleAnalytics',
         ),
     ),
     'console' => Array(

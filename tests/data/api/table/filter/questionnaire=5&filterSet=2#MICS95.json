@@ -427,8 +427,8 @@
         },
         "values": [
             {
-                "Urban": 64.0,
-                "Rural": 92.7,
+                "Urban": 57.7,
+                "Rural": 71.0,
                 "Total": 89.8
             }
         ]
@@ -609,8 +609,8 @@
         },
         "values": [
             {
-                "Urban": 0.9,
-                "Rural": 3.6,
+                "Urban": null,
+                "Rural": null,
                 "Total": 3.3
             }
         ]

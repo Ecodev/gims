@@ -5,9 +5,17 @@ namespace Application\Repository;
 class GeonameRepository extends AbstractRepository
 {
 
-    use Traits\OrderedByName;
-
     private $cache = array();
+
+    public function getAllWithPermission($action = 'read', $search = null)
+    {
+        $qb = $this->createQueryBuilder('geoname')
+                ->orderBy('geoname.name');
+
+        $this->addSearch($qb, $search);
+
+        return $qb->getQuery()->getResult();
+    }
 
     /**
      * Returns the Geoname ID for the given questionnaire (and use cache for subsequent usage)

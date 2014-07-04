@@ -24,6 +24,7 @@
     "autofill-event": "~1.0.0",
     "angular-ui-ace": "bower",
     "fontawesome": "v4.1.0",
-    "impress.js": "~0.5.3"
+    "impress.js": "~0.5.3",
+    "angulartics": "~0.15.19"
   }
 }

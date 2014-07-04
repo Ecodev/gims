@@ -3,7 +3,7 @@
 namespace Application\Service\Syntax;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Application\Service\Calculator\Jmp;
+use Application\Service\Calculator\Calculator;
 
 /**
  * Replace {Q#all,P#12} with cumulated population
@@ -16,7 +16,7 @@ class RegressionCumulatedPopulation extends AbstractRegressionToken
         return '/\{Q#all,P#(\d+|current)\}/';
     }
 
-    public function replace(Jmp $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
+    public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
     {
         $partId = $this->getId($matches[1], $currentPartId);
 

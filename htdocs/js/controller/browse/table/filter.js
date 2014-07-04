@@ -10,8 +10,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     var excludeRuleId = 1;
 
     // params for ajax requests
-    $scope.filterFields = {fields: 'color,paths'};
-//    $scope.countryParams = {fields: 'geoname'};
+    $scope.filterFields = {fields: 'color,paths,parents'};
+    $scope.countryParams = {fields: 'geoname'};
     var countryFields = {fields: 'geoname.questionnaires,geoname.questionnaires.survey,geoname.questionnaires.survey.questions,geoname.questionnaires.survey.questions.type,geoname.questionnaires.survey.questions.filter'};
     var questionnaireWithQTypeFields = {fields: 'status,survey.questions,survey.questions.type,survey.questions.isAbsolute'};
     var questionnaireWithAnswersFields = {fields: 'status,filterQuestionnaireUsages,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part'};
@@ -23,9 +23,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.lastFilterId = 1;
     $scope.firstQuestionnairesRetrieve = false; // avoid to compute filters before questionnaires have been retrieved, getComputedFilters() need ready base to complete data
     $scope.tabs = {};
-    $scope.sectorChildren = 'Number of equipement,Persons per equipement';
+    $scope.sectorChildren = 'Number of facilities,Persons per facilities';
     $scope.parts = Restangular.all('part').getList().$object;
-    $scope.modes = ['Browse', 'Contribute'];
     $scope.surveysTemplate = "[[item.code]] - [[item.name]]";
     $scope.questionnairesStatus = {
         validated: false,
@@ -42,23 +41,26 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             isSector: false
         },
         {
-            name: 'Contribute : JMP',
+            name: 'Contribute JMP',
             isContribute: true,
             isSector: false
+        },
+        {
+            name: 'Contribute NSA',
+            isContribute: true,
+            isSector: true
         }
-        /* @todo : implement full sector view, and not just create */
-        //        ,{
-        //            name : 'Contribute : NSA',
-        //            isContribute : true,
-        //            isSector : true
-        //        }
     ];
 
     /**************************************************************************/
     /***************************************** First execution initialisation */
     /**************************************************************************/
 
-    if ($location.$$path.indexOf('/contribute') >= 0) {
+    $scope.locationPath = $location.$$path;
+
+    if ($location.$$path.indexOf('/nsa') >= 0) {
+        $scope.mode = $scope.modes[2];
+    } else if ($location.$$path.indexOf('/contribute') >= 0) {
         $scope.mode = $scope.modes[1];
     } else if ($location.$$path.indexOf('/browse') >= 0) {
         $scope.mode = $scope.modes[0];
@@ -81,24 +83,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.$watch(function() {
         return $location.url();
     }, function() {
-        if ($location.search().sectorChildren) {
-            $scope.sector = true;
-            if (!$scope.tabs.questionnaires) {
-                $scope.addQuestionnaire();
-            }
-        } else {
-            $scope.sector = false;
-        }
         $scope.returnUrl = $location.search().returnUrl;
         $scope.currentUrl = encodeURIComponent($location.url());
-    });
-
-    $scope.$watch('sector', function() {
-        if ($scope.sector) {
-            $scope.max = 10000000000;
-        } else {
-            $scope.max = 100;
-        }
     });
 
     $scope.$watch('mode', function(mode) {
@@ -115,10 +101,12 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     $scope.$watch('tabs.filterSet', function() {
         if ($scope.tabs.filterSet) {
-            Restangular.one('filterSet', $scope.tabs.filterSet.id).getList('filters', {perPage: 1000}).then(function(filters) {
+            $scope.tabs.filters = [];
+            Restangular.one('filterSet', $scope.tabs.filterSet.id).getList('filters', _.merge($scope.filterFields, {perPage: 1000})).then(function(filters) {
                 if (filters) {
                     $scope.tabs.filters = filters;
                     $scope.tabs.filter = null;
+                    updateUrl('filter');
                 }
                 checkSelectionExpand();
             });
@@ -140,9 +128,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
                     $scope.tabs.filters = filters;
                     $scope.tabs.filterSet = null;
-                    if ($scope.sector) {
-                        $scope.addFilter();
-                    }
+                    updateUrl('filterSet');
+
                 }
                 checkSelectionExpand();
             });
@@ -178,6 +165,9 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         getComputedFilters();
         if (firstLoading === true && $scope.tabs.filters && $scope.tabs.questionnaires) {
             checkSelectionExpand();
+        }
+        if ($scope.tabs.filters) {
+            validateNSAFilterStructure();
         }
     });
 
@@ -317,11 +307,21 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param question
      */
     $scope.initQuestionAbsolute = function(question) {
-        if (_.isUndefined(question.isAbsolute)) {
+
+        // if absolute is undefined and we are in contribute view (no sector) -> set question as percent by default
+        if (_.isUndefined(question.isAbsolute) && !$scope.mode.isSector || question && question.isAbsolute === false) {
             question.isAbsolute = false;
             question.value = 'valuePercent';
             question.max = 100;
+
+            // if absolute is undefined and we are in sector view -> set question as absolute by default
+        } else if (_.isUndefined(question.isAbsolute) && $scope.mode.isSector || question && question.isAbsolute === true) {
+            question.isAbsolute = true;
+            question.value = 'valueAbsolute';
+            question.max = 100000000000;
         }
+
+        return question;
     };
 
     /**
@@ -335,21 +335,25 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      */
     $scope.saveAnswer = function(answer, question, filter, questionnaire, part) {
 
+        var deferred = $q.defer();
+
         // complete question in all situations with filter name if there is no name specified
-        if (_.isUndefined(question.name)) {
+        if (_.isUndefined(question.name) && !_.isUndefined(filter)) {
             question.name = filter.name;
         }
 
         // avoid to do some job if the value is not changed or if it's invalid (undefined)
         if (answer.initialValue === answer[question.value] || _.isUndefined(answer[question.value]) && !_.isUndefined(answer.initialValue)) {
             answer[question.value] = answer.initialValue;
-            return;
+            deferred.resolve();
+            return deferred.promise;
         }
 
         // avoid to save questions when its a new questionnaire / survey
         // the save is provided by generate button for all new questionnaires, surveys, questions and answers.
         if (_.isUndefined(questionnaire.id)) {
-            return;
+            deferred.resolve();
+            return deferred.promise;
         }
 
         Restangular.restangularizeElement(null, answer, 'answer');
@@ -358,54 +362,54 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         // delete answer if no value
         if (answer.id && !$scope.isValidNumber(answer[question.value])) {
             $scope.removeAnswer(question, answer);
+            deferred.resolve();
 
             // update
         } else if (answer.id) {
+
             if (answer.permissions) {
-                updateAnswer(answer, question, part);
+                updateAnswer(answer, questionnaire).then(function() {
+                    answer.initialValue = answer[question.value];
+                    deferred.resolve(answer);
+                });
             } else {
                 $scope.getPermissions(question, answer).then(function() {
-                    updateAnswer(answer, question, part);
+                    updateAnswer(answer, questionnaire).then(function() {
+                        answer.initialValue = answer[question.value];
+                        deferred.resolve(answer);
+                    });
                 });
             }
 
             // create answer, if allowed by questionnaire
         } else if (_.isUndefined(answer.id) && $scope.isValidNumber(answer[question.value]) && $scope.questionnairesStatus[questionnaire.status]) {
-            answer.isLoading = true;
             answer.questionnaire = questionnaire.id;
             question.survey = questionnaire.survey.id;
 
             // if question is not created, create it before creating the answer
             getOrSaveQuestion(question).then(function(question) {
-                answer.question = question.id;
-                answer.part = part.id;
-                createAnswer(question, answer, part).then(function() {
+                createAnswer(answer, question, {part: part}).then(function() {
+                    answer.initialValue = answer[question.value];
+                    deferred.resolve(answer);
                     $scope.refresh(false, true);
                 });
-
             });
         }
+
+        return deferred.promise;
     };
 
     /**
-     * Save one questionnaire if index is specified or all if it's not.
-     * @param index
+     * Save one questionnaire if specified or all if it's not.
+     * @param questionnaire
      */
-    $scope.saveQuestionnaires = function(index) {
+    $scope.saveAll = function(questionnaire) {
 
-        var sector = $scope.sector;
         $scope.checkQuestionnairesIntegrity().then(function() {
-            saveFilters().then(function() {
-                if (_.isUndefined(index)) {
-                    var questionnairesToSave = _.filter($scope.tabs.questionnaires, $scope.checkIfSavableQuestionnaire);
-                    saveAllQuestionnairesWhenQuestionsAreSaved(questionnairesToSave, 0, sector);
-                } else {
-                    if ($scope.checkIfSavableQuestionnaire($scope.tabs.questionnaires[index])) {
-                        saveCompleteQuestionnaire($scope.tabs.questionnaires[index]).then(function() {
-                            createQuestionnaireFilterUsages(sector);
-                        });
-                    }
-                }
+            saveFilters().then(function(savedFacilities) {
+                var questionnairesToCreate = !_.isUndefined(questionnaire) ? [questionnaire] : _.filter($scope.tabs.questionnaires, $scope.checkIfSavableQuestionnaire);
+                var existingQuestionnaires = _.filter($scope.tabs.questionnaires, 'id');
+                saveQuestionnaires(questionnairesToCreate.concat(existingQuestionnaires), savedFacilities);
             });
         });
     };
@@ -417,7 +421,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      */
     $scope.checkIfSavableQuestionnaire = function(questionnaire) {
         if (_.isUndefined(questionnaire.id) && !_.isUndefined(questionnaire.geoname) && !_.isUndefined(questionnaire.geoname.country) && !_.isUndefined(questionnaire.survey) && !_.isEmpty(questionnaire.survey.code) && !_.isUndefined(questionnaire.survey.year) && !hasErrors(questionnaire)) {
-            return questionnaire;
+            return true;
         }
     };
 
@@ -470,8 +474,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param question
      * @param answer
      */
-    $scope.setAnswerInitialValue = function(question, answer) {
+    $scope.setAnswerInitialValue = function(question, answer, part) {
         answer.initialValue = answer[question.value];
+        if (!answer.part && part) {
+            answer.part = part;
+        }
     };
 
     /**
@@ -504,6 +511,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      */
     $scope.saveQuestion = function(question, questionnaire) {
 
+        var deferred = $q.defer();
+
         // If the question is new and does not have an official name use it the alternative as real one
         var alternateName = question.alternateNames[questionnaire.id];
         if (!question.name) {
@@ -527,10 +536,15 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 if (!question.alternateNames[questionnaire.id]) {
                     question.alternateNames[questionnaire.id] = question.name;
                 }
+
+                deferred.resolve();
+
             });
         } else {
-            getOrSaveQuestion(question);
+            return getOrSaveQuestion(question);
         }
+
+        return deferred.promise;
     };
 
     /**
@@ -549,8 +563,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
                     questionnaire.id = data.questionnaire.id;
                     questionnaire.survey.id = data.survey.id;
-                    getQuestionnaires([data.questionnaire.id
-                    ], questionnaireWithAnswersFields).then(function(questionnaires) {
+                    getQuestionnaires([data.questionnaire.id], questionnaireWithAnswersFields).then(function(questionnaires) {
                         $scope.firstQuestionnairesRetrieve = true;
                         prepareDataQuestionnaires(questionnaires);
                         updateUrl('questionnaires');
@@ -576,7 +589,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      */
     $scope.removeAnswer = function(question, answer) {
         Restangular.restangularizeElement(null, answer, 'Answer');
-        answer.isLoading = true;
         if (_.isUndefined(answer.permissions)) {
             $scope.getPermissions(question, answer).then(function() {
                 deleteAnswer(question, answer);
@@ -593,7 +605,17 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         if (_.isUndefined($scope.tabs.questionnaires)) {
             $scope.tabs.questionnaires = [];
         }
-        $scope.tabs.questionnaires.splice(0, 0, {});
+
+        var questionnaire = {};
+        if ($location.search().usedCountry) {
+            questionnaire = {
+                geoname: {
+                    country: $location.search().usedCountry
+                }
+            };
+        }
+
+        $scope.tabs.questionnaires.splice(0, 0, questionnaire);
         $scope.questionnairesAreSorted = false;
         fillMissingElements();
         updateUrl('questionnaires');
@@ -610,45 +632,45 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     /**
      * Remove row (filter)
-     * @param index
+     * @param filter
      */
-    $scope.removeFilter = function(index) {
+    $scope.removeFilter = function(filter) {
 
-        var id = $scope.tabs.filters[index].id;
-        $scope.tabs.filters.splice(index, 1);
-        removeQuestionsForFilter(id, false);
+        var filters = _.uniq(_.pluck([filter
+        ].concat(getChildrenRecursively(filter)), 'id'));
 
-        if ($scope.sector) {
-            var temporaryFilterIdRegex = new RegExp('_' + id + "_");
-            // remove temporary children sector filters
-            $scope.tabs.filters = _.filter($scope.tabs.filters, function(filter) {
-                if (!temporaryFilterIdRegex.test(filter.id)) {
-                    return true;
-                }
-            });
-            if (!_.isEmpty($scope.tabs.questionnaires)) {
-                removeQuestionsForFilter(temporaryFilterIdRegex, true);
+        // remove filter if it's in list of
+        $scope.tabs.filters = _.filter($scope.tabs.filters, function(f) {
+            if (!_.contains(filters, f.id)) {
+                return true;
             }
-        }
+            return false;
+        });
+
         updateUrl('filters');
+
+        _.forEach(filters, function(f) {
+            removeQuestionsForFilter(f.id, false);
+        });
     };
 
     /**
      * Add a filter to list
      * Filters that have been added must have and ID because the questions are indexed on their filter id,
-     * This function assigns an arbitrary ID starting with and anderscore that is replaced on save.
+     * This function assigns an arbitrary ID starting with and underscore that is replaced on save.
      * This underscored id is used for children filters that need a reference to parents.
      */
-    $scope.addFilter = function() {
+    $scope.addEquipment = function() {
         if ($scope.tabs.filter) {
             if (_.isUndefined($scope.tabs.filters)) {
                 $scope.tabs.filters = [];
             }
             $scope.tabs.filters.push({
                 id: "_" + $scope.lastFilterId++,
-                level: 0,
-                parents: [$scope.tabs.filter.id],
-                sector: true
+                level: 1,
+                parents: [
+                    {id: $scope.tabs.filter.id}
+                ]
             });
             fillMissingElements();
         }
@@ -670,6 +692,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 $scope.tabs.viewDisabled = false;
                 $scope.tabs.create = false;
                 $scope.tabs.createDisabled = true;
+
+                // Automatically insert empty questionnaire and equipement
+                $scope.addQuestionnaire();
+                $timeout($scope.addEquipment, 800); // TODO, this is absolutely terrible, I think I need timeout because the new sector filter did not load its children yet, but I am not sure. Samuel, help !
             });
         });
     };
@@ -681,6 +707,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     /**
      * Detects if a ID is temporary (with underscore) or not. Used to detect unsaved filters.
+     * Return true if filter has a numeric ID without underscore or false if not.
      * @param filter
      * @returns {boolean}
      */
@@ -743,9 +770,120 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         });
     };
 
+    $scope.getFiltersByLevel = function(level, filters) {
+        filters = _.isUndefined(filters) ? $scope.tabs.filters : filters;
+        return _.filter(filters, function(filter) {
+            if (filter.level == level) {
+                return true;
+            }
+            return false;
+        });
+    };
+
+    $scope.setExpandHierarchy = function(bool) {
+        $scope.expandHierarchy = bool;
+    };
+
     /**************************************************************************/
     /****************************************************** Private functions */
     /**************************************************************************/
+
+    /**
+     * Save given questionnaires and create sector rules for given filters (rules only if sector mode)
+     * This method regroup questionnaires by survey, then save first questionnaire of each survey and his questions
+     * Then, when questions have been saved, they're propagated to other questionnaires from same survey in client side
+     * Then, other questionnaires are saved, without questions
+     * Answers are always saved if needed
+     * @param questionnairesToSave
+     * @param savedFacilities
+     */
+    var saveQuestionnaires = function(questionnairesToSave, savedFacilities) {
+
+        var questionnairesToSaveBySurvey = _.groupBy(questionnairesToSave, function(q) {
+            return q.survey.code;
+        });
+
+        _.forEach(questionnairesToSaveBySurvey, function(questionnaires) {
+            // save the first questionnaire (and his questions)
+            var questionnaire = questionnaires.shift();
+            if (!questionnaire.id) {
+                savedFacilities = $scope.getFiltersByLevel(1);
+            }
+            saveCompleteQuestionnaire(questionnaire).then(function(questionnaire) {
+                createQuestionnaireFilterUsages(questionnaire, savedFacilities);
+            }, function() {
+            }, function() {
+                // notification when questions have been safed
+                // then, once the questions have been created, save all other questionnaires
+                _.forEach(questionnaires, function(questionnaire) {
+                    if (!questionnaire.id) {
+                        savedFacilities = $scope.getFiltersByLevel(1);
+                    }
+                    saveCompleteQuestionnaire(questionnaire).then(function(questionnaire) {
+                        createQuestionnaireFilterUsages(questionnaire, savedFacilities);
+                    });
+                });
+            });
+        });
+    };
+
+    /**
+     * Check if in NSA view, we have a single root filter, then x equipments and 2 children by equipment
+     */
+    var validateNSAFilterStructure = function() {
+        $scope.NSAStructureOk = true;
+        if ($scope.tabs.filters && $scope.tabs.filters[0]) {
+            var rootLevel = $scope.tabs.filters[0].level;
+            var rootFilters = $scope.getFiltersByLevel(rootLevel);
+            if (rootFilters.length == 1) {
+                var filtersLvl1 = $scope.getFiltersByLevel(rootLevel + 1);
+
+                _.forEach(filtersLvl1, function(filter) {
+                    var children = getChildren(filter);
+                    if (children.length != 2) {
+                        $scope.NSAStructureOk = false;
+                        return false;
+                    }
+                });
+            } else {
+                $scope.NSAStructureOk = false;
+            }
+        }
+    };
+
+    /**
+     * Get all children and children's children, by searching in parents references
+     * @param filter
+     * @returns {Array}
+     */
+    var getChildrenRecursively = function(filter) {
+        var children = _.filter($scope.tabs.filters, function(f) {
+            if (_.find(f.parents, {id: filter.id})) {
+                return true;
+            }
+        });
+
+        _.forEach(children, function(f) {
+            children = children.concat(getChildrenRecursively(f));
+        });
+
+        return children;
+    };
+
+    /**
+     * Get immediate children, by searching in parents references
+     * @param filter
+     * @returns {Array}
+     */
+    var getChildren = function(filter) {
+        var children = _.filter($scope.tabs.filters, function(f) {
+            if (_.find(f.parents, {id: filter.id})) {
+                return true;
+            }
+        });
+
+        return children;
+    };
 
     /**
      * Call questionnaires asking for passed fields and executing callback function passing received questionnaires
@@ -773,6 +911,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 });
 
                 deferred.resolve(questionnaires);
+            }, function() {
+                $scope.tabs.questionnaires = [];
             });
         }
 
@@ -800,7 +940,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         // if there is only 1 glass in all selected questionnaires, consider that user want to edit this one, and redirect to glass template
         // no action is possible on multiple glass questionnaires (neither browse or contribute)
         if (glass.length === 1 && $scope.tabs.questionnaires.length === 1) {
-            $location.url('/contribute/questionnaire/glass/' + glass[0].id + "?returnUrl=" + $location.path());
+            $location.url('/contribute/glaas/' + glass[0].id + "?returnUrl=" + $location.path());
 
             // else list glass questionnaires apart
         } else {
@@ -817,7 +957,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             // get data for new jmp questionnaires
             getQuestionnaires(_.pluck(jmp, 'id'), questionnaireWithAnswersFields).then(function(questionnaires) {
                 $scope.firstQuestionnairesRetrieve = true;
-                listQuestionnairesWithFilterUsages(questionnaires);
+//                listQuestionnairesWithFilterUsages(questionnaires);
                 prepareDataQuestionnaires(questionnaires);
             });
         }
@@ -835,8 +975,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     // index answers by part id
                     var answers = {};
                     _.forEach(question.answers, function(answer) {
-                        if (!_.isUndefined(answer.questionnaire) && answer.questionnaire.id == questionnaire.id) {
-                            delete(answer.questionnaire);
+                        if (answer.questionnaire && answer.questionnaire.id == questionnaire.id) {
+                            answer.initialValue = question.isAbsolute ? answer.valueAbsolute : answer.valuePercent;
                             answers[answer.part.id] = answer;
                         }
                     });
@@ -845,23 +985,15 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             });
 
             // Index population by part id
-            var indexedPopulations = [];
-            _.forEach(questionnaire.populations, function(population) {
-                Restangular.restangularizeElement(null, population, 'population');
-                indexedPopulations[population.part.id] = population;
+            var restPopulations = _.map(questionnaire.populations, function(population) {
+                return Restangular.restangularizeElement(null, population, 'population');
             });
-            questionnaire.populations = indexedPopulations;
+            questionnaire.populations = _.indexBy(restPopulations, function(p) {
+                return p.part.id;
+            });
 
-            questionnaire.survey.questions = _.map(questionnaire.survey.questions, function(q) {
-                if (q.isAbsolute) {
-                    q.value = 'valueAbsolute';
-                    q.max = 10000000000000000;
-                } else {
-                    q.value = 'valuePercent';
-                    q.max = 100;
-                }
-
-                return q;
+            _.forEach(questionnaire.survey.questions, function(q) {
+                $scope.initQuestionAbsolute(q);
             });
 
             questionnaire.survey.questions = _.indexBy(questionnaire.survey.questions, function(q) {
@@ -947,7 +1079,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     /**
      * Called when a new questionnaire is added or filters are changed.
-     * Ensure there is empty objects to grand app to work fine (e.g emptyanswers have to exist before ng-model assigns a value)
+     * Ensure there is empty objects to grant app to work fine (e.g emptyanswers have to exist before ng-model assigns a value)
      */
     var fillMissingElements = function() {
         if ($scope.tabs.questionnaires && $scope.tabs.filters) {
@@ -968,7 +1100,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
                 // Create empty population indexed by the part ID
                 if (_.isUndefined(questionnaire.populations)) {
-                    questionnaire.populations = [];
+                    questionnaire.populations = {};
                 }
 
                 _.forEach($scope.parts, function(part) {
@@ -994,13 +1126,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                         questionnaire.survey.questions[filter.id].isAbsolute = true;
                     }
 
-                    if (questionnaire.survey.questions[filter.id].isAbsolute) {
-                        questionnaire.survey.questions[filter.id].value = 'valueAbsolute';
-                        questionnaire.survey.questions[filter.id].max = 10000000000000000;
-                    } else {
-                        questionnaire.survey.questions[filter.id].value = 'valuePercent';
-                        questionnaire.survey.questions[filter.id].max = 100;
-                    }
+                    $scope.initQuestionAbsolute(questionnaire.survey.questions[filter.id]);
 
                     if (_.isUndefined(questionnaire.survey.questions[filter.id].answers)) {
                         questionnaire.survey.questions[filter.id].answers = {};
@@ -1037,12 +1163,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         }
         $timeout(function() {
 
-            var filtersIds = _.map($scope.tabs.filters, function(el) {
-                return el.id;
-            });
-            var questionnairesIds = _.map($scope.tabs.questionnaires, function(el) {
-                return el.id;
-            });
+            var filtersIds = _.pluck($scope.tabs.filters, 'id');
+            var questionnairesIds = _.compact(_.pluck($scope.tabs.questionnaires, 'id')); // compact remove falsey values
 
             if (filtersIds.length > 0 && questionnairesIds.length > 0) {
                 $scope.isComputing = true;
@@ -1056,11 +1178,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     timeout: getComputedFiltersCanceller.promise,
                     params: {
                         filters: filtersIds.join(','),
-                        questionnaires: _.filter(questionnairesIds, function(el) {
-                            if (el) {
-                                return true;
-                            }
-                        }).join(',')
+                        questionnaires: questionnairesIds.join(',')
                     }
                 }).success(function(questionnaires) {
                     _.forEach($scope.tabs.questionnaires, function(scopeQuestionnaire) {
@@ -1083,16 +1201,14 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     var saveCompleteQuestionnaire = function(questionnaire) {
         var Qdeferred = $q.defer();
 
-        questionnaire.isLoading = true;
-
         // get survey if exists or create
         getOrSaveSurvey(questionnaire).then(function(survey) {
             questionnaire.survey = survey;
 
             // create questionnaire
-            saveUnitQuestionnaire(questionnaire).then(function(newQuestionnaire) {
+            getOrSaveUnitQuestionnaire(questionnaire).then(function(newQuestionnaire) {
+
                 questionnaire.id = newQuestionnaire.id;
-                questionnaire.isLoading = true;
                 propagateSurvey(survey);
                 updateUrl('questionnaires');
 
@@ -1107,42 +1223,35 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                         return true;
                     }
                 });
+
                 if (questionsForSave.length === 0) {
                     Qdeferred.notify();
                     Qdeferred.resolve(questionnaire);
                 } else {
                     var answersPromises = [];
-                    var questionPromises = _.map(questionsForSave, function(question) {
+                    var questionsPromises = _.map(questionsForSave, function(question) {
                         var qdeferred = $q.defer();
                         getOrSaveQuestion(question).then(function(newQuestion) {
                             question = newQuestion;
-                            qdeferred.resolve(question);
                             propagateSurvey(survey);
 
-                            var answersForSave = _.filter(question.answers, function(a) {
-                                if (a[question.value] || a[question.value] === 0) {
-                                    return true;
-                                }
-                            });
-                            _.forEach(answersForSave, function(answer, partId) {
-                                answer.questionnaire = questionnaire.id;
-                                answer.question = question.id;
-                                answersPromises.push(createAnswer(question, answer, partId));
+                            _.forEach(question.answers, function(answer) {
+                                answersPromises.push($scope.saveAnswer(answer, question, undefined, questionnaire));
                             });
 
+                            qdeferred.resolve(question);
                         });
                         return qdeferred.promise;
                     });
 
                     // once all questions have been saved, notify next questionnaire to start saving
                     // and add listener on all answers promises to notify end of full saved questionnaire
-                    $q.all(questionPromises).then(function() {
+                    $q.all(questionsPromises).then(function() {
                         propagateSurvey(survey);
-                        Qdeferred.notify('Questions recovered'); // says to promise listener he can save next questionnaire
                         $q.all(answersPromises).then(function() {
-                            questionnaire.isLoading = false;
                             Qdeferred.resolve(questionnaire);
                         });
+                        Qdeferred.notify('Questions recovered'); // says to promise listener he can save next questionnaire (notification)
                     });
                 }
             });
@@ -1153,26 +1262,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         });
 
         return Qdeferred.promise;
-    };
-
-    /**
-     * Recursive function that save all questionnaires
-     * Instead of saving all questionnaires at the same time, wait for the questions to be saved in case a future questionnaire use the same survey and the same questions.
-     * This avoid try to create questions twice and cause conflict.
-     * @param questionnaires
-     * @param index
-     */
-    var saveAllQuestionnairesWhenQuestionsAreSaved = function(questionnaires, index, sector) {
-        if (questionnaires[index]) {
-            saveCompleteQuestionnaire(questionnaires[index]).then(function() {
-            }, function() {
-            }, function() {
-                saveAllQuestionnairesWhenQuestionsAreSaved(questionnaires, index + 1, sector);
-            });
-
-        } else {
-            createQuestionnaireFilterUsages(sector);
-        }
     };
 
     /**
@@ -1240,7 +1329,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param questionnaire
      * @returns promise
      */
-    var saveUnitQuestionnaire = function(questionnaire) {
+    var getOrSaveUnitQuestionnaire = function(questionnaire) {
         var deferred = $q.defer();
 
         if (_.isUndefined(questionnaire.id)) {
@@ -1253,10 +1342,14 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 survey: questionnaire.survey.id
             };
 
+            questionnaire.isLoading = true;
             Restangular.all('questionnaire').post(miniQuestionnaire, {fields: 'permissions'}).then(function(newQuestionnaire) {
                 questionnaire.id = newQuestionnaire.id;
+                questionnaire.isLoading = false;
                 deferred.resolve(questionnaire);
             });
+        } else {
+            deferred.resolve(questionnaire);
         }
 
         return deferred.promise;
@@ -1271,7 +1364,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.savePopulation = function(questionnaire, population) {
 
         // Do nothing if the value did not change (avoid useless ajax)
-        if (population.initialValue === population.population) {
+        if (population.initialValue === population.population || !questionnaire.survey || !questionnaire.id || !questionnaire.geoname) {
             return;
         }
         $scope.setInitialValue(population, population.population);
@@ -1303,6 +1396,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 population.isLoading = false;
             });
         }
+
+        $scope.refresh(false, true);
     };
 
     /**
@@ -1331,8 +1426,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 // no survey exists, create it
             } else {
                 survey.name = survey.code + " - " + survey.year;
+                survey.isLoading = true;
                 Restangular.all('survey').post(survey).then(function(newSurvey) {
                     survey.id = newSurvey.id;
+                    survey.isLoading = false;
                     deferred.resolve(survey);
                 });
             }
@@ -1432,10 +1529,9 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /**
      * Update answers considering answer permissions
      * @param answer
-     * @param question
-     * @param questionnaire
+git      * @param questionnaire
      */
-    var updateAnswer = function(answer, question, questionnaire) {
+    var updateAnswer = function(answer, questionnaire) {
         var deferred = $q.defer();
         if (answer.id && (answer.permissions && answer.permissions.update || !answer.permissions && questionnaire && $scope.questionnairesStatus[questionnaire.status])) {
             Restangular.restangularizeElement(null, answer, 'Answer');
@@ -1472,9 +1568,12 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         var deferred = $q.defer();
         if (question.id && $scope.questionnairesStatus[questionnaire.status]) {
             Restangular.restangularizeElement(null, question, 'question');
+            question.isLoading = true;
             question.put().then(function() {
+                question.isLoading = false;
                 deferred.resolve();
             }, function() {
+                question.isLoading = false;
                 deferred.reject();
             });
         }
@@ -1490,6 +1589,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     var deleteAnswer = function(question, answer) {
 
         if (answer.id && answer.permissions.delete) {
+            answer.isLoading = true;
             answer.remove().then(function() {
                 delete(answer.id);
                 delete(answer[question.value]);
@@ -1502,15 +1602,32 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     /**
      * Create answer considering *questionnaire* permissions
-     * @param question
      * @param answer
-     * @param partId
+     * @param question
+     * @param params
      */
-    var createAnswer = function(question, answer, partId) {
+    var createAnswer = function(answer, question, params) {
         var deferred = $q.defer();
+
+        if (_.isUndefined(params)) {
+            params = {};
+        }
+
         if (answer[question.value] || answer[question.value] === 0) {
-            if (_.isUndefined(answer.part) && partId) {
-                answer.part = partId;
+
+            // init part if missing
+            if (!answer.part && params.part) {
+                answer.part = params.part.id;
+            }
+
+            // init questionnaire if missing
+            if (!answer.questionnaire && params.questionnaire) {
+                answer.questionnaire = params.questionnaire.id;
+            }
+
+            // init question if missing
+            if (!answer.question && question) {
+                answer.question = question.id;
             }
 
             answer.isLoading = true;
@@ -1538,6 +1655,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     var getOrSaveQuestion = function(question) {
         var deferred = $q.defer();
 
+        if (!$scope.isValidId(question.filter)) {
+            deferred.reject();
+            return deferred.promise;
+        }
+
         // if no id, create
         if (_.isUndefined(question.id)) {
             var miniQuestion = {};
@@ -1548,8 +1670,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             miniQuestion.isAbsolute = question.isAbsolute;
             miniQuestion.alternateNames = question.alternateNames;
 
+            question.isLoading = true;
             Restangular.all('question').post(miniQuestion).then(function(newQuestion) {
                 question.id = newQuestion.id;
+                question.isLoading = false;
                 deferred.resolve(question);
             });
 
@@ -1562,58 +1686,43 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     };
 
     /**
-     * Hide selection panels on :
-     *  - survey selection
-     *  - country selection
-     *  - filter set selection
-     *  - filter's children selection
-     *  - page loading
-     *
-     *  If there are filter and questionnaires selected after this manipulation
-     *  Don't hide selection panes if select with free selection tool on "Selected" tab.
-     *  The button "Expand/Compress Selection" reflects this status and allow to change is again.
-     */
-    var checkSelectionExpand = function() {
-        firstLoading = false;
-        if ($scope.tabs.filters && $scope.tabs.filters.length && $scope.tabs.questionnaires && $scope.tabs.questionnaires.length) {
-            $scope.expandSelection = false;
-        } else {
-            $scope.expandSelection = true;
-        }
-    };
-
-    /**
-     * In case sector parameter is detected in url, this function ensures each filter has sub filters dedicated to filter data (Usualy people and equipement but may be anything)
+     * In case sector parameter is detected in url, this function ensures each filter has
+     * sub filters dedicated to filter data (Usually people and equipment but may be anything)
      */
     var prepareSectorFilters = function() {
-        if ($scope.tabs.filters && $scope.sector) {
+        if ($scope.tabs.filters && $scope.mode.isSector) {
 
-            var sectorFilters = _.filter($scope.tabs.filters, function(f) {
-                if (!f.sectorChild) {
+            var equipments = _.filter($scope.tabs.filters, function(f) {
+                if (!$scope.isValidId(f) && f.level == 1) {
                     return true;
                 }
+                return false;
             });
-
             var sectorChildrenNames = $scope.sectorChildren.split(',');
 
-            _.forEachRight(sectorFilters, function(filter) {
-                var childSectorFilters = _.filter($scope.tabs.filters, function(f) {
-                    if (f.parents && f.parents[0] && f.parents[0] == filter.id) {
+            _.forEachRight(equipments, function(equipment) {
+                // get equipment children filter
+                var equipementData = _.filter($scope.tabs.filters, function(f) {
+                    if (_.find(f.parents, {id: equipment.id})) {
                         return true;
                     }
                 });
-                if (childSectorFilters.length === 0) {
+
+                // if no children added to equipment yet, add it
+                if (equipementData.length === 0) {
                     var sectorChildFilters = _.map(sectorChildrenNames, function(childSectorName, sectorIndex) {
                         return {
-                            id: '_' + filter.id + "_" + sectorIndex,
+                            id: '_' + equipment.id + "_" + sectorIndex,
                             name: childSectorName,
-                            parents: [filter.id],
-                            level: filter.level + 1,
-                            sectorChild: true
+                            parents: [
+                                {id: equipment.id}
+                            ],
+                            level: 2
                         };
                     });
 
-                    var index = _.findIndex($scope.tabs.filters, {id: filter.id});
+                    // add children to equipments
+                    var index = _.findIndex($scope.tabs.filters, {id: equipment.id});
                     _.forEach(sectorChildFilters, function(filter, sectorIndex) {
                         $scope.tabs.filters.splice(index + sectorIndex + 1, 0, filter);
                     });
@@ -1649,33 +1758,33 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     };
 
     /**
-     * Save all filters, first root ones, then children ones
+     * Save all filters, equipment before their children
      * @returns promise
      */
     var saveFilters = function() {
         var deferred = $q.defer();
 
         // get all filters with starting by _1
-        var parentFilters = _.filter($scope.tabs.filters, function(f) {
+        var equipments = _.filter($scope.tabs.filters, function(f) {
             if (/^_\d+/.test(f.id)) {
                 return true;
             }
         });
 
-        if (_.isEmpty(parentFilters)) {
+        if (_.isEmpty(equipments)) {
             deferred.resolve();
         } else {
-            saveFiltersCollection(parentFilters).then(function() {
+            saveFiltersCollection(equipments).then(function() {
 
                 // get all filters with starting by __1
-                var childrenFilters = _.filter($scope.tabs.filters, function(f) {
+                var nbPersonsFilters = _.filter($scope.tabs.filters, function(f) {
                     if (/^__\d+/.test(f.id)) {
                         return true;
                     }
                 });
-                if (!_.isEmpty(parentFilters)) {
-                    saveFiltersCollection(childrenFilters).then(function() {
-                        deferred.resolve();
+                if (!_.isEmpty(nbPersonsFilters)) {
+                    saveFiltersCollection(nbPersonsFilters).then(function() {
+                        deferred.resolve(equipments);
                     });
                 }
             });
@@ -1692,7 +1801,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     var saveFiltersCollection = function(filtersToSave) {
         var deferred = $q.defer();
 
-        // get all filters with starting by _1 or __1
         if (filtersToSave.length === 0) {
             deferred.resolve();
         } else {
@@ -1701,9 +1809,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 filterPromises.push(saveFilter(filter));
             });
             $q.all(filterPromises).then(function() {
-                $scope.expandHierarchy = true;
-                $location.search('sectorChildren', null);
-                $scope.sector = false;
                 updateUrl('filters');
                 deferred.resolve();
             });
@@ -1724,12 +1829,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             filter.oldId = filter.id;
         }
         filter.isLoading = true;
-        Restangular.all('filter').post({name: filter.name, parents: filter.parents, filterSets: filter.filterSets}).then(function(newFilter) {
+        Restangular.all('filter').post({name: filter.name, parents: _.pluck(filter.parents, 'id'), filterSets: filter.filterSets}).then(function(newFilter) {
             filter.id = newFilter.id;
             filter.isLoading = false;
-            delete(filter.sector);
-            delete(filter.sectorChild);
-            replaceQuestionsIds(filter.id, filter.oldId);
+            replaceQuestionsIds(filter);
             replaceIdReferenceOnChildFilters(filter);
             deferred.resolve(filter);
         });
@@ -1739,15 +1842,14 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     /**
      * When saving a filter with temporary url, we need to update question filter and index with new filter id.
-     * @param id
-     * @param oldId
+     * @param filter
      */
-    var replaceQuestionsIds = function(id, oldId) {
+    var replaceQuestionsIds = function(filter) {
         _.forEach($scope.tabs.questionnaires, function(questionnaire) {
-            if (questionnaire.survey && questionnaire.survey.questions && questionnaire.survey.questions[oldId]) {
-                questionnaire.survey.questions[id] = questionnaire.survey.questions[oldId];
-                questionnaire.survey.questions[id].filter.id = id;
-                delete(questionnaire.survey.questions[oldId]);
+            if (questionnaire.survey && questionnaire.survey.questions && questionnaire.survey.questions[filter.oldId]) {
+                questionnaire.survey.questions[filter.id] = questionnaire.survey.questions[filter.oldId];
+                questionnaire.survey.questions[filter.id].filter.id = filter.id;
+                delete(questionnaire.survey.questions[filter.oldId]);
             }
         });
     };
@@ -1757,54 +1859,37 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param filter
      */
     var replaceIdReferenceOnChildFilters = function(filter) {
-        var children = _.filter($scope.tabs.filters, function(f) {
-            if (f.parents && f.parents[0] && f.parents[0] == filter.oldId) {
-                return true;
-            }
-        });
-        _.forEach(children, function(child) {
-            child.parents[0] = filter.id;
+        _.forEach($scope.tabs.filters, function(f) {
+            _.forEach(f.parents, function(parent) {
+                if (parent.id == filter.oldId) {
+                    parent.id = filter.id;
+                }
+            });
         });
     };
 
     /**
      * Create usages only if we are in sector mode
      * As we cancel sector mode at
-     * @param execute
+     * @param questionnaire
+     * @param filters
      */
-    var createQuestionnaireFilterUsages = function(execute) {
-
-        if (execute) {
-            var rootFilters = _.filter($scope.tabs.filters, function(f) {
-                if (f.parents[0] == $scope.tabs.filter.id) {
-                    return true;
-                }
-            });
-            var filters = _.map(rootFilters, function(filter) {
-                var children = _.filter($scope.tabs.filters, function(f) {
-                    if (f.parents[0] == filter.id) {
-                        return true;
-                    }
-                });
-                return filter.id + ':' + _.map(children, function(f) {
-                    return f.id;
-                }).join('-');
+    var createQuestionnaireFilterUsages = function(questionnaire, filters) {
+        if ($scope.mode.isSector) {
+            var equipments = _.map($scope.getFiltersByLevel(1, filters), function(filter) {
+                return filter.id + ':' + _.pluck(getChildren(filter), 'id').join('-');
             });
 
-            var questionnaires = [];
             _.forEach($scope.tabs.questionnaires, function(questionnaire) {
                 questionnaire.filterQuestionnaireUsages = 1;
-                if (questionnaire.id) {
-                    questionnaires.push(questionnaire.id);
-                }
             });
 
-            listQuestionnairesWithFilterUsages($scope.tabs.questionnaires);
+//            listQuestionnairesWithFilterUsages($scope.tabs.questionnaires);
 
             $http.get('/api/filter/createUsages', {
                 params: {
-                    filters: filters.join(','),
-                    questionnaires: questionnaires.join(',')
+                    filters: equipments.join(','),
+                    questionnaires: questionnaire.id
                 }
             }).success(function() {
                 $scope.firstQuestionnairesRetrieve = true;
@@ -1817,13 +1902,14 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * Questionnaires with usages
      * @param questionnaires
      */
-    var listQuestionnairesWithFilterUsages = function(questionnaires) {
-        $scope.questionnairesWithUsages = _.filter(questionnaires, function(q) {
-            if (!_.isEmpty(q.filterQuestionnaireUsages) || _.isNumber(q.filterQuestionnaireUsages)) {
-                return true;
-            }
-        });
-    };
+//    Disabled for the moment, because add buttons that are not required since the news NSA view has been added, but works
+//    var listQuestionnairesWithFilterUsages = function(questionnaires) {
+//        $scope.questionnairesWithUsages = _.filter(questionnaires, function(q) {
+//            if (!_.isEmpty(q.filterQuestionnaireUsages) || _.isNumber(q.filterQuestionnaireUsages)) {
+//                return true;
+//            }
+//        });
+//    };
 
     /**
      * Update parameters on url exlucding empty ids to avoid multiple consecutive commas that cause problems on server side.
@@ -1835,6 +1921,27 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 return true;
             }
         }).join(','));
+    };
+
+    /**
+     * Hide selection panels on :
+     *  - survey selection
+     *  - country selection
+     *  - filter set selection
+     *  - filter's children selection
+     *  - page loading
+     *
+     *  If there are filter and questionnaires selected after this manipulation
+     *  Don't hide selection panes if select with free selection tool on "Selected" tab.
+     *  The button "Expand/Compress Selection" reflects this status and allow to change is again.
+     */
+    var checkSelectionExpand = function() {
+        firstLoading = false;
+        if ($scope.tabs.filters && $scope.tabs.filters.length && $scope.tabs.questionnaires && $scope.tabs.questionnaires.length) {
+            $scope.expandSelection = false;
+        } else {
+            $scope.expandSelection = true;
+        }
     };
 
     /**

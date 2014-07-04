@@ -336,6 +336,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                 $rootScope.$emit('gims-chart-modified', chart);
             } else {
                 addSeries(data.series);
+                chart.title.text = data.title.text;
             }
 
             deferred.resolve(chart);

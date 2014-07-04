@@ -1,5 +1,13 @@
 <div class="container" ng-class="{'gims-full-width-container':panelOpened}">
 
+<!-- Toolbar -->
+<div class="navbar navbar-default hidden-print">
+    <a class="navbar-brand" href="#">Chart</a>
+    <form class="navbar-form">
+        <a class="btn btn-default" ng-if="tabs.country" target="_blank" href="/contribute/nsa?usedCountry={{tabs.country.id}}&returnUrl={{currentUrl}}"><i class="fa fa-plus-circle"></i> Create sector dataset</a>
+    </form>
+</div>
+
 <table id="chartExternalLayout">
     <tr>
         <td>
@@ -80,7 +88,11 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="alert alert-info ng-trans ng-trans-fade-up" ng-hide="tabs.filters.length && tabs.country && tabs.part"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?></div>
+                        <div class="alert alert-warning ng-trans ng-trans-fade-up" ng-hide="tabs.filters.length && tabs.country && tabs.part">
+                            <p>
+                                <i class="fa fa-warning"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?>
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -232,7 +244,7 @@
                                 </div>
 
                                 <div class="col-md-12" ng-show="!pointSelected">
-                                    <div class="alert alert-info ng-trans ng-trans-fade-up" ><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select a questionnaire on chart to display filters') ?></div>
+                                    <div class="alert alert-warning ng-trans ng-trans-fade-up" ><i class="fa fa-warning"></i> <?php echo $this->translate('Select a questionnaire on chart to display filters') ?></div>
                                 </div>
 
                             </tab>
@@ -267,7 +279,7 @@
                                 </div>
 
                                 <div class="col-md-12" ng-show="!pointSelected">
-                                    <div class="alert alert-info ng-trans ng-trans-fade-up" ><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select a questionnaire on chart to display Calculations / Estimations / Ratios') ?></div>
+                                    <div class="alert alert-warning ng-trans ng-trans-fade-up" ><i class="fa fa-warning"></i> <?php echo $this->translate('Select a questionnaire on chart to display Calculations / Estimations / Ratios') ?></div>
                                 </div>
                             </tab>
 
@@ -328,22 +340,18 @@
                                     <div class="form-group">
                                         <div class="row show-grid">
                                             <div class="col-md-12">
-                                                <label class="form-label">New dataset</label>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <a class="btn btn-default" href="/contribute/questionnaire?sectorChildren&returnUrl={{currentUrl}}"><i class="fa fa-plus"></i> Create new dataset</a>
                                             </div>
                                         </div>
-                                        <div class="row show-grid" ng-show="filterSet">
+
+
+                                        <div class="row show-grid" ng-show="tabs.filters">
                                             <div class="col-md-12">
-                                                <label class="form-label">Edit dataset</label>
-                                            </div>
-                                            <div class="col-md-12">
+                                                <h2>Filter edition</h2>
 
                                                 <ul class="list-unstyled">
-                                                    <li class="pull-left" style="margin-bottom:5px;margin-right:5px;"><a class="btn btn-primary" ng-class="{'disabled': !country || !filterSet}" href="/contribute/questionnaire?&country={{country.id}}&filterSet={{getFiltersIds()}}&returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i> Edit all</a></li>
+                                                    <li class="pull-left" style="margin-bottom:5px;margin-right:5px;"><a class="btn btn-primary" ng-class="{'disabled': !tabs.country || !tabs.filters}" href="/contribute/jmp?&country={{country.id}}&filterSet={{getFiltersIds()}}&returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i> Edit all</a></li>
                                                     <li ng-repeat="filter in tabs.filters" class="pull-left" style="margin-bottom:5px;margin-right:5px;">
-                                                        <a class="btn btn-default" href="/contribute/questionnaire?&country={{country.id}}&filter={{filter.id}}&returnUrl={{currentUrl}}"><i class="fa fa-pencil" style="color:{{filter.genericColor}}"></i> {{filter.name}}</a>
+                                                        <a class="btn btn-default" href="/contribute/jmp?&country={{country.id}}&filter={{filter.id}}&returnUrl={{currentUrl}}"><i class="fa fa-pencil" style="color:{{filter.genericColor}}"></i> Edit {{filter.name}}</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -351,7 +359,7 @@
 
                                         <hr/>
 
-                                        <h3 class="text-center">Filter projection</h3>
+                                        <h2>Filter projection</h2>
 
                                         <div class="row show-grid">
                                             <div class="col-md-12">

@@ -5,9 +5,9 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function($scope, $ro
     $scope.sending = false;
 
     // Default redirect
-    var redirectTo = '/admin/survey';
+    var returnUrl = '/admin/survey';
     if ($routeParams.returnUrl) {
-        redirectTo = $routeParams.returnUrl;
+        returnUrl = $routeParams.returnUrl;
     }
 
     $scope.actives = [
@@ -16,11 +16,11 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function($scope, $ro
     ];
 
     $scope.saveAndClose = function() {
-        this.save(redirectTo);
+        this.save(returnUrl);
     };
 
     $scope.cancel = function() {
-        $location.path(redirectTo).search('returnUrl', null).hash(null);
+        $location.url(returnUrl);
     };
 
     $scope.save = function(redirectTo) {

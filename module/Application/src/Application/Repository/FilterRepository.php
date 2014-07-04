@@ -5,8 +5,6 @@ namespace Application\Repository;
 class FilterRepository extends AbstractRepository
 {
 
-    use Traits\OrderedByName;
-
     private $cacheDescendants = array();
 
     /**
@@ -15,7 +13,12 @@ class FilterRepository extends AbstractRepository
      */
     public function getAllWithPermission($action = 'read', $search = null)
     {
-        return $this->findAll();
+        $qb = $this->createQueryBuilder('filter')
+                ->orderBy('filter.id');
+
+        $this->addSearch($qb, $search);
+
+        return $qb->getQuery()->getResult();
     }
 
     /**

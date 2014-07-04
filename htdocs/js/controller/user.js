@@ -1,6 +1,18 @@
-angular.module('myApp').controller('UserCtrl', function($scope, $http, authService, $modal, $rootScope, requestNotification) {
+angular.module('myApp').controller('UserCtrl', function($scope, $http, authService, $modal, $rootScope, requestNotification, $window, $analytics) {
     'use strict';
     $scope.getRequestCount = requestNotification.getRequestCount;
+
+    function userLoggedIn(user) {
+        if ($window.ga) {
+            $window.ga('set', 'dimension1', user.id + ': ' + user.name);
+            $analytics.eventTrack('logged', {category: 'login', label: 'logged'});
+        }
+
+        $scope.user = user;
+        $rootScope.user = $scope.user;
+        authService.loginConfirmed();
+        $rootScope.$emit('gims-loginConfirmed', user);
+    }
 
     // Intercept the event broadcasted by http-auth-interceptor when a request get a HTTP 401 response
     $scope.$on('event:auth-loginRequired', function() {
@@ -9,10 +21,8 @@ angular.module('myApp').controller('UserCtrl', function($scope, $http, authServi
 
     // Reload existing logged in user (eg: when refreshing page)
     $http.get('/user/login').success(function(data) {
-        if (data.status == 'logged')
-        {
-            $scope.user = data;
-            $rootScope.user = $scope.user;
+        if (data.status == 'logged') {
+            userLoggedIn(data);
         }
     });
 
@@ -23,12 +33,7 @@ angular.module('myApp').controller('UserCtrl', function($scope, $http, authServi
             controller: 'LoginWindowCtrl'
         });
 
-        modalInstance.result.then(function(user) {
-            $scope.user = user;
-            $rootScope.user = $scope.user;
-            authService.loginConfirmed();
-            $rootScope.$emit('gims-loginConfirmed', user);
-        });
+        modalInstance.result.then(userLoggedIn);
     };
 
 });

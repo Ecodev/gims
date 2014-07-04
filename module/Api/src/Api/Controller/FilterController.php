@@ -57,7 +57,7 @@ class FilterController extends AbstractChildRestfulController
             // no parent, get all filters
         } else {
             $itemOnce = $this->params()->fromQuery('itemOnce') == 'true' ? true : false;
-            $filters = $this->getRepository()->findAll();
+            $filters = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), $this->params()->fromQuery('q'));
             $filters = $this->flattenFilters($filters, $itemOnce);
             $filters = $this->getFlatHierarchyWithMultipleRootElements($filters, '_parent');
         }
@@ -155,6 +155,41 @@ class FilterController extends AbstractChildRestfulController
         }
 
         return new JsonModel($result);
+    }
+
+    public function getComputedWorldAction()
+    {
+        $calculator = new \Application\Service\Calculator\Calculator();
+        $calculator->setServiceLocator($this->getServiceLocator());
+
+        $filterIds = explode(',', trim($this->params()->fromQuery('filters'), ','));
+
+        $filters = [];
+        foreach ($filterIds as $filterId) {
+            array_push($filters, $this->getRepository()->findOneById($filterId));
+        }
+
+        $geonames = $this->getEntityManager()->getRepository('\Application\Model\Geoname')->findAll();
+        $parts = $this->getEntityManager()->getRepository('\Application\Model\Part')->findAll();
+
+        /** @var \Application\Model\Geoname $geoname */
+        $data = [];
+        foreach ($geonames as $geoname) {
+            $questionnaires = $geoname->getQuestionnaires()->toArray();
+            $geonameData = $this->hydrator->extract($geoname, [
+                'gtopo30',
+                'population'
+            ]);
+            $geonameData['iso_numeric'] = $geoname->getCountry()->getIsoNumeric();
+            $geonameData['iso3'] = $geoname->getCountry()->getIso3();
+
+            foreach ($parts as $part) {
+                $geonameData['calculations'][$part->getId()] = $calculator->computeFlattenAllYears(1980, 2014, $filters, $questionnaires, $part);
+            }
+            array_push($data, $geonameData);
+        }
+
+        return new JsonModel($data);
     }
 
     public function createUsagesAction()

@@ -4,7 +4,6 @@ namespace Application\Service\Syntax;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Service\Calculator\Calculator;
-use Application\Service\Calculator\Jmp;
 use Application\Model\Rule\AbstractQuestionnaireUsage;
 
 /**
@@ -43,6 +42,7 @@ use \Application\Traits\EntityManagerAware;
             new QuestionnaireUsageValue(),
             new PopulationValue(),
             new BasicSelf(),
+            new FilterValueAfterRegression(),
         ];
 
         $this->regressions = [
@@ -194,7 +194,7 @@ use \Application\Traits\EntityManagerAware;
 
     /**
      * Convert the given GIMS formula into an Excel formula by using regression tokens
-     * @param \Application\Service\Calculator\Jmp $calculator
+     * @param \Application\Service\Calculator\Calculator $calculator
      * @param string $formula GIMS formula
      * @param itneger $currentFilterId
      * @param array $questionnaires
@@ -204,7 +204,7 @@ use \Application\Traits\EntityManagerAware;
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return string
      */
-    public function convertRegression(Jmp $calculator, $formula, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
+    public function convertRegression(Calculator $calculator, $formula, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
     {
         foreach ($this->regressions as $token) {
             $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token, $calculator, $currentFilterId, $questionnaires, $currentPartId, $year, $years, $alreadyUsedRules) {
