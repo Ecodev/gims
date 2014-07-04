@@ -9,4 +9,12 @@ For further information, see the `gimsinitiative.org website <http://www.gimsini
 
 Interested in the **technical aspects** of this open source system?  Take a look at the :doc:`short technical presentation <technical_presentation>` or dive into the code on `GitHub <https://github.com/Ecodev/gims>`_.
 
-The documentation below provides a step by step basic presentation of how GIMS works as well as detailed chapters for specific users. 
+The documentation below provides a step by step basic presentation of how GIMS works as well as detailed chapters for specific users.
+
+.. warning::
+
+    New features are being added into GIMS that necessitate adaptations to the current interfaces. Differences between the web application and the current documentation are therefore possible.
+
+.. note::
+
+    JMP users only interested in data entry can go directly to the section :doc:`How to answer a questionnaire <data_input2>`.

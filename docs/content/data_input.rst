@@ -1,27 +1,29 @@
-Data gathering and validation
-=============================
+How to gather data?
+===================
 
-To gather data, 3 basic steps are required:
+To gather data, the normal process requires 3 initial basic steps:
 
-#. create a :ref:`survey`
-#. create the :ref:`questions`
-#. dispatch the survey as :ref:`questionnaires`
+#. create a :ref:`DI survey`
+#. create the :ref:`DI questions`
+#. dispatch the survey as :ref:`DI questionnaires`
 
-Since all data is linked to one or several people, you must first of all that you :ref:`sign-in`.
+Once this first step is completed, see how to ensure each :doc:`questionnaire <data_input2>` is filled in properly.
 
-.. _survey:
+Since all data is linked to one or several people, you must first of all :ref:`sign-in`.
+
+.. _DI survey:
 
 Survey
 -------
-You can now go to the **Admin** section and click on the **Surveys** icon.
+You can now go to the **Admin** section and clic on the **Surveys** icon.
 
 .. image:: img/administration.png
     :width: 100%
     :alt: Administration section
 
-If you have access to an existing survey, it will be listed. To edit it, click on the pencil icon.
+If you have access to an existing survey, it will be listed. To edit it, clic on the pencil icon.
 
-To create a new survey, click on the corresponding button.
+To create a new survey, clic on the corresponding button.
 
 .. image:: img/surveys.png
     :width: 100%
@@ -29,19 +31,19 @@ To create a new survey, click on the corresponding button.
 
 For each survey, there are 4 tabs:
 
-* **General**: in this tab you must enter a unique code (typically an acronyme of the type of survey + year); the name (a more detailed and explicit title of the survey); if it is active or not (Yes is mandatory for people to fill in questionnaires); the year it covers; internal comments as well as a start and end date (that define the timeframe in which data will be gathered/entered).
+* **General**: in this tab you must enter a *unique* and *meaningful* code (typically an acronyme of the type of survey + year); the name (a more detailed and explicit title of the survey); if it is active or not ("Yes" is mandatory for people to fill in questionnaires); the year it covers; internal comments as well as a start and end date (that define the timeframe in which data will be gathered/entered).
 
 .. image:: img/surveys_general.png
     :width: 100%
     :alt: Surveys general tab
 
-* **Questions**: in this tab you will see the already existing questions and how they are structured; be able to edit (pencil icon) or delete them (dustbin icon) as well as add a new question (click on the corresponding button). For further details about the different types of questions see the :ref:`questions` section below.
+* **Questions**: in this tab you will see the already existing questions and how they are structured; be able to edit (pencil icon) or delete them (dustbin icon) as well as add a new question (clic on the corresponding button). For further details about the different types of questions see the :ref:`DI questions` section below.
 
 .. image:: img/surveys_questions.png
     :width: 100%
     :alt: Surveys questions tab
 
-* **Questionnaires**: in this tab you will see the questionnaire(s) you are entitled to edit and/or validate. In this view you can see which spatial zone (country, city…) the questionnaire corresponds to, when it has been last modified and too what extent it has been completed. To add a new questionnaire click on the corresponding button. For further details about the questionnaires see the :ref:`questionnaires` section below.
+* **Questionnaires**: in this tab you will see the questionnaire(s) you are entitled to edit and/or validate. In this view you can see which spatial zone (country, city…) the questionnaire corresponds to; when it has been last modified and too what extent it has been completed. To add a new questionnaire clic on the corresponding button. For further details about the questionnaires see the :ref:`DI questionnaires` section below.
 
 .. image:: img/surveys_questionnaires.png
     :width: 100%
@@ -54,7 +56,7 @@ For each survey, there are 4 tabs:
     :alt: Surveys users tab
 
 
-.. _questions:
+.. _DI questions:
 
 Questions
 ---------
@@ -66,7 +68,7 @@ To enable you to gather both *quantitative* and *qualitative* information, 4 typ
 #. :ref:`text`
 #. :ref:`user`
 
-The type **Chapter** helps you to create the survey structure with the necessary introductory information.
+The type **Chapter** helps you to create the survey structure with the necessary introductory information for each (sub)chapter.
 
 .. image:: img/question_chapter.png
     :width: 100%
@@ -78,7 +80,9 @@ The fields "belongs to chapter" and "display mode" (screen copy above) enable yo
     :width: 100%
     :alt: Questionnaire interface sample
 
-Each question can be linked to a :term:`filter` and a zone (or :term:`part`).
+Each question can be linked to :term:`filter(s)` and one or several zone(s) / :term:`part(s)`.
+
+The "Alternate labels" tab enables you to enter equivalent labels that may have been used, such as translations of the term in other languages (ex. "House connections" = "Robinet dans logement"…).
 
 .. _choice:
 
@@ -104,7 +108,10 @@ Numeric questions can be either expressed as a **percentage** or an **absolute**
 .. image:: img/question_numeric.png
     :width: 100%
     :alt: Numeric questions
+    
+.. note::
 
+    JMP questions have an extra check-box that enables to specify if the numeric value represents population data or not.
 
 .. _text:
 
@@ -129,7 +136,7 @@ User questions enable to gather names and contact information of people straight
     :alt: User questions
 
 
-.. _questionnaires:
+.. _DI questionnaires:
 
 Questionnaires
 --------------
@@ -138,16 +145,28 @@ A questionnaire contains the answers to a survey for a specific spatial entity (
 
 The two main tabs are:
 
-* **General**: The status indicates if the questionnaire is being answered (*New*), has been *completed*, validated, *published* (a published questionnaire is publicly available to anyone in the Browse section of GIMS) or eventually *rejected*.
+General
+^^^^^^^
+
+The status indicates if the questionnaire is being answered (*New*), has been *completed*, validated, *published* (a published questionnaire is publicly available to anyone in the Browse section of GIMS) or eventually *rejected*. See here for further information about the :doc:`validation process <data_validation>`.
 
 .. image:: img/questionnaire_general.png
     :width: 100%
     :alt: Questionnaires general tab
 
-* **Users**: As in the survey, the users tab enables to define who can do what for the current questionnaire. To add a new user, select the person and define his role.
+.. _DI questionnaires users:
+
+Users
+^^^^^
+
+As in the survey, the users tab enables to define who can do what for the current questionnaire. The user account must therefore exist.
+
+You can either create it for him and provide him with his username and password or ask him to create an account and then give him the access rights.
+
+To add a new user, select the person [1] and define his role [2].
 
 .. image:: img/questionnaire_users.png
     :width: 100%
     :alt: Questionnaires users tab
 
-**Rule - Filter** and **Rule** tabs are only used when specific calculations are linked to the questionnaire which is the case for JMP data. See the :doc:`Rule section <rule>`
+**Rule - Filter** and **Rule** tabs are only used when specific calculations are linked to the questionnaire which is typically the case for JMP data. See the :doc:`Rule section <rule>`

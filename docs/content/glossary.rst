@@ -3,32 +3,47 @@ Glossary
 
 .. glossary::
 
-    survey
-        A list of questions to be distributed to several countries.
+    editor
+        Person given the access rights to create and edit a survey, questionnaire, filter, etc.
 
-    question
-        Questions can optionally be categorized with filters.
+    filter(s)
+        Filters are a way to categorize data, and also to organize them, more generally. They may be used in combination with rules to compute things.
 
-    questionnaire
-        Contains the answers to a survey for a specific country. They have a
-        status indicating whether the questionnaire is being answered, completed,
-        validated, or published. A published questionnaire is publicly available
-        to anyone.
-
-    filter
-        Filters are a way to categorize data, and also to organize them, more
-        generally. They may be used in combination with rules to compute things.
-
-    filterSet
-        FilterSets are a way to group filters together for convenience. It does
-        not have any special semantics. It is only to be able to easily select
-        a group of well-known filters.
-
-    part
-        Defines a part of geographical region. Typically urban, rural and total parts.
+    filter set(s)
+        FilterSets are a way to group a series of filters together and facilitate their selection. You can see it as a "folder".
 
     geoname
-        A geographical region. Usually the same as a country, but could also be something smaller (such as cities).
+        A geographical region, typically a country. It can also be a smaller spatial entity such as a city.
 
-    rule
+    GLASS
+        This acronym stands for the "Global Analysis and Assessment of Sanitation and Drinking-Water"; a project piloted by WHO (see the `GLASS home page <http://www.who.int/water_sanitation_health/glaas/en/>`_)
+
+    JMP
+        This acronym stands for the "Joint Monitoring Programme for water supply and sanitation" which is carried out by WHO and UNICEF (see the `wssinfo.org website <http://www.wssinfo.org>`_).
+
+    NSA
+        This acronym stands for "National Sector Agency". They provide information on the level of *access* to facilities.
+
+    NSO
+        This acronym stands for "National Statistics Offices". They provide information on the level of *use* of facilities. This data gathered via national surveys and censuses is the one used by the JMP.
+
+    part(s)
+        Defines a zone within a geographical entity (typically a country) such as *urban* and *rural* areas. The *total* or *national* part corresponds to the entire geographical entity (ie. country).
+
+    question(s)
+        Questions can be of different types: numeric (absolute or relative), text, choice and users. They can be categorized with filters.
+
+    questionnaire(s)
+        Contains the answers to a survey for a specific country. They have a status indicating whether the questionnaire is being answered (new), completed, validated, or published. A published questionnaire is publicly available to anyone.
+
+    reporter
+        Person given the access rights to answer questions for a specific questionnaire.
+
+    rule(s)
         A rule is a way to customize computing with handcrafted formulas.
+
+    survey(s)
+        A list of questions to be distributed to several countries in the form of questionnaires.
+        
+    validator
+        Person given the access rights to validate the answers filled in for a specific questionnaire.
