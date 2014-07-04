@@ -926,8 +926,8 @@ STRING;
                         }
                     }
 
-                    // If the high filter has some hardcoded formula, import them as well, but only for non-total
-                    if (isset($filterData['rule']) && $part != $this->partTotal) {
+                    // If the high filter has some hardcoded formula, import them as well
+                    if (isset($filterData['rule'])) {
                         $formula = $this->replaceHighFilterNamesWithIdForBasic($filters, $filterData['rule']);
                         $rule = $this->getRule(($sheet->getTitle() == 'Tables_W' ? 'Water - ' : 'Sanitation - ') . $filterName, $formula);
                         $this->getFilterQuestionnaireUsage($highFilter, $questionnaire, $rule, $part);
