@@ -510,7 +510,7 @@
                                                     </button>
 
                                                      <!-- drop down menu -->
-                                                    <ul class="dropdown-menu pull-right" ng-if="questionnairesStatus[questionnaire.status] || questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id">
+                                                    <ul class="dropdown-menu pull-right" ng-if="questionnairesStatus[questionnaire.status] || questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id]">
                                                         <li ng-if="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id]" class="dropdown-header">Information</li>
                                                         <li ng-if="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]">
                                                             <a><i class="fa fa-question fa-fw"></i> {{questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]}}</a>
@@ -525,16 +525,16 @@
                                                             <a href="/admin/rule/edit/{{usage.rule.id}}"><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a>
                                                         </li>
                                                         <!--<li ng-if="!isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) && isValidNumber(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second)"><a><i class="fa fa-cog fa-fw"></i></a></li>-->
-                                                        <li ng-if="questionnairesStatus[questionnaire.status] && questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id]" class="divider"></li>
+                                                        <li ng-if="questionnairesStatus[questionnaire.status] && (questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id])" class="divider"></li>
                                                         <li ng-if="questionnairesStatus[questionnaire.status]" class="dropdown-header">Actions</li>
-                                                        <li>
+                                                        <li ng-if="questionnairesStatus[questionnaire.status]">
                                                             <a href ng-click="toggleExcludeRule(questionnaire, filter.id, tabs.part.id)"><i class="fa fa-gims-rule fa-fw"></i> {{excludeRuleExists(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id]) ? 'Include in further computing' : 'Exclude from further computing'}}</a>
                                                         </li>
                                                         <li ng-if="questionnairesStatus[questionnaire.status]">
                                                             <a href ng-if="questionnaire.survey.questions[filter.id].isAbsolute" ng-click="toggleQuestionAbsolute(questionnaire, questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id])"><i class="fa fa-fw">%</i> Set question as percent value</a>
                                                             <a href ng-if="!questionnaire.survey.questions[filter.id].isAbsolute" ng-click="toggleQuestionAbsolute(questionnaire, questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id])"><i class="fa fa-fw fa-plus-square-o"></i> Set question as absolute value</a>
                                                         </li>
-                                                        <li ng-if="questionnaire.survey.questions[filter.id].answers[tabs.part.id].id">
+                                                        <li ng-if="questionnairesStatus[questionnaire.status] && questionnaire.survey.questions[filter.id].answers[tabs.part.id].id">
                                                             <a href ng-click="removeAnswer(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id])">
                                                                 <span class="text-danger"><i class="fa fa-trash-o fa-fw"></i> Remove answer</span>
                                                             </a>
