@@ -35,15 +35,13 @@
         <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
             <div class="container">
                 <div class="navbar-header">
-                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                    <button class="navbar-toggle" type="button" ng-click="showMainMenu = !showMainMenu">
                         <span class="sr-only">Toggle navigation</span>
-                        <span class="fa fa-bar"></span>
-                        <span class="fa fa-bar"></span>
-                        <span class="fa fa-bar"></span>
+                        <i class="fa fa-bars"></i>
                     </button>
                     <a href="<?php echo $this->url('home') ?>" class="navbar-brand">GIMS</a>
                 </div>
-                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+                <nav class="navbar-collapse bs-navbar-collapse" ng-class="{collapse: !showMainMenu}" role="navigation">
                     <ul class="nav navbar-nav">
                         <li><a href="/about"><?php echo $this->translate('About') ?></a></li>
                         <li><a href="/browse"><?php echo $this->translate('Browse') ?></a></li>
