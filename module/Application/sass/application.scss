@@ -306,7 +306,7 @@ body.local {
         @include background(repeating-linear-gradient(-45deg, $navbar-inverse-bg,$navbar-inverse-bg 30px, #075f7f 30px, #075f7f 60px));
 
         .navbar-brand:before {
-            content: 'LOCAL VERSION ';
+            content: 'LOCAL ';
             font-weight: bolder;
             color: white;
         }
