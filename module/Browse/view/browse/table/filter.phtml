@@ -17,14 +17,21 @@
             <!-- Hide/Show selection tools and/or children filters -->
             <button class="btn btn-default" ng-click="expandSelection = !expandSelection"><i class="fa" ng-class="{'fa-compress':expandSelection,'fa-expand text-primary':!expandSelection}"></i> Selection</button>
 
-            <!--<button class="btn pull-right" ng-class="{'btn-info':showHelp, 'btn-default':!showHelp}" ng-click="showHelp = !showHelp"><i class='fa fa-question'></i></button>-->
+            <?php echo $this->helpButton(); ?>
         </form>
     </div>
 
-    <!--<div class="alert alert-info" ng-if="showHelp">-->
-        <!--<p><i class="fa fa-info-circle"></i> Lorem ipsum</p>-->
-    <!--</div>-->
-
+    <div ng-switch="mode.name">
+        <div ng-switch-when="Browse">
+            <?php echo $this->helpBox('Select a country and filter set and view the corresponding data. For further info, see the <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/data_processing.html">detailed documentation</a>.'); ?>
+        </div>
+        <div ng-switch-when="Contribute JMP">
+            <?php echo $this->helpBox('Select questionnaires and filters and edit existing or new data. For further info, see the <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/data_input2.html#di-jmp">detailed documentation</a>.'); ?>
+        </div>
+        <div ng-switch-when="Contribute NSA">
+            <?php echo $this->helpBox('Select an existing NSA filter set or create one and edit existing or new data. For further info, see the <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/data_input2.html#di-nsa">detailed documentation</a>.'); ?>
+        </div>
+    </div>
     <!-- Selection panel for filters and questionnaires -->
     <form name="selectionForm">
         <div class="row show-grid ng-trans ng-trans-slide-up" ng-show="expandSelection" >

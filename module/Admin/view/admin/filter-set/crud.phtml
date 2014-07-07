@@ -2,11 +2,14 @@
 
     <h2>
         <ul class="breadcrumb">
-            <i class="active fa fa-gims-filterset pull-right"></i>
+            <?php echo $this->helpButton(); ?>
+            <span class="active pull-right"><i class="fa fa-fw fa-gims-filterset"></i></span>
             <li><a href="/admin/filter-set">Filter sets</a></li>
             <li class="active">{{filterSet.name}}</li>
         </ul>
     </h2>
+
+    <?php echo $this->helpBox('Create new filter sets or delete them. For further info, see the <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/filter_set.html">detailed documentation</a>.'); ?>
 
     <form novalidate name="myForm" class="form-horizontal">
 

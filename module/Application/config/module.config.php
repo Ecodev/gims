@@ -207,6 +207,8 @@ return array(
             'bodyCssClass' => 'Application\View\Helper\BodyCssClass',
             'version' => 'Application\View\Helper\Version',
             'googleAnalytics' => 'Application\View\Helper\GoogleAnalytics',
+            'helpButton' => 'Application\View\Helper\HelpButton',
+            'helpBox' => 'Application\View\Helper\HelpBox',
         ),
     ),
     'console' => Array(

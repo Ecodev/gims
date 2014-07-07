@@ -2,10 +2,13 @@
 
     <h2>
         <ul class="breadcrumb">
-            <i class="active fa fa-gims-filterset pull-right"></i>
+            <?php echo $this->helpButton(); ?>
+            <span class="active pull-right"><i class="fa fa-fw fa-gims-filterset"></i></span>
             <li class="active"><a href="/admin/filter-set">Filter set</a></li>
         </ul>
     </h2>
+
+    <?php echo $this->helpBox('Edit the filter set\'s label and edit its filter content. For further info, see the <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/filter_set.html">detailed documentation</a>.'); ?>
 
     <div class="row">
         <div class="col-md-9">

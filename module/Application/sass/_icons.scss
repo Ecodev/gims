@@ -50,6 +50,11 @@ $fa-font-path: "../lib/fontawesome/fonts";
 
 .fa-gims-help {
     @extend .fa-question-circle;
+
+    // For help button in navbar, we boost the size to appear like in crumbread
+    .navbar-form  & {
+        font-size: 2.5em;
+    }
 }
 
 // Compatibility with glyphicons

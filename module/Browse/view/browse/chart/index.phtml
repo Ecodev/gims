@@ -5,8 +5,11 @@
     <a class="navbar-brand" href="#">Chart</a>
     <form class="navbar-form">
         <a class="btn btn-default" ng-if="tabs.country" target="_blank" href="/contribute/nsa?usedCountry={{tabs.country.id}}&returnUrl={{currentUrl}}"><i class="fa fa-plus-circle"></i> Create sector dataset</a>
+            <?php echo $this->helpButton(); ?>
     </form>
 </div>
+
+<?php echo $this->helpBox('Select country, part and filter set and perform visual analysis of the data. For further info, see the <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/data_processing.html#jmpgraphanalysis">detailed documentation</a>.'); ?>
 
 <table id="chartExternalLayout">
     <tr>
