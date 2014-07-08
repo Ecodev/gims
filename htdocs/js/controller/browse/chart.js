@@ -126,6 +126,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      */
     $rootScope.$on('gims-chart-pointSelected', function(event, pointSelected) {
         $scope.setPointSelected(pointSelected.id, pointSelected.questionnaire, pointSelected.name, pointSelected.filter);
+        $scope.panelOpened = true;
     });
 
     /**
