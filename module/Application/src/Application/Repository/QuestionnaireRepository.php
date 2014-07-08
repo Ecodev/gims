@@ -21,6 +21,9 @@ class QuestionnaireRepository extends AbstractChildRepository
     {
         $qb = $this->createQueryBuilder('questionnaire');
         $qb->join('questionnaire.survey', 'survey', \Doctrine\ORM\Query\Expr\Join::WITH);
+        $qb->join('questionnaire.geoname', 'geoname', \Doctrine\ORM\Query\Expr\Join::WITH);
+        $qb->addOrderBy('survey.code');
+        $qb->addOrderBy('geoname.name');
 
         if ($parent) {
             $qb->where($parentName . ' = :parent');
@@ -34,11 +37,7 @@ class QuestionnaireRepository extends AbstractChildRepository
         }
 
         $this->addPermission($qb, 'questionnaire', \Application\Model\Permission::getPermissionName($this, $action), $exceptionDql);
-
-        if ($search) {
-            $qb->join('questionnaire.geoname', 'geoname', \Doctrine\ORM\Query\Expr\Join::WITH);
-            $this->addSearch($qb, $search, array('survey.code', 'geoname.name'));
-        }
+        $this->addSearch($qb, $search, array('survey.code', 'geoname.name'));
 
         return $qb->getQuery()->getResult();
     }
