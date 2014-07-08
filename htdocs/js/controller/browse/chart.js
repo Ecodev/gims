@@ -125,8 +125,10 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * Watch chart service notifications about changer selected point
      */
     $rootScope.$on('gims-chart-pointSelected', function(event, pointSelected) {
-        $scope.setPointSelected(pointSelected.id, pointSelected.questionnaire, pointSelected.name, pointSelected.filter);
-        $scope.panelOpened = true;
+        $scope.$apply(function() {
+            $scope.setPointSelected(pointSelected.id, pointSelected.questionnaire, pointSelected.name, pointSelected.filter);
+            $scope.panelOpened = true;
+        });
     });
 
     /**

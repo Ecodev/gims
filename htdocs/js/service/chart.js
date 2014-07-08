@@ -365,19 +365,15 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
     };
 
     return {
-
         setCache: function(newCache) {
             cache = newCache;
         },
-
         resetSeries: function() {
             resetSeries();
         },
-
         computeEstimates: function(data, ignoredElements) {
             return computeEstimates(data, ignoredElements);
         },
-
         /**
          * Retrieve ignored elements in the url and init cache
          * This function is called after chart has been loaded.
@@ -389,7 +385,6 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         initIgnoredElementsFromUrl: function(filters, part) {
             return initIgnoredElementsFromUrl(filters, part);
         },
-
         /**
          * Remove passed series
          * @param seriesToRemove
@@ -398,15 +393,12 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         removeSeries: function(seriesToRemove, affectAdjusted) {
             removeSeries(seriesToRemove, affectAdjusted);
         },
-
         addSeries: function(seriesToAdd) {
             seriesToAdd(seriesToAdd);
         },
-
         retrieveFiltersAndValues: function(questionnaire, filters, part) {
             return retrieveFiltersAndValues(questionnaire, filters, part);
         },
-
         getIgnoredElements: function() {
 
             if (!cache) {
@@ -415,7 +407,6 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
 
             return getIgnoredElements();
         },
-
         refresh: function(queryParams, part, refreshCanceler, resetSeries) {
             return refresh(queryParams, part, refreshCanceler, resetSeries);
         }
