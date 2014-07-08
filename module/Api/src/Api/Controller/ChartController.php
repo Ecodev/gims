@@ -441,7 +441,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 return $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
             }, $filtersIds);
 
-            $result = array('filters' => array());
+            $result = array(
+                'name' => $questionnaire->getName(),
+                'filters' => array(),
+            );
             $resultWithoutIgnoredFilters = array('filters' => array());
 
             /** @var  \Application\Service\Hydrator $hydrator */

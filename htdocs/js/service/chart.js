@@ -174,6 +174,8 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                     ignoredElements: ignoredElements
                 }
             }).success(function(data) {
+                questionnaire.name = data.name; // Overwrite short name with full name
+
                 _.forEach(data.filters, function(hFilter, hFilterId) {
                     _.forEach(data.filters[hFilterId], function(filter, index) {
                         if (!_.isUndefined(cache[questionnaire.id].hFilters[hFilterId])) {
