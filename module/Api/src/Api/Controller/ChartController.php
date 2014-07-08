@@ -4,6 +4,7 @@ namespace Api\Controller;
 
 use Application\View\Model\NumericJsonModel;
 use Application\Model\Part;
+use Application\Model\Geoname;
 use Application\Utility;
 use Application\Model\Filter;
 
@@ -17,8 +18,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         'triangle',
         'triangle-down'
     );
-    private $startYear;
-    private $endYear;
+    private $startYear = 1980;
+    private $endYear = 2012;
 
     /**
      * @var \Application\Service\Calculator\Calculator
@@ -42,12 +43,16 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     /**
      * Return the entire structure to draw the chart
      * @param array $series
-     * @param \Application\Model\Country $country
+     * @param array $geonames
      * @param \Application\Model\Part $part
      * @return array
      */
-    private function getChart(array $series, \Application\Model\Country $country = null, Part $part = null)
+    private function getChart(array $series, array $geonames = null, Part $part = null)
     {
+        $geonameNames = join(', ', array_map(function($g) {
+                    return $g->getName();
+                }, $geonames));
+
         return array(
             'chart' => array(
                 'zoomType' => 'xy',
@@ -55,7 +60,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'animation' => false,
             ),
             'title' => array(
-                'text' => ($country ? $country->getName() : 'Unknown country') . ' - ' . ($part ? $part->getName() : 'Unkown part'),
+                'text' => $geonameNames . ' - ' . ($part ? $part->getName() : 'Unkown part'),
             ),
             'subtitle' => array(
                 'text' => 'Estimated proportion of the population',
@@ -102,7 +107,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     ),
                     "tooltip" => array(
                         "headerFormat" => '',
-                        "pointFormat" => '<b>{point.name}</b><br/>{point.y}% ({point.x})'
+                        "pointFormat" => '<b>{point.name}</b> ({point.x})<br/><span style="color:{series.color}">{point.y}% {series.name}</span>'
                     ),
                     'marker' => array(
                         'states' => array(
@@ -120,29 +125,45 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     public function indexAction()
     {
-        $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneById($this->params()->fromQuery('country'));
+        $geonameIds = array_filter(explode(',', $this->params()->fromQuery('geonames')));
         $filtersIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
-
-        $filters = array_map(function($filterId) {
-            return $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
-        }, $filtersIds);
+        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findById($geonameIds);
+        $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds);
 
         $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
-        $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getAllForComputing($country ? $country->getGeoname() : -1);
 
-        $this->startYear = 1980;
-        $this->endYear = 2012;
+        $series = [];
+        foreach ($geonames as $geoname) {
+            $prefix = count($geonames) > 1 ? $geoname->getName() . ' - ' : null;
+            $a = $this->getAllSeriesForOneGeoname($geoname, $filters, $part, $prefix);
+            $series = array_merge($series, $a);
+        }
+
+        $chart = $this->getChart($series, $geonames, $part);
+        if (isset($adjusted['overriddenFilters']) && $adjusted['overriddenFilters']) {
+            $chart['overriddenFilters'] = $adjusted['overriddenFilters'];
+        }
+        if (isset($adjusted['originalFilters']) && $adjusted['originalFilters']) {
+            $chart['originalFilters'] = $adjusted['originalFilters'];
+        }
+
+        return new NumericJsonModel($chart);
+    }
+
+    private function getAllSeriesForOneGeoname(Geoname $geoname, $filters, Part $part, $prefix)
+    {
+        $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getAllForComputing($geoname);
 
         // Compute adjusted series if we asked any
-        $adjusted = $this->getAdjustedSeries($questionnaires, $part);
+        $adjusted = $this->getAdjustedSeries($geoname, $questionnaires, $part, $prefix);
         $adjustedSeries = $adjusted['series'];
 
         // First get series of flatten regression lines with ignored values (if any)
-        $seriesWithIgnoredElements = $this->computeIgnoredElements($filters, $questionnaires, $part);
+        $seriesWithIgnoredElements = $this->computeIgnoredElements($geoname, $filters, $questionnaires, $part, $prefix);
 
         // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
         $alternativeSeries = array_merge($seriesWithIgnoredElements, $adjustedSeries);
-        $normalSeries = $this->getSeries($filters, $questionnaires, $part, $alternativeSeries ? 33 : 100, $alternativeSeries ? 'ShortDot' : null, false);
+        $normalSeries = $this->getSeries($geoname, $filters, $questionnaires, $part, $alternativeSeries ? 33 : 100, $alternativeSeries ? 'ShortDot' : null, false, $prefix);
 
         $newSeries = array_merge($normalSeries, $alternativeSeries);
 
@@ -161,15 +182,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
         }
 
-        $chart = $this->getChart($series, $country, $part);
-        if (isset($adjusted['overriddenFilters']) && $adjusted['overriddenFilters']) {
-            $chart['overriddenFilters'] = $adjusted['overriddenFilters'];
-        }
-        if (isset($adjusted['originalFilters']) && $adjusted['originalFilters']) {
-            $chart['originalFilters'] = $adjusted['originalFilters'];
-        }
-
-        return new NumericJsonModel($chart);
+        return $series;
     }
 
     /**
@@ -191,12 +204,13 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Returns all series for ignored questionnaires AND filters at the same time
+     * @param \Application\Model\Geoname $geoname
      * @param \Application\Model\Filter[] $filters
      * @param array $questionnaires
      * @param \Application\Model\Part $part
      * @return array
      */
-    protected function computeIgnoredElements($filters, array $questionnaires, Part $part)
+    protected function computeIgnoredElements(Geoname $geoname, $filters, array $questionnaires, Part $part, $prefix)
     {
         $overriddenFilters = $this->getIgnoredElements($part);
 
@@ -213,7 +227,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 }
             }
 
-            $mySeries = $this->getSeries($filters, $questionnairesNotIgnored, $part, 100, null, true, ' (ignored elements)', $overriddenFilters);
+            $mySeries = $this->getSeries($geoname, $filters, $questionnairesNotIgnored, $part, 100, null, true, $prefix, ' (ignored elements)', $overriddenFilters);
             $series = array_merge($series, $mySeries);
         }
 
@@ -249,23 +263,25 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Get line and scatter series for the given filters and questionnaires
+     * @param \Application\Model\Geoname $geoname
      * @param \Application\Model\Filter[] $filters
      * @param array $questionnaires
      * @param \Application\Model\Part $part
      * @param float $ratio
      * @param string $dashStyle
      * @param bool $isIgnored
+     * @param string $prefix for serie name
      * @param string $suffix for serie name
      * @param array $overriddenFilters
      * @internal param array $colors
      * @return array
      */
-    private function getSeries($filters, array $questionnaires, Part $part, $ratio, $dashStyle = null, $isIgnored = false, $suffix = null, array $overriddenFilters = array(), $isAdjusted = false)
+    private function getSeries(Geoname $geoname, $filters, array $questionnaires, Part $part, $ratio, $dashStyle = null, $isIgnored = false, $prefix = null, $suffix = null, array $overriddenFilters = array(), $isAdjusted = false)
     {
         $this->getCalculator()->setOverriddenFilters($overriddenFilters);
 
-        $lines = $this->getLinedSeries($filters, $questionnaires, $part, $ratio, $dashStyle, $isIgnored, $suffix, $isAdjusted);
-        $scatters = $this->getScatteredSeries($filters, $questionnaires, $part, $ratio, $isIgnored, $suffix, $isAdjusted);
+        $lines = $this->getLinedSeries($geoname, $filters, $questionnaires, $part, $ratio, $dashStyle, $isIgnored, $prefix, $suffix, $isAdjusted);
+        $scatters = $this->getScatteredSeries($filters, $questionnaires, $part, $ratio, $isIgnored, $prefix, $suffix, $isAdjusted);
 
         $series = array_merge($lines, $scatters);
 
@@ -274,6 +290,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Get lines series
+     * @param \Application\Model\Geoname $geoname
      * @param \Application\Model\Filter[] $filters
      * @param array $questionnaires
      * @param Part $part
@@ -286,15 +303,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @internal param array $ignoredFilters
      * @return array
      */
-    private function getLinedSeries($filters, array $questionnaires, Part $part, $ratio, $dashStyle = null, $isIgnored, $suffix, $isAdjusted = false)
+    private function getLinedSeries(Geoname $geoname, array $filters, array $questionnaires, Part $part, $ratio, $dashStyle = null, $isIgnored, $prefix, $suffix, $isAdjusted = false)
     {
         $series = array();
 
         /** @var \Application\Repository\Rule\FilterFilterRepository $filterRepository */
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
-
-        /** @var \Application\Model\Country $country */
-        $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneById($this->params()->fromQuery('country'));
 
         /** @var \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepo */
         $filterGeonameUsageRepo = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
@@ -305,11 +319,11 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $filter = $filterRepository->findOneById($serie['id']);
 
             /** @var \Application\Repository\Rule\FilterGeonameUsage usages */
-            $usages = $filterGeonameUsageRepo->getAllForGeonameAndFilter($country->getGeoname(), $filter, $part);
+            $usages = $filterGeonameUsageRepo->getAllForGeonameAndFilter($geoname, $filter, $part);
 
             $serie['color'] = $filter->getGenericColor($ratio);
             $serie['type'] = 'line';
-            $serie['name'] .= $suffix;
+            $serie['name'] = $prefix . $serie['name'] . $suffix;
 
             if ($isIgnored) {
                 $serie['isIgnored'] = $isIgnored;
@@ -350,7 +364,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @param bool $isAdjusted
      * @return array
      */
-    private function getScatteredSeries($filters, array $questionnaires, Part $part, $ratio, $isIgnored, $suffix, $isAdjusted = false)
+    private function getScatteredSeries($filters, array $questionnaires, Part $part, $ratio, $isIgnored, $prefix, $suffix, $isAdjusted = false)
     {
         $series = array();
 
@@ -363,7 +377,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'id' => $filter->getId(),
                 'color' => $filter->getGenericColor($ratio),
                 'marker' => array('symbol' => $this->symbols[$this->getConstantKey($filter->getName()) % count($this->symbols)]),
-                'name' => $filter->getName() . $suffix,
+                'name' => $prefix . $filter->getName() . $suffix,
                 'allowPointSelect' => false,
                 'data' => array(), // because we will use our own click handler
             );
@@ -559,11 +573,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Return an array of series and overridden filters, if were asked to do it
+     * @param \Application\Model\Geoname $geoname
      * @param array $questionnaires
      * @param \Application\Model\Part $part
      * @return array ['series' => series, 'overriddenFilters' => overriddenFilters]
      */
-    private function getAdjustedSeries(array $questionnaires, Part $part)
+    private function getAdjustedSeries(Geoname $geoname, array $questionnaires, Part $part, $prefix)
     {
         $series = array();
         $overriddenFilters = array();
@@ -591,9 +606,9 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $overriddenFilters = $adjustator->findOverriddenFilters($target, $reference, $overridable, $questionnaires, $part);
                 $this->getCalculator()->setOverriddenFilters($overriddenFilters);
 
-                $adjustedSeries = $this->getSeries([$reference], $questionnaires, $part, 100, null, false, ' (adjusted)', $overriddenFilters, true);
-                $originalSeries = $this->getSeries([$reference], $questionnaires, $part, 33, 'ShortDot', false, '', array(), true);
-                $ancestorsSeries = $this->getAncestorsSeries($reference, $questionnaires, $part, $overriddenFilters);
+                $adjustedSeries = $this->getSeries($geoname, [$reference], $questionnaires, $part, 100, null, false, $prefix, ' (adjusted)', $overriddenFilters, true);
+                $originalSeries = $this->getSeries($geoname, [$reference], $questionnaires, $part, 33, 'ShortDot', false, $prefix, '', array(), true);
+                $ancestorsSeries = $this->getAncestorsSeries($geoname, $reference, $questionnaires, $part, $overriddenFilters, $prefix);
 
                 $series = array_merge($adjustedSeries, $originalSeries, $ancestorsSeries);
             }
@@ -608,19 +623,20 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Return parents trend lines of the projected filter
+     * @param Geoname $geoname
      * @param Filter $reference
      * @param array $questionnaires
      * @param Part $part
      * @param array $overriddenFilters
      * @return array
      */
-    private function getAncestorsSeries(Filter $reference, array $questionnaires, Part $part, array $overriddenFilters)
+    private function getAncestorsSeries(Geoname $geoname, Filter $reference, array $questionnaires, Part $part, array $overriddenFilters, $prefix)
     {
         $topLevelFilters = $reference->getRootAncestors();
         $topLevelFiltersSeries = array();
         foreach ($topLevelFilters as $filter) {
-            $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries([$filter], $questionnaires, $part, 100, null, false, ' (adjusted)', $overriddenFilters, true));
-            $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries([$filter], $questionnaires, $part, 33, 'ShortDot', false, '', array(), true));
+            $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries($geoname, [$filter], $questionnaires, $part, 100, null, false, $prefix, ' (adjusted)', $overriddenFilters, true));
+            $topLevelFiltersSeries = array_merge($topLevelFiltersSeries, $this->getSeries($geoname, [$filter], $questionnaires, $part, 33, 'ShortDot', false, $prefix, '', array(), true));
         }
 
         return $topLevelFiltersSeries;

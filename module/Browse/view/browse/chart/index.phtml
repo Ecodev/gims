@@ -4,8 +4,19 @@
 <div class="navbar navbar-default hidden-print">
     <a class="navbar-brand" href="#">Chart</a>
     <form class="navbar-form">
-        <a class="btn btn-default" ng-if="tabs.country" target="_blank" href="/contribute/nsa?usedCountry={{tabs.country.id}}&returnUrl={{currentUrl}}"><i class="fa fa-plus-circle"></i> Create sector dataset</a>
-            <?php echo $this->helpButton(); ?>
+        <a ng-if="tabs.geonames.length == 1" class="btn btn-default" target="_blank" href="/contribute/nsa?usedCountry={{tabs.geonames[0].country.id}}&returnUrl={{currentUrl}}"><i class="fa fa-plus-circle"></i> Create sector dataset</a>
+        <div ng-if="tabs.geonames.length > 1"  class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-plus-circle"></i> Create sector dataset <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li ng-repeat="geoname in tabs.geonames">
+                    <a  target="_blank" href="/contribute/nsa?usedCountry={{geoname.country.id}}&returnUrl={{currentUrl}}">{{geoname.name}}</a>
+                </li>
+            </ul>
+        </div>
+
+        <?php echo $this->helpButton(); ?>
     </form>
 </div>
 
@@ -18,17 +29,18 @@
                 <div class="row show-grid">
                     <form>
                         <div class="col-md-12">
-                            <div class="col-sm-6 col-md-3 col-lg-3" ng-class="{'has-error':!tabs.country}">
+                            <div class="col-sm-6 col-md-3 col-lg-3" ng-class="{'has-error':!tabs.geonames}">
                                 <div class="col-md-12">
                                     <p>
                                         <tabset>
                                             <tab heading="Country">
                                                 <gims-select
-                                                        model="tabs.country"
-                                                        name="country"
-                                                        api="country"
-                                                        queryparams="countryParams"
-                                                        placeholder="Select a country"
+                                                        multiple
+                                                        model="tabs.geonames"
+                                                        name="geonames"
+                                                        api="geoname"
+                                                        queryparams="geonameParams"
+                                                        placeholder="Select a geoname"
                                                         disabled="isLoading"
                                                         style="width: 100%">
                                                 </gims-select>
@@ -91,18 +103,17 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="alert alert-warning ng-trans ng-trans-fade-up" ng-hide="tabs.filters.length && tabs.country && tabs.part">
+                        <div class="alert alert-info ng-trans ng-trans-fade-up" ng-hide="tabs.filters.length && tabs.geonames.length && tabs.part">
                             <p>
-                                <i class="fa fa-warning"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?>
+                                <i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to plot a chart here.') ?>
                             </p>
                         </div>
                     </div>
                 </div>
 
                 <div class="row show-grid">
-
                     <!-- Chart -->
-                    <div ng-show="tabs.filters.length && tabs.country && tabs.part" class="ng-trans ng-trans-fade-down col-md-12">
+                    <div ng-show="tabs.filters.length && tabs.geonames.length && tabs.part" class="ng-trans ng-trans-fade-down col-md-12">
                         <tabset class="nav-tabs-centered">
                             <tab heading="Chart">
                                 <chart value="chart" type="area" height="400" />
@@ -341,28 +352,28 @@
                                 <tab-heading><i class="fa fa-bolt"></i> Actions</tab-heading>
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <div class="row show-grid">
-                                            <div class="col-md-12">
-                                            </div>
-                                        </div>
-
 
                                         <div class="row show-grid" ng-show="tabs.filters">
                                             <div class="col-md-12">
-                                                <h2>Filter edition</h2>
+                                                <h3><i class="fa fa-table text-muted"></i> Edit in tables</h3>
+                                                    <p class="text-muted">Select a filter below to view and edit detailed values in tables.</p>
+                                                    <ul>
+                                                        <li ng-repeat="geoname in tabs.geonames" style="margin-bottom: 1em;">{{geoname.name}}
+                                                            <ul class="list-unstyled">
+                                                                <li><a ng-if="tabs.filters" href="/contribute/jmp?&country={{geoname.country.id}}&filters={{getFiltersIds()}}&returnUrl={{currentUrl}}"><i class="fa fa-gims-filter"></i> All filters</a></li>
+                                                                <li ng-repeat="filter in tabs.filters">
+                                                                    <a href="/contribute/jmp?&country={{geoname.country.id}}&filter={{filter.id}}&returnUrl={{currentUrl}}"><i class="fa fa-gims-filter" style="color:{{filter.genericColor}}"></i> {{filter.name}}</a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
 
-                                                <ul class="list-unstyled">
-                                                    <li class="pull-left" style="margin-bottom:5px;margin-right:5px;"><a class="btn btn-primary" ng-class="{'disabled': !tabs.country || !tabs.filters}" href="/contribute/jmp?&country={{country.id}}&filterSet={{getFiltersIds()}}&returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i> Edit all</a></li>
-                                                    <li ng-repeat="filter in tabs.filters" class="pull-left" style="margin-bottom:5px;margin-right:5px;">
-                                                        <a class="btn btn-default" href="/contribute/jmp?&country={{country.id}}&filter={{filter.id}}&returnUrl={{currentUrl}}"><i class="fa fa-pencil" style="color:{{filter.genericColor}}"></i> Edit {{filter.name}}</a>
-                                                    </li>
-                                                </ul>
                                             </div>
                                         </div>
 
                                         <hr/>
 
-                                        <h2>Filter projection</h2>
+                                        <h3>Filter projection</h3>
 
                                         <div class="row show-grid">
                                             <div class="col-md-12">

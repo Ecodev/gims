@@ -8,7 +8,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.panelTabs = {};
     $scope.ignoredElements = [];
     $scope.concatenatedIgnoredElements = [];
-    $scope.countryParams = {perPage: 500};
+    $scope.geonameParams = {perPage: 500, fields: 'country'};
     $scope.filterSetParams = {fields: 'filters.genericColor,filters.color'};
     $scope.indexedElements = ChartCache.getCache();
     Chart.setCache($scope.indexedElements);
@@ -92,7 +92,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     });
 
     /**
-     * Executes when country, part or filter set are changed
+     * Executes when geoname, part or filter set are changed
      */
     $scope.$watch('tabs.part', function() {
         Chart.resetSeries();
@@ -100,11 +100,11 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     }, true);
 
     /**
-     * Executes when country, part or filter set are changed
+     * Executes when geoname, part or filter set are changed
      */
-    $scope.$watch('tabs.country', function(newCountry, oldCountry) {
+    $scope.$watch('tabs.geonames', function(newGeoname, oldGeoname) {
 
-        if (oldCountry) {
+        if (oldGeoname) {
             ChartCache.reset();
             Chart.resetSeries();
             getIgnoredElements(true);
@@ -174,7 +174,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * @param filters
      */
     var initIgnoredElements = function(filters) {
-        if ($scope.tabs.country && $scope.tabs.part && filters && filters.length) {
+        if ($scope.tabs.geonames && $scope.tabs.part && filters && filters.length) {
             refresh(filters, false).then(function() {
                 if ($scope.pointSelected) {
                     retrieveFiltersAndValues($scope.pointSelected.questionnaire).then(function() {
@@ -420,7 +420,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         if (_.isArray(filters)) {
 
             var queryParams = {
-                country: $scope.tabs.country.id,
+                geonames: $location.search().geonames,
                 part: $scope.tabs.part.id,
                 filters: filters.join(','),
                 ignoredElements: ignoredElements,
