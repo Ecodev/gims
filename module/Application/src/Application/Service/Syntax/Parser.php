@@ -43,6 +43,7 @@ use \Application\Traits\EntityManagerAware;
             new PopulationValue(),
             new BasicSelf(),
             new FilterValueAfterRegression(),
+            new FilterValuesList(),
         ];
 
         $this->regressions = [

@@ -43,7 +43,7 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
      * @param integer $questionnaireId
      * @param integer $filterId
      * @param integer $partId
-     * @param boolean $useSecondLevelRules
+     * @param boolean $useSecondLevelRules if true returns only second level usages, if false, returns only first level usages
      * @param \Doctrine\Common\Collections\ArrayCollection $excluded
      * @return FilterQuestionnaireUsage|null
      */
@@ -80,15 +80,17 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
             }
         }
 
-        if (isset($this->cache[$questionnaireId][$filterId][$partId]))
+        if (isset($this->cache[$questionnaireId][$filterId][$partId])) {
             $possible = $this->cache[$questionnaireId][$filterId][$partId];
-        else
+        } else {
             $possible = array();
+        }
 
         // Returns the first non-excluded and according to its level
         foreach ($possible as $filterQuestionnaireUsage) {
-            if (($useSecondLevelRules || !$filterQuestionnaireUsage->isSecondLevel()) && !$excluded->contains($filterQuestionnaireUsage))
+            if ($useSecondLevelRules == $filterQuestionnaireUsage->isSecondLevel() && !$excluded->contains($filterQuestionnaireUsage)) {
                 return $filterQuestionnaireUsage;
+            }
         }
 
         return null;

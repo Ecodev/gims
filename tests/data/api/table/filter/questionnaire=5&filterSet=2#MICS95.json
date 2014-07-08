@@ -429,7 +429,7 @@
             {
                 "Urban": 57.7,
                 "Rural": 71.0,
-                "Total": 89.8
+                "Total": 68.1
             }
         ]
     },
@@ -611,7 +611,7 @@
             {
                 "Urban": null,
                 "Rural": null,
-                "Total": 3.3
+                "Total": null
             }
         ]
     },

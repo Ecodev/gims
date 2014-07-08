@@ -450,20 +450,6 @@
                     "y": 35.1
                 },
                 {
-                    "name": "NVRA08",
-                    "id": "78:29",
-                    "questionnaire": 29,
-                    "x": 2008,
-                    "y": 27.0
-                },
-                {
-                    "name": "MIS09",
-                    "id": "78:30",
-                    "questionnaire": 30,
-                    "x": 2009,
-                    "y": 78.5
-                },
-                {
                     "name": "MS10",
                     "id": "78:31",
                     "questionnaire": 31,
@@ -509,20 +495,6 @@
                     "questionnaire": 28,
                     "x": 2005,
                     "y": 45.2
-                },
-                {
-                    "name": "NVRA08",
-                    "id": "79:29",
-                    "questionnaire": 29,
-                    "x": 2008,
-                    "y": 73.0
-                },
-                {
-                    "name": "MIS09",
-                    "id": "79:30",
-                    "questionnaire": 30,
-                    "x": 2009,
-                    "y": 8.8
                 },
                 {
                     "name": "MS10",

@@ -131,6 +131,15 @@ Regression context
 Both contexts
 ^^^^^^^^^^^^^
 
+**List of all filter values**
+    Reference a list of available filter values for all questionnaires. The
+    result use Excel array constant syntax (eg: "{1,2,3}"). This should be used
+    with Excel functions such as ``COUNT()`` and ``AVERAGE()``.
+
+    .. code-block:: lua
+
+        {F#12,Q#all}
+
 **Filter value after regression**
     Reference a Filter regression value for a specific part and year. By default
     the year is the one currently computed (in basic context: the questionnaire's

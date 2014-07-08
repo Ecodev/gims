@@ -461,44 +461,52 @@ use \Application\Traits\EntityManagerAware;
                     'regressionRules' => array(
                         'default' => array(
                             // Additionnal rules for developed countries
-                            array(3, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
-                            array(4, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            array(3, "=IF(AND(Improved + shared > 99.5%, COUNT(ALL_RATIOS) = 0), Improved + shared, {self})", true),
+                            array(4, "=IF(AND(Improved + shared > 99.5%, COUNT(ALL_RATIOS) = 0), Improved + shared, {self})", true),
                             // Normal rules
+                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
+                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
                             array(5, "=IF(AND(ISNUMBER(ImprovedURBAN), ISNUMBER(ImprovedRURAL)), (ImprovedURBAN * POPULATION_URBAN + ImprovedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)"),
                         ),
                         'onlyTotal' => array(
                             array(3, '=ImprovedTOTAL'),
                             array(4, '=ImprovedTOTAL'),
+                            array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
                         ),
                         'onlyRural' => array(
                             // Additionnal rules for developed countries
-                            array(4, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            array(4, "=IF(AND(Improved + shared > 99.5%, COUNT(ALL_RATIOS) = 0), Improved + shared, {self})", true),
                             // Normal rules
+                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
                             array(5, '=ImprovedRURAL'),
                         ),
                         'onlyUrban' => array(
                             // Additionnal rules for developed countries
-                            array(3, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            array(3, "=IF(AND(Improved + shared > 99.5%, COUNT(ALL_RATIOS) = 0), Improved + shared, {self})", true),
                             // Normal rules
+                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
                             array(5, '=ImprovedURBAN'),
                         ),
                         'United States of America' => array(
                             // Additionnal rules for developed countries
-                            array(3, "=IF(AND(Improved + shared > 99.5%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
-                            array(4, "=IF(AND(Improved + shared > 98.4%, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            array(3, "=IF(AND(Improved + shared > 99.5%, COUNT(ALL_RATIOS) = 0), Improved + shared, {self})", true),
+                            array(4, "=IF(AND(Improved + shared > 98.4%, COUNT(ALL_RATIOS) = 0), Improved + shared, {self})", true),
                             // Normal rules
+                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
+                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
                             array(5, "=IF(AND(ISNUMBER(ImprovedURBAN), ISNUMBER(ImprovedRURAL)), (ImprovedURBAN * POPULATION_URBAN + ImprovedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)"),
                         ),
                         'Saudi Arabia' => array(
                             array(3, '=ImprovedTOTAL'),
                             array(4, '=ImprovedTOTAL'),
+                            array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
                         ),
                     ),
                 ),
                 "Shared" => array(
                     'row' => null,
                     'children' => array(), // based on ratio
-                    'excludes' => 99,
+                    'excludes' => null,
                     'isImproved' => false,
                     'regressionRules' => array(
                         'default' => array(

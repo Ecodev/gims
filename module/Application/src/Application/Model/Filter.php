@@ -81,7 +81,7 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="Filter")
      * @ORM\JoinTable(name="filter_summand",
-     *      inverseJoinColumns={@ORM\JoinColumn(name="summand_filter_id")}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="summand_filter_id", onDelete="CASCADE")}
      *      )
      */
     private $summands;

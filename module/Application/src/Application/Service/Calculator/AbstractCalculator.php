@@ -268,7 +268,6 @@ use \Application\Traits\EntityManagerAware;
      */
     private function computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
-
         // Avoid duplicates
         if ($alreadySummedFilters->contains($filterId)) {
             return null;
@@ -276,7 +275,7 @@ use \Application\Traits\EntityManagerAware;
             $alreadySummedFilters->add($filterId);
         }
 
-        // If the all filters of a questionnaire have an overriding value
+        // If the questionnaire has some overriding values
         // use array_key_exists() function cause overridden value may contain null that return false with isset()
         if (array_key_exists($questionnaireId, $this->overriddenFilters)) {
 
@@ -290,6 +289,15 @@ use \Application\Traits\EntityManagerAware;
             }
         }
 
+        // If we use second level rules, we let them override answers
+        // That means the end-user can enter an answer, but still choose to ignore it (via exclude rule)
+        if ($useSecondLevelRules) {
+            $filterQuestionnaireUsage = $this->getFilterQuestionnaireUsageRepository()->getFirst($questionnaireId, $filterId, $partId, $useSecondLevelRules, $alreadyUsedFormulas);
+            if ($filterQuestionnaireUsage) {
+                return $this->computeFormulaBasic($filterQuestionnaireUsage, $alreadyUsedFormulas, $useSecondLevelRules);
+            }
+        }
+
         // If the filter have a specified answer, returns it (skip all computation)
         $answerValue = $this->getAnswerRepository()->getValue($questionnaireId, $filterId, $partId);
 
@@ -298,7 +306,7 @@ use \Application\Traits\EntityManagerAware;
         }
 
         // If the filter has a formula, returns its value
-        $filterQuestionnaireUsage = $this->getFilterQuestionnaireUsageRepository()->getFirst($questionnaireId, $filterId, $partId, $useSecondLevelRules, $alreadyUsedFormulas);
+        $filterQuestionnaireUsage = $this->getFilterQuestionnaireUsageRepository()->getFirst($questionnaireId, $filterId, $partId, false, $alreadyUsedFormulas);
         if ($filterQuestionnaireUsage) {
             return $this->computeFormulaBasic($filterQuestionnaireUsage, $alreadyUsedFormulas, $useSecondLevelRules);
         }

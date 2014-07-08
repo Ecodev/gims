@@ -730,20 +730,6 @@
                     "y": 67.3
                 },
                 {
-                    "name": "MICS99",
-                    "id": "78:9",
-                    "questionnaire": 9,
-                    "x": 1999,
-                    "y": 97.9
-                },
-                {
-                    "name": "PP00",
-                    "id": "78:10",
-                    "questionnaire": 10,
-                    "x": 2000,
-                    "y": 97.5
-                },
-                {
                     "name": "DHS00",
                     "id": "78:11",
                     "questionnaire": 11,
@@ -852,27 +838,6 @@
                     "questionnaire": 3,
                     "x": 1994,
                     "y": 23.6
-                },
-                {
-                    "name": "MICS94",
-                    "id": "79:4",
-                    "questionnaire": 4,
-                    "x": 1994,
-                    "y": 3.3
-                },
-                {
-                    "name": "MICS95",
-                    "id": "79:5",
-                    "questionnaire": 5,
-                    "x": 1995,
-                    "y": 3.3
-                },
-                {
-                    "name": "MICS96",
-                    "id": "79:6",
-                    "questionnaire": 6,
-                    "x": 1996,
-                    "y": 3.3
                 },
                 {
                     "name": "DHS97",

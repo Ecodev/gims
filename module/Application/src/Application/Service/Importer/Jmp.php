@@ -37,6 +37,16 @@ class Jmp extends AbstractImporter
     private $questionnaireUsageCount = 0;
     private $filterQuestionnaireUsageCount = 0;
     private $filterGeonameUsageCount = 0;
+    private $ratioSynonyms = array(
+        'Facilités améliorées partagées / Facilités améliorées',
+        'Shared facilities / All improved facilities',
+        'Shared improved facilities/all improved facilities',
+    );
+
+    /**
+     * @var \PHPExcel_Worksheet
+     */
+    private $sheet;
 
     /**
      * @var Rule
@@ -65,6 +75,13 @@ class Jmp extends AbstractImporter
     private $isDevelopedCountry;
 
     /**
+     * The very special filter used to store ratio necessary to compute Shared and Improved.
+     * This is only available for Sanitation
+     * @var Filter
+     */
+    private $filterForRatio;
+
+    /**
      * Import data from file
      * @param string $filename
      */
@@ -73,8 +90,8 @@ class Jmp extends AbstractImporter
         $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
         $reader->setReadDataOnly(true);
 
-        $sheeNamesToImport = array_keys($this->definitions);
-        $reader->setLoadSheetsOnly($sheeNamesToImport);
+        $sheetNamesToImport = array_keys($this->definitions);
+        $reader->setLoadSheetsOnly($sheetNamesToImport);
         $workbook = $reader->load($filename);
 
         $this->excludeRule = $this->getRule('Exclude from computing', '=NULL');
@@ -88,7 +105,7 @@ class Jmp extends AbstractImporter
             5 => $this->partTotal,
         );
 
-        foreach ($sheeNamesToImport as $i => $sheetName) {
+        foreach ($sheetNamesToImport as $i => $sheetName) {
 
             $this->cacheQuestions = array();
             $this->importFilters($this->definitions[$sheetName]);
@@ -104,27 +121,34 @@ class Jmp extends AbstractImporter
             // Import high filter, but not their formula, we need them before importing QuestionnaireUsages
             $this->importHighFilters($this->definitions[$sheetName]['filterSet'], $this->definitions[$sheetName]['highFilters']);
 
+            // Import super-special filter only for Sanitation
+            if ($sheetName == 'Tables_S') {
+                $name = 'Ratio of Shared improved facilities / All improved facilities';
+                $this->filterForRatio = $this->getFilter([$name, 4], $this->cacheFilters);
+                $filterSet->addFilter($this->filterForRatio);
+            }
+
             $workbook->setActiveSheetIndex($i);
-            $sheet = $workbook->getSheet($i);
+            $this->sheet = $workbook->getSheet($i);
 
             // Try to import the first 50 questionnaires if data found
             // According to tab GraphData_W, maximum should be 40, but better safe than sorry
             $this->colToParts = array();
             for ($col = 0; $col < 50 * 6; $col += 6) {
-                $this->importQuestionnaire($sheet, $col);
+                $this->importQuestionnaire($col);
             }
             $this->getEntityManager()->flush();
 
             // Second pass on imported questionnaires to process cross-questionnaire things
             echo 'Importing uses of Rule for Questionnaire';
             foreach ($this->importedQuestionnaires as $col => $questionnaire) {
-                $this->importQuestionnaireUsages($sheet, $col, $questionnaire);
+                $this->importQuestionnaireUsages($col, $questionnaire);
                 echo '.';
             }
             echo PHP_EOL;
 
             // Third pass to import first step formulas for high filters
-            $this->importFilterQuestionnaireUsages($this->definitions[$sheetName]['highFilters'], $sheet);
+            $this->importFilterQuestionnaireUsages($this->definitions[$sheetName]['highFilters']);
 
             // Fourth pass to import last step formulas for high filters
             $this->importFilterGeonameUsages($this->definitions[$sheetName]['highFilters']);
@@ -138,6 +162,8 @@ class Jmp extends AbstractImporter
 
         $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $answerRepository->completePopulationAnswer();
+
+        $this->cleanUpRatios();
 
         return <<<STRING
 
@@ -194,20 +220,19 @@ STRING;
     /**
      * Import a questionnaire from the given column offset.
      * Questionnaire and Answers will always be created new. All other objects will be retrieved from database if available.
-     * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
      * @return void
      */
-    private function importQuestionnaire(\PHPExcel_Worksheet $sheet, $col)
+    private function importQuestionnaire($col)
     {
-        $code = trim($sheet->getCellByColumnAndRow($col + 2, 1)->getCalculatedValue());
+        $code = trim($this->sheet->getCellByColumnAndRow($col + 2, 1)->getCalculatedValue());
 
         // If no code found, we assume no survey at all
         if (!$code) {
             return;
         }
 
-        $year = $sheet->getCellByColumnAndRow($col + 3, 3)->getCalculatedValue();
+        $year = $this->sheet->getCellByColumnAndRow($col + 3, 3)->getCalculatedValue();
         $code = $this->standardizeSurveyCode($code, $year);
 
         // Load or create survey
@@ -219,7 +244,7 @@ STRING;
         }
 
         if (!$survey) {
-            $survey = new Survey($sheet->getCellByColumnAndRow($col + 0, 2)->getCalculatedValue());
+            $survey = new Survey($this->sheet->getCellByColumnAndRow($col + 0, 2)->getCalculatedValue());
 
             $survey->setIsActive(true);
             $survey->setCode($code);
@@ -230,7 +255,7 @@ STRING;
             }
 
             if (!$survey->getYear()) {
-                echo 'WARNING: skipped survey because there is no year. On sheet "' . $sheet->getTitle() . '" cell ' . $sheet->getCellByColumnAndRow($col + 3, 3)->getCoordinate() . PHP_EOL;
+                echo 'WARNING: skipped survey because there is no year. On sheet "' . $this->sheet->getTitle() . '" cell ' . $this->sheet->getCellByColumnAndRow($col + 3, 3)->getCoordinate() . PHP_EOL;
 
                 return;
             }
@@ -240,10 +265,10 @@ STRING;
         $this->cacheSurvey[$code] = $survey;
 
         // Create questionnaire
-        $countryCell = $sheet->getCellByColumnAndRow($col + 3, 1);
-        $questionnaire = $this->getQuestionnaire($sheet, $col, $survey, $countryCell);
+        $countryCell = $this->sheet->getCellByColumnAndRow($col + 3, 1);
+        $questionnaire = $this->getQuestionnaire($col, $survey, $countryCell);
         if (!$questionnaire) {
-            echo 'WARNING: skipped questionnaire because there is no country name. On sheet "' . $sheet->getTitle() . '" cell ' . $countryCell->getCoordinate() . PHP_EOL;
+            echo 'WARNING: skipped questionnaire because there is no country name. On sheet "' . $this->sheet->getTitle() . '" cell ' . $countryCell->getCoordinate() . PHP_EOL;
 
             return;
         }
@@ -251,8 +276,8 @@ STRING;
         echo 'Survey: ' . $survey->getCode() . PHP_EOL;
         echo 'Country: ' . $questionnaire->getGeoname()->getName() . PHP_EOL;
 
-        $this->importAnswers($sheet, $col, $survey, $questionnaire);
-        $this->importExtras($sheet, $col, $questionnaire);
+        $this->importAnswers($col, $survey, $questionnaire);
+        $this->importExtras($col, $questionnaire);
 
         // Keep a trace of what column correspond to what questionnaire for second pass
         $this->importedQuestionnaires[$col] = $questionnaire;
@@ -265,19 +290,18 @@ STRING;
     /**
      * Import extra data in questionnaire comments
      * Questions will only be created if an answer exists.
-     * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
      * @param Questionnaire $questionnaire
      */
-    private function importExtras(\PHPExcel_Worksheet $sheet, $col, Questionnaire $questionnaire)
+    private function importExtras($col, Questionnaire $questionnaire)
     {
-        foreach ($this->definitions[$sheet->getTitle()]['extras'] as $row => $title) {
+        foreach ($this->definitions[$this->sheet->getTitle()]['extras'] as $row => $title) {
 
             $comment = $title . ':' . PHP_EOL;
             $shouldAppend = false;
 
             foreach ($this->partOffsets as $offset => $part) {
-                $value = $sheet->getCellByColumnAndRow($col + $offset, $row)->getCalculatedValue();
+                $value = $this->sheet->getCellByColumnAndRow($col + $offset, $row)->getCalculatedValue();
 
                 // Remove second dot in number (eg: '123.456.789' => '123.456789')
                 $value = preg_replace('/(\.[^.]*)(\.)/', '$1', $value);
@@ -302,12 +326,11 @@ STRING;
     /**
      * Import all answers found at given column offset.
      * Questions will only be created if an answer exists.
-     * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
      * @param Survey $survey
      * @param Questionnaire $questionnaire
      */
-    private function importAnswers(\PHPExcel_Worksheet $sheet, $col, Survey $survey, Questionnaire $questionnaire)
+    private function importAnswers($col, Survey $survey, Questionnaire $questionnaire)
     {
         $knownRows = array_keys($this->cacheFilters);
         array_shift($knownRows); // Skip first filter, since it's not an actual row, but the common "JMP" filter
@@ -323,12 +346,12 @@ STRING;
             $filter = $this->cacheFilters[$row];
 
             // Get alternate question name, if any
-            $alternateName = trim($sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue());
+            $alternateName = trim($this->sheet->getCellByColumnAndRow($col, $row)->getCalculatedValue());
 
             // Import answers for each parts
             $question = null;
             foreach ($this->partOffsets as $offset => $part) {
-                $answerCell = $sheet->getCellByColumnAndRow($col + $offset, $row);
+                $answerCell = $this->sheet->getCellByColumnAndRow($col + $offset, $row);
 
                 // Only import value which are numeric, and NOT formula,
                 // unless an question name is defined, in this case we will import the formula result
@@ -341,7 +364,7 @@ STRING;
                     }
 
                     if (!$question) {
-                        $question = $this->getQuestion($survey, $filter, $questionnaire, $alternateName);
+                        $question = $this->getQuestion($questionnaire, $filter, $alternateName);
                     }
 
                     $answer = new Answer();
@@ -366,14 +389,13 @@ STRING;
      * It will only get a questionnaire from previous tab, so only if we are in Sanitation.
      * In all other cases a new questionnaire will be created.
      *
-     * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
      * @param \Application\Model\Survey $survey
      * @param \PHPExcel_Cell $countryCell
      * @return null|\Application\Model\Questionnaire
      * @throws \Exception
      */
-    private function getQuestionnaire(\PHPExcel_Worksheet $sheet, $col, Survey $survey, \PHPExcel_Cell $countryCell)
+    private function getQuestionnaire($col, Survey $survey, \PHPExcel_Cell $countryCell)
     {
         // If we already imported a questionnaire on that column with same Survey,
         // returns it directly. That means we are on second tab (Sanitation) and we
@@ -504,7 +526,7 @@ STRING;
         $questionnaire->setDateObservationStart(new \DateTime($survey->getYear() . '-01-01'));
         $questionnaire->setDateObservationEnd(new \DateTime($survey->getYear() . '-12-31T23:59:59'));
         $questionnaire->setGeoname($geoname);
-        $questionnaire->appendComment($sheet->getCellByColumnAndRow($col + 0, 3)->getCalculatedValue());
+        $questionnaire->appendComment($this->sheet->getCellByColumnAndRow($col + 0, 3)->getCalculatedValue());
 
         $this->getEntityManager()->persist($questionnaire);
         $this->questionnaireCount++;
@@ -538,14 +560,14 @@ STRING;
 
     /**
      * Returns a question either from database, or newly created
-     * @param Questionnaire $survey
-     * @param Filter $filter
      * @param Questionnaire $questionnaire
+     * @param Filter $filter
      * @param string|null $alternateName
      * @return NumericQuestion
      */
-    private function getQuestion(Survey $survey, Filter $filter, Questionnaire $questionnaire, $alternateName)
+    private function getQuestion(Questionnaire $questionnaire, Filter $filter, $alternateName)
     {
+        $survey = $questionnaire->getSurvey();
         $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question\NumericQuestion');
 
         $key = \Application\Utility::getCacheKey([$survey, $filter]);
@@ -583,16 +605,15 @@ STRING;
 
     /**
      * Import all rules on the questionnaire level (Calculations, Estimates and Ratios)
-     * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
      * @param Questionnaire $questionnaire
      */
-    private function importQuestionnaireUsages(\PHPExcel_Worksheet $sheet, $col, Questionnaire $questionnaire)
+    private function importQuestionnaireUsages($col, Questionnaire $questionnaire)
     {
-        foreach ($this->definitions[$sheet->getTitle()]['questionnaireUsages'] as $group) {
+        foreach ($this->definitions[$this->sheet->getTitle()]['questionnaireUsages'] as $group) {
             foreach ($group as $row) {
                 foreach ($this->partOffsets as $offset => $part) {
-                    $this->getQuestionnaireUsage($sheet, $col, $row, $offset, $questionnaire, $part);
+                    $this->getQuestionnaireUsage($col, $row, $offset, $questionnaire, $part);
                 }
             }
         }
@@ -600,7 +621,6 @@ STRING;
 
     /**
      * Create or get a QuestionnaireUsage and its Formula
-     * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
      * @param integer $row
      * @param integer $offset
@@ -608,14 +628,14 @@ STRING;
      * @param Part $part
      * @return QuestionnaireUsage|null
      */
-    private function getQuestionnaireUsage(\PHPExcel_Worksheet $sheet, $col, $row, $offset, Questionnaire $questionnaire, Part $part)
+    private function getQuestionnaireUsage($col, $row, $offset, Questionnaire $questionnaire, Part $part)
     {
-        $name = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
-        $value = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
+        $name = $this->getCalculatedValueSafely($this->sheet->getCellByColumnAndRow($col + 1, $row));
+        $value = $this->getCalculatedValueSafely($this->sheet->getCellByColumnAndRow($col + $offset, $row));
 
         if ($name && !is_null($value) || $value <> 0) {
 
-            $rule = $this->getRuleFromCell($sheet, $col, $row, $offset, $questionnaire, $part);
+            $rule = $this->getRuleFromCell($col, $row, $offset, $questionnaire, $part);
 
             // If formula was non-existing, or invalid, cannot do anything more
             if (!$rule) {
@@ -648,7 +668,6 @@ STRING;
 
     /**
      * Create or get a formula by converting Excel syntax to our own syntax
-     * @param \PHPExcel_Worksheet $sheet
      * @param integer $col
      * @param integer $row
      * @param integer $offset
@@ -657,9 +676,9 @@ STRING;
      * @param string $forcedName
      * @return null|Rule
      */
-    private function getRuleFromCell(\PHPExcel_Worksheet $sheet, $col, $row, $offset, Questionnaire $questionnaire, Part $part, $forcedName = null)
+    private function getRuleFromCell($col, $row, $offset, Questionnaire $questionnaire, Part $part, $forcedName = null)
     {
-        $cell = $sheet->getCellByColumnAndRow($col + $offset, $row);
+        $cell = $this->sheet->getCellByColumnAndRow($col + $offset, $row);
         $originalFormula = $cell->getValue();
 
         // if we have nothing at all, or stricly only letters, cannot do anything
@@ -686,7 +705,7 @@ STRING;
 
         // Some formulas, Estimations and Calculation, hardcode values as percent between 0 - 100,
         // we need to convert them to 0.00 - 1.00
-        $ruleRows = $this->definitions[$sheet->getTitle()]['questionnaireUsages'];
+        $ruleRows = $this->definitions[$this->sheet->getTitle()]['questionnaireUsages'];
         if (in_array($row, $ruleRows['Estimate']) || in_array($row, $ruleRows['Calculation'])) {
 
             // Convert very simple formula with numbers only and -/+ operations. Anything more complex
@@ -715,7 +734,7 @@ STRING;
 
         // Some formulas, Ratios, hardcode values as percent between 0.00 - 1.00,
         // while this is technically correct, we prefer the notation with %, so we convert them here
-        $ruleRows = $this->definitions[$sheet->getTitle()]['questionnaireUsages'];
+        $ruleRows = $this->definitions[$this->sheet->getTitle()]['questionnaireUsages'];
         if (in_array($row, $ruleRows['Ratio'])) {
 
             // Convert very simple formula with numbers only. Anything more complex
@@ -730,11 +749,11 @@ STRING;
         }
 
         // Expand range syntax to enumerate each cell: "A1:A5" => "{A1,A2,A3,A4,A5}"
-        $expandedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern:$cellPattern/", function($matches) use ($sheet, $cell) {
+        $expandedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern:$cellPattern/", function($matches) use ($cell) {
 
                     // This only expand vertical ranges, not horizontal ranges (which probably never make any sense for JMP anyway)
                     if ($matches[2] != $matches[5]) {
-                        throw new \Exception('Horizontal range are not supported: ' . $matches[0] . ' found in ' . $sheet->getTitle() . ', cell ' . $cell->getCoordinate());
+                        throw new \Exception('Horizontal range are not supported: ' . $matches[0] . ' found in ' . $this->sheet->getTitle() . ', cell ' . $cell->getCoordinate());
                     }
 
                     $expanded = array();
@@ -746,9 +765,9 @@ STRING;
                 }, $replacedFormula);
 
         // Replace special cell reference with some hardcoded formulas
-        $expandedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern/", function($matches) use ($sheet, $cell) {
+        $expandedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern/", function($matches) use ($cell) {
 
-                    $replacement = @$this->definitions[$sheet->getTitle()]['cellReplacements'][$matches[3]];
+                    $replacement = @$this->definitions[$this->sheet->getTitle()]['cellReplacements'][$matches[3]];
                     if ($replacement) {
                         // Use same column for replacement as the original cell reference
                         $replacement = str_replace('A', $matches[2], $replacement);
@@ -760,7 +779,7 @@ STRING;
                 }, $expandedFormula);
 
         // Replace all cell reference with our own syntax
-        $convertedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern/", function($matches) use ($sheet, $questionnaire, $part, $expandedFormula) {
+        $convertedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern/", function($matches) use ($questionnaire, $part, $expandedFormula) {
                     $refCol = \PHPExcel_Cell::columnIndexFromString($matches[2]) - 1;
                     $refRow = $matches[3];
 
@@ -771,7 +790,7 @@ STRING;
 
                     // If couldn't find filter yet, try last chance in high filters
                     if (!$refFilter) {
-                        foreach ($this->definitions[$sheet->getTitle()]['highFilters'] as $highFilterName => $highFilterData) {
+                        foreach ($this->definitions[$this->sheet->getTitle()]['highFilters'] as $highFilterName => $highFilterData) {
                             if ($refRow == $highFilterData['row']) {
                                 $refFilter = $this->cacheHighFilters[$highFilterName];
                             }
@@ -817,7 +836,7 @@ STRING;
                         // Find the column of the referenced questionnaire
                         $refColQuestionnaire = array_search($refQuestionnaire, $this->importedQuestionnaires);
 
-                        $refQuestionnaireUsage = $this->getQuestionnaireUsage($sheet, $refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart);
+                        $refQuestionnaireUsage = $this->getQuestionnaireUsage($refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart);
 
                         if ($refQuestionnaireUsage) {
 
@@ -847,13 +866,13 @@ STRING;
         $convertedFormula = preg_replace($isTextUsageWhichCannotBeText, 'NOT(ISNUMBER($1))', $convertedFormula);
 
         $prefix = '';
-        foreach ($this->definitions[$sheet->getTitle()]['questionnaireUsages'] as $label => $rows) {
+        foreach ($this->definitions[$this->sheet->getTitle()]['questionnaireUsages'] as $label => $rows) {
             if (in_array($row, $rows)) {
                 $prefix = $label . ': ';
             }
         }
 
-        $name = $forcedName ? : $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + 1, $row));
+        $name = $forcedName ? : $this->getCalculatedValueSafely($this->sheet->getCellByColumnAndRow($col + 1, $row));
 
         // Some countries have estimates with non-zero values but without name! (Yemen, Tables_W, DHS92, estimates line 88)
         if (!$name) {
@@ -871,15 +890,25 @@ STRING;
      */
     private function getRule($name, $formula)
     {
+        // If formula is only a number, we allow duplicated rules.
+        // Because it would most likely not have sense to have the same number
+        // used in different context with a unique name. Also it used to break
+        // the special cases of ratio for Shared/Improved if the ratio was a number
+        // which was already in use somewhere else
+        $onlyNumbers = preg_match('/^=[\d\.%+-]+$/', $formula);
+
+        $rule = null;
         $key = \Application\Utility::getCacheKey(array($formula));
-        if (array_key_exists($key, $this->cacheFormulas)) {
-            return $this->cacheFormulas[$key];
+        if (!$onlyNumbers) {
+            if (array_key_exists($key, $this->cacheFormulas)) {
+                return $this->cacheFormulas[$key];
+            }
+
+            $ruleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Rule');
+
+            // Look for existing formula (to prevent duplication)
+            $rule = $ruleRepository->findOneByFormula($formula);
         }
-
-        $ruleRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\Rule');
-
-        // Look for existing formula (to prevent duplication)
-        $rule = $ruleRepository->findOneByFormula($formula);
 
         if (!$rule) {
             $rule = new Rule($name);
@@ -896,9 +925,8 @@ STRING;
     /**
      * Finish high filters, by importing their exclude rules and their formulas (if any)
      * @param array $filters
-     * @param \PHPExcel_Worksheet $sheet
      */
-    private function importFilterQuestionnaireUsages(array $filters, \PHPExcel_Worksheet $sheet)
+    private function importFilterQuestionnaireUsages(array $filters)
     {
         $complementaryTotalFormula = $this->getRule('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . ',L#2}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . ',L#2})), ({F#current,Q#current,P#' . $this->partRural->getId() . ',L#2} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . ',L#2} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, {self})');
         // Get or create all filter
@@ -920,7 +948,7 @@ STRING;
 
                     // If the high filter exists in "Tables_W", then it may have a special formula that need to be imported
                     if ($filterData['row']) {
-                        $rule = $this->getRuleFromCell($sheet, $col, $filterData['row'], $offset, $questionnaire, $part, $filterName . ' (' . $questionnaire->getName() . ($part ? ', ' . $part->getName() : '') . ')');
+                        $rule = $this->getRuleFromCell($col, $filterData['row'], $offset, $questionnaire, $part, $filterName . ' (' . $questionnaire->getName() . ($part ? ', ' . $part->getName() : '') . ')');
                         if ($rule) {
                             $this->getFilterQuestionnaireUsage($highFilter, $questionnaire, $rule, $part);
                         }
@@ -929,12 +957,12 @@ STRING;
                     // If the high filter has some hardcoded formula, import them as well
                     if (isset($filterData['rule'])) {
                         $formula = $this->replaceHighFilterNamesWithIdForBasic($filters, $filterData['rule']);
-                        $rule = $this->getRule(($sheet->getTitle() == 'Tables_W' ? 'Water - ' : 'Sanitation - ') . $filterName, $formula);
+                        $rule = $this->getRule(($this->sheet->getTitle() == 'Tables_W' ? 'Water - ' : 'Sanitation - ') . $filterName, $formula);
                         $this->getFilterQuestionnaireUsage($highFilter, $questionnaire, $rule, $part);
                     }
                 }
 
-                $this->importExcludes($sheet, $col, $questionnaire, $highFilter, $filterData);
+                $this->importExcludes($questionnaire, $highFilter, $filterData['excludes']);
             }
             echo '.';
         }
@@ -1129,11 +1157,14 @@ STRING;
      */
     private function replaceHighFilterNamesWithIdForRegression(array $filters, $formula)
     {
+        if ($this->filterForRatio) {
+            $id = $this->filterForRatio->getId();
+            $formula = str_replace('ALL_RATIOS', "{F#$id,Q#all}", $formula);
+        }
+
         foreach ($filters as $filterNameOther => $foo) {
             $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
             $id = $otherHighFilter->getId();
-            $formula = str_replace('COUNT({' . $filterNameOther, "COUNT({F#$id", $formula);
-            $formula = str_replace('AVERAGE({' . $filterNameOther, "AVERAGE({F#$id", $formula);
             $formula = str_replace($filterNameOther . 'EARLIER', "{F#$id,P#current,Y-1}", $formula);
             $formula = str_replace($filterNameOther . 'LATER', "{F#$id,P#current,Y+1}", $formula);
             $formula = str_replace($filterNameOther . 'URBAN', "{F#$id,P#" . $this->partUrban->getId() . ",Y0}", $formula);
@@ -1167,20 +1198,21 @@ STRING;
     }
 
     /**
-     * Import exclude rules based on Yes/No content on cells
-     * @param \PHPExcel_Worksheet $sheet
-     * @param integer $col
+     * Import exclude rules based on Yes/No content in cells
      * @param Questionnaire $questionnaire
+     * @param Filter $filter
+     * @param integer $row
      */
-    private function importExcludes(\PHPExcel_Worksheet $sheet, $col, Questionnaire $questionnaire, Filter $filter, array $filterData)
+    private function importExcludes(Questionnaire $questionnaire, Filter $filter, $row)
     {
-        $row = $filterData['excludes'];
-        if (!$row) {
+        $col = array_search($questionnaire, $this->importedQuestionnaires, true);
+        if (!$row || $col === false) {
             return;
         }
 
+        $this->importedQuestionnaires;
         foreach ($this->partOffsets as $offset => $part) {
-            $includedValue = $this->getCalculatedValueSafely($sheet->getCellByColumnAndRow($col + $offset, $row));
+            $includedValue = $this->getCalculatedValueSafely($this->sheet->getCellByColumnAndRow($col + $offset, $row));
 
             // If it is not included, then it means we need an exclude rule
             if (strtolower($includedValue) != 'yes') {
@@ -1206,71 +1238,63 @@ STRING;
 
         echo 'Finishing special cases of Ratios for Sanitation';
 
-        $synonyms = array(
-            'Facilités améliorées partagées / Facilités améliorées',
-            'Shared facilities / All improved facilities',
-            'Shared improved facilities/all improved facilities',
-        );
-        $regexp = '-(' . join('|', $synonyms) . ')-i';
+        $regexp = '-(' . join('|', $this->ratioSynonyms) . ')-i';
 
-        // Collect all available ratios from all questionnaires
-        $allRatioReferences = [
-            $this->partUrban->getId() => [
-                'part' => $this->partUrban,
-                'ratios' => [],
-            ],
-            $this->partRural->getId() => [
-                'part' => $this->partRural,
-                'ratios' => [],
-            ],
-            $this->partTotal->getId() => [
-                'part' => $this->partTotal,
-                'ratios' => [],
-            ],
-        ];
+        // Create unique rules for everybody
+        $formulaImproved = $this->replaceHighFilterNamesWithIdForBasic($filters, '=Improved + sharedREGRESSION * (100% - AVERAGE({F#' . $this->filterForRatio->getId() . ',Q#all}))');
+        $formulaShared = $this->replaceHighFilterNamesWithIdForBasic($filters, '=Improved + sharedREGRESSION * AVERAGE({F#' . $this->filterForRatio->getId() . ',Q#all}))');
+        $ruleImproved = $this->getRule('Improved, based on average of shared ratios', $formulaImproved);
+        $ruleShared = $this->getRule('Shared, based on average of shared ratios', $formulaShared);
 
+        $questionnairesWithExcludedImported = [];
         foreach ($this->cacheQuestionnaireUsages as $usage) {
 
             if (!preg_match($regexp, $usage->getRule()->getName())) {
                 continue;
             }
 
-            if (!$usage->getRule()->getId() || !$usage->getQuestionnaire()->getId()) {
-                $this->getEntityManager()->flush();
-            }
+            $this->transformRatioIntoAnswer($usage, $this->filterForRatio);
 
-            $ruleId = $usage->getRule()->getId();
-            $questionnaireId = $usage->getQuestionnaire()->getId();
-            $ratioReference = "{R#$ruleId,Q#$questionnaireId,P#current}";
+            // Apply the rules, so we have coverage data for Improved and Shared
+            $questionnaire = $usage->getQuestionnaire();
+            $this->getFilterQuestionnaireUsage($filterImproved, $questionnaire, $ruleImproved, $usage->getPart(), true);
+            $this->getFilterQuestionnaireUsage($filterShared, $questionnaire, $ruleShared, $usage->getPart(), true);
 
-            $allRatioReferences[$usage->getPart()->getId()]['ratios'][] = $ratioReference;
-        }
 
-        // If found any, create the rule with the average of them
-        foreach ($allRatioReferences as $data) {
-            if ($data['ratios']) {
-
-                // Build the formulas
-                $average = 'AVERAGE(' . implode(', ', $data['ratios']) . ')';
-                $formulaImproved = $this->replaceHighFilterNamesWithIdForBasic($filters, "=Improved + sharedREGRESSION * (100% - $average)");
-                $formulaShared = $this->replaceHighFilterNamesWithIdForBasic($filters, "=Improved + sharedREGRESSION * $average");
-
-                $part = $data['part'];
-                $countryName = $this->cacheQuestionnaireUsages[0]->getQuestionnaire()->getGeoname()->getName();
-                $suffix = ' (' . $countryName . ', ' . $part->getName() . ') XXXX';
-
-                // Create rules
-                $ruleImproved = $this->getRule($filterImproved->getName() . $suffix, $formulaImproved);
-                $ruleShared = $this->getRule($filterShared->getName() . $suffix, $formulaShared);
-
-                // Actually use rules
-                foreach ($this->importedQuestionnaires as $questionnaire) {
-                    $this->getFilterQuestionnaireUsage($filterImproved, $questionnaire, $ruleImproved, $part, true);
-                    $this->getFilterQuestionnaireUsage($filterShared, $questionnaire, $ruleShared, $part, true);
-                    echo '.';
-                }
+            if (!in_array($questionnaire, $questionnairesWithExcludedImported)) {
+                $this->importExcludes($questionnaire, $this->filterForRatio, 99);
+                $questionnairesWithExcludedImported[] = $questionnaire;
             }
         }
+    }
+
+    private function transformRatioIntoAnswer(QuestionnaireUsage $usage, Filter $filterForRatio)
+    {
+        $rule = $usage->getRule();
+        $formula = $rule->getFormula();
+
+        // If formula contains GIMS syntax, transform into rule for the filter (minority of cases)
+        if (preg_match('/#/', $formula)) {
+            $this->getFilterQuestionnaireUsage($filterForRatio, $usage->getQuestionnaire(), $rule, $usage->getPart());
+        }
+        // Else transform into simple answer (vast majority of cases)
+        else {
+            $answerValue = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($formula);
+            $question = $this->getQuestion($usage->getQuestionnaire(), $filterForRatio, null);
+
+            $answer = new Answer();
+            $this->getEntityManager()->persist($answer);
+            $answer->setQuestionnaire($usage->getQuestionnaire());
+            $answer->setQuestion($question);
+            $answer->setPart($usage->getPart());
+            $answer->setValuePercent($answerValue);
+        }
+
+        // We only remove usage, and not the rule itself, because we are not sure
+        // if the rule has several usages and it is easier to clean rules at the very end
+        $usage->getRule()->getQuestionnaireUsages()->removeElement($usage);
+        $usage->getQuestionnaire()->getQuestionnaireUsages()->removeElement($usage);
+        $this->getEntityManager()->remove($usage);
     }
 
     /**
@@ -1375,6 +1399,46 @@ STRING;
 
         $this->getEntityManager()->flush();
         echo count($this->cacheFilters) . ' filters imported' . PHP_EOL;
+    }
+
+    private function cleanUpRatios()
+    {
+        $conditions = [];
+        foreach ($this->ratioSynonyms as $s) {
+            $conditions[] = "name ILIKE '%$s%'";
+        }
+        $synonyms = implode(' OR ', $conditions);
+        $id = $this->filterForRatio->getId();
+
+        // Convert reference to ratios to be reference to filter
+        $ratioToFilter = "UPDATE rule SET formula = REGEXP_REPLACE(formula, CONCAT('R\#(',
+    (
+        SELECT string_agg(id::varchar, '|')
+        FROM rule
+        WHERE $synonyms
+    )
+, '),')
+, 'F#$id,')
+
+";
+//        v($ratioToFilter);
+        $a = $this->getEntityManager()->getConnection()->executeUpdate($ratioToFilter);
+
+        // Clean up non-used rules after finishRatios()
+        $sql = '
+            DELETE FROM rule WHERE id NOT IN (
+                SELECT rule_id FROM questionnaire_usage
+                UNION
+                SELECT rule_id FROM filter_questionnaire_usage
+                UNION
+                SELECT rule_id FROM filter_geoname_usage
+            )';
+        $b = $this->getEntityManager()->getConnection()->executeUpdate($sql);
+
+        echo "
+$a ratio references switched to filter references
+$b unused rules deleted
+";
     }
 
 }

@@ -1188,5 +1188,19 @@
                 "Total": null
             }
         ]
+    },
+    {
+        "filter": {
+            "id": 172,
+            "name": "Ratio of Shared improved facilities \/ All improved facilities",
+            "level": 0
+        },
+        "values": [
+            {
+                "Urban": 29.7,
+                "Rural": 29.7,
+                "Total": null
+            }
+        ]
     }
 ]
