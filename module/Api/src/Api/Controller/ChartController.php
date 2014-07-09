@@ -390,10 +390,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             /** @var \Application\Repository\Rule\FilterGeonameUsage usages */
             $usages = $filterGeonameUsageRepo->getAllForGeonameAndFilter($geoname, $filter, $part);
 
+            $baseName = $prefix . $serie['name'];
             $serie['color'] = $filter->getGenericColor($this->getColorSaturation($isIgnored, $isAdjusted));
             $serie['type'] = 'line';
-            $serie['name'] = $prefix . $serie['name'] . $this->getSuffix($isIgnored, $isAdjusted);
+            $serie['name'] = $baseName . $this->getSuffix($isIgnored, $isAdjusted);
             $serie['dashStyle'] = $this->getDashStyle($prefix, $isIgnored, $isAdjusted);
+            $serie['marker'] = array('symbol' => $this->getConstantValue($baseName, $this->symbols));
 
             if ($isIgnored) {
                 $serie['isIgnored'] = $isIgnored;

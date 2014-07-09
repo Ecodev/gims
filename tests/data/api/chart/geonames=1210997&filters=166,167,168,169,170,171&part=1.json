@@ -108,6 +108,9 @@
             "color": "#005FD9",
             "type": "line",
             "dashStyle": "Solid",
+            "marker": {
+                "symbol": "circle"
+            },
             "usages": "(none)"
         },
         {
@@ -151,6 +154,9 @@
             "color": "#9ED900",
             "type": "line",
             "dashStyle": "Solid",
+            "marker": {
+                "symbol": "diamond"
+            },
             "usages": "(none)"
         },
         {
@@ -194,6 +200,9 @@
             "color": "#D400D9",
             "type": "line",
             "dashStyle": "Solid",
+            "marker": {
+                "symbol": "square"
+            },
             "usages": "Regression: Improved (default)"
         },
         {
@@ -237,6 +246,9 @@
             "color": "#00D995",
             "type": "line",
             "dashStyle": "Solid",
+            "marker": {
+                "symbol": "triangle"
+            },
             "usages": "Regression: Shared (default)"
         },
         {
@@ -280,6 +292,9 @@
             "color": "#D95600",
             "type": "line",
             "dashStyle": "Solid",
+            "marker": {
+                "symbol": "triangle-down"
+            },
             "usages": "Regression: Other unimproved (default)"
         },
         {
@@ -323,6 +338,9 @@
             "color": "#1600D9",
             "type": "line",
             "dashStyle": "Solid",
+            "marker": {
+                "symbol": "circle"
+            },
             "usages": "Regression: Open defecation (default)"
         },
         {
