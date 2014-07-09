@@ -107,6 +107,7 @@
             ],
             "color": "#00D919",
             "type": "line",
+            "dashStyle": "Solid",
             "usages": "Regression: Total improved (default)"
         },
         {
@@ -149,6 +150,7 @@
             ],
             "color": "#D90026",
             "type": "line",
+            "dashStyle": "Solid",
             "usages": "Regression: Piped onto premises (default)"
         },
         {
@@ -191,6 +193,7 @@
             ],
             "color": "#0066D9",
             "type": "line",
+            "dashStyle": "Solid",
             "usages": "Regression: Surface water (default)"
         },
         {
@@ -233,6 +236,7 @@
             ],
             "color": "#A5D900",
             "type": "line",
+            "dashStyle": "Solid",
             "usages": "Regression: Other Improved (default)"
         },
         {
@@ -275,6 +279,7 @@
             ],
             "color": "#CE00D9",
             "type": "line",
+            "dashStyle": "Solid",
             "usages": "Regression: Other Unimproved (default)"
         },
         {

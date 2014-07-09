@@ -107,6 +107,7 @@
             ],
             "color": "#005FD9",
             "type": "line",
+            "dashStyle": "Solid",
             "usages": "(none)"
         },
         {
@@ -149,6 +150,7 @@
             ],
             "color": "#9ED900",
             "type": "line",
+            "dashStyle": "Solid",
             "usages": "(none)"
         },
         {
@@ -191,6 +193,7 @@
             ],
             "color": "#D400D9",
             "type": "line",
+            "dashStyle": "Solid",
             "usages": "Regression: Improved (default)"
         },
         {
@@ -233,6 +236,7 @@
             ],
             "color": "#00D995",
             "type": "line",
+            "dashStyle": "Solid",
             "usages": "Regression: Shared (default)"
         },
         {
@@ -275,6 +279,7 @@
             ],
             "color": "#D95600",
             "type": "line",
+            "dashStyle": "Solid",
             "usages": "Regression: Other unimproved (default)"
         },
         {
@@ -317,6 +322,7 @@
             ],
             "color": "#1600D9",
             "type": "line",
+            "dashStyle": "Solid",
             "usages": "Regression: Open defecation (default)"
         },
         {

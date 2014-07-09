@@ -107,6 +107,7 @@
             ],
             "color": "#005FD9",
             "type": "line",
+            "dashStyle": "Solid",
             "usages": "(none)"
         },
         {
@@ -149,6 +150,7 @@
             ],
             "color": "#D400D9",
             "type": "line",
+            "dashStyle": "Solid",
             "usages": "Regression: Improved (default - for developed countries),<br\/>Regression: Improved (default)"
         },
         {
