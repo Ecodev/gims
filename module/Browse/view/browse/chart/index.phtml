@@ -167,9 +167,10 @@
                                     <div ng-show="pointSelected">
                                         <div class="col-md-12">
                                             <h3 ng-class="{'text-muted': indexedElements[pointSelected.questionnaire].ignored}">
-                                                <i class="fa fa-gims-questionnaire"
-                                                   ng-class="{'text-primary fa-eye': !indexedElements[pointSelected.questionnaire].ignored}"
-                                                   ng-click="toggleQuestionnaire(pointSelected.questionnaire)"></i>
+                                                <i ng-click="toggleQuestionnaire(pointSelected.questionnaire)" class="fa fa-gims-questionnaire text-primary" tooltip-placement="right"
+                                                   tooltip="Ignore questionnaire" ng-if="!indexedElements[pointSelected.questionnaire].ignored"></i>
+                                                <i ng-click="toggleQuestionnaire(pointSelected.questionnaire)" class="fa fa-gims-questionnaire" tooltip-placement="right"
+                                                   tooltip="Include questionnaire" ng-if="indexedElements[pointSelected.questionnaire].ignored"></i>
                                                 {{indexedElements[pointSelected.questionnaire].name}}
                                             </h3>
                                         </div>
@@ -274,9 +275,10 @@
                                     <div ng-show="pointSelected">
                                         <div class="col-md-12">
                                             <h3 ng-class="{'text-muted': indexedElements[pointSelected.questionnaire].ignored}">
-                                                <i class="fa fa-gims-questionnaire"
-                                                   ng-class="{'text-primary fa-eye': !indexedElements[pointSelected.questionnaire].ignored}"
-                                                   ng-click="toggleQuestionnaire(pointSelected.questionnaire)"></i>
+                                                <i ng-click="toggleQuestionnaire(pointSelected.questionnaire)" class="fa fa-gims-questionnaire text-primary" tooltip-placement="right"
+                                                   tooltip="Ignore questionnaire" ng-if="!indexedElements[pointSelected.questionnaire].ignored"></i>
+                                                <i ng-click="toggleQuestionnaire(pointSelected.questionnaire)" class="fa fa-gims-questionnaire" tooltip-placement="right"
+                                                   tooltip="Include questionnaire" ng-if="indexedElements[pointSelected.questionnaire].ignored"></i>
                                                 {{indexedElements[pointSelected.questionnaire].name}}<br/>
                                                 <small>Calculations / Estimations / Ratios</small>
                                             </h3>
