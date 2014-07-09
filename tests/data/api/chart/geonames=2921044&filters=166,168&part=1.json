@@ -54,7 +54,7 @@
             },
             "tooltip": {
                 "headerFormat": "",
-                "pointFormat": "<b>{point.name}<\/b><br\/>{point.y}% ({point.x})"
+                "pointFormat": "<b>{point.name}<\/b> ({point.x})<br\/><span style=\"color:{series.color}\">{point.y}% {series.name}<\/span>"
             },
             "marker": {
                 "states": {
