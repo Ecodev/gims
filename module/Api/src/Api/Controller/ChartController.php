@@ -179,20 +179,23 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     }
 
     /**
-     * Always returns the same integer for the same name and incrementing: 0, 1, 2...
+     * Always returns the same value from $data for the same name
      * @staticvar array $keys
-     * @param string $filterName
-     * @return integer
+     * @param string $name
+     * @return mixed one of $data values
      */
-    private function getConstantKey($filterName)
+    private function getConstantValue($name, array $data)
     {
         static $keys = array();
 
-        if (!array_key_exists($filterName, $keys)) {
-            $keys[$filterName] = count($keys);
+        if (!array_key_exists($name, $keys)) {
+            $keys[$name] = count($keys);
         }
 
-        return $keys[$filterName];
+        $key = $keys[$name];
+        $moduloKey = $key % count($data);
+
+        return $data[$moduloKey];
     }
 
     /**
@@ -340,6 +343,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             foreach ($serie['data'] as &$d) {
                 $d = Utility::decimalToRoundedPercent($d);
             }
+
             $series[] = $serie;
         }
 
@@ -351,10 +355,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @param \Application\Model\Filter[] $filters
      * @param array $questionnaires
      * @param Part $part
-     * @param $ratio
-     * @param $isIgnored
-     * @param $suffix
-     * @param bool $isAdjusted
+     * @param integer $ratio
+     * @param boolean$isIgnored
+     * @param string $suffix
+     * @param boolean $isAdjusted
      * @return array
      */
     private function getScatteredSeries($filters, array $questionnaires, Part $part, $ratio, $isIgnored, $prefix, $suffix, $isAdjusted = false)
@@ -365,18 +369,21 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         foreach ($filters as $filter) {
             $idFilter = $filter->getId();
             $data = $this->getCalculator()->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
+            $baseName = $prefix . $filter->getName();
             $scatter = array(
                 'type' => 'scatter',
                 'id' => $filter->getId(),
                 'color' => $filter->getGenericColor($ratio),
-                'marker' => array('symbol' => $this->symbols[$this->getConstantKey($filter->getName()) % count($this->symbols)]),
-                'name' => $prefix . $filter->getName() . $suffix,
+                'marker' => array('symbol' => $this->getConstantValue($baseName, $this->symbols)),
+                'name' => $baseName . $suffix,
                 'allowPointSelect' => false,
                 'data' => array(), // because we will use our own click handler
             );
+
             if ($isIgnored) {
                 $scatter['isIgnored'] = $isIgnored;
             }
+
             if ($isAdjusted) {
                 $scatter['isAdjusted'] = $isAdjusted;
             }
