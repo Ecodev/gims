@@ -31,7 +31,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
     var addSeries = function(seriesToAdd) {
 
         if (seriesToAdd.length > 0) {
-            _.forEachRight(seriesToAdd, function(serieToAdd, index) {
+            _.forEach(seriesToAdd, function(serieToAdd, index) {
                 // if exist, remove and add new one
                 if (_.contains(chart.series, {id: serieToAdd.id, isIgnored: serieToAdd.isIgnored})) {
                     chart.series.splice(index, 1);
