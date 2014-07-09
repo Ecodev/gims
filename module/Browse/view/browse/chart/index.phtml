@@ -140,9 +140,9 @@
                                                 <tbody>
                                                     <tr ng-repeat="(questionnaireId, questionnaire) in serie.overriddenFilters" ng-if="getFirstAttribute(serie.originalFilters[questionnaireId])['content'][tabs.part.id]">
                                                         <td>{{indexedElements[questionnaireId].name}}</td>
-                                                        <td class="text-warning">{{getFirstAttribute(serie.originalFilters[questionnaireId])['content'][tabs.part.id]}}</td>
-                                                        <td class="text-success">{{getFirstAttribute(questionnaire)['content'][tabs.part.id]}}</td>
-                                                        <td>{{getFirstAttribute(questionnaire)['content'][tabs.part.id] - getFirstAttribute(serie.originalFilters[questionnaireId])['content'][tabs.part.id]}}</td>
+                                                        <td class="text-warning">{{getFirstAttribute(serie.originalFilters[questionnaireId])['content'][tabs.part.id] | percent}}</td>
+                                                        <td class="text-success">{{getFirstAttribute(questionnaire)['content'][tabs.part.id] | percent}}</td>
+                                                        <td>{{getFirstAttribute(questionnaire)['content'][tabs.part.id] - getFirstAttribute(serie.originalFilters[questionnaireId])['content'][tabs.part.id] | percent}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
