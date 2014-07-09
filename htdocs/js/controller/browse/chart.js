@@ -132,12 +132,26 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     });
 
     /**
+     * Returns wether the chart has at least one adjusted line
+     * @param {chart} chart
+     * @returns {boolean}
+     */
+    function hasAdjustedLines(chart) {
+        return !!_.find(chart.series, function(serie) {
+            if (serie.isAdjusted) {
+                return true;
+            }
+        });
+    }
+
+    /**
      * Create new object to fire $watch listener on highChart directive
      * ChartObj is not used because addSeries() function dont save customized attributes like id, isAdjusted, isIgnored.
      * Use chart.series because all data is kept as submitted.
      */
     $rootScope.$on('gims-chart-modified', function(event, chart) {
         $scope.chart = _.clone(chart);
+        $scope.chart.hasAdjustedLines = hasAdjustedLines($scope.chart);
     });
 
     /**************************************************************************/

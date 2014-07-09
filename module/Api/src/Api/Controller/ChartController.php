@@ -140,12 +140,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         }
 
         $chart = $this->getChart($series, $geonames, $part);
-        if (isset($adjusted['overriddenFilters']) && $adjusted['overriddenFilters']) {
-            $chart['overriddenFilters'] = $adjusted['overriddenFilters'];
-        }
-        if (isset($adjusted['originalFilters']) && $adjusted['originalFilters']) {
-            $chart['originalFilters'] = $adjusted['originalFilters'];
-        }
 
         return new NumericJsonModel($chart);
     }
@@ -155,8 +149,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getAllForComputing($geoname);
 
         // Compute adjusted series if we asked any
-        $adjusted = $this->getAdjustedSeries($geoname, $questionnaires, $part, $prefix);
-        $adjustedSeries = $adjusted['series'];
+        $adjustedSeries = $this->getAdjustedSeries($geoname, $questionnaires, $part, $prefix);
 
         // First get series of flatten regression lines with ignored values (if any)
         $seriesWithIgnoredElements = $this->computeIgnoredElements($geoname, $filters, $questionnaires, $part, $prefix);
@@ -575,53 +568,55 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     }
 
     /**
-     * Return an array of series and overridden filters, if were asked to do it
+     * Return an array of series (with their overridden filters), if were asked to do it
      * @param \Application\Model\Geoname $geoname
      * @param array $questionnaires
      * @param \Application\Model\Part $part
-     * @return array ['series' => series, 'overriddenFilters' => overriddenFilters]
+     * @return array
      */
     private function getAdjustedSeries(Geoname $geoname, array $questionnaires, Part $part, $prefix)
     {
-        $series = array();
-        $overriddenFilters = array();
-        $originalFilters = array();
+        $referenceId = $this->params()->fromQuery('reference');
+        $overridableId = $this->params()->fromQuery('overridable');
+        @list($targetId, $includeIgnoredElements) = explode(':', $this->params()->fromQuery('target'));
 
-        if ($this->params()->fromQuery('reference') && $this->params()->fromQuery('overridable') && $this->params()->fromQuery('target')) {
-
-            $reference = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($this->params()->fromQuery('reference'));
-            $overridable = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($this->params()->fromQuery('overridable'));
-
-            @list($targetId, $includeIgnoredElements) = explode(':', $this->params()->fromQuery('target'));
-            $target = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($targetId);
-
-            if ($reference && $overridable && $target) {
-                $adjustator = new \Application\Service\Calculator\Adjustator();
-                $adjustator->setCalculator($this->getCalculator());
-
-                $originalFilters = $adjustator->getOriginalOverrideValues($target, $reference, $overridable, $questionnaires, $part);
-
-                if ($includeIgnoredElements) {
-                    $ignoredElements = $this->getIgnoredElements($part);
-                    $this->getCalculator()->setOverriddenFilters($ignoredElements);
-                }
-
-                $overriddenFilters = $adjustator->findOverriddenFilters($target, $reference, $overridable, $questionnaires, $part);
-                $this->getCalculator()->setOverriddenFilters($overriddenFilters);
-
-                $adjustedSeries = $this->getSeries($geoname, [$reference], $questionnaires, $part, 100, null, false, $prefix, ' (adjusted)', $overriddenFilters, true);
-                $originalSeries = $this->getSeries($geoname, [$reference], $questionnaires, $part, 33, 'ShortDot', false, $prefix, '', array(), true);
-                $ancestorsSeries = $this->getAncestorsSeries($geoname, $reference, $questionnaires, $part, $overriddenFilters, $prefix);
-
-                $series = array_merge($adjustedSeries, $originalSeries, $ancestorsSeries);
-            }
+        // bail out early to avoid useless SQL query
+        if (!$referenceId || !$overridableId || !$targetId) {
+            return [];
         }
 
-        return array(
-            'series' => $series,
-            'overriddenFilters' => $overriddenFilters,
-            'originalFilters' => $originalFilters,
-        );
+        $reference = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($referenceId);
+        $overridable = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($overridableId);
+        $target = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($targetId);
+
+        if (!$reference || !$overridable || !$target) {
+            return [];
+        }
+
+        $adjustator = new \Application\Service\Calculator\Adjustator();
+        $adjustator->setCalculator($this->getCalculator());
+
+        $originalFilters = $adjustator->getOriginalOverrideValues($target, $reference, $overridable, $questionnaires, $part);
+
+        if ($includeIgnoredElements) {
+            $ignoredElements = $this->getIgnoredElements($part);
+            $this->getCalculator()->setOverriddenFilters($ignoredElements);
+        }
+
+        $overriddenFilters = $adjustator->findOverriddenFilters($target, $reference, $overridable, $questionnaires, $part);
+        $this->getCalculator()->setOverriddenFilters($overriddenFilters);
+
+        $adjustedSeries = $this->getSeries($geoname, [$reference], $questionnaires, $part, 100, null, false, $prefix, ' (adjusted)', $overriddenFilters, true);
+        $originalSeries = $this->getSeries($geoname, [$reference], $questionnaires, $part, 33, 'ShortDot', false, $prefix, '', array(), true);
+        $ancestorsSeries = $this->getAncestorsSeries($geoname, $reference, $questionnaires, $part, $overriddenFilters, $prefix);
+
+        // Inject extra data about adjustement
+        $adjustedSeries[0]['overriddenFilters'] = $overriddenFilters;
+        $adjustedSeries[0]['originalFilters'] = $originalFilters;
+
+        $series = array_merge($adjustedSeries, $originalSeries, $ancestorsSeries);
+
+        return $series;
     }
 
     /**
