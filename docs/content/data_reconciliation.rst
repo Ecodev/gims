@@ -49,7 +49,7 @@ Editing and comparing JMP/NSO and NSA data
 
 JMP/NSO data will most certainly differ from :term:`NSA` data. One important reason is that the estimated number of persons having access to the facilities according to NSA data often doesn't match with effective use (i.e. what JMP/NSO measure).
 
-To add NSA sector data, simply clic on the "Create sector dataset" button.
+To add NSA sector data, simply click on the "Create sector dataset" button.
 
 .. image:: img/data_reconciliation3.png
     :width: 100%
@@ -69,7 +69,7 @@ Once the NSA sector data has been created…
     :width: 100%
     :alt: JMP, NSO and NSA data plotted
 
-To estimate by how many users per equipment one should lower current estimates (50 for equipment 1 and 100 for equipment 2 in the example above), clic on the "Actions" tab.
+To estimate by how many users per equipment one should lower current estimates (50 for equipment 1 and 100 for equipment 2 in the example above), click on the "Actions" tab.
 
 .. image:: img/data_reconciliation6.png
     :width: 100%
@@ -85,13 +85,13 @@ Here you will have to select 3 parameters to be used:
     :width: 100%
     :alt: Actions tab for graphical data reconciliation
 
-Clic on the "Apply" button. The initial blue trend line drops (here in red) to match the NSO purple line.
+Click on the "Apply" button. The initial blue trend line drops (here in red) to match the NSO purple line.
 
 .. image:: img/data_reconciliation8.png
     :width: 100%
     :alt: Actions tab for graphical data reconciliation
 
-Clic on the Estimates tab to discover by how many persons per equipment the number should be updated.
+Click on the Estimates tab to discover by how many persons per equipment the number should be updated.
 
 .. image:: img/data_reconciliation9.png
     :width: 100%

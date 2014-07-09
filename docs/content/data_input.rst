@@ -15,15 +15,15 @@ Since all data is linked to one or several people, you must first of all :ref:`s
 
 Survey
 -------
-You can now go to the **Admin** section and clic on the **Surveys** icon.
+You can now go to the **Admin** section and click on the **Surveys** icon.
 
 .. image:: img/administration.png
     :width: 100%
     :alt: Administration section
 
-If you have access to an existing survey, it will be listed. To edit it, clic on the pencil icon.
+If you have access to an existing survey, it will be listed. To edit it, click on the pencil icon.
 
-To create a new survey, clic on the corresponding button.
+To create a new survey, click on the corresponding button.
 
 .. image:: img/surveys.png
     :width: 100%
@@ -37,13 +37,13 @@ For each survey, there are 4 tabs:
     :width: 100%
     :alt: Surveys general tab
 
-* **Questions**: in this tab you will see the already existing questions and how they are structured; be able to edit (pencil icon) or delete them (dustbin icon) as well as add a new question (clic on the corresponding button). For further details about the different types of questions see the :ref:`DI questions` section below.
+* **Questions**: in this tab you will see the already existing questions and how they are structured; be able to edit (pencil icon) or delete them (dustbin icon) as well as add a new question (click on the corresponding button). For further details about the different types of questions see the :ref:`DI questions` section below.
 
 .. image:: img/surveys_questions.png
     :width: 100%
     :alt: Surveys questions tab
 
-* **Questionnaires**: in this tab you will see the questionnaire(s) you are entitled to edit and/or validate. In this view you can see which spatial zone (country, city…) the questionnaire corresponds to; when it has been last modified and too what extent it has been completed. To add a new questionnaire clic on the corresponding button. For further details about the questionnaires see the :ref:`DI questionnaires` section below.
+* **Questionnaires**: in this tab you will see the questionnaire(s) you are entitled to edit and/or validate. In this view you can see which spatial zone (country, city…) the questionnaire corresponds to; when it has been last modified and too what extent it has been completed. To add a new questionnaire click on the corresponding button. For further details about the questionnaires see the :ref:`DI questionnaires` section below.
 
 .. image:: img/surveys_questionnaires.png
     :width: 100%

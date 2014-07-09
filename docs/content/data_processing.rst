@@ -17,7 +17,7 @@ Until the other interfaces are programmed, users can already use GIMS for the :d
     :width: 100%
     :alt: Browse
 
-In these tables, select the country(ies), :term:`filter set(s)` (+ years) and once the content is visible, simply clic on the "Export" button. The file you will obtain is already *processed* data through the :term:`filter(s)` and their associated :term:`rule(s)`.
+In these tables, select the country(ies), :term:`filter set(s)` (+ years) and once the content is visible, simply click on the "Export" button. The file you will obtain is already *processed* data through the :term:`filter(s)` and their associated :term:`rule(s)`.
 
 .. note::
 
@@ -29,7 +29,7 @@ In these tables, select the country(ies), :term:`filter set(s)` (+ years) and on
 
 .. note::
 
-    The "Countries table" provides an output of computed data, in absolute (a) and relative numbers, per year for the selected countries. The acronyms in the header of the table follow a simple logic: P = population; U = urban; R = rural; T = total; W = water; S= sanitation; I = improved; U = unimproved… (ex. WUTI = water urban total improved). 
+    The "Countries table" provides an output of computed data, in absolute (a) and relative numbers, per year for the selected countries. The acronyms in the header of the table follow a simple logic: P = population; U = urban; R = rural; T = total; W = water; S= sanitation; I = improved; U = unimproved… (ex. WUTI = water urban total improved).
 
 .. image:: img/data_export_countries.png
     :width: 100%
@@ -47,19 +47,19 @@ To see how the water supply or sanitation facilities coverage evolve over time, 
     :width: 100%
     :alt: Browse
 
-Select a country, part (urban, rural or total) and filter set. The corresponding data points and trends lines are calculated and displaid. Pointing anywhere along the trend line provides a feedback regarding the corresponding coverage percentage.
+Select a country, part (urban, rural or total) and filter set. The corresponding data points and trends lines are calculated and displayed. Pointing anywhere along the trend line provides a feedback regarding the corresponding coverage percentage.
 
 .. image:: img/chart_1.png
     :width: 100%
     :alt: Chart with trend lines
 
-Estimates can also be seen in the form of a table by clicing on the "Estimates" tab.
+Estimates can also be seen in the form of a table by clicking on the "Estimates" tab.
 
 .. image:: img/chart_2.png
     :width: 100%
     :alt: Estimated coverage
 
-To get detailed information regarding a specific data point (questionnaire), you must simply clic on the point. Since data points can overlap, you can zoom into the chart by drawing a rectangle over the area of interest (clic and drag in diagonal).
+To get detailed information regarding a specific data point (questionnaire), you must simply click on the point. Since data points can overlap, you can zoom into the chart by drawing a rectangle over the area of interest (click and drag in diagonal).
 
 .. image:: img/chart_zoom.png
     :width: 100%
@@ -69,7 +69,7 @@ Once you have zoomed in, you can select more easily the data point you are inter
 
 .. note::
 
-    To view again the entire graph, clic on the "Reset the zoom" button [2].
+    To view again the entire graph, click on the "Reset the zoom" button [2].
 
 .. image:: img/chart_zoomed.png
     :width: 100%
@@ -86,23 +86,23 @@ The panel on the right opens up and displays detailed information pertaining to 
 Graphical analysis
 ^^^^^^^^^^^^^^^^^^
 
-To see the impact of ignoring a specific filter either just for the current questionnaire [1] or for all questionnaires displayed [2], clic on the corresponding icon. The data points (questionnaires) are recalculated without this filter element and a new trend line calculated and drawn. The initial data points are now in a lighter shade of the initial colour and the trend lines are dashed (as shown in the legend). Furthermore, the percentage ignored is highlighted in red [3] and the (sub)total(s) adjusted accordingly [4]. It is possible to ignore several elements by simply clicing on the appropriate icons of the filter elements you wish to ignore.
+To see the impact of ignoring a specific filter either just for the current questionnaire [1] or for all questionnaires displayed [2], click on the corresponding icon. The data points (questionnaires) are recalculated without this filter element and a new trend line calculated and drawn. The initial data points are now in a lighter shade of the initial colour and the trend lines are dashed (as shown in the legend). Furthermore, the percentage ignored is highlighted in red [3] and the (sub)total(s) adjusted accordingly [4]. It is possible to ignore several elements by simply clicking on the appropriate icons of the filter elements you wish to ignore.
 
 .. note::
 
-    By clicing on the labels in the legend, you can hide elements you don't want to display on the graph.
+    By clicking on the labels in the legend, you can hide elements you don't want to display on the graph.
 
 .. image:: img/chart_panel2.png
     :width: 100%
     :alt: Ignoring a specific filter for a graph
 
-The ignored data can be seen in the "Ignored" tab and reintegrated by simply clicing on the appropriate icon.
+The ignored data can be seen in the "Ignored" tab and reintegrated by simply clicking on the appropriate icon.
 
 .. image:: img/chart_panel3.png
     :width: 100%
     :alt: Ignored elements
 
-It is also possible to ignore an entire questionnaire by clicing on the icon to the left of the questionnaire code [1]. The data point of the questionnaire is shaded on the chart as well as the label in the panel and the trend line recalculated accordingly. To reintegrating a questionnaire, clic again on the same icon.
+It is also possible to ignore an entire questionnaire by clicking on the icon to the left of the questionnaire code [1]. The data point of the questionnaire is shaded on the chart as well as the label in the panel and the trend line recalculated accordingly. To reintegrating a questionnaire, click again on the same icon.
 
 .. image:: img/chart_panel4.png
     :width: 100%

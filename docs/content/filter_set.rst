@@ -3,7 +3,7 @@ Filter sets
 
 Filter sets can be seen as "folders" that facilitate the selection of a group of :term:`filer(s)` .
 
-To edit or create a filter set, go to the Administration section and clic on the "Filter sets" icon.
+To edit or create a filter set, go to the Administration section and click on the "Filter sets" icon.
 
 .. image:: img/administration.png
     :width: 100%
@@ -11,7 +11,7 @@ To edit or create a filter set, go to the Administration section and clic on the
 
 Normally the list shouldn't be very long. You will see both "official" JMP water and sanitation filter sets as well as the eventual filter sets you have created.
 
-If the list is too long, start typing the name of the filter set in the search bar. Once it appears in the list, clic on the pencil icon to edit the record.
+If the list is too long, start typing the name of the filter set in the search bar. Once it appears in the list, click on the pencil icon to edit the record.
 
 .. image:: img/filterset1.png
     :width: 100%

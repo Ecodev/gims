@@ -183,7 +183,7 @@ Or the more re-usable version:
 Edit and create a rule
 ----------------------
 
-To edit or create a rule, go to the Administration section and clic on the "Rules" icon.
+To edit or create a rule, go to the Administration section and click on the "Rules" icon.
 
 .. image:: img/administration.png
     :width: 100%

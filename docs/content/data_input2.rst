@@ -35,7 +35,7 @@ The typical flow will be to: 1) select your **country** in the "Questionnaires (
 
 .. note::
 
-    The Questionnaires and Filter selection menus are automatically hidden once the table vue is generated. To access these menus again, simply clic on the "Selection" button at the top.
+    The Questionnaires and Filter selection menus are automatically hidden once the table vue is generated. To access these menus again, simply click on the "Selection" button at the top.
 
 .. note::
 
@@ -73,13 +73,13 @@ Data that has a question mark [2] has been entered manually and can be edited if
 
 .. warning::
 
-    To avoid that unwanted modifications be performed to existing validated and published data, all existing questionnaires are "locked" (data in the cells with a grey background can't be edited). If modifications must really be made, you must first "Edit the questionnaire" and change the Status from "Published" to "New" [1]… and then clic on "Save and close" [2]
+    To avoid that unwanted modifications be performed to existing validated and published data, all existing questionnaires are "locked" (data in the cells with a grey background can't be edited). If modifications must really be made, you must first "Edit the questionnaire" and change the Status from "Published" to "New" [1]… and then click on "Save and close" [2]
 
 .. image:: img/contribute_jmp6.png
     :width: 100%
     :alt: Change the status of a questionnaire
 
-Back to the questionnaire, you can now modify existing values as well as add new data or delete existing info. Simply clic in the cell, change the value and clic somewhere outside the cell for it to update automatically.
+Back to the questionnaire, you can now modify existing values as well as add new data or delete existing info. Simply click in the cell, change the value and click somewhere outside the cell for it to update automatically.
 
 
 .. _DI create new JMP questionnaire:
@@ -87,7 +87,7 @@ Back to the questionnaire, you can now modify existing values as well as add new
 Add a new questionnaire
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-To add new data, simply clic the "Add new questionnaire" button [1]. A new column is created. Select the country, enter an appropriate survey code and year and fill in the percentages. Once you have finished, clic on the blue "Save new elements" button at the top.
+To add new data, simply click the "Add new questionnaire" button [1]. A new column is created. Select the country, enter an appropriate survey code and year and fill in the percentages. Once you have finished, click on the blue "Save new elements" button at the top.
 
 .. image:: img/contribute_jmp7.png
     :width: 100%
@@ -105,7 +105,7 @@ To delete a questionnaire and it's linked answers, simply select "Edit questionn
     :width: 100%
     :alt: Edit questionnaire
 
-In the following administration panel, clic on the red "Delete" button. A confirmation message appears, clic again on "Delete".
+In the following administration panel, click on the red "Delete" button. A confirmation message appears, click again on "Delete".
 
 .. image:: img/contribute_jmp9.png
     :width: 100%
@@ -135,7 +135,7 @@ The typical initial flow will be to: [1] "Create an NSA container" (i.e. filter 
     :width: 100%
     :alt: Create NSA filter and filter set
 
-Then [2] add one or several new questionnaires and [3] add one or several new equipments (facilities) for each questionnaire. Enter corresponding labels and numbers… for each part (urban, rural and total). Once the data has been entered, clic on the blue "Save new elements" button at the top: the percentage are automatically calculated.
+Then [2] add one or several new questionnaires and [3] add one or several new equipments (facilities) for each questionnaire. Enter corresponding labels and numbers… for each part (urban, rural and total). Once the data has been entered, click on the blue "Save new elements" button at the top: the percentage are automatically calculated.
 
 .. note::
 
@@ -163,7 +163,7 @@ Once you have cliced on the button you will be directed to an interface that ena
     :width: 100%
     :alt: Edit GLAAS questionnaires
 
-Once in the questionnaire, navigation from one question to another can be done either by clicing on the menus on the left or using the “previous / next” buttons at the top and bottom of the page.
+Once in the questionnaire, navigation from one question to another can be done either by clicking on the menus on the left or using the “previous / next” buttons at the top and bottom of the page.
 
 .. image:: img/contribute_glaas2.png
     :width: 100%

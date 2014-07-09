@@ -5,13 +5,13 @@ Access rights to all the data within GIMS is given to users.
 
 Each user who has an active account can conduct his own :term:`survey`. He can then decide with whom he will collaborate and share the information gathered.
 
-To edit a user account, go to the Administration section and clic on the "Users" icon.
+To edit a user account, go to the Administration section and click on the "Users" icon.
 
 .. image:: img/administration.png
     :width: 100%
     :alt: Admin section
 
-To find the user, start typing the name in the search bar. Once the person appears in the list, clic on the pencil icon to edit the record.
+To find the user, start typing the name in the search bar. Once the person appears in the list, click on the pencil icon to edit the record.
 
 .. image:: img/user1.png
     :width: 100%

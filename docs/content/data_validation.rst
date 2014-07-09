@@ -24,7 +24,7 @@ Changing the status of a questionnaire can be done directly from the Contribute 
     :alt: Edit a questionnaire
 
 
-In the following administration panel, clic on the "Status" drop-down menu and perform the necessary modification.
+In the following administration panel, click on the "Status" drop-down menu and perform the necessary modification.
 
 .. image:: img/contribute_jmp9.png
     :width: 100%
