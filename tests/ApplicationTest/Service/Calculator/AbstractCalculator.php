@@ -406,31 +406,16 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     protected function getNewCalculator()
     {
         $calculator = new \Application\Service\Calculator\Calculator();
+        $calculator->setPopulationRepository($this->getStubPopulationRepository());
         $calculator->setAnswerRepository($this->getStubAnswerRepository());
         $calculator->setFilterRepository($this->getStubFilterRepository());
         $calculator->setFilterQuestionnaireUsageRepository($this->getStubFilterQuestionnaireUsageRepository());
         $calculator->setQuestionnaireRepository($this->getStubQuestionnaireRepository());
+        $calculator->setFilterGeonameUsageRepository($this->getStubFilterGeonameUsageRepository());
 
         $calculator->setServiceLocator($this->getApplicationServiceLocator());
 
         return $calculator;
-    }
-
-    /**
-     *
-     * @return \Application\Service\Calculator\Calculator
-     */
-    protected function getNewJmp()
-    {
-        $service = new \Application\Service\Calculator\Calculator();
-        $service->setPopulationRepository($this->getStubPopulationRepository());
-        $service->setAnswerRepository($this->getStubAnswerRepository());
-        $service->setFilterRepository($this->getStubFilterRepository());
-        $service->setFilterQuestionnaireUsageRepository($this->getStubFilterQuestionnaireUsageRepository());
-        $service->setQuestionnaireRepository($this->getStubQuestionnaireRepository());
-        $service->setFilterGeonameUsageRepository($this->getStubFilterGeonameUsageRepository());
-
-        return $service;
     }
 
 }

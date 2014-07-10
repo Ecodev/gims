@@ -54,8 +54,8 @@ class RegressionCalculatorTest extends AbstractCalculator
                 ->addFilter($this->highFilter2)
                 ->addFilter($this->highFilter3);
 
-        $this->service = $this->getNewJmp();
-        $this->service2 = $this->getNewJmp();
+        $this->service = $this->getNewCalculator();
+        $this->service2 = $this->getNewCalculator();
     }
 
     public function testStubPopulation()

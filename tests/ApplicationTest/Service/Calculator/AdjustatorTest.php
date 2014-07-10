@@ -172,7 +172,7 @@ class AdjustatorTest extends AbstractCalculator
     {
         $this->populateSurveys($data);
         $adjustator = new \Application\Service\Calculator\Adjustator();
-        $calculator = $this->getNewJmp();
+        $calculator = $this->getNewCalculator();
         $adjustator->setCalculator($calculator);
         $overridenFilters = $adjustator->findOverriddenFilters($this->filterTarget, $this->filterReference, $this->filterChangeable, $this->questionnaires, $this->part1);
 
