@@ -41,7 +41,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     private $calculator;
 
     /**
-     * Get the JMP calculator shared instance
+     * Get the calculator shared instance
      * @return \Application\Service\Calculator\Calculator
      */
     private function getCalculator()
@@ -52,6 +52,25 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         }
 
         return $this->calculator;
+    }
+
+    /**
+     * @var \Application\Service\Calculator\Aggregator
+     */
+    private $aggregator;
+
+    /**
+     * Get the aggregator shared instance
+     * @return \Application\Service\Calculator\Aggregator
+     */
+    private function getAggregator()
+    {
+        if (!$this->aggregator) {
+            $this->aggregator = new \Application\Service\Calculator\Aggregator();
+            $this->aggregator->setCalculator($this->getCalculator());
+        }
+
+        return $this->aggregator;
     }
 
     /**
@@ -352,7 +371,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     {
         $this->getCalculator()->setOverriddenFilters($overriddenFilters);
 
-        $lines = $this->getLinedSeries($geoname, $filters, $questionnaires, $part, $prefix, $isIgnored, $isAdjusted);
+        $lines = $this->getLinedSeries($geoname, $filters, $part, $prefix, $isIgnored, $isAdjusted);
         $scatters = $this->getScatteredSeries($filters, $questionnaires, $part, $prefix, $isIgnored, $isAdjusted);
 
         $series = array_merge($lines, $scatters);
@@ -364,7 +383,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * Get lines series
      * @param \Application\Model\Geoname $geoname
      * @param \Application\Model\Filter[] $filters
-     * @param \Application\Model\Questionnaire[] $questionnaires
      * @param Part $part
      * @param $isIgnored
      * @param bool $isAdjusted
@@ -372,7 +390,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @internal param array $ignoredFilters
      * @return array
      */
-    private function getLinedSeries(Geoname $geoname, array $filters, array $questionnaires, Part $part, $prefix = null, $isIgnored = false, $isAdjusted = false)
+    private function getLinedSeries(Geoname $geoname, array $filters, Part $part, $prefix = null, $isIgnored = false, $isAdjusted = false)
     {
         $series = array();
 
@@ -382,7 +400,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         /** @var \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepo */
         $filterGeonameUsageRepo = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
 
-        $lines = $this->getCalculator()->computeFlattenAllYears($this->startYear, $this->endYear, $filters, $questionnaires, $part);
+        $lines = $this->getAggregator()->computeFlattenAllYears($this->startYear, $this->endYear, $filters, $geoname, $part);
         foreach ($lines as &$serie) {
             /** @var \Application\Model\Filter $filter */
             $filter = $filterRepository->findOneById($serie['id']);
