@@ -262,7 +262,7 @@ class Calculator extends AbstractCalculator
      * @param integer $filterId
      * @param array $questionnaires
      * @param integer $partId
-     * @return array
+     * @return array [values => [], count => integer, years => [], surveys => [], minYear => integer, maxYear => integer, period => integer, slope => float, average => float]
      */
     public function computeFilterForAllQuestionnaires($filterId, array $questionnaires, $partId)
     {

@@ -13,6 +13,11 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     protected $geoname;
 
     /**
+     * @var \Application\Model\Geoname
+     */
+    protected $geoname2;
+
+    /**
      * @var \Application\Model\Filter
      */
     protected $filter1;
@@ -182,6 +187,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         parent::setUp();
 
         $this->geoname = $this->getNewModelWithId('\Application\Model\Geoname')->setName('test geoname');
+        $this->geoname2 = $this->getNewModelWithId('\Application\Model\Geoname')->setName('test geoname 2');
 
         $this->filter1 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 1');
         $this->filter11 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 1.1 (sum of 1.*.1)');
@@ -276,6 +282,9 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
                             array($this->geoname, $this->partTotal->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(7)),
                             array($this->geoname, $this->partTotal->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(7)),
                             array($this->geoname, $this->partTotal->getId(), 2005, null, (new \Application\Model\Population())->setPopulation(12)),
+                            array($this->geoname2, $this->part1->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(30)),
+                            array($this->geoname2, $this->part1->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(40)),
+                            array($this->geoname2, $this->part1->getId(), 2002, null, (new \Application\Model\Population())->setPopulation(50)),
         )));
 
         return $stubPopulationRepository;
@@ -319,7 +328,14 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
 
     protected function getStubQuestionnaireRepository()
     {
-        $stubQuestionnaireRepository = $this->getMock('\Application\Repository\QuestionnaireRepository', array(), array(), '', false);
+        $stubQuestionnaireRepository = $this->getMock('\Application\Repository\QuestionnaireRepository', array('getAllForComputing'), array(), '', false);
+
+        $stubQuestionnaireRepository->expects($this->any())
+                ->method('getAllForComputing')
+                ->will($this->returnCallback(function(\Application\Model\Geoname $geoname) {
+                            return $geoname->getQuestionnaires()->toArray();
+                        })
+        );
 
         return $stubQuestionnaireRepository;
     }

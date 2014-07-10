@@ -9,6 +9,8 @@ use Application\Model\Rule\FilterQuestionnaireUsage;
 class QuestionnaireRepository extends AbstractChildRepository
 {
 
+    private $questionnaireForComputingCache = [];
+
     /**
      * Returns all items with matching search criteria
      * @param string $action
@@ -44,23 +46,33 @@ class QuestionnaireRepository extends AbstractChildRepository
 
     /**
      * Returns all questionnaires for the given geoname (and load their surveys)
-     * @param \Application\Model\Geoname|integer $geoname
+     * @param \Application\Model\Geoname|integer $geonameId
      * @return Questionnaires[]
      */
-    public function getAllForComputing($geoname)
+    public function getAllForComputing($geonameId)
     {
-        $questionnairesWithReadAccess = $this->getAllWithPermission();
-        $qb = $this->createQueryBuilder('questionnaire');
-        $qb->select('questionnaire, survey')
-                ->join('questionnaire.survey', 'survey')
-                ->where('questionnaire.geoname = :geoname')
-                ->andWhere('questionnaire IN (:questionnairesWithReadAccess)')
-                ->orderBy('questionnaire.id');
+        if ($geonameId instanceof \Application\Model\Geoname) {
+            $geonameId = $geonameId->getId();
+        }
 
-        $qb->setParameter('geoname', $geoname);
-        $qb->setParameter('questionnairesWithReadAccess', $questionnairesWithReadAccess);
+        if (!isset($this->questionnaireForComputingCache[$geonameId])) {
 
-        return $qb->getQuery()->getResult();
+            $questionnairesWithReadAccess = $this->getAllWithPermission();
+            $qb = $this->createQueryBuilder('questionnaire');
+            $qb->select('questionnaire, survey')
+                    ->join('questionnaire.survey', 'survey')
+                    ->where('questionnaire.geoname = :geoname')
+                    ->andWhere('questionnaire IN (:questionnairesWithReadAccess)')
+                    ->orderBy('questionnaire.id');
+
+            $qb->setParameter('geoname', $geonameId);
+            $qb->setParameter('questionnairesWithReadAccess', $questionnairesWithReadAccess);
+            $questionnaires = $qb->getQuery()->getResult();
+
+            $this->questionnaireForComputingCache[$geonameId] = $questionnaires;
+        }
+
+        return $this->questionnaireForComputingCache[$geonameId];
     }
 
     /**
@@ -70,7 +82,6 @@ class QuestionnaireRepository extends AbstractChildRepository
      */
     public function copyFilterUsages(\Application\Model\Questionnaire $destQ, \Application\Model\Questionnaire $srcQ)
     {
-
         $fqus = $srcQ->getFilterQuestionnaireUsages();
 
         foreach ($fqus as $fqu) {
