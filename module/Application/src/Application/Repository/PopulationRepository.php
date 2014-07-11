@@ -72,7 +72,7 @@ class PopulationRepository extends AbstractChildRepository
         if (isset($this->cache[$geoname->getId()][$year][$partId][$questionnaireId])) {
             return $this->cache[$geoname->getId()][$year][$partId][$questionnaireId];
         } else {
-            return $this->cache[$geoname->getId()][$year][$partId][null];
+            return @$this->cache[$geoname->getId()][$year][$partId][null];
         }
     }
 

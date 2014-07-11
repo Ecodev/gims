@@ -4,6 +4,7 @@ namespace Api\Controller;
 
 use Application\View\Model\NumericJsonModel;
 use Application\View\Model\ExcelModel;
+use Application\Model\Geoname;
 
 class TableController extends \Application\Controller\AbstractAngularActionController
 {
@@ -152,19 +153,13 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     public function countryAction()
     {
-        $p = $this->params()->fromQuery('country');
+        $geonameIds = explode(',', $this->params()->fromQuery('geonames', -1));
         $years = $this->getWantedYears($this->params()->fromQuery('years'));
-        if (!$p) {
-            $countryIds = array(-1);
-        } else {
-            $countryIds = explode(',', $p);
-        }
-        $countries = $this->getEntityManager()->getRepository('Application\Model\Country')->findById($countryIds);
+        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findById($geonameIds);
 
         /** @var \Application\Model\FilterSet $filterSet */
         $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
         $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
-        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
 
         $this->parts = $parts; // used for cache
 
@@ -183,30 +178,28 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             $columns[$acronym] = $acronym;
         }
 
-        foreach ($countries as $country) {
+        foreach ($geonames as $geoname) {
 
-            $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getAllForComputing($country->getGeoname());
             if (!$filterSet) {
                 continue;
             }
 
-            $allYearsComputed = $this->getAllYearsComputed($parts, $filterSet, $questionnaires);
+            $allYearsComputed = $this->getAllYearsComputed($parts, $filterSet, $geoname);
             $filteredYearsComputed = $this->filterYears($allYearsComputed, $years);
 
             foreach ($years as $year) {
 
                 // country info columns
                 $countryData = array(
-                    'country' => $country->getName(),
-                    'iso3' => $country->getIso3(),
+                    'country' => $geoname->getName(),
+                    'iso3' => $geoname->getCountry() ? $geoname->getCountry()->getIso3() : null,
                     'year' => $year
                 );
 
                 // population columns
                 $populationData = array();
                 foreach ($parts as $part) {
-                    $pop = $populationRepository->getOneByGeoname($country->getGeoname(), $part->getId(), $year);
-                    $populationData[$populationAcronyms[$part->getId()]] = $pop->getPopulation();
+                    $populationData[$populationAcronyms[$part->getId()]] = $this->getPopulation($geoname, $part->getId(), $year);
                 }
 
                 $statsData = array();
@@ -222,7 +215,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                         $statsData[$columnId] = \Application\Utility::decimalToRoundedPercent($value);
 
                         $columns[$columnId . 'a'] = $columnName . 'a';
-                        $statsData[$columnId . 'a'] = is_null($value) ? null : (int) ($value * $populationRepository->getOneByGeoname($country->getGeoname(), $partId, $year)->getPopulation());
+                        $statsData[$columnId . 'a'] = is_null($value) ? null : (int) ($value * $this->getPopulation($geoname, $partId, $year));
                         $count++;
                     }
                 }
@@ -245,19 +238,46 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
     }
 
     /**
+     * Returns the population for the geoname or its children total
+     * @param \Application\Model\Geoname $geoname
+     * @param integer $partId
+     * @param integer $year
+     * @return integer
+     */
+    private function getPopulation(\Application\Model\Geoname $geoname, $partId, $year)
+    {
+        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+        $pop = $populationRepository->getOneByGeoname($geoname, $partId, $year);
+
+        if ($pop) {
+            return $pop->getPopulation();
+        } else {
+            $populationTotal = null;
+            foreach ($geoname->getChildren() as $child) {
+                $populationTotal += $this->getPopulation($child, $partId, $year);
+            }
+
+            return $populationTotal;
+        }
+    }
+
+    /**
      * @param $parts
      * @param \Application\Model\FilterSet $filterSet
-     * @param array $questionnaires
+     * @param \Application\Model\Geoname $geoname
      * @return array all data ordered by part
      */
-    private function getAllYearsComputed($parts, \Application\Model\FilterSet $filterSet, array $questionnaires)
+    private function getAllYearsComputed($parts, \Application\Model\FilterSet $filterSet, Geoname $geoname)
     {
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
 
+        $aggregator = new \Application\Service\Calculator\Aggregator();
+        $aggregator->setCalculator($calculator);
+
         $dataPerPart = array();
         foreach ($parts as $part) {
-            $dataPerPart[$part->getId()] = $calculator->computeFlattenAllYears(1980, 2015, $filterSet->getFilters(), $questionnaires, $part);
+            $dataPerPart[$part->getId()] = $aggregator->computeFlattenAllYears(1980, 2015, $filterSet->getFilters()->toArray(), $geoname, $part);
         }
 
         return $dataPerPart;

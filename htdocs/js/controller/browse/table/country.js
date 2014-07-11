@@ -25,12 +25,12 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
 
     // Build export URL
     function buildExportUrl() {
-        var filterSetName = $scope.filterSet ? ' - ' + $scope.filterSet.name : '';
-        var filename = _.pluck($scope.country, 'iso3').join(', ') + filterSetName + '.xlsx';
+        var filterSetName = $scope.filterSet ? $scope.filterSet.name : '';
+        var filename = filterSetName + '.xlsx';
         $scope.exportUrl = $location.url().replace('browse/table/country', 'api/table/country/' + filename);
     }
 
-    $scope.$watch('country + filterSet.id', function() {
+    $scope.$watch('geonames + filterSet.id', function() {
         $scope.displayTable();
     });
 
@@ -39,7 +39,7 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
     $scope.displayTable = function() {
 
         // If they are all available ...
-        if ($scope.country && $scope.filterSet && $scope.years && $scope.years.length >= 4) {
+        if ($scope.geonames && $scope.filterSet && $scope.years && $scope.years.length >= 4) {
 
             buildExportUrl();
             $scope.isLoading = true;

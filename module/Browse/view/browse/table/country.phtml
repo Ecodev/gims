@@ -12,7 +12,7 @@
     <div class="row">
         <form class="col-md-6">
             <div class="form-group">
-                <gims-select api="country" model="country" placeholder="<?php echo $this->translate('Select a country') ?>" format="name" style="width:100%;" multiple="multiple"/>
+                <gims-select api="geoname" name="geonames" model="geonames" placeholder="<?php echo $this->translate('Select a country') ?>" format="name" style="width:100%;" multiple="multiple"/>
             </div>
             <div class="form-group">
                 <gims-select api="filterSet" model="filterSet" placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/>
@@ -29,7 +29,7 @@
             </div>
 
             <div class="form-group">
-                <button class="btn btn-default" ng-class="{disabled: !country || !filterSet.id || !years}" ng-click="displayTable()"><i class="fa fa-refresh"></i> Generate table</button>
+                <button class="btn btn-default" ng-class="{disabled: !geonames || !filterSet.id || !years}" ng-click="displayTable()"><i class="fa fa-refresh"></i> Generate table</button>
                 <a href="{{exportUrl}}" target="_blank" class="btn btn-default" ng-class="{disabled: !exportUrl}"><i class="fa fa-download"></i> Export</a>
                 <span><i class="fa fa-gims-loading" ng-show="isLoading"></i></span>
             </div>
