@@ -361,6 +361,17 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
         $series = array_merge($lines, $scatters);
 
+        // Mark ignored or adjusted series
+        foreach ($series as &$serie) {
+            if ($isIgnored) {
+                $serie['isIgnored'] = $isIgnored;
+            }
+
+            if ($isAdjusted) {
+                $serie['isAdjusted'] = $isAdjusted;
+            }
+        }
+
         return $series;
     }
 
@@ -399,13 +410,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $serie['name'] = $baseName . $this->getSuffix($isIgnored, $isAdjusted);
             $serie['dashStyle'] = $this->getDashStyle($prefix, $isIgnored, $isAdjusted);
             $serie['marker'] = array('symbol' => $this->getConstantValue($baseName, $this->symbols));
-
-            if ($isIgnored) {
-                $serie['isIgnored'] = $isIgnored;
-            }
-            if ($isAdjusted) {
-                $serie['isAdjusted'] = $isAdjusted;
-            }
 
             if (count($usages) > 0) {
                 $usageList = implode(',<br/>', array_map(function ($u) {
@@ -453,14 +457,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'allowPointSelect' => false,
                 'data' => array(), // because we will use our own click handler
             );
-
-            if ($isIgnored) {
-                $scatter['isIgnored'] = $isIgnored;
-            }
-
-            if ($isAdjusted) {
-                $scatter['isAdjusted'] = $isAdjusted;
-            }
 
             foreach ($data['values'] as $questionnaireId => $value) {
 
