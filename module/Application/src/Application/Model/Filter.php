@@ -5,7 +5,7 @@ namespace Application\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Application\Utility;
-use MischiefCollective\ColorJizz\Formats\HEX;
+use MischiefCollective\ColorJizz\Formats\Hex;
 use Application\Service\MultipleRoleContext;
 
 /**
@@ -446,7 +446,7 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
         if ($ratio == 100) {
             $color = $this->color;
         } else {
-            $hex = new HEX(intval(str_replace('#', '0x', strtoupper($this->color)), 16)); //Create Hex object
+            $hex = new Hex(intval(str_replace('#', '0x', strtoupper($this->color)), 16)); //Create Hex object
             $hsv = $hex->toHSV(); // then transform to HSV
             $hsv->saturation *= $ratio / 100; //multiply saturation by ratio
             $color = '#' . $hsv->toHex(); // and then transform again to Hex
