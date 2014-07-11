@@ -110,6 +110,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             getIgnoredElements(true);
             $scope.pointSelected = null;
         }
+        $scope.geonameIds = '?geonames=' + _.pluck($scope.tabs.geonames, 'id').join(',');
         initIgnoredElements(_.pluck($scope.tabs.filters, 'id'));
     }, true);
 
