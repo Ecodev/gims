@@ -275,6 +275,9 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
                 ->will($this->returnValueMap(array(
                             array($this->geoname, $this->part1->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(10)),
                             array($this->geoname, $this->part1->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(10)),
+                            array($this->geoname, $this->part1->getId(), 2002, null, (new \Application\Model\Population())->setPopulation(12)),
+                            array($this->geoname, $this->part1->getId(), 2003, null, (new \Application\Model\Population())->setPopulation(13)),
+                            array($this->geoname, $this->part1->getId(), 2004, null, (new \Application\Model\Population())->setPopulation(14)),
                             array($this->geoname, $this->part1->getId(), 2005, null, (new \Application\Model\Population())->setPopulation(15)),
                             array($this->geoname, $this->part2->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(3)),
                             array($this->geoname, $this->part2->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(3)),

@@ -173,8 +173,10 @@ class AdjustatorTest extends AbstractCalculator
         $this->populateSurveys($data);
         $adjustator = new \Application\Service\Calculator\Adjustator();
         $calculator = $this->getNewCalculator();
-        $adjustator->setCalculator($calculator);
-        $overridenFilters = $adjustator->findOverriddenFilters($this->filterTarget, $this->filterReference, $this->filterChangeable, $this->questionnaires, $this->part1);
+        $aggregator = new \Application\Service\Calculator\Aggregator();
+        $aggregator->setCalculator($calculator);
+        $adjustator->setAggregator($aggregator);
+        $overridenFilters = $adjustator->findOverriddenFilters($this->filterTarget, $this->filterReference, $this->filterChangeable, $this->geoname, $this->part1);
 
         $this->assertEquals($expected, $overridenFilters, $description);
     }

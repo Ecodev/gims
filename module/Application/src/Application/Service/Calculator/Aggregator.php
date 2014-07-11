@@ -19,6 +19,19 @@ class Aggregator
      */
     private $calculator;
 
+    /**
+     * Returns the calculator
+     * @return \Application\Service\Calculator\Calculator
+     */
+    public function getCalculator()
+    {
+        return $this->calculator;
+    }
+
+    /**
+     * Sets the calculator
+     * @param \Application\Service\Calculator\Calculator $calculator
+     */
     public function setCalculator(Calculator $calculator)
     {
         $this->calculator = $calculator;

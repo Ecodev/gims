@@ -3,6 +3,7 @@
 namespace Application\Service\Calculator;
 
 use Application\Model\Questionnaire;
+use Application\Model\Geoname;
 use Application\Model\Part;
 use Application\Model\Filter;
 
@@ -14,9 +15,9 @@ class Adjustator
 {
 
     /**
-     * @var Calculator
+     * @var Aggregator
      */
-    private $calculator;
+    private $aggregator;
 
     /**
      * @var Filter
@@ -34,26 +35,26 @@ class Adjustator
     private $overridable;
 
     /**
-     * @var array
+     * @var Geoname
      */
-    private $questionnaires;
+    private $geoname;
 
     /**
      * @var Part
      */
     private $part;
 
-    public function setCalculator(Calculator $calculator)
+    public function setAggregator(Aggregator $aggregator)
     {
-        $this->calculator = $calculator;
+        $this->aggregator = $aggregator;
     }
 
-    private function initObjects(Filter $target, Filter $reference, Filter $overridable, array $questionnaires, Part $part)
+    private function initObjects(Filter $target, Filter $reference, Filter $overridable, Geoname $geoname, Part $part)
     {
         $this->target = $target;
         $this->reference = $reference;
         $this->overridable = $overridable;
-        $this->questionnaires = $questionnaires;
+        $this->geoname = $geoname;
         $this->part = $part;
     }
 
@@ -63,26 +64,26 @@ class Adjustator
      * @param \Application\Model\Filter $target The filter to move close to
      * @param \Application\Model\Filter $reference The filter that will move
      * @param \Application\Model\Filter $overridable The filter that will be overridden in order to move $reference
-     * @param array $questionnaires
+     * @param Geoname $geoname
      * @param \Application\Model\Part $part
      * @return array
      */
-    public function findOverriddenFilters(Filter $target, Filter $reference, Filter $overridable, array $questionnaires, Part $part)
+    public function findOverriddenFilters(Filter $target, Filter $reference, Filter $overridable, Geoname $geoname, Part $part)
     {
-        $this->initObjects($target, $reference, $overridable, $questionnaires, $part);
-
-        $referenceQuestionnaires = $this->getReferenceQuestionnaires();
-        if (!$referenceQuestionnaires) {
-            return array();
+        $this->initObjects($target, $reference, $overridable, $geoname, $part);
+        $yearsWithValue = $this->getReferenceYearsWithValue();
+        $overriddenFilters = [];
+//w($yearsWithValue);
+        if (!$yearsWithValue) {
+            return $overriddenFilters;
         }
 
-        $targetValues = $this->getTargetValues($referenceQuestionnaires);
+        $targetValues = $this->getTargetValues($yearsWithValue);
 
         // foreach years-target, find best value for reference
-        $overriddenFilters = [];
-        foreach ($referenceQuestionnaires as $q) {
-            $overrideValue = $this->findBestOverrideValue($q, $targetValues[$q->getSurvey()->getYear()]);
-            $overriddenFilters[$q->getId()][$this->overridable->getId()][$this->part->getId()] = $overrideValue;
+        foreach ($yearsWithValue as $questionnaireId => $year) {
+            $overrideValue = $this->findBestOverrideValue($questionnaireId, $targetValues[$year]);
+            $overriddenFilters[$questionnaireId][$this->overridable->getId()][$this->part->getId()] = $overrideValue;
         }
 
         return $overriddenFilters;
@@ -93,63 +94,58 @@ class Adjustator
      * @param Filter $target
      * @param Filter $reference
      * @param Filter $overridable
-     * @param array $questionnaires
+     * @param Geoname $geoname
      * @param Part $part
      * @return array$
      */
-    public function getOriginalOverrideValues(Filter $target, Filter $reference, Filter $overridable, array $questionnaires, Part $part)
+    public function getOriginalOverrideValues(Filter $target, Filter $reference, Filter $overridable, Geoname $geoname, Part $part)
     {
-        $this->initObjects($target, $reference, $overridable, $questionnaires, $part);
+        $this->initObjects($target, $reference, $overridable, $geoname, $part);
+        $yearsWithValue = $this->getReferenceYearsWithValue();
+        $originalValues = [];
 
-        $referenceQuestionnaires = $this->getReferenceQuestionnaires();
-        if (!$referenceQuestionnaires) {
-            return array();
+        if (!$yearsWithValue) {
+            return $originalValues;
         }
 
-        $originalValues = [];
-        $this->calculator->setOverriddenFilters(array());
-        foreach ($referenceQuestionnaires as $q) {
-            $originalValue = $this->calculator->computeFilter($this->overridable->getId(), $q->getId(), $this->part->getId());
-            $originalValues[$q->getId()][$this->overridable->getId()][$this->part->getId()] = $originalValue;
+        $this->aggregator->getCalculator()->setOverriddenFilters(array());
+        foreach ($yearsWithValue as $questionnaireId => $year) {
+            $originalValue = $this->aggregator->getCalculator()->computeFilter($this->overridable->getId(), $questionnaireId, $this->part->getId());
+            $originalValues[$questionnaireId][$this->overridable->getId()][$this->part->getId()] = $originalValue;
         }
 
         return $originalValues;
     }
 
     /**
-     * Find all questionnaires used for the reference filter
-     * @return array
+     * Find all years with a questionnaire with a value for the reference filter
+     * @return array [questionnaireId => year]
      */
-    private function getReferenceQuestionnaires()
+    private function getReferenceYearsWithValue()
     {
-        $availableQuestionnaire = [];
-        foreach ($this->questionnaires as $questionnaire) {
-            $result = $this->calculator->computeFilter($this->reference->getId(), $questionnaire->getId(), $this->part->getId());
-            if (!is_null($result)) {
-                $availableQuestionnaire[] = $questionnaire;
+        $questionnairesValues = $this->aggregator->computeFilterForAllQuestionnaires($this->reference->getId(), $this->geoname, $this->part->getId());
+
+        // Remove questionnaires with null values
+        foreach ($questionnairesValues['values'] as $questionnaireId => $value) {
+            if (is_null($value)) {
+                unset($questionnairesValues['years'][$questionnaireId]);
             }
         }
 
-        return $availableQuestionnaire;
+        return $questionnairesValues['years'];
     }
 
     /**
      * Find the target value for each year (of each questionnaire)
-     * @param array $referenceQuestionnaires
+     * @param array $allYears
      * @return array [year => value]
      */
-    private function getTargetValues(array $referenceQuestionnaires)
+    private function getTargetValues(array $allYears)
     {
-        $allYears = [];
-        foreach ($referenceQuestionnaires as $questionnaire) {
-            $year = $questionnaire->getSurvey()->getYear();
-            $allYears[] = $year;
-        }
-
         $yearMin = min($allYears);
         $yearMax = max($allYears);
 
-        $flattenValues = $this->calculator->computeFlattenAllYears($yearMin, $yearMax, [$this->target], $this->questionnaires, $this->part);
+        $flattenValues = $this->aggregator->computeFlattenAllYears($yearMin, $yearMax, [$this->target], $this->geoname, $this->part);
 
         $targetValues = [];
         $i = 0;
@@ -166,17 +162,17 @@ class Adjustator
     /**
      * Try to find the best value to use as override in order to be closest to $targetValue.
      * The algorithm is dichotomy based, and inspired by the number-guessing game (where the other guy tells you "bigger"/"smaller")
-     * @param \Application\Model\Questionnaire $questionnaire
+     * @param integer $questionnaireId
      * @param float $targetValue
      * @return float
      */
-    private function findBestOverrideValue(Questionnaire $questionnaire, $targetValue)
+    private function findBestOverrideValue($questionnaireId, $targetValue)
     {
-        $this->calculator->setOverriddenFilters(array());
+        $this->aggregator->getCalculator()->setOverriddenFilters(array());
         $margin = 0.01 * $targetValue; // Give us a margin of +/-1% around the target
         $lowerLimit = 0;
-        $currentValue = $this->calculator->computeFilter($this->reference->getId(), $questionnaire->getId(), $this->part->getId());
-        $overrideValue = $this->calculator->computeFilter($this->overridable->getId(), $questionnaire->getId(), $this->part->getId());
+        $currentValue = $this->aggregator->getCalculator()->computeFilter($this->reference->getId(), $questionnaireId, $this->part->getId());
+        $overrideValue = $this->aggregator->getCalculator()->computeFilter($this->overridable->getId(), $questionnaireId, $this->part->getId());
         $higherLimit = $overrideValue * 4; // We assume that the it's usually less than 4 times bigger than current value
 
         $attempt = 0;
@@ -205,9 +201,9 @@ class Adjustator
                 $overrideValue = 0;
             }
 
-            $overriddenFilters = [$questionnaire->getId() => [$this->overridable->getId() => [$this->part->getId() => $overrideValue]]];
-            $this->calculator->setOverriddenFilters($overriddenFilters);
-            $currentValue = $this->calculator->computeFilter($this->reference->getId(), $questionnaire->getId(), $this->part->getId());
+            $overriddenFilters = [$questionnaireId => [$this->overridable->getId() => [$this->part->getId() => $overrideValue]]];
+            $this->aggregator->getCalculator()->setOverriddenFilters($overriddenFilters);
+            $currentValue = $this->aggregator->getCalculator()->computeFilter($this->reference->getId(), $questionnaireId, $this->part->getId());
             $attempt++;
         }
 

@@ -187,18 +187,16 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      */
     private function getAllSeriesForOneGeoname(Geoname $geoname, array $filters, Part $part, $prefix)
     {
-        $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getAllForComputing($geoname);
-
         // Compute adjusted series if we asked any
-        $adjustedSeries = $this->getAdjustedSeries($geoname, $filters, $questionnaires, $part, $prefix);
+        $adjustedSeries = $this->getAdjustedSeries($geoname, $filters, $part, $prefix);
 
         // Compute series with ignored values, if any
-        $seriesWithIgnoredElements = $this->getIgnoredSeries($geoname, $filters, $questionnaires, $part, $prefix);
+        $seriesWithIgnoredElements = $this->getIgnoredSeries($geoname, $filters, $part, $prefix);
 
         // Finally we compute "normal" series, and make it "light" if we have alternative series to highlight
         $alternativeSeries = array_merge($seriesWithIgnoredElements, $adjustedSeries);
         $this->alternativeSeriesExists = count($alternativeSeries) > 0;
-        $normalSeries = $this->getSeries($geoname, $filters, $questionnaires, $part, $prefix);
+        $normalSeries = $this->getSeries($geoname, $filters, $part, $prefix);
 
         $newSeries = array_merge($normalSeries, $alternativeSeries);
 
@@ -212,6 +210,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                     break;
                 }
             }
+
             if (!$same) {
                 array_push($series, $newSerie);
             }
@@ -299,32 +298,18 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * Returns all series for ignored questionnaires AND filters at the same time
      * @param \Application\Model\Geoname $geoname
      * @param \Application\Model\Filter[] $filters
-     * @param \Application\Model\Questionnaire[] $questionnaires
      * @param \Application\Model\Part $part
      * @return array
      */
-    private function getIgnoredSeries(Geoname $geoname, array $filters, array $questionnaires, Part $part, $prefix)
+    private function getIgnoredSeries(Geoname $geoname, array $filters, Part $part, $prefix)
     {
         $overriddenFilters = $this->getIgnoredElements($part);
 
-        $series = array();
-        if (count($overriddenFilters) > 0) {
-            $questionnairesNotIgnored = array();
-            foreach ($questionnaires as $questionnaire) {
-                // if questionnaire is not in the ignored list, add to not ignored questionnaires list
-                // or if questionnaire is in the ignored list but has filters, he's added to not ignored questionnaires list
-                // (a questionnaire is considered ignored if he's in the list AND he has not filters. If he has filters, they are ignored, but not the questionnaire)
-                if (!isset($overriddenFilters[$questionnaire->getId()]) || isset($overriddenFilters[$questionnaire->getId()]) && $overriddenFilters[$questionnaire->getId()] !== null
-                ) {
-                    $questionnairesNotIgnored[] = $questionnaire;
-                }
-            }
-
-            $mySeries = $this->getSeries($geoname, $filters, $questionnairesNotIgnored, $part, $prefix, $overriddenFilters, true);
-            $series = array_merge($series, $mySeries);
+        if ($overriddenFilters) {
+            return $this->getSeries($geoname, $filters, $part, $prefix, $overriddenFilters, true);
+        } else {
+            return [];
         }
-
-        return $series;
     }
 
     /**
@@ -367,12 +352,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @internal param array $colors
      * @return array
      */
-    private function getSeries(Geoname $geoname, array $filters, array $questionnaires, Part $part, $prefix = null, array $overriddenFilters = array(), $isIgnored = false, $isAdjusted = false)
+    private function getSeries(Geoname $geoname, array $filters, Part $part, $prefix = null, array $overriddenFilters = array(), $isIgnored = false, $isAdjusted = false)
     {
         $this->getCalculator()->setOverriddenFilters($overriddenFilters);
 
         $lines = $this->getLinedSeries($geoname, $filters, $part, $prefix, $isIgnored, $isAdjusted);
-        $scatters = $this->getScatteredSeries($filters, $questionnaires, $part, $prefix, $isIgnored, $isAdjusted);
+        $scatters = $this->getScatteredSeries($geoname, $filters, $part, $prefix, $isIgnored, $isAdjusted);
 
         $series = array_merge($lines, $scatters);
 
@@ -443,21 +428,21 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Get scatter series
+     * @param \Application\Model\Geoname $geoname
      * @param \Application\Model\Filter[] $filters
-     * @param \Application\Model\Questionnaire[] $questionnaires
      * @param Part $part
      * @param boolean $isIgnored
      * @param boolean $isAdjusted
      * @return array
      */
-    private function getScatteredSeries(array $filters, array $questionnaires, Part $part, $prefix, $isIgnored = false, $isAdjusted = false)
+    private function getScatteredSeries(Geoname $geoname, array $filters, Part $part, $prefix, $isIgnored = false, $isAdjusted = false)
     {
         $series = array();
 
         // Then add scatter points which are each questionnaire values
         foreach ($filters as $filter) {
             $idFilter = $filter->getId();
-            $data = $this->getCalculator()->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
+            $data = $this->getAggregator()->computeFilterForAllQuestionnaires($filter->getId(), $geoname, $part->getId());
             $baseName = $prefix . $filter->getName();
             $scatter = array(
                 'type' => 'scatter',
@@ -488,19 +473,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                         'y' => Utility::decimalToRoundedPercent($value),
                     );
 
-                    /** @todo : old params denominations -> refresh */
-                    // select the ignored values
-                    $inQuestionnaires = false;
-                    foreach ($questionnaires as $questionnaire) {
-                        if ($questionnaire->getId() == $questionnaireId) {
-                            $inQuestionnaires = true;
-                            break;
-                        }
-                    }
-
-                    if (!$inQuestionnaires) {
-                        $scatterData['selected'] = 'true';
-                    }
                     $scatter['data'][] = $scatterData;
                 }
             }
@@ -667,11 +639,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * Return an array of series (with their overridden filters), if were asked to do it
      * @param \Application\Model\Geoname $geoname
      * @param \Application\Model\Filter[] $filters
-     * @param \Application\Model\Questionnaire[] $questionnaires
      * @param \Application\Model\Part $part
      * @return array
      */
-    private function getAdjustedSeries(Geoname $geoname, array $filters, array $questionnaires, Part $part, $prefix)
+    private function getAdjustedSeries(Geoname $geoname, array $filters, Part $part, $prefix)
     {
         $referenceId = $this->params()->fromQuery('reference');
         $overridableId = $this->params()->fromQuery('overridable');
@@ -691,19 +662,19 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         }
 
         $adjustator = new \Application\Service\Calculator\Adjustator();
-        $adjustator->setCalculator($this->getCalculator());
+        $adjustator->setAggregator($this->getAggregator());
 
-        $originalFilters = $adjustator->getOriginalOverrideValues($target, $reference, $overridable, $questionnaires, $part);
+        $originalFilters = $adjustator->getOriginalOverrideValues($target, $reference, $overridable, $geoname, $part);
 
         if ($includeIgnoredElements) {
             $ignoredElements = $this->getIgnoredElements($part);
             $this->getCalculator()->setOverriddenFilters($ignoredElements);
         }
 
-        $overriddenFilters = $adjustator->findOverriddenFilters($target, $reference, $overridable, $questionnaires, $part);
+        $overriddenFilters = $adjustator->findOverriddenFilters($target, $reference, $overridable, $geoname, $part);
         $this->getCalculator()->setOverriddenFilters($overriddenFilters);
 
-        $adjustedSeries = $this->getSeries($geoname, $filters, $questionnaires, $part, $prefix, $overriddenFilters, false, true);
+        $adjustedSeries = $this->getSeries($geoname, $filters, $part, $prefix, $overriddenFilters, false, true);
 
         // Inject extra data about adjustement
         $adjustedSeries[0]['overriddenFilters'] = $overriddenFilters;
