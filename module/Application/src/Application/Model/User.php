@@ -580,7 +580,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     }
 
     /**
-     * @return int
+     * @return \DateTime
      */
     public function getLastLogin()
     {
@@ -588,10 +588,10 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     }
 
     /**
-     * @param int $lastLogin
+     * @param \DateTime $lastLogin
      * @return self
      */
-    public function setLastLogin($lastLogin)
+    public function setLastLogin(\DateTime $lastLogin)
     {
         $this->lastLogin = $lastLogin;
 
