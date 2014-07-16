@@ -151,7 +151,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * Use chart.series because all data is kept as submitted.
      */
     $rootScope.$on('gims-chart-modified', function(event, chart) {
-        $scope.chart = _.clone(chart);
+        $scope.chart = _.cloneDeep(chart);
         $scope.chart.hasAdjustedLines = hasAdjustedLines($scope.chart);
     });
 

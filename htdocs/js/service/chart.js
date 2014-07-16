@@ -46,7 +46,6 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
     /**
      * Remove passed series
      * @param seriesToRemove
-     * @param onlyRemoveAdjusted
      */
     var removeSeries = function(seriesToRemove) {
 
@@ -329,12 +328,16 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
 
             initCacheWithQuestionnairesName(data, part);
 
+            // Always keep the title up-to-date
+            if (chart) {
+                chart.title.text = data.title.text;
+            }
+
             if (!chart || resetSeries) {
                 chart = data;
                 $rootScope.$emit('gims-chart-modified', chart);
             } else {
                 addSeries(data.series);
-                chart.title.text = data.title.text;
             }
 
             deferred.resolve(chart);
