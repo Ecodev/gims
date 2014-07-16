@@ -10,7 +10,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     var excludeRuleId = 1;
 
     // params for ajax requests
-    $scope.filterFields = {fields: 'color,paths,parents'};
+    $scope.filterFields = {fields: 'color,paths,parents,summands'};
     $scope.countryParams = {fields: 'geoname'};
     var countryFields = {fields: 'geoname.questionnaires,geoname.questionnaires.survey,geoname.questionnaires.survey.questions,geoname.questionnaires.survey.questions.type,geoname.questionnaires.survey.questions.filter'};
     var questionnaireWithQTypeFields = {fields: 'status,survey.questions,survey.questions.type,survey.questions.isAbsolute'};
@@ -1529,7 +1529,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /**
      * Update answers considering answer permissions
      * @param answer
-git      * @param questionnaire
+     * @param questionnaire
      */
     var updateAnswer = function(answer, questionnaire) {
         var deferred = $q.defer();
@@ -1969,4 +1969,46 @@ git      * @param questionnaire
         redirect();
     };
 
+    /**
+     * Returns the type of cell, to be able to display correct icon
+     * @param {questionnaire} questionnaire
+     * @param {filter} filter
+     * @param {integer} partId
+     * @returns {String}
+     */
+    $scope.getCellType = function(questionnaire, filter, partId) {
+
+        if (questionnaire.survey) {
+
+            var question = questionnaire.survey.questions[filter.id];
+            var answer;
+            if (question) {
+                answer = question.answers[partId];
+            }
+
+            if (question.isLoading || (answer && answer.isLoading)) {
+                return 'loading';
+            }
+
+            var firstValue;
+            if (question && question.filter.values && question.filter.values[partId]) {
+                firstValue = question.filter.values[partId].first;
+            }
+
+            if (answer && answer.error) {
+                return 'error';
+            } else if (answer && $scope.isValidNumber(answer[question.value])) {
+                return 'answer';
+            } else if (questionnaire.filterQuestionnaireUsagesByFilterAndPart && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id] && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId] && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId].length) {
+                return 'rule';
+            } else if (filter.summands.length && $scope.isValidNumber(firstValue)) {
+                return 'summand';
+            } else if ($scope.isValidNumber(firstValue)) {
+                return 'child';
+            }
+        }
+
+        return 'nothing';
+
+    };
 });

@@ -48,6 +48,14 @@ $fa-font-path: "../lib/fontawesome/fonts";
     @extend .fa-male;
 }
 
+.fa-gims-summand {
+    @extend .fa-plus;
+}
+
+.fa-gims-child {
+    @extend .fa-folder;
+}
+
 .fa-gims-help {
     @extend .fa-question-circle;
 

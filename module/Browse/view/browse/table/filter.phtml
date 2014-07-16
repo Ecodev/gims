@@ -486,44 +486,42 @@
                                                 <!-- add-on buttons on input fields -->
                                                  <span class="input-group-btn">
                                                     <button type="button" class="btn btn-default dropdown-toggle"  data-toggle="dropdown-menu" ng-if="questionnairesStatus[questionnaire.status] || questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] && isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first || questionnaire.survey.questions[filter.id].answers[tabs.part.id].isLoading">
-                                                        <span ng-switch="!!questionnaire.survey.questions[filter.id].answers[tabs.part.id].isLoading || !!questionnaire.survey.questions[filter.id].isLoading">
-                                                            <span ng-switch-when="true">
-                                                                <i class="fa fa-gims-loading fa-fw"></i>
-                                                            </span>
-                                                            <span ng-switch-when="false">
-                                                                <span ng-switch="!!questionnaire.survey.questions[filter.id].answers[tabs.part.id].error">
-                                                                    <i ng-switch-when="true" class="fa fa-warning text-warning"></i>
-                                                                    <span ng-switch-when="false">
-                                                                        <span ng-switch="isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value])">
-                                                                             <i ng-switch-when="true" class="fa fa-question fa-fw"></i>
-                                                                            <span ng-switch-when="false">
-                                                                                <span ng-switch="isValidNumber(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second) || isValidNumber(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first)">
-                                                                                    <i ng-switch-when="false" class="fa fa-angle-down fa-fw" ></i>
-                                                                                    <i ng-switch-when="true" class="fa fa-fw fa-cog" ng-class="{'text-primary':isComputing}"></i>
-                                                                                </span>
-                                                                            </span>
-                                                                        </span>
-                                                                    </span>
-                                                                </span>
-                                                            </span>
+                                                        <span ng-switch="getCellType(questionnaire, filter, tabs.part.id)">
+                                                            <i ng-switch-when="loading" class="fa fa-fw fa-gims-loading"></i>
+                                                            <i ng-switch-when="error" class="fa fa-fw fa-warning text-warning"></i>
+                                                            <i ng-switch-when="answer" class="fa fa-fw fa-question" tooltip="manually answered"></i>
+                                                            <i ng-switch-when="rule" class="fa fa-fw fa-gims-rule" tooltip="computed with rules" ng-class="{'text-primary':isComputing}"></i>
+                                                            <i ng-switch-when="summand" class="fa fa-fw fa-gims-summand" tooltip="computed with summands" ng-class="{'text-primary':isComputing}"></i>
+                                                            <i ng-switch-when="child" class="fa fa-fw fa-gims-child"  tooltip="computed with children" ng-class="{'text-primary':isComputing}"></i>
+                                                            <i ng-switch-default class="fa fa-fw fa-angle-down"></i>
                                                         </span>
                                                     </button>
 
                                                      <!-- drop down menu -->
                                                     <ul class="dropdown-menu pull-right" ng-if="questionnairesStatus[questionnaire.status] || questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id]">
-                                                        <li ng-if="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id]" class="dropdown-header">Information</li>
+                                                        <li ng-if="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id" class="dropdown-header">Information</li>
                                                         <li ng-if="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]">
                                                             <a><i class="fa fa-question fa-fw"></i> {{questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]}}</a>
                                                         </li>
                                                         <li ng-if="isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value])" >
-                                                            <a><i class="fa fa-database fa-fw"></i> Exact value : {{questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]}}</a>
+                                                            <a><i class="fa fa-fw"></i> Exact value: {{questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]}}</a>
                                                         </li>
                                                         <li ng-if="questionnaire.survey.questions[filter.id].answers[tabs.part.id].error">
                                                             <a><i class="fa fa-warning text-warning"></i> This answer has not been saved.</a>
                                                         </li>
+
+                                                        <!-- Rules -->
+                                                        <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].length" class="dropdown-header">Rules used for computation</li>
                                                         <li ng-repeat="usage in questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id]">
                                                             <a href="/admin/rule/edit/{{usage.rule.id}}"><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a>
                                                         </li>
+
+                                                        <!-- Summands -->
+                                                        <li ng-if="filter.summands.length" class="dropdown-header">Summands used for computation</li>
+                                                        <li ng-repeat="summand in filter.summands">
+                                                            <a href="/admin/filter/edit/{{summand.id}}"><i class="fa fa-gims-filter fa-fw"></i> {{filter.name}}</a>
+                                                        </li>
+
                                                         <!--<li ng-if="!isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) && isValidNumber(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second)"><a><i class="fa fa-cog fa-fw"></i></a></li>-->
                                                         <li ng-if="questionnairesStatus[questionnaire.status] && (questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id])" class="divider"></li>
                                                         <li ng-if="questionnairesStatus[questionnaire.status]" class="dropdown-header">Actions</li>
