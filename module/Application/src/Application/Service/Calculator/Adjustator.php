@@ -73,7 +73,7 @@ class Adjustator
         $this->initObjects($target, $reference, $overridable, $geoname, $part);
         $yearsWithValue = $this->getReferenceYearsWithValue();
         $overriddenFilters = [];
-//w($yearsWithValue);
+
         if (!$yearsWithValue) {
             return $overriddenFilters;
         }
