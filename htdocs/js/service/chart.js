@@ -46,19 +46,15 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
     /**
      * Remove passed series
      * @param seriesToRemove
-     * @param affectAdjusted
+     * @param onlyRemoveAdjusted
      */
-    var removeSeries = function(seriesToRemove, affectAdjusted) {
+    var removeSeries = function(seriesToRemove) {
 
         if (seriesToRemove.length > 0) {
 
-            if (_.isUndefined(affectAdjusted)) {
-                affectAdjusted = false;
-            }
-
             _.forEach(seriesToRemove, function(serieToRemoveId) {
                 _.forEachRight(chart.series, function(existingSerie, index) {
-                    if (existingSerie.id == serieToRemoveId && (affectAdjusted && existingSerie.isAdjusted || !affectAdjusted && !existingSerie.isAdjusted)) {
+                    if (existingSerie.id == serieToRemoveId) {
                         chart.series.splice(index, 1);
                     }
                 });
@@ -390,10 +386,9 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         /**
          * Remove passed series
          * @param seriesToRemove
-         * @param affectAdjusted
          */
-        removeSeries: function(seriesToRemove, affectAdjusted) {
-            removeSeries(seriesToRemove, affectAdjusted);
+        removeSeries: function(seriesToRemove) {
+            removeSeries(seriesToRemove);
         },
         addSeries: function(seriesToAdd) {
             seriesToAdd(seriesToAdd);

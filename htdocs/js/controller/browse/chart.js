@@ -282,32 +282,22 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     };
 
     /**
-     * Remove all series tagged as adjusted and reset form.
+     * Reset projection form and refresh all series (without adjusted series)
      */
     $scope.removeAdjustedSeries = function() {
-        var adjustedSeries = _.uniq(_.pluck(_.filter($scope.chart.series, function(s) {
-            if (s.isAdjusted) {
-                return true;
-            }
-        }), 'id'));
-        Chart.removeSeries(adjustedSeries, true);
-        $scope.panelTabs.target = undefined;
-        $scope.panelTabs.overridable = undefined;
-        $scope.panelTabs.reference = undefined;
-        refresh(adjustedSeries, false);
+        delete $scope.panelTabs.target;
+        delete $scope.panelTabs.overridable;
+        delete $scope.panelTabs.reference;
+        $scope.addAdjustedSeries();
     };
 
     /**
-     * Add adjusted series after removing old ones
+     * Add adjusted and original series after removing everything
      */
     $scope.addAdjustedSeries = function() {
-        var adjustedSeries = _.uniq(_.pluck(_.filter($scope.chart.series, function(s) {
-            if (s.isAdjusted) {
-                return true;
-            }
-        }), 'id'));
-        Chart.removeSeries(adjustedSeries, true);
-        refresh([], false);
+        var allSeries = _.uniq(_.pluck($scope.chart.series, 'id'));
+        Chart.removeSeries(allSeries);
+        refresh(null, false);
     };
 
     /**
