@@ -1,6 +1,9 @@
 language: php
 php:
-  - "5.5"
+  - 5.5
+  - 5.6
+  - hhvm
+  - hhvm-nightly
 
 addons:
   postgresql: "9.3"
@@ -27,3 +30,9 @@ script: ./vendor/bin/phing travis
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover data/logs/tests/coverage-clover.xml
+
+matrix:
+  allow_failures:
+    - php: 5.6
+    - php: hhvm
+    - php: hhvm-nightly
