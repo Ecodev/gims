@@ -11,6 +11,25 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     private $parts; // used for cache
 
+    /**
+     * @var \Application\Service\Calculator\Calculator
+     */
+    private $calculator;
+
+    /**
+     * Get the calculator shared instance
+     * @return \Application\Service\Calculator\Calculator
+     */
+    private function getCalculator()
+    {
+        if (!$this->calculator) {
+            $this->calculator = new \Application\Service\Calculator\Calculator();
+            $this->calculator->setServiceLocator($this->getServiceLocator());
+        }
+
+        return $this->calculator;
+    }
+
     public function filterAction()
     {
         $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
@@ -269,11 +288,8 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
      */
     private function getAllYearsComputed($parts, \Application\Model\FilterSet $filterSet, Geoname $geoname)
     {
-        $calculator = new \Application\Service\Calculator\Calculator();
-        $calculator->setServiceLocator($this->getServiceLocator());
-
         $aggregator = new \Application\Service\Calculator\Aggregator();
-        $aggregator->setCalculator($calculator);
+        $aggregator->setCalculator($this->getCalculator());
 
         $dataPerPart = array();
         foreach ($parts as $part) {
