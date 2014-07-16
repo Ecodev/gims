@@ -5,14 +5,14 @@ angular.module('myApp.services').factory('ChartCache', function(Utility) {
     var index = {};
 
     /**
-     *   This function set initiates all questionnaires with data loaded with first one (except values)
-     *   It allows to see ignored elements if they are ignored globally before having loading the data specific to asked questionnaire
-     *   The data is too big to be executed on the fly and is not needed, so the timeout waits until angularjs generates page.
-     *   Then generates index in background
+     * This function set initiates all questionnaires with data loaded with first one (except values)
+     * It allows to see ignored elements if they are ignored globally before having loading the data specific to asked questionnaire
+     * The data is too big to be executed on the fly and is not needed, so the timeout waits until angularjs generates page.
+     * Then generates index in background
      *
-     *   @param part
-     *   @param questionnaire
-     *   @param callback function to execute when data is indexed (usefull for then change status to ignored if they're ignored in url)
+     * @param part
+     * @param questionnaire
+     * @param callback function to execute when data is indexed (usefull for then change status to ignored if they're ignored in url)
      */
     var propagateRetrievedQuestionnaires = function(part, questionnaire) {
         if (questionnaire.id) {
@@ -34,6 +34,48 @@ angular.module('myApp.services').factory('ChartCache', function(Utility) {
         }
     };
 
+    /**
+     * Put in index the state of all objects that have been selected / viewed / ignored.
+     *
+     * The index is a index table.
+     *
+     * Feed an object index that is structured as followed :
+     *
+     * {
+     *     23 : { // --> questionnaire ID
+     *         id : '74:02',
+     *         name : '...'
+     *         (ignoredGlobally : true,)
+     *         filters : {
+     *           2 : {
+     *             id : xx,
+     *             level : xx,
+     *             name : '...'
+     *             value : {
+     *                 rural : xxx,
+     *                 urban : xxx,
+     *                 total : xxx
+     *             }
+     *             (ignoredGlobally : true)
+     *             (ignored : true)
+     *           },
+     *           28 : {...}
+     *           39 : {...}
+     *         }
+     *     }
+     * }
+     *
+     * Some attributes like highFilter.name and questionnaire.name/code are loaded by ajax
+     * These attributes correspond to objects mentionned in the url (highFilter and questionnaire).
+     * They name attribute are loaded by ajax cause they're not specified in the url and are needed for display
+     * The app can't wait the user to click on a point to retrieve this data from pointSelected.name attribute
+     *
+     * @param part
+     * @param questionnaire
+     * @param filter
+     * @param ignored
+     * @returns questionnaire
+     */
     var cache = function(part, questionnaire, filter, ignored) {
         if (!part || !questionnaire) {
             return;
@@ -155,65 +197,14 @@ angular.module('myApp.services').factory('ChartCache', function(Utility) {
     };
 
     return {
-
-        /**
-         * Put in index the state of all objects that have been selected / viewed / ignored.
-         *
-         * The index is a index table.
-         *
-         * Feed an object index that is structured as followed :
-         *
-         * {
-         *     23 : { // --> questionnaire ID
-         *         id : '74:02',
-         *         name : '...'
-         *         (ignoredGlobally : true,)
-         *         filters : {
-         *           2 : {
-         *             id : xx,
-         *             level : xx,
-         *             name : '...'
-         *             value : {
-         *                 rural : xxx,
-         *                 urban : xxx,
-         *                 total : xxx
-         *             }
-         *             (ignoredGlobally : true)
-         *             (ignored : true)
-         *           },
-         *           28 : {...}
-         *           39 : {...}
-         *         }
-         *     }
-         * }
-         *
-         * Some attributes like highFilter.name and questionnaire.name/code are loaded by ajax
-         * These attributes correspond to objects mentionned in the url (highFilter and questionnaire).
-         * They name attribute are loaded by ajax cause they're not specified in the url and are needed for display
-         * The app can't wait the user to click on a point to retrieve this data from pointSelected.name attribute
-         *
-         * @param part
-         * @param questionnaire
-         * @param filter
-         * @param ignored
-         * @returns questionnaire
-         */
-        cache: function(part, questionnaire, filter, ignored) {
-            return cache(part, questionnaire, filter, ignored);
-        },
-
-        propagateRetrievedQuestionnaires: function(part, questionnaire) {
-            propagateRetrievedQuestionnaires(part, questionnaire);
-        },
-
+        cache: cache,
+        propagateRetrievedQuestionnaires: propagateRetrievedQuestionnaires,
         reset: function() {
             Utility.resetObject(index);
             firstExecution = true;
         },
-
         getCache: function() {
             return index;
         }
-
     };
 });

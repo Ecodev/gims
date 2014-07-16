@@ -295,8 +295,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * Add adjusted and original series after removing everything
      */
     $scope.addAdjustedSeries = function() {
-        var allSeries = _.uniq(_.pluck($scope.chart.series, 'id'));
-        Chart.removeSeries(allSeries);
+        Chart.resetSeries();
         refresh(null, false);
     };
 

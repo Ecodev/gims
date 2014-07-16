@@ -362,40 +362,16 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         return hasValue;
     };
 
+    // Return public API
     return {
         setCache: function(newCache) {
             cache = newCache;
         },
-        resetSeries: function() {
-            resetSeries();
-        },
-        computeEstimates: function(data, ignoredElements) {
-            return computeEstimates(data, ignoredElements);
-        },
-        /**
-         * Retrieve ignored elements in the url and init cache
-         * This function is called after chart has been loaded.
-         *
-         * 1) If there are some elements ignored :
-         * 2) Retrieve chart and panel filters
-         * 3) When request has come back, initiate all questionnaires to allow data display on ignored elements (mainly filter's name).
-         */
-        initIgnoredElementsFromUrl: function(filters, part) {
-            return initIgnoredElementsFromUrl(filters, part);
-        },
-        /**
-         * Remove passed series
-         * @param seriesToRemove
-         */
-        removeSeries: function(seriesToRemove) {
-            removeSeries(seriesToRemove);
-        },
-        addSeries: function(seriesToAdd) {
-            seriesToAdd(seriesToAdd);
-        },
-        retrieveFiltersAndValues: function(questionnaire, filters, part) {
-            return retrieveFiltersAndValues(questionnaire, filters, part);
-        },
+        resetSeries: resetSeries,
+        computeEstimates: computeEstimates,
+        initIgnoredElementsFromUrl: initIgnoredElementsFromUrl,
+        removeSeries: removeSeries,
+        retrieveFiltersAndValues: retrieveFiltersAndValues,
         getIgnoredElements: function() {
 
             if (!cache) {
@@ -404,8 +380,6 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
 
             return getIgnoredElements();
         },
-        refresh: function(queryParams, part, refreshCanceler, resetSeries) {
-            return refresh(queryParams, part, refreshCanceler, resetSeries);
-        }
+        refresh: refresh
     };
 });
