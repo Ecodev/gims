@@ -1,5 +1,5 @@
 require 'bootstrap-sass'
-# Require any additional compass plugins here.
+require 'autoprefixer-rails'
 
 
 # Set this to the root of your project when deployed:
@@ -25,3 +25,11 @@ cache_dir = "data/cache/sass"
 # preferred_syntax = :sass
 # and then run:
 # sass-convert -R --from scss --to sass sass scss && rm -rf sass && mv scss sass
+
+# Enable autoprefixer after compass processing
+on_stylesheet_saved do |file|
+  css = File.read(file)
+  File.open(file, 'w') do |io|
+    io << AutoprefixerRails.process(css)
+  end
+end

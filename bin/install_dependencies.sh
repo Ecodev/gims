@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Installing Compass..."
-GEMS="gem install --quiet --no-rdoc --no-ri sass compass oily_png bootstrap-sass"
+GEMS="gem install --quiet --no-rdoc --no-ri sass compass oily_png bootstrap-sass autoprefixer-rails"
 if [[ -z $TRAVIS ]]; then # If not on Travis, need to use sudo
    GEMS="sudo $GEMS"
 fi
