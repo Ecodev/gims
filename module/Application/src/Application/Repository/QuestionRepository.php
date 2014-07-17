@@ -3,6 +3,7 @@
 namespace Application\Repository;
 
 use Doctrine\ORM\Query\Expr\Join;
+use Application\Model\Questionnaire;
 
 class QuestionRepository extends AbstractChildRepository
 {
@@ -151,4 +152,28 @@ class QuestionRepository extends AbstractChildRepository
         return $question;
     }
 
+    /**
+     * Returns questions for the all filters for the given questionnaire
+     * @param array $filterIds
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @return \Application\Model\Question\AbstractAnswerableQuestion[]
+     */
+    public function getByFiltersAndQuestionnaire(array $filterIds, Questionnaire $questionnaire) {
+
+        $query = $this->getEntityManager()
+            ->createQuery("SELECT q.alternateNames, filter.id AS filterId FROM Application\Model\Question\AbstractAnswerableQuestion q
+                JOIN q.survey survey
+                JOIN q.filter filter
+                WHERE q.filter IN (:filters) AND :questionnaire MEMBER OF survey.questionnaires");
+
+        $params = array(
+            'filters' => $filterIds,
+            'questionnaire' => $questionnaire,
+        );
+
+        $query->setParameters($params);
+        $question = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        return $question;
+    }
 }

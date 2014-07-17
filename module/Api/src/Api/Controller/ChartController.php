@@ -520,22 +520,21 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
              */
             $overriddenElements = $this->getIgnoredElements($part);
             foreach ($filters as $filter) {
-                $fields = array_merge(explode(',', $this->params()->fromQuery('fields')), array(
-                    'questions',
-                    'questions.survey'
-                ));
+                $fields = explode(',', $this->params()->fromQuery('fields'));
 
                 $tableController = new TableController();
                 $tableController->setServiceLocator($this->getServiceLocator());
 
-                $result['filters'][$filter->getId()] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, array(), true);
-                $resultWithoutIgnoredFilters['filters'][$filter->getId()] = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, $overriddenElements, true);
+                $flatFilters = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, array(), true);
+                $flatFiltersWithoutIgnoredFilters = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, [], $overriddenElements, true);
 
-                foreach ($result['filters'][$filter->getId()] as $i => &$flatFilter) {
-                    $flatFilter = $this->addComputedValuesToFilters($flatFilter, $part, $resultWithoutIgnoredFilters['filters'][$filter->getId()][$i]['values']);
+                $flatFilters = $this->addQuestionsToFilters($flatFilters, $questionnaire);
+                foreach ($flatFilters as $filterId => &$flatFilter) {
+                    $flatFilter = $this->addComputedValuesToFilters($flatFilter, $part, $flatFiltersWithoutIgnoredFilters[$filterId]['values']);
                     $flatFilter = $this->addUsagesToFilters($flatFilter, $part, $questionnaire);
-                    $flatFilter = $this->addQuestionsToFilters($flatFilter, $questionnaire);
                 }
+
+                $result['filters'][$filter->getId()] = $flatFilters;
             }
 
             return new NumericJsonModel($result);
@@ -580,24 +579,28 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Add orignial denomations (questions labels) to given filter ($flatFilter)
-     * @param array $flatFilter
+     * @param array $flatFilters
      * @param Questionnaire $questionnaire
      * @return array $flatFilter with modifications
      */
-    private function addQuestionsToFilters(array $flatFilter, Questionnaire $questionnaire)
+    private function addQuestionsToFilters(array $flatFilters, Questionnaire $questionnaire)
     {
-        // replace the list of questions by a single question corresponding to current questionnaire
-        if (isset($flatFilter['filter']['questions'])) {
-            foreach ($flatFilter['filter']['questions'] as $question) {
-                if ($question['survey']['id'] == $questionnaire->getSurvey()->getId()) {
-                    $flatFilter['filter']['originalDenomination'] = $question['name'];
-                    break;
+        $filterIds = array_map(function($flatFilter) {
+            return $flatFilter['filter']['id'];
+        }, $flatFilters);
+
+        $alternateNames = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getByFiltersAndQuestionnaire($filterIds, $questionnaire);
+
+        foreach ($alternateNames as $alternateName) {
+            $name = $alternateName['alternateNames'][$questionnaire->getId()];
+            foreach ($flatFilters as &$flatFilter) {
+                if ($flatFilter['filter']['id'] == $alternateName['filterId']) {
+                    $flatFilter['filter']['originalDenomination'] = $name;
                 }
             }
-            unset($flatFilter['filter']['questions']);
         }
 
-        return $flatFilter;
+        return $flatFilters;
     }
 
     /**
