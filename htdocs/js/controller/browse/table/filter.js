@@ -1057,6 +1057,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     Restangular.restangularizeElement(null, usage, 'filterQuestionnaireUsage');
                     usage.remove().then(function() {
                         questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId] = _.without(usages, usage);
+                        $scope.refresh(false, true);
                     });
                 }
             });
@@ -1073,6 +1074,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
             Restangular.all('filterQuestionnaireUsage').post(usage).then(function(newUsage) {
                 usages.push(newUsage);
+                $scope.refresh(false, true);
             });
         }
     };
