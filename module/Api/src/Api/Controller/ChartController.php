@@ -508,7 +508,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $hydrator = new \Application\Service\Hydrator();
 
             if ($this->params()->fromQuery('getQuestionnaireUsages') === 'true') {
-                $usages = $this->extractUsages($questionnaire->getQuestionnaireUsages(), null, $part, $hydrator);
+                $usages = $this->extractUsages($questionnaire->getQuestionnaireUsages(), $part, $hydrator);
                 if ($usages) {
                     $result['usages'] = $usages;
                 }
@@ -610,12 +610,11 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         return $flatFilter;
     }
 
-    private function extractUsages($usages, $questionnaire = null, $part, $hydrator)
+    private function extractUsages($usages, $part, $hydrator)
     {
         $extractedUsages = array();
         foreach ($usages as $usage) {
-            if ($usage->getPart() === $part && (!$questionnaire || $questionnaire && $usage->getQuestionnaire() === $questionnaire)
-            ) {
+            if ($usage->getPart() === $part) {
                 $extractedUsage = $hydrator->extract($usage, array(
                     'part',
                     'rule',

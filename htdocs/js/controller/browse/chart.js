@@ -470,4 +470,16 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         $scope.columnDefs = $scope.columnDefs.concat(estimatesObject.columns);
     };
 
+    /**
+     * Toggle the display of a formula, and load it if not already done
+     * @param {usage} usage
+     */
+    $scope.toggleShowFormula = function(usage) {
+        usage.show = !usage.show;
+        if (!usage.rule.structure) {
+            Restangular.one('rule', usage.rule.id).get({fields: 'structure'}).then(function(rule) {
+                usage.rule.structure = rule.structure;
+            });
+        }
+    };
 });

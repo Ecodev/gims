@@ -187,6 +187,17 @@ div.browse .col-md-4 {
     &.visible{
         right:0;
     }
+
+    // Show pencil icon only when hovering
+    tr {
+        .fa-pencil {
+            visibility: hidden;
+        }
+        &:hover .fa-pencil {
+            visibility: visible;
+        }
+    }
+
 }
 
 #chartOpenBtn{
