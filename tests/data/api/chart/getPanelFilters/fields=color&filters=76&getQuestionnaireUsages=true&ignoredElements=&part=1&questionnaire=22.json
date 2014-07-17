@@ -1,0 +1,493 @@
+{
+    "name": "CEN11 - Bangladesh",
+    "filters": {
+        "76": [
+            {
+                "filter": {
+                    "id": 76,
+                    "name": "Piped onto premises",
+                    "color": null,
+                    "level": 0
+                },
+                "values": [
+                    {
+                        "Urban": 44.3
+                    }
+                ],
+                "usages": [
+                    {
+                        "id": 222,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 83,
+                            "name": "Piped onto premises (CEN11 - Bangladesh, Urban)",
+                            "formula": "=IF(AND(ISNUMBER({F#4,Q#current,P#current}),ISNUMBER({R#52,Q#current,P#current})),SUM({F#4,Q#current,P#current},{R#52,Q#current,P#current}),IF(ISNUMBER({F#4,Q#current,P#current}),{F#4,Q#current,P#current},IF(ISNUMBER({R#52,Q#current,P#current}),{R#52,Q#current,P#current},\"\")))"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "filter": {
+                            "id": 76,
+                            "name": "Piped onto premises"
+                        },
+                        "questionnaire": {
+                            "id": 22,
+                            "name": "CEN11 - Bangladesh",
+                            "status": "published"
+                        }
+                    }
+                ]
+            },
+            {
+                "filter": {
+                    "id": 4,
+                    "name": "House connections",
+                    "color": null,
+                    "level": 1
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 5,
+                    "name": "Piped water into dwelling",
+                    "color": null,
+                    "level": 2
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 6,
+                    "name": "Piped water to yard\/plot",
+                    "color": null,
+                    "level": 2
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            }
+        ]
+    },
+    "usages": [
+        {
+            "id": 438,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 3,
+                "name": "Estimate: Traditional wells improved based on MICS09",
+                "formula": "={R#2,Q#20,P#current}*{F#28,Q#current,P#current}"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": 0.0
+        },
+        {
+            "id": 439,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 50,
+                "name": "Calculation: Improved water sources",
+                "formula": "=+{F#3,Q#current,P#current}+{F#24,Q#current,P#current}+{R#3,Q#current,P#current}"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": 97.9
+        },
+        {
+            "id": 442,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 51,
+                "name": "Estimate: Adjustement for arsenic contamination based on MICS 2009 (13%)",
+                "formula": "=-0.13*{R#50,Q#current,P#current}"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": -12.7
+        },
+        {
+            "id": 444,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 5,
+                "name": "Estimate: Surface water",
+                "formula": "={F#58,Q#current,P#current}"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": 2.0
+        },
+        {
+            "id": 447,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 52,
+                "name": "Estimate: Piped into premises of tap water, based on DHS11",
+                "formula": "={R#7,Q#23,P#current}*{F#3,Q#current,P#current}"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": 44.3
+        },
+        {
+            "id": 449,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 7,
+                "name": "Ratio: HC \/ Tap water",
+                "formula": "=IF(AND(ISNUMBER({F#4,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#4,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": null
+        },
+        {
+            "id": 451,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 8,
+                "name": "Ratio: Public tap \/ Tap water",
+                "formula": "=IF(AND(ISNUMBER({F#7,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#7,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": null
+        },
+        {
+            "id": 453,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 9,
+                "name": "Ratio: Tubewell + protected well \/ All wells",
+                "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),({F#24,Q#current,P#current}+{F#32,Q#current,P#current})\/{F#20,Q#current,P#current},\"\")"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": null
+        },
+        {
+            "id": 455,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 2,
+                "name": "Ratio: Protected wells \/ Traditional wells",
+                "formula": "=IF(AND(ISNUMBER({F#28,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),{F#32,Q#current,P#current}\/({F#28,Q#current,P#current}),\"\")"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": null
+        },
+        {
+            "id": 457,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 10,
+                "name": "Ratio: Tubewell \/ All wells",
+                "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#20,Q#current,P#current})),{F#24,Q#current,P#current}\/{F#20,Q#current,P#current},\"\")"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": 99.9
+        },
+        {
+            "id": 459,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 11,
+                "name": "Ratio: Protected springs \/ All springs",
+                "formula": "=IF(AND(ISNUMBER({F#44,Q#current,P#current}),ISNUMBER({F#40,Q#current,P#current})),{F#44,Q#current,P#current}\/{F#40,Q#current,P#current},\"\")"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": null
+        },
+        {
+            "id": 461,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 12,
+                "name": "Ratio: Protect. well & spring \/ well & spring",
+                "formula": "=IF(ISERR((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current})))))"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": 100.0
+        },
+        {
+            "id": 918,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 130,
+                "name": "Estimate: Estimated improved pit latrines based onDHS11",
+                "formula": "={F#124,Q#current,P#current}*(1-{R#94,Q#23,P#current})"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": 47.7
+        },
+        {
+            "id": 920,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 131,
+                "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS11",
+                "formula": "=-({R#92,Q#23,P#current}*{F#81,Q#current,P#current})"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": -9.2
+        },
+        {
+            "id": 922,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 106,
+                "name": "Ratio: Improved latrine \/ All latrines",
+                "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": null
+        },
+        {
+            "id": 925,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 107,
+                "name": "Ratio: Covered dry latrines \/ All dry latrines",
+                "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": null
+        },
+        {
+            "id": 927,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 108,
+                "name": "Ratio: VIP \/ All latrines",
+                "formula": "=IF(ISNUMBER({F#126,Q#current,P#current}),{F#126,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": null
+        },
+        {
+            "id": 929,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 109,
+                "name": "Ratio: Traditional latrines \/ All latrines",
+                "formula": "=IF(ISNUMBER({F#128,Q#current,P#current}),{F#128,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": 67.4
+        },
+        {
+            "id": 932,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 110,
+                "name": "Ratio: Improved + traditional latrines \/ All latrines",
+                "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#109,Q#current,P#current})),({R#106,Q#current,P#current}+{R#109,Q#current,P#current}),\"\")"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": null
+        },
+        {
+            "id": 935,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 104,
+                "name": "Ratio: Sewerage connection among flush\/pour flush",
+                "formula": "=IF(ISNUMBER({F#82,Q#current,P#current}),{F#82,Q#current,P#current}\/{F#81,Q#current,P#current},\"\")"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": null
+        },
+        {
+            "id": 937,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 111,
+                "name": "Ratio: Sewerage connection among flush",
+                "formula": "=IF(ISNUMBER({F#88,Q#current,P#current}),{F#88,Q#current,P#current}\/{F#87,Q#current,P#current},\"\")"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": null
+        }
+    ]
+}
