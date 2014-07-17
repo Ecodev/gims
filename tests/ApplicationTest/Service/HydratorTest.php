@@ -86,7 +86,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'name' => 'John Connor',
             'email' => 'john.connor@skynet.net',
             'state' => null,
-            'lastLogin' => null
+            'lastLogin' => '1997-08-29T01:02:03+0000',
         );
 
         $this->hydrator->hydrate($data, $this->user);
