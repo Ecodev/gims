@@ -543,7 +543,7 @@
                                                 <!-- input for edit answer -->
                                                 <input ng-if="questionnaire.survey.questions[filter.id].value"
                                                        class="form-control text-center"
-                                                       ng-class="{'error': valueForm.value.$invalid}"
+                                                       ng-class="{'error': valueForm.value.$invalid, 'excluded-from-computing': !isValidNumber(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second) && isValidNumber(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first)}"
                                                        name="value"
                                                        type="number"
                                                        min="0"

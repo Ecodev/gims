@@ -279,10 +279,20 @@ div.browse .col-md-4 {
     display:inline-block;
     float:none;
 }
-.excluded-from-computing {
-    text-decoration: line-through;
-}
 
+// Values excluded from computing are striked-trhough (both computed and not computed)
+.excluded-from-computing {
+    &,
+    &::placeholder {
+        text-decoration: line-through;
+
+        &::before,
+        &::after
+        {
+            content: " "; // Try to expand the strike-trough to make it more visible
+        }
+    }
+}
 
 /* Differs local, dev and production instances */
 body.demo {

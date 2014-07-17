@@ -1995,11 +1995,16 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 firstValue = question.filter.values[partId].first;
             }
 
+            var usages;
+            if (questionnaire.filterQuestionnaireUsagesByFilterAndPart && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id]) {
+                usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId];
+            }
+
             if (answer && answer.error) {
                 return 'error';
             } else if (answer && $scope.isValidNumber(answer[question.value])) {
                 return 'answer';
-            } else if (questionnaire.filterQuestionnaireUsagesByFilterAndPart && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id] && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId] && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId].length) {
+            } else if (usages && usages.length) {
                 return 'rule';
             } else if (filter.summands.length && $scope.isValidNumber(firstValue)) {
                 return 'summand';
@@ -2009,6 +2014,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         }
 
         return 'nothing';
-
     };
+
 });
