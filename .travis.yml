@@ -2,8 +2,6 @@ language: php
 php:
   - 5.5
   - 5.6
-  - hhvm
-  - hhvm-nightly
 
 addons:
   postgresql: "9.3"
