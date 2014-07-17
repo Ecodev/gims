@@ -5,7 +5,9 @@ namespace Api\Controller;
 use Application\View\Model\NumericJsonModel;
 use Application\Model\Part;
 use Application\Model\Geoname;
+use Application\Model\Questionnaire;
 use Application\Utility;
+use Application\Service\Hydrator;
 
 class ChartController extends \Application\Controller\AbstractAngularActionController
 {
@@ -504,11 +506,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             );
             $resultWithoutIgnoredFilters = array('filters' => array());
 
-            /** @var  \Application\Service\Hydrator $hydrator */
-            $hydrator = new \Application\Service\Hydrator();
-
             if ($this->params()->fromQuery('getQuestionnaireUsages') === 'true') {
-                $usages = $this->extractUsages($questionnaire->getQuestionnaireUsages(), $part, $hydrator);
+                $usages = $this->extractUsages($questionnaire->getQuestionnaireUsages(), $part);
                 if ($usages) {
                     $result['usages'] = $usages;
                 }
@@ -566,35 +565,26 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Add Usages to given filter ($flatFilter)
-     * @param $flatFilter
-     * @param $part
-     * @param $questionnaire
+     * @param array $flatFilter
+     * @param Part $part
+     * @param Questionnaire $questionnaire
      * @return array $flatFilter with modifications
      */
-    private function addUsagesToFilters($flatFilter, $part, $questionnaire)
+    private function addUsagesToFilters(array $flatFilter, Part $part, Questionnaire $questionnaire)
     {
-        $flatFilter['usages'] = array();
-
-        // add the usages to filters
         $fqus = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($flatFilter['filter']['id'])->getFilterQuestionnaireUsages();
-        foreach ($fqus as $fqu) {
-            if ($fqu->getPart() === $part && $fqu->getQuestionnaire() === $questionnaire) {
-                $flatFilter['usages'][] = $fqu->getRule()->getName();
-            }
-        }
-
-        $flatFilter['usages'] = implode(', ', $flatFilter['usages']);
+        $flatFilter['usages'] = $this->extractUsages($fqus, $part, $questionnaire);
 
         return $flatFilter;
     }
 
     /**
      * Add orignial denomations (questions labels) to given filter ($flatFilter)
-     * @param $flatFilter
-     * @param $questionnaire
+     * @param array $flatFilter
+     * @param Questionnaire $questionnaire
      * @return array $flatFilter with modifications
      */
-    private function addQuestionsToFilters($flatFilter, $questionnaire)
+    private function addQuestionsToFilters(array $flatFilter, Questionnaire $questionnaire)
     {
         // replace the list of questions by a single question corresponding to current questionnaire
         if (isset($flatFilter['filter']['questions'])) {
@@ -610,19 +600,30 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         return $flatFilter;
     }
 
-    private function extractUsages($usages, $part, $hydrator)
+    /**
+     *
+     * @param \Application\Model\Rule\AbstractQuestionnaireUsage[] $usages
+     * @param Part $part
+     * @return array
+     */
+    private function extractUsages($usages, Part $part, Questionnaire $questionnaire = null)
     {
-        $extractedUsages = array();
+        $hydrator = new Hydrator();
+        $extractedUsages = [];
         foreach ($usages as $usage) {
-            if ($usage->getPart() === $part) {
+            if ($usage->getPart() === $part && (!$questionnaire || $questionnaire === $usage->getQuestionnaire())) {
                 $extractedUsage = $hydrator->extract($usage, array(
                     'part',
                     'rule',
                     'rule.name',
                 ));
-                $value = $this->getCalculator()->computeFormulaBasic($usage);
-                $value = Utility::decimalToRoundedPercent($value);
-                $extractedUsage['value'] = $value;
+
+                if ($usage instanceof \Application\Model\Rule\QuestionnaireUsage) {
+                    $value = $this->getCalculator()->computeFormulaBasic($usage);
+                    $roundedValue = Utility::decimalToRoundedPercent($value);
+                    $extractedUsage['value'] = $roundedValue;
+                }
+
                 $extractedUsages[] = $extractedUsage;
             }
         }

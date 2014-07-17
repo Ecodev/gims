@@ -219,9 +219,17 @@
                                                                    ng-click="propagateStatusGlobally(indexedElements[pointSelected.questionnaire].filters[key], false, pointSelected.questionnaire)"
                                                                    tooltip-placement="right"
                                                                    tooltip="Include filter for all questionnaires"></i>
-                                                                <i ng-if="indexedElements[pointSelected.questionnaire].filters[key].usages"
-                                                                   class="fa fa-lg fa-gims-rule"
-                                                                   style="color:{{findById(tabs.filters, hFilterId).genericColor}}" tooltip-placement="right" tooltip="At least one rule is involved in this value"></i>
+
+                                                                <span class="dropdown" ng-if="indexedElements[pointSelected.questionnaire].filters[key].usages">
+                                                                    <i class="fa fa-lg fa-gims-rule dropdown-toggle" style="color:{{findById(tabs.filters, hFilterId).genericColor}}" tooltip-placement="right" tooltip="Show rules"></i>
+                                                                    <ul class="dropdown-menu" role="menu">
+                                                                        <li class="dropdown-header">Rules used for computation</li>
+                                                                        <li ng-repeat="usage in indexedElements[pointSelected.questionnaire].filters[key].usages">
+                                                                            <a href="/admin/rule/edit/{{usage.rule.id}}"><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </span>
+
                                                             </td>
                                                             <td style="padding-left:{{indexedElements[pointSelected.questionnaire].filters[key].filter.hFilters[hFilterId].level + 1}}em;">
                                                                 <span tooltip="{{indexedElements[pointSelected.questionnaire].filters[key].filter.originalDenomination}}"
