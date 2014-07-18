@@ -49,7 +49,42 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
      */
     public function getFirst($questionnaireId, $filterId, $partId, $useSecondLevelRules, ArrayCollection $excluded)
     {
-        // If no cache for questionnaire, fill the cache
+        $possible = $this->getAll($questionnaireId, $filterId, $partId);
+
+        // Returns the first non-excluded and according to its level
+        foreach ($possible as $filterQuestionnaireUsage) {
+            if ($useSecondLevelRules == $filterQuestionnaireUsage->isSecondLevel() && !$excluded->contains($filterQuestionnaireUsage)) {
+                return $filterQuestionnaireUsage;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Return all FilterQuestionUsage for the given questionnaire, filter and part
+     * @param integer $questionnaireId
+     * @param integer $filterId
+     * @param integer $partId
+     * @return FilterQuestionnaireUsage[]
+     */
+    public function getAll($questionnaireId, $filterId, $partId)
+    {
+        $this->fillCache($questionnaireId);
+
+        if (isset($this->cache[$questionnaireId][$filterId][$partId])) {
+            return $this->cache[$questionnaireId][$filterId][$partId];
+        } else {
+            return [];
+        }
+    }
+
+    /**
+     * If no cache for questionnaire, fill the cache
+     * @param integer $questionnaireId
+     */
+    private function fillCache($questionnaireId)
+    {
         if (!isset($this->cache[$questionnaireId])) {
 
             // First we found which geoname is used for the given questionnaire
@@ -79,21 +114,6 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
                 $this->cache[$filterQuestionnaireUsage->getQuestionnaire()->getId()][$filterQuestionnaireUsage->getFilter()->getId()][$filterQuestionnaireUsage->getPart()->getId()][] = $filterQuestionnaireUsage;
             }
         }
-
-        if (isset($this->cache[$questionnaireId][$filterId][$partId])) {
-            $possible = $this->cache[$questionnaireId][$filterId][$partId];
-        } else {
-            $possible = array();
-        }
-
-        // Returns the first non-excluded and according to its level
-        foreach ($possible as $filterQuestionnaireUsage) {
-            if ($useSecondLevelRules == $filterQuestionnaireUsage->isSecondLevel() && !$excluded->contains($filterQuestionnaireUsage)) {
-                return $filterQuestionnaireUsage;
-            }
-        }
-
-        return null;
     }
 
 }

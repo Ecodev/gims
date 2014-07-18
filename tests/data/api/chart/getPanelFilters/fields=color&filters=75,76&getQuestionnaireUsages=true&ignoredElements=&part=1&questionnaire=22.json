@@ -1,6 +1,302 @@
 {
     "name": "CEN11 - Bangladesh",
     "filters": {
+        "75": [
+            {
+                "filter": {
+                    "id": 75,
+                    "name": "Total improved",
+                    "color": null,
+                    "level": 0
+                },
+                "values": [
+                    {
+                        "Urban": 85.2
+                    }
+                ],
+                "usages": [
+                    {
+                        "id": 106,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 74,
+                            "name": "Total improved (CEN11 - Bangladesh, Urban)",
+                            "formula": "=IF(OR(ISNUMBER({F#3,Q#current,P#current}),ISNUMBER({F#10,Q#current,P#current}),ISNUMBER({F#53,Q#current,P#current}),ISNUMBER({F#56,Q#current,P#current}),ISNUMBER({F#66,Q#current,P#current})),SUM({F#3,Q#current,P#current},{F#10,Q#current,P#current},{F#53,Q#current,P#current},{F#56,Q#current,P#current},{F#66,Q#current,P#current},{{R#3,Q#current,P#current},{R#51,Q#current,P#current},NULL,NULL}),\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "filter": {
+                            "id": 75,
+                            "name": "Total improved"
+                        },
+                        "questionnaire": {
+                            "id": 22,
+                            "name": "CEN11 - Bangladesh",
+                            "status": "published"
+                        }
+                    }
+                ]
+            },
+            {
+                "filter": {
+                    "id": 3,
+                    "name": "Tap water",
+                    "color": null,
+                    "level": 1,
+                    "originalDenomination": "Tap"
+                },
+                "values": [
+                    {
+                        "Urban": 52.7
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 4,
+                    "name": "House connections",
+                    "color": null,
+                    "level": 2
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 5,
+                    "name": "Piped water into dwelling",
+                    "color": null,
+                    "level": 3
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 6,
+                    "name": "Piped water to yard\/plot",
+                    "color": null,
+                    "level": 3
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 7,
+                    "name": "Public tap, standpipe",
+                    "color": null,
+                    "level": 2
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 8,
+                    "name": "Other",
+                    "color": null,
+                    "level": 2
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 10,
+                    "name": "Protected ground water (all protected wells or springs)",
+                    "color": null,
+                    "level": 1
+                },
+                "values": [
+                    {
+                        "Urban": 45.2
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 12,
+                    "name": "Undefined protected wells or springs",
+                    "color": null,
+                    "level": 2
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 13,
+                    "name": "Private",
+                    "color": null,
+                    "level": 3
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 14,
+                    "name": "Public",
+                    "color": null,
+                    "level": 3
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 15,
+                    "name": "Other",
+                    "color": null,
+                    "level": 3
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 53,
+                    "name": "Rainwater into covered cistern\/tank",
+                    "color": null,
+                    "level": 1
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 56,
+                    "name": "Bottled water with other improved",
+                    "color": null,
+                    "level": 1
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 66,
+                    "name": "Other improved sources",
+                    "color": null,
+                    "level": 1
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 67,
+                    "name": "Other 1",
+                    "color": null,
+                    "level": 2
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            },
+            {
+                "filter": {
+                    "id": 68,
+                    "name": "Other 2",
+                    "color": null,
+                    "level": 2
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": [
+
+                ]
+            }
+        ],
         "76": [
             {
                 "filter": {

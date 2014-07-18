@@ -571,8 +571,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      */
     private function addUsagesToFilters(array $flatFilter, Part $part, Questionnaire $questionnaire)
     {
-        $fqus = $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($flatFilter['filter']['id'])->getFilterQuestionnaireUsages();
-        $flatFilter['usages'] = $this->extractUsages($fqus, $part, $questionnaire);
+        $fqus = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterQuestionnaireUsage')->getAll($questionnaire->getId(), $flatFilter['filter']['id'], $part->getId());
+        $flatFilter['usages'] = $this->extractUsages($fqus, $part);
 
         return $flatFilter;
     }
@@ -609,12 +609,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @param Part $part
      * @return array
      */
-    private function extractUsages($usages, Part $part, Questionnaire $questionnaire = null)
+    private function extractUsages($usages, Part $part)
     {
         $hydrator = new Hydrator();
         $extractedUsages = [];
         foreach ($usages as $usage) {
-            if ($usage->getPart() === $part && (!$questionnaire || $questionnaire === $usage->getQuestionnaire())) {
+            if ($usage->getPart() === $part) {
                 $extractedUsage = $hydrator->extract($usage, array(
                     'part',
                     'rule',

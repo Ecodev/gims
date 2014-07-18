@@ -24,7 +24,7 @@ function benchmark()
 //        "http://$hostname.lan/api/chart?country=19&filterSet=5&part=1",
 //        "http://$hostname.lan/api/chart?country=19&filterSet=2&part=3",
 //        "http://$hostname.lan/api/chart?country=19&filterSet=5&part=3",
-        "http://$hostname.lan/api/chart/getPanelFilters?fields=color&filters=76&getQuestionnaireUsages=true&ignoredElements=&part=1&questionnaire=22",
+        "http://$hostname.lan/api/chart/getPanelFilters?fields=color&filters=75,76&getQuestionnaireUsages=true&ignoredElements=&part=1&questionnaire=22",
     );
 
     $maxSize = 0;
