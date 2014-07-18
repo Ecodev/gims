@@ -385,7 +385,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     };
 
     /**
-     * Calls ChartFilterController to recover filters data and values
+     * Calls ChartController to recover filters data and values
      *
      * @param questionnaireId
      * @param callback

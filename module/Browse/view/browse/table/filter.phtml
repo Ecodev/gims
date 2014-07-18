@@ -569,6 +569,22 @@
                                 </div>
                             </td>
                         </tr>
+                        <tr ng-repeat="rule in questionnaireUsages[tabs.part.id] track by $index">
+
+                            <!-- QuestionnaireUsage's rule name column-->
+                            <td>
+                                <i class="fa fa-gims-rule" ng-click="toggleShowFormula(rule)" tooltip="Show formula" tooltip-placement="right"></i> {{rule.name}} <a href="/admin/rule/edit/{{rule.id}}"><i class="fa fa-pencil"></i></a>
+                                <div ng-if="rule.show" class="ng-trans ng-trans-fade-up">
+                                    <span ng-if="!rule.structure"><i class="fa fa-gims-loading"></i></span>
+                                    <gims-formula structure="rule.structure" ></gims-formula>
+                                </div>
+                            </td>
+
+                            <!-- QuestionnaireUsage's value name column -->
+                            <td ng-repeat="questionnaire in tabs.questionnaires track by $index">
+                                 {{rule.values[questionnaire.id]}}
+                            </td>
+                        </tr>
                         <tr ng-if="mode.isSector">
                             <td  colspan="{{tabs.questionnaires.length+1}}">
                                 <a class="btn btn-default btn-sm"

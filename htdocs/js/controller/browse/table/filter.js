@@ -1192,6 +1192,16 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     });
                     $scope.isComputing = false;
                 });
+
+                // Also get the questionnaireusage for all questionnaires
+                $http.get('/api/questionnaireUsage/compute', {
+                    timeout: getComputedFiltersCanceller.promise,
+                    params: {
+                        questionnaires: questionnairesIds.join(',')
+                    }
+                }).success(function(questionnaireUsages) {
+                    $scope.questionnaireUsages = questionnaireUsages;
+                });
             }
         }, 0);
     };
@@ -2018,4 +2028,16 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         return 'nothing';
     };
 
+    /**
+     * Toggle the display of a formula, and load it if not already done
+     * @param {rule} rule
+     */
+    $scope.toggleShowFormula = function(rule) {
+        rule.show = !rule.show;
+        if (!rule.structure) {
+            Restangular.one('rule', rule.id).get({fields: 'structure'}).then(function(loadedRule) {
+                rule.structure = loadedRule.structure;
+            });
+        }
+    };
 });
