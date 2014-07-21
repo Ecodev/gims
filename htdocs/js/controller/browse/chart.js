@@ -6,7 +6,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     /**************************************************************************/
     $scope.tabs = {};
     $scope.panelTabs = {};
-    $scope.ignoredElements = [];
+    $scope.ignoredElements = null;
     $scope.concatenatedIgnoredElements = [];
     $scope.geonameParams = {perPage: 500, fields: 'country'};
     $scope.filterSetParams = {fields: 'filters.genericColor,filters.color'};
@@ -173,7 +173,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         var ignoredElements = Chart.getIgnoredElements();
         var concatenatedIgnoredElements = ignoredElements.concatenatedIgnoredElements;
         $scope.globalIndexedFilters = ignoredElements.globalIndexedFilters;
-        $scope.ignoredElements = ignoredElements.ignoredElements;
+        $scope.ignoredElements = !_.isEmpty(ignoredElements.ignoredElements) ? ignoredElements.ignoredElements : null;
 
         if (refreshUrl) {
             if (concatenatedIgnoredElements.length > 0) {

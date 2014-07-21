@@ -274,7 +274,6 @@
                                     <div class="col-md-12" ng-show="!pointSelected">
                                         <div class="alert alert-warning ng-trans ng-trans-fade-up" ><i class="fa fa-warning"></i> <?php echo $this->translate('Select a questionnaire on chart to display filters') ?></div>
                                     </div>
-
                                 </tab>
 
                                 <tab>
@@ -321,14 +320,19 @@
                                 <!-- Panel : Ignored elements -->
                                 <tab>
                                     <tab-heading><i class="fa fa-times-circle-o"></i> Ignored</tab-heading>
-                                    <div class="col-md-12">
+
+                                    <div class="col-md-12" ng-if="!ignoredElements">
+                                        <div class="alert alert-warning ng-trans ng-trans-fade-up"><i class="fa fa-warning"></i> No ignored elements</div>
+                                    </div>
+
+                                    <div class="col-md-12" ng-if="ignoredElements">
                                         <h3>Ignored elements</h3>
                                     </div>
-                                    <div class="col-md-12">
+
+                                    <div class="col-md-12" ng-if="ignoredElements">
 
                                         <!-- foreach hFilter -->
-                                        <div ng-repeat="(questionnaireId, ignoredFilters) in ignoredElements" class="row show-grid" ng-if="ignoredFilters.length && indexedElements[questionnaireId].hasIgnoredFilters">
-                                            <!--<pre>{{indexedElements[questionnaireId]|json}}</pre>-->
+                                        <div ng-repeat="(questionnaireId, ignoredFilters) in ignoredElements" class="row show-grid">
 
                                             <table class="table">
                                                 <tr class="active">
@@ -449,8 +453,3 @@
         </tr>
     </table>
 </div>
-
-
-<pre>
-    {{indexedElements|json}}
-</pre>
