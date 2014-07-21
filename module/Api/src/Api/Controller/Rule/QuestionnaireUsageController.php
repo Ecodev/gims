@@ -26,15 +26,18 @@ class QuestionnaireUsageController extends AbstractChildRestfulController
                     $result[$partId] = [];
                 }
 
-                $ruleId = $usage->getRule()->getId();
-                if (!isset($result[$partId][$ruleId])) {
-                    $result[$partId][$ruleId] = $this->hydrator->extract($usage->getRule());
+                $ruleName = $usage->getRule()->getName();
+                if (!isset($result[$partId][$ruleName])) {
+                    $result[$partId][$ruleName]['name'] = $ruleName;
                 }
 
                 $value = $calculator->computeFormulaBasic($usage);
                 $roundedValue = Utility::decimalToRoundedPercent($value);
 
-                $result[$partId][$ruleId]['values'][$usage->getQuestionnaire()->getId()] = $roundedValue;
+                $result[$partId][$ruleName]['values'][$usage->getQuestionnaire()->getId()] = [
+                    'id' => $usage->getRule()->getId(),
+                    'value' => $roundedValue,
+                ];
             }
         }
 

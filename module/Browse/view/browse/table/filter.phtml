@@ -569,24 +569,31 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr ng-repeat="rule in questionnaireUsages[tabs.part.id] track by $index">
+                        <tr ng-if="!mode.isSector">
+                            <td  colspan="{{tabs.questionnaires.length + 1}}">
+                                <a href ng-click="toggleShowQuestionnaireUsages()">
+                                   <span ng-if="!showQuestionnaireUsages">Show Calculations / Estimations / Ratios</span>
+                                   <span ng-if="showQuestionnaireUsages">Hide Calculations / Estimations / Ratios</span>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr ng-if="showQuestionnaireUsages" ng-repeat="rule in questionnaireUsages[tabs.part.id] track by $index">
 
                             <!-- QuestionnaireUsage's rule name column-->
                             <td>
-                                <i class="fa fa-gims-rule" ng-click="toggleShowFormula(rule)" tooltip="Show formula" tooltip-placement="right"></i> {{rule.name}} <a href="/admin/rule/edit/{{rule.id}}"><i class="fa fa-pencil"></i></a>
-                                <div ng-if="rule.show" class="ng-trans ng-trans-fade-up">
-                                    <span ng-if="!rule.structure"><i class="fa fa-gims-loading"></i></span>
-                                    <gims-formula structure="rule.structure" ></gims-formula>
-                                </div>
+                                <i class="fa fa-gims-rule"></i> {{rule.name}}
                             </td>
 
                             <!-- QuestionnaireUsage's value name column -->
-                            <td ng-repeat="questionnaire in tabs.questionnaires track by $index">
-                                 {{rule.values[questionnaire.id]}}
+                            <td ng-repeat="questionnaire in tabs.questionnaires track by $index" style="text-align: center;">
+                                <span ng-if="rule.values[questionnaire.id]">
+                                    <a href="/admin/rule/edit/{{rule.values[questionnaire.id].id}}"><i class="fa fa-pencil" tooltip="Edit rule"></i></a>
+                                    {{rule.values[questionnaire.id].value}}
+                                </span>
                             </td>
                         </tr>
                         <tr ng-if="mode.isSector">
-                            <td  colspan="{{tabs.questionnaires.length+1}}">
+                            <td  colspan="{{tabs.questionnaires.length + 1}}">
                                 <a class="btn btn-default btn-sm"
                                    ng-click="addEquipment();"
                                    ng-class="{'disabled': getFiltersByLevel(0).length != 1}">

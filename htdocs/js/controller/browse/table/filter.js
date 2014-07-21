@@ -1193,15 +1193,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     $scope.isComputing = false;
                 });
 
-                // Also get the questionnaireusage for all questionnaires
-                $http.get('/api/questionnaireUsage/compute', {
-                    timeout: getComputedFiltersCanceller.promise,
-                    params: {
-                        questionnaires: questionnairesIds.join(',')
-                    }
-                }).success(function(questionnaireUsages) {
-                    $scope.questionnaireUsages = questionnaireUsages;
-                });
+                // Also get questionnaireUsages for all questionnaires, if showing them
+                if ($scope.showQuestionnaireUsages) {
+                    loadQuestionnaireUsages();
+                }
             }
         }, 0);
     };
@@ -2029,15 +2024,29 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     };
 
     /**
-     * Toggle the display of a formula, and load it if not already done
-     * @param {rule} rule
+     * Toggle the display of questionnaireUsages
      */
-    $scope.toggleShowFormula = function(rule) {
-        rule.show = !rule.show;
-        if (!rule.structure) {
-            Restangular.one('rule', rule.id).get({fields: 'structure'}).then(function(loadedRule) {
-                rule.structure = loadedRule.structure;
-            });
+    $scope.toggleShowQuestionnaireUsages = function() {
+        $scope.showQuestionnaireUsages = !$scope.showQuestionnaireUsages;
+
+        if ($scope.showQuestionnaireUsages && !$scope.questionnaireUsages) {
+            loadQuestionnaireUsages();
         }
+    };
+
+    /**
+     * Load questionnaireUsages and their computed values for all questionnaires
+     */
+    var loadQuestionnaireUsages = function() {
+        var questionnairesIds = _.compact(_.pluck($scope.tabs.questionnaires, 'id')).join(','); // compact remove falsey values
+
+        $http.get('/api/questionnaireUsage/compute', {
+            timeout: getComputedFiltersCanceller.promise,
+            params: {
+                questionnaires: questionnairesIds
+            }
+        }).success(function(questionnaireUsages) {
+            $scope.questionnaireUsages = questionnaireUsages;
+        });
     };
 });
