@@ -1,0 +1,598 @@
+{
+    "1": [
+        {
+            "name": "Calculation: Improved water sources",
+            "values": {
+                "20": {
+                    "id": 44,
+                    "value": 99.5
+                },
+                "21": {
+                    "id": 46,
+                    "value": 94.9
+                }
+            }
+        },
+        {
+            "name": "Estimate: Adjustement for arsenic contamination based on MICS 2009 (13%)",
+            "values": {
+                "20": {
+                    "id": 45,
+                    "value": -12.9
+                },
+                "21": {
+                    "id": 47,
+                    "value": -12.3
+                }
+            }
+        },
+        {
+            "name": "Estimate: Estimated improved pit latrines based onDHS11",
+            "values": {
+                "21": {
+                    "id": 130,
+                    "value": 38.5
+                }
+            }
+        },
+        {
+            "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS07",
+            "values": {
+                "20": {
+                    "id": 128,
+                    "value": -11.4
+                }
+            }
+        },
+        {
+            "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS11",
+            "values": {
+                "21": {
+                    "id": 131,
+                    "value": -11.2
+                }
+            }
+        },
+        {
+            "name": "Estimate: Piped into premises of tap water, based on MICS09&DHS11",
+            "values": {
+                "21": {
+                    "id": 49,
+                    "value": 28.9
+                }
+            }
+        },
+        {
+            "name": "Estimate: Surface water",
+            "values": {
+                "20": {
+                    "id": 5,
+                    "value": 0.3
+                },
+                "21": {
+                    "id": 5,
+                    "value": 0.1
+                }
+            }
+        },
+        {
+            "name": "Estimate: Traditional wells improved based on MICS09",
+            "values": {
+                "21": {
+                    "id": 3,
+                    "value": 0.1
+                }
+            }
+        },
+        {
+            "name": "Ratio: \"Hanging\" and \"Bucket\" among Dry Latrines",
+            "values": {
+                "20": {
+                    "id": 94,
+                    "value": 3.7
+                }
+            }
+        },
+        {
+            "name": "Ratio: Covered dry latrines \/ All dry latrines",
+            "values": {
+                "20": {
+                    "id": 107,
+                    "value": 85.8
+                },
+                "21": {
+                    "id": 107,
+                    "value": null
+                }
+            }
+        },
+        {
+            "name": "Ratio: HC \/ Tap water",
+            "values": {
+                "20": {
+                    "id": 7,
+                    "value": 78.5
+                },
+                "21": {
+                    "id": 48,
+                    "value": 81.3
+                }
+            }
+        },
+        {
+            "name": "Ratio: Improved + traditional latrines \/ All latrines",
+            "values": {
+                "20": {
+                    "id": 129,
+                    "value": 94.3
+                },
+                "21": {
+                    "id": 110,
+                    "value": 67.3
+                }
+            }
+        },
+        {
+            "name": "Ratio: Improved latrine \/ All latrines",
+            "values": {
+                "20": {
+                    "id": 106,
+                    "value": 90.6
+                },
+                "21": {
+                    "id": 106,
+                    "value": 43.2
+                }
+            }
+        },
+        {
+            "name": "Ratio: Protect. well & spring \/ well & spring",
+            "values": {
+                "20": {
+                    "id": 12,
+                    "value": 99.8
+                },
+                "21": {
+                    "id": 12,
+                    "value": 100.0
+                }
+            }
+        },
+        {
+            "name": "Ratio: Protected springs \/ All springs",
+            "values": {
+                "21": {
+                    "id": 11,
+                    "value": null
+                }
+            }
+        },
+        {
+            "name": "Ratio: Protected wells \/ Traditional wells",
+            "values": {
+                "20": {
+                    "id": 2,
+                    "value": 75.0
+                },
+                "21": {
+                    "id": 2,
+                    "value": null
+                }
+            }
+        },
+        {
+            "name": "Ratio: Public tap \/ Tap water",
+            "values": {
+                "20": {
+                    "id": 8,
+                    "value": 21.5
+                },
+                "21": {
+                    "id": 8,
+                    "value": null
+                }
+            }
+        },
+        {
+            "name": "Ratio: Sewerage connection among flush",
+            "values": {
+                "20": {
+                    "id": 111,
+                    "value": null
+                },
+                "21": {
+                    "id": 111,
+                    "value": null
+                }
+            }
+        },
+        {
+            "name": "Ratio: Sewerage connection among flush\/pour flush",
+            "values": {
+                "20": {
+                    "id": 104,
+                    "value": 34.4
+                },
+                "21": {
+                    "id": 104,
+                    "value": null
+                }
+            }
+        },
+        {
+            "name": "Ratio: Traditional latrines \/ All latrines",
+            "values": {
+                "21": {
+                    "id": 109,
+                    "value": 24.1
+                }
+            }
+        },
+        {
+            "name": "Ratio: Tubewell + protected well \/ All wells",
+            "values": {
+                "20": {
+                    "id": 9,
+                    "value": 99.8
+                },
+                "21": {
+                    "id": 9,
+                    "value": null
+                }
+            }
+        },
+        {
+            "name": "Ratio: Tubewell \/ All wells",
+            "values": {
+                "20": {
+                    "id": 10,
+                    "value": 99.3
+                },
+                "21": {
+                    "id": 10,
+                    "value": 99.7
+                }
+            }
+        },
+        {
+            "name": "Ratio: VIP \/ All latrines",
+            "values": {
+                "20": {
+                    "id": 108,
+                    "value": 4.8
+                },
+                "21": {
+                    "id": 108,
+                    "value": null
+                }
+            }
+        }
+    ],
+    "2": [
+        {
+            "name": "Calculation: Improved water sources",
+            "values": {
+                "20": {
+                    "id": 44,
+                    "value": 97.6
+                },
+                "21": {
+                    "id": 46,
+                    "value": 97.1
+                }
+            }
+        },
+        {
+            "name": "Estimate: Adjustement for arsenic contamination based on MICS 2009 (13%)",
+            "values": {
+                "20": {
+                    "id": 45,
+                    "value": -12.7
+                },
+                "21": {
+                    "id": 47,
+                    "value": -12.6
+                }
+            }
+        },
+        {
+            "name": "Estimate: Estimated improved pit latrines based onDHS11",
+            "values": {
+                "21": {
+                    "id": 130,
+                    "value": 60.9
+                }
+            }
+        },
+        {
+            "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS07",
+            "values": {
+                "20": {
+                    "id": 128,
+                    "value": -0.3
+                }
+            }
+        },
+        {
+            "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS11",
+            "values": {
+                "21": {
+                    "id": 131,
+                    "value": -0.4
+                }
+            }
+        },
+        {
+            "name": "Estimate: Piped into premises of tap water, based on MICS09&DHS11",
+            "values": {
+                "21": {
+                    "id": 49,
+                    "value": 1.1
+                }
+            }
+        },
+        {
+            "name": "Estimate: Surface water",
+            "values": {
+                "20": {
+                    "id": 5,
+                    "value": 1.7
+                },
+                "21": {
+                    "id": 5,
+                    "value": 1.4
+                }
+            }
+        },
+        {
+            "name": "Estimate: Traditional wells improved based on MICS09",
+            "values": {
+                "21": {
+                    "id": 3,
+                    "value": 0.7
+                }
+            }
+        },
+        {
+            "name": "Ratio: \"Hanging\" and \"Bucket\" among Dry Latrines",
+            "values": {
+                "20": {
+                    "id": 94,
+                    "value": 6.0
+                }
+            }
+        },
+        {
+            "name": "Ratio: Covered dry latrines \/ All dry latrines",
+            "values": {
+                "20": {
+                    "id": 107,
+                    "value": 81.6
+                },
+                "21": {
+                    "id": 107,
+                    "value": null
+                }
+            }
+        },
+        {
+            "name": "Ratio: HC \/ Tap water",
+            "values": {
+                "20": {
+                    "id": 7,
+                    "value": 75.0
+                },
+                "21": {
+                    "id": 48,
+                    "value": 73.0
+                }
+            }
+        },
+        {
+            "name": "Ratio: Improved + traditional latrines \/ All latrines",
+            "values": {
+                "20": {
+                    "id": 129,
+                    "value": 91.5
+                },
+                "21": {
+                    "id": 110,
+                    "value": 35.5
+                }
+            }
+        },
+        {
+            "name": "Ratio: Improved latrine \/ All latrines",
+            "values": {
+                "20": {
+                    "id": 106,
+                    "value": 85.5
+                },
+                "21": {
+                    "id": 106,
+                    "value": 17.1
+                }
+            }
+        },
+        {
+            "name": "Ratio: Protect. well & spring \/ well & spring",
+            "values": {
+                "20": {
+                    "id": 12,
+                    "value": 99.3
+                },
+                "21": {
+                    "id": 12,
+                    "value": 100.0
+                }
+            }
+        },
+        {
+            "name": "Ratio: Protected springs \/ All springs",
+            "values": {
+                "20": {
+                    "id": 11,
+                    "value": 33.3
+                },
+                "21": {
+                    "id": 11,
+                    "value": null
+                }
+            }
+        },
+        {
+            "name": "Ratio: Protected wells \/ Traditional wells",
+            "values": {
+                "20": {
+                    "id": 2,
+                    "value": 54.5
+                },
+                "21": {
+                    "id": 2,
+                    "value": null
+                }
+            }
+        },
+        {
+            "name": "Ratio: Public tap \/ Tap water",
+            "values": {
+                "20": {
+                    "id": 8,
+                    "value": 25.0
+                },
+                "21": {
+                    "id": 8,
+                    "value": null
+                }
+            }
+        },
+        {
+            "name": "Ratio: Sewerage connection among flush",
+            "values": {
+                "20": {
+                    "id": 111,
+                    "value": null
+                },
+                "21": {
+                    "id": 111,
+                    "value": null
+                }
+            }
+        },
+        {
+            "name": "Ratio: Sewerage connection among flush\/pour flush",
+            "values": {
+                "20": {
+                    "id": 104,
+                    "value": 0.0
+                },
+                "21": {
+                    "id": 104,
+                    "value": null
+                }
+            }
+        },
+        {
+            "name": "Ratio: Traditional latrines \/ All latrines",
+            "values": {
+                "21": {
+                    "id": 109,
+                    "value": 18.4
+                }
+            }
+        },
+        {
+            "name": "Ratio: Tubewell + protected well \/ All wells",
+            "values": {
+                "20": {
+                    "id": 9,
+                    "value": 99.5
+                },
+                "21": {
+                    "id": 9,
+                    "value": null
+                }
+            }
+        },
+        {
+            "name": "Ratio: Tubewell \/ All wells",
+            "values": {
+                "20": {
+                    "id": 10,
+                    "value": 98.8
+                },
+                "21": {
+                    "id": 10,
+                    "value": 98.7
+                }
+            }
+        },
+        {
+            "name": "Ratio: VIP \/ All latrines",
+            "values": {
+                "20": {
+                    "id": 108,
+                    "value": 3.8
+                },
+                "21": {
+                    "id": 108,
+                    "value": null
+                }
+            }
+        }
+    ],
+    "3": [
+        {
+            "name": "Estimate: Surface water",
+            "values": {
+                "20": {
+                    "id": 5,
+                    "value": 1.4
+                },
+                "21": {
+                    "id": 5,
+                    "value": 1.0
+                }
+            }
+        },
+        {
+            "name": "Ratio: Improved + traditional latrines \/ All latrines",
+            "values": {
+                "20": {
+                    "id": 110,
+                    "value": null
+                },
+                "21": {
+                    "id": 110,
+                    "value": 43.2
+                }
+            }
+        },
+        {
+            "name": "Ratio: Improved latrine \/ All latrines",
+            "values": {
+                "20": {
+                    "id": 106,
+                    "value": 86.0
+                },
+                "21": {
+                    "id": 106,
+                    "value": 23.4
+                }
+            }
+        },
+        {
+            "name": "Ratio: Traditional latrines \/ All latrines",
+            "values": {
+                "20": {
+                    "id": 109,
+                    "value": null
+                },
+                "21": {
+                    "id": 109,
+                    "value": 19.8
+                }
+            }
+        }
+    ]
+}
