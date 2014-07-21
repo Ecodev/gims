@@ -306,6 +306,7 @@
             },
             "name": "Total improved",
             "allowPointSelect": false,
+            "country": "Afghanistan",
             "data": [
                 {
                     "name": "MICS97",
@@ -353,6 +354,7 @@
             },
             "name": "Piped onto premises",
             "allowPointSelect": false,
+            "country": "Afghanistan",
             "data": [
                 {
                     "name": "MICS97",
@@ -400,6 +402,7 @@
             },
             "name": "Surface water",
             "allowPointSelect": false,
+            "country": "Afghanistan",
             "data": [
                 {
                     "name": "MICS97",
@@ -447,6 +450,7 @@
             },
             "name": "Other Improved",
             "allowPointSelect": false,
+            "country": "Afghanistan",
             "data": [
                 {
                     "name": "MICS97",
@@ -494,6 +498,7 @@
             },
             "name": "Other Unimproved",
             "allowPointSelect": false,
+            "country": "Afghanistan",
             "data": [
                 {
                     "name": "MICS97",

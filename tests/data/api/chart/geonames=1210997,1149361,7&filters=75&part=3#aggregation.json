@@ -122,6 +122,7 @@
             },
             "name": "Afghanistan - Total improved",
             "allowPointSelect": false,
+            "country": "Afghanistan",
             "data": [
                 {
                     "name": "MICS97",
@@ -215,6 +216,7 @@
             },
             "name": "Bangladesh - Total improved",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "CEN91",
@@ -406,6 +408,7 @@
             },
             "name": "MDG - Southern Asia - Total improved",
             "allowPointSelect": false,
+            "country": "MDG - Southern Asia",
             "data": [
                 {
                     "name": "MICS97",

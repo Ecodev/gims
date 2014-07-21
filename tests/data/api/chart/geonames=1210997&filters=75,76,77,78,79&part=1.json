@@ -306,6 +306,7 @@
             },
             "name": "Total improved",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "CEN91",
@@ -451,6 +452,7 @@
             },
             "name": "Piped onto premises",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "CEN91",
@@ -596,6 +598,7 @@
             },
             "name": "Surface water",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "CEN91",
@@ -713,6 +716,7 @@
             },
             "name": "Other Improved",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "CEN91",
@@ -858,6 +862,7 @@
             },
             "name": "Other Unimproved",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "CEN91",

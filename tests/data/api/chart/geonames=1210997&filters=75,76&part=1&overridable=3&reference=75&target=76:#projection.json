@@ -168,6 +168,7 @@
             },
             "name": "Total improved",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "CEN91",
@@ -313,6 +314,7 @@
             },
             "name": "Piped onto premises",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "CEN91",
@@ -746,6 +748,7 @@
             },
             "name": "Total improved (adjusted)",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "CEN91",
@@ -892,6 +895,7 @@
             },
             "name": "Piped onto premises (adjusted)",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "CEN91",

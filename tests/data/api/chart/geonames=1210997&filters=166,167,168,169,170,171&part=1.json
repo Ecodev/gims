@@ -352,6 +352,7 @@
             },
             "name": "Improved + shared",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "CEN91",
@@ -504,6 +505,7 @@
             },
             "name": "Sewerage connections",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "DHS94",
@@ -607,6 +609,7 @@
             },
             "name": "Improved",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "MICS06",
@@ -640,6 +643,7 @@
             },
             "name": "Shared",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "MICS06",
@@ -673,6 +677,7 @@
             },
             "name": "Other unimproved",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "CEN91",
@@ -804,6 +809,7 @@
             },
             "name": "Open defecation",
             "allowPointSelect": false,
+            "country": "Bangladesh",
             "data": [
                 {
                     "name": "CEN91",
