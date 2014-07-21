@@ -72,7 +72,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                         var questionnaire = {hFilters: {}};
                         var ids = data.id.split(':');
                         questionnaire.id = ids[1];
-                        questionnaire.name = data.name;
+                        questionnaire.name = data.name + ' - ' + serie.country;
                         questionnaire.hFilters[ids[0]] = null;
                         ChartCache.cache(part, questionnaire);
                     });

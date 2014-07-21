@@ -457,6 +457,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 'marker' => array('symbol' => $this->getConstantValue($baseName, $this->symbols)),
                 'name' => $baseName . $this->getSuffix($isIgnored, $isAdjusted),
                 'allowPointSelect' => false,
+                'country' => $geoname->getName(),
                 'data' => array(), // because we will use our own click handler
             );
 
