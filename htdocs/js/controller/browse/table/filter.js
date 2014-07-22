@@ -34,7 +34,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         'new': true
     };
 
-    $scope.modes = [
+    var modes = [
         {
             name: 'Browse',
             isContribute: false,
@@ -59,11 +59,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.locationPath = $location.$$path;
 
     if ($location.$$path.indexOf('/nsa') >= 0) {
-        $scope.mode = $scope.modes[2];
+        $scope.mode = modes[2];
     } else if ($location.$$path.indexOf('/contribute') >= 0) {
-        $scope.mode = $scope.modes[1];
+        $scope.mode = modes[1];
     } else if ($location.$$path.indexOf('/browse') >= 0) {
-        $scope.mode = $scope.modes[0];
+        $scope.mode = modes[0];
     }
 
     /**************************************************************************/
@@ -85,18 +85,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     }, function() {
         $scope.returnUrl = $location.search().returnUrl;
         $scope.currentUrl = encodeURIComponent($location.url());
-    });
-
-    $scope.$watch('mode', function(mode) {
-        if (!_.isUndefined(mode) && mode != 'Browse') {
-            // Make a call that require to be authenticated, then UserCtrl catch 401 and fire event gims-loginConfirmed when it's done
-            Restangular.all('user').getList();
-            // listen to event gims-loginConfirmed to refresh questionnaires permissions, considering logged in user
-            $rootScope.$on('gims-loginConfirmed', function() {
-                $scope.refresh(true, false);
-            });
-
-        }
     });
 
     $scope.$watch('tabs.filterSet', function() {
@@ -194,10 +182,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /**************************************************************************/
     /******************************************************** Scope functions */
     /**************************************************************************/
-
-    $scope.setMode = function(i) {
-        $scope.mode = $scope.modes[i];
-    };
 
     /**
      * Refreshing page means :
