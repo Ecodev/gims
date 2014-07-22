@@ -17,4 +17,9 @@ class RuleController extends \Application\Controller\AbstractAngularActionContro
         return new ViewModel();
     }
 
+    public function wizardAction()
+    {
+        return new ViewModel();
+    }
+
 }
