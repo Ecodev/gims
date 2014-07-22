@@ -153,10 +153,10 @@ class QuestionRepository extends AbstractChildRepository
     }
 
     /**
-     * Returns questions for the all filters for the given questionnaire
+     * Returns alternateNames for the all filters for the given questionnaire
      * @param array $filterIds
      * @param \Application\Model\Questionnaire $questionnaire
-     * @return \Application\Model\Question\AbstractAnswerableQuestion[]
+     * @return array
      */
     public function getByFiltersAndQuestionnaire(array $filterIds, Questionnaire $questionnaire) {
 
@@ -172,8 +172,8 @@ class QuestionRepository extends AbstractChildRepository
         );
 
         $query->setParameters($params);
-        $question = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $alternateNames = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        return $question;
+        return $alternateNames;
     }
 }
