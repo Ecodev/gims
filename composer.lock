@@ -1,7 +1,8 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
     "hash": "9569ce71b8fa768a982e1245684b851d",
     "packages": [
@@ -355,12 +356,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PowerKiKi/dbal.git",
-                "reference": "0ea923e3cee65b2b2924b4be58b2ad579f8fedbe"
+                "reference": "83bb84786173f9b64c6da21cce31ce4b7aebbc2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PowerKiKi/dbal/zipball/0ea923e3cee65b2b2924b4be58b2ad579f8fedbe",
-                "reference": "0ea923e3cee65b2b2924b4be58b2ad579f8fedbe",
+                "url": "https://api.github.com/repos/PowerKiKi/dbal/zipball/83bb84786173f9b64c6da21cce31ce4b7aebbc2d",
+                "reference": "83bb84786173f9b64c6da21cce31ce4b7aebbc2d",
                 "shasum": ""
             },
             "archive": {
@@ -383,8 +384,11 @@
                 "symfony/console": "2.*"
             },
             "suggest": {
-                "symfony/console": "Allows use of the command line interface"
+                "symfony/console": "For helpful console commands such as SQL execution and import of files."
             },
+            "bin": [
+                "bin/doctrine-dbal"
+            ],
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -426,9 +430,9 @@
                 "queryobject"
             ],
             "support": {
-                "source": "https://github.com/PowerKiKi/dbal/tree/master"
+                "source": "https://github.com/PowerKiKi/dbal/tree/feature-partial-indexes"
             },
-            "time": "2014-05-15 02:41:25"
+            "time": "2014-07-22 01:25:57"
         },
         {
             "name": "doctrine/doctrine-module",
@@ -779,12 +783,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PowerKiKi/doctrine2.git",
-                "reference": "3d5faa19ef44a4f799252d7fd8f87c2591529afe"
+                "reference": "bb5345b33036cd9f9d4705657f28bb80dc4a474b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PowerKiKi/doctrine2/zipball/3d5faa19ef44a4f799252d7fd8f87c2591529afe",
-                "reference": "3d5faa19ef44a4f799252d7fd8f87c2591529afe",
+                "url": "https://api.github.com/repos/PowerKiKi/doctrine2/zipball/bb5345b33036cd9f9d4705657f28bb80dc4a474b",
+                "reference": "bb5345b33036cd9f9d4705657f28bb80dc4a474b",
                 "shasum": ""
             },
             "archive": {
@@ -803,7 +807,7 @@
                 ]
             },
             "require": {
-                "doctrine/collections": "~1.1",
+                "doctrine/collections": "~1.2",
                 "doctrine/dbal": ">=2.5-dev,<2.6-dev",
                 "ext-pdo": "*",
                 "php": ">=5.3.2",
@@ -862,7 +866,7 @@
             "support": {
                 "source": "https://github.com/PowerKiKi/doctrine2/tree/feature-partial-indexes"
             },
-            "time": "2014-05-07 14:36:40"
+            "time": "2014-07-22 01:44:45"
         },
         {
             "name": "firephp/firephp-core",
@@ -2404,6 +2408,7 @@
         "mischiefcollective/colorjizz": 20,
         "johnkary/phpunit-speedtrap": 20
     },
+    "prefer-stable": false,
     "platform": {
         "php": ">=5.5.0",
         "ext-bcmath": "*",
