@@ -1,4 +1,4 @@
-<div ng-class="{'formula-text-field-fixed':fixed}" ng-show="fixed && rule">
+<div ng-class="{'formula-text-field-fixed':fixed}" ng-show="fixed && rule || !fixed">
 
     <div class="input-group">
         <div id="rule.formula" class="form-control" ui-ace="aceOptions" name="formula" ng-model="rule.formula" style="height:50px;"></div>
