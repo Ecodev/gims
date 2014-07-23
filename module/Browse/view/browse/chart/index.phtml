@@ -294,7 +294,7 @@
                                             <!-- Questionnaire Usages -->
                                             <tbody ng-if="indexedElements[pointSelected.questionnaire].usages">
                                                 <tr ng-repeat-start="usage in indexedElements[pointSelected.questionnaire].usages| orderBy:'rule.name'">
-                                                    <td style="width:{{firstCol}}"><i class="fa fa-lg fa-gims-rule" ng-click="toggleShowFormula(usage)" tooltip="Show formula" tooltip-placement="right"></i></td>
+                                                    <td style="width:{{firstCol}}"><i class="fa fa-lg" ng-class="{'fa-gims-rule':!usage.show || usage.rule.structure, 'fa-gims-loading':usage.show && !usage.rule.structure}" ng-click="toggleShowFormula(usage)" tooltip="Show formula" tooltip-placement="right"></i></td>
                                                     <td>{{usage.rule.name}} <a href="/admin/rule/edit/{{usage.rule.id}}"><i class="fa fa-pencil"></i></a></td>
                                                     <td style="width:{{lastCol}}" class="text-right">
                                                         <span ng-show="usage.value">
@@ -304,8 +304,9 @@
                                                 </tr>
                                                 <tr ng-repeat-end ng-if="usage.show" class="ng-trans ng-trans-fade-up">
                                                     <td colspan="3" style="border: none !important;">
-                                                        <span ng-if="!usage.rule.structure"><i class="fa fa-lg fa-gims-loading"></i></span>
-                                                        <gims-formula structure="usage.rule.structure" ></gims-formula>
+                                                        <div style="width:430px">
+                                                            <gims-formula structure="usage.rule.structure" ></gims-formula>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             </tbody>

@@ -1,0 +1,18 @@
+<div>
+
+    <div class="input-group">
+        <div id="rule.formula" class="form-control" ui-ace="aceOptions" name="formula" ng-model="rule.formula" style="height:75px;"></div>
+        <span class="input-group-addon">
+            <button gims-rule-wizard class='btn btn-default'><i class='fa fa-gims-wizard'></i></button>
+        </span>
+    </div>
+
+    <ul class="help-block">
+        <li ng-repeat="message in messages" class="text-danger">{{message}}</li>
+    </ul>
+
+    <div ng-if="!messages.length">
+        <gims-formula structure="rule.structure"></gims-formula>
+    </div>
+
+</div>
