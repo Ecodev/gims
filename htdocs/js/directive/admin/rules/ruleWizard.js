@@ -12,7 +12,7 @@ angular.module('myApp.directives').directive('gimsRuleWizard', function($rootSco
         controller: function($scope, RuleWizardModal) {
             $scope.showWizardModal = function() {
                 RuleWizardModal.select().then(function(token) {
-                    $rootScope.$emit('gims-rule-target-selected', token);
+                    $rootScope.$emit('gims-rule-token-selected', token);
                 });
             };
         }

@@ -5,7 +5,8 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
         restrict: 'E', // Only usage possible is with tag
         templateUrl: '/template/admin/rule/textField',
         scope: {
-            rule: '='
+            rule: '=',
+            fixed: '='
         },
         controller: function($scope) {
 
@@ -59,19 +60,28 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
                 var validateFields = _.clone(fields);
                 validateFields.validate = true;
                 if ($scope.rule.id) {
+                    Restangular.restangularizeElement(null, $scope.rule, 'Rule');
                     $scope.rule.put(validateFields).then(success, fail);
                 } else {
                     Restangular.all('rule').post($scope.rule, validateFields).then(success, fail);
                 }
             }, 300);
 
+            $scope.unselect = function() {
+                $scope.rule = null;
+            };
+
             /**
              * Watchers and event managers
              */
             $scope.$watch('rule.formula', validate);
 
-            $rootScope.$on('gims-rule-target-selected', function(event, token) {
+            $rootScope.$on('gims-rule-token-selected', function(event, token) {
                 aceEditor.insert(token);
+            });
+
+            $rootScope.$on('gims-rule-selected', function(event, rule) {
+                $scope.rule = rule;
             });
         }
     };

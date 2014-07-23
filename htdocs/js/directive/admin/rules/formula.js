@@ -7,7 +7,7 @@ angular.module('myApp.directives').directive('gimsFormula', function() {
     return {
         restrict: 'E', // Only usage possible is with element
         template:
-                '<div class="well well-sm" style="overflow-x:auto;">' +
+                '<div style="overflow-x:auto;">' +
                 '<span ng-repeat="s in structure" class="formula">' +
                 '<span ng-switch="s.type">' +
                 '<span class="text"  ng-switch-when="text">{{s.content}}</span>' +

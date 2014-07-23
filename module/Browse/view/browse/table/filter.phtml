@@ -1,6 +1,7 @@
+<gims-rule-text-field rule="rule" fixed="true"></gims-rule-text-field>
+
 <div class="container" >
     <!-- Toolbar -->
-
     <div class="navbar navbar-default hidden-print">
         <a class="navbar-brand" href="#">{{mode.name}} filters</a>
 
@@ -513,7 +514,7 @@
                                                         <!-- Rules -->
                                                         <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].length" class="dropdown-header">Rules used for computation</li>
                                                         <li ng-repeat="usage in questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id]">
-                                                            <a href="/admin/rule/edit/{{usage.rule.id}}"><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a>
+                                                            <a href gims-select-formula rule="usage.rule" ><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a> <!--href="/admin/rule/edit/{{usage.rule.id}}"-->
                                                         </li>
 
                                                         <!-- Summands -->

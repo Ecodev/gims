@@ -10,8 +10,8 @@
             <label class="control-label col-md-2" for="token.selected"><?php echo $this->translate("Syntax"); ?></label>
             <div class="col-md-8">
                 <p>
-                    <select
-                            name="token" id="token.selected"
+                    <select name="token"
+                            id="token.selected"
                             ng-model="token.selected"
                             ng-options="t.name group by t.group for t in availableTokens">
                         <option style="display:none" value="">Select a syntax to insert</option>
@@ -27,9 +27,11 @@
         <div class="form-group" ng-show="token.selected.rule" ng-class="{'has-error': myForm.rule.$invalid}">
             <label class="control-label col-md-2" for="token.rule"><?php echo $this->translate("Rule"); ?></label>
             <div class="col-md-10">
-                <gims-select name="rule" id="token.rule"
+                <gims-select name="rule"
+                             id="token.rule"
                              api="rule"
                              model="token.rule"
+                             change-url="false"
                              placeholder="Select a rule"
                              style="width: 100%"
                         >
@@ -49,9 +51,11 @@
                 <div class="radio">
                     <label>
                         <input type="radio" ng-checked="currentValue != token.filter" name='wizard-radio' />
-                        <gims-select name="filter" id="token.filter"
+                        <gims-select name="filter"
+                                     id="token.filter"
                                      api="filter"
                                      model="token.filter"
+                                     change-url="false"
                                      placeholder="Select a filter"
                                      style="width: 100%"
                                 >
@@ -73,9 +77,11 @@
                 <div class="radio">
                     <label>
                         <input type="radio" ng-checked="currentValue != token.questionnaire" name='wizard-questionnaire' />
-                        <gims-select name="questionnaire" id="token.questionnaire"
+                        <gims-select name="questionnaire"
+                                     id="token.questionnaire"
                                      api="questionnaire"
                                      model="token.questionnaire"
+                                     change-url="false"
                                      placeholder="Select a questionnaire"
                                      style="width: 100%"
                                 >
@@ -97,9 +103,11 @@
                 <div class="radio">
                     <label>
                         <input type="radio" ng-checked="currentValue != token.part" name='wizard-part' />
-                        <gims-select name="part" id="token.part"
+                        <gims-select name="part"
+                                     id="token.part"
                                      api="part"
                                      model="token.part"
+                                     change-url="false"
                                      placeholder="Select a part"
                                      style="width: 100%"
                                 >
@@ -113,7 +121,8 @@
         <div class="form-group" ng-show="token.selected.year" ng-class="{'has-error': myForm.year.$invalid}">
             <label class="control-label col-md-2" for="token.year"><?php echo $this->translate("Year offset"); ?></label>
             <div class="col-md-10">
-                <input type="number" name="year" id="token.year"
+                <input type="number" name="year"
+                       id="token.year"
                        min="-50"
                        max="50"
                        step="1"

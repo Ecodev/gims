@@ -293,6 +293,17 @@ table.table {
     float:none;
 }
 
+.formula-text-field-fixed{
+    position:fixed;
+    width:100%;
+    z-index:1031;
+    top:0px;
+    left:0;
+    padding:15px;
+    box-shadow:0px 0px 20px rgba(0,0,0,1);
+    background:white;
+}
+
 // Values excluded from computing are striked-trhough (both computed and not computed)
 .excluded-from-computing {
     &,
