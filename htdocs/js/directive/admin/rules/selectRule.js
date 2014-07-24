@@ -1,14 +1,15 @@
-angular.module('myApp.directives').directive('gimsSelectFormula', function($rootScope) {
+angular.module('myApp.directives').directive('gimsSelectRule', function($rootScope) {
     'use strict';
 
     return {
         restrict: 'A', // Only usage possible is with attribute
         scope: {
-            rule: '='
+            gimsSelectRule: '='
         },
         link: function(scope, element) {
+
             element.on('click', function() {
-                $rootScope.$emit('gims-rule-selected', scope.rule);
+                $rootScope.$emit('gims-rule-selected', scope.gimsSelectRule);
             });
         }
     };
