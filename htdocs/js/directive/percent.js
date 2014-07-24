@@ -1,11 +1,7 @@
-angular.module('myApp.directives').directive('percent', function() {
+angular.module('myApp.directives').directive('percent', function($timeout) {
     return {
         restrict: 'A',
         require: 'ngModel',
-        scope: {
-            percent: '=',
-            percentPlaceholder: '@'
-        },
         link: function(scope, element, attr, ngModel) {
             if (!ngModel) {
                 return;
@@ -57,20 +53,31 @@ angular.module('myApp.directives').directive('percent', function() {
              *  -> when changing, viewValue stay the same but the modelValue changes
              */
             var added = false;
-            scope.$watch('percent', function(newAbsolute) {
-                scope.isPercent = !_.isUndefined(newAbsolute) ? !newAbsolute : newAbsolute;
-                if (!_.isUndefined(scope.isPercent) && !added) {
-                    added = true;
-                    ngModel.$parsers.push(toModel);
-                    ngModel.$formatters.push(toInput);
-                    ngModel.$modelValue = toInput(ngModel.$modelValue);
-                    ngModel.$render();
+            attr.$observe('percent', function(newAbsolute) {
+
+                if (newAbsolute == 'true') {
+                    scope.isPercent = false;
+                } else if (newAbsolute == 'false') {
+                    scope.isPercent = true;
+                } else {
+                    scope.isPercent = undefined;
                 }
+
+                $timeout(function() {
+                    if (!_.isUndefined(scope.isPercent) && !added) {
+                        added = true;
+                        ngModel.$parsers.push(toModel);
+                        ngModel.$formatters.push(toInput);
+                        ngModel.$modelValue = toInput(ngModel.$modelValue);
+                        ngModel.$render();
+                    }
+                }, 2000);
+
             });
 
-            scope.$watch('percentPlaceholder', function() {
+            attr.$observe('percentPlaceholder', function(newPlaceholder) {
                 /** @todo : all rules are considered as percent, so *100 is hardcoded. Ideally should not be, but we can't know if the result of a formula is percent or absolute */
-                var placeholder = !_.isUndefined(scope.percentPlaceholder) ? round3decimals(scope.percentPlaceholder * 100) : '';
+                var placeholder = !_.isUndefined(newPlaceholder) ? round3decimals(newPlaceholder * 100) : '';
                 element.attr('placeholder', placeholder);
             });
         }

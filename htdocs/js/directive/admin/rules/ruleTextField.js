@@ -36,7 +36,6 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
 
             // Validate formula but not too often
             var validate = _.debounce(function() {
-
                 if (!$scope.rule) {
                     return;
                 }
@@ -51,9 +50,7 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
                         $scope.messages = response.data.messages;
                     } else {
                         // If PHPExcel threw fatal errors, we default to generic message
-                        $scope.messages =
-                            ['Formula syntax is invalid and cannot be computed.'
-                            ];
+                        $scope.messages = ['Formula syntax is invalid and cannot be computed.'];
                     }
                 };
 
@@ -77,7 +74,9 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
             $scope.$watch('rule.formula', validate);
 
             $rootScope.$on('gims-rule-token-selected', function(event, token) {
-                aceEditor.insert(token);
+                if ($scope.fixed && $scope.rule || !$scope.fixed) {
+                    aceEditor.insert(token);
+                }
             });
 
             $rootScope.$on('gims-rule-selected', function(event, rule) {
