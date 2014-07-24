@@ -42,7 +42,8 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
 
                 var success = function(validatedRule) {
                     $scope.messages = [];
-                    $scope.rule = validatedRule;
+                    $scope.rule.id = validatedRule.id;
+                    $scope.rule.structure = validatedRule.structure;
                 };
 
                 var fail = function(response) {
@@ -76,6 +77,7 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
             $rootScope.$on('gims-rule-token-selected', function(event, token) {
                 if ($scope.fixed && $scope.rule || !$scope.fixed) {
                     aceEditor.insert(token);
+                    aceEditor.focus();
                 }
             });
 
