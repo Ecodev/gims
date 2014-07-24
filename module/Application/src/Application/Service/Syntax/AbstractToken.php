@@ -31,7 +31,7 @@ abstract class AbstractToken
         if ($filterId == 'current') {
             return null;
         } else {
-            return $parser->getFilterRepository()->findOneById($filterId)->getGenericColor();
+            return $parser->getFilterRepository()->findOneById($filterId)->getColor();
         }
     }
 
