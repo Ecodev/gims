@@ -304,6 +304,10 @@ table.table {
     background:white;
 }
 
+.input-group-addon-clickable:hover{
+    background-color:#E1E1E1;
+}
+
 // Values excluded from computing are striked-trhough (both computed and not computed)
 .excluded-from-computing {
     &,

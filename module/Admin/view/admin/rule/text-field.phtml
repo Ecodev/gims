@@ -1,22 +1,16 @@
-<div ng-class="{'formula-text-field-fixed':fixed}" ng-show="fixed && rule || !fixed">
-
-    <div class="input-group">
-        <div id="rule.formula" class="form-control" ui-ace="aceOptions" name="formula" ng-model="rule.formula" style="height:50px;"></div>
-        <span class="input-group-addon">
-            <button ng-show="fixed" ng-click="unselect();" class="btn btn-default" style="margin-bottom:5px"><i class="fa fa-times fa-fw"></i></button><br/>
-            <button gims-rule-wizard class="btn btn-default" style="margin-bottom:5px"><i class="fa fa-gims-wizard fa-fw"></i></button><br/>
-            <button ng-show="fixed" class="btn btn-primary"><i class="fa fa-check fa-fw"></i></button>
-        </span>
-    </div>
-
-    <div ng-show="messages.length" class="help-block alert alert-danger">
-        <ul>
-            <li ng-repeat="message in messages" class="text-danger">{{message}}</li>
-        </ul>
-    </div>
-
-    <p ng-if="!messages.length && rule.structure.length" class='help-block alert alert-success'>
-        <gims-formula structure="rule.structure"></gims-formula>
-    </p>
+<div class="input-group">
+    <div id="rule.formula" class="form-control" ui-ace="aceOptions" name="formula" ng-model="rule.formula" style="height:50px;"></div>
+    <span class="input-group-addon input-group-addon-clickable" gims-rule-wizard>
+        <i class="fa fa-gims-wizard fa-fw"></i>
+    </span>
 </div>
 
+<div ng-show="messages.length" class="help-block alert alert-danger">
+    <ul>
+        <li ng-repeat="message in messages" class="text-danger">{{message}}</li>
+    </ul>
+</div>
+
+<p ng-if="!messages.length && rule.structure.length" class='help-block alert alert-success'>
+    <gims-formula structure="rule.structure"></gims-formula>
+</p>

@@ -77,7 +77,7 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
                 'questionnaire' => 'tst - test geoname',
                 'part' => 'current',
                 'level' => false,
-                'color' => '#003FD9',
+                'color' => null,
             ],
             [
                 'type' => 'text',
@@ -89,7 +89,7 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
                 'questionnaire' => 'current',
                 'part' => 'test part',
                 'level' => true,
-                'color' => '#7ED900',
+                'color' => null,
             ],
             [
                 'type' => 'text',
@@ -166,7 +166,7 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
                 'filter' => 'filter 1',
                 'part' => 'current',
                 'year' => '+2',
-                'color' => '#003FD9',
+                'color' => null,
             ],
             [
                 'type' => 'text',

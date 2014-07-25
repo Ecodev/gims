@@ -6,7 +6,7 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
         templateUrl: '/template/admin/rule/textField',
         scope: {
             rule: '=',
-            fixed: '='
+            messages: '=?'
         },
         controller: function($scope) {
 
@@ -51,7 +51,9 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
                         $scope.messages = response.data.messages;
                     } else {
                         // If PHPExcel threw fatal errors, we default to generic message
-                        $scope.messages = ['Formula syntax is invalid and cannot be computed.'];
+                        $scope.messages =
+                            ['Formula syntax is invalid and cannot be computed.'
+                            ];
                     }
                 };
 
@@ -64,10 +66,6 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
                     Restangular.all('rule').post($scope.rule, validateFields).then(success, fail);
                 }
             }, 300);
-
-            $scope.unselect = function() {
-                $scope.rule = null;
-            };
 
             /**
              * Watchers and event managers
