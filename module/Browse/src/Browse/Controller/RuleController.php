@@ -1,6 +1,6 @@
 <?php
 
-namespace Admin\Controller;
+namespace Browse\Controller;
 
 use Zend\View\Model\ViewModel;
 
@@ -13,6 +13,20 @@ class RuleController extends \Application\Controller\AbstractAngularActionContro
     }
 
     public function crudAction()
+    {
+        return new ViewModel();
+    }
+
+    public function wizardAction()
+    {
+        return new ViewModel();
+    }
+
+    public function textFieldAction()
+    {
+        return new ViewModel();
+    }
+    public function textFieldPanelAction()
     {
         return new ViewModel();
     }

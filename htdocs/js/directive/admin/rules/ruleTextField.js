@@ -3,7 +3,7 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
 
     return {
         restrict: 'E', // Only usage possible is with tag
-        templateUrl: '/template/admin/rule/textField',
+        templateUrl: '/template/browse/rule/textField',
         scope: {
             rule: '=',
             messages: '=?'

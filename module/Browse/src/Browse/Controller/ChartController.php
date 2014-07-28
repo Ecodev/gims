@@ -15,12 +15,4 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         return new ViewModel();
     }
 
-    /**
-     * @return ViewModel
-     */
-    public function sectorAction()
-    {
-        return new ViewModel();
-    }
-
 }
