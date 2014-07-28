@@ -1,4 +1,4 @@
-<gims-rule-text-field-panel rule="rule" refresh="refresh(questionnairesPermissions, filtersComputing)" readonly="!mode.isContribute"></gims-rule-text-field-panel>
+<gims-rule-text-field-panel refresh="refresh(questionnairesPermissions, filtersComputing)" readonly="!mode.isContribute"></gims-rule-text-field-panel>
 
 <div class="container" >
     <!-- Toolbar -->
@@ -514,7 +514,7 @@
                                                         <!-- Rules -->
                                                         <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].length" class="dropdown-header">Rules used for computation</li>
                                                         <li ng-repeat="usage in questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id]">
-                                                            <a href gims-select-rule="usage.rule" ><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a> <!--href="/admin/rule/edit/{{usage.rule.id}}"-->
+                                                            <a href gims-select-usage="usage" ><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a> <!--href="/admin/rule/edit/{{usage.rule.id}}"-->
                                                         </li>
 
                                                         <!-- Summands -->
