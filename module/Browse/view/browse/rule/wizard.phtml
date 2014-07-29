@@ -13,12 +13,14 @@
                     <select name="token"
                             id="token.selected"
                             ng-model="token.selected"
-                            ng-options="t.name group by t.group for t in availableTokens">
+                            ng-options="t.name group by t.group for t in availableTokens"
+                            style="width: 100%"
+                            >
                         <option style="display:none" value="">Select a syntax to insert</option>
                     </select>
                 </p>
             </div>
-            <div class="col-md-offset-2 col-md-10">
+            <div class="col-md-offset-2 col-md-8">
                 <p class="help-block" ng-show="token.selected.description">{{token.selected.description}}</p>
             </div>
         </div>
@@ -26,15 +28,14 @@
     <div class='form-horizontal'>
         <div class="form-group" ng-show="token.selected.rule" ng-class="{'has-error': myForm.rule.$invalid}">
             <label class="control-label col-md-2" for="token.rule"><?php echo $this->translate("Rule"); ?></label>
-            <div class="col-md-10">
+            <div class="col-md-8">
                 <gims-select name="rule"
                              id="token.rule"
                              api="rule"
                              model="token.rule"
                              change-url="false"
                              placeholder="Select a rule"
-                             style="width: 100%"
-                        >
+                             style="width: 100%">
                 </gims-select>
             </div>
         </div>
@@ -42,14 +43,15 @@
     <div class='form-horizontal'>
         <div class="form-group" ng-show="token.selected.filter" ng-class="{'has-error': myForm.filter.$invalid}">
             <label class="control-label col-md-2" for="token.filter"><?php echo $this->translate("Filter"); ?></label>
-            <div class="col-md-10">
+            <div class="col-md-8">
                 <div class="radio">
-                    <label><input type="radio" ng-model="token.filter" ng-value="currentValue" name='wizard-radio' />
+                    <label>
+                        <input type="radio" ng-model="token.filter" ng-value="currentValue" name='wizard-radio' />
                         {{currentValue.name}}
                     </label>
                 </div>
                 <div class="radio">
-                    <label>
+                    <label style="width: 100%">
                         <input type="radio" ng-checked="currentValue != token.filter" name='wizard-radio' />
                         <gims-select name="filter"
                                      id="token.filter"
@@ -68,14 +70,15 @@
     <div class='form-horizontal'>
         <div class="form-group" ng-show="token.selected.questionnaire" ng-class="{'has-error': myForm.questionnaire.$invalid}">
             <label class="control-label col-md-2" for="token.questionnaire"><?php echo $this->translate("Questionnaire"); ?></label>
-            <div class="col-md-10">
+            <div class="col-md-8">
                 <div class="radio">
-                    <label><input type="radio" ng-model="token.questionnaire" ng-value="currentValue" name='wizard-questionnaire' />
+                    <label>
+                        <input type="radio" ng-model="token.questionnaire" ng-value="currentValue" name='wizard-questionnaire' />
                         {{currentValue.name}}
                     </label>
                 </div>
                 <div class="radio">
-                    <label>
+                    <label style="width: 100%">
                         <input type="radio" ng-checked="currentValue != token.questionnaire" name='wizard-questionnaire' />
                         <gims-select name="questionnaire"
                                      id="token.questionnaire"
@@ -94,14 +97,15 @@
     <div class='form-horizontal'>
         <div class="form-group" ng-show="token.selected.part" ng-class="{'has-error': myForm.part.$invalid}">
             <label class="control-label col-md-2" for="token.part"><?php echo $this->translate("Part"); ?></label>
-            <div class="col-md-10">
+            <div class="col-md-8">
                 <div class="radio">
-                    <label><input type="radio" ng-model="token.part" ng-value="currentValue" name='wizard-part' />
+                    <label>
+                        <input type="radio" ng-model="token.part" ng-value="currentValue" name='wizard-part' />
                         {{currentValue.name}}
                     </label>
                 </div>
                 <div class="radio">
-                    <label>
+                    <label style="width: 100%">
                         <input type="radio" ng-checked="currentValue != token.part" name='wizard-part' />
                         <gims-select name="part"
                                      id="token.part"
@@ -120,7 +124,7 @@
     <div class='form-horizontal'>
         <div class="form-group" ng-show="token.selected.year" ng-class="{'has-error': myForm.year.$invalid}">
             <label class="control-label col-md-2" for="token.year"><?php echo $this->translate("Year offset"); ?></label>
-            <div class="col-md-10">
+            <div class="col-md-8">
                 <input type="number" name="year"
                        id="token.year"
                        min="-50"
@@ -136,7 +140,7 @@
     <div class='form-horizontal'>
         <div class="form-group" ng-show="token.selected.level" ng-class="{'has-error': myForm.level.$invalid}">
             <label class="control-label col-md-2" for="token.level"><?php echo $this->translate("Level 2"); ?></label>
-            <div class="col-md-10">
+            <div class="col-md-8">
                 <input class="pull-left" type="checkbox" name="level" id="token.level" ng-model="token.level" style="margin-top:10px;"/>
                 <p class="help-block" style="margin-left:20px;">Levels correspond to Tables_W/Tables_S (level 1) and GraphData_W/GraphData_S (level 2). In most cases the filter value referenced should be the value of Tables_W/Tables_S, so the checkbox should be left unchecked.</p>
             </div>
