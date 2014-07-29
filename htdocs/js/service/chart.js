@@ -86,21 +86,26 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         var arrayData = [];
         var columns = [];
         _.forEach(data.series, function(serie) {
-            if (serie.type == 'line' && ((_.isUndefined(ignoredElements) || ignoredElements && ignoredElements.length === 0) && _.isUndefined(serie.isIgnored) || ignoredElements && ignoredElements.length > 0 && serie.isIgnored === true)) {
+            if (serie.type == 'line' &&
+                (
+                    (_.isUndefined(ignoredElements) || ignoredElements && ignoredElements.length === 0) && _.isUndefined(serie.isIgnored) ||
+                    ignoredElements && ignoredElements.length > 0 && serie.isIgnored === true)
+                ) {
 
                 // create a column by filter on graph
                 columns.push({
-                    field: 'value' + serie.id,
+                    field: 'value' + serie.id + '_' + serie.geonameId,
                     displayName: serie.name,
                     enableColumnResize: true,
                     color: serie.color,
-                    headerCellTemplate: " " +
-                            '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
-                            '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" popover-placement="top" popover="{{col.displayName}}">' +
-                            '       <i class="fa fa-gims-filter" style="color:{{col.colDef.color}};"></i> {{col.displayName}}' +
-                            '   </div>' +
-                            '</div>',
-                    cellTemplate: '<div class="ngCellText text-right" ng-class="col.colIndex()"><span ng-cell-text ng-show="{{row.entity.value' + serie.id + '!==null}}">{{row.entity.value' + serie.id + '}} %</span></div>'
+                    headerCellTemplate: '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
+                                        '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" popover-placement="top" popover="{{col.displayName}}">' +
+                                        '       <i class="fa fa-gims-filter" style="color:{{col.colDef.color}};"></i> {{col.displayName}}' +
+                                        '   </div>' +
+                                        '</div>',
+                    cellTemplate:   '<div class="ngCellText text-right" ng-class="col.colIndex()">' +
+                                        '<span ng-cell-text ng-show="{{row.entity.value' + serie.id + '_' + serie.geonameId + '!==null}}">{{row.entity.value' + serie.id + '_' + serie.geonameId + '}} %</span>' +
+                                    '</div>'
                 });
 
                 // retrieve data
@@ -108,7 +113,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                     if (_.isUndefined(arrayData[index])) {
                         arrayData[index] = {};
                     }
-                    arrayData[index]['value' + serie.id] = value;
+                    arrayData[index]['value' + serie.id + '_' + serie.geonameId] = value;
                 });
 
             }

@@ -408,6 +408,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
             $baseName = $prefix . $serie['name'];
             $serie['color'] = $filter->getGenericColor($this->getColorSaturation($isIgnored, $isAdjusted));
+            $serie['geonameId'] = $geoname->getId();
             $serie['type'] = 'line';
             $serie['name'] = $baseName . $this->getSuffix($isIgnored, $isAdjusted);
             $serie['dashStyle'] = $this->getDashStyle($prefix, $isIgnored, $isAdjusted);
