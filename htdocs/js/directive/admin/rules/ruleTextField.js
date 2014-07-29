@@ -31,6 +31,9 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
                     _renderer.setShowGutter(false);
                     // _session.setMode("ace/mode/sql");
                     _session.setMode("ace/mode/excel");
+
+                    _renderer.setOption("maxLines", 30);
+                    _renderer.setOption("minLines", 3);
                 }
             };
 
