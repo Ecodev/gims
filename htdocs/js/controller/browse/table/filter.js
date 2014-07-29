@@ -70,7 +70,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /*************************************************************** Watchers */
     /**************************************************************************/
 
-    // Subscribe to listen when there is network activity
+        // Subscribe to listen when there is network activity
     $scope.isLoading = false;
     requestNotification.subscribeOnRequest(function() {
         $scope.isLoading = true;
@@ -190,11 +190,17 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param questionnairesPermissions
      * @param filtersComputing
      */
-    $scope.refresh = function(questionnairesPermissions, filtersComputing) {
+    $scope.refresh = function(questionnairesPermissions, filtersComputing, questionnairesUsages) {
 
         if (questionnairesPermissions && !_.isUndefined($scope.tabs) && !_.isUndefined($scope.tabs.questionnaires)) {
-            getQuestionnaires($scope.tabs.questionnaires, {fields: 'permissions'}).then(function(questionnaires) {
+            getQuestionnaires(_.pluck($scope.tabs.questionnaires, 'id'), {fields: 'permissions'}).then(function(questionnaires) {
                 updateQuestionnairePermissions(questionnaires);
+            });
+        }
+
+        if (questionnairesUsages && !_.isUndefined($scope.tabs) && !_.isUndefined($scope.tabs.questionnaires)) {
+            getQuestionnaires(_.pluck($scope.tabs.questionnaires, 'id'), {fields: 'filterQuestionnaireUsages'}).then(function(questionnaires) {
+                updateQuestionnaireUsages(questionnaires);
             });
         }
 
@@ -391,7 +397,9 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
         $scope.checkQuestionnairesIntegrity().then(function() {
             saveFilters().then(function(savedFacilities) {
-                var questionnairesToCreate = !_.isUndefined(questionnaire) ? [questionnaire] : _.filter($scope.tabs.questionnaires, $scope.checkIfSavableQuestionnaire);
+                var questionnairesToCreate = !_.isUndefined(questionnaire) ?
+                    [questionnaire
+                    ] : _.filter($scope.tabs.questionnaires, $scope.checkIfSavableQuestionnaire);
                 var existingQuestionnaires = _.filter($scope.tabs.questionnaires, 'id');
                 saveQuestionnaires(questionnairesToCreate.concat(existingQuestionnaires), savedFacilities);
             });
@@ -544,10 +552,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 }
 
                 if (data.questionnaire && data.questionnaire.id) {
-
                     questionnaire.id = data.questionnaire.id;
                     questionnaire.survey.id = data.survey.id;
-                    getQuestionnaires([data.questionnaire.id], questionnaireWithAnswersFields).then(function(questionnaires) {
+                    getQuestionnaires([data.questionnaire.id
+                    ], questionnaireWithAnswersFields).then(function(questionnaires) {
                         $scope.firstQuestionnairesRetrieve = true;
                         prepareDataQuestionnaires(questionnaires);
                         updateUrl('questionnaires');
@@ -941,7 +949,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             // get data for new jmp questionnaires
             getQuestionnaires(_.pluck(jmp, 'id'), questionnaireWithAnswersFields).then(function(questionnaires) {
                 $scope.firstQuestionnairesRetrieve = true;
-//                listQuestionnairesWithFilterUsages(questionnaires);
+                //                listQuestionnairesWithFilterUsages(questionnaires);
                 prepareDataQuestionnaires(questionnaires);
             });
         }
@@ -984,20 +992,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 return q.filter.id;
             });
 
-            // Indexes usages by filter and part
-            var usagesByFilter = {};
-            _.forEach(questionnaire.filterQuestionnaireUsages, function(usage) {
-
-                if (!usagesByFilter[usage.filter.id]) {
-                    usagesByFilter[usage.filter.id] = {};
-                }
-
-                if (!usagesByFilter[usage.filter.id][usage.part.id]) {
-                    usagesByFilter[usage.filter.id][usage.part.id] = [];
-                }
-                usagesByFilter[usage.filter.id][usage.part.id].push(usage);
-            });
-            questionnaire.filterQuestionnaireUsagesByFilterAndPart = usagesByFilter;
+            indexFilterQuestionnaireUsages(questionnaire);
 
             // update $scope with modified questionnaire
             $scope.tabs.questionnaires[_.findIndex($scope.tabs.questionnaires, {id: questionnaire.id})] = questionnaire;
@@ -1005,6 +1000,29 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
         fillMissingElements();
         getComputedFilters();
+    };
+
+    /**
+     * Index FilterQuestionnaireUsages by filter and part
+     * @param questionnaire
+     */
+    var indexFilterQuestionnaireUsages = function(questionnaire) {
+
+        // Indexes usages by filter and part
+        var usagesByFilter = {};
+        _.forEach(questionnaire.filterQuestionnaireUsages, function(usage) {
+
+            if (!usagesByFilter[usage.filter.id]) {
+                usagesByFilter[usage.filter.id] = {};
+            }
+
+            if (!usagesByFilter[usage.filter.id][usage.part.id]) {
+                usagesByFilter[usage.filter.id][usage.part.id] = [];
+            }
+            usagesByFilter[usage.filter.id][usage.part.id].push(usage);
+        });
+        questionnaire.filterQuestionnaireUsagesByFilterAndPart = usagesByFilter;
+
     };
 
     /**
@@ -1031,7 +1049,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId] = {};
         }
         if (!questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId]) {
-            questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId] = [];
+            questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId] =
+                [];
         }
 
         var usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId];
@@ -1135,6 +1154,18 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     var updateQuestionnairePermissions = function(questionnaires) {
         _.forEach($scope.tabs.questionnaires, function(questionnaire) {
             questionnaire.permissions = _.find(questionnaires, {id: questionnaire.id}).permissions;
+        });
+    };
+
+    /**
+     * Update questionnaires permissions
+     * @type Function
+     * @param questionnaires
+     */
+    var updateQuestionnaireUsages = function(questionnaires) {
+        _.forEach($scope.tabs.questionnaires, function(questionnaire) {
+            questionnaire.filterQuestionnaireUsages = _.find(questionnaires, {id: questionnaire.id}).filterQuestionnaireUsages;
+            indexFilterQuestionnaireUsages(questionnaire);
         });
     };
 
@@ -1893,21 +1924,21 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * Questionnaires with usages
      * @param questionnaires
      */
-//    Disabled for the moment, because add buttons that are not required since the news NSA view has been added, but works
-//    var listQuestionnairesWithFilterUsages = function(questionnaires) {
-//        $scope.questionnairesWithUsages = _.filter(questionnaires, function(q) {
-//            if (!_.isEmpty(q.filterQuestionnaireUsages) || _.isNumber(q.filterQuestionnaireUsages)) {
-//                return true;
-//            }
-//        });
-//    };
+    //    Disabled for the moment, because add buttons that are not required since the news NSA view has been added, but works
+    //    var listQuestionnairesWithFilterUsages = function(questionnaires) {
+    //        $scope.questionnairesWithUsages = _.filter(questionnaires, function(q) {
+    //            if (!_.isEmpty(q.filterQuestionnaireUsages) || _.isNumber(q.filterQuestionnaireUsages)) {
+    //                return true;
+    //            }
+    //        });
+    //    };
 
     /**
      * Update parameters on url exlucding empty ids to avoid multiple consecutive commas that cause problems on server side.
      * @param element
      */
     var updateUrl = function(element) {
-        $location.search(element, _.filter(_.pluck($scope.tabs[element], 'id'), function(el) {
+        $location.search(element, _.filter(_.pluck($scope.tabs[element], 'id'),function(el) {
             if (el) {
                 return true;
             }

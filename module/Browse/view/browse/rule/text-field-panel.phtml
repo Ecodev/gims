@@ -1,11 +1,31 @@
 <div class="formula-text-field-fixed" ng-show="usage">
-    <div class="row">
-        <p class="col-sm-6">
-            <button class="btn btn-default" ng-click="close();" ><i class="fa fa-times"></i> Close</button>
-            <button class="btn btn-primary" ng-show="!readonly" ng-click="save()" ng-disabled="rule.permissions.update || errors.length"><i class="fa" ng-class="{'fa-gims-loading':isSaving, 'fa-check':!isSaving}"></i> Save</button>
-            <button class="btn btn-danger" ng-show="!readonly" ng-disabled="rule.permissions.delete" ng-click="delete()"><i class="fa"  ng-class="{'fa-gims-loading':isRemoving, 'fa-trash-o':!isRemoving}"></i> Delete</button>
-            <span class="text-warning" style="margin-left:10px;"><i class="fa fa-warning"></i> This rule is used in {{usage.rule.nbOfUsages}} different places.</span>
-        </p>
+
+    <form role="form">
+        <div class="form-group" ng-if="showDetails">
+            <label for="Name">Name</label>
+            <input type="text" class="form-control" id="Name" ng-model="usage.rule.name">
+        </div>
+        <div class="form-group" ng-if="showDetails">
+            <label for="Justification">Justification</label>
+            <input type="text" class="form-control" id="Justification" ng-model="usage.justification">
+        </div>
+        <div class="form-group">
+            <label for="Justification" ng-if="showDetails">Formula</label>
+            <gims-rule-text-field rule="usage.rule" messages="errors"></gims-rule-text-field>
+        </div>
+    </form>
+
+    <div class='text-right'>
+        <span class="alert alert-warning" style="margin-left:10px;" ng-if="usage.rule.nbOfUsages > 1"><i class="fa fa-warning"></i> This rule is used in {{usage.rule.nbOfUsages}} different places.</span>
+        <button class="btn btn-default" ng-click="close();" ><i class="fa fa-times"></i> Close</button>
+        <button class="btn btn-default" ng-click="showDetails =! showDetails"><i class="fa fa-info-circle"></i> Show/hide details</button>
+        <button class="btn btn-danger" ng-show="!readonly" ng-disabled="rule.permissions.delete" ng-click="delete()" ng-if="!!usage.id"><i class="fa"  ng-class="{'fa-gims-loading':isRemoving, 'fa-trash-o':!isRemoving}"></i> Delete</button>
+        <button class="btn btn-primary" ng-show="!readonly" ng-click="save()" ng-disabled="rule.permissions.update || errors.length">
+            <i class="fa" ng-class="{'fa-gims-loading':isSaving, 'fa-check':!isSaving}"></i>
+            <span ng-switch="!!usage.id">
+                <span ng-switch-when="true">Save</span>
+                <span ng-switch-when="false">Create</span>
+            </span>
+        </button>
     </div>
-    <gims-rule-text-field rule="usage.rule" messages="errors"></gims-rule-text-field>
 </div>

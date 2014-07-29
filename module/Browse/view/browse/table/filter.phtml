@@ -1,4 +1,4 @@
-<gims-rule-text-field-panel refresh="refresh(questionnairesPermissions, filtersComputing)" readonly="!mode.isContribute"></gims-rule-text-field-panel>
+<gims-rule-text-field-panel refresh="refresh(questionnairesPermissions, filtersComputing, questionnairesUsages)" readonly="!mode.isContribute"></gims-rule-text-field-panel>
 
 <div class="container" >
     <!-- Toolbar -->
@@ -505,26 +505,32 @@
                                                             <a><i class="fa fa-question fa-fw"></i> {{questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]}}</a>
                                                         </li>
                                                         <li ng-if="isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value])" >
-                                                            <a><i class="fa fa-fw"></i> Exact value: {{questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]}}</a>
+                                                            <a><i class="fa fa-crosshairs fa-fw"></i> Exact value: {{questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]}}</a>
                                                         </li>
                                                         <li ng-if="questionnaire.survey.questions[filter.id].answers[tabs.part.id].error">
                                                             <a><i class="fa fa-warning text-warning"></i> This answer has not been saved.</a>
                                                         </li>
 
                                                         <!-- Rules -->
-                                                        <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].length" class="dropdown-header">Rules used for computation</li>
+                                                        <li ng-if="((mode.isContribute && questionnairesStatus[questionnaire.status]) || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].length) && (questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id)" class="divider"></li>
+                                                        <li ng-if="(mode.isContribute && questionnairesStatus[questionnaire.status]) || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].length" class="dropdown-header">Rules used for computation</li>
                                                         <li ng-repeat="usage in questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id]">
-                                                            <a href gims-select-usage="usage" ><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a> <!--href="/admin/rule/edit/{{usage.rule.id}}"-->
+                                                            <a href gims-select-usage="usage"><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a> <!--href="/admin/rule/edit/{{usage.rule.id}}"-->
+                                                        </li>
+
+                                                        <li ng-if="mode.isContribute && questionnairesStatus[questionnaire.status]">
+                                                            <a href gims-add-usage questionnaire="questionnaire" filter="filter" part="tabs.part"><i class="fa fa-plus-circle fa-fw"></i> Add a rule</a>
                                                         </li>
 
                                                         <!-- Summands -->
+                                                        <li ng-if="filter.summands.length" class="divider"></li>
                                                         <li ng-if="filter.summands.length" class="dropdown-header">Summands used for computation</li>
                                                         <li ng-repeat="summand in filter.summands">
                                                             <a href="/admin/filter/edit/{{summand.id}}"><i class="fa fa-gims-filter fa-fw"></i> {{filter.name}}</a>
                                                         </li>
 
                                                         <!--<li ng-if="!isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) && isValidNumber(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second)"><a><i class="fa fa-cog fa-fw"></i></a></li>-->
-                                                        <li ng-if="questionnairesStatus[questionnaire.status] && (questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id])" class="divider"></li>
+                                                        <li ng-if="questionnairesStatus[questionnaire.status] && (filter.summands.length || ((mode.isContribute && questionnairesStatus[questionnaire.status]) || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].length) || questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id])" class="divider"></li>
                                                         <li ng-if="questionnairesStatus[questionnaire.status]" class="dropdown-header">Actions</li>
                                                         <li ng-if="questionnairesStatus[questionnaire.status]">
                                                             <a href ng-click="toggleExcludeRule(questionnaire, filter.id, tabs.part.id)"><i class="fa fa-gims-rule fa-fw"></i> {{excludeRuleExists(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id]) ? 'Include in further computing' : 'Exclude from further computing'}}</a>

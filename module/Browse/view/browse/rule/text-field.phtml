@@ -5,12 +5,12 @@
     </span>
 </div>
 
-<div ng-show="messages.length" class="help-block alert alert-danger">
+<div ng-show="messages.length" class="help-block alert alert-danger"  style="margin-bottom:0px;">
     <ul>
         <li ng-repeat="message in messages" class="text-danger">{{message}}</li>
     </ul>
 </div>
 
-<p ng-if="!messages.length && rule.structure.length" class='help-block alert alert-success'>
+<p ng-if="!messages.length && rule.structure.length" class='help-block alert alert-success' style="margin-bottom:0px;">
     <gims-formula structure="rule.structure"></gims-formula>
 </p>

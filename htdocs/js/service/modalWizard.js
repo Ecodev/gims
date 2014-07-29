@@ -6,7 +6,7 @@ angular.module('myApp.services').factory('RuleWizardModal', function($modal) {
         select: function() {
             var modalInstance = $modal.open({
                 controller: 'RuleWizardModalCtrl',
-                templateUrl: '/template/admin/rule/wizard'
+                templateUrl: '/template/browse/rule/wizard'
             });
             return modalInstance.result;
         }
