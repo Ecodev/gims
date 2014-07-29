@@ -16,7 +16,7 @@
     </form>
 
     <div class='text-right'>
-        <span class="alert alert-warning" style="margin-left:10px;" ng-if="usage.rule.nbOfUsages > 1"><i class="fa fa-warning"></i> This rule is used in {{usage.rule.nbOfUsages}} different places.</span>
+        <span class="text-warning" style="margin-left:10px;" ng-if="usage.rule.nbOfUsages > 1"><i class="fa fa-warning"></i> This rule is used in {{usage.rule.nbOfUsages}} different places.</span>
         <button class="btn btn-default" ng-click="close();" ><i class="fa fa-times"></i> Close</button>
         <button class="btn btn-default" ng-click="showDetails =! showDetails"><i class="fa fa-info-circle"></i> Show/hide details</button>
         <button class="btn btn-danger" ng-show="!readonly" ng-disabled="rule.permissions.delete" ng-click="delete()" ng-if="!!usage.id"><i class="fa"  ng-class="{'fa-gims-loading':isRemoving, 'fa-trash-o':!isRemoving}"></i> Delete</button>
