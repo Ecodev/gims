@@ -106,6 +106,7 @@
                 100.0
             ],
             "color": "#005FD9",
+            "geonameId": 2921044,
             "type": "line",
             "dashStyle": "Solid",
             "marker": {
@@ -152,6 +153,7 @@
                 100.0
             ],
             "color": "#D400D9",
+            "geonameId": 2921044,
             "type": "line",
             "dashStyle": "Solid",
             "marker": {

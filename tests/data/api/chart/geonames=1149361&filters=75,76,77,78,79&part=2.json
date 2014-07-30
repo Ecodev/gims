@@ -106,6 +106,7 @@
                 56.1
             ],
             "color": "#00D919",
+            "geonameId": 1149361,
             "type": "line",
             "dashStyle": "Solid",
             "marker": {
@@ -152,6 +153,7 @@
                 4.0
             ],
             "color": "#D90026",
+            "geonameId": 1149361,
             "type": "line",
             "dashStyle": "Solid",
             "marker": {
@@ -198,6 +200,7 @@
                 10.5
             ],
             "color": "#0066D9",
+            "geonameId": 1149361,
             "type": "line",
             "dashStyle": "Solid",
             "marker": {
@@ -244,6 +247,7 @@
                 52.1
             ],
             "color": "#A5D900",
+            "geonameId": 1149361,
             "type": "line",
             "dashStyle": "Solid",
             "marker": {
@@ -290,6 +294,7 @@
                 33.4
             ],
             "color": "#CE00D9",
+            "geonameId": 1149361,
             "type": "line",
             "dashStyle": "Solid",
             "marker": {
