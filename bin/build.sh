@@ -65,7 +65,7 @@ for jsDir in lib/autoload/ js/ ; do
         echo "$file"
         D=`dirname $file`
         mkdir -p "tmp/$D"
-        more "$file" | ../node_modules/.bin/ngmin | ../node_modules/.bin/uglifyjs - -o "tmp/$file" # uglify the code
+        more "$file" | ../node_modules/.bin/ng-annotate -a - | ../node_modules/.bin/uglifyjs - -o "tmp/$file" # uglify the code
         cat "tmp/$file" >> $TARGET # concatenate in a single file
     done
 done
