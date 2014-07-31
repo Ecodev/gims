@@ -7,7 +7,6 @@ angular.module('myApp.directives').directive('gimsSelectUsage', function($rootSc
             gimsSelectUsage: '='
         },
         link: function(scope, element) {
-
             element.on('click', function() {
                 $rootScope.$emit('gims-rule-usage-selected', scope.gimsSelectUsage);
             });

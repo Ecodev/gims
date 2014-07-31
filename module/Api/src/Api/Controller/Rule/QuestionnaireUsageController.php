@@ -6,6 +6,7 @@ use Api\Controller\AbstractChildRestfulController;
 use Application\View\Model\NumericJsonModel;
 use Application\Utility;
 use Application\Service\Calculator\Calculator;
+use Application\Service\Hydrator;
 
 class QuestionnaireUsageController extends AbstractChildRestfulController
 {
@@ -34,8 +35,11 @@ class QuestionnaireUsageController extends AbstractChildRestfulController
                 $value = $calculator->computeFormulaBasic($usage);
                 $roundedValue = Utility::decimalToRoundedPercent($value);
 
+                $hydrator = new Hydrator();
+
                 $result[$partId][$ruleName]['values'][$usage->getQuestionnaire()->getId()] = [
                     'id' => $usage->getRule()->getId(),
+                    'usage' => $hydrator->extract($usage),
                     'value' => $roundedValue,
                 ];
             }

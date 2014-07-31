@@ -486,10 +486,6 @@
                                                             <a href gims-select-usage="usage"><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a> <!--href="/admin/rule/edit/{{usage.rule.id}}"-->
                                                         </li>
 
-                                                        <li ng-if="mode.isContribute && questionnairesStatus[questionnaire.status]">
-                                                            <a href gims-add-usage questionnaire="questionnaire" filter="filter" part="tabs.part"><i class="fa fa-plus-circle fa-fw"></i> Add a rule</a>
-                                                        </li>
-
                                                         <!-- Summands -->
                                                         <li ng-if="filter.summands.length" class="divider"></li>
                                                         <li ng-if="filter.summands.length" class="dropdown-header">Summands used for computation</li>
@@ -502,6 +498,9 @@
                                                         <li ng-if="questionnairesStatus[questionnaire.status]" class="dropdown-header">Actions</li>
                                                         <li ng-if="questionnairesStatus[questionnaire.status]">
                                                             <a href ng-click="toggleExcludeRule(questionnaire, filter.id, tabs.part.id)"><i class="fa fa-gims-rule fa-fw"></i> {{excludeRuleExists(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id]) ? 'Include in further computing' : 'Exclude from further computing'}}</a>
+                                                        </li>
+                                                        <li ng-if="mode.isContribute && questionnairesStatus[questionnaire.status]">
+                                                            <a href gims-add-usage questionnaire="questionnaire" filter="filter" part="tabs.part"><i class="fa fa-gims-rule fa-fw"></i> Add a rule</a>
                                                         </li>
                                                         <li ng-if="questionnairesStatus[questionnaire.status]">
                                                             <a href ng-if="questionnaire.survey.questions[filter.id].isAbsolute" ng-click="toggleQuestionAbsolute(questionnaire, questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id])"><i class="fa fa-fw">%</i> Set question as percent value</a>
@@ -564,7 +563,8 @@
                             <!-- QuestionnaireUsage's value name column -->
                             <td ng-repeat="questionnaire in tabs.questionnaires track by $index" style="text-align: center;" >
                                 <span ng-if="rule.values[questionnaire.id]" gims-select-token part="tabs.part" questionnaire="questionnaire" rule="rule.values[questionnaire.id]">
-                                    <a href><i class="fa fa-pencil" tooltip="Edit rule"></i></a><!--="/admin/rule/edit/{{rule.values[questionnaire.id].id}}"-->
+                                    <!--@todo: actually don't work because we dont receive usage on request -->
+                                    <a href gims-select-usage="rule.values[questionnaire.id].usage"><i class="fa fa-pencil" tooltip="Edit rule"></i></a><!--="/admin/rule/edit/{{rule.values[questionnaire.id].id}}"-->
                                     {{rule.values[questionnaire.id].value}}
                                 </span>
                             </td>
