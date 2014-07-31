@@ -103,24 +103,29 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     $scope.$watch('tabs.filter', function() {
         if ($scope.tabs.filter) {
-            Restangular.one('filter', $scope.tabs.filter.id).getList('children', _.merge($scope.filterFields, {perPage: 1000})).then(function(filters) {
-                if (filters) {
 
-                    // Inject parent as first filter, so we are able to see the "main" value
-                    _.forEach(filters, function(filter) {
-                        filter.level++;
-                    });
-                    var parent = _.clone($scope.tabs.filter);
-                    parent.level = 0;
-                    filters.unshift(parent);
+            if ($scope.isValidId($scope.tabs.filter)) {
+                Restangular.one('filter', $scope.tabs.filter.id).getList('children', _.merge($scope.filterFields, {perPage: 1000})).then(function(filters) {
+                    if (filters) {
 
-                    $scope.tabs.filters = filters;
-                    $scope.tabs.filterSet = null;
-                    updateUrl('filterSet');
+                        // Inject parent as first filter, so we are able to see the "main" value
+                        _.forEach(filters, function(filter) {
+                            filter.level++;
+                        });
+                        var parent = _.clone($scope.tabs.filter);
+                        parent.level = 0;
+                        filters.unshift(parent);
 
-                }
-                checkSelectionExpand();
-            });
+                        $scope.tabs.filters = filters;
+                        $scope.tabs.filterSet = null;
+                        updateUrl('filterSet');
+
+                    }
+                    checkSelectionExpand();
+                });
+            } else {
+                $scope.tabs.filters = [$scope.tabs.filter];
+            }
         }
     });
 
@@ -130,6 +135,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             Restangular.one('country', $scope.tabs.country.id).get(_.merge(countryFields, {perPage: 1000})).then(function(country) {
                 $scope.tabs.questionnaires = country.geoname.questionnaires;
                 $scope.tabs.survey = null;
+                initSector();
                 checkSelectionExpand();
             });
         }
@@ -599,13 +605,18 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         }
 
         var questionnaire = {};
+        var country = null;
         if ($location.search().usedCountry) {
-            questionnaire = {
-                geoname: {
-                    country: $location.search().usedCountry
-                }
-            };
+            country = $location.search().usedCountry;
+        } else if ($scope.tabs.country) {
+            country = $scope.tabs.country.id;
         }
+
+        questionnaire = {
+            geoname: {
+                country: country
+            }
+        };
 
         $scope.tabs.questionnaires.splice(0, 0, questionnaire);
         $scope.questionnairesAreSorted = false;
@@ -666,30 +677,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             });
             fillMissingElements();
         }
-    };
-
-    /**
-     * Create a filterset with a filter using the same name. Is used on sector mode.
-     */
-    $scope.createFilterSet = function() {
-        Restangular.all('filterSet').post($scope.tabs.newFilterSet).then(function(filterSet) {
-            var filter = {
-                name: $scope.tabs.newFilterSet.name,
-                filterSets: [filterSet.id],
-                color: '#FF0000'
-            };
-            saveFilter(filter).then(function(filter) {
-                $scope.tabs.filter = filter;
-                $scope.tabs.view = true;
-                $scope.tabs.viewDisabled = false;
-                $scope.tabs.create = false;
-                $scope.tabs.createDisabled = true;
-
-                // Automatically insert empty questionnaire and equipement
-                $scope.addQuestionnaire();
-                $timeout($scope.addEquipment, 800); // TODO, this is absolutely terrible, I think I need timeout because the new sector filter did not load its children yet, but I am not sure. Samuel, help !
-            });
-        });
     };
 
     $scope.saveComment = function(questionnaire) {
@@ -1707,6 +1694,38 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         return deferred.promise;
     };
 
+    var initSector = function() {
+        if ($scope.mode.isSector) {
+            updateUrl('questionnaires');
+            $scope.tabs.filter = undefined;
+            $scope.tabs.filters = [];
+            updateUrl('filter');
+            updateUrl('filters');
+        }
+        if ($scope.tabs.country) {
+            if (_.isEmpty($scope.tabs.questionnaires)) {
+                $scope.addQuestionnaire();
+                addSectorFilterSet();
+            } else {
+                if ($scope.tabs.questionnaires && $scope.tabs.questionnaires.length && $scope.tabs.questionnaires[0].survey) {
+                    Restangular.one('filter', $scope.tabs.questionnaires[0].survey.questions[0].filter.id).get({fields: 'parents.parents'}).then(function(filters) {
+                        $scope.tabs.filter = filters.parents[0].parents[0];
+                    });
+                }
+            }
+        }
+    };
+
+    var addSectorFilterSet = function() {
+        $scope.tabs.filter = {
+            id: '_' + $scope.lastFilterId++,
+            name: 'Sector : ' + $scope.tabs.country.name,
+            level: 0,
+            color: '#FF0000'
+        };
+        $timeout($scope.addEquipment, 0);
+    };
+
     /**
      * In case sector parameter is detected in url, this function ensures each filter has
      * sub filters dedicated to filter data (Usually people and equipment but may be anything)
@@ -1784,6 +1803,33 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @returns promise
      */
     var saveFilters = function() {
+        var deferred = $q.defer();
+
+        if (!$scope.isValidId($scope.tabs.filters[0])) {
+
+            // first create filter set
+            var newFilterSet = {name: 'Sector : ' + $scope.tabs.country.name};
+            Restangular.all('filterSet').post(newFilterSet).then(function(filterSet) {
+                $scope.tabs.filters[0].filterset = [filterSet.id];
+
+                // then save first filter
+                saveFiltersCollection([$scope.tabs.filters[0]
+                ]).then(function() {
+                    updateUrl('filter');
+                    saveEquipments().then(function() {
+                        deferred.resolve();
+                    });
+                });
+            });
+
+        } else {
+            return saveEquipments();
+        }
+
+        return deferred.promise;
+    };
+
+    var saveEquipments = function() {
         var deferred = $q.defer();
 
         // get all filters with starting by _1
@@ -1898,6 +1944,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      */
     var createQuestionnaireFilterUsages = function(questionnaire, filters) {
         if ($scope.mode.isSector) {
+
             var equipments = _.map($scope.getFiltersByLevel(1, filters), function(filter) {
                 return filter.id + ':' + _.pluck(getChildren(filter), 'id').join('-');
             });
@@ -1906,7 +1953,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 questionnaire.filterQuestionnaireUsages = 1;
             });
 
-//            listQuestionnairesWithFilterUsages($scope.tabs.questionnaires);
+            //            listQuestionnairesWithFilterUsages($scope.tabs.questionnaires);
 
             $http.get('/api/filter/createUsages', {
                 params: {
@@ -2008,7 +2055,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 answer = question.answers[partId];
             }
 
-            if (question.isLoading || (answer && answer.isLoading)) {
+            if (question && question.isLoading || (answer && answer.isLoading)) {
                 return 'loading';
             }
 
@@ -2028,7 +2075,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 return 'answer';
             } else if (usages && usages.length) {
                 return 'rule';
-            } else if (filter.summands.length && $scope.isValidNumber(firstValue)) {
+            } else if (filter.summands && filter.summands.length && $scope.isValidNumber(firstValue)) {
                 return 'summand';
             } else if ($scope.isValidNumber(firstValue)) {
                 return 'child';
