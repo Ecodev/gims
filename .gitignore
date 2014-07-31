@@ -6,7 +6,7 @@ docs/_build
 data/logs
 htdocs/css
 htdocs/tmp
-htdocs/lib/*
+# htdocs/lib/*
 !htdocs/lib/autoload
 nbproject/private
 node_modules
