@@ -1,9 +1,9 @@
 {
   "name": "GIMS",
   "dependencies": {
-    "uglify-js": "~2.4.13",
-    "jshint": "~2.5.1",
-    "bower": "~1.3.3",
+    "uglify-js": "~2.4.15",
+    "jshint": "~2.5.2",
+    "bower": "~1.3.8",
     "jscs": "~1.4.5",
     "ng-annotate": "~0.9.8"
   },
