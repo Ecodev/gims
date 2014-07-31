@@ -46,7 +46,7 @@ describe('admin/survey/new', function() {
         randomCode = Math.random().toString(36).substr(2, 4);
         element(by.model('survey.code')).sendKeys(randomCode);
         element(by.model('survey.name')).sendKeys('foo');
-        element(by.model('survey.isActive')).findElement(by.css("[value='0']")).click();
+        element(by.model('survey.isActive')).element(by.css("[value='0']")).click();
         element(by.model('survey.year')).sendKeys('2013');
         element(by.model('survey.comments')).sendKeys('foo bar');
         element(by.model('survey.dateStart')).sendKeys('08/05/2013');
@@ -100,7 +100,7 @@ describe('admin/survey/new', function() {
         expect(element(by.model('survey.code')).getAttribute('value')).toMatch(randomCode);
 
         // Delete the survey
-        element(by.css('form .btn.btn-danger')).click();
+        element(by.css('form > .btn.btn-danger')).click();
         element(by.css(".modal .btn-danger")).click();
 
         // Should redirect to survey list
@@ -108,7 +108,7 @@ describe('admin/survey/new', function() {
         expect(browser.getCurrentUrl()).toBe(browser.baseUrl + '/admin/survey');
 
         // The deleted survey shouldn't be in the list anymore
-        element(by.css('[ng-view] [ng-grid]')).findElements(by.xpath('span[text() = "' + randomCode + '"]')).then(function(elements) {
+        element(by.css('[ng-view] [ng-grid]')).all(by.xpath('span[text() = "' + randomCode + '"]')).then(function(elements) {
             expect(elements.length).toBe(0);
         });
     });
@@ -147,24 +147,19 @@ describe('admin/questionnaire/new', function() {
         gimsUtility.login(undefined, undefined, browser);
     });
 
-    function select2ClickFirstItem(select2Id) {
+    function getSelect2FirstItem(select2Id) {
         element(by.css('div#s2id_' + select2Id)).click();
-        var items = element.all(by.css('.select2-results-dept-0'));
-        browser.driver.wait(function() {
-            return items.count().then(function(count) {
-                return count > 0;
-            });
-        });
-        var item = items.get(3);
-        item.click();
+        var item = element(by.css('.select2-result-selectable:first-child'));
+
         return item;
     }
 
     var selectedCountry;
     function fillQuestionnaireForm() {
-        select2ClickFirstItem('autogen1').then(function(country) {
+        getSelect2FirstItem('autogen1').then(function(country) {
             country.getText().then(function(countryName) {
                 selectedCountry = countryName;
+                country.click();
             });
         });
         element(by.model('questionnaire.dateObservationStart')).sendKeys('08/05/2013');
@@ -216,7 +211,7 @@ describe('admin/questionnaire/new', function() {
         expect(element(by.model('questionnaire.comments')).getAttribute('value')).toMatch('foo bar');
 
         // Delete the questionnaire
-        element(by.css('form .btn.btn-danger')).click();
+        element(by.css('form > .btn.btn-danger')).click();
         element(by.css('.modal .btn-danger')).click();
 
         // Should redirect to questionnaire list
@@ -225,7 +220,7 @@ describe('admin/questionnaire/new', function() {
         element(by.xpath("//*[@ng-view]//*[contains(@class, 'nav-tabs')]//li//a[text()='Questionnaires']")).click();
 
         // The deleted questionnaire shouldn't be in the list anymore
-        element(by.css('[ng-view] [ng-grid]')).findElements(by.xpath('span[text() = "' + selectedCountry + '"]')).then(function(elements) {
+        element(by.css('[gims-grid-questionnaire] [ng-grid]')).all(by.xpath('span[text() = "' + selectedCountry + '"]')).then(function(elements) {
             expect(elements.length).toBe(0);
         });
     });

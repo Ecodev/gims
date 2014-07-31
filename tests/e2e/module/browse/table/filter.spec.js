@@ -12,8 +12,8 @@ describe('browse/table', function() {
         expect(element.all(by.css('[ng-view] .table.table-bordered.table-condensed.bigtable')).count()).toBe(1);
     });
 
-    it('should render select for survey selectinon and filter selection', function() {
-        expect(element.all(by.css('[ng-view] .select2-container')).count()).toBe(7);
+    it('should render select for survey selection and filter selection', function() {
+        expect(element.all(by.css('[ng-view] .select2-container')).count()).toBe(6);
     });
 
 });
