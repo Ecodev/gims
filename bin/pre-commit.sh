@@ -24,7 +24,7 @@ if [ "$files" != "" ]; then
     done
 fi
 
-files=$(git diff --cached --name-only --diff-filter=ACMR | grep .php)
+files=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.php$')
 if [ "$files" != "" ]; then
 
     # Run php syntax check before commit
@@ -37,7 +37,7 @@ if [ "$files" != "" ]; then
 
     # Run php-cs-fixer validation before commit
     for file in ${files}; do
-        php-cs-fixer fix --dry-run --verbose --diff --fixers=indentation,elseif,linefeed,trailing_spaces,visibility,return,short_tag,php_closing_tag,extra_empty_lines,psr0,controls_spaces,elseif,eof_ending ${file}
+        php-cs-fixer fix --dry-run --verbose --diff --config-file .php_cs ${file}
         if [ $? -ne 0 ]; then
             pass=false
         fi

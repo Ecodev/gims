@@ -633,7 +633,7 @@ STRING;
         $name = $this->getCalculatedValueSafely($this->sheet->getCellByColumnAndRow($col + 1, $row));
         $value = $this->getCalculatedValueSafely($this->sheet->getCellByColumnAndRow($col + $offset, $row));
 
-        if ($name && !is_null($value) || $value <> 0) {
+        if ($name && !is_null($value) || $value != 0) {
 
             $rule = $this->getRuleFromCell($col, $row, $offset, $questionnaire, $part);
 

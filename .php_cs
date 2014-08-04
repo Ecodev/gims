@@ -11,18 +11,26 @@ $finder = Symfony\CS\Finder\DefaultFinder::create()
 
 return Symfony\CS\Config\Config::create()
                 ->fixers(array(
-                    'indentation',
-                    'elseif',
+                    'encoding',
                     'linefeed',
                     'trailing_spaces',
-//                    'unused_use', // This breaks usage of traits in parent class, specifically in Application\Service\Calculator\Calculator, see https://github.com/fabpot/PHP-CS-Fixer/issues/217
-                    'visibility',
-                    'return',
-                    'short_tag',
-//                    'braces', // still not quite sure about this one... it makes it very hard to comment if/else structure
-//                    'include', // This breaks usage of include within function call
                     'php_closing_tag',
+//                    'unused_use', // This breaks usage of traits in parent class, specifically in Application\Service\Calculator\Calculator, see https://github.com/fabpot/PHP-CS-Fixer/issues/217
+//                    'include', // This breaks usage of include within function call
+                    'visibility',
+                    'indentation',
+                    'lowercase_constants',
+//                    'braces', // still not quite sure about this one... it makes it very hard to comment if/else structure
+                    'standardize_not_equal',
+                    'lowercase_keywords',
                     'extra_empty_lines',
+                    'object_operator',
+                    'return',
+//                    'function_declaration', // This does not recognize javascript function in PHP string
+                    'short_tag',
+                    'new_with_braces',
+                    'spaces_cast',
+//                    'phpdoc_params', // Waste of time
                     'psr0',
                     'controls_spaces',
                     'elseif',

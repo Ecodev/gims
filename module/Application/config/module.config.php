@@ -211,7 +211,7 @@ return array(
             'helpBox' => 'Application\View\Helper\HelpBox',
         ),
     ),
-    'console' => Array(
+    'console' => array(
         'router' => array(
             'routes' => array(
                 'import-jmp' => array(
