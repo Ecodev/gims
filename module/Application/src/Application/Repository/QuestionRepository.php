@@ -158,8 +158,8 @@ class QuestionRepository extends AbstractChildRepository
      * @param \Application\Model\Questionnaire $questionnaire
      * @return array
      */
-    public function getByFiltersAndQuestionnaire(array $filterIds, Questionnaire $questionnaire) {
-
+    public function getByFiltersAndQuestionnaire(array $filterIds, Questionnaire $questionnaire)
+    {
         $query = $this->getEntityManager()
             ->createQuery("SELECT q.alternateNames, filter.id AS filterId FROM Application\Model\Question\AbstractAnswerableQuestion q
                 JOIN q.survey survey

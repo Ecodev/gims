@@ -20,13 +20,13 @@ return Symfony\CS\Config\Config::create()
                     'visibility',
                     'indentation',
                     'lowercase_constants',
-//                    'braces', // still not quite sure about this one... it makes it very hard to comment if/else structure
+                    'braces',
                     'standardize_not_equal',
                     'lowercase_keywords',
                     'extra_empty_lines',
                     'object_operator',
                     'return',
-//                    'function_declaration', // This does not recognize javascript function in PHP string
+//                    'function_declaration', // This does not recognize javascript function in PHP string, and mis-format PHP closures
                     'short_tag',
                     'new_with_braces',
                     'spaces_cast',

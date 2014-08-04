@@ -23,8 +23,7 @@ class RsyncBackup extends AbstractDatabase
         chmod($rsyncpass, 0600);
         $cmd = "rsync -av --password-file={$rsyncpass} {$this->backupDir}/ {$config['rsync']['username']}@{$config['rsync']['host']}::{$config['rsync']['module']}/{$config['domain']}";
         exec($cmd . ' 2>&1', $output, $status);
-        if ($status != 0)
-        {
+        if ($status != 0) {
             // TODO: send an email to the sysadmin
             echo "Error: " . PHP_EOL . implode(PHP_EOL, $output) . PHP_EOL;
         }
