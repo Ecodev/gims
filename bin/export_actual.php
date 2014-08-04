@@ -4,7 +4,7 @@
  * This script will import individually each country into DB and then call GIMS
  * API to export computed results
  */
-$countries = require (__DIR__ . '/countries.php');
+$countries = require __DIR__ . '/countries.php';
 
 /**
  * Export computed results for each country files

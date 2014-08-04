@@ -16,7 +16,7 @@ return Symfony\CS\Config\Config::create()
                     'trailing_spaces',
                     'php_closing_tag',
 //                    'unused_use', // This breaks usage of traits in parent class, specifically in Application\Service\Calculator\Calculator, see https://github.com/fabpot/PHP-CS-Fixer/issues/217
-//                    'include', // This breaks usage of include within function call
+                    'include',
                     'visibility',
                     'indentation',
                     'lowercase_constants',

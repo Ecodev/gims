@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . '/AbstractDatabase.php');
+require_once __DIR__ . '/AbstractDatabase.php';
 
 class RsyncBackup extends AbstractDatabase
 {

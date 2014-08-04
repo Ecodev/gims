@@ -4,7 +4,7 @@
  * This script extract data from GraphData_W/GraphData_S for all known country files
  */
 require __DIR__ . '/../htdocs/index.php';
-$countries = require (__DIR__ . '/countries.php');
+$countries = require __DIR__ . '/countries.php';
 
 // Enable cyclic computation
 PHPExcel_Calculation::getInstance()->cyclicFormulaCount = 100;

@@ -5,7 +5,7 @@ if (!ini_get('date.timezone')) {
     date_default_timezone_set('UTC');
 }
 
-require_once(__DIR__ . '/../module/debug.php');
+require_once __DIR__ . '/../module/debug.php';
 
 /**
  * This makes our life easier when dealing with paths. Everything is relative

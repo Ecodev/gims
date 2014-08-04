@@ -19,8 +19,7 @@ class ConsoleControllerTest extends \Zend\Test\PHPUnit\Controller\AbstractConsol
         // Everything is relative to the application root now.
         chdir(__DIR__ . '/../../../');
         $this->setApplicationConfig(
-                include 'config/application.config.php'
-        );
+                include 'config/application.config.php');
 
         parent::setUp();
 

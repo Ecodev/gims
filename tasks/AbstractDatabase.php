@@ -57,7 +57,7 @@ STRING;
      */
     public static function dumpData($siteLocal, $dumpFile)
     {
-        $config = require("$siteLocal/config/autoload/local.php");
+        $config = require "$siteLocal/config/autoload/local.php";
         $dbConfig = $config['doctrine']['connection']['orm_default']['params'];
         $username = $dbConfig['user'];
         $database = $dbConfig['dbname'];
@@ -89,7 +89,7 @@ STRING;
      */
     public static function loadDump($siteLocal, $dumpFile)
     {
-        $config = require("$siteLocal/config/autoload/local.php");
+        $config = require "$siteLocal/config/autoload/local.php";
         $dbConfig = $config['doctrine']['connection']['orm_default']['params'];
         $username = $dbConfig['user'];
         $database = $dbConfig['dbname'];
