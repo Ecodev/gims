@@ -3,6 +3,9 @@
 $finder = Symfony\CS\Finder\DefaultFinder::create()
         ->exclude('data')
         ->exclude('vendor')
+        ->exclude('node_modules')
+        ->exclude('nbproject')
+        ->exclude('htdocs/lib')
         ->in(__DIR__)
 ;
 
