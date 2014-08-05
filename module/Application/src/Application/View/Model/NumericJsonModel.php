@@ -34,7 +34,12 @@ class NumericJsonModel extends JsonModel
      */
     public static function numericToString($json)
     {
-        return preg_replace('/(-?\d+\.?\d*)(?=([^"\\\\]*(\\\\.|"([^"\\\\]*\\\\.)*[^"\\\\]*"))*[^"]*$)/', '"$1"', $json);
+        // This is not very clean, but it allow us to treat very big string (+40KB) albeit slowly.
+        // Since this is only used during unit testing, it is considered acceptable.
+        ini_set('pcre.backtrack_limit', 100000000);
+        $result = preg_replace('/(-?\d+\.?\d*)(?=([^"\\\\]*(\\\\.|"([^"\\\\]*\\\\.)*[^"\\\\]*"))*[^"]*$)/', '"$1"', $json);
+
+        return $result;
     }
 
     /**
