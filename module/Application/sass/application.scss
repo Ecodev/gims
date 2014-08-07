@@ -70,8 +70,9 @@ div.browse .col-md-4 {
 }
 
 .gridStyle {
-    height: 1000px;
-    // Use super big height, so the auto-resize works correctly
+    height: 1000px; // Use super big height, so the auto-resize works correctly
+    border: 1px solid $table-border-color;
+    margin-bottom: 1em;
 }
 
 .tab-content {
@@ -218,10 +219,6 @@ table.table {
 #panelContent{
     overflow-y: scroll;
     height:100%;
-}
-
-.gridStyle{
-    border: 1px solid rgb(212,212,212);
 }
 
 /* Extend select 2 advanced template */

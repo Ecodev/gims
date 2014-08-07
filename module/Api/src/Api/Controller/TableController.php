@@ -128,6 +128,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             'survey' => 'Survey',
             'year' => 'Year',
         );
+        $legends = [];
 
         foreach ($countries as $country) {
             $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getAllForComputing($country->getGeoname());
@@ -137,9 +138,10 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
             foreach ($parts as $part) {
                 foreach ($filterSet->getFilters() as $filter) {
-                    $columnName = $this->getCodeName($filterSet, $part, $filter->getName());
+                    $columnNames = $this->getColumnNames($filterSet, $part, $filter->getName());
                     $columnId = 'f' . $filter->getId() . 'p' . $part->getId();
-                    $columns[$columnId] = $columnName;
+                    $columns[$columnId] = $columnNames['short'];
+                    $legends[] = $columnNames;
 
                     $data = $calculator->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
                     foreach ($data['values'] as $questionnaireId => $value) {
@@ -159,6 +161,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         }
         $finalResult = array(
             'columns' => $columns,
+            'legends' => $legends,
             'data' => array_values($result),
         );
 
@@ -180,21 +183,26 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
         $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
 
-        $this->parts = $parts; // used for cache
-
         $result = array();
         $columns = array(
             'country' => 'Country',
             'iso3' => 'ISO-3',
             'year' => 'Year',
         );
+        $legends = [];
 
         // Build population acronyms and add them to columns definition
         $populationAcronyms = array();
+        $partsById = []; // used for cache
         foreach ($parts as $part) {
+            $partsById[$part->getId()] = $part;
             $acronym = 'P' . strtoupper($part->getName()[0]);
             $populationAcronyms[$part->getId()] = $acronym;
             $columns[$acronym] = $acronym;
+            $legends[] = [
+                'short' => $acronym,
+                'long' => 'Population, ' . $part->getName(),
+            ];
         }
 
         foreach ($geonames as $geoname) {
@@ -227,14 +235,20 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
                     foreach ($filters as $filter) {
                         $columnId = 'c' . $count;
-                        $columnName = $this->getCodeName($filterSet, $partId, $filter['name']);
-                        $columns[$columnId] = $columnName;
+                        $columnNames = $this->getColumnNames($filterSet, $partsById[$partId], $filter['name']);
+                        $columns[$columnId] = $columnNames['short'];
+                        $legends[] = $columnNames;
 
                         $value = $filter['data'][$year];
                         $statsData[$columnId] = \Application\Utility::decimalToRoundedPercent($value);
 
-                        $columns[$columnId . 'a'] = $columnName . 'a';
-                        $statsData[$columnId . 'a'] = is_null($value) ? null : (int) ($value * $this->getPopulation($geoname, $partId, $year));
+                        // Do absolute version
+                        $columnId = $columnId . 'a';
+                        $columnNames['short'] = $columnNames['short'] . 'a';
+                        $columnNames['long'] = $columnNames['long'] . ' (absolute value)';
+                        $legends[] = $columnNames;
+                        $columns[$columnId] = $columnNames['short'];
+                        $statsData[$columnId] = is_null($value) ? null : (int) ($value * $this->getPopulation($geoname, $partId, $year));
                         $count++;
                     }
                 }
@@ -245,6 +259,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
         $finalResult = array(
             'columns' => $columns,
+            'legends' => $legends,
             'data' => array_values($result)
         );
 
@@ -350,37 +365,31 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
     }
 
     /**
-     * Retrieve a code name by using two techniques : manual mapping or inversed acronym letters for the filter
+     * Retrieve column names, short and long version
      * @param \Application\Model\FilterSet $filterset
-     * @param \Application\Model\Part|integer $part
+     * @param \Application\Model\Part $part
      * @param string $filterName
-     * @return string code name in uppercase
+     * @return array ['short' => short name, 'long' => long name]
      */
-    public function getCodeName(\Application\Model\FilterSet $filterset, $part, $filterName)
+    private function getColumnNames(\Application\Model\FilterSet $filterset, \Application\Model\Part $part, $filterName)
     {
-        // first letter of the Filterset (care, if some have W, the all will start the same way)
+        // Filterset first letter
         $filtersetL = substr($filterset->getName(), 0, 1);
 
-        $partL = null;
-        if (is_numeric($part)) {
-            foreach ($this->parts as $partObj) {
-                if ($partObj->getId() == $part) {
-                    $partL = substr($partObj->getName(), 0, 1);
-                }
-            }
-        } else {
-            $partL = substr($part->getName(), 0, 1);
-        }
+        // Part first letter
+        $partL = substr($part->getName(), 0, 1);
 
-        // Filter letter (manual pairing or automatic acronym)
+        // Filter first letters of each word
         $filterL = '';
-
-        $filterNameSplit = explode(' ', $filterName);
-        foreach ($filterNameSplit as $word) {
+        $words = explode(' ', $filterName);
+        foreach ($words as $word) {
             $filterL .= substr($word, 0, 1);
         }
 
-        return strtoupper($filtersetL . $partL . $filterL);
+        return [
+            'short' => strtoupper($filtersetL . $partL . $filterL),
+            'long' => implode(', ', [preg_split('/\W/', $filterset->getName())[0], $part->getName(), $filterName]),
+        ];
     }
 
 }

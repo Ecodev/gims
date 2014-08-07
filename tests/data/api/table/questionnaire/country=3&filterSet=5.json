@@ -23,6 +23,80 @@
         "f170p3": "STOU",
         "f171p3": "STOD"
     },
+    "legends": [
+        {
+            "short": "SUI+S",
+            "long": "Sanitation, Urban, Improved + shared"
+        },
+        {
+            "short": "SUSC",
+            "long": "Sanitation, Urban, Sewerage connections"
+        },
+        {
+            "short": "SUI",
+            "long": "Sanitation, Urban, Improved"
+        },
+        {
+            "short": "SUS",
+            "long": "Sanitation, Urban, Shared"
+        },
+        {
+            "short": "SUOU",
+            "long": "Sanitation, Urban, Other unimproved"
+        },
+        {
+            "short": "SUOD",
+            "long": "Sanitation, Urban, Open defecation"
+        },
+        {
+            "short": "SRI+S",
+            "long": "Sanitation, Rural, Improved + shared"
+        },
+        {
+            "short": "SRSC",
+            "long": "Sanitation, Rural, Sewerage connections"
+        },
+        {
+            "short": "SRI",
+            "long": "Sanitation, Rural, Improved"
+        },
+        {
+            "short": "SRS",
+            "long": "Sanitation, Rural, Shared"
+        },
+        {
+            "short": "SROU",
+            "long": "Sanitation, Rural, Other unimproved"
+        },
+        {
+            "short": "SROD",
+            "long": "Sanitation, Rural, Open defecation"
+        },
+        {
+            "short": "STI+S",
+            "long": "Sanitation, Total, Improved + shared"
+        },
+        {
+            "short": "STSC",
+            "long": "Sanitation, Total, Sewerage connections"
+        },
+        {
+            "short": "STI",
+            "long": "Sanitation, Total, Improved"
+        },
+        {
+            "short": "STS",
+            "long": "Sanitation, Total, Shared"
+        },
+        {
+            "short": "STOU",
+            "long": "Sanitation, Total, Other unimproved"
+        },
+        {
+            "short": "STOD",
+            "long": "Sanitation, Total, Open defecation"
+        }
+    ],
     "data": [
         {
             "country": "Afghanistan",

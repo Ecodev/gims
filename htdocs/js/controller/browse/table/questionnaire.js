@@ -38,6 +38,7 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
                     $scope.columnDefs = _.map(data.columns, function(columnName, columnKey) {
                         return {field: columnKey, displayName: columnName, width: '100px'};
                     });
+                    $scope.legends = data.legends;
                     $scope.isLoading = false;
                 });
             }, 200);

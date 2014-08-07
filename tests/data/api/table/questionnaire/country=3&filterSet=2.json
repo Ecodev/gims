@@ -20,6 +20,68 @@
         "f78p3": "WTOI",
         "f79p3": "WTOU"
     },
+    "legends": [
+        {
+            "short": "WUTI",
+            "long": "Water, Urban, Total improved"
+        },
+        {
+            "short": "WUPOP",
+            "long": "Water, Urban, Piped onto premises"
+        },
+        {
+            "short": "WUSW",
+            "long": "Water, Urban, Surface water"
+        },
+        {
+            "short": "WUOI",
+            "long": "Water, Urban, Other Improved"
+        },
+        {
+            "short": "WUOU",
+            "long": "Water, Urban, Other Unimproved"
+        },
+        {
+            "short": "WRTI",
+            "long": "Water, Rural, Total improved"
+        },
+        {
+            "short": "WRPOP",
+            "long": "Water, Rural, Piped onto premises"
+        },
+        {
+            "short": "WRSW",
+            "long": "Water, Rural, Surface water"
+        },
+        {
+            "short": "WROI",
+            "long": "Water, Rural, Other Improved"
+        },
+        {
+            "short": "WROU",
+            "long": "Water, Rural, Other Unimproved"
+        },
+        {
+            "short": "WTTI",
+            "long": "Water, Total, Total improved"
+        },
+        {
+            "short": "WTPOP",
+            "long": "Water, Total, Piped onto premises"
+        },
+        {
+            "short": "WTSW",
+            "long": "Water, Total, Surface water"
+        },
+        {
+            "short": "WTOI",
+            "long": "Water, Total, Other Improved"
+        },
+        {
+            "short": "WTOU",
+            "long": "Water, Total, Other Unimproved"
+        }
+    ],
     "data": [
         {
             "country": "Afghanistan",
