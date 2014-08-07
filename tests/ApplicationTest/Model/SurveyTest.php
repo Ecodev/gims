@@ -23,13 +23,20 @@ class SurveyTest extends AbstractModel
         $this->assertSame($question, $survey->getQuestions()->first(), 'original question can be retrieved from survey');
     }
 
-    /**
-     * @test
-     */
-    public function getJsonConfigForSurvey()
+    public function testSurveyType()
     {
         $survey = new Survey();
-        $this->assertInternalType('array', $survey->getJsonConfig());
+        $this->assertEquals(\Application\Model\SurveyType::$GLAAS, $survey->getType(), 'survey should default to GLAAS type');
+
+        $question = new NumericQuestion();
+        $question->setIsPopulation(true);
+        $question->setIsAbsolute(false);
+        $question->setSurvey($survey);
+        $this->assertEquals(\Application\Model\SurveyType::$JMP, $survey->getType(), 'survey should automatically switch to JMP');
+
+        $chapter = new \Application\Model\Question\Chapter();
+        $chapter->setSurvey($survey);
+        $this->assertEquals(\Application\Model\SurveyType::$GLAAS, $survey->getType(), 'survey should automatically switch back to GLAAS');
     }
 
     /**

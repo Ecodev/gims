@@ -101,6 +101,7 @@ STRING;
 
         self::executeLocalCommand('./vendor/bin/doctrine-module orm:schema-tool:drop --full-database --force');
         self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP TYPE IF EXISTS questionnaire_status CASCADE;"');
+        self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP TYPE IF EXISTS survey_type CASCADE;"');
         self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP RULE IF EXISTS geometry_columns_delete ON geometry_columns CASCADE;"');
         self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP RULE IF EXISTS geometry_columns_insert ON geometry_columns CASCADE;"');
         self::executeLocalCommand('./vendor/bin/doctrine-module dbal:run-sql "DROP RULE IF EXISTS geometry_columns_update ON geometry_columns CASCADE;"');

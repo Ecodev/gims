@@ -76,6 +76,12 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     private $dateEnd;
 
     /**
+     * @var SurveyType
+     * @ORM\Column(type="survey_type")
+     */
+    private $type;
+
+    /**
      * Constructor
      * @param string $name
      */
@@ -84,6 +90,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
         $this->setName($name);
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questionnaires = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->setType(SurveyType::$GLAAS);
     }
 
     /**
@@ -258,6 +265,51 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     }
 
     /**
+     * Get the survey type
+     * @return \Application\Model\SurveyType
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set the survey type
+     * @param \Application\Model\SurveyType $type
+     * @return self
+     */
+    public function setType(SurveyType $type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Compute and set the survey type according to its existing questions
+     * @return self
+     */
+    public function computeSurveyType()
+    {
+        if ($this->getType() == SurveyType::$NSA) {
+            return;
+        }
+
+        // If we have only population coverage question, then it's JMP, otherwise GLAAS
+        $type = SurveyType::$JMP;
+        foreach ($this->getQuestions() as $question) {
+            if (!$question instanceof Question\NumericQuestion || !$question->isPopulation() || $question->isAbsolute()) {
+                $type = SurveyType::$GLAAS;
+                break;
+            }
+        }
+
+        $this->setType($type);
+
+        return $this;
+    }
+
+    /**
      * Get questions
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
@@ -278,6 +330,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     public function questionAdded(\Application\Model\Question\AbstractQuestion $question)
     {
         $this->getQuestions()->add($question);
+        $this->computeSurveyType();
 
         return $this;
     }
