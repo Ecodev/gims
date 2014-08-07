@@ -81,6 +81,25 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     }
 
     /**
+     * Return an array of specified surveyTypes
+     * @return array
+     */
+    protected function getSurveyTypes()
+    {
+        $surveyTypeParam = $this->params()->fromQuery('surveyType');
+        $surveyTypes = [];
+        if ($surveyTypeParam) {
+            foreach (explode(',', $surveyTypeParam) as $type) {
+                if ($type) {
+                    $surveyTypes [] = \Application\Model\SurveyType::get($type);
+                }
+            }
+        }
+
+        return $surveyTypes;
+    }
+
+    /**
      * Must return an array of properties that will be exposed publicly via JSON.
      * If a property is actually an object itself, it must have a sub-array of properties
      *
@@ -258,7 +277,6 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             $this->getResponse()->setStatusCode(404);
 
             return new JsonModel(array('message' => 'No object found'));
-
         } elseif (count($notGranted) == count($ids)) {
             $this->checkActionGranted($this->getRepository()->findOneById($ids[0]), 'read');
         } else {

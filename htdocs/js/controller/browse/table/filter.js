@@ -12,9 +12,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     // params for ajax requests
     $scope.filterFields = {fields: 'color,paths,parents,summands'};
     $scope.countryParams = {fields: 'geoname'};
-    var questionnaireByGeoname = {fields: 'survey.questions.type,survey.questions.filter'};
+    var questionnaireFields = {fields: 'survey.questions.type,survey.questions.filter'};
     var questionnaireWithAnswersFields = {fields: 'status,filterQuestionnaireUsages,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part'};
-    var surveyFields = {fields: 'questionnaires.status,questionnaires.survey,questionnaires.survey.questions,questionnaires.survey.questions.type,questionnaires.survey.questions.filter'};
 
     // Variables initialisations
     $scope.expandHierarchy = true;
@@ -69,6 +68,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     }
 
     $scope.questionnaireParams = {surveyType: $scope.mode.surveyType};
+    $scope.surveyParams = {surveyType: $scope.mode.surveyType};
 
     /**************************************************************************/
     /*************************************************************** Watchers */
@@ -136,7 +136,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.$watch('tabs.country', function() {
         if ($scope.tabs.country) {
             $scope.tabs.questionnaires = [];
-            Restangular.one('geoname', $scope.tabs.country.geoname.id).getList('questionnaire', _.merge(questionnaireByGeoname, {surveyType: $scope.mode.surveyType, perPage: 1000})).then(function(questionnaires) {
+            Restangular.one('geoname', $scope.tabs.country.geoname.id).getList('questionnaire', _.merge(questionnaireFields, {surveyType: $scope.mode.surveyType, perPage: 1000})).then(function(questionnaires) {
                 $scope.tabs.questionnaires = questionnaires;
                 $scope.tabs.survey = null;
 
@@ -152,8 +152,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.$watch('tabs.survey', function() {
         if ($scope.tabs.survey) {
             $scope.tabs.questionnaires = [];
-            Restangular.one('survey', $scope.tabs.survey.id).get(_.merge(surveyFields, {perPage: 1000})).then(function(survey) {
-                $scope.tabs.questionnaires = survey.questionnaires;
+            Restangular.one('survey', $scope.tabs.survey.id).getList('questionnaire', _.merge(questionnaireFields, {surveyType: $scope.mode.surveyType, perPage: 1000})).then(function(questionnaires) {
+                $scope.tabs.questionnaires = questionnaires;
                 $scope.tabs.country = null;
                 checkSelectionExpand();
             });

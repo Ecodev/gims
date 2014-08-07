@@ -3,6 +3,7 @@
 namespace Api\Controller;
 
 use Application\Model\AbstractModel;
+use Zend\View\Model\JsonModel;
 
 class SurveyController extends AbstractRestfulController
 {
@@ -20,6 +21,18 @@ class SurveyController extends AbstractRestfulController
 
         $this->getEntityManager()->persist($userSurvey);
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * @return JsonModel
+     */
+    public function getList()
+    {
+        $surveyTypes = $this->getSurveyTypes();
+        $objects = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), $this->params()->fromQuery('q'), $surveyTypes);
+        $jsonData = $this->paginate($objects);
+
+        return new JsonModel($jsonData);
     }
 
 }
