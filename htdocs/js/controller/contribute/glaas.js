@@ -1,7 +1,7 @@
 angular.module('myApp').controller('Contribute/GlaasCtrl', function($scope, $routeParams, $location, Restangular, QuestionAssistant) {
     'use strict';
 
-    $scope.questionnaireQueryParams = {permission: 'update', fields: 'permissions', surveyType: 'glaas'};
+    $scope.questionnaireQueryParams = {permission: 'update', surveyType: 'glaas'};
 
     // If a questionnaire is specified in URL, load its data
     if ($routeParams.id) {
@@ -45,6 +45,13 @@ angular.module('myApp').controller('Contribute/GlaasCtrl', function($scope, $rou
         if ($scope.questionnaire && $scope.questions && $scope.questions.length > 0) {
 
             var questionnaire2 = _.cloneDeep($scope.questionnaire);
+
+            // Load questionnaire permissions
+            Restangular.one('questionnaire', $routeParams.id).get({fields: 'permissions'}).then(function(questionnaire) {
+                $scope.questionnaire.permissions = questionnaire.permissions;
+                questionnaire2.permissions = $scope.questionnaire.permissions;
+            });
+
             questionnaire2.level = -1;
             questionnaire2.index = -1;
             questionnaire2.statusCode = 4;
