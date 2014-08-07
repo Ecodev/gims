@@ -60,11 +60,12 @@ abstract class AbstractEnum
     public static function get($value)
     {
         foreach (self::getValues() as $enum) {
-            if ((string) $enum == $value)
+            if ((string) $enum == $value) {
                 return $enum;
+            }
         }
 
-        throw new \InvalidArgumentException("'$value' not found for enum " . get_called_class());
+        throw new \InvalidArgumentException("'$value' is not a valid value for enum " . get_called_class());
     }
 
     /**

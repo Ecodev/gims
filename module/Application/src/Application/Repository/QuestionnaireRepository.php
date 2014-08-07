@@ -18,10 +18,10 @@ class QuestionnaireRepository extends AbstractChildRepository
      * @param string $search
      * @param string $parentName
      * @param \Application\Model\AbstractModel $parent
-     * @param \Application\Model\SurveyType $surveyType optionnal restriction on survey type
+     * @param array $surveyTypes optionnal restriction on survey types
      * @return array
      */
-    public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null, SurveyType $surveyType = null)
+    public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null, array $surveyTypes = [])
     {
         $qb = $this->createQueryBuilder('questionnaire');
         $qb->join('questionnaire.survey', 'survey', Join::WITH);
@@ -34,9 +34,9 @@ class QuestionnaireRepository extends AbstractChildRepository
             $qb->setParameter('parent', $parent);
         }
 
-        if ($surveyType) {
-            $qb->andWhere('survey.type = :surveyType');
-            $qb->setParameter('surveyType', $surveyType);
+        if ($surveyTypes) {
+            $qb->andWhere('survey.type IN (:surveyTypes)');
+            $qb->setParameter('surveyTypes', $surveyTypes);
         }
 
         if ($action == 'read') {

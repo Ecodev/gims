@@ -13,7 +13,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.filterFields = {fields: 'color,paths,parents,summands'};
     $scope.countryParams = {fields: 'geoname'};
     var countryFields = {fields: 'geoname.questionnaires,geoname.questionnaires.survey,geoname.questionnaires.survey.questions,geoname.questionnaires.survey.questions.type,geoname.questionnaires.survey.questions.filter'};
-    var questionnaireWithQTypeFields = {fields: 'status,survey.questions,survey.questions.type,survey.questions.isAbsolute'};
     var questionnaireWithAnswersFields = {fields: 'status,filterQuestionnaireUsages,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part'};
     var surveyFields = {fields: 'questionnaires.status,questionnaires.survey,questionnaires.survey.questions,questionnaires.survey.questions.type,questionnaires.survey.questions.filter'};
 
@@ -38,17 +37,20 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         {
             name: 'Browse',
             isContribute: false,
-            isSector: false
+            isSector: false,
+            surveyType: 'jmp,nsa'
         },
         {
             name: 'Contribute JMP',
             isContribute: true,
-            isSector: false
+            isSector: false,
+            surveyType: 'jmp'
         },
         {
             name: 'Contribute NSA',
             isContribute: true,
-            isSector: true
+            isSector: true,
+            surveyType: 'nsa'
         }
     ];
 
@@ -66,11 +68,13 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         $scope.mode = modes[0];
     }
 
+    $scope.questionnaireParams = {surveyType: $scope.mode.surveyType};
+
     /**************************************************************************/
     /*************************************************************** Watchers */
     /**************************************************************************/
 
-        // Subscribe to listen when there is network activity
+    // Subscribe to listen when there is network activity
     $scope.isLoading = false;
     requestNotification.subscribeOnRequest(function() {
         $scope.isLoading = true;
@@ -174,8 +178,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         newQuestionnaires = newQuestionnaires ? newQuestionnaires : [];
 
         if (!_.isEmpty(newQuestionnaires)) {
-            getQuestionnaires(newQuestionnaires, questionnaireWithQTypeFields).then(function(questionnaires) {
-                checkGlassQuestionnaires(questionnaires);
+
+            getQuestionnaires(newQuestionnaires, questionnaireWithAnswersFields).then(function(questionnaires) {
+                $scope.firstQuestionnairesRetrieve = true;
+                //                listQuestionnairesWithFilterUsages(questionnaires);
+                prepareDataQuestionnaires(questionnaires);
                 $scope.orderQuestionnaires(false);
             });
         }
@@ -404,8 +411,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         $scope.checkQuestionnairesIntegrity().then(function() {
             saveFilters().then(function(savedFacilities) {
                 var questionnairesToCreate = !_.isUndefined(questionnaire) ?
-                    [questionnaire
-                    ] : _.filter($scope.tabs.questionnaires, $scope.checkIfSavableQuestionnaire);
+                        [questionnaire] : _.filter($scope.tabs.questionnaires, $scope.checkIfSavableQuestionnaire);
                 var existingQuestionnaires = _.filter($scope.tabs.questionnaires, 'id');
                 saveQuestionnaires(questionnairesToCreate.concat(existingQuestionnaires), savedFacilities);
             });
@@ -899,50 +905,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     };
 
     /**
-     * Check glass questionnaires and add them to a specific array that add a tab
-     * If there is only one Glass questionnaire and no JMP, a redirection display the questionnaire
-     * @param questionnaires
-     */
-    var checkGlassQuestionnaires = function(questionnaires) {
-        var glass = [];
-        var jmp = [];
-        angular.forEach(questionnaires, function(questionnaire) {
-            if (_.find(questionnaire.survey.questions, function(question) {
-                return question.type != 'Numeric';
-            })) {
-                glass.push(questionnaire);
-            } else {
-                jmp.push(questionnaire);
-            }
-        });
-
-        // if there is only 1 glass in all selected questionnaires, consider that user want to edit this one, and redirect to glass template
-        // no action is possible on multiple glass questionnaires (neither browse or contribute)
-        if (glass.length === 1 && $scope.tabs.questionnaires.length === 1) {
-            $location.url('/contribute/glaas/' + glass[0].id + "?returnUrl=" + $location.path());
-
-            // else list glass questionnaires apart
-        } else {
-            $scope.tabs.glass = glass;
-
-            // remove glass questionnaires from selected questionnaires
-            $scope.tabs.questionnaires = _.filter($scope.tabs.questionnaires, function(q) {
-                if (!_.find(glass, {id: q.id})) {
-                    return true;
-                }
-                return false;
-            });
-
-            // get data for new jmp questionnaires
-            getQuestionnaires(_.pluck(jmp, 'id'), questionnaireWithAnswersFields).then(function(questionnaires) {
-                $scope.firstQuestionnairesRetrieve = true;
-                //                listQuestionnairesWithFilterUsages(questionnaires);
-                prepareDataQuestionnaires(questionnaires);
-            });
-        }
-    };
-
-    /**
      * Index answers and populations by part and questions by filters on questionnaire that have data from DB
      * @param questionnaires
      */
@@ -1037,7 +999,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         }
         if (!questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId]) {
             questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId] =
-                [];
+                    [];
         }
 
         var usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId];
@@ -1985,7 +1947,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param element
      */
     var updateUrl = function(element) {
-        $location.search(element, _.filter(_.pluck($scope.tabs[element], 'id'),function(el) {
+        $location.search(element, _.filter(_.pluck($scope.tabs[element], 'id'), function(el) {
             if (el) {
                 return true;
             }

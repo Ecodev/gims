@@ -125,14 +125,6 @@
                                             style="width: 100%">
                                     </gims-select>
                                 </tab>
-                                <tab ng-if="tabs.glass.length">
-                                    <tab-heading><span class="text-warning"><i class="fa fa-exclamation-triangle" ></i> Others</span></tab-heading>
-                                    <p>Some selected surveys are only available in advanced edition mode and one at a time.</p>
-                                    <p>Click to edit.</p>
-                                    <ul class="list-unstyled">
-                                        <li ng-repeat="q in tabs.glass"><a href="/contribute/glaas/{{q.id}}?returnUrl={{currentUrl}}"><i class="fa fa-external-link"></i> {{q.name}}</a></li>
-                                    </ul>
-                                </tab>
                             </tabset>
                         </div>
                     </div>

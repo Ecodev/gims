@@ -105,12 +105,16 @@ class QuestionnaireController extends AbstractChildRestfulController
         $q = $this->params()->fromQuery('q');
 
         $surveyTypeParam = $this->params()->fromQuery('surveyType');
-        $surveyType = null;
+        $surveyTypes = [];
         if ($surveyTypeParam) {
-            $surveyType = \Application\Model\SurveyType::get($surveyTypeParam);
+            foreach (explode(',', $surveyTypeParam) as $type) {
+                if ($type) {
+                    $surveyTypes [] = \Application\Model\SurveyType::get($type);
+                }
+            }
         }
 
-        $questionnaires = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), $q, 'survey', $survey, $surveyType);
+        $questionnaires = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), $q, 'survey', $survey, $surveyTypes);
         $jsonData = $this->paginate($questionnaires);
 
         return new JsonModel($jsonData);
