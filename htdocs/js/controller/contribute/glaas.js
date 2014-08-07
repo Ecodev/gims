@@ -1,7 +1,7 @@
 angular.module('myApp').controller('Contribute/GlaasCtrl', function($scope, $routeParams, $location, Restangular, QuestionAssistant) {
     'use strict';
 
-    $scope.questionnaireQueryParams = {permission: 'update', fields: 'permissions'};
+    $scope.questionnaireQueryParams = {permission: 'update', fields: 'permissions', surveyType: 'glaas'};
 
     // If a questionnaire is specified in URL, load its data
     if ($routeParams.id) {

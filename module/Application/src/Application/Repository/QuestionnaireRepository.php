@@ -3,6 +3,7 @@
 namespace Application\Repository;
 
 use Doctrine\ORM\Query\Expr\Join;
+use Application\Model\SurveyType;
 use Application\Model\Rule\Rule;
 use Application\Model\Rule\FilterQuestionnaireUsage;
 
@@ -14,22 +15,28 @@ class QuestionnaireRepository extends AbstractChildRepository
     /**
      * Returns all items with matching search criteria
      * @param string $action
-     * @param null $search
-     * @param null $parentName
+     * @param string $search
+     * @param string $parentName
      * @param \Application\Model\AbstractModel $parent
+     * @param \Application\Model\SurveyType $surveyType optionnal restriction on survey type
      * @return array
      */
-    public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
+    public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null, SurveyType $surveyType = null)
     {
         $qb = $this->createQueryBuilder('questionnaire');
-        $qb->join('questionnaire.survey', 'survey', \Doctrine\ORM\Query\Expr\Join::WITH);
-        $qb->join('questionnaire.geoname', 'geoname', \Doctrine\ORM\Query\Expr\Join::WITH);
+        $qb->join('questionnaire.survey', 'survey', Join::WITH);
+        $qb->join('questionnaire.geoname', 'geoname', Join::WITH);
         $qb->addOrderBy('survey.code');
         $qb->addOrderBy('geoname.name');
 
         if ($parent) {
             $qb->where($parentName . ' = :parent');
             $qb->setParameter('parent', $parent);
+        }
+
+        if ($surveyType) {
+            $qb->andWhere('survey.type = :surveyType');
+            $qb->setParameter('surveyType', $surveyType);
         }
 
         if ($action == 'read') {
