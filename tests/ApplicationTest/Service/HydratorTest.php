@@ -60,6 +60,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'othersub.name',
             'closure' => $closure,
             'children.__recursive',
+            'new1.new2.new3.new4', // new object, not referenced before, should not have any issue
         ));
 
         $expected = array(
@@ -75,6 +76,13 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             ),
             'closure' => $closure,
             'children' => '__recursive',
+            'new1' => array(
+                'new2' => array(
+                    'new3' => array(
+                        'new4',
+                    ),
+                ),
+            ),
         );
 
         $this->assertEquals($expected, $actual);

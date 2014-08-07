@@ -362,9 +362,11 @@ class Hydrator
                 while ($key = array_shift($keys)) {
 
                     // If value already exists, remove it to replace it with an array ([0 => 'a'], becomes ['a' => array()])
-                    $existingKey = array_search($key, $arr);
-                    if ($existingKey !== false) {
-                        unset($arr[$existingKey]);
+                    if (!is_null($arr)) {
+                        $existingKey = array_search($key, $arr);
+                        if ($existingKey !== false) {
+                            unset($arr[$existingKey]);
+                        }
                     }
 
                     $arr = &$arr[$key];
