@@ -482,4 +482,19 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             });
         }
     };
+
+    /**
+     * Returns the URL to contribute to the filter
+     * @param {filter} filter
+     * @param {geoname} geoname
+     * @returns {String}
+     */
+    $scope.getContributeUrl = function(filter, geoname) {
+        if (filter.name.match('Sector')) {
+            return '/contribute/nsa?&country=' + geoname.country.id + '&returnUrl=' + $scope.currentUrl;
+        } else {
+            return '/contribute/jmp?&country=' + geoname.country.id + '&filter=' + filter.id + '&returnUrl=' + $scope.currentUrl;
+        }
+
+    };
 });

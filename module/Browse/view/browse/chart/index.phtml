@@ -388,7 +388,7 @@
                                                             <ul class="list-unstyled">
                                                                 <li><a ng-if="tabs.filters" href="/contribute/jmp?&country={{geoname.country.id}}&filters={{getFiltersIds()}}&returnUrl={{currentUrl}}"><i class="fa fa-gims-filter"></i> All filters</a></li>
                                                                 <li ng-repeat="filter in tabs.filters">
-                                                                    <a href="/contribute/jmp?&country={{geoname.country.id}}&filter={{filter.id}}&returnUrl={{currentUrl}}"><i class="fa fa-gims-filter" style="color:{{filter.genericColor}}"></i> {{filter.name}}</a>
+                                                                    <a href="{{getContributeUrl(filter, geoname)}}"><i class="fa fa-gims-filter" style="color:{{filter.genericColor}}"></i> {{filter.name}}</a>
                                                                 </li>
                                                             </ul>
                                                         </li>
