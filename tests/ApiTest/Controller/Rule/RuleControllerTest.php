@@ -40,6 +40,24 @@ class RuleControllerTest extends AbstractRestfulControllerTest
         $this->assertResponseStatusCode(403);
     }
 
+    public function testCannotUpdateRuleWithPublishedQuestionnaire()
+    {
+        $data = array('name' => 'foo');
+        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
+        $this->assertResponseStatusCode(201);
+        $actual = $this->getJsonResponse();
+        $this->assertEquals($data['name'], $actual['name']);
+
+        // Change questionnaire to be published
+        $this->questionnaire->setStatus(\Application\Model\QuestionnaireStatus::$PUBLISHED);
+        $this->getEntityManager()->merge($this->questionnaire);
+        $this->getEntityManager()->flush();
+
+        // Now, the same operation should be forbidden, because the questionnaire is published
+        $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
+        $this->assertResponseStatusCode(403);
+    }
+
     public function testCannotUpdateRuleWithAnotherQuestionnaireUsage()
     {
         $questionnaire2 = $this->createAnotherQuestionnaire();

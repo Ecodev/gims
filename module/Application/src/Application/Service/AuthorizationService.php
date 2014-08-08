@@ -35,7 +35,7 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
     {
         $permission = \Application\Model\Permission::getPermissionName($object, $action);
         $context = $object->getRoleContext($action);
-        $this->setCurrentAssertion($object, $permission, $action);
+        $this->setCurrentAssertion($object, $permission, $action, $context);
 
         if ($action == 'read' && $object instanceof Questionnaire && $object->getStatus() == QuestionnaireStatus::$PUBLISHED) {
 
@@ -109,13 +109,9 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
             $context = [$context];
         }
 
-        $contextMessages = [];
-        foreach ($context as $singleContext) {
-            $contextId = $singleContext->getId() ? '#' . $singleContext->getId() : '#null';
-            $contextMessages[] = '' . Utility::getShortClassName($singleContext) . $contextId . ' (' . $singleContext->getName() . ')';
-        }
+        $contexts = Utility::objectsToString($context);
 
-        return 'in contexts [' . implode(', ', $contextMessages) . ']';
+        return 'in contexts [' . $contexts . ']';
     }
 
     /**
@@ -200,16 +196,19 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
      * @param \Application\Model\AbstractModel $object
      * @param string $permission
      * @param string $action
+     * @param RoleContextInterface $context
      */
-    private function setCurrentAssertion(AbstractModel $object, $permission, $action)
+    private function setCurrentAssertion(AbstractModel $object, $permission, $action, RoleContextInterface $context = null)
     {
         $assertion = null;
 
         // Every action which is not read on answer must check if questionnaire status is not VALIDATED
-        if ($object instanceof \Application\Model\Answer && $permission != 'Answer-read') {
+        if ($object instanceof \Application\Model\Answer && $action != 'read') {
             $assertion = new \Application\Assertion\CanAnswerQuestionnaire($object);
         } elseif ($object instanceof \Application\Model\AbstractUserRole && in_array($action, ['create', 'update'])) {
             $assertion = new \Application\Assertion\CanAttributeRole($object);
+        } elseif ($object instanceof \Application\Model\Rule\Rule && $action != 'read') {
+            $assertion = new \Application\Assertion\CanUpdateRule($object, $context);
         }
 
         $this->setAssertion($permission, $assertion);

@@ -134,4 +134,20 @@ abstract class Utility
         return $reflect->getShortName();
     }
 
+    /**
+     * Returns a string of the object list
+     * @param array|\Traversable $objects
+     * @return string
+     */
+    public static function objectsToString($objects)
+    {
+        $names = [];
+        foreach ($objects as $object) {
+            $id = $object->getId() ? '#' . $object->getId() : '#null';
+            $names[] = '' . self::getShortClassName($object) . $id . ' (' . $object->getName() . ')';
+        }
+
+        return implode(', ', $names);
+    }
+
 }

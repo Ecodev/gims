@@ -10,7 +10,7 @@ class CanAnswerQuestionnaire extends AbstractAssertion
     /**
      * @var \Application\Model\Answer
      */
-    protected $answer;
+    private $answer;
 
     /**
      *
