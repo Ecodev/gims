@@ -11,12 +11,21 @@ angular.module('myApp.directives').directive('gimsAddUsage', function($rootScope
         link: function(scope, element) {
 
             element.on('click', function() {
-                if (scope.questionnaire.id && scope.filter.id && scope.part.id) {
-                    var params = {
+                var params;
+                if (scope.questionnaire.id && scope.filter && scope.filter.id && scope.part.id) {
+                    params = {
                         questionnaire: scope.questionnaire,
                         filter: scope.filter,
                         part: scope.part
                     };
+                } else if (scope.questionnaire.id && !scope.filter && scope.part.id) {
+                    params = {
+                        questionnaire: scope.questionnaire,
+                        part: scope.part
+                    };
+                }
+
+                if (params) {
                     $rootScope.$emit('gims-rule-usage-added', params);
                 }
             });

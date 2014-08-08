@@ -10,16 +10,19 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
         },
         controller: function($scope, AbstractModel) {
 
-            var usageType = '';
-
             $rootScope.$on('gims-rule-usage-added', function(evt, objects) {
+
                 $scope.usage = {};
                 $scope.usage.questionnaire = objects.questionnaire;
                 $scope.usage.filter = objects.filter;
                 $scope.usage.part = objects.part;
                 $scope.usage.rule = {};
                 $scope.showDetails = true;
-                setUsageType();
+
+                // for some unkown reason, the panel does not appear instantaneously,
+                // especially when clicking on buttons in the very last row
+                // of the table to add questionnaireUsage.
+                $scope.$apply();
             });
 
             $rootScope.$on('gims-rule-usage-selected', function(evt, usage) {
@@ -28,18 +31,17 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
                 if (usage && usage.rule && usage.rule.id) {
                     Restangular.one('rule', usage.rule.id).get({fields: 'permissions,filterQuestionnaireUsages,questionnaireUsages,filterGeonameUsages'}).then(function(rule) {
                         $scope.usage.rule.nbOfUsages = rule.filterQuestionnaireUsages.length + rule.questionnaireUsages.length + rule.filterGeonameUsages.length;
-                        setUsageType();
                     });
                 }
             });
 
-            var setUsageType = function() {
+            var getUsageType = function() {
                 if ($scope.usage.filter && $scope.usage.geoname) {
-                    usageType = 'filterGeonameUsage';
+                    return 'filterGeonameUsage';
                 } else if ($scope.usage.filter && $scope.usage.questionnaire) {
-                    usageType = 'filterQuestionnaireUsage';
-                } else if ($scope.usage.questionnaire && !$scope.usage.geoname && !$scope.usage.filter) {
-                    usageType = 'questionnaireUsage';
+                    return 'filterQuestionnaireUsage';
+                } else {
+                    return 'questionnaireUsage';
                 }
             };
 
@@ -66,12 +68,20 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
                     var miniUsage = {
                         questionnaire: $scope.usage.questionnaire.id,
                         part: $scope.usage.part.id,
-                        filter: $scope.usage.filter.id,
                         justification: $scope.usage.justification,
                         isSecondLevel: false,
                         rule: $scope.usage.rule.id
                     };
 
+                    if ($scope.usage.filter) {
+                        miniUsage.filter = $scope.usage.filter.id;
+                    }
+
+                    if ($scope.usage.geoname) {
+                        miniUsage.geoname = $scope.usage.geoname.id;
+                    }
+
+                    var usageType = getUsageType();
                     AbstractModel.post(miniUsage, usageType).then(function(usage) {
                         $scope.usage.id = usage.id;
                         $scope.usage.rule[usageType] = usage.id;

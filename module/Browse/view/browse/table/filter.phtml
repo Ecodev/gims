@@ -255,6 +255,11 @@
                                             </a>
                                         </li>
 
+                                        <!-- Add questionnaireUsage -->
+                                        <li ng-if="mode.isContribute">
+                                            <a href gims-add-usage questionnaire="questionnaire" part="tabs.part"><i class="fa fa-gims-rule fa-fw"></i> Add a rule</a>
+                                        </li>
+
                                         <!-- Duplicate rules -->
                                         <!-- Disabled for the moment, because add buttons that are not required since the news NSA view has been added, but works -->
                                         <!--<li ng-if="questionnairesWithUsages.length && !questionnaire.filterQuestionnaireUsages.length" class="divider"></li>-->
@@ -540,8 +545,8 @@
                         <tr ng-if="!mode.isSector">
                             <td  colspan="{{tabs.questionnaires.length + 1}}">
                                 <a href ng-click="toggleShowQuestionnaireUsages()">
-                                   <span ng-if="!showQuestionnaireUsages">Show Calculations / Estimations / Ratios</span>
-                                   <span ng-if="showQuestionnaireUsages">Hide Calculations / Estimations / Ratios</span>
+                                    <span ng-if="!showQuestionnaireUsages">Show Calculations / Estimations / Ratios</span>
+                                    <span ng-if="showQuestionnaireUsages">Hide Calculations / Estimations / Ratios</span>
                                 </a>
                             </td>
                         </tr>
@@ -561,6 +566,15 @@
                                 </span>
                             </td>
                         </tr>
+
+                        <tr ng-if="showQuestionnaireUsages && mode.isContribute">
+                            <td>
+                            </td>
+                            <td ng-repeat="questionnaire in tabs.questionnaires track by $index" style="text-align: center;" >
+                                <a class="btn btn-default btn-sm" href gims-add-usage questionnaire="questionnaire" part="tabs.part"><i class="fa fa-plus-circle"></i> Add a rule</a>
+                            </td>
+                        </tr>
+
                         <tr ng-if="mode.isSector">
                             <td  colspan="{{tabs.questionnaires.length + 1}}">
                                 <a class="btn btn-default btn-sm"
