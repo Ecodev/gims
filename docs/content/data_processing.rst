@@ -17,7 +17,7 @@ Until the other interfaces are programmed, users can already use GIMS for the :d
     :width: 100%
     :alt: Browse
 
-In these tables, select the country(ies), :term:`filter set(s)` (+ years) and once the content is visible, simply click on the "Export" button. The file you will obtain is already *processed* data through the :term:`filter(s)` and their associated :term:`rule(s)`.
+In these tables, select the country(ies), :term:`filter set(s)<filter set>` (+ years) and once the content is visible, simply click on the "Export" button. The file you will obtain is already *processed* data through the :term:`filters<filter>` and their associated :term:`rules<rule>`.
 
 .. note::
 

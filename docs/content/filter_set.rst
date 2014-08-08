@@ -1,7 +1,7 @@
 Filter sets
 ===========
 
-Filter sets can be seen as "folders" that facilitate the selection of a group of :term:`filer(s)` .
+Filter sets can be seen as "folders" that facilitate the selection of a group of :term:`filters<filter>`.
 
 To edit or create a filter set, go to the Administration section and click on the "Filter sets" icon.
 

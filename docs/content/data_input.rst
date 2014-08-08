@@ -80,7 +80,7 @@ The fields "belongs to chapter" and "display mode" (screen copy above) enable yo
     :width: 100%
     :alt: Questionnaire interface sample
 
-Each question can be linked to :term:`filter(s)` and one or several zone(s) / :term:`part(s)`.
+Each question can be linked to a :term:`filter` and one or several zone(s) / :term:`part(s)<part>`.
 
 The "Alternate labels" tab enables you to enter equivalent labels that may have been used, such as translations of the term in other languages (ex. "House connections" = "Robinet dans logement"…).
 
@@ -108,7 +108,7 @@ Numeric questions can be either expressed as a **percentage** or an **absolute**
 .. image:: img/question_numeric.png
     :width: 100%
     :alt: Numeric questions
-    
+
 .. note::
 
     JMP questions have an extra check-box that enables to specify if the numeric value represents population data or not.
