@@ -18,16 +18,20 @@ The second application is used to compute any arbitrary values within a
 questionnaire. Typical usage would be to compute Calculations,
 Estimations and Ratios as done in former JMP Excel country files.
 
-Finally, the third application is used much later in the JMP :doc:`computing process<computing>`,
+Finally, the third application is used much later in the JMP :doc:`computing
+process<computing>`,
 after the regression step. This can be used to define that values should not be
-higher than 100%. Conceptually it could be something like: ``Other Unimproved`` = 
+higher than 100%. Conceptually it could be something like: ``Other
+Unimproved`` =
 ``100% - Total improved - Surface water``.
 
 
 .. note::
 
-    While final results are displayed as percentages between 0 and 100, internally
-    they are always computed between 0.00 and 1.00. Therefore formulas must be written
+    While final results are displayed as percentages between 0 and 100,
+    internally
+    they are always computed between 0.00 and 1.00. Therefore formulas must
+    be written
     to work between 0.00 and 1.00. The recommended way to do that, to avoid any
     possible confusion, is to explicitly use the `%` symbol. For example:
 
@@ -39,12 +43,15 @@ higher than 100%. Conceptually it could be something like: ``Other Unimproved`` 
 Formula syntax
 --------------
 
-The formula syntax is based on the one used in Excel, except that cell references (eg: ``A2``,
-``B3``) must be entirely replaced with GIMS specific syntax. The basic structure
+The formula syntax is based on the one used in Excel, except that cell
+references (eg: ``A2``,
+``B3``) must be entirely replaced with GIMS specific syntax. The basic
+structure
 of GIMS syntax is enclosed in ``{}``. Within those delimiters are references to
 various GIMS objects, according to the possibilities described below. Finally,
 as seen above, there are two distinct contexts whose syntaxes cannot be mixed.
-The first basic context is before the regression, and the second context is after the
+The first basic context is before the regression, and the second context is
+after the
 regression.
 
 Where:
@@ -53,12 +60,16 @@ Where:
 * ``Q`` = :term:`Questionnaire`
 * ``P`` = :term:`Part`
 * ``R`` = :term:`Rule`
-* ``L`` = Level, only two possibilities: absent, or exactly "L#2" to indicate Level 2
+* ``L`` = Level, only two possibilities: absent, or exactly "L#2" to indicate
+Level 2
 * ``Y`` = Year offset
 
-``F``, ``Q`` and ``P``, can have the value ``current`` instead of a specific ID. This means
-that the current Filter, Questionnaire or Part should be used, instead of the one selected
-by its ID. This syntax should be preferred, whenever possible, to maximize the chances to
+``F``, ``Q`` and ``P``, can have the value ``current`` instead of a specific
+ID. This means
+that the current Filter, Questionnaire or Part should be used, instead of
+the one selected
+by its ID. This syntax should be preferred, whenever possible, to maximize
+the chances to
 share a single rule in many places.
 
 
@@ -76,7 +87,8 @@ Basic context
 
 **Question label**
     Reference a question label. If the question has no answer, it will return
-    ``NULL``. When used with ``ISTEXT()``, it can be used to detect if an answer exists.
+    ``NULL``. When used with ``ISTEXT()``, it can be used to detect if an
+    answer exists.
 
     .. code-block:: lua
 
@@ -141,11 +153,15 @@ Both contexts
         {F#12,Q#all}
 
 **Filter value after regression**
-    Reference a Filter regression value for a specific part and year. By default
-    the year is the one currently computed (in basic context: the questionnaire's
+    Reference a Filter regression value for a specific part and year. By
+    default
+    the year is the one currently computed (in basic context: the
+    questionnaire's
     year, and in regression context: the current year as returned by ``{Y}``).
-    However it is possible to define an offset from that year. To express "1 year
-    earlier" the offset would be -1, and for "3 years later", it would be +3. To
+    However it is possible to define an offset from that year. To express
+    "1 year
+    earlier" the offset would be -1, and for "3 years later", it would be
+    +3. To
     stay on the same year, use an offset of 0.
 
     .. code-block:: lua
@@ -155,8 +171,10 @@ Both contexts
         {F#12,P#current,Y+3}
 
 **Value if this rule is ignored**
-    Reference the value if computed without this rule. It allows to conditionally
-    apply a rule with syntaxes such as ``IF(can_apply_my_rule, compute_some_result, {self})``.
+    Reference the value if computed without this rule. It allows to
+    conditionally
+    apply a rule with syntaxes such as ``IF(can_apply_my_rule,
+    compute_some_result, {self})``.
 
     .. code-block:: lua
 
@@ -171,25 +189,29 @@ An entire formula could be:
 
 .. code-block:: lua
 
-    =IF(ISTEXT({F#12,Q#34}), SUM({F#12,Q#34,P#56}, {R#2,Q#34,P#56}), {R#2,Q#34,P#56})
+    =IF(ISTEXT({F#12,Q#34}), SUM({F#12,Q#34,P#56}, {R#2,Q#34,P#56}),
+    {R#2,Q#34,P#56})
 
 Or the more re-usable version:
 
 .. code-block:: lua
 
-    =IF(ISTEXT({F#12,Q#current}), SUM({F#12,Q#current,P#current}, {R#2,Q#current,P#current}), {R#2,Q#current,P#current})
+    =IF(ISTEXT({F#12,Q#current}), SUM({F#12,Q#current,P#current},
+    {R#2,Q#current,P#current}), {R#2,Q#current,P#current})
 
 
 Edit and create a rule
 ----------------------
 
-To edit or create a rule, go to the Administration section and click on the "Rules" icon.
+To edit or create a rule, go to the Administration section and click on the
+"Rules" icon.
 
 .. image:: img/administration.png
     :width: 100%
     :alt: Admin section
 
-The name of a rule should be as explicit as possible [1]. The formula is "translated" into a more comprehensible form [2] below the "Formula" field [3].
+The name of a rule should be as explicit as possible [1]. The formula is
+"translated" into a more comprehensible form [2] below the "Formula" field [3].
 
 .. image:: img/rule1.png
     :width: 100%
@@ -197,4 +219,5 @@ The name of a rule should be as explicit as possible [1]. The formula is "transl
 
 .. note::
 
-    Since a more user-friendly interface to edit rules will be implemented in the near future, no further details will be provided for the moment.
+    Since a more user-friendly interface to edit rules will be implemented
+    in the near future, no further details will be provided for the moment.

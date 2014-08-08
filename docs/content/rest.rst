@@ -1,8 +1,10 @@
 REST API
 ========
 
-GIMS uses a `REST API <http://en.wikipedia.org/wiki/Representational_state_transfer>`_
-which is available on the URL `/api` and allow developers to manipulate GIMS data.
+GIMS uses a `REST API
+<http://en.wikipedia.org/wiki/Representational_state_transfer>`_
+which is available on the URL `/api` and allow developers to manipulate
+GIMS data.
 
 The API answers to the following HTTP methods:
 
@@ -21,7 +23,8 @@ Possible error codes are:
     Unauthorized, the request should be repeated after successfully logged in
 
 403
-    Action is denied because of lack of permission, or the submitted data are invalid.
+    Action is denied because of lack of permission, or the submitted data
+    are invalid.
 404
     Item could not be found
 
@@ -29,7 +32,8 @@ Fields
 ------
 
 The optional parameter `?fields=children` allow ask for additional fields to be
-be returned. By default the API return the strict minimum to be as fast as possible.
+be returned. By default the API return the strict minimum to be as fast
+as possible.
 But it is possible to get a very complex object graph if needed.
 
 Get a survey with its minimal fields:
@@ -53,7 +57,8 @@ And even more fields, with sub-items:
     .. note::
 
         `metadata` is a special field allowing to return fields common to all
-        item types. It will be expanded to `dateCreated,dateModified,creator,modifier`.
+        item types. It will be expanded to
+        `dateCreated,dateModified,creator,modifier`.
 
 
 Recursivity
@@ -62,7 +67,7 @@ Recursivity
 It is possible to ask for items, and their fields, recursively by using the
 special field `__recursive`.
 
-The following example will return all filters and all its children, and its
+The following example will return a filter and all its children, and its
 children's children and so on:
 
     .. code::
@@ -124,8 +129,10 @@ This will return only questionnaires on which the user has `update` permission.
 Validation
 -----------------------
 
-When specifying `?validate=true` with PUT or POST method, the database will never
-be modified, but the submitted data will be validated and appropriate validation
+When specifying `?validate=true` with PUT or POST method, the database
+will never
+be modified, but the submitted data will be validated and appropriate
+validation
 messages will be returned in case of failure (as well as a 403 code).
 
 A successful validation will return the code 200 and the item as it would be if
