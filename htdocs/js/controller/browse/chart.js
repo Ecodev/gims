@@ -4,6 +4,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     /**************************************************************************/
     /* VARIABLE INITIALISATION ************************************************/
     /**************************************************************************/
+    $scope.activeTab = {};
     $scope.tabs = {};
     $scope.panelTabs = {};
     $scope.ignoredElements = null;
@@ -33,11 +34,30 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             $scope.panelTabs.target = target;
         }
 
-        var panelOpened = $location.search().panelOpened ? $location.search().panelOpened : false;
-        if (panelOpened) {
-            $scope.panelOpened = panelOpened;
-        }
     });
+
+    // Reload panel if exists in URL
+    var panel = $location.search().panel;
+    if (panel) {
+        $scope.panelOpened = true;
+        $scope.activeTab[panel] = true;
+    }
+
+    // When panel is closed or changed, update URL
+    $scope.$watch('[activeTab, panelOpened]', function() {
+        // suppress panel in URL
+        $location.search('panel', null);
+
+        // select currently active panel
+        if ($scope.panelOpened) {
+            _.forEach($scope.activeTab, function(isActive, panel) {
+                if (isActive) {
+                    $location.search('panel', panel);
+                }
+            });
+        }
+
+    }, true);
 
     $scope.$watch('panelTabs.target', function() {
         $location.search('target', $scope.panelTabs.target);
@@ -120,8 +140,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         $timeout(function() {
             jQuery(window).resize();
         }, 350); // 350 to resize after animation of panel
-
-        $location.search('panelOpened', $scope.panelOpened ? true : undefined);
     });
 
     /**
@@ -131,6 +149,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         $scope.$apply(function() {
             $scope.setPointSelected(pointSelected.id, pointSelected.questionnaire, pointSelected.name, pointSelected.filter);
             $scope.panelOpened = true;
+            $scope.activeTab.filters = true;
         });
     });
 

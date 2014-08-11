@@ -160,7 +160,7 @@
                             </div>
 
                             <tabset id="panelContent" class="nav-tabs-centered">
-                                <tab>
+                                <tab active="activeTab.filters">
                                     <tab-heading><i class="fa fa-gims-filter"></i> Filters</tab-heading>
 
                                     <!-- Panel top part : selected questionnaire and filters -->
@@ -274,7 +274,7 @@
                                     </div>
                                 </tab>
 
-                                <tab>
+                                <tab active="activeTab.rules">
                                     <tab-heading><i class="fa fa-gims-rule"></i> Rules</tab-heading>
                                     <!-- Panel top part : selected questionnaire and filters -->
                                     <div ng-show="pointSelected">
@@ -317,7 +317,7 @@
                                 </tab>
 
                                 <!-- Panel : Ignored elements -->
-                                <tab>
+                                <tab active="activeTab.ignored">
                                     <tab-heading><i class="fa fa-times-circle-o"></i> Ignored</tab-heading>
 
                                     <div class="col-md-12" ng-if="!ignoredElements">
@@ -372,7 +372,7 @@
                                     </div>
 
                                 </tab>
-                                <tab>
+                                <tab active="activeTab.actions">
                                     <tab-heading><i class="fa fa-bolt"></i> Actions</tab-heading>
                                     <div class="col-md-12">
                                         <div class="form-group">
