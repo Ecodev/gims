@@ -36,9 +36,9 @@ to an interface that enables you to manage both *existing* data as well as
     :width: 100%
     :alt: Edit JMP questionnaires
 
-The typical flow will be to: 1) select your **country** in the "Questionnaires
-(columns) and 2) choose in the "Filter (rows) the **filter set** you need
-(ex. "water: use of improved sources (JMP data)). The resulting table looks
+The typical flow will be to: 1) choose in the "Filter (rows) the **filter set** you need
+(ex. "water: use of improved sources (JMP data)) and 2) select your **country** in the "Questionnaires
+(columns). The resulting table looks
 very close to the former Excel country files.
 
 .. note::
@@ -47,33 +47,37 @@ very close to the former Excel country files.
     once the table vue is generated. To access these menus again, simply
     click on the "Selection" button at the top.
 
-.. note::
-
-    This interface also enables you to select a Survey and get the
-    corresponding questionnaires or via the "Selected" tab choose several
-    questionnaires from different countries to display them side by side…
-
 .. image:: img/contribute_jmp2.png
     :width: 100%
     :alt: Edit the JMP questionnaire of one country
 
-Actions can be performed at different levels. The first is the
-questionnaire. You can "Remove survey from table" (the equivalent of hiding
-the column in Excel).
+.. note::
+
+    This interface also enables you to select a Survey and get the
+    corresponding questionnaires or via the "Questionnaires" tab choose several
+    questionnaires from different countries to display them side by side…
+
+From here, actions can be performed at different levels depending on your access rights. The first is at the level of the questionnaire by clicking on the drop-down arrow at the top (see screen copy below).
+You can "Hide this column" (the equivalent of hiding a column in Excel).
 
 .. image:: img/contribute_jmp3.png
     :width: 100%
     :alt: Edition tools for a JMP questionnaire
 
+.. note::
+
+    If you wish to hide several columns (questionnaires) rapidly, the simplest is to go to the "Questionnaires" tab and there, click on the ones you wish to dismiss.
+
+.. image:: img/contribute_jmp3b.png
+    :width: 100%
+    :alt: Hiding several questionnaire rapidly
 
 .. _DI edit JMP:
 
-Edit a questionnaire
-^^^^^^^^^^^^^^^^^^^^
+Editing a questionnaire
+^^^^^^^^^^^^^^^^^^^^^^^
 
-If you have the access rights, you can edit the question labels (so called
-"original denomination" in the Excel country files), the survey comments as
-well as the survey and questionnaire.
+If you are granted the access rights, you can edit the question labels (so called "original denomination" in the Excel country files), the survey comments as well as the survey and questionnaire.
 
 .. image:: img/contribute_jmp4.png
     :width: 100%
@@ -84,8 +88,12 @@ override with a manually entered value: the symbol will then change to a
 question mark. If you erase the value you entered, the initial :term:`rule`
 will automatically apply again.
 
-Data that has a question mark [2] has been entered manually and can be edited
+Data with a folder icon [2] results from the sum of the filter's children. You can also override this total with a manually entered value: the symbol will then change to a question mark. If you erase the value you entered, the initial computation will automatically apply again.
+
+Data that has a question mark [3] has been entered manually and can be edited
 if needed.
+
+Data that has a plus (+) icon [4] results from the sum of a number of other filter elements as defined in the :ref:`Summands`.
 
 .. image:: img/contribute_jmp5.png
     :width: 100%
@@ -153,28 +161,20 @@ confirmation message appears, click again on "Delete".
 NSA questionnaires
 ------------------
 
-.. This section will have to be updated following change of workflow !
-
 Once you have cliced on the "NSA questionnaire" button, you will be directed
-to an interface that enables you to manage both *existing* data (select NSA
-container) as well as *new info* (Create NSA container).
+to an interface that enables you to manage both *existing* data as well as *new info*. You must first select the country you wish to work on.
 
 .. image:: img/contribute_nsa1.png
     :width: 100%
     :alt: Edit NSA questionnaires
 
-The typical initial flow will be to: [1] "Create an NSA container" (i.e. filter
-set) by giving it a relevant name, typically "CountryName wat/san sector data".
+If you select a country for which there is **no sector data yet**, a first questionnaire is automatically created with lines to enter an initial equipment / facility. Enter a standard questionnaire "Code" (ex. "AFGS-00"), the "Year" (ex. "2000"), the "Facility name" (ex. "Public standpipes") and corresponding numbers… and then click on the blue "Save new elements" button at the top.
 
 .. image:: img/contribute_nsa2.png
     :width: 100%
     :alt: Create NSA filter and filter set
 
-Then [2] add one or several new questionnaires and [3] add one or several
-new equipments (facilities) for each questionnaire. Enter corresponding
-labels and numbers… for each part (urban, rural and total). Once the data
-has been entered, click on the blue "Save new elements" button at the top:
-the percentage are automatically calculated.
+If, for your country, **sector data already exists**, GIMS will automatically recall the existing data enabling you to modify existing data or add one or several new questionnaires [1] as well as one or several new equipments (facilities) for each questionnaire [2]. Don't forget to enter corresponding numbers for each part (urban, rural and total) [3] ! Once the data has been entered, click on the blue "Save new elements" button at the top: the percentages are automatically (re)calculated.
 
 .. note::
 
@@ -184,16 +184,6 @@ the percentage are automatically calculated.
 .. image:: img/contribute_nsa3.png
     :width: 100%
     :alt: Add new questionnaires and equipments
-
-If you return to update and/or enter new data, "Select the NSA container"
-you have already created as well as the country: the existing questionnaires
-will show up. You can edit the existing data, add new facilities as well as
-new questionnaires.
-
-.. note::
-
-    The current data flow and management will be greatly simplified in
-    version 1.30 !
 
 
 .. _DI GLAAS:

@@ -27,6 +27,11 @@ GIMS has three main sections:
     :width: 100%
     :alt: Admin section
 
+* **Help** is the link to the documentation you are reading. On most pages you will find question marks that provide an initial reminder of what you can do where you are as well as a contextual link to a specific section of the documentation.
+
+.. image:: img/help.png
+    :width: 100%
+    :alt: help section
 
 .. _sign-in:
 

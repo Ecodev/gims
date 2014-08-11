@@ -37,6 +37,17 @@ keep them, don't forget to click on the blue "Save" button.
     :width: 100%
     :alt: change the color for the filter
 
+.. _Summands:
+
+Summands
+^^^^^^^^
+
+If in most cases the filter structure provides a logical view of how elements add-up (a parent is typically the sum of it's children), some filters can be the sum of several other filters dispatched within the filter tree. Such calculations are defined in the "Summands" field by simply inserting the filter elements you wish to add-up.
+
+.. image:: img/filters4.png
+    :width: 100%
+    :alt: summands
+
 .. note::
 
     You can directly edit parent and/or child filters by clicking on the
