@@ -29,8 +29,6 @@ class SurveyTest extends AbstractModel
         $this->assertEquals(\Application\Model\SurveyType::$GLAAS, $survey->getType(), 'survey should default to GLAAS type');
 
         $question = new NumericQuestion();
-        $question->setIsPopulation(true);
-        $question->setIsAbsolute(false);
         $question->setSurvey($survey);
         $this->assertEquals(\Application\Model\SurveyType::$JMP, $survey->getType(), 'survey should automatically switch to JMP');
 

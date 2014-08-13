@@ -295,10 +295,10 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
             return;
         }
 
-        // If we have only population coverage question, then it's JMP, otherwise GLAAS
+        // If we have only numeric questions, then it's JMP, otherwise GLAAS
         $type = SurveyType::$JMP;
         foreach ($this->getQuestions() as $question) {
-            if (!$question instanceof Question\NumericQuestion || !$question->isPopulation() || $question->isAbsolute()) {
+            if (!$question instanceof Question\NumericQuestion) {
                 $type = SurveyType::$GLAAS;
                 break;
             }
