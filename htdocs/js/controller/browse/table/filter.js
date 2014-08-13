@@ -139,11 +139,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             Restangular.one('geoname', $scope.tabs.country.geoname.id).getList('questionnaire', _.merge(questionnaireFields, {surveyType: $scope.mode.surveyType, perPage: 1000})).then(function(questionnaires) {
                 $scope.tabs.questionnaires = questionnaires;
                 $scope.tabs.survey = null;
-
-                if ($scope.mode.isSector) {
-                    initSector();
-                }
-
+                initSector();
                 checkSelectionExpand();
             });
         }
@@ -189,6 +185,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 prepareDataQuestionnaires(questionnaires);
                 $scope.orderQuestionnaires(false);
             });
+        } else if (($scope.tabs.country || $scope.tabs.survey) && _.isEmpty($scope.tabs.questionnaires)) {
+            $scope.addQuestionnaire();
         }
 
         if (firstLoading === true && $scope.tabs.filters && $scope.tabs.questionnaires) {
@@ -1663,24 +1661,26 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     };
 
     var initSector = function() {
-        updateUrl('questionnaires');
-        $scope.tabs.filter = undefined;
-        $scope.tabs.filters = [];
-        updateUrl('filter');
-        updateUrl('filters');
+        if ($scope.mode.isSector) {
+            updateUrl('questionnaires');
+            $scope.tabs.filter = undefined;
+            $scope.tabs.filters = [];
+            updateUrl('filter');
+            updateUrl('filters');
 
-        if ($scope.tabs.country) {
-            if (_.isEmpty($scope.tabs.questionnaires)) {
-                $scope.addQuestionnaire();
-                addSectorFilterSet();
-            } else {
-                if ($scope.tabs.questionnaires && $scope.tabs.questionnaires.length && $scope.tabs.questionnaires[0].survey) {
+            if ($scope.tabs.country) {
 
-                    // Find the filter which contains everything sector-related
-                    Restangular.one('filter', $scope.tabs.questionnaires[0].survey.questions[0].filter.id).get({fields: 'parents.parents'}).then(function(filters) {
-                        $scope.tabs.filter = filters.parents[0].parents[0];
-                    });
-                }
+                $http.get('/api/filter/getSectorFiltersForGeoname', {
+                    params: {
+                        geoname: $scope.tabs.country.geoname.id
+                    }
+                }).success(function(data) {
+                    if (data.id) {
+                        $scope.tabs.filter = data;
+                    } else {
+                        addSectorFilterSet();
+                    }
+                });
             }
         }
     };

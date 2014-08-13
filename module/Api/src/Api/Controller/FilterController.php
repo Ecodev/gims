@@ -236,4 +236,11 @@ class FilterController extends AbstractChildRestfulController
         return new JsonModel(array());
     }
 
+    public function getSectorFiltersForGeonameAction()
+    {
+        $filter = $this->getEntityManager()->getRepository('\Application\Model\Geoname')->getSectorFilter($this->params()->fromQuery('geoname'));
+
+        return new JsonModel($filter);
+    }
+
 }

@@ -594,10 +594,11 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $alternateNames = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getByFiltersAndQuestionnaire($filterIds, $questionnaire);
 
         foreach ($alternateNames as $alternateName) {
-            $name = $alternateName['alternateNames'][$questionnaire->getId()];
-            foreach ($flatFilters as &$flatFilter) {
-                if ($flatFilter['filter']['id'] == $alternateName['filterId']) {
-                    $flatFilter['filter']['originalDenomination'] = $name;
+            if (isset($alternateName['alternateNames'][$questionnaire->getId()])) {
+                foreach ($flatFilters as &$flatFilter) {
+                    if ($flatFilter['filter']['id'] == $alternateName['filterId']) {
+                        $flatFilter['filter']['originalDenomination'] = $alternateName['alternateNames'][$questionnaire->getId()];
+                    }
                 }
             }
         }
