@@ -164,9 +164,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         if (firstLoading === true && $scope.tabs.filters && $scope.tabs.questionnaires) {
             checkSelectionExpand();
         }
-        if ($scope.tabs.filters) {
-            validateNSAFilterStructure();
-        }
     });
 
     $scope.$watchCollection('tabs.filters', function() {
@@ -812,30 +809,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 });
             });
         });
-    };
-
-    /**
-     * Check if in NSA view, we have a single root filter, then x equipments and 2 children by equipment
-     */
-    var validateNSAFilterStructure = function() {
-        $scope.NSAStructureOk = true;
-        if ($scope.tabs.filters && $scope.tabs.filters[0]) {
-            var rootLevel = $scope.tabs.filters[0].level;
-            var rootFilters = $scope.getFiltersByLevel(rootLevel);
-            if (rootFilters.length == 1) {
-                var filtersLvl1 = $scope.getFiltersByLevel(rootLevel + 1);
-
-                _.forEach(filtersLvl1, function(filter) {
-                    var children = getChildren(filter);
-                    if (children.length != 2) {
-                        $scope.NSAStructureOk = false;
-                        return false;
-                    }
-                });
-            } else {
-                $scope.NSAStructureOk = false;
-            }
-        }
     };
 
     /**

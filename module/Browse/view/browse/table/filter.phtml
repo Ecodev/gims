@@ -134,45 +134,6 @@
         </div>
     </form>
 
-    <div class="alert alert-danger" ng-show="mode.isSector && !NSAStructureOk && tabs.filter">
-        <span class=alert-link>NSA filter structure error</span>
-
-        <p>You're on NSA view and filter structure is not compatible.</p>
-        <p>The structure must have a single root filter with some equipments. Each equipment, must have two children.</p>
-        <br/>
-        <ul>
-            <li><span class=alert-link>Country sector</span>
-                <ul>
-                    <li>Equipment 1
-                        <ul>
-                            <li>Number of equipments</li>
-                            <li>Number of persons by equipment</li>
-                        </ul>
-                    </li>
-                    <li>Equipment 2
-                        <ul>
-                            <li>Number of equipments</li>
-                            <li>Number of persons by equipment</li>
-                        </ul>
-                    </li>
-                    <li>Equipment 3
-                        <ul>
-                            <li>Number of equipments</li>
-                            <li>Number of persons by equipment</li>
-                        </ul>
-                    </li>
-                    <li>Equipment 4
-                        <ul>
-                            <li>Number of equipments</li>
-                            <li>Number of persons by equipment</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-
-    </div>
-
     <!-- Tabs parts -->
     <tabset class="nav-tabs-centered" ng-show="(mode.isSector && tabs.filter) || tabs.filters.length && (tabs.questionnaires.length || mode.isContribute)">
         <tab ng-repeat="part in parts" heading="{{part.name}}" select="tabs.part = part"></tab>
