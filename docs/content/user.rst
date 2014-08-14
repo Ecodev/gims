@@ -33,3 +33,5 @@ the user access to extra surveys, questionnaires, etc.
 .. image:: img/user3.png
     :width: 100%
     :alt: User account general info
+
+.. add info about how to add a "viewer" role to enable other people to see new questionnaires you have added…

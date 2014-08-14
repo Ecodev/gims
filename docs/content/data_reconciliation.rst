@@ -1,13 +1,13 @@
 JMP data reconciliation process
 ===============================
 
-Provider-based and user-based monitoring approaches measure different,
+*Provider-based* and *user-based* monitoring approaches measure different,
 yet complementary, things:
 
-* *outputs* (what infrastructure is available to the population) is
+* *outputs* (what infrastructures are available to the population) is
   typically measured by the :term:`NSA`. Numerous countries are developing
   Sector Information Management Systems (SIMS) to this effect.
-* *outcomes* (what infrastructure people are actually using) is measured by the
+* *outcomes* (what infrastructures people are actually using) is measured by the
   :term:`NSO` and other organisations via household surveys and censuses. This
   information makes up the basic and historical corpus of the :term:`JMP`
   which is now managed within GIMS.
@@ -15,34 +15,43 @@ yet complementary, things:
 GIMS enables to handle these two approaches and compare results so as to
 identify existing problems that can be related to different definitions
 of improved facilities, different methodologies for estimating coverage,
-or different definitions of urban/rural.
+or different definitions of urban/rural, etc.
 
 Editing and comparing JMP and NSO data
 --------------------------------------
 
-NSO and JMP data may differ due to different definitions of what is considered
-improved / unimproved both for water and sanitation.
+Also NSO and JMP both measure *outcomes*, data may differ due to different definitions of what is considered improved / unimproved both for water and sanitation.
 
 NSO users can visualize the impact of such modifications via the Browse /
 Charts section by ignoring certain filters and/or questionnaires and seeing
-the impact of this adaptation on the calculated trend line.
+the impact of this adaptation on the calculated trend line. In the example below, data under "Public tap, standpipe" has been ignored for all questionnaires (see the :ref:`JMPgraphAnalysis` section for basic notions).
 
 .. image:: img/data_reconciliation1.png
     :width: 100%
     :alt: Data reconciliation process
 
-If they want to add one or several data sets, they can do so via the :ref:`DI
-create new JMP questionnaire` or the :ref:`DI JMP` section.
+NSO users can easily add one or several data sets, if needed, via the "Actions" tab [1] and clicking on "All filters" [2].
 
-.. note::
-
-    A direct link from the Chart will be added soon to facilitate this
-    creation.
+.. image:: img/data_reconciliation1a.png
+    :width: 100%
+    :alt: Editing data in tables
 
 .. warning::
 
     These new questionnaires will only be visible to their author and the
-    users to whom he will give the access rights !
+    users to whom he will give the access rights (see how to give access rights to :doc:`user`)!
+
+By default, the filters shown will correspond to the top level ones displayed on the chart, which might be sufficient if the person only wants to enter a coverage total to see it's impact on the calculated trend line. Click on "Add new questionnaire" [1], enter the data [2], Save new elements [3] and the click on the "Back" button [4] to view the updated chart.
+
+.. image:: img/data_reconciliation1b.png
+    :width: 100%
+    :alt: Editing data in a simplified table view
+
+If the user would like to enter more detailed data, he can simply add the filter's children by [1] clicking on the selection button and then choosing the desired filter [2].
+
+.. image:: img/data_reconciliation1c.png
+    :width: 100%
+    :alt: Expanding the filters displayed
 
 .. note::
 
@@ -50,11 +59,7 @@ create new JMP questionnaire` or the :ref:`DI JMP` section.
     approved data, they can do so by changing the status of the questionnaire
     from "new" to "published".
 
-Having added one or several new datasets; ignored certain filters and
-eventually also certain questionnaires, the resulting trend line will provide
-the result for the National Statistics Office (NSO) [1]. The difference with
-the original JMP data points and trend line (in shaded color and dashed line)
-[2] are clearly visible.
+Having added one or several new datasets (in the example below "DAT10"); ignored certain filters and eventually also certain questionnaires, the resulting data points and trend line will provide the National Statistics Office's version [1]. The difference with the original JMP data points and trend line (in shaded color and dashed line) [2] are clearly visible.
 
 .. note::
 
@@ -80,54 +85,51 @@ To add NSA sector data, simply click on the "Create sector dataset" button.
     :width: 100%
     :alt: NSA data entry
 
-Go to the :ref:`DI NSA` to review how to enter new NSA data.
+.. note::
 
-Once the NSA sector data has been created…
+    To review how to edit NSA data, see the :ref:`DI NSA` section.
+
+In the example below, we assume NSA have detailed data regarding piped water into and outside houses, the later being equivalent to the "piped water to yard/plot" filter.
+
+.. note::
+
+    For these sector data equipments, we recommend you append "SD" to the equipment label so as to distinguish easily NSA data in the chart.
 
 .. image:: img/data_reconciliation4.png
     :width: 100%
     :alt: NSA data entry
 
-…you can display it on the graph by simply adding the corresponding filter
-set to the existing one. The difference between NSO (blue) and NSA (purple)
-data is clearly visible.
+Once the NSA sector data has been created, you can display it on the graph so as to compare data points and corresponding trends lines with official JMP values.
+
+To ensure the comparisons performed are meaningful, it is best that you only display equivalent filters [1]. In the example below, we have displayed the JMP filter "Piped water into dwelling" (in blue) and the sector data "Piped water into houses (SD)" (in red).
+
+To discover by how many persons per equipment the NSA estimations need to be corrected, click on the "Actions" tab [2] and select the parameters to be used:
+
+* **Filter for the projection** [3]: select the trend line you wish to move. In
+  the example below the NSA data (red line)
+* **Target of projection** [4]: select the trend line you wish to match. In our
+  example the JMP data (blue line)
+* **Compute value after projection** [5]: select the parameter that should be
+  calculated, typically the number of persons per equipment.
+
+Click on the "Apply" button [6].
 
 .. image:: img/data_reconciliation5.png
     :width: 100%
-    :alt: JMP, NSO and NSA data plotted
+    :alt: Comparable JMP and NSA data plotted
 
-To estimate by how many users per equipment one should lower current estimates
-(50 for equipment 1 and 100 for equipment 2 in the example above), click on
-the "Actions" tab.
+The NSA trend line drops down in our example to adjust to the JMP data.
 
 .. image:: img/data_reconciliation6.png
     :width: 100%
-    :alt: Actions tab for graphical data reconciliation
+    :alt: Trend line adjustement
 
-Here you will have to select 3 parameters to be used:
-
-* **Filter for the projection**: select the trend line you wish to move. In
-  the example below "Improved equipment 1" has been chosen.
-* **Target of projection**: select the trend line you wish to match. In the
-  example below "Total improved (ignored elements)" has been chosen since this
-  corresponds to the NSO data.
-* **Compute value after projection**: select the parameter that should be
-  calculated, typically the number of people per equipment.
+To discover by how many persons the estimation should be adjusted, click on the "Differences" tab [1]. In our example, we see that the initial NSA estimation of 10 persons per equipment is close to the double of effective numbers (between 5-6 persons).
 
 .. image:: img/data_reconciliation7.png
     :width: 100%
     :alt: Actions tab for graphical data reconciliation
 
-Click on the "Apply" button. The initial blue trend line drops (here in red)
-to match the NSO purple line.
+.. note::
 
-.. image:: img/data_reconciliation8.png
-    :width: 100%
-    :alt: Actions tab for graphical data reconciliation
-
-Click on the Estimates tab to discover by how many persons per equipment
-the number should be updated.
-
-.. image:: img/data_reconciliation9.png
-    :width: 100%
-    :alt: Calculated difference in Estimates tab
+    GIMS will soon enable users to perform even more precise estimations by integrating a "quality" parameter that measures the percentage of equipments that are not operational anymore…

@@ -77,7 +77,7 @@ You can "Hide this column" (the equivalent of hiding a column in Excel).
 Editing a questionnaire
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-If you are granted the access rights, you can edit the question labels (so called "original denomination" in the Excel country files), the survey comments as well as the survey and questionnaire.
+If you are granted the access rights, you can edit the **question labels** (so called "original denomination" in the Excel country files), the **survey comments** as well as the **survey** and **questionnaire**.
 
 .. image:: img/contribute_jmp4.png
     :width: 100%
@@ -122,8 +122,7 @@ Add a new questionnaire
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 To add new data, simply click the "Add new questionnaire" button [1]. A new
-column is created. Select the country, enter an appropriate survey code and
-year and fill in the percentages. Once you have finished, click on the blue
+column is created [2]. Select the country, enter an appropriate survey code (typically three letters for the type of survey and two numbers for the year) and year and fill in the percentages. Once you have finished, click on the blue
 "Save new elements" button at the top.
 
 .. image:: img/contribute_jmp7.png

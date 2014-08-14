@@ -1,7 +1,7 @@
 Basic notions
 =============
 
-GIMS has three main sections:
+GIMS has three main sections on top of the **"About"** page and the **"Help"** section:
 
 * **Browse** enables you to visualize in the form of tables, graphs and maps
   (available soon) all validated data that the authors agree to make public. No
@@ -27,11 +27,18 @@ GIMS has three main sections:
     :width: 100%
     :alt: Admin section
 
-* **Help** is the link to the documentation you are reading. On most pages you will find question marks that provide an initial reminder of what you can do where you are as well as a contextual link to a specific section of the documentation.
+* **Help** provides a direct link to the documentation you are reading. Looking for something specific? Use the "Search docs" field [1]… If you wish to download the documentation as a PDF, click on the "Read the Docs" bar at the bottom [2] and choose "PDF" [3].
+
 
 .. image:: img/help.png
     :width: 100%
     :alt: help section
+
+On most pages you will find question marks [1] that provide an initial reminder of what you can do where you are as well as a contextual link to a specific section of the documentation [2].
+
+.. image:: img/help2.png
+    :width: 100%
+    :alt: contextual help
 
 .. _sign-in:
 

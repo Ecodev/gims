@@ -23,6 +23,7 @@ the questionnaire:
 For the moment, the only complete data validation process used is for GLASS
 questionnaires.
 
+.. See when we decide to mention how people could enter data for JMP -> submission to JMP for validation -> JMP reviews and comments (metadata) and decides to integrate (or not)…
 
 .. _change questionnaire status:
 
