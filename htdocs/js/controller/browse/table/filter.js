@@ -221,6 +221,13 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         }
     };
 
+    $scope.toggleOriginalDenominations = function() {
+        var firstQuestionnaireStatus = !$scope.tabs.questionnaires[0].showLabels;
+        _.forEach($scope.tabs.questionnaires, function(questionnaire) {
+            questionnaire.showLabels = firstQuestionnaireStatus;
+        });
+    };
+
     $scope.orderQuestionnaires = function(reverse) {
         $scope.tabs.questionnaires = $filter('orderBy')($scope.tabs.questionnaires, 'survey.year', reverse);
         $scope.questionnairesAreSorted = true;
