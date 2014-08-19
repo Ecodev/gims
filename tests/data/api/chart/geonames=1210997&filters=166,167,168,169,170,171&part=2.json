@@ -1,928 +1,865 @@
-{
-    "chart": {
-        "zoomType": "xy",
-        "height": 600,
-        "animation": false
-    },
-    "title": {
-        "text": "Bangladesh - Rural"
-    },
-    "subtitle": {
-        "text": "Estimated proportion of the population"
-    },
-    "xAxis": {
-        "title": {
-            "enabled": true,
-            "text": "Year"
+[
+    {
+        "name": "Improved + shared",
+        "id": 166,
+        "data": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            42.8,
+            42.8,
+            42.8,
+            42.8,
+            42.8,
+            44.7,
+            46.5,
+            48.4,
+            50.3,
+            52.1,
+            54.0,
+            55.8,
+            57.7,
+            59.5,
+            61.4,
+            63.3,
+            65.1,
+            67.0,
+            68.8,
+            70.7,
+            72.5,
+            74.4,
+            76.2,
+            78.1,
+            80.0,
+            81.8,
+            83.7,
+            85.5
+        ],
+        "type": "line",
+        "geonameId": 1210997,
+        "color": "#005FD9",
+        "lightColor": "#B8C6D9",
+        "marker": {
+            "symbol": "diamond"
         },
-        "labels": {
-            "step": 1,
-            "format": "{value}"
+        "usages": "(none)"
+    },
+    {
+        "name": "Sewerage connections",
+        "id": 167,
+        "data": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+        ],
+        "type": "line",
+        "geonameId": 1210997,
+        "color": "#9ED900",
+        "lightColor": "#D0D9B8",
+        "marker": {
+            "symbol": "diamond"
         },
-        "allowDecimals": false
+        "usages": "(none)"
     },
-    "yAxis": {
-        "title": {
-            "enabled": true,
-            "text": "Coverage (%)"
+    {
+        "name": "Improved",
+        "id": 168,
+        "data": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            28.9,
+            28.9,
+            28.9,
+            28.9,
+            28.9,
+            30.2,
+            31.4,
+            32.7,
+            33.9,
+            35.2,
+            36.4,
+            37.7,
+            39.0,
+            40.2,
+            41.5,
+            42.7,
+            44.0,
+            45.2,
+            46.5,
+            47.7,
+            49.0,
+            50.2,
+            51.5,
+            52.7,
+            54.0,
+            55.3,
+            56.5,
+            57.8
+        ],
+        "type": "line",
+        "geonameId": 1210997,
+        "color": "#D400D9",
+        "lightColor": "#D8B8D9",
+        "marker": {
+            "symbol": "diamond"
         },
-        "min": 0,
-        "max": 100
+        "usages": "Regression: Improved (default)"
     },
-    "credits": {
-        "enabled": false
+    {
+        "name": "Shared",
+        "id": 169,
+        "data": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            13.9,
+            13.9,
+            13.9,
+            13.9,
+            13.9,
+            14.5,
+            15.1,
+            15.7,
+            16.3,
+            16.9,
+            17.5,
+            18.1,
+            18.7,
+            19.3,
+            19.9,
+            20.5,
+            21.1,
+            21.7,
+            22.3,
+            22.9,
+            23.5,
+            24.2,
+            24.8,
+            25.4,
+            26.0,
+            26.6,
+            27.2,
+            27.8
+        ],
+        "type": "line",
+        "geonameId": 1210997,
+        "color": "#00D995",
+        "lightColor": "#B8D9CF",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "Regression: Shared (default)"
     },
-    "plotOptions": {
-        "line": {
-            "marker": {
-                "enabled": false
+    {
+        "name": "Other unimproved",
+        "id": 170,
+        "data": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            15.7,
+            15.7,
+            15.7,
+            15.7,
+            15.7,
+            15.5,
+            15.3,
+            15.1,
+            14.9,
+            14.7,
+            14.5,
+            14.2,
+            14.0,
+            13.8,
+            13.6,
+            13.4,
+            13.2,
+            13.0,
+            12.8,
+            12.6,
+            12.4,
+            12.2,
+            12.0,
+            11.8,
+            11.6,
+            11.4,
+            11.2,
+            11.0
+        ],
+        "type": "line",
+        "geonameId": 1210997,
+        "color": "#D95600",
+        "lightColor": "#D9C5B8",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "Regression: Other unimproved (default)"
+    },
+    {
+        "name": "Open defecation",
+        "id": 171,
+        "data": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            41.5,
+            41.5,
+            41.5,
+            41.5,
+            41.5,
+            39.8,
+            38.2,
+            36.5,
+            34.9,
+            33.2,
+            31.6,
+            29.9,
+            28.3,
+            26.6,
+            25.0,
+            23.3,
+            21.7,
+            20.0,
+            18.4,
+            16.7,
+            15.1,
+            13.4,
+            11.7,
+            10.1,
+            8.4,
+            6.8,
+            5.1,
+            3.5
+        ],
+        "type": "line",
+        "geonameId": 1210997,
+        "color": "#1600D9",
+        "lightColor": "#BCB8D9",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "Regression: Open defecation (default)"
+    },
+    {
+        "type": "scatter",
+        "id": 166,
+        "name": "Improved + shared",
+        "country": "Bangladesh",
+        "color": "#005FD9",
+        "lightColor": "#B8C6D9",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "CEN91",
+                "id": "166:2",
+                "questionnaire": 2,
+                "x": 1991,
+                "y": 49.6
             },
-            "tooltip": {
-                "headerFormat": "<span style=\"font-size: 10px\">Estimate for {point.category}<\/span><br\/>",
-                "pointFormat": "<span style=\"color:{series.color}\">{point.y}% {series.name}<\/span><br\/>",
-                "footerFormat": "<br><br><strong>Rules : <\/strong><br><br>{series.options.usages}<\/span><br\/>",
-                "valueSuffix": "%"
+            {
+                "name": "DHS94",
+                "id": "166:3",
+                "questionnaire": 3,
+                "x": 1994,
+                "y": 53.7
             },
-            "pointStart": 1980,
-            "dataLabels": {
-                "enabled": false
+            {
+                "name": "MICS94",
+                "id": "166:4",
+                "questionnaire": 4,
+                "x": 1994,
+                "y": 50.8
+            },
+            {
+                "name": "MICS95",
+                "id": "166:5",
+                "questionnaire": 5,
+                "x": 1995,
+                "y": 53.7
+            },
+            {
+                "name": "MICS96",
+                "id": "166:6",
+                "questionnaire": 6,
+                "x": 1996,
+                "y": 63.0
+            },
+            {
+                "name": "DHS97",
+                "id": "166:7",
+                "questionnaire": 7,
+                "x": 1997,
+                "y": 58.3
+            },
+            {
+                "name": "SVRS98",
+                "id": "166:8",
+                "questionnaire": 8,
+                "x": 1998,
+                "y": 55.0
+            },
+            {
+                "name": "DHS00",
+                "id": "166:11",
+                "questionnaire": 11,
+                "x": 2000,
+                "y": 63.3
+            },
+            {
+                "name": "HIES00",
+                "id": "166:12",
+                "questionnaire": 12,
+                "x": 2000,
+                "y": 62.6
+            },
+            {
+                "name": "CEN01",
+                "id": "166:13",
+                "questionnaire": 13,
+                "x": 2001,
+                "y": 64.7
+            },
+            {
+                "name": "MHS01",
+                "id": "166:14",
+                "questionnaire": 14,
+                "x": 2001,
+                "y": 59.0
+            },
+            {
+                "name": "DHS04",
+                "id": "166:16",
+                "questionnaire": 16,
+                "x": 2004,
+                "y": 65.8
+            },
+            {
+                "name": "HIES05",
+                "id": "166:17",
+                "questionnaire": 17,
+                "x": 2005,
+                "y": 71.2
+            },
+            {
+                "name": "MICS06",
+                "id": "166:18",
+                "questionnaire": 18,
+                "x": 2006,
+                "y": 70.1
+            },
+            {
+                "name": "DHS07",
+                "id": "166:19",
+                "questionnaire": 19,
+                "x": 2007,
+                "y": 79.1
+            },
+            {
+                "name": "MICS09",
+                "id": "166:20",
+                "questionnaire": 20,
+                "x": 2009,
+                "y": 79.8
+            },
+            {
+                "name": "HIES10",
+                "id": "166:21",
+                "questionnaire": 21,
+                "x": 2010,
+                "y": 87.4
+            },
+            {
+                "name": "CEN11",
+                "id": "166:22",
+                "questionnaire": 22,
+                "x": 2011,
+                "y": 84.9
+            },
+            {
+                "name": "DHS11",
+                "id": "166:23",
+                "questionnaire": 23,
+                "x": 2011,
+                "y": 85.5
             }
-        },
-        "scatter": {
-            "dataLabels": {
-                "enabled": true
-            },
-            "tooltip": {
-                "headerFormat": "",
-                "pointFormat": "<b>{point.name}<\/b> ({point.x})<br\/><span style=\"color:{series.color}\">{point.y}% {series.name}<\/span>"
-            },
-            "marker": {
-                "states": {
-                    "select": {
-                        "lineColor": "#DDD",
-                        "fillColor": "#DDD"
-                    }
-                }
-            }
-        }
+        ]
     },
-    "series": [
-        {
-            "name": "Improved + shared",
-            "id": 166,
-            "data": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                42.8,
-                42.8,
-                42.8,
-                42.8,
-                42.8,
-                44.7,
-                46.5,
-                48.4,
-                50.3,
-                52.1,
-                54.0,
-                55.8,
-                57.7,
-                59.5,
-                61.4,
-                63.3,
-                65.1,
-                67.0,
-                68.8,
-                70.7,
-                72.5,
-                74.4,
-                76.2,
-                78.1,
-                80.0,
-                81.8,
-                83.7,
-                85.5
-            ],
-            "color": "#005FD9",
-            "geonameId": 1210997,
-            "type": "line",
-            "dashStyle": "Solid",
-            "marker": {
-                "symbol": "circle"
-            },
-            "usages": "(none)"
+    {
+        "type": "scatter",
+        "id": 167,
+        "name": "Sewerage connections",
+        "country": "Bangladesh",
+        "color": "#9ED900",
+        "lightColor": "#D0D9B8",
+        "marker": {
+            "symbol": "circle"
         },
-        {
-            "name": "Sewerage connections",
-            "id": 167,
-            "data": [
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2,
-                0.2
-            ],
-            "color": "#9ED900",
-            "geonameId": 1210997,
-            "type": "line",
-            "dashStyle": "Solid",
-            "marker": {
-                "symbol": "diamond"
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "DHS94",
+                "id": "167:3",
+                "questionnaire": 3,
+                "x": 1994,
+                "y": 0.3
             },
-            "usages": "(none)"
+            {
+                "name": "MICS94",
+                "id": "167:4",
+                "questionnaire": 4,
+                "x": 1994,
+                "y": 0.1
+            },
+            {
+                "name": "MICS95",
+                "id": "167:5",
+                "questionnaire": 5,
+                "x": 1995,
+                "y": 0.1
+            },
+            {
+                "name": "MICS96",
+                "id": "167:6",
+                "questionnaire": 6,
+                "x": 1996,
+                "y": 0.1
+            },
+            {
+                "name": "DHS97",
+                "id": "167:7",
+                "questionnaire": 7,
+                "x": 1997,
+                "y": 0.4
+            },
+            {
+                "name": "SVRS98",
+                "id": "167:8",
+                "questionnaire": 8,
+                "x": 1998,
+                "y": 0.1
+            },
+            {
+                "name": "DHS00",
+                "id": "167:11",
+                "questionnaire": 11,
+                "x": 2000,
+                "y": 0.4
+            },
+            {
+                "name": "MHS01",
+                "id": "167:14",
+                "questionnaire": 14,
+                "x": 2001,
+                "y": 0.3
+            },
+            {
+                "name": "WHS03",
+                "id": "167:15",
+                "questionnaire": 15,
+                "x": 2003,
+                "y": 0.5
+            },
+            {
+                "name": "DHS04",
+                "id": "167:16",
+                "questionnaire": 16,
+                "x": 2004,
+                "y": 0.2
+            },
+            {
+                "name": "MICS06",
+                "id": "167:18",
+                "questionnaire": 18,
+                "x": 2006,
+                "y": 0.2
+            },
+            {
+                "name": "DHS07",
+                "id": "167:19",
+                "questionnaire": 19,
+                "x": 2007,
+                "y": 0.2
+            },
+            {
+                "name": "MICS09",
+                "id": "167:20",
+                "questionnaire": 20,
+                "x": 2009,
+                "y": 0.0
+            }
+        ]
+    },
+    {
+        "type": "scatter",
+        "id": 168,
+        "name": "Improved",
+        "country": "Bangladesh",
+        "color": "#D400D9",
+        "lightColor": "#D8B8D9",
+        "marker": {
+            "symbol": "circle"
         },
-        {
-            "name": "Improved",
-            "id": 168,
-            "data": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                28.9,
-                28.9,
-                28.9,
-                28.9,
-                28.9,
-                30.2,
-                31.4,
-                32.7,
-                33.9,
-                35.2,
-                36.4,
-                37.7,
-                39.0,
-                40.2,
-                41.5,
-                42.7,
-                44.0,
-                45.2,
-                46.5,
-                47.7,
-                49.0,
-                50.2,
-                51.5,
-                52.7,
-                54.0,
-                55.3,
-                56.5,
-                57.8
-            ],
-            "color": "#D400D9",
-            "geonameId": 1210997,
-            "type": "line",
-            "dashStyle": "Solid",
-            "marker": {
-                "symbol": "square"
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "MICS06",
+                "id": "168:18",
+                "questionnaire": 18,
+                "x": 2006,
+                "y": 50.2
             },
-            "usages": "Regression: Improved (default)"
+            {
+                "name": "DHS07",
+                "id": "168:19",
+                "questionnaire": 19,
+                "x": 2007,
+                "y": 51.5
+            },
+            {
+                "name": "DHS11",
+                "id": "168:23",
+                "questionnaire": 23,
+                "x": 2011,
+                "y": 56.5
+            }
+        ]
+    },
+    {
+        "type": "scatter",
+        "id": 169,
+        "name": "Shared",
+        "country": "Bangladesh",
+        "color": "#00D995",
+        "lightColor": "#B8D9CF",
+        "marker": {
+            "symbol": "circle"
         },
-        {
-            "name": "Shared",
-            "id": 169,
-            "data": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                13.9,
-                13.9,
-                13.9,
-                13.9,
-                13.9,
-                14.5,
-                15.1,
-                15.7,
-                16.3,
-                16.9,
-                17.5,
-                18.1,
-                18.7,
-                19.3,
-                19.9,
-                20.5,
-                21.1,
-                21.7,
-                22.3,
-                22.9,
-                23.5,
-                24.2,
-                24.8,
-                25.4,
-                26.0,
-                26.6,
-                27.2,
-                27.8
-            ],
-            "color": "#00D995",
-            "geonameId": 1210997,
-            "type": "line",
-            "dashStyle": "Solid",
-            "marker": {
-                "symbol": "triangle"
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "MICS06",
+                "id": "169:18",
+                "questionnaire": 18,
+                "x": 2006,
+                "y": 24.2
             },
-            "usages": "Regression: Shared (default)"
+            {
+                "name": "DHS07",
+                "id": "169:19",
+                "questionnaire": 19,
+                "x": 2007,
+                "y": 24.8
+            },
+            {
+                "name": "DHS11",
+                "id": "169:23",
+                "questionnaire": 23,
+                "x": 2011,
+                "y": 27.2
+            }
+        ]
+    },
+    {
+        "type": "scatter",
+        "id": 170,
+        "name": "Other unimproved",
+        "country": "Bangladesh",
+        "color": "#D95600",
+        "lightColor": "#D9C5B8",
+        "marker": {
+            "symbol": "circle"
         },
-        {
-            "name": "Other unimproved",
-            "id": 170,
-            "data": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                15.7,
-                15.7,
-                15.7,
-                15.7,
-                15.7,
-                15.5,
-                15.3,
-                15.1,
-                14.9,
-                14.7,
-                14.5,
-                14.2,
-                14.0,
-                13.8,
-                13.6,
-                13.4,
-                13.2,
-                13.0,
-                12.8,
-                12.6,
-                12.4,
-                12.2,
-                12.0,
-                11.8,
-                11.6,
-                11.4,
-                11.2,
-                11.0
-            ],
-            "color": "#D95600",
-            "geonameId": 1210997,
-            "type": "line",
-            "dashStyle": "Solid",
-            "marker": {
-                "symbol": "triangle-down"
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "CEN91",
+                "id": "170:2",
+                "questionnaire": 2,
+                "x": 1991,
+                "y": 15.1
             },
-            "usages": "Regression: Other unimproved (default)"
+            {
+                "name": "DHS94",
+                "id": "170:3",
+                "questionnaire": 3,
+                "x": 1994,
+                "y": 12.9
+            },
+            {
+                "name": "DHS97",
+                "id": "170:7",
+                "questionnaire": 7,
+                "x": 1997,
+                "y": 12.6
+            },
+            {
+                "name": "SVRS98",
+                "id": "170:8",
+                "questionnaire": 8,
+                "x": 1998,
+                "y": 16.6
+            },
+            {
+                "name": "DHS00",
+                "id": "170:11",
+                "questionnaire": 11,
+                "x": 2000,
+                "y": 12.9
+            },
+            {
+                "name": "HIES00",
+                "id": "170:12",
+                "questionnaire": 12,
+                "x": 2000,
+                "y": 17.3
+            },
+            {
+                "name": "CEN01",
+                "id": "170:13",
+                "questionnaire": 13,
+                "x": 2001,
+                "y": 12.6
+            },
+            {
+                "name": "MHS01",
+                "id": "170:14",
+                "questionnaire": 14,
+                "x": 2001,
+                "y": 14.4
+            },
+            {
+                "name": "DHS04",
+                "id": "170:16",
+                "questionnaire": 16,
+                "x": 2004,
+                "y": 17.8
+            },
+            {
+                "name": "HIES05",
+                "id": "170:17",
+                "questionnaire": 17,
+                "x": 2005,
+                "y": 16.5
+            },
+            {
+                "name": "MICS06",
+                "id": "170:18",
+                "questionnaire": 18,
+                "x": 2006,
+                "y": 20.4
+            },
+            {
+                "name": "DHS07",
+                "id": "170:19",
+                "questionnaire": 19,
+                "x": 2007,
+                "y": 11.8
+            },
+            {
+                "name": "MICS09",
+                "id": "170:20",
+                "questionnaire": 20,
+                "x": 2009,
+                "y": 13.3
+            },
+            {
+                "name": "HIES10",
+                "id": "170:21",
+                "questionnaire": 21,
+                "x": 2010,
+                "y": 6.9
+            },
+            {
+                "name": "CEN11",
+                "id": "170:22",
+                "questionnaire": 22,
+                "x": 2011,
+                "y": 6.9
+            },
+            {
+                "name": "DHS11",
+                "id": "170:23",
+                "questionnaire": 23,
+                "x": 2011,
+                "y": 8.7
+            }
+        ]
+    },
+    {
+        "type": "scatter",
+        "id": 171,
+        "name": "Open defecation",
+        "country": "Bangladesh",
+        "color": "#1600D9",
+        "lightColor": "#BCB8D9",
+        "marker": {
+            "symbol": "circle"
         },
-        {
-            "name": "Open defecation",
-            "id": 171,
-            "data": [
-                null,
-                null,
-                null,
-                null,
-                null,
-                41.5,
-                41.5,
-                41.5,
-                41.5,
-                41.5,
-                39.8,
-                38.2,
-                36.5,
-                34.9,
-                33.2,
-                31.6,
-                29.9,
-                28.3,
-                26.6,
-                25.0,
-                23.3,
-                21.7,
-                20.0,
-                18.4,
-                16.7,
-                15.1,
-                13.4,
-                11.7,
-                10.1,
-                8.4,
-                6.8,
-                5.1,
-                3.5
-            ],
-            "color": "#1600D9",
-            "geonameId": 1210997,
-            "type": "line",
-            "dashStyle": "Solid",
-            "marker": {
-                "symbol": "circle"
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "CEN91",
+                "id": "171:2",
+                "questionnaire": 2,
+                "x": 1991,
+                "y": 35.3
             },
-            "usages": "Regression: Open defecation (default)"
-        },
-        {
-            "type": "scatter",
-            "id": 166,
-            "color": "#005FD9",
-            "marker": {
-                "symbol": "circle"
+            {
+                "name": "DHS94",
+                "id": "171:3",
+                "questionnaire": 3,
+                "x": 1994,
+                "y": 33.4
             },
-            "name": "Improved + shared",
-            "allowPointSelect": false,
-            "country": "Bangladesh",
-            "data": [
-                {
-                    "name": "CEN91",
-                    "id": "166:2",
-                    "questionnaire": 2,
-                    "x": 1991,
-                    "y": 49.6
-                },
-                {
-                    "name": "DHS94",
-                    "id": "166:3",
-                    "questionnaire": 3,
-                    "x": 1994,
-                    "y": 53.7
-                },
-                {
-                    "name": "MICS94",
-                    "id": "166:4",
-                    "questionnaire": 4,
-                    "x": 1994,
-                    "y": 50.8
-                },
-                {
-                    "name": "MICS95",
-                    "id": "166:5",
-                    "questionnaire": 5,
-                    "x": 1995,
-                    "y": 53.7
-                },
-                {
-                    "name": "MICS96",
-                    "id": "166:6",
-                    "questionnaire": 6,
-                    "x": 1996,
-                    "y": 63.0
-                },
-                {
-                    "name": "DHS97",
-                    "id": "166:7",
-                    "questionnaire": 7,
-                    "x": 1997,
-                    "y": 58.3
-                },
-                {
-                    "name": "SVRS98",
-                    "id": "166:8",
-                    "questionnaire": 8,
-                    "x": 1998,
-                    "y": 55.0
-                },
-                {
-                    "name": "DHS00",
-                    "id": "166:11",
-                    "questionnaire": 11,
-                    "x": 2000,
-                    "y": 63.3
-                },
-                {
-                    "name": "HIES00",
-                    "id": "166:12",
-                    "questionnaire": 12,
-                    "x": 2000,
-                    "y": 62.6
-                },
-                {
-                    "name": "CEN01",
-                    "id": "166:13",
-                    "questionnaire": 13,
-                    "x": 2001,
-                    "y": 64.7
-                },
-                {
-                    "name": "MHS01",
-                    "id": "166:14",
-                    "questionnaire": 14,
-                    "x": 2001,
-                    "y": 59.0
-                },
-                {
-                    "name": "DHS04",
-                    "id": "166:16",
-                    "questionnaire": 16,
-                    "x": 2004,
-                    "y": 65.8
-                },
-                {
-                    "name": "HIES05",
-                    "id": "166:17",
-                    "questionnaire": 17,
-                    "x": 2005,
-                    "y": 71.2
-                },
-                {
-                    "name": "MICS06",
-                    "id": "166:18",
-                    "questionnaire": 18,
-                    "x": 2006,
-                    "y": 70.1
-                },
-                {
-                    "name": "DHS07",
-                    "id": "166:19",
-                    "questionnaire": 19,
-                    "x": 2007,
-                    "y": 79.1
-                },
-                {
-                    "name": "MICS09",
-                    "id": "166:20",
-                    "questionnaire": 20,
-                    "x": 2009,
-                    "y": 79.8
-                },
-                {
-                    "name": "HIES10",
-                    "id": "166:21",
-                    "questionnaire": 21,
-                    "x": 2010,
-                    "y": 87.4
-                },
-                {
-                    "name": "CEN11",
-                    "id": "166:22",
-                    "questionnaire": 22,
-                    "x": 2011,
-                    "y": 84.9
-                },
-                {
-                    "name": "DHS11",
-                    "id": "166:23",
-                    "questionnaire": 23,
-                    "x": 2011,
-                    "y": 85.5
-                }
-            ]
-        },
-        {
-            "type": "scatter",
-            "id": 167,
-            "color": "#9ED900",
-            "marker": {
-                "symbol": "diamond"
+            {
+                "name": "DHS97",
+                "id": "171:7",
+                "questionnaire": 7,
+                "x": 1997,
+                "y": 29.1
             },
-            "name": "Sewerage connections",
-            "allowPointSelect": false,
-            "country": "Bangladesh",
-            "data": [
-                {
-                    "name": "DHS94",
-                    "id": "167:3",
-                    "questionnaire": 3,
-                    "x": 1994,
-                    "y": 0.3
-                },
-                {
-                    "name": "MICS94",
-                    "id": "167:4",
-                    "questionnaire": 4,
-                    "x": 1994,
-                    "y": 0.1
-                },
-                {
-                    "name": "MICS95",
-                    "id": "167:5",
-                    "questionnaire": 5,
-                    "x": 1995,
-                    "y": 0.1
-                },
-                {
-                    "name": "MICS96",
-                    "id": "167:6",
-                    "questionnaire": 6,
-                    "x": 1996,
-                    "y": 0.1
-                },
-                {
-                    "name": "DHS97",
-                    "id": "167:7",
-                    "questionnaire": 7,
-                    "x": 1997,
-                    "y": 0.4
-                },
-                {
-                    "name": "SVRS98",
-                    "id": "167:8",
-                    "questionnaire": 8,
-                    "x": 1998,
-                    "y": 0.1
-                },
-                {
-                    "name": "DHS00",
-                    "id": "167:11",
-                    "questionnaire": 11,
-                    "x": 2000,
-                    "y": 0.4
-                },
-                {
-                    "name": "MHS01",
-                    "id": "167:14",
-                    "questionnaire": 14,
-                    "x": 2001,
-                    "y": 0.3
-                },
-                {
-                    "name": "WHS03",
-                    "id": "167:15",
-                    "questionnaire": 15,
-                    "x": 2003,
-                    "y": 0.5
-                },
-                {
-                    "name": "DHS04",
-                    "id": "167:16",
-                    "questionnaire": 16,
-                    "x": 2004,
-                    "y": 0.2
-                },
-                {
-                    "name": "MICS06",
-                    "id": "167:18",
-                    "questionnaire": 18,
-                    "x": 2006,
-                    "y": 0.2
-                },
-                {
-                    "name": "DHS07",
-                    "id": "167:19",
-                    "questionnaire": 19,
-                    "x": 2007,
-                    "y": 0.2
-                },
-                {
-                    "name": "MICS09",
-                    "id": "167:20",
-                    "questionnaire": 20,
-                    "x": 2009,
-                    "y": 0.0
-                }
-            ]
-        },
-        {
-            "type": "scatter",
-            "id": 168,
-            "color": "#D400D9",
-            "marker": {
-                "symbol": "square"
+            {
+                "name": "SVRS98",
+                "id": "171:8",
+                "questionnaire": 8,
+                "x": 1998,
+                "y": 28.4
             },
-            "name": "Improved",
-            "allowPointSelect": false,
-            "country": "Bangladesh",
-            "data": [
-                {
-                    "name": "MICS06",
-                    "id": "168:18",
-                    "questionnaire": 18,
-                    "x": 2006,
-                    "y": 50.2
-                },
-                {
-                    "name": "DHS07",
-                    "id": "168:19",
-                    "questionnaire": 19,
-                    "x": 2007,
-                    "y": 51.5
-                },
-                {
-                    "name": "DHS11",
-                    "id": "168:23",
-                    "questionnaire": 23,
-                    "x": 2011,
-                    "y": 56.5
-                }
-            ]
-        },
-        {
-            "type": "scatter",
-            "id": 169,
-            "color": "#00D995",
-            "marker": {
-                "symbol": "triangle"
+            {
+                "name": "DHS00",
+                "id": "171:11",
+                "questionnaire": 11,
+                "x": 2000,
+                "y": 23.8
             },
-            "name": "Shared",
-            "allowPointSelect": false,
-            "country": "Bangladesh",
-            "data": [
-                {
-                    "name": "MICS06",
-                    "id": "169:18",
-                    "questionnaire": 18,
-                    "x": 2006,
-                    "y": 24.2
-                },
-                {
-                    "name": "DHS07",
-                    "id": "169:19",
-                    "questionnaire": 19,
-                    "x": 2007,
-                    "y": 24.8
-                },
-                {
-                    "name": "DHS11",
-                    "id": "169:23",
-                    "questionnaire": 23,
-                    "x": 2011,
-                    "y": 27.2
-                }
-            ]
-        },
-        {
-            "type": "scatter",
-            "id": 170,
-            "color": "#D95600",
-            "marker": {
-                "symbol": "triangle-down"
+            {
+                "name": "HIES00",
+                "id": "171:12",
+                "questionnaire": 12,
+                "x": 2000,
+                "y": 20.2
             },
-            "name": "Other unimproved",
-            "allowPointSelect": false,
-            "country": "Bangladesh",
-            "data": [
-                {
-                    "name": "CEN91",
-                    "id": "170:2",
-                    "questionnaire": 2,
-                    "x": 1991,
-                    "y": 15.1
-                },
-                {
-                    "name": "DHS94",
-                    "id": "170:3",
-                    "questionnaire": 3,
-                    "x": 1994,
-                    "y": 12.9
-                },
-                {
-                    "name": "DHS97",
-                    "id": "170:7",
-                    "questionnaire": 7,
-                    "x": 1997,
-                    "y": 12.6
-                },
-                {
-                    "name": "SVRS98",
-                    "id": "170:8",
-                    "questionnaire": 8,
-                    "x": 1998,
-                    "y": 16.6
-                },
-                {
-                    "name": "DHS00",
-                    "id": "170:11",
-                    "questionnaire": 11,
-                    "x": 2000,
-                    "y": 12.9
-                },
-                {
-                    "name": "HIES00",
-                    "id": "170:12",
-                    "questionnaire": 12,
-                    "x": 2000,
-                    "y": 17.3
-                },
-                {
-                    "name": "CEN01",
-                    "id": "170:13",
-                    "questionnaire": 13,
-                    "x": 2001,
-                    "y": 12.6
-                },
-                {
-                    "name": "MHS01",
-                    "id": "170:14",
-                    "questionnaire": 14,
-                    "x": 2001,
-                    "y": 14.4
-                },
-                {
-                    "name": "DHS04",
-                    "id": "170:16",
-                    "questionnaire": 16,
-                    "x": 2004,
-                    "y": 17.8
-                },
-                {
-                    "name": "HIES05",
-                    "id": "170:17",
-                    "questionnaire": 17,
-                    "x": 2005,
-                    "y": 16.5
-                },
-                {
-                    "name": "MICS06",
-                    "id": "170:18",
-                    "questionnaire": 18,
-                    "x": 2006,
-                    "y": 20.4
-                },
-                {
-                    "name": "DHS07",
-                    "id": "170:19",
-                    "questionnaire": 19,
-                    "x": 2007,
-                    "y": 11.8
-                },
-                {
-                    "name": "MICS09",
-                    "id": "170:20",
-                    "questionnaire": 20,
-                    "x": 2009,
-                    "y": 13.3
-                },
-                {
-                    "name": "HIES10",
-                    "id": "170:21",
-                    "questionnaire": 21,
-                    "x": 2010,
-                    "y": 6.9
-                },
-                {
-                    "name": "CEN11",
-                    "id": "170:22",
-                    "questionnaire": 22,
-                    "x": 2011,
-                    "y": 6.9
-                },
-                {
-                    "name": "DHS11",
-                    "id": "170:23",
-                    "questionnaire": 23,
-                    "x": 2011,
-                    "y": 8.7
-                }
-            ]
-        },
-        {
-            "type": "scatter",
-            "id": 171,
-            "color": "#1600D9",
-            "marker": {
-                "symbol": "circle"
+            {
+                "name": "CEN01",
+                "id": "171:13",
+                "questionnaire": 13,
+                "x": 2001,
+                "y": 22.7
             },
-            "name": "Open defecation",
-            "allowPointSelect": false,
-            "country": "Bangladesh",
-            "data": [
-                {
-                    "name": "CEN91",
-                    "id": "171:2",
-                    "questionnaire": 2,
-                    "x": 1991,
-                    "y": 35.3
-                },
-                {
-                    "name": "DHS94",
-                    "id": "171:3",
-                    "questionnaire": 3,
-                    "x": 1994,
-                    "y": 33.4
-                },
-                {
-                    "name": "DHS97",
-                    "id": "171:7",
-                    "questionnaire": 7,
-                    "x": 1997,
-                    "y": 29.1
-                },
-                {
-                    "name": "SVRS98",
-                    "id": "171:8",
-                    "questionnaire": 8,
-                    "x": 1998,
-                    "y": 28.4
-                },
-                {
-                    "name": "DHS00",
-                    "id": "171:11",
-                    "questionnaire": 11,
-                    "x": 2000,
-                    "y": 23.8
-                },
-                {
-                    "name": "HIES00",
-                    "id": "171:12",
-                    "questionnaire": 12,
-                    "x": 2000,
-                    "y": 20.2
-                },
-                {
-                    "name": "CEN01",
-                    "id": "171:13",
-                    "questionnaire": 13,
-                    "x": 2001,
-                    "y": 22.7
-                },
-                {
-                    "name": "MHS01",
-                    "id": "171:14",
-                    "questionnaire": 14,
-                    "x": 2001,
-                    "y": 26.6
-                },
-                {
-                    "name": "WHS03",
-                    "id": "171:15",
-                    "questionnaire": 15,
-                    "x": 2003,
-                    "y": 23.6
-                },
-                {
-                    "name": "DHS04",
-                    "id": "171:16",
-                    "questionnaire": 16,
-                    "x": 2004,
-                    "y": 16.4
-                },
-                {
-                    "name": "HIES05",
-                    "id": "171:17",
-                    "questionnaire": 17,
-                    "x": 2005,
-                    "y": 12.3
-                },
-                {
-                    "name": "MICS06",
-                    "id": "171:18",
-                    "questionnaire": 18,
-                    "x": 2006,
-                    "y": 9.5
-                },
-                {
-                    "name": "DHS07",
-                    "id": "171:19",
-                    "questionnaire": 19,
-                    "x": 2007,
-                    "y": 9.1
-                },
-                {
-                    "name": "MICS09",
-                    "id": "171:20",
-                    "questionnaire": 20,
-                    "x": 2009,
-                    "y": 6.9
-                },
-                {
-                    "name": "HIES10",
-                    "id": "171:21",
-                    "questionnaire": 21,
-                    "x": 2010,
-                    "y": 5.7
-                },
-                {
-                    "name": "CEN11",
-                    "id": "171:22",
-                    "questionnaire": 22,
-                    "x": 2011,
-                    "y": 8.2
-                },
-                {
-                    "name": "DHS11",
-                    "id": "171:23",
-                    "questionnaire": 23,
-                    "x": 2011,
-                    "y": 5.8
-                }
-            ]
-        }
-    ]
-}
+            {
+                "name": "MHS01",
+                "id": "171:14",
+                "questionnaire": 14,
+                "x": 2001,
+                "y": 26.6
+            },
+            {
+                "name": "WHS03",
+                "id": "171:15",
+                "questionnaire": 15,
+                "x": 2003,
+                "y": 23.6
+            },
+            {
+                "name": "DHS04",
+                "id": "171:16",
+                "questionnaire": 16,
+                "x": 2004,
+                "y": 16.4
+            },
+            {
+                "name": "HIES05",
+                "id": "171:17",
+                "questionnaire": 17,
+                "x": 2005,
+                "y": 12.3
+            },
+            {
+                "name": "MICS06",
+                "id": "171:18",
+                "questionnaire": 18,
+                "x": 2006,
+                "y": 9.5
+            },
+            {
+                "name": "DHS07",
+                "id": "171:19",
+                "questionnaire": 19,
+                "x": 2007,
+                "y": 9.1
+            },
+            {
+                "name": "MICS09",
+                "id": "171:20",
+                "questionnaire": 20,
+                "x": 2009,
+                "y": 6.9
+            },
+            {
+                "name": "HIES10",
+                "id": "171:21",
+                "questionnaire": 21,
+                "x": 2010,
+                "y": 5.7
+            },
+            {
+                "name": "CEN11",
+                "id": "171:22",
+                "questionnaire": 22,
+                "x": 2011,
+                "y": 8.2
+            },
+            {
+                "name": "DHS11",
+                "id": "171:23",
+                "questionnaire": 23,
+                "x": 2011,
+                "y": 5.8
+            }
+        ]
+    }
+]
