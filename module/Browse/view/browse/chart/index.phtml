@@ -234,31 +234,29 @@
                                                             <td style="padding-left:{{indexedElements[pointSelected.questionnaire].filters[key].filter.hFilters[hFilterId].level + 1}}em;">
                                                                 <span tooltip="{{indexedElements[pointSelected.questionnaire].filters[key].filter.originalDenomination}}"
                                                                       tooltip-placement="right">
-                                                                    {{indexedElements[pointSelected.questionnaire].filters[key].filter.name}}&nbsp;<a
-                                                                        href="/admin/filter/edit/{{key}}"
-                                                                        target="_blank"><i
-                                                                            class="fa fa-pencil"></i></a>
+                                                                    {{indexedElements[pointSelected.questionnaire].filters[key].filter.name}}&nbsp;
+                                                                    <a href="/admin/filter/edit/{{key}}" target="_blank"><i class="fa fa-pencil"></i></a>
                                                                 </span>
                                                             </td>
-                                                            <td style="width:{{lastCol}}"
-                                                                class="text-right">
-                                                                <span ng-if="indexedElements[pointSelected.questionnaire].filters[key].ignored || !indexedElements[pointSelected.questionnaire].filters[key].ignored && indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[tabs.part.name] === undefined">
-                                                                    <span ng-show="indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]"
-                                                                          class="text-success">
+                                                            <td style="width:{{lastCol}}" class="text-right">
+                                                                <span ng-if="!indexedElements[pointSelected.questionnaire].filters[key].filter.ignored && indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[tabs.part.name] === undefined">
+                                                                    <span ng-if="indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]" class="text-success">
                                                                         {{indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]}}&nbsp;%
                                                                         <i class="fa fa-check-circle-o fa-fw"></i>
                                                                     </span>
                                                                 </span>
-                                                                <span ng-if="!indexedElements[pointSelected.questionnaire].filters[key].ignored">
-                                                                    <span ng-show="indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[tabs.part.name]"
-                                                                          class="text-warning">
+                                                                <span ng-if="!indexedElements[pointSelected.questionnaire].filters[key].filter.ignored && indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[tabs.part.name] !== undefined">
+                                                                    <span ng-if="indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[tabs.part.name]" class="text-warning">
                                                                         {{indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[tabs.part.name]}}&nbsp;%
                                                                         <i class="fa fa-exclamation-triangle fa-fw"></i>
                                                                     </span>
+                                                                    <span ng-if="!indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[tabs.part.name]" class="text-danger">
+                                                                        {{indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]}}&nbsp;%
+                                                                        <i class="fa fa-times-circle-o fa-fw"></i>
+                                                                    </span>
                                                                 </span>
-                                                                <span ng-if="!indexedElements[pointSelected.questionnaire].filters[key].ignored && indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[tabs.part.name] === null">
-                                                                    <span ng-show="indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]"
-                                                                          class="text-danger">
+                                                                <span ng-if="indexedElements[pointSelected.questionnaire].filters[key].filter.ignored">
+                                                                    <span ng-if="indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]" class="text-danger">
                                                                         {{indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]}}&nbsp;%
                                                                         <i class="fa fa-times-circle-o fa-fw"></i>
                                                                     </span>

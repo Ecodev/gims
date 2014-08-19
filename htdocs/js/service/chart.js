@@ -8,10 +8,101 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
     var globalIndexedFilters = {}; // is used to know if a same filter is ignored or not in all questionnaires (used on globally ignored button)
     var concatenatedIgnoredElements = [];
 
+    var dashStyles = [
+        'Solid',
+        'Dash',
+        'LongDashDot',
+        'LongDash',
+        'LongDashDotDot',
+        'ShortDash',
+        'ShortDashDot',
+        'ShortDashDotDot',
+        'DashDot'
+    ];
+
+    var adjustedDashStyle = 'ShortDot';
+    var adjustedColor = '#000000';
+
+    var getChart = function() {
+        return {
+            chart: {
+                zoomType: 'xy',
+                height: 600,
+                animation: false
+            },
+            subtitle: {
+                text: 'Estimated proportion of the population'
+            },
+            xAxis: {
+                title: {
+                    enabled: true,
+                    text: 'Year'
+                },
+                labels: {
+                    step: 1,
+                    format: '{value}'
+                },
+                allowDecimals: false
+            },
+            yAxis: {
+                title: {
+                    enabled: true,
+                    text: 'Coverage (%)'
+                },
+                min: 0,
+                max: 100
+            },
+            credits: {enabled: false},
+            plotOptions: {
+                line: {
+                    marker: {
+                        enabled: false
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size: 10px">Estimate for {point.category}</span><br/>',
+                        pointFormat: '<span style="color:{series.color}">{point.y}% {series.name}</span><br/>',
+                        footerFormat: '<br><br><strong>Rules : </strong><br><br>{series.options.usages}</span><br/>',
+                        valueSuffix: '%'
+                    },
+                    pointStart: 1980,
+                    dataLabels: {
+                        enabled: false
+                    }
+                },
+                scatter: {
+                    dataLabels: {enabled: true},
+                    tooltip: {
+                        headerFormat: '',
+                        pointFormat: '<b>{point.name}</b> ({point.x})<br/><span style="color:{series.color}">{point.y}% {series.name}</span>'
+                    }, marker: {
+                        states: {
+                            select: {
+                                lineColor: '#DDD',
+                                fillColor: '#DDD'
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    };
+
+    var updateChartTitle = function(geonames, part) {
+
+        if (!_.isEmpty(geonames)) {
+            chart.title = {};
+            chart.title.text = _.pluck(geonames, 'name').join(', ');
+        }
+
+        if (part) {
+            chart.title.text += " - " + part.name;
+        }
+    };
+
     var resetSeries = function() {
         if (chart) {
             chart.series = [];
-            $rootScope.$emit('gims-chart-modified', chart);
+            updateChart();
         }
     };
 
@@ -39,34 +130,39 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                 chart.series.push(serieToAdd);
             });
 
-            $rootScope.$emit('gims-chart-modified', chart);
+            updateChart();
         }
     };
 
     /**
      * Remove passed series
-     * @param seriesToRemove
+     * @param filtersToRemove
      */
-    var removeSeries = function(seriesToRemove) {
+    var removeSeries = function(filtersToRemove, type) {
 
-        if (seriesToRemove.length > 0) {
-
-            _.forEach(seriesToRemove, function(serieToRemoveId) {
-                _.forEachRight(chart.series, function(existingSerie, index) {
-                    if (existingSerie.id == serieToRemoveId) {
-                        chart.series.splice(index, 1);
-                    }
+        if (chart) {
+            if (filtersToRemove === null) {
+                filtersToRemove = _.map(chart.series, function(serie) {
+                    return {id: serie.id};
                 });
-            });
+            }
 
-            $rootScope.$emit('gims-chart-modified', chart);
+            if (filtersToRemove.length > 0) {
+                _.forEach(filtersToRemove, function(filtersToRemove) {
+                    _.forEachRight(chart.series, function(serie, index) {
+                        if (serie.id == filtersToRemove.id && (_.isUndefined(type) || (type === null && _.isUndefined(serie.isIgnored) && _.isUndefined(serie.isAdjusted)) || (type !== null && serie[type]))) {
+                            chart.series.splice(index, 1);
+                        }
+                    });
+                });
+            }
         }
     };
 
-    var initCacheWithQuestionnairesName = function(data, part) {
+    var initCacheWithQuestionnairesName = function(series, part) {
 
-        if (data && _.isArray(data.series)) {
-            _.forEach(data.series, function(serie) {
+        if (_.isArray(series)) {
+            _.forEach(series, function(serie) {
                 if (serie.type == 'scatter') {
                     _.forEach(serie.data, function(data) {
                         var questionnaire = {hFilters: {}};
@@ -81,16 +177,13 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         }
     };
 
-    var computeEstimates = function(data, ignoredElements) {
+    var computeEstimates = function(series, ignoredElements) {
 
         var arrayData = [];
         var columns = [];
-        _.forEach(data.series, function(serie) {
-            if (serie.type == 'line' &&
-                (
-                    (_.isUndefined(ignoredElements) || ignoredElements && ignoredElements.length === 0) && _.isUndefined(serie.isIgnored) ||
-                    ignoredElements && ignoredElements.length > 0 && serie.isIgnored === true)
-                ) {
+        _.forEach(series, function(serie) {
+            if (serie.type == 'line' && (
+                (_.isUndefined(ignoredElements) || ignoredElements && ignoredElements.length === 0) && _.isUndefined(serie.isIgnored) || ignoredElements && ignoredElements.length > 0 && serie.isIgnored === true)) {
 
                 // create a column by filter on graph
                 columns.push({
@@ -119,7 +212,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
             }
         });
 
-        var startYear = data.plotOptions.line.pointStart;
+        var startYear = chart.plotOptions.line.pointStart;
 
         // before adding date to row, create and object with same properties but all to null
         var nullEquivalentData = _.mapValues(arrayData[0], function() {
@@ -154,43 +247,46 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
 
         getIgnoredElements();
 
-        if (questionnaire && (!questionnaire.filters || !_.isEmpty(concatenatedIgnoredElements) || !firstFilterHasValue(part, questionnaire))) {
+        // we recompute panel filter if there are no filter yet or if there are any ignored filter
+        /** @todo : to activate this cache, we have to remove manually (browser side) valuesWithoutIgnored attribute for all filter of a questionnaire that is not in concatenatedIgnoredElements list*/
+        /** @todo : we may add a cache for each already sent request to avoid to send it again -> maybe indexed by (ignored filters)->toString() */
+        // if (questionnaire && (!questionnaire.filters || !_.isEmpty(concatenatedIgnoredElements) || !firstFilterHasValue(part, questionnaire))) {
 
-            if (retrieveFiltersAndValuesCanceler) {
-                retrieveFiltersAndValuesCanceler.resolve();
-            }
-            retrieveFiltersAndValuesCanceler = $q.defer();
-
-            var ignoredElements = concatenatedIgnoredElements ? concatenatedIgnoredElements.join(',') : '';
-
-            $http.get('/api/chart/getPanelFilters', {
-                timeout: retrieveFiltersAndValuesCanceler.promise,
-                params: {
-                    questionnaire: questionnaire.id,
-                    filters: _.pluck(filters, 'id').join(','),
-                    part: part.id,
-                    fields: 'color',
-                    getQuestionnaireUsages: questionnaire.usages && questionnaire.usages.length ? false : true,
-                    ignoredElements: ignoredElements
-                }
-            }).success(function(data) {
-                questionnaire.name = data.name; // Overwrite short name with full name
-
-                _.forEach(data.filters, function(hFilter, hFilterId) {
-                    _.forEach(data.filters[hFilterId], function(filter, index) {
-                        if (!_.isUndefined(cache[questionnaire.id].hFilters[hFilterId])) {
-                            filter.filter.sorting = index + 1;
-                            filter.filter.hFilters = {};
-                            filter.filter.hFilters[hFilterId] = null;
-                            ChartCache.cache(part, {id: questionnaire.id, usages: data.usages}, filter);
-                        }
-                    });
-                });
-
-                ChartCache.propagateRetrievedQuestionnaires(part, questionnaire);
-                deferred.resolve(data);
-            });
+        if (retrieveFiltersAndValuesCanceler) {
+            retrieveFiltersAndValuesCanceler.resolve();
         }
+        retrieveFiltersAndValuesCanceler = $q.defer();
+
+        var ignoredElements = concatenatedIgnoredElements ? concatenatedIgnoredElements.join(',') : '';
+
+        $http.get('/api/chart/getPanelFilters', {
+            timeout: retrieveFiltersAndValuesCanceler.promise,
+            params: {
+                questionnaire: questionnaire.id,
+                filters: _.pluck(filters, 'id').join(','),
+                part: part.id,
+                fields: 'color',
+                getQuestionnaireUsages: questionnaire.usages && questionnaire.usages.length ? false : true,
+                ignoredElements: ignoredElements
+            }
+        }).success(function(data) {
+            questionnaire.name = data.name; // Overwrite short name with full name
+
+            _.forEach(data.filters, function(hFilter, hFilterId) {
+                _.forEach(data.filters[hFilterId], function(filter, index) {
+                    if (!_.isUndefined(cache[questionnaire.id].hFilters[hFilterId])) {
+                        filter.filter.sorting = index + 1;
+                        filter.filter.hFilters = {};
+                        filter.filter.hFilters[hFilterId] = null;
+                        ChartCache.cache(part, {id: questionnaire.id, usages: data.usages}, filter);
+                    }
+                });
+            });
+
+            ChartCache.propagateRetrievedQuestionnaires(part, questionnaire);
+            deferred.resolve(data);
+        });
+        // }
 
         return deferred.promise;
     };
@@ -264,7 +360,8 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         var deferred = $q.defer();
 
         // url excluded questionnaires
-        var ignoredQuestionnaires = $location.search().ignoredElements ? $location.search().ignoredElements.split(',') : [];
+        var ignoredQuestionnaires = $location.search().ignoredElements ? $location.search().ignoredElements.split(',') :
+            [];
         if (ignoredQuestionnaires.length > 0) {
 
             var firstQuestionnaire = ignoredQuestionnaires[0].split(':');
@@ -296,26 +393,55 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         return deferred.promise;
     };
 
-    var refresh = function(queryParams, part, refreshCanceler, resetSeries) {
+    /**
+     * Return series by asked type
+     * @param type 'isAdjusted', 'isIgnored', null for normal series or undefined for all series
+     * @returns {Array}
+     */
+    var getChartSeries = function(type) {
+        var series = [];
+        if (chart) {
+            _.forEach(chart.series, function(serie) {
+                if (_.isUndefined(type) || (type === null && _.isUndefined(serie.isIgnored) && _.isUndefined(serie.isAdjusted)) || (type !== null && serie[type])) {
+                    series.push(serie);
+                }
+            });
+        }
+
+        return series;
+    };
+
+    /**
+     * This function only ensures there are original trendlines before asking for ignored ones
+     * @param queryParams
+     * @param part
+     * @param geonames
+     * @param timeout Promise that allows to cancel request on user action
+     */
+    var refresh = function(queryParams, part, geonames, timeout) {
         var deferred = $q.defer();
 
-        $http.get('/api/chart', {
-            timeout: refreshCanceler.promise,
+        if (!chart) {
+            chart = getChart();
+        }
+
+        $http.get('/api/chart/getSeries', {
+            timeout: timeout.promise,
             params: queryParams
-        }).success(function(data) {
+        }).success(function(series) {
 
             // implement tooltip formatter
-            data.tooltip = {
+            chart.tooltip = {
                 formatter: function() {
                     return HighChartFormatter.tooltipFormatter.call(this);
                 }
             };
 
-            data.plotOptions.scatter.dataLabels.formatter = function() {
+            chart.plotOptions.scatter.dataLabels.formatter = function() {
                 return HighChartFormatter.scatterFormatter.call(this);
             };
 
-            data.plotOptions.scatter.point = {
+            chart.plotOptions.scatter.point = {
                 events: {
                     click: function(e) {
                         var ids = e.currentTarget.id.split(':');
@@ -331,18 +457,14 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                 }
             };
 
-            initCacheWithQuestionnairesName(data, part);
+            initCacheWithQuestionnairesName(series, part);
+            updateChartTitle(geonames, part);
 
-            // Always keep the title up-to-date
-            if (chart) {
-                chart.title.text = data.title.text;
-            }
-
-            if (!chart || resetSeries) {
-                chart = data;
-                $rootScope.$emit('gims-chart-modified', chart);
+            if (!chart.series) {
+                chart.series = series;
+                updateChart();
             } else {
-                addSeries(data.series);
+                addSeries(series);
             }
 
             deferred.resolve(chart);
@@ -352,6 +474,49 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
     };
 
     /**
+     * Set lines lighter when there are adjusted lines or ignored elements
+     */
+    var updateChart = function() {
+
+        if (chart) {
+            var ignoredSeries = getChartSeries('isIgnored');
+            var adjustedSeries = getChartSeries('isAdjusted');
+            var alternativeSeries = ignoredSeries.concat(adjustedSeries);
+            var normalSeries = getChartSeries(null);
+
+            var geonames = _.uniq(_.compact(_.pluck(chart.series, 'geonameId')));
+
+            _.forEach(chart.series, function(serie) {
+                serie.dashStyle = dashStyles[_.indexOf(geonames, serie.geonameId)];
+            });
+
+            // define static color for adjusted serie
+            _.forEach(adjustedSeries, function(serie) {
+                serie.color = adjustedColor;
+                serie.dashStyle = adjustedDashStyle;
+            });
+
+            if (!_.isEmpty(alternativeSeries)) {
+                _.forEach(normalSeries, function(serie) {
+                    if (!serie.normalColor) {
+                        serie.normalColor = serie.color;
+                    }
+                    serie.color = serie.lightColor;
+                });
+            } else {
+                _.forEach(normalSeries, function(serie) {
+                    if (serie.normalColor) {
+                        serie.color = serie.normalColor;
+                    }
+                });
+            }
+
+            $rootScope.$emit('gims-chart-modified', chart);
+        }
+    };
+
+    /**
+     * @todo : actually ignored cause a cache has been disabled, will be usefull when it will be reactivated, so don't remove it.
      * As filters are stored in an array on index relative to their Id, this function gets first filter to verify is he has a value.
      * Is used to determine if we need to send request to recover values.
      *
@@ -359,23 +524,25 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
      * @param questionnaire
      * @returns {boolean}
      */
-    var firstFilterHasValue = function(part, questionnaire) {
-        var hasValue = false;
-        _.forEach(questionnaire.filters, function(filter) {
-            if (filter && filter.values && filter.values[part.name]) {
-                hasValue = true;
-                return false;
-            }
-        });
-        return hasValue;
-    };
+    //    var firstFilterHasValue = function(part, questionnaire) {
+    //        var hasValue = false;
+    //        _.forEach(questionnaire.filters, function(filter) {
+    //            if (filter && filter.values && filter.values[part.name]) {
+    //                hasValue = true;
+    //                return false;
+    //            }
+    //        });
+    //        return hasValue;
+    //    };
 
     // Return public API
     return {
         setCache: function(newCache) {
             cache = newCache;
         },
+        getChartSeries: getChartSeries,
         resetSeries: resetSeries,
+        updateChart: updateChart,
         computeEstimates: computeEstimates,
         initIgnoredElementsFromUrl: initIgnoredElementsFromUrl,
         removeSeries: removeSeries,

@@ -48,6 +48,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     });
 
     $scope.$watch('panelTabs.reference', function() {
+
         if ($scope.panelTabs.reference) {
             var id = $scope.panelTabs.reference.id ? $scope.panelTabs.reference.id : $scope.panelTabs.reference;
             $location.search('reference', id);
@@ -55,6 +56,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 $scope.panelTabs.referenceChildren = filters.children;
             });
         }
+
     });
 
     $scope.$watch('tabs.filterSets', function() {
@@ -67,23 +69,23 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     });
 
     $scope.$watch('tabs.filters', function(newFilters, oldFilters) {
-        var removedFilters = _.difference(_.pluck(oldFilters, 'id'), _.pluck(newFilters, 'id'));
-        var addedFilters = _.difference(_.pluck(newFilters, 'id'), _.pluck(oldFilters, 'id'));
-
-        // remove unused filters to avoid them to be displayed in panel after removing
-        _.forEach(removedFilters, function(removedFilterId) {
-
-            // unlink unused filters in questionnaires to avoid to display related filters on side panel
-            _.forEach($scope.indexedElements, function(questionnaire) {
-                delete(questionnaire.hFilters[removedFilterId]);
-            });
+        var removedFilters = _.map(_.difference(_.pluck(oldFilters, 'id'), _.pluck(newFilters, 'id')), function(filterId) {
+            return {id: filterId};
+        });
+        var addedFilters = _.map(_.difference(_.pluck(newFilters, 'id'), _.pluck(oldFilters, 'id')), function(filterId) {
+            return {id: filterId};
         });
 
-        // filter series that are no more used in chart (need to clone $scope.chart to fire $watch event on highchart directive
+        ChartCache.removeFilters(removedFilters);
+
+        // filter series that are no more used in chart
         Chart.removeSeries(removedFilters);
+        refreshNormalSeries(addedFilters);
 
         if (addedFilters.length > 0) {
             initIgnoredElements(addedFilters);
+        } else {
+            Chart.updateChart();
         }
 
         if ($scope.pointSelected) {
@@ -95,8 +97,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * Executes when geoname, part or filter set are changed
      */
     $scope.$watch('tabs.part', function() {
-        Chart.resetSeries();
-        initIgnoredElements(_.pluck($scope.tabs.filters, 'id'));
+        refreshNormalSeries(null);
+        initIgnoredElements($scope.tabs.filters);
     }, true);
 
     /**
@@ -105,13 +107,13 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.$watch('tabs.geonames', function(newGeoname, oldGeoname) {
 
         if (oldGeoname) {
-            ChartCache.reset();
-            Chart.resetSeries();
             getIgnoredElements(true);
             $scope.pointSelected = null;
         }
+
         $scope.geonameIds = '?geonames=' + _.pluck($scope.tabs.geonames, 'id').join(',');
-        initIgnoredElements(_.pluck($scope.tabs.filters, 'id'));
+        refreshNormalSeries(null);
+        initIgnoredElements($scope.tabs.filters);
     }, true);
 
     $scope.$watch('panelOpened', function() {
@@ -193,7 +195,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      */
     var initIgnoredElements = function(filters) {
         if ($scope.tabs.geonames && $scope.tabs.part && filters && filters.length) {
-            refresh(filters, false).then(function() {
+            refreshAlternativeSeries(filters, false).then(function() {
                 if ($scope.pointSelected) {
                     retrieveFiltersAndValues($scope.pointSelected.questionnaire).then(function() {
                         Chart.initIgnoredElementsFromUrl($scope.tabs.filters, $scope.tabs.part).then(function() {
@@ -217,17 +219,15 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * @param questionnaireId
      */
     $scope.propagateStatusGlobally = function(filter, ignored, questionnaireId) {
-        var hFilters = [];
         _.forEach($scope.indexedElements, function(questionnaire) {
             if (questionnaire.filters && questionnaire.filters[filter.filter.id]) {
-                hFilters = hFilters.concat($scope.ignoreFilter(questionnaire.filters[filter.filter.id], !_.isUndefined(ignored) ? ignored : filter.filter.ignored, false));
+                $scope.ignoreFilter(questionnaire.filters[filter.filter.id], !_.isUndefined(ignored) ? ignored : filter.filter.ignored, false);
                 updateQuestionnaireIgnoredStatus(questionnaire);
             }
         });
 
-        Chart.removeSeries(_.uniq(hFilters));
         retrieveFiltersAndValues(questionnaireId);
-        refresh(_.uniq(hFilters), true);
+        refreshAlternativeSeries(null, true);
     };
 
     /**
@@ -239,14 +239,12 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         var questionnaire = ChartCache.cache($scope.tabs.part, questionnaireId);
         questionnaire.ignored = _.isUndefined(questionnaire.ignored) ? true : !questionnaire.ignored;
 
-        var hFilters = [];
         _.forEach(questionnaire.filters, function(filter) {
-            hFilters = hFilters.concat($scope.ignoreFilter(filter, !_.isUndefined(ignore) ? ignore : questionnaire.ignored, false));
+            $scope.ignoreFilter(filter, !_.isUndefined(ignore) ? ignore : questionnaire.ignored, false);
         });
 
-        Chart.removeSeries(_.uniq(hFilters));
         retrieveFiltersAndValues(questionnaireId);
-        refresh(_.uniq(hFilters), true);
+        refreshAlternativeSeries(null, true);
     };
 
     /**
@@ -260,18 +258,12 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.ignoreFilter = function(filter, ignored, refreshUrl, questionnaireId) {
         if (filter) {
             filter.filter.ignored = ignored;
-            var hFilters = _.keys(filter.filter.hFilters);
 
             if (refreshUrl) {
-                Chart.removeSeries(hFilters);
                 retrieveFiltersAndValues(questionnaireId);
-                refresh(hFilters, true);
+                refreshAlternativeSeries(null, true);
             }
-
-            return hFilters;
         }
-
-        return [];
     };
 
     $scope.getFirstAttribute = function(obj) {
@@ -285,18 +277,19 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * Reset projection form and refresh all series (without adjusted series)
      */
     $scope.removeAdjustedSeries = function() {
+        Chart.removeSeries(null, 'isAdjusted');
         delete $scope.panelTabs.target;
         delete $scope.panelTabs.overridable;
         delete $scope.panelTabs.reference;
-        $scope.addAdjustedSeries();
+        Chart.updateChart();
     };
 
     /**
      * Add adjusted and original series after removing everything
      */
     $scope.addAdjustedSeries = function() {
-        Chart.resetSeries();
-        refresh(null, false);
+        Chart.removeSeries(null, 'isAdjusted');
+        refreshAlternativeSeries([], false);
     };
 
     /**
@@ -391,9 +384,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * @param callback
      */
     var retrieveFiltersAndValues = function(questionnaireId) {
-
         var deferred = $q.defer();
-
         var questionnaire = ChartCache.cache($scope.tabs.part, questionnaireId);
         if (questionnaire) {
             // only launch ajax request if the filters in this questionnaire don't have values
@@ -413,36 +404,74 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * @param refreshUrl Usually set to true before sending request but at first execution is set to false
      * @param callback
      */
-    var refresh = function(filters, refreshUrl) {
+    var alternativeSeriesTimeout = null;
+    var refreshAlternativeSeries = function(filters, refreshUrl) {
 
         var deferred = $q.defer();
 
-        var resetSeries = false;
-        if (filters === null) {
-            resetSeries = true;
-            filters = _.pluck($scope.tabs.filters, 'id');
-        }
+        filters = filters === null ? $scope.tabs.filters : filters;
+
+        Chart.removeSeries(filters, 'isIgnored');
+        Chart.removeSeries(null, 'isAdjusted');
+
         var ignoredElements = refreshUrl ? getIgnoredElements(refreshUrl).join(',') : $location.search().ignoredElements;
+        var reference = $scope.panelTabs.reference ? $scope.panelTabs.reference.id ? $scope.panelTabs.reference.id : $scope.panelTabs.reference : null;
+        var target = $scope.panelTabs.target ? $scope.panelTabs.target : null;
+        var overridable = $scope.panelTabs.overridable ? $scope.panelTabs.overridable : null;
 
-        if (_.isArray(filters)) {
-
+        if (_.isArray(filters) && (!_.isEmpty(ignoredElements) || (reference && target && overridable))) {
             var queryParams = {
                 geonames: $location.search().geonames,
                 part: $scope.tabs.part.id,
-                filters: filters.join(','),
+                filters: _.pluck(filters, 'id').join(','),
                 ignoredElements: ignoredElements,
-                reference: $scope.panelTabs.reference ? $scope.panelTabs.reference.id ? $scope.panelTabs.reference.id : $scope.panelTabs.reference : null,
-                target: $scope.panelTabs.target ? $scope.panelTabs.target : null,
-                overridable: $scope.panelTabs.overridable ? $scope.panelTabs.overridable : null
+                reference: reference,
+                target: target,
+                overridable: overridable
             };
 
-            Chart.refresh(queryParams, $scope.tabs.part, resetSeries).then(function(data) {
+            if (alternativeSeriesTimeout) {
+                alternativeSeriesTimeout.resolve();
+            }
+            alternativeSeriesTimeout = $q.defer();
+
+            Chart.refresh(queryParams, $scope.tabs.part, $scope.tabs.geonames, alternativeSeriesTimeout).then(function(data) {
                 computeEstimates(ignoredElements);
                 deferred.resolve(data);
             });
+        } else {
+            if (alternativeSeriesTimeout) {
+                alternativeSeriesTimeout.resolve();
+            }
+            Chart.updateChart();
         }
 
         return deferred.promise;
+    };
+
+    /**
+     * Get JMP trendlines and don't ask for them again while filters or countries aren't changed
+     */
+    var normalSeriesTimeout = null;
+    var refreshNormalSeries = function(filters) {
+        filters = filters === null ? $scope.tabs.filters : filters;
+        if (filters && $scope.tabs.part && $scope.tabs.geonames) {
+            Chart.removeSeries(filters, null);
+
+            var queryParams = {
+                geonames: _.pluck($scope.tabs.geonames, 'id').join(','),
+                part: $scope.tabs.part.id,
+                filters: _.pluck(filters, 'id').join(',')
+            };
+
+            if (normalSeriesTimeout) {
+                normalSeriesTimeout.resolve();
+            }
+            normalSeriesTimeout = $q.defer();
+            Chart.refresh(queryParams, $scope.tabs.part, $scope.tabs.geonames, normalSeriesTimeout).then(function() {
+                computeEstimates([]);
+            });
+        }
     };
 
     /**
@@ -465,7 +494,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             }
         ];
 
-        var estimatesObject = Chart.computeEstimates($scope.chart, ignoredElements);
+        var estimatesObject = Chart.computeEstimates($scope.chart.series, ignoredElements);
         $scope.estimatesData = estimatesObject.data;
         $scope.columnDefs = $scope.columnDefs.concat(estimatesObject.columns);
     };

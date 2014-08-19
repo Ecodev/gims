@@ -5,6 +5,18 @@ angular.module('myApp.services').factory('ChartCache', function(Utility) {
     var index = {};
 
     /**
+     * Remove unused filters to avoid them to be displayed in panel after removing
+     */
+    var removeFilters = function(removedFilters) {
+        _.forEach(removedFilters, function(removedFilter) {
+            // unlink unused filters in questionnaires to avoid to display related filters on side panel
+            _.forEach(index, function(questionnaire) {
+                delete(questionnaire.hFilters[removedFilter.id]);
+            });
+        });
+    };
+
+    /**
      * This function set initiates all questionnaires with data loaded with first one (except values)
      * It allows to see ignored elements if they are ignored globally before having loading the data specific to asked questionnaire
      * The data is too big to be executed on the fly and is not needed, so the timeout waits until angularjs generates page.
@@ -199,6 +211,7 @@ angular.module('myApp.services').factory('ChartCache', function(Utility) {
     return {
         cache: cache,
         propagateRetrievedQuestionnaires: propagateRetrievedQuestionnaires,
+        removeFilters: removeFilters,
         reset: function() {
             Utility.resetObject(index);
             firstExecution = true;
