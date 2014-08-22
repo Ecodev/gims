@@ -141,7 +141,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                     $columnNames = $this->getColumnNames($filterSet, $part, $filter->getName());
                     $columnId = 'f' . $filter->getId() . 'p' . $part->getId();
                     $columns[$columnId] = $columnNames['short'];
-                    $legends[] = $columnNames;
+                    $legends[$columnId] = $columnNames;
 
                     $data = $calculator->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
                     foreach ($data['values'] as $questionnaireId => $value) {
@@ -161,7 +161,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         }
         $finalResult = array(
             'columns' => $columns,
-            'legends' => $legends,
+            'legends' => array_values($legends),
             'data' => array_values($result),
         );
 
@@ -237,7 +237,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                         $columnId = 'c' . $count;
                         $columnNames = $this->getColumnNames($filterSet, $partsById[$partId], $filter['name']);
                         $columns[$columnId] = $columnNames['short'];
-                        $legends[] = $columnNames;
+                        $legends[$columnId] = $columnNames;
 
                         $value = $filter['data'][$year];
                         $statsData[$columnId] = \Application\Utility::decimalToRoundedPercent($value);
@@ -246,7 +246,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                         $columnId = $columnId . 'a';
                         $columnNames['short'] = $columnNames['short'] . 'a';
                         $columnNames['long'] = $columnNames['long'] . ' (absolute value)';
-                        $legends[] = $columnNames;
+                        $legends[$columnId] = $columnNames;
                         $columns[$columnId] = $columnNames['short'];
                         $statsData[$columnId] = is_null($value) ? null : (int) ($value * $this->getPopulation($geoname, $partId, $year));
                         $count++;
@@ -259,7 +259,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
         $finalResult = array(
             'columns' => $columns,
-            'legends' => $legends,
+            'legends' => array_values($legends),
             'data' => array_values($result)
         );
 
