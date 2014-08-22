@@ -65,8 +65,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $series = [];
         foreach ($geonames as $geoname) {
             $prefix = count($geonames) > 1 ? $geoname->getName() . ' - ' : null;
-            $a = $this->getAllSeriesForOneGeoname($geoname, $filters, $part, $prefix);
-            $series = array_merge($series, $a);
+            $seriesForOneGeoname = $this->getAllSeriesForOneGeoname($geoname, $filters, $part, $prefix);
+            $series = array_merge($series, $seriesForOneGeoname);
         }
 
         return new NumericJsonModel($series);
@@ -211,16 +211,16 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $serie['marker'] = array('symbol' => 'diamond');
 
             if (count($usages) > 0) {
-                $usageList = implode(',<br/>', array_map(function ($u) {
-                            return $u->getRule()->getName();
+                $usageList = implode(',<br/>', array_map(function ($usage) {
+                            return $usage->getRule()->getName();
                         }, $usages));
             } else {
                 $usageList = '(none)';
             }
             $serie['usages'] = $usageList;
 
-            foreach ($serie['data'] as &$d) {
-                $d = Utility::decimalToRoundedPercent($d);
+            foreach ($serie['data'] as &$value) {
+                $value = Utility::decimalToRoundedPercent($value);
             }
 
             $series[] = $serie;
