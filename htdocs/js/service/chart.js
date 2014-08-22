@@ -8,16 +8,18 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
     var globalIndexedFilters = {}; // is used to know if a same filter is ignored or not in all questionnaires (used on globally ignored button)
     var concatenatedIgnoredElements = [];
 
+    /**
+     * Dash styles that are acceptable to be displayed all at
+     * once on the same graph and still be somewhat readable.
+     * @type Array
+     */
     var dashStyles = [
         'Solid',
         'Dash',
         'LongDashDot',
-        'LongDash',
-        'LongDashDotDot',
-        'ShortDash',
         'ShortDashDot',
-        'ShortDashDotDot',
-        'DashDot'
+        'LongDashDotDot',
+        'ShortDashDotDot'
     ];
 
     var adjustedDashStyle = 'ShortDot';
