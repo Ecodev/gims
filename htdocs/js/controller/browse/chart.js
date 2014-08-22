@@ -308,7 +308,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      */
     $scope.addAdjustedSeries = function() {
         Chart.removeSeries(null, 'isAdjusted');
-        refreshAlternativeSeries([], false);
+        refreshAlternativeSeries(null, false);
     };
 
     /**
