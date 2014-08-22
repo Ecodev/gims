@@ -406,7 +406,9 @@
                                                     </label>
                                                 </div>
                                                 <div class="col-md-12">
-                                                    <gims-filter model='panelTabs.reference' name="reference"></gims-filter>
+                                                    <select ui-select2 ng-model="panelTabs.reference" name="reference" style="width: 100%" >
+                                                        <option ng-repeat="serie in chart.series" value="{{serie.id}}" ng-if="!serie.isAdjusted && !serie.isIgnored && serie.type == 'line'">{{serie.name}}</option>
+                                                    </select>
                                                 </div>
                                             </div>
 
