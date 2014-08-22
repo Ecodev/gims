@@ -21,7 +21,6 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
     ];
 
     var adjustedDashStyle = 'ShortDot';
-    var adjustedColor = '#000000';
 
     var getChart = function() {
         return {
@@ -492,9 +491,8 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                 serie.dashStyle = dashStyles[_.indexOf(geonames, serie.geonameId)];
             });
 
-            // define static color for adjusted serie
+            // define static dashStyle for adjusted serie to differentiate them from series with ignored elements
             _.forEach(adjustedSeries, function(serie) {
-                serie.color = adjustedColor;
                 serie.dashStyle = adjustedDashStyle;
             });
 
