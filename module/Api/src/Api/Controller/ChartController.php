@@ -83,7 +83,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     private function getAllSeriesForOneGeoname(Geoname $geoname, array $filters, Part $part, $prefix)
     {
         // Compute adjusted series if we asked any
-        $adjustedSeries = $this->getAdjustedSeries($geoname, $part, $prefix);
+        $adjustedSeries = $this->getAdjustedSeries($geoname, $filters, $part, $prefix);
 
         // Compute series taking in account ignored elements
         $overriddenFilters = $this->getIgnoredElements($part);
@@ -228,8 +228,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
             if (count($usages) > 0) {
                 $usageList = implode(',<br/>', array_map(function ($u) {
-                    return $u->getRule()->getName();
-                }, $usages));
+                            return $u->getRule()->getName();
+                        }, $usages));
             } else {
                 $usageList = '(none)';
             }
@@ -456,7 +456,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @internal param \Application\Model\Filter[] $filters
      * @return array
      */
-    private function getAdjustedSeries(Geoname $geoname, Part $part, $prefix)
+    private function getAdjustedSeries(Geoname $geoname, array $filters, Part $part, $prefix)
     {
         $referenceId = $this->params()->fromQuery('reference');
         $overridableId = $this->params()->fromQuery('overridable');
@@ -488,7 +488,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $overriddenFilters = $adjustator->findOverriddenFilters($target, $reference, $overridable, $geoname, $part);
         $this->getCalculator()->setOverriddenFilters($overriddenFilters);
 
-        $adjustedSeries = $this->getSeries($geoname, [$reference], $part, $prefix, $overriddenFilters, true);
+        $adjustedSeries = $this->getSeries($geoname, $filters, $part, $prefix, $overriddenFilters, true);
 
         // Inject extra data about adjustement
         $adjustedSeries[0]['overriddenFilters'] = $overriddenFilters;
