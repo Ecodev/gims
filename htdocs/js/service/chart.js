@@ -183,7 +183,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         var columns = [];
         _.forEach(series, function(serie) {
             if (serie.type == 'line' && (
-                (_.isUndefined(ignoredElements) || ignoredElements && ignoredElements.length === 0) && _.isUndefined(serie.isIgnored) || ignoredElements && ignoredElements.length > 0 && serie.isIgnored === true)) {
+                    (_.isUndefined(ignoredElements) || ignoredElements && ignoredElements.length === 0) && _.isUndefined(serie.isIgnored) || ignoredElements && ignoredElements.length > 0 && serie.isIgnored === true)) {
 
                 // create a column by filter on graph
                 columns.push({
@@ -192,13 +192,13 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                     enableColumnResize: true,
                     color: serie.color,
                     headerCellTemplate: '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
-                                        '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" popover-placement="top" popover="{{col.displayName}}">' +
-                                        '       <i class="fa fa-gims-filter" style="color:{{col.colDef.color}};"></i> {{col.displayName}}' +
-                                        '   </div>' +
-                                        '</div>',
-                    cellTemplate:   '<div class="ngCellText text-right" ng-class="col.colIndex()">' +
-                                        '<span ng-cell-text ng-show="{{row.entity.value' + serie.id + '_' + serie.geonameId + '!==null}}">{{row.entity.value' + serie.id + '_' + serie.geonameId + '}} %</span>' +
-                                    '</div>'
+                            '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" popover-placement="top" popover="{{col.displayName}}">' +
+                            '       <i class="fa fa-gims-filter" style="color:{{col.colDef.color}};"></i> {{col.displayName}}' +
+                            '   </div>' +
+                            '</div>',
+                    cellTemplate: '<div class="ngCellText text-right" ng-class="col.colIndex()">' +
+                            '<span ng-cell-text ng-show="{{row.entity.value' + serie.id + '_' + serie.geonameId + '!==null}}">{{row.entity.value' + serie.id + '_' + serie.geonameId + '}} %</span>' +
+                            '</div>'
                 });
 
                 // retrieve data
@@ -361,7 +361,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
 
         // url excluded questionnaires
         var ignoredQuestionnaires = $location.search().ignoredElements ? $location.search().ignoredElements.split(',') :
-            [];
+                [];
         if (ignoredQuestionnaires.length > 0) {
 
             var firstQuestionnaire = ignoredQuestionnaires[0].split(':');
@@ -479,6 +479,8 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
     var updateChart = function() {
 
         if (chart) {
+            deleteDuplicatedSeries();
+
             var ignoredSeries = getChartSeries('isIgnored');
             var adjustedSeries = getChartSeries('isAdjusted');
             var alternativeSeries = ignoredSeries.concat(adjustedSeries);
@@ -513,6 +515,29 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
 
             $rootScope.$emit('gims-chart-modified', chart);
         }
+    };
+
+    /**
+     * Remove duplicated series to ensure that series are unique
+     * A serie is unique only if the filter and the raw data are identical,
+     * everything else (label, extra data, etc.) is ignored.
+     */
+    var deleteDuplicatedSeries = function() {
+        var uniqueSeries = [];
+        _.forEach(chart.series, function(serie) {
+            var foundSame = false;
+            _.forEach(uniqueSeries, function(uniqueSerie) {
+                if (serie.id == uniqueSerie.id && _.isEqual(serie.data, uniqueSerie.data)) {
+                    foundSame = true;
+                }
+            });
+
+            if (!foundSame) {
+                uniqueSeries.push(serie);
+            }
+        });
+
+        chart.series = uniqueSeries;
     };
 
     /**

@@ -85,29 +85,13 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         // Compute adjusted series if we asked any
         $adjustedSeries = $this->getAdjustedSeries($geoname, $filters, $part, $prefix);
 
-        // Compute series taking in account ignored elements
+        // Compute series taking in account ignored elements, if no ignored elements, then it will be normal series
         $overriddenFilters = $this->getIgnoredElements($part);
         $series = $this->getSeries($geoname, $filters, $part, $prefix, $overriddenFilters);
 
         $newSeries = array_merge($series, $adjustedSeries);
 
-        // Ensure that series are not added twice to series list
-        $series = array();
-        foreach ($newSeries as $newSerie) {
-            $same = false;
-            foreach ($series as $serie) {
-                if (count(@array_diff_assoc($serie, $newSerie)) == 0) {
-                    $same = true;
-                    break;
-                }
-            }
-
-            if (!$same) {
-                array_push($series, $newSerie);
-            }
-        }
-
-        return $series;
+        return $newSeries;
     }
 
     /**
