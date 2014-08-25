@@ -36,21 +36,21 @@ class Rule extends \Application\Model\AbstractModel implements ReferencableInter
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="FilterQuestionnaireUsage", mappedBy="rule")
+     * @ORM\OneToMany(targetEntity="FilterQuestionnaireUsage", mappedBy="rule", fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
      */
     private $filterQuestionnaireUsages;
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="QuestionnaireUsage", mappedBy="rule")
+     * @ORM\OneToMany(targetEntity="QuestionnaireUsage", mappedBy="rule", fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
      */
     private $questionnaireUsages;
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="FilterGeonameUsage", mappedBy="rule")
+     * @ORM\OneToMany(targetEntity="FilterGeonameUsage", mappedBy="rule", fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
      */
     private $filterGeonameUsages;
