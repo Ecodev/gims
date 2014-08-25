@@ -209,6 +209,10 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
             $assertion = new \Application\Assertion\CanAttributeRole($object);
         } elseif ($object instanceof \Application\Model\Rule\Rule && $action != 'read') {
             $assertion = new \Application\Assertion\CanUpdateRule($object, $context);
+        } elseif ($object instanceof \Application\Model\Rule\FilterQuestionnaireUsage && $action != 'read') {
+            $assertion = new \Application\Assertion\CanUpdateUsage($object, $context);
+        } elseif ($object instanceof \Application\Model\Rule\QuestionnaireUsage && $action != 'read') {
+            $assertion = new \Application\Assertion\CanUpdateUsage($object, $context);
         }
 
         $this->setAssertion($permission, $assertion);
