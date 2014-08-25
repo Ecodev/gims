@@ -121,7 +121,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     private $userFilterSets;
 
     /**
-     * @var \Application\Model\AbstractModel
+     * @var \Application\Service\RoleContextInterface
      */
     private $roleContext;
 
@@ -373,50 +373,10 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
         // which means he has, at the very least, the hardcoded role of member
         $roles = array('member');
 
-        if ($this->roleContext instanceof \ArrayAccess) {
-            foreach ($this->roleContext as $contextElement) {
-                $roles = array_merge($roles, $this->getRolesByContext($contextElement));
-            }
-        } else {
-            $roles = array_merge($roles, $this->getRolesByContext($this->roleContext));
-        }
+        $roleRepository = \Application\Module::getEntityManager()->getRepository('\Application\Model\Role');
+        $roleNames = $roleRepository->getAllRoleNames($this, $this->roleContext);
 
-        $roles = array_unique($roles);
-
-        return $roles;
-    }
-
-    /**
-     * Return the roles currently active for this user and current role context (if any)
-     * @param $roleContext
-     * @return array
-     */
-    private function getRolesByContext(\Application\Service\RoleContextInterface $roleContext = null)
-    {
-        $roles = array();
-
-        // If there is no context, or the context matches, add roles from survey
-        foreach ($this->getUserSurveys() as $userSurvey) {
-            if (!$roleContext || $roleContext === $userSurvey->getSurvey() && $userSurvey->getId()) {
-                $roles [] = $userSurvey->getRole()->getName();
-            }
-        }
-
-        // If there is no context, or the context matches, add roles from questionnaire
-        foreach ($this->getUserQuestionnaires() as $userQuestionnaire) {
-            if (!$roleContext || $roleContext === $userQuestionnaire->getQuestionnaire() && $userQuestionnaire->getId()) {
-                $roles [] = $userQuestionnaire->getRole()->getName();
-            }
-        }
-
-        // If there is no context, or the context matches, add roles from filterSet
-        foreach ($this->getUserFilterSets() as $userFilterSet) {
-            if (!$roleContext || $roleContext === $userFilterSet->getFilterSet() && $userFilterSet->getId()) {
-                $roles [] = $userFilterSet->getRole()->getName();
-            }
-        }
-
-        return $roles;
+        return array_unique(array_merge($roles, $roleNames));
     }
 
     /**

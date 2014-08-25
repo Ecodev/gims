@@ -222,11 +222,10 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
         $multiAtLeastOneMustBeGranted = new \Application\Service\MultipleRoleContext([$survey2, $survey], false);
         $this->assertTrue($auth->isGrantedWithContext($multiAtLeastOneMustBeGranted, $permissionSurvey->getName()), 'should be denied, because multiRoleContext include survey2 on which we don\'t have access');
 
-        // Test with non persistent context
+        // Test with non persisted context
         $nonPersistedSurvey = new \Application\Model\Survey();
-        $userSurvey2 = new \Application\Model\UserSurvey();
         $userSurvey->setUser($user)->setSurvey($nonPersistedSurvey)->setRole($roleSurvey);
-        $this->assertTrue($auth->isGrantedWithContext($nonPersistedSurvey, $permission->getName()), 'permission with non persistent context is granted');
+        $this->assertFalse($auth->isGrantedWithContext($nonPersistedSurvey, $permission->getName()), 'permission with non persisted context should be rejected');
     }
 
 }

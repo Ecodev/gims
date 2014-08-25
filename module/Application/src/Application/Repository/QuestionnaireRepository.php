@@ -114,4 +114,36 @@ class QuestionnaireRepository extends AbstractChildRepository
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * Returns all questionnaires using the given rule
+     * @param \Application\Model\Rule\Rule $rule
+     * @return \Application\Model\Questionnaire[]
+     */
+    public function getAllFromRule(Rule $rule)
+    {
+        // First get all questionnaire ID via fast UNION query
+        $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
+        $rsm->addScalarResult('questionnaire_id', 'id');
+        $qb = $this->getEntityManager()->createNativeQuery('
+                SELECT questionnaire_id FROM filter_questionnaire_usage WHERE rule_id = :rule
+                UNION
+                SELECT questionnaire_id FROM questionnaire_usage WHERE rule_id = :rule
+                UNION
+                SELECT questionnaire.id AS questionnaire_id FROM questionnaire
+                INNER JOIN filter_geoname_usage ON (filter_geoname_usage.geoname_id = questionnaire.geoname_id AND rule_id = :rule)
+            ', $rsm);
+
+        $qb->setParameter('rule', $rule->getId());
+        $result = $qb->getResult();
+        $ids = [];
+        foreach ($result as $item) {
+            $ids[] = $item['id'];
+        }
+
+        // Then load actual objects via standard Doctrine to be sure they are "completely" loaded
+        $questionnaires = $this->findById($ids);
+
+        return $questionnaires;
+    }
+
 }

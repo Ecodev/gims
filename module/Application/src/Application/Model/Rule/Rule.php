@@ -158,21 +158,26 @@ class Rule extends \Application\Model\AbstractModel implements ReferencableInter
      */
     public function getRoleContext($action)
     {
-        $contexts = new \Application\Service\MultipleRoleContext();
+        $repositoryQ = \Application\Module::getEntityManager()->getRepository('Application\Model\Questionnaire');
+        $questionnaires = $repositoryQ->getAllFromRule($this);
+//        w($a);
+//        return null;
 
-        foreach ($this->getFilterQuestionnaireUsages() as $usage) {
-            $contexts->add($usage->getQuestionnaire());
-        }
-
-        foreach ($this->getQuestionnaireUsages() as $usage) {
-            $contexts->add($usage->getQuestionnaire());
-        }
-
-        foreach ($this->getFilterGeonameUsages() as $usage) {
-            foreach ($usage->getGeoname()->getQuestionnaires() as $questionnaire) {
-                $contexts->add($questionnaire);
-            }
-        }
+        $contexts = new \Application\Service\MultipleRoleContext($questionnaires);
+//
+//        foreach ($this->getFilterQuestionnaireUsages() as $usage) {
+//            $contexts->add($usage->getQuestionnaire());
+//        }
+//
+//        foreach ($this->getQuestionnaireUsages() as $usage) {
+//            $contexts->add($usage->getQuestionnaire());
+//        }
+//
+//        foreach ($this->getFilterGeonameUsages() as $usage) {
+//            foreach ($usage->getGeoname()->getQuestionnaires() as $questionnaire) {
+//                $contexts->add($questionnaire);
+//            }
+//        }
 
         // If we try to delete a rule, we must also consider the side-effect it may have on other Rules that use this rule
         if ($action == 'delete') {

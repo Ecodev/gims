@@ -138,9 +138,10 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
         $this->assertResponseStatusCode(403);
 
         // Define user as questionnaire validator (the guy who can validate if questionnaire is correct)
+        $userValidator = $this->createAnotherUser();
         $userQuestionnaire = new UserQuestionnaire();
         $this->questionnaire = $this->getEntityManager()->merge($this->questionnaire);
-        $userQuestionnaire->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($validator);
+        $userQuestionnaire->setUser($userValidator)->setQuestionnaire($this->questionnaire)->setRole($validator);
         $this->getEntityManager()->persist($userQuestionnaire);
         $this->getEntityManager()->flush();
 
@@ -156,10 +157,10 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
         $this->assertResponseStatusCode(403);
 
         // Define user as questionnaire publisher
-
+        $userPublisher = $this->createAnotherUser();
         $userQuestionnaire2 = new UserQuestionnaire();
         $this->questionnaire = $this->getEntityManager()->merge($this->questionnaire);
-        $userQuestionnaire2->setUser($this->user)->setQuestionnaire($this->questionnaire)->setRole($publisher);
+        $userQuestionnaire2->setUser($userPublisher)->setQuestionnaire($this->questionnaire)->setRole($publisher);
         $this->getEntityManager()->persist($userQuestionnaire2);
         $this->getEntityManager()->remove($userQuestionnaire);
         $this->getEntityManager()->flush();

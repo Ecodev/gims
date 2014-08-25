@@ -48,6 +48,7 @@ abstract class AbstractController extends \Zend\Test\PHPUnit\Controller\Abstract
         $this->user = new User('unit tests user');
         $this->user->setPassword('foo');
         $this->getEntityManager()->persist($this->user);
+        $this->getEntityManager()->flush();
 
         // Get rbac service to tell who we are (simulate logged in user)
         $this->identityProvider = $this->getApplicationServiceLocator()->get('ApplicationTest\Service\FakeIdentityProvider');
