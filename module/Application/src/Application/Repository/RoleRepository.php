@@ -72,7 +72,7 @@ class RoleRepository extends AbstractRepository
             }
 
             if ($type && isset($this->cache[$user->getId()][$type][$context->getId()])) {
-                $roleNames[] = $this->cache[$user->getId()][$type][$context->getId()];
+                $roleNames = array_merge($roleNames, $this->cache[$user->getId()][$type][$context->getId()]);
             }
         }
 
@@ -110,7 +110,10 @@ class RoleRepository extends AbstractRepository
         $all = [];
         foreach ($result as $item) {
             $all[] = $item['name'];
-            $this->cache[$user->getId()][$item['type']][$item['id']] = $item['name'];
+            if (!isset($this->cache[$user->getId()][$item['type']][$item['id']])) {
+                $this->cache[$user->getId()][$item['type']][$item['id']] = [];
+            }
+            $this->cache[$user->getId()][$item['type']][$item['id']][] = $item['name'];
         }
 
         $this->cache[$user->getId()]['all'] = array_unique($all);
