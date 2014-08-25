@@ -156,6 +156,86 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
+     * Returns the name according to 'current' syntax
+     * @param string|integer $filterId
+     * @return string
+     */
+    public function getFilterName($filterId)
+    {
+        static $cache = [];
+
+        if ($filterId == 'current') {
+            return $filterId;
+        } else {
+            if (!array_key_exists($filterId, $cache)) {
+                $cache[$filterId] = $this->getFilterRepository()->findOneById($filterId)->getName();
+            }
+
+            return $cache[$filterId];
+        }
+    }
+
+    /**
+     * Returns the color according to 'current' syntax
+     * @param string|integer $filterId
+     * @return string
+     */
+    public function getFilterColor($filterId)
+    {
+        static $cache = [];
+        if ($filterId == 'current') {
+            return null;
+        } else {
+
+            if (!array_key_exists($filterId, $cache)) {
+                $cache[$filterId] = $this->getFilterRepository()->findOneById($filterId)->getColor();
+            }
+
+            return $cache[$filterId];
+        }
+    }
+
+    /**
+     * Returns the name according to 'current' syntax
+     * @param string|integer $questionnaireId
+     * @return string
+     */
+    public function getQuestionnaireName($questionnaireId)
+    {
+        static $cache = [];
+        if ($questionnaireId == 'current') {
+            return $questionnaireId;
+        } else {
+
+            if (!array_key_exists($questionnaireId, $cache)) {
+                $cache[$questionnaireId] = $this->getQuestionnaireRepository()->findOneById($questionnaireId)->getName();
+            }
+
+            return $cache[$questionnaireId];
+        }
+    }
+
+    /**
+     * Returns the name according to 'current' syntax
+     * @param string|integer $partId
+     * @return string
+     */
+    public function getPartName($partId)
+    {
+        static $cache = [];
+        if ($partId == 'current') {
+            return $partId;
+        } else {
+
+            if (!array_key_exists($partId, $cache)) {
+                $cache[$partId] = $this->getPartRepository()->findOneById($partId)->getName();
+            }
+
+            return $cache[$partId];
+        }
+    }
+
+    /**
      * Get an array of basic tokens
      * @return AbstractBasicToken[]
      */

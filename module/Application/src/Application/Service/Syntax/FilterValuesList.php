@@ -40,7 +40,7 @@ class FilterValuesList extends AbstractBasicToken
     {
         return [
             'type' => 'regressionFilterValuesList',
-            'filter' => $this->getFilterName($matches[1], $parser),
+            'filter' => $parser->getFilterName($matches[1]),
         ];
     }
 

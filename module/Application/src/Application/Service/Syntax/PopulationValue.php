@@ -31,8 +31,8 @@ class PopulationValue extends AbstractBasicToken
     {
         return [
             'type' => 'populationValue',
-            'questionnaire' => $this->getQuestionnaireName($matches[1], $parser),
-            'part' => $this->getPartName($matches[2], $parser),
+            'questionnaire' => $parser->getQuestionnaireName($matches[1]),
+            'part' => $parser->getPartName($matches[2]),
         ];
     }
 }

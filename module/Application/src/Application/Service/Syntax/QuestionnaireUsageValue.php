@@ -41,8 +41,8 @@ class QuestionnaireUsageValue extends AbstractBasicToken
         return [
             'type' => 'ruleValue',
             'rule' => $rule->getName(),
-            'questionnaire' => $this->getQuestionnaireName($matches[2], $parser),
-            'part' => $this->getPartName($matches[3], $parser),
+            'questionnaire' => $parser->getQuestionnaireName($matches[2]),
+            'part' => $parser->getPartName($matches[3]),
         ];
     }
 

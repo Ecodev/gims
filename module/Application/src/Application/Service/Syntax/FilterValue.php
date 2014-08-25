@@ -33,11 +33,11 @@ class FilterValue extends AbstractBasicToken
     {
         return [
             'type' => 'filterValue',
-            'filter' => $this->getFilterName($matches[1], $parser),
-            'questionnaire' => $this->getQuestionnaireName($matches[2], $parser),
-            'part' => $this->getPartName($matches[3], $parser),
+            'filter' => $parser->getFilterName($matches[1]),
+            'questionnaire' => $parser->getQuestionnaireName($matches[2]),
+            'part' => $parser->getPartName($matches[3]),
             'level' => isset($matches[4]) && $matches[4] == ',L#2',
-            'color' => $this->getFilterColor($matches[1], $parser),
+            'color' => $parser->getFilterColor($matches[1]),
         ];
     }
 

@@ -32,7 +32,7 @@ class RegressionCumulatedPopulation extends AbstractRegressionToken
     {
         return [
             'type' => 'regressionCumulatedPopulation',
-            'part' => $this->getPartName($matches[1], $parser),
+            'part' => $parser->getPartName($matches[1]),
         ];
     }
 

@@ -35,8 +35,9 @@ class QuestionName extends AbstractBasicToken
     {
         return [
             'type' => 'questionName',
-            'filter' => $this->getFilterName($matches[1], $parser),
-            'questionnaire' => $this->getQuestionnaireName($matches[2], $parser),
+            'filter' => $parser->getFilterName($matches[1]),
+            'questionnaire' => $parser->getQuestionnaireName($matches[2]),
         ];
     }
+
 }

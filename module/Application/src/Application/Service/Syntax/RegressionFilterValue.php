@@ -42,10 +42,10 @@ class RegressionFilterValue extends AbstractRegressionToken
 
         return [
             'type' => 'regressionFilterValue',
-            'filter' => $this->getFilterName($matches[1], $parser),
-            'part' => $this->getPartName($matches[2], $parser),
+            'filter' => $parser->getFilterName($matches[1]),
+            'part' => $parser->getPartName($matches[2]),
             'year' => (string) $year,
-            'color' => $this->getFilterColor($matches[1], $parser),
+            'color' => $parser->getFilterColor($matches[1]),
         ];
     }
 
