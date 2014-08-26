@@ -14,16 +14,23 @@ angular.module('myApp').controller('UserCtrl', function($scope, $http, authServi
         $rootScope.$emit('gims-loginConfirmed', user);
     }
 
-    // Intercept the event broadcasted by http-auth-interceptor when a request get a HTTP 401 response
-    $scope.$on('event:auth-loginRequired', function() {
-        $scope.promptLogin();
-    });
-
     // Reload existing logged in user (eg: when refreshing page)
-    $http.get('/user/login').success(function(data) {
+    var loadUserPromise = $http.get('/user/login');
+    loadUserPromise.success(function(data) {
         if (data.status == 'logged') {
             userLoggedIn(data);
         }
+    });
+
+    // Intercept the event broadcasted by http-auth-interceptor when a request get a HTTP 401 response
+    $scope.$on('event:auth-loginRequired', function() {
+
+        // If we already checked with server, but are still not logged in, need to show prompt
+        loadUserPromise.then(function() {
+            if (!$rootScope.user) {
+                $scope.promptLogin();
+            }
+        });
     });
 
     $scope.promptLogin = function() {

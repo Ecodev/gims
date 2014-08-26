@@ -70,6 +70,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.questionnaireParams = {surveyType: $scope.mode.surveyType};
     $scope.surveyParams = {surveyType: $scope.mode.surveyType};
 
+    // Ensure that we have a logged in user if we are going to contribute things
+    if ($scope.mode.isContribute) {
+        $rootScope.$broadcast('event:auth-loginRequired');
+    }
+
     /**************************************************************************/
     /*************************************************************** Watchers */
     /**************************************************************************/
