@@ -228,4 +228,36 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
         $this->assertFalse($auth->isGrantedWithContext($nonPersistedSurvey, $permission->getName()), 'permission with non persisted context should be rejected');
     }
 
+    public function testCanHaveSeveralRolesForOneContext()
+    {
+        // Give our user two roles on the same context
+        $role1 = new \Application\Model\Role('role 1');
+        $role2 = new \Application\Model\Role('role 2');
+
+        $survey = new \Application\Model\Survey('survey 1');
+        $survey->setCode('tst srvy 1');
+        $survey->setYear(2000);
+
+        $u1 = new \Application\Model\UserSurvey();
+        $u1->setUser($this->user)->setSurvey($survey)->setRole($role1);
+        $u2 = new \Application\Model\UserSurvey();
+        $u2->setUser($this->user)->setSurvey($survey)->setRole($role2);
+
+        $this->getEntityManager()->persist($role1);
+        $this->getEntityManager()->persist($role2);
+        $this->getEntityManager()->persist($u1);
+        $this->getEntityManager()->persist($u2);
+        $this->getEntityManager()->persist($survey);
+        $this->getEntityManager()->flush();
+
+        // Ask the list of role for our single context
+        $this->user->setRolesContext($survey);
+        $actual = $this->user->getRoles();
+        $expected = ['member', 'role 1', 'role 2'];
+
+        sort($actual);
+        sort($expected);
+        $this->assertEquals($expected, $actual, 'should have both roles for a single context');
+    }
+
 }
