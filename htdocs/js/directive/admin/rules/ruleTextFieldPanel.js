@@ -8,10 +8,12 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
             refresh: '&?',
             readonly: '='
         },
-        controller: function($scope, AbstractModel) {
+        controller: function($scope) {
+
+            var ruleFields = {fields: 'permissions,filterQuestionnaireUsages,questionnaireUsages,filterGeonameUsages'};
+            var usageFields = {fields: 'permissions,rule.permissions,rule.filterQuestionnaireUsages,rule.questionnaireUsages,rule.filterGeonameUsages'};
 
             $rootScope.$on('gims-rule-usage-added', function(evt, objects) {
-
                 $scope.usage = {};
                 $scope.usage.questionnaire = objects.questionnaire;
                 $scope.usage.filter = objects.filter;
@@ -26,75 +28,91 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
             });
 
             $rootScope.$on('gims-rule-usage-selected', function(evt, usage) {
-                $scope.usage = usage;
                 $scope.showDetails = false;
-                if (usage && usage.rule && usage.rule.id) {
-                    Restangular.one('rule', usage.rule.id).get({fields: 'permissions,filterQuestionnaireUsages,questionnaireUsages,filterGeonameUsages'}).then(function(rule) {
-                        $scope.usage.rule.nbOfUsages = rule.filterQuestionnaireUsages.length + rule.questionnaireUsages.length + rule.filterGeonameUsages.length;
-                    });
-                }
+                $scope.usage = usage;
+                getUsageProperties();
             });
 
-            var getUsageType = function() {
-                if ($scope.usage.filter && $scope.usage.geoname) {
+            var getUsageProperties = function() {
+                if ($scope.usage && $scope.usage.id) {
+                    Restangular.one(getUsageType($scope.usage), $scope.usage.id).get(usageFields).then(function(usage) {
+                        $scope.usage = usage;
+                        $scope.usage.rule.nbOfUsages = usage.rule.filterQuestionnaireUsages.length + usage.rule.questionnaireUsages.length + usage.rule.filterGeonameUsages.length;
+                    });
+                }
+            };
+
+            var getUsageType = function(usage) {
+                if (!usage) {
+                    usage = $scope.usage;
+                }
+                if (usage.filter && usage.geoname) {
                     return 'filterGeonameUsage';
-                } else if ($scope.usage.filter && $scope.usage.questionnaire) {
+                } else if (usage.filter && usage.questionnaire) {
                     return 'filterQuestionnaireUsage';
                 } else {
                     return 'questionnaireUsage';
                 }
             };
 
+            $scope.saveDuplicate = function() {
+                delete $scope.usage.rule.id;
+                $scope.usage.rule[getUsageType() + "s"] = [
+                    {id: $scope.usage.id}
+                ];
+                $scope.usage.rule.nbOfUsages = 1;
+                $scope.save();
+            };
+
+            /**
+             * Create or update rule first, then create or update usage.
+             */
             $scope.save = function() {
+
+                // update
                 if ($scope.usage.rule.id) {
                     $scope.isSaving = true;
-                    AbstractModel.put($scope.usage.rule, 'rule').then(function() {
+                    $scope.usage.rule.put().then(function() {
                         $scope.isSaving = false;
-                        $scope.refresh({questionnairesPermissions: false, filtersComputing: true, questionnairesUsages: false}); // no need to request usages again, cause there is not new
+                        $scope.refresh({questionnairesPermissions: false, filtersComputing: true, questionnairesUsages: true});
                     });
+
+                    // create
                 } else {
                     $scope.isSaving = true;
-                    AbstractModel.post($scope.usage.rule, 'rule').then(function(rule) {
+                    Restangular.all('Rule').post($scope.usage.rule, ruleFields).then(function(rule) {
                         $scope.usage.rule.id = rule.id;
+                        $scope.usage.rule.permissions = rule.permissions;
                         $scope.saveUsage();
                         $scope.isSaving = false;
                     });
                 }
             };
 
+            /**
+             * Create or update usage.
+             */
             $scope.saveUsage = function() {
 
-                if (!$scope.usage.id) {
-                    var miniUsage = {
-                        questionnaire: $scope.usage.questionnaire.id,
-                        part: $scope.usage.part.id,
-                        justification: $scope.usage.justification,
-                        isSecondLevel: false,
-                        rule: $scope.usage.rule.id
-                    };
-
-                    if ($scope.usage.filter) {
-                        miniUsage.filter = $scope.usage.filter.id;
-                    }
-
-                    if ($scope.usage.geoname) {
-                        miniUsage.geoname = $scope.usage.geoname.id;
-                    }
-
-                    var usageType = getUsageType();
-                    AbstractModel.post(miniUsage, usageType).then(function(usage) {
-                        $scope.usage.id = usage.id;
-                        $scope.usage.rule[usageType] = usage.id;
-                        $scope.refresh({questionnairesPermissions: false, filtersComputing: true, questionnairesUsages: true}); // refresh usages to add added one
+                // update
+                if ($scope.usage.id) {
+                    $scope.usage.put().then(function() {
+                        $scope.refresh({questionnairesPermissions: false, filtersComputing: true, questionnairesUsages: true});
                     });
+
+                    // create
                 } else {
-                    $scope.refresh({questionnairesPermissions: false, filtersComputing: true, questionnairesUsages: false});
+                    Restangular.all(getUsageType()).post($scope.usage).then(function(usage) {
+                        $scope.usage.id = usage.id;
+                        $scope.usage.rule[getUsageType()] = usage.id;
+                        $scope.refresh({questionnairesPermissions: false, filtersComputing: true, questionnairesUsages: true});
+                    });
                 }
             };
 
             $scope.delete = function() {
                 $scope.isRemoving = true;
-                AbstractModel.remove($scope.usage.rule, 'rule').then(function() {
+                $scope.usage.remove().then(function() {
                     $scope.refresh({questionnairesPermissions: false, filtersComputing: true, questionnairesUsages: true});
                     $scope.isRemoving = false;
                     $scope.close();

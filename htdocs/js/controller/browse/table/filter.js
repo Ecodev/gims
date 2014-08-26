@@ -183,7 +183,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
             getQuestionnaires(newQuestionnaires, questionnaireWithAnswersFields).then(function(questionnaires) {
                 $scope.firstQuestionnairesRetrieve = true;
-                //                listQuestionnairesWithFilterUsages(questionnaires);
+                //listQuestionnairesWithFilterUsages(questionnaires);
                 prepareDataQuestionnaires(questionnaires);
                 $scope.orderQuestionnaires(false);
             });
@@ -943,7 +943,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param questionnaire
      */
     var indexFilterQuestionnaireUsages = function(questionnaire) {
-
         // Indexes usages by filter and part
         var usagesByFilter = {};
         _.forEach(questionnaire.filterQuestionnaireUsages, function(usage) {
@@ -957,6 +956,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             }
             usagesByFilter[usage.filter.id][usage.part.id].push(usage);
         });
+
         questionnaire.filterQuestionnaireUsagesByFilterAndPart = usagesByFilter;
 
     };
@@ -985,8 +985,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId] = {};
         }
         if (!questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId]) {
-            questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId] =
-                    [];
+            questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId] = [];
         }
 
         var usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId];
@@ -1013,7 +1012,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
             Restangular.all('filterQuestionnaireUsage').post(usage).then(function(newUsage) {
                 usages.push(newUsage);
-                $scope.refresh(false, true);
+                $scope.refresh(false, true, true);
             });
         }
     };
@@ -1096,7 +1095,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     };
 
     /**
-     * Update questionnaires permissions
+     * Update questionnaires Usages
      * @type Function
      * @param questionnaires
      */
@@ -2005,7 +2004,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
             var question = questionnaire.survey.questions[filter.id];
             var answer;
-            if (question) {
+            if (question && question.answers) {
                 answer = question.answers[partId];
             }
 

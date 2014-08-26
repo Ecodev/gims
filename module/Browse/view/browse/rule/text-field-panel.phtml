@@ -1,4 +1,4 @@
-<div class="formula-text-field-fixed ng-trans ng-trans-fade-up" ng-show="usage">
+<div class="formula-text-field-fixed ng-trans ng-trans-fade-down" ng-show="usage">
 
     <form role="form">
         <div class="form-group" ng-if="showDetails">
@@ -16,16 +16,34 @@
     </form>
 
     <div class='text-right'>
-        <span class="text-warning" style="margin-left:10px;" ng-if="usage.rule.nbOfUsages > 1"><i class="fa fa-warning"></i> This rule is used in {{usage.rule.nbOfUsages}} different places.</span>
-        <button class="btn btn-default" ng-click="close();" ><i class="fa fa-times"></i> Close</button>
+        <span class="text-warning" style="margin-left:10px;" ng-if="usage.rule.nbOfUsages > 1 && (!readonly && usage.rule.permissions.update && !!usage.id)"><i class="fa fa-warning"></i> This rule is used in {{usage.rule.nbOfUsages}} different places.</span>
+        <button class="btn btn-default pull-left" ng-click="close();" ><i class="fa fa-times"></i> Close</button>
         <button class="btn btn-default" ng-click="showDetails =! showDetails"><i class="fa fa-info-circle"></i> Show/hide details</button>
-        <button class="btn btn-danger" ng-show="!readonly" ng-disabled="rule.permissions.delete" ng-click="delete()" ng-if="!!usage.id"><i class="fa"  ng-class="{'fa-gims-loading':isRemoving, 'fa-trash-o':!isRemoving}"></i> Delete</button>
-        <button class="btn btn-primary" ng-show="!readonly" ng-click="save()" ng-disabled="rule.permissions.update || errors.length">
-            <i class="fa" ng-class="{'fa-gims-loading':isSaving, 'fa-check':!isSaving}"></i>
-            <span ng-switch="!!usage.id">
-                <span ng-switch-when="true">Save</span>
-                <span ng-switch-when="false">Create</span>
-            </span>
-        </button>
+        <button class="btn btn-danger" ng-click="delete()" ng-if="!!usage.id && !readonly && usage.rule.permissions.delete"><i class="fa" ng-class="{'fa-gims-loading':isRemoving, 'fa-trash-o':!isRemoving}"></i> Delete</button>
+
+        <div class="btn-group dropup" ng-if="!readonly">
+            <button class="btn btn-primary" ng-click="save()" ng-if="!usage.id" ng-disabled="usage.rule.permissions.create || errors.length">
+                <i class="fa" ng-class="{'fa-gims-loading':isSaving, 'fa-check':!isSaving}"></i>
+                Create
+            </button>
+            <!-- if update permission, save usage-->
+            <button class="btn btn-primary" ng-click="save()" ng-if="usage.rule.permissions.update" ng-disabled="errors.length">
+                <i class="fa" ng-class="{'fa-gims-loading':isSaving, 'fa-check':!isSaving}"></i>
+                Save
+            </button>
+            <!-- if no update permissions, create new usage for questionnaire -->
+            <button class="btn btn-primary" ng-click="saveDuplicate()" ng-if="!usage.rule.permissions.update && usage.permissions.update" ng-disabled="errors.length">
+                <i class="fa" ng-class="{'fa-gims-loading':isSaving, 'fa-check':!isSaving}"></i>
+                Save for this questionnaire
+            </button>
+
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" ng-if="">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu" ng-if="">
+                <li><a href>Dropdown link</a></li>
+            </ul>
+        </div>
+
     </div>
 </div>
