@@ -63,14 +63,4 @@ class QuestionnaireUsage extends AbstractQuestionnaireUsage
         ));
     }
 
-    /**
-     * Returns role contexts, which are all related questionnaires
-     * @param string $action
-     * @return \Application\Service\RoleContextInterface
-     */
-    public function getRoleContext($action)
-    {
-        return $this->getQuestionnaire() ? $this->getQuestionnaire() : null;
-    }
-
 }

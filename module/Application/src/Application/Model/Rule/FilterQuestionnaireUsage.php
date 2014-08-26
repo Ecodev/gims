@@ -119,14 +119,4 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
         return (bool) $this->isSecondLevel;
     }
 
-    /**
-     * Returns role contexts, which are all related questionnaires
-     * @param string $action
-     * @return \Application\Service\RoleContextInterface
-     */
-    public function getRoleContext($action)
-    {
-        return $this->getQuestionnaire() ? $this->getQuestionnaire() : null;
-    }
-
 }
