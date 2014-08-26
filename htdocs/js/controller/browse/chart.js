@@ -23,21 +23,11 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     }, function() {
         $scope.returnUrl = $location.search().returnUrl;
         $scope.currentUrl = encodeURIComponent($location.url());
-
-        var overridable = $location.search().overridable ? $location.search().overridable : null;
-        if (overridable) {
-            $scope.panelTabs.overridable = overridable;
-        }
-
-        var target = $location.search().target ? $location.search().target : null;
-        if (target) {
-            $scope.panelTabs.target = target;
-        }
-
     });
 
     // Reload panel if exists in URL
-    var panel = $location.search().panel;
+    var originalUrlParameters = _.cloneDeep($location.search());
+    var panel = originalUrlParameters.panel;
     if (panel) {
         $scope.panelOpened = true;
         $scope.activeTab[panel] = true;
@@ -171,9 +161,23 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * ChartObj is not used because addSeries() function dont save customized attributes like id, isAdjusted, isIgnored.
      * Use chart.series because all data is kept as submitted.
      */
+    var firstLoad = true;
     $rootScope.$on('gims-chart-modified', function(event, chart) {
         $scope.chart = _.cloneDeep(chart);
         $scope.chart.hasAdjustedLines = hasAdjustedLines($scope.chart);
+
+        // Reload projection if exists in original URL
+        if (firstLoad && $scope.chart.series.length) {
+            firstLoad = false;
+            $scope.panelTabs.reference = originalUrlParameters.reference;
+            $scope.panelTabs.target = originalUrlParameters.target;
+            $scope.panelTabs.overridable = originalUrlParameters.overridable;
+
+            if (originalUrlParameters.reference && originalUrlParameters.target && originalUrlParameters.overridable) {
+                refreshAlternativeSeries(null, false);
+            }
+        }
+
     });
 
     /**************************************************************************/
