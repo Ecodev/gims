@@ -1,15 +1,16 @@
 <?php
 
-namespace Application\Service\Syntax;
+namespace Application\Service\Syntax\BeforeRegression;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Service\Calculator\Calculator;
 use Application\Model\Rule\AbstractQuestionnaireUsage;
+use Application\Service\Syntax\Parser;
 
 /**
  * Replace {F#12,Q#34} with Question name, or NULL if no Question/Answer
  */
-class QuestionName extends AbstractBasicToken
+class QuestionName extends AbstractToken
 {
 
     public function getPattern()

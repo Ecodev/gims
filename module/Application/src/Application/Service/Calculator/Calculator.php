@@ -99,7 +99,7 @@ class Calculator extends AbstractCalculator
         if ($questionnaires) {
             $filterGeonameUsage = $this->getFilterGeonameUsageRepository()->getFirst(reset($questionnaires)->getGeoname()->getId(), $filterId, $partId, $alreadyUsedRules);
             if ($filterGeonameUsage) {
-                $oneYearResult = $this->computeFormulaRegression($filterGeonameUsage->getRule(), $year, $years, $filterId, $questionnaires, $partId, $alreadyUsedRules);
+                $oneYearResult = $this->computeFormulaAfterRegression($filterGeonameUsage->getRule(), $year, $years, $filterId, $questionnaires, $partId, $alreadyUsedRules);
                 $this->cacheComputeFlattenOneYearWithFormula[$key] = $oneYearResult;
 
                 _log()->debug(__METHOD__, array($filterId, $partId, $year, $oneYearResult));
@@ -341,7 +341,7 @@ class Calculator extends AbstractCalculator
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return null|float
      */
-    public function computeFormulaRegression(Rule $rule, $year, array $years, $currentFilterId, array $questionnaires, $currentPartId, ArrayCollection $alreadyUsedRules = null)
+    public function computeFormulaAfterRegression(Rule $rule, $year, array $years, $currentFilterId, array $questionnaires, $currentPartId, ArrayCollection $alreadyUsedRules = null)
     {
         if (!$alreadyUsedRules) {
             $alreadyUsedRules = new ArrayCollection();
@@ -349,7 +349,7 @@ class Calculator extends AbstractCalculator
         $alreadyUsedRules->add($rule);
 
         $originalFormula = $rule->getFormula();
-        $convertedFormula = $this->getParser()->convertRegression($this, $originalFormula, $currentFilterId, $questionnaires, $currentPartId, $year, $years, $alreadyUsedRules);
+        $convertedFormula = $this->getParser()->convertAfterRegression($this, $originalFormula, $currentFilterId, $questionnaires, $currentPartId, $year, $years, $alreadyUsedRules);
         $result = $this->getParser()->computeExcelFormula($convertedFormula);
 
         _log()->debug(__METHOD__, array($currentFilterId, $currentPartId, $year, $rule->getId(), $rule->getName(), $originalFormula, $convertedFormula, $result));

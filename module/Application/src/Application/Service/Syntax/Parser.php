@@ -24,34 +24,34 @@ use \Application\Traits\EntityManagerAware;
     /**
      * @var array
      */
-    private $basics;
+    private $beforeRegressions;
 
     /**
      * @var array
      */
-    private $regressions;
+    private $afterRegressions;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->basics = [
-            new FilterValue(),
-            new QuestionName(),
-            new QuestionnaireUsageValue(),
-            new PopulationValue(),
-            new BasicSelf(),
-            new FilterValueAfterRegression(),
-            new FilterValuesList(),
+        $this->beforeRegressions = [
+            new BeforeRegression\FilterValue(),
+            new BeforeRegression\QuestionName(),
+            new BeforeRegression\QuestionnaireUsageValue(),
+            new BeforeRegression\PopulationValue(),
+            new BeforeRegression\SelfToken(),
+            new BeforeRegression\FilterValueAfterRegression(),
+            new BeforeRegression\FilterValuesList(),
         ];
 
-        $this->regressions = [
-            new RegressionFilterValuesList(),
-            new RegressionFilterValue(),
-            new RegressionCumulatedPopulation(),
-            new RegressionSelf(),
-            new RegressionYear(),
+        $this->afterRegressions = [
+            new AfterRegression\FilterValuesList(),
+            new AfterRegression\FilterValue(),
+            new AfterRegression\CumulatedPopulation(),
+            new AfterRegression\SelfToken(),
+            new AfterRegression\Year(),
         ];
     }
 
@@ -236,25 +236,25 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
-     * Get an array of basic tokens
-     * @return AbstractBasicToken[]
+     * Get an array of tokens to be used before regression
+     * @return BeforeRegression\AbstractToken[]
      */
-    public function getBasicTokens()
+    public function getBeforeRegressionTokens()
     {
-        return $this->basics;
+        return $this->beforeRegressions;
     }
 
     /**
-     * Get an array of basic tokens
-     * @return AbstractRegressionToken[]
+     * Get an array of tokens to be used after regression
+     * @return AfterRegression\AbstractToken[]
      */
-    public function getRegressionTokens()
+    public function getAfterRegressionTokens()
     {
-        return $this->regressions;
+        return $this->afterRegressions;
     }
 
     /**
-     * Convert the given GIMS formula into an Excel formula by using basic tokens
+     * Convert the given GIMS formula into an Excel formula by using before regression tokens
      * @param \Application\Service\Calculator\Calculator $calculator
      * @param string $formula GIMS formula
      * @param \Application\Model\Rule\AbstractQuestionnaireUsage $usage
@@ -262,9 +262,9 @@ use \Application\Traits\EntityManagerAware;
      * @param boolean $useSecondLevelRules
      * @return string
      */
-    public function convertBasic(Calculator $calculator, $formula, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules)
+    public function convertBeforeRegression(Calculator $calculator, $formula, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules)
     {
-        foreach ($this->basics as $token) {
+        foreach ($this->getBeforeRegressionTokens() as $token) {
             $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token, $calculator, $usage, $alreadyUsedFormulas, $useSecondLevelRules) {
                         return $token->replace($calculator, $matches, $usage, $alreadyUsedFormulas, $useSecondLevelRules);
                     }, $formula);
@@ -274,7 +274,7 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
-     * Convert the given GIMS formula into an Excel formula by using regression tokens
+     * Convert the given GIMS formula into an Excel formula by using after regression tokens
      * @param \Application\Service\Calculator\Calculator $calculator
      * @param string $formula GIMS formula
      * @param itneger $currentFilterId
@@ -285,9 +285,9 @@ use \Application\Traits\EntityManagerAware;
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return string
      */
-    public function convertRegression(Calculator $calculator, $formula, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
+    public function convertAfterRegression(Calculator $calculator, $formula, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
     {
-        foreach ($this->regressions as $token) {
+        foreach ($this->getAfterRegressionTokens() as $token) {
             $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token, $calculator, $currentFilterId, $questionnaires, $currentPartId, $year, $years, $alreadyUsedRules) {
                         return $token->replace($calculator, $matches, $currentFilterId, $questionnaires, $currentPartId, $year, $years, $alreadyUsedRules);
                     }, $formula);
@@ -326,7 +326,7 @@ use \Application\Traits\EntityManagerAware;
         $tokenStructures = [];
 
         // First gather all token structures and replace the token with a reference to its structure
-        foreach (array_merge($this->getBasicTokens(), $this->getRegressionTokens()) as $token) {
+        foreach (array_merge($this->getBeforeRegressionTokens(), $this->getAfterRegressionTokens()) as $token) {
             $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token, &$tokenStructures, $splitter) {
 
                         $key = '::TOKEN_' . count($tokenStructures) . '::';

@@ -1,14 +1,15 @@
 <?php
 
-namespace Application\Service\Syntax;
+namespace Application\Service\Syntax\AfterRegression;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Service\Calculator\Calculator;
+use Application\Service\Syntax\Parser;
 
 /**
  * Replace {Q#all,P#12} with cumulated population
  */
-class RegressionCumulatedPopulation extends AbstractRegressionToken
+class CumulatedPopulation extends AbstractToken
 {
 
     public function getPattern()

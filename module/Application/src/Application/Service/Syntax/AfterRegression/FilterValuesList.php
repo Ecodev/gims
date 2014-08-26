@@ -1,15 +1,15 @@
 <?php
 
-namespace Application\Service\Syntax;
+namespace Application\Service\Syntax\AfterRegression;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Service\Calculator\Calculator;
-use Application\Model\Rule\AbstractQuestionnaireUsage;
+use Application\Service\Syntax\Parser;
 
 /**
  * Replace {F#12,Q#all} with a list of Filter values for all questionnaires
  */
-class FilterValuesList extends AbstractBasicToken
+class FilterValuesList extends AbstractToken
 {
 
     public function getPattern()
@@ -17,12 +17,11 @@ class FilterValuesList extends AbstractBasicToken
         return '/\{F#(\d+|current),Q#all\}/';
     }
 
-    public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules)
+    public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
     {
-        $filterId = $this->getFilterId($matches[1], $usage);
+        $filterId = $this->getId($matches[1], $currentFilterId);
 
-        $questionnaires = $calculator->getQuestionnaireRepository()->getAllForComputing($usage->getQuestionnaire()->getGeoname());
-        $data = $calculator->computeFilterForAllQuestionnaires($filterId, $questionnaires, $usage->getPart()->getId());
+        $data = $calculator->computeFilterForAllQuestionnaires($filterId, $questionnaires, $currentPartId);
 
         $values = array();
         foreach ($data['values'] as $v) {

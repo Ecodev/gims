@@ -294,7 +294,7 @@ use \Application\Traits\EntityManagerAware;
         if ($useSecondLevelRules) {
             $filterQuestionnaireUsage = $this->getFilterQuestionnaireUsageRepository()->getFirst($questionnaireId, $filterId, $partId, $useSecondLevelRules, $alreadyUsedFormulas);
             if ($filterQuestionnaireUsage) {
-                return $this->computeFormulaBasic($filterQuestionnaireUsage, $alreadyUsedFormulas, $useSecondLevelRules);
+                return $this->computeFormulaBeforeRegression($filterQuestionnaireUsage, $alreadyUsedFormulas, $useSecondLevelRules);
             }
         }
 
@@ -308,7 +308,7 @@ use \Application\Traits\EntityManagerAware;
         // If the filter has a formula, returns its value
         $filterQuestionnaireUsage = $this->getFilterQuestionnaireUsageRepository()->getFirst($questionnaireId, $filterId, $partId, false, $alreadyUsedFormulas);
         if ($filterQuestionnaireUsage) {
-            return $this->computeFormulaBasic($filterQuestionnaireUsage, $alreadyUsedFormulas, $useSecondLevelRules);
+            return $this->computeFormulaBeforeRegression($filterQuestionnaireUsage, $alreadyUsedFormulas, $useSecondLevelRules);
         }
 
         // First, attempt to sum summands
@@ -355,7 +355,7 @@ use \Application\Traits\EntityManagerAware;
      * @param boolean $useSecondLevelRules
      * @return null|float
      */
-    public function computeFormulaBasic(AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas = null, $useSecondLevelRules = false)
+    public function computeFormulaBeforeRegression(AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas = null, $useSecondLevelRules = false)
     {
         if (!$alreadyUsedFormulas) {
             $alreadyUsedFormulas = new ArrayCollection();
@@ -363,7 +363,7 @@ use \Application\Traits\EntityManagerAware;
         $alreadyUsedFormulas->add($usage);
 
         $originalFormula = $usage->getRule()->getFormula();
-        $convertedFormula = $this->getParser()->convertBasic($this, $originalFormula, $usage, $alreadyUsedFormulas, $useSecondLevelRules);
+        $convertedFormula = $this->getParser()->convertBeforeRegression($this, $originalFormula, $usage, $alreadyUsedFormulas, $useSecondLevelRules);
         $result = $this->getParser()->computeExcelFormula($convertedFormula);
 
         _log()->debug(__METHOD__, array($usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormula, $result));

@@ -956,7 +956,7 @@ STRING;
 
                     // If the high filter has some hardcoded formula, import them as well
                     if (isset($filterData['rule'])) {
-                        $formula = $this->replaceHighFilterNamesWithIdForBasic($filters, $filterData['rule']);
+                        $formula = $this->replaceHighFilterNamesWithIdForBeforeRegression($filters, $filterData['rule']);
                         $rule = $this->getRule(($this->sheet->getTitle() == 'Tables_W' ? 'Water - ' : 'Sanitation - ') . $filterName, $formula);
                         $this->getFilterQuestionnaireUsage($highFilter, $questionnaire, $rule, $part);
                     }
@@ -1136,7 +1136,7 @@ STRING;
                     }
 
                     // Translate our custom import syntax into real GIMS syntax
-                    $formula = $this->replaceHighFilterNamesWithIdForRegression($filters, $formula);
+                    $formula = $this->replaceHighFilterNamesWithIdForAfterRegression($filters, $formula);
 
                     $suffix = ' (' . $actualFormulaGroup . ( $isDevelopedFormula ? ' - for developed countries' : '') . ')';
                     $rule = $this->getRule('Regression: ' . $highFilter->getName() . $suffix, $formula);
@@ -1155,7 +1155,7 @@ STRING;
      * @param string $formula
      * @return string
      */
-    private function replaceHighFilterNamesWithIdForRegression(array $filters, $formula)
+    private function replaceHighFilterNamesWithIdForAfterRegression(array $filters, $formula)
     {
         if ($this->filterForRatio) {
             $id = $this->filterForRatio->getId();
@@ -1185,7 +1185,7 @@ STRING;
      * @param string $formula
      * @return string
      */
-    private function replaceHighFilterNamesWithIdForBasic(array $filters, $formula)
+    private function replaceHighFilterNamesWithIdForBeforeRegression(array $filters, $formula)
     {
         foreach ($filters as $filterNameOther => $foo) {
             $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
@@ -1241,8 +1241,8 @@ STRING;
         $regexp = '-(' . join('|', $this->ratioSynonyms) . ')-i';
 
         // Create unique rules for everybody
-        $formulaImproved = $this->replaceHighFilterNamesWithIdForBasic($filters, '=Improved + sharedREGRESSION * (100% - AVERAGE({F#' . $this->filterForRatio->getId() . ',Q#all}))');
-        $formulaShared = $this->replaceHighFilterNamesWithIdForBasic($filters, '=Improved + sharedREGRESSION * AVERAGE({F#' . $this->filterForRatio->getId() . ',Q#all}))');
+        $formulaImproved = $this->replaceHighFilterNamesWithIdForBeforeRegression($filters, '=Improved + sharedREGRESSION * (100% - AVERAGE({F#' . $this->filterForRatio->getId() . ',Q#all}))');
+        $formulaShared = $this->replaceHighFilterNamesWithIdForBeforeRegression($filters, '=Improved + sharedREGRESSION * AVERAGE({F#' . $this->filterForRatio->getId() . ',Q#all}))');
         $ruleImproved = $this->getRule('Improved, based on average of shared ratios', $formulaImproved);
         $ruleShared = $this->getRule('Shared, based on average of shared ratios', $formulaShared);
 

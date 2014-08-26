@@ -420,7 +420,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 ));
 
                 if ($usage instanceof \Application\Model\Rule\QuestionnaireUsage) {
-                    $value = $this->getCalculator()->computeFormulaBasic($usage);
+                    $value = $this->getCalculator()->computeFormulaBeforeRegression($usage);
                     $roundedValue = Utility::decimalToRoundedPercent($value);
                     $extractedUsage['value'] = $roundedValue;
                 }

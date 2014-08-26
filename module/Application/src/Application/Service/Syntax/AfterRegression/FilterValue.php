@@ -1,14 +1,15 @@
 <?php
 
-namespace Application\Service\Syntax;
+namespace Application\Service\Syntax\AfterRegression;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Service\Calculator\Calculator;
+use Application\Service\Syntax\Parser;
 
 /**
  * Replace {F#12,P#34,Y+0} with Filter regression value
  */
-class RegressionFilterValue extends AbstractRegressionToken
+class FilterValue extends AbstractToken
 {
 
     public function getPattern()

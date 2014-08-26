@@ -45,31 +45,31 @@ class RuleTest extends \ApplicationTest\Controller\AbstractController
         $this->assertArrayHasKey(Rule::MIXED_TOKENS, $validator->getMessages());
 
         $rule->setFormula('={F#12,Q#34,P#56} + {self}');
-        $this->assertTrue($validator->isValid($rule), 'Self syntax can be used with basic tokens');
+        $this->assertTrue($validator->isValid($rule), 'Self syntax can be used with before regression tokens');
 
         $rule->setFormula('={self} + {Y}');
-        $this->assertTrue($validator->isValid($rule), 'Self syntax can be used with regression tokens');
+        $this->assertTrue($validator->isValid($rule), 'Self syntax can be used with after regression tokens');
 
         $rule1 = new \Application\Model\Rule\Rule('tst rule');
         $usage1 = new \Application\Model\Rule\FilterGeonameUsage();
         $usage1->setRule($rule1);
         $rule1->setFormula('={F#12,Q#34,P#56}');
         $this->assertFalse($validator->isValid($rule1), 'Non-regression token cannot be used if rule is used in regression context');
-        $this->assertArrayHasKey(Rule::BASIC_WITH_REGRESSION, $validator->getMessages());
+        $this->assertArrayHasKey(Rule::BEFORE_WITH_AFTER_REGRESSION, $validator->getMessages());
 
         $rule2 = new \Application\Model\Rule\Rule('tst rule');
         $usage2 = new \Application\Model\Rule\FilterQuestionnaireUsage();
         $usage2->setRule($rule2);
         $rule2->setFormula('={Y}');
         $this->assertFalse($validator->isValid($rule2), 'Regression token cannot be used if Rule is used in non-regression context');
-        $this->assertArrayHasKey(Rule::REGRESSION_WITH_BASIC, $validator->getMessages());
+        $this->assertArrayHasKey(Rule::AFTER_WITH_BEFORE_REGRESSION, $validator->getMessages());
 
         $rule3 = new \Application\Model\Rule\Rule('tst rule');
         $usage3 = new \Application\Model\Rule\QuestionnaireUsage();
         $usage3->setRule($rule3);
         $rule3->setFormula('={Y}');
         $this->assertFalse($validator->isValid($rule3), 'Regression token cannot be used if Rule is used in non-regression context');
-        $this->assertArrayHasKey(Rule::REGRESSION_WITH_BASIC, $validator->getMessages());
+        $this->assertArrayHasKey(Rule::AFTER_WITH_BEFORE_REGRESSION, $validator->getMessages());
     }
 
 }

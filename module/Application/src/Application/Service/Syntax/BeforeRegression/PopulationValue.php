@@ -1,15 +1,16 @@
 <?php
 
-namespace Application\Service\Syntax;
+namespace Application\Service\Syntax\BeforeRegression;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Service\Calculator\Calculator;
 use Application\Model\Rule\AbstractQuestionnaireUsage;
+use Application\Service\Syntax\Parser;
 
 /**
  * Replace {Q#34,P#56} with population data
  */
-class PopulationValue extends AbstractBasicToken
+class PopulationValue extends AbstractToken
 {
 
     public function getPattern()

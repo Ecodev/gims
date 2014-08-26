@@ -1,11 +1,11 @@
 <?php
 
-namespace Application\Service\Syntax;
+namespace Application\Service\Syntax\AfterRegression;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Service\Calculator\Calculator;
 
-abstract class AbstractRegressionToken extends AbstractToken
+abstract class AbstractToken extends \Application\Service\Syntax\AbstractToken
 {
 
     /**

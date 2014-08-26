@@ -554,7 +554,7 @@ class RegressionCalculatorTest extends AbstractCalculator
      * Return formula and configurator for mockCalculator
      * @return array
      */
-    public function computeFormulaRegressionProvider()
+    public function computeFormulaAfterRegressionProvider()
     {
         return array(
             array('={F#345,P#current,Y0}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId) {
@@ -611,9 +611,9 @@ class RegressionCalculatorTest extends AbstractCalculator
     }
 
     /**
-     * @dataProvider computeFormulaRegressionProvider
+     * @dataProvider computeFormulaAfterRegressionProvider
      */
-    public function testcomputeFormulaRegression($formula, $configurator)
+    public function testcomputeFormulaAfterRegression($formula, $configurator)
     {
         $rule = new \Application\Model\Rule\Rule();
         $rule->setFormula($formula);
@@ -627,10 +627,10 @@ class RegressionCalculatorTest extends AbstractCalculator
         $mockedCalculator = $this->getMock('\Application\Service\Calculator\Calculator', array('computeFlattenOneYearWithFormula', 'computeFilterForAllQuestionnaires'));
         $configurator($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId);
 
-        $mockedCalculator->computeFormulaRegression($rule, $year, $years, $currentFilterId, $questionnaires, $partId);
+        $mockedCalculator->computeFormulaAfterRegression($rule, $year, $years, $currentFilterId, $questionnaires, $partId);
     }
 
-    public function testcomputeFormulaRegressionReturnsYear()
+    public function testcomputeFormulaAfterRegressionReturnsYear()
     {
         $rule = new \Application\Model\Rule\Rule();
         $rule->setFormula('={Y}');
@@ -640,7 +640,7 @@ class RegressionCalculatorTest extends AbstractCalculator
         $questionnaires = $this->questionnaires;
         $partId = 4;
 
-        $result = $this->service->computeFormulaRegression($rule, $year, $years, $currentFilterId, $questionnaires, $partId);
+        $result = $this->service->computeFormulaAfterRegression($rule, $year, $years, $currentFilterId, $questionnaires, $partId);
 
         $this->assertEquals($year, $result, 'should return the current year');
     }

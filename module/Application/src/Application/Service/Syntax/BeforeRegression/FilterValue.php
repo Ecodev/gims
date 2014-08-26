@@ -1,15 +1,16 @@
 <?php
 
-namespace Application\Service\Syntax;
+namespace Application\Service\Syntax\BeforeRegression;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Service\Calculator\Calculator;
 use Application\Model\Rule\AbstractQuestionnaireUsage;
+use Application\Service\Syntax\Parser;
 
 /**
  * Replace {F#12,Q#34,P#56} with Filter value
  */
-class FilterValue extends AbstractBasicToken
+class FilterValue extends AbstractToken
 {
 
     public function getPattern()

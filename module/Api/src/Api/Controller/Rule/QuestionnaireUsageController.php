@@ -32,7 +32,7 @@ class QuestionnaireUsageController extends AbstractChildRestfulController
                     $result[$partId][$ruleName]['name'] = $ruleName;
                 }
 
-                $value = $calculator->computeFormulaBasic($usage);
+                $value = $calculator->computeFormulaBeforeRegression($usage);
                 $roundedValue = Utility::decimalToRoundedPercent($value);
 
                 $hydrator = new Hydrator();

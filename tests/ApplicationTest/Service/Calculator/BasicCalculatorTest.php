@@ -141,37 +141,37 @@ class BasicCalculatorTest extends AbstractCalculator
                 ->setFilter($this->filter11);
 
         $rule->setFormula('=(3 + 7) * SUM(2, 3)');
-        $this->assertEquals(50, $service->computeFormulaBasic($filterQuestionnaireUsage), 'should be able to handle standard Excel things');
+        $this->assertEquals(50, $service->computeFormulaBeforeRegression($filterQuestionnaireUsage), 'should be able to handle standard Excel things');
 
         // Filter values
         $rule->setFormula('= 10 + {F#2,Q#' . $this->questionnaire->getId() . ',P#' . $this->part1->getId() . '}');
-        $this->assertEquals(10.101, $service->computeFormulaBasic($filterQuestionnaireUsage), 'should be able to refer a Filter value');
+        $this->assertEquals(10.101, $service->computeFormulaBeforeRegression($filterQuestionnaireUsage), 'should be able to refer a Filter value');
 
         $rule->setFormula('= 10 + {F#current,Q#current,P#current}');
-        $this->assertEquals(10.101, $service->computeFormulaBasic($filterQuestionnaireUsage), 'should be able to refer a Filter value with same Questionnaire and Part');
+        $this->assertEquals(10.101, $service->computeFormulaBeforeRegression($filterQuestionnaireUsage), 'should be able to refer a Filter value with same Questionnaire and Part');
 
         $rule->setFormula('= 10 + {F#' . $nullFilter->getId() . ',Q#' . $this->questionnaire->getId() . ',P#' . $this->part1->getId() . '}');
-        $this->assertEquals(10, $service->computeFormulaBasic($filterQuestionnaireUsage), 'should be able to refer a Filter value which is NULL');
+        $this->assertEquals(10, $service->computeFormulaBeforeRegression($filterQuestionnaireUsage), 'should be able to refer a Filter value which is NULL');
 
         // QuestionnaireUsage values
         $rule->setFormula('={R#12,Q#' . $this->questionnaire->getId() . ',P#' . $this->part1->getId() . '}');
-        $this->assertEquals(5, $service->computeFormulaBasic($filterQuestionnaireUsage), 'should be able to refer a QuestionnaireUsage');
+        $this->assertEquals(5, $service->computeFormulaBeforeRegression($filterQuestionnaireUsage), 'should be able to refer a QuestionnaireUsage');
 
         $rule->setFormula('={R#12,Q#current,P#current}');
-        $this->assertEquals(5, $service->computeFormulaBasic($filterQuestionnaireUsage), 'should be able to refer a QuestionnaireUsage with same Questionnaire and Part');
+        $this->assertEquals(5, $service->computeFormulaBeforeRegression($filterQuestionnaireUsage), 'should be able to refer a QuestionnaireUsage with same Questionnaire and Part');
 
         $questionnaireUsage->getRule()->setFormula('=NULL');
         $rule->setFormula('=7 + {R#12,Q#current,P#current}');
-        $this->assertEquals(7, $service->computeFormulaBasic($filterQuestionnaireUsage), 'should be able to refer a QuestionnaireUsage which is NULL');
+        $this->assertEquals(7, $service->computeFormulaBeforeRegression($filterQuestionnaireUsage), 'should be able to refer a QuestionnaireUsage which is NULL');
 
         // Non-existing question names
         $rule->setFormula('={F#12,Q#' . $this->questionnaire->getId() . '}');
-        $this->assertNull($service->computeFormulaBasic($filterQuestionnaireUsage), 'refering a non-existing Question name, returns null');
+        $this->assertNull($service->computeFormulaBeforeRegression($filterQuestionnaireUsage), 'refering a non-existing Question name, returns null');
 
         // Question names with double quotes
         $this->question131->setName('question with "double quotes"');
         $rule->setFormula('=ISTEXT({F#' . $this->filter131->getId() . ',Q#' . $this->questionnaire->getId() . '})');
-        $this->assertTrue($service->computeFormulaBasic($filterQuestionnaireUsage), 'should be able to refer a Question name');
+        $this->assertTrue($service->computeFormulaBeforeRegression($filterQuestionnaireUsage), 'should be able to refer a Question name');
     }
 
     public function testFormulaSyntaxSelf()
@@ -185,7 +185,7 @@ class BasicCalculatorTest extends AbstractCalculator
                 ->setPart($this->part1);
 
         $rule->setFormula('={self}');
-        $this->assertEquals(0.1111, $this->getNewCalculator()->computeFormulaBasic($fitlerRule), 'should fallback to filter value without any formulas');
+        $this->assertEquals(0.1111, $this->getNewCalculator()->computeFormulaBeforeRegression($fitlerRule), 'should fallback to filter value without any formulas');
 
         // Same result as above, but with different use of our API
         $this->assertEquals(0.1111, $this->getNewCalculator()->computeFilter($this->filter1->getId(), $this->questionnaire->getId(), $this->part1->getId()), 'should fallback to filter value without any formulas');

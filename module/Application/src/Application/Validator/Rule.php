@@ -7,8 +7,8 @@ class Rule extends \Zend\Validator\AbstractValidator
 
     const START_EQUAL = 'startEqual';
     const MIXED_TOKENS = 'mixedTokens';
-    const BASIC_WITH_REGRESSION = 'basicWithRegression';
-    const REGRESSION_WITH_BASIC = 'regressionWithBasic';
+    const BEFORE_WITH_AFTER_REGRESSION = 'beforeWithAfterRegression';
+    const AFTER_WITH_BEFORE_REGRESSION = 'afterWithBeforeRegression';
     const INVALID_SYNTAX = 'invalidSyntax';
 
     /**
@@ -18,9 +18,9 @@ class Rule extends \Zend\Validator\AbstractValidator
      */
     protected $messageTemplates = array(
         self::START_EQUAL => 'Formula must start with an equal sign "=".',
-        self::MIXED_TOKENS => 'Both kind of tokens cannot be mixed. Use either only Basic or only Regression tokens.',
-        self::BASIC_WITH_REGRESSION => 'Basic tokens cannot be used because the Rule is already in use in Regression context (applied to a filter-country).',
-        self::REGRESSION_WITH_BASIC => 'Regression tokens cannot be used because the Rule is already in use in Basic context (applied to a filter-questionnaire, or a questionnaire).',
+        self::MIXED_TOKENS => 'Both kind of tokens cannot be mixed. Use either only Before Regression or only After Regression tokens.',
+        self::BEFORE_WITH_AFTER_REGRESSION => 'Before Regression tokens cannot be used because the Rule is already in use in After Regression context (applied to a filter-country).',
+        self::AFTER_WITH_BEFORE_REGRESSION => 'After Regression tokens cannot be used because the Rule is already in use in Before Regression context (applied to a filter-questionnaire, or a questionnaire).',
         self::INVALID_SYNTAX => 'Formula syntax is invalid and cannot be computed.',
     );
 
@@ -32,12 +32,12 @@ class Rule extends \Zend\Validator\AbstractValidator
     /**
      * @var boolean
      */
-    private $basicTokenUsed = false;
+    private $beforeRegressionTokenUsed = false;
 
     /**
      * @var boolean
      */
-    private $regressionTokenUsed = false;
+    private $afterRegressionTokenUsed = false;
 
     /**
      * Constructor
@@ -57,23 +57,23 @@ class Rule extends \Zend\Validator\AbstractValidator
     {
         $this->setValue($rule);
 
-        $basicUsageCount = $rule->getQuestionnaireUsages()->count() + $rule->getFilterQuestionnaireUsages()->count();
-        $regressionUsageCount = $rule->getFilterGeonameUsages()->count();
+        $beforeRegressionUsageCount = $rule->getQuestionnaireUsages()->count() + $rule->getFilterQuestionnaireUsages()->count();
+        $afterRegressionUsageCount = $rule->getFilterGeonameUsages()->count();
         $convertedFormula = $this->convertDummyValues($rule->getFormula());
 
         if (!is_string($convertedFormula) || strlen($convertedFormula) === 0 || $convertedFormula[0] != '=') {
             $this->error(self::START_EQUAL);
         }
 
-        if ($this->basicTokenUsed && $regressionUsageCount) {
-            $this->error(self::BASIC_WITH_REGRESSION);
+        if ($this->beforeRegressionTokenUsed && $afterRegressionUsageCount) {
+            $this->error(self::BEFORE_WITH_AFTER_REGRESSION);
         }
 
-        if ($this->regressionTokenUsed && $basicUsageCount) {
-            $this->error(self::REGRESSION_WITH_BASIC);
+        if ($this->afterRegressionTokenUsed && $beforeRegressionUsageCount) {
+            $this->error(self::AFTER_WITH_BEFORE_REGRESSION);
         }
 
-        if ($this->basicTokenUsed && $this->regressionTokenUsed) {
+        if ($this->beforeRegressionTokenUsed && $this->afterRegressionTokenUsed) {
             $this->error(self::MIXED_TOKENS);
         }
 
@@ -97,25 +97,25 @@ class Rule extends \Zend\Validator\AbstractValidator
      */
     private function convertDummyValues($formula)
     {
-        $this->regressionTokenUsed = false;
-        $this->basicTokenUsed = false;
+        $this->afterRegressionTokenUsed = false;
+        $this->beforeRegressionTokenUsed = false;
 
-        foreach ($this->parser->getBasicTokens() as $token) {
+        foreach ($this->parser->getBeforeRegressionTokens() as $token) {
             $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token) {
 
-                        if (!$token instanceof \Application\Service\Syntax\BasicSelf && !$token instanceof \Application\Service\Syntax\FilterValueAfterRegression) {
-                            $this->basicTokenUsed = true;
+                        if (!$token instanceof \Application\Service\Syntax\BeforeRegression\SelfToken && !$token instanceof \Application\Service\Syntax\BeforeRegression\FilterValueAfterRegression) {
+                            $this->beforeRegressionTokenUsed = true;
                         }
 
                         return '(1)';
                     }, $formula);
         }
 
-        foreach ($this->parser->getRegressionTokens() as $token) {
+        foreach ($this->parser->getAfterRegressionTokens() as $token) {
             $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token) {
 
-                        if (!$token instanceof \Application\Service\Syntax\RegressionSelf && !$token instanceof \Application\Service\Syntax\RegressionFilterValue) {
-                            $this->regressionTokenUsed = true;
+                        if (!$token instanceof \Application\Service\Syntax\AfterRegression\SelfToken && !$token instanceof \Application\Service\Syntax\AfterRegression\FilterValue) {
+                            $this->afterRegressionTokenUsed = true;
                         }
 
                         return '(1)';

@@ -1,15 +1,16 @@
 <?php
 
-namespace Application\Service\Syntax;
+namespace Application\Service\Syntax\BeforeRegression;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Service\Calculator\Calculator;
 use Application\Model\Rule\AbstractQuestionnaireUsage;
+use Application\Service\Syntax\Parser;
 
 /**
  * Replace {R#12,Q#34,P#56} with QuestionnaireUsage value
  */
-class QuestionnaireUsageValue extends AbstractBasicToken
+class QuestionnaireUsageValue extends AbstractToken
 {
 
     public function getPattern()
@@ -29,7 +30,7 @@ class QuestionnaireUsageValue extends AbstractBasicToken
             throw new \Exception('Reference to non existing QuestionnaireUsage ' . $matches[0] . ' in  Rule#' . $usage->getRule()->getId() . ', "' . $usage->getRule()->getName() . '": ' . $usage->getRule()->getFormula());
         }
 
-        $value = $calculator->computeFormulaBasic($questionnaireUsage, $alreadyUsedFormulas);
+        $value = $calculator->computeFormulaBeforeRegression($questionnaireUsage, $alreadyUsedFormulas);
 
         return is_null($value) ? 'NULL' : $value;
     }

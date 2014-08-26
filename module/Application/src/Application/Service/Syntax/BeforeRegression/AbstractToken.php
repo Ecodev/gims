@@ -1,12 +1,12 @@
 <?php
 
-namespace Application\Service\Syntax;
+namespace Application\Service\Syntax\BeforeRegression;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Service\Calculator\Calculator;
 use Application\Model\Rule\AbstractQuestionnaireUsage;
 
-abstract class AbstractBasicToken extends AbstractToken
+abstract class AbstractToken extends \Application\Service\Syntax\AbstractToken
 {
 
     /**

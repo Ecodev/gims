@@ -50,9 +50,8 @@ structure
 of GIMS syntax is enclosed in ``{}``. Within those delimiters are references to
 various GIMS objects, according to the possibilities described below. Finally,
 as seen above, there are two distinct contexts whose syntaxes cannot be mixed.
-The first basic context is before the regression, and the second context is
-after the
-regression.
+The first context is before the regression, and the second context is
+after the regression.
 
 Where:
 
@@ -73,8 +72,8 @@ the chances to
 share a single rule in many places.
 
 
-Basic context
-^^^^^^^^^^^^^
+Before regression context
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Filter value**
     Reference a filter value.
@@ -119,8 +118,8 @@ Basic context
 
 
 
-Regression context
-^^^^^^^^^^^^^^^^^^
+After regression context
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Cumulated population**
     Reference the cumulated population for all current questionnaires for the
@@ -153,15 +152,12 @@ Both contexts
         {F#12,Q#all}
 
 **Filter value after regression**
-    Reference a Filter regression value for a specific part and year. By
-    default
-    the year is the one currently computed (in basic context: the
+    Reference a Filter regression value for a specific part and year. By default
+    the year is the one currently computed (in before regression context: the
     questionnaire's
-    year, and in regression context: the current year as returned by ``{Y}``).
-    However it is possible to define an offset from that year. To express
-    "1 year
-    earlier" the offset would be -1, and for "3 years later", it would be
-    +3. To
+    year, and in after regression context: the current year as returned by ``{Y}``).
+    However it is possible to define an offset from that year. To express "1 year
+    earlier" the offset would be -1, and for "3 years later", it would be +3. To
     stay on the same year, use an offset of 0.
 
     .. code-block:: lua

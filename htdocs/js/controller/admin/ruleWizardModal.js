@@ -18,7 +18,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
 
     $scope.availableTokens = [
         {
-            group: 'Basic',
+            group: 'Before regression',
             name: 'Filter value',
             description: "Reference a filter value.",
             filter: true,
@@ -32,7 +32,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             }
         },
         {
-            group: 'Basic',
+            group: 'Before regression',
             name: 'Question label',
             description: 'Reference a question label. If the question has no answer, it will return NULL. When used with ISTEXT(), it can be used to detect if an answer exists.',
             filter: true,
@@ -46,7 +46,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             }
         },
         {
-            group: 'Basic',
+            group: 'Before regression',
             name: 'Rule value (Calculations/Estimations/Ratios)',
             description: 'Reference a rule value. Typically used to reference a Calculation, Estimation or Ratio. WARNING: The referenced rule must exist and be applied to the specified questionnaire and part, otherwise computation will fail.',
             filter: false,
@@ -60,7 +60,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             }
         },
         {
-            group: 'Basic',
+            group: 'Before regression',
             name: 'Population value',
             description: 'Reference the population data of the questionnaire\'s country. This is an absolute value expressed in number of persons.',
             filter: false,
@@ -74,7 +74,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             }
         },
         {
-            group: 'Regression',
+            group: 'After regression',
             name: 'List of all filter values',
             description: 'Reference a list of available filter values for all questionnaires. The result use Excel array constant syntax (eg: "{1,2,3}"). This should be used with Excel functions such as COUNT() and AVERAGE().',
             filter: true,
@@ -88,7 +88,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             }
         },
         {
-            group: 'Regression',
+            group: 'After regression',
             name: 'Cumulated population',
             description: 'Reference the cumulated population for all current questionnaires for the specified part.',
             filter: false,
@@ -102,7 +102,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             }
         },
         {
-            group: 'Regression',
+            group: 'After regression',
             name: 'Current year',
             description: 'Reference the year we are currently computing. This may be useful for very exceptional edge cases, but should be avoided as much as possible.',
             filter: false,
@@ -116,7 +116,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             }
         },
         {
-            group: null,
+            group: 'Both',
             name: 'Filter value after regression',
             description: 'Reference a Filter regression value for a specific part and year. The year is defined by the year currently being computed plus a user-defined offset. To express "1 year earlier" the offset would be -1, and for "3 years later", it would be +3. To stay on the same year, use an offset of 0.',
             filter: true,
@@ -131,7 +131,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             }
         },
         {
-            group: null,
+            group: 'Both',
             name: 'Value if this rule is ignored',
             description: 'Reference the value if computed without this rule. It allows to conditionally apply a rule with syntaxes such as "IF(can_apply_my_rule, compute_some_result, {self})".',
             filter: false,
