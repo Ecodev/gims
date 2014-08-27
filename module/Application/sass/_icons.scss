@@ -52,6 +52,10 @@ $fa-font-path: "../lib/fontawesome/fonts";
     @extend .fa-plus;
 }
 
+.fa-gims-add {
+    @extend .fa-plus-circle;
+}
+
 .fa-gims-child {
     @extend .fa-folder;
 }

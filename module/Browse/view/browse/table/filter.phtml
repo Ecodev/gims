@@ -162,7 +162,7 @@
                                 <a class="btn btn-default btn-sm"
                                    ng-click="addQuestionnaire();"
                                    ng-if="mode.isContribute">
-                                    <i class="fa fa-plus-circle"></i> Add new questionnaire
+                                    <i class="fa fa-gims-add"></i> Add new questionnaire
                                 </a>
                             </td>
 
@@ -536,7 +536,7 @@
                             <td>
                             </td>
                             <td ng-repeat="questionnaire in tabs.questionnaires track by $index" style="text-align: center;" >
-                                <a class="btn btn-default btn-sm" href gims-add-usage questionnaire="questionnaire" part="tabs.part"><i class="fa fa-plus-circle"></i> Add a rule</a>
+                                <a class="btn btn-default btn-sm" href gims-add-usage questionnaire="questionnaire" part="tabs.part"><i class="fa fa-gims-add"></i> Add a rule</a>
                             </td>
                         </tr>
 
@@ -545,7 +545,7 @@
                                 <a class="btn btn-default btn-sm"
                                    ng-click="addEquipment();"
                                    ng-class="{'disabled': getFiltersByLevel(0).length != 1}">
-                                    <i class="fa fa-plus-circle"></i> Add new facility
+                                    <i class="fa fa-gims-add"></i> Add new facility
                                 </a>
                             </td>
                         </tr>
