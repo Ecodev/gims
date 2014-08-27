@@ -50,7 +50,7 @@ class Rule extends \Zend\Validator\AbstractValidator
     }
 
     /**
-     * Returns wether the Rule given is valid
+     * Returns whether the Rule given is valid
      * @param \Application\Model\Rule\Rule $rule
      */
     public function isValid($rule)

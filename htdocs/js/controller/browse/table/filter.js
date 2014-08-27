@@ -962,7 +962,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     };
 
     /**
-     * Returns wether the special Exclude rule exists in the given usage
+     * Returns whether the special Exclude rule exists in the given usage
      * @param {array} usages
      * @returns {boolean}
      */

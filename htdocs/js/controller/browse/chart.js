@@ -144,7 +144,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     });
 
     /**
-     * Returns wether the chart has at least one adjusted line
+     * Returns whether the chart has at least one adjusted line
      * @param {chart} chart
      * @returns {boolean}
      */

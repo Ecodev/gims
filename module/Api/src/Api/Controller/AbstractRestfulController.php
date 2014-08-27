@@ -72,7 +72,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     }
 
     /**
-     * Returns wether client asked to do only validation
+     * Returns whether client asked to do only validation
      * @return boolean
      */
     protected function isOnlyValidation()
@@ -307,7 +307,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     /**
      * Paginate an array of objects according to GET parameters
      * @param array $objects
-     * @param boolean $dehydrate wether we should dehydrate objects
+     * @param boolean $dehydrate whether we should dehydrate objects
      * @return array pagination metata, and a subset of objects (optionnaly extracted by Hydrator)
      */
     protected function paginate(array $objects, $dehydrate = true)
