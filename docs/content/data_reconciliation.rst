@@ -56,7 +56,7 @@ and the click on the :guilabel:`Back` button [4] to view the updated chart.
 
 If the user would like to enter more detailed data, he can simply add the
 filter's children by [1] clicking on the selection button and then choosing
- the desired filter [2].
+the desired filter [2].
 
 .. image:: img/data_reconciliation1c.png
     :width: 100%

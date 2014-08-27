@@ -60,7 +60,7 @@ Where:
 * ``P`` = :term:`Part`
 * ``R`` = :term:`Rule`
 * ``L`` = Level, only two possibilities: absent, or exactly "L#2" to indicate
-Level 2
+    Level 2
 * ``Y`` = Year offset
 
 ``F``, ``Q`` and ``P``, can have the value ``current`` instead of a specific

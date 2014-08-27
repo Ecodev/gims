@@ -23,7 +23,7 @@ Those optional customization points are shown in orange on the illustration.
 .. _step1:
 
 Step 1 - Completing filter values
---------------------------------
+---------------------------------
 
 The first step of computation is to complete filter values, as much as possible,
 based on the value entered by the user for other filters. So if the user entered
@@ -91,7 +91,7 @@ regression.
 According to statistics from previous step, we will use Excel function
 ``AVERAGE()`` if we don't have much data, or ``FORECAST()`` if we have enough
 significant data. More details about edge cases are available in GIMS
-`source code <https://github.com/Ecodev/gims/blob/master/module/Application/src/Application/Service/Calculator/Calculator.php#L231>`_.
+`source code <https://github.com/Ecodev/gims/blob/master/module/Application/src/Application/Service/Calculator/Calculator.php#L231>`__.
 
 The result of this computation step is the equivalent of the tables on the right
 of sheet *Estimates* in former Excel country files. In GIMS, it is not available,
@@ -101,13 +101,13 @@ since it is only an intermediary result.
 .. _step4:
 
 Step 4 - Flattening regression
------------------------------
+------------------------------
 
 Finally the last step is to *standardize* the regression. First we will enforce
 all values between 0% and 100% (internally 0.00 and 1.00). Then we will try to
 project in the past and in the future, if the data are good or bad enough. This
 is what cause the horizontal parts of trend lines in chart. See
-`source code <https://github.com/Ecodev/gims/blob/master/module/Application/src/Application/Service/Calculator/Calculator.php#L126>`_ for details.
+`source code <https://github.com/Ecodev/gims/blob/master/module/Application/src/Application/Service/Calculator/Calculator.php#L126>`__ for details.
 
 This is also the last opportunity to use rules to customize results. In this
 case the rules are applied **per country**. They can be used to say, again,

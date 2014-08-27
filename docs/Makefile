@@ -66,7 +66,7 @@ images: $(PDFs)
 
 clean:
 	rm -rf $(BUILDDIR)/*
-	rm $(PDFs)
+	rm -f $(PDFs)
 
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html

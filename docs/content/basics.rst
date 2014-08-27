@@ -12,14 +12,14 @@ GIMS has three main sections on top of the **"About"** page and the **"Help"** s
     :alt: Browse section
 
 * **Contribute** requires that you :ref:`sign-in`. You can then provide an
-  input for the :ref:`questionnaires` that are made available to you.
+  input for the :ref:`questionnaires<DI questionnaires>` that are made available to you.
 
 .. image:: img/contribute.png
     :width: 100%
     :alt: Contribute section
 
 * **Admin** requires that you :ref:`sign-in`. From here, you can conduct your
-  own :ref:`survey` and decide to keep the data private if you wish… This
+  own :ref:`survey <DI survey>` and decide to keep the data private if you wish… This
   is also the starting point to manage users as well as filters, filter-sets
   and rules.
 
@@ -46,7 +46,7 @@ Register or Sign in
 -------------------
 
 If you have no user account yet, fill in the fields in the "Register" column
-[1]. You will be able to complete your :doc:`users account <users>` in a
+[1]. You will be able to complete your :doc:`users account <user>` in a
 second stage.
 
 If you already have a user account, simply sign in with your email and password
