@@ -60,11 +60,16 @@ Glossary
         questionnaire.
 
     rule
-        A rule is a way to customize computing with handcrafted formulas.
+        A rule is a way to customize computing with handcrafted formulas. See
+        :doc:`detailed description <rule>`.
 
     survey
         A list of questions to be distributed to several countries in the
         form of questionnaires.
+
+    summand
+        Summands are a user-defined list of filters which are summed to compute
+        the value of a specific filter
 
     validator
         Person given the access rights to validate the answers filled in

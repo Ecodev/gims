@@ -1,7 +1,8 @@
 Rule
 ====
 
-Rules provide a way to define custom calculation. One rule is defined by its
+Rules provide a way to define custom calculation during the
+:doc:`computing process<computing>`. One rule is defined by its
 formula and can be shared in many places. Rules can be used in three different
 ways:
 
@@ -16,12 +17,11 @@ anything we want.
 
 The second application is used to compute any arbitrary values within a
 questionnaire. Typical usage would be to compute Calculations,
-Estimations and Ratios as done in former JMP Excel country files.
+Estimations and Ratios as done in former Excel country files.
 
-Finally, the third application is used much later in the JMP :doc:`computing
-process<computing>`,
-after the regression step. This can be used to define that values should not be
-higher than 100%. Conceptually it could be something like: ``Other
+Finally, the third application is used much later, after the
+:ref:`regression step <step4>`. This can be used to define that values should
+not be higher than 100%. Conceptually it could be something like: ``Other
 Unimproved`` =
 ``100% - Total improved - Surface water``.
 

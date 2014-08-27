@@ -117,9 +117,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.2045296"
-     inkscape:cx="1809.7282"
-     inkscape:cy="299.32763"
+     inkscape:zoom="1.445033"
+     inkscape:cx="461.86794"
+     inkscape:cy="329.35163"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -210,7 +210,7 @@
          sodipodi:role="line"
          id="tspan4500"
          x="26.391933"
-         y="-200.51428">Calculator::computeFilter()</tspan></text>
+         y="-200.51428">AbstractCalculator::computeFilter()</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
@@ -225,7 +225,7 @@
          sodipodi:role="line"
          id="tspan3210"
          x="-36.798008"
-         y="-135.35088">a ratio of another filter</tspan><tspan
+         y="-135.35088">a custom rule</tspan><tspan
          sodipodi:role="line"
          id="tspan3212"
          x="-36.798008"
@@ -337,7 +337,7 @@
          sodipodi:role="line"
          id="tspan5114"
          x="433.53204"
-         y="-200.51428">Jmp::computeFilterForAllQuestionnaires()</tspan></text>
+         y="-200.51428">Calculator::computeFilterForAllQuestionnaires()</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend)"
        d="M 415.76032,-9.4310956 C 516.61347,-15.079772 575.7796,-144.14227 703.7341,-168.21642"
@@ -575,7 +575,7 @@
          sodipodi:role="line"
          id="tspan5624"
          x="954.50903"
-         y="-200.51428">Jmp::computeRegressionOneYear()</tspan></text>
+         y="-200.51428">Calculator::computeRegressionOneYear()</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend)"
        d="m 935.0538,-168.50251 198.7382,0"
@@ -765,7 +765,7 @@
          sodipodi:role="line"
          id="tspan5955"
          x="1319.7732"
-         y="-200.51428">Jmp::computeFlattenAllYears()</tspan></text>
+         y="-200.51428">Calculator::computeFlattenAllYears()</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Lend)"
        d="m 1282.9996,-168.50251 205.6347,0"
