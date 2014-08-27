@@ -82,6 +82,6 @@ automatically. In addition to that, the code quality is checked with
 
 For an overview of the architecture, see the diagram below.
 
-.. image:: img/architecture.svg
+.. image:: img/architecture.*
     :width: 100%
     :alt: GIMS architecture diagram

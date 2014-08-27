@@ -3,6 +3,7 @@ config/autoload/local.php
 data/cache
 docs/api
 docs/_build
+docs/content/img/*.pdf
 data/logs
 htdocs/css
 htdocs/tmp
