@@ -20,11 +20,14 @@ or different definitions of urban/rural, etc.
 Editing and comparing JMP and NSO data
 --------------------------------------
 
-Also NSO and JMP both measure *outcomes*, data may differ due to different definitions of what is considered improved / unimproved both for water and sanitation.
+Also NSO and JMP both measure *outcomes*, data may differ due to different
+definitions of what is considered improved / unimproved both for water and sanitation.
 
 NSO users can visualize the impact of such modifications via the Browse /
 Charts section by ignoring certain filters and/or questionnaires and seeing
-the impact of this adaptation on the calculated trend line. In the example below, data under "Public tap, standpipe" has been ignored for all questionnaires (see the :ref:`JMPgraphAnalysis` section for basic notions).
+the impact of this adaptation on the calculated trend line. In the example
+below, data under "Public tap, standpipe" has been ignored for all
+questionnaires (see the :ref:`JMPgraphAnalysis` section for basic notions).
 
 .. image:: img/data_reconciliation1.png
     :width: 100%
@@ -41,13 +44,19 @@ NSO users can easily add one or several data sets, if needed, via the "Actions" 
     These new questionnaires will only be visible to their author and the
     users to whom he will give the access rights (see how to give access rights to :doc:`user`)!
 
-By default, the filters shown will correspond to the top level ones displayed on the chart, which might be sufficient if the person only wants to enter a coverage total to see it's impact on the calculated trend line. Click on "Add new questionnaire" [1], enter the data [2], Save new elements [3] and the click on the "Back" button [4] to view the updated chart.
+By default, the filters shown will correspond to the top level ones displayed on
+the chart, which might be sufficient if the person only wants to enter a
+coverage total to see it's impact on the calculated trend line. Click on
+:guilabel:`Add new questionnaire` [1], enter the data [2], Save new elements [3]
+and the click on the :guilabel:`Back` button [4] to view the updated chart.
 
 .. image:: img/data_reconciliation1b.png
     :width: 100%
     :alt: Editing data in a simplified table view
 
-If the user would like to enter more detailed data, he can simply add the filter's children by [1] clicking on the selection button and then choosing the desired filter [2].
+If the user would like to enter more detailed data, he can simply add the
+filter's children by [1] clicking on the selection button and then choosing
+ the desired filter [2].
 
 .. image:: img/data_reconciliation1c.png
     :width: 100%
@@ -59,7 +68,11 @@ If the user would like to enter more detailed data, he can simply add the filter
     approved data, they can do so by changing the status of the questionnaire
     from "new" to "published".
 
-Having added one or several new datasets (in the example below "DAT10"); ignored certain filters and eventually also certain questionnaires, the resulting data points and trend line will provide the National Statistics Office's version [1]. The difference with the original JMP data points and trend line (in shaded color and dashed line) [2] are clearly visible.
+Having added one or several new datasets (in the example below "DAT10"); ignored
+certain filters and eventually also certain questionnaires, the resulting data
+points and trend line will provide the National Statistics Office's version [1].
+The difference with the original JMP data points and trend line (in shaded
+color and dashed line) [2] are clearly visible.
 
 .. note::
 
@@ -79,7 +92,8 @@ reason is that the estimated number of persons having access to the facilities
 according to NSA data often doesn't match with effective use (i.e. what
 JMP/NSO measure).
 
-To add NSA sector data, simply click on the "Create sector dataset" button.
+To add NSA sector data, simply click on the :guilabel:`Create sector dataset`
+button.
 
 .. image:: img/data_reconciliation3.png
     :width: 100%
@@ -112,7 +126,7 @@ To discover by how many persons per equipment the NSA estimations need to be cor
 * **Compute value after projection** [5]: select the parameter that should be
   calculated, typically the number of persons per equipment.
 
-Click on the "Apply" button [6].
+Click on the :guilabel:`Apply` button [6].
 
 .. image:: img/data_reconciliation5.png
     :width: 100%

@@ -28,9 +28,9 @@ On this page 3 specialized data entries are available:
 JMP questionnaires
 ------------------
 
-Once you have clicked on the "JMP questionnaires" button you will be directed
-to an interface that enables you to manage both *existing* data as well as
-*new info*.
+Once you have clicked on the :guilabel:`JMP questionnaires` button you will be
+directed to an interface that enables you to manage both *existing* data as well
+as *new info*.
 
 .. image:: img/contribute_jmp1.png
     :width: 100%
@@ -44,8 +44,8 @@ very close to the former Excel country files.
 .. note::
 
     The Questionnaires and Filter selection menus are automatically hidden
-    once the table vue is generated. To access these menus again, simply
-    click on the "Selection" button at the top.
+    once the table view is generated. To access these menus again, simply
+    click on the :guilabel:`Selection` button at the top.
 
 .. image:: img/contribute_jmp2.png
     :width: 100%
@@ -121,9 +121,11 @@ value and click somewhere outside the cell for it to update automatically.
 Add a new questionnaire
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-To add new data, simply click the "Add new questionnaire" button [1]. A new
-column is created [2]. Select the country, enter an appropriate survey code (typically three letters for the type of survey and two numbers for the year) and year and fill in the percentages. Once you have finished, click on the blue
-"Save new elements" button at the top.
+To add new data, simply click the :guilabel:`Add new questionnaire` button [1].
+A new column is created [2]. Select the country, enter an appropriate survey
+code (typically three letters for the type of survey and two numbers for the
+year) and year and fill in the percentages. Once you have finished, click on the
+blue :guilabel:`Save new elements` button at the top.
 
 .. image:: img/contribute_jmp7.png
     :width: 100%
@@ -142,8 +144,8 @@ questionnaire".
     :width: 100%
     :alt: Edit questionnaire
 
-In the following administration panel, click on the red "Delete" button. A
-confirmation message appears, click again on "Delete".
+In the following administration panel, click on the red :guilabel:`Delete`
+button. A confirmation message appears, click again on :guilabel:`Delete`.
 
 .. image:: img/contribute_jmp9.png
     :width: 100%
@@ -152,7 +154,7 @@ confirmation message appears, click again on "Delete".
 .. warning::
 
     Once you delete a questionnaire, it is really erased as well as all the
-    linked answers. There is no "undo" button !
+    linked answers. There is no :guilabel:`undo` button !
 
 
 .. _DI NSA:
@@ -160,20 +162,31 @@ confirmation message appears, click again on "Delete".
 NSA questionnaires
 ------------------
 
-Once you have cliced on the "NSA questionnaire" button, you will be directed
-to an interface that enables you to manage both *existing* data as well as *new info*. You must first select the country you wish to work on.
+Once you have clicked on the :guilabel:`NSA questionnaire` button, you will be
+directed to an interface that enables you to manage both *existing* data as well
+as *new info*. You must first select the country you wish to work on.
 
 .. image:: img/contribute_nsa1.png
     :width: 100%
     :alt: Edit NSA questionnaires
 
-If you select a country for which there is **no sector data yet**, a first questionnaire is automatically created with lines to enter an initial equipment / facility. Enter a standard questionnaire "Code" (ex. "AFGS-00"), the "Year" (ex. "2000"), the "Facility name" (ex. "Public standpipes") and corresponding numbers… and then click on the blue "Save new elements" button at the top.
+If you select a country for which there is **no sector data yet**, a first
+questionnaire is automatically created with lines to enter an initial equipment
+/ facility. Enter a standard questionnaire "Code" (ex. "AFGS-00"), the "Year"
+(ex. "2000"), the "Facility name" (ex. "Public standpipes") and corresponding
+numbers… and then click on the blue :guilabel:`Save new elements` button at the top.
 
 .. image:: img/contribute_nsa2.png
     :width: 100%
     :alt: Create NSA filter and filter set
 
-If, for your country, **sector data already exists**, GIMS will automatically recall the existing data enabling you to modify existing data or add one or several new questionnaires [1] as well as one or several new equipments (facilities) for each questionnaire [2]. Don't forget to enter corresponding numbers for each part (urban, rural and total) [3] ! Once the data has been entered, click on the blue "Save new elements" button at the top: the percentages are automatically (re)calculated.
+If, for your country, **sector data already exists**, GIMS will automatically
+recall the existing data enabling you to modify existing data or add one or
+several new questionnaires [1] as well as one or several new equipments
+(facilities) for each questionnaire [2]. Don't forget to enter corresponding
+numbers for each part (urban, rural and total) [3] ! Once the data has been
+entered, click on the blue :guilabel:`Save new elements` button at the top: the
+percentages are automatically (re)calculated.
 
 .. note::
 
@@ -190,7 +203,7 @@ If, for your country, **sector data already exists**, GIMS will automatically re
 GLAAS questionnaires
 --------------------
 
-Once you have cliced on the button you will be directed to an interface that
+Once you have clicked on the button you will be directed to an interface that
 enables you to edit a given questionnaire.
 
 .. image:: img/contribute_glaas1.png
@@ -198,8 +211,9 @@ enables you to edit a given questionnaire.
     :alt: Edit GLAAS questionnaires
 
 Once in the questionnaire, navigation from one question to another can be
-done either by clicking on the menus on the left or using the “previous /
-next” buttons at the top and bottom of the page.
+done either by clicking on the menus on the left or using the
+:guilabel:`previous` / :guilabel:`next` buttons at the top and bottom of the
+page.
 
 .. image:: img/contribute_glaas2.png
     :width: 100%

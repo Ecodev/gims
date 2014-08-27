@@ -31,7 +31,7 @@ above [2] and child filters, below [3].
 
 If you wish to change the color of the filter used in the graph, click on
 the color selection icon. If changes have been performed and you want to
-keep them, don't forget to click on the blue "Save" button.
+keep them, don't forget to click on the blue :guilabel:`Save` button.
 
 .. image:: img/filters3.png
     :width: 100%

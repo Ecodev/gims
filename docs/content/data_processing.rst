@@ -11,9 +11,9 @@ in the form of Excel spreadsheets for further analysis. This can be done in
 two different places that correspond to different process stages:
 
 * **Export questionnaire answers**: this is done from the Admin / Surveys
-  where you can either "Export all questionnaires" (button at the top) or "Export
-  selected" questionnaires (use the check boxes to select the countries). Data
-  exported corresponds to the "raw", *non-processed* data.
+  where you can either :guilabel:`Export all questionnaires` (button at the top)
+  or :guilabel:`Export selected` questionnaires (use the check boxes to select
+  the countries). Data exported corresponds to the "raw", *non-processed* data.
 
 .. image:: img/questionnaire_export.png
     :width: 100%
@@ -27,7 +27,7 @@ two different places that correspond to different process stages:
     :alt: Browse
 
 In these tables, select the country(ies), :term:`filter set(s)<filter set>`
-(+ years) and once the content is visible, simply click on the "Export"
+(+ years) and once the content is visible, simply click on the :guilabel:`Export`
 button. The file you will obtain is already *processed* data through the
 :term:`filters<filter>` and their associated :term:`rules<rule>`.
 
@@ -96,7 +96,7 @@ interested in [1].
 
 .. note::
 
-    To view again the entire graph, click on the "Reset the zoom" button [2].
+    To view again the entire graph, click on the :guilabel:`Reset the zoom` button [2].
 
 .. image:: img/chart_zoomed.png
     :width: 100%
