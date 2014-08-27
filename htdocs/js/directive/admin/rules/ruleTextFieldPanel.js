@@ -1,4 +1,4 @@
-angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function($rootScope, Restangular) {
+angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function($rootScope, Restangular, $q) {
     'use strict';
 
     return {
@@ -8,14 +8,15 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
             refresh: '&?',
             readonly: '='
         },
-        controller: function($scope) {
+        controller: function($scope, selectExistingRuleModal) {
 
             var ruleFields = {fields: 'permissions,filterQuestionnaireUsages,questionnaireUsages,filterGeonameUsages'};
-            var usageFields = {fields: 'permissions,rule.permissions,rule.filterQuestionnaireUsages,rule.questionnaireUsages,rule.filterGeonameUsages'};
+            var usageFields = {fields: 'permissions'};
 
             $rootScope.$on('gims-rule-usage-added', function(evt, objects) {
                 $scope.usage = {};
                 $scope.usage.questionnaire = objects.questionnaire;
+                $scope.usage.geoname = objects.geoname;
                 $scope.usage.filter = objects.filter;
                 $scope.usage.part = objects.part;
                 $scope.usage.rule = {};
@@ -30,17 +31,36 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
             $rootScope.$on('gims-rule-usage-selected', function(evt, usage) {
                 $scope.showDetails = false;
                 $scope.usage = usage;
-                getUsageProperties();
             });
 
-            var getUsageProperties = function() {
-                if ($scope.usage && $scope.usage.id) {
-                    Restangular.one(getUsageType($scope.usage), $scope.usage.id).get(usageFields).then(function(usage) {
-                        $scope.usage = usage;
-                        $scope.usage.rule.nbOfUsages = usage.rule.filterQuestionnaireUsages.length + usage.rule.questionnaireUsages.length + usage.rule.filterGeonameUsages.length;
-                    });
+            $scope.$watch('usage', function(usage, oldUsage) {
+                if (usage && usage.id && (_.isUndefined(oldUsage) || usage.id != oldUsage.id)) {
+                    getUsageProperties(usage);
                 }
-            };
+            });
+
+            $scope.$watch('usage.rule', function(rule, oldRule) {
+                if (rule && rule.id && (_.isUndefined(oldRule) || rule.id != oldRule.id)) {
+                    getRuleProperties(rule);
+                }
+            });
+
+            var getUsageProperties = _.debounce(function(usage) {
+                Restangular.one(getUsageType(usage), $scope.usage.id).get(usageFields).then(function(newUsage) {
+                    usage.permissions = newUsage.permissions;
+                });
+            }, 300);
+
+            var getRuleProperties = _.debounce(function(rule) {
+                Restangular.one('Rule', $scope.usage.rule.id).get(ruleFields).then(function(newRule) {
+                    rule.permissions = newRule.permissions;
+                    rule.filterQuestionnaireUsages = newRule.filterQuestionnaireUsages;
+                    rule.questionnaireUsages = newRule.questionnaireUsages;
+                    rule.filterGeonameUsages = newRule.filterGeonameUsages;
+                    rule.nbOfUsages = rule.filterQuestionnaireUsages.length + rule.questionnaireUsages.length + rule.filterGeonameUsages.length;
+                    $scope.setLastSelectedRule(rule);
+                });
+            }, 300);
 
             var getUsageType = function(usage) {
                 if (!usage) {
@@ -55,6 +75,27 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
                 }
             };
 
+            $scope.saveForAllParts = function() {
+                $scope.usage.rule.formula = $scope.usage.rule.formula.replace(/P#\d/g, 'P#current');
+            };
+
+            $scope.selectExistingRule = function() {
+                selectExistingRuleModal.select($scope.usage).then(function(rule) {
+                    $scope.usage.rule = rule;
+                    $scope.setLastSelectedRule(rule);
+                });
+            };
+
+            $scope.setLastSelectedRule = function(rule) {
+                $scope.lastSelectedRule = _.clone(rule);
+                $scope.formulaForm.$setPristine(true);
+            };
+
+            $scope.restoreLastSelectedRule = function() {
+                $scope.usage.rule = _.clone($scope.lastSelectedRule);
+                $scope.formulaForm.$setPristine(true);
+            };
+
             $scope.saveDuplicate = function() {
                 delete $scope.usage.rule.id;
                 $scope.usage.rule[getUsageType() + "s"] = [
@@ -64,49 +105,64 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
                 $scope.save();
             };
 
-            /**
-             * Create or update rule first, then create or update usage.
-             */
             $scope.save = function() {
+                $scope.isSaving = true;
 
-                // update
-                if ($scope.usage.rule.id) {
-                    $scope.isSaving = true;
-                    $scope.usage.rule.put().then(function() {
+                saveRule().then(function(rule) {
+                    if (rule) {
+                        $scope.usage.rule.id = rule.id;
+                        $scope.usage.rule.permissions = rule.permissions;
+                    }
+
+                    saveUsage().then(function(usage) {
+                        if (usage) {
+                            $scope.usage.id = usage.id;
+                            $scope.usage.permissions = usage.permissions;
+                        }
                         $scope.isSaving = false;
                         $scope.refresh({questionnairesPermissions: false, filtersComputing: true, questionnairesUsages: true});
                     });
+                });
+            };
+
+            /**
+             * Create or update rule first, then create or update usage.
+             */
+            var saveRule = function() {
+
+                // update
+                if ($scope.usage.rule.id && $scope.usage.rule.permissions && $scope.usage.rule.permissions.update) {
+                    return $scope.usage.rule.put();
 
                     // create
+                } else if ($scope.usage.rule && _.isUndefined($scope.usage.rule.id)) {
+                    return Restangular.all('Rule').post($scope.usage.rule, ruleFields);
+
+                    // do nothing, but return promise to allow script to process .then() function and save usage
                 } else {
-                    $scope.isSaving = true;
-                    Restangular.all('Rule').post($scope.usage.rule, ruleFields).then(function(rule) {
-                        $scope.usage.rule.id = rule.id;
-                        $scope.usage.rule.permissions = rule.permissions;
-                        $scope.saveUsage();
-                        $scope.isSaving = false;
-                    });
+                    var deferred = $q.defer();
+                    deferred.resolve();
+                    return deferred.promise;
                 }
             };
 
             /**
              * Create or update usage.
              */
-            $scope.saveUsage = function() {
+            var saveUsage = function() {
 
                 // update
-                if ($scope.usage.id) {
-                    $scope.usage.put().then(function() {
-                        $scope.refresh({questionnairesPermissions: false, filtersComputing: true, questionnairesUsages: true});
-                    });
+                if ($scope.usage.id && $scope.usage.permissions && $scope.usage.permissions.update) {
+                    return $scope.usage.put();
 
                     // create
+                } else if ($scope.usage && _.isUndefined($scope.usage.id)) {
+                    return Restangular.all(getUsageType()).post($scope.usage, usageFields);
+
                 } else {
-                    Restangular.all(getUsageType()).post($scope.usage).then(function(usage) {
-                        $scope.usage.id = usage.id;
-                        $scope.usage.rule[getUsageType()] = usage.id;
-                        $scope.refresh({questionnairesPermissions: false, filtersComputing: true, questionnairesUsages: true});
-                    });
+                    var deferred = $q.defer();
+                    deferred.resolve();
+                    return deferred.promise;
                 }
             };
 

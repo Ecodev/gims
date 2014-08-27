@@ -16,7 +16,13 @@ class RuleController extends \Application\Controller\AbstractAngularActionContro
     {
         return new ViewModel();
     }
+
     public function textFieldPanelAction()
+    {
+        return new ViewModel();
+    }
+
+    public function selectExistingRuleAction()
     {
         return new ViewModel();
     }

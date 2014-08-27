@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="$dismiss()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    <h4 class="modal-title">Select existing rule</h4>
+</div>
+
+<div class="modal-body">
+
+    <div class='form-horizontal'>
+        <div class="form-group" ng-class="{'has-error': myForm.token.$invalid}">
+            <label class="control-label col-md-2">By name</label>
+            <div class="col-md-8">
+                <p>
+                    <gims-select api="rule"
+                                 model="rule"
+                                 queryParams="ruleFields"
+                                 change-url="false"
+                                 style="width: 100%"
+                                >
+                    </gims-select>
+                </p>
+            </div>
+            <div class="col-md-offset-2 col-md-8">
+                <p class="help-block" ng-show="token.selected.description">{{token.selected.description}}</p>
+            </div>
+        </div>
+    </div>
+
+    <gims-formula structure="rule.structure" ></gims-formula>
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">Close</button>
+    <button class="btn btn-primary pull-right" ng-click="selectRule(rule)" ng-disabled="!rule">Select rule</button>
+</div>
+
+
+

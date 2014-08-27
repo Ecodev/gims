@@ -1,48 +1,67 @@
 <div class="formula-text-field-fixed ng-trans ng-trans-fade-down" ng-show="usage">
 
-    <form role="form">
-        <div class="form-group" ng-if="showDetails">
-            <label for="Name">Name</label>
-            <input type="text" class="form-control" id="Name" ng-model="usage.rule.name">
+    <form role="form" name="formulaForm">
+        <div class="form-group" ng-if="showDetails" ng-class="{'has-error': formulaForm.name.$error.required}" >
+            <label  class="control-label" for="Name">Name</label>
+            <input type="text" class="form-control" id="Name" name="name" ng-model="usage.rule.name" required>
         </div>
-        <div class="form-group" ng-if="showDetails">
-            <label for="Justification">Justification</label>
-            <input type="text" class="form-control" id="Justification" ng-model="usage.justification">
+        <div class="form-group" ng-if="showDetails" ng-class="{'has-error': formulaForm.justification.$error.required}">
+            <label class="control-label" for="Justification">Justification</label>
+            <input type="text" class="form-control" id="Justification" name="justification" ng-model="usage.justification" required>
         </div>
-        <div class="form-group">
-            <label for="Justification" ng-if="showDetails">Formula</label>
+        <div class="form-group" ng-class="{'has-error': formulaForm.formula.$error.required}">
+            <label  class="control-label" for="Justification" ng-if="showDetails">Formula</label>
             <gims-rule-text-field rule="usage.rule" messages="errors"></gims-rule-text-field>
         </div>
+        <!--<div class="row" ng-if="showDetails">-->
+            <!--<div class="col-md-2"><strong>Selection</strong></div>-->
+            <!--<div class="col-md-2"><span class="fa fa-gims-filter"></span> {{usage.filter.name}}</div>-->
+            <!--<div class="col-md-5"><span class="fa fa-gims-questionnaire"></span>  {{usage.questionnaire.name}} - {{usage.part.name}}</div>-->
+        <!--</div>-->
     </form>
 
     <div class='text-right'>
         <span class="text-warning" style="margin-left:10px;" ng-if="usage.rule.nbOfUsages > 1 && (!readonly && usage.rule.permissions.update && !!usage.id)"><i class="fa fa-warning"></i> This rule is used in {{usage.rule.nbOfUsages}} different places.</span>
         <button class="btn btn-default pull-left" ng-click="close();" ><i class="fa fa-times"></i> Close</button>
         <button class="btn btn-default" ng-click="showDetails =! showDetails"><i class="fa fa-info-circle"></i> Show/hide details</button>
+        <button class="btn btn-default" ng-click="selectExistingRule()" ng-if="!usage.id">
+            <i class="fa fa-gims-rule"></i>
+            Select existing rule
+        </button>
+
+        <button class="btn btn-default" ng-click="restoreLastSelectedRule()" ng-if="(formulaForm.name.$dirty || formulaForm.formula.$dirty) && lastSelectedRule">
+            <i class="fa fa-gims-back"></i>
+            Restore last selected rule
+        </button>
+
         <button class="btn btn-danger" ng-click="delete()" ng-if="!!usage.id && !readonly && usage.rule.permissions.delete"><i class="fa" ng-class="{'fa-gims-loading':isRemoving, 'fa-trash-o':!isRemoving}"></i> Delete</button>
 
         <div class="btn-group dropup" ng-if="!readonly">
-            <button class="btn btn-primary" ng-click="save()" ng-if="!usage.id" ng-disabled="usage.rule.permissions.create || errors.length">
-                <i class="fa" ng-class="{'fa-gims-loading':isSaving, 'fa-check':!isSaving}"></i>
-                Create
+            <button class="btn btn-primary" ng-click="save()" ng-if="!usage.id && formulaForm.name.$pristine && formulaForm.formula.$pristine" ng-disabled="formulaForm.$invalid || errors.length">
+                <i class="fa" ng-class="{'fa-gims-loading':isSaving, 'fa-gims-add':!isSaving}"></i>
+                Add
+            </button>
+            <button class="btn btn-primary" ng-click="saveDuplicate()" ng-if="!usage.id && !usage.rule.permissions.update && (formulaForm.name.$dirty || formulaForm.formula.$dirty)" ng-disabled="formulaForm.$invalid || errors.length">
+                <i class="fa" ng-class="{'fa-gims-loading':isSaving, 'fa-gims-add':!isSaving}"></i>
+                Add for this questionnaire
             </button>
             <!-- if update permission, save usage-->
-            <button class="btn btn-primary" ng-click="save()" ng-if="usage.rule.permissions.update" ng-disabled="errors.length">
+            <button class="btn btn-primary" ng-click="save()" ng-if="usage.rule.permissions.update && (formulaForm.name.$dirty || formulaForm.formula.$dirty)" ng-disabled="formulaForm.$invalid || errors.length">
                 <i class="fa" ng-class="{'fa-gims-loading':isSaving, 'fa-check':!isSaving}"></i>
                 Save
             </button>
             <!-- if no update permissions, create new usage for questionnaire -->
-            <button class="btn btn-primary" ng-click="saveDuplicate()" ng-if="!usage.rule.permissions.update && usage.permissions.update" ng-disabled="errors.length">
+            <button class="btn btn-primary" ng-click="saveDuplicate()" ng-if="usage.permissions.update && !usage.rule.permissions.update && (formulaForm.name.$dirty || formulaForm.formula.$dirty)" ng-disabled="formulaForm.$invalid || errors.length">
                 <i class="fa" ng-class="{'fa-gims-loading':isSaving, 'fa-check':!isSaving}"></i>
                 Save for this questionnaire
             </button>
 
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" ng-if="">
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-right" role="menu" ng-if="">
-                <li><a href>Dropdown link</a></li>
-            </ul>
+            <!--<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" ng-if="!usage.id" ng-disabled="formulaForm.$invalid || errors.length">-->
+                <!--<span class="caret"></span>-->
+            <!--</button>-->
+            <!--<ul class="dropdown-menu dropdown-menu-right" role="menu">-->
+                <!--<li ng-if="!usage.id" ng-click="saveForAllParts()" ng-disabled="formulaForm.$invalid"><a href>Save for all parts</a></li>-->
+            <!--</ul>-->
         </div>
 
     </div>
