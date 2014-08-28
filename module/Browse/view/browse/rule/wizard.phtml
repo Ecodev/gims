@@ -142,14 +142,14 @@
             <label class="control-label col-md-2" for="token.level"><?php echo $this->translate("Level 2"); ?></label>
             <div class="col-md-8">
                 <input class="pull-left" type="checkbox" name="level" id="token.level" ng-model="token.level" style="margin-top:10px;"/>
-                <p class="help-block" style="margin-left:20px;">Levels correspond to Tables_W/Tables_S (level 1) and GraphData_W/GraphData_S (level 2). In most cases the filter value referenced should be the value of Tables_W/Tables_S, so the checkbox should be left unchecked.</p>
+                <p class="help-block" style="margin-left:20px;">In most cases the rule should be applied in first step of computation (Tables_W/Tables_S), so the checkbox should be left unchecked. <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/computing.html#step-2-computing-questionnaires-values"><i class="fa fa-gims-help" tooltip="Read more"></i></a></p>
             </div>
         </div>
     </div>
 
     <div class="row">
         <p class="col-md-12 help-block" ng-show="token.selected.filter || token.selected.questionnaire || token.selected.part">
-            <i>Current</i> refers to the context where the rule is applied. If a rule is applied on the filter "Total improved" then the current filter will be evaluated as "Total improved". And if the same rule is also applied to "Piped onto premises", then the current filter will be evaluated as "Piped onto premises" for that application. While optional, the usage of <i>Current</i> allow to share a single rule for multiple applications, so it should be favored as much as possible.
+            <i>Current</i> refers to the context where the rule is applied. It should be favored as much as possible. <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/rule.html#current"><i class="fa fa-gims-help" tooltip="Read more"></i></a></p>
         </p>
     </div>
 

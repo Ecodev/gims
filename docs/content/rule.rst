@@ -60,16 +60,19 @@ Where:
 * ``P`` = :term:`Part`
 * ``R`` = :term:`Rule`
 * ``L`` = Level, only two possibilities: absent, or exactly "L#2" to indicate
-    Level 2
+  Level 2 (:ref:`see explanation <step2>`)
 * ``Y`` = Year offset
 
+
+.. _current:
+
 ``F``, ``Q`` and ``P``, can have the value ``current`` instead of a specific
-ID. This means
-that the current Filter, Questionnaire or Part should be used, instead of
-the one selected
-by its ID. This syntax should be preferred, whenever possible, to maximize
-the chances to
-share a single rule in many places.
+ID. ``current`` refers to the context where the rule is applied. If a rule is applied on
+the filter "Total improved" then the current filter will be evaluated as "Total improved".
+And if the same rule is also applied to "Piped onto premises", then the current
+filter will be evaluated as "Piped onto premises" for that application. While
+optional, the usage of ``current`` allows to share a single rule for multiple
+applications, so it should be favored as much as possible.
 
 
 Before regression context
