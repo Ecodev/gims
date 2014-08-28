@@ -10,10 +10,10 @@ overview of that process:
 
 This can be briefly summarized as:
 
-#. Compute all filters for one questionnaire
-#. Compute all questionnaires
-#. Compute all years
-#. Fine tune the final result
+#. :ref:`Compute all filters for one questionnaire <step1>`
+#. :ref:`Compute all questionnaires <step2>`
+#. :ref:`Compute all years <step3>`
+#. :ref:`Fine tune the final result <step4>`
 
 While the default computing behavior should satisfy a majority of case, the
 user can choose to customize it in three of those steps (via rules or summands).
@@ -39,7 +39,7 @@ available possibility will be used, and the rest will be discarded:
 
 The last case is by far the most common one. It means a parent filter is the sum
 of its children. This is used for the vast majority of filters and nothing
-special need to be done, except build the correct filter hierarchy once and
+special needs to be done, except build the correct filter hierarchy once and
 for all.
 
 The two other possibilities are the first way to customize GIMS computation. A
@@ -64,7 +64,7 @@ The second step use the previous results from all questionnaires and compute
 some statistics. Those statistics are for internal use only and are not available
 to end-user.
 
-However it is in that step that the user can use rule of level 2. Those rules of
+However it is in that step that the user can use rules of level 2. Those rules of
 level 2 are typically used to ignore values. While some values were interesting
 in the previous step, we can decide that we are no longer interested in them for
 this and any following computing steps.
