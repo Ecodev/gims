@@ -183,7 +183,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
             getQuestionnaires(newQuestionnaires, questionnaireWithAnswersFields).then(function(questionnaires) {
                 $scope.firstQuestionnairesRetrieve = true;
-                //listQuestionnairesWithFilterUsages(questionnaires);
                 prepareDataQuestionnaires(questionnaires);
                 $scope.orderQuestionnaires(false);
             });
@@ -1906,8 +1905,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 questionnaire.filterQuestionnaireUsages = 1;
             });
 
-            //            listQuestionnairesWithFilterUsages($scope.tabs.questionnaires);
-
             $http.get('/api/filter/createUsages', {
                 params: {
                     filters: equipments.join(','),
@@ -1919,19 +1916,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             });
         }
     };
-
-    /**
-     * Questionnaires with usages
-     * @param questionnaires
-     */
-    //    Disabled for the moment, because add buttons that are not required since the news NSA view has been added, but works
-    //    var listQuestionnairesWithFilterUsages = function(questionnaires) {
-    //        $scope.questionnairesWithUsages = _.filter(questionnaires, function(q) {
-    //            if (!_.isEmpty(q.filterQuestionnaireUsages) || _.isNumber(q.filterQuestionnaireUsages)) {
-    //                return true;
-    //            }
-    //        });
-    //    };
 
     /**
      * Update parameters on url exlucding empty ids to avoid multiple consecutive commas that cause problems on server side.

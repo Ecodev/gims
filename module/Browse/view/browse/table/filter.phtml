@@ -224,17 +224,6 @@
                                             <a href gims-add-usage questionnaire="questionnaire" part="tabs.part"><i class="fa fa-gims-rule fa-fw"></i> Add a rule</a>
                                         </li>
 
-                                        <!-- Duplicate rules -->
-                                        <!-- Disabled for the moment, because add buttons that are not required since the news NSA view has been added, but works -->
-                                        <!--<li ng-if="questionnairesWithUsages.length && !questionnaire.filterQuestionnaireUsages.length" class="divider"></li>-->
-                                        <!--<li ng-if="questionnairesWithUsages.length && !questionnaire.filterQuestionnaireUsages.length" class="dropdown-header">Suggested formulas</li>-->
-                                        <!--<li ng-repeat="q in questionnairesWithUsages"-->
-                                            <!--ng-if="q.id && (!questionnaire.filterQuestionnaireUsages || !questionnaire.filterQuestionnaireUsages.length)"-->
-                                            <!--ng-attr-tooltip="{{!questionnaire.id && 'When the survey is saved, click here to report the same formulas'}}"-->
-                                            <!--tooltip-placement="left">-->
-                                            <!--<a href ng-click="copyFilterUsages(questionnaire, q)"><i class="fa fa-gims-questionnaire fa-fw" ng-class="{'disabled':!questionnaire.id}"></i> {{q.geoname.country.name}} - {{q.survey.name}}</a>-->
-                                        <!--</li>-->
-
                                         <li ng-if="mode.isContribute && questionnaire.id" class="divider"></li>
 
                                         <!-- Links to admin -->
