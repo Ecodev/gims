@@ -26,7 +26,7 @@ class CrudButtons extends \Zend\View\Helper\AbstractHtmlElement
             </div>
 
             <div class="btn-group" ng-switch-when="false">
-                <button class="btn btn-primary btn-save" ng-click="save()" ng-disabled="myForm.\$invalid"><i class="fa fa-check"></i> Save</button>
+                <button class="btn btn-primary btn-save" ng-click="save()" ng-disabled="myForm.\$invalid"><i class="fa fa-gims-save"></i> Save</button>
                 <button class="btn btn-primary dropdown-toggle" ng-disabled="myForm.\$invalid" data-toggle="dropdown">
                     <span class="caret"></span>
                 </button>

@@ -47,12 +47,12 @@
             </button>
             <!-- if update permission, save usage-->
             <button class="btn btn-primary" ng-click="save()" ng-if="usage.permissions.update && usage.rule.permissions.update && formulaForm.$dirty || usage.permissions.update && !usage.rule.permissions.update && formulaForm.justification.$dirty && formulaForm.name.$pristine && formulaForm.formula.$pristine" ng-disabled="formulaForm.$invalid || errors.length">
-                <i class="fa" ng-class="{'fa-gims-loading':isSaving, 'fa-check':!isSaving}"></i>
+                <i class="fa" ng-class="{'fa-gims-loading':isSaving, 'fa-gims-save':!isSaving}"></i>
                 Save
             </button>
             <!-- if no update permissions, create new usage for questionnaire -->
             <button class="btn btn-primary" ng-click="saveDuplicate()" ng-if="usage.permissions.update && !usage.rule.permissions.update && (formulaForm.name.$dirty || formulaForm.formula.$dirty)" ng-disabled="formulaForm.$invalid || errors.length">
-                <i class="fa" ng-class="{'fa-gims-loading':isSaving, 'fa-check':!isSaving}"></i>
+                <i class="fa" ng-class="{'fa-gims-loading':isSaving, 'fa-gims-save':!isSaving}"></i>
                 Save for this questionnaire
             </button>
 
