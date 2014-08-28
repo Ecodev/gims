@@ -64,12 +64,12 @@ The second step use the previous results from all questionnaires and compute
 some statistics. Those statistics are for internal use only and are not available
 to end-user.
 
-However it is in that step that the user can use rules of level 2. Those rules of
-level 2 are typically used to ignore values. While some values were interesting
+However it is in that step that the user can use rules of Step 2. Those rules of
+Step 2 are typically used to ignore values. While some values were interesting
 in the previous step, we can decide that we are no longer interested in them for
 this and any following computing steps.
 
-Rules of level 2 are also the first opportunity to say ``Total = Urban + Rural``.
+Rules of Step 2 are also the first opportunity to say ``Total = Urban + Rural``.
 Again because we wanted to keep the raw number for ``Total`` in previous step,
 but from now on we want to change the way ``Total`` is computed.
 
@@ -123,5 +123,5 @@ the chart on :menuselection:`Browse --> Chart` page.
 .. note::
 
     In this section we mentioned two kind of applications for rules: for filter
-    (level 1 and 2) and for country. There is a third kind, for questionnaire,
+    (Step 1 and 2) and for country. There is a third kind, for questionnaire,
     that may be useful. See the :doc:`full explanation<rule>`.

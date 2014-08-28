@@ -349,11 +349,11 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $stubFilterQuestionnaireUsageRepository = $this->getMock('\Application\Repository\Rule\FilterQuestionnaireUsageRepository', array('getFirst'), array(), '', false);
         $stubFilterQuestionnaireUsageRepository->expects($this->any())
                 ->method('getFirst')
-                ->will($this->returnCallback(function($questionnaireId, $filterId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas) {
+                ->will($this->returnCallback(function($questionnaireId, $filterId, $partId, $useSecondStepRules, ArrayCollection $alreadyUsedFormulas) {
 
                             $filter = $this->getModel('\Application\Model\Filter', $filterId);
                             foreach ($filter->getFilterQuestionnaireUsages() as $filterQuestionnaireUsage) {
-                                if (($useSecondLevelRules || !$filterQuestionnaireUsage->isSecondLevel()) && $filterQuestionnaireUsage->getRule() && $filterQuestionnaireUsage->getQuestionnaire()->getId() == $questionnaireId && $filterQuestionnaireUsage->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterQuestionnaireUsage)) {
+                                if (($useSecondStepRules || !$filterQuestionnaireUsage->isSecondStep()) && $filterQuestionnaireUsage->getRule() && $filterQuestionnaireUsage->getQuestionnaire()->getId() == $questionnaireId && $filterQuestionnaireUsage->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterQuestionnaireUsage)) {
                                     return $filterQuestionnaireUsage;
                                 }
                             }

@@ -18,7 +18,7 @@ class QuestionnaireUsageValue extends AbstractToken
         return '/\{R#(\d+),Q#(\d+|current),P#(\d+|current)\}/';
     }
 
-    public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules)
+    public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondStepRules)
     {
         $ruleId = $matches[1];
         $questionnaireId = $this->getQuestionnaireId($matches[2], $usage);

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * FilterQuestionnaireUsage allows us to "apply" a rule to a filter-questionnaire-part triple.
  *
  * @ORM\Entity(repositoryClass="Application\Repository\Rule\FilterQuestionnaireUsageRepository")
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="filter_questionnaire_usage_unique",columns={"filter_id", "questionnaire_id", "part_id", "rule_id", "is_second_level"})})
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="filter_questionnaire_usage_unique",columns={"filter_id", "questionnaire_id", "part_id", "rule_id", "is_second_step"})})
  */
 class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
 {
@@ -48,7 +48,7 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
      *
      * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
      */
-    private $isSecondLevel = false;
+    private $isSecondStep = false;
 
     /**
      * {@inheritdoc}
@@ -100,23 +100,23 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
     }
 
     /**
-     * Set whether this rule is used in the second level of computation
+     * Set whether this rule is used in the second step of computation
      * @return boolean
      */
-    public function setIsSecondLevel($isSecondLevel)
+    public function setIsSecondStep($isSecondStep)
     {
-        $this->isSecondLevel = $isSecondLevel;
+        $this->isSecondStep = $isSecondStep;
 
         return $this;
     }
 
     /**
-     * Returns whether this rule is used in the second level of computation
+     * Returns whether this rule is used in the second step of computation
      * @return boolean
      */
-    public function isSecondLevel()
+    public function isSecondStep()
     {
-        return (bool) $this->isSecondLevel;
+        return (bool) $this->isSecondStep;
     }
 
 }

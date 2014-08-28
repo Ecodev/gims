@@ -234,11 +234,11 @@ use \Application\Traits\EntityManagerAware;
      * @param integer $filterId
      * @param integer $questionnaireId
      * @param integer $partId
-     * @param boolean $useSecondLevelRules
+     * @param boolean $useSecondStepRules
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
      * @return float|null null if no answer at all, otherwise the percentage value
      */
-    public function computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules = false, ArrayCollection $alreadyUsedFormulas = null)
+    public function computeFilter($filterId, $questionnaireId, $partId, $useSecondStepRules = false, ArrayCollection $alreadyUsedFormulas = null)
     {
         $key = \Application\Utility::getCacheKey([func_get_args(), $this->overriddenFilters]);
         if (array_key_exists($key, $this->cacheComputeFilter)) {
@@ -249,7 +249,7 @@ use \Application\Traits\EntityManagerAware;
             $alreadyUsedFormulas = new ArrayCollection();
         }
 
-        $result = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, new ArrayCollection());
+        $result = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondStepRules, $alreadyUsedFormulas, new ArrayCollection());
 
         $this->cacheComputeFilter[$key] = $result;
 
@@ -261,12 +261,12 @@ use \Application\Traits\EntityManagerAware;
      * @param integer $filterId
      * @param integer $questionnaireId
      * @param integer $partId
-     * @param boolean $useSecondLevelRules
+     * @param boolean $useSecondStepRules
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas already used formula to be exclude when computing
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters will be used to avoid duplicates
      * @return float|null null if no answer at all, otherwise the percentage value
      */
-    private function computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
+    private function computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondStepRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
         // Avoid duplicates
         if ($alreadySummedFilters->contains($filterId)) {
@@ -289,12 +289,12 @@ use \Application\Traits\EntityManagerAware;
             }
         }
 
-        // If we use second level rules, we let them override answers
+        // If we use second step rules, we let them override answers
         // That means the end-user can enter an answer, but still choose to ignore it (via exclude rule)
-        if ($useSecondLevelRules) {
-            $filterQuestionnaireUsage = $this->getFilterQuestionnaireUsageRepository()->getFirst($questionnaireId, $filterId, $partId, $useSecondLevelRules, $alreadyUsedFormulas);
+        if ($useSecondStepRules) {
+            $filterQuestionnaireUsage = $this->getFilterQuestionnaireUsageRepository()->getFirst($questionnaireId, $filterId, $partId, $useSecondStepRules, $alreadyUsedFormulas);
             if ($filterQuestionnaireUsage) {
-                return $this->computeFormulaBeforeRegression($filterQuestionnaireUsage, $alreadyUsedFormulas, $useSecondLevelRules);
+                return $this->computeFormulaBeforeRegression($filterQuestionnaireUsage, $alreadyUsedFormulas, $useSecondStepRules);
             }
         }
 
@@ -308,17 +308,17 @@ use \Application\Traits\EntityManagerAware;
         // If the filter has a formula, returns its value
         $filterQuestionnaireUsage = $this->getFilterQuestionnaireUsageRepository()->getFirst($questionnaireId, $filterId, $partId, false, $alreadyUsedFormulas);
         if ($filterQuestionnaireUsage) {
-            return $this->computeFormulaBeforeRegression($filterQuestionnaireUsage, $alreadyUsedFormulas, $useSecondLevelRules);
+            return $this->computeFormulaBeforeRegression($filterQuestionnaireUsage, $alreadyUsedFormulas, $useSecondStepRules);
         }
 
         // First, attempt to sum summands
         $summandIds = $this->getFilterRepository()->getSummandIds($filterId);
-        $sum = $this->summer($summandIds, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, $alreadySummedFilters);
+        $sum = $this->summer($summandIds, $questionnaireId, $partId, $useSecondStepRules, $alreadyUsedFormulas, $alreadySummedFilters);
 
         // If no sum so far, we use children instead. This is "normal case"
         if (is_null($sum)) {
             $childrenIds = $this->getFilterRepository()->getChildrenIds($filterId);
-            $sum = $this->summer($childrenIds, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, $alreadySummedFilters);
+            $sum = $this->summer($childrenIds, $questionnaireId, $partId, $useSecondStepRules, $alreadyUsedFormulas, $alreadySummedFilters);
         }
 
         return $sum;
@@ -329,16 +329,16 @@ use \Application\Traits\EntityManagerAware;
      * @param array|\IteratorAggregate $filterIds
      * @param integer $questionnaireId
      * @param integer $partId
-     * @param boolean $useSecondLevelRules
+     * @param boolean $useSecondStepRules
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters
      * @return float|null
      */
-    private function summer(array $filterIds, $questionnaireId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
+    private function summer(array $filterIds, $questionnaireId, $partId, $useSecondStepRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
     {
         $sum = null;
         foreach ($filterIds as $filterId) {
-            $summandValue = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, $alreadySummedFilters);
+            $summandValue = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondStepRules, $alreadyUsedFormulas, $alreadySummedFilters);
             if (!is_null($summandValue)) {
                 $sum += $summandValue;
             }
@@ -352,10 +352,10 @@ use \Application\Traits\EntityManagerAware;
      * For details about syntax, @see \Application\Model\Rule\Rule
      * @param \Application\Model\Rule\AbstractQuestionnaireUsage $usage
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
-     * @param boolean $useSecondLevelRules
+     * @param boolean $useSecondStepRules
      * @return null|float
      */
-    public function computeFormulaBeforeRegression(AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas = null, $useSecondLevelRules = false)
+    public function computeFormulaBeforeRegression(AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas = null, $useSecondStepRules = false)
     {
         if (!$alreadyUsedFormulas) {
             $alreadyUsedFormulas = new ArrayCollection();
@@ -363,7 +363,7 @@ use \Application\Traits\EntityManagerAware;
         $alreadyUsedFormulas->add($usage);
 
         $originalFormula = $usage->getRule()->getFormula();
-        $convertedFormula = $this->getParser()->convertBeforeRegression($this, $originalFormula, $usage, $alreadyUsedFormulas, $useSecondLevelRules);
+        $convertedFormula = $this->getParser()->convertBeforeRegression($this, $originalFormula, $usage, $alreadyUsedFormulas, $useSecondStepRules);
         $result = $this->getParser()->computeExcelFormula($convertedFormula);
 
         _log()->debug(__METHOD__, array($usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormula, $result));

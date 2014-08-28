@@ -60,8 +60,8 @@ abstract class AbstractToken extends \Application\Service\Syntax\AbstractToken
      * @param array $matches
      * @param \Application\Model\Rule\AbstractQuestionnaireUsage $usage
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
-     * @param boolean $useSecondLevelRules
+     * @param boolean $useSecondStepRules
      * @return float|string
      */
-    abstract public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules);
+    abstract public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondStepRules);
 }

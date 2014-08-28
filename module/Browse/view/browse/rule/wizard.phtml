@@ -138,11 +138,11 @@
         </div>
     </div>
     <div class='form-horizontal'>
-        <div class="form-group" ng-show="token.selected.level" ng-class="{'has-error': myForm.level.$invalid}">
-            <label class="control-label col-md-2" for="token.level"><?php echo $this->translate("Level 2"); ?></label>
+        <div class="form-group" ng-show="token.selected.step" ng-class="{'has-error': myForm.step.$invalid}">
+            <label class="control-label col-md-2" for="token.step"><?php echo $this->translate("Step 2"); ?></label>
             <div class="col-md-8">
-                <input class="pull-left" type="checkbox" name="level" id="token.level" ng-model="token.level" style="margin-top:10px;"/>
-                <p class="help-block" style="margin-left:20px;">In most cases the rule should be applied in first step of computation (Tables_W/Tables_S), so the checkbox should be left unchecked. <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/computing.html#step-2-computing-questionnaires-values"><i class="fa fa-gims-help" tooltip="Read more"></i></a></p>
+                <input class="pull-left" type="checkbox" name="step" id="token.step" ng-model="token.step" style="margin-top:10px;"/>
+                <p class="help-block" style="margin-left:20px;">In most cases the filter value referenced should be the one from the first step of computation, so the checkbox should be left unchecked. <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/rule.html#step"><i class="fa fa-gims-help" tooltip="Read more"></i></a></p>
             </div>
         </div>
     </div>

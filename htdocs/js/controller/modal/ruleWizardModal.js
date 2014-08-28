@@ -25,10 +25,10 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             questionnaire: true,
             part: true,
             rule: false,
-            level: true,
+            step: true,
             year: false,
             toString: function(config) {
-                return '{F#' + config.filter.id + ',Q#' + config.questionnaire.id + ',P#' + config.part.id + (config.level ? ',L#2' : '') + '}';
+                return '{F#' + config.filter.id + ',Q#' + config.questionnaire.id + ',P#' + config.part.id + (config.step ? ',S#2' : '') + '}';
             }
         },
         {
@@ -39,7 +39,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             questionnaire: true,
             part: false,
             rule: false,
-            level: false,
+            step: false,
             year: false,
             toString: function(config) {
                 return '{F#' + config.filter.id + ',Q#' + config.questionnaire.id + '}';
@@ -53,7 +53,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             questionnaire: true,
             part: true,
             rule: true,
-            level: false,
+            step: false,
             year: false,
             toString: function(config) {
                 return '{R#' + config.rule.id + ',Q#' + config.questionnaire.id + ',P#' + config.part.id + '}';
@@ -67,7 +67,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             questionnaire: true,
             part: true,
             rule: false,
-            level: false,
+            step: false,
             year: false,
             toString: function(config) {
                 return '{Q#' + config.questionnaire.id + ',P#' + config.part.id + '}';
@@ -81,7 +81,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             questionnaire: false,
             part: false,
             rule: false,
-            level: false,
+            step: false,
             year: false,
             toString: function(config) {
                 return '{F#' + config.filter.id + ',Q#all}';
@@ -95,7 +95,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             questionnaire: false,
             part: true,
             rule: false,
-            level: false,
+            step: false,
             year: false,
             toString: function(config) {
                 return '{Q#all,P#' + config.part.id + '}';
@@ -109,7 +109,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             questionnaire: false,
             part: false,
             rule: false,
-            level: false,
+            step: false,
             year: false,
             toString: function() {
                 return '{Y}';
@@ -123,7 +123,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             questionnaire: false,
             part: true,
             rule: false,
-            level: false,
+            step: false,
             year: true,
             toString: function(config) {
                 var year = config.year > 0 ? '+' + config.year : config.year;
@@ -138,7 +138,7 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             questionnaire: false,
             part: false,
             rule: false,
-            level: false,
+            step: false,
             year: false,
             toString: function() {
                 return '{self}';

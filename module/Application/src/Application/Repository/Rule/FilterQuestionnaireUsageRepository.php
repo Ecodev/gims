@@ -43,17 +43,17 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
      * @param integer $questionnaireId
      * @param integer $filterId
      * @param integer $partId
-     * @param boolean $useSecondLevelRules if true returns only second level usages, if false, returns only first level usages
+     * @param boolean $useSecondStepRules if true returns only second step usages, if false, returns only first step usages
      * @param \Doctrine\Common\Collections\ArrayCollection $excluded
      * @return FilterQuestionnaireUsage|null
      */
-    public function getFirst($questionnaireId, $filterId, $partId, $useSecondLevelRules, ArrayCollection $excluded)
+    public function getFirst($questionnaireId, $filterId, $partId, $useSecondStepRules, ArrayCollection $excluded)
     {
         $possible = $this->getAll($questionnaireId, $filterId, $partId);
 
-        // Returns the first non-excluded and according to its level
+        // Returns the first non-excluded and according to its step
         foreach ($possible as $filterQuestionnaireUsage) {
-            if ($useSecondLevelRules == $filterQuestionnaireUsage->isSecondLevel() && !$excluded->contains($filterQuestionnaireUsage)) {
+            if ($useSecondStepRules == $filterQuestionnaireUsage->isSecondStep() && !$excluded->contains($filterQuestionnaireUsage)) {
                 return $filterQuestionnaireUsage;
             }
         }
@@ -97,7 +97,7 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
                     ->join('filterQuestionnaireUsage.filter', 'filter')
                     ->join('filterQuestionnaireUsage.rule', 'rule')
                     ->andWhere('questionnaire.geoname = :geoname')
-                    ->orderBy('filterQuestionnaireUsage.isSecondLevel DESC, filterQuestionnaireUsage.sorting, filterQuestionnaireUsage.id')
+                    ->orderBy('filterQuestionnaireUsage.isSecondStep DESC, filterQuestionnaireUsage.sorting, filterQuestionnaireUsage.id')
             ;
 
             $qb->setParameters(array(

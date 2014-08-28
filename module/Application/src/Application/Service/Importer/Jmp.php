@@ -928,7 +928,7 @@ STRING;
      */
     private function importFilterQuestionnaireUsages(array $filters)
     {
-        $complementaryTotalFormula = $this->getRule('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . ',L#2}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . ',L#2})), ({F#current,Q#current,P#' . $this->partRural->getId() . ',L#2} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . ',L#2} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, {self})');
+        $complementaryTotalFormula = $this->getRule('Total part is sum of parts if both are available', '=IF(AND(ISNUMBER({F#current,Q#current,P#' . $this->partRural->getId() . ',S#2}), ISNUMBER({F#current,Q#current,P#' . $this->partUrban->getId() . ',S#2})), ({F#current,Q#current,P#' . $this->partRural->getId() . ',S#2} * {Q#current,P#' . $this->partRural->getId() . '} + {F#current,Q#current,P#' . $this->partUrban->getId() . ',S#2} * {Q#current,P#' . $this->partUrban->getId() . '}) / {Q#current,P#' . $this->partTotal->getId() . '}, {self})');
         // Get or create all filter
         echo 'Importing uses of Rule for Filter-Questionnaire';
         foreach ($filters as $filterName => $filterData) {
@@ -976,10 +976,10 @@ STRING;
      * @param Questionnaire $questionnaire
      * @param Rule $rule
      * @param Part $part
-     * @param boolean $isSecondLevel
+     * @param boolean $isSecondStep
      * @return FilterQuestionnaireUsage
      */
-    private function getFilterQuestionnaireUsage(Filter $filter, Questionnaire $questionnaire, Rule $rule, Part $part, $isSecondLevel = false)
+    private function getFilterQuestionnaireUsage(Filter $filter, Questionnaire $questionnaire, Rule $rule, Part $part, $isSecondStep = false)
     {
         $key = \Application\Utility::getCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheFilterQuestionnaireUsages)) {
@@ -991,7 +991,7 @@ STRING;
                     ->setRule($rule)
                     ->setPart($part)
                     ->setFilter($filter)
-                    ->setIsSecondLevel($isSecondLevel);
+                    ->setIsSecondStep($isSecondStep);
 
             $this->getEntityManager()->persist($filterQuestionnaireUsage);
 
@@ -1191,7 +1191,7 @@ STRING;
             $otherHighFilter = $this->cacheHighFilters[$filterNameOther];
             $id = $otherHighFilter->getId();
             $formula = str_replace($filterNameOther . 'REGRESSION', "{F#$id,P#current,Y+0}", $formula);
-            $formula = str_replace($filterNameOther, "{F#$id,Q#current,P#current,L#2}", $formula);
+            $formula = str_replace($filterNameOther, "{F#$id,Q#current,P#current,S#2}", $formula);
         }
 
         return $formula;

@@ -259,14 +259,14 @@ use \Application\Traits\EntityManagerAware;
      * @param string $formula GIMS formula
      * @param \Application\Model\Rule\AbstractQuestionnaireUsage $usage
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
-     * @param boolean $useSecondLevelRules
+     * @param boolean $useSecondStepRules
      * @return string
      */
-    public function convertBeforeRegression(Calculator $calculator, $formula, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules)
+    public function convertBeforeRegression(Calculator $calculator, $formula, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondStepRules)
     {
         foreach ($this->getBeforeRegressionTokens() as $token) {
-            $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token, $calculator, $usage, $alreadyUsedFormulas, $useSecondLevelRules) {
-                        return $token->replace($calculator, $matches, $usage, $alreadyUsedFormulas, $useSecondLevelRules);
+            $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token, $calculator, $usage, $alreadyUsedFormulas, $useSecondStepRules) {
+                        return $token->replace($calculator, $matches, $usage, $alreadyUsedFormulas, $useSecondStepRules);
                     }, $formula);
         }
 

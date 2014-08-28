@@ -90,7 +90,7 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
      * Additional rules to apply to compute value
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="\Application\Model\Rule\FilterQuestionnaireUsage", mappedBy="filter")
-     * @ORM\OrderBy({"isSecondLevel" = "DESC", "sorting" = "ASC", "id" = "ASC"})
+     * @ORM\OrderBy({"isSecondStep" = "DESC", "sorting" = "ASC", "id" = "ASC"})
      */
     private $filterQuestionnaireUsages;
 

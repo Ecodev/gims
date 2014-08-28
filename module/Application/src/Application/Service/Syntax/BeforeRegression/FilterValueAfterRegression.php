@@ -18,7 +18,7 @@ class FilterValueAfterRegression extends AbstractToken
         return '/\{F#(\d+|current),P#(\d+|current),Y([+-]?\d+)\}/';
     }
 
-    public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules)
+    public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondStepRules)
     {
         $filterId = $this->getFilterId($matches[1], $usage);
         $partId = $this->getPartId($matches[2], $usage);

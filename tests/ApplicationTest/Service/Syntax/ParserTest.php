@@ -65,7 +65,7 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
         $this->assertSame($f1, $f1bis);
         $this->assertSame($f2, $f2bis);
 
-        $formula = '=IF(FOO(), SUM({F#1,Q#1,P#current}, {F#2,Q#current,P#1,L#2}), 0.95) + {self} + {Q#1,P#1} / {F#1,Q#1} + {R#1,Q#current,P#1}';
+        $formula = '=IF(FOO(), SUM({F#1,Q#1,P#current}, {F#2,Q#current,P#1,S#2}), 0.95) + {self} + {Q#1,P#1} / {F#1,Q#1} + {R#1,Q#current,P#1}';
         $expected = [
             [
                 'type' => 'text',
@@ -76,7 +76,7 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
                 'filter' => 'filter 1',
                 'questionnaire' => 'tst - test geoname',
                 'part' => 'current',
-                'level' => false,
+                'isSecondStep' => false,
                 'color' => null,
             ],
             [
@@ -88,7 +88,7 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
                 'filter' => 'filter 2',
                 'questionnaire' => 'current',
                 'part' => 'test part',
-                'level' => true,
+                'isSecondStep' => true,
                 'color' => null,
             ],
             [

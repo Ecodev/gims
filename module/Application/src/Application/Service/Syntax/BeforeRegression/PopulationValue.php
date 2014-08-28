@@ -18,7 +18,7 @@ class PopulationValue extends AbstractToken
         return '/\{Q#(\d+|current),P#(\d+|current)\}/';
     }
 
-    public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules)
+    public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondStepRules)
     {
         $questionnaireId = $matches[1];
         $partId = $this->getPartId($matches[2], $usage);

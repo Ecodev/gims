@@ -53,14 +53,18 @@ as seen above, there are two distinct contexts whose syntaxes cannot be mixed.
 The first context is before the regression, and the second context is
 after the regression.
 
+
+.. _step:
+
 Where:
 
 * ``F`` = :term:`Filter`
 * ``Q`` = :term:`Questionnaire`
 * ``P`` = :term:`Part`
 * ``R`` = :term:`Rule`
-* ``L`` = Level, only two possibilities: absent, or exactly "L#2" to indicate
-  Level 2 (:ref:`see explanation <step2>`)
+* ``S`` = Step, only two possibilities: absent, so only rules of Step 1 will be
+  used, or exactly "S#2" to indicate that rules of Step 2 should also be used
+  (:ref:`see explanation <step2>`)
 * ``Y`` = Year offset
 
 
@@ -84,7 +88,7 @@ Before regression context
     .. code-block:: lua
 
         {F#12,Q#34,P#56}
-        {F#12,Q#34,P#56,L#2}
+        {F#12,Q#34,P#56,S#2}
 
 
 **Question label**

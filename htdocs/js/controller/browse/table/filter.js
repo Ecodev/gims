@@ -1001,7 +1001,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             });
         } else {
             var usage = {
-                isSecondLevel: true,
+                isSecondStep: true,
                 filter: filterId,
                 questionnaire: questionnaire.id,
                 part: partId,

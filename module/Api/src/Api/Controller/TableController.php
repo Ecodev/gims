@@ -75,10 +75,10 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
      * @param integer $level the level of the current filter in the filter tree
      * @param array $fields
      * @param array $overridenFilters
-     * @param bool $userSecondLevelRules
+     * @param bool $useSecondStepRules
      * @return array a list (not tree) of all filters with their values and tree level
      */
-    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0, $fields = array(), $overridenFilters = array(), $userSecondLevelRules = false)
+    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0, $fields = array(), $overridenFilters = array(), $useSecondStepRules = false)
     {
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
@@ -90,7 +90,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $current['filter']['level'] = $level;
 
         foreach ($parts as $part) {
-            $computed = $calculator->computeFilter($filter->getId(), $questionnaire->getId(), $part->getId(), $userSecondLevelRules, null);
+            $computed = $calculator->computeFilter($filter->getId(), $questionnaire->getId(), $part->getId(), $useSecondStepRules, null);
             // Round the value
             $value = \Application\Utility::decimalToRoundedPercent($computed);
             $current['values'][0][$part->getName()] = $value;
@@ -99,7 +99,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         // Compute children
         $result = array($current);
         foreach ($filter->getChildren() as $child) {
-            $result = array_merge($result, $this->computeWithChildren($questionnaire, $child, $parts, $level + 1, $fields, $overridenFilters, $userSecondLevelRules));
+            $result = array_merge($result, $this->computeWithChildren($questionnaire, $child, $parts, $level + 1, $fields, $overridenFilters, $useSecondStepRules));
         }
 
         return $result;

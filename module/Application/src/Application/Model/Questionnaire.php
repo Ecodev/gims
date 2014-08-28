@@ -80,7 +80,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      * Additional rules to apply to compute value
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="\Application\Model\Rule\FilterQuestionnaireUsage", mappedBy="questionnaire")
-     * @ORM\OrderBy({"isSecondLevel" = "DESC", "sorting" = "ASC", "id" = "ASC"})
+     * @ORM\OrderBy({"isSecondStep" = "DESC", "sorting" = "ASC", "id" = "ASC"})
      */
     private $filterQuestionnaireUsages;
 

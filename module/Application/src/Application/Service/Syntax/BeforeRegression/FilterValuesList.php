@@ -18,7 +18,7 @@ class FilterValuesList extends AbstractToken
         return '/\{F#(\d+|current),Q#all\}/';
     }
 
-    public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules)
+    public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondStepRules)
     {
         $filterId = $this->getFilterId($matches[1], $usage);
 

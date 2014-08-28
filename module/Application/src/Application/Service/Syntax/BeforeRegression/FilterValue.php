@@ -15,17 +15,17 @@ class FilterValue extends AbstractToken
 
     public function getPattern()
     {
-        return '/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)(,L#2)?\}/';
+        return '/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)(,S#2)?\}/';
     }
 
-    public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules)
+    public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondStepRules)
     {
         $filterId = $this->getFilterId($matches[1], $usage);
         $questionnaireId = $this->getQuestionnaireId($matches[2], $usage);
         $partId = $this->getPartId($matches[3], $usage);
 
-        $useSecondLevelRules = isset($matches[4]) && $matches[4] == ',L#2';
-        $value = $calculator->computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas);
+        $useSecondStepRules = isset($matches[4]) && $matches[4] == ',S#2';
+        $value = $calculator->computeFilter($filterId, $questionnaireId, $partId, $useSecondStepRules, $alreadyUsedFormulas);
 
         return is_null($value) ? 'NULL' : $value;
     }
@@ -37,7 +37,7 @@ class FilterValue extends AbstractToken
             'filter' => $parser->getFilterName($matches[1]),
             'questionnaire' => $parser->getQuestionnaireName($matches[2]),
             'part' => $parser->getPartName($matches[3]),
-            'level' => isset($matches[4]) && $matches[4] == ',L#2',
+            'isSecondStep' => isset($matches[4]) && $matches[4] == ',S#2',
             'color' => $parser->getFilterColor($matches[1]),
         ];
     }

@@ -18,7 +18,7 @@ class QuestionName extends AbstractToken
         return '/\{F#(\d+|current),Q#(\d+|current)\}/';
     }
 
-    public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondLevelRules)
+    public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondStepRules)
     {
         $filterId = $this->getFilterId($matches[1], $usage);
         $questionnaireId = $this->getQuestionnaireId($matches[2], $usage);
