@@ -56,7 +56,7 @@ class RoleRepository extends AbstractRepository
 
         // If no context at all, return all role names
         if (is_null($contexts)) {
-            return $this->cache[$user->getId()]['all'];
+            return array_merge($roleNames, $this->cache[$user->getId()]['all']);
         }
 
         // Ensure we have something foreach-able
