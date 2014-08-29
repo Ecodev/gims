@@ -369,14 +369,10 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      */
     public function getRoles()
     {
-        // If we are here, it means there is at least a logged in user,
-        // which means he has, at the very least, the hardcoded role of member
-        $roles = array('member');
-
         $roleRepository = \Application\Module::getEntityManager()->getRepository('\Application\Model\Role');
         $roleNames = $roleRepository->getAllRoleNames($this, $this->roleContext);
 
-        return array_unique(array_merge($roles, $roleNames));
+        return $roleNames;
     }
 
     /**

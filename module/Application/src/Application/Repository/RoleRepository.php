@@ -40,6 +40,15 @@ class RoleRepository extends AbstractRepository
      */
     public function getAllRoleNames(\Application\Model\User $user, \Application\Service\RoleContextInterface $contexts = null)
     {
+        // If we are here, it means there is at least a logged in user,
+        // which means he has, at the very least, the hardcoded role of member
+        $roleNames = array('member');
+
+        // If the user is not persisted yet, there is no way to have any other roles than member
+        if (!$user->getId()) {
+            return $roleNames;
+        }
+
         // Fill cache if needed
         if (!isset($this->cache[$user->getId()])) {
             $this->fillCache($user);
@@ -56,7 +65,6 @@ class RoleRepository extends AbstractRepository
         }
 
         // Picks the roles from cache according to context
-        $roleNames = [];
         foreach ($contexts as $context) {
 
             if ($context instanceof \Application\Model\Survey) {
