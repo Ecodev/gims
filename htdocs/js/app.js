@@ -15,7 +15,8 @@ angular.module('myApp', [
     'ngAnimate',
     'ui.ace',
     'angulartics',
-    'angulartics.google.analytics'
+    'angulartics.google.analytics',
+    'ui.sortable'
 ]).
         config(function($routeProvider, $locationProvider, RestangularProvider, $httpProvider, requestNotificationProvider) {
             'use strict';

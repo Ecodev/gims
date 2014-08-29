@@ -25,6 +25,7 @@
     "angular-ui-ace": "bower",
     "fontawesome": "v4.1.0",
     "impress.js": "~0.5.3",
-    "angulartics": "~0.15.19"
+    "angulartics": "~0.15.19",
+    "angular-ui-sortable": "~0.12.10"
   }
 }
