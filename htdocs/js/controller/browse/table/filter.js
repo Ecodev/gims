@@ -13,7 +13,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.filterFields = {fields: 'color,paths,parents,summands'};
     $scope.countryParams = {fields: 'geoname'};
     var questionnaireFields = {fields: 'survey.questions.type,survey.questions.filter'};
-    var questionnaireWithAnswersFields = {fields: 'status,filterQuestionnaireUsages,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part'};
+    var questionnaireWithAnswersFields = {fields: 'status,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part,filterQuestionnaireUsages.sorting,filterQuestionnaireUsages.isSecondLevel'};
 
     // Variables initialisations
     $scope.expandHierarchy = true;
@@ -30,6 +30,37 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         completed: true,
         rejected: true,
         'new': true
+    };
+
+    $scope.sortableOptions = {
+        stop: function(e, ui) {
+            var questionnaireId = ui.item[0].dataset.questionnaire;
+            var filterId = ui.item[0].dataset.filter;
+            var partId = ui.item[0].dataset.part;
+            var questionnaire = _.find($scope.tabs.questionnaires, {id: parseInt(questionnaireId)});
+            var usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId].second.concat(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId].first);
+
+            var miniUsages = [];
+            // update sorting and create mini usages to avoid sending mass data to server
+            _.forEach(usages, function(usage, i) {
+                usage.sorting = i;
+                miniUsages.push({
+                    id: usage.id,
+                    sorting: usage.sorting
+                });
+            });
+
+            var usagesPromisses = [];
+            _.forEach(miniUsages, function(usage) {
+                Restangular.restangularizeElement(null, usage, 'filterQuestionnaireUsage');
+                usagesPromisses.push(usage.put({fields: 'sorting'}));
+            });
+
+            $q.all(usagesPromisses).then(function() {
+                $scope.refresh(false, true, true);
+            });
+
+        }
     };
 
     var modes = [
@@ -79,7 +110,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /*************************************************************** Watchers */
     /**************************************************************************/
 
-    // Subscribe to listen when there is network activity
+        // Subscribe to listen when there is network activity
     $scope.isLoading = false;
     requestNotification.subscribeOnRequest(function() {
         $scope.isLoading = true;
@@ -180,7 +211,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         newQuestionnaires = newQuestionnaires ? newQuestionnaires : [];
 
         if (!_.isEmpty(newQuestionnaires)) {
-
             getQuestionnaires(newQuestionnaires, questionnaireWithAnswersFields).then(function(questionnaires) {
                 $scope.firstQuestionnairesRetrieve = true;
                 prepareDataQuestionnaires(questionnaires);
@@ -215,7 +245,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         }
 
         if (questionnairesUsages && !_.isUndefined($scope.tabs) && !_.isUndefined($scope.tabs.questionnaires)) {
-            getQuestionnaires(_.pluck($scope.tabs.questionnaires, 'id'), {fields: 'filterQuestionnaireUsages'}).then(function(questionnaires) {
+            getQuestionnaires(_.pluck($scope.tabs.questionnaires, 'id'), {fields: 'filterQuestionnaireUsages.isSecondLevel,filterQuestionnaireUsages.sorting'}).then(function(questionnaires) {
                 updateQuestionnaireUsages(questionnaires);
             });
         }
@@ -421,7 +451,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         $scope.checkQuestionnairesIntegrity().then(function() {
             saveFilters().then(function(savedFacilities) {
                 var questionnairesToCreate = !_.isUndefined(questionnaire) ?
-                        [questionnaire] : _.filter($scope.tabs.questionnaires, $scope.checkIfSavableQuestionnaire);
+                    [questionnaire
+                    ] : _.filter($scope.tabs.questionnaires, $scope.checkIfSavableQuestionnaire);
                 var existingQuestionnaires = _.filter($scope.tabs.questionnaires, 'id');
                 saveQuestionnaires(questionnairesToCreate.concat(existingQuestionnaires), savedFacilities);
             });
@@ -714,23 +745,24 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         }
     };
 
-    $scope.copyFilterUsages = function(dest, src) {
-
-        if (dest.id && src.id) {
-            // add an array with 1 element to disable the ability to duplicate formulas again
-            dest.filterQuestionnaireUsages = true;
-            dest.isLoading = true;
-            $http.get('/api/questionnaire/copyFilterUsages', {
-                params: {
-                    dest: dest.id,
-                    src: src.id
-                }
-            }).success(function() {
-                dest.isLoading = false;
-                $scope.refresh(false, true);
-            });
-        }
-    };
+    // @todo : remove /api/questionnaire/copyFilterUsages on server side
+    //    $scope.copyFilterUsages = function(dest, src) {
+    //
+    //        if (dest.id && src.id) {
+    //            // add an array with 1 element to disable the ability to duplicate formulas again
+    //            dest.filterQuestionnaireUsages = true;
+    //            dest.isLoading = true;
+    //            $http.get('/api/questionnaire/copyFilterUsages', {
+    //                params: {
+    //                    dest: dest.id,
+    //                    src: src.id
+    //                }
+    //            }).success(function() {
+    //                dest.isLoading = false;
+    //                $scope.refresh(false, true);
+    //            });
+    //        }
+    //    };
 
     $scope.toggleQuestionAbsolute = function(questionnaire, question) {
 
@@ -895,6 +927,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param questionnaires
      */
     var prepareDataQuestionnaires = function(questionnaires) {
+
         angular.forEach(questionnaires, function(questionnaire) {
 
             _.forEach(questionnaire.survey.questions, function(question) {
@@ -942,6 +975,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param questionnaire
      */
     var indexFilterQuestionnaireUsages = function(questionnaire) {
+
         // Indexes usages by filter and part
         var usagesByFilter = {};
         _.forEach(questionnaire.filterQuestionnaireUsages, function(usage) {
@@ -951,13 +985,17 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             }
 
             if (!usagesByFilter[usage.filter.id][usage.part.id]) {
-                usagesByFilter[usage.filter.id][usage.part.id] = [];
+                usagesByFilter[usage.filter.id][usage.part.id] = {first: [
+                ], second: []};
             }
-            usagesByFilter[usage.filter.id][usage.part.id].push(usage);
+            if (usage.isSecondLevel) {
+                usagesByFilter[usage.filter.id][usage.part.id].second.push(usage);
+            } else {
+                usagesByFilter[usage.filter.id][usage.part.id].first.push(usage);
+            }
         });
 
         questionnaire.filterQuestionnaireUsagesByFilterAndPart = usagesByFilter;
-
     };
 
     /**
@@ -984,17 +1022,17 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId] = {};
         }
         if (!questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId]) {
-            questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId] = [];
+            questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId] = {second: []};
         }
 
-        var usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId];
+        var usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId].second;
         if ($scope.excludeRuleExists(usages)) {
             _.forEach(usages, function(usage) {
                 if (usage.rule.id == excludeRuleId) {
                     Restangular.restangularizeElement(null, usage, 'filterQuestionnaireUsage');
                     usage.remove().then(function() {
-                        questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId] = _.without(usages, usage);
-                        $scope.refresh(false, true);
+                        questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId].second = _.without(usages, usage);
+                        $scope.refresh(false, true, true);
                     });
                 }
             });
@@ -1009,8 +1047,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 sorting: -1 // guarantee that the rule overrides all other existing rules
             };
 
-            Restangular.all('filterQuestionnaireUsage').post(usage).then(function(newUsage) {
-                usages.push(newUsage);
+            Restangular.all('filterQuestionnaireUsage').post(usage).then(function() {
                 $scope.refresh(false, true, true);
             });
         }
@@ -1922,7 +1959,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      * @param element
      */
     var updateUrl = function(element) {
-        $location.search(element, _.filter(_.pluck($scope.tabs[element], 'id'), function(el) {
+        $location.search(element, _.filter(_.pluck($scope.tabs[element], 'id'),function(el) {
             if (el) {
                 return true;
             }
@@ -2003,7 +2040,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
             var usages;
             if (questionnaire.filterQuestionnaireUsagesByFilterAndPart && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id]) {
-                usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId];
+                usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId].first.concat(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId].second);
             }
 
             if (answer && answer.error) {

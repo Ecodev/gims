@@ -269,7 +269,7 @@ table.table {
 .bigtable {
     table-layout:fixed;
     margin-right:50px;
-    margin-bottom:100px;
+    margin-bottom:250px;
 }
 .bigtable th{
     text-overflow:ellipsis;
@@ -319,6 +319,35 @@ table.table {
     }
 }
 
+
+.navbar-nav .navbar-text.loading-widget {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.dropdown-menu > li > ul {
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+.dropdown-menu > li > ul > li > a {
+    display: block;
+    padding:3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.428571429;
+    color: #333333;
+    white-space: nowrap;
+
+    &:hover{
+        text-decoration: none;
+        color: #262626;
+        background-color: whitesmoke;
+    }
+}
+
+
 /* Differs local, dev and production instances */
 body.demo {
     .navbar-fixed-top {
@@ -346,12 +375,6 @@ body.local {
 
 [ui-ace] {
     @extend .form-control;
-}
-
-.navbar-nav .navbar-text.loading-widget {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    color: white;
 }
 
 

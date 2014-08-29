@@ -34,7 +34,7 @@
             Restore last selected rule
         </button>
 
-        <button class="btn btn-danger" ng-click="delete()" ng-if="!!usage.id && !readonly && usage.rule.permissions.delete"><i class="fa" ng-class="{'fa-gims-loading':isRemoving, 'fa-trash-o':!isRemoving}"></i> Delete</button>
+        <button class="btn btn-danger" ng-click="delete()" ng-if="!!usage.id && !readonly && usage.permissions.delete"><i class="fa" ng-class="{'fa-gims-loading':isRemoving, 'fa-trash-o':!isRemoving}"></i> Delete</button>
 
         <div class="btn-group dropup" ng-if="!readonly">
             <button class="btn btn-primary" ng-click="save()" ng-if="!usage.id && formulaForm.name.$pristine && formulaForm.formula.$pristine" ng-disabled="formulaForm.$invalid || errors.length">

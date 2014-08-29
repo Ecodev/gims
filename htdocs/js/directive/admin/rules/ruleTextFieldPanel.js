@@ -34,13 +34,13 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
             });
 
             $scope.$watch('usage', function(usage, oldUsage) {
-                if (usage && usage.id && (_.isUndefined(oldUsage) || usage.id != oldUsage.id)) {
+                if (usage && usage.id && (_.isUndefined(oldUsage) || !_.isUndefined(oldUsage) && usage.id != oldUsage.id)) {
                     getUsageProperties(usage);
                 }
             });
 
             $scope.$watch('usage.rule', function(rule, oldRule) {
-                if (rule && rule.id && (_.isUndefined(oldRule) || rule.id != oldRule.id)) {
+                if (rule && rule.id && (_.isUndefined(oldRule) || !_.isUndefined(oldRule) && rule.id != oldRule.id)) {
                     getRuleProperties(rule);
                 }
             });
@@ -168,6 +168,7 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
 
             $scope.delete = function() {
                 $scope.isRemoving = true;
+                Restangular.restangularizeElement(null, $scope.usage, getUsageType());
                 $scope.usage.remove().then(function() {
                     $scope.refresh({questionnairesPermissions: false, filtersComputing: true, questionnairesUsages: true});
                     $scope.isRemoving = false;
