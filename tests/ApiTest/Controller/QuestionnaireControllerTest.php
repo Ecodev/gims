@@ -127,6 +127,27 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
         $this->assertEquals(1, $actual['metadata']['totalCount'], 'should be able to be listed');
     }
 
+    public function testCanGetQuestionnaireFromBothContexts()
+    {
+        $this->createAnotherQuestionnaire();
+
+        // Check that we have exactly one role via survey
+        $this->assertEquals(1, $this->user->getUserSurveys()->count(1), 'should have only one role on surveys');
+        $this->assertEquals('Survey editor', $this->user->getUserSurveys()[0]->getRole()->getName(), 'should be Survey editor');
+
+        // Check that we have exactly one role via questionnaire
+        $this->assertEquals(1, $this->user->getUserQuestionnaires()->count(1), 'should have only one role on questionnaires');
+        $this->assertEquals('Questionnaire reporter', $this->user->getUserQuestionnaires()[0]->getRole()->getName(), 'should be Questionnaire reporter');
+
+        // Check that we have exactly 2 questionnaires
+        $this->assertEquals(2, $this->survey->getQuestionnaires()->count(), 'should have two questionnaires');
+
+        $this->dispatch($this->getRoute('getListViaSurvey') . '?fields=permissions', Request::METHOD_GET);
+        $actual = $this->getJsonResponse();
+
+        $this->assertEquals(2, $actual['metadata']['totalCount'], 'should be able to get both questionnaires, one via questionnaire context, and the other one via survey context');
+    }
+
     public function testCanValidateAndPublishQuestionnaire()
     {
         $roleRepository = $this->getEntityManager()->getRepository('Application\Model\Role');
