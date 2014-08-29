@@ -19,7 +19,7 @@ Computing is a complex process that can be split in 4 steps as described below:
     :alt: Computing
 
 While the default computing process should satisfy the majority of cases, the
-user can choose to customize it in three of the above steps via rules or summands (shown in orange on the illustration above).
+user can choose to customize it in three of the above steps via rules or summands (shown in orange on the illustration).
 
 
 .. _step1:
