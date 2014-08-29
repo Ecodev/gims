@@ -372,7 +372,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
         $roleRepository = \Application\Module::getEntityManager()->getRepository('\Application\Model\Role');
         $roleNames = $roleRepository->getAllRoleNames($this, $this->roleContext);
 
-        return $roleNames;
+        return array_unique($roleNames);
     }
 
     /**
