@@ -13,7 +13,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.filterFields = {fields: 'color,paths,parents,summands'};
     $scope.countryParams = {fields: 'geoname'};
     var questionnaireFields = {fields: 'survey.questions.type,survey.questions.filter'};
-    var questionnaireWithAnswersFields = {fields: 'status,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part,filterQuestionnaireUsages.sorting,filterQuestionnaireUsages.isSecondLevel'};
+    var questionnaireWithAnswersFields = {fields: 'status,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part,filterQuestionnaireUsages.isSecondStep,filterQuestionnaireUsages.sorting'};
 
     // Variables initialisations
     $scope.expandHierarchy = true;
@@ -129,6 +129,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     $scope.$watch('tabs.filterSet', function() {
         if ($scope.tabs.filterSet) {
+
             $scope.tabs.filters = [];
             Restangular.one('filterSet', $scope.tabs.filterSet.id).getList('filters', _.merge($scope.filterFields, {perPage: 1000})).then(function(filters) {
                 if (filters) {
@@ -245,7 +246,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         }
 
         if (questionnairesUsages && !_.isUndefined($scope.tabs) && !_.isUndefined($scope.tabs.questionnaires)) {
-            getQuestionnaires(_.pluck($scope.tabs.questionnaires, 'id'), {fields: 'filterQuestionnaireUsages.isSecondLevel,filterQuestionnaireUsages.sorting'}).then(function(questionnaires) {
+            getQuestionnaires(_.pluck($scope.tabs.questionnaires, 'id'), {fields: 'filterQuestionnaireUsages.isSecondStep,filterQuestionnaireUsages.sorting'}).then(function(questionnaires) {
                 updateQuestionnaireUsages(questionnaires);
             });
         }
@@ -450,9 +451,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
         $scope.checkQuestionnairesIntegrity().then(function() {
             saveFilters().then(function(savedFacilities) {
-                var questionnairesToCreate = !_.isUndefined(questionnaire) ?
-                    [questionnaire
-                    ] : _.filter($scope.tabs.questionnaires, $scope.checkIfSavableQuestionnaire);
+                var questionnairesToCreate = !_.isUndefined(questionnaire) ? [questionnaire] : _.filter($scope.tabs.questionnaires, $scope.checkIfSavableQuestionnaire);
                 var existingQuestionnaires = _.filter($scope.tabs.questionnaires, 'id');
                 saveQuestionnaires(questionnairesToCreate.concat(existingQuestionnaires), savedFacilities);
             });
@@ -607,8 +606,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 if (data.questionnaire && data.questionnaire.id) {
                     questionnaire.id = data.questionnaire.id;
                     questionnaire.survey.id = data.survey.id;
-                    getQuestionnaires([data.questionnaire.id
-                    ], questionnaireWithAnswersFields).then(function(questionnaires) {
+                    getQuestionnaires([data.questionnaire.id], questionnaireWithAnswersFields).then(function(questionnaires) {
                         $scope.firstQuestionnairesRetrieve = true;
                         prepareDataQuestionnaires(questionnaires);
                         updateUrl('questionnaires');
@@ -651,7 +649,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             $scope.tabs.questionnaires = [];
         }
 
-        var questionnaire = {};
         var country = null;
         if ($location.search().usedCountry) {
             country = $location.search().usedCountry;
@@ -659,7 +656,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             country = $scope.tabs.country.id;
         }
 
-        questionnaire = {
+        var questionnaire = {
             geoname: {
                 country: country
             }
@@ -985,10 +982,9 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             }
 
             if (!usagesByFilter[usage.filter.id][usage.part.id]) {
-                usagesByFilter[usage.filter.id][usage.part.id] = {first: [
-                ], second: []};
+                usagesByFilter[usage.filter.id][usage.part.id] = {first: [], second: []};
             }
-            if (usage.isSecondLevel) {
+            if (usage.isSecondStep) {
                 usagesByFilter[usage.filter.id][usage.part.id].second.push(usage);
             } else {
                 usagesByFilter[usage.filter.id][usage.part.id].first.push(usage);
