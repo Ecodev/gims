@@ -36,10 +36,10 @@
     </div>
     <!-- Selection panel for filters and questionnaires -->
     <form name="selectionForm">
-        <div class="row show-grid ng-trans ng-trans-slide-up" ng-show="expandSelection" >
+        <div class="row show-grid ng-trans ng-trans-slide-up" ng-if="expandSelection" >
 
             <!-- Filter selection -->
-            <div class="col-md-6" ng-show="(tabs.questionnaires.length || mode.isContribute) && !mode.isSector">
+            <div class="col-md-6" ng-if="(tabs.questionnaires.length || mode.isContribute) && !mode.isSector">
                 <div class="row" ng-class="{'has-error':!tabs.filters.length}">
                     <div class="col-md-12">
                         <h3 class="control-label">Filter (rows) <small ng-if="!tabs.filters.length">(Required)</small></h3>
@@ -136,7 +136,7 @@
     </form>
 
     <!-- Tabs parts -->
-    <tabset class="nav-tabs-centered" ng-show="(mode.isSector && tabs.filter) || tabs.filters.length && (tabs.questionnaires.length || mode.isContribute)">
+    <tabset class="nav-tabs-centered" ng-if="(mode.isSector && tabs.filter) || tabs.filters.length && (tabs.questionnaires.length || mode.isContribute)">
         <tab ng-repeat="part in parts" heading="{{part.name}}" select="tabs.part = part"></tab>
     </tabset>
 
@@ -145,7 +145,7 @@
 
 
 <!-- Table of filters, questionnaires and answers. Display in full width when there are too much elements -->
-<div ng-show="(mode.isSector && tabs.filter) || tabs.filters.length && (tabs.questionnaires.length || mode.isContribute)" class="container gims-full-width-container">
+<div ng-if="(mode.isSector && tabs.filter) || tabs.filters.length && (tabs.questionnaires.length || mode.isContribute)" class="container gims-full-width-container">
 
     <div class="row">
         <div class="col-md-12">
@@ -298,8 +298,8 @@
                         <!-- Survey's year row -->
                         <tr class="active" ng-if="tabs.questionnaires.length">
                             <td>
-                                <button class="btn btn-default btn-sm" ng-show="!mode.isSector" ng-click="setExpandHierarchy(!expandHierarchy)"><i class="fa" ng-class="{'fa-compress':expandHierarchy,'fa-expand':!expandHierarchy}"></i> Filter hierarchy tree</button>
-                                <button class="btn btn-default btn-sm pull-right" ng-show="tabs.questionnaires.length > 1 && !questionnairesAreSorted" ng-click="orderQuestionnaires(false)"><i class="fa fa-sort-amount-asc fa-rotate-270"></i> Sort by year</button>
+                                <button class="btn btn-default btn-sm" ng-if="!mode.isSector" ng-click="setExpandHierarchy(!expandHierarchy)"><i class="fa" ng-class="{'fa-compress':expandHierarchy,'fa-expand':!expandHierarchy}"></i> Filter hierarchy tree</button>
+                                <button class="btn btn-default btn-sm pull-right" ng-if="tabs.questionnaires.length > 1 && !questionnairesAreSorted" ng-click="orderQuestionnaires(false)"><i class="fa fa-sort-amount-asc fa-rotate-270"></i> Sort by year</button>
                             </td>
                             <td ng-if="tabs.selectedQuestionnaireForLabels" class="text-center">{{tabs.selectedQuestionnaireForLabels.survey.year}}</td>
                             <td ng-repeat="questionnaire in tabs.questionnaires track by $index">
@@ -313,7 +313,7 @@
                         <!-- Population row -->
                         <tr class="active" ng-if="tabs.questionnaires.length && mode.isSector">
                             <td>
-                                <button class="btn btn-default btn-sm" ng-show="!mode.isSector" ng-click="setExpandHierarchy(!expandHierarchy)"><i class="fa" ng-class="{'fa-compress':expandHierarchy,'fa-expand':!expandHierarchy}"></i> Filter hierarchy tree</button>
+                                <button class="btn btn-default btn-sm" ng-if="!mode.isSector" ng-click="setExpandHierarchy(!expandHierarchy)"><i class="fa" ng-class="{'fa-compress':expandHierarchy,'fa-expand':!expandHierarchy}"></i> Filter hierarchy tree</button>
                             </td>
                             <td ng-if="tabs.selectedQuestionnaireForLabels"></td>
                             <td class="text-center" ng-repeat="questionnaire in tabs.questionnaires track by $index">
