@@ -742,25 +742,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         }
     };
 
-    // @todo : remove /api/questionnaire/copyFilterUsages on server side
-    //    $scope.copyFilterUsages = function(dest, src) {
-    //
-    //        if (dest.id && src.id) {
-    //            // add an array with 1 element to disable the ability to duplicate formulas again
-    //            dest.filterQuestionnaireUsages = true;
-    //            dest.isLoading = true;
-    //            $http.get('/api/questionnaire/copyFilterUsages', {
-    //                params: {
-    //                    dest: dest.id,
-    //                    src: src.id
-    //                }
-    //            }).success(function() {
-    //                dest.isLoading = false;
-    //                $scope.refresh(false, true);
-    //            });
-    //        }
-    //    };
-
     $scope.toggleQuestionAbsolute = function(questionnaire, question) {
 
         var isAbsolute = !question.isAbsolute;

@@ -154,14 +154,4 @@ class QuestionnaireController extends AbstractChildRestfulController
         $this->getEntityManager()->flush();
     }
 
-    public function copyFilterUsagesAction()
-    {
-        $destQ = $this->getRepository()->findOneById($this->params()->fromQuery('dest'));
-        $srcQ = $this->getRepository()->findOneById($this->params()->fromQuery('src'));
-
-        $this->getRepository()->copyFilterUsages($destQ, $srcQ);
-
-        return new \Zend\View\Model\JsonModel(array($destQ->getFilterQuestionnaireUsages()->count()));
-    }
-
 }

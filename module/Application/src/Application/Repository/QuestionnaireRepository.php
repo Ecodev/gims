@@ -83,38 +83,6 @@ class QuestionnaireRepository extends AbstractChildRepository
     }
 
     /**
-     * Duplicate all usages related to source questionnaire and replacing formula with destination questionnaire
-     * @param \Application\Model\Questionnaire $destQ
-     * @param \Application\Model\Questionnaire $srcQ
-     */
-    public function copyFilterUsages(\Application\Model\Questionnaire $destQ, \Application\Model\Questionnaire $srcQ)
-    {
-        $fqus = $srcQ->getFilterQuestionnaireUsages();
-
-        foreach ($fqus as $fqu) {
-
-            // replace questionnaire id in formula
-            $formula = $fqu->getRule()->getFormula();
-            $newFormula = str_replace('Q#' . $srcQ->getId(), 'Q#' . $destQ->getId(), $formula);
-
-            $newRule = new Rule($fqu->getRule()->getName());
-            $newRule->setFormula($newFormula);
-
-            $newFqu = new FilterQuestionnaireUsage();
-            $newFqu->setFilter($fqu->getFilter());
-            $newFqu->setQuestionnaire($destQ);
-            $newFqu->setPart($fqu->getPart());
-            $newFqu->setRule($newRule);
-            $newFqu->setJustification($fqu->getJustification());
-
-            $this->getEntityManager()->persist($newRule);
-            $this->getEntityManager()->persist($newFqu);
-        }
-
-        $this->getEntityManager()->flush();
-    }
-
-    /**
      * Returns all questionnaires using the given rule
      * @param \Application\Model\Rule\Rule $rule
      * @return \Application\Model\Questionnaire[]
