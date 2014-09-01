@@ -9,7 +9,7 @@ describe('browse/table', function() {
     });
 
     it('should render a grid', function() {
-        expect(element.all(by.css('[ng-view] .table.table-bordered.table-condensed.bigtable')).count()).toBe(1);
+        expect(element.all(by.css('[ng-view] .table.table-bordered.table-condensed.table-filter')).count()).toBe(1);
     });
 
     it('should render select for survey selection and filter selection', function() {

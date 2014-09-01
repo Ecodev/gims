@@ -29,6 +29,7 @@ input.error {
 @import "ng-trans";
 @import "rule";
 @import "icons";
+@import "tableFilter";
 
 // Force vertical scrollbar
 html {
@@ -260,26 +261,6 @@ table.table {
     width:100%;
     padding:0 20px;
     overflow-x:auto;
-}
-
-.bigtable .input-group-btn{
-    padding-left:6px;
-}
-
-.bigtable {
-    table-layout:fixed;
-    margin-right:50px;
-    margin-bottom:250px;
-}
-.bigtable th{
-    text-overflow:ellipsis;
-}
-.bigtable td, .bigtable th {
-    width: 150px;
-}
-
-.bigtable td.showLabels{
-    width:500px;
 }
 
 .nav-tabs-centered ul.nav-tabs{

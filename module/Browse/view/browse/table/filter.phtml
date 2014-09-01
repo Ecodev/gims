@@ -150,7 +150,7 @@
     <div class="row">
         <div class="col-md-12">
             <form name="answersForm" novalidate>
-                <table class="table table-bordered table-condensed bigtable">
+                <table class="table table-bordered table-condensed table-filter">
 
                     <!-- Head part : including country, survey code and survey year -->
                     <tbody>
@@ -363,16 +363,16 @@
 
                     <tbody>
                         <!-- Filters and answers rows -->
-                        <tr ng-repeat="filter in tabs.filters track by $index" ng-if="(mode.isSector && isValidId(filter)) || expandHierarchy || filter.level <= tabs.filters[0].level" ng-class="{'active':mode.isSector && filter.level < 2}"  ng-mouseenter="filter.hover=true" ng-mouseleave="filter.hover=false">
+                        <tr ng-repeat="filter in tabs.filters track by $index" ng-if="(mode.isSector && isValidId(filter)) || expandHierarchy || filter.level <= tabs.filters[0].level" ng-class="{'active':mode.isSector && filter.level < 2}">
 
                             <!-- Filter name column-->
-                            <td>
-                                <span class="btn btn-default btn-xs" style="vertical-align:top;" ng-click="removeFilter(filter)" ng-class="{'invisible':!mode.isContribute || !(!mode.isSector || mode.isSector && filter.level <= 1) || !filter.hover}" tooltip="Hide this row and its children" tooltip-placement="right"><i class="fa fa-times"></i></span>
+                            <td class="filter">
+                                <span class="btn btn-default btn-xs removeButton" style="vertical-align:top;" ng-click="removeFilter(filter)" tooltip="Hide this row and its children" tooltip-placement="right"><i class="fa fa-times"></i></span>
 
                                 <span ng-if="isValidId(filter) || mode.isSector && filter.level != 1" ng-class="{'strong':filter.level == tabs.filters[0].level && !filter.sectorChild}" style="margin-left:{{(filter.level - tabs.filters[0].level) * 2}}em;">
                                     <i class="fa" style="color:{{filter.color}}" ng-class="{'fa-gims-filter':!filter.isLoading && isValidId(filter), 'fa-asterisk text-primary':!filter.isLoading && !isValidId(filter), 'fa-gims-loading':filter.isLoading}"></i>
                                     {{filter.name}}
-                                    <a href="/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}" ng-if="mode.isContribute && !filter.sectorChild && filter.hover"><i class="fa fa-pencil"></i></a>
+                                    <a href="/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i></a>
                                 </span>
                                 <div ng-if="!isValidId(filter) && mode.isSector && filter.level == 1" style="display:inline-block;vertical-align:top;width:80%;margin-left:{{(filter.level - tabs.filters[0].level) * 2}}em;">
                                     <ng-form name="filterName" class="input-group" ng-class="{'has-error':filterName.$invalid}">
