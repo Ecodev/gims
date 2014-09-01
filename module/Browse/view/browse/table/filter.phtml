@@ -405,7 +405,7 @@
                                             <div class="input-group input-group-sm">
                                                 <!-- add-on buttons on input fields -->
                                                  <span class="input-group-btn">
-                                                    <button type="button" class="btn btn-default dropdown-toggle"  data-toggle="dropdown-menu" ng-if="questionnairesStatus[questionnaire.status] || questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] && isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first || questionnaire.survey.questions[filter.id].answers[tabs.part.id].isLoading">
+                                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown-menu" ng-if="questionnairesStatus[questionnaire.status] || questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] && isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first || questionnaire.survey.questions[filter.id].answers[tabs.part.id].isLoading">
                                                         <span ng-switch="getCellType(questionnaire, filter, tabs.part.id)">
                                                             <i ng-switch-when="loading" class="fa fa-fw fa-gims-loading"></i>
                                                             <i ng-switch-when="error" class="fa fa-fw fa-warning text-warning"></i>
@@ -482,18 +482,17 @@
                                                 <!-- input for edit answer -->
                                                 <input ng-if="questionnaire.survey.questions[filter.id].value"
                                                        class="form-control text-center"
-                                                       ng-class="{'error': valueForm.value.$invalid, 'excluded-from-computing': !isValidNumber(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second) && isValidNumber(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first)}"
+                                                       ng-class="{'error': valueForm.value.$invalid, 'excluded-from-computing': questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].isExcludedFromComputing}"
                                                        name="value"
                                                        type="number"
                                                        min="0"
                                                        gims-select-token part="tabs.part" questionnaire="questionnaire" filter="filter"
                                                        ng-max="questionnaire.survey.questions[filter.id].max"
-                                                       percent="{{questionnaire.survey.questions[filter.id].isAbsolute}}"
-                                                       percent-placeholder="{{questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second || questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first}}"
+                                                       placeholder="{{questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].displayValue}}"
                                                        question="questionnaire.survey.questions[filter.id]"
                                                        ng-focus="initQuestionAbsolute(questionnaire.survey.questions[filter.id]);setAnswerInitialValue(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id]); getPermissions(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[tabs.part.id])"
                                                        ng-blur="saveAnswer(questionnaire.survey.questions[filter.id].answers[tabs.part.id], questionnaire.survey.questions[filter.id], filter, questionnaire, tabs.part)"
-                                                       ng-model="questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]"
+                                                       ng-model="questionnaire.survey.questions[filter.id].answers[tabs.part.id].displayValue"
                                                        ng-readonly="!questionnairesStatus[questionnaire.status] ||
                                                                     questionnaire.survey.questions[filter.id].answers[tabs.part.id].permissions.update === false ||
                                                                     mode.isSector && filter.level <= 1 ||
@@ -505,7 +504,6 @@
                                                 <span class="input-group-addon" ng-if="questionnaire.survey.questions[filter.id].isAbsolute === true  && isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value])" tooltip="Positive number" tooltip-placement="left"><i class="fa fa-plus-square-o fa-fw"></i></span>
                                             </div>
                                         </ng-form>
-                                        <!--<pre>{{questionnaire.survey.questions[filter.id]|json}}</pre>-->
                                     </div>
                                 </div>
                             </td>

@@ -1,4 +1,4 @@
-angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $location, $http, $timeout, Restangular, $q, $rootScope, requestNotification, $filter) {
+angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $location, $http, $timeout, Restangular, $q, $rootScope, requestNotification, $filter, Percent) {
     'use strict';
 
     /**************************************************************************/
@@ -297,7 +297,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
                 // if value has been updated between permissions check, restore value
                 if (!answer.permissions.update) {
-                    answer[question.value] = newAnswer[question.value];
+                    answer.displayValue = question.isAbsolute ? newAnswer[question.value] : Percent.fractionToPercent(newAnswer[question.value]);
                 }
 
                 answer.isLoading = false;
@@ -399,9 +399,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             question.name = filter.name;
         }
 
-        // avoid to do some job if the value is not changed or if it's invalid (undefined)
-        if (answer.initialValue === answer[question.value] || _.isUndefined(answer[question.value]) && !_.isUndefined(answer.initialValue)) {
-            answer[question.value] = answer.initialValue;
+        // if the value is not changed or if it's invalid (undefined), reset to initial value
+        var valueToBeSaved = question.isAbsolute ? answer.displayValue : Percent.percentToFraction(answer.displayValue);
+        if (answer.initialValue === valueToBeSaved || !_.isNumber(valueToBeSaved) && !_.isUndefined(answer.initialValue)) {
+            answer.displayValue = question.isAbsolute ? answer.initialValue : Percent.fractionToPercent(answer.initialValue);
             deferred.resolve();
             return deferred.promise;
         }
@@ -413,11 +414,13 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             return deferred.promise;
         }
 
+        // If we reached this far, then we will touch the server, so we prepare the answer
+        answer[question.value] = valueToBeSaved;
         Restangular.restangularizeElement(null, answer, 'answer');
         Restangular.restangularizeElement(null, question, 'question');
 
         // delete answer if no value
-        if (answer.id && !$scope.isValidNumber(answer[question.value])) {
+        if (answer.id && !$scope.isValidNumber(valueToBeSaved)) {
             $scope.removeAnswer(question, answer);
             deferred.resolve();
 
@@ -426,27 +429,27 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
             if (answer.permissions) {
                 updateAnswer(answer, questionnaire).then(function() {
-                    answer.initialValue = answer[question.value];
+                    answer.initialValue = valueToBeSaved;
                     deferred.resolve(answer);
                 });
             } else {
                 $scope.getPermissions(question, answer).then(function() {
                     updateAnswer(answer, questionnaire).then(function() {
-                        answer.initialValue = answer[question.value];
+                        answer.initialValue = valueToBeSaved;
                         deferred.resolve(answer);
                     });
                 });
             }
 
             // create answer, if allowed by questionnaire
-        } else if (_.isUndefined(answer.id) && $scope.isValidNumber(answer[question.value]) && $scope.questionnairesStatus[questionnaire.status]) {
+        } else if (_.isUndefined(answer.id) && $scope.isValidNumber(valueToBeSaved) && $scope.questionnairesStatus[questionnaire.status]) {
             answer.questionnaire = questionnaire.id;
             question.survey = questionnaire.survey.id;
 
             // if question is not created, create it before creating the answer
             getOrSaveQuestion(question).then(function(question) {
                 createAnswer(answer, question, {part: part}).then(function() {
-                    answer.initialValue = answer[question.value];
+                    answer.initialValue = valueToBeSaved;
                     deferred.resolve(answer);
                     $scope.refresh(false, true);
                 });
@@ -922,11 +925,13 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
             _.forEach(questionnaire.survey.questions, function(question) {
                 if (question.answers) {
+
                     // index answers by part id
                     var answers = {};
                     _.forEach(question.answers, function(answer) {
                         if (answer.questionnaire && answer.questionnaire.id == questionnaire.id) {
                             answer.initialValue = question.isAbsolute ? answer.valueAbsolute : answer.valuePercent;
+                            answer.displayValue = question.isAbsolute ? answer.valueAbsolute : Percent.fractionToPercent(answer.valuePercent);
                             answers[answer.part.id] = answer;
                         }
                     });
@@ -1081,6 +1086,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     }
                 });
 
+                // Complete questions
                 _.forEach($scope.tabs.filters, function(filter) {
                     if (_.isUndefined(questionnaire.survey.questions[filter.id])) {
                         questionnaire.survey.questions[filter.id] = {
@@ -1161,10 +1167,19 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                         questionnaires: questionnairesIds.join(',')
                     }
                 }).success(function(questionnaires) {
+
+                    // Complete our structure with the result from server
                     _.forEach($scope.tabs.questionnaires, function(scopeQuestionnaire) {
                         if (questionnaires[scopeQuestionnaire.id]) {
-                            _.forEach(questionnaires[scopeQuestionnaire.id], function(values, filterId) {
-                                scopeQuestionnaire.survey.questions[filterId].filter.values = values;
+                            _.forEach(questionnaires[scopeQuestionnaire.id], function(valuesByPart, filterId) {
+
+                                // Compute a few useful things for our template
+                                _.forEach(valuesByPart, function(values, partId) {
+                                    valuesByPart[partId].isExcludedFromComputing = !$scope.isValidNumber(values.second) && $scope.isValidNumber(values.first);
+                                    valuesByPart[partId].displayValue = Percent.fractionToPercent($scope.isValidNumber(values.second) ? values.second : values.first);
+                                });
+
+                                scopeQuestionnaire.survey.questions[filterId].filter.values = valuesByPart;
                             });
                         }
                     });
@@ -1493,17 +1508,19 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     };
 
     /**
-     * Get and empty answer ready to be used as model and with right attributs setted
+     * Get an empty answer ready to be used as model and with right attributs set
      */
     var getEmptyAnswer = function(answer, questionnaire, question, part) {
-        answer = answer ? answer : {};
+        answer = answer || {};
 
         if (questionnaire) {
             answer.questionnaire = questionnaire;
         }
+
         if (question) {
             answer.question = question;
         }
+
         if (part) {
             answer.part = part;
         }
@@ -1519,7 +1536,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     var updateAnswer = function(answer, questionnaire) {
         var deferred = $q.defer();
         if (answer.id && (answer.permissions && answer.permissions.update || !answer.permissions && questionnaire && $scope.questionnairesStatus[questionnaire.status])) {
-            Restangular.restangularizeElement(null, answer, 'Answer');
+            Restangular.restangularizeElement(null, answer, 'answer');
 
             delete(answer.error);
             answer.isLoading = true;
@@ -1577,7 +1594,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             answer.isLoading = true;
             answer.remove().then(function() {
                 delete(answer.id);
-                delete(answer[question.value]);
+                delete(answer.displayValue);
                 delete(answer.edit);
                 answer.isLoading = false;
                 $scope.refresh(false, true);
@@ -1620,6 +1637,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             Restangular.all('answer').post(answer, {fields: 'permissions'}).then(function(newAnswer) {
                 answer.id = newAnswer.id;
                 answer[question.value] = newAnswer[question.value];
+                answer.displayValue = question.isAbsolute ? newAnswer[question.value] : Percent.fractionToPercent(newAnswer[question.value]);
                 answer.isLoading = false;
                 deferred.resolve(answer);
             }, function(data) {
