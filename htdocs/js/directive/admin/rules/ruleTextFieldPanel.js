@@ -1,4 +1,4 @@
-angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function($rootScope, Restangular, $q) {
+angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function($rootScope, Restangular, $q, requestNotification) {
     'use strict';
 
     return {
@@ -10,9 +10,18 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
         },
         controller: function($scope, selectExistingRuleModal) {
 
-            var ruleFields = {fields: 'permissions,filterQuestionnaireUsages.isSecondLevel,questionnaireUsages,filterGeonameUsages'};
-            var usageFields = {fields: 'permissions'};
+            var ruleFields = {fields: 'permissions,filterQuestionnaireUsages.isSecondStep,questionnaireUsages,filterGeonameUsages'};
+            var usageFields = {fields: 'permissions,isSecondStep'};
             $scope.usageType = null;
+
+            $scope.isLoading = false;
+            requestNotification.subscribeOnRequest(function() {
+                $scope.isLoading = true;
+            }, function() {
+                if (requestNotification.getRequestCount() === 0) {
+                    $scope.isLoading = false;
+                }
+            });
 
             $rootScope.$on('gims-rule-usage-added', function(evt, objects) {
                 $scope.usage = {};
@@ -61,7 +70,7 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
                     rule.questionnaireUsages = newRule.questionnaireUsages;
                     rule.filterGeonameUsages = newRule.filterGeonameUsages;
                     rule.nbOfUsages = rule.filterQuestionnaireUsages.length + rule.questionnaireUsages.length + rule.filterGeonameUsages.length;
-                    $scope.setLastSelectedRule(rule);
+                    $scope.saveCheckPoint();
                 });
             }, 300);
 
@@ -92,18 +101,18 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
             $scope.selectExistingRule = function() {
                 selectExistingRuleModal.select($scope.usage).then(function(rule) {
                     $scope.usage.rule = rule;
-                    $scope.setLastSelectedRule(rule);
+                    $scope.saveCheckPoint();
                 });
             };
 
-            $scope.setLastSelectedRule = function(rule) {
-                $scope.lastSelectedRule = _.clone(rule);
-                $scope.formulaForm.$setPristine(true);
+            $scope.saveCheckPoint = function() {
+                $scope.originUsage = _.cloneDeep($scope.usage);
+                $scope.form.$setPristine();
             };
 
-            $scope.restoreLastSelectedRule = function() {
-                $scope.usage.rule = _.clone($scope.lastSelectedRule);
-                $scope.formulaForm.$setPristine(true);
+            $scope.resetForm = function() {
+                $scope.usage = _.cloneDeep($scope.originUsage);
+                $scope.form.$setPristine();
             };
 
             $scope.saveDuplicate = function() {
@@ -121,13 +130,17 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
                 saveRule().then(function(rule) {
                     if (rule) {
                         $scope.usage.rule.id = rule.id;
-                        $scope.usage.rule.permissions = rule.permissions;
+                        if (rule.permissions) {
+                            $scope.usage.rule.permissions = rule.permissions;
+                        }
                     }
 
                     saveUsage().then(function(usage) {
                         if (usage) {
                             $scope.usage.id = usage.id;
-                            $scope.usage.permissions = usage.permissions;
+                            if (usage.permissions) {
+                                $scope.usage.permissions = usage.permissions;
+                            }
                         }
                         $scope.isSaving = false;
                         $scope.refresh({questionnairesPermissions: false, filtersComputing: true, questionnairesUsages: true});

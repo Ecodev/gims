@@ -6,7 +6,8 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
         templateUrl: '/template/browse/rule/textField',
         scope: {
             rule: '=',
-            messages: '=?'
+            messages: '=?',
+            ngDisabled: '=?'
         },
         controller: function($scope) {
 
