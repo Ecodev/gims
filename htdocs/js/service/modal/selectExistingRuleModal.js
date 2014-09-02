@@ -7,6 +7,7 @@ angular.module('myApp.services').factory('selectExistingRuleModal', function($mo
             var modalInstance = $modal.open({
                 controller: 'selectExistingRuleModalCtrl',
                 templateUrl: '/template/browse/rule/selectExistingRule',
+                windowClass: 'windowHeight',
                 resolve: {
                     referenceUsage: function() {
                         return usage;

@@ -347,6 +347,10 @@ table.table {
     }
 }
 
+div.windowHeight .modal-body {
+    max-height: 500px;
+    overflow: auto;
+}
 
 /* Differs local, dev and production instances */
 body.demo {
