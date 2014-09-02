@@ -956,6 +956,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
         // Indexes usages by filter and part
         var usagesByFilter = {};
+
         _.forEach(questionnaire.filterQuestionnaireUsages, function(usage) {
 
             if (!usagesByFilter[usage.filter.id]) {
@@ -2016,7 +2017,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             }
 
             var usages;
-            if (questionnaire.filterQuestionnaireUsagesByFilterAndPart && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id]) {
+            if (questionnaire.filterQuestionnaireUsagesByFilterAndPart && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id] && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId]) {
                 usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId].first.concat(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId].second);
             }
 

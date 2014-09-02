@@ -36,14 +36,14 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
             });
 
             $scope.$watch('usage', function(usage, oldUsage) {
-                if (usage && usage.id && (_.isUndefined(oldUsage) || !_.isUndefined(oldUsage) && usage.id != oldUsage.id)) {
+                if (usage && usage.id && (!oldUsage || oldUsage && usage.id != oldUsage.id)) {
                     updateUsageType();
                     getUsageProperties(usage);
                 }
             });
 
             $scope.$watch('usage.rule', function(rule, oldRule) {
-                if (rule && rule.id && (_.isUndefined(oldRule) || !_.isUndefined(oldRule) && rule.id != oldRule.id)) {
+                if (rule && rule.id && (!oldRule || oldRule && rule.id != oldRule.id)) {
                     getRuleProperties(rule);
                 }
             });
@@ -140,6 +140,8 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
              */
             var saveRule = function() {
 
+                Restangular.restangularizeElement(null, $scope.usage.rule, 'Rule');
+
                 // update
                 if ($scope.usage.rule.id && $scope.usage.rule.permissions && $scope.usage.rule.permissions.update) {
                     return $scope.usage.rule.put();
@@ -161,6 +163,8 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
              */
             var saveUsage = function() {
 
+                Restangular.restangularizeElement(null, $scope.usage, $scope.usageType);
+
                 // update
                 if ($scope.usage.id && $scope.usage.permissions && $scope.usage.permissions.update) {
                     return $scope.usage.put();
@@ -178,11 +182,22 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
 
             $scope.delete = function() {
                 $scope.isRemoving = true;
+
                 Restangular.restangularizeElement(null, $scope.usage, $scope.usageType);
+                Restangular.restangularizeElement(null, $scope.usage.rule, 'Rule');
+
                 $scope.usage.remove().then(function() {
-                    $scope.refresh({questionnairesPermissions: false, filtersComputing: true, questionnairesUsages: true});
-                    $scope.isRemoving = false;
-                    $scope.close();
+                    if ($scope.usage.rule.nbOfUsages == 1) { // if current usage is the only one used by rule, delete rule too
+                        $scope.usage.rule.remove().then(function() {
+                            $scope.isRemoving = false;
+                            $scope.refresh({questionnairesPermissions: false, filtersComputing: true, questionnairesUsages: true});
+                            $scope.close();
+                        });
+                    } else {
+                        $scope.isRemoving = false;
+                        $scope.refresh({questionnairesPermissions: false, filtersComputing: true, questionnairesUsages: true});
+                        $scope.close();
+                    }
                 });
             };
 
