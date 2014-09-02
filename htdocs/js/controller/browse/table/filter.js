@@ -940,10 +940,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             });
 
             // Index population by part id
-            var restPopulations = _.map(questionnaire.populations, function(population) {
-                return Restangular.restangularizeElement(null, population, 'population');
-            });
-            questionnaire.populations = _.indexBy(restPopulations, function(p) {
+            questionnaire.populations = _.indexBy(questionnaire.populations, function(p) {
                 return p.part.id;
             });
 
@@ -1078,11 +1075,9 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
                 _.forEach($scope.parts, function(part) {
                     if (_.isUndefined(questionnaire.populations[part.id])) {
-                        var emptyPopulation = {
+                        questionnaire.populations[part.id] = {
                             part: part.id
                         };
-                        Restangular.restangularizeElement(null, emptyPopulation, 'population');
-                        questionnaire.populations[part.id] = emptyPopulation;
                     }
                 });
 
@@ -1368,6 +1363,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             return;
         }
         $scope.setInitialValue(population, population.population);
+        Restangular.restangularizeElement(null, population, 'population');
 
         // Be sure that population data are in sync with other data from questionnaire/survey
         population.questionnaire = questionnaire.id;
