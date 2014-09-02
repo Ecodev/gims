@@ -431,7 +431,7 @@
                                                         </li>
 
                                                         <!-- Rules -->
-                                                        <li ng-if="((mode.isContribute && questionnairesStatus[questionnaire.status]) || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].second.length) && (questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id)" class="divider"></li>
+                                                        <li ng-if="(mode.isContribute && questionnairesStatus[questionnaire.status]) && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].second.length" class="divider"></li>
                                                         <li ng-if="(mode.isContribute && questionnairesStatus[questionnaire.status]) && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].second.length" class="dropdown-header">Rules used in 2nd step of computation</li>
                                                         <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].second">
                                                             <ul ui-sortable="sortableOptions" ng-model="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].second">
@@ -441,7 +441,7 @@
                                                             </ul>
                                                         </li>
 
-                                                        <li ng-if="((mode.isContribute && questionnairesStatus[questionnaire.status]) || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].first.length) && (questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[tabs.part.id].id)" class="divider"></li>
+                                                        <li ng-if="(mode.isContribute && questionnairesStatus[questionnaire.status]) && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].first.length" class="divider"></li>
                                                         <li ng-if="(mode.isContribute && questionnairesStatus[questionnaire.status]) && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].first.length" class="dropdown-header">Rules used in 1st step of computation</li>
                                                         <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].first">
                                                             <ul ui-sortable="sortableOptions" ng-model="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].first">
@@ -459,7 +459,7 @@
                                                         </li>
 
                                                         <!--<li ng-if="!isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) && isValidNumber(questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second)"><a><i class="fa fa-cog fa-fw"></i></a></li>-->
-                                                        <li ng-if="questionnairesStatus[questionnaire.status] && (filter.summands.length || ((mode.isContribute && questionnairesStatus[questionnaire.status]) || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].length) || questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id])" class="divider"></li>
+                                                        <li ng-if="questionnairesStatus[questionnaire.status]" class="divider"></li>
                                                         <li ng-if="questionnairesStatus[questionnaire.status]" class="dropdown-header">Actions</li>
                                                         <li ng-if="questionnairesStatus[questionnaire.status]">
                                                             <a href ng-click="toggleExcludeRule(questionnaire, filter.id, tabs.part.id)"><i class="fa fa-gims-rule fa-fw"></i> {{excludeRuleExists(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][tabs.part.id].second) ? 'Include in further computing' : 'Exclude from further computing'}}</a>
