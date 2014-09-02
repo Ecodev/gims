@@ -1,4 +1,4 @@
-<div class="container" >
+<div disable-animate class="container">
     <!-- Toolbar -->
     <div class="navbar navbar-default hidden-print">
         <a class="navbar-brand" href="#">{{mode.name}} filters</a>
@@ -36,7 +36,7 @@
     </div>
     <!-- Selection panel for filters and questionnaires -->
     <form name="selectionForm">
-        <div class="row show-grid ng-trans ng-trans-slide-up" ng-if="expandSelection" >
+        <div class="row show-grid" ng-if="expandSelection">
 
             <!-- Filter selection -->
             <div class="col-md-6" ng-if="(tabs.questionnaires.length || mode.isContribute) && !mode.isSector">
@@ -145,7 +145,7 @@
 
 
 <!-- Table of filters, questionnaires and answers. Display in full width when there are too much elements -->
-<div ng-if="(mode.isSector && tabs.filter) || tabs.filters.length && (tabs.questionnaires.length || mode.isContribute)" class="container gims-full-width-container">
+<div disable-animate ng-if="(mode.isSector && tabs.filter) || tabs.filters.length && (tabs.questionnaires.length || mode.isContribute)" class="container gims-full-width-container">
 
     <div class="row">
         <div class="col-md-12">

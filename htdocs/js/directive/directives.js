@@ -104,4 +104,13 @@ angular.module('myApp.directives')
                     ctrl.$formatters.push(maxValidator);
                 }
             };
+        })
+        /**
+         * Deactivate ng-animate on all children elements
+         */
+        .directive('disableAnimate', function($animate) {
+
+            return function($scope, elem) {
+                $animate.enabled(false, elem);
+            };
         });
