@@ -127,12 +127,22 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         $scope.currentUrl = encodeURIComponent($location.url());
     });
 
+    var filterSetDeferred = $q.defer();
+    if (!$location.search().filterSet) {
+        filterSetDeferred.resolve();
+    }
+
+    var filterDeferred = $q.defer();
+    if (!$location.search().filter) {
+        filterDeferred.resolve();
+    }
+
     $scope.$watch('tabs.filterSet', function() {
         if ($scope.tabs.filterSet) {
-
             $scope.tabs.filters = [];
             Restangular.one('filterSet', $scope.tabs.filterSet.id).getList('filters', _.merge($scope.filterFields, {perPage: 1000})).then(function(filters) {
                 if (filters) {
+                    filterSetDeferred.resolve();
                     $scope.tabs.filters = filters;
                     $scope.tabs.filter = null;
                     updateUrl('filter');
@@ -148,6 +158,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             if ($scope.isValidId($scope.tabs.filter)) {
                 Restangular.one('filter', $scope.tabs.filter.id).getList('children', _.merge($scope.filterFields, {perPage: 1000})).then(function(filters) {
                     if (filters) {
+                        filterDeferred.resolve();
 
                         // Inject parent as first filter, so we are able to see the "main" value
                         _.forEach(filters, function(filter) {
@@ -194,13 +205,15 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     });
 
     var firstLoading = true;
-    $scope.$watch('tabs.filters', function(newFilters, oldFilters) {
-        removeUnUsedQuestions(newFilters, oldFilters);
-        fillMissingElements();
-        getComputedFilters();
-        if (firstLoading === true && $scope.tabs.filters && $scope.tabs.questionnaires) {
-            checkSelectionExpand();
-        }
+    $q.all([filterSetDeferred, filterDeferred]).then(function() {
+        $scope.$watch('tabs.filters', function(newFilters, oldFilters) {
+            removeUnUsedQuestions(newFilters, oldFilters);
+            fillMissingElements();
+            getComputedFilters();
+            if (firstLoading === true && $scope.tabs.filters && $scope.tabs.questionnaires) {
+                checkSelectionExpand();
+            }
+        });
     });
 
     $scope.$watchCollection('tabs.filters', function() {
