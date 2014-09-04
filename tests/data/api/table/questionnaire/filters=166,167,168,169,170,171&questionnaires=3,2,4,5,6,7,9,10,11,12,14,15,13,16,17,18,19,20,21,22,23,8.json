@@ -4,124 +4,100 @@
         "iso3": "ISO-3",
         "survey": "Survey",
         "year": "Year",
-        "f166p1": "SUI+S",
-        "f167p1": "SUSC",
-        "f168p1": "SUI",
-        "f169p1": "SUS",
-        "f170p1": "SUOU",
-        "f171p1": "SUOD",
-        "f166p2": "SRI+S",
-        "f167p2": "SRSC",
-        "f168p2": "SRI",
-        "f169p2": "SRS",
-        "f170p2": "SROU",
-        "f171p2": "SROD",
-        "f166p3": "STI+S",
-        "f167p3": "STSC",
-        "f168p3": "STI",
-        "f169p3": "STS",
-        "f170p3": "STOU",
-        "f171p3": "STOD"
+        "f166p1": "I+SU",
+        "f167p1": "SCU",
+        "f168p1": "IU",
+        "f169p1": "SU",
+        "f170p1": "OUU",
+        "f171p1": "ODU",
+        "f166p2": "I+SR",
+        "f167p2": "SCR",
+        "f168p2": "IR",
+        "f169p2": "SR",
+        "f170p2": "OUR",
+        "f171p2": "ODR",
+        "f166p3": "I+ST",
+        "f167p3": "SCT",
+        "f168p3": "IT",
+        "f169p3": "ST",
+        "f170p3": "OUT",
+        "f171p3": "ODT"
     },
     "legends": [
         {
-            "short": "SUI+S",
-            "long": "Sanitation, Urban, Improved + shared"
+            "short": "I+SU",
+            "long": "Improved + shared, Urban"
         },
         {
-            "short": "SUSC",
-            "long": "Sanitation, Urban, Sewerage connections"
+            "short": "SCU",
+            "long": "Sewerage connections, Urban"
         },
         {
-            "short": "SUI",
-            "long": "Sanitation, Urban, Improved"
+            "short": "IU",
+            "long": "Improved, Urban"
         },
         {
-            "short": "SUS",
-            "long": "Sanitation, Urban, Shared"
+            "short": "SU",
+            "long": "Shared, Urban"
         },
         {
-            "short": "SUOU",
-            "long": "Sanitation, Urban, Other unimproved"
+            "short": "OUU",
+            "long": "Other unimproved, Urban"
         },
         {
-            "short": "SUOD",
-            "long": "Sanitation, Urban, Open defecation"
+            "short": "ODU",
+            "long": "Open defecation, Urban"
         },
         {
-            "short": "SRI+S",
-            "long": "Sanitation, Rural, Improved + shared"
+            "short": "I+SR",
+            "long": "Improved + shared, Rural"
         },
         {
-            "short": "SRSC",
-            "long": "Sanitation, Rural, Sewerage connections"
+            "short": "SCR",
+            "long": "Sewerage connections, Rural"
         },
         {
-            "short": "SRI",
-            "long": "Sanitation, Rural, Improved"
+            "short": "IR",
+            "long": "Improved, Rural"
         },
         {
-            "short": "SRS",
-            "long": "Sanitation, Rural, Shared"
+            "short": "SR",
+            "long": "Shared, Rural"
         },
         {
-            "short": "SROU",
-            "long": "Sanitation, Rural, Other unimproved"
+            "short": "OUR",
+            "long": "Other unimproved, Rural"
         },
         {
-            "short": "SROD",
-            "long": "Sanitation, Rural, Open defecation"
+            "short": "ODR",
+            "long": "Open defecation, Rural"
         },
         {
-            "short": "STI+S",
-            "long": "Sanitation, Total, Improved + shared"
+            "short": "I+ST",
+            "long": "Improved + shared, Total"
         },
         {
-            "short": "STSC",
-            "long": "Sanitation, Total, Sewerage connections"
+            "short": "SCT",
+            "long": "Sewerage connections, Total"
         },
         {
-            "short": "STI",
-            "long": "Sanitation, Total, Improved"
+            "short": "IT",
+            "long": "Improved, Total"
         },
         {
-            "short": "STS",
-            "long": "Sanitation, Total, Shared"
+            "short": "ST",
+            "long": "Shared, Total"
         },
         {
-            "short": "STOU",
-            "long": "Sanitation, Total, Other unimproved"
+            "short": "OUT",
+            "long": "Other unimproved, Total"
         },
         {
-            "short": "STOD",
-            "long": "Sanitation, Total, Open defecation"
+            "short": "ODT",
+            "long": "Open defecation, Total"
         }
     ],
     "data": [
-        {
-            "country": "Bangladesh",
-            "iso3": "BGD",
-            "survey": "CEN91",
-            "year": 1991,
-            "f166p1": 67.3,
-            "f167p1": null,
-            "f168p1": null,
-            "f169p1": null,
-            "f170p1": 18.4,
-            "f171p1": 14.3,
-            "f166p2": 49.6,
-            "f167p2": null,
-            "f168p2": null,
-            "f169p2": null,
-            "f170p2": 15.1,
-            "f171p2": 35.3,
-            "f166p3": 53.2,
-            "f167p3": null,
-            "f168p3": null,
-            "f169p3": null,
-            "f170p3": 15.7,
-            "f171p3": 31.1
-        },
         {
             "country": "Bangladesh",
             "iso3": "BGD",
@@ -145,6 +121,30 @@
             "f169p3": null,
             "f170p3": 13.6,
             "f171p3": 27.3
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "CEN91",
+            "year": 1991,
+            "f166p1": 67.3,
+            "f167p1": null,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": 18.4,
+            "f171p1": 14.3,
+            "f166p2": 49.6,
+            "f167p2": null,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": 15.1,
+            "f171p2": 35.3,
+            "f166p3": 53.2,
+            "f167p3": null,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": 15.7,
+            "f171p3": 31.1
         },
         {
             "country": "Bangladesh",
@@ -245,30 +245,6 @@
         {
             "country": "Bangladesh",
             "iso3": "BGD",
-            "survey": "SVRS98",
-            "year": 1998,
-            "f166p1": 78.5,
-            "f167p1": 15.7,
-            "f168p1": null,
-            "f169p1": null,
-            "f170p1": 13.8,
-            "f171p1": 7.7,
-            "f166p2": 55.0,
-            "f167p2": 0.1,
-            "f168p2": null,
-            "f169p2": null,
-            "f170p2": 16.6,
-            "f171p2": 28.4,
-            "f166p3": 60.4,
-            "f167p3": 3.7,
-            "f168p3": null,
-            "f169p3": null,
-            "f170p3": 15.9,
-            "f171p3": 23.7
-        },
-        {
-            "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "MICS99",
             "year": 1999,
             "f166p1": null,
@@ -365,30 +341,6 @@
         {
             "country": "Bangladesh",
             "iso3": "BGD",
-            "survey": "CEN01",
-            "year": 2001,
-            "f166p1": 77.6,
-            "f167p1": null,
-            "f168p1": null,
-            "f169p1": null,
-            "f170p1": 15.7,
-            "f171p1": 6.7,
-            "f166p2": 64.7,
-            "f167p2": null,
-            "f168p2": null,
-            "f169p2": null,
-            "f170p2": 12.6,
-            "f171p2": 22.7,
-            "f166p3": 67.8,
-            "f167p3": null,
-            "f168p3": null,
-            "f169p3": null,
-            "f170p3": 13.4,
-            "f171p3": 18.9
-        },
-        {
-            "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "MHS01",
             "year": 2001,
             "f166p1": 71.4,
@@ -433,6 +385,30 @@
             "f169p3": null,
             "f170p3": null,
             "f171p3": 18.8
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "CEN01",
+            "year": 2001,
+            "f166p1": 77.6,
+            "f167p1": null,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": 15.7,
+            "f171p1": 6.7,
+            "f166p2": 64.7,
+            "f167p2": null,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": 12.6,
+            "f171p2": 22.7,
+            "f166p3": 67.8,
+            "f167p3": null,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": 13.4,
+            "f171p3": 18.9
         },
         {
             "country": "Bangladesh",
@@ -625,6 +601,30 @@
             "f169p3": 27.8,
             "f170p3": 9.5,
             "f171p3": 4.4
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "SVRS98",
+            "year": 1998,
+            "f166p1": 78.5,
+            "f167p1": 15.7,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": 13.8,
+            "f171p1": 7.7,
+            "f166p2": 55.0,
+            "f167p2": 0.1,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": 16.6,
+            "f171p2": 28.4,
+            "f166p3": 60.4,
+            "f167p3": 3.7,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": 15.9,
+            "f171p3": 23.7
         }
     ]
 }

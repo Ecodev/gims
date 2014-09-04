@@ -1,0 +1,333 @@
+{
+    "columns": {
+        "country": "Country",
+        "iso3": "ISO-3",
+        "survey": "Survey",
+        "year": "Year",
+        "f75p1": "TIU",
+        "f76p1": "POPU",
+        "f77p1": "SWU",
+        "f78p1": "OIU",
+        "f79p1": "OUU",
+        "f166p1": "I+SU",
+        "f167p1": "SCU",
+        "f168p1": "IU",
+        "f169p1": "SU",
+        "f170p1": "OUU",
+        "f171p1": "ODU",
+        "f75p2": "TIR",
+        "f76p2": "POPR",
+        "f77p2": "SWR",
+        "f78p2": "OIR",
+        "f79p2": "OUR",
+        "f166p2": "I+SR",
+        "f167p2": "SCR",
+        "f168p2": "IR",
+        "f169p2": "SR",
+        "f170p2": "OUR",
+        "f171p2": "ODR",
+        "f75p3": "TIT",
+        "f76p3": "POPT",
+        "f77p3": "SWT",
+        "f78p3": "OIT",
+        "f79p3": "OUT",
+        "f166p3": "I+ST",
+        "f167p3": "SCT",
+        "f168p3": "IT",
+        "f169p3": "ST",
+        "f170p3": "OUT",
+        "f171p3": "ODT"
+    },
+    "legends": [
+        {
+            "short": "TIU",
+            "long": "Total improved, Urban"
+        },
+        {
+            "short": "POPU",
+            "long": "Piped onto premises, Urban"
+        },
+        {
+            "short": "SWU",
+            "long": "Surface water, Urban"
+        },
+        {
+            "short": "OIU",
+            "long": "Other Improved, Urban"
+        },
+        {
+            "short": "OUU",
+            "long": "Other Unimproved, Urban"
+        },
+        {
+            "short": "I+SU",
+            "long": "Improved + shared, Urban"
+        },
+        {
+            "short": "SCU",
+            "long": "Sewerage connections, Urban"
+        },
+        {
+            "short": "IU",
+            "long": "Improved, Urban"
+        },
+        {
+            "short": "SU",
+            "long": "Shared, Urban"
+        },
+        {
+            "short": "OUU",
+            "long": "Other unimproved, Urban"
+        },
+        {
+            "short": "ODU",
+            "long": "Open defecation, Urban"
+        },
+        {
+            "short": "TIR",
+            "long": "Total improved, Rural"
+        },
+        {
+            "short": "POPR",
+            "long": "Piped onto premises, Rural"
+        },
+        {
+            "short": "SWR",
+            "long": "Surface water, Rural"
+        },
+        {
+            "short": "OIR",
+            "long": "Other Improved, Rural"
+        },
+        {
+            "short": "OUR",
+            "long": "Other Unimproved, Rural"
+        },
+        {
+            "short": "I+SR",
+            "long": "Improved + shared, Rural"
+        },
+        {
+            "short": "SCR",
+            "long": "Sewerage connections, Rural"
+        },
+        {
+            "short": "IR",
+            "long": "Improved, Rural"
+        },
+        {
+            "short": "SR",
+            "long": "Shared, Rural"
+        },
+        {
+            "short": "OUR",
+            "long": "Other unimproved, Rural"
+        },
+        {
+            "short": "ODR",
+            "long": "Open defecation, Rural"
+        },
+        {
+            "short": "TIT",
+            "long": "Total improved, Total"
+        },
+        {
+            "short": "POPT",
+            "long": "Piped onto premises, Total"
+        },
+        {
+            "short": "SWT",
+            "long": "Surface water, Total"
+        },
+        {
+            "short": "OIT",
+            "long": "Other Improved, Total"
+        },
+        {
+            "short": "OUT",
+            "long": "Other Unimproved, Total"
+        },
+        {
+            "short": "I+ST",
+            "long": "Improved + shared, Total"
+        },
+        {
+            "short": "SCT",
+            "long": "Sewerage connections, Total"
+        },
+        {
+            "short": "IT",
+            "long": "Improved, Total"
+        },
+        {
+            "short": "ST",
+            "long": "Shared, Total"
+        },
+        {
+            "short": "OUT",
+            "long": "Other unimproved, Total"
+        },
+        {
+            "short": "ODT",
+            "long": "Open defecation, Total"
+        }
+    ],
+    "data": [
+        {
+            "country": "Azerbaijan",
+            "iso3": "AZE",
+            "survey": "SLC95",
+            "year": 1995,
+            "f75p1": 85.3,
+            "f76p1": 67.9,
+            "f77p1": null,
+            "f78p1": 17.4,
+            "f79p1": null,
+            "f166p1": null,
+            "f167p1": null,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": null,
+            "f171p1": null,
+            "f75p2": 53.0,
+            "f76p2": 16.8,
+            "f77p2": null,
+            "f78p2": 36.2,
+            "f79p2": null,
+            "f166p2": null,
+            "f167p2": null,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": null,
+            "f171p2": null,
+            "f75p3": 69.9,
+            "f76p3": 43.5,
+            "f77p3": null,
+            "f78p3": 26.4,
+            "f79p3": null,
+            "f166p3": null,
+            "f167p3": null,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": null,
+            "f171p3": null
+        },
+        {
+            "country": "Azerbaijan",
+            "iso3": "AZE",
+            "survey": "HBS01",
+            "year": 2001,
+            "f75p1": null,
+            "f76p1": null,
+            "f77p1": null,
+            "f78p1": null,
+            "f79p1": null,
+            "f166p1": null,
+            "f167p1": null,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": null,
+            "f171p1": null,
+            "f75p2": null,
+            "f76p2": null,
+            "f77p2": null,
+            "f78p2": null,
+            "f79p2": null,
+            "f166p2": null,
+            "f167p2": null,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": null,
+            "f171p2": null,
+            "f75p3": null,
+            "f76p3": null,
+            "f77p3": null,
+            "f78p3": null,
+            "f79p3": null,
+            "f166p3": null,
+            "f167p3": null,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": null,
+            "f171p3": null
+        },
+        {
+            "country": "Azerbaijan",
+            "iso3": "AZE",
+            "survey": "MICS00",
+            "year": 2000,
+            "f75p1": 92.5,
+            "f76p1": 73.6,
+            "f77p1": 0.9,
+            "f78p1": 18.9,
+            "f79p1": 6.6,
+            "f166p1": 82.6,
+            "f167p1": null,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": 17.3,
+            "f171p1": 0.1,
+            "f75p2": 57.5,
+            "f76p2": 18.2,
+            "f77p2": 17.4,
+            "f78p2": 39.3,
+            "f79p2": 25.1,
+            "f166p2": 51.9,
+            "f167p2": null,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": 48.0,
+            "f171p2": 0.1,
+            "f75p3": 75.5,
+            "f76p3": 46.7,
+            "f77p3": 8.9,
+            "f78p3": 28.8,
+            "f79p3": 15.6,
+            "f166p3": 67.7,
+            "f167p3": null,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": 32.2,
+            "f171p3": 0.1
+        },
+        {
+            "country": "Azerbaijan",
+            "iso3": "AZE",
+            "survey": "DHS06",
+            "year": 2006,
+            "f75p1": 86.3,
+            "f76p1": 75.6,
+            "f77p1": 1.8,
+            "f78p1": 10.7,
+            "f79p1": 11.9,
+            "f166p1": 93.1,
+            "f167p1": 74.0,
+            "f168p1": 82.8,
+            "f169p1": 10.3,
+            "f170p1": 6.8,
+            "f171p1": 0.1,
+            "f75p2": 68.6,
+            "f76p2": 19.0,
+            "f77p2": 16.1,
+            "f78p2": 49.6,
+            "f79p2": 15.3,
+            "f166p2": 73.1,
+            "f167p2": 1.6,
+            "f168p2": 70.7,
+            "f169p2": 2.5,
+            "f170p2": 26.4,
+            "f171p2": 0.5,
+            "f75p3": 77.9,
+            "f76p3": 48.8,
+            "f77p3": 8.6,
+            "f78p3": 29.1,
+            "f79p3": 13.5,
+            "f166p3": 83.7,
+            "f167p3": 39.7,
+            "f168p3": 77.0,
+            "f169p3": 6.6,
+            "f170p3": 16.1,
+            "f171p3": 0.3
+        }
+    ]
+}

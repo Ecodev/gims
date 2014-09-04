@@ -4,106 +4,85 @@
         "iso3": "ISO-3",
         "survey": "Survey",
         "year": "Year",
-        "f75p1": "WUTI",
-        "f76p1": "WUPOP",
-        "f77p1": "WUSW",
-        "f78p1": "WUOI",
-        "f79p1": "WUOU",
-        "f75p2": "WRTI",
-        "f76p2": "WRPOP",
-        "f77p2": "WRSW",
-        "f78p2": "WROI",
-        "f79p2": "WROU",
-        "f75p3": "WTTI",
-        "f76p3": "WTPOP",
-        "f77p3": "WTSW",
-        "f78p3": "WTOI",
-        "f79p3": "WTOU"
+        "f75p1": "TIU",
+        "f76p1": "POPU",
+        "f77p1": "SWU",
+        "f78p1": "OIU",
+        "f79p1": "OUU",
+        "f75p2": "TIR",
+        "f76p2": "POPR",
+        "f77p2": "SWR",
+        "f78p2": "OIR",
+        "f79p2": "OUR",
+        "f75p3": "TIT",
+        "f76p3": "POPT",
+        "f77p3": "SWT",
+        "f78p3": "OIT",
+        "f79p3": "OUT"
     },
     "legends": [
         {
-            "short": "WUTI",
-            "long": "Water, Urban, Total improved"
+            "short": "TIU",
+            "long": "Total improved, Urban"
         },
         {
-            "short": "WUPOP",
-            "long": "Water, Urban, Piped onto premises"
+            "short": "POPU",
+            "long": "Piped onto premises, Urban"
         },
         {
-            "short": "WUSW",
-            "long": "Water, Urban, Surface water"
+            "short": "SWU",
+            "long": "Surface water, Urban"
         },
         {
-            "short": "WUOI",
-            "long": "Water, Urban, Other Improved"
+            "short": "OIU",
+            "long": "Other Improved, Urban"
         },
         {
-            "short": "WUOU",
-            "long": "Water, Urban, Other Unimproved"
+            "short": "OUU",
+            "long": "Other Unimproved, Urban"
         },
         {
-            "short": "WRTI",
-            "long": "Water, Rural, Total improved"
+            "short": "TIR",
+            "long": "Total improved, Rural"
         },
         {
-            "short": "WRPOP",
-            "long": "Water, Rural, Piped onto premises"
+            "short": "POPR",
+            "long": "Piped onto premises, Rural"
         },
         {
-            "short": "WRSW",
-            "long": "Water, Rural, Surface water"
+            "short": "SWR",
+            "long": "Surface water, Rural"
         },
         {
-            "short": "WROI",
-            "long": "Water, Rural, Other Improved"
+            "short": "OIR",
+            "long": "Other Improved, Rural"
         },
         {
-            "short": "WROU",
-            "long": "Water, Rural, Other Unimproved"
+            "short": "OUR",
+            "long": "Other Unimproved, Rural"
         },
         {
-            "short": "WTTI",
-            "long": "Water, Total, Total improved"
+            "short": "TIT",
+            "long": "Total improved, Total"
         },
         {
-            "short": "WTPOP",
-            "long": "Water, Total, Piped onto premises"
+            "short": "POPT",
+            "long": "Piped onto premises, Total"
         },
         {
-            "short": "WTSW",
-            "long": "Water, Total, Surface water"
+            "short": "SWT",
+            "long": "Surface water, Total"
         },
         {
-            "short": "WTOI",
-            "long": "Water, Total, Other Improved"
+            "short": "OIT",
+            "long": "Other Improved, Total"
         },
         {
-            "short": "WTOU",
-            "long": "Water, Total, Other Unimproved"
+            "short": "OUT",
+            "long": "Other Unimproved, Total"
         }
     ],
     "data": [
-        {
-            "country": "Bangladesh",
-            "iso3": "BGD",
-            "survey": "CEN91",
-            "year": 1991,
-            "f75p1": 75.9,
-            "f76p1": 24.3,
-            "f77p1": 4.8,
-            "f78p1": 51.6,
-            "f79p1": 19.3,
-            "f75p2": 62.8,
-            "f76p2": 0.2,
-            "f77p2": 11.8,
-            "f78p2": 62.6,
-            "f79p2": 25.5,
-            "f75p3": 65.4,
-            "f76p3": 5.1,
-            "f77p3": 10.4,
-            "f78p3": 60.4,
-            "f79p3": 24.2
-        },
         {
             "country": "Bangladesh",
             "iso3": "BGD",
@@ -124,6 +103,27 @@
             "f77p3": 3.2,
             "f78p3": 67.3,
             "f79p3": 23.6
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "CEN91",
+            "year": 1991,
+            "f75p1": 75.9,
+            "f76p1": 24.3,
+            "f77p1": 4.8,
+            "f78p1": 51.6,
+            "f79p1": 19.3,
+            "f75p2": 62.8,
+            "f76p2": 0.2,
+            "f77p2": 11.8,
+            "f78p2": 62.6,
+            "f79p2": 25.5,
+            "f75p3": 65.4,
+            "f76p3": 5.1,
+            "f77p3": 10.4,
+            "f78p3": 60.4,
+            "f79p3": 24.2
         },
         {
             "country": "Bangladesh",
@@ -212,27 +212,6 @@
         {
             "country": "Bangladesh",
             "iso3": "BGD",
-            "survey": "SVRS98",
-            "year": 1998,
-            "f75p1": 84.9,
-            "f76p1": 25.9,
-            "f77p1": null,
-            "f78p1": 59.0,
-            "f79p1": null,
-            "f75p2": 74.4,
-            "f76p2": null,
-            "f77p2": null,
-            "f78p2": null,
-            "f79p2": null,
-            "f75p3": 76.8,
-            "f76p3": null,
-            "f77p3": null,
-            "f78p3": null,
-            "f79p3": null
-        },
-        {
-            "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "MICS99",
             "year": 1999,
             "f75p1": null,
@@ -317,27 +296,6 @@
         {
             "country": "Bangladesh",
             "iso3": "BGD",
-            "survey": "CEN01",
-            "year": 2001,
-            "f75p1": 78.2,
-            "f76p1": 26.3,
-            "f77p1": 1.0,
-            "f78p1": 51.9,
-            "f79p1": 20.7,
-            "f75p2": 67.0,
-            "f76p2": 0.7,
-            "f77p2": 4.2,
-            "f78p2": 66.3,
-            "f79p2": 28.8,
-            "f75p3": 69.7,
-            "f76p3": 6.8,
-            "f77p3": 3.4,
-            "f78p3": 62.9,
-            "f79p3": 26.8
-        },
-        {
-            "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "MHS01",
             "year": 2001,
             "f75p1": null,
@@ -376,6 +334,27 @@
             "f77p3": 1.9,
             "f78p3": 68.5,
             "f79p3": 22.8
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "CEN01",
+            "year": 2001,
+            "f75p1": 78.2,
+            "f76p1": 26.3,
+            "f77p1": 1.0,
+            "f78p1": 51.9,
+            "f79p1": 20.7,
+            "f75p2": 67.0,
+            "f76p2": 0.7,
+            "f77p2": 4.2,
+            "f78p2": 66.3,
+            "f79p2": 28.8,
+            "f75p3": 69.7,
+            "f76p3": 6.8,
+            "f77p3": 3.4,
+            "f78p3": 62.9,
+            "f79p3": 26.8
         },
         {
             "country": "Bangladesh",
@@ -544,6 +523,27 @@
             "f77p3": 1.1,
             "f78p3": 74.4,
             "f79p3": 13.1
+        },
+        {
+            "country": "Bangladesh",
+            "iso3": "BGD",
+            "survey": "SVRS98",
+            "year": 1998,
+            "f75p1": 84.9,
+            "f76p1": 25.9,
+            "f77p1": null,
+            "f78p1": 59.0,
+            "f79p1": null,
+            "f75p2": 74.4,
+            "f76p2": null,
+            "f77p2": null,
+            "f78p2": null,
+            "f79p2": null,
+            "f75p3": 76.8,
+            "f76p3": null,
+            "f77p3": null,
+            "f78p3": null,
+            "f79p3": null
         }
     ]
 }

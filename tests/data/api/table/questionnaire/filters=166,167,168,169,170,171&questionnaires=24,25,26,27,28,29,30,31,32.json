@@ -4,97 +4,97 @@
         "iso3": "ISO-3",
         "survey": "Survey",
         "year": "Year",
-        "f166p1": "SUI+S",
-        "f167p1": "SUSC",
-        "f168p1": "SUI",
-        "f169p1": "SUS",
-        "f170p1": "SUOU",
-        "f171p1": "SUOD",
-        "f166p2": "SRI+S",
-        "f167p2": "SRSC",
-        "f168p2": "SRI",
-        "f169p2": "SRS",
-        "f170p2": "SROU",
-        "f171p2": "SROD",
-        "f166p3": "STI+S",
-        "f167p3": "STSC",
-        "f168p3": "STI",
-        "f169p3": "STS",
-        "f170p3": "STOU",
-        "f171p3": "STOD"
+        "f166p1": "I+SU",
+        "f167p1": "SCU",
+        "f168p1": "IU",
+        "f169p1": "SU",
+        "f170p1": "OUU",
+        "f171p1": "ODU",
+        "f166p2": "I+SR",
+        "f167p2": "SCR",
+        "f168p2": "IR",
+        "f169p2": "SR",
+        "f170p2": "OUR",
+        "f171p2": "ODR",
+        "f166p3": "I+ST",
+        "f167p3": "SCT",
+        "f168p3": "IT",
+        "f169p3": "ST",
+        "f170p3": "OUT",
+        "f171p3": "ODT"
     },
     "legends": [
         {
-            "short": "SUI+S",
-            "long": "Sanitation, Urban, Improved + shared"
+            "short": "I+SU",
+            "long": "Improved + shared, Urban"
         },
         {
-            "short": "SUSC",
-            "long": "Sanitation, Urban, Sewerage connections"
+            "short": "SCU",
+            "long": "Sewerage connections, Urban"
         },
         {
-            "short": "SUI",
-            "long": "Sanitation, Urban, Improved"
+            "short": "IU",
+            "long": "Improved, Urban"
         },
         {
-            "short": "SUS",
-            "long": "Sanitation, Urban, Shared"
+            "short": "SU",
+            "long": "Shared, Urban"
         },
         {
-            "short": "SUOU",
-            "long": "Sanitation, Urban, Other unimproved"
+            "short": "OUU",
+            "long": "Other unimproved, Urban"
         },
         {
-            "short": "SUOD",
-            "long": "Sanitation, Urban, Open defecation"
+            "short": "ODU",
+            "long": "Open defecation, Urban"
         },
         {
-            "short": "SRI+S",
-            "long": "Sanitation, Rural, Improved + shared"
+            "short": "I+SR",
+            "long": "Improved + shared, Rural"
         },
         {
-            "short": "SRSC",
-            "long": "Sanitation, Rural, Sewerage connections"
+            "short": "SCR",
+            "long": "Sewerage connections, Rural"
         },
         {
-            "short": "SRI",
-            "long": "Sanitation, Rural, Improved"
+            "short": "IR",
+            "long": "Improved, Rural"
         },
         {
-            "short": "SRS",
-            "long": "Sanitation, Rural, Shared"
+            "short": "SR",
+            "long": "Shared, Rural"
         },
         {
-            "short": "SROU",
-            "long": "Sanitation, Rural, Other unimproved"
+            "short": "OUR",
+            "long": "Other unimproved, Rural"
         },
         {
-            "short": "SROD",
-            "long": "Sanitation, Rural, Open defecation"
+            "short": "ODR",
+            "long": "Open defecation, Rural"
         },
         {
-            "short": "STI+S",
-            "long": "Sanitation, Total, Improved + shared"
+            "short": "I+ST",
+            "long": "Improved + shared, Total"
         },
         {
-            "short": "STSC",
-            "long": "Sanitation, Total, Sewerage connections"
+            "short": "SCT",
+            "long": "Sewerage connections, Total"
         },
         {
-            "short": "STI",
-            "long": "Sanitation, Total, Improved"
+            "short": "IT",
+            "long": "Improved, Total"
         },
         {
-            "short": "STS",
-            "long": "Sanitation, Total, Shared"
+            "short": "ST",
+            "long": "Shared, Total"
         },
         {
-            "short": "STOU",
-            "long": "Sanitation, Total, Other unimproved"
+            "short": "OUT",
+            "long": "Other unimproved, Total"
         },
         {
-            "short": "STOD",
-            "long": "Sanitation, Total, Open defecation"
+            "short": "ODT",
+            "long": "Open defecation, Total"
         }
     ],
     "data": [
