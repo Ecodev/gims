@@ -107,16 +107,15 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     public function questionnaireAction()
     {
-        $p = $this->params()->fromQuery('country');
-        if (!$p) {
-            $countryIds = array(-1);
-        } else {
-            $countryIds = explode(',', $p);
-        }
-        $countries = $this->getEntityManager()->getRepository('Application\Model\Country')->findById($countryIds);
+        $questionnairesIds = array_filter(explode(',', $this->params()->fromQuery('questionnaires')));
+        $filtersIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
 
-        /** @var \Application\Model\FilterSet $filterSet */
-        $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
+        $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findById($questionnairesIds);
+        $questionnairesById = [];
+        foreach ($questionnaires as $questionnaire) {
+            $questionnairesById[$questionnaire->getId()] = $questionnaire;
+        }
+        $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds);
         $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
@@ -130,35 +129,29 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         );
         $legends = [];
 
-        foreach ($countries as $country) {
-            $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->getAllForComputing($country->getGeoname());
-            if (!$filterSet) {
-                continue;
-            }
+        foreach ($parts as $part) {
+            foreach ($filters as $filter) {
+                $columnNames = $this->getColumnNames($part, $filter->getName());
+                $columnId = 'f' . $filter->getId() . 'p' . $part->getId();
+                $columns[$columnId] = $columnNames['short'];
+                $legends[$columnId] = $columnNames;
 
-            foreach ($parts as $part) {
-                foreach ($filterSet->getFilters() as $filter) {
-                    $columnNames = $this->getColumnNames($filterSet, $part, $filter->getName());
-                    $columnId = 'f' . $filter->getId() . 'p' . $part->getId();
-                    $columns[$columnId] = $columnNames['short'];
-                    $legends[$columnId] = $columnNames;
-
-                    $data = $calculator->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
-                    foreach ($data['values'] as $questionnaireId => $value) {
-                        if (!isset($result[$questionnaireId])) {
-                            $result[$questionnaireId] = array(
-                                'country' => $country->getName(),
-                                'iso3' => $country->getIso3(),
-                                'survey' => $data['surveys'][$questionnaireId],
-                                'year' => $data['years'][$questionnaireId],
-                            );
-                        }
-
-                        $result[$questionnaireId][$columnId] = \Application\Utility::decimalToRoundedPercent($value);
+                $data = $calculator->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
+                foreach ($data['values'] as $questionnaireId => $value) {
+                    if (!isset($result[$questionnaireId])) {
+                        $result[$questionnaireId] = array(
+                            'country' => $questionnairesById[$questionnaireId]->getGeoname()->getName(),
+                            'iso3' => $questionnairesById[$questionnaireId]->getGeoname()->getCountry()->getIso3(),
+                            'survey' => $data['surveys'][$questionnaireId],
+                            'year' => $data['years'][$questionnaireId],
+                        );
                     }
+
+                    $result[$questionnaireId][$columnId] = \Application\Utility::decimalToRoundedPercent($value);
                 }
             }
         }
+
         $finalResult = array(
             'columns' => $columns,
             'legends' => array_values($legends),
@@ -371,10 +364,8 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
      * @param string $filterName
      * @return array ['short' => short name, 'long' => long name]
      */
-    private function getColumnNames(\Application\Model\FilterSet $filterset, \Application\Model\Part $part, $filterName)
+    private function getColumnNames(\Application\Model\Part $part, $filterName)
     {
-        // Filterset first letter
-        $filtersetL = substr($filterset->getName(), 0, 1);
 
         // Part first letter
         $partL = substr($part->getName(), 0, 1);
@@ -387,8 +378,8 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         }
 
         return [
-            'short' => strtoupper($filtersetL . $partL . $filterL),
-            'long' => implode(', ', [preg_split('/\W/', $filterset->getName())[0], $part->getName(), $filterName]),
+            'short' => strtoupper($filterL . $partL),
+            'long' => implode(', ', [$filterName, $part->getName()]),
         ];
     }
 

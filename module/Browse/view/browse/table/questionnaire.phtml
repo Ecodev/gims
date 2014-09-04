@@ -9,26 +9,117 @@
 
     <?php echo $this->helpBox('View filtered data per survey for the selected countries and export the corresponding data. For further info, see the <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/data_processing.html">detailed documentation</a>.'); ?>
 
-    <form>
-        <div class="row">
-            <span class="col-md-6">
-                <p><gims-select api="country" model="country" placeholder="<?php echo $this->translate('Select a country') ?>" format="name" style="width:100%;" multiple="multiple"/></p>
-            </span>
-        </div>
-        <div class="row">
-            <span class="col-md-6">
-                <p><gims-select api="filterSet" model="filterSet" placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/></p>
-            </span>
-            <span class="col-md-2">
-                <p>&nbsp;<i class="fa fa-gims-loading" ng-show="isLoading"></i></p>
-            </span>
-        </div>
-        <div class="row">
-            <span class="form-group col-md-6">
-                <a href="{{exportUrl}}" target="_blank" class="btn btn-default" ng-class="{disabled: !exportUrl}"><i class="fa fa-download"></i> Export</a>
-            </span>
+
+    <!-- Selection panel for filters and questionnaires -->
+    <form name="selectionForm">
+        <div class="row show-grid ng-trans ng-trans-slide-up">
+
+            <!-- Filter selection -->
+            <div class="col-md-6">
+                <div class="row" ng-class="{'has-error':!tabs.filters.length}">
+                    <div class="col-md-12">
+                        <h3 class="control-label">Filter <small ng-if="!tabs.filters.length">(Required)</small></h3>
+                    </div>
+
+                    <div class="col-md-12">
+                        <tabset>
+                            <tab heading="Filter sets" >
+                                <gims-select
+                                        model="tabs.filterSets"
+                                        api="filterSet"
+                                        placeholder="Select filter set"
+                                        disabled="isLoading"
+                                        multiple
+                                        change-url="false"
+                                        style="width: 100%">
+                                </gims-select>
+                            </tab>
+                            <tab heading="Filter's children">
+                                <gims-filter
+                                        model="tabs.filter"
+                                        name="filter"
+                                        show-selection-path="true"
+                                        change-url="false"
+                                        disabled="isLoading">
+                                </gims-filter>
+                            </tab>
+                            <tab heading="Filters ({{tabs.filters.length}})">
+                                <gims-filter
+                                        model="tabs.filters"
+                                        name="filters"
+                                        query-params="filterFields"
+                                        show-selection-path="true"
+                                        disabled="isLoading"
+                                        multiple>
+                                </gims-filter>
+                            </tab>
+                        </tabset>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questionnaires selection -->
+            <div class="col-md-6">
+                <div class="row" ng-class="{'has-error':!tabs.questionnaires.length}">
+
+                    <div>
+                        <div class="col-md-12">
+                            <h3 class="control-label" ng-if="!mode.isSector">Questionnaires<small ng-if="!tabs.questionnaires.length"> (Required)</small></h3>
+                        </div>
+
+                        <div class="col-md-12">
+                            <tabset>
+                                <tab heading="Countries">
+                                    <gims-select
+                                            model="tabs.geonames"
+                                            api="geoname"
+                                            placeholder="Select an area"
+                                            change-url="false"
+                                            multiple
+                                            style="width: 100%">
+                                    </gims-select>
+                                </tab>
+                                <tab heading="Surveys">
+                                    <gims-select
+                                            model="tabs.surveys"
+                                            api="survey"
+                                            placeholder="Select surveys"
+                                            search-attributes="code,name"
+                                            custom-selection-template="{{surveysTemplate}}"
+                                            custom-result-template="{{surveysTemplate}}"
+                                            change-url="false"
+                                            multiple
+                                            style="width: 100%">
+                                    </gims-select>
+                                </tab>
+                                <tab heading="Questionnaires ({{tabs.questionnaires.length}})">
+                                    <gims-select
+                                            model="tabs.questionnaires"
+                                            name="questionnaires"
+                                            api="questionnaire"
+                                            placeholder="Select questionnaires"
+                                            disabled="isLoading"
+                                            multiple
+                                            style="width: 100%">
+                                    </gims-select>
+                                </tab>
+                            </tabset>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
+
+
+
+
+
+    <div class="row">
+        <span class="form-group col-md-6">
+            <a href="/api/table/questionnaire/gims-questionnaires.xlsx?questionnaires={{questionnairesIds}}&filters={{filtersIds}}" target="_blank" class="btn btn-default" ng-class="{disabled: !tabs.questionnaires || !tabs.filters}"><i class="fa fa-download"></i> Export</a>
+        </span>
+    </div>
 
     <div class="alert alert-info" ng-if="!columnDefs"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to show table here.') ?></div>
     <div ng-grid="gridOptions" class="gridStyle" ng-show="columnDefs"></div>
