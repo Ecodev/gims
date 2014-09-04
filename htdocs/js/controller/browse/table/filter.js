@@ -142,10 +142,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             $scope.tabs.filters = [];
             Restangular.one('filterSet', $scope.tabs.filterSet.id).getList('filters', _.merge($scope.filterFields, {perPage: 1000})).then(function(filters) {
                 if (filters) {
-                    filterSetDeferred.resolve();
                     $scope.tabs.filters = filters;
                     $scope.tabs.filter = null;
                     updateUrl('filter');
+                    filterSetDeferred.resolve();
+
                 }
                 checkSelectionExpand();
             });
@@ -158,11 +159,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             if ($scope.isValidId($scope.tabs.filter)) {
                 Restangular.one('filter', $scope.tabs.filter.id).getList('children', _.merge($scope.filterFields, {perPage: 1000})).then(function(filters) {
                     if (filters) {
-                        filterDeferred.resolve();
                         $scope.tabs.filters = filters;
                         $scope.tabs.filterSet = null;
                         updateUrl('filterSet');
-
+                        filterDeferred.resolve();
                     }
                     checkSelectionExpand();
                 });
