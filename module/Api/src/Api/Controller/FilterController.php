@@ -52,7 +52,6 @@ class FilterController extends AbstractChildRestfulController
                 $filters = $this->getAllChildren($parent);
                 // get unique filters because flattenFilters() already duplicate elements if there are multiple parents
                 $uniqueFilters = [];
-                $uniqueFilters[$parent->getId()] = $parent;
                 foreach ($filters as $filter) {
                     $uniqueFilters[$filter->getId()] = $filter;
                 }
