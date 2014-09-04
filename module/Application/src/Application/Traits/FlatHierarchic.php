@@ -2,6 +2,8 @@
 
 namespace Application\Traits;
 
+use \Application\Utility;
+
 trait FlatHierarchic
 {
 
@@ -16,7 +18,8 @@ trait FlatHierarchic
     {
         $objectsByParent = array();
         foreach ($objects as $object) {
-            if (!isset($object[$referenceObject]['id']) || empty($object[$referenceObject]['id'])) {
+            // if there is no parent or if object has parent, but the parent is not in collection : set object as parent
+            if (!isset($object[$referenceObject]['id']) || empty($object[$referenceObject]['id']) || $object[$referenceObject]['id'] && !Utility::getObjectById($object[$referenceObject]['id'], $objects)) {
                 $parentId = $rootElementId;
             } else {
                 $parentId = $object[$referenceObject]['id'];

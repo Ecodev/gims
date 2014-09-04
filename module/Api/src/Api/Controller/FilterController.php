@@ -50,12 +50,14 @@ class FilterController extends AbstractChildRestfulController
                 // else means parent is filter
             } else {
                 $filters = $this->getAllChildren($parent);
-                $uniqueFilters = []; // get unique filters because flattenFilters() already duplicate elements if there are multiple parents
+                // get unique filters because flattenFilters() already duplicate elements if there are multiple parents
+                $uniqueFilters = [];
+                $uniqueFilters[$parent->getId()] = $parent;
                 foreach ($filters as $filter) {
                     $uniqueFilters[$filter->getId()] = $filter;
                 }
                 $filters = $this->flattenFilters($uniqueFilters);
-                $filters = $this->getFlatHierarchyWithSingleRootElement($filters, '_parent', $this->params('idParent'));
+                $filters = $this->getFlatHierarchyWithSingleRootElement($filters, '_parent');
             }
 
             // no parent, get all filters

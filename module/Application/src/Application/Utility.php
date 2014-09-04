@@ -24,6 +24,26 @@ abstract class Utility
     }
 
     /**
+     * Find an object by id on assoc array
+     * @param $id
+     * @param $objects
+     * @return null
+     */
+    public static function getObjectById($id, $objects)
+    {
+
+        if ($id) {
+            foreach ($objects as $o) {
+                if ($o['id'] == $id) {
+                    return $o;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * This round a number with arbitrary precision
      *
      * Once rounded, the number *MUST NOT* be converted to float anymore.
