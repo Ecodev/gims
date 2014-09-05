@@ -627,4 +627,18 @@ class Geoname extends AbstractModel
         return $this->children;
     }
 
+    /**
+     * Get children recursively
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    private function getAllChildren()
+    {
+        $children = $this->getChildren()->toArray();
+        foreach ($children as $child) {
+            $children = array_merge($children, $child->getAllChildren());
+        }
+
+        return $children;
+    }
+
 }
