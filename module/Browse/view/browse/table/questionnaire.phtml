@@ -3,6 +3,9 @@
     <div class="navbar navbar-default hidden-print">
         <a class="navbar-brand" href="#">Questionnaires</a>
         <form class="navbar-form">
+
+            <a href="/api/table/questionnaire/gims-questionnaires.xlsx?questionnaires={{questionnairesIds}}&filters={{filtersIds}}" target="_blank" class="btn btn-default" ng-class="{disabled: !tabs.questionnaires || !tabs.filters}"><i class="fa fa-download"></i> Export</a>
+
             <?php echo $this->helpButton(); ?>
         </form>
     </div>
@@ -110,16 +113,6 @@
             </div>
         </div>
     </form>
-
-
-
-
-
-    <div class="row">
-        <span class="form-group col-md-6">
-            <a href="/api/table/questionnaire/gims-questionnaires.xlsx?questionnaires={{questionnairesIds}}&filters={{filtersIds}}" target="_blank" class="btn btn-default" ng-class="{disabled: !tabs.questionnaires || !tabs.filters}"><i class="fa fa-download"></i> Export</a>
-        </span>
-    </div>
 
     <div class="alert alert-info" ng-if="!columnDefs"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to show table here.') ?></div>
     <div ng-grid="gridOptions" class="gridStyle" ng-show="columnDefs"></div>
