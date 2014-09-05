@@ -228,7 +228,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
                     foreach ($filters as $filter) {
                         $columnId = 'c' . $count;
-                        $columnNames = $this->getColumnNames($filterSet, $partsById[$partId], $filter['name']);
+                        $columnNames = $this->getColumnNames($partsById[$partId], $filter['name']);
                         $columns[$columnId] = $columnNames['short'];
                         $legends[$columnId] = $columnNames;
 
