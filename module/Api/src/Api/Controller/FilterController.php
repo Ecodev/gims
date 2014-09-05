@@ -37,7 +37,7 @@ class FilterController extends AbstractChildRestfulController
                 $filters = array();
                 foreach ($filterSetFilters as $filter) {
                     $filterChildren = array($filter);
-                    $filterChildren = array_merge($filterChildren, $this->getAllChildren($filter));
+                    $filterChildren = array_merge($filterChildren, $filter->getAllChildren());
                     $filterChildren = $this->flattenFilters($filterChildren);
                     unset($filterChildren[0]['_parent']);
                     for ($i = 1; $i < $filter->getParents()->count(); $i++) {
@@ -49,7 +49,7 @@ class FilterController extends AbstractChildRestfulController
 
                 // else means parent is filter
             } else {
-                $filters = $this->getAllChildren($parent);
+                $filters = $parent->getAllChildren();
                 // get unique filters because flattenFilters() already duplicate elements if there are multiple parents
                 $uniqueFilters = [];
                 foreach ($filters as $filter) {
@@ -101,16 +101,6 @@ class FilterController extends AbstractChildRestfulController
         }
 
         return $flatFilters;
-    }
-
-    private function getAllChildren(\Application\Model\Filter $filter)
-    {
-        $children = $filter->getChildren()->toArray();
-        foreach ($children as $child) {
-            $children = array_merge($children, $this->getAllChildren($child));
-        }
-
-        return $children;
     }
 
     public function getAutoCompleteListAction()
