@@ -2,6 +2,7 @@
 
 namespace Application\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Application\Model\Country;
 
@@ -631,14 +632,14 @@ class Geoname extends AbstractModel
      * Get children recursively
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    private function getAllChildren()
+    public function getAllChildren()
     {
         $children = $this->getChildren()->toArray();
         foreach ($children as $child) {
-            $children = array_merge($children, $child->getAllChildren());
+            $children = array_merge($children, $child->getAllChildren()->toArray());
         }
 
-        return $children;
+        return new ArrayCollection($children);
     }
 
 }

@@ -37,7 +37,7 @@ class FilterController extends AbstractChildRestfulController
                 $filters = array();
                 foreach ($filterSetFilters as $filter) {
                     $filterChildren = array($filter);
-                    $filterChildren = array_merge($filterChildren, $filter->getAllChildren());
+                    $filterChildren = array_merge($filterChildren, $filter->getAllChildren()->toArray());
                     $filterChildren = $this->flattenFilters($filterChildren);
                     unset($filterChildren[0]['_parent']);
                     for ($i = 1; $i < $filter->getParents()->count(); $i++) {
@@ -49,7 +49,7 @@ class FilterController extends AbstractChildRestfulController
 
                 // else means parent is filter
             } else {
-                $filters = $parent->getAllChildren();
+                $filters = $parent->getAllChildren()->toArray();
                 // get unique filters because flattenFilters() already duplicate elements if there are multiple parents
                 $uniqueFilters = [];
                 foreach ($filters as $filter) {

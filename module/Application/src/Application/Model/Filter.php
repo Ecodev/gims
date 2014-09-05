@@ -157,16 +157,16 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
 
     /**
      * Get all children recursively
-     * @return array
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getAllChildren()
     {
         $children = $this->getChildren()->toArray();
         foreach ($children as $child) {
-            $children = array_merge($children, $child->getAllChildren());
+            $children = array_merge($children, $child->getAllChildren()->toArray());
         }
 
-        return $children;
+        return new ArrayCollection($children);
     }
 
     /**
