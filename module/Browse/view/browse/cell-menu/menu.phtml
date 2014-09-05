@@ -1,0 +1,63 @@
+<div tabindex="-1" role="dialog" class="modal fade" ng-class="{in: animate}" ng-style="{'z-index': 1050 + index * 10, display: 'block'}" ng-click="close()">
+    <div class="gims-contextual-menu open" gims-position-when-rendered style=" position: absolute;">
+
+        <ul class="gims-dropdown-menu" ng-if="questionnairesStatus[questionnaire.status] || questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[part.id].id || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id]">
+            <li ng-if="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[part.id].id" class="dropdown-header">Information</li>
+            <li ng-if="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]">
+                <a><i class="fa fa-question fa-fw"></i> {{questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]}}</a>
+            </li>
+            <li ng-if="isValidNumber(questionnaire.survey.questions[filter.id].answers[part.id][questionnaire.survey.questions[filter.id].value])" >
+                <a><i class="fa fa-crosshairs fa-fw"></i> Exact value: {{questionnaire.survey.questions[filter.id].answers[part.id][questionnaire.survey.questions[filter.id].value]}}</a>
+            </li>
+            <li ng-if="questionnaire.survey.questions[filter.id].answers[part.id].error">
+                <a><i class="fa fa-warning text-warning"></i> This answer has not been saved.</a>
+            </li>
+
+            <!-- Rules -->
+            <li ng-if="(mode.isContribute && questionnairesStatus[questionnaire.status]) && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second.length" class="divider"></li>
+            <li ng-if="(mode.isContribute && questionnairesStatus[questionnaire.status]) && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second.length" class="dropdown-header">Rules used in 2nd step of computation</li>
+            <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second">
+                <ul ui-sortable="sortableOptions" ng-model="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second">
+                    <li ng-repeat="usage in questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second" data-questionnaire="{{questionnaire.id}}" data-part="{{part.id}}" data-filter="{{filter.id}}">
+                        <a href gims-select-usage="usage"><i class="fa fa-navicon fa-fw text-muted"></i><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li ng-if="(mode.isContribute && questionnairesStatus[questionnaire.status]) && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first.length" class="divider"></li>
+            <li ng-if="(mode.isContribute && questionnairesStatus[questionnaire.status]) && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first.length" class="dropdown-header">Rules used in 1st step of computation</li>
+            <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first">
+                <ul ui-sortable="sortableOptions" ng-model="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first">
+                    <li ng-repeat="usage in questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first" data-questionnaire="{{questionnaire.id}}" data-part="{{part.id}}" data-filter="{{filter.id}}">
+                        <a href gims-select-usage="usage"><i class="fa fa-navicon fa-fw text-muted"></i><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Summands -->
+            <li ng-if="filter.summands.length" class="divider"></li>
+            <li ng-if="filter.summands.length" class="dropdown-header">Summands used for computation</li>
+            <li ng-repeat="summand in filter.summands">
+                <a href="/admin/filter/edit/{{summand.id}}"><i class="fa fa-gims-filter fa-fw"></i> {{filter.name}}</a>
+            </li>
+
+            <li ng-if="questionnairesStatus[questionnaire.status]" class="divider"></li>
+            <li ng-if="questionnairesStatus[questionnaire.status]" class="dropdown-header">Actions</li>
+            <li ng-if="questionnairesStatus[questionnaire.status]">
+                <a href ng-click="toggleExcludeRule(questionnaire, filter.id, part.id)"><i class="fa fa-gims-rule fa-fw"></i> {{excludeRuleExists(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id]) ? 'Include in further computing' : 'Exclude from further computing'}}</a>
+            </li>
+            <li ng-if="mode.isContribute && questionnairesStatus[questionnaire.status]">
+                <a href gims-add-usage questionnaire="questionnaire" filter="filter" part="part"><i class="fa fa-gims-rule fa-fw"></i> Add a rule</a>
+            </li>
+            <li ng-if="mode.isContribute && questionnairesStatus[questionnaire.status]">
+                <a href ng-if="questionnaire.survey.questions[filter.id].isAbsolute" ng-click="toggleQuestionAbsolute(questionnaire, questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[part.id])"><i class="fa fa-fw">%</i> Set question as percent value</a>
+                <a href ng-if="!questionnaire.survey.questions[filter.id].isAbsolute" ng-click="toggleQuestionAbsolute(questionnaire, questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[part.id])"><i class="fa fa-fw fa-plus-square-o"></i> Set question as absolute value</a>
+            </li>
+            <li ng-if="mode.isContribute && questionnairesStatus[questionnaire.status] && questionnaire.survey.questions[filter.id].answers[part.id].id">
+                <a href ng-click="removeAnswer(tabs, questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[part.id])">
+                    <span class="text-danger"><i class="fa fa-trash-o fa-fw"></i> Remove answer</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

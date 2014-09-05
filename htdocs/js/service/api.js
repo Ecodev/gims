@@ -16,4 +16,15 @@ angular.module('myApp.services')
             return Restangular.withConfig(function(RestangularConfigurer) {
                 RestangularConfigurer.setDefaultHttpFields({cache: true});
             });
+        })
+
+        /**
+         * Defines what questionnaire status are read-only
+         */
+        .value('questionnairesStatus', {
+            validated: false,
+            published: false,
+            completed: true,
+            rejected: true,
+            'new': true
         });

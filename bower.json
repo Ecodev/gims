@@ -11,7 +11,7 @@
     "angular-resource": "~1.2.14",
     "angular-route": "~1.2.14",
     "angular-scenario": "~1.2.14",
-    "angular-bootstrap": "0.10.0",
+    "angular-bootstrap": "0.11.0",
     "angular-ui-select2": "v0.0.5",
     "highcharts.com": "v3.0.9",
     "html5shiv": "3.7.0",

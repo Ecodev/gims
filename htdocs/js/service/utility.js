@@ -14,7 +14,17 @@ angular.module('myApp.services').factory('Utility', function() {
                 }
             }
         },
-
+        /**
+         * Check if given value is positive number including 0, to avoid 0 to be interpreted as null in the template side
+         * @param val
+         * @returns {boolean}
+         */
+        isValidNumber: function(val) {
+            if (_.isNumber(val) && val >= 0) {
+                return true;
+            }
+            return false;
+        },
         /**
          * Return a parameter in a list of objects (or single object)
          * Almost could use _.pluck but the loop in pluck dont use angular.foreach and uses some angular function as object. pluck can't neither differentiate if server returns list or single object
