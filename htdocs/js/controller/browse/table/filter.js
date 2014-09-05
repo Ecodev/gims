@@ -696,8 +696,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
      */
     $scope.removeFilter = function(filter) {
 
-        var filters = _.uniq(_.pluck([filter
-        ].concat(getChildrenRecursively(filter)), 'id'));
+        var filters = _.uniq(_.pluck([filter].concat(getChildrenRecursively(filter)), 'id'));
 
         // remove filter if it's in list of
         $scope.tabs.filters = _.filter($scope.tabs.filters, function(f) {
