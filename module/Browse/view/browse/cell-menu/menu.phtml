@@ -1,6 +1,6 @@
 <div tabindex="-1" role="dialog" class="modal fade" ng-class="{in: animate}" ng-style="{'z-index': 1050 + index * 10, display: 'block'}" ng-click="close()">
     <div class="gims-contextual-menu open" gims-position-when-rendered style=" position: absolute;">
-
+        
         <ul class="gims-dropdown-menu" ng-if="questionnairesStatus[questionnaire.status] || questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[part.id].id || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id]">
             <li ng-if="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[part.id].id" class="dropdown-header">Information</li>
             <li ng-if="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]">
@@ -14,9 +14,9 @@
             </li>
 
             <!-- Rules -->
-            <li ng-if="(mode.isContribute && questionnairesStatus[questionnaire.status]) && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second.length" class="divider"></li>
-            <li ng-if="(mode.isContribute && questionnairesStatus[questionnaire.status]) && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second.length" class="dropdown-header">Rules used in 2nd step of computation</li>
-            <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second">
+            <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second.length" class="divider"></li>
+            <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second.length" class="dropdown-header">Rules used in 2nd step of computation</li>
+            <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second.length">
                 <ul ui-sortable="sortableOptions" ng-model="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second">
                     <li ng-repeat="usage in questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second" data-questionnaire="{{questionnaire.id}}" data-part="{{part.id}}" data-filter="{{filter.id}}">
                         <a href gims-select-usage="usage"><i class="fa fa-navicon fa-fw text-muted"></i><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a>
@@ -24,9 +24,9 @@
                 </ul>
             </li>
 
-            <li ng-if="(mode.isContribute && questionnairesStatus[questionnaire.status]) && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first.length" class="divider"></li>
-            <li ng-if="(mode.isContribute && questionnairesStatus[questionnaire.status]) && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first.length" class="dropdown-header">Rules used in 1st step of computation</li>
-            <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first">
+            <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first.length" class="divider"></li>
+            <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first.length" class="dropdown-header">Rules used in 1st step of computation</li>
+            <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first.length">
                 <ul ui-sortable="sortableOptions" ng-model="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first">
                     <li ng-repeat="usage in questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first" data-questionnaire="{{questionnaire.id}}" data-part="{{part.id}}" data-filter="{{filter.id}}">
                         <a href gims-select-usage="usage"><i class="fa fa-navicon fa-fw text-muted"></i><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a>
@@ -44,7 +44,7 @@
             <li ng-if="questionnairesStatus[questionnaire.status]" class="divider"></li>
             <li ng-if="questionnairesStatus[questionnaire.status]" class="dropdown-header">Actions</li>
             <li ng-if="questionnairesStatus[questionnaire.status]">
-                <a href ng-click="toggleExcludeRule(questionnaire, filter.id, part.id)"><i class="fa fa-gims-rule fa-fw"></i> {{excludeRuleExists(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id]) ? 'Include in further computing' : 'Exclude from further computing'}}</a>
+                <a href ng-click="toggleExcludeRule(questionnaire, filter.id, part.id)"><i class="fa fa-gims-rule fa-fw"></i> {{excludeRuleExists(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second) ? 'Include in further computing' : 'Exclude from further computing'}}</a>
             </li>
             <li ng-if="mode.isContribute && questionnairesStatus[questionnaire.status]">
                 <a href gims-add-usage questionnaire="questionnaire" filter="filter" part="part"><i class="fa fa-gims-rule fa-fw"></i> Add a rule</a>

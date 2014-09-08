@@ -1,6 +1,5 @@
-angular.module('myApp').controller('CellMenuCtrl', function($scope, $modalInstance, $q, tabs, mode, questionnaire, filter, part, questionnairesStatus, Restangular, TableFilter) {
+angular.module('myApp').controller('CellMenuCtrl', function($scope, $modalInstance, $q, tabs, mode, questionnaire, filter, part, questionnairesStatus, Restangular, TableFilter, Utility) {
     'use strict';
-    console.log('CellMenuCtrl');
 
     // My future self will hate me for this, but we hardcode the exclude
     // rule ID to make it easier to find it
@@ -16,6 +15,7 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $modalInstan
 
     // Expose function to scope
     $scope.removeAnswer = TableFilter.removeAnswer;
+    $scope.isValidNumber = Utility.isValidNumber;
 
     /**
      * Returns whether the special Exclude rule exists in the given usage
@@ -41,23 +41,23 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $modalInstan
             questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId] = {};
         }
         if (!questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId]) {
-            questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId] = [];
+            questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId] = {second: []};
         }
 
-        var usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId];
+        var usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId].second;
         if ($scope.excludeRuleExists(usages)) {
             _.forEach(usages, function(usage) {
                 if (usage.rule.id == excludeRuleId) {
                     Restangular.restangularizeElement(null, usage, 'filterQuestionnaireUsage');
                     usage.remove().then(function() {
-                        questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId] = _.without(usages, usage);
+                        questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId].second = _.without(usages, usage);
                         TableFilter.refresh(tabs, false, true);
                     });
                 }
             });
         } else {
             var usage = {
-                isSecondLevel: true,
+                isSecondStep: true,
                 filter: filterId,
                 questionnaire: questionnaire.id,
                 part: partId,

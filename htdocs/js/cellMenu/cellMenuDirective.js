@@ -107,7 +107,7 @@ angular.module('myApp.directives').directive('gimsCellMenu', function($modal, $p
 
                     var usages;
                     if (questionnaire.filterQuestionnaireUsagesByFilterAndPart && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id]) {
-                        usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId];
+                        usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId].first.concat(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId].second);
                     }
 
                     if (answer && answer.error) {
