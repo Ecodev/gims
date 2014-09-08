@@ -58,7 +58,6 @@ class Aggregator
         // Then, accumulate all children
         foreach ($geoname->getChildren() as $child) {
             $childResult = $this->computeFlattenAllYears($yearStart, $yearEnd, $filters, $child, $part);
-
             $accumulator = $this->accumulate($accumulator, $childResult, $child, $years, $part);
         }
 

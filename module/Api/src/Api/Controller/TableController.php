@@ -5,6 +5,7 @@ namespace Api\Controller;
 use Application\View\Model\NumericJsonModel;
 use Application\View\Model\ExcelModel;
 use Application\Model\Geoname;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class TableController extends \Application\Controller\AbstractAngularActionController
 {
@@ -168,12 +169,12 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     public function countryAction()
     {
-        $geonameIds = explode(',', $this->params()->fromQuery('geonames', -1));
+        $geonamesIds = array_filter(explode(',', $this->params()->fromQuery('geonames')));
+        $filtersIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
         $years = $this->getWantedYears($this->params()->fromQuery('years'));
-        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findById($geonameIds);
 
-        /** @var \Application\Model\FilterSet $filterSet */
-        $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
+        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findById($geonamesIds);
+        $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds);
         $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
 
         $result = array();
@@ -200,11 +201,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
         foreach ($geonames as $geoname) {
 
-            if (!$filterSet) {
-                continue;
-            }
-
-            $allYearsComputed = $this->getAllYearsComputed($parts, $filterSet, $geoname);
+            $allYearsComputed = $this->getAllYearsComputed($parts, $filters, $geoname);
             $filteredYearsComputed = $this->filterYears($allYearsComputed, $years);
 
             foreach ($years as $year) {
@@ -224,9 +221,9 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
                 $statsData = array();
                 $count = 1;
-                foreach ($filteredYearsComputed as $partId => $filters) {
+                foreach ($filteredYearsComputed as $partId => $flatFilters) {
 
-                    foreach ($filters as $filter) {
+                    foreach ($flatFilters as $filter) {
                         $columnId = 'c' . $count;
                         $columnNames = $this->getColumnNames($partsById[$partId], $filter['name']);
                         $columns[$columnId] = $columnNames['short'];
@@ -294,14 +291,14 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
      * @param \Application\Model\Geoname $geoname
      * @return array all data ordered by part
      */
-    private function getAllYearsComputed($parts, \Application\Model\FilterSet $filterSet, Geoname $geoname)
+    private function getAllYearsComputed($parts, $filters, Geoname $geoname)
     {
         $aggregator = new \Application\Service\Calculator\Aggregator();
         $aggregator->setCalculator($this->getCalculator());
 
         $dataPerPart = array();
         foreach ($parts as $part) {
-            $dataPerPart[$part->getId()] = $aggregator->computeFlattenAllYears(1980, 2015, $filterSet->getFilters()->toArray(), $geoname, $part);
+            $dataPerPart[$part->getId()] = $aggregator->computeFlattenAllYears(1980, 2015, $filters, $geoname, $part);
         }
 
         return $dataPerPart;

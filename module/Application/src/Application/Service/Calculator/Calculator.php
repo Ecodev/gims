@@ -54,7 +54,6 @@ class Calculator extends AbstractCalculator
      */
     public function computeFlattenAllYears($yearStart, $yearEnd, $filters, array $questionnaires, Part $part)
     {
-
         $result = array();
         $years = range($yearStart, $yearEnd);
         foreach ($filters as $filter) {

@@ -1,4 +1,4 @@
-angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($scope, $http, $timeout, $location, Restangular) {
+angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($scope, $http, $timeout, $location, Restangular, Utility) {
     'use strict';
 
     // Init to empty
@@ -17,7 +17,7 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
         if ($scope.tabs.filterSets && $scope.tabs.filterSets.length) {
             $scope.tabs.filters = [];
             Restangular.one('filterSet').get({id: _.pluck($scope.tabs.filterSets, 'id').join(','), fields: 'filters', perPage: 1000}).then(function(data) {
-                $scope.tabs.filters = getAttribute(data, 'filters', null);
+                $scope.tabs.filters = Utility.getAttribute(data, 'filters', null);
                 $scope.tabs.filter = null;
             });
         }
@@ -39,12 +39,12 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
                 var questionnaires = [];
                 if (_.isArray(data)) {
                     angular.forEach(data, function(geoname) {
-                        questionnaires = questionnaires.concat(getAttribute(geoname, 'questionnaires', 'read'));
-                        questionnaires = questionnaires.concat(getAttribute(geoname.allChildren, 'questionnaires', 'read'));
+                        questionnaires = questionnaires.concat(Utility.getAttribute(geoname, 'questionnaires', 'read'));
+                        questionnaires = questionnaires.concat(Utility.getAttribute(geoname.allChildren, 'questionnaires', 'read'));
                     });
                 } else {
-                    questionnaires = getAttribute(data, 'questionnaires', 'read');
-                    questionnaires = questionnaires.concat(getAttribute(data.allChildren, 'questionnaires', 'read'));
+                    questionnaires = Utility.getAttribute(data, 'questionnaires', 'read');
+                    questionnaires = questionnaires.concat(Utility.getAttribute(data.allChildren, 'questionnaires', 'read'));
                 }
 
                 $scope.tabs.questionnaires = _.uniq(questionnaires, 'id');
@@ -57,7 +57,7 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
         if ($scope.tabs.surveys && $scope.tabs.surveys.length) {
             $scope.tabs.questionnaires = [];
             Restangular.one('survey').get({id: _.pluck($scope.tabs.surveys, 'id').join(','), fields: 'questionnaires.permissions', perPage: 1000}).then(function(data) {
-                $scope.tabs.questionnaires = getAttribute(data, 'questionnaires', 'read');
+                $scope.tabs.questionnaires = Utility.getAttribute(data, 'questionnaires', 'read');
                 $scope.tabs.geonames = null;
             });
         }
@@ -88,37 +88,8 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
                     return {field: columnKey, displayName: columnName, width: '100px'};
                 });
                 $scope.legends = data.legends;
-                $scope.isLoading = false;
             });
         }
     }, 300);
-
-    /**
-     * Return a parameter in a list of objects (or single object)
-     * Almost could use _.pluck but the loop in pluck dont use angular.foreach and uses some angular function as object. pluck can't neither differentiate if server returns list or single object
-     * @param data
-     * @param attribute
-     * @param permission
-     * @returns {Array}
-     */
-    var getAttribute = function(data, attribute, permission) {
-        var list = [];
-        if (_.isArray(data)) {
-            angular.forEach(data, function(obj) {
-                list = list.concat(obj[attribute]);
-            });
-        } else if (data) {
-            list = data[attribute];
-        }
-
-        list = _.filter(list, function(l) {
-            if (!permission || permission && l && (!l.permissions || l.permissions && l.permissions[permission])) {
-                return true;
-            }
-            return false;
-        });
-
-        return list;
-    };
 
 });

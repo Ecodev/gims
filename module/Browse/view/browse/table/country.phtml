@@ -3,38 +3,127 @@
     <div class="navbar navbar-default hidden-print">
         <a class="navbar-brand" href="#">Countries</a>
         <form class="navbar-form">
+            <button class="btn btn-default" ng-class="{disabled: !tabs.geonames || !tabs.filters || !tabs.years}" ng-click="refresh()"><i class="fa fa-refresh"></i> Generate table</button>
+            <a href="/api/table/country/gims-countries.xlsx?geonames={{geonamesIds}}&filters={{filtersIds}}" target="_blank" class="btn btn-default" ng-class="{disabled: !tabs.geonames || !tabs.filters}"><i class="fa fa-download"></i> Export</a>
             <?php echo $this->helpButton(); ?>
         </form>
     </div>
 
     <?php echo $this->helpBox('View computed data, in absolute (a) and relative numbers, per year for the selected countries and export the corresponding data. For further info, see the <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/data_processing.html">detailed documentation</a>.'); ?>
 
-    <div class="row">
-        <form class="col-md-6">
-            <div class="form-group">
-                <gims-select api="geoname" name="geonames" model="geonames" placeholder="<?php echo $this->translate('Select a country') ?>" format="name" style="width:100%;" multiple="multiple"/>
-            </div>
-            <div class="form-group">
-                <gims-select api="filterSet" model="filterSet" placeholder="<?php echo $this->translate('Select a filter set') ?>" style="width:100%;"/>
-            </div>
-            <div class="form-group">
-                <label class="control-label" for="years"><?php echo $this->translate('Years') ?>
-                    <i class="fa fa-gims-help"
-                       popover="You can chain multiple years requests by commas. If separated by a dash, all years contained in the range will be selected. E.g : 1980,1990-2000,2005-2010,2013,2015"
-                       popover-trigger="mouseenter"
-                       popover-placement="right"
-                       ></i>
-                </label>
-                <input type="text" id="years" ng-model="years" ng-blur='updateUrl()' placeholder="E.g : 1980,1990-2000,2005-2010,2013,2015" />
+    <!-- Selection panel for filters and questionnaires -->
+    <form name="selectionForm">
+        <div class="row show-grid ng-trans ng-trans-slide-up">
+
+            <!-- Filter selection -->
+            <div class="col-md-4">
+                <div class="row" ng-class="{'has-error':!tabs.filters.length}">
+                    <div class="col-md-12">
+                        <h3 class="control-label">Filter <small ng-if="!tabs.filters.length">(Required)</small></h3>
+                    </div>
+
+                    <div class="col-md-12">
+                        <tabset>
+                            <tab heading="Filter sets">
+                                <gims-select
+                                        model="tabs.filterSets"
+                                        api="filterSet"
+                                        placeholder="Select filter set"
+                                        disabled="isLoading"
+                                        multiple
+                                        change-url="false"
+                                        style="width: 100%">
+                                </gims-select>
+                            </tab>
+                            <tab heading="Filter's children">
+                                <gims-filter
+                                        model="tabs.filter"
+                                        name="filter"
+                                        show-selection-path="true"
+                                        change-url="false"
+                                        disabled="isLoading">
+                                </gims-filter>
+                            </tab>
+                            <tab heading="Filters ({{tabs.filters.length}})">
+                                <gims-filter
+                                        model="tabs.filters"
+                                        name="filters"
+                                        query-params="filterFields"
+                                        show-selection-path="true"
+                                        disabled="isLoading"
+                                        multiple>
+                                </gims-filter>
+                            </tab>
+                        </tabset>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <button class="btn btn-default" ng-class="{disabled: !geonames || !filterSet.id || !years}" ng-click="displayTable()"><i class="fa fa-refresh"></i> Generate table</button>
-                <a href="{{exportUrl}}" target="_blank" class="btn btn-default" ng-class="{disabled: !exportUrl}"><i class="fa fa-download"></i> Export</a>
-                <span><i class="fa fa-gims-loading" ng-show="isLoading"></i></span>
+            <!-- Questionnaires selection -->
+            <div class="col-md-4">
+                <div class="row" ng-class="{'has-error':!tabs.geonames.length}">
+                    <div>
+                        <div class="col-md-12">
+                            <h3 class="control-label">Geography <small ng-if="!tabs.geonames.length">(Required)</small></h3>
+                        </div>
+
+                        <div class="col-md-12">
+                            <tabset>
+                                <tab heading="Regions">
+                                    <gims-select
+                                            model="tabs.regions"
+                                            api="geoname"
+                                            placeholder="Select region"
+                                            change-url="false"
+                                            multiple
+                                            style="width: 100%">
+                                    </gims-select>
+                                </tab>
+                                <tab heading="Countries ({{tabs.geonames.length}})">
+                                    <gims-select
+                                            model="tabs.geonames"
+                                            name="geonames"
+                                            api="geoname"
+                                            placeholder="Select countries"
+                                            disabled="isLoading"
+                                            multiple
+                                            style="width: 100%">
+                                    </gims-select>
+                                </tab>
+                            </tabset>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </form>
-    </div>
+
+            <div class="col-md-4">
+                <div class="row" ng-class="{'has-error':selectionForm.years.$error.required}">
+                    <div>
+                        <div class="col-md-12">
+                            <h3 class="control-label" ng-if="!mode.isSector">Time <small ng-if="selectionForm.years.$error.required">(Required)</small></h3>
+                        </div>
+
+                        <div class="col-md-12">
+                            <tabset>
+                                <tab>
+                                    <tab-heading>
+                                        Years
+                                        <i class="fa fa-gims-help"
+                                           popover="You can chain multiple years requests by commas. If separated by a dash, all years contained in the range will be selected. E.g : 1980,1990-2000,2005-2010,2013,2015"
+                                           popover-trigger="mouseenter"
+                                           popover-placement="right"
+                                                ></i>
+                                    </tab-heading>
+                                    <input type="text" name="years" ng-model="tabs.years" placeholder="E.g : 1980,1990-2000,2005-2010,2013,2015" required />
+
+                                </tab>
+                            </tabset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 
     <div class="alert alert-info" ng-hide="columnDefs"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to show table here.') ?></div>
     <div ng-grid="gridOptions" class="gridStyle" ng-show="columnDefs"></div>
