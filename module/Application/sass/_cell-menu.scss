@@ -3,6 +3,6 @@
 // we "rename" the class to access the style without the behavior
 .gims-dropdown-menu  {
     @extend .dropdown-menu;
+    display: block; // force it to be "open", because we don't manage the "open" class of parent element
+    z-index: 3000; // Alawys over everything else, including the footer
 }
-
-

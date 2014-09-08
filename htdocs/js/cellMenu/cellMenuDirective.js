@@ -1,4 +1,4 @@
-angular.module('myApp.directives').directive('gimsCellMenu', function($modal, $position, $log, $rootScope, Utility) {
+angular.module('myApp.directives').directive('gimsCellMenu', function($dropdown, $rootScope, Utility) {
 
     return {
         restrict: 'E',
@@ -23,15 +23,14 @@ angular.module('myApp.directives').directive('gimsCellMenu', function($modal, $p
             filter: '=',
             part: '='
         },
-        link: function(scope, element, attrs) {
+        link: function(scope, element) {
 
-            element.bind('click', function(event) {
-
-                var modalInstance = $modal.open({
+            var button = element.find('button');
+            button.bind('click', function() {
+                $dropdown.open({
+                    button: button,
                     templateUrl: '/template/browse/cell-menu/menu',
-                    windowTemplateUrl: '/template/browse/cell-menu/window',
                     controller: 'CellMenuCtrl',
-                    backdrop: false,
                     resolve: {
                         tabs: function() {
                             return scope.tabs;
@@ -49,32 +48,6 @@ angular.module('myApp.directives').directive('gimsCellMenu', function($modal, $p
                             return scope.part;
                         }
                     }
-                });
-
-                /**
-                 * Position the menu under the button which called it
-                 * @param {element} menu
-                 * @returns {void}
-                 */
-                function positionMenu(menu) {
-                    var target = $(event.target).closest('button');
-                    var targetPosition = $position.offset(target);
-                    var menuPosition = {
-                        top: targetPosition.top + targetPosition.height + 'px',
-                        left: targetPosition.left + 'px'
-                    };
-                    menu.css(menuPosition);
-                }
-
-                var stopListening = $rootScope.$on('gims-contextual-menu-rendered', function(event, menu) {
-                    positionMenu(menu);
-                    stopListening();
-                });
-
-                modalInstance.result.then(function(selectedItem) {
-                    scope.selected = selectedItem;
-                }, function() {
-                    $log.info('Modal dismissed at: ' + new Date());
                 });
             });
 
@@ -126,9 +99,5 @@ angular.module('myApp.directives').directive('gimsCellMenu', function($modal, $p
                 return 'nothing';
             };
         }
-    };
-}).directive('gimsPositionWhenRendered', function($rootScope) {
-    return function(scope, element) {
-        $rootScope.$emit('gims-contextual-menu-rendered', element);
     };
 });

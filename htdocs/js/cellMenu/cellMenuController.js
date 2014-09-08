@@ -1,4 +1,4 @@
-angular.module('myApp').controller('CellMenuCtrl', function($scope, $modalInstance, $q, tabs, mode, questionnaire, filter, part, questionnairesStatus, Restangular, TableFilter, Utility) {
+angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, tabs, mode, questionnaire, filter, part, questionnairesStatus, Restangular, TableFilter, Utility, $timeout) {
     'use strict';
 
     // My future self will hate me for this, but we hardcode the exclude
@@ -11,7 +11,6 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $modalInstan
     $scope.filter = filter;
     $scope.part = part;
     $scope.questionnairesStatus = questionnairesStatus;
-    $scope.close = $modalInstance.close;
 
     // Expose function to scope
     $scope.removeAnswer = TableFilter.removeAnswer;
@@ -72,6 +71,10 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $modalInstan
             });
         }
     };
+$scope.$on('$destroy', function iVeBeenDismissed() {
+console.log('  // say goodbye to your controller here');
+  // release resources, cancel request...
+});
 
     $scope.toggleQuestionAbsolute = function(questionnaire, question) {
 
