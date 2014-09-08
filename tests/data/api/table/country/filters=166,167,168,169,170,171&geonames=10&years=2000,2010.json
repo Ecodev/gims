@@ -1,0 +1,294 @@
+{
+    "columns": {
+        "country": "Country",
+        "iso3": "ISO-3",
+        "year": "Year",
+        "PU": "PU",
+        "PR": "PR",
+        "PT": "PT",
+        "c1": "I+SU",
+        "c1a": "I+SUa",
+        "c2": "SCU",
+        "c2a": "SCUa",
+        "c3": "IU",
+        "c3a": "IUa",
+        "c4": "SU",
+        "c4a": "SUa",
+        "c5": "OUU",
+        "c5a": "OUUa",
+        "c6": "ODU",
+        "c6a": "ODUa",
+        "c7": "I+SR",
+        "c7a": "I+SRa",
+        "c8": "SCR",
+        "c8a": "SCRa",
+        "c9": "IR",
+        "c9a": "IRa",
+        "c10": "SR",
+        "c10a": "SRa",
+        "c11": "OUR",
+        "c11a": "OURa",
+        "c12": "ODR",
+        "c12a": "ODRa",
+        "c13": "I+ST",
+        "c13a": "I+STa",
+        "c14": "SCT",
+        "c14a": "SCTa",
+        "c15": "IT",
+        "c15a": "ITa",
+        "c16": "ST",
+        "c16a": "STa",
+        "c17": "OUT",
+        "c17a": "OUTa",
+        "c18": "ODT",
+        "c18a": "ODTa"
+    },
+    "legends": [
+        {
+            "short": "PU",
+            "long": "Population, Urban"
+        },
+        {
+            "short": "PR",
+            "long": "Population, Rural"
+        },
+        {
+            "short": "PT",
+            "long": "Population, Total"
+        },
+        {
+            "short": "I+SU",
+            "long": "Improved + shared, Urban"
+        },
+        {
+            "short": "I+SUa",
+            "long": "Improved + shared, Urban (absolute value)"
+        },
+        {
+            "short": "SCU",
+            "long": "Sewerage connections, Urban"
+        },
+        {
+            "short": "SCUa",
+            "long": "Sewerage connections, Urban (absolute value)"
+        },
+        {
+            "short": "IU",
+            "long": "Improved, Urban"
+        },
+        {
+            "short": "IUa",
+            "long": "Improved, Urban (absolute value)"
+        },
+        {
+            "short": "SU",
+            "long": "Shared, Urban"
+        },
+        {
+            "short": "SUa",
+            "long": "Shared, Urban (absolute value)"
+        },
+        {
+            "short": "OUU",
+            "long": "Other unimproved, Urban"
+        },
+        {
+            "short": "OUUa",
+            "long": "Other unimproved, Urban (absolute value)"
+        },
+        {
+            "short": "ODU",
+            "long": "Open defecation, Urban"
+        },
+        {
+            "short": "ODUa",
+            "long": "Open defecation, Urban (absolute value)"
+        },
+        {
+            "short": "I+SR",
+            "long": "Improved + shared, Rural"
+        },
+        {
+            "short": "I+SRa",
+            "long": "Improved + shared, Rural (absolute value)"
+        },
+        {
+            "short": "SCR",
+            "long": "Sewerage connections, Rural"
+        },
+        {
+            "short": "SCRa",
+            "long": "Sewerage connections, Rural (absolute value)"
+        },
+        {
+            "short": "IR",
+            "long": "Improved, Rural"
+        },
+        {
+            "short": "IRa",
+            "long": "Improved, Rural (absolute value)"
+        },
+        {
+            "short": "SR",
+            "long": "Shared, Rural"
+        },
+        {
+            "short": "SRa",
+            "long": "Shared, Rural (absolute value)"
+        },
+        {
+            "short": "OUR",
+            "long": "Other unimproved, Rural"
+        },
+        {
+            "short": "OURa",
+            "long": "Other unimproved, Rural (absolute value)"
+        },
+        {
+            "short": "ODR",
+            "long": "Open defecation, Rural"
+        },
+        {
+            "short": "ODRa",
+            "long": "Open defecation, Rural (absolute value)"
+        },
+        {
+            "short": "I+ST",
+            "long": "Improved + shared, Total"
+        },
+        {
+            "short": "I+STa",
+            "long": "Improved + shared, Total (absolute value)"
+        },
+        {
+            "short": "SCT",
+            "long": "Sewerage connections, Total"
+        },
+        {
+            "short": "SCTa",
+            "long": "Sewerage connections, Total (absolute value)"
+        },
+        {
+            "short": "IT",
+            "long": "Improved, Total"
+        },
+        {
+            "short": "ITa",
+            "long": "Improved, Total (absolute value)"
+        },
+        {
+            "short": "ST",
+            "long": "Shared, Total"
+        },
+        {
+            "short": "STa",
+            "long": "Shared, Total (absolute value)"
+        },
+        {
+            "short": "OUT",
+            "long": "Other unimproved, Total"
+        },
+        {
+            "short": "OUTa",
+            "long": "Other unimproved, Total (absolute value)"
+        },
+        {
+            "short": "ODT",
+            "long": "Open defecation, Total"
+        },
+        {
+            "short": "ODTa",
+            "long": "Open defecation, Total (absolute value)"
+        }
+    ],
+    "data": [
+        {
+            "country": "MDG - Western Asia",
+            "iso3": null,
+            "year": 2000,
+            "PU": 102159641,
+            "PR": 58448799,
+            "PT": 160608446,
+            "c1": 96.8,
+            "c1a": 98844679,
+            "c2": 38.4,
+            "c2a": 39274070,
+            "c3": null,
+            "c3a": null,
+            "c4": null,
+            "c4a": null,
+            "c5": 0.0,
+            "c5a": 0,
+            "c6": 3.2,
+            "c6a": 3314961,
+            "c7": 96.8,
+            "c7a": 56552203,
+            "c8": 38.4,
+            "c8a": 22469952,
+            "c9": null,
+            "c9a": null,
+            "c10": null,
+            "c10a": null,
+            "c11": 0.0,
+            "c11a": 0,
+            "c12": 3.2,
+            "c12a": 1896595,
+            "c13": 96.8,
+            "c13a": 155396888,
+            "c14": 38.4,
+            "c14a": 61744024,
+            "c15": null,
+            "c15a": null,
+            "c16": null,
+            "c16a": null,
+            "c17": 0.0,
+            "c17a": 0,
+            "c18": 3.2,
+            "c18a": 5211557
+        },
+        {
+            "country": "MDG - Western Asia",
+            "iso3": null,
+            "year": 2010,
+            "PU": 140037546,
+            "PR": 66662055,
+            "PT": 206699605,
+            "c1": 100.0,
+            "c1a": 140037546,
+            "c2": 37.6,
+            "c2a": 52655818,
+            "c3": null,
+            "c3a": null,
+            "c4": null,
+            "c4a": null,
+            "c5": 0.0,
+            "c5a": 0,
+            "c6": 0.0,
+            "c6a": 0,
+            "c7": 100.0,
+            "c7a": 66662055,
+            "c8": 37.6,
+            "c8a": 25065742,
+            "c9": null,
+            "c9a": null,
+            "c10": null,
+            "c10a": null,
+            "c11": 0.0,
+            "c11a": 0,
+            "c12": 0.0,
+            "c12a": 0,
+            "c13": 100.0,
+            "c13a": 206699605,
+            "c14": 37.6,
+            "c14a": 77721562,
+            "c15": null,
+            "c15a": null,
+            "c16": null,
+            "c16a": null,
+            "c17": 0.0,
+            "c17a": 0,
+            "c18": 0.0,
+            "c18a": 0
+        }
+    ]
+}

@@ -1,0 +1,70 @@
+{
+    "columns": {
+        "country": "Country",
+        "iso3": "ISO-3",
+        "year": "Year",
+        "PU": "PU",
+        "PR": "PR",
+        "PT": "PT",
+        "c1": "I+SU",
+        "c1a": "I+SUa",
+        "c2": "I+SR",
+        "c2a": "I+SRa",
+        "c3": "I+ST",
+        "c3a": "I+STa"
+    },
+    "legends": [
+        {
+            "short": "PU",
+            "long": "Population, Urban"
+        },
+        {
+            "short": "PR",
+            "long": "Population, Rural"
+        },
+        {
+            "short": "PT",
+            "long": "Population, Total"
+        },
+        {
+            "short": "I+SU",
+            "long": "Improved + shared, Urban"
+        },
+        {
+            "short": "I+SUa",
+            "long": "Improved + shared, Urban (absolute value)"
+        },
+        {
+            "short": "I+SR",
+            "long": "Improved + shared, Rural"
+        },
+        {
+            "short": "I+SRa",
+            "long": "Improved + shared, Rural (absolute value)"
+        },
+        {
+            "short": "I+ST",
+            "long": "Improved + shared, Total"
+        },
+        {
+            "short": "I+STa",
+            "long": "Improved + shared, Total (absolute value)"
+        }
+    ],
+    "data": [
+        {
+            "country": "MDG - Western Asia",
+            "iso3": null,
+            "year": 2000,
+            "PU": 102159641,
+            "PR": 58448799,
+            "PT": 160608446,
+            "c1": 96.8,
+            "c1a": 98844679,
+            "c2": 96.8,
+            "c2a": 56552203,
+            "c3": 96.8,
+            "c3a": 155396888
+        }
+    ]
+}
