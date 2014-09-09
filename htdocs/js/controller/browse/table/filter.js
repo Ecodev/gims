@@ -1789,11 +1789,10 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             // first create filter set
             var newFilterSet = {name: 'Sector : ' + $scope.tabs.country.name};
             Restangular.all('filterSet').post(newFilterSet).then(function(filterSet) {
-                $scope.tabs.filters[0].filterset = [filterSet.id];
+                $scope.tabs.filters[0].filterSets = [filterSet];
 
                 // then save first filter
-                saveFiltersCollection([$scope.tabs.filters[0]
-                ]).then(function() {
+                saveFiltersCollection([$scope.tabs.filters[0]]).then(function() {
                     updateUrl('filter');
                     saveEquipments().then(function() {
                         deferred.resolve();
