@@ -105,7 +105,8 @@ describe('admin/survey/new', function() {
 
         // Should redirect to survey list
         browser.sleep(1);
-        expect(browser.getCurrentUrl()).toBe(browser.baseUrl + '/admin/survey');
+        // TODO remove the '#3' this is a bug in angular-bootstrap: https://github.com/angular-ui/bootstrap/issues/2155
+        expect(browser.getCurrentUrl()).toBe(browser.baseUrl + '/admin/survey#3');
 
         // The deleted survey shouldn't be in the list anymore
         element(by.css('[ng-view] [ng-grid]')).all(by.xpath('span[text() = "' + randomCode + '"]')).then(function(elements) {
