@@ -1,5 +1,5 @@
 <div>
-    <ul class="gims-dropdown-menu pull-right" ng-if="questionnairesStatus[questionnaire.status] || questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[part.id].id || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id]">
+    <ul class="gims-dropdown-menu pull-right" ng-if="questionnairesStatus[questionnaire.status] || questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[part.id].id || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id] || filter.summands.length">
         <li ng-if="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[part.id].id" class="dropdown-header">Information</li>
         <li ng-if="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]">
             <a><i class="fa fa-question fa-fw"></i> {{questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]}}</a>
