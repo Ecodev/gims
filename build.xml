@@ -109,7 +109,7 @@ WHERE S.relkind = 'S'
     AND D.refobjid = C.attrelid
     AND D.refobjsubid = C.attnum
     AND T.relname = PGT.tablename
-ORDER BY S.relname;&quot; | grep -oP &quot;SELECT.*;&quot; | sed 's/\(.*\)/&quot;\1&quot;/g' | sed &quot;s/&amp;#39;/'/g&quot; | xargs -L 1 ./vendor/bin/doctrine-module dbal:run-sql" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
+ORDER BY S.relname;&quot; | grep -oE &quot;SELECT.*;&quot; | sed 's/\(.*\)/&quot;\1&quot;/g' | sed &quot;s/&amp;#39;/'/g&quot; | xargs -L 1 ./vendor/bin/doctrine-module dbal:run-sql" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
     </target>
 
     <target name="insert-test-user">
