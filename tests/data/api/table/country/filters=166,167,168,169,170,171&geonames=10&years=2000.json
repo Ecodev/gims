@@ -6,42 +6,42 @@
         "PU": "PU",
         "PR": "PR",
         "PT": "PT",
-        "c1": "I+SU",
-        "c1a": "I+SUa",
-        "c2": "SCU",
-        "c2a": "SCUa",
-        "c3": "IU",
-        "c3a": "IUa",
-        "c4": "SU",
-        "c4a": "SUa",
-        "c5": "OUU",
-        "c5a": "OUUa",
-        "c6": "ODU",
-        "c6a": "ODUa",
-        "c7": "I+SR",
-        "c7a": "I+SRa",
-        "c8": "SCR",
-        "c8a": "SCRa",
-        "c9": "IR",
-        "c9a": "IRa",
-        "c10": "SR",
-        "c10a": "SRa",
-        "c11": "OUR",
-        "c11a": "OURa",
-        "c12": "ODR",
-        "c12a": "ODRa",
-        "c13": "I+ST",
-        "c13a": "I+STa",
-        "c14": "SCT",
-        "c14a": "SCTa",
-        "c15": "IT",
-        "c15a": "ITa",
-        "c16": "ST",
-        "c16a": "STa",
-        "c17": "OUT",
-        "c17a": "OUTa",
-        "c18": "ODT",
-        "c18a": "ODTa"
+        "c1": "SUI+S",
+        "c1a": "SUI+Sa",
+        "c2": "SUSC",
+        "c2a": "SUSCa",
+        "c3": "SUI",
+        "c3a": "SUIa",
+        "c4": "SUS",
+        "c4a": "SUSa",
+        "c5": "SUOU",
+        "c5a": "SUOUa",
+        "c6": "SUOD",
+        "c6a": "SUODa",
+        "c7": "SRI+S",
+        "c7a": "SRI+Sa",
+        "c8": "SRSC",
+        "c8a": "SRSCa",
+        "c9": "SRI",
+        "c9a": "SRIa",
+        "c10": "SRS",
+        "c10a": "SRSa",
+        "c11": "SROU",
+        "c11a": "SROUa",
+        "c12": "SROD",
+        "c12a": "SRODa",
+        "c13": "STI+S",
+        "c13a": "STI+Sa",
+        "c14": "STSC",
+        "c14a": "STSCa",
+        "c15": "STI",
+        "c15a": "STIa",
+        "c16": "STS",
+        "c16a": "STSa",
+        "c17": "STOU",
+        "c17a": "STOUa",
+        "c18": "STOD",
+        "c18a": "STODa"
     },
     "legends": [
         {
@@ -57,148 +57,148 @@
             "long": "Population, Total"
         },
         {
-            "short": "I+SU",
-            "long": "Improved + shared, Urban"
+            "short": "SUI+S",
+            "long": "Sanitation, Urban, Improved + shared"
         },
         {
-            "short": "I+SUa",
-            "long": "Improved + shared, Urban (absolute value)"
+            "short": "SUI+Sa",
+            "long": "Sanitation, Urban, Improved + shared (absolute value)"
         },
         {
-            "short": "SCU",
-            "long": "Sewerage connections, Urban"
+            "short": "SUSC",
+            "long": "Sanitation, Urban, Sewerage connections"
         },
         {
-            "short": "SCUa",
-            "long": "Sewerage connections, Urban (absolute value)"
+            "short": "SUSCa",
+            "long": "Sanitation, Urban, Sewerage connections (absolute value)"
         },
         {
-            "short": "IU",
-            "long": "Improved, Urban"
+            "short": "SUI",
+            "long": "Sanitation, Urban, Improved"
         },
         {
-            "short": "IUa",
-            "long": "Improved, Urban (absolute value)"
+            "short": "SUIa",
+            "long": "Sanitation, Urban, Improved (absolute value)"
         },
         {
-            "short": "SU",
-            "long": "Shared, Urban"
+            "short": "SUS",
+            "long": "Sanitation, Urban, Shared"
         },
         {
-            "short": "SUa",
-            "long": "Shared, Urban (absolute value)"
+            "short": "SUSa",
+            "long": "Sanitation, Urban, Shared (absolute value)"
         },
         {
-            "short": "OUU",
-            "long": "Other unimproved, Urban"
+            "short": "SUOU",
+            "long": "Sanitation, Urban, Other unimproved"
         },
         {
-            "short": "OUUa",
-            "long": "Other unimproved, Urban (absolute value)"
+            "short": "SUOUa",
+            "long": "Sanitation, Urban, Other unimproved (absolute value)"
         },
         {
-            "short": "ODU",
-            "long": "Open defecation, Urban"
+            "short": "SUOD",
+            "long": "Sanitation, Urban, Open defecation"
         },
         {
-            "short": "ODUa",
-            "long": "Open defecation, Urban (absolute value)"
+            "short": "SUODa",
+            "long": "Sanitation, Urban, Open defecation (absolute value)"
         },
         {
-            "short": "I+SR",
-            "long": "Improved + shared, Rural"
+            "short": "SRI+S",
+            "long": "Sanitation, Rural, Improved + shared"
         },
         {
-            "short": "I+SRa",
-            "long": "Improved + shared, Rural (absolute value)"
+            "short": "SRI+Sa",
+            "long": "Sanitation, Rural, Improved + shared (absolute value)"
         },
         {
-            "short": "SCR",
-            "long": "Sewerage connections, Rural"
+            "short": "SRSC",
+            "long": "Sanitation, Rural, Sewerage connections"
         },
         {
-            "short": "SCRa",
-            "long": "Sewerage connections, Rural (absolute value)"
+            "short": "SRSCa",
+            "long": "Sanitation, Rural, Sewerage connections (absolute value)"
         },
         {
-            "short": "IR",
-            "long": "Improved, Rural"
+            "short": "SRI",
+            "long": "Sanitation, Rural, Improved"
         },
         {
-            "short": "IRa",
-            "long": "Improved, Rural (absolute value)"
+            "short": "SRIa",
+            "long": "Sanitation, Rural, Improved (absolute value)"
         },
         {
-            "short": "SR",
-            "long": "Shared, Rural"
+            "short": "SRS",
+            "long": "Sanitation, Rural, Shared"
         },
         {
-            "short": "SRa",
-            "long": "Shared, Rural (absolute value)"
+            "short": "SRSa",
+            "long": "Sanitation, Rural, Shared (absolute value)"
         },
         {
-            "short": "OUR",
-            "long": "Other unimproved, Rural"
+            "short": "SROU",
+            "long": "Sanitation, Rural, Other unimproved"
         },
         {
-            "short": "OURa",
-            "long": "Other unimproved, Rural (absolute value)"
+            "short": "SROUa",
+            "long": "Sanitation, Rural, Other unimproved (absolute value)"
         },
         {
-            "short": "ODR",
-            "long": "Open defecation, Rural"
+            "short": "SROD",
+            "long": "Sanitation, Rural, Open defecation"
         },
         {
-            "short": "ODRa",
-            "long": "Open defecation, Rural (absolute value)"
+            "short": "SRODa",
+            "long": "Sanitation, Rural, Open defecation (absolute value)"
         },
         {
-            "short": "I+ST",
-            "long": "Improved + shared, Total"
+            "short": "STI+S",
+            "long": "Sanitation, Total, Improved + shared"
         },
         {
-            "short": "I+STa",
-            "long": "Improved + shared, Total (absolute value)"
+            "short": "STI+Sa",
+            "long": "Sanitation, Total, Improved + shared (absolute value)"
         },
         {
-            "short": "SCT",
-            "long": "Sewerage connections, Total"
+            "short": "STSC",
+            "long": "Sanitation, Total, Sewerage connections"
         },
         {
-            "short": "SCTa",
-            "long": "Sewerage connections, Total (absolute value)"
+            "short": "STSCa",
+            "long": "Sanitation, Total, Sewerage connections (absolute value)"
         },
         {
-            "short": "IT",
-            "long": "Improved, Total"
+            "short": "STI",
+            "long": "Sanitation, Total, Improved"
         },
         {
-            "short": "ITa",
-            "long": "Improved, Total (absolute value)"
+            "short": "STIa",
+            "long": "Sanitation, Total, Improved (absolute value)"
         },
         {
-            "short": "ST",
-            "long": "Shared, Total"
+            "short": "STS",
+            "long": "Sanitation, Total, Shared"
         },
         {
-            "short": "STa",
-            "long": "Shared, Total (absolute value)"
+            "short": "STSa",
+            "long": "Sanitation, Total, Shared (absolute value)"
         },
         {
-            "short": "OUT",
-            "long": "Other unimproved, Total"
+            "short": "STOU",
+            "long": "Sanitation, Total, Other unimproved"
         },
         {
-            "short": "OUTa",
-            "long": "Other unimproved, Total (absolute value)"
+            "short": "STOUa",
+            "long": "Sanitation, Total, Other unimproved (absolute value)"
         },
         {
-            "short": "ODT",
-            "long": "Open defecation, Total"
+            "short": "STOD",
+            "long": "Sanitation, Total, Open defecation"
         },
         {
-            "short": "ODTa",
-            "long": "Open defecation, Total (absolute value)"
+            "short": "STODa",
+            "long": "Sanitation, Total, Open defecation (absolute value)"
         }
     ],
     "data": [

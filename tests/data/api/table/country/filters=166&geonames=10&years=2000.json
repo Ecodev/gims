@@ -6,12 +6,12 @@
         "PU": "PU",
         "PR": "PR",
         "PT": "PT",
-        "c1": "I+SU",
-        "c1a": "I+SUa",
-        "c2": "I+SR",
-        "c2a": "I+SRa",
-        "c3": "I+ST",
-        "c3a": "I+STa"
+        "c1": "SUI+S",
+        "c1a": "SUI+Sa",
+        "c2": "SRI+S",
+        "c2a": "SRI+Sa",
+        "c3": "STI+S",
+        "c3a": "STI+Sa"
     },
     "legends": [
         {
@@ -27,28 +27,28 @@
             "long": "Population, Total"
         },
         {
-            "short": "I+SU",
-            "long": "Improved + shared, Urban"
+            "short": "SUI+S",
+            "long": "Sanitation, Urban, Improved + shared"
         },
         {
-            "short": "I+SUa",
-            "long": "Improved + shared, Urban (absolute value)"
+            "short": "SUI+Sa",
+            "long": "Sanitation, Urban, Improved + shared (absolute value)"
         },
         {
-            "short": "I+SR",
-            "long": "Improved + shared, Rural"
+            "short": "SRI+S",
+            "long": "Sanitation, Rural, Improved + shared"
         },
         {
-            "short": "I+SRa",
-            "long": "Improved + shared, Rural (absolute value)"
+            "short": "SRI+Sa",
+            "long": "Sanitation, Rural, Improved + shared (absolute value)"
         },
         {
-            "short": "I+ST",
-            "long": "Improved + shared, Total"
+            "short": "STI+S",
+            "long": "Sanitation, Total, Improved + shared"
         },
         {
-            "short": "I+STa",
-            "long": "Improved + shared, Total (absolute value)"
+            "short": "STI+Sa",
+            "long": "Sanitation, Total, Improved + shared (absolute value)"
         }
     ],
     "data": [

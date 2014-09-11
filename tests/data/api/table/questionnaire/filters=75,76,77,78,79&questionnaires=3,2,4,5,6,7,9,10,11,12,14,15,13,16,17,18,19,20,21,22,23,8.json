@@ -4,82 +4,82 @@
         "iso3": "ISO-3",
         "survey": "Survey",
         "year": "Year",
-        "f75p1": "TIU",
-        "f76p1": "POPU",
-        "f77p1": "SWU",
-        "f78p1": "OIU",
-        "f79p1": "OUU",
-        "f75p2": "TIR",
-        "f76p2": "POPR",
-        "f77p2": "SWR",
-        "f78p2": "OIR",
-        "f79p2": "OUR",
-        "f75p3": "TIT",
-        "f76p3": "POPT",
-        "f77p3": "SWT",
-        "f78p3": "OIT",
-        "f79p3": "OUT"
+        "f75p1": "WUTI",
+        "f76p1": "WUPOP",
+        "f77p1": "WUSW",
+        "f78p1": "WUOI",
+        "f79p1": "WUOU",
+        "f75p2": "WRTI",
+        "f76p2": "WRPOP",
+        "f77p2": "WRSW",
+        "f78p2": "WROI",
+        "f79p2": "WROU",
+        "f75p3": "WTTI",
+        "f76p3": "WTPOP",
+        "f77p3": "WTSW",
+        "f78p3": "WTOI",
+        "f79p3": "WTOU"
     },
     "legends": [
         {
-            "short": "TIU",
-            "long": "Total improved, Urban"
+            "short": "WUTI",
+            "long": "Water, Urban, Total improved"
         },
         {
-            "short": "POPU",
-            "long": "Piped onto premises, Urban"
+            "short": "WUPOP",
+            "long": "Water, Urban, Piped onto premises"
         },
         {
-            "short": "SWU",
-            "long": "Surface water, Urban"
+            "short": "WUSW",
+            "long": "Water, Urban, Surface water"
         },
         {
-            "short": "OIU",
-            "long": "Other Improved, Urban"
+            "short": "WUOI",
+            "long": "Water, Urban, Other Improved"
         },
         {
-            "short": "OUU",
-            "long": "Other Unimproved, Urban"
+            "short": "WUOU",
+            "long": "Water, Urban, Other Unimproved"
         },
         {
-            "short": "TIR",
-            "long": "Total improved, Rural"
+            "short": "WRTI",
+            "long": "Water, Rural, Total improved"
         },
         {
-            "short": "POPR",
-            "long": "Piped onto premises, Rural"
+            "short": "WRPOP",
+            "long": "Water, Rural, Piped onto premises"
         },
         {
-            "short": "SWR",
-            "long": "Surface water, Rural"
+            "short": "WRSW",
+            "long": "Water, Rural, Surface water"
         },
         {
-            "short": "OIR",
-            "long": "Other Improved, Rural"
+            "short": "WROI",
+            "long": "Water, Rural, Other Improved"
         },
         {
-            "short": "OUR",
-            "long": "Other Unimproved, Rural"
+            "short": "WROU",
+            "long": "Water, Rural, Other Unimproved"
         },
         {
-            "short": "TIT",
-            "long": "Total improved, Total"
+            "short": "WTTI",
+            "long": "Water, Total, Total improved"
         },
         {
-            "short": "POPT",
-            "long": "Piped onto premises, Total"
+            "short": "WTPOP",
+            "long": "Water, Total, Piped onto premises"
         },
         {
-            "short": "SWT",
-            "long": "Surface water, Total"
+            "short": "WTSW",
+            "long": "Water, Total, Surface water"
         },
         {
-            "short": "OIT",
-            "long": "Other Improved, Total"
+            "short": "WTOI",
+            "long": "Water, Total, Other Improved"
         },
         {
-            "short": "OUT",
-            "long": "Other Unimproved, Total"
+            "short": "WTOU",
+            "long": "Water, Total, Other Unimproved"
         }
     ],
     "data": [

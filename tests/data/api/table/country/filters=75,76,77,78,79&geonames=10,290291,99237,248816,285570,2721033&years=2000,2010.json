@@ -6,36 +6,36 @@
         "PU": "PU",
         "PR": "PR",
         "PT": "PT",
-        "c1": "TIU",
-        "c1a": "TIUa",
-        "c2": "POPU",
-        "c2a": "POPUa",
-        "c3": "SWU",
-        "c3a": "SWUa",
-        "c4": "OIU",
-        "c4a": "OIUa",
-        "c5": "OUU",
-        "c5a": "OUUa",
-        "c6": "TIR",
-        "c6a": "TIRa",
-        "c7": "POPR",
-        "c7a": "POPRa",
-        "c8": "SWR",
-        "c8a": "SWRa",
-        "c9": "OIR",
-        "c9a": "OIRa",
-        "c10": "OUR",
-        "c10a": "OURa",
-        "c11": "TIT",
-        "c11a": "TITa",
-        "c12": "POPT",
-        "c12a": "POPTa",
-        "c13": "SWT",
-        "c13a": "SWTa",
-        "c14": "OIT",
-        "c14a": "OITa",
-        "c15": "OUT",
-        "c15a": "OUTa"
+        "c1": "WUTI",
+        "c1a": "WUTIa",
+        "c2": "WUPOP",
+        "c2a": "WUPOPa",
+        "c3": "WUSW",
+        "c3a": "WUSWa",
+        "c4": "WUOI",
+        "c4a": "WUOIa",
+        "c5": "WUOU",
+        "c5a": "WUOUa",
+        "c6": "WRTI",
+        "c6a": "WRTIa",
+        "c7": "WRPOP",
+        "c7a": "WRPOPa",
+        "c8": "WRSW",
+        "c8a": "WRSWa",
+        "c9": "WROI",
+        "c9a": "WROIa",
+        "c10": "WROU",
+        "c10a": "WROUa",
+        "c11": "WTTI",
+        "c11a": "WTTIa",
+        "c12": "WTPOP",
+        "c12a": "WTPOPa",
+        "c13": "WTSW",
+        "c13a": "WTSWa",
+        "c14": "WTOI",
+        "c14a": "WTOIa",
+        "c15": "WTOU",
+        "c15a": "WTOUa"
     },
     "legends": [
         {
@@ -51,124 +51,124 @@
             "long": "Population, Total"
         },
         {
-            "short": "TIU",
-            "long": "Total improved, Urban"
+            "short": "WUTI",
+            "long": "Water, Urban, Total improved"
         },
         {
-            "short": "TIUa",
-            "long": "Total improved, Urban (absolute value)"
+            "short": "WUTIa",
+            "long": "Water, Urban, Total improved (absolute value)"
         },
         {
-            "short": "POPU",
-            "long": "Piped onto premises, Urban"
+            "short": "WUPOP",
+            "long": "Water, Urban, Piped onto premises"
         },
         {
-            "short": "POPUa",
-            "long": "Piped onto premises, Urban (absolute value)"
+            "short": "WUPOPa",
+            "long": "Water, Urban, Piped onto premises (absolute value)"
         },
         {
-            "short": "SWU",
-            "long": "Surface water, Urban"
+            "short": "WUSW",
+            "long": "Water, Urban, Surface water"
         },
         {
-            "short": "SWUa",
-            "long": "Surface water, Urban (absolute value)"
+            "short": "WUSWa",
+            "long": "Water, Urban, Surface water (absolute value)"
         },
         {
-            "short": "OIU",
-            "long": "Other Improved, Urban"
+            "short": "WUOI",
+            "long": "Water, Urban, Other Improved"
         },
         {
-            "short": "OIUa",
-            "long": "Other Improved, Urban (absolute value)"
+            "short": "WUOIa",
+            "long": "Water, Urban, Other Improved (absolute value)"
         },
         {
-            "short": "OUU",
-            "long": "Other Unimproved, Urban"
+            "short": "WUOU",
+            "long": "Water, Urban, Other Unimproved"
         },
         {
-            "short": "OUUa",
-            "long": "Other Unimproved, Urban (absolute value)"
+            "short": "WUOUa",
+            "long": "Water, Urban, Other Unimproved (absolute value)"
         },
         {
-            "short": "TIR",
-            "long": "Total improved, Rural"
+            "short": "WRTI",
+            "long": "Water, Rural, Total improved"
         },
         {
-            "short": "TIRa",
-            "long": "Total improved, Rural (absolute value)"
+            "short": "WRTIa",
+            "long": "Water, Rural, Total improved (absolute value)"
         },
         {
-            "short": "POPR",
-            "long": "Piped onto premises, Rural"
+            "short": "WRPOP",
+            "long": "Water, Rural, Piped onto premises"
         },
         {
-            "short": "POPRa",
-            "long": "Piped onto premises, Rural (absolute value)"
+            "short": "WRPOPa",
+            "long": "Water, Rural, Piped onto premises (absolute value)"
         },
         {
-            "short": "SWR",
-            "long": "Surface water, Rural"
+            "short": "WRSW",
+            "long": "Water, Rural, Surface water"
         },
         {
-            "short": "SWRa",
-            "long": "Surface water, Rural (absolute value)"
+            "short": "WRSWa",
+            "long": "Water, Rural, Surface water (absolute value)"
         },
         {
-            "short": "OIR",
-            "long": "Other Improved, Rural"
+            "short": "WROI",
+            "long": "Water, Rural, Other Improved"
         },
         {
-            "short": "OIRa",
-            "long": "Other Improved, Rural (absolute value)"
+            "short": "WROIa",
+            "long": "Water, Rural, Other Improved (absolute value)"
         },
         {
-            "short": "OUR",
-            "long": "Other Unimproved, Rural"
+            "short": "WROU",
+            "long": "Water, Rural, Other Unimproved"
         },
         {
-            "short": "OURa",
-            "long": "Other Unimproved, Rural (absolute value)"
+            "short": "WROUa",
+            "long": "Water, Rural, Other Unimproved (absolute value)"
         },
         {
-            "short": "TIT",
-            "long": "Total improved, Total"
+            "short": "WTTI",
+            "long": "Water, Total, Total improved"
         },
         {
-            "short": "TITa",
-            "long": "Total improved, Total (absolute value)"
+            "short": "WTTIa",
+            "long": "Water, Total, Total improved (absolute value)"
         },
         {
-            "short": "POPT",
-            "long": "Piped onto premises, Total"
+            "short": "WTPOP",
+            "long": "Water, Total, Piped onto premises"
         },
         {
-            "short": "POPTa",
-            "long": "Piped onto premises, Total (absolute value)"
+            "short": "WTPOPa",
+            "long": "Water, Total, Piped onto premises (absolute value)"
         },
         {
-            "short": "SWT",
-            "long": "Surface water, Total"
+            "short": "WTSW",
+            "long": "Water, Total, Surface water"
         },
         {
-            "short": "SWTa",
-            "long": "Surface water, Total (absolute value)"
+            "short": "WTSWa",
+            "long": "Water, Total, Surface water (absolute value)"
         },
         {
-            "short": "OIT",
-            "long": "Other Improved, Total"
+            "short": "WTOI",
+            "long": "Water, Total, Other Improved"
         },
         {
-            "short": "OITa",
-            "long": "Other Improved, Total (absolute value)"
+            "short": "WTOIa",
+            "long": "Water, Total, Other Improved (absolute value)"
         },
         {
-            "short": "OUT",
-            "long": "Other Unimproved, Total"
+            "short": "WTOU",
+            "long": "Water, Total, Other Unimproved"
         },
         {
-            "short": "OUTa",
-            "long": "Other Unimproved, Total (absolute value)"
+            "short": "WTOUa",
+            "long": "Water, Total, Other Unimproved (absolute value)"
         }
     ],
     "data": [
