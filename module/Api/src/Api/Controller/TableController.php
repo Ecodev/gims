@@ -132,7 +132,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
         foreach ($parts as $part) {
             foreach ($filters as $filter) {
-                $columnNames = $this->getColumnNames($part, $filter->getName());
+                $columnNames = $this->getColumnNames($part, $filter->getId());
                 $columnId = 'f' . $filter->getId() . 'p' . $part->getId();
                 $columns[$columnId] = $columnNames['short'];
                 $legends[$columnId] = $columnNames;
@@ -225,7 +225,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
                     foreach ($flatFilters as $filter) {
                         $columnId = 'c' . $count;
-                        $columnNames = $this->getColumnNames($partsById[$partId], $filter['name']);
+                        $columnNames = $this->getColumnNames($partsById[$partId], $filter['id']);
                         $columns[$columnId] = $columnNames['short'];
                         $legends[$columnId] = $columnNames;
 
@@ -321,6 +321,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                 }
                 $tmpFieldset = array(
                     'name' => $filter['name'],
+                    'id' => $filter['id'],
                     'data' => $yearsData
                 );
                 $finalFieldsets[$partId][] = $tmpFieldset;
@@ -356,27 +357,36 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * Retrieve column names, short and long version
-     * @param \Application\Model\FilterSet $filterset
      * @param \Application\Model\Part $part
-     * @param string $filterName
+     * @param $filterId
      * @return array ['short' => short name, 'long' => long name]
      */
-    private function getColumnNames(\Application\Model\Part $part, $filterName)
+    private function getColumnNames(\Application\Model\Part $part, $filterId)
     {
+        $filter = $this->getEntityManager()->getRepository('\Application\Model\Filter')->findOneById($filterId);
+
+        $thematicFilter = $filter->getThematicFilter();
+
+        $thematicFirstLetter = '';
+        $thematicFirstWord = '';
+        if ($thematicFilter) {
+            $thematicFirstLetter = substr($thematicFilter->getName(), 0, 1);
+            $thematicFirstWord = preg_split('/\W/', $thematicFilter->getName())[0] . ', ';
+        }
 
         // Part first letter
         $partL = substr($part->getName(), 0, 1);
 
         // Filter first letters of each word
         $filterL = '';
-        $words = explode(' ', $filterName);
+        $words = explode(' ', $filter->getName());
         foreach ($words as $word) {
             $filterL .= substr($word, 0, 1);
         }
 
         return [
-            'short' => strtoupper($filterL . $partL),
-            'long' => implode(', ', [$filterName, $part->getName()]),
+            'short' => strtoupper($thematicFirstLetter . $partL . $filterL),
+            'long' => $thematicFirstWord . implode(', ', [ $part->getName(), $filter->getName()]),
         ];
     }
 

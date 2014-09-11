@@ -101,6 +101,19 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
     private $color;
 
     /**
+     * @var int
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
+     */
+    private $isThematic = false;
+
+    /**
+     * @var thematicFilter
+     * @ORM\ManyToOne(targetEntity="Filter")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $thematicFilter;
+
+    /**
      * Constructor
      * @param string $name
      */
@@ -413,28 +426,6 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
     }
 
     /**
-     * Return a list of related top level filters
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getRootAncestors()
-    {
-        $rootAncestors = new ArrayCollection();
-
-        foreach ($this->getParents() as $parent) {
-            $grandParents = $parent->getRootAncestors();
-            if (count($grandParents) == 0) {
-                $rootAncestors->add($parent);
-            } else {
-                foreach ($grandParents as $gp) {
-                    $rootAncestors->add($gp);
-                }
-            }
-        }
-
-        return $rootAncestors;
-    }
-
-    /**
      * Return color with generic replacement if no color in database
      * @param Ration|int saturation from 0 to 100
      * @return string
@@ -501,6 +492,47 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
         }
 
         return $contexts->count() ? $contexts : null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isThematic()
+    {
+        return $this->isThematic;
+    }
+
+    /**
+     * @param bool $isThematic
+     */
+    public function setIsThematic($isThematic)
+    {
+        $this->isThematic = $isThematic;
+
+        return $this;
+    }
+
+    /**
+     * return \Application\Model\Filter
+     */
+    public function getThematicFilter()
+    {
+        return $this->thematicFilter;
+    }
+
+    /**
+     * @param \Application\Model\Filter $thematicFilter
+     * @return self
+     */
+    public function setThematicFilter($thematicFilter)
+    {
+        if ($thematicFilter->isThematic()) {
+            $this->thematicFilter = $thematicFilter;
+        } else {
+            throw new InvalidArgumentException('Filter ' . $thematicFilter->getName() . ' is not a thematic.');
+        }
+
+        return $this;
     }
 
 }
