@@ -336,7 +336,7 @@ STRING;
         array_shift($knownRows); // Skip first filter, since it's not an actual row, but the common "JMP" filter
         array_shift($knownRows); // Skip second filter, since it's not an actual row, but the sheet topic (eg: "Access to drinking water sources")
         // Remove negative rows which were replacement filters
-        $knownRows = array_filter($knownRows, function($row) {
+        $knownRows = array_filter($knownRows, function ($row) {
             return $row > 0 && $row < 100;
         });
 
@@ -385,10 +385,8 @@ STRING;
 
     /**
      * Get or create a questionnaire.
-     *
      * It will only get a questionnaire from previous tab, so only if we are in Sanitation.
      * In all other cases a new questionnaire will be created.
-     *
      * @param integer $col
      * @param \Application\Model\Survey $survey
      * @param \PHPExcel_Cell $countryCell
@@ -643,17 +641,14 @@ STRING;
             }
 
             // If we had an existing formula, maybe we also have an existing usage
-            $usage = $questionnaire->getQuestionnaireUsages()->filter(function($usage) use ($questionnaire, $part, $rule) {
-                        return $usage->getQuestionnaire() === $questionnaire && $usage->getPart() === $part && $usage->getRule() === $rule;
-                    })->first();
+            $usage = $questionnaire->getQuestionnaireUsages()->filter(function ($usage) use ($questionnaire, $part, $rule) {
+                return $usage->getQuestionnaire() === $questionnaire && $usage->getPart() === $part && $usage->getRule() === $rule;
+            })->first();
 
             // If usage doesn't exist yet, create it
             if (!$usage) {
                 $usage = new QuestionnaireUsage();
-                $usage->setJustification($this->defaultJustification)
-                        ->setQuestionnaire($questionnaire)
-                        ->setRule($rule)
-                        ->setPart($part);
+                $usage->setJustification($this->defaultJustification)->setQuestionnaire($questionnaire)->setRule($rule)->setPart($part);
 
                 $this->getEntityManager()->persist($usage);
                 $this->questionnaireUsageCount++;
@@ -694,10 +689,9 @@ STRING;
         // useless conversion done in formula, but only if there is at least one cell reference
         // in the formula ("=15/100" should be kept intact, as seen in Afghanistan, Table_S, AZ100)
         $cellPattern = '\$?(([[:alpha:]]+)\$?(\\d+))';
-        if (preg_match("/$cellPattern/", $originalFormula))
-            $replacedFormula = str_replace(array('*100', '/100'), '', $originalFormula);
-        else
+        if (preg_match("/$cellPattern/", $originalFormula)) $replacedFormula = str_replace(array('*100', '/100'), '', $originalFormula); else {
             $replacedFormula = $originalFormula;
+        }
 
         // For the same reason, we need to replace complementary computing based on 100, to be based on 1
         // eg: "=100-A23" => "=100%-A23"
@@ -712,24 +706,24 @@ STRING;
             // would be too dangerous. This is the case for Cambodge DHS05 "Bottled water with HC" estimation, or
             // Solomon Islands, Tables_W!AH88
             // eg: "=29.6" => "=29.6%", "=29.6+10" => "=39.6%"
-            $replacedFormula = \Application\Utility::pregReplaceUniqueCallback('/^=[-+\.\d ]+$/', function($matches) {
-                        $number = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($matches[0]);
-                        $number = $number . '%';
+            $replacedFormula = \Application\Utility::pregReplaceUniqueCallback('/^=[-+\.\d ]+$/', function ($matches) {
+                $number = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($matches[0]);
+                $number = $number . '%';
 
-                        return "=$number";
-                    }, $replacedFormula);
+                return "=$number";
+            }, $replacedFormula);
 
             // Convert when using a Ratio, this is the case of Thailand, Tables_W!CD88
             // eg: "=44.6*BR102" => "=44.6%*BR102"
-            $replacedFormula = \Application\Utility::pregReplaceUniqueCallback("/^=([-+\.\d ]+)(\*$cellPattern)$/", function($matches) use ($ruleRows) {
-                        $number = $matches[1];
+            $replacedFormula = \Application\Utility::pregReplaceUniqueCallback("/^=([-+\.\d ]+)(\*$cellPattern)$/", function ($matches) use ($ruleRows) {
+                $number = $matches[1];
 
-                        if (in_array($matches[5], $ruleRows['Ratio'])) {
-                            $number = $number . '%';
-                        }
+                if (in_array($matches[5], $ruleRows['Ratio'])) {
+                    $number = $number . '%';
+                }
 
-                        return "=$number" . $matches[2];
-                    }, $replacedFormula);
+                return "=$number" . $matches[2];
+            }, $replacedFormula);
         }
 
         // Some formulas, Ratios, hardcode values as percent between 0.00 - 1.00,
@@ -740,119 +734,117 @@ STRING;
             // Convert very simple formula with numbers only. Anything more complex
             // would be too dangerous.
             // eg: "=0.296" => "=29.6%", "=0.296+0.10" => "=39.6%"
-            $replacedFormula = \Application\Utility::pregReplaceUniqueCallback('/^=[-+\/\*\.\d ]+$/', function($matches) {
-                        $number = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($matches[0]);
-                        $number = ($number * 100) . '%';
+            $replacedFormula = \Application\Utility::pregReplaceUniqueCallback('/^=[-+\/\*\.\d ]+$/', function ($matches) {
+                $number = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($matches[0]);
+                $number = ($number * 100) . '%';
 
-                        return "=$number";
-                    }, $replacedFormula);
+                return "=$number";
+            }, $replacedFormula);
         }
 
         // Expand range syntax to enumerate each cell: "A1:A5" => "{A1,A2,A3,A4,A5}"
-        $expandedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern:$cellPattern/", function($matches) use ($cell) {
+        $expandedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern:$cellPattern/", function ($matches) use ($cell) {
 
-                    // This only expand vertical ranges, not horizontal ranges (which probably never make any sense for JMP anyway)
-                    if ($matches[2] != $matches[5]) {
-                        throw new \Exception('Horizontal range are not supported: ' . $matches[0] . ' found in ' . $this->sheet->getTitle() . ', cell ' . $cell->getCoordinate());
-                    }
+            // This only expand vertical ranges, not horizontal ranges (which probably never make any sense for JMP anyway)
+            if ($matches[2] != $matches[5]) {
+                throw new \Exception('Horizontal range are not supported: ' . $matches[0] . ' found in ' . $this->sheet->getTitle() . ', cell ' . $cell->getCoordinate());
+            }
 
-                    $expanded = array();
-                    for ($i = $matches[3]; $i <= $matches[6]; $i++) {
-                        $expanded[] = $matches[2] . $i;
-                    }
+            $expanded = array();
+            for ($i = $matches[3]; $i <= $matches[6]; $i++) {
+                $expanded[] = $matches[2] . $i;
+            }
 
-                    return '{' . join(',', $expanded) . '}';
-                }, $replacedFormula);
+            return '{' . join(',', $expanded) . '}';
+        }, $replacedFormula);
 
         // Replace special cell reference with some hardcoded formulas
-        $expandedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern/", function($matches) use ($cell) {
+        $expandedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern/", function ($matches) use ($cell) {
 
-                    $replacement = @$this->definitions[$this->sheet->getTitle()]['cellReplacements'][$matches[3]];
-                    if ($replacement) {
-                        // Use same column for replacement as the original cell reference
-                        $replacement = str_replace('A', $matches[2], $replacement);
+            $replacement = @$this->definitions[$this->sheet->getTitle()]['cellReplacements'][$matches[3]];
+            if ($replacement) {
+                // Use same column for replacement as the original cell reference
+                $replacement = str_replace('A', $matches[2], $replacement);
 
-                        return '(' . $replacement . ')';
-                    } else {
-                        return $matches[0];
-                    }
-                }, $expandedFormula);
+                return '(' . $replacement . ')';
+            } else {
+                return $matches[0];
+            }
+        }, $expandedFormula);
 
         // Replace all cell reference with our own syntax
-        $convertedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern/", function($matches) use ($questionnaire, $part, $expandedFormula) {
-                    $refCol = \PHPExcel_Cell::columnIndexFromString($matches[2]) - 1;
-                    $refRow = $matches[3];
+        $convertedFormula = \Application\Utility::pregReplaceUniqueCallback("/$cellPattern/", function ($matches) use ($questionnaire, $part, $expandedFormula) {
+            $refCol = \PHPExcel_Cell::columnIndexFromString($matches[2]) - 1;
+            $refRow = $matches[3];
 
-                    // We first look for filter on negative indexes to find original filters in case we made
-                    // replacements (for Sanitation), because formulas always refers to the originals,
-                    // not the one we created in this script
-                    $refFilter = @$this->cacheFilters[-$refRow] ? : @$this->cacheFilters[$refRow];
+            // We first look for filter on negative indexes to find original filters in case we made
+            // replacements (for Sanitation), because formulas always refers to the originals,
+            // not the one we created in this script
+            $refFilter = @$this->cacheFilters[-$refRow] ? : @$this->cacheFilters[$refRow];
 
-                    // If couldn't find filter yet, try last chance in high filters
-                    if (!$refFilter) {
-                        foreach ($this->definitions[$this->sheet->getTitle()]['highFilters'] as $highFilterName => $highFilterData) {
-                            if ($refRow == $highFilterData['row']) {
-                                $refFilter = $this->cacheHighFilters[$highFilterName];
-                            }
-                        }
+            // If couldn't find filter yet, try last chance in high filters
+            if (!$refFilter) {
+                foreach ($this->definitions[$this->sheet->getTitle()]['highFilters'] as $highFilterName => $highFilterData) {
+                    if ($refRow == $highFilterData['row']) {
+                        $refFilter = $this->cacheHighFilters[$highFilterName];
+                    }
+                }
+            }
+
+            $refFilterId = $refFilter ? $refFilter->getId() : null;
+
+            if (isset($this->importedQuestionnaires[$refCol])) {
+                $refQuestionnaireId = $this->importedQuestionnaires[$refCol]->getId();
+
+                return "{F#$refFilterId,Q#$refQuestionnaireId}";
+            }
+
+            // Find out referenced Questionnaire
+            $refData = @$this->colToParts[$refCol];
+
+            // If reference an non-existing questionnaire, replace reference with NULL
+            if (!$refData) {
+                return 'NULL';
+            }
+
+            $refQuestionnaire = $refData['questionnaire'];
+            if ($refQuestionnaire === $questionnaire) $refQuestionnaireId = 'current'; else
+                $refQuestionnaireId = $refQuestionnaire->getId();
+
+            // Find out referenced Part
+            $refPart = $refData['part'];
+            if ($refPart === $part) {
+                $refPartId = 'current';
+            } else {
+                $refPartId = $refPart->getId();
+            }
+
+            // Simple case is when we reference a filter
+            if ($refFilterId) {
+                return "{F#$refFilterId,Q#$refQuestionnaireId,P#$refPartId}";
+                // More advanced case is when we reference another QuestionnaireUsage (Calculation, Estimate or Ratio)
+            } else {
+
+                // Find the column of the referenced questionnaire
+                $refColQuestionnaire = array_search($refQuestionnaire, $this->importedQuestionnaires);
+
+                $refQuestionnaireUsage = $this->getQuestionnaireUsage($refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart);
+
+                if ($refQuestionnaireUsage) {
+
+                    // If not ID yet, we need to save to DB to have valid ID
+                    if (!$refQuestionnaireUsage->getRule()->getId()) {
+                        $this->getEntityManager()->flush();
                     }
 
-                    $refFilterId = $refFilter ? $refFilter->getId() : null;
+                    $refRuleId = $refQuestionnaireUsage->getRule()->getId();
 
-                    if (isset($this->importedQuestionnaires[$refCol])) {
-                        $refQuestionnaireId = $this->importedQuestionnaires[$refCol]->getId();
-
-                        return "{F#$refFilterId,Q#$refQuestionnaireId}";
-                    }
-
-                    // Find out referenced Questionnaire
-                    $refData = @$this->colToParts[$refCol];
-
-                    // If reference an non-existing questionnaire, replace reference with NULL
-                    if (!$refData) {
-                        return 'NULL';
-                    }
-
-                    $refQuestionnaire = $refData['questionnaire'];
-                    if ($refQuestionnaire === $questionnaire)
-                        $refQuestionnaireId = 'current';
-                    else
-                        $refQuestionnaireId = $refQuestionnaire->getId();
-
-                    // Find out referenced Part
-                    $refPart = $refData['part'];
-                    if ($refPart === $part) {
-                        $refPartId = 'current';
-                    } else {
-                        $refPartId = $refPart->getId();
-                    }
-
-                    // Simple case is when we reference a filter
-                    if ($refFilterId) {
-                        return "{F#$refFilterId,Q#$refQuestionnaireId,P#$refPartId}";
-                        // More advanced case is when we reference another QuestionnaireUsage (Calculation, Estimate or Ratio)
-                    } else {
-
-                        // Find the column of the referenced questionnaire
-                        $refColQuestionnaire = array_search($refQuestionnaire, $this->importedQuestionnaires);
-
-                        $refQuestionnaireUsage = $this->getQuestionnaireUsage($refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart);
-
-                        if ($refQuestionnaireUsage) {
-
-                            // If not ID yet, we need to save to DB to have valid ID
-                            if (!$refQuestionnaireUsage->getRule()->getId()) {
-                                $this->getEntityManager()->flush();
-                            }
-
-                            $refRuleId = $refQuestionnaireUsage->getRule()->getId();
-
-                            return "{R#$refRuleId,Q#$refQuestionnaireId,P#$refPartId}";
-                        } else {
-                            return 'NULL'; // if no formula found at all, return NULL string which will behave like an empty cell in PHPExcell
-                        }
-                    }
-                }, $expandedFormula);
+                    return "{R#$refRuleId,Q#$refQuestionnaireId,P#$refPartId}";
+                } else {
+                    return 'NULL'; // if no formula found at all, return NULL string which will behave like an empty cell in PHPExcell
+                }
+            }
+        }, $expandedFormula);
 
         // In some case ISTEXT() is used to check if a number does not exist. But GIMS
         // always returns either a number or NULL, never empty string. So we adapt formula
@@ -986,12 +978,7 @@ STRING;
             $filterQuestionnaireUsage = $this->cacheFilterQuestionnaireUsages[$key];
         } else {
             $filterQuestionnaireUsage = new FilterQuestionnaireUsage();
-            $filterQuestionnaireUsage->setJustification($this->defaultJustification)
-                    ->setQuestionnaire($questionnaire)
-                    ->setRule($rule)
-                    ->setPart($part)
-                    ->setFilter($filter)
-                    ->setIsSecondStep($isSecondStep);
+            $filterQuestionnaireUsage->setJustification($this->defaultJustification)->setQuestionnaire($questionnaire)->setRule($rule)->setPart($part)->setFilter($filter)->setIsSecondStep($isSecondStep);
 
             $this->getEntityManager()->persist($filterQuestionnaireUsage);
 
@@ -1033,11 +1020,7 @@ STRING;
 
         if (!$filterGeonameUsage) {
             $filterGeonameUsage = new FilterGeonameUsage();
-            $filterGeonameUsage->setJustification($this->defaultJustification)
-                    ->setRule($rule)
-                    ->setPart($part)
-                    ->setFilter($filter)
-                    ->setGeoname($geoname);
+            $filterGeonameUsage->setJustification($this->defaultJustification)->setRule($rule)->setPart($part)->setFilter($filter)->setGeoname($geoname);
 
             $this->getEntityManager()->persist($filterGeonameUsage);
             $this->filterGeonameUsageCount++;
@@ -1060,61 +1043,66 @@ STRING;
             $formulaGroup = 'default';
             $countryName = $questionnaire->getGeoname()->getCountry()->getName();
             if (in_array($countryName, array(
-                        'American Samoa',
-                        'Antigua and Barbuda',
-                        'Aruba',
-                        'Bahamas',
-                        'Bahrain',
-                        'Barbados',
-                        'British Virgin Islands',
-                        'Cook Islands',
-                        'French Polynesia',
-                        'Guam',
-                        'Montserrat',
-                        'New Caledonia',
-                        'Niue',
-                        'Northern Mariana Islands',
-                        'Puerto Rico',
-                        'Saint Kitts and Nevis',
-                        'Saint Vincent and the Grenadines',
-                        'Seychelles',
-                        'Turks and Caicos Islands',
-                        'United States Virgin Islands'
-                    ))) {
+                'American Samoa',
+                'Antigua and Barbuda',
+                'Aruba',
+                'Bahamas',
+                'Bahrain',
+                'Barbados',
+                'British Virgin Islands',
+                'Cook Islands',
+                'French Polynesia',
+                'Guam',
+                'Montserrat',
+                'New Caledonia',
+                'Niue',
+                'Northern Mariana Islands',
+                'Puerto Rico',
+                'Saint Kitts and Nevis',
+                'Saint Vincent and the Grenadines',
+                'Seychelles',
+                'Turks and Caicos Islands',
+                'United States Virgin Islands'
+            ))
+            ) {
                 $formulaGroup = 'onlyTotal';
             } elseif (in_array($countryName, array(
-                        'Tokelau',
-                    ))) {
+                'Tokelau',
+            ))
+            ) {
                 $formulaGroup = 'onlyRural';
             } elseif (in_array($countryName, array(
-                        'Anguilla',
-                        'Cayman Islands',
-                        'Monaco',
-                        'Nauru',
-                        'Singapore',
-                    ))) {
+                'Anguilla',
+                'Cayman Islands',
+                'Monaco',
+                'Nauru',
+                'Singapore',
+            ))
+            ) {
                 $formulaGroup = 'onlyUrban';
             } elseif (in_array($countryName, array(
-                        'Argentina',
-                        'Chile',
-                        'Costa Rica',
-                        'Guadeloupe',
-                        'Iraq',
-                        'Lithuania',
-                        'Martinique',
-                        'Palau',
-                        'Portugal',
-                        'Tuvalu',
-                        'Uruguay',
-                    ))) {
+                'Argentina',
+                'Chile',
+                'Costa Rica',
+                'Guadeloupe',
+                'Iraq',
+                'Lithuania',
+                'Martinique',
+                'Palau',
+                'Portugal',
+                'Tuvalu',
+                'Uruguay',
+            ))
+            ) {
                 $formulaGroup = 'popHigherThanTotal';
             } elseif (in_array($countryName, array(
-                        'Belarus',
-                        'TFYR Macedonia',
-                        'United States of America',
-                        'Saudi Arabia',
-                        'Tunisia',
-                    ))) {
+                'Belarus',
+                'TFYR Macedonia',
+                'United States of America',
+                'Saudi Arabia',
+                'Tunisia',
+            ))
+            ) {
 
                 // Here each country has its own set of rules, so we use country name as formulaGroup name
                 $formulaGroup = $countryName;
@@ -1138,7 +1126,7 @@ STRING;
                     // Translate our custom import syntax into real GIMS syntax
                     $formula = $this->replaceHighFilterNamesWithIdForAfterRegression($filters, $formula);
 
-                    $suffix = ' (' . $actualFormulaGroup . ( $isDevelopedFormula ? ' - for developed countries' : '') . ')';
+                    $suffix = ' (' . $actualFormulaGroup . ($isDevelopedFormula ? ' - for developed countries' : '') . ')';
                     $rule = $this->getRule('Regression: ' . $highFilter->getName() . $suffix, $formula);
                     $this->getFilterGeonameUsage($highFilter, $questionnaire->getGeoname(), $rule, $part);
                 }
@@ -1275,8 +1263,7 @@ STRING;
         // If formula contains GIMS syntax, transform into rule for the filter (minority of cases)
         if (preg_match('/#/', $formula)) {
             $this->getFilterQuestionnaireUsage($filterForRatio, $usage->getQuestionnaire(), $rule, $usage->getPart());
-        }
-        // Else transform into simple answer (vast majority of cases)
+        } // Else transform into simple answer (vast majority of cases)
         else {
             $answerValue = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($formula);
             $question = $this->getQuestion($usage->getQuestionnaire(), $filterForRatio, null);
@@ -1330,6 +1317,10 @@ STRING;
 
                 if ($filterData['isImproved']) {
                     $improvedFilterSet->addFilter($highFilter);
+                }
+
+                if ($filterData['thematic']) {
+                    $highFilter->setThematicFilter($this->cacheFilters[$filterData['thematic']]);
                 }
             }
 
@@ -1420,7 +1411,7 @@ STRING;
 , 'F#$id,')
 
 ";
-//        v($ratioToFilter);
+        //        v($ratioToFilter);
         $a = $this->getEntityManager()->getConnection()->executeUpdate($ratioToFilter);
 
         // Clean up non-used rules after finishRatios()

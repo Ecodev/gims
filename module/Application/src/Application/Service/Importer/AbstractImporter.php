@@ -120,6 +120,7 @@ use \Application\Traits\EntityManagerAware;
             'highFilters' => array(
                 "Total improved" => array(
                     'row' => 89,
+                    'thematic' => 4,
                     'children' => array(5, 12, 55, 58, 68),
                     'excludes' => 91,
                     'isImproved' => true,
@@ -145,6 +146,7 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Piped onto premises" => array(
                     'row' => 90,
+                    'thematic' => 4,
                     'children' => array(6),
                     'excludes' => 92,
                     'isImproved' => true,
@@ -179,6 +181,7 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Surface water" => array(
                     'row' => 87,
+                    'thematic' => 4,
                     'children' => array(60),
                     'excludes' => 93,
                     'isImproved' => false,
@@ -225,6 +228,7 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Other Improved" => array(
                     'row' => null,
+                    'thematic' => 4,
                     'children' => array(9, 10, 12, 55, 58, 68),
                     'excludes' => null,
                     'isImproved' => false,
@@ -257,6 +261,7 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Other Unimproved" => array(
                     'row' => null,
+                    'thematic' => 4,
                     'children' => array(56, 59, 71),
                     'excludes' => null,
                     'isImproved' => false,
@@ -406,6 +411,7 @@ use \Application\Traits\EntityManagerAware;
             'highFilters' => array(
                 "Improved + shared" => array(
                     'row' => 94,
+                    'thematic' => 4,
                     'children' => array(-6, -7, -8, -9, 49, 73, 76),
                     'excludes' => 96,
                     'isImproved' => true,
@@ -431,6 +437,7 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Sewerage connections" => array(
                     'row' => 95,
+                    'thematic' => 4,
                     'children' => array(6),
                     'excludes' => 97,
                     'isImproved' => false,
@@ -455,6 +462,7 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Improved" => array(
                     'row' => null,
+                    'thematic' => 4,
                     'children' => array(), // based on ratio
                     'excludes' => null,
                     'isImproved' => true,
@@ -505,6 +513,7 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Shared" => array(
                     'row' => null,
+                    'thematic' => 4,
                     'children' => array(), // based on ratio
                     'excludes' => null,
                     'isImproved' => false,
@@ -536,6 +545,7 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Other unimproved" => array(
                     'row' => null,
+                    'thematic' => 4,
                     'children' => array(80),
                     'excludes' => null,
                     'isImproved' => false,
@@ -568,6 +578,7 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Open defecation" => array(
                     'row' => null,
+                    'thematic' => 4,
                     'children' => array(79),
                     'excludes' => 98,
                     'isImproved' => false,
@@ -632,6 +643,12 @@ use \Application\Traits\EntityManagerAware;
             $this->getEntityManager()->persist($filter);
             if ($parent) {
                 $parent->addChild($filter);
+
+                if ($parentName != 'JMP') {
+                    $filter->setThematicFilter(@$cache[4]);
+                } else {
+                    $filter->setIsThematic(true);
+                }
             }
         }
 
