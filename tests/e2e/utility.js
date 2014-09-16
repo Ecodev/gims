@@ -32,6 +32,7 @@ module.exports.login = function(user, pass, browser) {
                 element(by.model('login.identity')).sendKeys(user);
                 element(by.model('login.credential')).sendKeys(pass);
                 element(by.css("[name='loginForm'] [name='submit']")).click();
+                expect(element(by.css("a[href='/user/logout']")).isPresent()).toBe(true);
 
             });
         }

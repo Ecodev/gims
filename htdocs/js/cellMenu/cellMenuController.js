@@ -15,6 +15,7 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, tabs, mo
     // Expose function to scope
     $scope.removeAnswer = TableFilter.removeAnswer;
     $scope.isValidNumber = Utility.isValidNumber;
+    $scope.getCellType = TableFilter.getCellType;
 
     /**
      * Returns whether the special Exclude rule exists in the given usage

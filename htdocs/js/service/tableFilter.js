@@ -276,6 +276,52 @@ angular.module('myApp.services').factory('TableFilter', function($http, $timeout
         }
     }
 
+    /**
+     * Returns the type of cell, to be able to display correct icon
+     * @param {questionnaire} questionnaire
+     * @param {filter} filter
+     * @param {integer} partId
+     * @returns {String}
+     */
+    function getCellType(questionnaire, filter, partId) {
+
+        if (questionnaire.survey) {
+
+            var question = questionnaire.survey.questions[filter.id];
+            var answer;
+            if (question && question.answers) {
+                answer = question.answers[partId];
+            }
+
+            if (question && question.isLoading || (answer && answer.isLoading)) {
+                return 'loading';
+            }
+
+            var firstValue;
+            if (question && question.filter.values && question.filter.values[partId]) {
+                firstValue = question.filter.values[partId].first;
+            }
+
+            var usages;
+            if (questionnaire.filterQuestionnaireUsagesByFilterAndPart && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id]) {
+                usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId].first.concat(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId].second);
+            }
+
+            if (answer && answer.error) {
+                return 'error';
+            } else if (answer && Utility.isValidNumber(answer[question.value])) {
+                return 'answer';
+            } else if (usages && usages.length) {
+                return 'rule';
+            } else if (filter.summands && filter.summands.length && Utility.isValidNumber(firstValue)) {
+                return 'summand';
+            } else if (Utility.isValidNumber(firstValue)) {
+                return 'child';
+            }
+        }
+
+        return 'nothing';
+    }
 
     // Return public API
     return {
@@ -285,6 +331,7 @@ angular.module('myApp.services').factory('TableFilter', function($http, $timeout
         getQuestionnaires: getQuestionnaires,
         refresh: refresh,
         getComputedFilters: getComputedFilters,
-        toggleShowQuestionnaireUsages: toggleShowQuestionnaireUsages
+        toggleShowQuestionnaireUsages: toggleShowQuestionnaireUsages,
+        getCellType: getCellType
     };
 });

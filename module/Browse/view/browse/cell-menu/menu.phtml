@@ -1,6 +1,16 @@
 <div>
-    <ul class="gims-dropdown-menu pull-right" ng-if="questionnairesStatus[questionnaire.status] || questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[part.id].id || questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id] || filter.summands.length">
-        <li ng-if="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id] || questionnaire.survey.questions[filter.id].answers[part.id].id" class="dropdown-header">Information</li>
+    <ul class="gims-dropdown-menu pull-right">
+        <li class="dropdown-header">Information</li>
+        <li ng-switch="getCellType(questionnaire, filter, part.id)">
+            <a ng-switch-when="loading"><i class="fa fa-fw fa-gims-loading"></i></a>
+            <a ng-switch-when="error"><i class="fa fa-fw fa-warning text-warning"></i> Answer entered is invalid</a>
+            <a ng-switch-when="answer"><i class="fa fa-fw fa-question"></i> Manually answered</a>
+            <a ng-switch-when="rule"><i class="fa fa-fw fa-gims-rule"></i> Computed with rules</a>
+            <a ng-switch-when="summand"><i class="fa fa-fw fa-gims-summand"></i> Computed with summands</a>
+            <a ng-switch-when="child"><i class="fa fa-fw fa-gims-child"></i> Computed with children</a>
+            <a ng-switch-default> No value</a>
+        </li>
+
         <li ng-if="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]">
             <a><i class="fa fa-question fa-fw"></i> {{questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]}}</a>
         </li>

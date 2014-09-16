@@ -41,32 +41,35 @@ describe('browse/table/filter menu', function() {
 
     it('menu for question should be complete', function() {
         element(by.css('.input-group-btn .fa-question')).click();
-        expect(element(by.css('.gims-dropdown-menu li:nth-child(2)')).getText()).toContain("Tap");
-        expect(element(by.css('.gims-dropdown-menu li:nth-child(3)')).getText()).toContain("0.243446");
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(2)')).getText()).toContain("Manually answered");
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(3)')).getText()).toContain("Tap");
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(4)')).getText()).toContain("0.243446");
     });
 
-    iit('menu for rule should be complete', function() {
+    it('menu for rule should be complete', function() {
         element(by.css('.input-group-btn .fa-gims-rule')).click();
-        expect(element(by.css('.gims-dropdown-menu li:nth-child(2)')).getText()).toContain("Rules used in 1st step of computation");
-        expect(element(by.css('.gims-dropdown-menu li:nth-child(3) ul li:nth-child(1)')).getText()).toContain("Total improved (CEN91 - Bangladesh, Urban)");
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(2)')).getText()).toContain("Computed with rules");
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(4)')).getText()).toContain("Rules used in 1st step of computation");
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(5) ul li:nth-child(1)')).getText()).toContain("Total improved (CEN91 - Bangladesh, Urban)");
     });
 
-    it('menu for nothing should be empty', function() {
+    it('menu for nothing should be complete', function() {
         element(by.css('.input-group-btn .fa-angle-down')).click();
-        expect(element.all(by.css('.gims-dropdown-menu')).count()).toBe(0);
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(2)')).getText()).toContain("No value");
     });
 
-    it('menu for children should be empty', function() {
+    it('menu for children should be complete', function() {
         element(by.css('.input-group-btn .fa-gims-child')).click();
-        expect(element.all(by.css('.gims-dropdown-menu')).count()).toBe(0);
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(2)')).getText()).toContain("Computed with children");
     });
 
     it('menu for summands should be complete', function() {
         element(by.css('.input-group-btn .fa-gims-summand')).click();
-        expect(element(by.css('.gims-dropdown-menu li:nth-child(2)')).getText()).toContain("Summands used for computation");
-        expect(element(by.css('.gims-dropdown-menu li:nth-child(3)')).getText()).toContain("Protected ground water (all protected wells or springs)");
-        expect(element(by.css('.gims-dropdown-menu li:nth-child(4)')).getText()).toContain("Protected ground water (all protected wells or springs)");
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(2)')).getText()).toContain("Computed with summands");
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(4)')).getText()).toContain("Summands used for computation");
         expect(element(by.css('.gims-dropdown-menu li:nth-child(5)')).getText()).toContain("Protected ground water (all protected wells or springs)");
         expect(element(by.css('.gims-dropdown-menu li:nth-child(6)')).getText()).toContain("Protected ground water (all protected wells or springs)");
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(7)')).getText()).toContain("Protected ground water (all protected wells or springs)");
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(8)')).getText()).toContain("Protected ground water (all protected wells or springs)");
     });
 });
