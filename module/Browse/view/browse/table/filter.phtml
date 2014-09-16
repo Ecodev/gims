@@ -426,9 +426,8 @@
                                                                     !mode.isContribute"
                                                         />
 
-                                                <span class="input-group-addon" ng-if="!isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value]) && (!!questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].second || !!questionnaire.survey.questions[filter.id].filter.values[tabs.part.id].first)" tooltip="Percent value (between 0 and 100)" tooltip-placement="left"><i class="fa fa-fw">%</i></span>
-                                                <span class="input-group-addon" ng-if="questionnaire.survey.questions[filter.id].isAbsolute === false && isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value])" tooltip="Percent value (between 0 and 100)" tooltip-placement="left"><i class="fa fa-fw">%</i></span>
-                                                <span class="input-group-addon" ng-if="questionnaire.survey.questions[filter.id].isAbsolute === true  && isValidNumber(questionnaire.survey.questions[filter.id].answers[tabs.part.id][questionnaire.survey.questions[filter.id].value])" tooltip="Positive number" tooltip-placement="left"><i class="fa fa-plus-square-o fa-fw"></i></span>
+                                                <span class="input-group-addon" ng-if="questionnaire.survey.questions[filter.id].isAbsolute === false"><i class="fa fa-fw">%</i></span>
+                                                <span class="input-group-addon" ng-if="questionnaire.survey.questions[filter.id].isAbsolute === true"><i class="fa fa-plus-square-o fa-fw"></i></span>
                                             </div>
                                         </ng-form>
                                     </div>
