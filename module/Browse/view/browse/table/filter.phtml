@@ -36,7 +36,7 @@
     </div>
     <!-- Selection panel for filters and questionnaires -->
     <form name="selectionForm">
-        <div class="row show-grid" ng-if="expandSelection">
+        <div class="row show-grid" ng-show="expandSelection">
 
             <!-- Filter selection -->
             <div class="col-md-6" ng-if="(tabs.questionnaires.length || mode.isContribute) && !mode.isSector">
