@@ -71,10 +71,6 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, tabs, mo
             });
         }
     };
-$scope.$on('$destroy', function iVeBeenDismissed() {
-console.log('  // say goodbye to your controller here');
-  // release resources, cancel request...
-});
 
     $scope.toggleQuestionAbsolute = function(questionnaire, question) {
 
