@@ -1,7 +1,7 @@
 /**
  * Service with common functions to manage /browse/table/filter and its contextual menu
  */
-angular.module('myApp.services').factory('TableFilter', function($http, $timeout, $q, Restangular, questionnairesStatus, Percent, Utility) {
+angular.module('myApp.services').factory('TableFilter', function($http, $q, Restangular, questionnairesStatus, Percent, Utility) {
     'use strict';
 
     /**
@@ -198,51 +198,48 @@ angular.module('myApp.services').factory('TableFilter', function($http, $timeout
             return;
         }
 
-        $timeout(function() {
+        var filtersIds = _.pluck(tabs.filters, 'id');
+        var questionnairesIds = _.compact(_.pluck(tabs.questionnaires, 'id')); // compact remove falsey values
 
-            var filtersIds = _.pluck(tabs.filters, 'id');
-            var questionnairesIds = _.compact(_.pluck(tabs.questionnaires, 'id')); // compact remove falsey values
+        if (filtersIds.length > 0 && questionnairesIds.length > 0) {
+            tabs.isComputing = true;
 
-            if (filtersIds.length > 0 && questionnairesIds.length > 0) {
-                tabs.isComputing = true;
-
-                if (getComputedFiltersCanceller) {
-                    getComputedFiltersCanceller.resolve();
-                }
-                getComputedFiltersCanceller = $q.defer();
-
-                $http.get('/api/filter/getComputedFilters', {
-                    timeout: getComputedFiltersCanceller.promise,
-                    params: {
-                        filters: filtersIds.join(','),
-                        questionnaires: questionnairesIds.join(',')
-                    }
-                }).success(function(questionnaires) {
-
-                    // Complete our structure with the result from server
-                    _.forEach(tabs.questionnaires, function(scopeQuestionnaire) {
-                        if (questionnaires[scopeQuestionnaire.id]) {
-                            _.forEach(questionnaires[scopeQuestionnaire.id], function(valuesByPart, filterId) {
-
-                                // Compute a few useful things for our template
-                                _.forEach(valuesByPart, function(values, partId) {
-                                    valuesByPart[partId].isExcludedFromComputing = !Utility.isValidNumber(values.second) && Utility.isValidNumber(values.first);
-                                    valuesByPart[partId].displayValue = Percent.fractionToPercent(Utility.isValidNumber(values.second) ? values.second : values.first);
-                                });
-
-                                scopeQuestionnaire.survey.questions[filterId].filter.values = valuesByPart;
-                            });
-                        }
-                    });
-                    tabs.isComputing = false;
-                });
-
-                // Also get questionnaireUsages for all questionnaires, if showing them
-                if (tabs.showQuestionnaireUsages) {
-                    loadQuestionnaireUsages();
-                }
+            if (getComputedFiltersCanceller) {
+                getComputedFiltersCanceller.resolve();
             }
-        }, 0);
+            getComputedFiltersCanceller = $q.defer();
+
+            $http.get('/api/filter/getComputedFilters', {
+                timeout: getComputedFiltersCanceller.promise,
+                params: {
+                    filters: filtersIds.join(','),
+                    questionnaires: questionnairesIds.join(',')
+                }
+            }).success(function(questionnaires) {
+
+                // Complete our structure with the result from server
+                _.forEach(tabs.questionnaires, function(scopeQuestionnaire) {
+                    if (questionnaires[scopeQuestionnaire.id]) {
+                        _.forEach(questionnaires[scopeQuestionnaire.id], function(valuesByPart, filterId) {
+
+                            // Compute a few useful things for our template
+                            _.forEach(valuesByPart, function(values, partId) {
+                                valuesByPart[partId].isExcludedFromComputing = !Utility.isValidNumber(values.second) && Utility.isValidNumber(values.first);
+                                valuesByPart[partId].displayValue = Percent.fractionToPercent(Utility.isValidNumber(values.second) ? values.second : values.first);
+                            });
+
+                            scopeQuestionnaire.survey.questions[filterId].filter.values = valuesByPart;
+                        });
+                    }
+                });
+                tabs.isComputing = false;
+            });
+
+            // Also get questionnaireUsages for all questionnaires, if showing them
+            if (tabs.showQuestionnaireUsages) {
+                loadQuestionnaireUsages();
+            }
+        }
     }
 
     /**
