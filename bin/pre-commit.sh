@@ -2,7 +2,7 @@
 
 pass=true
 
-files=$(git diff --cached --name-only --diff-filter=ACMR | grep .js | grep -v htdocs/lib)
+files=$(git diff --cached --name-only --diff-filter=ACMR | grep -F ".js" | grep -vE "(htdocs/lib|package.json)")
 if [ "$files" != "" ]; then
 
     # Run JSHint validation before commit
