@@ -177,8 +177,8 @@
                                 <!-- mark new questionnaire / is loading -->
                                 <a class="btn btn-sm" ng-if="!questionnaire.id || questionnaire.isLoading" tooltip="New survey" tooltip-placement="left" ><i class="fa fa-lg" ng-class="{'fa-asterisk':!questionnaire.isLoading, 'fa-gims-loading':questionnaire.isLoading}"></i></a>
 
-                                <div class="btn-group pull-right">
-                                    <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
+                                <div class="btn-group pull-right" dropdown>
+                                    <button type="button" class="btn btn-default dropdown-toggle btn-sm">
                                         <i class="fa fa-angle-down"></i>
                                     </button>
                                     <ul class="dropdown-menu pull-right" role="menu">

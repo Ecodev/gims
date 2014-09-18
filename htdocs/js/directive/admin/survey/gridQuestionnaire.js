@@ -71,7 +71,7 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function()
                         width: '120px',
                         cellTemplate:
                                 '<div style="margin: 5px 5px 0 5px ">' +
-                                '<i class="fa fa-grid fa-comment" ng-visible="row.entity.comments" data-toggle="tooltip" title="{{row.entity.comments}}"></i>' +
+                                '<i class="fa fa-grid fa-comment" ng-visible="row.entity.comments" title="{{row.entity.comments}}"></i>' +
                                 '<i class="fa fa-grid fa-check-square-o" ng-visible="row.entity.status == \'validated\'" title="Validated"></i>' +
                                 '<div class="btn-group">' +
                                 '<a class="btn btn-default btn-xs btn-edit" href="/admin/questionnaire/edit/{{row.entity.id}}?returnUrl={{options.extra.returnUrl}}" ng-visible="row.entity.permissions.update"><i class="fa fa-pencil fa-lg"></i></a>' +

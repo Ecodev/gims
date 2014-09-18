@@ -3,7 +3,7 @@ angular.module('myApp.directives').directive('gimsCellMenu', function($dropdown,
     return {
         restrict: 'E',
         template: '<span class="input-group-btn">' +
-                '    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown-menu">' +
+                '    <button type="button" class="btn btn-default dropdown-toggle">' +
                 '        <span ng-switch="getCellType(questionnaire, filter, part.id)">' +
                 '            <i ng-switch-when="loading" class="fa fa-fw fa-gims-loading"></i>' +
                 '            <i ng-switch-when="error" class="fa fa-fw fa-warning text-warning"></i>' +
