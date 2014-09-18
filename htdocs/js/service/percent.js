@@ -18,8 +18,7 @@ angular.module('myApp.services').factory('Percent', function() {
         fractionToPercent: function(fraction) {
             if (_.isNumber(fraction)) {
                 return round(fraction * 100);
-            }
-            else {
+            } else {
                 return null;
             }
         },
@@ -31,8 +30,7 @@ angular.module('myApp.services').factory('Percent', function() {
         percentToFraction: function(percent) {
             if (_.isNumber(percent)) {
                 return percent / 100;
-            }
-            else {
+            } else {
                 return null;
             }
         }

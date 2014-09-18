@@ -5,7 +5,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /*********************************************** Variables initialisation */
     /**************************************************************************/
 
-
     // params for ajax requests
     $scope.filterFields = {fields: 'color,paths,parents,summands'};
     $scope.countryParams = {fields: 'geoname'};
@@ -446,7 +445,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         model.initialValue = value;
     };
 
-
     /**
      * Save question if it has a name
      * @param question
@@ -642,7 +640,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         }
     };
 
-
     $scope.getFiltersByLevel = function(level, filters) {
         filters = _.isUndefined(filters) ? $scope.tabs.filters : filters;
         return _.filter(filters, function(filter) {
@@ -770,7 +767,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 return q.filter.id;
             });
 
-            indexFilterQuestionnaireUsages(questionnaire);
+            TableFilter.indexFilterQuestionnaireUsages(questionnaire);
 
             // update $scope with modified questionnaire
             $scope.tabs.questionnaires[_.findIndex($scope.tabs.questionnaires, {id: questionnaire.id})] = questionnaire;
@@ -778,33 +775,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
         fillMissingElements();
         TableFilter.getComputedFilters($scope.tabs);
-    };
-
-    /**
-     * Index FilterQuestionnaireUsages by filter and part
-     * @param questionnaire
-     */
-    var indexFilterQuestionnaireUsages = function(questionnaire) {
-        // Indexes usages by filter and part
-        var usagesByFilter = {};
-        _.forEach(questionnaire.filterQuestionnaireUsages, function(usage) {
-
-            if (!usagesByFilter[usage.filter.id]) {
-                usagesByFilter[usage.filter.id] = {};
-            }
-
-            if (!usagesByFilter[usage.filter.id][usage.part.id]) {
-                usagesByFilter[usage.filter.id][usage.part.id] = {first: [], second: []};
-            }
-            if (usage.isSecondStep) {
-                usagesByFilter[usage.filter.id][usage.part.id].second.push(usage);
-            } else {
-                usagesByFilter[usage.filter.id][usage.part.id].first.push(usage);
-            }
-        });
-
-        questionnaire.filterQuestionnaireUsagesByFilterAndPart = usagesByFilter;
-
     };
 
     /**
@@ -983,7 +953,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             });
         }
     };
-
 
     /**
      * Create a questionnaire object in database.
@@ -1569,7 +1538,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             _.forEach($scope.tabs.questionnaires, function(questionnaire) {
                 questionnaire.filterQuestionnaireUsages = 1;
             });
-
 
             $http.get('/api/filter/createUsages', {
                 params: {

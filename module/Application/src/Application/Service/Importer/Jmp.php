@@ -1260,7 +1260,6 @@ STRING;
             $this->getFilterQuestionnaireUsage($filterImproved, $questionnaire, $ruleImproved, $usage->getPart(), true);
             $this->getFilterQuestionnaireUsage($filterShared, $questionnaire, $ruleShared, $usage->getPart(), true);
 
-
             if (!in_array($questionnaire, $questionnairesWithExcludedImported)) {
                 $this->importExcludes($questionnaire, $this->filterForRatio, 99);
                 $questionnairesWithExcludedImported[] = $questionnaire;

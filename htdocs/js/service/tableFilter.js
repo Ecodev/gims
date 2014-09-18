@@ -320,6 +320,33 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
         return 'nothing';
     }
 
+    /**
+     * Index FilterQuestionnaireUsages by filter and part
+     * @param questionnaire
+     */
+    function indexFilterQuestionnaireUsages(questionnaire) {
+        // Indexes usages by filter and part
+        var usagesByFilter = {};
+        _.forEach(questionnaire.filterQuestionnaireUsages, function(usage) {
+
+            if (!usagesByFilter[usage.filter.id]) {
+                usagesByFilter[usage.filter.id] = {};
+            }
+
+            if (!usagesByFilter[usage.filter.id][usage.part.id]) {
+                usagesByFilter[usage.filter.id][usage.part.id] = {first: [], second: []};
+            }
+            if (usage.isSecondStep) {
+                usagesByFilter[usage.filter.id][usage.part.id].second.push(usage);
+            } else {
+                usagesByFilter[usage.filter.id][usage.part.id].first.push(usage);
+            }
+        });
+
+        questionnaire.filterQuestionnaireUsagesByFilterAndPart = usagesByFilter;
+
+    }
+
     // Return public API
     return {
         removeAnswer: removeAnswer,
@@ -329,6 +356,7 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
         refresh: refresh,
         getComputedFilters: getComputedFilters,
         toggleShowQuestionnaireUsages: toggleShowQuestionnaireUsages,
-        getCellType: getCellType
+        getCellType: getCellType,
+        indexFilterQuestionnaireUsages: indexFilterQuestionnaireUsages
     };
 });

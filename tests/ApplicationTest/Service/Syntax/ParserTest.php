@@ -53,12 +53,10 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
         $part = $this->getNewModelWithId('\Application\Model\Part');
         $part->setName('test part');
 
-
         $q = $this->getNewModelWithId('\Application\Model\Rule\QuestionnaireUsage');
         $rule = $this->getNewModelWithId('\Application\Model\Rule\Rule');
         $rule->setName('test rule');
         $q->setRule($rule);
-
 
         $f1bis = $parser->getFilterRepository()->findOneById($f1->getId());
         $f2bis = $parser->getFilterRepository()->findOneById($f2->getId());
@@ -129,9 +127,7 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
         ];
 
         $actual = $parser->getStructure($formula);
-
         $this->assertEquals($expected, $actual);
-
 
         $formula2 = '={self} + {Y} / {F#current,Q#all} * ({F#1,P#current,Y+2} + {Q#all,P#1})';
         $expected2 = [
@@ -183,7 +179,6 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
         ];
 
         $actual2 = $parser->getStructure($formula2);
-
         $this->assertEquals($expected2, $actual2);
     }
 
