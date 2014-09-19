@@ -244,7 +244,7 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
      * Init computed filters
      * @type {null}
      */
-    var getComputedFiltersCanceller = null;
+    var previousQuery = null;
     function getComputedFilters() {
         if (_.isEmpty(data.questionnaires)) {
             return;
@@ -254,19 +254,32 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
         var questionnairesIds = _.compact(_.pluck(data.questionnaires, 'id')); // compact remove falsey values
 
         if (filtersIds.length > 0 && questionnairesIds.length > 0) {
-            data.isComputing = true;
 
-            if (getComputedFiltersCanceller) {
-                getComputedFiltersCanceller.resolve();
+            var params = {
+                filters: filtersIds.join(','),
+                questionnaires: questionnairesIds.join(',')
+            };
+
+            // If there is a previous query still running...
+            if (previousQuery) {
+                if (_.isEqual(previousQuery.params, params)) {
+                    // ... and it is the same as what we are going to do, don't do anything
+                    return;
+                } else {
+                    // ... and it is different, cancel the previous one, and run ours
+                    previousQuery.canceller.resolve();
+                }
             }
-            getComputedFiltersCanceller = $q.defer();
+
+            data.isComputing = true;
+            previousQuery = {
+                canceller: $q.defer(),
+                params: params
+            };
 
             $http.get('/api/filter/getComputedFilters', {
-                timeout: getComputedFiltersCanceller.promise,
-                params: {
-                    filters: filtersIds.join(','),
-                    questionnaires: questionnairesIds.join(',')
-                }
+                timeout: previousQuery.promise,
+                params: params
             }).success(function(questionnaires) {
 
                 // Complete our structure with the result from server
@@ -285,6 +298,7 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
                     }
                 });
                 data.isComputing = false;
+                previousQuery = null;
             });
 
             // Also get questionnaireUsages for all questionnaires, if showing them
@@ -302,7 +316,7 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
         var questionnairesIds = _.compact(_.pluck(data.questionnaires, 'id')).join(','); // compact remove falsey values
 
         $http.get('/api/questionnaireUsage/compute', {
-            timeout: getComputedFiltersCanceller.promise,
+            timeout: previousQuery.promise,
             params: {
                 questionnaires: questionnairesIds
             }
