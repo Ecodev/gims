@@ -1,12 +1,11 @@
-angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, tabs, mode, questionnaire, filter, part, questionnairesStatus, Restangular, TableFilter, Utility, $timeout) {
+angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, questionnaire, filter, part, questionnairesStatus, Restangular, TableFilter, Utility, $timeout) {
     'use strict';
 
     // My future self will hate me for this, but we hardcode the exclude
     // rule ID to make it easier to find it
     var excludeRuleId = 1;
 
-    $scope.tabs = tabs;
-    $scope.mode = mode;
+    $scope.data = TableFilter.getData();
     $scope.questionnaire = questionnaire;
     $scope.filter = filter;
     $scope.part = part;
@@ -51,7 +50,7 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, tabs, mo
                     Restangular.restangularizeElement(null, usage, 'filterQuestionnaireUsage');
                     usage.remove().then(function() {
                         questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId].second = _.without(usages, usage);
-                        TableFilter.refresh(tabs, false, true);
+                        TableFilter.refresh(false, true);
                     });
                 }
             });
@@ -68,7 +67,7 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, tabs, mo
 
             Restangular.all('filterQuestionnaireUsage').post(usage).then(function(newUsage) {
                 usages.push(newUsage);
-                TableFilter.refresh(tabs, false, true, true);
+                TableFilter.refresh(false, true, true);
             });
         }
     };
@@ -76,7 +75,7 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, tabs, mo
     $scope.toggleQuestionAbsolute = function(questionnaire, question) {
 
         var isAbsolute = !question.isAbsolute;
-        var questionnaireWithSameCode = TableFilter.getSurveysWithSameCode(tabs.questionnaires, questionnaire.survey.code);
+        var questionnaireWithSameCode = TableFilter.getSurveysWithSameCode($scope.data.questionnaires, questionnaire.survey.code);
 
         _.forEach(questionnaireWithSameCode, function(questionnaire) {
             question = questionnaire.survey.questions[question.filter.id];
@@ -98,7 +97,7 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, tabs, mo
                 question.value = value;
                 question.max = max;
                 updateQuestion(questionnaire, question).then(function() {
-                    TableFilter.refresh(tabs, false, true);
+                    TableFilter.refresh(false, true);
                 });
 
             }, 0);
@@ -132,7 +131,7 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, tabs, mo
             var questionnaireId = ui.item[0].dataset.questionnaire;
             var filterId = ui.item[0].dataset.filter;
             var partId = ui.item[0].dataset.part;
-            var questionnaire = _.find($scope.tabs.questionnaires, {id: parseInt(questionnaireId)});
+            var questionnaire = _.find($scope.data.questionnaires, {id: parseInt(questionnaireId)});
             var usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId].second.concat(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId].first);
 
             var miniUsages = [];
@@ -152,7 +151,7 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, tabs, mo
             });
 
             $q.all(usagesPromisses).then(function() {
-                TableFilter.refresh(tabs, false, true, true);
+                TableFilter.refresh(false, true, true);
             });
 
         }

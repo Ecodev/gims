@@ -54,15 +54,15 @@
         <li ng-if="questionnairesStatus[questionnaire.status]">
             <a href ng-click="toggleExcludeRule(questionnaire, filter.id, part.id)"><i class="fa fa-gims-rule fa-fw"></i> {{excludeRuleExists(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second) ? 'Include in further computing' : 'Exclude from further computing'}}</a>
         </li>
-        <li ng-if="mode.isContribute && questionnairesStatus[questionnaire.status]">
+        <li ng-if="data.mode.isContribute && questionnairesStatus[questionnaire.status]">
             <a href gims-add-usage questionnaire="questionnaire" filter="filter" part="part"><i class="fa fa-gims-rule fa-fw"></i> Add a rule</a>
         </li>
-        <li ng-if="mode.isContribute && questionnairesStatus[questionnaire.status]">
+        <li ng-if="data.mode.isContribute && questionnairesStatus[questionnaire.status]">
             <a href ng-if="questionnaire.survey.questions[filter.id].isAbsolute" ng-click="toggleQuestionAbsolute(questionnaire, questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[part.id])"><i class="fa fa-fw">%</i> Set question as percent value</a>
             <a href ng-if="!questionnaire.survey.questions[filter.id].isAbsolute" ng-click="toggleQuestionAbsolute(questionnaire, questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[part.id])"><i class="fa fa-fw fa-plus-square-o"></i> Set question as absolute value</a>
         </li>
-        <li ng-if="mode.isContribute && questionnairesStatus[questionnaire.status] && questionnaire.survey.questions[filter.id].answers[part.id].id">
-            <a href ng-click="removeAnswer(tabs, questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[part.id])">
+        <li ng-if="data.mode.isContribute && questionnairesStatus[questionnaire.status] && questionnaire.survey.questions[filter.id].answers[part.id].id">
+            <a href ng-click="removeAnswer(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[part.id])">
                 <span class="text-danger"><i class="fa fa-trash-o fa-fw"></i> Remove answer</span>
             </a>
         </li>

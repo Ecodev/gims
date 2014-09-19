@@ -5,6 +5,62 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
     'use strict';
 
     /**
+     * This contains all data needed to display table filter.
+     * It is passed around different controller/directives, but
+     * must always stays the same object
+     * @type object
+     */
+    var data;
+
+    /**
+     * Initialize and return the data container for this service
+     * @param {string} locationPath
+     * @returns {object}
+     */
+    function init(locationPath) {
+        data = {};
+
+        var modes = [
+            {
+                name: 'Browse',
+                isContribute: false,
+                isSector: false,
+                surveyType: 'jmp,nsa'
+            },
+            {
+                name: 'Contribute JMP',
+                isContribute: true,
+                isSector: false,
+                surveyType: 'jmp'
+            },
+            {
+                name: 'Contribute NSA',
+                isContribute: true,
+                isSector: true,
+                surveyType: 'nsa'
+            }
+        ];
+
+        if (locationPath.indexOf('/nsa') >= 0) {
+            data.mode = modes[2];
+        } else if (locationPath.indexOf('/contribute') >= 0) {
+            data.mode = modes[1];
+        } else if (locationPath.indexOf('/browse') >= 0) {
+            data.mode = modes[0];
+        }
+
+        return getData();
+    }
+
+    /**
+     * Returns the data containers
+     * @returns {object}
+     */
+    function getData() {
+        return data;
+    }
+
+    /**
      * Call api to get answer permissions
      * @param question
      * @param answer
@@ -51,10 +107,9 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
 
     /**
      * Delete answer considering answer permissions
-     * @param tabs
      * @param answer
      */
-    function deleteAnswer(tabs, answer) {
+    function deleteAnswer(answer) {
 
         if (answer.id && answer.permissions.delete) {
             answer.isLoading = true;
@@ -63,25 +118,24 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
                 delete(answer.displayValue);
                 delete(answer.edit);
                 answer.isLoading = false;
-                refresh(tabs, false, true);
+                refresh(false, true);
             });
         }
     }
 
     /**
      * Remove question after retrieving permissions from server if not yet done
-     * @param tabs
      * @param question
      * @param answer
      */
-    function removeAnswer(tabs, question, answer) {
+    function removeAnswer(question, answer) {
         Restangular.restangularizeElement(null, answer, 'answer');
         if (_.isUndefined(answer.permissions)) {
             getPermissions(question, answer).then(function() {
-                deleteAnswer(tabs, answer);
+                deleteAnswer(answer);
             });
         } else {
-            deleteAnswer(tabs, answer);
+            deleteAnswer(answer);
         }
     }
 
@@ -105,11 +159,10 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
 
     /**
      * Call questionnaires asking for passed fields and executing callback function passing received questionnaires
-     * @param {type} tabs
      * @param questionnaires
      * @param fields
      */
-    function getQuestionnaires(tabs, questionnaires, fields) {
+    function getQuestionnaires(questionnaires, fields) {
         var deferred = new $q.defer();
 
         if (questionnaires.length === 1 && !_.isUndefined(questionnaires[0])) {
@@ -120,17 +173,17 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
             Restangular.all('questionnaire').getList(_.merge({id: questionnaires.join(',')}, fields)).then(function(questionnaires) {
 
                 // when retrieve questionnaire with read permissions, remove pré-selected questionnaires from list if they're not received
-                var removedQuestionnaires = _.difference(_.pluck(tabs.questionnaires, 'id'), _.pluck(questionnaires, 'id'));
+                var removedQuestionnaires = _.difference(_.pluck(data.questionnaires, 'id'), _.pluck(questionnaires, 'id'));
                 _.forEach(removedQuestionnaires, function(questionnaireId) {
-                    var index = _.findIndex(tabs.questionnaires, {id: questionnaireId});
+                    var index = _.findIndex(data.questionnaires, {id: questionnaireId});
                     if (index >= 0) {
-                        tabs.questionnaires.splice(index, 1);
+                        data.questionnaires.splice(index, 1);
                     }
                 });
 
                 deferred.resolve(questionnaires);
             }, function() {
-                tabs.questionnaires = [];
+                data.questionnaires = [];
             });
         }
 
@@ -164,27 +217,26 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
      * Refreshing page means :
      *  - Recover all questionnaires permissions (in case user switch from browse to contribute/full view and need to be logged in)
      *  - Recompute filters, after some changes on answers. Can be done automatically after each answer change, but is heavy.
-     * @param {type} tabs
      * @param {type} questionnairesPermissions
      * @param {type} filtersComputing
      * @param {type} questionnairesUsages
      */
-    function refresh(tabs, questionnairesPermissions, filtersComputing, questionnairesUsages) {
+    function refresh(questionnairesPermissions, filtersComputing, questionnairesUsages) {
 
-        if (questionnairesPermissions && !_.isUndefined(tabs) && !_.isUndefined(tabs.questionnaires)) {
-            getQuestionnaires(_.pluck(tabs.questionnaires, 'id'), {fields: 'permissions'}).then(function(questionnaires) {
-                updateQuestionnairePermissions(tabs.questionnaires, questionnaires);
+        if (questionnairesPermissions && !_.isUndefined(data) && !_.isUndefined(data.questionnaires)) {
+            getQuestionnaires(_.pluck(data.questionnaires, 'id'), {fields: 'permissions'}).then(function(questionnaires) {
+                updateQuestionnairePermissions(data.questionnaires, questionnaires);
             });
         }
 
-        if (questionnairesUsages && !_.isUndefined(tabs) && !_.isUndefined(tabs.questionnaires)) {
-            getQuestionnaires(_.pluck(tabs.questionnaires, 'id'), {fields: 'filterQuestionnaireUsages.isSecondStep,filterQuestionnaireUsages.sorting'}).then(function(questionnaires) {
-                updateQuestionnaireUsages(tabs.questionnaires, questionnaires);
+        if (questionnairesUsages && !_.isUndefined(data) && !_.isUndefined(data.questionnaires)) {
+            getQuestionnaires(_.pluck(data.questionnaires, 'id'), {fields: 'filterQuestionnaireUsages.isSecondStep,filterQuestionnaireUsages.sorting'}).then(function(questionnaires) {
+                updateQuestionnaireUsages(data.questionnaires, questionnaires);
             });
         }
 
         if (filtersComputing) {
-            getComputedFilters(tabs);
+            getComputedFilters();
         }
     }
 
@@ -193,16 +245,16 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
      * @type {null}
      */
     var getComputedFiltersCanceller = null;
-    function getComputedFilters(tabs) {
-        if (_.isEmpty(tabs.questionnaires)) {
+    function getComputedFilters() {
+        if (_.isEmpty(data.questionnaires)) {
             return;
         }
 
-        var filtersIds = _.pluck(tabs.filters, 'id');
-        var questionnairesIds = _.compact(_.pluck(tabs.questionnaires, 'id')); // compact remove falsey values
+        var filtersIds = _.pluck(data.filters, 'id');
+        var questionnairesIds = _.compact(_.pluck(data.questionnaires, 'id')); // compact remove falsey values
 
         if (filtersIds.length > 0 && questionnairesIds.length > 0) {
-            tabs.isComputing = true;
+            data.isComputing = true;
 
             if (getComputedFiltersCanceller) {
                 getComputedFiltersCanceller.resolve();
@@ -218,7 +270,7 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
             }).success(function(questionnaires) {
 
                 // Complete our structure with the result from server
-                _.forEach(tabs.questionnaires, function(scopeQuestionnaire) {
+                _.forEach(data.questionnaires, function(scopeQuestionnaire) {
                     if (questionnaires[scopeQuestionnaire.id]) {
                         _.forEach(questionnaires[scopeQuestionnaire.id], function(valuesByPart, filterId) {
 
@@ -232,11 +284,11 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
                         });
                     }
                 });
-                tabs.isComputing = false;
+                data.isComputing = false;
             });
 
             // Also get questionnaireUsages for all questionnaires, if showing them
-            if (tabs.showQuestionnaireUsages) {
+            if (data.showQuestionnaireUsages) {
                 loadQuestionnaireUsages();
             }
         }
@@ -244,11 +296,10 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
 
     /**
      * Load questionnaireUsages and their computed values for all questionnaires
-     * @param {type} tabs
      * @returns {undefined}
      */
-    function loadQuestionnaireUsages(tabs) {
-        var questionnairesIds = _.compact(_.pluck(tabs.questionnaires, 'id')).join(','); // compact remove falsey values
+    function loadQuestionnaireUsages() {
+        var questionnairesIds = _.compact(_.pluck(data.questionnaires, 'id')).join(','); // compact remove falsey values
 
         $http.get('/api/questionnaireUsage/compute', {
             timeout: getComputedFiltersCanceller.promise,
@@ -256,20 +307,18 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
                 questionnaires: questionnairesIds
             }
         }).success(function(questionnaireUsages) {
-            tabs.questionnaireUsages = questionnaireUsages;
+            data.questionnaireUsages = questionnaireUsages;
         });
     }
 
     /**
      * Toggle the display of questionnaireUsages
-     * @param {type} tabs
-     * @returns {undefined}
      */
-    function toggleShowQuestionnaireUsages(tabs) {
-        tabs.showQuestionnaireUsages = !tabs.showQuestionnaireUsages;
+    function toggleShowQuestionnaireUsages() {
+        data.showQuestionnaireUsages = !data.showQuestionnaireUsages;
 
-        if (tabs.showQuestionnaireUsages && !tabs.questionnaireUsages) {
-            loadQuestionnaireUsages(tabs);
+        if (data.showQuestionnaireUsages && !data.questionnaireUsages) {
+            loadQuestionnaireUsages();
         }
     }
 
@@ -349,6 +398,8 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
 
     // Return public API
     return {
+        init: init,
+        getData: getData,
         removeAnswer: removeAnswer,
         getPermissions: getPermissions,
         getSurveysWithSameCode: getSurveysWithSameCode,
