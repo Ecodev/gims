@@ -317,7 +317,7 @@
                             </td>
                             <td ng-if="data.selectedQuestionnaireForLabels"></td>
                             <td class="text-center" ng-repeat="questionnaire in data.questionnaires track by $index">
-                                <ng-form name="valueForm" class="input-group input-group-sm" ng-class="{'has-error':valueForm.value.$invalid}" tooltip="Leave empty to use official population data">
+                                <ng-form name="populationForm" class="input-group input-group-sm" ng-class="{'has-error':populationForm.value.$invalid}" tooltip="Leave empty to use official population data">
                                     <div class="input-group-addon"><i class="fa fa-fw" ng-class="{'fa-gims-population':!questionnaire.populations[data.part.id].isLoading,'fa-gims-loading':questionnaire.populations[data.part.id].isLoading}"></i></div>
                                     <input  type="number"
                                             class="text-center"
