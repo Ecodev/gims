@@ -1,7 +1,7 @@
 /**
  * Service with common functions to manage /browse/table/filter and its contextual menu
  */
-angular.module('myApp.services').factory('TableFilter', function($http, $q, Restangular, questionnairesStatus, Percent, Utility) {
+angular.module('myApp.services').factory('TableFilter', function($http, $q, $location, Restangular, questionnairesStatus, Percent, Utility) {
     'use strict';
 
     /**
@@ -410,6 +410,18 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
 
     }
 
+    /**
+     * Update parameters on url excluding empty IDs to avoid multiple consecutive commas that cause problems on server side.
+     * @param element
+     */
+    function updateUrl(element) {
+        $location.search(element, _.filter(_.pluck(data[element], 'id'), function(el) {
+            if (el) {
+                return true;
+            }
+        }).join(','));
+    }
+
     // Return public API
     return {
         init: init,
@@ -422,6 +434,7 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, Rest
         getComputedFilters: getComputedFilters,
         toggleShowQuestionnaireUsages: toggleShowQuestionnaireUsages,
         getCellType: getCellType,
-        indexFilterQuestionnaireUsages: indexFilterQuestionnaireUsages
+        indexFilterQuestionnaireUsages: indexFilterQuestionnaireUsages,
+        updateUrl: updateUrl
     };
 });

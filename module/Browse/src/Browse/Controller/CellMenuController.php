@@ -12,7 +12,7 @@ class CellMenuController extends \Application\Controller\AbstractAngularActionCo
         return new ViewModel();
     }
 
-    public function windowAction()
+    public function questionnaireMenuAction()
     {
         return new ViewModel();
     }

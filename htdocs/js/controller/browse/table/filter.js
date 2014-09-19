@@ -76,7 +76,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 if (filters) {
                     $scope.data.filters = filters;
                     $scope.data.filter = null;
-                    updateUrl('filter');
+                    TableFilter.updateUrl('filter');
                     filterSetDeferred.resolve();
                 }
                 checkSelectionExpand();
@@ -101,7 +101,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
                         $scope.data.filters = filters;
                         $scope.data.filterSet = null;
-                        updateUrl('filterSet');
+                        TableFilter.updateUrl('filterSet');
 
                         filterDeferred.resolve();
                     }
@@ -475,7 +475,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                     TableFilter.getQuestionnaires([data.questionnaire.id], questionnaireWithAnswersFields).then(function(questionnaires) {
                         $scope.firstQuestionnairesRetrieve = true;
                         prepareDataQuestionnaires(questionnaires);
-                        updateUrl('questionnaires');
+                        TableFilter.updateUrl('questionnaires');
                     });
                 }
 
@@ -515,16 +515,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         $scope.data.questionnaires.splice(0, 0, questionnaire);
         $scope.questionnairesAreSorted = false;
         fillMissingElements();
-        updateUrl('questionnaires');
-    };
-
-    /**
-     * Remove column (questionnaire)
-     * @param index
-     */
-    $scope.removeQuestionnaire = function(index) {
-        $scope.data.questionnaires.splice(index, 1);
-        updateUrl('questionnaires');
+        TableFilter.updateUrl('questionnaires');
     };
 
     /**
@@ -543,7 +534,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             return false;
         });
 
-        updateUrl('filters');
+        TableFilter.updateUrl('filters');
 
         _.forEach(filters, function(f) {
             removeQuestionsForFilter(f.id, false);
@@ -827,7 +818,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
                 questionnaire.id = newQuestionnaire.id;
                 propagateSurvey(survey);
-                updateUrl('questionnaires');
+                TableFilter.updateUrl('questionnaires');
 
                 // Save all populations
                 angular.forEach(questionnaire.populations, function(population) {
@@ -1249,11 +1240,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     var initSector = function() {
         if ($scope.data.mode.isSector) {
-            updateUrl('questionnaires');
+            TableFilter.updateUrl('questionnaires');
             $scope.data.filter = undefined;
             $scope.data.filters = [];
-            updateUrl('filter');
-            updateUrl('filters');
+            TableFilter.updateUrl('filter');
+            TableFilter.updateUrl('filters');
 
             if ($scope.data.country) {
 
@@ -1371,7 +1362,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
                 // then save first filter
                 saveFiltersCollection([$scope.data.filters[0]]).then(function() {
-                    updateUrl('filter');
+                    TableFilter.updateUrl('filter');
                     saveEquipments().then(function() {
                         deferred.resolve();
                     });
@@ -1433,7 +1424,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 filterPromises.push(saveFilter(filter));
             });
             $q.all(filterPromises).then(function() {
-                updateUrl('filters');
+                TableFilter.updateUrl('filters');
                 deferred.resolve();
             });
         }
@@ -1519,18 +1510,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 $scope.refresh(false, true);
             });
         }
-    };
-
-    /**
-     * Update parameters on url exlucding empty ids to avoid multiple consecutive commas that cause problems on server side.
-     * @param element
-     */
-    var updateUrl = function(element) {
-        $location.search(element, _.filter(_.pluck($scope.data[element], 'id'), function(el) {
-            if (el) {
-                return true;
-            }
-        }).join(','));
     };
 
     /**
