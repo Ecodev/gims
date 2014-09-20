@@ -226,7 +226,6 @@
                         <!-- Survey's year row -->
                         <tr class="active" ng-if="data.questionnaires.length">
                             <td>
-                                <button class="btn btn-default btn-sm" ng-if="!data.mode.isSector" ng-click="setExpandHierarchy(!expandHierarchy)"><i class="fa" ng-class="{'fa-compress':expandHierarchy,'fa-expand':!expandHierarchy}"></i> Filter hierarchy tree</button>
                                 <button class="btn btn-default btn-sm pull-right" ng-if="data.questionnaires.length > 1 && !questionnairesAreSorted" ng-click="orderQuestionnaires(false)"><i class="fa fa-sort-amount-asc fa-rotate-270"></i> Sort by year</button>
                             </td>
                             <td ng-if="data.selectedQuestionnaireForLabels" class="text-center">{{data.selectedQuestionnaireForLabels.survey.year}}</td>
@@ -241,7 +240,6 @@
                         <!-- Population row -->
                         <tr class="active" ng-if="data.questionnaires.length && data.mode.isSector">
                             <td>
-                                <button class="btn btn-default btn-sm" ng-if="!data.mode.isSector" ng-click="setExpandHierarchy(!expandHierarchy)"><i class="fa" ng-class="{'fa-compress':expandHierarchy,'fa-expand':!expandHierarchy}"></i> Filter hierarchy tree</button>
                             </td>
                             <td ng-if="data.selectedQuestionnaireForLabels"></td>
                             <td class="text-center" ng-repeat="questionnaire in data.questionnaires track by $index">
@@ -291,7 +289,7 @@
 
                     <tbody>
                         <!-- Filters and answers rows -->
-                        <tr ng-repeat="filter in data.filters track by $index" ng-if="(data.mode.isSector && isValidId(filter)) || expandHierarchy || filter.level <= data.filters[0].level" ng-class="{'active':data.mode.isSector && filter.level < 2}">
+                        <tr ng-repeat="filter in data.filters track by $index" ng-class="{'active':data.mode.isSector && filter.level < 2}">
 
                             <!-- Filter name column-->
                             <td class="filter">

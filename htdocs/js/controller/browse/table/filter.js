@@ -14,7 +14,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     // Variables initialisations
     $scope.locationPath = $location.$$path;
     $scope.data = TableFilter.init($scope.locationPath);
-    $scope.expandHierarchy = true;
     $scope.expandSelection = true;
     $scope.lastFilterId = 1;
     $scope.parts = Restangular.all('part').getList().$object;
@@ -608,10 +607,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
             }
             return false;
         });
-    };
-
-    $scope.setExpandHierarchy = function(bool) {
-        $scope.expandHierarchy = bool;
     };
 
     /**************************************************************************/
