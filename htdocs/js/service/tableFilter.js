@@ -544,16 +544,16 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, $loc
                 firstValue = question.filter.values[partId].first;
             }
 
-            var usages;
+            var usages = {};
             if (questionnaire.filterQuestionnaireUsagesByFilterAndPart && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id]) {
-                usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId].first.concat(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId].second);
+                usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId];
             }
 
             if (answer && answer.error) {
                 return 'error';
             } else if (answer && Utility.isValidNumber(answer[question.value])) {
                 return 'answer';
-            } else if (usages && usages.length) {
+            } else if ((usages.first && usages.first.length) || (usages.second && usages.second.length)) {
                 return 'rule';
             } else if (filter.summands && filter.summands.length && Utility.isValidNumber(firstValue)) {
                 return 'summand';
