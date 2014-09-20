@@ -62,8 +62,8 @@
             <a href ng-if="!questionnaire.survey.questions[filter.id].isAbsolute" ng-click="toggleQuestionAbsolute(questionnaire, questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[part.id])"><i class="fa fa-fw fa-plus-square-o"></i> Set question as absolute value</a>
         </li>
         <li ng-if="data.mode.isContribute && questionnairesStatus[questionnaire.status] && questionnaire.survey.questions[filter.id].answers[part.id].id">
-            <a href ng-click="removeAnswer(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[part.id])">
-                <span class="text-danger"><i class="fa fa-trash-o fa-fw"></i> Remove answer</span>
+            <a href ng-click="deleteAnswer(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[part.id])">
+                <span class="text-danger"><i class="fa fa-trash-o fa-fw"></i> Delete answer</span>
             </a>
         </li>
     </ul>

@@ -12,7 +12,7 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, question
     $scope.questionnairesStatus = questionnairesStatus;
 
     // Expose function to scope
-    $scope.removeAnswer = TableFilter.removeAnswer;
+    $scope.deleteAnswer = TableFilter.deleteAnswer;
     $scope.isValidNumber = Utility.isValidNumber;
     $scope.getCellType = TableFilter.getCellType;
 

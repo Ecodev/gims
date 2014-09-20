@@ -107,6 +107,10 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, $loc
                 update: questionnairesStatus[questionnaire.status],
                 delete: questionnairesStatus[questionnaire.status]
             };
+
+            deferred.resolve(answer);
+        } else if (answer.permissions) {
+            deferred.resolve(answer);
         }
 
         return deferred.promise;
@@ -114,36 +118,27 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, $loc
 
     /**
      * Delete answer considering answer permissions
-     * @param answer
-     */
-    function deleteAnswer(answer) {
-
-        if (answer.id && answer.permissions.delete) {
-            answer.isLoading = true;
-            answer.remove().then(function() {
-                delete(answer.id);
-                delete(answer.displayValue);
-                delete(answer.edit);
-                answer.isLoading = false;
-                refresh(false, true);
-            });
-        }
-    }
-
-    /**
-     * Remove question after retrieving permissions from server if not yet done
      * @param question
      * @param answer
      */
-    function removeAnswer(question, answer) {
-        Restangular.restangularizeElement(null, answer, 'answer');
-        if (_.isUndefined(answer.permissions)) {
-            getPermissions(question, answer).then(function() {
-                deleteAnswer(answer);
-            });
-        } else {
-            deleteAnswer(answer);
-        }
+    function deleteAnswer(question, answer) {
+        getPermissions(question, answer).then(function() {
+            if (answer.id && answer.permissions.delete) {
+                answer.isLoading = true;
+                Restangular.restangularizeElement(null, answer, 'answer');
+                answer.remove().then(function() {
+
+                    delete(answer.id);
+                    delete(answer.valuePercent);
+                    delete(answer.valueAbsolute);
+                    delete(answer.initialValue);
+                    delete(answer.displayValue);
+                    delete(answer.edit);
+                    answer.isLoading = false;
+                    refresh(false, true);
+                });
+            }
+        });
     }
 
     function getSurveysWithSameCode(questionnaires, code) {
@@ -1152,7 +1147,7 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, $loc
 
         // delete answer if no value
         if (answer.id && !Utility.isValidNumber(valueToBeSaved)) {
-            removeAnswer(question, answer);
+            deleteAnswer(question, answer);
             deferred.resolve();
 
             // update
@@ -1774,7 +1769,7 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, $loc
         prepareSectorFilters: prepareSectorFilters,
         questionnaireCanBeSaved: questionnaireCanBeSaved,
         refresh: refresh,
-        removeAnswer: removeAnswer,
+        deleteAnswer: deleteAnswer,
         removeFilter: removeFilter,
         saveAll: saveAll,
         saveAnswer: saveAnswer,
