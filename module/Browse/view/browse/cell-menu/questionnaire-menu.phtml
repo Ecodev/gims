@@ -11,7 +11,7 @@
         <li>
             <a ng-click="saveAll(questionnaire)"
                ng-if="data.mode.isContribute && !questionnaire.id"
-               ng-class="{'disabled' : !checkIfSavableQuestionnaire(questionnaire)}" href>
+               ng-class="{'disabled' : !questionnaireCanBeSaved(questionnaire)}" href>
                 <span class="text-primary"><i class="fa fa-fw fa-save"></i> Save this survey</span>
             </a>
         </li>

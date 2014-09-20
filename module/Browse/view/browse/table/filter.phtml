@@ -8,7 +8,7 @@
             <button class="btn btn-default" ng-if="returnUrl" ng-click="cancel();"><i class="fa fa-gims-back"></i> Back</button>
 
             <!-- Save all the new questionnaires -->
-            <button class="btn btn-primary" ng-if="isEmptyQuestionnaires() || isEmptyFilters()" ng-click="saveAll();" ng-disabled="isLoading || !data.filters && !data.questionnaires"><i class="fa fa-save"></i> Save new elements</button>
+            <button class="btn btn-primary" ng-if="hasUnsavedElement()" ng-click="saveAll();" ng-disabled="isLoading || !data.filters && !data.questionnaires"><i class="fa fa-save"></i> Save new elements</button>
 
             <!-- Clear the selection -->
             <a href class="btn btn-default" ng-click="data.questionnaires=[];data.filters=[];data.filterSet=null;data.country=null;data.filter=null;data.survey=null"><i class="fa fa-eraser"></i> Clear selection</a>
@@ -137,7 +137,7 @@
 
     <!-- Tabs parts -->
     <tabset class="nav-data-centered" ng-if="(data.mode.isSector && data.filter) || data.filters.length && (data.questionnaires.length || data.mode.isContribute)">
-        <tab ng-repeat="part in parts" heading="{{part.name}}" select="data.part = part"></tab>
+        <tab ng-repeat="part in data.parts" heading="{{part.name}}" select="data.part = part"></tab>
     </tabset>
 
 </div>
@@ -203,7 +203,7 @@
                                                 placeholder="Country"
                                                 change-url="false"
                                                 style="width: 100%"
-                                                ng-change="checkQuestionnairesIntegrity();completeQuestionnaire(questionnaire);">
+                                                ng-change="checkAndCompleteQuestionnaire(questionnaire)">
                                             </gims-select>
                                         </ng-form>
                                     </div>
@@ -218,7 +218,7 @@
                             <td ng-repeat="questionnaire in data.questionnaires track by $index" class="text-center">
                                 <ng-form name="questionnaireForm" class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.code.$invalid}">
                                     <div class="input-group-addon"><i class="fa fa-fw fa-gims-survey"></i></div>
-                                    <input ng-disabled="questionnaire.survey.id || questionnaire.isLoading" type="text" class="text-center" placeholder="Code" ng-model="questionnaire.survey.code" name="code" required ng-class="{'error':questionnaire.errors.duplicateCountryCode || questionnaire.errors.codeAndYearDifferent || questionnaireForm.code.$invalid}" ng-blur="checkQuestionnairesIntegrity();completeQuestionnaire(questionnaire);"/>
+                                    <input ng-disabled="questionnaire.survey.id || questionnaire.isLoading" type="text" class="text-center" placeholder="Code" ng-model="questionnaire.survey.code" name="code" required ng-class="{'error':questionnaire.errors.duplicateCountryCode || questionnaire.errors.codeAndYearDifferent || questionnaireForm.code.$invalid}" ng-blur="checkAndCompleteQuestionnaire(questionnaire)"/>
                                 </ng-form>
                             </td>
                         </tr>
@@ -226,13 +226,13 @@
                         <!-- Survey's year row -->
                         <tr class="active" ng-if="data.questionnaires.length">
                             <td>
-                                <button class="btn btn-default btn-sm pull-right" ng-if="data.questionnaires.length > 1 && !questionnairesAreSorted" ng-click="orderQuestionnaires(false)"><i class="fa fa-sort-amount-asc fa-rotate-270"></i> Sort by year</button>
+                                <button class="btn btn-default btn-sm pull-right" ng-if="data.questionnaires.length > 1" ng-click="orderQuestionnaires(false)"><i class="fa fa-sort-amount-asc fa-rotate-270"></i> Sort by year</button>
                             </td>
                             <td ng-if="data.selectedQuestionnaireForLabels" class="text-center">{{data.selectedQuestionnaireForLabels.survey.year}}</td>
                             <td ng-repeat="questionnaire in data.questionnaires track by $index">
                                 <ng-form name="questionnaireForm" class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.year.$invalid}">
                                     <div class="input-group-addon"><i class="fa fa-fw fa-gims-survey"></i></div>
-                                    <input ng-disabled="questionnaire.survey.id || questionnaire.isLoading" type="number" class="text-center" placeholder="Year" ng-model="questionnaire.survey.year" name="year" min="1980" max="2015" size="4" required ng-class="{'error': questionnaire.errors.codeAndYearDifferent || questionnaireForm.year.$invalid}" ng-blur="checkQuestionnairesIntegrity();completeQuestionnaire(questionnaire);"/>
+                                    <input ng-disabled="questionnaire.survey.id || questionnaire.isLoading" type="number" class="text-center" placeholder="Year" ng-model="questionnaire.survey.year" name="year" min="1980" max="2015" size="4" required ng-class="{'error': questionnaire.errors.codeAndYearDifferent || questionnaireForm.year.$invalid}" ng-blur="checkAndCompleteQuestionnaire(questionnaire)"/>
                                </ng-form>
                            </td>
                         </tr>

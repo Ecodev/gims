@@ -3,6 +3,8 @@ angular.module('myApp').controller('QuestionnaireMenuCtrl', function($scope, que
 
     $scope.questionnaire = questionnaire;
     $scope.data = TableFilter.getData();
+    $scope.saveAll = TableFilter.saveAll;
+    $scope.questionnaireCanBeSaved = TableFilter.questionnaireCanBeSaved;
 
     /**
      * Remove column (questionnaire)
@@ -10,7 +12,7 @@ angular.module('myApp').controller('QuestionnaireMenuCtrl', function($scope, que
      */
     $scope.removeQuestionnaire = function(questionnaire) {
         _.remove($scope.data.questionnaires, function(q) {
-            return q.id == questionnaire.id;
+            return q === questionnaire;
         });
         TableFilter.updateUrl('questionnaires');
     };
