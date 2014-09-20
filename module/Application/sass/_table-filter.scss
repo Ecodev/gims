@@ -30,3 +30,7 @@
         }
     }
 }
+
+.is-computing .computable {
+    @extend .text-primary;
+}
