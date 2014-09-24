@@ -11,7 +11,7 @@
             <button class="btn btn-primary" ng-if="hasUnsavedElement()" ng-click="saveAll();" ng-disabled="isLoading || !data.filters && !data.questionnaires"><i class="fa fa-save"></i> Save new elements</button>
 
             <!-- Clear the selection -->
-            <a href class="btn btn-default" ng-click="data.questionnaires=[];data.filters=[];data.filterSet=null;data.country=null;data.filter=null;data.survey=null"><i class="fa fa-eraser"></i> Clear selection</a>
+            <a href class="btn btn-default" ng-click="data.questionnaires = []; data.filters = []; data.filterSet = null; data.country = null; data.filter = null; data.survey = null"><i class="fa fa-eraser"></i> Clear selection</a>
 
             <!-- Hide/Show selection tools and/or children filters -->
             <button class="btn btn-default" ng-click="expandSelection = !expandSelection"><i class="fa" ng-class="{'fa-compress':expandSelection,'fa-expand text-primary':!expandSelection}"></i> Selection</button>
@@ -324,38 +324,8 @@
                                             </div>
                                         </ng-form>
                                     </div>
-                                    <div ng-class="{'col-md-4': questionnaire.showLabels, 'col-md-12' : !questionnaire.showLabels}">
-
-                                        <!-- Display answers / formulas in *contribute* data.mode -->
-                                        <ng-form name="valueForm" ng-if="!data.mode.isSector || filter.level > 0">
-                                            <div class="input-group input-group-sm">
-                                                <!-- add-on buttons on input fields -->
-                                                <gims-cell-menu questionnaire="questionnaire" filter="filter" part="data.part"></gims-cell-menu>
-
-                                                <!-- input for edit answer -->
-                                                <input ng-if="questionnaire.survey.questions[filter.id].value"
-                                                       class="form-control text-center"
-                                                       ng-class="{'error': valueForm.value.$invalid, 'excluded-from-computing': questionnaire.survey.questions[filter.id].filter.values[data.part.id].isExcludedFromComputing}"
-                                                       name="value"
-                                                       type="number"
-                                                       min="0"
-                                                       gims-select-token part="data.part" questionnaire="questionnaire" filter="filter"
-                                                       ng-max="questionnaire.survey.questions[filter.id].max"
-                                                       placeholder="{{questionnaire.survey.questions[filter.id].filter.values[data.part.id].displayValue}}"
-                                                       question="questionnaire.survey.questions[filter.id]"
-                                                       ng-focus="initQuestionAbsolute(questionnaire.survey.questions[filter.id]);setAnswerInitialValue(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[data.part.id]); getPermissions(questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[data.part.id])"
-                                                       ng-blur="saveAnswer(questionnaire.survey.questions[filter.id].answers[data.part.id], questionnaire.survey.questions[filter.id], filter, questionnaire, data.part)"
-                                                       ng-model="questionnaire.survey.questions[filter.id].answers[data.part.id].displayValue"
-                                                       ng-readonly="!questionnairesStatus[questionnaire.status] ||
-                                                                    questionnaire.survey.questions[filter.id].answers[data.part.id].permissions.update === false ||
-                                                                    data.mode.isSector && filter.level <= 1 ||
-                                                                    !data.mode.isContribute"
-                                                        />
-
-                                                <span class="input-group-addon" ng-if="questionnaire.survey.questions[filter.id].isAbsolute === false"><i class="fa fa-fw">%</i></span>
-                                                <span class="input-group-addon" ng-if="questionnaire.survey.questions[filter.id].isAbsolute === true"><i class="fa fa-plus-square-o fa-fw"></i></span>
-                                            </div>
-                                        </ng-form>
+                                    <div ng-class="{'col-md-4': questionnaire.showLabels, 'col-md-12' : !questionnaire.showLabels}" gims-select-token questionnaire="questionnaire" filter="filter" part="data.part" question="questionnaire.survey.questions[filter.id]">
+                                        <gims-cell questionnaire="questionnaire" filter="filter" part="data.part"></gims-cell>
                                     </div>
                                 </div>
                             </td>

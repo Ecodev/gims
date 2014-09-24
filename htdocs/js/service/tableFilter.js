@@ -1,7 +1,7 @@
 /**
  * Service with common functions to manage /browse/table/filter and its contextual menu
  */
-angular.module('myApp.services').factory('TableFilter', function($http, $q, $location, $timeout, Restangular, questionnairesStatus, Percent, Utility) {
+angular.module('myApp.services').factory('TableFilter', function($rootScope, $http, $q, $location, $timeout, Restangular, questionnairesStatus, Percent, Utility) {
     'use strict';
 
     /**
@@ -476,6 +476,9 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, $loc
                 });
                 data.isComputing = false;
                 previousQuery = null;
+
+                // Notify that at this point, we have everything to fully display tableFilter
+                $rootScope.$emit('gims-tablefilter-computed');
             });
 
             // Also get questionnaireUsages for all questionnaires, if showing them
@@ -1153,19 +1156,13 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, $loc
             // update
         } else if (answer.id) {
 
-            if (answer.permissions) {
+            getPermissions(question, answer).then(function() {
                 updateAnswer(answer, questionnaire).then(function() {
                     answer.initialValue = valueToBeSaved;
+                    answer.displayValue = question.isAbsolute ? answer[question.value] : Percent.fractionToPercent(answer[question.value]);
                     deferred.resolve(answer);
                 });
-            } else {
-                getPermissions(question, answer).then(function() {
-                    updateAnswer(answer, questionnaire).then(function() {
-                        answer.initialValue = valueToBeSaved;
-                        deferred.resolve(answer);
-                    });
-                });
-            }
+            });
 
             // create answer, if allowed by questionnaire
         } else if (_.isUndefined(answer.id) && Utility.isValidNumber(valueToBeSaved) && questionnairesStatus[questionnaire.status]) {
@@ -1176,6 +1173,7 @@ angular.module('myApp.services').factory('TableFilter', function($http, $q, $loc
             getOrSaveQuestion(question).then(function(question) {
                 createAnswer(answer, question, {part: part}).then(function() {
                     answer.initialValue = valueToBeSaved;
+                    answer.displayValue = question.isAbsolute ? answer[question.value] : Percent.fractionToPercent(answer[question.value]);
                     deferred.resolve(answer);
                     refresh(false, true);
                 });

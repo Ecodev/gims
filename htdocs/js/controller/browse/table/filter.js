@@ -17,7 +17,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.questionnairesStatus = questionnairesStatus;
 
     // Expose functions to scope
-    $scope.getPermissions = TableFilter.getPermissions;
     $scope.refresh = TableFilter.refresh;
     $scope.toggleShowQuestionnaireUsages = TableFilter.toggleShowQuestionnaireUsages;
     $scope.saveAll = TableFilter.saveAll;
@@ -25,9 +24,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.isValidId = TableFilter.isValidId;
     $scope.savePopulation = TableFilter.savePopulation;
     $scope.setInitialValue = TableFilter.setInitialValue;
-    $scope.saveAnswer = TableFilter.saveAnswer;
     $scope.getFiltersByLevel = TableFilter.getFiltersByLevel;
-    $scope.initQuestionAbsolute = TableFilter.initQuestionAbsolute;
     $scope.addEquipment = TableFilter.addEquipment;
     $scope.addQuestionnaire = TableFilter.addQuestionnaire;
     $scope.removeFilter = TableFilter.removeFilter;
@@ -189,20 +186,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         }) || _.find($scope.data.filters, function(filter) {
             return !TableFilter.isValidId(filter);
         }));
-    };
-
-    /**
-     * Set the value of a input (ng-model) before the value is changed
-     * Used in function saveAnswer().
-     * Avoid to do some ajax requests when we just blur field without changing value.
-     * @param question
-     * @param answer
-     */
-    $scope.setAnswerInitialValue = function(question, answer, part) {
-        answer.initialValue = answer[question.value];
-        if (!answer.part && part) {
-            answer.part = part;
-        }
     };
 
     $scope.saveComment = function(questionnaire) {
