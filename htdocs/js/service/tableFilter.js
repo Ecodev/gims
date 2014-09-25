@@ -1746,6 +1746,24 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         return deferred.promise;
     }
 
+    /**
+     * Toggle showLabels for all questionnaire, or only the one specified
+     * @param {type} questionnaire
+     * @returns {undefined}
+     */
+    function toggleShowLabels(questionnaire) {
+        if (questionnaire) {
+            questionnaire.showLabels = !questionnaire.showLabels;
+        } else {
+            var firstQuestionnaireStatus = !data.questionnaires[0].showLabels;
+            _.forEach(data.questionnaires, function(questionnaire) {
+                questionnaire.showLabels = firstQuestionnaireStatus;
+            });
+        }
+
+        $rootScope.$emit('gims-tablefilter-show-labels-toggled');
+    }
+
     // Return public API
     return {
         init: init,
@@ -1774,6 +1792,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         savePopulation: savePopulation,
         saveQuestion: saveQuestion,
         setInitialValue: setInitialValue,
+        toggleShowLabels: toggleShowLabels,
         toggleShowQuestionnaireUsages: toggleShowQuestionnaireUsages,
         updateUrl: updateUrl
     };

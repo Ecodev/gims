@@ -29,6 +29,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.addQuestionnaire = TableFilter.addQuestionnaire;
     $scope.removeFilter = TableFilter.removeFilter;
     $scope.saveQuestion = TableFilter.saveQuestion;
+    $scope.toggleShowLabels = TableFilter.toggleShowLabels;
 
     /**************************************************************************/
     /***************************************** First execution initialisation */
@@ -164,13 +165,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /**************************************************************************/
     /******************************************************** Scope functions */
     /**************************************************************************/
-
-    $scope.toggleOriginalDenominations = function() {
-        var firstQuestionnaireStatus = !$scope.data.questionnaires[0].showLabels;
-        _.forEach($scope.data.questionnaires, function(questionnaire) {
-            questionnaire.showLabels = firstQuestionnaireStatus;
-        });
-    };
 
     $scope.orderQuestionnaires = function(reverse) {
         $scope.data.questionnaires = $filter('orderBy')($scope.data.questionnaires, 'survey.year', reverse);

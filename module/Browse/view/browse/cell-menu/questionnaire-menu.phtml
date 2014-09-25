@@ -25,7 +25,7 @@
 
         <!-- Questions labels edition button, display an additionnal column -->
         <li ng-if="data.mode.isContribute">
-            <a ng-click="questionnaire.showLabels = !questionnaire.showLabels" href>
+            <a ng-click="toggleShowLabels(questionnaire)" href>
                 <i class="fa fa-question fa-fw"></i>
                 <span ng-if="questionnaire.showLabels">Hide</span>
                 <span ng-if="!questionnaire.showLabels">Show</span>

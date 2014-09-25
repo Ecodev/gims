@@ -5,6 +5,7 @@ angular.module('myApp').controller('QuestionnaireMenuCtrl', function($scope, que
     $scope.data = TableFilter.getData();
     $scope.saveAll = TableFilter.saveAll;
     $scope.questionnaireCanBeSaved = TableFilter.questionnaireCanBeSaved;
+    $scope.toggleShowLabels = TableFilter.toggleShowLabels;
 
     /**
      * Remove column (questionnaire)

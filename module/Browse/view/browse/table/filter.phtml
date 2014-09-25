@@ -17,7 +17,7 @@
             <button class="btn btn-default" ng-click="expandSelection = !expandSelection"><i class="fa" ng-class="{'fa-compress':expandSelection,'fa-expand text-primary':!expandSelection}"></i> Selection</button>
 
             <!-- Show all original nominations -->
-            <button class="btn btn-default" ng-click="toggleOriginalDenominations()"><i class="fa fa-question"></i> Show/Hide question labels</button>
+            <button class="btn btn-default" ng-click="toggleShowLabels()"><i class="fa fa-question"></i> Show/Hide question labels</button>
 
             <?php echo $this->helpButton(); ?>
         </form>
@@ -324,7 +324,7 @@
                                             </div>
                                         </ng-form>
                                     </div>
-                                    <div ng-class="{'col-md-4': questionnaire.showLabels, 'col-md-12' : !questionnaire.showLabels}" gims-select-token questionnaire="questionnaire" filter="filter" part="data.part" question="questionnaire.survey.questions[filter.id]">
+                                    <div class="col-md-12" gims-resize-for-labels gims-select-token questionnaire="questionnaire" filter="filter" part="data.part" question="questionnaire.survey.questions[filter.id]">
                                         <gims-cell questionnaire="questionnaire" filter="filter" part="data.part"></gims-cell>
                                     </div>
                                 </div>
