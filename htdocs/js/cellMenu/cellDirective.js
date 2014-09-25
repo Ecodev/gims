@@ -2,7 +2,7 @@
  * Directive to show a filter value with its menu and everything.
  * Highly optimized for performance, $watch() are avoided at all cost
  */
-angular.module('myApp.directives').directive('gimsCell', function($rootScope, questionnairesStatus, TableFilter) {
+angular.module('myApp.directives').directive('gimsCell', function($rootScope, $dropdown, questionnairesStatus, TableFilter) {
 
     // A helper function to call $setValidity and return the value / undefined,
     // a pattern that is repeated a lot in the input validation logic.
@@ -30,7 +30,11 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, qu
         restrict: 'E',
         template:
                 '<div class="input-group input-group-sm">' +
-                '    <gims-cell-menu questionnaire="questionnaire" filter="filter" part="part"></gims-cell-menu>' +
+                '    <span class="input-group-btn">' +
+                '        <button type="button" class="btn btn-default dropdown-toggle">' +
+                '            <i class="type-icon fa fa-fw fa-angle-down"></i>' +
+                '        </button>' +
+                '    </span>' +
                 '    <input' +
                 '        type="number"' +
                 '        class="form-control text-center"' +
@@ -56,6 +60,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, qu
 
             var input = element.find('input');
             var unitIcon = element.find('.unit-icon');
+            var typeIcon = element.find('.type-icon').get(0);
             var inputController = input.controller('ngModel');
 
             scope.questionnairesStatus = questionnairesStatus;
@@ -164,7 +169,55 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, qu
                 } else {
                     input.removeClass('excluded-from-computing');
                 }
+
+                // Update the type icon
+                var type = TableFilter.getCellType(scope.questionnaire, scope.filter, scope.part.id);
+                var classes;
+                switch (type) {
+                    case 'loading':
+                        classes = 'fa fa-fw fa-gims-loading';
+                        break;
+                    case 'error':
+                        classes = 'fa fa-fw fa-warning text-warning';
+                        break;
+                    case 'answer':
+                        classes = 'fa fa-fw fa-question';
+                        break;
+                    case 'rule':
+                        classes = 'fa fa-fw fa-gims-rule computable';
+                        break;
+                    case 'summand':
+                        classes = 'fa fa-fw fa-gims-summand computable';
+                        break;
+                    case 'child':
+                        classes = 'fa fa-fw fa-gims-child computable';
+                        break;
+                    default:
+                        classes = 'fa fa-fw fa-angle-down';
+                }
+                typeIcon.className = classes;
             }
+
+            // Open menu when clicking button
+            var button = element.find('button');
+            button.bind('click', function() {
+                $dropdown.open({
+                    button: button,
+                    templateUrl: '/template/browse/cell-menu/menu',
+                    controller: 'CellMenuCtrl',
+                    resolve: {
+                        questionnaire: function() {
+                            return scope.questionnaire;
+                        },
+                        filter: function() {
+                            return scope.filter;
+                        },
+                        part: function() {
+                            return scope.part;
+                        }
+                    }
+                });
+            });
 
             // When we get all data, apply custom visual style
             $rootScope.$on('gims-tablefilter-computed', updateVisualStyle);
