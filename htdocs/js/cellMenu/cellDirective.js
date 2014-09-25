@@ -44,7 +44,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, qu
                 '            data.mode.isSector && filter.level <= 1 ||' +
                 '            !data.mode.isContribute"' +
                 '    />' +
-                '    <span class="input-group-addon"><i class="fa fa-fw">%</i></span>' +
+                '    <span class="input-group-addon"><i class="unit-icon fa fa-fw">%</i></span>' +
                 '</div>',
         replace: true,
         scope: {
@@ -55,7 +55,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, qu
         link: function(scope, element) {
 
             var input = element.find('input');
-            var unitIcon = element.find('i');
+            var unitIcon = element.find('.unit-icon');
             var inputController = input.controller('ngModel');
 
             scope.questionnairesStatus = questionnairesStatus;
