@@ -496,7 +496,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         var questionnairesIds = _.compact(_.pluck(data.questionnaires, 'id')).join(','); // compact remove falsey values
 
         $http.get('/api/questionnaireUsage/compute', {
-            timeout: previousQuery.promise,
+            timeout: previousQuery ? previousQuery.promise : null,
             params: {
                 questionnaires: questionnairesIds
             }
