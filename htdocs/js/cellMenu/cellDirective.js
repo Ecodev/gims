@@ -43,10 +43,6 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
                 '        ng-focus="focus()"' +
                 '        ng-blur="blur()"' +
                 '        ng-model="questionnaire.survey.questions[filter.id].answers[part.id].displayValue"' +
-                '        ng-readonly="!questionnairesStatus[questionnaire.status] ||' +
-                '            questionnaire.survey.questions[filter.id].answers[part.id].permissions.update === false ||' +
-                '            data.mode.isSector && filter.level <= 1 ||' +
-                '            !data.mode.isContribute"' +
                 '    />' +
                 '    <span class="input-group-addon"><i class="unit-icon fa fa-fw">%</i></span>' +
                 '</div>',
@@ -62,9 +58,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
             var unitIcon = element.find('.unit-icon');
             var typeIcon = element.find('.type-icon').get(0);
             var inputController = input.controller('ngModel');
-
-            scope.questionnairesStatus = questionnairesStatus;
-            scope.data = TableFilter.getData();
+            var data = TableFilter.getData();
 
             /**
              * When entering the input
@@ -221,6 +215,30 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
 
             // When we get all data, apply custom visual style
             $rootScope.$on('gims-tablefilter-computed', updateVisualStyle);
+
+            /**
+             * Apply the readonly attribute according to current permissions and mode
+             */
+            function updatePermissions() {
+                var isReadonly = !data.mode.isContribute ||
+                        !questionnairesStatus[scope.questionnaire.status] ||
+                        data.mode.isSector && scope.filter.level <= 1;
+
+                // In addition, if we also know permissions for answer, check it
+                if (scope.questionnaire.survey.questions[scope.filter.id].answers[scope.part.id].permissions) {
+                    isReadonly = isReadonly || scope.questionnaire.survey.questions[scope.filter.id].answers[scope.part.id].permissions.update === false;
+                }
+
+                if (isReadonly) {
+                    input.attr('readonly', 'readonly');
+                } else {
+                    input.removeAttr('readonly');
+                }
+            }
+
+            // Initialize immediately, and react to permissions change if any
+            updatePermissions();
+            $rootScope.$on('gims-tablefilter-permissions-changed', updatePermissions);
         }
     };
 });

@@ -76,6 +76,9 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     function getPermissions(question, answer, questionnaire) {
 
         var deferred = $q.defer();
+        deferred.promise.then(function() {
+            $rootScope.$emit('gims-tablefilter-permissions-changed');
+        });
 
         if (answer.id && _.isUndefined(answer.permissions)) {
             Restangular.one('answer', answer.id).get({fields: 'permissions'}).then(function(newAnswer) {
