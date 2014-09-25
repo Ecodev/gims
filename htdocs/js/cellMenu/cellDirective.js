@@ -38,7 +38,6 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
                 '    <input' +
                 '        type="number"' +
                 '        class="form-control text-center"' +
-                '        placeholder="{{questionnaire.survey.questions[filter.id].filter.values[part.id].displayValue}}"' +
                 '        ng-change="updateValidState()"' +
                 '        ng-focus="focus()"' +
                 '        ng-blur="blur()"' +
@@ -190,6 +189,9 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
                         classes = 'fa fa-fw fa-angle-down';
                 }
                 typeIcon.className = classes;
+
+                var placeholderValue = scope.questionnaire.survey.questions[scope.filter.id].filter.values[scope.part.id].displayValue;
+                input.attr('placeholder', placeholderValue);
             }
 
             // Open menu when clicking button
@@ -225,8 +227,9 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
                         data.mode.isSector && scope.filter.level <= 1;
 
                 // In addition, if we also know permissions for answer, check it
-                if (scope.questionnaire.survey.questions[scope.filter.id].answers[scope.part.id].permissions) {
-                    isReadonly = isReadonly || scope.questionnaire.survey.questions[scope.filter.id].answers[scope.part.id].permissions.update === false;
+                var answerPermissions = scope.$eval('questionnaire.survey.questions[filter.id].answers[part.id].permissions.update');
+                if (answerPermissions === false) {
+                    isReadonly = true;
                 }
 
                 if (isReadonly) {
