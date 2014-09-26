@@ -311,7 +311,7 @@
                             <!-- Questionnaires columns -->
                             <td ng-repeat="questionnaire in data.questionnaires track by $index">
                                 <div class="row">
-                                    <div class="col-md-8" ng-if="questionnaire.showLabels">
+                                    <div class="col-md-8" gims-if="questionnaire.showLabels">
                                         <ng-form name="labelForm">
                                             <div class="input-group input-group-sm">
                                                 <span class="input-group-addon"><i class="fa" ng-class="{'fa-question':!data.selectedQuestionnaireForLabels.survey.questions[filter.id].isLoading,'fa-gims-loading':data.selectedQuestionnaireForLabels.survey.questions[filter.id].isLoading}"></i></span>
