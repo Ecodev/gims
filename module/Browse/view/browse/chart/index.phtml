@@ -4,18 +4,6 @@
     <div class="navbar navbar-default hidden-print">
         <a class="navbar-brand" href="#">Chart</a>
         <form class="navbar-form">
-            <a ng-if="tabs.geonames.length == 1" class="btn btn-default" target="_blank" href="/contribute/nsa?usedCountry={{tabs.geonames[0].country.id}}&returnUrl={{currentUrl}}"><i class="fa fa-gims-add"></i> Create sector dataset</a>
-            <div ng-if="tabs.geonames.length > 1" class="btn-group" dropdown>
-                <button type="button" class="btn btn-default dropdown-toggle">
-                    <i class="fa fa-gims-add"></i> Create sector dataset <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li ng-repeat="geoname in tabs.geonames">
-                        <a  target="_blank" href="/contribute/nsa?usedCountry={{geoname.country.id}}&returnUrl={{currentUrl}}">{{geoname.name}}</a>
-                    </li>
-                </ul>
-            </div>
-
             <?php echo $this->helpButton(); ?>
         </form>
     </div>
