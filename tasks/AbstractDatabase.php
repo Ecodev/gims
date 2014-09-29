@@ -63,7 +63,7 @@ STRING;
         $database = $dbConfig['dbname'];
 
         echo "dumping $dumpFile...\n";
-        $dumpCmd = "pg_dump --host localhost --username $username --format=custom $database | gzip > \"$dumpFile\"";
+        $dumpCmd = "pg_dump --host localhost --username $username --format=custom $database --no-privileges | gzip > \"$dumpFile\"";
         self::executeLocalCommand($dumpCmd);
     }
 
