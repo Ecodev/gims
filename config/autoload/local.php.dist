@@ -52,6 +52,4 @@ return array(
 
     'emailOverride' => 'your@email.com',
     'domain' => 'gims.lan'
-    //,'bodyCssClass' => 'local' // local or demo
-
 );
