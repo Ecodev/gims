@@ -1,17 +1,36 @@
-angular.module('myApp').controller('UserCtrl', function($scope, $http, authService, $modal) {
+angular.module('myApp').controller('UserCtrl', function($scope, $http, authService, $modal, $rootScope, requestNotification, $window, $analytics) {
     'use strict';
+    $scope.getRequestCount = requestNotification.getRequestCount;
+
+    function userLoggedIn(user) {
+        if ($window.ga) {
+            $window.ga('set', 'dimension1', user.id + ': ' + user.name);
+            $analytics.eventTrack('logged', {category: 'login', label: 'logged'});
+        }
+
+        $scope.user = user;
+        $rootScope.user = $scope.user;
+        authService.loginConfirmed();
+        $rootScope.$emit('gims-loginConfirmed', user);
+    }
+
+    // Reload existing logged in user (eg: when refreshing page)
+    var loadUserPromise = $http.get('/user/login');
+    loadUserPromise.success(function(data) {
+        if (data.status == 'logged') {
+            userLoggedIn(data);
+        }
+    });
 
     // Intercept the event broadcasted by http-auth-interceptor when a request get a HTTP 401 response
     $scope.$on('event:auth-loginRequired', function() {
-        $scope.promptLogin();
-    });
 
-    // Reload existing logged in user (eg: when refreshing page)
-    $http.get('/user/login').success(function(data) {
-        if (data.status == 'logged')
-        {
-            $scope.user = data;
-        }
+        // If we already checked with server, but are still not logged in, need to show prompt
+        loadUserPromise.then(function() {
+            if (!$rootScope.user) {
+                $scope.promptLogin();
+            }
+        });
     });
 
     $scope.promptLogin = function() {
@@ -21,26 +40,22 @@ angular.module('myApp').controller('UserCtrl', function($scope, $http, authServi
             controller: 'LoginWindowCtrl'
         });
 
-        modalInstance.result.then(function(user) {
-            $scope.user = user;
-            authService.loginConfirmed();
-        });
+        modalInstance.result.then(userLoggedIn);
     };
 
 });
 
-
-angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $modalInstance, $log) {
+angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $modalInstance, $log, $rootScope) {
     'use strict';
 
-    function resetErrors()
-    {
+    function resetErrors() {
         $scope.invalidUsernamePassword = false;
         $scope.userExisting = false;
     }
     resetErrors();
 
-    $scope.cancelLogin = function() {
+    $scope.cancelLogin = function()
+    {
         $modalInstance.dismiss();
     };
 
@@ -56,9 +71,9 @@ angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $m
             {
                 $scope.invalidUsernamePassword = false;
                 $scope.user = data;
+                $rootScope.user = $scope.user;
                 $modalInstance.close(data);
-            }
-            else if (data.status == 'failed')
+            } else if (data.status == 'failed')
             {
                 $scope.invalidUsernamePassword = true;
             }
@@ -85,5 +100,13 @@ angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $m
         });
     };
 
-});
+    $scope.toLowerCase = function() {
+        if ($scope.login.identity) {
+            $scope.login.identity = $scope.login.identity.toLowerCase();
+        }
 
+        if ($scope.register.email) {
+            $scope.register.email = $scope.register.email.toLowerCase();
+        }
+    };
+});

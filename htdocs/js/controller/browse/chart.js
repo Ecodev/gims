@@ -1,80 +1,337 @@
-angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $location, $http, $timeout, Restangular, $q) {
+angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $location, $http, $timeout, Restangular, $q, Chart, ChartCache, $rootScope) {
     'use strict';
 
-    $scope.Math = window.Math;
-    $scope.usedFilters = {};
-    $scope.ignoredElements = [];
-    $scope.indexedElements = {};
-    $scope.firstExecution = true;
-    $scope.countryQueryParams = {perPage: 500};
-    $scope.filterSetQueryParams = {fields: 'filters.genericColor,filters.children.__recursive'};
+    /**************************************************************************/
+    /* VARIABLE INITIALISATION ************************************************/
+    /**************************************************************************/
+    $scope.activeTab = {};
+    $scope.tabs = {};
+    $scope.panelTabs = {};
+    $scope.ignoredElements = null;
+    $scope.concatenatedIgnoredElements = [];
+    $scope.geonameParams = {perPage: 500, fields: 'country'};
+    $scope.filterSetParams = {fields: 'filters.genericColor,filters.color'};
+    $scope.indexedElements = ChartCache.getCache();
+    Chart.setCache($scope.indexedElements);
+
+    /**************************************************************************/
+    /* WATCHERS ***************************************************************/
+    /**************************************************************************/
+
+    $scope.$watch(function() {
+        return $location.url();
+    }, function() {
+        $scope.returnUrl = $location.search().returnUrl;
+        $scope.currentUrl = encodeURIComponent($location.url());
+    });
+
+    // Reload panel if exists in URL
+    var originalUrlParameters = _.cloneDeep($location.search());
+    var panel = originalUrlParameters.panel;
+    if (panel) {
+        $scope.panelOpened = true;
+        $scope.activeTab[panel] = true;
+    }
+
+    // When panel is closed or changed, update URL
+    $scope.$watch('[activeTab, panelOpened]', function() {
+        // suppress panel in URL
+        $location.search('panel', null);
+
+        // select currently active panel
+        if ($scope.panelOpened) {
+            _.forEach($scope.activeTab, function(isActive, panel) {
+                if (isActive) {
+                    $location.search('panel', panel);
+                }
+            });
+        }
+
+    }, true);
+
+    $scope.$watch('panelTabs.target', function() {
+        $location.search('target', $scope.panelTabs.target);
+    });
+
+    $scope.$watch('panelTabs.overridable', function() {
+        $location.search('overridable', $scope.panelTabs.overridable);
+    });
+
+    $scope.$watch('panelTabs.reference', function() {
+
+        if ($scope.panelTabs.reference) {
+            var id = $scope.panelTabs.reference.id ? $scope.panelTabs.reference.id : $scope.panelTabs.reference;
+            $location.search('reference', id);
+            Restangular.one('filter', id).get({fields: 'children'}).then(function(filters) {
+                $scope.panelTabs.referenceChildren = filters.children;
+            });
+        }
+
+    });
+
+    $scope.$watch('tabs.filterSets', function() {
+        var filters = [];
+        _.forEach($scope.tabs.filterSets, function(filterSet) {
+            filters = filters.concat(filterSet.filters);
+        });
+
+        $scope.tabs.filters = filters;
+    });
+
+    $scope.$watch('tabs.filters', function(newFilters, oldFilters) {
+        var removedFilters = _.map(_.difference(_.pluck(oldFilters, 'id'), _.pluck(newFilters, 'id')), function(filterId) {
+            return {id: filterId};
+        });
+        var addedFilters = _.map(_.difference(_.pluck(newFilters, 'id'), _.pluck(oldFilters, 'id')), function(filterId) {
+            return {id: filterId};
+        });
+
+        ChartCache.removeFilters(removedFilters);
+
+        // filter series that are no more used in chart
+        Chart.removeSeries(removedFilters);
+        refreshNormalSeries(addedFilters);
+
+        if (addedFilters.length > 0) {
+            initIgnoredElements(addedFilters);
+        } else {
+            Chart.updateChart();
+        }
+
+        if ($scope.pointSelected) {
+            retrieveFiltersAndValues($scope.pointSelected.questionnaire);
+        }
+    });
 
     /**
-     * Executes when country, part or filterset are changed
-     * When filter filterset is changed, rebuilds the list of the hFilters used.
+     * Executes when geoname, part or filter set are changed
      */
-    $scope.$watch('{country:country.id, part:part.id, filterSet:filterSet}', function(newObj, oldObj) {
-        if ($scope.country && $scope.part && $scope.filterSet) {
-
-            // When filter filterset is changed, rebuilds the list of the hFilters used.
-            // Needed to send only a request for all hFilters at once and then assign to filter to whith hFilter they are assigned.
-            if (newObj.filterSet != oldObj.filterSet) {
-                var newUsedFilters = {};
-                _.forEach($scope.filterSet, function(filterSet) {
-                    _.forEach(filterSet.filters, function(filter) {
-                        newUsedFilters[filter.id] = filter.genericColor;
-                    });
-                });
-                $scope.usedFilters = newUsedFilters;
-
-                // remove all filters that are nos used by current usedFilters
-                _.forEach($scope.indexedElements, function(questionnaire) { // select first questionnaire they return false to break and avoid to loop all questionnaires
-                    questionnaire.hFilters = {};
-                    _.forEach(questionnaire.filters, function(filter) {
-                        var found = false;
-                        _.forEach(filter.filter.hFilters, function(hFilter, hFilterId) {
-                            if ($scope.usedFilters[hFilterId]) {
-                                found = true;
-                            }
-                        });
-
-                        if (!found) {
-                            _.forEach($scope.indexedElements, function(questionnaireBis, questionnaireBisId) {
-                                if (!_.isUndefined($scope.indexedElements[questionnaireBisId].filters)) {
-                                    delete($scope.indexedElements[questionnaireBisId].filters[filter.filter.id]);
-                                }
-                            });
-                        }
-                    });
-                    $scope.getIgnoredElements(true);
-                    return false;
-                });
-            }
-
-            var callback = function() {
-                if ($scope.pointSelected) {
-                    $scope.retrieveFiltersAndValues($scope.pointSelected.questionnaire);
-                }
-                $scope.initIgnoredElementsFromUrl();
-            };
-            $scope.refresh(false, callback);
-        }
+    $scope.$watch('tabs.part', function() {
+        refreshNormalSeries(null);
+        initIgnoredElements($scope.tabs.filters);
     }, true);
 
     /**
-     * Executes when a point is selected
+     * Executes when geoname, part or filter set are changed
      */
-    $scope.$watch('pointSelected', function(pointSelected) {
-        // We throw an window.resize event to force Highcharts to reflow and adapt to its new size
+    $scope.$watch('tabs.geonames', function(newGeoname, oldGeoname) {
+
+        if (oldGeoname) {
+            getIgnoredElements(true);
+            $scope.pointSelected = null;
+        }
+
+        $scope.geonameIds = '?geonames=' + _.pluck($scope.tabs.geonames, 'id').join(',');
+        refreshNormalSeries(null);
+        initIgnoredElements($scope.tabs.filters);
+    }, true);
+
+    $scope.$watch('panelOpened', function() {
         $timeout(function() {
             jQuery(window).resize();
         }, 350); // 350 to resize after animation of panel
-
-        if (pointSelected) {
-            // select point and then recover the cached questionnaire by reference
-            $scope.retrieveFiltersAndValues($scope.pointSelected.questionnaire);
-        }
     });
+
+    /**
+     * Watch chart service notifications about changer selected point
+     */
+    $rootScope.$on('gims-chart-pointSelected', function(event, pointSelected) {
+        $scope.$apply(function() {
+            $scope.setPointSelected(pointSelected.id, pointSelected.questionnaire, pointSelected.name, pointSelected.filter);
+            $scope.panelOpened = true;
+            $scope.activeTab.filters = true;
+        });
+    });
+
+    /**
+     * Returns whether the chart has at least one adjusted line
+     * @param {chart} chart
+     * @returns {boolean}
+     */
+    function hasAdjustedLines(chart) {
+        return !!_.find(chart.series, function(serie) {
+            if (serie.isAdjusted) {
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Create new object to fire $watch listener on highChart directive
+     * ChartObj is not used because addSeries() function dont save customized attributes like id, isAdjusted, isIgnored.
+     * Use chart.series because all data is kept as submitted.
+     */
+    var firstLoad = true;
+    $rootScope.$on('gims-chart-modified', function(event, chart) {
+        $scope.chart = _.cloneDeep(chart);
+        $scope.chart.hasAdjustedLines = hasAdjustedLines($scope.chart);
+
+        // Reload projection if exists in original URL
+        if (firstLoad && $scope.chart.series.length) {
+            firstLoad = false;
+            $scope.panelTabs.reference = originalUrlParameters.reference;
+            $scope.panelTabs.target = originalUrlParameters.target;
+            $scope.panelTabs.overridable = originalUrlParameters.overridable;
+
+            if (originalUrlParameters.reference && originalUrlParameters.target && originalUrlParameters.overridable) {
+                refreshAlternativeSeries(null, false);
+            }
+        }
+
+    });
+
+    /**************************************************************************/
+    /* SCOPE FUNCTIONS ********************************************************/
+    /**************************************************************************/
+
+    /**
+     * Inspect $scope.indexedElements to find ignored elements and update Url if refreshUrl is set to true.
+     *
+     * When all filters for a questionnaire are ignored, the questionnaire is considered as ignored.
+     * Set $scope.ignoredElements to true of false to allow or not panel display
+     *
+     * @param refreshUrl
+     * @returns {Array}
+     */
+    var getIgnoredElements = function(refreshUrl) {
+
+        var ignoredElements = Chart.getIgnoredElements();
+        var concatenatedIgnoredElements = ignoredElements.concatenatedIgnoredElements;
+        $scope.globalIndexedFilters = ignoredElements.globalIndexedFilters;
+        $scope.ignoredElements = !_.isEmpty(ignoredElements.ignoredElements) ? ignoredElements.ignoredElements : null;
+
+        if (refreshUrl) {
+            if (concatenatedIgnoredElements.length > 0) {
+                $location.search('ignoredElements', concatenatedIgnoredElements.join(','));
+            } else {
+                $location.search('ignoredElements', null);
+            }
+        }
+
+        return concatenatedIgnoredElements;
+    };
+
+    /**
+     * When retrieving new filters from server, ignored params are only browser side,
+     * This function update filter.ignore status and recover from URL if needed.
+     * @param filters
+     */
+    var initIgnoredElements = function(filters) {
+        if ($scope.tabs.geonames && $scope.tabs.part && filters && filters.length) {
+            refreshAlternativeSeries(filters, false).then(function() {
+                if ($scope.pointSelected) {
+                    retrieveFiltersAndValues($scope.pointSelected.questionnaire).then(function() {
+                        Chart.initIgnoredElementsFromUrl($scope.tabs.filters, $scope.tabs.part).then(function() {
+                            getIgnoredElements(false);
+                        });
+
+                    });
+                } else {
+                    Chart.initIgnoredElementsFromUrl($scope.tabs.filters, $scope.tabs.part).then(function() {
+                        getIgnoredElements(false);
+                    });
+                }
+            });
+        }
+    };
+
+    /**
+     * Include or ignore a single filter for all questionnaires
+     * @param filter
+     * @param ignored
+     * @param questionnaireId
+     */
+    $scope.propagateStatusGlobally = function(filter, ignored, questionnaireId) {
+        _.forEach($scope.indexedElements, function(questionnaire) {
+            if (questionnaire.filters && questionnaire.filters[filter.filter.id]) {
+                $scope.ignoreFilter(questionnaire.filters[filter.filter.id], !_.isUndefined(ignored) ? ignored : filter.filter.ignored, false);
+                updateQuestionnaireIgnoredStatus(questionnaire);
+            }
+        });
+
+        retrieveFiltersAndValues(questionnaireId);
+        refreshAlternativeSeries(null, true);
+    };
+
+    /**
+     * Ignore or include entire questionnaire
+     * @param questionnaireId
+     * @param ignore
+     */
+    $scope.toggleQuestionnaire = function(questionnaireId, ignore) {
+        var questionnaire = ChartCache.cache($scope.tabs.part, questionnaireId);
+        questionnaire.ignored = _.isUndefined(questionnaire.ignored) ? true : !questionnaire.ignored;
+
+        _.forEach(questionnaire.filters, function(filter) {
+            $scope.ignoreFilter(filter, !_.isUndefined(ignore) ? ignore : questionnaire.ignored, false);
+        });
+
+        retrieveFiltersAndValues(questionnaireId);
+        refreshAlternativeSeries(null, true);
+    };
+
+    /**
+     * Include or ignore a single filter for a single questionnaire
+     * @param filter
+     * @param ignored
+     * @param refreshUrl
+     * @param questionnaireId
+     * @returns {Array}
+     */
+    $scope.ignoreFilter = function(filter, ignored, refreshUrl, questionnaireId) {
+        if (filter) {
+            filter.filter.ignored = ignored;
+
+            if (refreshUrl) {
+                retrieveFiltersAndValues(questionnaireId);
+                refreshAlternativeSeries(null, true);
+            }
+        }
+    };
+
+    $scope.getFirstAttribute = function(obj) {
+        return {
+            attribute: Object.keys(obj)[0],
+            content: obj[Object.keys(obj)[0]]
+        };
+    };
+
+    /**
+     * Reset projection form and refresh all series (without adjusted series)
+     */
+    $scope.removeAdjustedSeries = function() {
+        Chart.removeSeries(null, 'isAdjusted');
+        delete $scope.panelTabs.target;
+        delete $scope.panelTabs.overridable;
+        delete $scope.panelTabs.reference;
+        Chart.updateChart();
+    };
+
+    /**
+     * Add adjusted and original series after removing everything
+     */
+    $scope.addAdjustedSeries = function() {
+        Chart.removeSeries(null, 'isAdjusted');
+        refreshAlternativeSeries(null, false);
+    };
+
+    /**
+     * Allow to change selected questionnaire (used from chart and outside chart in "Ignored elements" tab in panel)
+     * @param id
+     * @param questionnaireId
+     * @param name
+     * @param filterId
+     */
+    $scope.setPointSelected = function(id, questionnaireId, name, filterId) {
+        $scope.pointSelected = {
+            id: id,
+            questionnaire: questionnaireId,
+            name: name,
+            filter: filterId
+        };
+
+        retrieveFiltersAndValues($scope.pointSelected.questionnaire);
+    };
 
     /**
      * Structure of filters need a sorting that is not supported by ng-repeat
@@ -105,423 +362,32 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     };
 
     /**
-     * Calls ChartFilterController to recover filters data and values
-     *
-     * @param questionnaireId
-     * @param callback
+     * Returns a list of id of selected filters joined by comma.
+     * @returns {String}
      */
-    var retrieveFiltersAndValuesCanceler = null;
-    $scope.retrieveFiltersAndValues = _.debounce(function(questionnaireId, callback) {
-        if (questionnaireId && $scope.filterSet.length > 0) {
-            var questionnaire = $scope.cache(questionnaireId);
-
-            // only launch ajax request if the filters in this questionnaire don't have values
-            if (!questionnaire.filters || $scope.concatenedIgnoredElements || !$scope.firstFilterHasValue(questionnaire)) {
-
-                $scope.isLoading = true;
-                var ignoredElements = $scope.concatenedIgnoredElements ? $scope.concatenedIgnoredElements.join(',') : '';
-
-                if (retrieveFiltersAndValuesCanceler) {
-                    retrieveFiltersAndValuesCanceler.resolve();
-                }
-                retrieveFiltersAndValuesCanceler = $q.defer();
-
-                $scope.$apply(function() {
-                    $http.get('/api/chart/getPanelFilters', {
-                        timeout: retrieveFiltersAndValuesCanceler.promise,
-                        params: {
-                            questionnaire: questionnaireId,
-                            filters: _.keys($scope.usedFilters).join(','),
-                            part: $scope.part.id,
-                            fields: 'color',
-                            getQuestionnaireUsages: questionnaire.usages && questionnaire.usages.length ? false : true,
-                            ignoredElements: ignoredElements
-                        }
-                    }).success(function(data) {
-                        _.forEach(data.filters, function(hFilter, hFilterId) {
-                            _.map(data.filters[hFilterId], function(filter, index) {
-                                if (!_.isUndefined($scope.indexedElements[questionnaireId].hFilters[hFilterId])) {
-                                    filter.filter.sorting = index + 1;
-                                    filter.filter.hFilters = {};
-                                    filter.filter.hFilters[hFilterId] = null;
-                                    $scope.cache({id: questionnaireId, usages: data.usages}, filter);
-                                }
-                            });
-                        });
-
-                        $scope.initiateEmptyQuestionnairesWithLoadedData(questionnaireId, callback);
-                        $scope.getIgnoredElements(true);
-                        $scope.isLoading = false;
-                    });
-                });
-            }
-        }
-    }, 500);
-
-    /**
-     *   This function set initiates all questionnaires with data loaded with first one (except values)
-     *   It allows to see ignored elements if they are ignored globally before having loading the data specific to asked questionnaire
-     *   The data is too big to be executed on the fly and is not needed, so the timeout waits until angularjs generates page.
-     *   Then generates index in background
-     *
-     *   @param questionnaireId Reference questionnaire id
-     *   @param callback function to execute when data is indexed (usefull for then change status to ignored if they're ignored in url)
-     */
-    $scope.initiateEmptyQuestionnairesWithLoadedData = function(questionnaireId, callback) {
-        if (questionnaireId) {
-
-            var questionnaire = $scope.indexedElements[questionnaireId];
-
-            if ($scope.firstExecution) {
-                $scope.firstExecution = false;
-                _.forEach($scope.indexedElements, function(tmpQuestionnaire, tmpQuestionnaireId) {
-                    if (tmpQuestionnaireId != questionnaireId) {
-                        _.forEach(tmpQuestionnaire.hFilters, function(hFilter, hFilterId) {
-                            _.forEach(questionnaire.filters, function(filter) {
-                                if (filter && !_.isUndefined(filter.filter.hFilters[hFilterId])) {
-                                    $scope.cache(tmpQuestionnaireId, {filter: filter.filter});
-                                }
-                            });
-                        });
-                    }
-                });
-
-                if (callback) {
-                    callback();
-                }
-            }
-        }
+    $scope.getFiltersIds = function() {
+        return _.pluck($scope.tabs.filters, 'id').join(',');
     };
 
     /**
-     * As filters are stored in an array on index relative to their Id, this function gets first filter to verify is he has a value.
-     * Is used to determine if we need to send request to recover values.
-     *
-     * @param questionnaire
-     * @returns {boolean}
+     * Get one of selected filters by id, to recover its color from template
+     * @param list of elements containing id attribute
+     * @param id to find
+     * @returns {*}
      */
-    $scope.firstFilterHasValue = function(questionnaire) {
-        var hasValue = false;
-        _.forEach(questionnaire.filters, function(filter) {
-            if (filter && filter.values && filter.values[$scope.part.name]) {
-                hasValue = true;
-                return false;
+    $scope.findById = function(list, id) {
+        return _.find(list, function(f) {
+            if (f.id == id) {
+                return true;
             }
         });
-        return hasValue;
     };
 
-    /**
-     * Inspect $scope.indexedElements to find ignored elements and update Url if refreshUrl is set to true.
-     *
-     * When all filters for a questionnaire are ignored, the questionnaire is considered as ignored.
-     * Set $scope.ignoredElements to true of false to allow or not panel display
-     *
-     * @param refreshUrl
-     * @returns {Array}
-     */
-    $scope.concatenedIgnoredElements = [];
-    $scope.getIgnoredElements = function(refreshUrl) {
-        if (!$scope.indexedElements) {
-            return [];
-        }
+    /**************************************************************************/
+    /* PRIVATE FUNCTIONS ******************************************************/
+    /**************************************************************************/
 
-        $scope.ignoredElements = {};
-        $scope.globalIndexedFilters = {}; // is used to know if a same filter is ignored or not in all questionnaires (used on globally ignored button)
-        var concatenedIgnoredElements = [];
-
-        // browse each questionnaire
-        _.forEach($scope.indexedElements, function(questionnaire, questionnaireId) {
-            var ignoredElementsForQuestionnaire = [];
-            if (questionnaire.filters) {
-                questionnaire.ignored = true;
-            }
-            questionnaire.hasIgnoredFilters = false;
-
-            // browse each filter of questionnaire
-            _.forEach(questionnaire.filters, function(filter) {
-                if (filter) {
-
-                    // report globally ignored filter status on $scope.globalIndexedFilters
-                    // false = filter never ignored
-                    // true = filter ignored on all questionnaires
-                    // null = filter sometimes ignored
-                    if (_.isUndefined(filter.filter.ignored)) {
-                        filter.filter.ignored = false;
-                    }
-                    if (_.isUndefined($scope.globalIndexedFilters[filter.filter.id])) {
-                        $scope.globalIndexedFilters[filter.filter.id] = filter.filter.ignored;
-                    } else if (filter.filter.ignored != $scope.globalIndexedFilters[filter.filter.id] && !_.isNull($scope.globalIndexedFilters[filter.filter.id])) {
-                        $scope.globalIndexedFilters[filter.filter.id] = null;
-                    }
-
-                    if (filter.filter.ignored) {
-                        questionnaire.hasIgnoredFilters = true;
-                        ignoredElementsForQuestionnaire.push(filter.filter.id);
-                    } else {
-                        questionnaire.ignored = false;
-                    }
-                }
-            });
-
-            if (ignoredElementsForQuestionnaire.length > 0) {
-                if (questionnaire.ignored) {
-                    concatenedIgnoredElements.push(questionnaireId);
-                    $scope.ignoredElements[questionnaireId] = [];
-                } else {
-                    concatenedIgnoredElements.push(questionnaireId + ':' + ignoredElementsForQuestionnaire.join('-'));
-                    $scope.ignoredElements[questionnaireId] = ignoredElementsForQuestionnaire;
-                }
-            }
-        });
-
-        if (concatenedIgnoredElements.length > 0) {
-            $scope.hasIgnoredElements = true;
-            if (refreshUrl) {
-                $location.search('ignoredElements', concatenedIgnoredElements.join(','));
-            }
-        } else {
-            $scope.hasIgnoredElements = false;
-            if (refreshUrl) {
-                $location.search('ignoredElements', null);
-            }
-        }
-        $scope.concatenedIgnoredElements = concatenedIgnoredElements;
-        return $scope.concatenedIgnoredElements;
-    };
-
-    /**
-     * Retrieve ignored elements in the url following this operations.
-     * This function is called after chart has been loaded.
-     *
-     * 1) If there are some elements ignored :
-     * 2) Retrieve data (filter structure with informations -> name, and values)
-     * 3) When request has come back, initiate all questionnaires to allow data display on ignored elements (mainly filter's name).
-     */
-    $scope.initIgnoredElementsFromUrl = function() {
-        // url excluded questionnaires
-        var ignoredQuestionnaires = $location.search().ignoredElements ? $location.search().ignoredElements.split(',') :
-                [];
-
-        if (ignoredQuestionnaires.length > 0) {
-
-            var callback = function(ignoredQuestionnaires) {
-                _.forEach(ignoredQuestionnaires, function(ignoredElement) {
-                    var questionnaireDetail = ignoredElement.split(':');
-                    var ignoredQuestionnaireId = questionnaireDetail[0];
-                    var ignoredFilters = questionnaireDetail[1] ? questionnaireDetail[1].split('-') : null;
-                    if (ignoredFilters && ignoredFilters.length > 0) {
-                        _.forEach(ignoredFilters, function(filterId) {
-                            $scope.cache(ignoredQuestionnaireId, {filter: {id: filterId}}, true);
-                        });
-                    } else {
-                        _.forEach($scope.indexedElements[ignoredQuestionnaireId].filters, function(filter) {
-                            if (filter) {
-                                filter.filter.ignored = true;
-                            }
-                        });
-                        $scope.cache(ignoredQuestionnaireId, null, true);
-                    }
-
-                    $scope.getIgnoredElements(false);
-                });
-
-                $timeout(function() {
-                    jQuery(window).resize();
-                }, 350);
-            };
-
-            var firstQuestionnaire = ignoredQuestionnaires[0].split(':');
-            $scope.retrieveFiltersAndValues(firstQuestionnaire[0], function() {
-                callback(ignoredQuestionnaires);
-            });
-        }
-    };
-
-    /**
-     * Calls CharController to refresh charts depending on new values
-     *
-     * @param refreshUrl Usualy set to true before sending request but at first execution is set to false
-     * @param callback
-     */
-    $scope.refresh = function(refreshUrl, callback) {
-
-        $scope.isLoading = true;
-        var ignoredElements = refreshUrl ? $scope.getIgnoredElements(refreshUrl).join(',') : $location.search().ignoredElements;
-        $scope.refreshChart(refreshUrl, ignoredElements, callback);
-    };
-
-    var refreshCanceler;
-    $scope.refreshChart = _.debounce(function(refreshUrl, ignoredElements, callback) {
-        //$scope.chart = null;
-        var filterSets = _.map($scope.filterSet, function(filterSet) {
-            return filterSet.id;
-        });
-
-        // get chart data via Ajax, but only once per 500 milliseconds
-        // (this avoid sending several request on page loading)
-        if (refreshCanceler) {
-            refreshCanceler.resolve();
-        }
-        refreshCanceler = $q.defer();
-
-        $scope.$apply(function() {
-            $http.get('/api/chart', {
-                timeout: refreshCanceler.promise,
-                params: {
-                    country: $scope.country.id,
-                    part: $scope.part.id,
-                    filterSet: filterSets.join(','),
-                    ignoredElements: ignoredElements
-                }
-            }).success(function(data) {
-                data.plotOptions.scatter.dataLabels.formatter = function() {
-                    var questionnaire = {hFilters: {}};
-                    var ids = this.point.id.split(':');
-                    questionnaire.id = ids[1];
-                    questionnaire.name = this.point.name;
-                    questionnaire.hFilters[ids[0]] = null;
-                    $scope.cache(questionnaire);
-                    return $('<span/>').css({color: this.series.color}).text(this.point.name)[0].outerHTML;
-                };
-
-                data.plotOptions.scatter.point = {
-                    events: {
-                        click: function(e) {
-                            var ids = e.currentTarget.id.split(':');
-                            $scope.setPointSelected(e.currentTarget.id, e.currentTarget.questionnaire, e.currentTarget.name, ids[0]);
-                            $scope.$apply(); // this is needed because we are outside the AngularJS context (highcharts uses jQuery event handlers)
-                        }
-                    }
-                };
-
-                if (callback) {
-                    callback();
-                }
-                $scope.chart = data;
-                $scope.generateKeyIndicatorsTable(ignoredElements);
-                $scope.isLoading = false;
-            });
-        });
-
-    }, 500);
-
-    $scope.setPointSelected = function(id, questionnaireId, name, filterId) {
-        $scope.pointSelected = {
-            id: id,
-            questionnaire: questionnaireId,
-            name: name,
-            filter: filterId
-        };
-    };
-
-    $scope.gridOptions = {
-        columnDefs: 'columnDefs',
-        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 0})],
-        data: 'data'
-    };
-    $scope.generateKeyIndicatorsTable = function(ignoredElements) {
-        var data = $scope.chart;
-        $scope.isLoading = true;
-
-        $scope.columnDefs = [
-            {
-                field: 'year',
-                displayName: 'Year',
-                enableColumnResize: true,
-                width: '100px'
-            }
-        ];
-
-        var arrayData = [];
-        _.forEach(data.series, function(serie) {
-            if (serie.type == 'line' && ((_.isUndefined(ignoredElements) || ignoredElements.length === 0) && _.isUndefined(serie.isIgnored) || ignoredElements.length > 0 && serie.isIgnored === true)) {
-
-                // create a column by filter on graph
-                $scope.columnDefs.push({
-                    field: 'value' + serie.id,
-                    displayName: serie.name,
-                    enableColumnResize: true,
-                    bgcolor: serie.color,
-                    headerCellTemplate: '' + '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' + '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" style="background:{{col.colDef.bgcolor}}" popover-placement="top" popover="{{col.displayName}}">' + '       {{col.displayName}}' + '   </div>' + '</div>',
-                    cellTemplate: '' + '<div class="ngCellText text-right" ng-class="col.colIndex()"><span ng-cell-text ng-show="{{row.entity.value' + serie.id + '!==null}}">{{row.entity.value' + serie.id + '}} %</span></div>'
-                });
-
-                // retrieve data
-                _.forEach(serie.data, function(value, index) {
-                    if (_.isUndefined(arrayData[index])) {
-                        arrayData[index] = {};
-                    }
-                    arrayData[index]['value' + serie.id] = value;
-                });
-
-            }
-        });
-
-        var startYear = data.plotOptions.line.pointStart;
-        // before adding date to row, create and object with same properties but all to null
-        var nullEquivalentData = _.mapValues(arrayData[0], function() {
-            return null;
-        });
-        arrayData = _.map(arrayData, function(row, index) {
-            row.year = startYear + index;
-            return row;
-        });
-
-        // use the equivalent null object to keep all except with null objects
-        arrayData = _.rest(arrayData, nullEquivalentData);
-
-        // remove useless dates
-        var finalData = [];
-        angular.forEach(arrayData, function(row, index) {
-            if (row.year % 5 === 0 && index < arrayData.length || index == arrayData.length - 1) {
-                finalData.push(arrayData.splice(index, 1)[0]);
-            }
-        });
-        $scope.data = finalData;
-        $scope.isLoading = false;
-    };
-
-    /**
-     *  Manage filters ignored actions
-     */
-    $scope.reportStatusGlobally = function(filter, ignored, questionnaireId) {
-        _.forEach($scope.indexedElements, function(questionnaire) {
-            if (questionnaire.filters && questionnaire.filters[filter.filter.id]) {
-                $scope.ignoreFilter(questionnaire.filters[filter.filter.id], !_.isUndefined(ignored) ? ignored : filter.filter.ignored, false);
-                $scope.updateQuestionnaireIgnoredStatus(questionnaire);
-            }
-        });
-
-        $scope.retrieveFiltersAndValues(questionnaireId);
-        $scope.refresh(true);
-    };
-
-    $scope.toggleQuestionnaire = function(questionnaireId, ignore) {
-        var questionnaire = $scope.cache(questionnaireId);
-        questionnaire.ignored = _.isUndefined(questionnaire.ignored) ? true : !questionnaire.ignored;
-
-        _.forEach(questionnaire.filters, function(filter) {
-            $scope.ignoreFilter(filter, !_.isUndefined(ignore) ? ignore : questionnaire.ignored, false);
-        });
-
-        $scope.retrieveFiltersAndValues(questionnaireId);
-        $scope.refresh(true);
-    };
-
-    $scope.ignoreFilter = function(filter, ignored, refresh, questionnaireId) {
-        if (filter) {
-            filter.filter.ignored = ignored;
-            if (refresh) {
-                if (questionnaireId) {
-                    $scope.retrieveFiltersAndValues(questionnaireId);
-                }
-                $scope.refresh(true);
-            }
-        }
-    };
-
-    $scope.updateQuestionnaireIgnoredStatus = function(questionnaire) {
+    var updateQuestionnaireIgnoredStatus = function(questionnaire) {
         if (questionnaire.filters) {
             var questionnaireIgnored = true;
             _.forEach(questionnaire.filters, function(filter) {
@@ -535,170 +401,152 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     };
 
     /**
-     * Put in $scope.indexedElements the state of all objects that have been selected / viewed / ignored.
-     *
-     * The cache is a index table.
-     *
-     * Feed an object $scope.indexedElements that is structured as followed :
-     *
-     * {
-     *     23 : { // --> questionnaire ID
-     *         id : '74:02',
-     *         name : '...'
-     *         (ignoredGlobally : true,)
-     *         filters : {
-     *           2 : {
-     *             id : xx,
-     *             level : xx,
-     *             name : '...'
-     *             value : {
-     *                 rural : xxx,
-     *                 urban : xxx,
-     *                 total : xxx
-     *             }
-     *             (ignoredGlobally : true)
-     *             (ignored : true)
-     *           },
-     *           28 : {...}
-     *           39 : {...}
-     *         }
-     *     }
-     * }
-     *
-     * Some attributes like highFilter.name and questionnaire.name/code are loaded by ajax
-     * These attributes correspond to objects mentionned in the url (highFilter and questionnaire).
-     * They name attribute are loaded by ajax cause they're not specified in the url and are needed for display
-     * The app can't wait the user to click on a point to retrieve this data from pointSelected.name attribute
+     * Calls ChartController to recover filters data and values
      *
      * @param questionnaireId
-     * @param filter
-     * @param questionnaireName
-     * @param ignored
-     * @returns current cached highFilter object
+     * @param callback
      */
-    $scope.cache = function(questionnaire, filter, ignored) {
-        if (!$scope.country || !$scope.part) {
-            return [];
-        }
-
-        if (!$scope.indexedElements) {
-            $scope.indexedElements = {};
-        }
-
-        // initiates high filter index and retrieves name for display in panel
-        questionnaire = $scope.indexQuestionnaireCache(questionnaire, ignored && !filter ? ignored : false);
-        $scope.indexQuestionnaireFilterCache(questionnaire.id, filter, ignored);
-        return questionnaire;
-    };
-
-    $scope.indexQuestionnaireCache = function(questionnaire, ignored) {
+    var retrieveFiltersAndValues = function(questionnaireId) {
+        var deferred = $q.defer();
+        var questionnaire = ChartCache.cache($scope.tabs.part, questionnaireId);
         if (questionnaire) {
-
-            if (!_.isObject(questionnaire)) {
-                questionnaire = {id: questionnaire};
-            }
-            if (!$scope.indexedElements[questionnaire.id]) {
-                $scope.indexedElements[questionnaire.id] = {};
-            }
-
-            if (questionnaire.id) {
-                $scope.indexedElements[questionnaire.id].id = questionnaire.id;
-            }
-            if (questionnaire.name) {
-                $scope.indexedElements[questionnaire.id].name = questionnaire.name;
-            }
-
-            if (!$scope.indexedElements[questionnaire.id].hFilters) {
-                $scope.indexedElements[questionnaire.id].hFilters = {};
-            }
-
-            // assigns root filters to which this filter belongs to.
-            _.forEach(questionnaire.hFilters, function(hFilter, hFilterId) {
-                $scope.indexedElements[questionnaire.id].hFilters[hFilterId] = hFilter;
+            // only launch ajax request if the filters in this questionnaire don't have values
+            Chart.retrieveFiltersAndValues(questionnaire, $scope.tabs.filters, $scope.tabs.part).then(function() {
+                deferred.resolve();
+                getIgnoredElements(false);
             });
+        }
 
-            if (questionnaire.usages) {
-                $scope.indexedElements[questionnaire.id].usages = questionnaire.usages;
-            }
+        return deferred.promise;
+    };
 
-            if (ignored) {
-                $scope.indexedElements[questionnaire.id].ignored = true;
+    /**
+     * Calls ChartController to refresh charts depending on new values
+     *
+     * @param filters
+     * @param refreshUrl Usually set to true before sending request but at first execution is set to false
+     * @param callback
+     */
+    var alternativeSeriesTimeout = null;
+    var refreshAlternativeSeries = function(filters, refreshUrl) {
+
+        var deferred = $q.defer();
+
+        filters = filters === null ? $scope.tabs.filters : filters;
+
+        Chart.removeSeries(filters, 'isIgnored');
+        Chart.removeSeries(null, 'isAdjusted');
+
+        var ignoredElements = refreshUrl ? getIgnoredElements(refreshUrl).join(',') : $location.search().ignoredElements;
+        var reference = $scope.panelTabs.reference ? $scope.panelTabs.reference.id ? $scope.panelTabs.reference.id : $scope.panelTabs.reference : null;
+        var target = $scope.panelTabs.target ? $scope.panelTabs.target : null;
+        var overridable = $scope.panelTabs.overridable ? $scope.panelTabs.overridable : null;
+
+        if (_.isArray(filters) && (!_.isEmpty(ignoredElements) || (reference && target && overridable))) {
+            var queryParams = {
+                geonames: $location.search().geonames,
+                part: $scope.tabs.part.id,
+                filters: _.pluck(filters, 'id').join(','),
+                ignoredElements: ignoredElements,
+                reference: reference,
+                target: target,
+                overridable: overridable
+            };
+
+            if (alternativeSeriesTimeout) {
+                alternativeSeriesTimeout.resolve();
             }
-            return $scope.indexedElements[questionnaire.id];
+            alternativeSeriesTimeout = $q.defer();
+
+            Chart.refresh(queryParams, $scope.tabs.part, $scope.tabs.geonames, alternativeSeriesTimeout).then(function(data) {
+                computeEstimates(ignoredElements);
+                deferred.resolve(data);
+            });
+        } else {
+            if (alternativeSeriesTimeout) {
+                alternativeSeriesTimeout.resolve();
+            }
+            Chart.updateChart();
+        }
+
+        return deferred.promise;
+    };
+
+    /**
+     * Get JMP trendlines and don't ask for them again while filters or countries aren't changed
+     */
+    var normalSeriesTimeout = null;
+    var refreshNormalSeries = function(filters) {
+        filters = filters === null ? $scope.tabs.filters : filters;
+        if (filters && $scope.tabs.part && $scope.tabs.geonames) {
+            Chart.removeSeries(filters, null);
+
+            var queryParams = {
+                geonames: _.pluck($scope.tabs.geonames, 'id').join(','),
+                part: $scope.tabs.part.id,
+                filters: _.pluck(filters, 'id').join(',')
+            };
+
+            if (normalSeriesTimeout) {
+                normalSeriesTimeout.resolve();
+            }
+            normalSeriesTimeout = $q.defer();
+            Chart.refresh(queryParams, $scope.tabs.part, $scope.tabs.geonames, normalSeriesTimeout).then(function() {
+                computeEstimates([]);
+            });
         }
     };
 
-    $scope.indexQuestionnaireFilterCache = function(questionnaireId, filter, ignored) {
-        if (filter) {
-            if (!$scope.indexedElements[questionnaireId].filters) {
-                $scope.indexedElements[questionnaireId].filters = {};
-            }
+    /**
+     * Use chart to compute estimates and configure ng-grid for display
+     * @param ignoredElements
+     */
+    $scope.gridOptions = {
+        columnDefs: 'columnDefs',
+        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 0})],
+        data: 'estimatesData'
+    };
 
-            if (!$scope.indexedElements[questionnaireId].filters[filter.filter.id]) {
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id] = {};
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter = {};
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].values = {};
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].valuesWithoutIgnored = {};
+    var computeEstimates = function(ignoredElements) {
+        $scope.columnDefs = [
+            {
+                field: 'year',
+                displayName: 'Year',
+                enableColumnResize: true,
+                width: '100px'
             }
+        ];
 
-            if (filter.filter.id) {
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.id = filter.filter.id;
-            }
-            if (filter.filter.name) {
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.name = filter.filter.name;
-            }
-            if (filter.filter.color) {
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.color = filter.filter.color;
-            }
-            if (filter.filter.originalDenomination) {
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.originalDenomination = filter.filter.originalDenomination;
-            }
+        var estimatesObject = Chart.computeEstimates($scope.chart.series, ignoredElements);
+        $scope.estimatesData = estimatesObject.data;
+        $scope.columnDefs = $scope.columnDefs.concat(estimatesObject.columns);
+    };
 
-            if (!$scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.hFilters) {
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.hFilters = {};
-            }
-
-            if (filter.usages) {
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].usages = filter.usages;
-            }
-
-            // assigns root filters to which this filter belongs to.
-            _.forEach(filter.filter.hFilters, function(hFilter, hFilterId) {
-                if (_.isNull(hFilter)) {
-
-                    if (!$scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.hFilters[hFilterId]) {
-                        $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.hFilters[hFilterId] = {};
-                    }
-
-                    if (filter.filter.level >= 0) {
-                        $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.hFilters[hFilterId].level = filter.filter.level;
-                    }
-                    if (filter.filter.sorting) {
-                        $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.hFilters[hFilterId].sorting = filter.filter.sorting;
-                    }
-                } else {
-                    $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.hFilters[hFilterId] = hFilter;
-                }
+    /**
+     * Toggle the display of a formula, and load it if not already done
+     * @param {usage} usage
+     */
+    $scope.toggleShowFormula = function(usage) {
+        usage.show = !usage.show;
+        if (!usage.rule.structure) {
+            Restangular.one('rule', usage.rule.id).get({fields: 'structure'}).then(function(rule) {
+                usage.rule.structure = rule.structure;
             });
-
-            // if no ignored params and no ignored status specified on filter but questionnaire has one, filter inherits questionnaire status
-            if (_.isUndefined(ignored) && !_.isUndefined($scope.indexedElements[questionnaireId].ignored) && _.isUndefined($scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.ignored)) {
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.ignored = $scope.indexedElements[questionnaireId].ignored;
-
-                // if ignored param specified, filter gets its value
-            } else if (!_.isUndefined(ignored)) {
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].filter.ignored = ignored;
-            }
-
-            if (filter.values) {
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].values[$scope.part.name] = filter.values[0][$scope.part.name];
-            }
-            if (!_.isUndefined(filter.valuesWithoutIgnored)) {
-                $scope.indexedElements[questionnaireId].filters[filter.filter.id].valuesWithoutIgnored[$scope.part.name] = filter.valuesWithoutIgnored[0][$scope.part.name];
-            } else {
-                delete($scope.indexedElements[questionnaireId].filters[filter.filter.id].valuesWithoutIgnored[$scope.part.name]);
-            }
         }
     };
 
+    /**
+     * Returns the URL to contribute to the filter
+     * @param {filter} filter
+     * @param {geoname} geoname
+     * @returns {String}
+     */
+    $scope.getContributeUrl = function(filter, geoname) {
+        if (filter.name.match('Sector')) {
+            return '/contribute/nsa?&country=' + geoname.country.id + '&returnUrl=' + $scope.currentUrl;
+        } else {
+            return '/contribute/jmp?&country=' + geoname.country.id + '&filter=' + filter.id + '&returnUrl=' + $scope.currentUrl;
+        }
+
+    };
 });

@@ -2,17 +2,21 @@
 
     <h2>
         <ul class="breadcrumb">
+            <?php echo $this->helpButton(); ?>
+            <span class="active pull-right"><i class="fa fa-fw fa-user"></i></span>
             <li><a href="/admin/user">Users</a></li>
             <li class="active">{{user.name}}</li>
         </ul>
     </h2>
+
+    <?php echo $this->helpBox('Edit the user\'s account and his access rights. For further info, see the <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/user.html">detailed documentation</a>.'); ?>
 
     <form name="myForm" class="form-horizontal">
 
         <?php echo $this->crudButtons('user'); ?>
 
         <tabset style="margin-top: 20px">
-            <tab heading="General info">
+            <tab heading="General">
 
                 <div class="form-group" ng-class="{'has-error': myForm.name.$invalid}">
                     <label class="control-label col-sm-1" for="user.name"><?php echo $this->translate("Name"); ?></label>
@@ -36,14 +40,14 @@
                     </div>
                 </div>
 
-                <div class="form-group" ng-class="{'has-error': myForm.password.$invalid || myForm.passwordVerify.$invalid}">
+                <div class="form-group" ng-if="!user.id" ng-class="{'has-error': myForm.password.$invalid || myForm.passwordVerify.$invalid}">
                     <label class="control-label col-sm-1" for="user.password"><?php echo $this->translate("Password"); ?></label>
 
                     <div class="col-sm-11">
 
                         <div class="row">
                             <div class="col-sm-5">
-                                <input id="user.password" name="password" type="password" ng-model="user.password" placeholder="password" ng-minlength="6">
+                                <input id="user.password" name="password" type="password" autocomplete="off" ng-model="user.password" placeholder="password" ng-minlength="6">
                             </div>
                             <div class="col-sm-3">
                                 <span ng-show="myForm.password.$error.required" class="help-block"><?php echo $this->translate("Required"); ?></span>
@@ -116,15 +120,15 @@
             </tab>
 
             <tab heading="Surveys" ng-if="user.id">
-                <gims-relations relation="UserSurvey" first="user" second="survey" third="role" format="code"></gims-relations>
+                <gims-relations relation="UserSurvey" properties="['user', 'survey', 'role']"></gims-relations>
             </tab>
 
             <tab heading="Questionnaires" ng-if="user.id">
-                <gims-relations relation="UserQuestionnaire" first="user" second="questionnaire" third="role"></gims-relations>
+                <gims-relations relation="UserQuestionnaire" properties="['user', 'questionnaire', 'role']"></gims-relations>
             </tab>
 
             <tab heading="Filter Sets" ng-if="user.id">
-                <gims-relations relation="UserFilterSet" first="user" second="filterSet" third="role"></gims-relations>
+                <gims-relations relation="UserFilterSet" properties="['user', 'filterSet', 'role']"></gims-relations>
             </tab>
         </tabset>
     </form>

@@ -1,0 +1,57 @@
+<?php
+
+namespace Application\Service\Syntax\BeforeRegression;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Application\Service\Calculator\Calculator;
+use Application\Model\Rule\AbstractQuestionnaireUsage;
+use Application\Service\Syntax\Parser;
+
+/**
+ * Replace {F#12,P#34,Y+0} with Filter regression value
+ */
+class FilterValueAfterRegression extends AbstractToken
+{
+
+    public function getPattern()
+    {
+        return '/\{F#(\d+|current),P#(\d+|current),Y([+-]?\d+)\}/';
+    }
+
+    public function replace(Calculator $calculator, array $matches, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondStepRules)
+    {
+        $filterId = $this->getFilterId($matches[1], $usage);
+        $partId = $this->getPartId($matches[2], $usage);
+        $yearOffset = $matches[3];
+        $year = $usage->getQuestionnaire()->getSurvey()->getYear() + $yearOffset;
+
+        $years = range(1980, 2012);
+        $questionnaires = $calculator->getQuestionnaireRepository()->getAllForComputing($usage->getQuestionnaire()->getGeoname());
+
+        // Only compute thing if in current years, to avoid infinite recursitivy in a very distant future
+        if (in_array($year, $years)) {
+            $value = $calculator->computeFlattenOneYearWithFormula($year, $years, $filterId, $questionnaires, $partId);
+        } else {
+            $value = null;
+        }
+
+        return is_null($value) ? 'NULL' : $value;
+    }
+
+    public function getStructure(array $matches, Parser $parser)
+    {
+        $year = (int) $matches[3];
+        if ($year > 0) {
+            $year = '+' . $year;
+        }
+
+        return [
+            'type' => 'regressionFilterValue',
+            'filter' => $parser->getFilterName($matches[1]),
+            'part' => $parser->getPartName($matches[2]),
+            'year' => (string) $year,
+            'color' => $parser->getFilterColor($matches[1]),
+        ];
+    }
+
+}

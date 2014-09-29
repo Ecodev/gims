@@ -2,6 +2,9 @@
 
 namespace ApplicationTest;
 
+/**
+ * @group Service
+ */
 class UtilityTest extends \ApplicationTest\Controller\AbstractController
 {
 
@@ -100,7 +103,10 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
 
         $allKeys = array();
         $allKeys[] = \Application\Utility::getCacheKey(array());
+        $allKeys[] = \Application\Utility::getCacheKey(array(''));
         $allKeys[] = \Application\Utility::getCacheKey(array('', ''));
+        $allKeys[] = \Application\Utility::getCacheKey(array(false));
+        $allKeys[] = \Application\Utility::getCacheKey(array(true));
         $allKeys[] = \Application\Utility::getCacheKey(array(0));
         $allKeys[] = \Application\Utility::getCacheKey(array(null));
         $allKeys[] = \Application\Utility::getCacheKey(array(null, null));
@@ -125,8 +131,8 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
 
     public function testGetColor()
     {
-        $codes = [74,75,76,78,900];
-        $ratios = [0,85,100];
+        $codes = [74, 75, 76, 78, 900];
+        $ratios = [0, 85, 100];
 
         foreach ($codes as $code) {
             foreach ($ratios as $ratio) {
@@ -136,4 +142,5 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
             }
         }
     }
+
 }

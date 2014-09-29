@@ -4,6 +4,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Contribute\Controller\Index' => 'Contribute\Controller\IndexController',
+            'Contribute\Controller\Rule' => 'Contribute\Controller\RuleController',
         ),
     ),
     'view_manager' => array(

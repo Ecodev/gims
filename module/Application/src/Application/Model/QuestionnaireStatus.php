@@ -24,6 +24,11 @@ class QuestionnaireStatus extends AbstractEnum
     public static $VALIDATED = 'validated';
 
     /**
+     * Questionnaire is publicly available to anyone for computation.
+     */
+    public static $PUBLISHED = 'published';
+
+    /**
      * Questionnaire was not validated, but rejected.
      */
     public static $REJECTED = 'rejected';

@@ -1,0 +1,14 @@
+.formula {
+    font-family: $font-family-monospace;
+    .token {
+        border: 1px solid $gray-light;
+        border-radius: $border-radius-base;
+        padding: $padding-xs-vertical $padding-xs-horizontal;
+        background: $gray-lighter;
+        white-space: nowrap;
+        cursor: default;
+    }
+    .text {
+        white-space: pre;
+    }
+}

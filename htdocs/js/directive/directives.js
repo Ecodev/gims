@@ -1,4 +1,9 @@
 /* Directives */
+
+function isEmpty(value) {
+    return angular.isUndefined(value) || value === '' || value === null || value !== value;
+}
+
 angular.module('myApp.directives')
         .directive('ngVisible', function() {
             return function(scope, elem, attr) {
@@ -33,7 +38,7 @@ angular.module('myApp.directives')
                                 );
                     }
 
-                    var html = sprintf('<a class="link-new list-inline btn btn-default" href="/admin/%s/new%s"><i class="fa fa-plus-circle"></i> new %s</a>',
+                    var html = sprintf('<a class="link-new list-inline btn btn-default" href="/admin/%s/new%s"><i class="fa fa-gims-add"></i> new %s</a>',
                             attrs.target,
                             returnUrl,
                             attrs.target
@@ -50,5 +55,14 @@ angular.module('myApp.directives')
                         element.focus();
                     }, 100);
                 }
+            };
+        })
+        /**
+         * Deactivate ng-animate on all children elements
+         */
+        .directive('disableAnimate', function($animate) {
+
+            return function($scope, elem) {
+                $animate.enabled(false, elem);
             };
         });

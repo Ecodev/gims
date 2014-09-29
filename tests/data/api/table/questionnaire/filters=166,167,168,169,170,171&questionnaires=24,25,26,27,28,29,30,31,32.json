@@ -1,0 +1,318 @@
+{
+    "columns": {
+        "country": "Country",
+        "iso3": "ISO-3",
+        "survey": "Survey",
+        "year": "Year",
+        "f166p1": "SUI+S",
+        "f167p1": "SUSC",
+        "f168p1": "SUI",
+        "f169p1": "SUS",
+        "f170p1": "SUOU",
+        "f171p1": "SUOD",
+        "f166p2": "SRI+S",
+        "f167p2": "SRSC",
+        "f168p2": "SRI",
+        "f169p2": "SRS",
+        "f170p2": "SROU",
+        "f171p2": "SROD",
+        "f166p3": "STI+S",
+        "f167p3": "STSC",
+        "f168p3": "STI",
+        "f169p3": "STS",
+        "f170p3": "STOU",
+        "f171p3": "STOD"
+    },
+    "legends": [
+        {
+            "short": "SUI+S",
+            "long": "Sanitation, Urban, Improved + shared"
+        },
+        {
+            "short": "SUSC",
+            "long": "Sanitation, Urban, Sewerage connections"
+        },
+        {
+            "short": "SUI",
+            "long": "Sanitation, Urban, Improved"
+        },
+        {
+            "short": "SUS",
+            "long": "Sanitation, Urban, Shared"
+        },
+        {
+            "short": "SUOU",
+            "long": "Sanitation, Urban, Other unimproved"
+        },
+        {
+            "short": "SUOD",
+            "long": "Sanitation, Urban, Open defecation"
+        },
+        {
+            "short": "SRI+S",
+            "long": "Sanitation, Rural, Improved + shared"
+        },
+        {
+            "short": "SRSC",
+            "long": "Sanitation, Rural, Sewerage connections"
+        },
+        {
+            "short": "SRI",
+            "long": "Sanitation, Rural, Improved"
+        },
+        {
+            "short": "SRS",
+            "long": "Sanitation, Rural, Shared"
+        },
+        {
+            "short": "SROU",
+            "long": "Sanitation, Rural, Other unimproved"
+        },
+        {
+            "short": "SROD",
+            "long": "Sanitation, Rural, Open defecation"
+        },
+        {
+            "short": "STI+S",
+            "long": "Sanitation, Total, Improved + shared"
+        },
+        {
+            "short": "STSC",
+            "long": "Sanitation, Total, Sewerage connections"
+        },
+        {
+            "short": "STI",
+            "long": "Sanitation, Total, Improved"
+        },
+        {
+            "short": "STS",
+            "long": "Sanitation, Total, Shared"
+        },
+        {
+            "short": "STOU",
+            "long": "Sanitation, Total, Other unimproved"
+        },
+        {
+            "short": "STOD",
+            "long": "Sanitation, Total, Open defecation"
+        }
+    ],
+    "data": [
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "MICS97",
+            "year": 1997,
+            "f166p1": 42.5,
+            "f167p1": 6.1,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": 44.1,
+            "f171p1": 13.5,
+            "f166p2": 28.0,
+            "f167p2": 0.4,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": 38.0,
+            "f171p2": 34.0,
+            "f166p3": 30.8,
+            "f167p3": 1.5,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": 39.2,
+            "f171p3": 29.9
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "MICS00",
+            "year": 2000,
+            "f166p1": null,
+            "f167p1": null,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": null,
+            "f171p1": null,
+            "f166p2": null,
+            "f167p2": null,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": null,
+            "f171p2": null,
+            "f166p3": null,
+            "f167p3": null,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": null,
+            "f171p3": null
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "MICS03",
+            "year": 2003,
+            "f166p1": 44.2,
+            "f167p1": 8.2,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": 43.0,
+            "f171p1": 12.8,
+            "f166p2": 26.0,
+            "f167p2": 0.4,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": 34.8,
+            "f171p2": 39.2,
+            "f166p3": 29.9,
+            "f167p3": 2.1,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": 36.6,
+            "f171p3": 33.6
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "NRVA03",
+            "year": 2003,
+            "f166p1": null,
+            "f167p1": null,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": null,
+            "f171p1": null,
+            "f166p2": 28.6,
+            "f167p2": null,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": 40.8,
+            "f171p2": 30.6,
+            "f166p3": null,
+            "f167p3": null,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": null,
+            "f171p3": null
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "NRVS05",
+            "year": 2005,
+            "f166p1": 62.3,
+            "f167p1": null,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": 37.5,
+            "f171p1": 0.2,
+            "f166p2": 31.2,
+            "f167p2": null,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": 54.1,
+            "f171p2": 14.7,
+            "f166p3": 38.0,
+            "f167p3": null,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": 50.5,
+            "f171p3": 11.5
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "NVRA08",
+            "year": 2008,
+            "f166p1": null,
+            "f167p1": null,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": null,
+            "f171p1": null,
+            "f166p2": null,
+            "f167p2": null,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": null,
+            "f171p2": null,
+            "f166p3": null,
+            "f167p3": null,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": null,
+            "f171p3": null
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "MIS09",
+            "year": 2009,
+            "f166p1": null,
+            "f167p1": null,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": null,
+            "f171p1": null,
+            "f166p2": null,
+            "f167p2": null,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": null,
+            "f171p2": null,
+            "f166p3": null,
+            "f167p3": null,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": null,
+            "f171p3": null
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "MS10",
+            "year": 2010,
+            "f166p1": 65.5,
+            "f167p1": 1.9,
+            "f168p1": 44.3,
+            "f169p1": 19.8,
+            "f170p1": 33.4,
+            "f171p1": 1.1,
+            "f166p2": 28.6,
+            "f167p2": 0.0,
+            "f168p2": 23.0,
+            "f169p2": 7.7,
+            "f170p2": 46.6,
+            "f171p2": 24.8,
+            "f166p3": 37.2,
+            "f167p3": 0.4,
+            "f168p3": 28.0,
+            "f169p3": 10.5,
+            "f170p3": 43.5,
+            "f171p3": 19.3
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "MICS11",
+            "year": 2011,
+            "f166p1": 64.0,
+            "f167p1": 4.5,
+            "f168p1": 45.6,
+            "f169p1": 20.4,
+            "f170p1": 35.4,
+            "f171p1": 0.6,
+            "f166p2": 33.1,
+            "f167p2": 2.2,
+            "f168p2": 23.2,
+            "f169p2": 7.8,
+            "f170p2": 45.6,
+            "f171p2": 21.3,
+            "f166p3": 40.4,
+            "f167p3": 2.7,
+            "f168p3": 28.5,
+            "f169p3": 10.7,
+            "f170p3": 43.2,
+            "f171p3": 16.4
+        }
+    ]
+}

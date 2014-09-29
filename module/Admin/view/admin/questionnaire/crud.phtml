@@ -2,6 +2,7 @@
 
     <h2>
         <ul class="breadcrumb">
+            <span class="active pull-right"><i class="fa fa-fw fa-gims-questionnaire"></i></span>
             <li><a href="/admin/survey">Surveys</a></li>
             <li><a href="/admin/survey/edit/{{survey.id}}#2">{{survey.code}}</a></li>
             <li class="active">{{survey.code}} - {{questionnaire.geoname.name}}</li>
@@ -12,7 +13,7 @@
         <?php echo $this->crudButtons('questionnaire'); ?>
 
         <tabset style="margin-top: 20px" active="panes[0].active">
-            <tab heading="General info">
+            <tab heading="General">
 
                 <div class="form-group" ng-class="{'has-error': myForm.status.$invalid}" ng-show="questionnaire.id">
                     <label class="control-label col-sm-2" for="questionnaire.status">Status</label>
@@ -71,8 +72,17 @@
                 </div>
 
             </tab>
+
+            <tab heading="Rule - Filter" ng-if="questionnaire.id">
+                <gims-relations relation="FilterQuestionnaireUsage" properties="['questionnaire', 'rule', 'filter', 'part']" justification="true"></gims-relations>
+            </tab>
+
+            <tab heading="Rule" ng-if="questionnaire.id">
+                <gims-relations relation="QuestionnaireUsage" properties="['questionnaire', 'rule', 'part']" justification="true"></gims-relations>
+            </tab>
+
             <tab heading="Users" ng-if="questionnaire.id">
-                <gims-relations relation="UserQuestionnaire" first="questionnaire" second="user" third="role"></gims-relations>
+                <gims-relations relation="UserQuestionnaire" properties="['questionnaire', 'user', 'role']"></gims-relations>
             </tab>
         </tabset>
     </form>

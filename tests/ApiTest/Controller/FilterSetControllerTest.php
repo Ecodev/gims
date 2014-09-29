@@ -29,7 +29,7 @@ class FilterSetControllerTest extends AbstractRestfulControllerTest
         $this->assertEquals($data['name'], $actual['name']);
 
         // anonymous
-        $this->rbac->setIdentity(null);
+        $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(403);
     }
@@ -39,8 +39,6 @@ class FilterSetControllerTest extends AbstractRestfulControllerTest
         // FilterSet
         $data = array(
             'name' => 'new-filterSet',
-            'excludedFilters' => array($this->filter->getId()),
-            'originalFilterSet' => $this->filterSet->getId(),
         );
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
@@ -49,29 +47,9 @@ class FilterSetControllerTest extends AbstractRestfulControllerTest
         $this->assertEquals($data['name'], $actual['name']);
 
         // anonymous
-        $this->rbac->setIdentity(null);
+        $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(403);
-    }
-
-    public function testCanDeleteFilterSet()
-    {
-        $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
-        $this->assertResponseStatusCode(200);
-        $this->assertEquals($this->getJsonResponse()['message'], 'Deleted successfully');
-    }
-
-    public function testAnonymousCanDeleteFilterSet()
-    {
-        $this->rbac->setIdentity(null);
-        $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
-        $this->assertResponseStatusCode(403);
-    }
-
-    public function testCannotDeleteNonExistingFilterSet()
-    {
-        $this->dispatch('/api/filterSet/713705', Request::METHOD_DELETE); // smyle, the sun shines :)
-        $this->assertResponseStatusCode(404);
     }
 
 }

@@ -13,9 +13,9 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     use EntityManagerAware;
 
     /**
-     * @var \Application\Service\Rbac
+     * @var \Application\Service\AuthorizationService
      */
-    private $rbac;
+    private $auth;
 
     /**
      * @var MetaModel
@@ -28,16 +28,29 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     protected $hydrator;
 
     /**
-     * Returns RBAC service
-     * @return \Application\Service\Rbac
+     * Returns Authorization service
+     * @return \Application\Service\AuthorizationService
      */
-    protected function getRbac()
+    protected function getAuth()
     {
-        if (!$this->rbac) {
-            $this->rbac = $this->getServiceLocator()->get('ZfcRbac\Service\Rbac');
+        if (!$this->auth) {
+            $this->auth = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
         }
 
-        return $this->rbac;
+        return $this->auth;
+    }
+
+    /**
+     * Throw an exception if action is denied
+     * @param \Application\Model\AbstractModel $object
+     * @param string $action
+     * @throws \Application\Service\PermissionDeniedException
+     */
+    protected function checkActionGranted(AbstractModel $object, $action)
+    {
+        if (!$this->getAuth()->isActionGranted($object, $action)) {
+            throw new \Application\Service\PermissionDeniedException($this->getAuth()->getMessage());
+        }
     }
 
     /**
@@ -56,6 +69,34 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     public function __construct()
     {
         $this->hydrator = new \Application\Service\Hydrator();
+    }
+
+    /**
+     * Returns whether client asked to do only validation
+     * @return boolean
+     */
+    protected function isOnlyValidation()
+    {
+        return !is_null($this->params()->fromQuery('validate'));
+    }
+
+    /**
+     * Return an array of specified surveyTypes
+     * @return array
+     */
+    protected function getSurveyTypes()
+    {
+        $surveyTypeParam = $this->params()->fromQuery('surveyType');
+        $surveyTypes = [];
+        if ($surveyTypeParam) {
+            foreach (explode(',', $surveyTypeParam) as $type) {
+                if ($type) {
+                    $surveyTypes [] = \Application\Model\SurveyType::get($type);
+                }
+            }
+        }
+
+        return $surveyTypes;
     }
 
     /**
@@ -103,6 +144,10 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $class = get_called_class();
         $shortClass = preg_replace('/(.*\\\\)([^\\\\]+)(Controller$)/', '$2', $class);
 
+        if (preg_match('/Usage$/', $shortClass)) {
+            $shortClass = 'Rule\\' . $shortClass;
+        }
+
         return 'Application\Model\\' . $shortClass;
     }
 
@@ -147,11 +192,16 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $object = new $modelName();
         $this->hydrator->hydrate($data, $object);
 
-        // If not allowed to create object, cancel everything
-        if (!$this->getRbac()->isActionGranted($object, 'create')) {
-            $this->getResponse()->setStatusCode(403);
-            return new JsonModel(array('message' => $this->getRbac()->getMessage()));
+        // If only want to validate, do it then return empty data
+        if ($this->isOnlyValidation()) {
+            $object->validate();
+            $this->getResponse()->setStatusCode(200);
+
+            return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
         }
+
+        // If not allowed to create object, cancel everything
+        $this->checkActionGranted($object, 'create');
 
         $this->getEntityManager()->persist($object);
         $this->getEntityManager()->flush();
@@ -181,45 +231,60 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         }
 
         // If not allowed to delete object, cancel everything
-        if (!$this->getRbac()->isActionGranted($object, 'delete')) {
-            $this->getResponse()->setStatusCode(403);
-            return new JsonModel(array('message' => $this->getRbac()->getMessage()));
-        }
+        $this->checkActionGranted($object, 'delete');
 
         $this->getEntityManager()->remove($object);
         $this->getEntityManager()->flush();
-        $this->getResponse()->setStatusCode(200);
+        $this->getResponse()->setStatusCode(204);
 
         return new JsonModel(array('message' => 'Deleted successfully'));
     }
 
     /**
+     * Returns one object or a list of objects
+     * If more than one object is wanted, return valid objects excluding those who have errors
+     * If a single object is wanted and has an error (access not granted or not found) an error is returned
+     * @todo : maybe return errored objects and valid objects in order to give information to client side
      * @param int $id
-     *
      * @return JsonModel
      */
     public function get($id)
     {
         $objects = array();
-        foreach (explode(',', $id) as $id) {
+        $notFound = array();
+        $notGranted = array();
+        $ids = explode(',', $id);
+
+        foreach ($ids as $id) {
             $object = $this->getRepository()->findOneById($id);
             if (!$object) {
-                $this->getResponse()->setStatusCode(404);
-
-                return new JsonModel(array('message' => 'No object found'));
+                $notFound[] = $id;
+                continue;
             }
 
             // If not allowed to read the object, cancel everything
-            if (!$this->getRbac()->isActionGranted($object, 'read')) {
-                $this->getResponse()->setStatusCode(403);
-                return new JsonModel(array('message' => $this->getRbac()->getMessage()));
+            if ($this->getAuth()->isActionGranted($object, 'read')) {
+                $objects[] = $object;
+            } else {
+                $notGranted[] = $id;
+                if (count($ids) == 1) {
+                    $objects[] = $object;
+                }
             }
+        }
 
-            $objects[] = $object;
+        if (count($notFound) == count($ids)) {
+            $this->getResponse()->setStatusCode(404);
+
+            return new JsonModel(array('message' => 'No object found'));
+        } elseif (count($notGranted) == count($ids)) {
+            $this->checkActionGranted($this->getRepository()->findOneById($ids[0]), 'read');
+        } else {
+            $this->getResponse()->setStatusCode(200);
         }
 
         // if we have multiple IDs to output
-        if (count($objects) > 1) {
+        if (count($ids) > 1) {
             $result = new JsonModel($this->hydrator->extractArray($objects, $this->getJsonConfig()));
         } else {
             $result = new JsonModel($this->hydrator->extract($objects[0], $this->getJsonConfig()));
@@ -242,7 +307,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
     /**
      * Paginate an array of objects according to GET parameters
      * @param array $objects
-     * @param boolean $dehydrate wether we should dehydrate objects
+     * @param boolean $dehydrate whether we should dehydrate objects
      * @return array pagination metata, and a subset of objects (optionnaly extracted by Hydrator)
      */
     protected function paginate(array $objects, $dehydrate = true)
@@ -298,21 +363,34 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
             return new JsonModel(array('message' => 'No object found'));
         }
 
-        // If not allowed to read the object, cancel everything
-        if (!$this->getRbac()->isActionGranted($object, 'update')) {
-            $this->getResponse()->setStatusCode(403);
-            return new JsonModel(array('message' => $this->getRbac()->getMessage()));
+        // First, hydrate the object in case the hydration changes the context used for ACL evaluation
+        $this->hydrator->hydrate($data, $object);
+
+        // If only want to validate, do it then return modified object
+        if ($this->isOnlyValidation()) {
+
+            // If not allowed to read the object, cancel the validation
+            $this->checkActionGranted($object, 'read');
+
+            $object->validate();
+            $this->getResponse()->setStatusCode(200);
+
+            return new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
         }
 
+        // If not allowed to update the object, cancel everything
+        $this->checkActionGranted($object, 'update');
 
-        $this->hydrator->hydrate($data, $object);
         $this->getEntityManager()->flush();
         $this->getResponse()->setStatusCode(201);
 
         $result = $this->postUpdate($object, $data);
 
         if (!$result) {
+            _log()->debug('nothing received from post update');
             $result = new JsonModel($this->hydrator->extract($object, $this->getJsonConfig()));
+        } else {
+            _log()->debug('youpi !!');
         }
 
         return $result;

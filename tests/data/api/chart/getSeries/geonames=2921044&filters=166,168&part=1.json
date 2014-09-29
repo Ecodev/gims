@@ -1,0 +1,158 @@
+[
+    {
+        "name": "Improved + shared",
+        "id": 166,
+        "data": [
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0
+        ],
+        "type": "line",
+        "geonameId": 2921044,
+        "color": "#005FD9",
+        "lightColor": "#B8C6D9",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "(none)"
+    },
+    {
+        "name": "Improved",
+        "id": 168,
+        "data": [
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0,
+            100.0
+        ],
+        "type": "line",
+        "geonameId": 2921044,
+        "color": "#D400D9",
+        "lightColor": "#D8B8D9",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "Regression: Improved (default - for developed countries),<br\/>Regression: Improved (default)"
+    },
+    {
+        "type": "scatter",
+        "id": 166,
+        "name": "Improved + shared",
+        "country": "Germany",
+        "color": "#005FD9",
+        "lightColor": "#B8C6D9",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "ES98",
+                "id": "166:46",
+                "questionnaire": 46,
+                "x": 1998,
+                "y": 100.0
+            },
+            {
+                "name": "ES01",
+                "id": "166:50",
+                "questionnaire": 50,
+                "x": 2001,
+                "y": 100.0
+            },
+            {
+                "name": "SIS01",
+                "id": "166:51",
+                "questionnaire": 51,
+                "x": 2001,
+                "y": 100.0
+            },
+            {
+                "name": "ES04",
+                "id": "166:54",
+                "questionnaire": 54,
+                "x": 2004,
+                "y": 100.0
+            },
+            {
+                "name": "ES05",
+                "id": "166:55",
+                "questionnaire": 55,
+                "x": 2005,
+                "y": 100.0
+            }
+        ]
+    },
+    {
+        "type": "scatter",
+        "id": 168,
+        "name": "Improved",
+        "country": "Germany",
+        "color": "#D400D9",
+        "lightColor": "#D8B8D9",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": []
+    }
+]

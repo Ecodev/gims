@@ -1,0 +1,39 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="$dismiss()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    <h4 class="modal-title">Select rule</h4>
+</div>
+
+<div class="modal-body">
+
+    <h3 class="control-label">Find by name</h3>
+    <gims-select api="rule"
+                 model="rule"
+                 queryParams="ruleFields"
+                 change-url="false"
+                 style="width: 100%">
+    </gims-select>
+
+
+    <h3>Suggested rules</h3>
+    <div ng-repeat="type in types" ng-if="suggestedUsages[type].length">
+        <h4>Same {{type}}</h4>
+        <ul class="list-unstyled">
+            <li ng-repeat="usage in suggestedUsages[type]" ng-click="setRule(usage.rule)">
+                <a href><i class="fa fa-gims-rule"></i> {{usage.rule.name}}</a>
+            </li>
+        </ul>
+    </div>
+
+
+</div>
+<div class="modal-footer" ng-if="rule" style="text-align:left">
+    <strong>Selected rule : </strong> {{rule.name}}
+    <gims-formula structure="rule.structure" ></gims-formula>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="$dismiss()">Close</button>
+    <button class="btn btn-primary pull-right" ng-click="selectRule(rule)" ng-disabled="!rule"><i class="fa fa-gims-add"></i> Add</button>
+</div>
+
+
+

@@ -2,9 +2,13 @@
 
     <h2>
         <ul class="breadcrumb">
+            <?php echo $this->helpButton(); ?>
+            <span class="active pull-right"><i class="fa fa-fw fa-gims-rule"></i></span>
             <li class="active"><a href="/admin/rule">Rules</a></li>
         </ul>
     </h2>
+
+    <?php echo $this->helpBox('Create new rules or delete them. For further info, see the <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/rule.html#edit-and-create-a-rule">detailed documentation</a>.'); ?>
 
     <div class="row show-grid">
         <div class="col-md-9">

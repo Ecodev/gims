@@ -7,6 +7,8 @@ return array(
             'Browse\Controller\Chart' => 'Browse\Controller\ChartController',
             'Browse\Controller\Table' => 'Browse\Controller\TableController',
             'Browse\Controller\Country' => 'Browse\Controller\TableController',
+            'Browse\Controller\Rule' => 'Browse\Controller\RuleController',
+            'Browse\Controller\CellMenu' => 'Browse\Controller\CellMenuController',
         ),
     ),
     'view_manager' => array(
@@ -48,7 +50,7 @@ return array(
                         ),
                     ),
                 ),
-            ),
+            )
         ),
     ),
 );

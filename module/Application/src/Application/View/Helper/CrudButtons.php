@@ -14,22 +14,20 @@ class CrudButtons extends \Zend\View\Helper\AbstractHtmlElement
     {
         $result = <<<STRING
 
-        <a ng-click="cancel()" class="btn btn-default">Back</a>
-
         <span ng-switch="sending > 0">
             <div class="btn-group" ng-switch-when="true">
                 <button class="btn btn-primary disabled btn-saving">
                     <i class="fa fa-gims-loading"></i>
                     <ng-pluralize count="sending + 0" when="{'one': 'Saving', 'other': 'Saving {} items'}" />
                 </button>
-                <button class="btn btn-primary dropdown-toggle disabled" data-toggle="dropdown">
+                <button class="btn btn-primary dropdown-toggle disabled">
                     <span class="caret"></span>
                 </button>
             </div>
 
-            <div class="btn-group" ng-switch-when="false">
-                <button class="btn btn-primary btn-save" ng-click="save()" ng-disabled="myForm.\$invalid"><i class="fa fa-check"></i> Save</button>
-                <button class="btn btn-primary dropdown-toggle" ng-disabled="myForm.\$invalid" data-toggle="dropdown">
+            <div class="btn-group" dropdown ng-switch-when="false">
+                <button class="btn btn-primary btn-save" ng-click="save()" ng-disabled="myForm.\$invalid"><i class="fa fa-gims-save"></i> Save</button>
+                <button class="btn btn-primary dropdown-toggle" ng-disabled="myForm.\$invalid">
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">

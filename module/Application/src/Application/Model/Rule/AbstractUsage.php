@@ -13,13 +13,8 @@ abstract class AbstractUsage extends \Application\Model\AbstractModel
 
     /**
      * @var Rule
-     *
-     * @ORM\ManyToOne(targetEntity="Rule")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * })
      */
-    private $rule;
+    protected $rule;
 
     /**
      * @var Part
@@ -46,6 +41,18 @@ abstract class AbstractUsage extends \Application\Model\AbstractModel
     private $sorting = 0;
 
     /**
+     * {@inheritdoc}
+     */
+    public function getJsonConfig()
+    {
+        return array_merge(parent::getJsonConfig(), array(
+            'justification',
+            'rule',
+            'part',
+        ));
+    }
+
+    /**
      * Set rule
      *
      * @param Rule $rule
@@ -54,6 +61,7 @@ abstract class AbstractUsage extends \Application\Model\AbstractModel
     public function setRule(Rule $rule)
     {
         $this->rule = $rule;
+        $rule->usageAdded($this);
 
         return $this;
     }

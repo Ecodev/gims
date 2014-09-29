@@ -14,14 +14,14 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * Returns currently logged user or null
-     * @return User|null
+     * @return self|null
      */
     public static function getCurrentUser()
     {
         $sm = \Application\Module::getServiceManager();
-        $auth = $sm->get('zfcuser_auth_service');
+        $identityProvider = $sm->get('ZfcRbac\Service\AuthorizationService');
 
-        return $auth->getIdentity();
+        return $identityProvider->getIdentity();
     }
 
     /**
@@ -121,23 +121,25 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     private $userFilterSets;
 
     /**
-     * @var \Application\Model\AbstractModel
+     * @var \Application\Service\RoleContextInterface
      */
     private $roleContext;
 
     /**
      * Constructor
+     * @param string $name
      */
-    public function __construct()
+    public function __construct($name = null)
     {
         $this->userSurveys = new \Doctrine\Common\Collections\ArrayCollection();
         $this->userQuestionnaires = new \Doctrine\Common\Collections\ArrayCollection();
         $this->userFilterSets = new \Doctrine\Common\Collections\ArrayCollection();
         $this->userFilters = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->setName($name);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -152,7 +154,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     /**
      * Set name
      * @param string $name
-     * @return User
+     * @return self
      */
     public function setName($name)
     {
@@ -173,7 +175,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     /**
      * Set email
      * @param string $email
-     * @return User
+     * @return self
      */
     public function setEmail($email)
     {
@@ -194,7 +196,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     /**
      * Set password
      * @param string $password
-     * @return User
+     * @return self
      */
     public function setPassword($password)
     {
@@ -215,7 +217,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     /**
      * Set state
      * @param integer $state
-     * @return User
+     * @return self
      */
     public function setState($state)
     {
@@ -291,7 +293,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      * Notify the user that it was added to UserSurvey relation.
      * This should only be called by UserSurvey::setUser()
      * @param UserSurvey $userSurvey
-     * @return User
+     * @return self
      */
     public function userSurveyAdded(UserSurvey $userSurvey)
     {
@@ -322,7 +324,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      * Notify the user that it was added to UserSurvey relation.
      * This should only be called by UserQuestionnaire::setUser()
      * @param UserQuestionnaire $userQuestionnaire
-     * @return User
+     * @return self
      */
     public function userQuestionnaireAdded(UserQuestionnaire $userQuestionnaire)
     {
@@ -335,7 +337,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      * Notify the user that it was added to UserFilterSet relation.
      * This should only be called by UserFilterSet::setUser()
      * @param UserFilterSet UserFilterSet
-     * @return User
+     * @return self
      */
     public function userFilterSetAdded(UserFilterSet $userFilterSet)
     {
@@ -350,7 +352,6 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      */
     public function setRolesContext(\Application\Service\RoleContextInterface $context)
     {
-        /** @todo  removed check ->getId() on objects to ensure it has been persisted bef */
         $this->roleContext = $context;
     }
 
@@ -368,54 +369,10 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      */
     public function getRoles()
     {
-        // If we are here, it means there is at least a logged in user,
-        // which means he has, at the very least, the hardcoded role of member
-        $roles = array('member');
+        $roleRepository = \Application\Module::getEntityManager()->getRepository('\Application\Model\Role');
+        $roleNames = $roleRepository->getAllRoleNames($this, $this->roleContext);
 
-        if ($this->roleContext instanceof \ArrayAccess) {
-            foreach ($this->roleContext as $contextElement) {
-                $roles = array_merge($roles, $this->getRolesByContext($contextElement));
-            }
-        } else {
-            $roles = array_merge($roles, $this->getRolesByContext($this->roleContext));
-        }
-
-        $roles = array_unique($roles);
-
-        return $roles;
-    }
-
-    /**
-     * Return the roles currently active for this user and current role context (if any)
-     * @param $roleContext
-     * @return array
-     */
-    private function getRolesByContext(\Application\Service\RoleContextInterface $roleContext = null)
-    {
-        $roles = array();
-
-        // If there is no context, or the context matches, add roles from survey
-        foreach ($this->getUserSurveys() as $userSurvey) {
-            if (!$roleContext || $roleContext === $userSurvey->getSurvey()) {
-                $roles [] = $userSurvey->getRole()->getName();
-            }
-        }
-
-        // If there is no context, or the context matches, add roles from questionnaire
-        foreach ($this->getUserQuestionnaires() as $userQuestionnaire) {
-            if (!$roleContext || $roleContext === $userQuestionnaire->getQuestionnaire()) {
-                $roles [] = $userQuestionnaire->getRole()->getName();
-            }
-        }
-
-        // If there is no context, or the context matches, add roles from filterSet
-        foreach ($this->getUserFilterSets() as $userFilterSet) {
-            if (!$roleContext || $roleContext === $userFilterSet->getFilterSet()) {
-                $roles [] = $userFilterSet->getRole()->getName();
-            }
-        }
-
-        return $roles;
+        return array_unique($roleNames);
     }
 
     /**
@@ -436,7 +393,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param string $phone
-     * @return User
+     * @return self
      */
     public function setPhone($phone)
     {
@@ -455,7 +412,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param string $skype
-     * @return User
+     * @return self
      */
     public function setSkype($skype)
     {
@@ -474,7 +431,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param string $job
-     * @return User
+     * @return self
      */
     public function setJob($job)
     {
@@ -493,7 +450,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param string $ministry
-     * @return User
+     * @return self
      */
     public function setMinistry($ministry)
     {
@@ -512,7 +469,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param string $address
-     * @return User
+     * @return self
      */
     public function setAddress($address)
     {
@@ -531,7 +488,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param string $zip
-     * @return User
+     * @return self
      */
     public function setZip($zip)
     {
@@ -550,7 +507,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param string $city
-     * @return User
+     * @return self
      */
     public function setCity($city)
     {
@@ -569,7 +526,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @param \Application\Model\Country $country
-     * @return User
+     * @return self
      */
     public function setCountry($country)
     {
@@ -579,7 +536,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     }
 
     /**
-     * @return int
+     * @return \DateTime
      */
     public function getLastLogin()
     {
@@ -587,10 +544,10 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     }
 
     /**
-     * @param int $lastLogin
-     * @return User
+     * @param \DateTime $lastLogin
+     * @return self
      */
-    public function setLastLogin($lastLogin)
+    public function setLastLogin(\DateTime $lastLogin)
     {
         $this->lastLogin = $lastLogin;
 

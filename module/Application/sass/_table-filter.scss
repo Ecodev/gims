@@ -1,0 +1,36 @@
+
+.table-filter {
+    table-layout:fixed;
+    margin-right:50px;
+    margin-bottom:250px;
+
+    .input-group-btn {
+        padding-left:6px;
+    }
+
+    th {
+        text-overflow:ellipsis;
+    }
+
+    td, th {
+        width: 150px;
+    }
+
+    td.showLabels{
+        width:500px;
+    }
+
+    // Show remove button only when hover
+    .filter {
+        .removeButton {
+            visibility: hidden;
+        }
+        &:hover .removeButton {
+            visibility: visible;
+        }
+    }
+}
+
+.is-computing .computable {
+    @extend .text-primary;
+}

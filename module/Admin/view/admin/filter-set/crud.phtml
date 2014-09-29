@@ -2,10 +2,14 @@
 
     <h2>
         <ul class="breadcrumb">
+            <?php echo $this->helpButton(); ?>
+            <span class="active pull-right"><i class="fa fa-fw fa-gims-filterset"></i></span>
             <li><a href="/admin/filter-set">Filter sets</a></li>
             <li class="active">{{filterSet.name}}</li>
         </ul>
     </h2>
+
+    <?php echo $this->helpBox('Create new filter sets or delete them. For further info, see the <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/filter_set.html">detailed documentation</a>.'); ?>
 
     <form novalidate name="myForm" class="form-horizontal">
 
@@ -15,7 +19,7 @@
 
         <tabset style="margin-top: 20px">
 
-            <tab heading="General info" active="tabs[0]" select="selectTab(0)" >
+            <tab heading="General" active="tabs[0]" select="selectTab(0)" >
                 <div class="form-group"  ng-class="{'has-error': myForm.name.$invalid}">
                     <label class="control-label col-md-2" for="filterSet.name">Label</label>
                     <div class="col-md-6">
@@ -26,20 +30,15 @@
                     </div>
                 </div>
                 <div class="form-group" ng-hide="isChapter" ng-class="{'has-error': myForm.filter.$invalid}">
-                    <label class="control-label col-md-2"  for="filters">Thematics</label>
+                    <label class="control-label col-md-2"  for="filters">Filters</label>
                     <div class="col-md-8">
-                        <gims-select    name="filter"
-                                        api="filter"
-                                        model="filterSet.filters"
-                                        queryparams="params"
-                                        placeholder="Select a thematic"
-                                        container-css-class='select2list'
-                                        current-context-element='?returnUrl=/admin/filter/edit/{{filter.id}}'
-                                        custom-selection-template="{{select2Template}}"
-                                        custom-result-template="{{select2Template}}"
-                                        style="width: 100%"
-                                        multiple >
-                        </gims-select>
+                        <gims-filter model="filterSet.filters"
+                                     show-selection-path="true"
+                                     show-edit-button="true"
+                                     current-url="/admin/filter/edit/{{filter.id}}"
+                                     multiple>
+                        </gims-filter>
+
                     </div>
                     <div class='col-md-1'>
                         <span ng-show="myForm.filter.$error.required" class="col-md-1 help-block">Required</span>
@@ -49,7 +48,7 @@
             </tab>
 
             <tab heading="Users" active="tabs[1]" select="selectTab(1)"  ng-if="filterSet.id">
-                <gims-relations relation="UserFilterSet" first="filterSet" second="user" third="role"></gims-relations>
+                <gims-relations relation="UserFilterSet" properties="['filterSet', 'user', 'role']"></gims-relations>
             </tab>
 
         </tabset>

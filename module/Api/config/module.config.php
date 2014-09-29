@@ -22,7 +22,13 @@ return array(
             'Api\Controller\Chart' => 'Api\Controller\ChartController',
             'Api\Controller\Table' => 'Api\Controller\TableController',
             'Api\Controller\Note' => 'Api\Controller\NoteController',
-            'Api\Controller\Rule' => 'Api\Controller\RuleController',
+            'Api\Controller\Rule' => 'Api\Controller\Rule\RuleController',
+            'Api\Controller\Population' => 'Api\Controller\PopulationController',
+            'Api\Controller\QuestionnaireUsage' => 'Api\Controller\Rule\QuestionnaireUsageController',
+            'Api\Controller\FilterQuestionnaireUsage' => 'Api\Controller\Rule\FilterQuestionnaireUsageController',
+            'Api\Controller\FilterGeonameUsage' => 'Api\Controller\Rule\FilterGeonameUsageController',
+            'Api\Controller\children' => 'Api\Controller\FilterController',
+            'Api\Controller\filters' => 'Api\Controller\FilterController',
         ),
     ),
     'router' => array(
@@ -73,7 +79,7 @@ return array(
                         'options' => array(
                             'route' => '/:parent/:idParent/:controller[/:id]',
                             'constraints' => array(
-                                'parent' => '(chapter|user|survey|role|questionnaire|filterSet)',
+                                'parent' => '(chapter|user|survey|role|questionnaire|filterSet|rule|filter|geoname)',
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'idParent' => '[0-9]+',
                                 'id' => '[0-9]+',
@@ -116,7 +122,7 @@ return array(
                         'options' => array(
                             'route' => '/:controller[/:action][/:filename]',
                             'constraints' => array(
-                                'controller' => '(chartFilterGenerator|chartFilter|chart|table)', // Define here allowed controllers: (controller1|controller2|controller3)
+                                'controller' => '(chart|table)', // Define here allowed controllers: (controller1|controller2|controller3)
                             ),
                             'defaults' => array(
                                 '__NAMESPACE__' => 'Api\Controller',

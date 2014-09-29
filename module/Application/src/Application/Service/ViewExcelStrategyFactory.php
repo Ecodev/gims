@@ -24,6 +24,7 @@ class ViewExcelStrategyFactory implements FactoryInterface
     {
         $excelRenderer = $serviceLocator->get('ViewExcelRenderer');
         $excelStrategy = new ExcelStrategy($excelRenderer);
+
         return $excelStrategy;
     }
 

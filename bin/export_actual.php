@@ -4,7 +4,7 @@
  * This script will import individually each country into DB and then call GIMS
  * API to export computed results
  */
-$countries = require (__DIR__ . '/countries.php');
+$countries = require __DIR__ . '/countries.php';
 
 /**
  * Export computed results for each country files
@@ -15,7 +15,6 @@ function export(array $countries, array $onlyThose = array())
 {
     $hostname = basename(getcwd());
     @mkdir('actual');
-    @mkdir('actual/backup');
     @mkdir('actual/questionnaire');
     @mkdir('actual/country');
 
@@ -34,22 +33,6 @@ function export(array $countries, array $onlyThose = array())
         }
 
         echo $path . PHP_EOL;
-        $backup = "actual/backup/$name.backup.gz";
-
-        // Recycle backup if exists
-        if (is_readable($backup)) {
-            echo `phing load-data -DdumpFile="$backup"`;
-        } else {
-            echo `phing load-data -DdumpFile=../gims/population.backup.gz`;
-
-            $returnStatus = null;
-            passthru("php htdocs/index.php import jmp $path", $returnStatus);
-            if ($returnStatus) {
-                echo "FATAL: could not import '$path', abort export for this country" . PHP_EOL;
-                continue;
-            }
-            echo `phing dump-data -DdumpFile="$backup"`;
-        }
 
         echo `wget -O "actual/questionnaire/$name - Water.csv"      "http://$hostname.lan/api/table/questionnaire/foo.csv?country=$id&filterSet=2"`;
         echo `wget -O "actual/questionnaire/$name - Sanitation.csv" "http://$hostname.lan/api/table/questionnaire/foo.csv?country=$id&filterSet=5"`;

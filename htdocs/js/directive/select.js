@@ -7,7 +7,7 @@
  * <gims-select api="filterSet" model="mySelectedFilterSet" name="myFilterName" placeholder="Select a questionnaire" style="width:100%;"></gims-select>
  *
  * To enable "ID mode", specify name="id" in element. This will reload the current URL
- * with the ID of the selected item instead of GET parameter (see for example: /contribute/questionnaire)
+ * with the ID of the selected item instead of GET parameter (see for example: /contribute/jmp)
  *
  * To specify additional GET parameter for API calls, use attribute queryparams:
  * <gims-select api="questionnaire" queryparams="questionnaireQueryParams" /></gims-select>
@@ -34,55 +34,58 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
         restrict: 'E', // Only usage possible is with element
         require: 'ngModel',
         replace: true,
-        transclude: true,
         template: '<input type="hidden" ui-select2="options" ng-model="model" ng-disabled="disabled"/>',
         scope: {
             api: '@',
             name: '@',
             placeholder: '@',
             format: '@',
+            searchAttributes: '@',
             customSelectionTemplate: '@',
             customResultTemplate: '@',
             containerCssClass: '@',
-            currentContextElement: '@',
+            currentVar: '@',
+            changeUrl: '=',
             queryparams: '=',
             disabled: '=',
             model: '=' // TODO: could not find a way to use real 'ng-model'. So for now we use custom 'model' attribute and bi-bind it to real ng-model. Ugly, but working
         },
-        // The linking function will add behavior to the template
-        link: function() {
-        },
+
         controller: function($scope, $attrs, Restangular, CachedRestangular, $location, $route, $routeParams, $timeout) {
             var items = [];
             var api = $scope.api;
             var name = $scope.name || api; // default key to same name as route
             var fromUrl = name == 'id' ? $routeParams.id : $location.search()[name];
             var idsFromUrl = fromUrl ? fromUrl.split(',') : [];
+            var changeUrl = $scope.changeUrl === false ? false : true;
             idsFromUrl = _.map(idsFromUrl, function(id) {
                 return parseInt(id);
             });
 
-            $scope.includeLinks = function(){
-                $timeout(function(){
-                    $('.select2list .btn[href]').off('mouseup').on('mouseup', function(){
+            // in case we don't want url to be affected, we don't don't want neither to display received info, so remove it after retrieve it above
+            if (!changeUrl) {
+                $location.search(name, null);
+            }
+
+            $scope.includeLinks = function() {
+                $timeout(function() {
+                    $('.select2list .btn[href]').off('mouseup').on('mouseup', function() {
                         location.href = $(this).attr('href');
                     });
                 }, 500);
             };
 
             // Update URL when value changes
-            if (!$route.current.$$route.reloadOnSearch || name == 'id') {
+            if (!$route.current.$$route.reloadOnSearch && changeUrl || name == 'id') {
                 $scope.$watch($attrs.ngModel, function(o) {
 
                     // Either get the single ID, or the multiple IDs
                     var id;
                     if (_.isString(o)) {
                         id = o;
-                    }
-                    else if (o && o.id) {
+                    } else if (o && o.id) {
                         id = o.id;
-                    }
-                    else if (o) {
+                    } else if (o) {
                         id = _.map(o, function(a) {
                             return a.id;
                         }).join(',');
@@ -95,8 +98,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                                 var newPath = $location.path().replace(/\/?\d*$/, '/' + id);
                                 $location.path(newPath);
                             }
-                        }
-                        else {
+                        } else {
                             // If current URL does not reload when url changes, then when selected item changes, update URL search part
                             $location.search(name, id);
                         }
@@ -105,10 +107,17 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             }
 
             // define what mode should be used for what type of item
+            // Items with small quantity should be cached once and for all,
+            // items with large quantity should use ajax.
             var config = {
-                questionnaire: 'ajax',
                 user: 'ajax',
+                survey: 'ajax',
+                questionnaire: 'ajax',
+                rule: 'ajax',
+                filter: 'ajax',
+                filterSet: 'cached',
                 country: 'cached',
+                geoname: 'cached',
                 part: 'cached'
             };
 
@@ -116,8 +125,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             var myRestangular = config[api] == 'cached' ? CachedRestangular : Restangular;
 
             // If the object type should use ajax search, then configure as such
-            if (config[api] == 'ajax')
-            {
+            if (config[api] == 'ajax') {
                 $scope.options = {
                     minimumInputLength: 1,
                     ajax: {// instead of writing the function to execute the request we use Select2's convenient helper
@@ -155,19 +163,24 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                         $scope.includeLinks();
                     });
                 }
-            }
-            // Otherwise, default to standard mode (list fully loaded)
-            else
-            {
+
+            } else { // Otherwise, default to standard mode (list fully loaded)
+
                 // Load items and re-select item based on URL params (if any)
                 myRestangular.all(api).getList(_.merge({perPage: 1000}, $scope.queryparams)).then(function(data) {
 
                     items = data;
 
                     if (idsFromUrl.length) {
-                        var selectedItems = _.filter(items, function(item) {
-                            return _.contains(idsFromUrl, item.id);
+                        var selectedItems = [];
+                        _.forEach(idsFromUrl, function(idFromUrl) {
+                            _.forEach(items, function(item) {
+                                if (item.id == idFromUrl) {
+                                    selectedItems.push(item);
+                                }
+                            });
                         });
+
                         // If we are not multiple, we need to return an object, not an array of objects
                         if (_.isUndefined($attrs.multiple)) {
                             selectedItems = _.first(selectedItems);
@@ -175,29 +188,38 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
 
                         $scope[$attrs.ngModel] = selectedItems;
                     }
+
+                    // prepare item.searchString according to search-attributes attribute on <gims-select>
+                    var defaultSearchAttributes = ['id', 'name'];
+                    var searchAttributes = $scope.searchAttributes ? $scope.searchAttributes.split(',') : [];
+                    searchAttributes = _.uniq(defaultSearchAttributes.concat(searchAttributes));
+                    items = _.map(items, function(item) {
+                        item.searchString = _.map(searchAttributes, function(attribute) {
+                            if (!_.isUndefined(item[attribute])) {
+                                return item[attribute];
+                            }
+                        }).join(' ');
+                        return item;
+                    });
+
                     $scope.includeLinks();
                 });
 
+                var search = _.debounce(function(query) {
+                    var regexp = new RegExp(query.term.toUpperCase());
+                    var data = {};
+                    data.results = _.filter(items, function(item) {
+                        if (regexp.test(item.searchString.toUpperCase())) {
+                            return item;
+                        }
+                    });
+
+                    query.callback(data);
+                }, 150);
+
                 $scope.options = {
                     query: function(query) {
-                        var data = {results: []};
-
-                        var searchTerm = query.term.toUpperCase();
-                        var regexp = new RegExp(searchTerm);
-
-                        angular.forEach(items, function(item) {
-
-                            var result = item.name;
-                            // @todo fix me! We should have a way to define the format key. Case added for survey.
-                            if (item.code !== undefined) {
-                                result = item.code;
-                            }
-                            var blob = (item.id + ' ' + item.name).toUpperCase();
-                            if (regexp.test(blob)) {
-                                data.results.push(item);
-                            }
-                        });
-                        query.callback(data);
+                        search(query);
                     }
                 };
             }
@@ -226,17 +248,14 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 return result;
             };
 
-
             var formatStandardTemplate = function(item) {
                 var result = item.name;
-                if ($scope.format == 'code')
-                {
-                    result = item.code || item.id || item.name;
+                if ($scope.format == 'code') {
+                    result = item.code || item.id || item.name;
                 }
 
                 return result;
             };
-
 
             /**
              * Generate custom template by finding tags [[xxx]] and evaluating them, and then replacing in the template.
@@ -244,8 +263,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
              * @param item element of list with queryparams requested. This var is used only by the custom-template string.
              * @returns {string}
              */
-            var generateTemplate = function(item, originalTemplate)
-            {
+            var generateTemplate = function(item, originalTemplate) {
                 // copy orignal template to avoid remplacing elements on it
                 var template = originalTemplate;
 

@@ -3,7 +3,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
     "use strict";
 
     // Default redirect
-    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,chapter,isCompulsory,isMultiple,isFinal,description,questions'};
+    var questionFields = {fields: 'metadata,filter,survey,type,choices,parts,chapter,isCompulsory,isPopulation,isMultiple,isFinal,description,questions,isAbsolute,alternateNames'};
     var returnUrl = '/';
 
     $scope.sending = false;
@@ -11,46 +11,16 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
     // @TODO : manage value null and integer value
     $scope.percentages = [
         {text: '100%', value: '1.000'},
-        {text: '90%',  value: '0.900'},
-        {text: '80%',  value: '0.800'},
-        {text: '70%',  value: '0.700'},
-        {text: '60%',  value: '0.600'},
-        {text: '50%',  value: '0.500'},
-        {text: '40%',  value: '0.400'},
-        {text: '30%',  value: '0.300'},
-        {text: '20%',  value: '0.200'},
-        {text: '10%',  value: '0.100'},
-        {text: '0%',   value: '0.000'}
-    ];
-
-    $scope.params = {fields: 'paths'};
-
-    $scope.select2Template = "" +
-            "<div>" +
-            "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
-            "    <i class='fa fa-gims-filter'></i> [[item.name]]" +
-            "</div>" +
-            "<div class='col-sm-7 col-md-7'>" +
-            "    <small>" +
-            "       [[_.map(item.paths, function(path){return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]" +
-            "    </small>" +
-            "</div>" +
-            "<div class='col-sm-1 col-md-1 hide-in-results' >" +
-            "    <a class='btn btn-default btn-sm' href='/admin/filter/edit/[[item.id]][[$scope.currentContextElement]]'>" +
-            "        <i class='fa fa-pencil'></i>" +
-            "    </a>" +
-            "</div>" +
-            "<div class='clearfix'></div>" +
-            "</div>";
-
-    $scope.compulsory = [
-        {text: 'Optional', value: 0},
-        {text: 'Compulsory', value: 1}
-    ];
-
-    $scope.multiple = [
-        {text: 'Single choice', value: false},
-        {text: 'Multiple choices', value: true}
+        {text: '90%', value: '0.900'},
+        {text: '80%', value: '0.800'},
+        {text: '70%', value: '0.700'},
+        {text: '60%', value: '0.600'},
+        {text: '50%', value: '0.500'},
+        {text: '40%', value: '0.400'},
+        {text: '30%', value: '0.300'},
+        {text: '20%', value: '0.200'},
+        {text: '10%', value: '0.100'},
+        {text: '0%', value: '0.000'}
     ];
 
     $scope.initChoices = function()
@@ -66,9 +36,10 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
             if (!$scope.question.choices && $scope.question.id) {
                 $scope.question.choices = [{}];
                 $scope.save();
-            }
-            // Otherwise, if the question is new and no choices exists, we inject an empty one
-            else if (!$scope.question.choices || $scope.question.choices.length === 0) {
+
+            } else if (!$scope.question.choices || $scope.question.choices.length === 0) {
+                // Otherwise, if the question is new and no choices exists, we inject an empty one
+
                 $scope.question.choices = [{}];
             }
         }
@@ -86,16 +57,13 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
         $scope.question.choices.push({});
     };
 
-
     $scope.deleteOption = function(index) {
         $scope.question.choices.splice(index, 1);
     };
 
-
     if ($routeParams.returnUrl) {
         returnUrl = $routeParams.returnUrl;
     }
-
 
     var redirect = function() {
         $location.url(returnUrl);
@@ -135,9 +103,10 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
                 if (redirectAfterSave) {
                     redirect();
                 }
+            }, function() {
+                $scope.sending = false;
             });
-        }
-        else {
+        } else {
             $scope.question.survey = $routeParams.survey;
 
             delete $scope.question.sorting; // let the server define the sorting value
@@ -150,14 +119,16 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
                     // redirect to edit URL
                     $location.path(sprintf('admin/question/edit/%s', question.id));
                 }
+            }, function() {
+                $scope.sending = false;
             });
         }
     };
 
     $scope.chapterList = [];
 
-    $scope.setParentQuestions = function (surveyId) {
-        Restangular.one('survey', surveyId).all('question').getList({fields:'chapter,level,type',perPage:1000}).then(function (questions) {
+    var setParentQuestions = function(surveyId) {
+        Restangular.one('survey', surveyId).all('question').getList({fields: 'chapter,level,type', perPage: 1000}).then(function(questions) {
 
             angular.forEach(questions, function(question) {
                 if (question.type == 'Chapter') {
@@ -171,37 +142,56 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
         });
     };
 
-
-
     // Delete a question
     $scope.delete = function() {
         Modal.confirmDelete($scope.question, {label: $scope.question.name, returnUrl: $location.search().returnUrl});
     };
 
+    $scope.addAlternateName = function() {
+        if (!$scope.question.alternateNames[$scope.question.questionnaireForAlternateNames.id]) {
+            $scope.question.alternateNames[$scope.question.questionnaireForAlternateNames.id] = '';
+            $scope.question.questionnaireForAlternateNames = null;
+        }
+    };
+
+    $scope.deleteAlternate = function(questionnaireId) {
+        delete $scope.question.alternateNames[questionnaireId];
+    };
+
+    $scope.$watch('[question.alternateNames, questionnaires]', function() {
+        if (!$scope.questionnaires) {
+            return;
+        }
+
+        $scope.notUsedQuestionnaires = _.filter($scope.questionnaires, function(q, id) {
+            return _.isUndefined($scope.question.alternateNames[id]);
+        });
+    }, true);
 
     // Try loading question if possible...
     if ($routeParams.id) {
         Restangular.one('question', $routeParams.id).get(questionFields).then(function(question) {
             $scope.question = question;
             $scope.survey = question.survey;
-            $scope.setParentQuestions($scope.question.survey.id);
+            setParentQuestions($scope.question.survey.id);
             $scope.initChoices();
-
+            if (_.isEmpty(question.alternateNames)) {
+                question.alternateNames = {};
+            }
             angular.forEach(question.questions, function(question) {
                 question = Restangular.restangularizeElement(null, question, 'question');
             });
             $scope.questions = question.questions;
 
+            Restangular.one('survey', $scope.question.survey.id).all('questionnaire').getList().then(function(questionnaires) {
+                $scope.questionnaires = _.indexBy(questionnaires, 'id');
+            });
         });
 
     } else {
         $scope.question = {};
-        $scope.setParentQuestions($routeParams.survey);
+        setParentQuestions($routeParams.survey);
     }
-
-
-
-
 
     Restangular.all('questionType').getList().then(function(types) {
         $scope.types = types;
@@ -213,4 +203,3 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
         $scope.survey = Restangular.one('survey', params.survey).get().$object;
     }
 });
-

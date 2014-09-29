@@ -20,16 +20,7 @@ class UserSurvey extends AbstractUserRole
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
      */
-    private $user;
-
-    /**
-     * @var Role
-     * @ORM\ManyToOne(targetEntity="Role")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * })
-     */
-    private $role;
+    protected $user;
 
     /**
      * @var Survey
@@ -41,7 +32,7 @@ class UserSurvey extends AbstractUserRole
     private $survey;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -55,50 +46,20 @@ class UserSurvey extends AbstractUserRole
     /**
      * Set "user"
      * @param User $user
-     * @return UserSurvey
+     * @return self
      */
     public function setUser(User $user)
     {
-        $this->user = $user;
+        parent::setUser($user);
         $user->userSurveyAdded($this);
 
         return $this;
     }
 
     /**
-     * Get user
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set role
-     * @param Role $role
-     * @return UserSurvey
-     */
-    public function setRole(Role $role)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * Get role
-     * @return Role
-     */
-    public function getRole()
-    {
-        return $this->role;
-    }
-
-    /**
      * Set survey
      * @param Survey $survey
-     * @return UserSurvey
+     * @return self
      */
     public function setSurvey(Survey $survey)
     {
@@ -117,9 +78,9 @@ class UserSurvey extends AbstractUserRole
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function getRoleContextInternal($action)
+    public function getRoleContext($action)
     {
         return $this->getSurvey();
     }

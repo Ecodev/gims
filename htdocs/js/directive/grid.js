@@ -33,7 +33,6 @@ angular.module('myApp.directives').directive('gimsGrid', function() {
                         api = Restangular.all($attrs.api);
                     }
 
-
                     var defaultParameters = {
                         page: $scope.pagingOptions.currentPage,
                         perPage: $scope.pagingOptions.pageSize,
@@ -73,11 +72,10 @@ angular.module('myApp.directives').directive('gimsGrid', function() {
             var overrideOptions = $scope.$parent.$eval($attrs.options);
             $scope.privateOptions = _.merge(defaultOptions, overrideOptions);
 
-
             /**
              * Utility function to delete a row from the grid (and from server)
              * The column template should use: ng-click="remove(row)"
-             * @param object row
+             * @param row
              * @returns void
              */
             $scope.remove = function(row) {

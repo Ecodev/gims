@@ -1,11 +1,14 @@
 <?php
 
-namespace ApplicationTest\Model;
+namespace ApplicationTest\Model\Question;
 
 use Application\Model\Question\ChoiceQuestion;
 use Application\Model\Question\Choice;
 
-class QuestionTest extends AbstractModel
+/**
+ * @group Model
+ */
+class ChoiceQuestionTest extends \ApplicationTest\Model\AbstractModel
 {
 
     public function testChoicesRelation()
@@ -17,7 +20,7 @@ class QuestionTest extends AbstractModel
 
         $choice->setQuestion($question);
         $this->assertCount(1, $question->getChoices(), 'question must be notified when choice is added');
-        $this->assertSame($choice, $question->getChoices()->first(), 'original choice can be retreived from question');
+        $this->assertSame($choice, $question->getChoices()->first(), 'original choice can be retrieved from question');
     }
 
     public function testChoicesCanBeSet()

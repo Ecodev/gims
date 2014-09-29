@@ -6,7 +6,7 @@ use Zend\Json\Json;
 use \Application\Model\User;
 use \ApplicationTest\Traits\TestWithTransaction;
 
-class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase
+abstract class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase
 {
 
     /**
@@ -15,9 +15,9 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
     protected $user;
 
     /**
-     * @var \ZfcRbac\Service\Rbac
+     * @var \ApplicationTest\Service\FakeIdentityProvider
      */
-    protected $rbac;
+    protected $identityProvider;
 
     /**
      * @var array [classname => [id => object]]
@@ -33,8 +33,9 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
         // Everything is relative to the application root now.
         chdir(__DIR__ . '/../../../');
 
-        // Config is the normal configuration
+        // Config is the normal configuration, overridden by test configuration
         $config = include 'config/application.config.php';
+        $config['module_listener_options']['config_glob_paths'][] = 'config/autoload/{,*.}{phpunit}.php';
 
         $this->setApplicationConfig($config);
 
@@ -44,12 +45,14 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
         $this->setUpTransaction();
 
         // create a fake user
-        $this->user = new User();
-        $this->user->setPassword('foo')->setName('test user unit tests');
+        $this->user = new User('unit tests user');
+        $this->user->setPassword('foo');
+        $this->getEntityManager()->persist($this->user);
+        $this->getEntityManager()->flush();
 
         // Get rbac service to tell who we are (simulate logged in user)
-        $this->rbac = $this->getApplication()->getServiceManager()->get('ZfcRbac\Service\Rbac');
-        $this->rbac->setIdentity($this->user);
+        $this->identityProvider = $this->getApplicationServiceLocator()->get('ApplicationTest\Service\FakeIdentityProvider');
+        $this->identityProvider->setIdentity($this->user);
     }
 
     /**
@@ -91,6 +94,11 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
         $prettyActualWithString = json_encode($actualObject, JSON_PRETTY_PRINT);
         $prettyActualWithFloat = \Application\View\Model\NumericJsonModel::stringToNumeric($prettyActualWithString);
 
+        // Very special case for PHP lower than 5.5.12 with wrong JSON prettyfier
+        $prettyActualWithFloat = preg_replace('/\[
+
+\s*\]/', '[]', $prettyActualWithFloat);
+
         // Overwrite log  with given JSON to file for easy comparaison/replacement of existing expected JSON files
         if ($logFile) {
             file_put_contents($logFile, $prettyActualWithFloat);
@@ -107,8 +115,9 @@ class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpContr
      */
     protected function getNewModelWithId($classname, $mockedMethods = array())
     {
-        if (!isset($this->identity[$classname]))
+        if (!isset($this->identity[$classname])) {
             $this->identity[$classname] = array();
+        }
 
         $id = count($this->identity[$classname]) + 1;
         $mockedMethods ['getId'] = $this->returnValue($id);

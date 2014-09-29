@@ -32,6 +32,8 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
                 if (redirectTo) {
                     $location.path(redirectTo);
                 }
+            }, function() {
+                $scope.sending = false;
             });
         } else {
             Restangular.all('user').post($scope.user).then(function(user) {
@@ -41,6 +43,8 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
                     redirectTo = '/admin/user/edit/' + user.id;
                 }
                 $location.path(redirectTo);
+            }, function() {
+                $scope.sending = false;
             });
         }
     };
@@ -49,7 +53,6 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
     $scope.delete = function() {
         Modal.confirmDelete($scope.user, {label: $scope.user.name, returnUrl: returnUrl});
     };
-
 
     // Load user if possible
     if ($routeParams.id) {
@@ -72,8 +75,7 @@ angular.module('myApp').controller('Admin/UserCtrl', function($scope) {
         columnDefs: [
             {field: 'name', displayName: 'Name', width: '250px'},
             {field: 'email', displayName: 'Email', cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a href="mailto:{{row.entity[col.field]}}">{{row.entity[col.field]}}</a></div>'},
-            {displayName: '', width: '70px', cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/user/edit/{{row.entity.id}}" ><i class="fa fa-pencil fa-lg"></i></a>' +
-                        '<button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
+            {displayName: '', width: '70px', cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/user/edit/{{row.entity.id}}" ><i class="fa fa-pencil fa-lg"></i></a><button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
         ]
     };
 

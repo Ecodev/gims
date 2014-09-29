@@ -11,14 +11,29 @@
     </testsuites>
 
     <filter>
-        <blacklist>
-            <!--Exclude everything from vendor and data, so code coverage statistics takes only our own code -->
-            <directory>../vendor</directory>
-            <directory>../data</directory>
-        </blacklist>
+        <whitelist>
+            <!-- Include only our own code for code coverage statistics -->
+            <directory>../module</directory>
+        </whitelist>
     </filter>
 
     <logging>
-        <!--<log type="coverage-html" target="../data/logs/report" charset="UTF-8" yui="true" hightlight="true" lowupperbound="50" highlowerbound="80"></log>-->
+        <!--<log type="coverage-html" target="../data/logs/tests/report" charset="UTF-8" yui="true" hightlight="true" lowupperbound="50" highlowerbound="80"></log>-->
     </logging>
+
+    <listeners>
+        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener">
+            <arguments>
+                <array>
+                    <element key="slowThreshold">
+                        <integer>1000</integer>
+                    </element>
+                    <element key="reportLength">
+                        <integer>15</integer>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
+    </listeners>
+
 </phpunit>

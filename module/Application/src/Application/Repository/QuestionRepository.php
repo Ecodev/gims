@@ -3,6 +3,7 @@
 namespace Application\Repository;
 
 use Doctrine\ORM\Query\Expr\Join;
+use Application\Model\Questionnaire;
 
 class QuestionRepository extends AbstractChildRepository
 {
@@ -17,7 +18,7 @@ class QuestionRepository extends AbstractChildRepository
             ->join('question.survey', 'survey', Join::WITH)
             ->where('question.' . $parentName . ' = :parent')
             ->setParameter('parent', $parent)->orderBy('question.sorting')
-            ->groupBy('question');
+            ->groupBy('question.id');
 
         $this->addSearch($qb, $search);
         $this->addPermission($qb, 'survey', \Application\Model\Permission::getPermissionName($this, $action));
@@ -28,9 +29,9 @@ class QuestionRepository extends AbstractChildRepository
     /**
      * Changer question type directly in database
      * @todo : find a way to change type with doctrine (transform a doctrine object to another)
-     * @param $id
+     * @param integer $id
      * @param \Application\Model\QuestionType $questionType
-     * @return $this
+     * @return self
      */
     public function changeType($id, \Application\Model\QuestionType $questionType)
     {
@@ -47,7 +48,7 @@ class QuestionRepository extends AbstractChildRepository
      * Returns all items with read access and answers and choices related
      * @return array
      */
-    public function getAllWithPermissionWithAnswers($action = 'read', \Application\Model\Survey $survey = null, $questionnairesIds = null)
+    public function getAllWithPermissionWithAnswers($action = 'read', \Application\Model\Survey $survey = null, array $questionnairesIds = null)
     {
         /** @var \Doctrine\ORM\QueryBuilder $qb */
 
@@ -60,7 +61,8 @@ class QuestionRepository extends AbstractChildRepository
             ->leftJoin('question.chapter', 'chapter')
             ->where('question.survey = :survey')
             ->setParameter('survey', $survey)
-            ->orderBy('question.sorting')
+            ->orderBy('question.sorting', 'ASC')
+            ->addOrderBy('parts.id', 'ASC')
         ;
         $this->addPermission($qb, 'survey', \Application\Model\Permission::getPermissionName($this, $action));
         $questions = $qb->getQuery()->getArrayResult();
@@ -110,7 +112,6 @@ class QuestionRepository extends AbstractChildRepository
             $questionsIndexed[$question['id']]['isMultiple'] = $question['isMultiple'];
         }
 
-
         // answers
         $answers = $this->getEntityManager()
             ->getRepository('\Application\Model\Answer')
@@ -128,13 +129,12 @@ class QuestionRepository extends AbstractChildRepository
             }
         }
 
-       //w($questionsIndexed[55]['answers'][1][4]);
-
         return $questionsIndexed;
     }
 
     /**
      * Get one question, without taking into consideration its type
+     * @param integer $id
      */
     public function getOneById($id)
     {
@@ -152,4 +152,28 @@ class QuestionRepository extends AbstractChildRepository
         return $question;
     }
 
+    /**
+     * Returns alternateNames for the all filters for the given questionnaire
+     * @param array $filterIds
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @return array
+     */
+    public function getByFiltersAndQuestionnaire(array $filterIds, Questionnaire $questionnaire)
+    {
+        $query = $this->getEntityManager()
+            ->createQuery("SELECT q.alternateNames, filter.id AS filterId FROM Application\Model\Question\AbstractAnswerableQuestion q
+                JOIN q.survey survey
+                JOIN q.filter filter
+                WHERE q.filter IN (:filters) AND :questionnaire MEMBER OF survey.questionnaires");
+
+        $params = array(
+            'filters' => $filterIds,
+            'questionnaire' => $questionnaire,
+        );
+
+        $query->setParameters($params);
+        $alternateNames = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        return $alternateNames;
+    }
 }

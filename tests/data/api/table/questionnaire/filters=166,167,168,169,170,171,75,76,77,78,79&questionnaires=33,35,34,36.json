@@ -1,0 +1,333 @@
+{
+    "columns": {
+        "country": "Country",
+        "iso3": "ISO-3",
+        "survey": "Survey",
+        "year": "Year",
+        "f75p1": "WUTI",
+        "f76p1": "WUPOP",
+        "f77p1": "WUSW",
+        "f78p1": "WUOI",
+        "f79p1": "WUOU",
+        "f166p1": "SUI+S",
+        "f167p1": "SUSC",
+        "f168p1": "SUI",
+        "f169p1": "SUS",
+        "f170p1": "SUOU",
+        "f171p1": "SUOD",
+        "f75p2": "WRTI",
+        "f76p2": "WRPOP",
+        "f77p2": "WRSW",
+        "f78p2": "WROI",
+        "f79p2": "WROU",
+        "f166p2": "SRI+S",
+        "f167p2": "SRSC",
+        "f168p2": "SRI",
+        "f169p2": "SRS",
+        "f170p2": "SROU",
+        "f171p2": "SROD",
+        "f75p3": "WTTI",
+        "f76p3": "WTPOP",
+        "f77p3": "WTSW",
+        "f78p3": "WTOI",
+        "f79p3": "WTOU",
+        "f166p3": "STI+S",
+        "f167p3": "STSC",
+        "f168p3": "STI",
+        "f169p3": "STS",
+        "f170p3": "STOU",
+        "f171p3": "STOD"
+    },
+    "legends": [
+        {
+            "short": "WUTI",
+            "long": "Water, Urban, Total improved"
+        },
+        {
+            "short": "WUPOP",
+            "long": "Water, Urban, Piped onto premises"
+        },
+        {
+            "short": "WUSW",
+            "long": "Water, Urban, Surface water"
+        },
+        {
+            "short": "WUOI",
+            "long": "Water, Urban, Other Improved"
+        },
+        {
+            "short": "WUOU",
+            "long": "Water, Urban, Other Unimproved"
+        },
+        {
+            "short": "SUI+S",
+            "long": "Sanitation, Urban, Improved + shared"
+        },
+        {
+            "short": "SUSC",
+            "long": "Sanitation, Urban, Sewerage connections"
+        },
+        {
+            "short": "SUI",
+            "long": "Sanitation, Urban, Improved"
+        },
+        {
+            "short": "SUS",
+            "long": "Sanitation, Urban, Shared"
+        },
+        {
+            "short": "SUOU",
+            "long": "Sanitation, Urban, Other unimproved"
+        },
+        {
+            "short": "SUOD",
+            "long": "Sanitation, Urban, Open defecation"
+        },
+        {
+            "short": "WRTI",
+            "long": "Water, Rural, Total improved"
+        },
+        {
+            "short": "WRPOP",
+            "long": "Water, Rural, Piped onto premises"
+        },
+        {
+            "short": "WRSW",
+            "long": "Water, Rural, Surface water"
+        },
+        {
+            "short": "WROI",
+            "long": "Water, Rural, Other Improved"
+        },
+        {
+            "short": "WROU",
+            "long": "Water, Rural, Other Unimproved"
+        },
+        {
+            "short": "SRI+S",
+            "long": "Sanitation, Rural, Improved + shared"
+        },
+        {
+            "short": "SRSC",
+            "long": "Sanitation, Rural, Sewerage connections"
+        },
+        {
+            "short": "SRI",
+            "long": "Sanitation, Rural, Improved"
+        },
+        {
+            "short": "SRS",
+            "long": "Sanitation, Rural, Shared"
+        },
+        {
+            "short": "SROU",
+            "long": "Sanitation, Rural, Other unimproved"
+        },
+        {
+            "short": "SROD",
+            "long": "Sanitation, Rural, Open defecation"
+        },
+        {
+            "short": "WTTI",
+            "long": "Water, Total, Total improved"
+        },
+        {
+            "short": "WTPOP",
+            "long": "Water, Total, Piped onto premises"
+        },
+        {
+            "short": "WTSW",
+            "long": "Water, Total, Surface water"
+        },
+        {
+            "short": "WTOI",
+            "long": "Water, Total, Other Improved"
+        },
+        {
+            "short": "WTOU",
+            "long": "Water, Total, Other Unimproved"
+        },
+        {
+            "short": "STI+S",
+            "long": "Sanitation, Total, Improved + shared"
+        },
+        {
+            "short": "STSC",
+            "long": "Sanitation, Total, Sewerage connections"
+        },
+        {
+            "short": "STI",
+            "long": "Sanitation, Total, Improved"
+        },
+        {
+            "short": "STS",
+            "long": "Sanitation, Total, Shared"
+        },
+        {
+            "short": "STOU",
+            "long": "Sanitation, Total, Other unimproved"
+        },
+        {
+            "short": "STOD",
+            "long": "Sanitation, Total, Open defecation"
+        }
+    ],
+    "data": [
+        {
+            "country": "Azerbaijan",
+            "iso3": "AZE",
+            "survey": "SLC95",
+            "year": 1995,
+            "f75p1": 85.3,
+            "f76p1": 67.9,
+            "f77p1": null,
+            "f78p1": 85.3,
+            "f79p1": null,
+            "f166p1": null,
+            "f167p1": null,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": null,
+            "f171p1": null,
+            "f75p2": 53.0,
+            "f76p2": 16.8,
+            "f77p2": null,
+            "f78p2": 53.0,
+            "f79p2": null,
+            "f166p2": null,
+            "f167p2": null,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": null,
+            "f171p2": null,
+            "f75p3": 69.9,
+            "f76p3": 43.5,
+            "f77p3": null,
+            "f78p3": 69.9,
+            "f79p3": null,
+            "f166p3": null,
+            "f167p3": null,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": null,
+            "f171p3": null
+        },
+        {
+            "country": "Azerbaijan",
+            "iso3": "AZE",
+            "survey": "HBS01",
+            "year": 2001,
+            "f75p1": null,
+            "f76p1": null,
+            "f77p1": null,
+            "f78p1": null,
+            "f79p1": null,
+            "f166p1": null,
+            "f167p1": null,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": null,
+            "f171p1": null,
+            "f75p2": null,
+            "f76p2": null,
+            "f77p2": null,
+            "f78p2": null,
+            "f79p2": null,
+            "f166p2": null,
+            "f167p2": null,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": null,
+            "f171p2": null,
+            "f75p3": null,
+            "f76p3": null,
+            "f77p3": null,
+            "f78p3": null,
+            "f79p3": null,
+            "f166p3": null,
+            "f167p3": null,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": null,
+            "f171p3": null
+        },
+        {
+            "country": "Azerbaijan",
+            "iso3": "AZE",
+            "survey": "MICS00",
+            "year": 2000,
+            "f75p1": 92.5,
+            "f76p1": 73.6,
+            "f77p1": 0.9,
+            "f78p1": 18.9,
+            "f79p1": 6.6,
+            "f166p1": 82.6,
+            "f167p1": null,
+            "f168p1": null,
+            "f169p1": null,
+            "f170p1": 17.3,
+            "f171p1": 0.1,
+            "f75p2": 57.5,
+            "f76p2": 18.2,
+            "f77p2": 17.4,
+            "f78p2": 39.3,
+            "f79p2": 25.1,
+            "f166p2": 51.9,
+            "f167p2": null,
+            "f168p2": null,
+            "f169p2": null,
+            "f170p2": 48.0,
+            "f171p2": 0.1,
+            "f75p3": 75.5,
+            "f76p3": 46.7,
+            "f77p3": 8.9,
+            "f78p3": 28.8,
+            "f79p3": 15.6,
+            "f166p3": 67.7,
+            "f167p3": null,
+            "f168p3": null,
+            "f169p3": null,
+            "f170p3": 32.2,
+            "f171p3": 0.1
+        },
+        {
+            "country": "Azerbaijan",
+            "iso3": "AZE",
+            "survey": "DHS06",
+            "year": 2006,
+            "f75p1": 86.3,
+            "f76p1": 75.6,
+            "f77p1": 1.8,
+            "f78p1": 10.7,
+            "f79p1": 11.9,
+            "f166p1": 93.1,
+            "f167p1": 74.0,
+            "f168p1": 82.8,
+            "f169p1": 10.3,
+            "f170p1": 6.8,
+            "f171p1": 0.1,
+            "f75p2": 68.6,
+            "f76p2": 19.0,
+            "f77p2": 16.1,
+            "f78p2": 49.6,
+            "f79p2": 15.3,
+            "f166p2": 73.1,
+            "f167p2": 1.6,
+            "f168p2": 70.7,
+            "f169p2": 2.5,
+            "f170p2": 26.4,
+            "f171p2": 0.5,
+            "f75p3": 77.9,
+            "f76p3": 48.8,
+            "f77p3": 8.6,
+            "f78p3": 29.1,
+            "f79p3": 13.5,
+            "f166p3": 83.7,
+            "f167p3": 39.7,
+            "f168p3": 77.0,
+            "f169p3": 6.6,
+            "f170p3": 16.1,
+            "f171p3": 0.3
+        }
+    ]
+}

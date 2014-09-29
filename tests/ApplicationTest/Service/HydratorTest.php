@@ -7,6 +7,9 @@ use Application\Model\Questionnaire;
 use Application\Model\Survey;
 use Application\Service\Hydrator;
 
+/**
+ * @group Service
+ */
 class HydratorTest extends \ApplicationTest\Controller\AbstractController
 {
 
@@ -25,39 +28,11 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     private $hydrator;
 
-    /**
-     * @var array
-     */
-    private $fieldSet1 = array(
-        'foo',
-        'name',
-        'questionnaires',
-        'metadata',
-        'questionnaires.foo',
-        'questionnaires.name',
-        'questionnaires.status',
-        'questionnaires.metadata',
-        'questionnaires.answers',
-        'questionnaires.answers.foo',
-        'questionnaires.answers.metadata',
-        'questionnaires.answers.valuePercent',
-        'questionnaires.answers.valueAbsolute',
-    );
-
-    /**
-     * @var array
-     */
-    private $fieldSet2 = array(
-        'name',
-        'questionnaires',
-    );
-
     public function setUp()
     {
         parent::setUp();
 
-        $this->user = new \Application\Model\User();
-        $this->user->setName('John');
+        $this->user = new \Application\Model\User('John');
         $this->choice1 = new \Application\Model\Question\Choice();
         $this->choice2 = new \Application\Model\Question\Choice();
 
@@ -85,6 +60,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'othersub.name',
             'closure' => $closure,
             'children.__recursive',
+            'new1.new2.new3.new4', // new object, not referenced before, should not have any issue
         ));
 
         $expected = array(
@@ -100,6 +76,13 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             ),
             'closure' => $closure,
             'children' => '__recursive',
+            'new1' => array(
+                'new2' => array(
+                    'new3' => array(
+                        'new4',
+                    ),
+                ),
+            ),
         );
 
         $this->assertEquals($expected, $actual);
@@ -111,7 +94,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'name' => 'John Connor',
             'email' => 'john.connor@skynet.net',
             'state' => null,
-            'lastLogin' => null
+            'lastLogin' => '1997-08-29T01:02:03+0000',
         );
 
         $this->hydrator->hydrate($data, $this->user);
@@ -124,10 +107,28 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->assertEquals($data, $actual, 'it must be exactly same as input, except the id');
     }
 
+    public function testCanHydrateAndExtractJSONproperty()
+    {
+        $data = [
+            'alternateNames' => [
+                123 => 'alternate 1',
+                456 => 'alternate 2',
+            ],
+        ];
+
+        $question = new \Application\Model\Question\NumericQuestion('tst question');
+        $this->assertEquals([], $question->getAlternateNames());
+
+        $this->hydrator->hydrate($data, $question);
+        $this->assertEquals($data['alternateNames'], $question->getAlternateNames());
+
+        $actual = $this->hydrator->extract($question, array('alternateNames'));
+        $this->assertEquals($data['alternateNames'], $actual['alternateNames'], 'it must be exactly same as input');
+    }
+
     public function testDoesNotModifySubobject()
     {
-        $survey = new Survey();
-        $survey->setName('original name');
+        $survey = new Survey('original name');
         $questionnaire = new \Application\Model\Questionnaire();
         $questionnaire->setSurvey($survey);
 
@@ -232,8 +233,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     {
         $questionnaire = new \Application\Model\Questionnaire('filter 1');
         $questionnaire->setComments('test comments');
-        $survey = new \Application\Model\Survey();
-        $survey->setName('test survey');
+        $survey = new \Application\Model\Survey('test survey');
         $survey->setCode('tst');
         $questionnaire->setSurvey($survey);
         $questionnaire->setGeoname(new Geoname('test geoname'));
@@ -373,8 +373,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     public function testHydrateAssociationWithSuboject()
     {
         $questionnaire = new \Application\Model\Questionnaire();
-        $survey = new \Application\Model\Survey();
-        $survey->setName('test survey');
+        $survey = new \Application\Model\Survey('test survey');
 
         // Create a stub for the \Application\Service\Hydrator class, so we don't have to mess with database
         $mockHydrator = $this->getMock('\Application\Service\Hydrator', array('getObject'), array(), '', false);
@@ -441,20 +440,18 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     private function getFakeSurvey()
     {
-
-        $survey = new Survey();
+        $survey = new Survey('test survey');
         $survey->setIsActive(true);
-        $survey->setName('test survey');
         $survey->setCode('code test survey');
         $survey->setYear(2010);
 
-        $geoName = new Geoname('test geoname');
+        $geoname = new Geoname('test geoname');
 
         $questionnaire = new Questionnaire();
         $questionnaire->setSurvey($survey);
         $questionnaire->setDateObservationStart(new \DateTime('2010-01-01T00:00:00+0100'));
         $questionnaire->setDateObservationEnd(new \DateTime('2011-01-01T00:00:00+0100'));
-        $questionnaire->setGeoname($geoName);
+        $questionnaire->setGeoname($geoname);
 
         return $survey;
     }

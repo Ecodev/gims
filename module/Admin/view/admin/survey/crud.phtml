@@ -2,10 +2,18 @@
 
     <h2>
         <ul class="breadcrumb">
+            <?php echo $this->helpButton(); ?>
+            <span class="active pull-right"><i class="fa fa-fw fa-gims-survey"></i></span>
             <li><a href="/admin/survey">Surveys</a></li>
-            <li class="active">{{survey.code}}</li>
+            <li class="active"> {{survey.code}}</li>
         </ul>
     </h2>
+
+    <?php echo $this->helpBox('Name your survey, create questions and questionnaires and give access to users. For further info, see how to edit the
+            <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/data_input.html#survey">survey</a>,
+            <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/data_input.html#questions">questions</a> and
+            <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/data_input.html#questionnaires">questionnaires</a>.'); ?>
+
 
     <form name="myForm" class="form-horizontal">
 
@@ -13,7 +21,7 @@
         <a href='/export/survey/{{survey.id}}/{{survey.name}}.xslx' target='_blank' class='btn btn-default'><i class='fa fa-download'></i> Export all questionnaires</a>
 
         <tabset style="margin-top: 20px">
-            <tab heading="General info" active="tabs[0]" select="selectTab(0)" >
+            <tab heading="General" active="tabs[0]" select="selectTab(0)" >
 
                 <div class="form-group" ng-class="{'has-error':myForm.code.$invalid}">
                     <label class="control-label col-sm-1" for="survey.code">Code</label>
@@ -87,7 +95,7 @@
             </tab>
 
             <tab heading="Users" active="tabs[3]" select="selectTab(3)" ng-if="survey.id">
-                <gims-relations relation="UserSurvey" first="survey" second="user" third="role"></gims-relations>
+                <gims-relations relation="UserSurvey" properties="['survey', 'user', 'role']"></gims-relations>
             </tab>
         </tabset>
     </form>

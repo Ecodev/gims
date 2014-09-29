@@ -11,11 +11,6 @@ abstract class AbstractImporter
 
 use \Application\Traits\EntityManagerAware;
 
-    protected $cacheQuestions = array();
-    protected $cacheFilters = array();
-    protected $cacheFilterSets = array();
-    protected $cacheHighFilters = array();
-
     /**
      * sheet name =>
      *      defintions =>
@@ -25,7 +20,8 @@ use \Application\Traits\EntityManagerAware;
     protected $definitions = array(
         'Tables_W' => array(
             'definitions' => array(
-                4 => array("Water", null, 0, null),
+                3 => array("JMP", null, 0, null),
+                4 => array("Water", 3, 0, null),
                 5 => array("Tap water", 4, 0, null),
                 6 => array("House connections", 5, 0, null),
                 7 => array("Piped water into dwelling", 6, 0, null),
@@ -76,10 +72,10 @@ use \Application\Traits\EntityManagerAware;
                 52 => array("Public", 50, 0, null),
                 53 => array("Other", 50, 0, null),
                 54 => array("Rainwater", 4, 0, null),
-                55 => array("Covered cistern/tank", 54, 0, null),
+                55 => array("Rainwater into covered cistern/tank", 54, 0, null),
                 56 => array("Uncovered cistern/tank", 54, 0, null),
                 57 => array("Bottled water", 4, 0, null),
-                58 => array("with other improved", 57, 0, null),
+                58 => array("Bottled water with other improved", 57, 0, null),
                 59 => array("without other improved", 57, 0, null),
                 60 => array("Surface water", 4, 0, null),
                 61 => array("River", 60, 0, null),
@@ -124,10 +120,11 @@ use \Application\Traits\EntityManagerAware;
             'highFilters' => array(
                 "Total improved" => array(
                     'row' => 89,
+                    'thematic' => 4,
                     'children' => array(5, 12, 55, 58, 68),
                     'excludes' => 91,
                     'isImproved' => true,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
                             array(5, '=IF(AND(ISNUMBER(Total improvedURBAN), ISNUMBER(Total improvedRURAL)), (Total improvedURBAN * POPULATION_URBAN + Total improvedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)'),
                         ),
@@ -149,10 +146,11 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Piped onto premises" => array(
                     'row' => 90,
+                    'thematic' => 4,
                     'children' => array(6),
                     'excludes' => 92,
                     'isImproved' => true,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
                             array(5, '=IF(AND(ISNUMBER(Piped onto premisesURBAN), ISNUMBER(Piped onto premisesRURAL)), (Piped onto premisesURBAN * POPULATION_URBAN + Piped onto premisesRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)'),
                         ),
@@ -183,56 +181,59 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Surface water" => array(
                     'row' => 87,
+                    'thematic' => 4,
                     'children' => array(60),
                     'excludes' => 93,
                     'isImproved' => false,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
-                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
-                            array(5, '=IF(Total improved = 1, 0, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
+                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
+                            array(5, '=IF(Total improved = 100%, 0%, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
                         'onlyTotal' => array(
                             array(3, '=Surface waterTOTAL'),
                             array(4, '=Surface waterTOTAL'),
-                            array(5, '=IF(Total improved = 1, 0, {self})'),
+                            array(5, '=IF(Total improved = 100%, 0%, {self})'),
                         ),
                         'onlyRural' => array(
-                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
+                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
                             array(5, '=Surface waterRURAL'),
                         ),
                         'onlyUrban' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
                             array(5, '=Surface waterURBAN'),
                         ),
                         'Belarus' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
-                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.99, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
-                            array(5, '=IF(Total improved = 1, 0, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
+                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
+                            array(5, '=IF(Total improved = 100%, 0%, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
                         'TFYR Macedonia' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
                             array(4, '=Surface waterURBAN'),
-                            array(5, '=IF(Total improved = 1, 0, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
+                            array(5, '=IF(Total improved = 100%, 0%, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
                         'United States of America' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.993, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
-                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 0.936, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 1), 1 - Total improved, {self}))), NULL)'),
-                            array(5, '=IF(Total improved = 1, 0, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved >= 99.3%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
+                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved >= 93.6%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Surface waterLATER)), Surface waterLATER, IF(AND(ISNUMBER({self}), Total improved + {self} >= 100%), 100% - Total improved, {self}))), NULL)'),
+                            array(5, '=IF(Total improved = 100%, 0%, IF(AND(ISNUMBER(Surface waterURBAN), ISNUMBER(Surface waterRURAL)), (Surface waterURBAN * POPULATION_URBAN + Surface waterRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
                         'Saudi Arabia' => array(
                             array(3, '=Surface waterTOTAL'),
                             array(4, '=Surface waterTOTAL'),
-                            array(5, '=IF(Total improved = 1, 0, {self})'),
+                            array(5, '=IF(Total improved = 100%, 0%, {self})'),
                         ),
                     ),
                 ),
                 "Other Improved" => array(
                     'row' => null,
+                    'thematic' => 4,
                     'children' => array(9, 10, 12, 55, 58, 68),
                     'excludes' => null,
                     'isImproved' => false,
-                    'formulas' => array(
+                    'rule' => '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)',
+                    'regressionRules' => array(
                         'default' => array(
                             array(3, '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)'),
                             array(4, '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)'),
@@ -260,40 +261,48 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Other Unimproved" => array(
                     'row' => null,
+                    'thematic' => 4,
                     'children' => array(56, 59, 71),
                     'excludes' => null,
                     'isImproved' => false,
-                    'formulas' => array(
+                    'rule' => '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Surface water)), 100% - Total improved - Surface water, NULL)',
+                    'regressionRules' => array(
                         'default' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
-                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
-                            array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
+                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
+                            array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
                         ),
                         'onlyTotal' => array(
                             array(3, '=Other UnimprovedTOTAL'),
                             array(4, '=Other UnimprovedTOTAL'),
-                            array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
+                            array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
                         ),
                         'onlyRural' => array(
-                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
+                            array(4, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
                             array(5, '=Other UnimprovedRURAL'),
                         ),
                         'onlyUrban' => array(
-                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
+                            array(3, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
                             array(5, '=Other UnimprovedURBAN'),
                         ),
                         'Saudi Arabia' => array(
                             array(3, '=Other UnimprovedTOTAL'),
                             array(4, '=Other UnimprovedTOTAL'),
-                            array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 1, 0, 1 - Total improved - Surface water), NULL)'),
+                            array(5, '=IF(ISNUMBER(Total improved), IF(Total improved = 100%, 0%, 100% - Total improved - Surface water), NULL)'),
                         ),
                     ),
                 ),
             ),
+            'extras' => [
+                104 => '[Water] Number of people covered by the questionnaire',
+                105 => '[Water] Number of households covered by the questionnaire',
+                106 => '[Water] Total population',
+            ],
         ),
         'Tables_S' => array(
             'definitions' => array(
-                4 => array("Sanitation", null, 0, null),
+                3 => array("JMP", null, 0, null),
+                4 => array("Sanitation", 3, 0, null),
                 5 => array("Flush and pour flush", 4, 2, array(11, 30), 999),
                 6 => array("to piped sewer system", 5, 1, array(12, 31)),
                 7 => array("to septic tank", 5, 1, array(13, 32)),
@@ -402,10 +411,11 @@ use \Application\Traits\EntityManagerAware;
             'highFilters' => array(
                 "Improved + shared" => array(
                     'row' => 94,
+                    'thematic' => 4,
                     'children' => array(-6, -7, -8, -9, 49, 73, 76),
                     'excludes' => 96,
                     'isImproved' => true,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
                             array(5, '=IF(ISNUMBER(Shared), Shared + Improved, IF(AND(ISNUMBER(Improved + sharedURBAN), ISNUMBER(Improved + sharedRURAL)), (Improved + sharedURBAN * POPULATION_URBAN + Improved + sharedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
@@ -427,10 +437,11 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Sewerage connections" => array(
                     'row' => 95,
+                    'thematic' => 4,
                     'children' => array(6),
                     'excludes' => 97,
                     'isImproved' => false,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
                         ),
                         'onlyTotal' => array(
@@ -451,60 +462,62 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Improved" => array(
                     'row' => null,
+                    'thematic' => 4,
                     'children' => array(), // based on ratio
                     'excludes' => null,
                     'isImproved' => true,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
                             // Additionnal rules for developed countries
-                            array(3, "=IF(AND(Improved + shared > 0.995, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
-                            array(4, "=IF(AND(Improved + shared > 0.995, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            array(3, "=IF(AND(Improved + shared > 99.5%, COUNT(ALL_RATIOS) = 0), Improved + shared, {self})", true),
+                            array(4, "=IF(AND(Improved + shared > 99.5%, COUNT(ALL_RATIOS) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
-                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
+                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
                             array(5, "=IF(AND(ISNUMBER(ImprovedURBAN), ISNUMBER(ImprovedRURAL)), (ImprovedURBAN * POPULATION_URBAN + ImprovedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)"),
                         ),
                         'onlyTotal' => array(
                             array(3, '=ImprovedTOTAL'),
                             array(4, '=ImprovedTOTAL'),
-                            array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
                         ),
                         'onlyRural' => array(
                             // Additionnal rules for developed countries
-                            array(4, "=IF(AND(Improved + shared > 0.995, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            array(4, "=IF(AND(Improved + shared > 99.5%, COUNT(ALL_RATIOS) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
                             array(5, '=ImprovedRURAL'),
                         ),
                         'onlyUrban' => array(
                             // Additionnal rules for developed countries
-                            array(3, "=IF(AND(Improved + shared > 0.995, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            array(3, "=IF(AND(Improved + shared > 99.5%, COUNT(ALL_RATIOS) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
                             array(5, '=ImprovedURBAN'),
                         ),
                         'United States of America' => array(
                             // Additionnal rules for developed countries
-                            array(3, "=IF(AND(Improved + shared > 0.995, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
-                            array(4, "=IF(AND(Improved + shared > 0.984, COUNT({Shared,Q#all}) = 0), Improved + shared, {self})", true),
+                            array(3, "=IF(AND(Improved + shared > 99.5%, COUNT(ALL_RATIOS) = 0), Improved + shared, {self})", true),
+                            array(4, "=IF(AND(Improved + shared > 98.4%, COUNT(ALL_RATIOS) = 0), Improved + shared, {self})", true),
                             // Normal rules
-                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
-                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(3, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
+                            array(4, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
                             array(5, "=IF(AND(ISNUMBER(ImprovedURBAN), ISNUMBER(ImprovedRURAL)), (ImprovedURBAN * POPULATION_URBAN + ImprovedRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL)"),
                         ),
                         'Saudi Arabia' => array(
                             array(3, '=ImprovedTOTAL'),
                             array(4, '=ImprovedTOTAL'),
-                            array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT({Shared,Q#all}) > 0), Improved + shared * (1 - AVERAGE({Shared,Q#all})), NULL)"),
+                            array(5, "=IF(AND(ISNUMBER(Improved + shared), COUNT(ALL_RATIOS) > 0), Improved + shared * (100% - AVERAGE(ALL_RATIOS)), NULL)"),
                         ),
                     ),
                 ),
                 "Shared" => array(
                     'row' => null,
+                    'thematic' => 4,
                     'children' => array(), // based on ratio
-                    'excludes' => 99,
+                    'excludes' => null,
                     'isImproved' => false,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
                             array(3, '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)'),
                             array(4, '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Improved)), Improved + shared - Improved, NULL)'),
@@ -532,76 +545,90 @@ use \Application\Traits\EntityManagerAware;
                 ),
                 "Other unimproved" => array(
                     'row' => null,
+                    'thematic' => 4,
                     'children' => array(80),
                     'excludes' => null,
                     'isImproved' => false,
-                    'formulas' => array(
+                    'rule' => '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Open defecation)), 100% - Improved + shared - Open defecation, NULL)',
+                    'regressionRules' => array(
                         'default' => array(
-                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation), NULL)'),
-                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation), NULL)'),
-                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared + Open defecation >= 1, 0, IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation)), NULL)'),
+                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation), NULL)'),
+                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation), NULL)'),
+                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared + Open defecation >= 100%, 0%, IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation)), NULL)'),
                         ),
                         'onlyTotal' => array(
                             array(3, '=Other unimprovedTOTAL'),
                             array(4, '=Other unimprovedTOTAL'),
-                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared + Open defecation >= 1, 0, IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation)), NULL)'),
+                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared + Open defecation >= 100%, 0%, IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation)), NULL)'),
                         ),
                         'onlyRural' => array(
-                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation), NULL)'),
+                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation), NULL)'),
                             array(5, '=Other unimprovedRURAL'),
                         ),
                         'onlyUrban' => array(
-                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation), NULL)'),
+                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation), NULL)'),
                             array(5, '=Other unimprovedURBAN'),
                         ),
                         'Saudi Arabia' => array(
                             array(3, '=Other unimprovedTOTAL'),
                             array(4, '=Other unimprovedTOTAL'),
-                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared + Open defecation >= 1, 0, IF(Improved + shared = 1, 0, 1 - Improved + shared - Open defecation)), NULL)'),
+                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared + Open defecation >= 100%, 0%, IF(Improved + shared = 100%, 0%, 100% - Improved + shared - Open defecation)), NULL)'),
                         ),
                     ),
                 ),
                 "Open defecation" => array(
                     'row' => null,
+                    'thematic' => 4,
                     'children' => array(79),
                     'excludes' => 98,
                     'isImproved' => false,
-                    'formulas' => array(
+                    'regressionRules' => array(
                         'default' => array(
-                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
-                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
-                            array(5, '=IF(Improved + shared = 1, 0, IF(AND(ISNUMBER(Open defecationURBAN), ISNUMBER(Open defecationRURAL)), (Open defecationURBAN * POPULATION_URBAN + Open defecationRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
+                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), 100% - Improved + shared, {self}))), NULL)'),
+                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), 100% - Improved + shared, {self}))), NULL)'),
+                            array(5, '=IF(Improved + shared = 100%, 0%, IF(AND(ISNUMBER(Open defecationURBAN), ISNUMBER(Open defecationRURAL)), (Open defecationURBAN * POPULATION_URBAN + Open defecationRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
                         'onlyTotal' => array(
                             array(3, '=Open defecationTOTAL'),
                             array(4, '=Open defecationTOTAL'),
-                            array(5, '=IF(Improved + shared = 1, 0, {self})'),
+                            array(5, '=IF(Improved + shared = 100%, 0%, {self})'),
                         ),
                         'onlyRural' => array(
-                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
+                            array(4, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), 100% - Improved + shared, {self}))), NULL)'),
                             array(5, '=Open defecationRURAL'),
                         ),
                         'onlyUrban' => array(
-                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
+                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), 100% - Improved + shared, {self}))), NULL)'),
                             array(5, '=Open defecationURBAN'),
                         ),
                         'Tunisia' => array(
-                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self}))), NULL)'),
-                            array(4, '=IF({Y} >= 2006, Open defecationEARLIER - 0.02, IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 0.995, 0, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), 1 - Improved + shared, {self})), NULL))'),
-                            array(5, '=IF(Improved + shared = 1, 0, IF(AND(ISNUMBER(Open defecationURBAN), ISNUMBER(Open defecationRURAL)), (Open defecationURBAN * POPULATION_URBAN + Open defecationRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
+                            array(3, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 99.5%, 0%, IF(AND(NOT(ISNUMBER({self})), ISNUMBER(Open defecationLATER)), Open defecationLATER, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), 100% - Improved + shared, {self}))), NULL)'),
+                            array(4, '=IF({Y} >= 2006, Open defecationEARLIER - 2%, IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 99.5%, 0%, IF(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), 100% - Improved + shared, {self})), NULL))'),
+                            array(5, '=IF(Improved + shared = 100%, 0%, IF(AND(ISNUMBER(Open defecationURBAN), ISNUMBER(Open defecationRURAL)), (Open defecationURBAN * POPULATION_URBAN + Open defecationRURAL * POPULATION_RURAL) / POPULATION_TOTAL, NULL))'),
                         ),
                         'Saudi Arabia' => array(
                             array(3, '=Open defecationTOTAL'),
                             array(4, '=Open defecationTOTAL'),
-                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 1, 0, IF(OR(AND(ISNUMBER({self}), Improved + shared + {self} >= 1), NOT(ISNUMBER({self}))), 1 - Improved + shared, {self})), NULL)'),
+                            array(5, '=IF(ISNUMBER(Improved + shared), IF(Improved + shared >= 100%, 0%, IF(OR(AND(ISNUMBER({self}), Improved + shared + {self} >= 100%), NOT(ISNUMBER({self}))), 100% - Improved + shared, {self})), NULL)'),
                         ),
                     ),
                 ),
             ),
+            'extras' => [
+                108 => '[Sanitation] Number of people covered by the questionnaire',
+                109 => '[Sanitation] Number of households covered by the questionnaire',
+                110 => '[Sanitation] Total population',
+            ],
         ),
     );
 
-    protected function getFilter($definition, $cache)
+    /**
+     * Get or create a filter and link it to its parent
+     * @param array $definition
+     * @param array $cache
+     * @return \Application\Model\Filter
+     */
+    protected function getFilter(array $definition, array $cache)
     {
         $name = $definition[0];
 
@@ -612,119 +639,20 @@ use \Application\Traits\EntityManagerAware;
         $filter = $filterRepository->getOneByNames($name, $parentName);
         if (!$filter) {
 
-            $filter = new Filter();
+            $filter = new Filter($name);
             $this->getEntityManager()->persist($filter);
-            $filter->setName($name);
             if ($parent) {
                 $parent->addChild($filter);
+
+                if ($parentName != 'JMP') {
+                    $filter->setThematicFilter(@$cache[4]);
+                } else {
+                    $filter->setIsThematic(true);
+                }
             }
         }
 
         return $filter;
-    }
-
-    /**
-     * Import filters
-     * @param array $filters
-     */
-    protected function importFilters(array $filters)
-    {
-        // Import filters
-        $this->cacheFilters = array();
-        $this->cacheQuestions = array();
-        foreach ($filters['definitions'] as $row => $definition) {
-            $filter = $this->getFilter($definition, $this->cacheFilters);
-            $this->cacheFilters[$row] = $filter;
-        }
-
-        // Add all summands to filters
-        foreach ($filters['definitions'] as $row => $definition) {
-            $filter = $this->cacheFilters[$row];
-            $summands = $definition[3];
-            if ($summands) {
-                foreach ($summands as $summand) {
-                    $s = $this->cacheFilters[$summand];
-                    $filter->addSummand($s);
-                }
-            }
-        }
-
-        // Replace filters with their replacements, if any defined
-        // This is a dirty trick to solve inconsistency in first filter of sanitation
-        foreach ($filters['replacements'] as $row => $definition) {
-            $replacementFilter = $this->getFilter($definition, $this->cacheFilters);
-            $originalFilter = @$this->cacheFilters[$row];
-
-            // If original filter actually exists, add the replacement as a summand, and replace it
-            if ($originalFilter) {
-                $originalFilter->addSummand($replacementFilter);
-            }
-            $this->cacheFilters[$row] = $replacementFilter;
-
-            // Keep original filter available on negative indexes
-            $this->cacheFilters[-$row] = $originalFilter;
-        }
-
-        // Add extra summand which can be one of replacement
-        foreach ($filters['definitions'] as $row => $definition) {
-            $filter = $this->cacheFilters[$row];
-            $extraSummand = @$definition[4];
-            if ($extraSummand) {
-                $s = $this->cacheFilters[$extraSummand];
-                $filter->addSummand($s);
-            }
-        }
-
-        $this->getEntityManager()->flush();
-        echo count($this->cacheFilters) . ' filters imported' . PHP_EOL;
-    }
-
-    /**
-     * Import high filters, their FilterSet
-     * @param array $filterSetNames
-     * @param array $filters
-     */
-    protected function importHighFilters(array $filterSetNames, array $filters)
-    {
-        $filterSetRepository = $this->getEntityManager()->getRepository('Application\Model\FilterSet');
-        $filterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedUnimprovedName']);
-        $improvedFilterSet = $filterSetRepository->getOrCreate($filterSetNames['improvedName']);
-        $this->getEntityManager()->flush();
-
-        // Get or create all filter
-        echo 'Importing high filters';
-        foreach ($filters as $filterName => $filterData) {
-
-            // Look for existing high filter...
-            $highFilter = null;
-            foreach ($filterSet->getFilters() as $f) {
-                if ($f->getName() == $filterName) {
-                    $highFilter = $f;
-                    break;
-                }
-            }
-
-            // .. or create it
-            if (!$highFilter) {
-                $highFilter = new Filter($filterName);
-                $filterSet->addFilter($highFilter);
-                $this->getEntityManager()->persist($highFilter);
-
-                if ($filterData['isImproved']) {
-                    $improvedFilterSet->addFilter($highFilter);
-                }
-            }
-
-            // Affect children filters
-            foreach ($filterData['children'] as $child) {
-                $highFilter->addChild($this->cacheFilters[$child]);
-            }
-
-            $this->cacheHighFilters[$filterName] = $highFilter;
-            echo '.';
-        }
-
-        echo PHP_EOL;
     }
 
 }

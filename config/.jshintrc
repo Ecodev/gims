@@ -33,7 +33,6 @@
     "noempty": true,    // Prohibit use of empty blocks.
     "nonew": true,      // Prohibit use of constructors for side-effects.
     "strict": false,    // Require `use strict` pragma  in every file.
-    "trailing": true,   // Prohibit trailing whitespaces.
     "undef": true,      // Require all non-global variables be declared before they are used.
     "unused": true
 }

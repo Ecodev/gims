@@ -3,438 +3,356 @@
 namespace Application\Service\Calculator;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Application\Model\Rule\AbstractQuestionnaireUsage;
+use Application\Model\Part;
+use Application\Model\Rule\Rule;
 
 /**
- * Common base class for various computation. It includes a local instance cache.
- * That means a single instance of Calculator cannot be used if the data model
- * changes. Once computation was started and data model changes, then you *MUST*
- * create a new instance of Calculator to start from scratch (empty caches).
+ * Additional computing capabilities related to regressions
  */
-class Calculator
+class Calculator extends AbstractCalculator
 {
 
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
-
-use \Application\Traits\EntityManagerAware;
-
-    private $cacheComputeFilter = array();
-    protected $ignoredFilters = array();
-    private $populationRepository;
-    private $questionnaireUsageRepository;
-    private $filterRepository;
-    private $questionnaireRepository;
-    private $partRepository;
-    private $answerRepository;
-    private $filterQuestionnaireUsageRepository;
+    private $cacheComputeFilterForAllQuestionnaires = array();
+    private $cacheComputeRegressionForAllYears = array();
+    private $cacheComputeFlattenOneYearWithFormula = array();
+    private $filterGeonameUsageRepository;
 
     /**
-     * Set the population repository
-     * @param \Application\Repository\PopulationRepository $populationRepository
-     * @return \Application\Service\Calculator\Jmp
+     * Set the filterGeonameUsage repository
+     * @param \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepository
+     * @return self
      */
-    public function setPopulationRepository(\Application\Repository\PopulationRepository $populationRepository)
+    public function setFilterGeonameUsageRepository(\Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepository)
     {
-        $this->populationRepository = $populationRepository;
+        $this->filterGeonameUsageRepository = $filterGeonameUsageRepository;
 
         return $this;
     }
 
     /**
-     * Get the population repository
-     * @return \Application\Repository\PopulationRepository
+     * Get the filterGeonameUsage repository
+     * @return \Application\Repository\Rule\FilterGeonameUsageRepository
      */
-    public function getPopulationRepository()
+    public function getFilterGeonameUsageRepository()
     {
-        if (!$this->populationRepository) {
-            $this->populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+        if (!$this->filterGeonameUsageRepository) {
+            $this->filterGeonameUsageRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
         }
 
-        return $this->populationRepository;
+        return $this->filterGeonameUsageRepository;
     }
 
     /**
-     * Set the questionnaireusage repository
-     * @param \Application\Repository\Rule\QuestionnaireUsageRepository $questionnaireUsageRepository
-     * @return \Application\Service\Calculator\Calculator
+     * Returns an array of all filter data, which includes name and year-regression pairs
+     * This is the highest level of computation, the "main" computation method.
+     * @param integer $yearStart
+     * @param integer $yearEnd
+     * @param \Application\Model\Filter[] $filters
+     * @param array $questionnaires
+     * @param \Application\Model\Part $part
+     * @return array [[name => filterName, data => [year => flattenedRegression]]]]
      */
-    public function setQuestionnaireUsageRepository(\Application\Repository\Rule\QuestionnaireUsageRepository $questionnaireUsageRepository)
+    public function computeFlattenAllYears($yearStart, $yearEnd, $filters, array $questionnaires, Part $part)
     {
-        $this->questionnaireUsageRepository = $questionnaireUsageRepository;
+        $result = array();
+        $years = range($yearStart, $yearEnd);
+        foreach ($filters as $filter) {
 
-        return $this;
-    }
+            $data = array();
+            foreach ($years as $year) {
+                $data[] = $this->computeFlattenOneYearWithFormula($year, $years, $filter->getId(), $questionnaires, $part->getId());
+            }
 
-    /**
-     * Get the questionnaireusage repository
-     * @return \Application\Repository\Rule\QuestionnaireUsageRepository
-     */
-    public function getQuestionnaireUsageRepository()
-    {
-        if (!$this->questionnaireUsageRepository) {
-            $this->questionnaireUsageRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\QuestionnaireUsage');
+            $result[] = array(
+                'name' => $filter->getName(),
+                'id' => $filter->getId(),
+                'data' => $data,
+            );
         }
 
-        return $this->questionnaireUsageRepository;
-    }
-
-    /**
-     * Set the filter repository
-     * @param \Application\Repository\FilterRepository $filterRepository
-     * @return \Application\Service\Calculator\Calculator
-     */
-    public function setFilterRepository(\Application\Repository\FilterRepository $filterRepository)
-    {
-        $this->filterRepository = $filterRepository;
-
-        return $this;
-    }
-
-    /**
-     * Get the filter repository
-     * @return \Application\Repository\FilterRepository
-     */
-    public function getFilterRepository()
-    {
-        if (!$this->filterRepository) {
-            $this->filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
-        }
-
-        return $this->filterRepository;
-    }
-
-    /**
-     * Set the part repository
-     * @param \Application\Repository\PartRepository $partRepository
-     * @return \Application\Service\Calculator\Calculator
-     */
-    public function setPartRepository(\Application\Repository\PartRepository $partRepository)
-    {
-        $this->partRepository = $partRepository;
-
-        return $this;
-    }
-
-    /**
-     * Get the part repository
-     * @return \Application\Repository\PartRepository
-     */
-    public function getPartRepository()
-    {
-        if (!$this->partRepository) {
-            $this->partRepository = $this->getEntityManager()->getRepository('Application\Model\Part');
-        }
-
-        return $this->partRepository;
-    }
-
-    /**
-     * Set the questionnaire repository
-     * @param \Application\Repository\QuestionnaireRepository $questionnaireRepository
-     * @return \Application\Service\Calculator\Calculator
-     */
-    public function setQuestionnaireRepository(\Application\Repository\QuestionnaireRepository $questionnaireRepository)
-    {
-        $this->questionnaireRepository = $questionnaireRepository;
-
-        return $this;
-    }
-
-    /**
-     * Get the questionnaire repository
-     * @return \Application\Repository\QuestionnaireRepository
-     */
-    public function getQuestionnaireRepository()
-    {
-        if (!$this->questionnaireRepository) {
-            $this->questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
-        }
-
-        return $this->questionnaireRepository;
-    }
-
-    /**
-     * Set the answer repository
-     * @param \Application\Repository\AnswerRepository $answerRepository
-     * @return \Application\Service\Calculator\Calculator
-     */
-    public function setAnswerRepository(\Application\Repository\AnswerRepository $answerRepository)
-    {
-        $this->answerRepository = $answerRepository;
-
-        return $this;
-    }
-
-    /**
-     * Get the answer repository
-     * @return \Application\Repository\AnswerRepository
-     */
-    public function getAnswerRepository()
-    {
-        if (!$this->answerRepository) {
-            $this->answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
-        }
-
-        return $this->answerRepository;
-    }
-
-    /**
-     * Set the filterQuestionnaireUsage repository
-     * @param \Application\Repository\Rule\FilterQuestionnaireUsageRepository $filterQuestionnaireUsageRepository
-     * @return \Application\Service\Calculator\Calculator
-     */
-    public function setFilterQuestionnaireUsageRepository(\Application\Repository\Rule\FilterQuestionnaireUsageRepository $filterQuestionnaireUsageRepository)
-    {
-        $this->filterQuestionnaireUsageRepository = $filterQuestionnaireUsageRepository;
-
-        return $this;
-    }
-
-    /**
-     * Get the filterQuestionnaireUsage repository
-     * @return \Application\Repository\Rule\FilterQuestionnaireUsageRepository
-     */
-    public function getFilterQuestionnaireUsageRepository()
-    {
-        if (!$this->filterQuestionnaireUsageRepository) {
-            $this->filterQuestionnaireUsageRepository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterQuestionnaireUsage');
-        }
-
-        return $this->filterQuestionnaireUsageRepository;
-    }
-
-    /**
-     * Returns the computed value of the given filter, based on the questionnaire's available answers
-     * @param integer $filterId
-     * @param integer $questionnaireId
-     * @param integer $partId
-     * @param boolean $useSecondLevelRules
-     * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
-     * @return float|null null if no answer at all, otherwise the percentage value
-     */
-    public function computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules = false, ArrayCollection $alreadyUsedFormulas = null, $ignoredElementsByQuestionnaire = null)
-    {
-        if ($ignoredElementsByQuestionnaire) {
-            $this->ignoredFilters = $ignoredElementsByQuestionnaire;
-        }
-
-        _log()->debug(__METHOD__, array('start', $filterId, $questionnaireId, $partId));
-        $key = \Application\Utility::getCacheKey(func_get_args());
-        if (array_key_exists($key, $this->cacheComputeFilter)) {
-            return $this->cacheComputeFilter[$key];
-        }
-
-        if (!$alreadyUsedFormulas)
-            $alreadyUsedFormulas = new ArrayCollection();
-
-        $result = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, new ArrayCollection());
-
-        $this->cacheComputeFilter[$key] = $result;
-        _log()->debug(__METHOD__, array('end  ', $filterId, $questionnaireId, $partId, $result));
         return $result;
     }
 
     /**
-     * Returns the computed value of the given filter, based on the questionnaire's available answers
+     * Compute the flatten regression value for the given year with optional formulas
+     * @param integer $year
+     * @param array $years
      * @param integer $filterId
-     * @param integer $questionnaireId
+     * @param array $questionnaires
      * @param integer $partId
-     * @param boolean $useSecondLevelRules
-     * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas already used formula to be exclude when computing
-     * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters will be used to avoid duplicates
-     * @return float|null null if no answer at all, otherwise the percentage value
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
+     * @return null|float
      */
-    private function computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
+    public function computeFlattenOneYearWithFormula($year, array $years, $filterId, array $questionnaires, $partId, ArrayCollection $alreadyUsedRules = null)
     {
-        _log()->debug(__METHOD__, array($filterId, $questionnaireId, $partId, $useSecondLevelRules));
-
-        // The logic goes as follows: if the filter id is contained within excludeFilters, skip calculation.
-        if (
-            isset($this->ignoredFilters['byQuestionnaire'])
-                && isset($this->ignoredFilters['byQuestionnaire'][$questionnaireId])
-                && in_array($filterId, $this->ignoredFilters['byQuestionnaire'][$questionnaireId])
-            || isset($this->ignoredFilters['byFilterSet'])
-                && in_array($filterId, $this->ignoredFilters['byFilterSet']))
-        {
-            return null;
+        if (!$alreadyUsedRules) {
+            $alreadyUsedRules = new ArrayCollection();
         }
 
-        // Avoid duplicates
-        if ($alreadySummedFilters->contains($filterId)) {
-            return null;
-        } else {
-            $alreadySummedFilters->add($filterId);
-        }
-
-        // If the filter have a specified answer, returns it (skip all computation)
-        $answerValue = $this->getAnswerRepository()->getValuePercent($questionnaireId, $filterId, $partId);
-
-        if (!is_null($answerValue)) {
-            return $answerValue;
+        $key = \Application\Utility::getCacheKey([func_get_args(), $this->overriddenFilters]);
+        if (array_key_exists($key, $this->cacheComputeFlattenOneYearWithFormula)) {
+            return $this->cacheComputeFlattenOneYearWithFormula[$key];
         }
 
         // If the filter has a formula, returns its value
-        $filterQuestionnaireUsage = $this->getFilterQuestionnaireUsageRepository()->getFirst($questionnaireId, $filterId, $partId, $useSecondLevelRules, $alreadyUsedFormulas);
-        if ($filterQuestionnaireUsage) {
-            return $this->computeFormula($filterQuestionnaireUsage, $alreadyUsedFormulas, $useSecondLevelRules);
-        }
+        if ($questionnaires) {
+            $filterGeonameUsage = $this->getFilterGeonameUsageRepository()->getFirst(reset($questionnaires)->getGeoname()->getId(), $filterId, $partId, $alreadyUsedRules);
+            if ($filterGeonameUsage) {
+                $oneYearResult = $this->computeFormulaAfterRegression($filterGeonameUsage->getRule(), $year, $years, $filterId, $questionnaires, $partId, $alreadyUsedRules);
+                $this->cacheComputeFlattenOneYearWithFormula[$key] = $oneYearResult;
 
-        // First, attempt to sum summands
-        $summandIds = $this->getFilterRepository()->getSummandIds($filterId);
-        $sum = $this->summer($summandIds, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, $alreadySummedFilters);
+                _log()->debug(__METHOD__, array($filterId, $partId, $year, $oneYearResult));
 
-        // If no sum so far, we use children instead. This is "normal case"
-        if (is_null($sum)) {
-            $childrenIds = $this->getFilterRepository()->getChildrenIds($filterId);
-            $sum = $this->summer($childrenIds, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, $alreadySummedFilters);
-        }
-
-        return $sum;
-    }
-
-    /**
-     * Summer to sum values of given filters, but only if non-null (to preserve null value if no answer at all)
-     * @param \IteratorAggregate $filterIds
-     * @param integer $questionnaireId
-     * @param integer $partId
-     * @param boolean $useSecondLevelRules
-     * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedFormulas
-     * @param \Doctrine\Common\Collections\ArrayCollection $alreadySummedFilters
-     * @return float|null
-     */
-    private function summer(array $filterIds, $questionnaireId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas, ArrayCollection $alreadySummedFilters)
-    {
-        _log()->debug(__METHOD__, array($filterIds, $questionnaireId, $partId, $useSecondLevelRules));
-
-        $sum = null;
-        foreach ($filterIds as $filterId) {
-            $summandValue = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas, $alreadySummedFilters);
-            if (!is_null($summandValue)) {
-                $sum += $summandValue;
+                return $oneYearResult;
             }
         }
 
-        return $sum;
+        // Otherwise fallback to normal computation
+        $allRegressions = $this->computeRegressionForAllYears($years, $filterId, $questionnaires, $partId);
+        $oneYearResult = $this->computeFlattenOneYear($year, $allRegressions);
+        $this->cacheComputeFlattenOneYearWithFormula[$key] = $oneYearResult;
+
+        return $oneYearResult;
+    }
+
+    /**
+     * Compute the flatten regression value for the given year
+     * @param integer $year
+     * @param array $allRegressions [year => regression]
+     * @param array $usedYears [year] should be empty array for first call, then used for recursivity
+     * @return null|float
+     */
+    public function computeFlattenOneYear($year, array $allRegressions, array $usedYears = array())
+    {
+        if (!array_key_exists($year, $allRegressions)) {
+            return null;
+        }
+
+        $nonNullRegressions = array_reduce($allRegressions, function($result, $regression) {
+            if (!is_null($regression)) {
+                $result [] = $regression;
+            }
+
+            return $result;
+        }, array());
+
+        $minRegression = $nonNullRegressions ? min($nonNullRegressions) : null;
+        $maxRegression = $nonNullRegressions ? max($nonNullRegressions) : null;
+        $regression = $allRegressions[$year];
+        array_push($usedYears, $year);
+
+        // If regression value exists, make sure it's within our limits and returns it
+        $result = null;
+        if (!is_null($regression)) {
+            if ($regression < 0) {
+                $result = 0;
+            } elseif ($regression > 1) {
+                $result = 1;
+            } else {
+                $result = $regression;
+            }
+        }
+
+        if (is_null($result)) {
+            $yearEarlier = $year - 1;
+            $flattenYearEarlier = !in_array($yearEarlier, $usedYears) ? $this->computeFlattenOneYear($yearEarlier, $allRegressions, $usedYears) : null;
+
+            if ($flattenYearEarlier === $minRegression && $flattenYearEarlier < 0.05) {
+                $result = $flattenYearEarlier;
+            } elseif ($flattenYearEarlier === $maxRegression && $flattenYearEarlier < 0.05) {
+                $result = $flattenYearEarlier;
+            } elseif ($flattenYearEarlier === $maxRegression && $flattenYearEarlier > 0.95) {
+                $result = $flattenYearEarlier;
+            } elseif ($flattenYearEarlier === $minRegression && $flattenYearEarlier > 0.95) {
+                $result = $flattenYearEarlier;
+            } elseif ($flattenYearEarlier === 1) {
+                $result = 1;
+            } elseif ($flattenYearEarlier === 0) {
+                $result = 0;
+            }
+        }
+
+        if (is_null($result)) {
+            $yearLater = $year + 1;
+            $flattenYearLater = !in_array($yearLater, $usedYears) ? $this->computeFlattenOneYear($yearLater, $allRegressions, $usedYears) : null;
+
+            if ($flattenYearLater === $minRegression && $flattenYearLater < 0.05) {
+                $result = $flattenYearLater;
+            } elseif ($flattenYearLater === $maxRegression && $flattenYearLater < 0.05) {
+                $result = $flattenYearLater;
+            } elseif ($flattenYearLater === $maxRegression && $flattenYearLater > 0.95) {
+                $result = $flattenYearLater;
+            } elseif ($flattenYearLater === $minRegression && $flattenYearLater > 0.95) {
+                $result = $flattenYearLater;
+            } elseif ($flattenYearLater === 1) {
+                $result = 1;
+            } elseif ($flattenYearLater === 0) {
+                $result = 0;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns regressions for each years specified
+     * @param array $years
+     * @param integer $filterId
+     * @param array $questionnaires
+     * @param integer $partId
+     * @return array [year => regresssion]
+     */
+    private function computeRegressionForAllYears(array $years, $filterId, array $questionnaires, $partId)
+    {
+        $key = \Application\Utility::getCacheKey([func_get_args(), $this->overriddenFilters]);
+        if (array_key_exists($key, $this->cacheComputeRegressionForAllYears)) {
+            return $this->cacheComputeRegressionForAllYears[$key];
+        }
+
+        $allRegressions = array();
+        foreach ($years as $year) {
+            $allRegressions[$year] = $this->computeRegressionOneYear($year, $filterId, $questionnaires, $partId);
+        }
+
+        $this->cacheComputeRegressionForAllYears[$key] = $allRegressions;
+
+        return $allRegressions;
+    }
+
+    /**
+     * Returns the regression for one year
+     * @param integer $year
+     * @param integer $filterId
+     * @param array $questionnaires
+     * @param integer $partId
+     * @return null|float
+     */
+    public function computeRegressionOneYear($year, $filterId, array $questionnaires, $partId)
+    {
+        $d = $this->computeFilterForAllQuestionnaires($filterId, $questionnaires, $partId);
+
+        if ($year == $d['maxYear'] + 6) {
+            $result = $this->computeRegressionOneYear($year - 4, $filterId, $questionnaires, $partId);
+        } elseif ($year == $d['minYear'] - 6) {
+            $result = $this->computeRegressionOneYear($year + 4, $filterId, $questionnaires, $partId);
+        } elseif ($year < $d['maxYear'] + 3 && $year > $d['minYear'] - 3 && $d['count'] > 1 && $d['period'] > 4) {
+            $result = $this->ifNonZeroValue($d['values'], function() use ($year, $d) {
+                return \PHPExcel_Calculation_Statistical::FORECAST($year, $d['values'], $d['years']);
+            });
+        } elseif ($year < $d['maxYear'] + 7 && $year > $d['minYear'] - 7 && ($d['count'] < 2 || $d['period'] < 5)) {
+            $result = \PHPExcel_Calculation_Statistical::AVERAGE($d['values']);
+        } elseif ($year > $d['minYear'] - 7 && $year < $d['minYear'] - 1) {
+            $result = $this->ifNonZeroValue($d['values'], function() use ($d) {
+                return \PHPExcel_Calculation_Statistical::FORECAST($d['minYear'] - 2, $d['values'], $d['years']);
+            });
+        } elseif ($year > $d['maxYear'] + 1 && $year < $d['maxYear'] + 7) {
+            $result = $this->ifNonZeroValue($d['values'], function() use ($d) {
+                return \PHPExcel_Calculation_Statistical::FORECAST($d['maxYear'] + 2, $d['values'], $d['years']);
+            });
+        } else {
+            $result = null;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Implement computing on filter level, as seen on tab "GraphData_W"
+     * @param integer $filterId
+     * @param array $questionnaires
+     * @param integer $partId
+     * @return array [values => [], count => integer, years => [], surveys => [], minYear => integer, maxYear => integer, period => integer, slope => float, average => float]
+     */
+    public function computeFilterForAllQuestionnaires($filterId, array $questionnaires, $partId)
+    {
+        $key = \Application\Utility::getCacheKey([func_get_args(), $this->overriddenFilters]);
+
+        if (array_key_exists($key, $this->cacheComputeFilterForAllQuestionnaires)) {
+            return $this->cacheComputeFilterForAllQuestionnaires[$key];
+        }
+
+        $result = array(
+            'values' => array(),
+            'count' => 0,
+        );
+
+        $years = array();
+        $surveys = array();
+        $yearsWithData = array();
+        foreach ($questionnaires as $questionnaire) {
+
+            $year = $questionnaire->getSurvey()->getYear();
+            $years[$questionnaire->getId()] = $year;
+            $surveys[$questionnaire->getId()] = $questionnaire->getSurvey()->getCode();
+
+            $computed = $this->computeFilter($filterId, $questionnaire->getId(), $partId, true);
+            $result['values'][$questionnaire->getId()] = $computed;
+
+            if (!is_null($computed)) {
+                $yearsWithData[] = $year;
+                $result['count'] ++;
+            }
+        }
+
+        $result['years'] = $years;
+        $result['surveys'] = $surveys;
+        $result['minYear'] = $yearsWithData ? min($yearsWithData) : null;
+        $result['maxYear'] = $yearsWithData ? max($yearsWithData) : null;
+        $result['period'] = $result['maxYear'] - $result['minYear'] ? : 1;
+
+        $result['slope'] = $result['count'] < 2 ? null : $this->ifNonZeroValue($result['values'], function() use ($result, $years) {
+                    return \PHPExcel_Calculation_Statistical::SLOPE($result['values'], $years);
+                });
+
+        $result['average'] = $result['count'] ? \PHPExcel_Calculation_MathTrig::SUM($result['values']) / $result['count'] : null;
+
+        $this->cacheComputeFilterForAllQuestionnaires[$key] = $result;
+
+        return $result;
+    }
+
+    /**
+     * PHPExcel divide by zero, so we need to wrap it to ensure that we have at least 1 non-zero value
+     * @param array $data
+     * @param Closure $phpExcelFunction
+     * @return float
+     */
+    private function ifNonZeroValue(array $data, \Closure $phpExcelFunction)
+    {
+        foreach ($data as $d) {
+            if ($d) {
+                return @$phpExcelFunction();
+            }
+        }
+
+        return 0;
     }
 
     /**
      * Compute the value of a formula based on GIMS syntax.
      * For details about syntax, @see \Application\Model\Rule\Rule
-     * @param \Application\Model\Rule\AbstractQuestionnaireUsage $usage
-     * @param boolean $useSecondLevelRules
+     * @param \Application\Model\Rule\Rule $rule
+     * @param integer $year
+     * @param array $years
+     * @param integer $currentFilterId
+     * @param array $questionnaires
+     * @param integer $currentPartId
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return null|float
-     * @throws \Exception
      */
-    public function computeFormula(AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas = null, $useSecondLevelRules = false)
+    public function computeFormulaAfterRegression(Rule $rule, $year, array $years, $currentFilterId, array $questionnaires, $currentPartId, ArrayCollection $alreadyUsedRules = null)
     {
-        if (!$alreadyUsedFormulas) {
-            $alreadyUsedFormulas = new ArrayCollection();
+        if (!$alreadyUsedRules) {
+            $alreadyUsedRules = new ArrayCollection();
         }
+        $alreadyUsedRules->add($rule);
 
-        $alreadyUsedFormulas->add($usage);
-        $originalFormula = $usage->getRule()->getFormula();
+        $originalFormula = $rule->getFormula();
+        $convertedFormula = $this->getParser()->convertAfterRegression($this, $originalFormula, $currentFilterId, $questionnaires, $currentPartId, $year, $years, $alreadyUsedRules);
+        $result = $this->getParser()->computeExcelFormula($convertedFormula);
 
-        _log()->debug(__METHOD__, array($usage->getId(), $originalFormula));
+        _log()->debug(__METHOD__, array($currentFilterId, $currentPartId, $year, $rule->getId(), $rule->getName(), $originalFormula, $convertedFormula, $result));
 
-        // Replace {F#12,Q#34,P#56} with Filter value
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)(,L#2)?\}/', function($matches) use ($usage, $alreadyUsedFormulas) {
-                    $filterId = $matches[1];
-                    $questionnaireId = $matches[2];
-                    $partId = $matches[3];
-
-                    if ($filterId == 'current') {
-                        $filterId = $usage->getFilter()->getId();
-                    }
-
-                    if ($questionnaireId == 'current') {
-                        $questionnaireId = $usage->getQuestionnaire()->getId();
-                    }
-
-                    if ($partId == 'current') {
-                        $partId = $usage->getPart()->getId();
-                    }
-
-                    $useSecondLevelRules = isset($matches[4]) && $matches[4] == ',L#2';
-                    $value = $this->computeFilter($filterId, $questionnaireId, $partId, $useSecondLevelRules, $alreadyUsedFormulas);
-
-                    return is_null($value) ? 'NULL' : $value;
-                }, $originalFormula);
-
-        // Replace {F#12,Q#34} with Question name, or NULL if no Question/Answer
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{F#(\d+),Q#(\d+|current)\}/', function($matches) use ($usage) {
-                    $filterId = $matches[1];
-                    $questionnaireId = $matches[2];
-
-                    if ($questionnaireId == 'current') {
-                        $questionnaireId = $usage->getQuestionnaire()->getId();
-                    }
-
-                    $questionName = $this->getAnswerRepository()->getQuestionNameIfNonNullAnswer($questionnaireId, $filterId);
-                    if (is_null($questionName)) {
-                        return 'NULL';
-                    } else {
-                        // Format string for Excel formula
-                        return '"' . str_replace('"', '""', $questionName) . '"';
-                    }
-                }, $convertedFormulas);
-
-        // Replace {R#12,Q#34,P#56} with QuestionnaireUsage value
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{R#(\d+),Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage, $alreadyUsedFormulas) {
-                    $ruleId = $matches[1];
-                    $questionnaireId = $matches[2];
-                    $partId = $matches[3];
-
-                    if ($questionnaireId == 'current') {
-                        $questionnaireId = $usage->getQuestionnaire()->getId();
-                    }
-
-                    if ($partId == 'current') {
-                        $partId = $usage->getPart()->getId();
-                    }
-
-                    $questionnaireUsage = $this->getQuestionnaireUsageRepository()->getOneByQuestionnaire($questionnaireId, $partId, $ruleId);
-
-                    if (!$questionnaireUsage) {
-                        throw new \Exception('Reference to non existing QuestionnaireUsage ' . $matches[0] . ' in  Rule#' . $usage->getRule()->getId() . ', "' . $usage->getRule()->getName() . '": ' . $usage->getRule()->getFormula());
-                    }
-
-                    $value = $this->computeFormula($questionnaireUsage, $alreadyUsedFormulas);
-
-                    return is_null($value) ? 'NULL' : $value;
-                }, $convertedFormulas);
-
-        // Replace {Q#34,P#56} with population data
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{Q#(\d+|current),P#(\d+|current)\}/', function($matches) use ($usage) {
-                    $questionnaireId = $matches[1];
-                    $partId = $matches[2];
-
-                    $questionnaire = $questionnaireId == 'current' ? $usage->getQuestionnaire() : $this->getQuestionnaireRepository()->findOneById($questionnaireId);
-
-                    if ($partId == 'current') {
-                        $partId = $usage->getPart()->getId();
-                    }
-
-                    return $this->getPopulationRepository()->getOneByQuestionnaire($questionnaire, $partId)->getPopulation();
-                }, $convertedFormulas);
-
-        // Replace {self} with computed value without this formula
-        $convertedFormulas = \Application\Utility::pregReplaceUniqueCallback('/\{self\}/', function() use ($usage, $alreadyUsedFormulas, $useSecondLevelRules) {
-
-                    $value = $this->computeFilter($usage->getFilter()->getId(), $usage->getQuestionnaire()->getId(), $usage->getPart()->getId(), $useSecondLevelRules, $alreadyUsedFormulas);
-
-                    return is_null($value) ? 'NULL' : $value;
-                }, $convertedFormulas);
-
-        $result = \PHPExcel_Calculation::getInstance()->_calculateFormulaValue($convertedFormulas);
-
-        // In some edge cases, it may happen that we get FALSE or empty double quotes as result,
-        // we need to convert it to NULL, otherwise it will be converted to
-        // 0 later, which is not correct. Eg: '=IF(FALSE, NULL, NULL)', or '=IF(FALSE,NULL,"")'
-        if ($result === false || $result === '""') {
-            $result = null;
-        }
-
-        _log()->debug(__METHOD__, array($usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormulas, $result));
         return $result;
     }
 

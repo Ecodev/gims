@@ -2,6 +2,7 @@
 
     <h2>
         <ul class="breadcrumb">
+            <span class="active pull-right"><i class="fa fa-fw fa-gims-question"></i></span>
             <li><a href="/admin/survey">Surveys</a></li>
             <li><a href="/admin/survey/edit/{{survey.id}}#1">{{survey.code}}</a></li>
             <li class="active">{{question.name}}</li>
@@ -11,167 +12,209 @@
 
     <form novalidate name="myForm" class="form-horizontal">
         <?php echo $this->crudButtons('question'); ?>
-        <br/><br/>
 
-        <div class="form-group"  ng-class="{'has-error': myForm.name.$invalid}">
-            <label class="control-label col-md-2" for="question.name">Label</label>
-            <div class="col-md-6">
-                <input type="text" name="name" ng-model="question.name" required/>
-            </div>
-            <div class="col-md-2">
-                <span ng-show="myForm.name.$error.required" class="help-block">Required</span>
-            </div>
-        </div>
+        <tabset style="margin-top: 20px" active="panes[1].active">
+            <tab heading="General">
 
-        <div class="form-group" ng-class="{'has-error': myForm.type.$invalid}">
-            <label class="control-label col-md-2" for="type">Type</label>
-            <div class="col-md-6">
-                <select required
-                        name="type"
-                        ng-model="question.type"
-                        ng-change="initChoices()"
-                        ng-options="c.value as c.text for c in types">
-                </select></div>
-            <div class="col-md-2">
-                <span ng-show="myForm.type.$error.required" class="help-block">Required</span>
-            </div>
-        </div>
-
-        <div class="form-group ng-trans ng-trans-fade-down" ng-show="isChoices">
-            <div class='col-md-6 col-md-offset-2 radio'>
-                <div class="col-md-12"><label><input type='radio' name='isMultiple' value='0' ng-model='question.isMultiple' ng-checked="1">Single choice</label></div>
-                <div class="col-md-12"><label><input type='radio' name='isMultiple' value='1' ng-model='question.isMultiple'>Multiple choices</label></div>
-            </div>
-        </div>
-
-        <div class="form-group ng-trans ng-trans-fade-down" ng-hide="isChapter">
-            <div class="col-md-6 col-md-offset-2 radio">
-                <div class="col-md-12"><label><input type='radio' name='isCompulsory' value='0' ng-model='question.isCompulsory' ng-checked="1">Optional</label></div>
-                <div class="col-md-12"><label><input type='radio' name='isCompulsory' value='1' ng-model='question.isCompulsory'>Compulsory</label></div>
-            </div>
-        </div>
-
-
-        <div class="form-group ng-trans ng-trans-fade-down" ng-show="isChapter">
-            <label class="control-label col-md-2" for="question.description">Description</label>
-            <div class='col-md-6'>
-                <textarea type="text" name="name" ng-model="question.description"></textarea>
-            </div>
-        </div>
-        <br/><br/>
-
-
-        <div class="form-group">
-            <label class="control-label col-md-2" for="question.chapter">Belongs to chapter</label>
-            <div class='col-md-6'>
-                <select class='col-md-12'
-                        name="chapter"
-                        ng-model="question.chapter.id"
-                        ng-options="p.id as p.name for p in chapterList">
-                </select>
-            </div>
-            <div class='col-md-1'>
-                <button class="btn btn-danger" ng-click="removeChapter()" ><i class="fa fa-trash-o"></i></button>
-            </div>
-        </div>
-
-        <div class="form-group ng-trans ng-trans-fade-down" ng-show="isChapter">
-            <label class="control-label col-md-2" for="question.isFinal">Display mode</label>
-            <div class="col-md-6 radio">
-                <div class="col-md-12"><label><input type='radio' name='isFinal' value='0' ng-model='question.isFinal' ng-checked="1">Behaves like a folder : every subquestion is displayed on its own page</label></div>
-                <div class="col-md-12"><label><input type='radio' name='isFinal' value='1' ng-model='question.isFinal'>Behaves like a question : displays all subquestions in the current page</label></div>
-            </div>
-        </div>
-
-
-        <div class="form-group ng-trans ng-trans-fade-down" ng-hide="isChapter" ng-class="{'has-error': myForm.filter.$invalid}">
-            <label class="control-label col-md-2" for="question.filter">Thematic</label>
-            <div class="col-md-6">
-                <gims-select    name='filter'
-                                api="filter"
-                                queryparams="params"
-                                model="question.filter"
-                                placeholder="Select a thematic"
-                                container-css-class='select2list'
-                                custom-result-template="{{select2Template}}"
-                                style="width: 100%">
-                </gims-select>
-            </div>
-            <div class='col-md-1'>
-                <span ng-show="myForm.filter.$error.required" class="col-md-1 help-block">Required</span>
-            </div>
-        </div>
-
-
-        <div class="form-group ng-trans ng-trans-fade-down" ng-hide="isChapter" ng-class="{'has-error': myForm.zone.$invalid}">
-            <label class="control-label col-md-2" for="question.part">Zone</label>
-            <div class="col-md-4">
-                <gims-select    name="zone"
-                                api="part"
-                                model="question.parts"
-                                multiple="multiple"
-                                style="width: 100%">
-                </gims-select>
-            </div>
-            <div class='col-md-1'>
-                <span ng-show="myForm.zone.$error.required" class="col-md-1 help-block">Required</span>
-            </div>
-        </div>
-        <br/>
-
-        <br/>
-        <div class="ng-trans ng-trans-fade-down" ng-repeat="choice in question.choices" ng-show="isChoices">
-            <div ng-form name='myInnerForm' class="form-group" ng-class="{'has-error': myInnerForm.choiceName.$invalid || myInnerForm.choiceValue.$invalid}">
-                <label class="control-label col-md-2" for="choiceLabel">Choice {{$index + 1}}</label>
-                <div class='col-md-6'>
-                    <input id="choiceLabel" type="text" name="choiceName" ng-model="choice.name" ng-required="isChoices"/>
+                <div class="form-group"  ng-class="{'has-error': myForm.name.$invalid}">
+                    <label class="control-label col-md-2" for="question.name">Label</label>
+                    <div class="col-md-6">
+                        <input type="text" name="name" ng-model="question.name" required/>
+                    </div>
+                    <div class="col-md-2">
+                        <span ng-show="myForm.name.$error.required" class="help-block">Required</span>
+                    </div>
                 </div>
-                <div class='col-md-1 ng-trans ng-trans-fade-down' ng-hide='question.isMultiple'>
-                    <select ng-required="isChoices && question.isMultiple==0"
-                            class="input-sm col-md-12"
-                            name="choiceValue"
-                            ng-model="choice.value"
-                            ng-options="p.value as p.text for p in percentages">
-                    </select>
+
+                <div class="form-group" ng-class="{'has-error': myForm.type.$invalid}">
+                    <label class="control-label col-md-2" for="type">Type</label>
+                    <div class="col-md-6">
+                        <select required
+                                name="type"
+                                ng-model="question.type"
+                                ng-change="initChoices()"
+                                ng-options="c.value as c.text for c in types">
+                        </select></div>
+                    <div class="col-md-2">
+                        <span ng-show="myForm.type.$error.required" class="help-block">Required</span>
+                    </div>
                 </div>
-                <div class='col-md-1'>
-                    <button class="btn btn-danger" ng-click="deleteOption($index)" ><i class="fa fa-trash-o"></i></button>
+
+                <div class="form-group ng-trans ng-trans-fade-down" ng-show="isChoices || question.type == 'Numeric'">
+                    <div class='col-md-6 col-md-offset-2 checkbox'>
+                        <div class="col-md-12"><label><input type='checkbox' name='isPopulation' ng-model='question.isPopulation'>Represent a population</label></div>
+                    </div>
                 </div>
-                <div class='col-md-1'>
-                    <span ng-show="myInnerForm.choiceName.$error.required || myInnerForm.choiceValue.$error.required" class="help-block">Required</span>
+
+                <div class="form-group ng-trans ng-trans-fade-down" ng-show="question.type == 'Numeric'">
+                    <div class='col-md-6 col-md-offset-2 radio'>
+                        <div class="col-md-12"><label><input type='radio' name='isAbsolute' value='0' ng-model='question.isAbsolute' ng-checked="1">Answer is a percentage (0% - 100%)</label></div>
+                        <div class="col-md-12"><label><input type='radio' name='isAbsolute' value='1' ng-model='question.isAbsolute'>Answer is an absolute number</label></div>
+                    </div>
                 </div>
-            </div>
-        </div>
+
+                <div class="form-group ng-trans ng-trans-fade-down" ng-show="isChoices">
+                    <div class='col-md-6 col-md-offset-2 radio'>
+                        <div class="col-md-12"><label><input type='radio' name='isMultiple' value='0' ng-model='question.isMultiple' ng-checked="1">Single choice</label></div>
+                        <div class="col-md-12"><label><input type='radio' name='isMultiple' value='1' ng-model='question.isMultiple'>Multiple choices</label></div>
+                    </div>
+                </div>
+
+                <div class="form-group ng-trans ng-trans-fade-down" ng-hide="isChapter">
+                    <div class="col-md-6 col-md-offset-2 radio">
+                        <div class="col-md-12"><label><input type='radio' name='isCompulsory' value='0' ng-model='question.isCompulsory' ng-checked="1">Optional</label></div>
+                        <div class="col-md-12"><label><input type='radio' name='isCompulsory' value='1' ng-model='question.isCompulsory'>Compulsory</label></div>
+                    </div>
+                </div>
 
 
-        <div class="form-group form-horizontal ng-trans ng-trans-fade-down" ng-show="isChoices">
-            <label class="control-label col-md-2">&nbsp;</label>
-            <div class='col-md-3'>
-                <button class="btn btn-success" ng-click="addOption()"><i class="fa fa-plus"></i> Add choice</button>
-            </div>
-
-            <br/><br/>
-        </div>
-
+                <div class="form-group ng-trans ng-trans-fade-down" ng-show="isChapter">
+                    <label class="control-label col-md-2" for="question.description">Description</label>
+                    <div class='col-md-6'>
+                        <textarea type="text" name="name" ng-model="question.description"></textarea>
+                    </div>
+                </div>
+                <br/><br/>
 
 
-        <div class="form-group form-horizontal ng-trans ng-trans-fade-down" ng-class="{'has-error': myForm.sorting.$invalid}" ng-show="question.id">
-            <label class="control-label col-md-2" for="question.sorting">Sorting</label>
-            <div class="col-md-1">
-                <input type="number" name="sorting" ng-model="question.sorting"/>
-            </div>
-        </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="question.chapter">Belongs to chapter</label>
+                    <div class='col-md-6'>
+                        <select class='col-md-12'
+                                name="chapter"
+                                ng-model="question.chapter.id"
+                                ng-options="p.id as p.name for p in chapterList">
+                        </select>
+                    </div>
+                    <div class='col-md-1'>
+                        <button class="btn btn-danger" ng-click="removeChapter()" ><i class="fa fa-trash-o"></i></button>
+                    </div>
+                </div>
+
+                <div class="form-group ng-trans ng-trans-fade-down" ng-show="isChapter">
+                    <label class="control-label col-md-2" for="question.isFinal">Display mode</label>
+                    <div class="col-md-6 radio">
+                        <div class="col-md-12"><label><input type='radio' name='isFinal' value='0' ng-model='question.isFinal' ng-checked="1">Behaves like a folder : every subquestion is displayed on its own page</label></div>
+                        <div class="col-md-12"><label><input type='radio' name='isFinal' value='1' ng-model='question.isFinal'>Behaves like a question : displays all subquestions in the current page</label></div>
+                    </div>
+                </div>
 
 
-        <!-- @todo : correct embeded ng-grid
-        <div class="form-group form-horizontal" ng-show="isChapter" >
-            <label class="control-label col-md-2" for="question.sorting">Included questions</label>
-            <div class='col-md-8'>
-                <div gims-grid-question></div>
-            </div>
-        </div>
-        -->
+                <div class="form-group ng-trans ng-trans-fade-down" ng-hide="isChapter" ng-class="{'has-error': myForm.filter.$invalid}">
+                    <label class="control-label col-md-2" for="question.filter">Filter</label>
+                    <div class="col-md-6">
+                        <gims-filter model="question.filter"></gims-filter>
+                    </div>
+                    <div class='col-md-1'>
+                        <span ng-show="myForm.filter.$error.required" class="col-md-1 help-block">Required</span>
+                    </div>
+                </div>
 
+
+                <div class="form-group ng-trans ng-trans-fade-down" ng-hide="isChapter" ng-class="{'has-error': myForm.part.$invalid}">
+                    <label class="control-label col-md-2" for="question.part">Part</label>
+                    <div class="col-md-4">
+                        <gims-select    name="part"
+                                        api="part"
+                                        model="question.parts"
+                                        multiple="multiple"
+                                        style="width: 100%">
+                        </gims-select>
+                    </div>
+                    <div class='col-md-1'>
+                        <span ng-show="myForm.part.$error.required" class="col-md-1 help-block">Required</span>
+                    </div>
+                </div>
+                <br/>
+
+                <br/>
+                <div class="ng-trans ng-trans-fade-down" ng-repeat="choice in question.choices" ng-show="isChoices">
+                    <div ng-form name='myInnerForm' class="form-group" ng-class="{'has-error': myInnerForm.choiceName.$invalid || myInnerForm.choiceValue.$invalid}">
+                        <label class="control-label col-md-2" for="choiceLabel">Choice {{$index + 1}}</label>
+                        <div class='col-md-6'>
+                            <input id="choiceLabel" type="text" name="choiceName" ng-model="choice.name" ng-required="isChoices"/>
+                        </div>
+                        <div class='col-md-1 ng-trans ng-trans-fade-down' ng-hide='question.isMultiple'>
+                            <select ng-required="isChoices && question.isMultiple==0"
+                                    class="input-sm col-md-12"
+                                    name="choiceValue"
+                                    ng-model="choice.value"
+                                    ng-options="p.value as p.text for p in percentages">
+                            </select>
+                        </div>
+                        <div class='col-md-1'>
+                            <button class="btn btn-danger" ng-click="deleteOption($index)" ><i class="fa fa-trash-o"></i></button>
+                        </div>
+                        <div class='col-md-1'>
+                            <span ng-show="myInnerForm.choiceName.$error.required || myInnerForm.choiceValue.$error.required" class="help-block">Required</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group form-horizontal ng-trans ng-trans-fade-down" ng-show="isChoices">
+                    <label class="control-label col-md-2">&nbsp;</label>
+                    <div class='col-md-3'>
+                        <button class="btn btn-success" ng-click="addOption()"><i class="fa fa-gims-add"></i> Add choice</button>
+                    </div>
+
+                    <br/><br/>
+                </div>
+
+
+
+                <div class="form-group form-horizontal ng-trans ng-trans-fade-down" ng-class="{'has-error': myForm.sorting.$invalid}" ng-show="question.id">
+                    <label class="control-label col-md-2" for="question.sorting">Sorting</label>
+                    <div class="col-md-1">
+                        <input type="number" name="sorting" ng-model="question.sorting"/>
+                    </div>
+                </div>
+
+
+                <!-- @todo : correct embeded ng-grid
+                        <div class="form-group form-horizontal" ng-show="isChapter" >
+                            <label class="control-label col-md-2" for="question.sorting">Included questions</label>
+                            <div class='col-md-8'>
+                                <div gims-grid-question></div>
+                            </div>
+                        </div>
+                -->
+
+            </tab>
+            <tab heading="Alternate labels" ng-show="question.id" >
+                <div class="row">
+                    <p class="col-md-6">Alternate labels are specific to each questionnaire and can be modified when answering the questionnaire, for instance to specify the original denomination. Here is an overview of alternate labels for all questionnaires.</p>
+                </div>
+                <div class="ng-trans ng-trans-fade-down" ng-repeat="(questionnaireId, name) in question.alternateNames track by questionnaireId">
+                    <div ng-form name='myInnerForm' class="form-group" ng-class="{'has-error': myInnerForm.alternateName.$invalid}">
+
+                        <label class="control-label col-md-2" for="alternateName">{{questionnaires[questionnaireId].name}}</label>
+                        <div class="col-md-6">
+                            <input type="text" name="alternateName" ng-model="question.alternateNames[questionnaireId]" required/>
+                        </div>
+                        <div class='col-md-1'>
+                            <button class="btn btn-danger" ng-click="deleteAlternate(questionnaireId)" ><i class="fa fa-trash-o"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group form-horizontal">
+                    <div class="control-label col-md-2">
+                    </div>
+                    <div class="col-md-4">
+                        <select
+                            name="questionnaire"
+                            ng-model="question.questionnaireForAlternateNames"
+                            ng-options="q.name for q in notUsedQuestionnaires">
+                            <option style="display:none" value="">Select a Questionnaire</option>
+                        </select>
+                    </div>
+                    <div class='col-md-2'>
+                        <button class="btn btn-success" ng-click="addAlternateName()" ng-disabled="!question.questionnaireForAlternateNames"><i class="fa fa-gims-add"></i> Add alternate name</button>
+                    </div>
+                </div>
+            </tab>
+        </tabset>
     </form>
 
     <?php echo $this->metadata('question'); ?>

@@ -7,7 +7,7 @@ describe('home', function() {
         browser.get('/home');
     });
 
-    it('should render home when user navigates to /home', function() {
-        expect(element(by.css('[ng-view] p:nth-of-type(1)')).getText()).toContain("Global Information Management System");
+    it('should render home', function() {
+        expect(element(by.css('.jumbotron p')).getText()).toContain("Global Information Management System");
     });
 });

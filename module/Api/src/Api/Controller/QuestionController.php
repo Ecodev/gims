@@ -29,33 +29,29 @@ class QuestionController extends AbstractChildRestfulController
             // Here we use a closure to get the questions' answers, but only for the current questionnaire
 
             'answers' => function (\Application\Service\Hydrator $hydrator, AbstractQuestion $question) use (
-                    $questionnaire, $controller
-                ) {
-                    $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
-                    $answers = $answerRepository->findBy(array(
-                        'question' => $question,
-                        'questionnaire' => $questionnaire
-                    ));
+            $questionnaire, $controller
+            ) {
+        $output = null;
+        if (is_callable(array($question, 'getAnswers'))) {
+            $answers = $question->getAnswers($questionnaire);
 
-                    // special case for question, reorganize keys for the needs of NgGrid:
-                    // Numerical key must correspond to the id of the part.
-                    $output = array();
-                    foreach ($answers as $answer) {
+            // special case for question, reorganize keys for the needs of NgGrid:
+            // Numerical key must correspond to the id of the part.
+            $output = array();
+            foreach ($answers as $answer) {
 
-                        // If does not have access to answer, skip silently
-                        if (!$controller->getRbac()->isActionGranted($answer, 'read')) {
-                            continue;
-                        }
+                // If does not have access to answer, skip silently
+                if (!$controller->getAuth()->isActionGranted($answer, 'read')) {
+                    continue;
+                }
 
-                        $part = $answer->getPart();
-                        $answerData = $hydrator->extract($answer);
-                        $answerData['part'] = $hydrator->extract($part);
+                $answerData = $hydrator->extract($answer, array('part'));
+                array_push($output, $answerData);
+            }
+        }
 
-                        array_push($output, $answerData);
-                    }
-
-                    return $output;
-                },
+        return $output;
+    },
         );
 
         return $config;
@@ -89,7 +85,6 @@ class QuestionController extends AbstractChildRestfulController
 
     public function getList()
     {
-
         $parent = $this->getParent();
         $permission = $this->params()->fromQuery('permission', 'read');
         if ($parent instanceof \Application\Model\Question\Chapter) {
@@ -109,10 +104,11 @@ class QuestionController extends AbstractChildRestfulController
         $flatQuestions = array();
         foreach ($questions as $question) {
             $flatQuestion = $this->hydrator->extract($question, $this->getJsonConfig());
+            $flatQuestion['_chapter'] = $question->getChapter() ? $this->hydrator->extract($question->getChapter(), ['id']) : null;
             array_push($flatQuestions, $flatQuestion);
         }
 
-        $questions = $this->getFlatHierarchyWithSingleRootElement($flatQuestions, 'chapter', 0);
+        $questions = $this->getFlatHierarchyWithSingleRootElement($flatQuestions, '_chapter', 0);
         $jsonData = $this->paginate($questions, false);
 
         return new JsonModel($jsonData);
@@ -121,6 +117,7 @@ class QuestionController extends AbstractChildRestfulController
     /**
      * Update answers percent and absolute value depending on updated choices
      * @param \Application\Model\AbstractModel $question
+     * @param array $data
      */
     protected function postUpdate(AbstractModel $question, array $data)
     {
@@ -149,14 +146,8 @@ class QuestionController extends AbstractChildRestfulController
 
         // If not allowed to read the object, cancel everything
         $question = $questionRepository->findOneById($id);
-        if ($this->getRbac()->isActionGranted($question, 'update')) {
-            $this->getEntityManager()->getConnection()->commit();
-        } else {
-            $this->getEntityManager()->getConnection()->rollback();
-            $this->getResponse()->setStatusCode(403);
-
-            return new JsonModel(array('message' => $this->getRbac()->getMessage()));
-        }
+        $this->checkActionGranted($question, 'update');
+        $this->getEntityManager()->getConnection()->commit();
 
         if (isset($data['sorting'])) {
             $data['sorting'] = $this->reorderSiblingQuestions($question, $data['sorting']);
@@ -174,6 +165,7 @@ class QuestionController extends AbstractChildRestfulController
      * Reorder sibling questions to make room for the new question according to its sorting
      * @param \Application\Model\Question\AbstractQuestion $question the question BEFORE setting its new sorting
      * @param integer $newSorting the new sorting
+     * @return int
      */
     protected function reorderSiblingQuestions(AbstractQuestion $question, $newSorting)
     {
@@ -249,6 +241,7 @@ class QuestionController extends AbstractChildRestfulController
     /**
      * Create choices for the newly created question
      * @param \Application\Model\AbstractModel $question
+     * @param array $data
      */
     protected function postCreate(AbstractModel $question, array $data)
     {
@@ -260,7 +253,6 @@ class QuestionController extends AbstractChildRestfulController
 
     /**
      * @param array $data
-     * @param callable $postAction
      * @throws \Exception
      * @return mixed|void|JsonModel
      */

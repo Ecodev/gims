@@ -4,40 +4,19 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
     "use strict";
 
     $scope.fields = {fields: 'filterSets,children,children.paths,children.color,parents,parents.paths,parents.color,summands,summands.paths,summands.color,paths,color'};
-    $scope.params = {fields: 'paths,color,genericColor'};
 
-    $scope.select2Template = "" +
-            "<div>" +
-            "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
-            "    <i class='fa fa-gims-filter' style='color:[[item.color]];' ></i> [[item.name]]" +
-            "</div>" +
-            "<div class='col-sm-7 col-md-7'>" +
-            "    <small>" +
-            "       [[_.map(item.paths, function(path){return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]" +
-            "    </small>" +
-            "</div>" +
-            "<div class='col-sm-1 col-md-1 hide-in-results' >" +
-            "    <a class='btn btn-default btn-sm' href='/admin/filter/edit/[[item.id]][[$scope.currentContextElement]]'>" +
-            "        <i class='fa fa-pencil'></i>" +
-            "    </a>" +
-            "</div>" +
-            "<div class='clearfix'></div>" +
-            "</div>";
-
-
-    var redirectTo = '/admin/filter';
+    var returnUrl = '/admin/filter';
     if ($routeParams.returnUrl) {
-        redirectTo = $routeParams.returnUrl;
+        returnUrl = $routeParams.returnUrl;
     }
 
     $scope.saveAndClose = function() {
-        this.save(redirectTo);
+        this.save(returnUrl);
     };
 
     $scope.cancel = function() {
-        $location.path(redirectTo).search('returnUrl', null).hash(null);
+        $location.url(returnUrl);
     };
-
 
     if ($routeParams.id) {
         Restangular.one('filter', $routeParams.id).get($scope.fields).then(function(filter) {
@@ -47,7 +26,6 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
     } else {
         $scope.filter = {};
     }
-
 
     $scope.save = function(redirectTo) {
         $scope.sending = true;
@@ -60,50 +38,33 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
                 if (redirectTo) {
                     $location.path(redirectTo);
                 }
+            }, function() {
+                $scope.sending = false;
             });
-        }
-        else {
+        } else {
             Restangular.all('filter').post($scope.filter).then(function(filter) {
                 $scope.sending = false;
                 if (!redirectTo) {
                     redirectTo = '/admin/filter/edit/' + filter.id;
                 }
                 $location.path(redirectTo);
+            }, function() {
+                $scope.sending = false;
             });
         }
     };
 
+    // Delete a Filter
+    $scope.delete = function() {
+        Modal.confirmDelete($scope.filter, {returnUrl: returnUrl});
+    };
 });
-
-
 
 /**
  * Admin filter Controller
  */
 angular.module('myApp').controller('Admin/FilterCtrl', function($scope, $location) {
     "use strict";
-
-    // Initialize
-    $scope.params = {fields: 'paths'};
-
-    $scope.select2Template = "" +
-            "<div>" +
-            "<div class='col-sm-4 col-md-4 select-label select-label-with-icon'>" +
-            "    <i class='fa fa-gims-filter'></i> [[item.name]]" +
-            "</div>" +
-            "<div class='col-sm-7 col-md-7'>" +
-            "    <small>" +
-            "       [[_.map(item.paths, function(path){return \"<div class='select-label select-label-with-icon'><i class='fa fa-gims-filter'></i> \"+path+\"</div>\";}).join('')]]" +
-            "    </small>" +
-            "</div>" +
-            "<div class='col-sm-1 col-md-1 hide-in-results' >" +
-            "    <a class='btn btn-default btn-sm' href='/admin/filter/edit/[[item.id]]'>" +
-            "        <i class='fa fa-pencil'></i>" +
-            "    </a>" +
-            "</div>" +
-            "<div class='clearfix'></div>" +
-            "</div>";
-
 
     $scope.$watch('selectedFilter', function(selectedFilter)
     {
@@ -119,10 +80,9 @@ angular.module('myApp').controller('Admin/FilterCtrl', function($scope, $locatio
             {
                 field: 'name',
                 displayName: 'Name',
-                cellTemplate: '' +
-                        '<div class="ngCellText" ng-class="col.colIndex()">' +
+                cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">' +
                         '   <span style="padding-left: {{row.entity.level * 2}}em;">' +
-                        '       <span style="display:inline-block;vertical-align:middle;width:5px;height:18px;background:{{row.entity.color}}"></span>' +
+                        '       <span style="display:inline-block;vertical-align:middle;"><i class="fa fa-gims-filter" style="color:{{row.entity.color}}"></i></span>' +
                         '       <span style="display:inline-block;vertical-align:middle;">{{row.entity.name}}</span>' +
                         '   </span>' +
                         '</div>'
@@ -130,8 +90,7 @@ angular.module('myApp').controller('Admin/FilterCtrl', function($scope, $locatio
             {
                 displayName: '',
                 width: '70px',
-                cellTemplate: '' +
-                        '<div class="btn-group" style="margin:4px 0 0 4px;">' +
+                cellTemplate: '<div class="btn-group" style="margin:4px 0 0 4px;">' +
                         '   <a class="btn btn-default btn-xs" href="/admin/filter/edit/{{row.entity.id}}"><i class="fa fa-pencil fa-lg"></i></a>' +
                         '   <button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>' +
                         '</div>'

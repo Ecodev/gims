@@ -1,0 +1,39 @@
+<?php
+
+namespace Application\Service\Syntax\AfterRegression;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Application\Service\Calculator\Calculator;
+
+abstract class AbstractToken extends \Application\Service\Syntax\AbstractToken
+{
+
+    /**
+     * Returns the ID according to 'current' syntax
+     * @param string|integer $id
+     * @param integer $currentId
+     * @return integer
+     */
+    protected function getId($id, $currentId)
+    {
+        if ($id == 'current') {
+            return $currentId;
+        } else {
+            return $id;
+        }
+    }
+
+    /**
+     *
+     * @param \Application\Service\Calculator\Calculator $calculator
+     * @param array $matches
+     * @param integer $currentFilterId
+     * @param array $questionnaires
+     * @param integer $currentPartId
+     * @param integer $year
+     * @param array $years
+     * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
+     * @return float|string
+     */
+    abstract public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules);
+}

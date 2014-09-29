@@ -4,6 +4,9 @@ namespace ApplicationTest\Controller;
 
 use \ApplicationTest\Traits\TestWithTransaction;
 
+/**
+ * @group Console
+ */
 class ConsoleControllerTest extends \Zend\Test\PHPUnit\Controller\AbstractConsoleControllerTestCase
 {
 
@@ -16,8 +19,7 @@ class ConsoleControllerTest extends \Zend\Test\PHPUnit\Controller\AbstractConsol
         // Everything is relative to the application root now.
         chdir(__DIR__ . '/../../../');
         $this->setApplicationConfig(
-                include 'config/application.config.php'
-        );
+                include 'config/application.config.php');
 
         parent::setUp();
 
@@ -54,7 +56,7 @@ Answers          : 70
 Rules            : 41
 Uses of Exclude  : 41
 Uses of Rule for Questionnaire       : 20
-Uses of Rule for Filter-Questionnaire: 33
+Uses of Rule for Filter-Questionnaire: 51
 Uses of Rule for Filter-Geoname      : 26
 STRING;
         $this->assertConsoleOutputContains($expected);

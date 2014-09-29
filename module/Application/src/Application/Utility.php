@@ -24,6 +24,26 @@ abstract class Utility
     }
 
     /**
+     * Find an object by id on assoc array
+     * @param $id
+     * @param $objects
+     * @return null
+     */
+    public static function getObjectById($id, $objects)
+    {
+
+        if ($id) {
+            foreach ($objects as $o) {
+                if ($o['id'] == $id) {
+                    return $o;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * This round a number with arbitrary precision
      *
      * Once rounded, the number *MUST NOT* be converted to float anymore.
@@ -59,14 +79,17 @@ abstract class Utility
     {
         $key = '';
         foreach ($args as $arg) {
-            if (is_null($arg))
+            if (is_null($arg)) {
                 $key .= '[[NULL]]';
-            else if (is_object($arg)) {
+            } elseif (is_object($arg)) {
                 $key .= spl_object_hash($arg);
-            } else if (is_array($arg))
+            } elseif (is_array($arg)) {
                 $key .= '[[ARRAY|' . self::getCacheKey($arg) . ']]';
-            else
+            } elseif (is_bool($arg)) {
+                $key .= '[[BOOL|' . $arg . ']]';
+            } else {
                 $key .= $arg;
+            }
 
             $key .= '|';
         }
@@ -84,15 +107,16 @@ abstract class Utility
     public static function pregReplaceUniqueCallback($pattern, \Closure $callback, $subject)
     {
         $replacements = array();
+
         return preg_replace_callback($pattern, function($matches) use ($callback, &$replacements) {
-                    $key = $matches[0];
+            $key = $matches[0];
 
-                    if (!isset($replacements[$key])) {
-                        $replacement = $callback($matches);
-                        $replacements[$key] = $replacement;
-                    }
+            if (!isset($replacements[$key])) {
+                $replacement = $callback($matches);
+                $replacements[$key] = $replacement;
+            }
 
-                    return $replacements[$key];
+            return $replacements[$key];
         }, $subject);
     }
 
@@ -107,14 +131,43 @@ abstract class Utility
     public static function getColor($number, $ratio)
     {
         // multiply number by phi (golden number constant) to ensure the number is between 0 and 1
-        $phi = (1 + sqrt(5))/2;
+        $phi = (1 + sqrt(5)) / 2;
         $number = $number * $phi - floor($number * $phi);
         $number *= 360; // tsl/hsv tint is between 0° and 360°
 
         $hsv = new HSV($number, $ratio, 85);
         $rgb = $hsv->toRGB();
         $hex = $rgb->toHex();
-        return '#'.$hex;
-    }
-}
 
+        return '#' . $hex;
+    }
+
+    /**
+     * Returns the short class name of any object, eg: Application\Model\Survey => Survey
+     * @param object $object
+     * @return string
+     */
+    public static function getShortClassName($object)
+    {
+        $reflect = new \ReflectionClass($object);
+
+        return $reflect->getShortName();
+    }
+
+    /**
+     * Returns a string of the object list
+     * @param array|\Traversable $objects
+     * @return string
+     */
+    public static function objectsToString($objects)
+    {
+        $names = [];
+        foreach ($objects as $object) {
+            $id = $object->getId() ? '#' . $object->getId() : '#null';
+            $names[] = '' . self::getShortClassName($object) . $id . ' (' . $object->getName() . ')';
+        }
+
+        return implode(', ', $names);
+    }
+
+}

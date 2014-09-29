@@ -7,8 +7,10 @@ use Zend\Http\Request;
 /**
  * @group Rest
  */
-class FilterControllerTest extends AbstractRestfulControllerTest
+class FilterControllerTest extends AbstractChildRestfulControllerTest
 {
+
+    use \ApiTest\Controller\Traits\ReferenceableInRule;
 
     protected function getAllowedFields()
     {
@@ -20,6 +22,14 @@ class FilterControllerTest extends AbstractRestfulControllerTest
         return $this->filter;
     }
 
+    protected function getPossibleParents()
+    {
+        return [
+            'filterSets' => $this->filterSet,
+            'parents' => $this->filterParent,
+        ];
+    }
+
     public function testCanUpdateFilter()
     {
         $data = array('name' => 'foo');
@@ -29,7 +39,7 @@ class FilterControllerTest extends AbstractRestfulControllerTest
         $this->assertEquals($data['name'], $actual['name']);
 
         // anonymous
-        $this->rbac->setIdentity(null);
+        $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(403);
     }
@@ -47,29 +57,9 @@ class FilterControllerTest extends AbstractRestfulControllerTest
         $this->assertEquals($data['name'], $actual['name']);
 
         // anonymous
-        $this->rbac->setIdentity(null);
+        $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(403);
-    }
-
-    public function testCanDeleteFilter()
-    {
-        $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
-        $this->assertResponseStatusCode(200);
-        $this->assertEquals($this->getJsonResponse()['message'], 'Deleted successfully');
-    }
-
-    public function testAnonymousCanDeleteFilter()
-    {
-        $this->rbac->setIdentity(null);
-        $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
-        $this->assertResponseStatusCode(403);
-    }
-
-    public function testCannotDeleteNonExistingFilter()
-    {
-        $this->dispatch('/api/filter/713705', Request::METHOD_DELETE); // smyle, the sun shines :)
-        $this->assertResponseStatusCode(404);
     }
 
 }

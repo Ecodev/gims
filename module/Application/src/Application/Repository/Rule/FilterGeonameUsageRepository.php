@@ -3,9 +3,26 @@
 namespace Application\Repository\Rule;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Expr\Join;
 
 class FilterGeonameUsageRepository extends \Application\Repository\AbstractRepository
 {
+
+    public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
+    {
+        $qb = $this->createQueryBuilder('fgu');
+        $qb->join('fgu.rule', 'rule', Join::WITH);
+        $qb->join('fgu.filter', 'filter', Join::WITH);
+        $qb->join('fgu.geoname', 'geoname', Join::WITH);
+        $qb->join('fgu.part', 'part', Join::WITH);
+
+        $qb->where('fgu.' . $parentName . ' = :parent');
+        $qb->setParameter('parent', $parent);
+
+        $this->addSearch($qb, $search, array('filter.name', 'rule.name', 'rule.formula', 'geoname.name', 'part.name'));
+
+        return $qb->getQuery()->getResult();
+    }
 
     /**
      * @var array $cache [geonameId => [filterId => [partId => value]]]
@@ -22,12 +39,12 @@ class FilterGeonameUsageRepository extends \Application\Repository\AbstractRepos
         // If no cache for geoname, fill the cache
         if (!isset($this->cache[$geonameId])) {
             $qb = $this->createQueryBuilder('filterGeonameUsage')
-                ->select('filterGeonameUsage, geoname, filter, rule')
-                ->join('filterGeonameUsage.geoname', 'geoname')
-                ->join('filterGeonameUsage.filter', 'filter')
-                ->join('filterGeonameUsage.rule', 'rule')
-                ->andWhere('filterGeonameUsage.geoname = :geoname')
-                ->orderBy('filterGeonameUsage.sorting, filterGeonameUsage.id');
+                    ->select('filterGeonameUsage, geoname, filter, rule')
+                    ->join('filterGeonameUsage.geoname', 'geoname')
+                    ->join('filterGeonameUsage.filter', 'filter')
+                    ->join('filterGeonameUsage.rule', 'rule')
+                    ->andWhere('filterGeonameUsage.geoname = :geoname')
+                    ->orderBy('filterGeonameUsage.sorting, filterGeonameUsage.id');
 
             $qb->setParameters(array(
                 'geoname' => $geonameId,
@@ -86,4 +103,5 @@ class FilterGeonameUsageRepository extends \Application\Repository\AbstractRepos
 
         return null;
     }
+
 }

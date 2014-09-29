@@ -76,16 +76,25 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     private $dateEnd;
 
     /**
-     * Constructor
+     * @var SurveyType
+     * @ORM\Column(type="survey_type")
      */
-    public function __construct()
+    private $type;
+
+    /**
+     * Constructor
+     * @param string $name
+     */
+    public function __construct($name = null)
     {
+        $this->setName($name);
         $this->questions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->questionnaires = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->setType(SurveyType::$GLAAS);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -104,7 +113,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @param string $name
      *
-     * @return Survey
+     * @return self
      */
     public function setName($name)
     {
@@ -128,7 +137,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @param string $code
      *
-     * @return Survey
+     * @return self
      */
     public function setCode($code)
     {
@@ -152,7 +161,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @param boolean $isActive
      *
-     * @return Survey
+     * @return self
      */
     public function setIsActive($isActive)
     {
@@ -176,7 +185,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @param integer $year
      *
-     * @return Survey
+     * @return self
      */
     public function setYear($year)
     {
@@ -206,7 +215,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * @param string $comments
      *
-     * @return Survey
+     * @return self
      */
     public function setComments($comments)
     {
@@ -226,7 +235,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * @param \DateTime $dateStart
      *
-     * @return Survey
+     * @return self
      */
     public function setDateStart(\DateTime $dateStart = null)
     {
@@ -246,11 +255,56 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     /**
      * @param \DateTime $dateEnd
      *
-     * @return Survey
+     * @return self
      */
     public function setDateEnd(\DateTime $dateEnd = null)
     {
         $this->dateEnd = $dateEnd;
+
+        return $this;
+    }
+
+    /**
+     * Get the survey type
+     * @return \Application\Model\SurveyType
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set the survey type
+     * @param \Application\Model\SurveyType $type
+     * @return self
+     */
+    public function setType(SurveyType $type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Compute and set the survey type according to its existing questions
+     * @return self
+     */
+    public function computeSurveyType()
+    {
+        if ($this->getType() == SurveyType::$NSA) {
+            return;
+        }
+
+        // If we have only numeric questions, then it's JMP, otherwise GLAAS
+        $type = SurveyType::$JMP;
+        foreach ($this->getQuestions() as $question) {
+            if (!$question instanceof Question\NumericQuestion) {
+                $type = SurveyType::$GLAAS;
+                break;
+            }
+        }
+
+        $this->setType($type);
 
         return $this;
     }
@@ -271,11 +325,12 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @param \Application\Model\Question\AbstractQuestion $question
      *
-     * @return Survey
+     * @return self
      */
     public function questionAdded(\Application\Model\Question\AbstractQuestion $question)
     {
         $this->getQuestions()->add($question);
+        $this->computeSurveyType();
 
         return $this;
     }
@@ -294,7 +349,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      *
      * @param Questionnaire $questionnaire
      *
-     * @return Survey
+     * @return self
      */
     public function questionnaireAdded(Questionnaire $questionnaire)
     {
@@ -304,7 +359,7 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRoleContext($action)
     {

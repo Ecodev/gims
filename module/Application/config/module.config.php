@@ -19,6 +19,7 @@ return array(
                     'polygon' => 'polygon',
                     'linestring' => 'linestring',
                     'questionnaire_status' => 'questionnaire_status',
+                    'survey_type' => 'survey_type',
                 ),
             ),
         ),
@@ -43,9 +44,28 @@ return array(
                     'polygon' => 'CrEOF\Spatial\DBAL\Types\Geometry\PolygonType',
                     'linestring' => 'CrEOF\Spatial\DBAL\Types\Geometry\LineStringType',
                     'questionnaire_status' => 'Application\DBAL\Types\QuestionnaireStatusType',
+                    'survey_type' => 'Application\DBAL\Types\SurveyTypeType',
                 ),
                 'proxy_dir' => 'data/cache/DoctrineORMModule/Proxy',
                 'generate_proxies' => false,
+                'datetime_functions' => array(
+                    'CAST' => 'Application\ORM\AST\Functions\CastFunction',
+                ),
+                'string_functions' => array(
+                    'CAST' => 'Application\ORM\AST\Functions\CastFunction',
+                ),
+                'numeric_functions' => array(
+                    'CAST' => 'Application\ORM\AST\Functions\CastFunction',
+                ),
+            ),
+        ),
+        // migrations configuration
+        'migrations_configuration' => array(
+            'orm_default' => array(
+                'directory' => 'data/migrations',
+                'name' => 'GIMS Migrations',
+                'namespace' => 'DoctrineMigrations',
+                'table' => 'version',
             ),
         ),
     ),
@@ -187,9 +207,13 @@ return array(
             'metadata' => 'Application\View\Helper\Metadata',
             'crudButtons' => 'Application\View\Helper\CrudButtons',
             'bodyCssClass' => 'Application\View\Helper\BodyCssClass',
+            'version' => 'Application\View\Helper\Version',
+            'googleAnalytics' => 'Application\View\Helper\GoogleAnalytics',
+            'helpButton' => 'Application\View\Helper\HelpButton',
+            'helpBox' => 'Application\View\Helper\HelpBox',
         ),
     ),
-    'console' => Array(
+    'console' => array(
         'router' => array(
             'routes' => array(
                 'import-jmp' => array(

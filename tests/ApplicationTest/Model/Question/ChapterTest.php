@@ -1,11 +1,14 @@
 <?php
 
-namespace ApplicationTest\Model;
+namespace ApplicationTest\Model\Question;
 
 use Application\Model\Question\Chapter;
 use Application\Model\Question\NumericQuestion;
 
-class ChapterTest extends AbstractModel
+/**
+ * @group Model
+ */
+class ChapterTest extends \ApplicationTest\Model\AbstractModel
 {
 
     public function testQuestionsRelation()
@@ -17,7 +20,7 @@ class ChapterTest extends AbstractModel
 
         $question->setChapter($chapter);
         $this->assertCount(1, $chapter->getQuestions(), 'chapter must be notified when question is added');
-        $this->assertSame($question, $chapter->getQuestions()->first(), 'original question can be retreived from chapter');
+        $this->assertSame($question, $chapter->getQuestions()->first(), 'original question can be retrieved from chapter');
     }
 
 }

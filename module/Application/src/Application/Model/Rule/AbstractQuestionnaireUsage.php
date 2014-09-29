@@ -11,15 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class AbstractQuestionnaireUsage extends AbstractUsage
 {
 
-    /**
-     * @var Questionnaire
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Model\Questionnaire", inversedBy="questionnaireUsages"))
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * })
-     */
-    private $questionnaire;
+    protected $questionnaire;
 
     /**
      * Set questionnaire
@@ -48,5 +40,16 @@ abstract class AbstractQuestionnaireUsage extends AbstractUsage
      * Get Filter
      * @return Filter|null
      */
-    abstract function getFilter();
+    abstract public function getFilter();
+
+    /**
+     * Returns role context
+     * @param string $action
+     * @return \Application\Model\Questionnaire
+     */
+    public function getRoleContext($action)
+    {
+        return $this->getQuestionnaire();
+    }
+
 }

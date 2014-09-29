@@ -5,8 +5,7 @@ namespace Application\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Application\Utility;
-use MischiefCollective\ColorJizz\Formats\HSV;
-use MischiefCollective\ColorJizz\Formats\HEX;
+use MischiefCollective\ColorJizz\Formats\Hex;
 use Application\Service\MultipleRoleContext;
 
 /**
@@ -39,7 +38,7 @@ use Application\Service\MultipleRoleContext;
  * </pre>
  * @ORM\Entity(repositoryClass="Application\Repository\FilterRepository")
  */
-class Filter extends AbstractModel
+class Filter extends AbstractModel implements Rule\ReferencableInterface
 {
 
     /**
@@ -71,7 +70,7 @@ class Filter extends AbstractModel
     private $questions;
 
     /**
-     * Questions that have current filter assigned
+     * FilterSets that have current filter assigned
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="\Application\Model\FilterSet", mappedBy="filters")
      */
@@ -82,7 +81,7 @@ class Filter extends AbstractModel
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="Filter")
      * @ORM\JoinTable(name="filter_summand",
-     *      inverseJoinColumns={@ORM\JoinColumn(name="summand_filter_id")}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="summand_filter_id", onDelete="CASCADE")}
      *      )
      */
     private $summands;
@@ -91,7 +90,7 @@ class Filter extends AbstractModel
      * Additional rules to apply to compute value
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="\Application\Model\Rule\FilterQuestionnaireUsage", mappedBy="filter")
-     * @ORM\OrderBy({"isSecondLevel" = "DESC", "sorting" = "ASC", "id" = "ASC"})
+     * @ORM\OrderBy({"isSecondStep" = "DESC", "sorting" = "ASC", "id" = "ASC"})
      */
     private $filterQuestionnaireUsages;
 
@@ -100,6 +99,19 @@ class Filter extends AbstractModel
      * @ORM\Column(type="text", nullable=true)
      */
     private $color;
+
+    /**
+     * @var int
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
+     */
+    private $isThematic = false;
+
+    /**
+     * @var thematicFilter
+     * @ORM\ManyToOne(targetEntity="Filter")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $thematicFilter;
 
     /**
      * Constructor
@@ -117,7 +129,7 @@ class Filter extends AbstractModel
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -129,7 +141,7 @@ class Filter extends AbstractModel
     /**
      * Set name
      * @param string $name
-     * @return Filter
+     * @return self
      */
     public function setName($name)
     {
@@ -157,9 +169,23 @@ class Filter extends AbstractModel
     }
 
     /**
+     * Get all children recursively
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getAllChildren()
+    {
+        $children = $this->getChildren()->toArray();
+        foreach ($children as $child) {
+            $children = array_merge($children, $child->getAllChildren()->toArray());
+        }
+
+        return new ArrayCollection($children);
+    }
+
+    /**
      * Add a child
      * @param Filter $child
-     * @return Filter
+     * @return self
      */
     public function addChild(Filter $child)
     {
@@ -174,7 +200,7 @@ class Filter extends AbstractModel
     /**
      * Set new filters, replacing entirely existing children
      * @param \Doctrine\Common\Collections\ArrayCollection $children
-     * @return $this
+     * @return self
      */
     public function setChildren(\Doctrine\Common\Collections\ArrayCollection $children)
     {
@@ -204,7 +230,7 @@ class Filter extends AbstractModel
      * Notify the child that he has a new parent.
      * This should only be called by Filter::addChild()
      * @param Filter $parent
-     * @return Filter
+     * @return self
      */
     protected function parentAdded(Filter $parent)
     {
@@ -218,7 +244,7 @@ class Filter extends AbstractModel
     /**
      * Set new filters, replacing entirely existing parents
      * @param \Doctrine\Common\Collections\ArrayCollection $parents
-     * @return $this
+     * @return self
      */
     public function setParents(\Doctrine\Common\Collections\ArrayCollection $parents)
     {
@@ -265,7 +291,7 @@ class Filter extends AbstractModel
      * Notify the filter that he has a new filterset.
      * This should only be called by FilterSet::addFilter()
      * @param FilterSet $filterSet
-     * @return Filter
+     * @return self
      */
     public function filterSetAdded(FilterSet $filterSet)
     {
@@ -288,12 +314,27 @@ class Filter extends AbstractModel
     /**
      * Add a summand
      * @param Filter $summand
-     * @return Filter
+     * @return self
      */
     public function addSummand(Filter $summand)
     {
         if (!$this->getSummands()->contains($summand)) {
             $this->getSummands()->add($summand);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set new summands, replacing entirely existing summands
+     * @param \Doctrine\Common\Collections\ArrayCollection $summands
+     * @return self
+     */
+    public function setSummands(\Doctrine\Common\Collections\ArrayCollection $summands)
+    {
+        $this->getSummands()->clear();
+        foreach ($summands as $summand) {
+            $this->addSummand($summand);
         }
 
         return $this;
@@ -353,7 +394,7 @@ class Filter extends AbstractModel
      * Notify the filter that it was added to FilterQuestionnaireUsage relation.
      * This should only be called by FilterQuestionnaireUsage::setFilter()
      * @param Rule\FilterQuestionnaireUsage $usage
-     * @return Filter
+     * @return self
      */
     public function filterQuestionnaireUsageAdded(Rule\FilterQuestionnaireUsage $usage)
     {
@@ -410,7 +451,7 @@ class Filter extends AbstractModel
         if ($ratio == 100) {
             $color = $this->color;
         } else {
-            $hex = new HEX(intval(str_replace('#', '0x', strtoupper($this->color)), 16)); //Create Hex object
+            $hex = new Hex(intval(str_replace('#', '0x', strtoupper($this->color)), 16)); //Create Hex object
             $hsv = $hex->toHSV(); // then transform to HSV
             $hsv->saturation *= $ratio / 100; //multiply saturation by ratio
             $color = '#' . $hsv->toHex(); // and then transform again to Hex
@@ -422,7 +463,7 @@ class Filter extends AbstractModel
     /**
      * Set color in database
      * @param $color string hexadecimal
-     * @return Filter
+     * @return self
      */
     public function setColor($color)
     {
@@ -432,19 +473,66 @@ class Filter extends AbstractModel
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRoleContext($action)
     {
-        $contexts = $this->getFilterSets()->toArray();
+        $contexts = new MultipleRoleContext($this->getFilterSets());
         foreach ($this->getParents() as $parent) {
-            $parentContexts = $parent->getRoleContext($action);
-            if ($parentContexts) {
-                $contexts = array_merge($contexts, $parentContexts->toArray());
+            $contexts->merge($parent->getRoleContext($action));
+        }
+
+        // If we try to delete a filter, we must also consider the side-effect it may have on Rules that use this filter
+        if ($action == 'delete') {
+            $repository = \Application\Module::getEntityManager()->getRepository('Application\Model\Rule\Rule');
+            $rulesWithReference = $repository->getAllReferencing($this);
+            foreach ($rulesWithReference as $rule) {
+                $contexts->merge($rule->getRoleContext($action));
             }
         }
 
-        return $contexts ? new MultipleRoleContext($contexts, true) : null;
+        return $contexts->count() ? $contexts : null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isThematic()
+    {
+        return $this->isThematic;
+    }
+
+    /**
+     * @param bool $isThematic
+     */
+    public function setIsThematic($isThematic)
+    {
+        $this->isThematic = $isThematic;
+
+        return $this;
+    }
+
+    /**
+     * return \Application\Model\Filter
+     */
+    public function getThematicFilter()
+    {
+        return $this->thematicFilter;
+    }
+
+    /**
+     * @param \Application\Model\Filter $thematicFilter
+     * @return self
+     */
+    public function setThematicFilter($thematicFilter)
+    {
+        if ($thematicFilter->isThematic()) {
+            $this->thematicFilter = $thematicFilter;
+        } else {
+            throw new InvalidArgumentException('Filter ' . $thematicFilter->getName() . ' is not a thematic.');
+        }
+
+        return $this;
     }
 
 }

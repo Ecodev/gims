@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . '/AbstractDatabase.php');
+require_once __DIR__ . '/AbstractDatabase.php';
 
 class PurgeBackup extends AbstractDatabase
 {
@@ -23,20 +23,16 @@ class PurgeBackup extends AbstractDatabase
     {
         $handle = opendir($this->backupDir);
         $files = array();
-        while (($file = readdir($handle)) !== false)
-        {
+        while (($file = readdir($handle)) !== false) {
             $filePath = $this->backupDir . '/' . $file;
-            if ($file == '.' || $file == '..')
-            {
+            if ($file == '.' || $file == '..') {
                 continue;
-            } elseif (is_file($filePath))
-            {
+            } elseif (is_file($filePath)) {
                 $files[] = $filePath;
             }
         }
         sort($files, SORT_REGULAR);
-        while (count($files) > $this->numberOfVersions)
-        {
+        while (count($files) > $this->numberOfVersions) {
             unlink(array_shift($files));
         }
     }

@@ -3,8 +3,10 @@
 namespace Api\Controller;
 
 use Zend\View\Model\JsonModel;
+use Application\Model\Rule\FilterQuestionnaireUsage;
+use Application\Model\Rule\Rule;
 
-class FilterController extends AbstractRestfulController
+class FilterController extends AbstractChildRestfulController
 {
 
     use \Application\Traits\FlatHierarchic;
@@ -20,32 +22,85 @@ class FilterController extends AbstractRestfulController
     }
 
     /**
-     *
+     * Return all children recursively.
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     protected function getFlatList()
     {
-        $filters = $this->getRepository()->findAll();
-        $jsonConfig = array_merge($this->getJsonConfig(), array('parents'));
+        $parent = $this->getParent();
+        if ($parent) {
 
+            // if parent is FilterSet, get his filters
+            if ($parent instanceof \Application\Model\FilterSet) {
+
+                $filterSetFilters = $parent->getFilters();
+                $filters = array();
+                foreach ($filterSetFilters as $filter) {
+                    $filterChildren = array($filter);
+                    $filterChildren = array_merge($filterChildren, $filter->getAllChildren()->toArray());
+                    $filterChildren = $this->flattenFilters($filterChildren);
+                    unset($filterChildren[0]['_parent']);
+                    for ($i = 1; $i < $filter->getParents()->count(); $i++) {
+                        unset($filterChildren[$i]);
+                    }
+                    $filterChildren = $this->getFlatHierarchyWithSingleRootElement($filterChildren, '_parent');
+                    $filters = array_merge($filters, $filterChildren);
+                }
+
+                // else means parent is filter
+            } else {
+                $filters = $parent->getAllChildren()->toArray();
+                // get unique filters because flattenFilters() already duplicate elements if there are multiple parents
+                $uniqueFilters = [];
+                foreach ($filters as $filter) {
+                    $uniqueFilters[$filter->getId()] = $filter;
+                }
+                $filters = $this->flattenFilters($uniqueFilters);
+                $filters = $this->getFlatHierarchyWithSingleRootElement($filters, '_parent');
+            }
+
+            // no parent, get all filters
+        } else {
+            $itemOnce = $this->params()->fromQuery('itemOnce') == 'true' ? true : false;
+            $filters = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), $this->params()->fromQuery('q'));
+            $filters = $this->flattenFilters($filters, $itemOnce);
+            $filters = $this->getFlatHierarchyWithMultipleRootElements($filters, '_parent');
+        }
+
+        return $filters;
+    }
+
+    /**
+     * This function return a list of filters in assoc array
+     * If a filter has multiple parents, he's added multiple times in the right hierarchic position
+     * @param $filters
+     * @param bool $itemOnce avoid to add multiple times the same filter if he has multiple parents
+     * @return array
+     */
+    private function flattenFilters($filters, $itemOnce = false)
+    {
+        $jsonConfig = $this->getJsonConfig();
         $flatFilters = array();
         foreach ($filters as $filter) {
             $flatFilter = $this->hydrator->extract($filter, $jsonConfig);
-            if (count($flatFilter['parents']) > 0) {
-                $parents = $flatFilter['parents'];
-                unset($flatFilter['parents']);
+            $parents = $this->hydrator->extractArray($filter->getParents(), ['id']);
+
+            if ($parents) {
                 foreach ($parents as $parent) {
-                    $filter = $flatFilter;
-                    $filter['parents'] = $parent;
-                    array_push($flatFilters, $filter);
+                    $flatFilter['_parent'] = $parent;
+                    $flatFilters[] = $flatFilter;
+
+                    // If we don't want duplicated items for each parents, break the loop
+                    if ($itemOnce) {
+                        break;
+                    }
                 }
             } else {
-                unset($flatFilter['parents']);
-                array_push($flatFilters, $flatFilter);
+                $flatFilters[] = $flatFilter;
             }
         }
 
-        return $this->getFlatHierarchyWithMultipleRootElements($flatFilters, 'parents');
+        return $flatFilters;
     }
 
     public function getAutoCompleteListAction()
@@ -69,6 +124,118 @@ class FilterController extends AbstractRestfulController
         }
 
         return $filter['name'];
+    }
+
+    public function getComputedFiltersAction()
+    {
+        $filterIds = explode(',', trim($this->params()->fromQuery('filters'), ','));
+        $questionnaireIds = explode(',', trim($this->params()->fromQuery('questionnaires'), ','));
+
+        $calculator = new \Application\Service\Calculator\Calculator();
+        $calculator->setServiceLocator($this->getServiceLocator());
+        $parts = $this->getEntityManager()->getRepository('\Application\Model\Part')->findAll();
+
+        $result = array();
+        foreach ($questionnaireIds as $questionnaireId) {
+            $result[$questionnaireId] = array();
+            foreach ($filterIds as $filterId) {
+                $result[$questionnaireId][$filterId] = array();
+                foreach ($parts as $part) {
+                    $value = array();
+                    $value['first'] = $calculator->computeFilter($filterId, $questionnaireId, $part->getId(), false);
+                    $value['second'] = $calculator->computeFilter($filterId, $questionnaireId, $part->getId(), true);
+                    $result[$questionnaireId][$filterId][$part->getId()] = $value;
+                }
+            }
+        }
+
+        return new JsonModel($result);
+    }
+
+    public function getComputedWorldAction()
+    {
+        $calculator = new \Application\Service\Calculator\Calculator();
+        $calculator->setServiceLocator($this->getServiceLocator());
+
+        $filterIds = explode(',', trim($this->params()->fromQuery('filters'), ','));
+
+        $filters = [];
+        foreach ($filterIds as $filterId) {
+            array_push($filters, $this->getRepository()->findOneById($filterId));
+        }
+
+        $geonames = $this->getEntityManager()->getRepository('\Application\Model\Geoname')->findAll();
+        $parts = $this->getEntityManager()->getRepository('\Application\Model\Part')->findAll();
+
+        /** @var \Application\Model\Geoname $geoname */
+        $data = [];
+        foreach ($geonames as $geoname) {
+            $questionnaires = $geoname->getQuestionnaires()->toArray();
+            $geonameData = $this->hydrator->extract($geoname, [
+                'gtopo30',
+                'population'
+            ]);
+            $geonameData['iso_numeric'] = $geoname->getCountry()->getIsoNumeric();
+            $geonameData['iso3'] = $geoname->getCountry()->getIso3();
+
+            foreach ($parts as $part) {
+                $geonameData['calculations'][$part->getId()] = $calculator->computeFlattenAllYears(1980, 2014, $filters, $questionnaires, $part);
+            }
+            array_push($data, $geonameData);
+        }
+
+        return new JsonModel($data);
+    }
+
+    public function createUsagesAction()
+    {
+        $filters = explode(',', $this->params()->fromQuery('filters'));
+        $questionnaires = explode(',', $this->params()->fromQuery('questionnaires'));
+
+        $parts = $this->getEntityManager()->getRepository('\Application\Model\Part')->findAll();
+        $filterRepo = $this->getEntityManager()->getRepository('\Application\Model\Filter');
+
+        foreach ($filters as $filter) {
+            list($parentFilter, $children) = explode(':', $filter);
+            $children = explode('-', $children);
+            $parent = $filterRepo->findOneById($parentFilter);
+            $child1 = $filterRepo->findOneById($children[0]);
+            $child2 = $filterRepo->findOneById($children[1]);
+
+            foreach ($questionnaires as $questionnaire) {
+                $questionnaire = $this->getEntityManager()->getRepository('\Application\Model\Questionnaire')->findOneById($questionnaire);
+
+                foreach ($parts as $part) {
+                    $child1Form = '{F#' . $child1->getId() . ',Q#' . $questionnaire->getId() . ',P#' . $part->getId() . '}';
+                    $child2Form = '{F#' . $child2->getId() . ',Q#' . $questionnaire->getId() . ',P#' . $part->getId() . '}';
+                    $questionnaireForm = '{Q#' . $questionnaire->getId() . ',P#' . $part->getId() . '}';
+                    $completeForm = '=(' . $child1Form . '*' . $child2Form . '/' . $questionnaireForm . ')';
+
+                    $rule = new Rule('Sector for "' . $parent->getName() + '"');
+                    $rule->setFormula($completeForm);
+
+                    $fqu = new FilterQuestionnaireUsage();
+                    $fqu->setQuestionnaire($questionnaire);
+                    $fqu->setFilter($parent);
+                    $fqu->setRule($rule);
+                    $fqu->setPart($part);
+                    $fqu->setJustification('Sector for "' . $parent->getName() + '"');
+
+                    $this->getEntityManager()->persist($rule);
+                    $this->getEntityManager()->persist($fqu);
+                }
+            }
+        }
+        $this->getEntityManager()->flush();
+
+        return new JsonModel(array());
+    }
+
+    public function getSectorFiltersForGeonameAction()
+    {
+        $filter = $this->getEntityManager()->getRepository('\Application\Model\Geoname')->getSectorFilter($this->params()->fromQuery('geoname'));
+
+        return new JsonModel($filter);
     }
 
 }

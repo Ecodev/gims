@@ -2,6 +2,9 @@
 
 namespace ApplicationTest\Model;
 
+/**
+ * @group Model
+ */
 class UserSurveyTest extends AbstractModel
 {
 
@@ -13,7 +16,7 @@ class UserSurveyTest extends AbstractModel
 
         $userSurvey->setUser($user);
         $this->assertCount(1, $user->getUserSurveys(), 'user must be notified when userSurvey is added');
-        $this->assertSame($userSurvey, $user->getUserSurveys()->first(), 'original userSurvey can be retreived from user');
+        $this->assertSame($userSurvey, $user->getUserSurveys()->first(), 'original userSurvey can be retrieved from user');
     }
 
 }

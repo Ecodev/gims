@@ -22,7 +22,9 @@
                         '/lib/autoload',
                         '/js',
                     )
-                ))
+                ));
+
+        echo $this->googleAnalytics();
         ?>
 
     </head>
@@ -33,30 +35,33 @@
         <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
             <div class="container">
                 <div class="navbar-header">
-                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+                    <button class="navbar-toggle" type="button" ng-click="showMainMenu = !showMainMenu">
                         <span class="sr-only">Toggle navigation</span>
-                        <span class="fa fa-bar"></span>
-                        <span class="fa fa-bar"></span>
-                        <span class="fa fa-bar"></span>
+                        <i class="fa fa-bars"></i>
                     </button>
                     <a href="<?php echo $this->url('home') ?>" class="navbar-brand">GIMS</a>
                 </div>
-                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+                <nav class="navbar-collapse bs-navbar-collapse" ng-class="{collapse: !showMainMenu}" role="navigation">
                     <ul class="nav navbar-nav">
                         <li><a href="/about"><?php echo $this->translate('About') ?></a></li>
                         <li><a href="/browse"><?php echo $this->translate('Browse') ?></a></li>
                         <li><a href="/contribute"><?php echo $this->translate('Contribute') ?></a></li>
+                        <li><a href="/admin"><?php echo $this->translate('Admin') ?></a></li>
+                        <li><a href="http://gims.readthedocs.org/en/develop/" target="_blank"><i class="fa fa-gims-help"></i> <?php echo $this->translate('Help') ?></a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
 
                             <div class="pull-right" ng-controller="UserCtrl">
+                                <gims-network-activity class="loading-widget navbar-text" tooltip="Pending requests: {{getRequestCount()}}" tooltip-placement="bottom"><i class="fa fa-2x fa-gims-loading"></i></gims-network-activity>
                                 <p ng-show="user" class="navbar-text loggedInUser">
-                                <ng-switch on="user.gravatar==undefined">
-                                    <img ng-switch-when="false" ng-src="{{user.gravatar}}?s=50" />
-                                </ng-switch>
-                                <span>{{user.name}}</span>
-                                <a target="_self" href="<?php echo $this->url('zfcuser/logout') ?>">[<?php echo $this->translate('Sign out') ?>]</a>
+                                    <a class="text-muted" href="/admin/user/edit/{{user.id}}">
+                                        <ng-switch on="user.gravatar==undefined">
+                                            <img ng-switch-when="false" ng-src="{{user.gravatar}}?s=50" />
+                                        </ng-switch>
+                                        <span>{{user.name}}</span>
+                                    </a>
+                                    <a target="_self" href="<?php echo $this->url('zfcuser/logout') ?>">[<?php echo $this->translate('Sign out') ?>]</a>
                                 </p>
                                 <a ng-hide="user" class="btn btn-primary loginButton" href ng-click="promptLogin()"><span class="fa fa-user"></span> <?php echo $this->translate('User login') ?></a>
                             </div>
@@ -67,20 +72,22 @@
             </div>
         </header>
 
-        <div class="container-angular" ng-view></div>
+        <div class="container-angular">
+            <gims-errors></gims-errors>
+            <div ng-view></div>
+        </div>
 
-        <footer id='pagefooter' class="row">
+        <footer class='navbar navbar-default navbar-fixed-bottom'>
                 <p class="col-md-4 text-muted">
-                    <small>A project by <a href="http://www.who.int/phe/en/" target="_blank">WHO - Public Health and Environment</a> - 2013</small>
+                    <small>A project by <a href="http://www.who.int/phe/en/" target="_blank">WHO - Public Health and Environment</a></small>
                 </p>
 
                 <p class="col-md-4 text-muted">
                     <img src="/img/who-logo-black.png" alt="" style="height: 30px"/>
                 </p>
                 <p class="col-md-4 text-muted">
-                    <small><?php echo $this->translate('Designed and built by <a href="http://www.ecodev.ch" target="_blank">Ecodev</a>') ?></small>
+                    <small><?php echo $this->translate('Designed and built by <a href="http://www.ecodev.ch" target="_blank">Ecodev</a>') ?>, v<?php echo $this->version(); ?></small>
                 </p>
-
         </footer>
 
         <!-- Modal Login Window !-->
@@ -95,7 +102,7 @@
                             </div>
                             <div class="form-group" ng-class="{'has-error': loginForm.identity.$dirty && loginForm.identity.$invalid}">
                                 <label class="control-label" for="login-email"><?php echo $this->translate('Email'); ?></label>
-                                <input gims-focus type="email" name="identity" id="login-email" ng-model="login.identity" />
+                                <input gims-focus type="email" name="identity" id="login-email" ng-model="login.identity" ng-blur="toLowerCase()" />
                                 <span ng-show="loginForm.identity.$error.email" class="help-block"><?php echo $this->translate('Enter a valid email address'); ?></span>
                             </div>
 
@@ -104,7 +111,7 @@
                                 <input type="password" name="credential" id="login-password" ng-model="login.credential" />
                             </div>
 
-                            <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Sign In'); ?></button>  <i ng-show="signing" class="fa fa-gims-loading"></i>
+                            <button type="submit" name="submit" class="btn btn-primary" value=""> <i ng-show="signing" class="fa fa-gims-loading"></i> <?php echo $this->translate('Sign In'); ?></button>
 
                             <input type="hidden" name="redirect" value="{{redirect}}">
 
@@ -115,7 +122,7 @@
                         <form class="modal-form" name="registerForm" ng-submit="sendRegister()">
                             <div class="form-group" ng-class="{'has-error': userExisting || (registerForm.email.$dirty && registerForm.email.$error.email)}">
                                 <label class="control-label" for="register-email"><?php echo $this->translate('Email'); ?></label>
-                                <input type="email" name="email" id="register-email" required ng-model="register.email">
+                                <input type="email" name="email" id="register-email" required ng-model="register.email" ng-blur="toLowerCase()">
                                 <span ng-show="registerForm.email.$error.email" class="help-block"><?php echo $this->translate('Enter a valid email address'); ?></span>
                                 <span ng-show="userExisting" class="help-block"><?php echo $this->translate('There is already an account with this email address'); ?></span>
                             </div>
@@ -133,7 +140,7 @@
                                 <input type="password" name="passwordVerify" id="register-password-verify" placeholder="confirm password" required ui-validate=" '$value==register.password' " ui-validate-watch=" 'register.passwordVerify' " ng-model="register.passwordVerify">
                                 <span ng-show="registerForm.passwordVerify.$error.validator" class="help-block"><?php echo $this->translate("Passwords do not match!"); ?></span>
                             </div>
-                            <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Register') ?></button> <i ng-show="registering" class="fa fa-gims-loading"></i>
+                            <button type="submit" name="submit" class="btn btn-primary" value=""><i ng-show="registering" class="fa fa-gims-loading"></i> <?php echo $this->translate('Register') ?></button>
                         </form>
                     </div>
                 </div>

@@ -26,8 +26,7 @@ class Permission extends AbstractModel
         if ($object instanceof \Application\Model\Question\AbstractQuestion) {
             $name = 'Question'; // All questions use same permissions
         } else {
-            $reflect = new \ReflectionClass($object);
-            $name = $reflect->getShortName();
+            $name = \Application\Utility::getShortClassName($object);
 
             if ($object instanceof AbstractRepository) {
                 $name = str_replace('Repository', '', $name);
@@ -54,7 +53,7 @@ class Permission extends AbstractModel
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -67,7 +66,7 @@ class Permission extends AbstractModel
      * Set name
      *
      * @param string $name
-     * @return Permission
+     * @return self
      */
     public function setName($name)
     {

@@ -81,15 +81,15 @@ class UserController extends AbstractRestfulController
 
     public function statisticsAction()
     {
-        // TODO: make the user mandatory and return stats based on actual roles (once we can pass the ID from angular)
-        //        $user = $this->getRepository()->findOneById($this->params('idUser'));
-        //
-        //        if (!$user) {
-        //            $this->getResponse()->setStatusCode(404);
-        //            return new JsonModel(array('message' => 'No object found'));
-        //        }
+        $user = $this->getRepository()->findOneById($this->params('idUser'));
 
-        $stats = $this->getRepository()->getStatistics( /* $user */);
+        if (!$user) {
+            $this->getResponse()->setStatusCode(404);
+
+            return new JsonModel(array('message' => 'No object found'));
+        }
+
+        $stats = $this->getRepository()->getStatistics($user);
 
         return new JsonModel($stats);
     }
@@ -107,8 +107,8 @@ class UserController extends AbstractRestfulController
 
         if (!$request->isPost()) {
             return array(
-                'loginForm'          => $form,
-                'redirect'           => $redirect,
+                'loginForm' => $form,
+                'redirect' => $redirect,
                 'enableRegistration' => $this->getOptions()->getEnableRegistration(),
             );
         }
@@ -126,14 +126,6 @@ class UserController extends AbstractRestfulController
         $this->zfcUserAuthentication()->getAuthService()->clearIdentity();
 
         return $this->forward()->dispatch(static::CONTROLLER_NAME, array('action' => 'authenticate'));
-    }
-
-    public function getList()
-    {
-        $users = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), $this->params()->fromQuery('q'), 'user');
-        $jsonData = $this->paginate($users);
-
-        return new JsonModel($jsonData);
     }
 
     public function delete($id)

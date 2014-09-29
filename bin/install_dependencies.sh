@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Installing Compass..."
-GEMS="gem install --quiet --no-rdoc --no-ri sass compass oily_png bootstrap-sass"
+GEMS="gem install --quiet --no-rdoc --no-ri sass compass oily_png bootstrap-sass autoprefixer-rails"
 if [[ -z $TRAVIS ]]; then # If not on Travis, need to use sudo
    GEMS="sudo $GEMS"
 fi
@@ -16,7 +16,7 @@ sudo apt-get install -qq software-properties-common # to get next command: add-a
 sudo add-apt-repository --yes ppa:ubuntugis/ubuntugis-unstable
 sudo add-apt-repository --yes ppa:chris-lea/node.js
 sudo apt-get -qq update
-sudo apt-get -qq install postgresql-9.1-postgis-2.0 rubygems nodejs apache2 php5-pgsql php5-cli php5-gd php5-mcrypt php5-intl php5-json
+sudo apt-get -qq install postgresql-9.3-postgis-2.1 rubygems nodejs apache2 php5-pgsql php5-cli php5-gd php5-mcrypt php5-intl php5-json
 
 echo "Installing php-cs-fixer..."
 sudo wget http://cs.sensiolabs.org/get/php-cs-fixer.phar -O /usr/local/bin/php-cs-fixer
@@ -69,5 +69,6 @@ if [[ "$1" = "configure" ]]; then
     cp config/autoload/local.php.dist config/autoload/local.php
     sudo -u postgres psql -c 'create database gims;' -U postgres
     createuser --no-superuser --no-createdb --no-createrole gims
+    createuser --no-superuser --no-createdb --no-createrole devgims
     createuser --no-superuser --no-createdb --no-createrole backup
 fi

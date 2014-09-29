@@ -16,7 +16,7 @@ class Chapter extends AbstractQuestion
     /**
      * @var string
      *
-     * @ORM\Column(type="text", nullable=false)
+     * @ORM\Column(type="text", nullable=false, options={"default" = ""})
      */
     private $description = '';
 
@@ -82,7 +82,7 @@ class Chapter extends AbstractQuestion
      *
      * @param \Application\Model\Question\AbstractQuestion $question
      *
-     * @return Chapter
+     * @return self
      */
     public function questionAdded(\Application\Model\Question\AbstractQuestion $question)
     {

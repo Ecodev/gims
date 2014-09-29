@@ -1,0 +1,902 @@
+[
+    {
+        "name": "Total improved",
+        "id": 75,
+        "data": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            66.9,
+            67.0,
+            67.0,
+            67.1,
+            67.2,
+            68.0,
+            68.9,
+            69.7,
+            70.5,
+            71.3,
+            72.1,
+            72.9,
+            73.6,
+            74.4,
+            75.2,
+            76.0,
+            76.7,
+            77.5,
+            78.3,
+            79.0,
+            79.8,
+            80.5,
+            81.2,
+            82.0,
+            82.7,
+            83.4,
+            84.1,
+            84.8
+        ],
+        "type": "line",
+        "geonameId": 1210997,
+        "color": "#00D919",
+        "lightColor": "#B8D9BC",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "Regression: Total improved (default)"
+    },
+    {
+        "name": "Piped onto premises",
+        "id": 76,
+        "data": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            4.0,
+            4.1,
+            4.2,
+            4.3,
+            4.4,
+            4.6,
+            4.8,
+            4.9,
+            5.1,
+            5.3,
+            5.6,
+            5.8,
+            6.0,
+            6.2,
+            6.5,
+            6.7,
+            6.9,
+            7.2,
+            7.4,
+            7.7,
+            7.9,
+            8.2,
+            8.5,
+            8.8,
+            9.0,
+            9.3,
+            9.6,
+            9.9
+        ],
+        "type": "line",
+        "geonameId": 1210997,
+        "color": "#D90026",
+        "lightColor": "#D9B8BE",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "Regression: Piped onto premises (default)"
+    },
+    {
+        "name": "Surface water",
+        "id": 77,
+        "data": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            6.5,
+            6.4,
+            6.4,
+            6.4,
+            6.4,
+            6.1,
+            5.8,
+            5.5,
+            5.2,
+            5.0,
+            4.7,
+            4.4,
+            4.2,
+            3.9,
+            3.6,
+            3.3,
+            3.1,
+            2.8,
+            2.6,
+            2.3,
+            2.0,
+            1.8,
+            1.5,
+            1.3,
+            1.0,
+            0.8,
+            0.5,
+            0.3
+        ],
+        "type": "line",
+        "geonameId": 1210997,
+        "color": "#0066D9",
+        "lightColor": "#B8C7D9",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "Regression: Surface water (default)"
+    },
+    {
+        "name": "Other Improved",
+        "id": 78,
+        "data": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            62.9,
+            62.9,
+            62.8,
+            62.8,
+            62.8,
+            63.4,
+            64.1,
+            64.7,
+            65.3,
+            65.9,
+            66.5,
+            67.1,
+            67.6,
+            68.2,
+            68.7,
+            69.3,
+            69.8,
+            70.3,
+            70.8,
+            71.3,
+            71.8,
+            72.3,
+            72.8,
+            73.2,
+            73.7,
+            74.1,
+            74.5,
+            74.9
+        ],
+        "type": "line",
+        "geonameId": 1210997,
+        "color": "#A5D900",
+        "lightColor": "#D1D9B8",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "Regression: Other Improved (default)"
+    },
+    {
+        "name": "Other Unimproved",
+        "id": 79,
+        "data": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            26.7,
+            26.6,
+            26.5,
+            26.5,
+            26.4,
+            25.9,
+            25.3,
+            24.8,
+            24.3,
+            23.8,
+            23.2,
+            22.7,
+            22.2,
+            21.7,
+            21.2,
+            20.7,
+            20.2,
+            19.7,
+            19.2,
+            18.7,
+            18.2,
+            17.7,
+            17.2,
+            16.8,
+            16.3,
+            15.8,
+            15.4,
+            14.9
+        ],
+        "type": "line",
+        "geonameId": 1210997,
+        "color": "#CE00D9",
+        "lightColor": "#D7B8D9",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "Regression: Other Unimproved (default)"
+    },
+    {
+        "type": "scatter",
+        "id": 75,
+        "name": "Total improved",
+        "country": "Bangladesh",
+        "color": "#00D919",
+        "lightColor": "#B8D9BC",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "CEN91",
+                "id": "75:2",
+                "questionnaire": 2,
+                "x": 1991,
+                "y": 65.4
+            },
+            {
+                "name": "DHS94",
+                "id": "75:3",
+                "questionnaire": 3,
+                "x": 1994,
+                "y": 73.2
+            },
+            {
+                "name": "MICS94",
+                "id": "75:4",
+                "questionnaire": 4,
+                "x": 1994,
+                "y": 74.1
+            },
+            {
+                "name": "MICS95",
+                "id": "75:5",
+                "questionnaire": 5,
+                "x": 1995,
+                "y": 73.8
+            },
+            {
+                "name": "MICS96",
+                "id": "75:6",
+                "questionnaire": 6,
+                "x": 1996,
+                "y": 75.4
+            },
+            {
+                "name": "DHS97",
+                "id": "75:7",
+                "questionnaire": 7,
+                "x": 1997,
+                "y": 74.8
+            },
+            {
+                "name": "SVRS98",
+                "id": "75:8",
+                "questionnaire": 8,
+                "x": 1998,
+                "y": 76.8
+            },
+            {
+                "name": "DHS00",
+                "id": "75:11",
+                "questionnaire": 11,
+                "x": 2000,
+                "y": 74.6
+            },
+            {
+                "name": "HIES00",
+                "id": "75:12",
+                "questionnaire": 12,
+                "x": 2000,
+                "y": 75.1
+            },
+            {
+                "name": "CEN01",
+                "id": "75:13",
+                "questionnaire": 13,
+                "x": 2001,
+                "y": 69.7
+            },
+            {
+                "name": "WHS03",
+                "id": "75:15",
+                "questionnaire": 15,
+                "x": 2003,
+                "y": 75.3
+            },
+            {
+                "name": "DHS04",
+                "id": "75:16",
+                "questionnaire": 16,
+                "x": 2004,
+                "y": 79.7
+            },
+            {
+                "name": "HIES05",
+                "id": "75:17",
+                "questionnaire": 17,
+                "x": 2005,
+                "y": 79.8
+            },
+            {
+                "name": "MICS06",
+                "id": "75:18",
+                "questionnaire": 18,
+                "x": 2006,
+                "y": 79.6
+            },
+            {
+                "name": "DHS07",
+                "id": "75:19",
+                "questionnaire": 19,
+                "x": 2007,
+                "y": 79.3
+            },
+            {
+                "name": "MICS09",
+                "id": "75:20",
+                "questionnaire": 20,
+                "x": 2009,
+                "y": 85.4
+            },
+            {
+                "name": "HIES10",
+                "id": "75:21",
+                "questionnaire": 21,
+                "x": 2010,
+                "y": 84.0
+            },
+            {
+                "name": "CEN11",
+                "id": "75:22",
+                "questionnaire": 22,
+                "x": 2011,
+                "y": 84.7
+            },
+            {
+                "name": "DHS11",
+                "id": "75:23",
+                "questionnaire": 23,
+                "x": 2011,
+                "y": 85.7
+            }
+        ]
+    },
+    {
+        "type": "scatter",
+        "id": 76,
+        "name": "Piped onto premises",
+        "country": "Bangladesh",
+        "color": "#D90026",
+        "lightColor": "#D9B8BE",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "CEN91",
+                "id": "76:2",
+                "questionnaire": 2,
+                "x": 1991,
+                "y": 5.1
+            },
+            {
+                "name": "DHS94",
+                "id": "76:3",
+                "questionnaire": 3,
+                "x": 1994,
+                "y": 5.9
+            },
+            {
+                "name": "MICS94",
+                "id": "76:4",
+                "questionnaire": 4,
+                "x": 1994,
+                "y": 5.6
+            },
+            {
+                "name": "MICS95",
+                "id": "76:5",
+                "questionnaire": 5,
+                "x": 1995,
+                "y": 5.6
+            },
+            {
+                "name": "MICS96",
+                "id": "76:6",
+                "questionnaire": 6,
+                "x": 1996,
+                "y": 6.8
+            },
+            {
+                "name": "DHS97",
+                "id": "76:7",
+                "questionnaire": 7,
+                "x": 1997,
+                "y": 7.5
+            },
+            {
+                "name": "DHS00",
+                "id": "76:11",
+                "questionnaire": 11,
+                "x": 2000,
+                "y": 5.8
+            },
+            {
+                "name": "HIES00",
+                "id": "76:12",
+                "questionnaire": 12,
+                "x": 2000,
+                "y": 6.0
+            },
+            {
+                "name": "CEN01",
+                "id": "76:13",
+                "questionnaire": 13,
+                "x": 2001,
+                "y": 6.8
+            },
+            {
+                "name": "WHS03",
+                "id": "76:15",
+                "questionnaire": 15,
+                "x": 2003,
+                "y": 6.7
+            },
+            {
+                "name": "DHS04",
+                "id": "76:16",
+                "questionnaire": 16,
+                "x": 2004,
+                "y": 5.9
+            },
+            {
+                "name": "HIES05",
+                "id": "76:17",
+                "questionnaire": 17,
+                "x": 2005,
+                "y": 5.8
+            },
+            {
+                "name": "MICS06",
+                "id": "76:18",
+                "questionnaire": 18,
+                "x": 2006,
+                "y": 6.1
+            },
+            {
+                "name": "DHS07",
+                "id": "76:19",
+                "questionnaire": 19,
+                "x": 2007,
+                "y": 7.1
+            },
+            {
+                "name": "MICS09",
+                "id": "76:20",
+                "questionnaire": 20,
+                "x": 2009,
+                "y": 10.0
+            },
+            {
+                "name": "HIES10",
+                "id": "76:21",
+                "questionnaire": 21,
+                "x": 2010,
+                "y": 8.8
+            },
+            {
+                "name": "CEN11",
+                "id": "76:22",
+                "questionnaire": 22,
+                "x": 2011,
+                "y": 13.6
+            },
+            {
+                "name": "DHS11",
+                "id": "76:23",
+                "questionnaire": 23,
+                "x": 2011,
+                "y": 11.4
+            }
+        ]
+    },
+    {
+        "type": "scatter",
+        "id": 77,
+        "name": "Surface water",
+        "country": "Bangladesh",
+        "color": "#0066D9",
+        "lightColor": "#B8C7D9",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "CEN91",
+                "id": "77:2",
+                "questionnaire": 2,
+                "x": 1991,
+                "y": 10.4
+            },
+            {
+                "name": "DHS94",
+                "id": "77:3",
+                "questionnaire": 3,
+                "x": 1994,
+                "y": 3.2
+            },
+            {
+                "name": "DHS97",
+                "id": "77:7",
+                "questionnaire": 7,
+                "x": 1997,
+                "y": 2.3
+            },
+            {
+                "name": "DHS00",
+                "id": "77:11",
+                "questionnaire": 11,
+                "x": 2000,
+                "y": 2.5
+            },
+            {
+                "name": "HIES00",
+                "id": "77:12",
+                "questionnaire": 12,
+                "x": 2000,
+                "y": 1.8
+            },
+            {
+                "name": "CEN01",
+                "id": "77:13",
+                "questionnaire": 13,
+                "x": 2001,
+                "y": 3.4
+            },
+            {
+                "name": "WHS03",
+                "id": "77:15",
+                "questionnaire": 15,
+                "x": 2003,
+                "y": 1.9
+            },
+            {
+                "name": "DHS04",
+                "id": "77:16",
+                "questionnaire": 16,
+                "x": 2004,
+                "y": 1.9
+            },
+            {
+                "name": "HIES05",
+                "id": "77:17",
+                "questionnaire": 17,
+                "x": 2005,
+                "y": 0.8
+            },
+            {
+                "name": "MICS06",
+                "id": "77:18",
+                "questionnaire": 18,
+                "x": 2006,
+                "y": 1.8
+            },
+            {
+                "name": "DHS07",
+                "id": "77:19",
+                "questionnaire": 19,
+                "x": 2007,
+                "y": 2.2
+            },
+            {
+                "name": "MICS09",
+                "id": "77:20",
+                "questionnaire": 20,
+                "x": 2009,
+                "y": 1.3
+            },
+            {
+                "name": "HIES10",
+                "id": "77:21",
+                "questionnaire": 21,
+                "x": 2010,
+                "y": 1.0
+            },
+            {
+                "name": "CEN11",
+                "id": "77:22",
+                "questionnaire": 22,
+                "x": 2011,
+                "y": 2.0
+            },
+            {
+                "name": "DHS11",
+                "id": "77:23",
+                "questionnaire": 23,
+                "x": 2011,
+                "y": 1.1
+            }
+        ]
+    },
+    {
+        "type": "scatter",
+        "id": 78,
+        "name": "Other Improved",
+        "country": "Bangladesh",
+        "color": "#A5D900",
+        "lightColor": "#D1D9B8",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "CEN91",
+                "id": "78:2",
+                "questionnaire": 2,
+                "x": 1991,
+                "y": 60.4
+            },
+            {
+                "name": "DHS94",
+                "id": "78:3",
+                "questionnaire": 3,
+                "x": 1994,
+                "y": 67.3
+            },
+            {
+                "name": "MICS94",
+                "id": "78:4",
+                "questionnaire": 4,
+                "x": 1994,
+                "y": 68.5
+            },
+            {
+                "name": "MICS95",
+                "id": "78:5",
+                "questionnaire": 5,
+                "x": 1995,
+                "y": 68.1
+            },
+            {
+                "name": "MICS96",
+                "id": "78:6",
+                "questionnaire": 6,
+                "x": 1996,
+                "y": 68.6
+            },
+            {
+                "name": "DHS97",
+                "id": "78:7",
+                "questionnaire": 7,
+                "x": 1997,
+                "y": 67.3
+            },
+            {
+                "name": "DHS00",
+                "id": "78:11",
+                "questionnaire": 11,
+                "x": 2000,
+                "y": 68.8
+            },
+            {
+                "name": "HIES00",
+                "id": "78:12",
+                "questionnaire": 12,
+                "x": 2000,
+                "y": 69.1
+            },
+            {
+                "name": "CEN01",
+                "id": "78:13",
+                "questionnaire": 13,
+                "x": 2001,
+                "y": 62.9
+            },
+            {
+                "name": "WHS03",
+                "id": "78:15",
+                "questionnaire": 15,
+                "x": 2003,
+                "y": 68.5
+            },
+            {
+                "name": "DHS04",
+                "id": "78:16",
+                "questionnaire": 16,
+                "x": 2004,
+                "y": 73.8
+            },
+            {
+                "name": "HIES05",
+                "id": "78:17",
+                "questionnaire": 17,
+                "x": 2005,
+                "y": 74.0
+            },
+            {
+                "name": "MICS06",
+                "id": "78:18",
+                "questionnaire": 18,
+                "x": 2006,
+                "y": 73.5
+            },
+            {
+                "name": "DHS07",
+                "id": "78:19",
+                "questionnaire": 19,
+                "x": 2007,
+                "y": 72.2
+            },
+            {
+                "name": "MICS09",
+                "id": "78:20",
+                "questionnaire": 20,
+                "x": 2009,
+                "y": 75.4
+            },
+            {
+                "name": "HIES10",
+                "id": "78:21",
+                "questionnaire": 21,
+                "x": 2010,
+                "y": 75.1
+            },
+            {
+                "name": "CEN11",
+                "id": "78:22",
+                "questionnaire": 22,
+                "x": 2011,
+                "y": 71.0
+            },
+            {
+                "name": "DHS11",
+                "id": "78:23",
+                "questionnaire": 23,
+                "x": 2011,
+                "y": 74.4
+            }
+        ]
+    },
+    {
+        "type": "scatter",
+        "id": 79,
+        "name": "Other Unimproved",
+        "country": "Bangladesh",
+        "color": "#CE00D9",
+        "lightColor": "#D7B8D9",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "CEN91",
+                "id": "79:2",
+                "questionnaire": 2,
+                "x": 1991,
+                "y": 24.2
+            },
+            {
+                "name": "DHS94",
+                "id": "79:3",
+                "questionnaire": 3,
+                "x": 1994,
+                "y": 23.6
+            },
+            {
+                "name": "DHS97",
+                "id": "79:7",
+                "questionnaire": 7,
+                "x": 1997,
+                "y": 22.9
+            },
+            {
+                "name": "DHS00",
+                "id": "79:11",
+                "questionnaire": 11,
+                "x": 2000,
+                "y": 22.9
+            },
+            {
+                "name": "HIES00",
+                "id": "79:12",
+                "questionnaire": 12,
+                "x": 2000,
+                "y": 23.1
+            },
+            {
+                "name": "CEN01",
+                "id": "79:13",
+                "questionnaire": 13,
+                "x": 2001,
+                "y": 26.8
+            },
+            {
+                "name": "WHS03",
+                "id": "79:15",
+                "questionnaire": 15,
+                "x": 2003,
+                "y": 22.8
+            },
+            {
+                "name": "DHS04",
+                "id": "79:16",
+                "questionnaire": 16,
+                "x": 2004,
+                "y": 18.4
+            },
+            {
+                "name": "HIES05",
+                "id": "79:17",
+                "questionnaire": 17,
+                "x": 2005,
+                "y": 19.4
+            },
+            {
+                "name": "MICS06",
+                "id": "79:18",
+                "questionnaire": 18,
+                "x": 2006,
+                "y": 18.7
+            },
+            {
+                "name": "DHS07",
+                "id": "79:19",
+                "questionnaire": 19,
+                "x": 2007,
+                "y": 18.5
+            },
+            {
+                "name": "MICS09",
+                "id": "79:20",
+                "questionnaire": 20,
+                "x": 2009,
+                "y": 13.3
+            },
+            {
+                "name": "HIES10",
+                "id": "79:21",
+                "questionnaire": 21,
+                "x": 2010,
+                "y": 15.0
+            },
+            {
+                "name": "CEN11",
+                "id": "79:22",
+                "questionnaire": 22,
+                "x": 2011,
+                "y": 13.3
+            },
+            {
+                "name": "DHS11",
+                "id": "79:23",
+                "questionnaire": 23,
+                "x": 2011,
+                "y": 13.1
+            }
+        ]
+    }
+]

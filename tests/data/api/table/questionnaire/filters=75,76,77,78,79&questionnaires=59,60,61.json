@@ -1,0 +1,150 @@
+{
+    "columns": {
+        "country": "Country",
+        "iso3": "ISO-3",
+        "survey": "Survey",
+        "year": "Year",
+        "f75p1": "WUTI",
+        "f76p1": "WUPOP",
+        "f77p1": "WUSW",
+        "f78p1": "WUOI",
+        "f79p1": "WUOU",
+        "f75p2": "WRTI",
+        "f76p2": "WRPOP",
+        "f77p2": "WRSW",
+        "f78p2": "WROI",
+        "f79p2": "WROU",
+        "f75p3": "WTTI",
+        "f76p3": "WTPOP",
+        "f77p3": "WTSW",
+        "f78p3": "WTOI",
+        "f79p3": "WTOU"
+    },
+    "legends": [
+        {
+            "short": "WUTI",
+            "long": "Water, Urban, Total improved"
+        },
+        {
+            "short": "WUPOP",
+            "long": "Water, Urban, Piped onto premises"
+        },
+        {
+            "short": "WUSW",
+            "long": "Water, Urban, Surface water"
+        },
+        {
+            "short": "WUOI",
+            "long": "Water, Urban, Other Improved"
+        },
+        {
+            "short": "WUOU",
+            "long": "Water, Urban, Other Unimproved"
+        },
+        {
+            "short": "WRTI",
+            "long": "Water, Rural, Total improved"
+        },
+        {
+            "short": "WRPOP",
+            "long": "Water, Rural, Piped onto premises"
+        },
+        {
+            "short": "WRSW",
+            "long": "Water, Rural, Surface water"
+        },
+        {
+            "short": "WROI",
+            "long": "Water, Rural, Other Improved"
+        },
+        {
+            "short": "WROU",
+            "long": "Water, Rural, Other Unimproved"
+        },
+        {
+            "short": "WTTI",
+            "long": "Water, Total, Total improved"
+        },
+        {
+            "short": "WTPOP",
+            "long": "Water, Total, Piped onto premises"
+        },
+        {
+            "short": "WTSW",
+            "long": "Water, Total, Surface water"
+        },
+        {
+            "short": "WTOI",
+            "long": "Water, Total, Other Improved"
+        },
+        {
+            "short": "WTOU",
+            "long": "Water, Total, Other Unimproved"
+        }
+    ],
+    "data": [
+        {
+            "country": "Saudi Arabia",
+            "iso3": "SAU",
+            "survey": "CEN93",
+            "year": 1993,
+            "f75p1": null,
+            "f76p1": null,
+            "f77p1": null,
+            "f78p1": null,
+            "f79p1": null,
+            "f75p2": null,
+            "f76p2": null,
+            "f77p2": null,
+            "f78p2": null,
+            "f79p2": null,
+            "f75p3": 95.6,
+            "f76p3": 65.6,
+            "f77p3": null,
+            "f78p3": 30.0,
+            "f79p3": null
+        },
+        {
+            "country": "Saudi Arabia",
+            "iso3": "SAU",
+            "survey": "FHS96",
+            "year": 1996,
+            "f75p1": null,
+            "f76p1": null,
+            "f77p1": null,
+            "f78p1": null,
+            "f79p1": null,
+            "f75p2": null,
+            "f76p2": null,
+            "f77p2": null,
+            "f78p2": null,
+            "f79p2": null,
+            "f75p3": 89.7,
+            "f76p3": 52.7,
+            "f77p3": null,
+            "f78p3": 37.0,
+            "f79p3": null
+        },
+        {
+            "country": "Saudi Arabia",
+            "iso3": "SAU",
+            "survey": "CEN04",
+            "year": 2004,
+            "f75p1": null,
+            "f76p1": null,
+            "f77p1": null,
+            "f78p1": null,
+            "f79p1": null,
+            "f75p2": null,
+            "f76p2": null,
+            "f77p2": null,
+            "f78p2": null,
+            "f79p2": null,
+            "f75p3": 97.4,
+            "f76p3": 67.9,
+            "f77p3": null,
+            "f78p3": 29.6,
+            "f79p3": null
+        }
+    ]
+}

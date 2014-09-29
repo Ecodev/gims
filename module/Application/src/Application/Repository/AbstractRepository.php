@@ -12,6 +12,7 @@ abstract class AbstractRepository extends EntityRepository
     /**
      * Returns all items with permissions
      * @param string $action
+     * @param string $search
      * @return array
      */
     public function getAllWithPermission($action = 'read', $search = null)
@@ -26,28 +27,60 @@ abstract class AbstractRepository extends EntityRepository
      * Modify $qb to add constraint to check for given permission in the current context.
      * This method assumes that the member $context already exists in the query, so you
      * need to do appropriate join before using this method.
+     *
+     * Here there are 3 different cases to consider:
+     *   1. published objects are always accessible via DQL exception (like questionnaire)
+     *   2. default roles of anonymous and member may give access to objects even without specific rights on them
+     *   3. specific rights applied to one specific object, via one ore more contexts
+     *
      * @param \Doctrine\ORM\QueryBuilder $qb
-     * @param string $context
+     * @param string|string[] $contexts
      * @param string $permission
+     * @param null|string $exceptionDql a condition expressed in DQL to bypass all security check. This should almost never be used !
      * @throws Exception
      */
-    protected function addPermission(QueryBuilder $qb, $context, $permission)
+    protected function addPermission(QueryBuilder $qb, $contexts, $permission, $exceptionDql = null)
     {
-        if ($context == 'survey') {
-            $relationType = 'UserSurvey';
-        } elseif ($context == 'questionnaire') {
-            $relationType = 'UserQuestionnaire';
-        } elseif ($context == 'filterSet') {
-            $relationType = 'UserFilterSet';
-        } elseif ($context == 'filter') {
-            $relationType = 'UserFilter';
-        } else {
-            throw new \Exception("Unsupported context '$context' for automatic permission");
+        $whereParts = [];
+
+        // 1. published objects
+        if ($exceptionDql) {
+            $whereParts[] = '(' . $exceptionDql . ')';
         }
 
-        $qb->leftJoin("Application\Model\\$relationType", 'relation', Join::WITH, "relation.$context = $context AND relation.user = :permissionUser");
-        $qb->join('Application\Model\Role', 'role', Join::WITH, "relation.role = role OR role.name = :permissionDefaultRole");
-        $qb->join('Application\Model\Permission', 'permission', Join::WITH, "permission MEMBER OF role.permissions AND permission.name = :permissionPermission");
+        // 2. default roles of anonymous and member
+        $whereParts[] = "
+            EXISTS (
+                SELECT roleDefaultRole.id FROM Application\Model\Role roleDefaultRole
+                INNER JOIN Application\Model\Permission permissionDefaultRole WITH permissionDefaultRole MEMBER OF roleDefaultRole.permissions AND permissionDefaultRole.name = :permissionPermission
+                WHERE roleDefaultRole.name = :permissionDefaultRole
+            )";
+
+        // 3. specific rights
+        $contexts = (array) $contexts;
+        foreach ($contexts as $i => $context) {
+            if ($context == 'survey') {
+                $relationType = 'UserSurvey';
+            } elseif ($context == 'questionnaire') {
+                $relationType = 'UserQuestionnaire';
+            } elseif ($context == 'filterSet') {
+                $relationType = 'UserFilterSet';
+            } elseif ($context == 'filter') {
+                $relationType = 'UserFilter';
+            } else {
+                throw new \Exception("Unsupported context '$context' for automatic permission");
+            }
+
+            $whereParts [] = "
+                EXISTS (
+                    SELECT relation$i.id FROM Application\Model\\$relationType relation$i
+                    INNER JOIN Application\Model\Role role$i WITH relation$i.role = role$i
+                    INNER JOIN Application\Model\Permission permission$i WITH permission$i MEMBER OF role$i.permissions AND permission$i.name = :permissionPermission
+                    WHERE relation$i.user = :permissionUser AND relation$i.$context = $context.id
+                )";
+        }
+
+        $qb->andWhere("(" . implode(' OR ', $whereParts) . ")");
 
         $user = \Application\Model\User::getCurrentUser();
         $defaultRole = $user ? 'member' : 'anonymous';
@@ -89,7 +122,7 @@ abstract class AbstractRepository extends EntityRepository
 
             $fieldWheres = array();
             foreach ($fields as $field) {
-                $fieldWheres[] = 'LOWER(' . $field . ') LIKE LOWER(:' . $parameterName . ')';
+                $fieldWheres[] = 'LOWER(CAST(' . $field . ' AS text)) LIKE LOWER(:' . $parameterName . ')';
             }
 
             if ($fieldWheres) {

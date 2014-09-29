@@ -7,62 +7,50 @@
 
     <!-- Example row of columns -->
     <div class="row">
-        <div class="col-md-4">
-            <h2>Administration</h2>
-            <ul class="nav nav-pills nav-pills-icon">
-                <li>
-                    <a href="/admin/survey">
-                        <p><i class="fa fa-gims-survey fa-4x"></i></p>
-                        <p>Surveys</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/user">
-                        <p><i class="fa fa-user fa-4x"></i></p>
-                        <p>Users</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/filter-set">
-                        <p><i class="fa fa-gims-filterset fa-4x"></i></p>
-                        <p>Filter sets</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/filter">
-                        <p><i class="fa fa-gims-filter fa-4x"></i></p>
-                        <p>Filters</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="/admin/rule">
-                        <p><i class="fa fa-gims-rule fa-4x"></i></p>
-                        <p>Rules</p>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div class="col-md-4">
+        <div class="col-sm-6">
             <h2>Data</h2>
             <ul class="nav nav-pills nav-pills-icon">
                 <li>
-                    <a href="/contribute/questionnaire">
+                    <a href="/contribute/jmp">
                         <p><i class="fa fa-gims-questionnaire fa-4x"></i></p>
-                        <p>Questionnaires</p>
+                        <p>JMP questionnaires</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/contribute/nsa">
+                        <p><i class="fa fa-gims-questionnaire fa-4x"></i></p>
+                        <p>NSA questionnaires</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/contribute/glaas">
+                        <p><i class="fa fa-gims-questionnaire fa-4x"></i></p>
+                        <p>GLAAS questionnaires</p>
                     </a>
                 </li>
             </ul>
         </div>
-        <div class="col-md-4">
-            <h2>Statistics</h2>
-            <p>Questionnaires</p>
+        <div class="col-sm-6">
+            <h2>
+                <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/data_input.html#questionnaires" class="pull-right text-muted" tooltip="Read about questionnaire statuses"><i class="fa fa-gims-help"></i></a>
+                Questionnaire statistics</h2>
             <div class="progress">
-                <div class="progress-bar progress-bar-info" style="width: {{statistics.new / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.new}} / {{statistics.total}} new questionnaires"></div>
-                <div class="progress-bar progress-bar-warning" style="width: {{statistics.completed / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.completed}} / {{statistics.total}} completed questionnaires"></div>
-                <div class="progress-bar progress-bar-success" style="width: {{statistics.validated / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.validated}} / {{statistics.total}} validated questionnaires"></div>
+                <div class="progress-bar" style="width: {{statistics.new / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.new}} / {{statistics.total}} new questionnaires"></div>
+                <div class="progress-bar progress-bar-info" style="width: {{statistics.completed / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.completed}} / {{statistics.total}} completed questionnaires"></div>
+                <div class="progress-bar progress-bar-warning" style="width: {{statistics.validated / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.validated}} / {{statistics.total}} validated questionnaires"></div>
+                <div class="progress-bar progress-bar-success" style="width: {{statistics.published / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.published}} / {{statistics.total}} published questionnaires"></div>
                 <div class="progress-bar progress-bar-danger" style="width: {{statistics.rejected / statistics.total * 100}}%;" tooltip-placement="bottom" tooltip="{{statistics.rejected}} / {{statistics.total}} rejected questionnaires"></div>
             </div>
 
+            <div ng-if="statistics" class="ng-trans ng-trans-fade-up">
+                <ul>
+                    <li>{{statistics.new}} new, waiting to be answered</li>
+                    <li>{{statistics.completed}} completed</li>
+                    <li>{{statistics.validated}} validated</li>
+                    <li>{{statistics.published}} published</li>
+                    <li>{{statistics.rejected}} rejected</li>
+                </ul>
+            </div>
         </div>
     </div>
 

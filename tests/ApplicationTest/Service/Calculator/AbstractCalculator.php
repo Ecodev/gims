@@ -13,6 +13,11 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     protected $geoname;
 
     /**
+     * @var \Application\Model\Geoname
+     */
+    protected $geoname2;
+
+    /**
      * @var \Application\Model\Filter
      */
     protected $filter1;
@@ -167,11 +172,22 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
      */
     protected $part1;
 
+    /**
+     * @var \Application\Model\Part
+     */
+    protected $part2;
+
+    /**
+     * @var \Application\Model\Part
+     */
+    protected $partTotal;
+
     public function setUp()
     {
         parent::setUp();
 
         $this->geoname = $this->getNewModelWithId('\Application\Model\Geoname')->setName('test geoname');
+        $this->geoname2 = $this->getNewModelWithId('\Application\Model\Geoname')->setName('test geoname 2');
 
         $this->filter1 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 1');
         $this->filter11 = $this->getNewModelWithId('\Application\Model\Filter')->setName('Filter 1.1 (sum of 1.*.1)');
@@ -201,29 +217,31 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $this->filter3->addSummand($this->filter21);
 
         // Define questionnaire with answers for leaf filters only
-        $survey = new \Application\Model\Survey();
-        $survey->setCode('tst 1')->setName('Test survey 1')->setYear(2000);
+        $survey = new \Application\Model\Survey('Test survey 1');
+        $survey->setCode('tst 1')->setYear(2000);
 
         // Create a stub for the Questionnaire class with fake ID, so we don't have to mess with database
         $this->questionnaire = $this->getNewModelWithId('\Application\Model\Questionnaire');
         $this->questionnaire->setSurvey($survey)->setGeoname($this->geoname);
 
-        $this->question131 = new \Application\Model\Question\NumericQuestion();
-        $this->question132 = new \Application\Model\Question\NumericQuestion();
-        $this->question141 = new \Application\Model\Question\NumericQuestion();
-        $this->question142 = new \Application\Model\Question\NumericQuestion();
-        $this->question31 = new \Application\Model\Question\NumericQuestion();
-        $this->question32 = new \Application\Model\Question\NumericQuestion();
+        $this->question131 = new \Application\Model\Question\NumericQuestion('Question 1.3.1');
+        $this->question132 = new \Application\Model\Question\NumericQuestion('Question 1.3.2');
+        $this->question141 = new \Application\Model\Question\NumericQuestion('Question 1.4.1');
+        $this->question142 = new \Application\Model\Question\NumericQuestion('Question 1.4.2');
+        $this->question31 = new \Application\Model\Question\NumericQuestion('Question 3.1');
+        $this->question32 = new \Application\Model\Question\NumericQuestion('Question 3.2');
 
-        $this->question131->setFilter($this->filter131)->setName('Question 1.3.1');
-        $this->question132->setFilter($this->filter132)->setName('Question 1.3.2');
-        $this->question141->setFilter($this->filter141)->setName('Question 1.4.1');
-        $this->question142->setFilter($this->filter142)->setName('Question 1.4.2');
-        $this->question31->setFilter($this->filter31)->setName('Question 3.1');
-        $this->question32->setFilter($this->filter32)->setName('Question 3.2');
+        $this->question131->setFilter($this->filter131);
+        $this->question132->setFilter($this->filter132);
+        $this->question141->setFilter($this->filter141);
+        $this->question142->setFilter($this->filter142);
+        $this->question31->setFilter($this->filter31);
+        $this->question32->setFilter($this->filter32);
 
         // Create a stub for the Part class
         $this->part1 = $this->getNewModelWithId('\Application\Model\Part')->setName('tst part 1');
+        $this->part2 = $this->getNewModelWithId('\Application\Model\Part')->setName('tst part 2');
+        $this->partTotal = $this->getNewModelWithId('\Application\Model\Part', array('isTotal' => $this->returnValue(true)))->setName('tst part total');
 
         $this->answer131 = new \Application\Model\Answer();
         $this->answer132 = new \Application\Model\Answer();
@@ -248,12 +266,39 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $this->highFilter3->addChild($this->filter1)->addChild($this->filter2)->addChild($this->filter3);
     }
 
+    protected function getStubPopulationRepository()
+    {
+        // Create a stub for the PopulationRepository class with predetermined values, so we don't have to mess with database
+        $stubPopulationRepository = $this->getMock('\Application\Repository\PopulationRepository', array('getOneByGeoname'), array(), '', false);
+        $stubPopulationRepository->expects($this->any())
+                ->method('getOneByGeoname')
+                ->will($this->returnValueMap(array(
+                            array($this->geoname, $this->part1->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(10)),
+                            array($this->geoname, $this->part1->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(10)),
+                            array($this->geoname, $this->part1->getId(), 2002, null, (new \Application\Model\Population())->setPopulation(12)),
+                            array($this->geoname, $this->part1->getId(), 2003, null, (new \Application\Model\Population())->setPopulation(13)),
+                            array($this->geoname, $this->part1->getId(), 2004, null, (new \Application\Model\Population())->setPopulation(14)),
+                            array($this->geoname, $this->part1->getId(), 2005, null, (new \Application\Model\Population())->setPopulation(15)),
+                            array($this->geoname, $this->part2->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(3)),
+                            array($this->geoname, $this->part2->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(3)),
+                            array($this->geoname, $this->part2->getId(), 2005, null, (new \Application\Model\Population())->setPopulation(3)),
+                            array($this->geoname, $this->partTotal->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(7)),
+                            array($this->geoname, $this->partTotal->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(7)),
+                            array($this->geoname, $this->partTotal->getId(), 2005, null, (new \Application\Model\Population())->setPopulation(12)),
+                            array($this->geoname2, $this->part1->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(30)),
+                            array($this->geoname2, $this->part1->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(40)),
+                            array($this->geoname2, $this->part1->getId(), 2002, null, (new \Application\Model\Population())->setPopulation(50)),
+        )));
+
+        return $stubPopulationRepository;
+    }
+
     protected function getStubAnswerRepository()
     {
         // Create a stub for the AnswerRepository class with predetermined values, so we don't have to mess with database
-        $stubAnswerRepository = $this->getMock('\Application\Repository\AnswerRepository', array('getValuePercent', 'getQuestionNameIfNonNullAnswer'), array(), '', false);
+        $stubAnswerRepository = $this->getMock('\Application\Repository\AnswerRepository', array('getValue', 'getQuestionNameIfNonNullAnswer'), array(), '', false);
         $stubAnswerRepository->expects($this->any())
-                ->method('getValuePercent')
+                ->method('getValue')
                 ->will($this->returnCallback(function($questionnaireId, $filterId, $partId) {
                             $questionnaire = $this->getModel('\Application\Model\Questionnaire', $questionnaireId);
                             foreach ($questionnaire->getAnswers() as $answer) {
@@ -286,7 +331,14 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
 
     protected function getStubQuestionnaireRepository()
     {
-        $stubQuestionnaireRepository = $this->getMock('\Application\Repository\QuestionnaireRepository', array(), array(), '', false);
+        $stubQuestionnaireRepository = $this->getMock('\Application\Repository\QuestionnaireRepository', array('getAllForComputing'), array(), '', false);
+
+        $stubQuestionnaireRepository->expects($this->any())
+                ->method('getAllForComputing')
+                ->will($this->returnCallback(function(\Application\Model\Geoname $geoname) {
+                            return $geoname->getQuestionnaires()->toArray();
+                        })
+        );
 
         return $stubQuestionnaireRepository;
     }
@@ -297,11 +349,11 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         $stubFilterQuestionnaireUsageRepository = $this->getMock('\Application\Repository\Rule\FilterQuestionnaireUsageRepository', array('getFirst'), array(), '', false);
         $stubFilterQuestionnaireUsageRepository->expects($this->any())
                 ->method('getFirst')
-                ->will($this->returnCallback(function($questionnaireId, $filterId, $partId, $useSecondLevelRules, ArrayCollection $alreadyUsedFormulas) {
+                ->will($this->returnCallback(function($questionnaireId, $filterId, $partId, $useSecondStepRules, ArrayCollection $alreadyUsedFormulas) {
 
                             $filter = $this->getModel('\Application\Model\Filter', $filterId);
                             foreach ($filter->getFilterQuestionnaireUsages() as $filterQuestionnaireUsage) {
-                                if (($useSecondLevelRules || !$filterQuestionnaireUsage->isSecondLevel()) && $filterQuestionnaireUsage->getRule() && $filterQuestionnaireUsage->getQuestionnaire()->getId() == $questionnaireId && $filterQuestionnaireUsage->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterQuestionnaireUsage)) {
+                                if (($useSecondStepRules || !$filterQuestionnaireUsage->isSecondStep()) && $filterQuestionnaireUsage->getRule() && $filterQuestionnaireUsage->getQuestionnaire()->getId() == $questionnaireId && $filterQuestionnaireUsage->getPart()->getId() == $partId && !$alreadyUsedFormulas->contains($filterQuestionnaireUsage)) {
                                     return $filterQuestionnaireUsage;
                                 }
                             }
@@ -373,10 +425,12 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     protected function getNewCalculator()
     {
         $calculator = new \Application\Service\Calculator\Calculator();
+        $calculator->setPopulationRepository($this->getStubPopulationRepository());
         $calculator->setAnswerRepository($this->getStubAnswerRepository());
         $calculator->setFilterRepository($this->getStubFilterRepository());
         $calculator->setFilterQuestionnaireUsageRepository($this->getStubFilterQuestionnaireUsageRepository());
         $calculator->setQuestionnaireRepository($this->getStubQuestionnaireRepository());
+        $calculator->setFilterGeonameUsageRepository($this->getStubFilterGeonameUsageRepository());
 
         $calculator->setServiceLocator($this->getApplicationServiceLocator());
 

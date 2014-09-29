@@ -1,10 +1,18 @@
 language: php
 php:
-  - "5.5"
+  - 5.5
+  - 5.6
 
 addons:
-  postgresql: "9.2"
-  firefox: "21.0"
+    postgresql: "9.3"
+
+env:
+  - TEST_GROUP=ApiComputing
+  - TEST_GROUP=Console,Repository
+  - TEST_GROUP=Rest
+  - TEST_GROUP=Model
+  - TEST_GROUP=Calculator
+  - TEST_GROUP=Service,__nogroup__
 
 before_install:
   - export DISPLAY=:99.0
@@ -15,4 +23,12 @@ before_script:
   - ./bin/install_dependencies.sh configure
   - ./bin/build.sh
 
-script: ./vendor/bin/phing test
+script: ./vendor/bin/phing travis
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover data/logs/tests/coverage-clover.xml
+
+matrix:
+  allow_failures:
+    - php: 5.6

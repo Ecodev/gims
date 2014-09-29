@@ -6,7 +6,7 @@ class AnswerRepository extends AbstractChildRepository
 {
 
     /**
-     * @var array $cache [questionnaireId => [filterId => [partId => ['valuePercent' => value, 'questionName' => question]]]]
+     * @var array $cache [questionnaireId => [filterId => [partId => ['value' => value, 'questionName' => question]]]]
      */
     private $cache = array();
 
@@ -24,31 +24,49 @@ class AnswerRepository extends AbstractChildRepository
                     ->getRepository('Application\Model\Geoname')
                     ->getIdByQuestionnaireId($questionnaireId);
 
-            // Then we get all data for the geoname
-            $qb = $this->getEntityManager()->createQueryBuilder()
-                    ->from('Application\Model\Questionnaire', 'questionnaire')
-                    ->select('questionnaire.id AS questionnaire_id, answers.valuePercent, part.id AS part_id, filter.id AS filter_id, question.name AS questionName')
-                    ->leftJoin('questionnaire.answers', 'answers')
-                    ->leftJoin('answers.question', 'question')
-                    ->leftJoin('answers.part', 'part')
-                    ->leftJoin('question.filter', 'filter')
-                    ->andWhere('questionnaire.geoname = :geoname');
+            // use native query instead of query builder, because answers are related
+            // to AbstractAnswerableQuestions and can't access to child class NumericQuestion::is_absolute
+            $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
+            $rsm->addScalarResult('questionnaire_id', 'questionnaire_id');
+            $rsm->addScalarResult('valuepercent', 'valuePercent');
+            $rsm->addScalarResult('valueabsolute', 'valueAbsolute');
+            $rsm->addScalarResult('part_id', 'part_id');
+            $rsm->addScalarResult('filter_id', 'filter_id');
+            $rsm->addScalarResult('questionname', 'questionName');
+            $rsm->addScalarResult('questionisabsolute', 'questionIsAbsolute');
 
-            $qb->setParameters(array(
-                'geoname' => $geonameId,
-            ));
+            $qb = $this->getEntityManager()->createNativeQuery('
+                SELECT
+                    q.id AS questionnaire_id,
+                    a.value_percent as valuePercent,
+                    a.value_absolute as valueAbsolute,
+                    p.id AS part_id,
+                    f.id AS filter_id,
+                    qu.name AS questionName,
+                    qu.is_absolute as questionIsAbsolute
+                FROM questionnaire q
+                LEFT JOIN answer AS a ON a.questionnaire_id = q.id
+                LEFT JOIN question AS qu ON a.question_id = qu.id
+                LEFT JOIN part AS p on a.part_id = p.id
+                LEFT JOIN filter AS f on qu.filter_id = f.id
+                WHERE q.geoname_id = :geonameId', $rsm);
 
-            $res = $qb->getQuery()
-                    ->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SCALAR);
+            $qb->setParameters(array('geonameId' => $geonameId));
+            $res = $qb->getResult();
 
             // Ensure that we hit the cache next time, even if we have no results at all
             $this->cache[$questionnaireId] = array();
 
             // Restructure cache
             foreach ($res as $data) {
+
+                $valuePercent = is_null($data['valuePercent']) ? null : (float) $data['valuePercent'];
+                $valueAbsolute = is_null($data['valueAbsolute']) ? null : (float) $data['valueAbsolute'];
+                $value = $data['questionIsAbsolute'] === false ? $valuePercent : $valueAbsolute;
+
                 $answerData = array(
-                    'valuePercent' => is_null($data['valuePercent']) ? null : (float) $data['valuePercent'],
-                    'questionName' => $data['questionName'],
+                    'value' => $value,
+                    'questionName' => $data['questionName']
                 );
 
                 $this->cache[$data['questionnaire_id']][$data['filter_id']][$data['part_id']] = $answerData;
@@ -58,26 +76,26 @@ class AnswerRepository extends AbstractChildRepository
 
     /**
      * Returns the percent value of an answer if it exists.
-     * Optimized for mass querying wihtin a Geoname based on a cache.
+     * Optimized for mass querying within a Geoname based on a cache.
      * @param integer $questionnaireId
      * @param integer $filterId
      * @param integer $partId
      * @return float|null
      */
-    public function getValuePercent($questionnaireId, $filterId, $partId)
+    public function getValue($questionnaireId, $filterId, $partId)
     {
         $this->fillCache($questionnaireId);
 
         if (isset($this->cache[$questionnaireId][$filterId][$partId])) {
-            return $this->cache[$questionnaireId][$filterId][$partId]['valuePercent'];
+            return $this->cache[$questionnaireId][$filterId][$partId]['value'];
         } else {
             return null;
         }
     }
 
     /**
-     * Returns Question name, but only if a non-null anwer exists. Otherwise NULL
-     * Optimized for mass querying wihtin a Geoname based on a cache.
+     * Returns Question name, but only if a non-null answer exists. Otherwise NULL
+     * Optimized for mass querying within a Geoname based on a cache.
      * @param integer $questionnaireId
      * @param integer $filterId
      * @return string|null
@@ -89,7 +107,7 @@ class AnswerRepository extends AbstractChildRepository
         if (isset($this->cache[$questionnaireId][$filterId])) {
 
             foreach ($this->cache[$questionnaireId][$filterId] as $answerData) {
-                if (!is_null($answerData['valuePercent'])) {
+                if (!is_null($answerData['value'])) {
                     return $answerData['questionName'];
                 }
             }
@@ -100,6 +118,10 @@ class AnswerRepository extends AbstractChildRepository
 
     /**
      * Returns all items with read access
+     * @param string $action
+     * @param null $search
+     * @param null $parentName
+     * @param \Application\Model\AbstractModel $parent
      * @return array
      */
     public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
@@ -115,15 +137,27 @@ class AnswerRepository extends AbstractChildRepository
     }
 
     /**
-     * Compute absolute value from percentage value, based on population (for JMP)
-     * @param \Application\Model\Answer $answer optional answer to limit on what we compute thing
-     * @return integer row modifed count
+     * Depending on answer.question.isAbsolute, this method completes valuePercent or valueAbsolute
+     * @param \Application\Model\Answer $answer
+     * @return int
      */
-    public function updateAbsoluteValueFromPercentageValue(\Application\Model\Answer $answer = null)
+    public function completePopulationAnswer(\Application\Model\Answer $answer = null)
     {
-        // if we have an answer we could limit the scope of the request
-        $clause = $answer ? 'answer.id = ' . $answer->getId() : 'answer.value_absolute IS NULL';
-        $sql = sprintf('UPDATE answer SET value_absolute = p.population * value_percent
+        $isAbsolute = $answer && $answer->getQuestion() instanceof \Application\Model\Question\NumericQuestion && $answer->getQuestion()->isAbsolute();
+
+        if ($isAbsolute) {
+            $computing = "value_percent = value_absolute / p.population";
+        } else {
+            $computing = "value_absolute = p.population * value_percent";
+        }
+
+        if ($answer) {
+            $whereClause = 'answer.id = ' . $answer->getId();
+        } else {
+            $whereClause = 'question.is_absolute = FALSE';
+        }
+
+        $sql = sprintf('UPDATE answer SET %s
                 FROM questionnaire q
                     JOIN survey s ON (q.survey_id = s.id)
                     JOIN geoname g ON (q.geoname_id = g.id)
@@ -134,7 +168,7 @@ class AnswerRepository extends AbstractChildRepository
                     AND answer.part_id = p.part_id
                     AND answer.questionnaire_id = q.id
                     AND answer.question_id = question.id
-                    AND question.is_population = true', $clause);
+                    AND question.is_population = TRUE', $computing, $whereClause);
 
         return $this->getEntityManager()->getConnection()->executeUpdate($sql);
     }
@@ -153,12 +187,12 @@ class AnswerRepository extends AbstractChildRepository
                 answer.id = ' . $answer->getId();
 
         $res = $this->getEntityManager()->getConnection()->executeUpdate($sql);
-        $this->updateAbsoluteValueFromPercentageValue($answer);
+        $this->completePopulationAnswer($answer);
 
         return $res;
     }
 
-    public function getAllAnswersInQuestionnaires(\Application\Model\Survey $survey, $questionnairesIds)
+    public function getAllAnswersInQuestionnaires(\Application\Model\Survey $survey, array $questionnairesIds)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('answer, question, questionnaire, choice, part')
@@ -169,7 +203,8 @@ class AnswerRepository extends AbstractChildRepository
                 ->leftJoin('answer.valueChoice', 'choice');
 
         if ($questionnairesIds) {
-            $qb->where($qb->expr()->in('questionnaire.id', $questionnairesIds));
+            $qb->where('questionnaire IN (:questionnaireIds)');
+            $qb->setParameter('questionnaireIds', $questionnairesIds);
         } else {
             $qb->join('questionnaire.survey', 'survey')
                     ->where('survey.id = :surveyid')

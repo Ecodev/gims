@@ -6,6 +6,9 @@ use \Application\Model\AbstractModel;
 use \Zend\Code\Reflection\MethodReflection;
 use \Application\Module;
 
+/**
+ * Used to extract object properties into an array or to hydrate an object from an array.
+ */
 class Hydrator
 {
 
@@ -20,6 +23,7 @@ class Hydrator
     public function extractArray($objects, array $properties = array())
     {
         $properties = $this->initializePropertyStructure($properties);
+
         return $this->internalExtractArray($objects, $properties);
     }
 
@@ -76,7 +80,7 @@ class Hydrator
     /**
      * Merge with default properties
      *
-     * @param string $className
+     * @param AbstractModel $object
      * @param array  $properties
      *
      * @return array
@@ -358,9 +362,11 @@ class Hydrator
                 while ($key = array_shift($keys)) {
 
                     // If value already exists, remove it to replace it with an array ([0 => 'a'], becomes ['a' => array()])
-                    $existingKey = array_search($key, $arr);
-                    if ($existingKey !== false) {
-                        unset($arr[$existingKey]);
+                    if (!is_null($arr)) {
+                        $existingKey = array_search($key, $arr);
+                        if ($existingKey !== false) {
+                            unset($arr[$existingKey]);
+                        }
                     }
 
                     $arr = &$arr[$key];

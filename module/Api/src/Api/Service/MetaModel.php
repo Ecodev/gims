@@ -12,7 +12,8 @@ class MetaModel
     /**
      * @param string $modelName
      */
-    public function __construct($modelName = ''){
+    public function __construct($modelName = '')
+    {
         $this->modelName = $modelName;
     }
 
@@ -47,8 +48,7 @@ class MetaModel
 
         // Also have a look in parent
         $parent = $reflectionClass->getParentClass();
-        if ($parent)
-        {
+        if ($parent) {
             $properties = array_merge($properties, $this->getMandatoryPropertiesInternal($parent->getName()));
         }
 

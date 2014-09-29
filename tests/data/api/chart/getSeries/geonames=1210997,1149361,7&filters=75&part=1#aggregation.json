@@ -1,0 +1,521 @@
+[
+    {
+        "name": "Afghanistan - Total improved",
+        "id": 75,
+        "data": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            14.0,
+            14.0,
+            14.0,
+            14.0,
+            14.0,
+            18.4,
+            22.9,
+            27.4,
+            31.8,
+            36.3,
+            40.8,
+            45.2,
+            49.7,
+            54.1,
+            58.6,
+            63.1,
+            67.5,
+            72.0,
+            76.5,
+            80.9,
+            85.4,
+            89.9
+        ],
+        "type": "line",
+        "geonameId": 1149361,
+        "color": "#00D919",
+        "lightColor": "#B8D9BC",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "(none)"
+    },
+    {
+        "type": "scatter",
+        "id": 75,
+        "name": "Afghanistan - Total improved",
+        "country": "Afghanistan",
+        "color": "#00D919",
+        "lightColor": "#B8D9BC",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "MICS97",
+                "id": "75:24",
+                "questionnaire": 24,
+                "x": 1997,
+                "y": 16.9
+            },
+            {
+                "name": "MICS03",
+                "id": "75:26",
+                "questionnaire": 26,
+                "x": 2003,
+                "y": 56.7
+            },
+            {
+                "name": "NRVS05",
+                "id": "75:28",
+                "questionnaire": 28,
+                "x": 2005,
+                "y": 63.7
+            },
+            {
+                "name": "MS10",
+                "id": "75:31",
+                "questionnaire": 31,
+                "x": 2010,
+                "y": 77.9
+            },
+            {
+                "name": "MICS11",
+                "id": "75:32",
+                "questionnaire": 32,
+                "x": 2011,
+                "y": 82.3
+            }
+        ]
+    },
+    {
+        "name": "Bangladesh - Total improved",
+        "id": 75,
+        "data": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            80.9,
+            80.9,
+            80.9,
+            80.9,
+            80.9,
+            81.1,
+            81.3,
+            81.5,
+            81.7,
+            81.9,
+            82.2,
+            82.4,
+            82.6,
+            82.8,
+            83.0,
+            83.2,
+            83.4,
+            83.7,
+            83.9,
+            84.1,
+            84.3,
+            84.5,
+            84.7,
+            85.0,
+            85.2,
+            85.4,
+            85.6,
+            85.8
+        ],
+        "type": "line",
+        "geonameId": 1210997,
+        "color": "#00D919",
+        "lightColor": "#B8D9BC",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "(none)"
+    },
+    {
+        "type": "scatter",
+        "id": 75,
+        "name": "Bangladesh - Total improved",
+        "country": "Bangladesh",
+        "color": "#00D919",
+        "lightColor": "#B8D9BC",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "CEN91",
+                "id": "75:2",
+                "questionnaire": 2,
+                "x": 1991,
+                "y": 75.9
+            },
+            {
+                "name": "DHS94",
+                "id": "75:3",
+                "questionnaire": 3,
+                "x": 1994,
+                "y": 83.6
+            },
+            {
+                "name": "MICS94",
+                "id": "75:4",
+                "questionnaire": 4,
+                "x": 1994,
+                "y": 84.0
+            },
+            {
+                "name": "MICS95",
+                "id": "75:5",
+                "questionnaire": 5,
+                "x": 1995,
+                "y": 83.2
+            },
+            {
+                "name": "MICS96",
+                "id": "75:6",
+                "questionnaire": 6,
+                "x": 1996,
+                "y": 84.8
+            },
+            {
+                "name": "DHS97",
+                "id": "75:7",
+                "questionnaire": 7,
+                "x": 1997,
+                "y": 84.3
+            },
+            {
+                "name": "SVRS98",
+                "id": "75:8",
+                "questionnaire": 8,
+                "x": 1998,
+                "y": 84.9
+            },
+            {
+                "name": "DHS00",
+                "id": "75:11",
+                "questionnaire": 11,
+                "x": 2000,
+                "y": 82.2
+            },
+            {
+                "name": "HIES00",
+                "id": "75:12",
+                "questionnaire": 12,
+                "x": 2000,
+                "y": 82.6
+            },
+            {
+                "name": "CEN01",
+                "id": "75:13",
+                "questionnaire": 13,
+                "x": 2001,
+                "y": 78.2
+            },
+            {
+                "name": "WHS03",
+                "id": "75:15",
+                "questionnaire": 15,
+                "x": 2003,
+                "y": 83.0
+            },
+            {
+                "name": "DHS04",
+                "id": "75:16",
+                "questionnaire": 16,
+                "x": 2004,
+                "y": 85.5
+            },
+            {
+                "name": "HIES05",
+                "id": "75:17",
+                "questionnaire": 17,
+                "x": 2005,
+                "y": 85.4
+            },
+            {
+                "name": "MICS06",
+                "id": "75:18",
+                "questionnaire": 18,
+                "x": 2006,
+                "y": 84.7
+            },
+            {
+                "name": "DHS07",
+                "id": "75:19",
+                "questionnaire": 19,
+                "x": 2007,
+                "y": 85.3
+            },
+            {
+                "name": "MICS09",
+                "id": "75:20",
+                "questionnaire": 20,
+                "x": 2009,
+                "y": 86.6
+            },
+            {
+                "name": "HIES10",
+                "id": "75:21",
+                "questionnaire": 21,
+                "x": 2010,
+                "y": 82.5
+            },
+            {
+                "name": "CEN11",
+                "id": "75:22",
+                "questionnaire": 22,
+                "x": 2011,
+                "y": 85.2
+            },
+            {
+                "name": "DHS11",
+                "id": "75:23",
+                "questionnaire": 23,
+                "x": 2011,
+                "y": 86.5
+            }
+        ]
+    },
+    {
+        "name": "MDG - Southern Asia - Total improved",
+        "id": 75,
+        "data": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            80.9,
+            80.9,
+            80.9,
+            80.9,
+            80.9,
+            81.1,
+            74.9,
+            74.8,
+            74.5,
+            74.3,
+            74.3,
+            74.8,
+            75.5,
+            76.2,
+            76.9,
+            77.6,
+            78.3,
+            78.9,
+            79.6,
+            80.3,
+            81.0,
+            81.7,
+            82.5,
+            83.2,
+            84.0,
+            84.8,
+            85.6,
+            86.4
+        ],
+        "type": "line",
+        "geonameId": 7,
+        "color": "#00D919",
+        "lightColor": "#B8D9BC",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "(none)"
+    },
+    {
+        "type": "scatter",
+        "id": 75,
+        "name": "MDG - Southern Asia - Total improved",
+        "country": "MDG - Southern Asia",
+        "color": "#00D919",
+        "lightColor": "#B8D9BC",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "MICS97",
+                "id": "75:24",
+                "questionnaire": 24,
+                "x": 1997,
+                "y": 16.9
+            },
+            {
+                "name": "MICS03",
+                "id": "75:26",
+                "questionnaire": 26,
+                "x": 2003,
+                "y": 56.7
+            },
+            {
+                "name": "NRVS05",
+                "id": "75:28",
+                "questionnaire": 28,
+                "x": 2005,
+                "y": 63.7
+            },
+            {
+                "name": "MS10",
+                "id": "75:31",
+                "questionnaire": 31,
+                "x": 2010,
+                "y": 77.9
+            },
+            {
+                "name": "MICS11",
+                "id": "75:32",
+                "questionnaire": 32,
+                "x": 2011,
+                "y": 82.3
+            },
+            {
+                "name": "CEN91",
+                "id": "75:2",
+                "questionnaire": 2,
+                "x": 1991,
+                "y": 75.9
+            },
+            {
+                "name": "DHS94",
+                "id": "75:3",
+                "questionnaire": 3,
+                "x": 1994,
+                "y": 83.6
+            },
+            {
+                "name": "MICS94",
+                "id": "75:4",
+                "questionnaire": 4,
+                "x": 1994,
+                "y": 84.0
+            },
+            {
+                "name": "MICS95",
+                "id": "75:5",
+                "questionnaire": 5,
+                "x": 1995,
+                "y": 83.2
+            },
+            {
+                "name": "MICS96",
+                "id": "75:6",
+                "questionnaire": 6,
+                "x": 1996,
+                "y": 84.8
+            },
+            {
+                "name": "DHS97",
+                "id": "75:7",
+                "questionnaire": 7,
+                "x": 1997,
+                "y": 84.3
+            },
+            {
+                "name": "SVRS98",
+                "id": "75:8",
+                "questionnaire": 8,
+                "x": 1998,
+                "y": 84.9
+            },
+            {
+                "name": "DHS00",
+                "id": "75:11",
+                "questionnaire": 11,
+                "x": 2000,
+                "y": 82.2
+            },
+            {
+                "name": "HIES00",
+                "id": "75:12",
+                "questionnaire": 12,
+                "x": 2000,
+                "y": 82.6
+            },
+            {
+                "name": "CEN01",
+                "id": "75:13",
+                "questionnaire": 13,
+                "x": 2001,
+                "y": 78.2
+            },
+            {
+                "name": "WHS03",
+                "id": "75:15",
+                "questionnaire": 15,
+                "x": 2003,
+                "y": 83.0
+            },
+            {
+                "name": "DHS04",
+                "id": "75:16",
+                "questionnaire": 16,
+                "x": 2004,
+                "y": 85.5
+            },
+            {
+                "name": "HIES05",
+                "id": "75:17",
+                "questionnaire": 17,
+                "x": 2005,
+                "y": 85.4
+            },
+            {
+                "name": "MICS06",
+                "id": "75:18",
+                "questionnaire": 18,
+                "x": 2006,
+                "y": 84.7
+            },
+            {
+                "name": "DHS07",
+                "id": "75:19",
+                "questionnaire": 19,
+                "x": 2007,
+                "y": 85.3
+            },
+            {
+                "name": "MICS09",
+                "id": "75:20",
+                "questionnaire": 20,
+                "x": 2009,
+                "y": 86.6
+            },
+            {
+                "name": "HIES10",
+                "id": "75:21",
+                "questionnaire": 21,
+                "x": 2010,
+                "y": 82.5
+            },
+            {
+                "name": "CEN11",
+                "id": "75:22",
+                "questionnaire": 22,
+                "x": 2011,
+                "y": 85.2
+            },
+            {
+                "name": "DHS11",
+                "id": "75:23",
+                "questionnaire": 23,
+                "x": 2011,
+                "y": 86.5
+            }
+        ]
+    }
+]

@@ -18,7 +18,7 @@ class QuestionTypeController extends AbstractRestfulController
                 'value' => $property->__toString()
             ));
         }
-        
+
         $jsonData = $this->paginate($arrayValues, false);
 
         return new JsonModel($jsonData);

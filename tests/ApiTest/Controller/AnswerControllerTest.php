@@ -7,7 +7,7 @@ use Zend\Http\Request;
 /**
  * @group Rest
  */
-class AnswerControllerTest extends AbstractRestfulControllerTest
+class AnswerControllerTest extends AbstractChildRestfulControllerTest
 {
 
     protected function getAllowedFields()
@@ -18,6 +18,13 @@ class AnswerControllerTest extends AbstractRestfulControllerTest
     protected function getTestedObject()
     {
         return $this->answer;
+    }
+
+    protected function getPossibleParents()
+    {
+        return [
+            $this->questionnaire,
+        ];
     }
 
     public function testPostANewAnswerWithNestedObjectWillCreateIt()
@@ -75,7 +82,7 @@ class AnswerControllerTest extends AbstractRestfulControllerTest
             ),
         );
 
-        $this->rbac->setIdentity(null);
+        $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(403);
     }
@@ -92,16 +99,9 @@ class AnswerControllerTest extends AbstractRestfulControllerTest
         $actual = $this->getJsonResponse();
         $this->assertEquals($expected, $actual['valuePercent'], 'it should be the new value set');
         $this->assertEquals($this->answer->getQuestionnaire()->getId(), $actual['questionnaire']['id'], 'should return specified fields, in addition to standard one');
-    }
 
-    public function testUpdateAnAnswerAsAnonymousReturnsStatusCode403()
-    {
-        $expected = $this->answer->getValuePercent() + 0.2;
-        $data = array(
-            'valuePercent' => $expected,
-        );
-
-        $this->rbac->setIdentity(null);
+        // Same with anonymous will fail
+        $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(403);
     }

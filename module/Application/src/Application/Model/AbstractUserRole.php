@@ -6,28 +6,65 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Base class for all User-role classes
+ * @ORM\MappedSuperclass
  */
 abstract class AbstractUserRole extends AbstractModel
 {
 
     /**
-     * Ensures that a permission can't be added to an object if it's not
-     * persisted.
-     * E.g. when giving "Filter Editor" role to a FilterSet, the AbstractModel
-     * hydrates the UserFilterSet object to recover context and then verify
-     * if rights are granted. The objects used is in memory and we have
-     * officially not the permissions.
-     * This method ensures that the objects used to test permissions is in database.
-     * @param string $action
-     * @return \Application\Service\RoleContextInterface|null
+     * @var User
      */
-    public function getRoleContext($action)
+    protected $user;
+
+    /**
+     * @var Role
+     * @ORM\ManyToOne(targetEntity="Role")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
+     * })
+     */
+    private $role;
+
+    /**
+     * Set "user"
+     * @param User $user
+     * @return self
+     */
+    public function setUser(User $user)
     {
-        if ($this->getId()) {
-            return $this->getRoleContextInternal();
-        } else {
-            return null;
-        }
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get "user"
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set role
+     * @param Role $role
+     * @return self
+     */
+    public function setRole(Role $role)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get role
+     * @return Role
+     */
+    public function getRole()
+    {
+        return $this->role;
     }
 
 }

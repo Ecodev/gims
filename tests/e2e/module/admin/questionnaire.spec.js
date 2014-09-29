@@ -12,7 +12,7 @@ describe('admin/questionnaire/new', function() {
     });
 
     it('should be displayed tabs', function() {
-        var panes = new Array('General info');
+        var panes = new Array('General');
         expect(element.all(by.css('[ng-view] .nav-tabs li')).count()).toEqual(panes.length);
         for (var index = 0; index < panes.length; index++) {
             var paneText = panes[index];

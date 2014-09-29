@@ -1,0 +1,503 @@
+[
+    {
+        "name": "Total improved",
+        "id": 75,
+        "data": [
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            5.9,
+            9.0,
+            12.2,
+            15.3,
+            18.5,
+            21.6,
+            24.7,
+            27.9,
+            31.0,
+            34.2,
+            37.3,
+            40.4,
+            43.6,
+            46.7,
+            49.9,
+            53.0,
+            56.1
+        ],
+        "type": "line",
+        "geonameId": 1149361,
+        "color": "#00D919",
+        "lightColor": "#B8D9BC",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "(none)"
+    },
+    {
+        "name": "Piped onto premises",
+        "id": 76,
+        "data": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.3,
+            0.7,
+            1.0,
+            1.3,
+            1.7,
+            2.0,
+            2.3,
+            2.7,
+            3.0,
+            3.3,
+            3.7,
+            4.0
+        ],
+        "type": "line",
+        "geonameId": 1149361,
+        "color": "#D90026",
+        "lightColor": "#D9B8BE",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "(none)"
+    },
+    {
+        "name": "Surface water",
+        "id": 77,
+        "data": [
+            48.1,
+            48.1,
+            48.1,
+            48.1,
+            48.1,
+            48.1,
+            48.1,
+            48.1,
+            48.1,
+            48.1,
+            48.1,
+            48.1,
+            48.1,
+            48.1,
+            48.1,
+            48.1,
+            45.9,
+            43.7,
+            41.5,
+            39.3,
+            37.0,
+            34.8,
+            32.6,
+            30.4,
+            28.2,
+            26.0,
+            23.8,
+            21.6,
+            19.3,
+            17.1,
+            14.9,
+            12.7,
+            10.5
+        ],
+        "type": "line",
+        "geonameId": 1149361,
+        "color": "#0066D9",
+        "lightColor": "#B8C7D9",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "Regression: Surface water (default)"
+    },
+    {
+        "name": "Other Improved",
+        "id": 78,
+        "data": [
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            2.8,
+            5.9,
+            9.0,
+            12.2,
+            15.3,
+            18.5,
+            21.3,
+            24.1,
+            26.9,
+            29.7,
+            32.5,
+            35.3,
+            38.1,
+            40.9,
+            43.7,
+            46.5,
+            49.3,
+            52.1
+        ],
+        "type": "line",
+        "geonameId": 1149361,
+        "color": "#A5D900",
+        "lightColor": "#D1D9B8",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "Regression: Other Improved (default)"
+    },
+    {
+        "name": "Other Unimproved",
+        "id": 79,
+        "data": [
+            49.1,
+            49.1,
+            49.1,
+            49.1,
+            49.1,
+            49.1,
+            49.1,
+            49.1,
+            49.1,
+            49.1,
+            49.1,
+            49.1,
+            49.1,
+            49.1,
+            49.1,
+            49.1,
+            48.2,
+            47.3,
+            46.4,
+            45.4,
+            44.5,
+            43.6,
+            42.6,
+            41.7,
+            40.8,
+            39.9,
+            38.9,
+            38.0,
+            37.1,
+            36.1,
+            35.2,
+            34.3,
+            33.4
+        ],
+        "type": "line",
+        "geonameId": 1149361,
+        "color": "#CE00D9",
+        "lightColor": "#D7B8D9",
+        "marker": {
+            "symbol": "diamond"
+        },
+        "usages": "Regression: Other Unimproved (default)"
+    },
+    {
+        "type": "scatter",
+        "id": 75,
+        "name": "Total improved",
+        "country": "Afghanistan",
+        "color": "#00D919",
+        "lightColor": "#B8D9BC",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "MICS97",
+                "id": "75:24",
+                "questionnaire": 24,
+                "x": 1997,
+                "y": 6.8
+            },
+            {
+                "name": "MICS03",
+                "id": "75:26",
+                "questionnaire": 26,
+                "x": 2003,
+                "y": 27.4
+            },
+            {
+                "name": "NRVA03",
+                "id": "75:27",
+                "questionnaire": 27,
+                "x": 2003,
+                "y": 33.7
+            },
+            {
+                "name": "NRVS05",
+                "id": "75:28",
+                "questionnaire": 28,
+                "x": 2005,
+                "y": 32.1
+            },
+            {
+                "name": "MS10",
+                "id": "75:31",
+                "questionnaire": 31,
+                "x": 2010,
+                "y": 50.6
+            },
+            {
+                "name": "MICS11",
+                "id": "75:32",
+                "questionnaire": 32,
+                "x": 2011,
+                "y": 51.2
+            }
+        ]
+    },
+    {
+        "type": "scatter",
+        "id": 76,
+        "name": "Piped onto premises",
+        "country": "Afghanistan",
+        "color": "#D90026",
+        "lightColor": "#D9B8BE",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "MICS97",
+                "id": "76:24",
+                "questionnaire": 24,
+                "x": 1997,
+                "y": 0.0
+            },
+            {
+                "name": "MICS03",
+                "id": "76:26",
+                "questionnaire": 26,
+                "x": 2003,
+                "y": 0.0
+            },
+            {
+                "name": "NRVS05",
+                "id": "76:28",
+                "questionnaire": 28,
+                "x": 2005,
+                "y": 0.8
+            },
+            {
+                "name": "MS10",
+                "id": "76:31",
+                "questionnaire": 31,
+                "x": 2010,
+                "y": 2.6
+            },
+            {
+                "name": "MICS11",
+                "id": "76:32",
+                "questionnaire": 32,
+                "x": 2011,
+                "y": 5.3
+            }
+        ]
+    },
+    {
+        "type": "scatter",
+        "id": 77,
+        "name": "Surface water",
+        "country": "Afghanistan",
+        "color": "#0066D9",
+        "lightColor": "#B8C7D9",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "MICS97",
+                "id": "77:24",
+                "questionnaire": 24,
+                "x": 1997,
+                "y": 50.6
+            },
+            {
+                "name": "MICS03",
+                "id": "77:26",
+                "questionnaire": 26,
+                "x": 2003,
+                "y": 33.0
+            },
+            {
+                "name": "NRVA03",
+                "id": "77:27",
+                "questionnaire": 27,
+                "x": 2003,
+                "y": 20.5
+            },
+            {
+                "name": "NRVS05",
+                "id": "77:28",
+                "questionnaire": 28,
+                "x": 2005,
+                "y": 19.4
+            },
+            {
+                "name": "MS10",
+                "id": "77:31",
+                "questionnaire": 31,
+                "x": 2010,
+                "y": 15.9
+            },
+            {
+                "name": "MICS11",
+                "id": "77:32",
+                "questionnaire": 32,
+                "x": 2011,
+                "y": 18.7
+            }
+        ]
+    },
+    {
+        "type": "scatter",
+        "id": 78,
+        "name": "Other Improved",
+        "country": "Afghanistan",
+        "color": "#A5D900",
+        "lightColor": "#D1D9B8",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "MICS97",
+                "id": "78:24",
+                "questionnaire": 24,
+                "x": 1997,
+                "y": 6.8
+            },
+            {
+                "name": "MICS03",
+                "id": "78:26",
+                "questionnaire": 26,
+                "x": 2003,
+                "y": 27.4
+            },
+            {
+                "name": "NRVS05",
+                "id": "78:28",
+                "questionnaire": 28,
+                "x": 2005,
+                "y": 31.4
+            },
+            {
+                "name": "MS10",
+                "id": "78:31",
+                "questionnaire": 31,
+                "x": 2010,
+                "y": 48.0
+            },
+            {
+                "name": "MICS11",
+                "id": "78:32",
+                "questionnaire": 32,
+                "x": 2011,
+                "y": 45.9
+            }
+        ]
+    },
+    {
+        "type": "scatter",
+        "id": 79,
+        "name": "Other Unimproved",
+        "country": "Afghanistan",
+        "color": "#CE00D9",
+        "lightColor": "#D7B8D9",
+        "marker": {
+            "symbol": "circle"
+        },
+        "allowPointSelect": false,
+        "data": [
+            {
+                "name": "MICS97",
+                "id": "79:24",
+                "questionnaire": 24,
+                "x": 1997,
+                "y": 42.6
+            },
+            {
+                "name": "MICS03",
+                "id": "79:26",
+                "questionnaire": 26,
+                "x": 2003,
+                "y": 39.6
+            },
+            {
+                "name": "NRVA03",
+                "id": "79:27",
+                "questionnaire": 27,
+                "x": 2003,
+                "y": 45.8
+            },
+            {
+                "name": "NRVS05",
+                "id": "79:28",
+                "questionnaire": 28,
+                "x": 2005,
+                "y": 48.5
+            },
+            {
+                "name": "MS10",
+                "id": "79:31",
+                "questionnaire": 31,
+                "x": 2010,
+                "y": 33.5
+            },
+            {
+                "name": "MICS11",
+                "id": "79:32",
+                "questionnaire": 32,
+                "x": 2011,
+                "y": 30.1
+            }
+        ]
+    }
+]

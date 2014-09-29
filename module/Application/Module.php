@@ -52,6 +52,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
 
         $this->detectBrowserLocale($e);
         $this->deactivateLayout($e);
+
+        // Register a strategy to control what happens when access is denied
+        $t = $e->getTarget();
+        $t->getEventManager()->attach(
+                $t->getServiceManager()->get('ZfcRbac\View\Strategy\UnauthorizedStrategy')
+        );
     }
 
     /**
@@ -124,6 +130,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
     {
         return array(
             'Application module commands',
+            'import glass' => "Import filters for GLASS and affect them to existing question",
             'import jmp <file>' => "Import individual country file in JMP format",
             'import population <file>' => "Import population data",
             'email <action> <id>' => "Send email"

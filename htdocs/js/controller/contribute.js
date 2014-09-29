@@ -1,9 +1,10 @@
 
-angular.module('myApp').controller('ContributeCtrl', function($scope, $http) {
+angular.module('myApp').controller('ContributeCtrl', function($scope, $http, $rootScope) {
     'use strict';
 
-    // TODO: replace with actual logged in user ID
-    $http.get('/api/user/1/statistics').success(function(data) {
-        $scope.statistics = data;
-    });
+    if ($rootScope.user) {
+        $http.get('/api/user/' + $rootScope.user.id + '/statistics').success(function(data) {
+            $scope.statistics = data;
+        });
+    }
 });

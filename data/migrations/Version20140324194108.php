@@ -16,7 +16,25 @@ class Version20140324194108 extends AbstractMigration
         $add = array(
             'Rule' => array(
                 'create' => array('member'),
-                'read' => array('anonymous'),
+                'read' => array('member'),
+                'update' => array('member'),
+                'delete' => array('member')
+            ),
+            'QuestionnaireUsage' => array(
+                'create' => array('member'),
+                'read' => array('member'),
+                'update' => array('member'),
+                'delete' => array('member')
+            ),
+            'FilterQuestionnaireUsage' => array(
+                'create' => array('member'),
+                'read' => array('member'),
+                'update' => array('member'),
+                'delete' => array('member')
+            ),
+            'FilterGeonameUsage' => array(
+                'create' => array('member'),
+                'read' => array('member'),
                 'update' => array('member'),
                 'delete' => array('member')
             ),

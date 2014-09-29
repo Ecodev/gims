@@ -17,21 +17,15 @@
                 <li class=""><a href="#point2"><i class="fa fa-chevron-right"></i> Solution</a></li>
                 <li class=""><a href="#point3"><i class="fa fa-chevron-right"></i> Goals</a></li>
                 <li class=""><a href="#point4"><i class="fa fa-chevron-right"></i> Impact</a></li>
-                <li class=""><a href="#point5"><i class="fa fa-chevron-right"></i> Partners and donors</a></li>
+                <li class=""><a href="#point5"><i class="fa fa-chevron-right"></i> Donors and Partners</a></li>
+                <li class=""><a href="/intro" target="_blank"><i class="fa fa-chevron-right"></i> Short presentation</a></li>
+                <li class=""><a href="http://gims.readthedocs.org/en/develop/" target="_blank"><i class="fa fa-gims-help"></i> Help</a></li>
             </ul>
         </div>
         <div class="col-md-9">
 
             <section id="point1">
 
-                <script type="text/javascript">
-                    $(document).ready(function () {
-                        $('.read-more').click(function (e) {
-                            $('.hidden-read-more').toggle();
-                            e.preventDefault();
-                        });
-                    });
-                </script>
                 <h2>Background</h2>
 
                 <p>Environmental determinants are critical components of human health. It is currently estimated that a
@@ -41,22 +35,21 @@
                     mechanisms
                     in place include The WHO/UNICEF Joint Monitoring Programme (JMP) for Water Supply and Sanitation and
                     The
-                    UN-Water Global Analysis and Assessment of Sanitation and Drinking-Water (GLAAS). <a href="#"
-                                                                                                         class="read-more">Read
-                        more</a>...
+                    UN-Water Global Analysis and Assessment of Sanitation and Drinking-Water (GLAAS).
+                    <a href="#" class="read-more" ng-click="showHidden = !showHidden">Read more</a>...
                 </p>
 
-                <p class="hidden-read-more" style="display: none">These two reporting mechanisms represent a
+                <p class="ng-trans ng-trans-fade-up" ng-class="{'ng-hide': !showHidden}">These two reporting mechanisms represent a
                     complementary set of information on water and
                     development. The JMP is the official mechanism of the UN system mandated to monitor global progress
-                    towards the Millenium Development Goals (MDG). JMP monitors outcomes by reporting on access and
+                    towards the Millennium Development Goals (MDG). JMP monitors outcomes by reporting on access and
                     coverage
                     of improved water sources and sanitation facilities globally. JMP estimates, derived primarily from
-                    household surveys and census data, allow comparisons between countries over time. GLAAS, a UN-Water
-                    reporting mechanism, tracks the institutional and financial capacity of countries to progress
-                    towards
-                    the MDG water and sanitation targets. GLAAS, for example, is able to compare improvements in service
-                    levels to institutional, policy, or funding changes.
+                    household surveys and census data, allow comparisons between countries over time. While Global Analysis
+                    and Assessment on Sanitation and Drinking water (GLAAS), a UN-Water reporting mechanism lead by WHO,
+                    tracks the institutional and financial capacity of countries to progress towards the MDG water and
+                    sanitation targets. GLAAS, for example, is able to compare improvements in service levels to institutional,
+                    policy, or funding changes.
                 </p>
 
                 <p>Many more factors are implicated in the link between the environment and public health, including
@@ -71,10 +64,10 @@
 
                 <h3>Solution</h3>
 
-                <p>The Global Information Management System on Environment and Health (GIMS) provides the platform for
+                <p>The Global Information Management System on Health and Environment (GIMS) provides the platform for
                     this
                     innovative approach to environmental disease prevention. GIMS will contain data collected through
-                    national and international surveys, national censuses, scientific repositories, climate and
+                    national and international surveys, national censuses, scientific repositories, climactic and
                     meteorological forecast systems, and GIS based data. Data will be thematic, spatial and temporal in
                     nature and will be available at regional, country and local levels.</p>
             </section>
@@ -85,26 +78,26 @@
 
                 Using a multi-disciplinary public health approach, the goals of GIMS are to:
                 <ul>
-                    <li>harmonize water, sanitation and hygiene monitoring mechanisms (JMP access and coverage data with
-                        GLAAS
-                        institutional and financial capacity data).
+                    <li>provide data management for JMP (data collection, estimates preparation,
+                        validation, data reconciliation between JMP and country authorities and
+                        harmonization of monitoring system including data collection instruments)
                     </li>
-                    <li>provide insight into the correlation of environmental drivers that impact human health (access
-                        to
-                        water, sanitation facilities, basic hygiene, socio-economic status and climate conditions).
+                    <li>harmonize water, sanitation and hygiene monitoring mechanisms (JMP access
+                        and coverage data with GLAAS institutional and financial capacity data).
                     </li>
-                    <li>integrate spatial and temporal data on key health determinants at local, country and regional
-                        levels.
+                    <li>provide insight into the correlation of environmental drivers that impact
+                        human health (access to water, sanitation facilities, basic hygiene,
+                        socio-economic status and climate conditions).
                     </li>
-                    <li>provide an early warning system of health emergencies (such as cholera outbreaks) by using
-                        dynamic
-                        models which assess real-time environmental, meteorological, socio-economic, microbiological and
-                        health
-                        data.
+                    <li>integrate spatial and temporal data on key health determinants at local,
+                        country and regional levels.
                     </li>
-                    <li>promote innovative analytical tools, with data collection, analysis, dissemination and
-                        visualization
-                        capacities.
+                    <li>provide an early warning system of health emergencies (such as cholera
+                        outbreaks) by using dynamic models which assess real-time environmental,
+                        meteorological, socio-economic, microbiological and health data.
+                    </li>
+                    <li>promote innovative analytical tools, with data collection, analysis,
+                        dissemination and visualization capacities.
                     </li>
                 </ul>
 
@@ -120,18 +113,16 @@
                     data management system allows a fundamental paradigm shift from traditional “surveillance and
                     response”
                     to “prediction and prevention” –helping to save lives, optimize resource utilization, promote
-                    evidence-based decision making and ensure effective policy and program implementation.</p>
+                    evidence-based decision making and ensure effective policy and program implementation.
+                </p>
 
             </section>
             <section id="point5">
-                <h3>Partners and donors</h3>
+                <h3>Donors and Partners</h3>
 
-                <p>United Nations Children’s Fund (UNICEF), UK aid (formerly UK Department for International Development
-                    ,
-                    DFID), Islamic Development Bank , International Centre for Diarrhoeal Disease Research, Bangladesh
-                    (ICDDRB), US National Oceanic and Atmospheric Administration (NOAA), Council for Scientific and
-                    Industrial Research, South Africa (CSIR), Royal Tropic Institute, Netherlands (KIT), Fraunhofer
-                    Institute of Optronics, System Technologies and Image Exploitation, Germany (IOSB)</p>
+                <p>Islamic Development Bank, International Household Survey Network, and its Accelerated Data Programme
+                    (co-hosted by World Bank and OECD), United Nations Children’s Fund (UNICEF), and UK aid
+                    (formerly UK Department for International Development , DFID).</p>
             </section>
 
         </div>

@@ -54,6 +54,10 @@ class AuthController extends \ZfcUser\Controller\UserController
 
             // Copy data to POST values of request so ZfcUser authentication can found them
             foreach ($data as $key => $value) {
+                if ($key == 'identity') {
+                    $value = strtolower($value);
+                }
+
                 $this->getRequest()->getPost()->set($key, $value);
             }
 
@@ -113,10 +117,12 @@ class AuthController extends \ZfcUser\Controller\UserController
 
         if ($request->isPost()) {
             $data = Json::decode($request->getContent(), Json::TYPE_ARRAY);
+            $data['email'] = strtolower($data['email']);
             $data['display_name'] = @$data['name'];
 
             $user = $this->getUserService()->register($data);
 
+            // If registered successfully, directly login the user
             if ($user) {
                 $data['identity'] = $data['email'];
                 $data['credential'] = $data['password'];

@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Application\Repository\PartRepository")
  */
-class Part extends AbstractModel
+class Part extends AbstractModel implements Rule\ReferencableInterface
 {
 
     /**
@@ -28,13 +28,17 @@ class Part extends AbstractModel
      */
     private $isTotal = false;
 
+    /**
+     * Constructor
+     * @param string $name
+     */
     public function __construct($name = null)
     {
         $this->setName($name);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -47,7 +51,7 @@ class Part extends AbstractModel
      * Set name
      *
      * @param string $name
-     * @return Part
+     * @return self
      */
     public function setName($name)
     {

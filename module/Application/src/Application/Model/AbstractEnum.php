@@ -54,17 +54,18 @@ abstract class AbstractEnum
     /**
      * Returns the Enum object corresponding to value given
      * @param string $value
-     * @return AbstractEnum
+     * @return self
      * @throws \InvalidArgumentException
      */
     public static function get($value)
     {
         foreach (self::getValues() as $enum) {
-            if ((string) $enum == $value)
+            if ((string) $enum == $value) {
                 return $enum;
+            }
         }
 
-        throw new \InvalidArgumentException("'$value' not found for enum " . get_called_class());
+        throw new \InvalidArgumentException("'$value' is not a valid value for enum " . get_called_class());
     }
 
     /**

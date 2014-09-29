@@ -27,25 +27,36 @@ textarea
 // Contextual variations of badges
 // Bootstrap 3.0 removed contexts for badges, we re-introduce them, based on what is done for labels
 .badge-default {
-  @include label-variant($label-default-bg);
+    @include label-variant($label-default-bg);
 }
 
 .badge-primary {
-  @include label-variant($label-primary-bg);
+    @include label-variant($label-primary-bg);
 }
 
 .badge-success {
-  @include label-variant($label-success-bg);
+    @include label-variant($label-success-bg);
 }
 
 .badge-info {
-  @include label-variant($label-info-bg);
+    @include label-variant($label-info-bg);
 }
 
 .badge-warning {
-  @include label-variant($label-warning-bg);
+    @include label-variant($label-warning-bg);
 }
 
 .badge-danger {
-  @include label-variant($label-danger-bg);
+    @include label-variant($label-danger-bg);
+}
+
+
+.navbar-inverse .navbar-toggle  {
+
+    padding: 4px 10px;
+    .fa-bars {
+        color: $body-bg;
+        font-size: 1.5em;
+    }
+
 }

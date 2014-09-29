@@ -1,13 +1,13 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/Survey/CrudCtrl', function($scope, $routeParams, $location, $resource, Modal, Restangular) {
+angular.module('myApp').controller('Admin/Survey/CrudCtrl', function($scope, $routeParams, $location, Modal, Restangular) {
     "use strict";
 
     $scope.sending = false;
 
     // Default redirect
-    var redirectTo = '/admin/survey';
+    var returnUrl = '/admin/survey';
     if ($routeParams.returnUrl) {
-        redirectTo = $routeParams.returnUrl;
+        returnUrl = $routeParams.returnUrl;
     }
 
     $scope.actives = [
@@ -16,11 +16,11 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function($scope, $ro
     ];
 
     $scope.saveAndClose = function() {
-        this.save(redirectTo);
+        this.save(returnUrl);
     };
 
     $scope.cancel = function() {
-        $location.path(redirectTo).search('returnUrl', null).hash(null);
+        $location.url(returnUrl);
     };
 
     $scope.save = function(redirectTo) {
@@ -35,6 +35,8 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function($scope, $ro
                 if (redirectTo) {
                     $location.path(redirectTo);
                 }
+            }, function() {
+                $scope.sending = false;
             });
         } else {
             Restangular.all('survey').post($scope.survey).then(function(survey) {
@@ -44,6 +46,8 @@ angular.module('myApp').controller('Admin/Survey/CrudCtrl', function($scope, $ro
                     redirectTo = '/admin/survey/edit/' + survey.id;
                 }
                 $location.path(redirectTo);
+            }, function() {
+                $scope.sending = false;
             });
         }
     };
@@ -86,8 +90,7 @@ angular.module('myApp').controller('Admin/SurveyCtrl', function($scope) {
             {field: 'name', displayName: 'Name'},
             {field: 'isActive', displayName: 'Active', cellFilter: 'checkmark', width: '100px'},
             {field: 'year', displayName: 'Year', width: '100px'},
-            {displayName: '', width: '70px', cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/survey/edit/{{row.entity.id}}"><i class="fa fa-pencil fa-lg"></i></a>' +
-                        '<button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
+            {displayName: '', width: '70px', cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/survey/edit/{{row.entity.id}}"><i class="fa fa-pencil fa-lg"></i></a><button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
         ]
     };
 });

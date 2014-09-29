@@ -5,7 +5,7 @@ namespace Application\Model\Question;
 use Doctrine\ORM\Mapping as ORM;
 use Application\Model\Answer;
 use Application\Model\Filter;
-use Application\Model\Part;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * A question which can be answered by end-user, and thus may be specific to parts.
@@ -18,7 +18,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
      * @var Filter
      * @ORM\ManyToOne(targetEntity="Application\Model\Filter", fetch="EAGER", inversedBy="questions")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * })
      */
     private $filter;
@@ -33,6 +33,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\ManyToMany(targetEntity="Application\Model\Part")
      * @ORM\JoinTable(name="question_part", joinColumns={@ORM\JoinColumn(name="question_id", onDelete="CASCADE")})
+     * @ORM\OrderBy({"id" = "ASC"})
      */
     private $parts;
 
@@ -54,18 +55,20 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
 
     /**
      * Set filter
-     *
      * @param Filter $filter
-     *
-     * @return AbstractAnswerableQuestion
+     * @return self
      */
-    public function setFilter(Filter $filter)
+    public function setFilter(Filter $filter = null)
     {
         if ($this->filter) {
             $this->filter->removeQuestion($this);
         }
+
         $this->filter = $filter;
-        $filter->addQuestion($this);
+
+        if ($filter) {
+            $filter->addQuestion($this);
+        }
 
         return $this;
     }
@@ -81,20 +84,26 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
 
     /**
      * Get all answers
+     * @param \Application\Model\Questionnaire $questionnaire
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getAnswers()
+    public function getAnswers(\Application\Model\Questionnaire $questionnaire = null)
     {
-        return $this->answers;
+        if ($questionnaire) {
+            $criteria = Criteria::create()->where(Criteria::expr()->eq("questionnaire", $questionnaire));
+            $answers = $this->answers->matching($criteria);
+        } else {
+            $answers = $this->answers;
+        }
+
+        return $answers;
     }
 
     /**
      * Notify the question that it was added to the answer.
      * This should only be called by Answer::setQuestion()
-     *
      * @param Answer $answer
-     *
-     * @return AbstractAnswerableQuestion
+     * @return self
      */
     public function answerAdded(Answer $answer)
     {
@@ -114,8 +123,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
 
     /**
      * @param boolean $isCompulsory
-     *
-     * @return $this
+     * @return self
      */
     public function setIsCompulsory($isCompulsory)
     {
@@ -134,8 +142,7 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $parts
-     *
-     * @return $this
+     * @return self
      */
     public function setParts(\Doctrine\Common\Collections\ArrayCollection $parts)
     {

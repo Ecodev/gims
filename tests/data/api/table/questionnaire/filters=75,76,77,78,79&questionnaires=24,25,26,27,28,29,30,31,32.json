@@ -1,0 +1,276 @@
+{
+    "columns": {
+        "country": "Country",
+        "iso3": "ISO-3",
+        "survey": "Survey",
+        "year": "Year",
+        "f75p1": "WUTI",
+        "f76p1": "WUPOP",
+        "f77p1": "WUSW",
+        "f78p1": "WUOI",
+        "f79p1": "WUOU",
+        "f75p2": "WRTI",
+        "f76p2": "WRPOP",
+        "f77p2": "WRSW",
+        "f78p2": "WROI",
+        "f79p2": "WROU",
+        "f75p3": "WTTI",
+        "f76p3": "WTPOP",
+        "f77p3": "WTSW",
+        "f78p3": "WTOI",
+        "f79p3": "WTOU"
+    },
+    "legends": [
+        {
+            "short": "WUTI",
+            "long": "Water, Urban, Total improved"
+        },
+        {
+            "short": "WUPOP",
+            "long": "Water, Urban, Piped onto premises"
+        },
+        {
+            "short": "WUSW",
+            "long": "Water, Urban, Surface water"
+        },
+        {
+            "short": "WUOI",
+            "long": "Water, Urban, Other Improved"
+        },
+        {
+            "short": "WUOU",
+            "long": "Water, Urban, Other Unimproved"
+        },
+        {
+            "short": "WRTI",
+            "long": "Water, Rural, Total improved"
+        },
+        {
+            "short": "WRPOP",
+            "long": "Water, Rural, Piped onto premises"
+        },
+        {
+            "short": "WRSW",
+            "long": "Water, Rural, Surface water"
+        },
+        {
+            "short": "WROI",
+            "long": "Water, Rural, Other Improved"
+        },
+        {
+            "short": "WROU",
+            "long": "Water, Rural, Other Unimproved"
+        },
+        {
+            "short": "WTTI",
+            "long": "Water, Total, Total improved"
+        },
+        {
+            "short": "WTPOP",
+            "long": "Water, Total, Piped onto premises"
+        },
+        {
+            "short": "WTSW",
+            "long": "Water, Total, Surface water"
+        },
+        {
+            "short": "WTOI",
+            "long": "Water, Total, Other Improved"
+        },
+        {
+            "short": "WTOU",
+            "long": "Water, Total, Other Unimproved"
+        }
+    ],
+    "data": [
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "MICS97",
+            "year": 1997,
+            "f75p1": 16.9,
+            "f76p1": 7.7,
+            "f77p1": 10.7,
+            "f78p1": 9.2,
+            "f79p1": 72.4,
+            "f75p2": 6.8,
+            "f76p2": 0.0,
+            "f77p2": 50.6,
+            "f78p2": 6.8,
+            "f79p2": 42.6,
+            "f75p3": 8.8,
+            "f76p3": 1.5,
+            "f77p3": 42.7,
+            "f78p3": 7.3,
+            "f79p3": 48.5
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "MICS00",
+            "year": 2000,
+            "f75p1": null,
+            "f76p1": null,
+            "f77p1": null,
+            "f78p1": null,
+            "f79p1": null,
+            "f75p2": null,
+            "f76p2": null,
+            "f77p2": null,
+            "f78p2": null,
+            "f79p2": null,
+            "f75p3": null,
+            "f76p3": null,
+            "f77p3": null,
+            "f78p3": null,
+            "f79p3": null
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "MICS03",
+            "year": 2003,
+            "f75p1": 56.7,
+            "f76p1": 14.0,
+            "f77p1": 13.7,
+            "f78p1": 42.7,
+            "f79p1": 29.6,
+            "f75p2": 27.4,
+            "f76p2": 0.0,
+            "f77p2": 33.0,
+            "f78p2": 27.4,
+            "f79p2": 39.6,
+            "f75p3": 33.7,
+            "f76p3": 3.0,
+            "f77p3": 28.9,
+            "f78p3": 30.7,
+            "f79p3": 37.5
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "NRVA03",
+            "year": 2003,
+            "f75p1": null,
+            "f76p1": null,
+            "f77p1": null,
+            "f78p1": null,
+            "f79p1": null,
+            "f75p2": 33.7,
+            "f76p2": null,
+            "f77p2": 20.5,
+            "f78p2": null,
+            "f79p2": 45.8,
+            "f75p3": null,
+            "f76p3": null,
+            "f77p3": null,
+            "f78p3": null,
+            "f79p3": null
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "NRVS05",
+            "year": 2005,
+            "f75p1": 63.7,
+            "f76p1": 15.4,
+            "f77p1": 2.6,
+            "f78p1": 48.3,
+            "f79p1": 33.7,
+            "f75p2": 32.1,
+            "f76p2": 0.8,
+            "f77p2": 19.4,
+            "f78p2": 31.4,
+            "f79p2": 48.5,
+            "f75p3": 39.0,
+            "f76p3": 4.0,
+            "f77p3": 15.7,
+            "f78p3": 35.1,
+            "f79p3": 45.2
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "NVRA08",
+            "year": 2008,
+            "f75p1": null,
+            "f76p1": null,
+            "f77p1": null,
+            "f78p1": null,
+            "f79p1": null,
+            "f75p2": null,
+            "f76p2": null,
+            "f77p2": null,
+            "f78p2": null,
+            "f79p2": null,
+            "f75p3": null,
+            "f76p3": null,
+            "f77p3": null,
+            "f78p3": null,
+            "f79p3": null
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "MIS09",
+            "year": 2009,
+            "f75p1": null,
+            "f76p1": null,
+            "f77p1": null,
+            "f78p1": null,
+            "f79p1": null,
+            "f75p2": null,
+            "f76p2": null,
+            "f77p2": null,
+            "f78p2": null,
+            "f79p2": null,
+            "f75p3": null,
+            "f76p3": null,
+            "f77p3": null,
+            "f78p3": null,
+            "f79p3": null
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "MS10",
+            "year": 2010,
+            "f75p1": 77.9,
+            "f76p1": 21.8,
+            "f77p1": 3.0,
+            "f78p1": 56.1,
+            "f79p1": 19.1,
+            "f75p2": 50.6,
+            "f76p2": 2.6,
+            "f77p2": 15.9,
+            "f78p2": 48.0,
+            "f79p2": 33.5,
+            "f75p3": 56.9,
+            "f76p3": 7.1,
+            "f77p3": 12.9,
+            "f78p3": 49.9,
+            "f79p3": 30.2
+        },
+        {
+            "country": "Afghanistan",
+            "iso3": "AFG",
+            "survey": "MICS11",
+            "year": 2011,
+            "f75p1": 82.3,
+            "f76p1": 31.2,
+            "f77p1": 5.1,
+            "f78p1": 51.1,
+            "f79p1": 12.6,
+            "f75p2": 51.2,
+            "f76p2": 5.3,
+            "f77p2": 18.7,
+            "f78p2": 45.9,
+            "f79p2": 30.1,
+            "f75p3": 58.5,
+            "f76p3": 11.4,
+            "f77p3": 15.5,
+            "f78p3": 47.1,
+            "f79p3": 26.0
+        }
+    ]
+}

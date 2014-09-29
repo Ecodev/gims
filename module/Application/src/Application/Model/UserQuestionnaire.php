@@ -20,7 +20,7 @@ class UserQuestionnaire extends AbstractUserRole
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
      */
-    private $user;
+    protected $user;
 
     /**
      * @var Questionnaire
@@ -32,16 +32,7 @@ class UserQuestionnaire extends AbstractUserRole
     private $questionnaire;
 
     /**
-     * @var Role
-     * @ORM\ManyToOne(targetEntity="Role")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * })
-     */
-    private $role;
-
-    /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getJsonConfig()
     {
@@ -55,29 +46,20 @@ class UserQuestionnaire extends AbstractUserRole
     /**
      * Set "user"
      * @param User $user
-     * @return UserQuestionnaire
+     * @return self
      */
     public function setUser(User $user)
     {
-        $this->user = $user;
+        parent::setUser($user);
         $user->userQuestionnaireAdded($this);
 
         return $this;
     }
 
     /**
-     * Get "user"
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
      * Set questionnaire
      * @param Questionnaire $questionnaire
-     * @return UserQuestionnaire
+     * @return self
      */
     public function setQuestionnaire(Questionnaire $questionnaire)
     {
@@ -96,30 +78,9 @@ class UserQuestionnaire extends AbstractUserRole
     }
 
     /**
-     * Set role
-     * @param Role $role
-     * @return UserQuestionnaire
+     * {@inheritdoc}
      */
-    public function setRole(Role $role)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * Get role
-     * @return Role
-     */
-    public function getRole()
-    {
-        return $this->role;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getRoleContextInternal($action)
+    public function getRoleContext($action)
     {
         return $this->getQuestionnaire()->getSurvey();
     }

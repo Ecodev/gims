@@ -7,6 +7,7 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function($sco
         {text: 'New', value: 'new'},
         {text: 'Completed', value: 'completed'},
         {text: 'Validated', value: 'validated'},
+        {text: 'Published', value: 'published'},
         {text: 'Rejected', value: 'rejected'}
     ];
 
@@ -45,19 +46,19 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function($sco
         var geoname = $scope.questionnaire.geoname;
         $scope.questionnaire.geoname = $scope.questionnaire.geoname.id;
         if ($scope.questionnaire.id) {
-            $scope.questionnaire.put().then(function()
-            {
+            $scope.questionnaire.put().then(function() {
                 $scope.sending = false;
 
                 if (redirectAfterSave) {
                     redirect();
                 }
+            }, function() {
+                $scope.sending = false;
             });
         } else {
             $scope.questionnaire.survey = $routeParams.survey;
             $scope.questionnaire.status = 'new';
-            Restangular.all('questionnaire').post($scope.questionnaire).then(function(questionnaire)
-            {
+            Restangular.all('questionnaire').post($scope.questionnaire).then(function(questionnaire) {
                 $scope.sending = false;
 
                 if (redirectAfterSave) {
@@ -67,6 +68,8 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function($sco
                     $location.path(sprintf('admin/questionnaire/edit/%s', questionnaire.id));
 
                 }
+            }, function() {
+                $scope.sending = false;
             });
         }
         $scope.questionnaire.geoname = geoname;
@@ -75,7 +78,7 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function($sco
     // Delete a questionnaire
     $scope.delete = function()
     {
-        Modal.confirmDelete($scope.questionnaire, {label: $scope.questionnaire.name, returnUrl: $location.search().returnUrl});
+        Modal.confirmDelete($scope.questionnaire, {label: $scope.questionnaire.name, returnUrl: '/admin/survey/edit/' + $location.search().survey});
     };
 
     // Create object with default value
@@ -94,9 +97,14 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function($sco
     // Only show 'validated' option if it is already validated, or if the user has enough permission to select it
     $scope.$watch('questionnaire', function(questionnaire)
     {
-        $scope.status = _.filter(allStatus, function(status)
-        {
-            return status.value != 'validated' || questionnaire.status == 'validated' || (questionnaire.permissions && questionnaire.permissions.validate);
+        $scope.status = _.filter(allStatus, function(status) {
+            if (status.value == 'validated') {
+                return questionnaire.status == 'validated' || (questionnaire.permissions && questionnaire.permissions.validate);
+            } else if (status.value == 'published') {
+                return questionnaire.status == 'published' || (questionnaire.permissions && questionnaire.permissions.publish);
+            }
+
+            return true;
         });
     });
 
@@ -109,4 +117,3 @@ angular.module('myApp').controller('Admin/Questionnaire/CrudCtrl', function($sco
         });
     }
 });
-

@@ -1,0 +1,99 @@
+
+// Import official Font Awesome
+$fa-font-path: "../lib/fontawesome/fonts";
+@import "../../../htdocs/lib/fontawesome/scss/font-awesome.scss";
+
+/**
+ * Custom GIMS icons
+ */
+
+.fa-grid {
+    padding-right: 10px;
+}
+
+.fa-gims-loading {
+    &.hide {
+        display: none !important;
+    }
+
+    @extend .fa-refresh;
+    @extend .fa-spin;
+}
+
+.fa-gims-back {
+    @extend .fa-reply;
+}
+
+.fa-gims-save {
+    @extend .fa-check;
+}
+
+.fa-gims-filterset {
+    @extend .fa-tags;
+}
+
+.fa-gims-filter {
+    @extend .fa-tag;
+}
+
+.fa-gims-survey {
+    @extend .fa-pencil-square-o;
+}
+
+.fa-gims-rule {
+    @extend .fa-gear;
+}
+
+.fa-gims-questionnaire {
+    @extend .fa-paste;
+}
+
+.fa-gims-population {
+    @extend .fa-male;
+}
+
+.fa-gims-summand {
+    @extend .fa-plus;
+}
+
+.fa-gims-add {
+    @extend .fa-plus-circle;
+}
+
+.fa-gims-child {
+    @extend .fa-folder;
+}
+
+.fa-gims-wizard {
+    @extend .fa-magic;
+}
+
+.fa-gims-help {
+    @extend .fa-question-circle;
+
+    // For help button in navbar, we boost the size to appear like in crumbread
+    .navbar-form  & {
+        font-size: 2.5em;
+    }
+}
+
+// Compatibility with glyphicons
+.glyphicon {
+    @extend .fa;
+}
+
+.glyphicon-chevron-right {
+    @extend .fa-chevron-right;
+}
+
+.glyphicon-chevron-left {
+    @extend .fa-chevron-left;
+}
+
+.glyphicon-chevron-up {
+    @extend .fa-chevron-up;
+}
+
+.glyphicon-chevron-down {
+    @extend .fa-chevron-down;
+}

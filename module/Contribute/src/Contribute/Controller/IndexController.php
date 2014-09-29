@@ -14,12 +14,7 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
         ));
     }
 
-    public function questionnaireAction()
-    {
-        return new ViewModel();
-    }
-
-    public function questionsAction()
+    public function glaasAction()
     {
         return new ViewModel();
     }

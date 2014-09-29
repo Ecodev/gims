@@ -1,11 +1,13 @@
 config/autoload/*.local.php
 config/autoload/local.php
 data/cache
-data/docs/api
+docs/api
+docs/_build
+docs/content/img/*.pdf
 data/logs
 htdocs/css
 htdocs/tmp
-htdocs/lib/*
+# htdocs/lib/*
 !htdocs/lib/autoload
 nbproject/private
 node_modules
