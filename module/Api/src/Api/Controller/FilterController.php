@@ -55,7 +55,8 @@ class FilterController extends AbstractChildRestfulController
                 foreach ($filters as $filter) {
                     $uniqueFilters[$filter->getId()] = $filter;
                 }
-                $filters = $this->flattenFilters($uniqueFilters);
+
+                $filters = $this->flattenFilters($uniqueFilters, false, $parent);
                 $filters = $this->getFlatHierarchyWithSingleRootElement($filters, '_parent');
             }
 
@@ -73,12 +74,16 @@ class FilterController extends AbstractChildRestfulController
     /**
      * This function return a list of filters in assoc array
      * If a filter has multiple parents, he's added multiple times in the right hierarchic position
+     * The $rootParent argument means to duplicate filters only if the parents are in the given filter list or is the $rootElement.
+     * If $rootParent is null, a filter is duplicated for each parent regardless if the parent is or not in the given filter list.
      * @param $filters
      * @param bool $itemOnce avoid to add multiple times the same filter if he has multiple parents
+     * @param \Application\Model\Filter $rootParent originally asked parent
      * @return array
      */
-    private function flattenFilters($filters, $itemOnce = false)
+    private function flattenFilters($filters, $itemOnce = false, \Application\Model\Filter $rootParent = null)
     {
+
         $jsonConfig = $this->getJsonConfig();
         $flatFilters = array();
         foreach ($filters as $filter) {
@@ -87,12 +92,15 @@ class FilterController extends AbstractChildRestfulController
 
             if ($parents) {
                 foreach ($parents as $parent) {
-                    $flatFilter['_parent'] = $parent;
-                    $flatFilters[] = $flatFilter;
 
-                    // If we don't want duplicated items for each parents, break the loop
-                    if ($itemOnce) {
-                        break;
+                    if (!$rootParent || ($rootParent && (isset($filters[$parent['id']]) || $parent['id'] == $rootParent->getId()))) {
+                        $flatFilter['_parent'] = $parent;
+                        $flatFilters[] = $flatFilter;
+
+                        // If we don't want duplicated items for each parents, break the loop
+                        if ($itemOnce) {
+                            break;
+                        }
                     }
                 }
             } else {
