@@ -4,11 +4,6 @@ $border: 1px;
 .table-filter {
     display: flex;
 
-
-    .input-group-btn {
-        padding-left:6px;
-    }
-
     [vs-repeat] {
         overflow: auto;
         position: relative;
@@ -38,7 +33,7 @@ $border: 1px;
     .table-filter-row {
         border-bottom: $border solid $table-border-color;
         border-right: $border solid $table-border-color;
-        height: $input-height-base + 2 * $padding + 2 * $border;
+        height: 30px + 2 * $padding + $border;
         border-collapse: collapse;
         padding: $padding;
 
@@ -51,6 +46,10 @@ $border: 1px;
             textarea {
                 height: 140px;
             }
+        }
+
+        &.header {
+            background-color: $table-bg-hover;
         }
     }
 

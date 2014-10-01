@@ -160,15 +160,15 @@
                                 <i class="fa fa-gims-add"></i> Add new questionnaire
                             </button>
                         </div>
-                        <div class="table-filter-row"></div>
-                        <div class="table-filter-row"></div>
-                        <div class="table-filter-row" ng-if="data.mode.isSector"></div>
-                        <div class="table-filter-row">
+                        <div class="table-filter-row header"></div>
+                        <div class="table-filter-row header"></div>
+                        <div class="table-filter-row header" ng-if="data.mode.isSector"></div>
+                        <div class="table-filter-row header">
                             <button class="btn btn-default btn-sm pull-right" ng-if="data.questionnaires.length > 1" ng-click="orderQuestionnaires(false)">
                                 <i class="fa fa-sort-amount-asc fa-rotate-270"></i> Sort by year
                             </button>
                         </div>
-                        <div class="table-filter-row large" ng-if="data.showQuestionnaireComments"></div>
+                        <div class="table-filter-row header large" ng-if="data.showQuestionnaireComments"></div>
 
 
                         <div class="table-filter-row" ng-repeat="filter in data.filters track by $index" ng-class="{'active':data.mode.isSector && filter.level < 2}">
@@ -226,7 +226,7 @@
                             <ng-form name="questionnaireForm">
 
                                 <!-- Questionnaire's geoname row-->
-                                <div class="table-filter-row" ng-switch="!!questionnaire.id">
+                                <div class="table-filter-row header" ng-switch="!!questionnaire.id">
                                     <div ng-switch-when="true" class="text-center">
                                         <div class="input-group input-group-sm">
                                             <div class="input-group-addon"><i class="fa fa-fw fa-gims-questionnaire"></i></div>
@@ -249,7 +249,7 @@
                                 </div>
 
                                 <!-- Survey's code row -->
-                                <div class="table-filter-row">
+                                <div class="table-filter-row header">
                                     <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.code.$invalid}">
                                         <div class="input-group-addon"><i class="fa fa-fw fa-gims-survey"></i></div>
                                         <input ng-disabled="questionnaire.survey.id || questionnaire.isLoading" type="text" class="text-center" placeholder="Code" ng-model="questionnaire.survey.code" name="code" required ng-class="{'error':questionnaire.errors.duplicateCountryCode || questionnaire.errors.codeAndYearDifferent || questionnaireForm.code.$invalid}" ng-blur="checkAndCompleteQuestionnaire(questionnaire)"/>
@@ -257,7 +257,7 @@
                                 </div>
 
                                 <!-- Survey's year row -->
-                                <div class="table-filter-row">
+                                <div class="table-filter-row header">
                                     <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.year.$invalid}">
                                         <div class="input-group-addon"><i class="fa fa-fw fa-gims-survey"></i></div>
                                         <input ng-disabled="questionnaire.survey.id || questionnaire.isLoading" type="number" class="text-center" placeholder="Year" ng-model="questionnaire.survey.year" name="year" min="1980" max="2015" size="4" required ng-class="{'error': questionnaire.errors.codeAndYearDifferent || questionnaireForm.year.$invalid}" ng-blur="checkAndCompleteQuestionnaire(questionnaire)"/>
@@ -265,7 +265,7 @@
                                 </div>
 
                                 <!-- Population row -->
-                                <div class="table-filter-row" ng-if="data.mode.isSector">
+                                <div class="table-filter-row header" ng-if="data.mode.isSector">
                                     <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.value.$invalid}" tooltip="Leave empty to use official population data">
                                         <div class="input-group-addon"><i class="fa fa-fw" ng-class="{'fa-gims-population':!questionnaire.populations[data.part.id].isLoading,'fa-gims-loading':questionnaire.populations[data.part.id].isLoading}"></i></div>
                                         <input  type="number"
@@ -282,7 +282,7 @@
                                 </div>
 
                                 <!-- Label for questionnaire comments -->
-                                <div class="table-filter-row large" ng-if="data.showQuestionnaireComments">
+                                <div class="table-filter-row header large" ng-if="data.showQuestionnaireComments">
                                     <div class="input-group input-group-sm" >
                                         <span class="input-group-addon"><i class="fa fa-comment"></i></span>
                                         <textarea class="form-control"
