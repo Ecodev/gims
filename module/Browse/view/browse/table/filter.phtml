@@ -220,7 +220,7 @@
 
                                 <!-- mark new questionnaire / is loading -->
                                 <a class="btn btn-sm" ng-if="!questionnaire.id || questionnaire.isLoading" tooltip="New survey" tooltip-placement="left" ><i class="fa fa-lg" ng-class="{'fa-asterisk':!questionnaire.isLoading, 'fa-gims-loading':questionnaire.isLoading}"></i></a>
-                                <span><gims-questionnaire-menu questionnaire="questionnaire"></gims-questionnaire-menu></span>
+                                <span><gims-questionnaire-menu></gims-questionnaire-menu></span>
                             </div>
 
                             <ng-form name="questionnaireForm">
@@ -311,7 +311,7 @@
                                     </ng-form>
                                 </div>
                                 <div class="filter-value" gims-select-token questionnaire="questionnaire" filter="filter" part="data.part" question="questionnaire.survey.questions[filter.id]">
-                                    <gims-cell questionnaire="questionnaire" filter="filter" part="data.part"></gims-cell>
+                                    <gims-cell></gims-cell>
                                 </div>
                             </div>
 

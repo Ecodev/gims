@@ -7,9 +7,6 @@ angular.module('myApp.directives').directive('gimsQuestionnaireMenu', function($
                 '        <i class="fa fa-angle-down"></i>' +
                 '    </button><span class="input-group-btn">' +
                 '</div>',
-        scope: {
-            questionnaire: '='
-        },
         link: function(scope, element) {
 
             var button = element.find('button');
