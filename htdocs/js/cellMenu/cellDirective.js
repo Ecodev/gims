@@ -45,7 +45,6 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
                 '    />' +
                 '    <span class="input-group-addon"><i class="unit-icon fa fa-fw">%</i></span>' +
                 '</div>',
-        replace: true,
         link: function(scope, element) {
 
             var input = element.find('input');
