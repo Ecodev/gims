@@ -16,7 +16,8 @@ angular.module('myApp', [
     'ui.ace',
     'angulartics',
     'angulartics.google.analytics',
-    'ui.sortable'
+    'ui.sortable',
+    'vs-repeat'
 ]).
         config(function($routeProvider, $locationProvider, RestangularProvider, $httpProvider, requestNotificationProvider) {
             'use strict';

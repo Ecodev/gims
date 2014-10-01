@@ -63,13 +63,19 @@ angular.module('myApp.services').provider('$dropdown', function() {
                     }
 
                     // Create and append element
-                    var dopdownDomElement = $compile(tplAndVars[0])(dropdownScope);
-                    dropdownOptions.button.after(dopdownDomElement);
+                    var dropdownDomElement = $compile(tplAndVars[0])(dropdownScope);
+                    var offset = dropdownOptions.button.offset();
+                    $('body').append(dropdownDomElement);
+                    dropdownDomElement.css({
+                        position: 'absolute',
+                        top: offset.top,
+                        left: offset.left
+                    });
 
                     // Prepare function to close dropdown
                     dropdownInstance.close = function(result) {
                         dropdownScope.$destroy();
-                        dopdownDomElement.remove();
+                        dropdownDomElement.remove();
                         resultDeferred.resolve(result);
                     };
 

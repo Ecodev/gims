@@ -35,9 +35,11 @@
 
         <!-- Edit questionnaire comment, display an additionnal column -->
         <li ng-if="data.mode.isContribute">
-            <a ng-click="data.selectedQuestionnaireForComments = questionnaire;" href>
+            <a ng-click="data.showQuestionnaireComments = !data.showQuestionnaireComments;" href>
                 <i class="fa fa-comment fa-fw"></i>
-                Edit survey comments
+                <span ng-if="data.showQuestionnaireComments">Hide</span>
+                <span ng-if="!data.showQuestionnaireComments">Show</span>
+                questionnaire comments
             </a>
         </li>
 

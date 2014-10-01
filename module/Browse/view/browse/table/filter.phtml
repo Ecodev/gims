@@ -58,20 +58,20 @@
                             </tab>
                             <tab heading="Filter's children">
                                 <gims-filter
-                                        model="data.filter"
-                                        name="filter"
-                                        show-selection-path="true"
-                                        disabled="isLoading">
+                                    model="data.filter"
+                                    name="filter"
+                                    show-selection-path="true"
+                                    disabled="isLoading">
                                 </gims-filter>
                             </tab>
                             <tab heading="Filters ({{data.filters.length}})">
                                 <gims-filter
-                                        model="data.filters"
-                                        name="filters"
-                                        query-params="filterFields"
-                                        show-selection-path="true"
-                                        disabled="isLoading"
-                                        multiple>
+                                    model="data.filters"
+                                    name="filters"
+                                    query-params="filterFields"
+                                    show-selection-path="true"
+                                    disabled="isLoading"
+                                    multiple>
                                 </gims-filter>
                             </tab>
                         </tabset>
@@ -92,13 +92,13 @@
                             <tabset>
                                 <tab heading="Country">
                                     <gims-select
-                                            model="data.country"
-                                            api="country"
-                                            queryparams="countryParams"
-                                            placeholder="Select a country"
-                                            change-url="false"
-                                            disabled="isLoading"
-                                            style="width: 100%">
+                                        model="data.country"
+                                        api="country"
+                                        queryparams="countryParams"
+                                        placeholder="Select a country"
+                                        change-url="false"
+                                        disabled="isLoading"
+                                        style="width: 100%">
                                     </gims-select>
                                 </tab>
                                 <tab heading="Survey" ng-if="!data.mode.isSector">
@@ -117,14 +117,14 @@
                                 </tab>
                                 <tab heading="Questionnaires ({{data.questionnaires.length}})" ng-if="!data.mode.isSector">
                                     <gims-select
-                                            model="data.questionnaires"
-                                            name="questionnaires"
-                                            api="questionnaire"
-                                            queryparams="questionnaireParams"
-                                            placeholder="Select questionnaires"
-                                            disabled="isLoading"
-                                            multiple
-                                            style="width: 100%">
+                                        model="data.questionnaires"
+                                        name="questionnaires"
+                                        api="questionnaire"
+                                        queryparams="questionnaireParams"
+                                        placeholder="Select questionnaires"
+                                        disabled="isLoading"
+                                        multiple
+                                        style="width: 100%">
                                     </gims-select>
                                 </tab>
                             </tabset>
@@ -142,32 +142,76 @@
 
 </div>
 
-
-
 <!-- Table of filters, questionnaires and answers. Display in full width when there are too much elements -->
 <div disable-animate ng-if="(data.mode.isSector && data.filter) || data.filters.length && (data.questionnaires.length || data.mode.isContribute)" class="container gims-full-width-container">
 
     <div class="row">
         <div class="col-md-12">
             <form name="answersForm" novalidate>
-                <table class="table table-bordered table-condensed table-filter" ng-class="{'is-computing': data.isComputing}">
 
-                    <!-- Head part : including country, survey code and survey year -->
-                    <tbody>
 
-                        <!-- Action buttons (first row) -->
-                        <tr>
-                            <!-- Add a new empty questionnaire -->
-                            <td style="width:350px">
-                                <a class="btn btn-default btn-sm"
-                                   ng-click="addQuestionnaire();"
-                                   ng-if="data.mode.isContribute">
-                                    <i class="fa fa-gims-add"></i> Add new questionnaire
-                                </a>
-                            </td>
+                <div class="table-filter" ng-class="{'is-computing': data.isComputing}">
 
-                            <td ng-repeat="questionnaire in data.questionnaires track by $index" ng-class="{'showLabels': questionnaire.showLabels}">
+                    <!-- First column for filters -->
+                    <div class="column column-filter">
 
+                        <div class="table-filter-row">
+                            <button class="btn btn-default btn-sm" ng-click="addQuestionnaire();" ng-if="data.mode.isContribute">
+                                <i class="fa fa-gims-add"></i> Add new questionnaire
+                            </button>
+                        </div>
+                        <div class="table-filter-row"></div>
+                        <div class="table-filter-row"></div>
+                        <div class="table-filter-row" ng-if="data.mode.isSector"></div>
+                        <div class="table-filter-row">
+                            <button class="btn btn-default btn-sm pull-right" ng-if="data.questionnaires.length > 1" ng-click="orderQuestionnaires(false)">
+                                <i class="fa fa-sort-amount-asc fa-rotate-270"></i> Sort by year
+                            </button>
+                        </div>
+                        <div class="table-filter-row large" ng-if="data.showQuestionnaireComments"></div>
+
+
+                        <div class="table-filter-row" ng-repeat="filter in data.filters track by $index" ng-class="{'active':data.mode.isSector && filter.level < 2}">
+
+                            <span class="btn btn-default btn-xs removeButton" style="vertical-align:top;" ng-click="removeFilter(filter)" tooltip="Hide this row and its children" tooltip-placement="right"><i class="fa fa-times"></i></span>
+
+                            <span ng-if="isValidId(filter) || data.mode.isSector && filter.level != 1" ng-class="{'strong':filter.level == data.filters[0].level && !filter.sectorChild}" style="margin-left:{{(filter.level - data.filters[0].level) * 2}}em;">
+                                <i class="fa" style="color:{{filter.color}}" ng-class="{'fa-gims-filter':!filter.isLoading && isValidId(filter), 'fa-asterisk text-primary':!filter.isLoading && !isValidId(filter), 'fa-gims-loading':filter.isLoading}"></i>
+                                {{filter.name}}
+                                <a href="/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i></a>
+                            </span>
+                            <div ng-if="!isValidId(filter) && data.mode.isSector && filter.level == 1" style="display:inline-block;vertical-align:top;width:80%;margin-left:{{(filter.level - data.filters[0].level) * 2}}em;">
+                                <ng-form name="filterName" class="input-group" ng-class="{'has-error':filterName.$invalid}">
+                                    <span class="input-group-addon"><i class="fa" ng-class="{'fa-asterisk':!filter.isLoading,'fa-gims-loading':filter.isLoading,'text-primary':!filterName.$invalid}"></i></span>
+                                    <input type="text" name="name" ng-model="filter.name" placeholder="Facility name" required />
+                                </ng-form>
+                            </div>
+                        </div>
+
+                        <div class="table-filter-row" ng-if="!data.mode.isSector">
+                            <a href ng-click="toggleShowQuestionnaireUsages()">
+                                <span ng-if="!data.showQuestionnaireUsages">Show Calculations / Estimations / Ratios</span>
+                                <span ng-if="data.showQuestionnaireUsages">Hide Calculations / Estimations / Ratios</span>
+                            </a>
+                        </div>
+
+                        <!-- QuestionnaireUsage's rule name column-->
+                        <div class="table-filter-row" ng-if="data.showQuestionnaireUsages" ng-repeat="rule in data.questionnaireUsages[data.part.id] track by $index">
+                            <i class="fa fa-gims-rule"></i> {{rule.name}}
+                        </div>
+
+                        <div class="table-filter-row" ng-if="data.mode.isSector">
+                            <button class="btn btn-default btn-sm" ng-click="addEquipment();" ng-class="{'disabled': getFiltersByLevel(0).length != 1}">
+                                <i class="fa fa-gims-add"></i> Add new facility
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- All questionnaire columns -->
+                    <div vs-repeat vs-horizontal vs-size-property="width" vs-repeat-trigger="myevent" style="height: {{ (7 + data.filters.length + data.questionnaireUsages[data.part.id].length) * 46}}px" >
+                        <div gims-resize-for-labels class="column" ng-repeat="questionnaire in data.questionnaires track by $index">
+
+                            <div class="table-filter-row">
                                 <!-- Display errors on questionnaires / surveys integrity data structure (like two different years for the same survey or two countries for the same survey -->
                                 <a class="btn btn-warning btn-xs" ng-if="questionnaire.errors.duplicateCountryCode" tooltip="Surveys may not have the same country more than once" tooltip-placement="left"><i class="fa fa-warning"></i></a>
                                 <a class="btn btn-warning btn-xs" ng-if="questionnaire.errors.codeAndYearDifferent" tooltip="Surveys with the same code may have the same year" tooltip-placement="left"><i class="fa fa-warning"></i></a>
@@ -177,203 +221,116 @@
                                 <!-- mark new questionnaire / is loading -->
                                 <a class="btn btn-sm" ng-if="!questionnaire.id || questionnaire.isLoading" tooltip="New survey" tooltip-placement="left" ><i class="fa fa-lg" ng-class="{'fa-asterisk':!questionnaire.isLoading, 'fa-gims-loading':questionnaire.isLoading}"></i></a>
                                 <span><gims-questionnaire-menu questionnaire="questionnaire"></gims-questionnaire-menu></span>
-                            </td>
-                        </tr>
+                            </div>
 
-                        <!-- Questionnaire's geoname row-->
-                        <tr class="active" ng-if="data.questionnaires.length">
-                            <td></td>
-                            <td ng-if="data.selectedQuestionnaireForLabels" class="text-center">{{data.selectedQuestionnaireForLabels.geoname.country.name}} </td>
-                            <td ng-repeat="questionnaire in data.questionnaires track by $index">
-                                <div ng-switch="!!questionnaire.id">
+                            <ng-form name="questionnaireForm">
+
+                                <!-- Questionnaire's geoname row-->
+                                <div class="table-filter-row" ng-switch="!!questionnaire.id">
                                     <div ng-switch-when="true" class="text-center">
-                                        <div name="questionnaireForm" class="input-group input-group-sm">
+                                        <div class="input-group input-group-sm">
                                             <div class="input-group-addon"><i class="fa fa-fw fa-gims-questionnaire"></i></div>
                                             <input ng-disabled="true" type="text" class="text-center" placeholder="Country" ng-model="questionnaire.geoname.country.name" name="country" />
                                         </div>
                                     </div>
                                     <div ng-switch-when="false" class="has-error">
-                                        <ng-form name="questionnaireForm">
-                                            <gims-select
-                                                required
-                                                disabled="data.mode.isSector || questionnaire.id || questionnaire.isLoading"
-                                                api="country"
-                                                model="questionnaire.geoname.country"
-                                                queryparams="countryParams"
-                                                placeholder="Country"
-                                                change-url="false"
-                                                style="width: 100%"
-                                                ng-change="checkAndCompleteQuestionnaire(questionnaire)">
-                                            </gims-select>
-                                        </ng-form>
+                                        <gims-select
+                                            required
+                                            disabled="data.mode.isSector || questionnaire.id || questionnaire.isLoading"
+                                            api="country"
+                                            model="questionnaire.geoname.country"
+                                            queryparams="countryParams"
+                                            placeholder="Country"
+                                            change-url="false"
+                                            style="width: 100%"
+                                            ng-change="checkAndCompleteQuestionnaire(questionnaire)">
+                                        </gims-select>
                                     </div>
                                 </div>
-                            </td>
-                        </tr>
 
-                        <!-- Survey's code row -->
-                        <tr class="active" ng-if="data.questionnaires.length">
-                            <td></td>
-                            <td ng-if="data.selectedQuestionnaireForLabels" class="text-center">{{data.selectedQuestionnaireForLabels.survey.code}}</td>
-                            <td ng-repeat="questionnaire in data.questionnaires track by $index" class="text-center">
-                                <ng-form name="questionnaireForm" class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.code.$invalid}">
-                                    <div class="input-group-addon"><i class="fa fa-fw fa-gims-survey"></i></div>
-                                    <input ng-disabled="questionnaire.survey.id || questionnaire.isLoading" type="text" class="text-center" placeholder="Code" ng-model="questionnaire.survey.code" name="code" required ng-class="{'error':questionnaire.errors.duplicateCountryCode || questionnaire.errors.codeAndYearDifferent || questionnaireForm.code.$invalid}" ng-blur="checkAndCompleteQuestionnaire(questionnaire)"/>
-                                </ng-form>
-                            </td>
-                        </tr>
+                                <!-- Survey's code row -->
+                                <div class="table-filter-row">
+                                    <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.code.$invalid}">
+                                        <div class="input-group-addon"><i class="fa fa-fw fa-gims-survey"></i></div>
+                                        <input ng-disabled="questionnaire.survey.id || questionnaire.isLoading" type="text" class="text-center" placeholder="Code" ng-model="questionnaire.survey.code" name="code" required ng-class="{'error':questionnaire.errors.duplicateCountryCode || questionnaire.errors.codeAndYearDifferent || questionnaireForm.code.$invalid}" ng-blur="checkAndCompleteQuestionnaire(questionnaire)"/>
+                                    </div>
+                                </div>
 
-                        <!-- Survey's year row -->
-                        <tr class="active" ng-if="data.questionnaires.length">
-                            <td>
-                                <button class="btn btn-default btn-sm pull-right" ng-if="data.questionnaires.length > 1" ng-click="orderQuestionnaires(false)"><i class="fa fa-sort-amount-asc fa-rotate-270"></i> Sort by year</button>
-                            </td>
-                            <td ng-if="data.selectedQuestionnaireForLabels" class="text-center">{{data.selectedQuestionnaireForLabels.survey.year}}</td>
-                            <td ng-repeat="questionnaire in data.questionnaires track by $index">
-                                <ng-form name="questionnaireForm" class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.year.$invalid}">
-                                    <div class="input-group-addon"><i class="fa fa-fw fa-gims-survey"></i></div>
-                                    <input ng-disabled="questionnaire.survey.id || questionnaire.isLoading" type="number" class="text-center" placeholder="Year" ng-model="questionnaire.survey.year" name="year" min="1980" max="2015" size="4" required ng-class="{'error': questionnaire.errors.codeAndYearDifferent || questionnaireForm.year.$invalid}" ng-blur="checkAndCompleteQuestionnaire(questionnaire)"/>
-                               </ng-form>
-                           </td>
-                        </tr>
+                                <!-- Survey's year row -->
+                                <div class="table-filter-row">
+                                    <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.year.$invalid}">
+                                        <div class="input-group-addon"><i class="fa fa-fw fa-gims-survey"></i></div>
+                                        <input ng-disabled="questionnaire.survey.id || questionnaire.isLoading" type="number" class="text-center" placeholder="Year" ng-model="questionnaire.survey.year" name="year" min="1980" max="2015" size="4" required ng-class="{'error': questionnaire.errors.codeAndYearDifferent || questionnaireForm.year.$invalid}" ng-blur="checkAndCompleteQuestionnaire(questionnaire)"/>
+                                    </div>
+                                </div>
 
-                        <!-- Population row -->
-                        <tr class="active" ng-if="data.questionnaires.length && data.mode.isSector">
-                            <td>
-                            </td>
-                            <td ng-if="data.selectedQuestionnaireForLabels"></td>
-                            <td class="text-center" ng-repeat="questionnaire in data.questionnaires track by $index">
-                                <ng-form name="populationForm" class="input-group input-group-sm" ng-class="{'has-error':populationForm.value.$invalid}" tooltip="Leave empty to use official population data">
-                                    <div class="input-group-addon"><i class="fa fa-fw" ng-class="{'fa-gims-population':!questionnaire.populations[data.part.id].isLoading,'fa-gims-loading':questionnaire.populations[data.part.id].isLoading}"></i></div>
-                                    <input  type="number"
-                                            class="text-center"
-                                            placeholder="Population"
-                                            min="0"
-                                            name="value"
-                                            ng-focus="setInitialValue(questionnaire.populations[data.part.id], questionnaire.populations[data.part.id].population)"
-                                            ng-blur="savePopulation(questionnaire, questionnaire.populations[data.part.id])"
-                                            ng-model="questionnaire.populations[data.part.id].population"
-                                            ng-disabled="questionnaire.isLoading"
-                                            />
-                                </ng-form>
-                            </td>
-                        </tr>
+                                <!-- Population row -->
+                                <div class="table-filter-row" ng-if="data.mode.isSector">
+                                    <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.value.$invalid}" tooltip="Leave empty to use official population data">
+                                        <div class="input-group-addon"><i class="fa fa-fw" ng-class="{'fa-gims-population':!questionnaire.populations[data.part.id].isLoading,'fa-gims-loading':questionnaire.populations[data.part.id].isLoading}"></i></div>
+                                        <input  type="number"
+                                                class="text-center"
+                                                placeholder="Population"
+                                                min="0"
+                                                name="value"
+                                                ng-focus="setInitialValue(questionnaire.populations[data.part.id], questionnaire.populations[data.part.id].population)"
+                                                ng-blur="savePopulation(questionnaire, questionnaire.populations[data.part.id])"
+                                                ng-model="questionnaire.populations[data.part.id].population"
+                                                ng-disabled="questionnaire.isLoading"
+                                                />
+                                    </div>
+                                </div>
 
-                    </tbody>
-                    <!-- End of table header-->
-
-                    <!-- Label for questionnaire comments and close btn -->
-                    <tbody ng-if="data.selectedQuestionnaireForComments">
-                        <tr>
-                            <td>
-                                <a class="btn btn-default btn-xs" ng-click="data.selectedQuestionnaireForComments = null"><i class="fa fa-times"></i></a>
-                                <i class="fa fa-comment"></i> Comments for {{data.selectedQuestionnaireForComments.geoname.country.name}}, {{data.selectedQuestionnaireForComments.survey.code}}, {{data.selectedQuestionnaireForComments.survey.year}}
-                            </td>
-
-                            <td ng-attr-colspan="{{!data.selectedQuestionnaireForLabels && data.questionnaires.length || data.selectedQuestionnaireForLabels && (data.questionnaires.length+1)}}" ng-if="data.selectedQuestionnaireForComments" class="text-center">
-
-                                <ng-form name="labelForm" ng-if="data.mode.isContribute">
-                                    <div class="input-group input-group-sm">
+                                <!-- Label for questionnaire comments -->
+                                <div class="table-filter-row large" ng-if="data.showQuestionnaireComments">
+                                    <div class="input-group input-group-sm" >
                                         <span class="input-group-addon"><i class="fa fa-comment"></i></span>
                                         <textarea class="form-control"
-                                               ng-model="data.selectedQuestionnaireForComments.comments"
-                                               ng-focus="data.selectedQuestionnaireForComments.initialComments = data.selectedQuestionnaireForComments.comments"
-                                               ng-blur="saveComment(data.selectedQuestionnaireForComments)"
-                                               name="label">
+                                                  ng-model="questionnaire.comments"
+                                                  ng-focus="questionnaire.initialComments = questionnaire.comments"
+                                                  ng-blur="saveComment(questionnaire)"
+                                                  name="label">
                                         </textarea>
                                     </div>
-                                </ng-form>
-                            </td>
-                        </tr>
-                    </tbody>
+                                </div>
+                            </ng-form>
 
-                    <tbody>
-                        <!-- Filters and answers rows -->
-                        <tr ng-repeat="filter in data.filters track by $index" ng-class="{'active':data.mode.isSector && filter.level < 2}">
-
-                            <!-- Filter name column-->
-                            <td class="filter">
-                                <span class="btn btn-default btn-xs removeButton" style="vertical-align:top;" ng-click="removeFilter(filter)" tooltip="Hide this row and its children" tooltip-placement="right"><i class="fa fa-times"></i></span>
-
-                                <span ng-if="isValidId(filter) || data.mode.isSector && filter.level != 1" ng-class="{'strong':filter.level == data.filters[0].level && !filter.sectorChild}" style="margin-left:{{(filter.level - data.filters[0].level) * 2}}em;">
-                                    <i class="fa" style="color:{{filter.color}}" ng-class="{'fa-gims-filter':!filter.isLoading && isValidId(filter), 'fa-asterisk text-primary':!filter.isLoading && !isValidId(filter), 'fa-gims-loading':filter.isLoading}"></i>
-                                    {{filter.name}}
-                                    <a href="/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i></a>
-                                </span>
-                                <div ng-if="!isValidId(filter) && data.mode.isSector && filter.level == 1" style="display:inline-block;vertical-align:top;width:80%;margin-left:{{(filter.level - data.filters[0].level) * 2}}em;">
-                                    <ng-form name="filterName" class="input-group" ng-class="{'has-error':filterName.$invalid}">
-                                        <span class="input-group-addon"><i class="fa" ng-class="{'fa-asterisk':!filter.isLoading,'fa-gims-loading':filter.isLoading,'text-primary':!filterName.$invalid}"></i></span>
-                                        <input type="text" name="name" ng-model="filter.name" placeholder="Facility name" required />
+                            <!-- Filter values (and question labels) -->
+                            <div ng-repeat="filter in data.filters track by $index" class="table-filter-row">
+                                <div class="question-label" gims-if="questionnaire.showLabels">
+                                    <ng-form name="labelForm">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa" ng-class="{'fa-question':!questionnaire.survey.questions[filter.id].isLoading,'fa-gims-loading':questionnaire.survey.questions[filter.id].isLoading}"></i></span>
+                                            <input class="form-control"
+                                                   ng-model="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]"
+                                                   ng-blur="saveQuestion(questionnaire.survey.questions[filter.id], questionnaire)"
+                                                   name="label"
+                                                   ng-required="questionnaire.survey.questions[filter.id].answers[part.id][questionnaire.survey.questions[filter.id].value]"
+                                                   ng-class="{'error': labelForm.label.$invalid}"/>
+                                        </div>
                                     </ng-form>
                                 </div>
-                            </td>
-
-                            <!-- Questionnaires columns -->
-                            <td ng-repeat="questionnaire in data.questionnaires track by $index">
-                                <div class="row">
-                                    <div class="col-md-8" gims-if="questionnaire.showLabels">
-                                        <ng-form name="labelForm">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-addon"><i class="fa" ng-class="{'fa-question':!data.selectedQuestionnaireForLabels.survey.questions[filter.id].isLoading,'fa-gims-loading':data.selectedQuestionnaireForLabels.survey.questions[filter.id].isLoading}"></i></span>
-                                                <input class="form-control"
-                                                       ng-model="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]"
-                                                       ng-blur="saveQuestion(questionnaire.survey.questions[filter.id], questionnaire)"
-                                                       name="label"
-                                                       ng-required="questionnaire.survey.questions[filter.id].answers[part.id][questionnaire.survey.questions[filter.id].value]"
-                                                       ng-class="{'error': labelForm.label.$invalid}"/>
-                                            </div>
-                                        </ng-form>
-                                    </div>
-                                    <div class="col-md-12" gims-resize-for-labels gims-select-token questionnaire="questionnaire" filter="filter" part="data.part" question="questionnaire.survey.questions[filter.id]">
-                                        <gims-cell questionnaire="questionnaire" filter="filter" part="data.part"></gims-cell>
-                                    </div>
+                                <div class="filter-value" gims-select-token questionnaire="questionnaire" filter="filter" part="data.part" question="questionnaire.survey.questions[filter.id]">
+                                    <gims-cell questionnaire="questionnaire" filter="filter" part="data.part"></gims-cell>
                                 </div>
-                            </td>
-                        </tr>
-                        <tr ng-if="!data.mode.isSector">
-                            <td  colspan="{{data.questionnaires.length + 1}}">
-                                <a href ng-click="toggleShowQuestionnaireUsages()">
-                                    <span ng-if="!data.showQuestionnaireUsages">Show Calculations / Estimations / Ratios</span>
-                                    <span ng-if="data.showQuestionnaireUsages">Hide Calculations / Estimations / Ratios</span>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr ng-if="data.showQuestionnaireUsages" ng-repeat="rule in data.questionnaireUsages[data.part.id] track by $index">
+                            </div>
 
-                            <!-- QuestionnaireUsage's rule name column-->
-                            <td>
-                                <i class="fa fa-gims-rule"></i> {{rule.name}}
-                            </td>
-
-                            <!-- QuestionnaireUsage's value name column -->
-                            <td ng-repeat="questionnaire in data.questionnaires track by $index" style="text-align: center;" >
+                            <!-- QuestionnaireUsage's values -->
+                            <div class="table-filter-row"></div>
+                            <div class="table-filter-row text-center" ng-if="data.showQuestionnaireUsages" ng-repeat="rule in data.questionnaireUsages[data.part.id] track by $index">
                                 <span ng-if="rule.values[questionnaire.id]" gims-select-token part="data.part" questionnaire="questionnaire" rule="rule.values[questionnaire.id]">
-                                    <!--@todo: actually don't work because we dont receive usage on request -->
-                                    <a href gims-select-usage="rule.values[questionnaire.id].usage"><i class="fa fa-pencil" tooltip="Edit rule"></i></a><!--="/admin/rule/edit/{{rule.values[questionnaire.id].id}}"-->
                                     {{rule.values[questionnaire.id].value}}
+                                    <a href gims-select-usage="rule.values[questionnaire.id].usage"><i class="fa fa-pencil" tooltip="Edit rule"></i></a><!--="/admin/rule/edit/{{rule.values[questionnaire.id].id}}"-->
                                 </span>
-                            </td>
-                        </tr>
+                            </div>
 
-                        <tr ng-if="data.showQuestionnaireUsages && data.mode.isContribute">
-                            <td>
-                            </td>
-                            <td ng-repeat="questionnaire in data.questionnaires track by $index" style="text-align: center;" >
-                                <a class="btn btn-default btn-sm" href gims-add-usage questionnaire="questionnaire" part="data.part"><i class="fa fa-gims-add"></i> Add a rule</a>
-                            </td>
-                        </tr>
-
-                        <tr ng-if="data.mode.isSector">
-                            <td  colspan="{{data.questionnaires.length + 1}}">
-                                <a class="btn btn-default btn-sm"
-                                   ng-click="addEquipment();"
-                                   ng-class="{'disabled': getFiltersByLevel(0).length != 1}">
-                                    <i class="fa fa-gims-add"></i> Add new facility
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                            <!-- Button to add QuestionnaireUsage -->
+                            <div class="table-filter-row text-center" ng-if="data.showQuestionnaireUsages && data.mode.isContribute">
+                                <button class="btn btn-default btn-sm" gims-add-usage questionnaire="questionnaire" part="data.part"><i class="fa fa-gims-add"></i> Add a rule</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </form>
         </div>

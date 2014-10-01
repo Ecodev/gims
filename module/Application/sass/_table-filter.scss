@@ -1,33 +1,67 @@
+$padding: 5px;
+$border: 1px;
 
 .table-filter {
-    table-layout:fixed;
-    margin-right:50px;
-    margin-bottom:250px;
+    display: flex;
+
 
     .input-group-btn {
         padding-left:6px;
     }
 
-    th {
-        text-overflow:ellipsis;
+    [vs-repeat] {
+        overflow: auto;
+        position: relative;
+
     }
 
-    td, th {
-        width: 150px;
+    .column {
+        display: inline-block;
     }
 
-    td.showLabels{
-        width:500px;
-    }
+    .column-filter {
+        flex: 0 0 500px;
 
-    // Show remove button only when hover
-    .filter {
-        .removeButton {
-            visibility: hidden;
+        &:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 464px;
+            z-index: 19;
+            width: 50px;
+            height: 100%;
+            pointer-events: none;
+            box-shadow: 10px -10px 10px -10px;
         }
-        &:hover .removeButton {
-            visibility: visible;
+    }
+
+    .table-filter-row {
+        border-bottom: $border solid $table-border-color;
+        border-right: $border solid $table-border-color;
+        height: $input-height-base + 2 * $padding + 2 * $border;
+        border-collapse: collapse;
+        padding: $padding;
+
+        // Show buttons only when hover
+        .fa-pencil, .removeButton { visibility: hidden; }
+        &:hover .removeButton, &:hover .fa-pencil { visibility: visible; }
+
+        &.large {
+            height: 150px;
+            textarea {
+                height: 140px;
+            }
         }
+    }
+
+    // Those two width should be kept in sync with TableFilter.setQuestionnaireWidth()
+    .filter-value {
+        width: 240px;
+        display: inline-block;
+    }
+    .question-label{
+        width: 300px;
+        display: inline-block;
     }
 }
 

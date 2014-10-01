@@ -233,4 +233,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.cancel = function() {
         $location.url($location.search().returnUrl);
     };
+
+    $rootScope.$on('gims-tablefilter-show-labels-toggled', function() {
+        $scope.$broadcast('vsRepeatTrigger');
+    });
 });
