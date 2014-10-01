@@ -11,6 +11,9 @@ use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
+use Zend\Session\SessionManager;
+use Zend\Session\Config\SessionConfig;
+use Zend\Session\Container;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ConsoleUsageProviderInterface, ServiceProviderInterface, BootstrapListenerInterface
 {
@@ -45,6 +48,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
     public function onBootstrap(EventInterface $e)
     {
         self::$serviceManager = $e->getApplication()->getServiceManager();
+
+        $config = self::$serviceManager->get('Configuration');
+        $sessionConfig = new SessionConfig();
+        $sessionConfig->setOptions($config['session']);
+        $sessionManager = new SessionManager($sessionConfig, null, null);
+        Container::setDefaultManager($sessionManager);
 
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
