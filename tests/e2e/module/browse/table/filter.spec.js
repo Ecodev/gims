@@ -28,7 +28,7 @@ describe('browse/table/filter menu', function() {
     browser.get('/browse/table/filter?questionnaires=2&filters=3,75,27,9,10');
 
     it('should render filter table', function() {
-        expect(element.all(by.css('[ng-view] .table.table-bordered.table-condensed.table-filter')).count()).toBe(1);
+        expect(element.all(by.css('[ng-view] .table-filter')).count()).toBe(1);
     });
 
     it('should have every single type of values', function() {
