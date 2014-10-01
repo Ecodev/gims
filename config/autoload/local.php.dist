@@ -18,7 +18,7 @@ $password = '';
 return array(
     'session' => array(
         'name' => 'gimscookie',
-        'save_path' => '/[**absolute_path_to_project_root**]/data/cache/session',
+        'save_path' => '/[**absolute_path_to_project_root**]/data/session',
         'cookie_httponly' => true
     ),
     'db' => array(
