@@ -16,11 +16,6 @@ $username = 'postgres';
 $password = '';
 
 return array(
-    'session' => array(
-        'name' => 'gimscookie',
-        'save_path' =>  __DIR__ . '/../../data/session',
-        'cookie_httponly' => true
-    ),
     'db' => array(
         'dsn' => "pgsql:dbname=$database;host=localhost",
         'username' => $username,

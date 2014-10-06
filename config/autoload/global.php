@@ -26,4 +26,9 @@ return array(
             'Application\DBAL\Logging\ForwardSQLLogger' => 'Application\Service\ForwardSQLLoggerFactory',
         ),
     ),
+    'session' => array(
+        'name' => 'gimscookie',
+        'save_path' => __DIR__ . '/../../data/session',
+        'cookie_httponly' => true
+    ),
 );
