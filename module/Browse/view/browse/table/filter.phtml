@@ -135,11 +135,6 @@
         </div>
     </form>
 
-    <!-- Tabs parts -->
-    <tabset class="nav-data-centered" ng-if="(data.mode.isSector && data.filter) || data.filters.length && (data.questionnaires.length || data.mode.isContribute)">
-        <tab ng-repeat="part in data.parts" heading="{{part.name}}" select="data.part = part"></tab>
-    </tabset>
-
 </div>
 
 <!-- Table of filters, questionnaires and answers. Display in full width when there are too much elements -->
@@ -156,7 +151,7 @@
                     <div class="column column-filter">
 
                         <div class="table-filter-row">
-                            <button class="btn btn-default btn-sm" ng-click="addQuestionnaire();" ng-if="data.mode.isContribute">
+                            <button class="btn btn-default btn-sm pull-right" ng-click="addQuestionnaire();" ng-if="data.mode.isContribute">
                                 <i class="fa fa-gims-add"></i> Add new questionnaire
                             </button>
                         </div>
@@ -170,15 +165,16 @@
                         </div>
                         <div class="table-filter-row header large" ng-if="data.showQuestionnaireComments"></div>
 
+                        <div class="table-filter-row"></div>
 
-                        <div class="table-filter-row" ng-repeat="filter in data.filters track by $index" ng-class="{'active':data.mode.isSector && filter.level < 2}">
+                        <div class="table-filter-row filter-label" ng-repeat="filter in data.filters track by $index" ng-class="{'active':data.mode.isSector && filter.level < 2}">
 
-                            <span class="btn btn-default btn-xs removeButton" style="vertical-align:top;" ng-click="removeFilter(filter)" tooltip="Hide this row and its children" tooltip-placement="right"><i class="fa fa-times"></i></span>
-
-                            <span ng-if="isValidId(filter) || data.mode.isSector && filter.level != 1" ng-class="{'strong':filter.level == data.filters[0].level && !filter.sectorChild}" style="margin-left:{{(filter.level - data.filters[0].level) * 2}}em;">
+                            <span ng-if="isValidId(filter) || data.mode.isSector && filter.level != 1" ng-class="{'strong':filter.level == data.filters[0].level && !filter.sectorChild}" class="text-2em" style="margin-left:{{(filter.level - data.filters[0].level) * 2}}em;">
                                 <i class="fa" style="color:{{filter.color}}" ng-class="{'fa-gims-filter':!filter.isLoading && isValidId(filter), 'fa-asterisk text-primary':!filter.isLoading && !isValidId(filter), 'fa-gims-loading':filter.isLoading}"></i>
                                 {{filter.name}}
-                                <a href="/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i></a>
+                                <a class="btn btn-link" href="/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i></a>
+                                <span class="btn btn-link removeButton" style="vertical-align:top;" ng-click="removeFilter(filter)" tooltip="Hide this row and its children" tooltip-placement="right"><i class="fa fa-times"></i></span>
+
                             </span>
                             <div ng-if="!isValidId(filter) && data.mode.isSector && filter.level == 1" style="display:inline-block;vertical-align:top;width:80%;margin-left:{{(filter.level - data.filters[0].level) * 2}}em;">
                                 <ng-form name="filterName" class="input-group" ng-class="{'has-error':filterName.$invalid}">
@@ -189,14 +185,15 @@
                         </div>
 
                         <div class="table-filter-row" ng-if="!data.mode.isSector">
-                            <a href ng-click="toggleShowQuestionnaireUsages()">
+                            <a href class='btn btn-default' ng-click="toggleShowQuestionnaireUsages()">
+                                <i class="fa fa-angle-down"></i>
                                 <span ng-if="!data.showQuestionnaireUsages">Show Calculations / Estimations / Ratios</span>
                                 <span ng-if="data.showQuestionnaireUsages">Hide Calculations / Estimations / Ratios</span>
                             </a>
                         </div>
 
                         <!-- QuestionnaireUsage's rule name column-->
-                        <div class="table-filter-row" ng-if="data.showQuestionnaireUsages" ng-repeat="rule in data.questionnaireUsages[data.part.id] track by $index">
+                        <div class="table-filter-row text-2em" ng-if="data.showQuestionnaireUsages" ng-repeat="rule in data.questionnaireUsages track by $index">
                             <i class="fa fa-gims-rule"></i> {{rule.name}}
                         </div>
 
@@ -206,9 +203,8 @@
                             </button>
                         </div>
                     </div>
-
                     <!-- All questionnaire columns -->
-                    <div vs-repeat vs-horizontal vs-size-property="width" vs-repeat-trigger="myevent" style="height: {{ (7 + data.filters.length + data.questionnaireUsages[data.part.id].length) * 46}}px" >
+                    <div vs-repeat vs-horizontal vs-size-property="width" vs-repeat-trigger="myevent" style="height: {{ (8 + data.filters.length + data.questionnaireUsages.length) * 46}}px" >
                         <div gims-resize-for-labels class="column" ng-repeat="questionnaire in data.questionnaires track by $index">
 
                             <div class="table-filter-row">
@@ -295,9 +291,14 @@
                                 </div>
                             </ng-form>
 
+                            <div class="table-filter-row">
+                                <div gims-if="questionnaire.showLabels" class="question-label"></div>
+                                <div ng-repeat="part in data.parts" class="filter-value text-center text-muted text-3em"><small>{{part.name}}</small></div>
+                            </div>
+
                             <!-- Filter values (and question labels) -->
                             <div ng-repeat="filter in data.filters track by $index" class="table-filter-row">
-                                <div class="question-label" gims-if="questionnaire.showLabels">
+                                <div gims-if="questionnaire.showLabels" class="question-label">
                                     <ng-form name="labelForm">
                                         <div class="input-group input-group-sm">
                                             <span class="input-group-addon"><i class="fa" ng-class="{'fa-question':!questionnaire.survey.questions[filter.id].isLoading,'fa-gims-loading':questionnaire.survey.questions[filter.id].isLoading}"></i></span>
@@ -310,23 +311,34 @@
                                         </div>
                                     </ng-form>
                                 </div>
-                                <div class="filter-value" gims-select-token questionnaire="questionnaire" filter="filter" part="data.part" question="questionnaire.survey.questions[filter.id]">
+                                <div ng-repeat="part in data.parts" class="filter-value" gims-select-token questionnaire="questionnaire" filter="filter" part="part" question="questionnaire.survey.questions[filter.id]">
                                     <gims-cell></gims-cell>
                                 </div>
                             </div>
 
                             <!-- QuestionnaireUsage's values -->
-                            <div class="table-filter-row"></div>
-                            <div class="table-filter-row text-center" ng-if="data.showQuestionnaireUsages" ng-repeat="rule in data.questionnaireUsages[data.part.id] track by $index">
-                                <span ng-if="rule.values[questionnaire.id]" gims-select-token part="data.part" questionnaire="questionnaire" rule="rule.values[questionnaire.id]">
-                                    {{rule.values[questionnaire.id].value}}
-                                    <a href gims-select-usage="rule.values[questionnaire.id].usage"><i class="fa fa-pencil" tooltip="Edit rule"></i></a><!--="/admin/rule/edit/{{rule.values[questionnaire.id].id}}"-->
-                                </span>
+                            <div class="table-filter-row">
+                                <div ng-if="data.showQuestionnaireUsages">
+                                    <div gims-if="questionnaire.showLabels" class="question-label"></div>
+                                    <div ng-repeat="part in data.parts" class="filter-value text-center text-muted text-3em"><small>{{part.name}}</small></div>
+                                </div>
+                            </div>
+                            <div class="table-filter-row text-center" ng-if="data.showQuestionnaireUsages" ng-repeat="rule in data.questionnaireUsages track by $index">
+                                <div class="filter-value filter-value-container text-2em" ng-repeat="part in data.parts" gims-select-token part="part" questionnaire="questionnaire" rule="rule.values[questionnaire.id][part.id]">
+                                    <span ng-if="rule.values[questionnaire.id][part.id]">
+                                        <i class="fa fa-gims-rule text-muted" ng-if="rule.values[questionnaire.id][part.id].value === null"></i>
+                                        {{rule.values[questionnaire.id][part.id].value}}
+                                        <a href gims-select-usage="rule.values[questionnaire.id][part.id].usage"><i class="fa fa-pencil" tooltip="Edit rule"></i></a>
+                                        </span>
+                                        &nbsp;
+                                </div>
                             </div>
 
                             <!-- Button to add QuestionnaireUsage -->
                             <div class="table-filter-row text-center" ng-if="data.showQuestionnaireUsages && data.mode.isContribute">
-                                <button class="btn btn-default btn-sm" gims-add-usage questionnaire="questionnaire" part="data.part"><i class="fa fa-gims-add"></i> Add a rule</button>
+                                <div ng-repeat="part in data.parts" class="filter-value filter-value-container">
+                                    <button class="btn btn-default btn-sm" gims-add-usage questionnaire="questionnaire" part="part"><i class="fa fa-gims-add"></i> Add a rule</button>
+                                </div>
                             </div>
                         </div>
                     </div>

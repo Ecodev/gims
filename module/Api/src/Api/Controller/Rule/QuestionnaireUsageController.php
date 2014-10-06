@@ -22,14 +22,10 @@ class QuestionnaireUsageController extends AbstractChildRestfulController
         $result = [];
         foreach ($questionnaires as $questionnaire) {
             foreach ($questionnaire->getQuestionnaireUsages() as $usage) {
-                $partId = $usage->getPart()->getId();
-                if (!isset($result[$partId])) {
-                    $result[$partId] = [];
-                }
 
                 $ruleName = $usage->getRule()->getName();
-                if (!isset($result[$partId][$ruleName])) {
-                    $result[$partId][$ruleName]['name'] = $ruleName;
+                if (!isset($result[$ruleName])) {
+                    $result[$ruleName]['name'] = $ruleName;
                 }
 
                 $value = $calculator->computeFormulaBeforeRegression($usage);
@@ -37,7 +33,7 @@ class QuestionnaireUsageController extends AbstractChildRestfulController
 
                 $hydrator = new Hydrator();
 
-                $result[$partId][$ruleName]['values'][$usage->getQuestionnaire()->getId()] = [
+                $result[$ruleName]['values'][$usage->getQuestionnaire()->getId()][$usage->getPart()->getId()] = [
                     'id' => $usage->getRule()->getId(),
                     'usage' => $hydrator->extract($usage),
                     'value' => $roundedValue,
@@ -48,15 +44,16 @@ class QuestionnaireUsageController extends AbstractChildRestfulController
         // Sort by rule names and convert associative array to simple array so
         // JSON generated is an array and not an object. This is because JSON
         // objects do not guarantee order
-        foreach ($result as $partId => $rules) {
-            usort($rules, function($rule1, $rule2) {
-                return strcmp($rule1['name'], $rule2['name']);
-            });
+        uksort($result, function ($name1, $name2) {
+            return strcmp($name1, $name2);
+        });
 
-            $result[$partId] = $rules;
+        $finalResult = [];
+        foreach ($result as $rule) {
+            $finalResult[] = $rule;
         }
 
-        return new NumericJsonModel($result);
+        return new NumericJsonModel($finalResult);
     }
 
 }

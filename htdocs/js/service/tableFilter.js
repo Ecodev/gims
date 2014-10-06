@@ -250,9 +250,9 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
      */
     function setQuestionnaireWidth(questionnaire) {
         if (questionnaire.showLabels) {
-            questionnaire.width = 560;
+            questionnaire.width = 775;
         } else {
-            questionnaire.width = 250;
+            questionnaire.width = 470;
         }
     }
 

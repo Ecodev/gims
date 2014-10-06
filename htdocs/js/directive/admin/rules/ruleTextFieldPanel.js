@@ -107,12 +107,16 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
 
             $scope.saveCheckPoint = function() {
                 $scope.originUsage = _.cloneDeep($scope.usage);
-                $scope.form.$setPristine();
+                if ($scope.form) {
+                    $scope.form.$setPristine();
+                }
             };
 
             $scope.resetForm = function() {
                 $scope.usage = _.cloneDeep($scope.originUsage);
-                $scope.form.$setPristine();
+                if ($scope.form) {
+                    $scope.form.$setPristine();
+                }
             };
 
             $scope.saveDuplicate = function() {

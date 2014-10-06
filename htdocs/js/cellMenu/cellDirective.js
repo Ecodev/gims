@@ -41,7 +41,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
                 '        ng-change="updateValidState()"' +
                 '        ng-focus="focus()"' +
                 '        ng-blur="blur()"' +
-                '        ng-model="questionnaire.survey.questions[filter.id].answers[data.part.id].displayValue"' +
+                '        ng-model="questionnaire.survey.questions[filter.id].answers[part.id].displayValue"' +
                 '    />' +
                 '    <span class="input-group-addon"><i class="unit-icon fa fa-fw">%</i></span>' +
                 '</div>',
@@ -58,9 +58,9 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
              */
             scope.focus = function() {
                 TableFilter.initQuestionAbsolute(scope.questionnaire.survey.questions[scope.filter.id]);
-                TableFilter.getPermissions(scope.questionnaire.survey.questions[scope.filter.id], scope.questionnaire.survey.questions[scope.filter.id].answers[scope.data.part.id]);
+                TableFilter.getPermissions(scope.questionnaire.survey.questions[scope.filter.id], scope.questionnaire.survey.questions[scope.filter.id].answers[scope.part.id]);
 
-                setAnswerInitialValue(scope.questionnaire.survey.questions[scope.filter.id], scope.questionnaire.survey.questions[scope.filter.id].answers[scope.data.part.id]);
+                setAnswerInitialValue(scope.questionnaire.survey.questions[scope.filter.id], scope.questionnaire.survey.questions[scope.filter.id].answers[scope.part.id]);
                 addValidators();
             };
 
@@ -68,7 +68,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
              * When leaving the input
              */
             scope.blur = function() {
-                TableFilter.saveAnswer(scope.questionnaire.survey.questions[scope.filter.id].answers[scope.data.part.id], scope.questionnaire.survey.questions[scope.filter.id], scope.filter, scope.questionnaire, scope.data.part);
+                TableFilter.saveAnswer(scope.questionnaire.survey.questions[scope.filter.id].answers[scope.part.id], scope.questionnaire.survey.questions[scope.filter.id], scope.filter, scope.questionnaire, scope.part);
                 removeValidators();
             };
 
@@ -139,7 +139,6 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
              * Apply custom visual style
              */
             function updateVisualStyle() {
-
                 // Update absolute/percent icon
                 if (scope.questionnaire.survey.questions[scope.filter.id].isAbsolute) {
                     unitIcon.text('');
@@ -150,7 +149,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
                 }
 
                 // Update if excluded from computing
-                var isExcluded = scope.questionnaire.survey.questions[scope.filter.id].filter.values[scope.data.part.id].isExcludedFromComputing;
+                var isExcluded = scope.questionnaire.survey.questions[scope.filter.id].filter.values[scope.part.id].isExcludedFromComputing;
                 if (isExcluded) {
                     input.addClass('excluded-from-computing');
                 } else {
@@ -158,7 +157,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
                 }
 
                 // Update the type icon
-                var type = TableFilter.getCellType(scope.questionnaire, scope.filter, scope.data.part.id);
+                var type = TableFilter.getCellType(scope.questionnaire, scope.filter, scope.part.id);
                 var classes;
                 switch (type) {
                     case 'loading':
@@ -184,7 +183,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
                 }
                 typeIcon.className = classes;
 
-                var placeholderValue = scope.questionnaire.survey.questions[scope.filter.id].filter.values[scope.data.part.id].displayValue;
+                var placeholderValue = scope.questionnaire.survey.questions[scope.filter.id].filter.values[scope.part.id].displayValue;
                 input.attr('placeholder', placeholderValue);
             }
 
@@ -203,7 +202,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
                             return scope.filter;
                         },
                         part: function() {
-                            return scope.data.part;
+                            return scope.part;
                         }
                     }
                 });

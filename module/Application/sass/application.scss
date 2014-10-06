@@ -359,6 +359,13 @@ body.local {
     }
 }
 
+.text-2em {
+    line-height:2em;
+}
+.text-3em {
+    line-height:3em;
+}
+
 [ui-ace] {
     @extend .form-control;
 }

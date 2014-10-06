@@ -39,6 +39,7 @@ $border: 1px;
 
         // Show buttons only when hover
         .fa-pencil, .removeButton { visibility: hidden; }
+        &.filter-label{line-height:2.25em;}
         &:hover .removeButton, &:hover .fa-pencil { visibility: visible; }
 
         &.large {
@@ -55,9 +56,23 @@ $border: 1px;
 
     // Those two width should be kept in sync with TableFilter.setQuestionnaireWidth()
     .filter-value {
-        width: 240px;
+        width: 150px;
         display: inline-block;
+        margin-right:4px;
+
+        &:last-child{
+            margin-right:0;
+        }
+
+        &.filter-value-container {
+            border-right: 1px solid $table-border-color;
+            &:last-child {
+                border-right:none;
+            }
+        }
+
     }
+
     .question-label{
         width: 300px;
         display: inline-block;
