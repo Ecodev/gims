@@ -120,4 +120,54 @@ class FilterRepository extends AbstractRepository
         }
     }
 
+    /**
+     * Retrieve column names, short and long version for all filters and parts in 1 SQL query
+     * @param \Application\Model\Filter[]|integer[] $filters
+     * @param \Application\Model\Part[] $parts
+     * @return array ['short' => short name, 'long' => long name]
+     */
+    public function getColumnNames($filters, $parts)
+    {
+        $query = $this->getEntityManager()
+                ->createQuery("SELECT filter.id AS id, filter.name AS name, thematicFilter.name AS thematic
+                FROM Application\Model\Filter filter
+                LEFT JOIN filter.thematicFilter thematicFilter
+                WHERE filter IN (:filters)");
+
+        $params = array(
+            'filters' => $filters,
+        );
+
+        $query->setParameters($params);
+        $data = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $result = [];
+        foreach ($data as $filter) {
+
+            // Thematic
+            $thematicFirstLetter = '';
+            $thematicFirstWord = '';
+            if ($filter['thematic']) {
+                $thematicFirstLetter = substr($filter['thematic'], 0, 1);
+                $thematicFirstWord = preg_split('/\W/', $filter['thematic'], null, PREG_SPLIT_NO_EMPTY)[0] . ', ';
+            }
+
+            // Filter first letters of each word
+            $filterAcronym = '';
+            $words = preg_split('/\W/', $filter['name'], null, PREG_SPLIT_NO_EMPTY);
+            foreach ($words as $word) {
+                $filterAcronym .= substr($word, 0, 1);
+            }
+
+            foreach ($parts as $part) {
+                $partFirstLetter = substr($part->getName(), 0, 1);
+                $result[$filter['id']][$part->getId()] = [
+                    'short' => strtoupper($thematicFirstLetter . $partFirstLetter . $filterAcronym),
+                    'long' => $thematicFirstWord . $part->getName() . ', ' . $filter['name'],
+                ];
+            }
+        }
+
+        return $result;
+    }
+
 }
