@@ -15,13 +15,11 @@ function average(array $data)
     return array_sum($data) / count($data);
 }
 
-/**
- * Do the benchmark
- */
-function benchmark($repetition)
+function getUrls()
 {
     $hostname = basename(getcwd());
 
+    $southernAsia = 7;
     $bangladesh = '1210997';
     $bangladeshGermanyAfghanistan = '1210997,2921044,1149361';
     $questionnairesForBangladesh = '2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23';
@@ -29,10 +27,6 @@ function benchmark($repetition)
     $water = '75,76,77,78,79';
     $sanitation = '166,167,168,169,170,171';
     $urls = array(
-//        "http://$hostname.lan/api/table/filter?questionnaire=1&filterSet=2",
-//        "http://$hostname.lan/api/table/filter?questionnaire=1&filterSet=5",
-//        "http://$hostname.lan/api/table/filter?questionnaire=1,2,3,4&filterSet=2",
-//        "http://$hostname.lan/api/table/filter?questionnaire=1,2,3,4&filterSet=5",
         'table/questionnaire Water Bangladesh                         ' => "http://$hostname.lan/api/table/questionnaire?filters=$water&questionnaires=$questionnairesForBangladesh",
         'table/questionnaire Sanitation Bangladesh                    ' => "http://$hostname.lan/api/table/questionnaire?filters=$sanitation&questionnaires=$questionnairesForBangladesh",
         'table/questionnaire Water Bangladesh,Germany,Afghanistan     ' => "http://$hostname.lan/api/table/questionnaire?filters=$water&questionnaires=$questionnairesForBangladeshGermanyAfghanistan",
@@ -41,14 +35,27 @@ function benchmark($repetition)
         'table/country Sanitation Bangladesh                          ' => "http://$hostname.lan/api/table/country?filters=$sanitation&geonames=$bangladesh&years=1980-2012",
         'table/country Water Bangladesh,Germany,Afghanistan           ' => "http://$hostname.lan/api/table/country?filters=$water&geonames=$bangladeshGermanyAfghanistan&years=1980-2012",
         'table/country Sanitation Bangladesh,Germany,Afghanistan      ' => "http://$hostname.lan/api/table/country?filters=$sanitation&geonames=$bangladeshGermanyAfghanistan&years=1980-2012",
+        'table/country Water Southern Asia                            ' => "http://$hostname.lan/api/table/country?filters=$water&geonames=$southernAsia&years=1980-2012",
+        'table/country Sanitation Southern Asia                       ' => "http://$hostname.lan/api/table/country?filters=$sanitation&geonames=$southernAsia&years=1980-2012",
         'chart/getSeries Water Bangladesh Urban                       ' => "http://$hostname.lan/api/chart/getSeries?filters=$water&geonames=$bangladesh&part=1",
         'chart/getSeries Sanitation Bangladesh Urban                  ' => "http://$hostname.lan/api/chart/getSeries?filters=$sanitation&geonames=$bangladesh&part=1",
         'chart/getSeries Water Bangladesh Total                       ' => "http://$hostname.lan/api/chart/getSeries?filters=$water&geonames=$bangladesh&part=3",
         'chart/getSeries Sanitation Bangladesh Total                  ' => "http://$hostname.lan/api/chart/getSeries?filters=$sanitation&geonames=$bangladesh&part=3",
+        'chart/getSeries Water Southern Asia Total                    ' => "http://$hostname.lan/api/chart/getSeries?filters=$water&geonames=$southernAsia&part=3",
+        'chart/getSeries Sanitation Southern Asia Total               ' => "http://$hostname.lan/api/chart/getSeries?filters=$sanitation&geonames=$southernAsia&part=3",
         'chart/getPanelFilters Water CEN11                            ' => "http://$hostname.lan/api/chart/getPanelFilters?fields=color&filters=75,76&getQuestionnaireUsages=true&ignoredElements=&part=1&questionnaire=22",
         'filter/getComputedFilters Water Bangladesh                   ' => "http://$hostname.lan/api/filter/getComputedFilters?filters=3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74&questionnaires=$questionnairesForBangladesh",
     );
 
+    return $urls;
+}
+
+/**
+ * Do the benchmark
+ */
+function benchmark($repetition)
+{
+    $urls = getUrls();
     $maxSize = 0;
     foreach ($urls as $label => $url) {
         $size = strlen($label);
@@ -76,5 +83,9 @@ function benchmark($repetition)
     }
 }
 
-$repetition = (int) @$argv[1] ? : 1;
-benchmark($repetition);
+$repetition = @$argv[1] ? : 1;
+if ($repetition == 'url') {
+    var_export(getUrls());
+} else {
+    benchmark((int) $repetition);
+}
