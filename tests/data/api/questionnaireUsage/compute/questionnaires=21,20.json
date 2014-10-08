@@ -1,9 +1,9 @@
-{
-    "1": [
-        {
-            "name": "Calculation: Improved water sources",
-            "values": {
-                "20": {
+[
+    {
+        "name": "Calculation: Improved water sources",
+        "values": {
+            "20": {
+                "1": {
                     "id": 44,
                     "usage": {
                         "id": 393,
@@ -25,938 +25,7 @@
                     },
                     "value": 99.5
                 },
-                "21": {
-                    "id": 46,
-                    "usage": {
-                        "id": 412,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 46,
-                            "name": "Calculation: Improved water sources",
-                            "formula": "=SUM({F#24,Q#current,P#current},{F#3,Q#current,P#current},{R#3,Q#current,P#current})"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 94.9
-                }
-            }
-        },
-        {
-            "name": "Estimate: Adjustement for arsenic contamination based on MICS 2009 (13%)",
-            "values": {
-                "20": {
-                    "id": 45,
-                    "usage": {
-                        "id": 395,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 45,
-                            "name": "Estimate: Adjustement for arsenic contamination based on MICS 2009 (13%)",
-                            "formula": "=-0.13*{R#44,Q#current,P#current}"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": -12.9
-                },
-                "21": {
-                    "id": 47,
-                    "usage": {
-                        "id": 415,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 47,
-                            "name": "Estimate: Adjustement for arsenic contamination based on MICS 2009 (13%)",
-                            "formula": "=-0.13*{R#46,Q#current,P#current}"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": -12.3
-                }
-            }
-        },
-        {
-            "name": "Estimate: Estimated improved pit latrines based onDHS11",
-            "values": {
-                "21": {
-                    "id": 130,
-                    "usage": {
-                        "id": 894,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 130,
-                            "name": "Estimate: Estimated improved pit latrines based onDHS11",
-                            "formula": "={F#124,Q#current,P#current}*(1-{R#94,Q#23,P#current})"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 38.5
-                }
-            }
-        },
-        {
-            "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS07",
-            "values": {
-                "20": {
-                    "id": 128,
-                    "usage": {
-                        "id": 874,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 128,
-                            "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS07",
-                            "formula": "=-({R#92,Q#19,P#current}*{F#81,Q#current,P#current})"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": -11.4
-                }
-            }
-        },
-        {
-            "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS11",
-            "values": {
-                "21": {
-                    "id": 131,
-                    "usage": {
-                        "id": 898,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 131,
-                            "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS11",
-                            "formula": "=-({R#92,Q#23,P#current}*{F#81,Q#current,P#current})"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": -11.2
-                }
-            }
-        },
-        {
-            "name": "Estimate: Piped into premises of tap water, based on MICS09&DHS11",
-            "values": {
-                "21": {
-                    "id": 49,
-                    "usage": {
-                        "id": 422,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 49,
-                            "name": "Estimate: Piped into premises of tap water, based on MICS09&DHS11",
-                            "formula": "={R#48,Q#current,P#current}*{F#3,Q#current,P#current}"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 28.9
-                }
-            }
-        },
-        {
-            "name": "Estimate: Surface water",
-            "values": {
-                "20": {
-                    "id": 5,
-                    "usage": {
-                        "id": 397,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 5,
-                            "name": "Estimate: Surface water",
-                            "formula": "={F#58,Q#current,P#current}"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 0.3
-                },
-                "21": {
-                    "id": 5,
-                    "usage": {
-                        "id": 417,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 5,
-                            "name": "Estimate: Surface water",
-                            "formula": "={F#58,Q#current,P#current}"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 0.1
-                }
-            }
-        },
-        {
-            "name": "Estimate: Traditional wells improved based on MICS09",
-            "values": {
-                "21": {
-                    "id": 3,
-                    "usage": {
-                        "id": 411,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 3,
-                            "name": "Estimate: Traditional wells improved based on MICS09",
-                            "formula": "={R#2,Q#20,P#current}*{F#28,Q#current,P#current}"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 0.1
-                }
-            }
-        },
-        {
-            "name": "Ratio: \"Hanging\" and \"Bucket\" among Dry Latrines",
-            "values": {
-                "20": {
-                    "id": 94,
-                    "usage": {
-                        "id": 883,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 94,
-                            "name": "Ratio: \"Hanging\" and \"Bucket\" among Dry Latrines",
-                            "formula": "=SUM({{F#130,Q#current,P#current},{F#131,Q#current,P#current}})\/SUM({F#124,Q#current,P#current})"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 3.7
-                }
-            }
-        },
-        {
-            "name": "Ratio: Covered dry latrines \/ All dry latrines",
-            "values": {
-                "20": {
-                    "id": 107,
-                    "usage": {
-                        "id": 879,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 107,
-                            "name": "Ratio: Covered dry latrines \/ All dry latrines",
-                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 85.8
-                },
-                "21": {
-                    "id": 107,
-                    "usage": {
-                        "id": 904,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 107,
-                            "name": "Ratio: Covered dry latrines \/ All dry latrines",
-                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        },
-        {
-            "name": "Ratio: HC \/ Tap water",
-            "values": {
-                "20": {
-                    "id": 7,
-                    "usage": {
-                        "id": 400,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 7,
-                            "name": "Ratio: HC \/ Tap water",
-                            "formula": "=IF(AND(ISNUMBER({F#4,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#4,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 78.5
-                },
-                "21": {
-                    "id": 48,
-                    "usage": {
-                        "id": 421,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 48,
-                            "name": "Ratio: HC \/ Tap water",
-                            "formula": "=SUM({R#7,Q#20,P#current},{R#7,Q#23,P#current})\/2"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 81.3
-                }
-            }
-        },
-        {
-            "name": "Ratio: Improved + traditional latrines \/ All latrines",
-            "values": {
-                "20": {
-                    "id": 129,
-                    "usage": {
-                        "id": 886,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 129,
-                            "name": "Ratio: Improved + traditional latrines \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#94,Q#current,P#current})),({R#106,Q#current,P#current}+{R#94,Q#current,P#current}),\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 94.3
-                },
-                "21": {
-                    "id": 110,
-                    "usage": {
-                        "id": 911,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 110,
-                            "name": "Ratio: Improved + traditional latrines \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#109,Q#current,P#current})),({R#106,Q#current,P#current}+{R#109,Q#current,P#current}),\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 67.3
-                }
-            }
-        },
-        {
-            "name": "Ratio: Improved latrine \/ All latrines",
-            "values": {
-                "20": {
-                    "id": 106,
-                    "usage": {
-                        "id": 876,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 106,
-                            "name": "Ratio: Improved latrine \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 90.6
-                },
-                "21": {
-                    "id": 106,
-                    "usage": {
-                        "id": 901,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 106,
-                            "name": "Ratio: Improved latrine \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 43.2
-                }
-            }
-        },
-        {
-            "name": "Ratio: Protect. well & spring \/ well & spring",
-            "values": {
-                "20": {
-                    "id": 12,
-                    "usage": {
-                        "id": 409,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 12,
-                            "name": "Ratio: Protect. well & spring \/ well & spring",
-                            "formula": "=IF(ISERR((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current})))))"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 99.8
-                },
-                "21": {
-                    "id": 12,
-                    "usage": {
-                        "id": 436,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 12,
-                            "name": "Ratio: Protect. well & spring \/ well & spring",
-                            "formula": "=IF(ISERR((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current})))))"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 100.0
-                }
-            }
-        },
-        {
-            "name": "Ratio: Protected springs \/ All springs",
-            "values": {
-                "21": {
-                    "id": 11,
-                    "usage": {
-                        "id": 434,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 11,
-                            "name": "Ratio: Protected springs \/ All springs",
-                            "formula": "=IF(AND(ISNUMBER({F#44,Q#current,P#current}),ISNUMBER({F#40,Q#current,P#current})),{F#44,Q#current,P#current}\/{F#40,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        },
-        {
-            "name": "Ratio: Protected wells \/ Traditional wells",
-            "values": {
-                "20": {
-                    "id": 2,
-                    "usage": {
-                        "id": 1,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 2,
-                            "name": "Ratio: Protected wells \/ Traditional wells",
-                            "formula": "=IF(AND(ISNUMBER({F#28,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),{F#32,Q#current,P#current}\/({F#28,Q#current,P#current}),\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 75.0
-                },
-                "21": {
-                    "id": 2,
-                    "usage": {
-                        "id": 430,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 2,
-                            "name": "Ratio: Protected wells \/ Traditional wells",
-                            "formula": "=IF(AND(ISNUMBER({F#28,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),{F#32,Q#current,P#current}\/({F#28,Q#current,P#current}),\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        },
-        {
-            "name": "Ratio: Public tap \/ Tap water",
-            "values": {
-                "20": {
-                    "id": 8,
-                    "usage": {
-                        "id": 402,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 8,
-                            "name": "Ratio: Public tap \/ Tap water",
-                            "formula": "=IF(AND(ISNUMBER({F#7,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#7,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 21.5
-                },
-                "21": {
-                    "id": 8,
-                    "usage": {
-                        "id": 426,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 8,
-                            "name": "Ratio: Public tap \/ Tap water",
-                            "formula": "=IF(AND(ISNUMBER({F#7,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#7,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        },
-        {
-            "name": "Ratio: Sewerage connection among flush",
-            "values": {
-                "20": {
-                    "id": 111,
-                    "usage": {
-                        "id": 891,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 111,
-                            "name": "Ratio: Sewerage connection among flush",
-                            "formula": "=IF(ISNUMBER({F#88,Q#current,P#current}),{F#88,Q#current,P#current}\/{F#87,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                },
-                "21": {
-                    "id": 111,
-                    "usage": {
-                        "id": 916,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 111,
-                            "name": "Ratio: Sewerage connection among flush",
-                            "formula": "=IF(ISNUMBER({F#88,Q#current,P#current}),{F#88,Q#current,P#current}\/{F#87,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        },
-        {
-            "name": "Ratio: Sewerage connection among flush\/pour flush",
-            "values": {
-                "20": {
-                    "id": 104,
-                    "usage": {
-                        "id": 889,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 104,
-                            "name": "Ratio: Sewerage connection among flush\/pour flush",
-                            "formula": "=IF(ISNUMBER({F#82,Q#current,P#current}),{F#82,Q#current,P#current}\/{F#81,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 34.4
-                },
-                "21": {
-                    "id": 104,
-                    "usage": {
-                        "id": 914,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 104,
-                            "name": "Ratio: Sewerage connection among flush\/pour flush",
-                            "formula": "=IF(ISNUMBER({F#82,Q#current,P#current}),{F#82,Q#current,P#current}\/{F#81,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        },
-        {
-            "name": "Ratio: Traditional latrines \/ All latrines",
-            "values": {
-                "21": {
-                    "id": 109,
-                    "usage": {
-                        "id": 908,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 109,
-                            "name": "Ratio: Traditional latrines \/ All latrines",
-                            "formula": "=IF(ISNUMBER({F#128,Q#current,P#current}),{F#128,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 24.1
-                }
-            }
-        },
-        {
-            "name": "Ratio: Tubewell + protected well \/ All wells",
-            "values": {
-                "20": {
-                    "id": 9,
-                    "usage": {
-                        "id": 404,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 9,
-                            "name": "Ratio: Tubewell + protected well \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),({F#24,Q#current,P#current}+{F#32,Q#current,P#current})\/{F#20,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 99.8
-                },
-                "21": {
-                    "id": 9,
-                    "usage": {
-                        "id": 428,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 9,
-                            "name": "Ratio: Tubewell + protected well \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),({F#24,Q#current,P#current}+{F#32,Q#current,P#current})\/{F#20,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        },
-        {
-            "name": "Ratio: Tubewell \/ All wells",
-            "values": {
-                "20": {
-                    "id": 10,
-                    "usage": {
-                        "id": 406,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 10,
-                            "name": "Ratio: Tubewell \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#20,Q#current,P#current})),{F#24,Q#current,P#current}\/{F#20,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 99.3
-                },
-                "21": {
-                    "id": 10,
-                    "usage": {
-                        "id": 432,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 10,
-                            "name": "Ratio: Tubewell \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#20,Q#current,P#current})),{F#24,Q#current,P#current}\/{F#20,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 99.7
-                }
-            }
-        },
-        {
-            "name": "Ratio: VIP \/ All latrines",
-            "values": {
-                "20": {
-                    "id": 108,
-                    "usage": {
-                        "id": 881,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 108,
-                            "name": "Ratio: VIP \/ All latrines",
-                            "formula": "=IF(ISNUMBER({F#126,Q#current,P#current}),{F#126,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 4.8
-                },
-                "21": {
-                    "id": 108,
-                    "usage": {
-                        "id": 906,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 108,
-                            "name": "Ratio: VIP \/ All latrines",
-                            "formula": "=IF(ISNUMBER({F#126,Q#current,P#current}),{F#126,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 1,
-                            "name": "Urban"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        }
-    ],
-    "2": [
-        {
-            "name": "Calculation: Improved water sources",
-            "values": {
-                "20": {
+                "2": {
                     "id": 44,
                     "usage": {
                         "id": 394,
@@ -977,8 +46,32 @@
                         }
                     },
                     "value": 97.6
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 46,
+                    "usage": {
+                        "id": 412,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 46,
+                            "name": "Calculation: Improved water sources",
+                            "formula": "=SUM({F#24,Q#current,P#current},{F#3,Q#current,P#current},{R#3,Q#current,P#current})"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 94.9
                 },
-                "21": {
+                "2": {
                     "id": 46,
                     "usage": {
                         "id": 414,
@@ -1001,11 +94,35 @@
                     "value": 97.1
                 }
             }
-        },
-        {
-            "name": "Estimate: Adjustement for arsenic contamination based on MICS 2009 (13%)",
-            "values": {
-                "20": {
+        }
+    },
+    {
+        "name": "Estimate: Adjustement for arsenic contamination based on MICS 2009 (13%)",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 45,
+                    "usage": {
+                        "id": 395,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 45,
+                            "name": "Estimate: Adjustement for arsenic contamination based on MICS 2009 (13%)",
+                            "formula": "=-0.13*{R#44,Q#current,P#current}"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": -12.9
+                },
+                "2": {
                     "id": 45,
                     "usage": {
                         "id": 396,
@@ -1026,8 +143,32 @@
                         }
                     },
                     "value": -12.7
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 47,
+                    "usage": {
+                        "id": 415,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 47,
+                            "name": "Estimate: Adjustement for arsenic contamination based on MICS 2009 (13%)",
+                            "formula": "=-0.13*{R#46,Q#current,P#current}"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": -12.3
                 },
-                "21": {
+                "2": {
                     "id": 47,
                     "usage": {
                         "id": 416,
@@ -1050,11 +191,35 @@
                     "value": -12.6
                 }
             }
-        },
-        {
-            "name": "Estimate: Estimated improved pit latrines based onDHS11",
-            "values": {
-                "21": {
+        }
+    },
+    {
+        "name": "Estimate: Estimated improved pit latrines based onDHS11",
+        "values": {
+            "21": {
+                "1": {
+                    "id": 130,
+                    "usage": {
+                        "id": 894,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 130,
+                            "name": "Estimate: Estimated improved pit latrines based onDHS11",
+                            "formula": "={F#124,Q#current,P#current}*(1-{R#94,Q#23,P#current})"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 38.5
+                },
+                "2": {
                     "id": 130,
                     "usage": {
                         "id": 896,
@@ -1077,11 +242,35 @@
                     "value": 60.9
                 }
             }
-        },
-        {
-            "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS07",
-            "values": {
-                "20": {
+        }
+    },
+    {
+        "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS07",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 128,
+                    "usage": {
+                        "id": 874,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 128,
+                            "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS07",
+                            "formula": "=-({R#92,Q#19,P#current}*{F#81,Q#current,P#current})"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": -11.4
+                },
+                "2": {
                     "id": 128,
                     "usage": {
                         "id": 875,
@@ -1104,11 +293,35 @@
                     "value": -0.3
                 }
             }
-        },
-        {
-            "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS11",
-            "values": {
-                "21": {
+        }
+    },
+    {
+        "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS11",
+        "values": {
+            "21": {
+                "1": {
+                    "id": 131,
+                    "usage": {
+                        "id": 898,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 131,
+                            "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS11",
+                            "formula": "=-({R#92,Q#23,P#current}*{F#81,Q#current,P#current})"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": -11.2
+                },
+                "2": {
                     "id": 131,
                     "usage": {
                         "id": 900,
@@ -1131,11 +344,35 @@
                     "value": -0.4
                 }
             }
-        },
-        {
-            "name": "Estimate: Piped into premises of tap water, based on MICS09&DHS11",
-            "values": {
-                "21": {
+        }
+    },
+    {
+        "name": "Estimate: Piped into premises of tap water, based on MICS09&DHS11",
+        "values": {
+            "21": {
+                "1": {
+                    "id": 49,
+                    "usage": {
+                        "id": 422,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 49,
+                            "name": "Estimate: Piped into premises of tap water, based on MICS09&DHS11",
+                            "formula": "={R#48,Q#current,P#current}*{F#3,Q#current,P#current}"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 28.9
+                },
+                "2": {
                     "id": 49,
                     "usage": {
                         "id": 425,
@@ -1158,11 +395,35 @@
                     "value": 1.1
                 }
             }
-        },
-        {
-            "name": "Estimate: Surface water",
-            "values": {
-                "20": {
+        }
+    },
+    {
+        "name": "Estimate: Surface water",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 5,
+                    "usage": {
+                        "id": 397,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 5,
+                            "name": "Estimate: Surface water",
+                            "formula": "={F#58,Q#current,P#current}"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 0.3
+                },
+                "2": {
                     "id": 5,
                     "usage": {
                         "id": 398,
@@ -1184,754 +445,7 @@
                     },
                     "value": 1.7
                 },
-                "21": {
-                    "id": 5,
-                    "usage": {
-                        "id": 418,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 5,
-                            "name": "Estimate: Surface water",
-                            "formula": "={F#58,Q#current,P#current}"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 1.4
-                }
-            }
-        },
-        {
-            "name": "Estimate: Traditional wells improved based on MICS09",
-            "values": {
-                "21": {
-                    "id": 3,
-                    "usage": {
-                        "id": 413,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 3,
-                            "name": "Estimate: Traditional wells improved based on MICS09",
-                            "formula": "={R#2,Q#20,P#current}*{F#28,Q#current,P#current}"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 0.7
-                }
-            }
-        },
-        {
-            "name": "Ratio: \"Hanging\" and \"Bucket\" among Dry Latrines",
-            "values": {
-                "20": {
-                    "id": 94,
-                    "usage": {
-                        "id": 884,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 94,
-                            "name": "Ratio: \"Hanging\" and \"Bucket\" among Dry Latrines",
-                            "formula": "=SUM({{F#130,Q#current,P#current},{F#131,Q#current,P#current}})\/SUM({F#124,Q#current,P#current})"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 6.0
-                }
-            }
-        },
-        {
-            "name": "Ratio: Covered dry latrines \/ All dry latrines",
-            "values": {
-                "20": {
-                    "id": 107,
-                    "usage": {
-                        "id": 880,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 107,
-                            "name": "Ratio: Covered dry latrines \/ All dry latrines",
-                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 81.6
-                },
-                "21": {
-                    "id": 107,
-                    "usage": {
-                        "id": 905,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 107,
-                            "name": "Ratio: Covered dry latrines \/ All dry latrines",
-                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        },
-        {
-            "name": "Ratio: HC \/ Tap water",
-            "values": {
-                "20": {
-                    "id": 7,
-                    "usage": {
-                        "id": 401,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 7,
-                            "name": "Ratio: HC \/ Tap water",
-                            "formula": "=IF(AND(ISNUMBER({F#4,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#4,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 75.0
-                },
-                "21": {
-                    "id": 48,
-                    "usage": {
-                        "id": 424,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 48,
-                            "name": "Ratio: HC \/ Tap water",
-                            "formula": "=SUM({R#7,Q#20,P#current},{R#7,Q#23,P#current})\/2"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 73.0
-                }
-            }
-        },
-        {
-            "name": "Ratio: Improved + traditional latrines \/ All latrines",
-            "values": {
-                "20": {
-                    "id": 129,
-                    "usage": {
-                        "id": 887,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 129,
-                            "name": "Ratio: Improved + traditional latrines \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#94,Q#current,P#current})),({R#106,Q#current,P#current}+{R#94,Q#current,P#current}),\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 91.5
-                },
-                "21": {
-                    "id": 110,
-                    "usage": {
-                        "id": 912,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 110,
-                            "name": "Ratio: Improved + traditional latrines \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#109,Q#current,P#current})),({R#106,Q#current,P#current}+{R#109,Q#current,P#current}),\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 35.5
-                }
-            }
-        },
-        {
-            "name": "Ratio: Improved latrine \/ All latrines",
-            "values": {
-                "20": {
-                    "id": 106,
-                    "usage": {
-                        "id": 877,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 106,
-                            "name": "Ratio: Improved latrine \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 85.5
-                },
-                "21": {
-                    "id": 106,
-                    "usage": {
-                        "id": 902,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 106,
-                            "name": "Ratio: Improved latrine \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 17.1
-                }
-            }
-        },
-        {
-            "name": "Ratio: Protect. well & spring \/ well & spring",
-            "values": {
-                "20": {
-                    "id": 12,
-                    "usage": {
-                        "id": 410,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 12,
-                            "name": "Ratio: Protect. well & spring \/ well & spring",
-                            "formula": "=IF(ISERR((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current})))))"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 99.3
-                },
-                "21": {
-                    "id": 12,
-                    "usage": {
-                        "id": 437,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 12,
-                            "name": "Ratio: Protect. well & spring \/ well & spring",
-                            "formula": "=IF(ISERR((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current})))))"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 100.0
-                }
-            }
-        },
-        {
-            "name": "Ratio: Protected springs \/ All springs",
-            "values": {
-                "20": {
-                    "id": 11,
-                    "usage": {
-                        "id": 408,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 11,
-                            "name": "Ratio: Protected springs \/ All springs",
-                            "formula": "=IF(AND(ISNUMBER({F#44,Q#current,P#current}),ISNUMBER({F#40,Q#current,P#current})),{F#44,Q#current,P#current}\/{F#40,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 33.3
-                },
-                "21": {
-                    "id": 11,
-                    "usage": {
-                        "id": 435,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 11,
-                            "name": "Ratio: Protected springs \/ All springs",
-                            "formula": "=IF(AND(ISNUMBER({F#44,Q#current,P#current}),ISNUMBER({F#40,Q#current,P#current})),{F#44,Q#current,P#current}\/{F#40,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        },
-        {
-            "name": "Ratio: Protected wells \/ Traditional wells",
-            "values": {
-                "20": {
-                    "id": 2,
-                    "usage": {
-                        "id": 3,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 2,
-                            "name": "Ratio: Protected wells \/ Traditional wells",
-                            "formula": "=IF(AND(ISNUMBER({F#28,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),{F#32,Q#current,P#current}\/({F#28,Q#current,P#current}),\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 54.5
-                },
-                "21": {
-                    "id": 2,
-                    "usage": {
-                        "id": 431,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 2,
-                            "name": "Ratio: Protected wells \/ Traditional wells",
-                            "formula": "=IF(AND(ISNUMBER({F#28,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),{F#32,Q#current,P#current}\/({F#28,Q#current,P#current}),\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        },
-        {
-            "name": "Ratio: Public tap \/ Tap water",
-            "values": {
-                "20": {
-                    "id": 8,
-                    "usage": {
-                        "id": 403,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 8,
-                            "name": "Ratio: Public tap \/ Tap water",
-                            "formula": "=IF(AND(ISNUMBER({F#7,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#7,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 25.0
-                },
-                "21": {
-                    "id": 8,
-                    "usage": {
-                        "id": 427,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 8,
-                            "name": "Ratio: Public tap \/ Tap water",
-                            "formula": "=IF(AND(ISNUMBER({F#7,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#7,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        },
-        {
-            "name": "Ratio: Sewerage connection among flush",
-            "values": {
-                "20": {
-                    "id": 111,
-                    "usage": {
-                        "id": 892,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 111,
-                            "name": "Ratio: Sewerage connection among flush",
-                            "formula": "=IF(ISNUMBER({F#88,Q#current,P#current}),{F#88,Q#current,P#current}\/{F#87,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                },
-                "21": {
-                    "id": 111,
-                    "usage": {
-                        "id": 917,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 111,
-                            "name": "Ratio: Sewerage connection among flush",
-                            "formula": "=IF(ISNUMBER({F#88,Q#current,P#current}),{F#88,Q#current,P#current}\/{F#87,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        },
-        {
-            "name": "Ratio: Sewerage connection among flush\/pour flush",
-            "values": {
-                "20": {
-                    "id": 104,
-                    "usage": {
-                        "id": 890,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 104,
-                            "name": "Ratio: Sewerage connection among flush\/pour flush",
-                            "formula": "=IF(ISNUMBER({F#82,Q#current,P#current}),{F#82,Q#current,P#current}\/{F#81,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 0.0
-                },
-                "21": {
-                    "id": 104,
-                    "usage": {
-                        "id": 915,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 104,
-                            "name": "Ratio: Sewerage connection among flush\/pour flush",
-                            "formula": "=IF(ISNUMBER({F#82,Q#current,P#current}),{F#82,Q#current,P#current}\/{F#81,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        },
-        {
-            "name": "Ratio: Traditional latrines \/ All latrines",
-            "values": {
-                "21": {
-                    "id": 109,
-                    "usage": {
-                        "id": 909,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 109,
-                            "name": "Ratio: Traditional latrines \/ All latrines",
-                            "formula": "=IF(ISNUMBER({F#128,Q#current,P#current}),{F#128,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 18.4
-                }
-            }
-        },
-        {
-            "name": "Ratio: Tubewell + protected well \/ All wells",
-            "values": {
-                "20": {
-                    "id": 9,
-                    "usage": {
-                        "id": 405,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 9,
-                            "name": "Ratio: Tubewell + protected well \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),({F#24,Q#current,P#current}+{F#32,Q#current,P#current})\/{F#20,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 99.5
-                },
-                "21": {
-                    "id": 9,
-                    "usage": {
-                        "id": 429,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 9,
-                            "name": "Ratio: Tubewell + protected well \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),({F#24,Q#current,P#current}+{F#32,Q#current,P#current})\/{F#20,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        },
-        {
-            "name": "Ratio: Tubewell \/ All wells",
-            "values": {
-                "20": {
-                    "id": 10,
-                    "usage": {
-                        "id": 407,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 10,
-                            "name": "Ratio: Tubewell \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#20,Q#current,P#current})),{F#24,Q#current,P#current}\/{F#20,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 98.8
-                },
-                "21": {
-                    "id": 10,
-                    "usage": {
-                        "id": 433,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 10,
-                            "name": "Ratio: Tubewell \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#20,Q#current,P#current})),{F#24,Q#current,P#current}\/{F#20,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 98.7
-                }
-            }
-        },
-        {
-            "name": "Ratio: VIP \/ All latrines",
-            "values": {
-                "20": {
-                    "id": 108,
-                    "usage": {
-                        "id": 882,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 108,
-                            "name": "Ratio: VIP \/ All latrines",
-                            "formula": "=IF(ISNUMBER({F#126,Q#current,P#current}),{F#126,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 20,
-                            "name": "MICS09 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": 3.8
-                },
-                "21": {
-                    "id": 108,
-                    "usage": {
-                        "id": 907,
-                        "justification": "Imported from country files",
-                        "rule": {
-                            "id": 108,
-                            "name": "Ratio: VIP \/ All latrines",
-                            "formula": "=IF(ISNUMBER({F#126,Q#current,P#current}),{F#126,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
-                        },
-                        "part": {
-                            "id": 2,
-                            "name": "Rural"
-                        },
-                        "questionnaire": {
-                            "id": 21,
-                            "name": "HIES10 - Bangladesh",
-                            "status": "published"
-                        }
-                    },
-                    "value": null
-                }
-            }
-        }
-    ],
-    "3": [
-        {
-            "name": "Estimate: Surface water",
-            "values": {
-                "20": {
+                "3": {
                     "id": 5,
                     "usage": {
                         "id": 399,
@@ -1952,8 +466,54 @@
                         }
                     },
                     "value": 1.4
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 5,
+                    "usage": {
+                        "id": 417,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 5,
+                            "name": "Estimate: Surface water",
+                            "formula": "={F#58,Q#current,P#current}"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 0.1
                 },
-                "21": {
+                "2": {
+                    "id": 5,
+                    "usage": {
+                        "id": 418,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 5,
+                            "name": "Estimate: Surface water",
+                            "formula": "={F#58,Q#current,P#current}"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 1.4
+                },
+                "3": {
                     "id": 5,
                     "usage": {
                         "id": 419,
@@ -1976,11 +536,353 @@
                     "value": 1.0
                 }
             }
-        },
-        {
-            "name": "Ratio: Improved + traditional latrines \/ All latrines",
-            "values": {
-                "20": {
+        }
+    },
+    {
+        "name": "Estimate: Traditional wells improved based on MICS09",
+        "values": {
+            "21": {
+                "1": {
+                    "id": 3,
+                    "usage": {
+                        "id": 411,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 3,
+                            "name": "Estimate: Traditional wells improved based on MICS09",
+                            "formula": "={R#2,Q#20,P#current}*{F#28,Q#current,P#current}"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 0.1
+                },
+                "2": {
+                    "id": 3,
+                    "usage": {
+                        "id": 413,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 3,
+                            "name": "Estimate: Traditional wells improved based on MICS09",
+                            "formula": "={R#2,Q#20,P#current}*{F#28,Q#current,P#current}"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 0.7
+                }
+            }
+        }
+    },
+    {
+        "name": "Ratio: \"Hanging\" and \"Bucket\" among Dry Latrines",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 94,
+                    "usage": {
+                        "id": 883,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 94,
+                            "name": "Ratio: \"Hanging\" and \"Bucket\" among Dry Latrines",
+                            "formula": "=SUM({{F#130,Q#current,P#current},{F#131,Q#current,P#current}})\/SUM({F#124,Q#current,P#current})"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 3.7
+                },
+                "2": {
+                    "id": 94,
+                    "usage": {
+                        "id": 884,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 94,
+                            "name": "Ratio: \"Hanging\" and \"Bucket\" among Dry Latrines",
+                            "formula": "=SUM({{F#130,Q#current,P#current},{F#131,Q#current,P#current}})\/SUM({F#124,Q#current,P#current})"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 6.0
+                }
+            }
+        }
+    },
+    {
+        "name": "Ratio: Covered dry latrines \/ All dry latrines",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 107,
+                    "usage": {
+                        "id": 879,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 107,
+                            "name": "Ratio: Covered dry latrines \/ All dry latrines",
+                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 85.8
+                },
+                "2": {
+                    "id": 107,
+                    "usage": {
+                        "id": 880,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 107,
+                            "name": "Ratio: Covered dry latrines \/ All dry latrines",
+                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 81.6
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 107,
+                    "usage": {
+                        "id": 904,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 107,
+                            "name": "Ratio: Covered dry latrines \/ All dry latrines",
+                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                },
+                "2": {
+                    "id": 107,
+                    "usage": {
+                        "id": 905,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 107,
+                            "name": "Ratio: Covered dry latrines \/ All dry latrines",
+                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                }
+            }
+        }
+    },
+    {
+        "name": "Ratio: HC \/ Tap water",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 7,
+                    "usage": {
+                        "id": 400,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 7,
+                            "name": "Ratio: HC \/ Tap water",
+                            "formula": "=IF(AND(ISNUMBER({F#4,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#4,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 78.5
+                },
+                "2": {
+                    "id": 7,
+                    "usage": {
+                        "id": 401,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 7,
+                            "name": "Ratio: HC \/ Tap water",
+                            "formula": "=IF(AND(ISNUMBER({F#4,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#4,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 75.0
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 48,
+                    "usage": {
+                        "id": 421,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 48,
+                            "name": "Ratio: HC \/ Tap water",
+                            "formula": "=SUM({R#7,Q#20,P#current},{R#7,Q#23,P#current})\/2"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 81.3
+                },
+                "2": {
+                    "id": 48,
+                    "usage": {
+                        "id": 424,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 48,
+                            "name": "Ratio: HC \/ Tap water",
+                            "formula": "=SUM({R#7,Q#20,P#current},{R#7,Q#23,P#current})\/2"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 73.0
+                }
+            }
+        }
+    },
+    {
+        "name": "Ratio: Improved + traditional latrines \/ All latrines",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 129,
+                    "usage": {
+                        "id": 886,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 129,
+                            "name": "Ratio: Improved + traditional latrines \/ All latrines",
+                            "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#94,Q#current,P#current})),({R#106,Q#current,P#current}+{R#94,Q#current,P#current}),\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 94.3
+                },
+                "2": {
+                    "id": 129,
+                    "usage": {
+                        "id": 887,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 129,
+                            "name": "Ratio: Improved + traditional latrines \/ All latrines",
+                            "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#94,Q#current,P#current})),({R#106,Q#current,P#current}+{R#94,Q#current,P#current}),\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 91.5
+                },
+                "3": {
                     "id": 110,
                     "usage": {
                         "id": 888,
@@ -2001,8 +903,54 @@
                         }
                     },
                     "value": null
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 110,
+                    "usage": {
+                        "id": 911,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 110,
+                            "name": "Ratio: Improved + traditional latrines \/ All latrines",
+                            "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#109,Q#current,P#current})),({R#106,Q#current,P#current}+{R#109,Q#current,P#current}),\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 67.3
                 },
-                "21": {
+                "2": {
+                    "id": 110,
+                    "usage": {
+                        "id": 912,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 110,
+                            "name": "Ratio: Improved + traditional latrines \/ All latrines",
+                            "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#109,Q#current,P#current})),({R#106,Q#current,P#current}+{R#109,Q#current,P#current}),\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 35.5
+                },
+                "3": {
                     "id": 110,
                     "usage": {
                         "id": 913,
@@ -2025,11 +973,57 @@
                     "value": 43.2
                 }
             }
-        },
-        {
-            "name": "Ratio: Improved latrine \/ All latrines",
-            "values": {
-                "20": {
+        }
+    },
+    {
+        "name": "Ratio: Improved latrine \/ All latrines",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 106,
+                    "usage": {
+                        "id": 876,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 106,
+                            "name": "Ratio: Improved latrine \/ All latrines",
+                            "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 90.6
+                },
+                "2": {
+                    "id": 106,
+                    "usage": {
+                        "id": 877,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 106,
+                            "name": "Ratio: Improved latrine \/ All latrines",
+                            "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 85.5
+                },
+                "3": {
                     "id": 106,
                     "usage": {
                         "id": 878,
@@ -2050,8 +1044,54 @@
                         }
                     },
                     "value": 86.0
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 106,
+                    "usage": {
+                        "id": 901,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 106,
+                            "name": "Ratio: Improved latrine \/ All latrines",
+                            "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 43.2
                 },
-                "21": {
+                "2": {
+                    "id": 106,
+                    "usage": {
+                        "id": 902,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 106,
+                            "name": "Ratio: Improved latrine \/ All latrines",
+                            "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 17.1
+                },
+                "3": {
                     "id": 106,
                     "usage": {
                         "id": 903,
@@ -2074,11 +1114,573 @@
                     "value": 23.4
                 }
             }
-        },
-        {
-            "name": "Ratio: Traditional latrines \/ All latrines",
-            "values": {
-                "20": {
+        }
+    },
+    {
+        "name": "Ratio: Protect. well & spring \/ well & spring",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 12,
+                    "usage": {
+                        "id": 409,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 12,
+                            "name": "Ratio: Protect. well & spring \/ well & spring",
+                            "formula": "=IF(ISERR((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current})))))"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 99.8
+                },
+                "2": {
+                    "id": 12,
+                    "usage": {
+                        "id": 410,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 12,
+                            "name": "Ratio: Protect. well & spring \/ well & spring",
+                            "formula": "=IF(ISERR((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current})))))"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 99.3
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 12,
+                    "usage": {
+                        "id": 436,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 12,
+                            "name": "Ratio: Protect. well & spring \/ well & spring",
+                            "formula": "=IF(ISERR((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current})))))"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 100.0
+                },
+                "2": {
+                    "id": 12,
+                    "usage": {
+                        "id": 437,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 12,
+                            "name": "Ratio: Protect. well & spring \/ well & spring",
+                            "formula": "=IF(ISERR((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current})))))"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 100.0
+                }
+            }
+        }
+    },
+    {
+        "name": "Ratio: Protected springs \/ All springs",
+        "values": {
+            "20": {
+                "2": {
+                    "id": 11,
+                    "usage": {
+                        "id": 408,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 11,
+                            "name": "Ratio: Protected springs \/ All springs",
+                            "formula": "=IF(AND(ISNUMBER({F#44,Q#current,P#current}),ISNUMBER({F#40,Q#current,P#current})),{F#44,Q#current,P#current}\/{F#40,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 33.3
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 11,
+                    "usage": {
+                        "id": 434,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 11,
+                            "name": "Ratio: Protected springs \/ All springs",
+                            "formula": "=IF(AND(ISNUMBER({F#44,Q#current,P#current}),ISNUMBER({F#40,Q#current,P#current})),{F#44,Q#current,P#current}\/{F#40,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                },
+                "2": {
+                    "id": 11,
+                    "usage": {
+                        "id": 435,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 11,
+                            "name": "Ratio: Protected springs \/ All springs",
+                            "formula": "=IF(AND(ISNUMBER({F#44,Q#current,P#current}),ISNUMBER({F#40,Q#current,P#current})),{F#44,Q#current,P#current}\/{F#40,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                }
+            }
+        }
+    },
+    {
+        "name": "Ratio: Protected wells \/ Traditional wells",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 2,
+                    "usage": {
+                        "id": 1,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 2,
+                            "name": "Ratio: Protected wells \/ Traditional wells",
+                            "formula": "=IF(AND(ISNUMBER({F#28,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),{F#32,Q#current,P#current}\/({F#28,Q#current,P#current}),\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 75.0
+                },
+                "2": {
+                    "id": 2,
+                    "usage": {
+                        "id": 3,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 2,
+                            "name": "Ratio: Protected wells \/ Traditional wells",
+                            "formula": "=IF(AND(ISNUMBER({F#28,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),{F#32,Q#current,P#current}\/({F#28,Q#current,P#current}),\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 54.5
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 2,
+                    "usage": {
+                        "id": 430,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 2,
+                            "name": "Ratio: Protected wells \/ Traditional wells",
+                            "formula": "=IF(AND(ISNUMBER({F#28,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),{F#32,Q#current,P#current}\/({F#28,Q#current,P#current}),\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                },
+                "2": {
+                    "id": 2,
+                    "usage": {
+                        "id": 431,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 2,
+                            "name": "Ratio: Protected wells \/ Traditional wells",
+                            "formula": "=IF(AND(ISNUMBER({F#28,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),{F#32,Q#current,P#current}\/({F#28,Q#current,P#current}),\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                }
+            }
+        }
+    },
+    {
+        "name": "Ratio: Public tap \/ Tap water",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 8,
+                    "usage": {
+                        "id": 402,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 8,
+                            "name": "Ratio: Public tap \/ Tap water",
+                            "formula": "=IF(AND(ISNUMBER({F#7,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#7,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 21.5
+                },
+                "2": {
+                    "id": 8,
+                    "usage": {
+                        "id": 403,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 8,
+                            "name": "Ratio: Public tap \/ Tap water",
+                            "formula": "=IF(AND(ISNUMBER({F#7,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#7,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 25.0
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 8,
+                    "usage": {
+                        "id": 426,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 8,
+                            "name": "Ratio: Public tap \/ Tap water",
+                            "formula": "=IF(AND(ISNUMBER({F#7,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#7,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                },
+                "2": {
+                    "id": 8,
+                    "usage": {
+                        "id": 427,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 8,
+                            "name": "Ratio: Public tap \/ Tap water",
+                            "formula": "=IF(AND(ISNUMBER({F#7,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#7,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                }
+            }
+        }
+    },
+    {
+        "name": "Ratio: Sewerage connection among flush",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 111,
+                    "usage": {
+                        "id": 891,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 111,
+                            "name": "Ratio: Sewerage connection among flush",
+                            "formula": "=IF(ISNUMBER({F#88,Q#current,P#current}),{F#88,Q#current,P#current}\/{F#87,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                },
+                "2": {
+                    "id": 111,
+                    "usage": {
+                        "id": 892,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 111,
+                            "name": "Ratio: Sewerage connection among flush",
+                            "formula": "=IF(ISNUMBER({F#88,Q#current,P#current}),{F#88,Q#current,P#current}\/{F#87,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 111,
+                    "usage": {
+                        "id": 916,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 111,
+                            "name": "Ratio: Sewerage connection among flush",
+                            "formula": "=IF(ISNUMBER({F#88,Q#current,P#current}),{F#88,Q#current,P#current}\/{F#87,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                },
+                "2": {
+                    "id": 111,
+                    "usage": {
+                        "id": 917,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 111,
+                            "name": "Ratio: Sewerage connection among flush",
+                            "formula": "=IF(ISNUMBER({F#88,Q#current,P#current}),{F#88,Q#current,P#current}\/{F#87,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                }
+            }
+        }
+    },
+    {
+        "name": "Ratio: Sewerage connection among flush\/pour flush",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 104,
+                    "usage": {
+                        "id": 889,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 104,
+                            "name": "Ratio: Sewerage connection among flush\/pour flush",
+                            "formula": "=IF(ISNUMBER({F#82,Q#current,P#current}),{F#82,Q#current,P#current}\/{F#81,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 34.4
+                },
+                "2": {
+                    "id": 104,
+                    "usage": {
+                        "id": 890,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 104,
+                            "name": "Ratio: Sewerage connection among flush\/pour flush",
+                            "formula": "=IF(ISNUMBER({F#82,Q#current,P#current}),{F#82,Q#current,P#current}\/{F#81,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 0.0
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 104,
+                    "usage": {
+                        "id": 914,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 104,
+                            "name": "Ratio: Sewerage connection among flush\/pour flush",
+                            "formula": "=IF(ISNUMBER({F#82,Q#current,P#current}),{F#82,Q#current,P#current}\/{F#81,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                },
+                "2": {
+                    "id": 104,
+                    "usage": {
+                        "id": 915,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 104,
+                            "name": "Ratio: Sewerage connection among flush\/pour flush",
+                            "formula": "=IF(ISNUMBER({F#82,Q#current,P#current}),{F#82,Q#current,P#current}\/{F#81,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                }
+            }
+        }
+    },
+    {
+        "name": "Ratio: Traditional latrines \/ All latrines",
+        "values": {
+            "20": {
+                "3": {
                     "id": 109,
                     "usage": {
                         "id": 885,
@@ -2099,8 +1701,54 @@
                         }
                     },
                     "value": null
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 109,
+                    "usage": {
+                        "id": 908,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 109,
+                            "name": "Ratio: Traditional latrines \/ All latrines",
+                            "formula": "=IF(ISNUMBER({F#128,Q#current,P#current}),{F#128,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 24.1
                 },
-                "21": {
+                "2": {
+                    "id": 109,
+                    "usage": {
+                        "id": 909,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 109,
+                            "name": "Ratio: Traditional latrines \/ All latrines",
+                            "formula": "=IF(ISNUMBER({F#128,Q#current,P#current}),{F#128,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 18.4
+                },
+                "3": {
                     "id": 109,
                     "usage": {
                         "id": 910,
@@ -2124,5 +1772,296 @@
                 }
             }
         }
-    ]
-}
+    },
+    {
+        "name": "Ratio: Tubewell + protected well \/ All wells",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 9,
+                    "usage": {
+                        "id": 404,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 9,
+                            "name": "Ratio: Tubewell + protected well \/ All wells",
+                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),({F#24,Q#current,P#current}+{F#32,Q#current,P#current})\/{F#20,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 99.8
+                },
+                "2": {
+                    "id": 9,
+                    "usage": {
+                        "id": 405,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 9,
+                            "name": "Ratio: Tubewell + protected well \/ All wells",
+                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),({F#24,Q#current,P#current}+{F#32,Q#current,P#current})\/{F#20,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 99.5
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 9,
+                    "usage": {
+                        "id": 428,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 9,
+                            "name": "Ratio: Tubewell + protected well \/ All wells",
+                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),({F#24,Q#current,P#current}+{F#32,Q#current,P#current})\/{F#20,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                },
+                "2": {
+                    "id": 9,
+                    "usage": {
+                        "id": 429,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 9,
+                            "name": "Ratio: Tubewell + protected well \/ All wells",
+                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),({F#24,Q#current,P#current}+{F#32,Q#current,P#current})\/{F#20,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                }
+            }
+        }
+    },
+    {
+        "name": "Ratio: Tubewell \/ All wells",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 10,
+                    "usage": {
+                        "id": 406,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 10,
+                            "name": "Ratio: Tubewell \/ All wells",
+                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#20,Q#current,P#current})),{F#24,Q#current,P#current}\/{F#20,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 99.3
+                },
+                "2": {
+                    "id": 10,
+                    "usage": {
+                        "id": 407,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 10,
+                            "name": "Ratio: Tubewell \/ All wells",
+                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#20,Q#current,P#current})),{F#24,Q#current,P#current}\/{F#20,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 98.8
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 10,
+                    "usage": {
+                        "id": 432,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 10,
+                            "name": "Ratio: Tubewell \/ All wells",
+                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#20,Q#current,P#current})),{F#24,Q#current,P#current}\/{F#20,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 99.7
+                },
+                "2": {
+                    "id": 10,
+                    "usage": {
+                        "id": 433,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 10,
+                            "name": "Ratio: Tubewell \/ All wells",
+                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#20,Q#current,P#current})),{F#24,Q#current,P#current}\/{F#20,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 98.7
+                }
+            }
+        }
+    },
+    {
+        "name": "Ratio: VIP \/ All latrines",
+        "values": {
+            "20": {
+                "1": {
+                    "id": 108,
+                    "usage": {
+                        "id": 881,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 108,
+                            "name": "Ratio: VIP \/ All latrines",
+                            "formula": "=IF(ISNUMBER({F#126,Q#current,P#current}),{F#126,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 4.8
+                },
+                "2": {
+                    "id": 108,
+                    "usage": {
+                        "id": 882,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 108,
+                            "name": "Ratio: VIP \/ All latrines",
+                            "formula": "=IF(ISNUMBER({F#126,Q#current,P#current}),{F#126,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 20,
+                            "name": "MICS09 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": 3.8
+                }
+            },
+            "21": {
+                "1": {
+                    "id": 108,
+                    "usage": {
+                        "id": 906,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 108,
+                            "name": "Ratio: VIP \/ All latrines",
+                            "formula": "=IF(ISNUMBER({F#126,Q#current,P#current}),{F#126,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 1,
+                            "name": "Urban"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                },
+                "2": {
+                    "id": 108,
+                    "usage": {
+                        "id": 907,
+                        "justification": "Imported from country files",
+                        "rule": {
+                            "id": 108,
+                            "name": "Ratio: VIP \/ All latrines",
+                            "formula": "=IF(ISNUMBER({F#126,Q#current,P#current}),{F#126,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                        },
+                        "part": {
+                            "id": 2,
+                            "name": "Rural"
+                        },
+                        "questionnaire": {
+                            "id": 21,
+                            "name": "HIES10 - Bangladesh",
+                            "status": "published"
+                        }
+                    },
+                    "value": null
+                }
+            }
+        }
+    }
+]
