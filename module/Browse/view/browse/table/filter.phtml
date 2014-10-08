@@ -141,7 +141,7 @@
 </div>
 
 <!-- Table of filters, questionnaires and answers. Display in full width when there are too much elements -->
-<div disable-animate ng-if="(data.mode.isSector && data.filter) || data.filters.length && (data.questionnaires.length || data.mode.isContribute)" class="container gims-full-width-container">
+<div disable-animate ng-if="(data.mode.isSector && data.filter) || data.filters.length && (data.questionnaires.length || data.mode.isContribute)" class="container gims-full-width-container" ng-init="initScrollAndHeight()">
 
     <div class="row">
         <div class="col-md-12">

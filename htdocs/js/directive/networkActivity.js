@@ -1,7 +1,7 @@
 /**
  * Directive which is shown only when there is some network activity (anywhere within GIMS)
  */
-angular.module('myApp.directives').directive('gimsNetworkActivity', function(requestNotification, $log, $rootScope) {
+angular.module('myApp.directives').directive('gimsNetworkActivity', function(requestNotification, $log) {
     return {
         restrict: 'E',
         link: function(scope, element) {
@@ -24,7 +24,6 @@ angular.module('myApp.directives').directive('gimsNetworkActivity', function(req
                     if (startTime) {
                         var endTime = Date.now();
                         $log.log("last rendering time [ms]: ", endTime - startTime);
-                        $rootScope.$emit('gims-rendering-ready');
                         startTime = null;
                     }
                 }
