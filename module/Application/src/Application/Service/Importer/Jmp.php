@@ -568,7 +568,7 @@ STRING;
         $survey = $questionnaire->getSurvey();
         $questionRepository = $this->getEntityManager()->getRepository('Application\Model\Question\NumericQuestion');
 
-        $key = \Application\Utility::getCacheKey([$survey, $filter]);
+        $key = \Application\Utility::getVolatileCacheKey([$survey, $filter]);
 
         $question = null;
         if (array_key_exists($key, $this->cacheQuestions)) {
@@ -890,7 +890,7 @@ STRING;
         $onlyNumbers = preg_match('/^=[\d\.%+-]+$/', $formula);
 
         $rule = null;
-        $key = \Application\Utility::getCacheKey(array($formula));
+        $key = \Application\Utility::getVolatileCacheKey(array($formula));
         if (!$onlyNumbers) {
             if (array_key_exists($key, $this->cacheFormulas)) {
                 return $this->cacheFormulas[$key];
@@ -973,7 +973,7 @@ STRING;
      */
     private function getFilterQuestionnaireUsage(Filter $filter, Questionnaire $questionnaire, Rule $rule, Part $part, $isSecondStep = false)
     {
-        $key = \Application\Utility::getCacheKey(func_get_args());
+        $key = \Application\Utility::getVolatileCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheFilterQuestionnaireUsages)) {
             $filterQuestionnaireUsage = $this->cacheFilterQuestionnaireUsages[$key];
         } else {
@@ -1005,7 +1005,7 @@ STRING;
     private function getFilterGeonameUsage(Filter $filter, Geoname $geoname, Rule $rule, Part $part)
     {
         $filterGeonameUsage = null;
-        $key = \Application\Utility::getCacheKey(func_get_args());
+        $key = \Application\Utility::getVolatileCacheKey(func_get_args());
         if (array_key_exists($key, $this->cacheFilterGeonameUsages)) {
             $filterGeonameUsage = $this->cacheFilterGeonameUsages[$key];
         } elseif ($rule->getId() && $part->getId() && $filter->getId() && $geoname->getId()) {

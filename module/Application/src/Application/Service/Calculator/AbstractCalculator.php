@@ -240,7 +240,7 @@ use \Application\Traits\EntityManagerAware;
      */
     public function computeFilter($filterId, $questionnaireId, $partId, $useSecondStepRules = false, ArrayCollection $alreadyUsedFormulas = null)
     {
-        $key = \Application\Utility::getCacheKey([func_get_args(), $this->overriddenFilters]);
+        $key = \Application\Utility::getPersistentCacheKey([$filterId, $questionnaireId, $partId, $useSecondStepRules, $this->overriddenFilters]);
         if (array_key_exists($key, $this->cacheComputeFilter)) {
             return $this->cacheComputeFilter[$key];
         }

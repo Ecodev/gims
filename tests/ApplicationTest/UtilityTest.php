@@ -95,31 +95,42 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
         $this->assertSame($expected, \Application\Utility::decimalToRoundedPercent($number));
     }
 
-    public function testGetCacheKey()
+    private function getCommonCacheValues()
+    {
+        return [
+            [],
+            [''],
+            ['', ''],
+            [false],
+            [true],
+            [0],
+            [null],
+            [null, null],
+            [1, 1, null],
+            [1, 1],
+            [1, 1, ''],
+            [1, array(1)],
+            ['11', 1],
+            [1, '11'],
+            [1, '11', array(2)],
+        ];
+    }
+
+    public function testGetVolatileCacheKey()
     {
         $foo1 = new \stdClass();
         $foo2 = new \stdClass();
         $foo3 = clone $foo2;
 
+        $values = $this->getCommonCacheValues();
+        $values[] = [1, '11', array(2, $foo1)];
+        $values[] = [1, '11', array(2, $foo2)];
+        $values[] = [1, '11', array(2, $foo3)];
+
         $allKeys = array();
-        $allKeys[] = \Application\Utility::getCacheKey(array());
-        $allKeys[] = \Application\Utility::getCacheKey(array(''));
-        $allKeys[] = \Application\Utility::getCacheKey(array('', ''));
-        $allKeys[] = \Application\Utility::getCacheKey(array(false));
-        $allKeys[] = \Application\Utility::getCacheKey(array(true));
-        $allKeys[] = \Application\Utility::getCacheKey(array(0));
-        $allKeys[] = \Application\Utility::getCacheKey(array(null));
-        $allKeys[] = \Application\Utility::getCacheKey(array(null, null));
-        $allKeys[] = \Application\Utility::getCacheKey(array(1, 1, null));
-        $allKeys[] = \Application\Utility::getCacheKey(array(1, 1));
-        $allKeys[] = \Application\Utility::getCacheKey(array(1, 1, ''));
-        $allKeys[] = \Application\Utility::getCacheKey(array(1, array(1)));
-        $allKeys[] = \Application\Utility::getCacheKey(array('11', 1));
-        $allKeys[] = \Application\Utility::getCacheKey(array(1, '11'));
-        $allKeys[] = \Application\Utility::getCacheKey(array(1, '11', array(2)));
-        $allKeys[] = \Application\Utility::getCacheKey(array(1, '11', array(2, $foo1)));
-        $allKeys[] = \Application\Utility::getCacheKey(array(1, '11', array(2, $foo2)));
-        $allKeys[] = \Application\Utility::getCacheKey(array(1, '11', array(2, $foo3)));
+        foreach ($values as $value) {
+            $allKeys[] = \Application\Utility::getVolatileCacheKey($value);
+        }
 
         $uniqueKeys = array_unique($allKeys);
         $this->assertEquals(count($allKeys), count($uniqueKeys), 'all keys must be unique');
@@ -129,9 +140,33 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
         }
 
         // Get key and immediately destroy objects
-        $firstKey = \Application\Utility::getCacheKey(array(new \stdClass()));
-        $secondKey = \Application\Utility::getCacheKey(array(new \stdClass()));
+        $firstKey = \Application\Utility::getVolatileCacheKey(array(new \stdClass()));
+        $secondKey = \Application\Utility::getVolatileCacheKey(array(new \stdClass()));
         $this->assertNotEquals($secondKey, $firstKey, 'we should never recycle key from garbage collected objects');
+    }
+
+    public function testGetPersistentCacheKey()
+    {
+        $foo1 = $this->getNewModelWithId('Application\Model\Filter');
+        $foo2 = $this->getNewModelWithId('Application\Model\Filter');
+        $collection = new \Doctrine\Common\Collections\ArrayCollection([$foo1, $foo2, 123]);
+
+        $values = $this->getCommonCacheValues();
+        $values[] = [1, '11', [2, $foo1]];
+        $values[] = [1, '11', [2, $foo2]];
+        $values[] = $collection;
+
+        $allKeys = array();
+        foreach ($values as $value) {
+            $allKeys[] = \Application\Utility::getPersistentCacheKey($value);
+        }
+
+        $uniqueKeys = array_unique($allKeys);
+        $this->assertEquals(count($allKeys), count($uniqueKeys), 'all keys must be unique');
+
+        foreach ($allKeys as $key) {
+            $this->assertTrue(is_string($key), 'each key must be a string');
+        }
     }
 
     public function testGetColor()

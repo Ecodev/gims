@@ -72,22 +72,57 @@ abstract class Utility
 
     /**
      * Returns a unique key identifying all arguments in the array, so we can use the result as cache key
-     * @param array $args
+     *
+     * In most case you should use getPersistentCacheKey() instead of this method.
+     *
+     * This only works for in-memory objects. The key returned should *never* be
+     * persisted. And it is quite expensive in memory because object are forced
+     * not to be garbage collected.
+     * @param array|\Traversable $args
      * @return string
      */
-    public static function getCacheKey(array $args)
+    public static function getVolatileCacheKey($args)
+    {
+        return self::getCacheKey($args, false);
+    }
+
+    /**
+     * Returns a unique key identifying all arguments in the array, so we can use the result as cache key
+     * This only works for persisted Model objects (with an ID). The returned key can be persisted.
+     * @param array|\Traversable $args
+     * @return string
+     */
+    public static function getPersistentCacheKey($args)
+    {
+        return self::getCacheKey($args, true);
+    }
+
+    /**
+     * Returns a unique key identifying all arguments in the array, so we can use the result as cache key
+     * This only works for persisted Model objects (with an ID). The returned key can be persisted.
+     * @param array|\Traversable $args
+     * @return string
+     */
+    private static function getCacheKey($args, $isPersistent)
     {
         static $preventGarbageCollectorFromDestroyingObject = [];
-
         $key = '';
         foreach ($args as $arg) {
             if (is_null($arg)) {
                 $key .= '[[NULL]]';
             } elseif (is_object($arg)) {
+                if ($isPersistent) {
+                    if ($arg instanceof \Traversable) {
+                        $key .= '[[COLLECTION|' . self::getCacheKey($arg, $isPersistent) . ']]';
+                    } else {
+                        $key .= $arg->getId();
+                    }
+                } else {
                 $preventGarbageCollectorFromDestroyingObject[] = $arg;
                 $key .= spl_object_hash($arg);
+                }
             } elseif (is_array($arg)) {
-                $key .= '[[ARRAY|' . self::getCacheKey($arg) . ']]';
+                $key .= '[[ARRAY|' . self::getCacheKey($arg, $isPersistent) . ']]';
             } elseif (is_bool($arg)) {
                 $key .= '[[BOOL|' . $arg . ']]';
             } else {
