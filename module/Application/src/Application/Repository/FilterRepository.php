@@ -148,12 +148,12 @@ class FilterRepository extends AbstractRepository
             $thematicFirstWord = '';
             if ($filter['thematic']) {
                 $thematicFirstLetter = substr($filter['thematic'], 0, 1);
-                $thematicFirstWord = preg_split('/\W/', $filter['thematic'], null, PREG_SPLIT_NO_EMPTY)[0] . ', ';
+                $thematicFirstWord = preg_split('/\s/', $filter['thematic'], null, PREG_SPLIT_NO_EMPTY)[0] . ', ';
             }
 
             // Filter first letters of each word
             $filterAcronym = '';
-            $words = preg_split('/\W/', $filter['name'], null, PREG_SPLIT_NO_EMPTY);
+            $words = preg_split('/\s/', $filter['name'], null, PREG_SPLIT_NO_EMPTY);
             foreach ($words as $word) {
                 $filterAcronym .= substr($word, 0, 1);
             }
