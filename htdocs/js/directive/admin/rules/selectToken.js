@@ -3,12 +3,6 @@ angular.module('myApp.directives').directive('gimsSelectToken', function($rootSc
 
     return {
         restrict: 'A', // Only usage possible is with attribute
-        scope: {
-            part: '=',
-            questionnaire: '=',
-            filter: '=?',
-            rule: '=?'
-        },
         link: function(scope, element) {
 
             element.on('click', function() {
