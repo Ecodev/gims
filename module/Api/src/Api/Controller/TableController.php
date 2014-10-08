@@ -199,6 +199,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                 'long' => 'Population, ' . $part->getName(),
             ];
         }
+
         $allColumnNames = $this->getEntityManager()->getRepository('\Application\Model\Filter')->getColumnNames($filters, $parts);
         foreach ($geonames as $geoname) {
 

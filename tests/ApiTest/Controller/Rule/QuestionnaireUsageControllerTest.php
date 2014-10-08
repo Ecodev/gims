@@ -36,6 +36,7 @@ class QuestionnaireUsageControllerTest extends AbstractQuestionnaireUsageControl
     /**
      * @dataProvider getComputedQuestionnaireUsageProvider
      * @group LongTest
+     * @group ApiComputing
      */
     public function testgetComputedQuestionnaireUsage($params, $expectedJson, $message, $logFile)
     {
