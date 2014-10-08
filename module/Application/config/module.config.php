@@ -159,6 +159,9 @@ return array(
         ),
     ),
     'service_manager' => array(
+        'abstract_factories' => array(
+            'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
+        ),
         'factories' => array(
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
             'ViewExcelRenderer' => 'Application\Service\ViewExcelRendererFactory',

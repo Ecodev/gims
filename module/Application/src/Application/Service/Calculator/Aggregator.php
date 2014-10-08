@@ -46,7 +46,17 @@ class Aggregator
      */
     public function computeFlattenAllYears(array $filters, Geoname $geoname, Part $part)
     {
+        $key = 'computeFlattenAllYears:' . \Application\Utility::getPersistentCacheKey([func_get_args(), $this->calculator->getOverriddenFilters()]);
+
+        /* @var $cache \Application\Service\Calculator\Cache */
+        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        if ($cache->hasItem($key)) {
+            return $cache->getItem($key);
+        }
+        $cache->startComputing($key);
+
         // First, accumulate the parent
+        $years = range($yearStart, $yearEnd);
         $questionnaires = $this->calculator->getQuestionnaireRepository()->getAllForComputing($geoname);
         $parentResult = $this->calculator->computeFlattenAllYears($filters, $questionnaires, $part);
         $accumulator = $this->accumulate([], $parentResult, $geoname, $part);
@@ -58,6 +68,7 @@ class Aggregator
         }
 
         $result = $this->accumulatorToPercent($accumulator);
+        $cache->setItem($key, $result);
 
         return $result;
     }

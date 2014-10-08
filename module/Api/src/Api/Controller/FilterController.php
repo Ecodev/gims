@@ -151,17 +151,30 @@ class FilterController extends AbstractChildRestfulController
         $calculator->setServiceLocator($this->getServiceLocator());
         $parts = $this->getEntityManager()->getRepository('\Application\Model\Part')->findAll();
 
+        /* @var $cache \Application\Service\Calculator\Cache */
+        $cache = $this->getServiceLocator()->get('Cache\Computing');
+
         $result = array();
         foreach ($questionnaireIds as $questionnaireId) {
             $result[$questionnaireId] = array();
             foreach ($filterIds as $filterId) {
                 $result[$questionnaireId][$filterId] = array();
-                foreach ($parts as $part) {
-                    $value = array();
-                    $value['first'] = $calculator->computeFilter($filterId, $questionnaireId, $part->getId(), false);
-                    $value['second'] = $calculator->computeFilter($filterId, $questionnaireId, $part->getId(), true);
-                    $result[$questionnaireId][$filterId][$part->getId()] = $value;
+
+                $key = "getComputedFiltersAction:$questionnaireId:$filterId";
+                if ($cache->hasItem($key)) {
+                    $valuesByPart = $cache->getItem($key);
+                } else {
+                    $cache->startComputing($key);
+                    $valuesByPart = [];
+                    foreach ($parts as $part) {
+                        $value = array();
+                        $value['first'] = $calculator->computeFilter($filterId, $questionnaireId, $part->getId(), false);
+                        $value['second'] = $calculator->computeFilter($filterId, $questionnaireId, $part->getId(), true);
+                        $valuesByPart[$part->getId()] = $value;
+                    }
+                    $cache->setItem($key, $valuesByPart);
                 }
+                $result[$questionnaireId][$filterId] = $valuesByPart;
             }
         }
 

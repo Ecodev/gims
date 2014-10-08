@@ -12,7 +12,6 @@ use Application\Model\Rule\Rule;
 class Calculator extends AbstractCalculator
 {
 
-    private $cacheComputeFilterForAllQuestionnaires = array();
     private $cacheComputeRegressionForAllYears = array();
     private $cacheComputeFlattenOneYearWithFormula = array();
     private $filterGeonameUsageRepository;
@@ -266,11 +265,16 @@ class Calculator extends AbstractCalculator
      */
     public function computeFilterForAllQuestionnaires($filterId, array $questionnaires, $partId)
     {
-        $key = \Application\Utility::getPersistentCacheKey([func_get_args(), $this->overriddenFilters]);
+        $key = 'computeFilterForAllQuestionnaires:' . \Application\Utility::getPersistentCacheKey([func_get_args(), $this->overriddenFilters]);
 
-        if (array_key_exists($key, $this->cacheComputeFilterForAllQuestionnaires)) {
-            return $this->cacheComputeFilterForAllQuestionnaires[$key];
+        /* @var $cache \Application\Service\Calculator\Cache */
+        $cache = $this->getServiceLocator()->get('Cache\Computing');
+        if ($cache->hasItem($key)) {
+            $result = $cache->getItem($key);
+
+            return $result;
         }
+        $cache->startComputing($key);
 
         $result = array(
             'values' => array(),
@@ -307,7 +311,7 @@ class Calculator extends AbstractCalculator
 
         $result['average'] = $result['count'] ? \PHPExcel_Calculation_MathTrig::SUM($result['values']) / $result['count'] : null;
 
-        $this->cacheComputeFilterForAllQuestionnaires[$key] = $result;
+        $cache->setItem($key, $result);
 
         return $result;
     }

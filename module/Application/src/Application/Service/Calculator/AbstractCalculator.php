@@ -218,6 +218,15 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
+     * Get the overridden filter
+     * @return array
+     */
+    public function getOverriddenFilters()
+    {
+        return $this->overriddenFilters;
+    }
+
+    /**
      * Set the filter which must be overridden with given value
      * @param array $overriddenFilters [questionnaireId => [filterId => [partId => value]]]
      * @return self
