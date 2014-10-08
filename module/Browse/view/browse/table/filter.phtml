@@ -309,7 +309,7 @@
                             <div gims-resize-for-labels class="column" ng-repeat="questionnaire in data.questionnaires track by $index">
                                 
                                 <!-- Filter values (and question labels) -->
-                                <div class="repeater-container combined" vs-repeat vs-scroll-parent=".combined-vs">
+                                <div class="repeater-container combined column-questionnaire" vs-repeat vs-scroll-parent=".combined-vs">
                                     <div ng-repeat="filter in data.filters track by $index" class="table-filter-row">
                                         <div gims-if="questionnaire.showLabels" class="question-label">
                                             <ng-form name="labelForm">

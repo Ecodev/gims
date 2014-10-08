@@ -22,6 +22,10 @@ $border: 1px;
         display: inline-block;
     }
 
+    .column-questionnaire{
+        overflow:hidden !important;
+    }
+
     #column-questionnaires{
         overflow:auto;
     }
