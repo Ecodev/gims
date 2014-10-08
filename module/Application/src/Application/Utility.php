@@ -77,11 +77,14 @@ abstract class Utility
      */
     public static function getCacheKey(array $args)
     {
+        static $preventGarbageCollectorFromDestroyingObject = [];
+
         $key = '';
         foreach ($args as $arg) {
             if (is_null($arg)) {
                 $key .= '[[NULL]]';
             } elseif (is_object($arg)) {
+                $preventGarbageCollectorFromDestroyingObject[] = $arg;
                 $key .= spl_object_hash($arg);
             } elseif (is_array($arg)) {
                 $key .= '[[ARRAY|' . self::getCacheKey($arg) . ']]';

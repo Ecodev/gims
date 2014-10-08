@@ -127,6 +127,11 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
         foreach ($allKeys as $key) {
             $this->assertTrue(is_string($key), 'each key must be a string');
         }
+
+        // Get key and immediately destroy objects
+        $firstKey = \Application\Utility::getCacheKey(array(new \stdClass()));
+        $secondKey = \Application\Utility::getCacheKey(array(new \stdClass()));
+        $this->assertNotEquals($secondKey, $firstKey, 'we should never recycle key from garbage collected objects');
     }
 
     public function testGetColor()
