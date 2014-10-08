@@ -1783,6 +1783,42 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         $rootScope.$emit('gims-tablefilter-show-labels-toggled');
     }
 
+    var filtersSection = null;
+    var questionnairesSection = null;
+    var questionnairesHeaderSection = null;
+
+    function adjustHeight() {
+        filtersSection = jQuery("#filtersSection");
+        questionnairesSection = jQuery("#questionnairesSection");
+        questionnairesHeaderSection = jQuery("#questionnairesHeaderSection");
+        resizeContent();
+        jQuery(window).resize(resizeContent);
+    }
+
+    function resizeContent() {
+        var headerHeight = jQuery("#header").outerHeight(true);
+        var footerHeight = jQuery("#footer").outerHeight(true);
+        var toolsHeight = jQuery("#tools").outerHeight(true);
+        var margin = 275;
+        var contentHeight = jQuery(window).height() - headerHeight - footerHeight - toolsHeight - margin;
+
+        filtersSection.height(contentHeight);
+        questionnairesSection.height(contentHeight);
+    }
+
+    function syncScroll() {
+        filtersSection.scroll(function(e) {
+            questionnairesSection.scrollTop(e.target.scrollTop);
+        });
+        questionnairesSection.scroll(function(e) {
+            filtersSection.scrollTop(e.target.scrollTop);
+            questionnairesHeaderSection.scrollLeft(e.target.scrollLeft);
+        });
+        questionnairesHeaderSection.scroll(function(e) {
+            questionnairesSection.scrollLeft(e.target.scrollLeft);
+        });
+    }
+
     // Return public API
     return {
         init: init,
@@ -1813,6 +1849,9 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         setInitialValue: setInitialValue,
         toggleShowLabels: toggleShowLabels,
         toggleShowQuestionnaireUsages: toggleShowQuestionnaireUsages,
-        updateUrl: updateUrl
+        updateUrl: updateUrl,
+        adjustHeight: adjustHeight,
+        syncScroll: syncScroll,
+        resizeContent: resizeContent
     };
 });

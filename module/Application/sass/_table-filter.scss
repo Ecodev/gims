@@ -7,15 +7,28 @@ $border: 1px;
     [vs-repeat] {
         overflow: auto;
         position: relative;
-
     }
+
+    #questionnairesHeaderSection{
+        overflow:hidden !important;
+    }
+
+    #filtersSection {
+        overflow:hidden;
+    }
+
 
     .column {
         display: inline-block;
     }
 
-    .column-filter {
+    #column-questionnaires{
+        overflow:auto;
+    }
+
+    #column-filter {
         flex: 0 0 500px;
+        overflow-y:auto;
 
         &:before {
             content: "";

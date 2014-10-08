@@ -43,6 +43,19 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         $rootScope.$broadcast('event:auth-loginRequired');
     }
 
+    // scroll management
+    var renderingListenerCanceller = $rootScope.$on('gims-rendering-ready', function() {
+        // ensures events listeners are not added twice by cancelling $rootScope event listening
+        renderingListenerCanceller();
+        TableFilter.adjustHeight();
+        TableFilter.syncScroll();
+
+        $scope.$watch('expandSelection', function() {
+            TableFilter.resizeContent();
+        });
+
+    });
+
     /**************************************************************************/
     /*************************************************************** Watchers */
     /**************************************************************************/
