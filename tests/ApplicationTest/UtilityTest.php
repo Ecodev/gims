@@ -2,6 +2,8 @@
 
 namespace ApplicationTest;
 
+use Application\Utility;
+
 /**
  * @group Service
  */
@@ -36,7 +38,7 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
         $expected = preg_replace_callback($pattern, $callback, $subject);
 
         $count = 0;
-        $actual = \Application\Utility::pregReplaceUniqueCallback($pattern, $callback, $subject);
+        $actual = Utility::pregReplaceUniqueCallback($pattern, $callback, $subject);
 
         $this->assertEquals($expected, $actual);
         $this->assertEquals($expectedCount, $count);
@@ -64,7 +66,7 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
      */
     public function testBcround($number, $expected)
     {
-        $this->assertSame($expected, \Application\Utility::bcround($number, 3));
+        $this->assertSame($expected, Utility::bcround($number, 3));
     }
 
     public function decimalToRoundedPercentDataProvider()
@@ -92,7 +94,7 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
      */
     public function testDecimalToRoundedPercent($number, $expected)
     {
-        $this->assertSame($expected, \Application\Utility::decimalToRoundedPercent($number));
+        $this->assertSame($expected, Utility::decimalToRoundedPercent($number));
     }
 
     private function getCommonCacheValues()
@@ -113,6 +115,9 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
             ['11', 1],
             [1, '11'],
             [1, '11', array(2)],
+            1,
+            [0 => 1],
+            [2 => 1],
         ];
     }
 
@@ -129,7 +134,7 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
 
         $allKeys = array();
         foreach ($values as $value) {
-            $allKeys[] = \Application\Utility::getVolatileCacheKey($value);
+            $allKeys[] = Utility::getVolatileCacheKey($value);
         }
 
         $uniqueKeys = array_unique($allKeys);
@@ -140,8 +145,8 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
         }
 
         // Get key and immediately destroy objects
-        $firstKey = \Application\Utility::getVolatileCacheKey(array(new \stdClass()));
-        $secondKey = \Application\Utility::getVolatileCacheKey(array(new \stdClass()));
+        $firstKey = Utility::getVolatileCacheKey(array(new \stdClass()));
+        $secondKey = Utility::getVolatileCacheKey(array(new \stdClass()));
         $this->assertNotEquals($secondKey, $firstKey, 'we should never recycle key from garbage collected objects');
     }
 
@@ -158,7 +163,7 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
 
         $allKeys = array();
         foreach ($values as $value) {
-            $allKeys[] = \Application\Utility::getPersistentCacheKey($value);
+            $allKeys[] = Utility::getPersistentCacheKey($value);
         }
 
         $uniqueKeys = array_unique($allKeys);
@@ -176,8 +181,8 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
 
         foreach ($codes as $code) {
             foreach ($ratios as $ratio) {
-                $color1 = \Application\Utility::getColor($code, $ratio);
-                $color2 = \Application\Utility::getColor($code, $ratio);
+                $color1 = Utility::getColor($code, $ratio);
+                $color2 = Utility::getColor($code, $ratio);
                 $this->assertEquals($color1, $color2, 'colors are not identical');
             }
         }
