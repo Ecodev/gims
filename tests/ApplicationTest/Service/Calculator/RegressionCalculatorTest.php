@@ -61,13 +61,13 @@ class RegressionCalculatorTest extends AbstractCalculator
     public function testStubPopulation()
     {
         $stubPopulationRepository = $this->getStubPopulationRepository();
-        $this->assertEquals(10, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part1->getId(), 2000)->getPopulation());
-        $this->assertEquals(3, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part2->getId(), 2000)->getPopulation());
-        $this->assertEquals(7, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->partTotal->getId(), 2000)->getPopulation());
+        $this->assertEquals(10, $stubPopulationRepository->getPopulationByGeoname($this->geoname, $this->part1->getId(), 2000));
+        $this->assertEquals(3, $stubPopulationRepository->getPopulationByGeoname($this->geoname, $this->part2->getId(), 2000));
+        $this->assertEquals(7, $stubPopulationRepository->getPopulationByGeoname($this->geoname, $this->partTotal->getId(), 2000));
 
-        $this->assertEquals(15, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part1->getId(), 2005)->getPopulation());
-        $this->assertEquals(3, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->part2->getId(), 2005)->getPopulation());
-        $this->assertEquals(12, $stubPopulationRepository->getOneByGeoname($this->geoname, $this->partTotal->getId(), 2005)->getPopulation());
+        $this->assertEquals(15, $stubPopulationRepository->getPopulationByGeoname($this->geoname, $this->part1->getId(), 2005));
+        $this->assertEquals(3, $stubPopulationRepository->getPopulationByGeoname($this->geoname, $this->part2->getId(), 2005));
+        $this->assertEquals(12, $stubPopulationRepository->getPopulationByGeoname($this->geoname, $this->partTotal->getId(), 2005));
     }
 
     public function testComputeFilterForAllQuestionnaires()
@@ -596,15 +596,15 @@ class RegressionCalculatorTest extends AbstractCalculator
         }),
             array('={Q#all,P#2}', function($mockedCalculator, $year, $years, $currentFilterId, $questionnaires, $partId) {
 
-            $mockedPop = $this->getMock('\Application\Repository\PopulationRepository', array('getOneByGeoname'), array(), '', false);
+            $mockedPop = $this->getMock('\Application\Repository\PopulationRepository', array('getPopulationByGeoname'), array(), '', false);
 
             $mockedCalculator->setPopulationRepository($mockedPop);
 
             foreach ($questionnaires as $q) {
                 $mockedPop->expects($this->exactly(count($questionnaires)))
-                        ->method('getOneByGeoname')
+                        ->method('getPopulationByGeoname')
                         ->with($this->anything(), $this->equalTo(2), $year)
-                        ->will($this->returnValue(new \Application\Model\Population()));
+                        ->will($this->returnValue(null));
             }
         }),
         );

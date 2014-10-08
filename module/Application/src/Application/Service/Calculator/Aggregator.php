@@ -127,12 +127,10 @@ class Aggregator
                 // Only count the value (and its population) if it is not null
                 if (!is_null($value)) {
                     $year = $years[$valueIndex];
-                    $population = $this->calculator->getPopulationRepository()->getOneByGeoname($geoname, $part->getId(), $year);
-                    $populationValue = $population->getPopulation();
+                    $population = $this->calculator->getPopulationRepository()->getPopulationByGeoname($geoname, $part->getId(), $year);
+                    $absoluteValue = $value * $population;
 
-                    $absoluteValue = $value * $populationValue;
-
-                    $accumulator[$filterIndex]['population'][$valueIndex] += $populationValue;
+                    $accumulator[$filterIndex]['population'][$valueIndex] += $population;
                     $accumulator[$filterIndex]['absoluteData'][$valueIndex] += $absoluteValue;
                 }
             }

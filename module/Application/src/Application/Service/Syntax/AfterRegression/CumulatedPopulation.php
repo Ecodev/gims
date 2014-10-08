@@ -23,7 +23,7 @@ class CumulatedPopulation extends AbstractToken
 
         $population = 0;
         foreach ($questionnaires as $questionnaire) {
-            $population += $calculator->getPopulationRepository()->getOneByGeoname($questionnaire->getGeoname(), $partId, $year, $questionnaire->getId())->getPopulation();
+            $population += $calculator->getPopulationRepository()->getPopulationByGeoname($questionnaire->getGeoname(), $partId, $year, $questionnaire->getId());
         }
 
         return $population;

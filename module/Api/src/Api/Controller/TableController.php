@@ -272,10 +272,10 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
     private function getPopulation(\Application\Model\Geoname $geoname, $partId, $year)
     {
         $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
-        $pop = $populationRepository->getOneByGeoname($geoname, $partId, $year);
+        $population = $populationRepository->getPopulationByGeoname($geoname, $partId, $year);
 
-        if ($pop) {
-            return $pop->getPopulation();
+        if ($population) {
+            return $population;
         } else {
             $populationTotal = null;
             foreach ($geoname->getChildren() as $child) {

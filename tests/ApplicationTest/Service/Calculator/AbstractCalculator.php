@@ -269,25 +269,25 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     protected function getStubPopulationRepository()
     {
         // Create a stub for the PopulationRepository class with predetermined values, so we don't have to mess with database
-        $stubPopulationRepository = $this->getMock('\Application\Repository\PopulationRepository', array('getOneByGeoname'), array(), '', false);
+        $stubPopulationRepository = $this->getMock('\Application\Repository\PopulationRepository', array('getPopulationByGeoname'), array(), '', false);
         $stubPopulationRepository->expects($this->any())
-                ->method('getOneByGeoname')
+                ->method('getPopulationByGeoname')
                 ->will($this->returnValueMap(array(
-                            array($this->geoname, $this->part1->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(10)),
-                            array($this->geoname, $this->part1->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(10)),
-                            array($this->geoname, $this->part1->getId(), 2002, null, (new \Application\Model\Population())->setPopulation(12)),
-                            array($this->geoname, $this->part1->getId(), 2003, null, (new \Application\Model\Population())->setPopulation(13)),
-                            array($this->geoname, $this->part1->getId(), 2004, null, (new \Application\Model\Population())->setPopulation(14)),
-                            array($this->geoname, $this->part1->getId(), 2005, null, (new \Application\Model\Population())->setPopulation(15)),
-                            array($this->geoname, $this->part2->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(3)),
-                            array($this->geoname, $this->part2->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(3)),
-                            array($this->geoname, $this->part2->getId(), 2005, null, (new \Application\Model\Population())->setPopulation(3)),
-                            array($this->geoname, $this->partTotal->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(7)),
-                            array($this->geoname, $this->partTotal->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(7)),
-                            array($this->geoname, $this->partTotal->getId(), 2005, null, (new \Application\Model\Population())->setPopulation(12)),
-                            array($this->geoname2, $this->part1->getId(), 2000, null, (new \Application\Model\Population())->setPopulation(30)),
-                            array($this->geoname2, $this->part1->getId(), 2001, null, (new \Application\Model\Population())->setPopulation(40)),
-                            array($this->geoname2, $this->part1->getId(), 2002, null, (new \Application\Model\Population())->setPopulation(50)),
+                            array($this->geoname, $this->part1->getId(), 2000, null, 10),
+                            array($this->geoname, $this->part1->getId(), 2001, null, 10),
+                            array($this->geoname, $this->part1->getId(), 2002, null, 12),
+                            array($this->geoname, $this->part1->getId(), 2003, null, 13),
+                            array($this->geoname, $this->part1->getId(), 2004, null, 14),
+                            array($this->geoname, $this->part1->getId(), 2005, null, 15),
+                            array($this->geoname, $this->part2->getId(), 2000, null, 3),
+                            array($this->geoname, $this->part2->getId(), 2001, null, 3),
+                            array($this->geoname, $this->part2->getId(), 2005, null, 3),
+                            array($this->geoname, $this->partTotal->getId(), 2000, null, 7),
+                            array($this->geoname, $this->partTotal->getId(), 2001, null, 7),
+                            array($this->geoname, $this->partTotal->getId(), 2005, null, 12),
+                            array($this->geoname2, $this->part1->getId(), 2000, null, 30),
+                            array($this->geoname2, $this->part1->getId(), 2001, null, 40),
+                            array($this->geoname2, $this->part1->getId(), 2002, null, 50),
         )));
 
         return $stubPopulationRepository;

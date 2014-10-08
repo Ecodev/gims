@@ -45,17 +45,17 @@ class PopulationRepositoryTest extends AbstractRepository
         $this->getEntityManager()->flush();
 
         $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
-        $pop = $populationRepository->getOneByGeoname($geoname, $part->getId(), 2000);
-        $this->assertEquals(5, $pop->getPopulation(), 'should return official population');
+        $pop = $populationRepository->getPopulationByGeoname($geoname, $part->getId(), 2000);
+        $this->assertEquals(5, $pop, 'should return official population');
 
-        $pop = $populationRepository->getOneByGeoname($geoname, $part->getId(), 2000, 12345);
-        $this->assertEquals(5, $pop->getPopulation(), 'should default to official population if questionnaire does not have population');
+        $pop = $populationRepository->getPopulationByGeoname($geoname, $part->getId(), 2000, 12345);
+        $this->assertEquals(5, $pop, 'should default to official population if questionnaire does not have population');
 
-        $pop = $populationRepository->getOneByGeoname($geoname, $part->getId(), 2000, $questionnaire->getId());
-        $this->assertEquals(500, $pop->getPopulation(), 'should return non-official population specific the questionnaire');
+        $pop = $populationRepository->getPopulationByGeoname($geoname, $part->getId(), 2000, $questionnaire->getId());
+        $this->assertEquals(500, $pop, 'should return non-official population specific the questionnaire');
 
-        $pop = $populationRepository->getOneByQuestionnaire($questionnaire, $part->getId(), 2000);
-        $this->assertEquals(500, $pop->getPopulation(), 'should return non-official population specific the questionnaire');
+        $pop = $populationRepository->getPopulationByQuestionnaire($questionnaire, $part->getId(), 2000);
+        $this->assertEquals(500, $pop, 'should return non-official population specific the questionnaire');
     }
 
 }

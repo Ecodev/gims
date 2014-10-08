@@ -25,7 +25,7 @@ class PopulationValue extends AbstractToken
 
         $questionnaire = $questionnaireId == 'current' ? $usage->getQuestionnaire() : $calculator->getQuestionnaireRepository()->findOneById($questionnaireId);
 
-        return $calculator->getPopulationRepository()->getOneByQuestionnaire($questionnaire, $partId)->getPopulation();
+        return $calculator->getPopulationRepository()->getPopulationByQuestionnaire($questionnaire, $partId);
     }
 
     public function getStructure(array $matches, Parser $parser)

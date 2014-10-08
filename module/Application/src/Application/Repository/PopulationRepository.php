@@ -28,43 +28,50 @@ class PopulationRepository extends AbstractChildRepository
     private $cache = array();
 
     /**
-     * Returns the population for given questionnaire and part.
+     * Returns the population value for given questionnaire and part.
      * Optimized to fetch all data by geoname.
      * @param \Application\Model\Questionnaire $questionnaire
      * @param integer $partId
      * @return \Application\Model\Population
      */
-    public function getOneByQuestionnaire(\Application\Model\Questionnaire $questionnaire, $partId)
+    public function getPopulationByQuestionnaire(\Application\Model\Questionnaire $questionnaire, $partId)
     {
-        return $this->getOneByGeoname($questionnaire->getGeoname(), $partId, $questionnaire->getSurvey()->getYear(), $questionnaire->getId());
+        return $this->getPopulationByGeoname($questionnaire->getGeoname(), $partId, $questionnaire->getSurvey()->getYear(), $questionnaire->getId());
     }
 
     /**
-     * Returns the population for given geoname, part and year.
+     * Returns the population value for given geoname, part and year.
      * Optimized to fetch all data by geoname.
      * @param \Application\Model\Geoname $geoname
      * @param integer $partId
      * @param integer $year
      * @param integer|null $questionnaireId if given will return custom population for that questionnaire if available
-     * @return \Application\Model\Population
+     * @return integer
      */
-    public function getOneByGeoname(\Application\Model\Geoname $geoname, $partId, $year, $questionnaireId = null)
+    public function getPopulationByGeoname(\Application\Model\Geoname $geoname, $partId, $year, $questionnaireId = null)
     {
         if (!isset($this->cache[$geoname->getId()])) {
+            $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
+            $rsm->addScalarResult('population', 'population');
+            $rsm->addScalarResult('year', 'year');
+            $rsm->addScalarResult('part_id', 'part_id');
+            $rsm->addScalarResult('questionnaire_id', 'questionnaire_id');
 
-            $query = $this->getEntityManager()->createQuery("SELECT p FROM Application\Model\Population p
-                JOIN p.country c WITH c.geoname = :geoname"
-            );
+            $query = $this->getEntityManager()->createNativeQuery('
+                SELECT population, year, part_id, questionnaire_id
+                FROM population
+                INNER JOIN country ON (population.country_id = country.id AND country.geoname_id = :geoname)', $rsm);
 
             $query->setParameters(array(
                 'geoname' => $geoname,
             ));
+            $data = $query->getResult();
 
             // Ensure that we hit the cache next time, even if we have no results at all
             $this->cache[$geoname->getId()] = array();
 
-            foreach ($query->getResult() as $p) {
-                $this->cache[$geoname->getId()][$p->getYear()][$p->getPart()->getId()][$p->getQuestionnaire() ? $p->getQuestionnaire()->getId() : null] = $p;
+            foreach ($data as $p) {
+                $this->cache[$geoname->getId()][$p['year']][$p['part_id']][$p['questionnaire_id']] = $p['population'];
             }
         }
 
