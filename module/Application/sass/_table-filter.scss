@@ -14,7 +14,7 @@ $border: 1px;
     }
 
     #filtersSection {
-        overflow:hidden;
+        overflow:auto;
     }
 
 
@@ -32,7 +32,7 @@ $border: 1px;
 
     #column-filter {
         flex: 0 0 500px;
-        overflow-y:auto;
+        overflow-y:hidden;
 
         &:before {
             content: "";
