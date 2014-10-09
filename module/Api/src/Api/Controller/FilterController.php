@@ -57,7 +57,15 @@ class FilterController extends AbstractChildRestfulController
                 }
 
                 $filters = $this->flattenFilters($uniqueFilters, false, $parent);
+                array_unshift($filters, ["id" => $parent->getId()]);
                 $filters = $this->getFlatHierarchyWithSingleRootElement($filters, '_parent');
+                array_shift($filters);
+                $filters = array_map(function ($filter) {
+                    $filter['level']--;
+
+                    return $filter;
+                }, $filters);
+
             }
 
             // no parent, get all filters
