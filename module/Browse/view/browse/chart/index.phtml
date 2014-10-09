@@ -371,11 +371,14 @@
                                                     <p class="text-muted">Select a filter below to view and edit detailed values in tables.</p>
                                                     <ul>
                                                         <li ng-repeat="geoname in tabs.geonames" style="margin-bottom: 1em;">{{geoname.name}}
-                                                            <ul class="list-unstyled">
+                                                            <ul class="list-unstyled" ng-if="geoname.country">
                                                                 <li><a ng-if="tabs.filters" href="/contribute/jmp?&country={{geoname.country.id}}&filters={{getFiltersIds()}}&returnUrl={{currentUrl}}"><i class="fa fa-gims-filter"></i> All filters</a></li>
                                                                 <li ng-repeat="filter in tabs.filters">
                                                                     <a href="{{getContributeUrl(filter, geoname)}}"><i class="fa fa-gims-filter" style="color:{{filter.genericColor}}"></i> {{filter.name}}</a>
                                                                 </li>
+                                                            </ul>
+                                                            <ul class="list-unstyled" ng-if="!geoname.country">
+                                                                <li class="text-muted">Not available for aggregated results</li>
                                                             </ul>
                                                         </li>
                                                     </ul>
