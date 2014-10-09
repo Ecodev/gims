@@ -59,7 +59,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $filtersIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
 
         $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findById($geonameIds);
-        $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds);
+        $filters = Utility::indexById($this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds));
         $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
 
         $series = [];
@@ -188,16 +188,13 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     {
         $series = array();
 
-        /** @var \Application\Repository\Rule\FilterFilterRepository $filterRepository */
-        $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
-
         /** @var \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepo */
         $filterGeonameUsageRepo = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
 
         $lines = $this->getAggregator()->computeFlattenAllYears($this->startYear, $this->endYear, $filters, $geoname, $part);
         foreach ($lines as &$serie) {
             /** @var \Application\Model\Filter $filter */
-            $filter = $filterRepository->findOneById($serie['id']);
+            $filter = $filters[$serie['id']];
 
             /** @var \Application\Repository\Rule\FilterGeonameUsage usages */
             $usages = $filterGeonameUsageRepo->getAllForGeonameAndFilter($geoname, $filter, $part);

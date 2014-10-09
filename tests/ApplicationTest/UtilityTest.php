@@ -188,4 +188,19 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
         }
     }
 
+    public function testIndexById()
+    {
+        $foo1 = $this->getNewModelWithId('Application\Model\Filter');
+        $foo2 = $this->getNewModelWithId('Application\Model\Filter');
+        $foo3 = $this->getNewModelWithId('Application\Model\Filter');
+        $array = [$foo3, $foo2];
+
+        $expected = [
+            2 => $foo2,
+            3 => $foo3,
+        ];
+
+        $this->assertEquals($expected, Utility::indexById($array));
+    }
+
 }

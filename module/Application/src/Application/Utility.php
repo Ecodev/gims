@@ -25,13 +25,12 @@ abstract class Utility
 
     /**
      * Find an object by id on assoc array
-     * @param $id
-     * @param $objects
+     * @param integer $id
+     * @param array $objects
      * @return null
      */
-    public static function getObjectById($id, $objects)
+    public static function getObjectById($id, array $objects)
     {
-
         if ($id) {
             foreach ($objects as $o) {
                 if ($o['id'] == $id) {
@@ -41,6 +40,21 @@ abstract class Utility
         }
 
         return null;
+    }
+
+    /**
+     * Return a new array indexed by the objects ID
+     * @param Model\AbstractModel[] $objects
+     * @return Model\AbstractModel[] $objects indexed by their ID
+     */
+    public static function indexById(array $objects)
+    {
+        $result = [];
+        foreach ($objects as $object) {
+            $result[$object->getId()] = $object;
+        }
+
+        return $result;
     }
 
     /**
