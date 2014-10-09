@@ -1,4 +1,4 @@
-<div disable-animate class="container">
+<div disable-animate class="container" on-rendered="test()">
     <div id="tools">
 
         <!-- Toolbar -->
@@ -212,7 +212,7 @@
                     <div class="column" id="column-questionnaires">
 
                         <div vs-repeat vs-horizontal vs-size-property="width" vs-repeat-trigger="myevent" id="questionnairesHeaderSection" style="height:{{5 * 41}}px;">
-                            <div gims-resize-for-labels class="column" ng-repeat="questionnaire in data.questionnaires track by $index">
+                            <div gims-resize-for-labels class="column" ng-repeat="questionnaire in data.questionnaires track by $id(questionnaire)">
 
                                 <div class="table-filter-row">
                                     <!-- Display errors on questionnaires / surveys integrity data structure (like two different years for the same survey or two countries for the same survey -->
@@ -306,11 +306,11 @@
                         </div>
 
                         <div vs-repeat vs-horizontal vs-size-property="width" vs-repeat-trigger="myevent" class="horizontal combined-vs" id="questionnairesSection">
-                            <div gims-resize-for-labels class="column" ng-repeat="questionnaire in data.questionnaires track by $index">
+                            <div gims-resize-for-labels class="column" ng-repeat="questionnaire in data.questionnaires track by $id(questionnaire)">
 
                                 <!-- Filter values (and question labels) -->
                                 <div class="repeater-container combined column-questionnaire" vs-repeat vs-scroll-parent=".combined-vs">
-                                    <div ng-repeat="filter in data.filters track by $index" class="table-filter-row">
+                                    <div ng-repeat="filter in data.filters track by $id(filter)" class="table-filter-row">
                                         <div gims-if="questionnaire.showLabels" class="question-label">
                                             <ng-form name="labelForm">
                                                 <div class="input-group input-group-sm">
