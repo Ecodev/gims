@@ -2,6 +2,8 @@
 
 namespace Application\Repository;
 
+use Doctrine\ORM\Query\Expr\Join;
+
 class GeonameRepository extends AbstractRepository
 {
 
@@ -76,4 +78,29 @@ INNER JOIN questionnaire AS q ON questionnaire.geoname_id = q.geoname_id AND q.i
 
         return $result;
     }
+
+    /**
+     * Returns geonames with their children already loaded
+     * @param array $geonameIds
+     * @return \Application\Model\Geoname[]
+     */
+    public function getByIdForComputing(array $geonameIds)
+    {
+        // Here we have to also include country even if we don't use it, otherwise
+        // Doctrine would issue another SQL query for each geoname to get their countries
+        $qb = $this->createQueryBuilder('geoname')
+                ->select('geoname', 'country', 'children', 'childrenCountry', 'grandChildren', 'grandChildrenCountry')
+                ->leftJoin('geoname.country', 'country', Join::WITH)
+                ->leftJoin('geoname.children', 'children', Join::WITH)
+                ->leftJoin('children.country', 'childrenCountry', Join::WITH)
+                ->leftJoin('children.children', 'grandChildren', Join::WITH)
+                ->leftJoin('grandChildren.country', 'grandChildrenCountry', Join::WITH)
+                ->where('geoname IN (:geonames)')
+                ->orderBy('geoname.name');
+
+        $qb->setParameter('geonames', $geonameIds);
+
+        return $qb->getQuery()->getResult();
+    }
+
 }
