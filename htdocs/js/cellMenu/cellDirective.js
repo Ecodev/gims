@@ -139,53 +139,60 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
              * Apply custom visual style
              */
             function updateVisualStyle() {
-                // Update absolute/percent icon
-                if (scope.questionnaire.survey.questions[scope.filter.id].isAbsolute) {
-                    unitIcon.text('');
-                    unitIcon.addClass('fa-plus-square-o');
-                } else {
-                    unitIcon.text('%');
-                    unitIcon.removeClass('fa-plus-square-o');
-                }
+                // Update absolute/percent icon$
+                if (scope.filter && scope.questionnaire) {
 
-                // Update if excluded from computing
-                var isExcluded = scope.questionnaire.survey.questions[scope.filter.id].filter.values[scope.part.id].isExcludedFromComputing;
-                if (isExcluded) {
-                    input.addClass('excluded-from-computing');
-                } else {
-                    input.removeClass('excluded-from-computing');
-                }
+                    if (scope.questionnaire.survey && scope.questionnaire.survey.questions[scope.filter.id]) {
+                        if (scope.questionnaire.survey.questions[scope.filter.id].isAbsolute) {
+                            unitIcon.text('');
+                            unitIcon.addClass('fa-plus-square-o');
+                        } else {
+                            unitIcon.text('%');
+                            unitIcon.removeClass('fa-plus-square-o');
+                        }
+                    }
 
-                // Update the type icon
-                var type = TableFilter.getCellType(scope.questionnaire, scope.filter, scope.part.id);
-                var classes;
-                switch (type) {
-                    case 'loading':
-                        classes = 'fa fa-fw fa-gims-loading';
-                        break;
-                    case 'error':
-                        classes = 'fa fa-fw fa-warning text-warning';
-                        break;
-                    case 'answer':
-                        classes = 'fa fa-fw fa-question';
-                        break;
-                    case 'rule':
-                        classes = 'fa fa-fw fa-gims-rule computable';
-                        break;
-                    case 'summand':
-                        classes = 'fa fa-fw fa-gims-summand computable';
-                        break;
-                    case 'child':
-                        classes = 'fa fa-fw fa-gims-child computable';
-                        break;
-                    default:
-                        classes = 'fa fa-fw fa-angle-down';
-                }
-                typeIcon.className = classes;
+                    // Update if excluded from computing
+                    if (scope.questionnaire.survey && scope.questionnaire.survey.questions[scope.filter.id].filter.values) {
+                        var isExcluded = scope.questionnaire.survey.questions[scope.filter.id].filter.values[scope.part.id].isExcludedFromComputing;
+                        if (isExcluded) {
+                            input.addClass('excluded-from-computing');
+                        } else {
+                            input.removeClass('excluded-from-computing');
+                        }
+                        var placeholderValue = scope.questionnaire.survey.questions[scope.filter.id].filter.values[scope.part.id].displayValue;
+                        input.attr('placeholder', placeholderValue);
+                    }
 
-                var placeholderValue = scope.questionnaire.survey.questions[scope.filter.id].filter.values[scope.part.id].displayValue;
-                input.attr('placeholder', placeholderValue);
+                    // Update the type icon
+                    var type = TableFilter.getCellType(scope.questionnaire, scope.filter, scope.part.id);
+                    var classes;
+                    switch (type) {
+                        case 'loading':
+                            classes = 'fa fa-fw fa-gims-loading';
+                            break;
+                        case 'error':
+                            classes = 'fa fa-fw fa-warning text-warning';
+                            break;
+                        case 'answer':
+                            classes = 'fa fa-fw fa-question';
+                            break;
+                        case 'rule':
+                            classes = 'fa fa-fw fa-gims-rule computable';
+                            break;
+                        case 'summand':
+                            classes = 'fa fa-fw fa-gims-summand computable';
+                            break;
+                        case 'child':
+                            classes = 'fa fa-fw fa-gims-child computable';
+                            break;
+                        default:
+                            classes = 'fa fa-fw fa-angle-down';
+                    }
+                    typeIcon.className = classes;
+                }
             }
+            updateVisualStyle();
 
             // Open menu when clicking button
             var button = element.find('button');
