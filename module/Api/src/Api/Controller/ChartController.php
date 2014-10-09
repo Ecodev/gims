@@ -291,10 +291,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
 
             // create filters objects
-            $filtersIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
-            $filters = array_map(function ($filterId) {
-                return $this->getEntityManager()->getRepository('Application\Model\Filter')->findOneById($filterId);
-            }, $filtersIds);
+            $filterIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
+            $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filterIds);
 
             $result = array(
                 'name' => $questionnaire->getName(),
