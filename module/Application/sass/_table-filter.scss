@@ -10,7 +10,13 @@ $border: 1px;
     }
 
     #questionnairesHeaderSection{
-        overflow:hidden !important;
+        height:206px; /* 5 * 41 */
+        overflow-x:hidden;
+        overflow-y:scroll;
+    }
+
+    #filtersSectionHeader, #questionnairesHeaderSection{
+        border-bottom: $border solid $table-border-color;
     }
 
     #filtersSection {

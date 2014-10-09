@@ -152,22 +152,24 @@
                     <!-- First column for filters -->
                     <div class="column" id="column-filter">
 
-                        <div class="table-filter-row">
-                            <button class="btn btn-default btn-sm pull-right" ng-click="addQuestionnaire();" ng-if="data.mode.isContribute">
-                                <i class="fa fa-gims-add"></i> Add new questionnaire
-                            </button>
-                        </div>
-                        <div class="table-filter-row header"></div>
-                        <div class="table-filter-row header"></div>
-                        <div class="table-filter-row header" ng-if="data.mode.isSector"></div>
-                        <div class="table-filter-row header">
-                            <button class="btn btn-default btn-sm pull-right" ng-if="data.questionnaires.length > 1" ng-click="orderQuestionnaires(false)">
-                                <i class="fa fa-sort-amount-asc fa-rotate-270"></i> Sort by year
-                            </button>
-                        </div>
-                        <div class="table-filter-row header large" ng-if="data.showQuestionnaireComments"></div>
+                        <div id='filtersSectionHeader'>
+                            <div class="table-filter-row">
+                                <button class="btn btn-default btn-sm pull-right" ng-click="addQuestionnaire();" ng-if="data.mode.isContribute">
+                                    <i class="fa fa-gims-add"></i> Add new questionnaire
+                                </button>
+                            </div>
+                            <div class="table-filter-row header"></div>
+                            <div class="table-filter-row header"></div>
+                            <div class="table-filter-row header" ng-if="data.mode.isSector"></div>
+                            <div class="table-filter-row header">
+                                <button class="btn btn-default btn-sm pull-right" ng-if="data.questionnaires.length > 1" ng-click="orderQuestionnaires(false)">
+                                    <i class="fa fa-sort-amount-asc fa-rotate-270"></i> Sort by year
+                                </button>
+                            </div>
+                            <div class="table-filter-row header large" ng-if="data.showQuestionnaireComments"></div>
 
-                        <div class="table-filter-row"></div>
+                            <div class="table-filter-row"></div>
+                        </div>
 
                         <div id="filtersSection">
                             <div class="table-filter-row filter-label" ng-repeat="filter in data.filters track by $index" ng-class="{'active':data.mode.isSector && filter.level < 2}" >
@@ -211,7 +213,7 @@
                     <!-- All questionnaire columns -->
                     <div class="column" id="column-questionnaires">
 
-                        <div vs-repeat vs-horizontal vs-size-property="width" vs-repeat-trigger="myevent" id="questionnairesHeaderSection" style="height:{{5 * 41}}px;">
+                        <div vs-repeat vs-horizontal vs-size-property="width" vs-repeat-trigger="myevent" id="questionnairesHeaderSection">
                             <div gims-resize-for-labels class="column" ng-repeat="questionnaire in data.questionnaires track by $id(questionnaire)">
 
                                 <div class="table-filter-row">
