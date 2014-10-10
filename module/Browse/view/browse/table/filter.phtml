@@ -217,7 +217,7 @@
                     <!-- All questionnaire columns -->
                     <div class="column" id="column-questionnaires">
 
-                        <div vs-repeat vs-horizontal vs-size-property="width" vs-repeat-trigger="myevent" id="questionnairesHeaderSection">
+                        <div vs-repeat vs-horizontal vs-size-property="width" id="questionnairesHeaderSection">
                             <div gims-resize-for-labels class="column" ng-repeat="questionnaire in data.questionnaires track by $id(questionnaire)">
 
                                 <div class="table-filter-row">
@@ -311,7 +311,7 @@
                             </div>
                         </div>
 
-                        <div vs-repeat vs-horizontal vs-size-property="width" vs-repeat-trigger="myevent" class="horizontal combined-vs" id="questionnairesSection">
+                        <div vs-repeat vs-horizontal vs-size-property="width" class="horizontal combined-vs" id="questionnairesSection">
                             <div gims-resize-for-labels class="column" ng-repeat="questionnaire in data.questionnaires track by $id(questionnaire)">
 
                                 <!-- Filter values (and question labels) -->
