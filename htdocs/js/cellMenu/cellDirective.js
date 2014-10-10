@@ -153,7 +153,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
                     }
 
                     // Update if excluded from computing
-                    if (scope.questionnaire.survey && scope.questionnaire.survey.questions[scope.filter.id].filter.values) {
+                    if (scope.questionnaire.survey && scope.questionnaire.survey.questions[scope.filter.id] && scope.questionnaire.survey.questions[scope.filter.id].filter.values) {
                         var isExcluded = scope.questionnaire.survey.questions[scope.filter.id].filter.values[scope.part.id].isExcludedFromComputing;
                         if (isExcluded) {
                             input.addClass('excluded-from-computing');
