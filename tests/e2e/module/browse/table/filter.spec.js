@@ -32,11 +32,11 @@ describe('browse/table/filter menu', function() {
     });
 
     it('should have every single type of values', function() {
-        expect(element.all(by.css('.input-group-btn .fa-question')).count()).toBe(1);
-        expect(element.all(by.css('.input-group-btn .fa-gims-rule')).count()).toBe(1);
-        expect(element.all(by.css('.input-group-btn .fa-angle-down')).count()).toBe(1);
-        expect(element.all(by.css('.input-group-btn .fa-gims-child')).count()).toBe(1);
-        expect(element.all(by.css('.input-group-btn .fa-gims-summand')).count()).toBe(1);
+        expect(element.all(by.css('.input-group-btn .fa-question')).count()).toBe(3);
+        expect(element.all(by.css('.input-group-btn .fa-gims-rule')).count()).toBe(3);
+        expect(element.all(by.css('.input-group-btn .fa-angle-down')).count()).toBe(3);
+        expect(element.all(by.css('.input-group-btn .fa-gims-child')).count()).toBe(3);
+        expect(element.all(by.css('.input-group-btn .fa-gims-summand')).count()).toBe(3);
     });
 
     it('menu for question should be complete', function() {
