@@ -101,6 +101,12 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
     private $color;
 
     /**
+     * @var string
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $bgColor;
+
+    /**
      * @var int
      * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
      */
@@ -442,7 +448,7 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
     }
 
     /**
-     * Get color if setted in datase
+     * Get color if setted in database
      * @param Ration|int saturation from 0 to 100
      * @return string
      */
@@ -468,6 +474,27 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
     public function setColor($color)
     {
         $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get background color i
+     * @return string
+     */
+    public function getBgColor()
+    {
+        return $this->bgColor;
+    }
+
+    /**
+     * Set color in database
+     * @param $color string hexadecimal
+     * @return self
+     */
+    public function setBgColor($color)
+    {
+        $this->bgColor = $color;
 
         return $this;
     }
@@ -504,6 +531,7 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
 
     /**
      * @param bool $isThematic
+     *      * @return self
      */
     public function setIsThematic($isThematic)
     {
@@ -522,6 +550,7 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
 
     /**
      * @param \Application\Model\Filter $thematicFilter
+     * @throws InvalidArgumentException
      * @return self
      */
     public function setThematicFilter($thematicFilter)

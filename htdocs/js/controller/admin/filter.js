@@ -3,7 +3,7 @@
 angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $location, $routeParams, Modal, Restangular) {
     "use strict";
 
-    $scope.fields = {fields: 'filterSets,children,children.paths,children.color,parents,parents.paths,parents.color,summands,summands.paths,summands.color,paths,color'};
+    $scope.fields = {fields: 'filterSets,children,children.paths,children.color,parents,parents.paths,parents.color,summands,summands.paths,summands.color,paths,color,bgColor'};
 
     var returnUrl = '/admin/filter';
     if ($routeParams.returnUrl) {
