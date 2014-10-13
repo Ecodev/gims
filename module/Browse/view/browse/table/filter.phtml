@@ -49,7 +49,7 @@
 
                         <div class="col-md-12">
                             <tabset>
-                                <tab heading="Filter set" >
+                                <tab heading="Filter set">
                                     <gims-select
                                         model="data.filterSet"
                                         api="filterSet"
@@ -172,9 +172,9 @@
                         </div>
 
                         <div id="filtersSection">
-                            <div class="table-filter-row filter-label" ng-repeat="filter in data.filters track by $index" ng-class="{'active':data.mode.isSector && filter.level < 2}" >
+                            <div class="table-filter-row filter-label" ng-repeat="filter in data.filters track by $index" ng-class="{'active':data.mode.isSector && filter.level < 2}" style="background-color:{{filter.bgColor}}">
                                 <span ng-if="isValidId(filter) || data.mode.isSector && filter.level != 1" ng-class="{'strong':filter.level == data.filters[0].level && !filter.sectorChild}" class="text-2em" style="margin-left:{{(filter.level - data.filters[0].level) * 2}}em;">
-                                    <i class="fa" style="color:{{filter.color}}" ng-class="{'fa-gims-filter':!filter.isLoading && isValidId(filter), 'fa-asterisk text-primary':!filter.isLoading && !isValidId(filter), 'fa-gims-loading':filter.isLoading}"></i>
+                                    <i class="fa" style="color:{{filter.color}};" ng-class="{'fa-gims-filter':!filter.isLoading && isValidId(filter), 'fa-asterisk text-primary':!filter.isLoading && !isValidId(filter), 'fa-gims-loading':filter.isLoading}"></i>
                                     {{filter.name}}
                                     <a class="btn btn-link" href="/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i></a>
                                     <span class="btn btn-link removeButton" style="vertical-align:top;" ng-click="removeFilter(filter)" tooltip="Hide this row and its children" tooltip-placement="right"><i class="fa fa-times"></i></span>
@@ -312,7 +312,7 @@
 
                                 <!-- Filter values (and question labels) -->
                                 <div class="repeater-container combined column-questionnaire" vs-repeat vs-scroll-parent=".combined-vs">
-                                    <div ng-repeat="filter in data.filters track by $id(filter)" class="table-filter-row">
+                                    <div ng-repeat="filter in data.filters track by $id(filter)" class="table-filter-row" background-color>
                                         <div gims-if="questionnaire.showLabels" class="question-label">
                                             <ng-form name="labelForm">
                                                 <div class="input-group input-group-sm">

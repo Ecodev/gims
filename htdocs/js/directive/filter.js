@@ -68,7 +68,7 @@ angular.module('myApp.directives').directive('gimsFilter', function() {
                     scope.changeUrl = !_.isUndefined(scope.changeUrl) ? scope.changeUrl == 'true' ? true : false : true;
                     scope.showEditButton = !_.isUndefined(scope.showEditButton) ? scope.showEditButton == 'true' ? true : false : false;
 
-                    var defaultFields = ['color'];
+                    var defaultFields = ['bgColor', 'color'];
                     if (scope.genericColor) {
                         defaultFields.push('genericColor');
                     }
