@@ -9,7 +9,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.panelTabs = {};
     $scope.ignoredElements = null;
     $scope.concatenatedIgnoredElements = [];
-    $scope.geonameParams = {perPage: 500, fields: 'country'};
+    $scope.geonameParams = {perPage: 500, fields: 'country,questionnaires'};
     $scope.filterSetParams = {fields: 'filters.genericColor,filters.color'};
     $scope.indexedElements = ChartCache.getCache();
     Chart.setCache($scope.indexedElements);
@@ -58,7 +58,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     });
 
     $scope.$watch('panelTabs.reference', function() {
-
         if ($scope.panelTabs.reference) {
             var id = $scope.panelTabs.reference.id ? $scope.panelTabs.reference.id : $scope.panelTabs.reference;
             $location.search('reference', id);
@@ -66,7 +65,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 $scope.panelTabs.referenceChildren = filters.children;
             });
         }
-
     });
 
     $scope.$watch('tabs.filterSets', function() {
@@ -87,6 +85,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         });
 
         ChartCache.removeFilters(removedFilters);
+
+        $scope.filtersIds = _.pluck($scope.tabs.filters, 'id').join(',');
 
         // filter series that are no more used in chart
         Chart.removeSeries(removedFilters);
@@ -121,7 +121,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             $scope.pointSelected = null;
         }
 
-        $scope.geonameIds = '?geonames=' + _.pluck($scope.tabs.geonames, 'id').join(',');
+        refreshGeonameScopeShortcuts();
         refreshNormalSeries(null);
         initIgnoredElements($scope.tabs.filters);
     }, true);
@@ -183,6 +183,24 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     /**************************************************************************/
     /* SCOPE FUNCTIONS ********************************************************/
     /**************************************************************************/
+
+    /**
+     * Set a scoped variable questionnairesIds that contains questionnaire ids by geoname
+     * Is used to link to table filter view
+     * {
+     *   all : '1,2,3,4,5',
+     *   19 : '1,2,3',
+     *   28 : '4,5'
+     * }
+     */
+    var refreshGeonameScopeShortcuts = function() {
+        $scope.questionnairesIds = { all: [] };
+        angular.forEach($scope.tabs.geonames, function(geoname) {
+            $scope.questionnairesIds.all = $scope.questionnairesIds.all.concat(_.pluck(geoname.questionnaires, 'id'));
+            $scope.questionnairesIds[geoname.id] = _.pluck(geoname.questionnaires, 'id').join(',');
+        });
+        $scope.questionnairesIds.all = _.uniq($scope.questionnairesIds.all).join(',');
+    };
 
     /**
      * Inspect $scope.indexedElements to find ignored elements and update Url if refreshUrl is set to true.

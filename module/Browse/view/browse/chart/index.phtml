@@ -3,7 +3,22 @@
     <!-- Toolbar -->
     <div class="navbar navbar-default hidden-print">
         <a class="navbar-brand" href="#">Chart</a>
+
         <form class="navbar-form">
+            <div class="btn-group dropdown"  ng-if="tabs.geonames">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                    <i class="fa fa-gims-questionnaire"></i> View in JMP table <span class="caret"></span>
+                </button>
+
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="/contribute/jmp?questionnaires={{questionnairesIds.all}}&filterSet={{tabs.filterSets[0].id}}&filters={{filtersIds}}">All countries </a>
+                    </li>
+                    <li ng-repeat="geoname in tabs.geonames">
+                        <a href="/contribute/jmp?questionnaires={{questionnairesIds[geoname.id]}}&filterSet={{tabs.filterSets[0].id}}&filters={{filtersIds}}">{{geoname.name}}</a>
+                    </li>
+                </ul>
+            </div>
             <?php echo $this->helpButton(); ?>
         </form>
     </div>
@@ -108,7 +123,7 @@
                                 </tab>
                                 <tab heading="Estimates">
                                     <h2>Estimated coverage</h2>
-                                    <p>Extract of estimated coverage. Complete data are available <a href="/browse/table/country{{geonameIds}}">on country table</a>.</p>
+                                    <p>Extract of estimated coverage. Complete data are available <a href="/browse/table/country?geonames={{geonameIds}}">on country table</a>.</p>
                                     <div ng-grid="gridOptions" class="gridStyle"></div>
                                 </tab>
                                 <tab heading="Differences" ng-if="chart.hasAdjustedLines">
@@ -361,32 +376,9 @@
 
                                 </tab>
                                 <tab active="activeTab.actions">
-                                    <tab-heading><i class="fa fa-bolt"></i> Actions</tab-heading>
+                                    <tab-heading><i class="fa fa-arrows-v"></i> Projection</tab-heading>
                                     <div class="col-md-12">
                                         <div class="form-group">
-
-                                            <div class="row show-grid" ng-show="tabs.filters">
-                                                <div class="col-md-12">
-                                                    <h3><i class="fa fa-table text-muted"></i> Edit in tables</h3>
-                                                    <p class="text-muted">Select a filter below to view and edit detailed values in tables.</p>
-                                                    <ul>
-                                                        <li ng-repeat="geoname in tabs.geonames" style="margin-bottom: 1em;">{{geoname.name}}
-                                                            <ul class="list-unstyled" ng-if="geoname.country">
-                                                                <li><a ng-if="tabs.filters" href="/contribute/jmp?&country={{geoname.country.id}}&filters={{getFiltersIds()}}&returnUrl={{currentUrl}}"><i class="fa fa-gims-filter"></i> All filters</a></li>
-                                                                <li ng-repeat="filter in tabs.filters">
-                                                                    <a href="{{getContributeUrl(filter, geoname)}}"><i class="fa fa-gims-filter" style="color:{{filter.genericColor}}"></i> {{filter.name}}</a>
-                                                                </li>
-                                                            </ul>
-                                                            <ul class="list-unstyled" ng-if="!geoname.country">
-                                                                <li class="text-muted">Not available for aggregated results</li>
-                                                            </ul>
-                                                        </li>
-                                                    </ul>
-
-                                                </div>
-                                            </div>
-
-                                            <hr/>
 
                                             <h3>Filter projection</h3>
 
