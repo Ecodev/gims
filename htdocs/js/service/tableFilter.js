@@ -560,7 +560,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
 
             var usages = {};
             if (questionnaire.filterQuestionnaireUsagesByFilterAndPart && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id]) {
-                usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId];
+                usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId] || {};
             }
 
             if (answer && answer.error) {
