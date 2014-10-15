@@ -220,6 +220,7 @@ return array(
         'router' => array(
             'routes' => array(
                 'import-jmp' => array(
+                    'description' => 'Import individual country file in JMP format',
                     'options' => array(
                         'route' => 'import jmp <file>',
                         'defaults' => array(
@@ -229,6 +230,7 @@ return array(
                     ),
                 ),
                 'import-glass' => array(
+                    'description' => 'Import filters for GLASS and affect them to existing question',
                     'options' => array(
                         'route' => 'import glass',
                         'defaults' => array(
@@ -238,6 +240,7 @@ return array(
                     ),
                 ),
                 'import-population' => array(
+                    'description' => 'Import population data',
                     'options' => array(
                         'route' => 'import population <file>',
                         'defaults' => array(
@@ -247,6 +250,7 @@ return array(
                     ),
                 ),
                 'email' => array(
+                    'description' => 'Send email',
                     'options' => array(
                         'route' => 'email <action> <id>',
                         'defaults' => array(

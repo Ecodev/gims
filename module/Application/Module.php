@@ -137,13 +137,14 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
 
     public function getConsoleUsage(\Zend\Console\Adapter\AdapterInterface $console)
     {
-        return array(
-            'Application module commands',
-            'import glass' => "Import filters for GLASS and affect them to existing question",
-            'import jmp <file>' => "Import individual country file in JMP format",
-            'import population <file>' => "Import population data",
-            'email <action> <id>' => "Send email"
-        );
+        $result = ['GIMS commands'];
+
+        $config = $this->getConfig();
+        foreach ($config['console']['router']['routes'] as $c) {
+            $result[$c['options']['route']] = $c['description'];
+        }
+
+        return $result;
     }
 
 }
