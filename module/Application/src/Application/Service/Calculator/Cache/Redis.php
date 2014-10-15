@@ -25,6 +25,19 @@ class Redis extends \Zend\Cache\Storage\Adapter\Redis implements CacheInterface
     private $dependencies = [];
 
     /**
+     * Flush currently set DB
+     *
+     * @return bool
+     * @throws Exception\RuntimeException
+     */
+    public function flush()
+    {
+        $this->volatile = [];
+
+        return parent::flush();
+    }
+
+    /**
      * Override parent to provide a first level cache in memory
      * @param string $normalizedKey
      * @param boolean $success

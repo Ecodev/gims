@@ -258,6 +258,26 @@ return array(
                         ),
                     ),
                 ),
+                'cache-clear' => array(
+                    'description' => 'Clear computing cache',
+                    'options' => array(
+                        'route' => 'cache clear',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Console',
+                            'action' => 'cacheClear'
+                        ),
+                    ),
+                ),
+                'cache-warm-up' => array(
+                    'description' => 'Fill computing cache',
+                    'options' => array(
+                        'route' => 'cache warm-up',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Console',
+                            'action' => 'cacheWarmUp'
+                        ),
+                    ),
+                ),
             ),
         ),
     ),
