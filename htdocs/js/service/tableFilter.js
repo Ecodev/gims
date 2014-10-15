@@ -567,7 +567,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                 return 'error';
             } else if (answer && Utility.isValidNumber(answer[question.value])) {
                 return 'answer';
-            } else if ((usages.first && usages.first.length) || (usages.second && usages.second.length)) {
+            } else if (usages && ((usages.first && usages.first.length) || (usages.second && usages.second.length))) {
                 return 'rule';
             } else if (filter.summands && filter.summands.length && Utility.isValidNumber(firstValue)) {
                 return 'summand';

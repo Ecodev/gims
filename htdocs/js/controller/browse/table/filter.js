@@ -151,6 +151,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     $scope.$watchCollection('data.filters', function() {
         TableFilter.prepareSectorFilters();
+        $scope.data.filtersIds = _.pluck(_.filter($scope.data.filters, function(f) {
+            if (f.level === 0 || _.isUndefined(f.level)) {
+                return true;
+            }
+        }), 'id').join(',');
     });
 
     $scope.$watch('data.questionnaires', function(newQuests, oldQuests) {
@@ -161,7 +166,12 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
             TableFilter.loadQuestionnaires(newQuestionnaires).then(function() {
                 $scope.orderQuestionnaires(false);
+
+                $scope.data.geonamesIds = _.uniq(_.pluck($scope.data.questionnaires, function(q) {
+                    return q.geoname.id;
+                })).join(',');
             });
+
         } else if (($scope.data.country || $scope.data.survey) && _.isEmpty($scope.data.questionnaires)) {
             $scope.addQuestionnaire();
         }

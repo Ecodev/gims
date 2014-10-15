@@ -6,6 +6,10 @@
             <a class="navbar-brand" href="#">{{data.mode.name}} filters</a>
 
             <form class="navbar-form">
+
+                <!-- link to chart -->
+                <a class="btn btn-default" href="/browse/chart?geonames={{data.geonamesIds}}&part=1&filterSet={{data.filterSet.id}}&filters={{data.filtersIds}}"><i class="fa fa-bar-chart-o"></i> View in chart</a>
+
                 <!-- Back button, if return URL is specified -->
                 <button class="btn btn-default" ng-if="returnUrl" ng-click="cancel();"><i class="fa fa-gims-back"></i> Back</button>
 

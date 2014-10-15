@@ -496,7 +496,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     var normalSeriesTimeout = null;
     var refreshNormalSeries = function(filters) {
         filters = filters === null ? $scope.tabs.filters : filters;
-        if (filters && $scope.tabs.part && $scope.tabs.geonames) {
+        if (filters.length && $scope.tabs.part && $scope.tabs.geonames) {
             Chart.removeSeries(filters, null);
 
             var queryParams = {

@@ -5,13 +5,15 @@
         <a class="navbar-brand" href="#">Chart</a>
 
         <form class="navbar-form">
-            <div class="btn-group dropdown"  ng-if="tabs.geonames">
+
+            <a ng-if="tabs.geonames.length == 1" class="btn btn-default" href="/contribute/jmp?questionnaires={{questionnairesIds.all}}&filterSet={{tabs.filterSets[0].id}}&filters={{filtersIds}}""><i class="fa fa-gims-questionnaire"></i> View in JMP table</a>
+
+            <div class="btn-group dropdown"  ng-if="tabs.geonames.length > 1">
                 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
                     <i class="fa fa-gims-questionnaire"></i> View in JMP table <span class="caret"></span>
                 </button>
-
                 <ul class="dropdown-menu" role="menu">
-                    <li>
+                    <li ng-if="tabs.geonames.length > 1">
                         <a href="/contribute/jmp?questionnaires={{questionnairesIds.all}}&filterSet={{tabs.filterSets[0].id}}&filters={{filtersIds}}">All countries </a>
                     </li>
                     <li ng-repeat="geoname in tabs.geonames">
@@ -81,7 +83,6 @@
                                                         api="filterSet"
                                                         queryparams="filterSetParams"
                                                         placeholder="Select filter set"
-                                                        change-url = "false"
                                                         disabled="isLoading"
                                                         multiple
                                                         style="width: 100%">
