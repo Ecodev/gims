@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Application\Repository\Rule\FilterQuestionnaireUsageRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="filter_questionnaire_usage_unique",columns={"filter_id", "questionnaire_id", "part_id", "rule_id", "is_second_step"})})
+ * @ORM\HasLifecycleCallbacks
  */
 class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
 {
@@ -117,6 +118,27 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
     public function isSecondStep()
     {
         return (bool) $this->isSecondStep;
+    }
+
+    /**
+     * Automatically called by Doctrine when the object is modified whatsoever to invalid computing cache
+     * @ORM\PostPersist
+     * @ORM\PreUpdate
+     * @ORM\PreRemove
+     */
+    public function invalidateCache()
+    {
+        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $key = 'F#' . $this->getFilter()->getId() . ',Q#' . $this->getQuestionnaire()->getId() . ',P#' . $this->getPart()->getId();
+        $cache->removeItem($key);
+
+        $key = $this->getCacheKey();
+        $cache->removeItem($key);
+    }
+
+    public function getCacheKey()
+    {
+        return 'fqu:' . $this->getId();
     }
 
 }

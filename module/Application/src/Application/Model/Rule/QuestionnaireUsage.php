@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * is used for what is called Calculations, Estimates and Ratios in original Excel files.
  * @ORM\Entity(repositoryClass="Application\Repository\Rule\QuestionnaireUsageRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="questionnaire_usage_unique",columns={"questionnaire_id", "part_id", "rule_id"})})
+ * @ORM\HasLifecycleCallbacks
  */
 class QuestionnaireUsage extends AbstractQuestionnaireUsage
 {
@@ -61,6 +62,24 @@ class QuestionnaireUsage extends AbstractQuestionnaireUsage
         return array_merge(parent::getJsonConfig(), array(
             'questionnaire',
         ));
+    }
+
+    /**
+     * Automatically called by Doctrine when the object is modified whatsoever to invalid computing cache
+     * @ORM\PostPersist
+     * @ORM\PreUpdate
+     * @ORM\PreRemove
+     */
+    public function invalidateCache()
+    {
+        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $key = $this->getCacheKey();
+        $cache->removeItem($key);
+    }
+
+    public function getCacheKey()
+    {
+        return 'qu:' . $this->getId();
     }
 
 }

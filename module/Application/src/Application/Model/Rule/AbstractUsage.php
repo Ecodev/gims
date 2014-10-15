@@ -145,4 +145,8 @@ abstract class AbstractUsage extends \Application\Model\AbstractModel
         return (int) $this->sorting;
     }
 
+    /**
+     * Return the key used to record in cache
+     */
+    abstract public function getCacheKey();
 }

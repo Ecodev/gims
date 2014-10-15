@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     @ORM\UniqueConstraint(name="population_unique_official",columns={"year", "country_id", "part_id"}, options={"where": "questionnaire_id IS NULL"}),
  *     @ORM\UniqueConstraint(name="population_unique_non_official",columns={"year", "country_id", "part_id", "questionnaire_id"}, options={"where": "questionnaire_id IS NOT NULL"})
  * })
+ * @ORM\HasLifecycleCallbacks
  */
 class Population extends AbstractModel
 {
@@ -200,6 +201,20 @@ class Population extends AbstractModel
     public function getRoleContext($action)
     {
         return $this->getQuestionnaire() ? : new \Application\Service\MissingRequiredRoleContext('questionnaire');
+    }
+
+    /**
+     * Automatically called by Doctrine when the object is modified whatsoever to invalid computing cache
+     * @ORM\PostPersist
+     * @ORM\PreUpdate
+     * @ORM\PreRemove
+     */
+    public function invalidateCache()
+    {
+        $questionnaire = $this->getQuestionnaire();
+        if ($questionnaire) {
+            $questionnaire->invalidateCache();
+        }
     }
 
 }

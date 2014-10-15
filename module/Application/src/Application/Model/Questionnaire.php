@@ -470,4 +470,17 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         return $this;
     }
 
+    /**
+     * Automatically called by Doctrine when the object is modified whatsoever to invalid computing cache
+     * @ORM\PostPersist
+     * @ORM\PreUpdate
+     * @ORM\PreRemove
+     */
+    public function invalidateCache()
+    {
+        $key = 'questionnaire:' . $this->getId();
+        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $cache->removeItem($key);
+    }
+
 }

@@ -54,6 +54,7 @@ class Aggregator
             return $cache->getItem($key);
         }
         $cache->startComputing($key);
+        $cache->record('geoname:' . $geoname->getId());
 
         // First, accumulate the parent
         $years = range($yearStart, $yearEnd);

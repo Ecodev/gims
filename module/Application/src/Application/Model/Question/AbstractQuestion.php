@@ -11,6 +11,7 @@ use Application\Model\Questionnaire;
  * @ORM\Entity(repositoryClass="Application\Repository\QuestionRepository")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\Table(name="question", uniqueConstraints={@ORM\UniqueConstraint(name="answerable_question_must_have_unique_filter_within_same_survey",columns={"survey_id", "filter_id"})})
+ * @ORM\HasLifecycleCallbacks
  */
 abstract class AbstractQuestion extends \Application\Model\AbstractModel
 {
@@ -239,6 +240,17 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
     public function getRoleContext($action)
     {
         return $this->getSurvey();
+    }
+
+    /**
+     * Automatically called by Doctrine when the object is modified whatsoever to invalid computing cache
+     * @ORM\PostPersist
+     * @ORM\PreUpdate
+     * @ORM\PreRemove
+     */
+    public function invalidateCache()
+    {
+        $this->getSurvey()->invalidateCache();
     }
 
 }

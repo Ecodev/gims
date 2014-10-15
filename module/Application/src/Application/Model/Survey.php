@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Application\Repository\SurveyRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="survey_code_unique",columns={"code"})})
+ * @ORM\HasLifecycleCallbacks
  */
 class Survey extends AbstractModel implements \Application\Service\RoleContextInterface
 {
@@ -353,7 +354,9 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      */
     public function questionnaireAdded(Questionnaire $questionnaire)
     {
-        $this->getQuestionnaires()->add($questionnaire);
+        if (!$this->getQuestionnaires()->contains($questionnaire)) {
+            $this->getQuestionnaires()->add($questionnaire);
+        }
 
         return $this;
     }
@@ -369,6 +372,19 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
             return $this;
         } else {
             return null;
+        }
+    }
+
+    /**
+     * Automatically called by Doctrine when the object is modified whatsoever to invalid computing cache
+     * @ORM\PostPersist
+     * @ORM\PreUpdate
+     * @ORM\PreRemove
+     */
+    public function invalidateCache()
+    {
+        foreach ($this->getQuestionnaires() as $questionnaire) {
+            $questionnaire->invalidateCache();
         }
     }
 

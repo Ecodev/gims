@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Choice is used to defines all possible choices for a Question of type QuestionType::$CHOICE
  *
  * @ORM\Entity(repositoryClass="Application\Repository\ChoiceRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Choice extends \Application\Model\AbstractModel
 {
@@ -167,6 +168,17 @@ class Choice extends \Application\Model\AbstractModel
     public function getAnswers()
     {
         return $this->answers;
+    }
+
+    /**
+     * Automatically called by Doctrine when the object is modified whatsoever to invalid computing cache
+     * @ORM\PostPersist
+     * @ORM\PreUpdate
+     * @ORM\PreRemove
+     */
+    public function invalidateCache()
+    {
+        $this->getQuestion()->invalidateCache();
     }
 
 }

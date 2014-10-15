@@ -20,7 +20,6 @@ class Calculator extends AbstractCalculator
     {
         return range(1980, 2015); // if changed, modify in js/service/chart.js too
     }
-
     /**
      * Set the filterGeonameUsage repository
      * @param \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepository
@@ -97,8 +96,11 @@ class Calculator extends AbstractCalculator
 
         // If the filter has a formula, returns its value
         if ($questionnaires) {
-            $filterGeonameUsage = $this->getFilterGeonameUsageRepository()->getFirst(reset($questionnaires)->getGeoname()->getId(), $filterId, $partId, $alreadyUsedRules);
+            $geonameId = reset($questionnaires)->getGeoname()->getId();
+            $this->getCache()->record("F#$filterId,G#$geonameId,P#$partId");
+            $filterGeonameUsage = $this->getFilterGeonameUsageRepository()->getFirst($geonameId, $filterId, $partId, $alreadyUsedRules);
             if ($filterGeonameUsage) {
+                $this->getCache()->record($filterGeonameUsage->getCacheKey());
                 $oneYearResult = $this->computeFormulaAfterRegression($filterGeonameUsage->getRule(), $year, $filterId, $questionnaires, $partId, $alreadyUsedRules);
                 $this->cacheComputeFlattenOneYearWithFormula[$key] = $oneYearResult;
 
@@ -267,14 +269,12 @@ class Calculator extends AbstractCalculator
     {
         $key = 'computeFilterForAllQuestionnaires:' . \Application\Utility::getPersistentCacheKey([func_get_args(), $this->overriddenFilters]);
 
-        /* @var $cache \Application\Service\Calculator\Cache */
-        $cache = $this->getServiceLocator()->get('Cache\Computing');
-        if ($cache->hasItem($key)) {
-            $result = $cache->getItem($key);
+        if ($this->getCache()->hasItem($key)) {
+            $result = $this->getCache()->getItem($key);
 
             return $result;
         }
-        $cache->startComputing($key);
+        $this->getCache()->startComputing($key);
 
         $result = array(
             'values' => array(),
@@ -311,7 +311,7 @@ class Calculator extends AbstractCalculator
 
         $result['average'] = $result['count'] ? \PHPExcel_Calculation_MathTrig::SUM($result['values']) / $result['count'] : null;
 
-        $cache->setItem($key, $result);
+        $this->getCache()->setItem($key, $result);
 
         return $result;
     }
@@ -350,6 +350,7 @@ class Calculator extends AbstractCalculator
             $alreadyUsedRules = new ArrayCollection();
         }
         $alreadyUsedRules->add($rule);
+        $this->getCache()->record('rule:' . $rule->getId());
 
         $originalFormula = $rule->getFormula();
         $convertedFormula = $this->getParser()->convertAfterRegression($this, $originalFormula, $currentFilterId, $questionnaires, $currentPartId, $year, $alreadyUsedRules);

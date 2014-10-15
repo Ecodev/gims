@@ -558,56 +558,56 @@ class RegressionCalculatorTest extends AbstractCalculator
     {
         return array(
             array('={F#345,P#current,Y0}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
-                    $mockedCalculator->expects($this->once())
-                            ->method('computeFlattenOneYearWithFormula')
+            $mockedCalculator->expects($this->once())
+                    ->method('computeFlattenOneYearWithFormula')
                             ->with($this->equalTo($year), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo($partId));
-                }),
+        }),
             array('={F#345,P#current,Y+2}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
-                    $mockedCalculator->expects($this->once())
-                            ->method('computeFlattenOneYearWithFormula')
+            $mockedCalculator->expects($this->once())
+                    ->method('computeFlattenOneYearWithFormula')
                             ->with($this->equalTo($year + 2), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo($partId));
-                }),
+        }),
             array('={F#345,P#678,Y-1}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
-                    $mockedCalculator->expects($this->once())
-                            ->method('computeFlattenOneYearWithFormula')
+            $mockedCalculator->expects($this->once())
+                    ->method('computeFlattenOneYearWithFormula')
                             ->with($this->equalTo($year - 1), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo(678));
-                }),
+        }),
             array('={F#current,P#current,Y0}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
-                    $mockedCalculator->expects($this->once())
-                            ->method('computeFlattenOneYearWithFormula')
+            $mockedCalculator->expects($this->once())
+                    ->method('computeFlattenOneYearWithFormula')
                             ->with($this->equalTo($year), $this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId));
-                }),
+        }),
             array('={self}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
-                    $mockedCalculator->expects($this->once())
-                            ->method('computeFlattenOneYearWithFormula')
+            $mockedCalculator->expects($this->once())
+                    ->method('computeFlattenOneYearWithFormula')
                             ->with($this->equalTo($year), $this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId));
-                }),
+        }),
             array('={F#12,Q#all}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
-                    $mockedCalculator->expects($this->once())
-                            ->method('computeFilterForAllQuestionnaires')
-                            ->with($this->equalTo(12), $this->equalTo($questionnaires), $this->equalTo($partId))
-                            ->will($this->returnValue(array('values' => array(1))));
-                }),
+            $mockedCalculator->expects($this->once())
+                    ->method('computeFilterForAllQuestionnaires')
+                    ->with($this->equalTo(12), $this->equalTo($questionnaires), $this->equalTo($partId))
+                    ->will($this->returnValue(array('values' => array(1))));
+        }),
             array('={F#current,Q#all}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
-                    $mockedCalculator->expects($this->once())
-                            ->method('computeFilterForAllQuestionnaires')
-                            ->with($this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId))
-                            ->will($this->returnValue(array('values' => array(1))));
-                }),
+            $mockedCalculator->expects($this->once())
+                    ->method('computeFilterForAllQuestionnaires')
+                    ->with($this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId))
+                    ->will($this->returnValue(array('values' => array(1))));
+        }),
             array('={Q#all,P#2}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
 
-                    $mockedPop = $this->getMock('\Application\Repository\PopulationRepository', array('getPopulationByGeoname'), array(), '', false);
+            $mockedPop = $this->getMock('\Application\Repository\PopulationRepository', array('getPopulationByGeoname'), array(), '', false);
 
-                    $mockedCalculator->setPopulationRepository($mockedPop);
+            $mockedCalculator->setPopulationRepository($mockedPop);
 
-                    foreach ($questionnaires as $q) {
-                        $mockedPop->expects($this->exactly(count($questionnaires)))
-                                ->method('getPopulationByGeoname')
-                                ->with($this->anything(), $this->equalTo(2), $year)
-                                ->will($this->returnValue(null));
-                    }
-                }),
-            );
+            foreach ($questionnaires as $q) {
+                $mockedPop->expects($this->exactly(count($questionnaires)))
+                        ->method('getPopulationByGeoname')
+                        ->with($this->anything(), $this->equalTo(2), $year)
+                        ->will($this->returnValue(null));
+            }
+        }),
+        );
     }
 
 }

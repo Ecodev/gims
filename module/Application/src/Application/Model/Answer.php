@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Answer is the raw data on which all computing/graph/table are based.
  * @ORM\Entity(repositoryClass="Application\Repository\AnswerRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Answer extends AbstractModel
 {
@@ -323,4 +324,18 @@ class Answer extends AbstractModel
     {
         return '';
     }
+
+    /**
+     * Automatically called by Doctrine when the object is modified whatsoever to invalid computing cache
+     * @ORM\PostPersist
+     * @ORM\PreUpdate
+     * @ORM\PreRemove
+     */
+    public function invalidateCache()
+    {
+        $key = 'F#' . $this->getQuestion()->getFilter()->getId() . ',Q#' . $this->getQuestionnaire()->getId() . ',P#' . $this->getPart()->getId();
+        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $cache->removeItem($key);
+    }
+
 }

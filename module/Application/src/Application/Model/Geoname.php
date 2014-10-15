@@ -10,6 +10,7 @@ use Application\Model\Country;
  * Geoname. Data are imported from http://www.geonames.org, but only partially for
  * what we actually need.
  * @ORM\Entity(repositoryClass="Application\Repository\GeonameRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Geoname extends AbstractModel
 {
@@ -640,6 +641,19 @@ class Geoname extends AbstractModel
         }
 
         return new ArrayCollection($children);
+    }
+
+    /**
+     * Automatically called by Doctrine when the object is modified whatsoever to invalid computing cache
+     * @ORM\PostPersist
+     * @ORM\PreUpdate
+     * @ORM\PreRemove
+     */
+    public function invalidateCache()
+    {
+        $key = 'geoname:' . $this->getId();
+        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $cache->removeItem($key);
     }
 
 }

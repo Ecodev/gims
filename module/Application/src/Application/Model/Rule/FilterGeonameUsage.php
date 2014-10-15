@@ -11,6 +11,7 @@ use Application\Model\Geoname;
  *
  * @ORM\Entity(repositoryClass="Application\Repository\Rule\FilterGeonameUsageRepository")
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(name="filter_geoname_usage_unique",columns={"filter_id", "geoname_id", "part_id", "rule_id"})})
+ * @ORM\HasLifecycleCallbacks
  */
 class FilterGeonameUsage extends AbstractUsage
 {
@@ -111,6 +112,27 @@ class FilterGeonameUsage extends AbstractUsage
     public function getRoleContext($action)
     {
         return new \Application\Service\MultipleRoleContext($this->getGeoname()->getQuestionnaires());
+    }
+
+    /**
+     * Automatically called by Doctrine when the object is modified whatsoever to invalid computing cache
+     * @ORM\PostPersist
+     * @ORM\PreUpdate
+     * @ORM\PreRemove
+     */
+    public function invalidateCache()
+    {
+        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $key = 'F#' . $this->getFilter()->getId() . ',G#' . $this->getGeoname()->getId() . ',P#' . $this->getPart()->getId();
+        $cache->removeItem($key);
+
+        $key = $this->getCacheKey();
+        $cache->removeItem($key);
+    }
+
+    public function getCacheKey()
+    {
+        return 'fgu:' . $this->getId();
     }
 
 }

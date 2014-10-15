@@ -18,6 +18,7 @@ abstract class AbstractCalculator
 
 use \Application\Traits\EntityManagerAware;
 
+    private $cache;
     private $cacheComputeFilter = array();
     protected $overriddenFilters = array();
     private $populationRepository;
@@ -28,6 +29,19 @@ use \Application\Traits\EntityManagerAware;
     private $answerRepository;
     private $filterQuestionnaireUsageRepository;
     private $parser;
+
+    /**
+     * Get the cache instance
+     * @return \Application\Service\Calculator\Cache\CacheInterface
+     */
+    public function getCache()
+    {
+        if (!$this->cache) {
+            $this->cache = $this->getServiceLocator()->get('Cache\Computing');
+        }
+
+        return $this->cache;
+    }
 
     /**
      * Set the population repository
@@ -282,6 +296,9 @@ use \Application\Traits\EntityManagerAware;
             return null;
         } else {
             $alreadySummedFilters->add($filterId);
+            $this->getCache()->record("F#$filterId,Q#$questionnaireId,P#$partId"); // The cell value is used
+            $this->getCache()->record("filter:$filterId"); // and also the filter is globally used (so we can invalid if summands change)
+            $this->getCache()->record("questionnaire:$questionnaireId"); // and also the questionnaire is globally used (so we can invalid if questions or questionnaire's geoname change)
         }
 
         // If the questionnaire has some overriding values
@@ -370,6 +387,8 @@ use \Application\Traits\EntityManagerAware;
             $alreadyUsedFormulas = new ArrayCollection();
         }
         $alreadyUsedFormulas->add($usage);
+        $this->getCache()->record('rule:' . $usage->getRule()->getId());
+        $this->getCache()->record($usage->getCacheKey());
 
         $originalFormula = $usage->getRule()->getFormula();
         $convertedFormula = $this->getParser()->convertBeforeRegression($this, $originalFormula, $usage, $alreadyUsedFormulas, $useSecondStepRules);

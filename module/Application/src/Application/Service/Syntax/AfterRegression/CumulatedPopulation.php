@@ -21,8 +21,10 @@ class CumulatedPopulation extends AbstractToken
     {
         $partId = $this->getId($matches[1], $currentPartId);
 
+        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
         $population = 0;
         foreach ($questionnaires as $questionnaire) {
+            $cache->record('questionnaire:' . $questionnaire->getId());
             $population += $calculator->getPopulationRepository()->getPopulationByGeoname($questionnaire->getGeoname(), $partId, $year, $questionnaire->getId());
         }
 

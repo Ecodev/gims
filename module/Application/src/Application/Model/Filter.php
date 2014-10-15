@@ -37,6 +37,7 @@ use Application\Service\MultipleRoleContext;
  *    Bad quality
  * </pre>
  * @ORM\Entity(repositoryClass="Application\Repository\FilterRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Filter extends AbstractModel implements Rule\ReferencableInterface
 {
@@ -588,6 +589,19 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
     public function getSorting()
     {
         return $this->sorting;
+    }
+
+    /**
+     * Automatically called by Doctrine when the object is modified whatsoever to invalid computing cache
+     * @ORM\PostPersist
+     * @ORM\PreUpdate
+     * @ORM\PreRemove
+     */
+    public function invalidateCache()
+    {
+        $key = 'filter:' . $this->getId();
+        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $cache->removeItem($key);
     }
 
 }

@@ -178,7 +178,6 @@ class Rule extends \Application\Model\AbstractModel implements ReferencableInter
 //                $contexts->add($questionnaire);
 //            }
 //        }
-
         // If we try to delete a rule, we must also consider the side-effect it may have on other Rules that use this rule
         if ($action == 'delete') {
             $repository = \Application\Module::getEntityManager()->getRepository('Application\Model\Rule\Rule');
@@ -240,6 +239,19 @@ class Rule extends \Application\Model\AbstractModel implements ReferencableInter
         $parser->setServiceLocator(\Application\Module::getServiceManager());
 
         return $parser->getStructure($this->getFormula());
+    }
+
+    /**
+     * Automatically called by Doctrine when the object is modified whatsoever to invalid computing cache
+     * @ORM\PostPersist
+     * @ORM\PreUpdate
+     * @ORM\PreRemove
+     */
+    public function invalidateCache()
+    {
+        $key = 'rule:' . $this->getId();
+        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $cache->removeItem($key);
     }
 
 }
