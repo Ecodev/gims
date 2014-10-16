@@ -531,6 +531,7 @@ class RegressionCalculatorTest extends AbstractCalculator
 
         // Test that we the custom syntax is correctly interpreted and submethods are correctly called
         $mockedCalculator = $this->getMock('\Application\Service\Calculator\Calculator', array('computeFlattenOneYearWithFormula', 'computeFilterForAllQuestionnaires'));
+        $mockedCalculator->setServiceLocator($this->getApplicationServiceLocator());
         $configurator($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId);
 
         $mockedCalculator->computeFormulaAfterRegression($rule, $year, $currentFilterId, $questionnaires, $partId);

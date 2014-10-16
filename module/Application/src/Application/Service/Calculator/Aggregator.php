@@ -57,7 +57,6 @@ class Aggregator
         $cache->record('geoname:' . $geoname->getId());
 
         // First, accumulate the parent
-        $years = range($yearStart, $yearEnd);
         $questionnaires = $this->calculator->getQuestionnaireRepository()->getAllForComputing($geoname);
         $parentResult = $this->calculator->computeFlattenAllYears($filters, $questionnaires, $part);
         $accumulator = $this->accumulate([], $parentResult, $geoname, $part);
