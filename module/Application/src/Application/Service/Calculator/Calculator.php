@@ -3,6 +3,7 @@
 namespace Application\Service\Calculator;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Application\Model\Filter;
 use Application\Model\Part;
 use Application\Model\Rule\Rule;
 
@@ -16,10 +17,15 @@ class Calculator extends AbstractCalculator
     private $cacheComputeFlattenOneYearWithFormula = array();
     private $filterGeonameUsageRepository;
 
+    /**
+     * Returns the range of years for which we compute things
+     * @return integer[]
+     */
     public function getYears()
     {
         return range(1980, 2015); // if changed, modify in js/service/chart.js too
     }
+
     /**
      * Set the filterGeonameUsage repository
      * @param \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepository
@@ -48,27 +54,17 @@ class Calculator extends AbstractCalculator
     /**
      * Returns an array of all filter data, which includes name and year-regression pairs
      * This is the highest level of computation, the "main" computation method.
-     * @param \Application\Model\Filter[] $filters
-     * @param array $questionnaires
+     * @param \Application\Model\Filter $filter
+     * @param \Application\Model\Questionnaire[] $questionnaires
      * @param \Application\Model\Part $part
      * @return array [[name => filterName, data => [year => flattenedRegression]]]]
      */
-    public function computeFlattenAllYears($filters, array $questionnaires, Part $part)
+    public function computeFlattenAllYears(Filter $filter, array $questionnaires, Part $part)
     {
-        $result = array();
         $years = $this->getYears();
-        foreach ($filters as $filter) {
-
-            $data = array();
-            foreach ($years as $year) {
-                $data[] = $this->computeFlattenOneYearWithFormula($year, $filter->getId(), $questionnaires, $part->getId());
-            }
-
-            $result[] = array(
-                'name' => $filter->getName(),
-                'id' => $filter->getId(),
-                'data' => $data,
-            );
+        $result = array();
+        foreach ($years as $year) {
+            $result[] = $this->computeFlattenOneYearWithFormula($year, $filter->getId(), $questionnaires, $part->getId());
         }
 
         return $result;
@@ -78,7 +74,7 @@ class Calculator extends AbstractCalculator
      * Compute the flatten regression value for the given year with optional formulas
      * @param integer $year
      * @param integer $filterId
-     * @param array $questionnaires
+     * @param \Application\Model\Questionnaire[] $questionnaires
      * @param integer $partId
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return null|float

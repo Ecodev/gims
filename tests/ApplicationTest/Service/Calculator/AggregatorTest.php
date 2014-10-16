@@ -67,43 +67,25 @@ class AggregatorTest extends AbstractCalculator
 
         $stubCalculator->expects($this->any())
                 ->method('computeFlattenAllYears')
-                ->will($this->returnCallback(function($filters, array $questionnaires, Part $part) {
+                ->will($this->returnCallback(function(\Application\Model\Filter $filter, array $questionnaires, Part $part) {
                             $id = count($questionnaires) ? $questionnaires[0]->getId() : null;
                             if ($id == null) {
                                 return [
-                                    [
-                                        'name' => 'my filter name',
-                                        'id' => 789,
-                                        'data' => [
-                                            null,
-                                            null,
-                                            null,
-                                        ]
-                                    ]
+                                    null,
+                                    null,
+                                    null,
                                 ];
                             } elseif ($id == 1) {
                                 return [
-                                    [
-                                        'name' => 'my filter name',
-                                        'id' => 789,
-                                        'data' => [
-                                            0.25,
-                                            0.90,
-                                            null,
-                                        ]
-                                    ]
+                                    0.25,
+                                    0.90,
+                                    null,
                                 ];
                             } elseif ($id == 2) {
                                 return [
-                                    [
-                                        'name' => 'my filter name',
-                                        'id' => 789,
-                                        'data' => [
-                                            0.15,
-                                            0.80,
-                                            0.90,
-                                        ]
-                                    ]
+                                    0.15,
+                                    0.80,
+                                    0.90,
                                 ];
                             } else {
                                 return null;
@@ -173,14 +155,14 @@ class AggregatorTest extends AbstractCalculator
         $calculator = $this->getStubCalculator();
         $aggregator->setCalculator($calculator);
 
-        $notAggregated = $calculator->computeFlattenAllYears([123], [$this->questionnaire], $this->part1);
-        $aggregated = $aggregator->computeFlattenAllYears([123], $this->geoname, $this->part1);
-        $this->assertEquals($notAggregated, $aggregated, 'geoname without hierarchy should be exactly the same as non-aggregated');
+        $notAggregated = $calculator->computeFlattenAllYears($this->filter1, [$this->questionnaire], $this->part1);
+        $aggregated = $aggregator->computeFlattenAllYears([$this->filter1], $this->geoname, $this->part1);
+        $this->assertEquals($notAggregated, $aggregated[0]['data'], 'geoname without hierarchy should be exactly the same as non-aggregated');
 
         $expectedWithChild = [
             [
-                'name' => 'my filter name',
-                'id' => 789,
+                'name' => 'Filter 1',
+                'id' => 1,
                 'data' => [
                     0.175,
                     0.825,
@@ -201,7 +183,7 @@ class AggregatorTest extends AbstractCalculator
         $parent->getChildren()->add($this->geoname2);
 
         // The same call as before should yield different result, because we now have a child
-        $aggregatedWithChild = $aggregator->computeFlattenAllYears([123], $parent, $this->part1);
+        $aggregatedWithChild = $aggregator->computeFlattenAllYears([$this->filter1], $parent, $this->part1);
         $this->assertEquals($expectedWithChild, $aggregatedWithChild, 'geoname with children should return all of his  and his children\'s values');
     }
 

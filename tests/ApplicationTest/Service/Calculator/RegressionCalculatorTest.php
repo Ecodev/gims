@@ -222,155 +222,117 @@ class RegressionCalculatorTest extends AbstractCalculator
         return array(
             array(true, array(
                     0 => array(
-                        'name' => 'improved',
-                        'data' => array(
-                            26 => 0.09778,
-                            27 => 0.095560000000001,
-                        ),
-                        'id' => 15
+                        26 => 0.09778,
+                        27 => 0.095560000000001,
                     ),
                     1 => array(
-                        'name' => 'unimproved',
-                        'data' =>
-                        array(
-                            26 => NULL,
-                            27 => NULL,
-                        ),
-                        'id' => 16
+                        26 => NULL,
+                        27 => NULL,
                     ),
                     2 => array(
-                        'name' => 'total',
-                        'data' =>
-                        array(
-                            26 => 0.097779,
-                            27 => 0.095557,
-                        ),
-                        'id' => 17
+                        26 => 0.097779,
+                        27 => 0.095557,
                     ),
                 )),
             // No questionnaires at all, to assert that structure returned is still valid
             array(false, array(
                     0 => array(
-                        'name' => 'improved',
-                        'data' => array(
-                            26 => NULL,
-                            27 => NULL,
-                        ),
-                        'id' => 15
+                        26 => NULL,
+                        27 => NULL,
                     ),
                     1 => array(
-                        'name' => 'unimproved',
-                        'data' => array(
-                            26 => NULL,
-                            27 => NULL,
-                        ),
-                        'id' => 16
+                        26 => NULL,
+                        27 => NULL,
                     ),
                     2 => array(
-                        'name' => 'total',
-                        'data' => array(
-                            26 => NULL,
-                            27 => NULL,
-                        ),
-                        'id' => 17
+                        26 => NULL,
+                        27 => NULL,
                     ),
                 )),
             array(true, array(
                     0 => array(
-                        'name' => 'improved',
-                        'data' => array(
-                            10 => NULL,
-                            11 => NULL,
-                            12 => NULL,
-                            13 => NULL,
-                            14 => 0.11554,
-                            15 => 0.11554,
-                            16 => 0.11554,
-                            17 => 0.11554,
-                            18 => 0.11554,
-                            19 => 0.11332,
-                            20 => 0.1111,
-                            21 => 0.10888,
-                            22 => 0.10666,
-                            23 => 0.10444,
-                            24 => 0.10222,
-                            25 => 0.1,
-                            26 => 0.09778,
-                            27 => 0.095560000000001,
-                            28 => 0.095560000000001,
-                            29 => 0.095560000000001,
-                            30 => 0.095560000000001,
-                            31 => 0.095560000000001,
-                            32 => null,
-                            33 => null,
-                            34 => null,
-                            35 => null,
-                        ),
-                        'id' => 15
+                        10 => NULL,
+                        11 => NULL,
+                        12 => NULL,
+                        13 => NULL,
+                        14 => 0.11554,
+                        15 => 0.11554,
+                        16 => 0.11554,
+                        17 => 0.11554,
+                        18 => 0.11554,
+                        19 => 0.11332,
+                        20 => 0.1111,
+                        21 => 0.10888,
+                        22 => 0.10666,
+                        23 => 0.10444,
+                        24 => 0.10222,
+                        25 => 0.1,
+                        26 => 0.09778,
+                        27 => 0.095560000000001,
+                        28 => 0.095560000000001,
+                        29 => 0.095560000000001,
+                        30 => 0.095560000000001,
+                        31 => 0.095560000000001,
+                        32 => null,
+                        33 => null,
+                        34 => null,
+                        35 => null,
                     ),
                     1 => array(
-                        'name' => 'unimproved',
-                        'data' => array(
-                            10 => NULL,
-                            11 => NULL,
-                            12 => NULL,
-                            13 => NULL,
-                            14 => NULL,
-                            15 => NULL,
-                            16 => NULL,
-                            17 => NULL,
-                            18 => NULL,
-                            19 => NULL,
-                            20 => NULL,
-                            21 => NULL,
-                            22 => NULL,
-                            23 => NULL,
-                            24 => NULL,
-                            25 => NULL,
-                            26 => NULL,
-                            27 => NULL,
-                            28 => NULL,
-                            29 => NULL,
-                            30 => NULL,
-                            31 => NULL,
-                            32 => NULL,
-                            33 => NULL,
-                            34 => NULL,
-                            35 => NULL,
-                        ),
-                        'id' => 16
+                        10 => NULL,
+                        11 => NULL,
+                        12 => NULL,
+                        13 => NULL,
+                        14 => NULL,
+                        15 => NULL,
+                        16 => NULL,
+                        17 => NULL,
+                        18 => NULL,
+                        19 => NULL,
+                        20 => NULL,
+                        21 => NULL,
+                        22 => NULL,
+                        23 => NULL,
+                        24 => NULL,
+                        25 => NULL,
+                        26 => NULL,
+                        27 => NULL,
+                        28 => NULL,
+                        29 => NULL,
+                        30 => NULL,
+                        31 => NULL,
+                        32 => NULL,
+                        33 => NULL,
+                        34 => NULL,
+                        35 => NULL,
                     ),
                     2 => array(
-                        'name' => 'total',
-                        'data' => array(
-                            10 => NULL,
-                            11 => NULL,
-                            12 => NULL,
-                            13 => null,
-                            14 => 0.115555,
-                            15 => 0.115555,
-                            16 => 0.115555,
-                            17 => 0.115555,
-                            18 => 0.115555,
-                            19 => 0.113333,
-                            20 => 0.111111,
-                            21 => 0.108889,
-                            22 => 0.106667,
-                            23 => 0.104445,
-                            24 => 0.102223,
-                            25 => 0.100001,
-                            26 => 0.097779,
-                            27 => 0.095557,
-                            28 => 0.095557,
-                            29 => 0.095557,
-                            30 => 0.095557,
-                            31 => 0.095557,
-                            32 => null,
-                            33 => null,
-                            34 => null,
-                            35 => null,
-                        ),
-                        'id' => 17
+                        10 => NULL,
+                        11 => NULL,
+                        12 => NULL,
+                        13 => null,
+                        14 => 0.115555,
+                        15 => 0.115555,
+                        16 => 0.115555,
+                        17 => 0.115555,
+                        18 => 0.115555,
+                        19 => 0.113333,
+                        20 => 0.111111,
+                        21 => 0.108889,
+                        22 => 0.106667,
+                        23 => 0.104445,
+                        24 => 0.102223,
+                        25 => 0.100001,
+                        26 => 0.097779,
+                        27 => 0.095557,
+                        28 => 0.095557,
+                        29 => 0.095557,
+                        30 => 0.095557,
+                        31 => 0.095557,
+                        32 => null,
+                        33 => null,
+                        34 => null,
+                        35 => null,
                     ),
                 ),
             ),
@@ -380,13 +342,15 @@ class RegressionCalculatorTest extends AbstractCalculator
     /**
      * @dataProvider flattenProvider
      */
-    public function testComputeFlatten($useQuestionnaires, $partialExpected)
+    public function testComputeFlatten($useQuestionnaires, $partialExpecteds)
     {
-        $actual = $this->service->computeFlattenAllYears($this->filterSet->getFilters(), $useQuestionnaires ? $this->questionnaires : array(), $this->part1);
+        foreach ($this->filterSet->getFilters() as $i => $filter) {
+            $actual = $this->service->computeFlattenAllYears($filter, $useQuestionnaires ? $this->questionnaires : array(), $this->part1);
+            $partialExpected = $partialExpecteds[$i];
+            $partialActual = $this->removeExtraData($partialExpected, $actual);
 
-        $partialActual = $this->removeExtraData($partialExpected, $actual);
-
-        $this->assertEquals($partialExpected, $partialActual, 'the partial data expected must match');
+            $this->assertEquals($partialExpected, $partialActual, 'the partial data expected must match');
+        }
     }
 
     /**
@@ -397,56 +361,47 @@ class RegressionCalculatorTest extends AbstractCalculator
      */
     private function removeExtraData(array $partialExpected, array $actual)
     {
-        $this->assertEquals(array_keys($partialExpected), array_keys($actual), 'we should get all filters asked');
-        foreach ($actual as $i => &$d) {
-            $d['data'] = array_intersect_key($d['data'], $partialExpected[$i]['data']);
-        }
+        $result = array_intersect_key($actual, $partialExpected);
 
-        return $actual;
+        return $result;
     }
 
     public function testCacheOnFilterForAllQuestionnaire()
     {
-        $res1 = $this->service->computeFlattenAllYears($this->filterSet->getFilters(), $this->questionnaires, $this->part1);
+        $res1 = [];
+        foreach ($this->filterSet->getFilters() as $i => $filter) {
+            $res1[] = $this->service->computeFlattenAllYears($filter, $this->questionnaires, $this->part1);
+        }
 
-        $this->answer131->setValuePercent((0.2));
-        $res2 = $this->service->computeFlattenAllYears($this->filterSet->getFilters(), $this->questionnaires, $this->part1);
+        $this->answer131->setValuePercent(0.2);
+        $res2 = [];
+        $res3 = [];
+        foreach ($this->filterSet->getFilters() as $i => $filter) {
+            $res2[] = $this->service->computeFlattenAllYears($filter, $this->questionnaires, $this->part1);
+            $res3[] = $this->service2->computeFlattenAllYears($filter, $this->questionnaires, $this->part1);
+        }
         $this->assertEquals($res1, $res2, 'result should be cached and therefore be the same');
+        $this->assertNotEquals($res1, $res3, 'after clearing cache, result differs');
 
-        $res3 = $this->service2->computeFlattenAllYears($this->filterSet->getFilters(), $this->questionnaires, $this->part1);
         $partialExpected = array(
             0 => array(
-                'name' => 'improved',
-                'data' =>
-                array(
-                    26 => 0.077779999999997,
-                    27 => 0.05556,
-                ),
-                'id' => 15
+                26 => 0.077779999999997,
+                27 => 0.05556,
             ),
             1 => array(
-                'name' => 'unimproved',
-                'data' =>
-                array(
-                    26 => NULL,
-                    27 => NULL,
-                ),
-                'id' => 16
+                26 => NULL,
+                27 => NULL,
             ),
             2 => array(
-                'name' => 'total',
-                'data' =>
-                array(
-                    26 => 0.077778999999992,
-                    27 => 0.055556999999993,
-                ),
-                'id' => 17
+                26 => 0.077778999999992,
+                27 => 0.055556999999993,
             ),
         );
 
-        $partialRes3 = $this->removeExtraData($partialExpected, $res3);
-        $this->assertNotEquals($res1, $res3, 'after clearing cache, result differs');
-        $this->assertEquals($partialExpected, $partialRes3, 'after clearing cache, result reflect new values');
+        foreach ($res3 as $i => $actual) {
+            $partialActual = $this->removeExtraData($partialExpected[$i], $actual);
+            $this->assertEquals($partialExpected[$i], $partialActual, 'after clearing cache, result reflect new values');
+        }
     }
 
     public function testRealRepositoriesCanBeFound()
@@ -559,55 +514,55 @@ class RegressionCalculatorTest extends AbstractCalculator
     {
         return array(
             array('={F#345,P#current,Y0}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
-            $mockedCalculator->expects($this->once())
-                    ->method('computeFlattenOneYearWithFormula')
+                    $mockedCalculator->expects($this->once())
+                            ->method('computeFlattenOneYearWithFormula')
                             ->with($this->equalTo($year), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo($partId));
-        }),
+                }),
             array('={F#345,P#current,Y+2}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
-            $mockedCalculator->expects($this->once())
-                    ->method('computeFlattenOneYearWithFormula')
+                    $mockedCalculator->expects($this->once())
+                            ->method('computeFlattenOneYearWithFormula')
                             ->with($this->equalTo($year + 2), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo($partId));
-        }),
+                }),
             array('={F#345,P#678,Y-1}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
-            $mockedCalculator->expects($this->once())
-                    ->method('computeFlattenOneYearWithFormula')
+                    $mockedCalculator->expects($this->once())
+                            ->method('computeFlattenOneYearWithFormula')
                             ->with($this->equalTo($year - 1), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo(678));
-        }),
+                }),
             array('={F#current,P#current,Y0}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
-            $mockedCalculator->expects($this->once())
-                    ->method('computeFlattenOneYearWithFormula')
+                    $mockedCalculator->expects($this->once())
+                            ->method('computeFlattenOneYearWithFormula')
                             ->with($this->equalTo($year), $this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId));
-        }),
+                }),
             array('={self}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
-            $mockedCalculator->expects($this->once())
-                    ->method('computeFlattenOneYearWithFormula')
+                    $mockedCalculator->expects($this->once())
+                            ->method('computeFlattenOneYearWithFormula')
                             ->with($this->equalTo($year), $this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId));
-        }),
+                }),
             array('={F#12,Q#all}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
-            $mockedCalculator->expects($this->once())
-                    ->method('computeFilterForAllQuestionnaires')
-                    ->with($this->equalTo(12), $this->equalTo($questionnaires), $this->equalTo($partId))
-                    ->will($this->returnValue(array('values' => array(1))));
-        }),
+                    $mockedCalculator->expects($this->once())
+                            ->method('computeFilterForAllQuestionnaires')
+                            ->with($this->equalTo(12), $this->equalTo($questionnaires), $this->equalTo($partId))
+                            ->will($this->returnValue(array('values' => array(1))));
+                }),
             array('={F#current,Q#all}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
-            $mockedCalculator->expects($this->once())
-                    ->method('computeFilterForAllQuestionnaires')
-                    ->with($this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId))
-                    ->will($this->returnValue(array('values' => array(1))));
-        }),
+                    $mockedCalculator->expects($this->once())
+                            ->method('computeFilterForAllQuestionnaires')
+                            ->with($this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId))
+                            ->will($this->returnValue(array('values' => array(1))));
+                }),
             array('={Q#all,P#2}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
 
-            $mockedPop = $this->getMock('\Application\Repository\PopulationRepository', array('getPopulationByGeoname'), array(), '', false);
+                    $mockedPop = $this->getMock('\Application\Repository\PopulationRepository', array('getPopulationByGeoname'), array(), '', false);
 
-            $mockedCalculator->setPopulationRepository($mockedPop);
+                    $mockedCalculator->setPopulationRepository($mockedPop);
 
-            foreach ($questionnaires as $q) {
-                $mockedPop->expects($this->exactly(count($questionnaires)))
-                        ->method('getPopulationByGeoname')
-                        ->with($this->anything(), $this->equalTo(2), $year)
-                        ->will($this->returnValue(null));
-            }
-        }),
+                    foreach ($questionnaires as $q) {
+                        $mockedPop->expects($this->exactly(count($questionnaires)))
+                                ->method('getPopulationByGeoname')
+                                ->with($this->anything(), $this->equalTo(2), $year)
+                                ->will($this->returnValue(null));
+                    }
+                }),
         );
     }
 

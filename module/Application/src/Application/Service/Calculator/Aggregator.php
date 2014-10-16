@@ -2,6 +2,7 @@
 
 namespace Application\Service\Calculator;
 
+use Application\Model\Filter;
 use Application\Model\Geoname;
 use Application\Model\Part;
 
@@ -39,14 +40,34 @@ class Aggregator
 
     /**
      * Same as Calculator::computeFlattenAllYears but aggregate geoname children
-     * @param array $filters
+     * @param \Application\Model\Filter[] $filters
      * @param \Application\Model\Geoname $geoname
      * @param \Application\Model\Part $part
      * @return array
      */
     public function computeFlattenAllYears(array $filters, Geoname $geoname, Part $part)
     {
-        $key = 'computeFlattenAllYears:' . \Application\Utility::getPersistentCacheKey([func_get_args(), $this->calculator->getOverriddenFilters()]);
+        $accumulators = [];
+        foreach ($filters as $filter) {
+            $accumulator = $this->computeFlattenAllYearsInternal($filter, $geoname, $part);
+            $accumulators[$filter->getId()] = $accumulator;
+        }
+
+        $result = $this->accumulatorsToPercent($accumulators, $filters);
+
+        return $result;
+    }
+
+    /**
+     * Same as Calculator::computeFlattenAllYears but aggregate geoname children
+     * @param \Application\Model\Filter $filter
+     * @param \Application\Model\Geoname $geoname
+     * @param \Application\Model\Part $part
+     * @return array
+     */
+    public function computeFlattenAllYearsInternal(Filter $filter, Geoname $geoname, Part $part)
+    {
+        $key = 'computeFlattenAllYearsInternal:' . \Application\Utility::getPersistentCacheKey([func_get_args(), $this->calculator->getOverriddenFilters()]);
 
         /* @var $cache \Application\Service\Calculator\Cache */
         $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
@@ -58,19 +79,19 @@ class Aggregator
 
         // First, accumulate the parent
         $questionnaires = $this->calculator->getQuestionnaireRepository()->getAllForComputing($geoname);
-        $parentResult = $this->calculator->computeFlattenAllYears($filters, $questionnaires, $part);
-        $accumulator = $this->accumulate([], $parentResult, $geoname, $part);
+
+        $computed = $this->calculator->computeFlattenAllYears($filter, $questionnaires, $part);
+        $accumulator = $this->computedToAccumulator($computed, $geoname, $part);
 
         // Then, accumulate all children
         foreach ($geoname->getChildren() as $child) {
-            $childResult = $this->computeFlattenAllYears($filters, $child, $part);
-            $accumulator = $this->accumulate($accumulator, $childResult, $child, $part);
+            $childResult = $this->computeFlattenAllYearsInternal($filter, $child, $part);
+            $accumulator = $this->accumulate($accumulator, $childResult);
         }
 
-        $result = $this->accumulatorToPercent($accumulator);
-        $cache->setItem($key, $result);
+        $cache->setItem($key, $accumulator);
 
-        return $result;
+        return $accumulator;
     }
 
     /**
@@ -78,9 +99,12 @@ class Aggregator
      * @param array $accumulator
      * @return array final aggregated result
      */
-    private function accumulatorToPercent(array $accumulator)
+    private function accumulatorsToPercent(array $accumulator, array $filters)
     {
-        foreach ($accumulator as &$filter) {
+        $filtersById = \Application\Utility::indexById($filters);
+        foreach ($accumulator as $filterId => &$filter) {
+            $filter['name'] = $filtersById[$filterId]->getName();
+            $filter['id'] = $filterId;
             $filter['data'] = [];
             foreach ($filter['absoluteData'] as $i => $absoluteValue) {
                 $population = $filter['population'][$i];
@@ -99,51 +123,67 @@ class Aggregator
             unset($filter['population']);
         }
 
+        return array_values($accumulator);
+    }
+
+    /**
+     * Convert data from computing to accumulator.
+     * The structure of accumulator is similar to computing result, except it is absolute values,
+     * and population is the sum of population for which we have a value.
+     * @param array $computedValues
+     * @param Geoname $geoname
+     * @param Part $part
+     * @return type
+     */
+    private function computedToAccumulator(array $computedValues, Geoname $geoname, Part $part)
+    {
+        $accumulator = [
+            'absoluteData' => [],
+            'population' => [],
+        ];
+        $years = $this->calculator->getYears();
+
+        // Convert value and population
+        foreach ($computedValues as $valueIndex => $value) {
+
+            // Only count the value and its population if it is not null
+            if (is_null($value)) {
+                $population = null;
+                $absoluteValue = null;
+            } else {
+                $year = $years[$valueIndex];
+                $population = $this->calculator->getPopulationRepository()->getPopulationByGeoname($geoname, $part->getId(), $year);
+                $absoluteValue = $value * $population;
+            }
+            $accumulator['absoluteData'][$valueIndex] = $absoluteValue;
+            $accumulator['population'][$valueIndex] = $population;
+        }
+
         return $accumulator;
     }
 
     /**
-     * This will accumulate results from computing into $accumulator as absolute values
-     * The structure of accumulator is similar to computing result, except it is absolute values,
-     * and population is the sum of population for which we have a value.
-     * @param array $accumulator
-     * @param array $computedValues
-     * @param \Application\Model\Geoname $geoname
-     * @param \Application\Model\Part $part
+     * This will accumulate two accumulator together
+     * @param array $accumulator1
+     * @param array $accumulator2
      * @return array
      */
-    private function accumulate(array $accumulator, array $computedValues, Geoname $geoname, Part $part)
+    private function accumulate(array $accumulator1, array $accumulator2)
     {
-        $years = $this->calculator->getYears();
-        foreach ($computedValues as $filterIndex => $filter) {
-            if (!isset($accumulator[$filterIndex])) {
-                $accumulator[$filterIndex] = [
-                    'name' => $filter['name'],
-                    'id' => $filter['id'],
-                    'absoluteData' => [],
-                ];
+        // Cumulate value and population
+        foreach ($accumulator2['absoluteData'] as $valueIndex => $value) {
+            if (!isset($accumulator1['absoluteData'][$valueIndex])) {
+                $accumulator1['absoluteData'][$valueIndex] = null;
+                $accumulator1['population'][$valueIndex] = null;
             }
 
-            // Cumulate value and population
-            foreach ($filter['data'] as $valueIndex => $value) {
-                if (!isset($accumulator[$filterIndex]['absoluteData'][$valueIndex])) {
-                    $accumulator[$filterIndex]['absoluteData'][$valueIndex] = null;
-                    $accumulator[$filterIndex]['population'][$valueIndex] = null;
-                }
-
-                // Only count the value (and its population) if it is not null
-                if (!is_null($value)) {
-                    $year = $years[$valueIndex];
-                    $population = $this->calculator->getPopulationRepository()->getPopulationByGeoname($geoname, $part->getId(), $year);
-                    $absoluteValue = $value * $population;
-
-                    $accumulator[$filterIndex]['population'][$valueIndex] += $population;
-                    $accumulator[$filterIndex]['absoluteData'][$valueIndex] += $absoluteValue;
-                }
+            if (!is_null($value)) {
+                $accumulator1['absoluteData'][$valueIndex] += $accumulator2['absoluteData'][$valueIndex];
+                $accumulator1['population'][$valueIndex] += $accumulator2['population'][$valueIndex];
             }
         }
 
-        return $accumulator;
+        return $accumulator1;
     }
 
     /**

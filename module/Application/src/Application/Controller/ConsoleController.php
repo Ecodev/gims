@@ -81,7 +81,7 @@ class ConsoleController extends AbstractActionController
                 echo '            ' . $filterSet->getName() . PHP_EOL;
                 foreach ($parts as $part) {
                     echo $progress($i++, $total) . '     ' . $part->getName() . PHP_EOL;
-                    $aggregator->computeFlattenAllYears(1980, 2015, $filters, $geoname, $part);
+                    $aggregator->computeFlattenAllYears($filters, $geoname, $part);
                 }
             }
         }
