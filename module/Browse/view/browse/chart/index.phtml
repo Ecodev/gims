@@ -120,7 +120,18 @@
                         <div ng-show="tabs.filters.length && tabs.geonames.length && tabs.part" class="ng-trans ng-trans-fade-down col-md-12">
                             <tabset class="nav-tabs-centered">
                                 <tab heading="Chart">
-                                    <chart value="chart" type="area" height="400" />
+                                    <chart value="chart" type="area"/>
+                                </tab>
+                                <tab heading="Estimates chart">
+                                    <div ng-repeat="geoname in tabs.geonames" class="row text-center">
+                                        <h3>{{geoname.name}} - {{tabs.part.name}}</h3>
+                                        <div ng-class="{'col-md-6':estimatesCharts[geoname.id]['ignored'].series,'col-md-12':!estimatesCharts[geoname.id]['ignored'].series}" ng-if="estimatesCharts[geoname.id]['normal'].series">
+                                            <chart class="chartPercentageCharts"  value="estimatesCharts[geoname.id]['normal']" type="area"/>
+                                        </div>
+                                        <div  ng-class="{'col-md-6':estimatesCharts[geoname.id]['normal'].series,'col-md-12':!estimatesCharts[geoname.id]['normal'].series}" ng-if="estimatesCharts[geoname.id]['ignored'].series">
+                                            <chart class="chartPercentageCharts" value="estimatesCharts[geoname.id]['ignored']" type="area"/>
+                                        </div>
+                                    </div>
                                 </tab>
                                 <tab heading="Estimates">
                                     <h2>Estimated coverage</h2>

@@ -190,7 +190,10 @@ div.browse .col-md-4 {
     &.visible{
         right:0;
     }
+}
 
+.chartPercentageCharts > div {
+    margin:auto;
 }
 
 // Show pencil icon only when hovering

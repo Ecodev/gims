@@ -2,8 +2,11 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
     'use strict';
 
     var chart = null;
+    var estimatesCharts = null;
     var cache = null;
 
+    var startChartYear = 1980;
+    var estimatesChartDates = ['1990', '2011']; // possible to add dates
     var ignoredElements = {};
     var globalIndexedFilters = {}; // is used to know if a same filter is ignored or not in all questionnaires (used on globally ignored button)
     var concatenatedIgnoredElements = [];
@@ -65,7 +68,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                         footerFormat: '<br><br><strong>Rules : </strong><br><br>{series.options.usages}</span><br/>',
                         valueSuffix: '%'
                     },
-                    pointStart: 1980,
+                    pointStart: startChartYear,
                     dataLabels: {
                         enabled: false
                     }
@@ -83,6 +86,58 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                             }
                         }
                     }
+                }
+            }
+        };
+    };
+
+    var getEstimatesChart = function(title) {
+        return {
+            title: {
+                text: title
+            },
+            chart: {
+                zoomType: 'xy',
+                height: 500,
+                width: 450,
+                animation: false
+            },
+            xAxis: {
+                categories: estimatesChartDates,
+                title: {
+                    enabled: true,
+                    text: 'Year'
+                },
+                labels: {
+                    step: 1,
+                    format: '{value}'
+                },
+                allowDecimals: false
+            },
+            yAxis: {
+                title: {
+                    enabled: true,
+                    text: 'Coverage (%)'
+                },
+                min: 0,
+                max: 100
+            },
+            tooltip: {
+                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:,.0f} millions)<br/>',
+                shared: true
+            },
+            credits: {enabled: false},
+            plotOptions: {
+                area: {
+                    stacking: 'percent',
+                    lineColor: '#ffffff',
+                    lineWidth: 1,
+                    marker: {
+                        symbol: 'circle',
+                        lineWidth: 1,
+                        lineColor: '#ffffff'
+                    }
+
                 }
             }
         };
@@ -137,6 +192,11 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
 
     /**
      * Remove passed series
+     * Type values :
+     *  - undefined = all series
+     *  - null = normal series (not ignored and not adjusted)
+     *  - isIgnored = ignored series
+     *  - isAdjusted = adjusted series
      * @param filtersToRemove
      */
     var removeSeries = function(filtersToRemove, type) {
@@ -396,20 +456,21 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
 
     /**
      * Return series by asked type
+     * @param series : array with series collection to search in
      * @param type 'isAdjusted', 'isIgnored', null for normal series or undefined for all series
      * @returns {Array}
      */
-    var getChartSeries = function(type) {
-        var series = [];
+    var getChartSeries = function(series, type) {
+        var filtredSeries = [];
         if (chart) {
-            _.forEach(chart.series, function(serie) {
+            _.forEach(series, function(serie) {
                 if (_.isUndefined(type) || (type === null && _.isUndefined(serie.isIgnored) && _.isUndefined(serie.isAdjusted)) || (type !== null && serie[type])) {
-                    series.push(serie);
+                    filtredSeries.push(serie);
                 }
             });
         }
 
-        return series;
+        return filtredSeries;
     };
 
     /**
@@ -477,15 +538,17 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
     /**
      * Set lines lighter when there are adjusted lines or ignored elements
      */
+    var allSeriesWithDuplicates = null;
     var updateChart = function() {
 
         if (chart) {
+            allSeriesWithDuplicates = chart.series;
             deleteDuplicatedSeries();
 
-            var ignoredSeries = getChartSeries('isIgnored');
-            var adjustedSeries = getChartSeries('isAdjusted');
+            var ignoredSeries = getChartSeries(chart.series, 'isIgnored');
+            var adjustedSeries = getChartSeries(chart.series, 'isAdjusted');
             var alternativeSeries = ignoredSeries.concat(adjustedSeries);
-            var normalSeries = getChartSeries(null);
+            var normalSeries = getChartSeries(chart.series, null);
 
             var geonames = _.uniq(_.compact(_.pluck(chart.series, 'geonameId')));
 
@@ -513,27 +576,89 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                 });
             }
 
+            updatePercentCharts();
             $rootScope.$emit('gims-chart-modified', chart);
         }
+    };
+
+    var updatePercentCharts = function() {
+
+        var ignoredSeries = getChartSeries(allSeriesWithDuplicates, 'isIgnored');
+        var normalSeries = getChartSeries(allSeriesWithDuplicates, null);
+
+        // init estimates charts
+        estimatesCharts = {};
+        _.forEach(_.uniq(_.compact(_.pluck(normalSeries.concat(ignoredSeries), 'geonameId'))), function(geonameId) {
+            if (!estimatesCharts[geonameId]) {
+                estimatesCharts[geonameId] = {};
+                estimatesCharts[geonameId].normal = getEstimatesChart('JMP');
+                estimatesCharts[geonameId].ignored = getEstimatesChart('Ignored elements');
+            }
+        });
+
+        updatePercentChart(normalSeries, 'normal');
+        updatePercentChart(ignoredSeries, 'ignored');
+        $rootScope.$emit('gims-estimates-chart-modified', estimatesCharts);
+    };
+
+    var updatePercentChart = function(series, type) {
+
+        series = _.filter(series, function(serie) {
+            if (serie.name.indexOf('Total') == -1 && serie.type == 'line') {
+                return true;
+            }
+        });
+
+        var reducedSeries = _.map(series, function(serie) {
+
+            var reducedSerieData = [];
+            _.forEach(estimatesChartDates, function(year, index) {
+                var yearIndex = parseInt(year) - startChartYear;
+                reducedSerieData[index] = serie.data[yearIndex];
+            });
+
+            var reducedSerie = {
+                id: serie.id,
+                name: serie.name,
+                color: serie.color,
+                geonameId: serie.geonameId,
+                isAdjusted: serie.isAdjusted,
+                isIgnored: serie.isIgnored
+            };
+            reducedSerie.data = reducedSerieData;
+
+            return reducedSerie;
+        });
+
+        var reducedSeriesByGeoname = _.groupBy(reducedSeries, 'geonameId');
+        _.forEach(reducedSeriesByGeoname, function(series, geonameId) {
+            estimatesCharts[geonameId][type].series = series;
+        });
     };
 
     /**
      * Remove duplicated series to ensure that series are unique
      * A serie is unique only if the filter and the raw data are identical,
      * everything else (label, extra data, etc.) is ignored.
+     * This function gives priority to non ignored elements (replace ignored serie if the non ignored one is tested after)
      */
     var deleteDuplicatedSeries = function() {
         var uniqueSeries = [];
         _.forEach(chart.series, function(serie) {
             var foundSame = false;
-            _.forEach(uniqueSeries, function(uniqueSerie) {
+            _.forEach(uniqueSeries, function(uniqueSerie, index) {
                 if (serie.id == uniqueSerie.id && _.isEqual(serie.data, uniqueSerie.data)) {
-                    foundSame = true;
+                    foundSame = {serie: serie, index: index};
+                    return false;
                 }
             });
 
             if (!foundSame) {
                 uniqueSeries.push(serie);
+            } else {
+                if (!foundSame.serie.isIgnored && uniqueSeries[foundSame.index].isIgnored) {
+                    uniqueSeries[foundSame.index] = foundSame.serie;
+                }
             }
         });
 
@@ -542,7 +667,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
 
     /**
      * @todo : actually ignored cause a cache has been disabled, will be usefull when it will be reactivated, so don't remove it.
-     * As filters are stored in an array on index relative to their Id, this function gets first filter to verify is he has a value.
+     * As filters are stored in an array on index relative to their Id, this function gets first filter to verify ifs he has a value.
      * Is used to determine if we need to send request to recover values.
      *
      * @param part

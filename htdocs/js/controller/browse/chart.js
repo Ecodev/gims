@@ -177,7 +177,11 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 refreshAlternativeSeries(null, false);
             }
         }
+    });
 
+    // update estimates charts
+    $rootScope.$on('gims-estimates-chart-modified', function(event, chart) {
+        $scope.estimatesCharts = _.cloneDeep(chart);
     });
 
     /**************************************************************************/
