@@ -281,15 +281,14 @@ use \Application\Traits\EntityManagerAware;
      * @param array $questionnaires
      * @param integer $currentPartId
      * @param integer $year
-     * @param array $years
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return string
      */
-    public function convertAfterRegression(Calculator $calculator, $formula, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
+    public function convertAfterRegression(Calculator $calculator, $formula, $currentFilterId, array $questionnaires, $currentPartId, $year, ArrayCollection $alreadyUsedRules)
     {
         foreach ($this->getAfterRegressionTokens() as $token) {
-            $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token, $calculator, $currentFilterId, $questionnaires, $currentPartId, $year, $years, $alreadyUsedRules) {
-                        return $token->replace($calculator, $matches, $currentFilterId, $questionnaires, $currentPartId, $year, $years, $alreadyUsedRules);
+            $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token, $calculator, $currentFilterId, $questionnaires, $currentPartId, $year, $alreadyUsedRules) {
+                        return $token->replace($calculator, $matches, $currentFilterId, $questionnaires, $currentPartId, $year, $alreadyUsedRules);
                     }, $formula);
         }
 

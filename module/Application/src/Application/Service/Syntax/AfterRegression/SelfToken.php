@@ -17,9 +17,9 @@ class SelfToken extends AbstractToken
         return '/\{self\}/';
     }
 
-    public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
+    public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, ArrayCollection $alreadyUsedRules)
     {
-        $value = $calculator->computeFlattenOneYearWithFormula($year, $years, $currentFilterId, $questionnaires, $currentPartId, $alreadyUsedRules);
+        $value = $calculator->computeFlattenOneYearWithFormula($year, $currentFilterId, $questionnaires, $currentPartId, $alreadyUsedRules);
 
         return is_null($value) ? 'NULL' : $value;
     }

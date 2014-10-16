@@ -17,7 +17,7 @@ class CumulatedPopulation extends AbstractToken
         return '/\{Q#all,P#(\d+|current)\}/';
     }
 
-    public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
+    public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, ArrayCollection $alreadyUsedRules)
     {
         $partId = $this->getId($matches[1], $currentPartId);
 

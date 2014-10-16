@@ -137,20 +137,17 @@ class Adjustator
 
     /**
      * Find the target value for each year (of each questionnaire)
-     * @param array $allYears
+     * @param array $yearsWithValue
      * @return array [year => value]
      */
-    private function getTargetValues(array $allYears)
+    private function getTargetValues(array $yearsWithValue)
     {
-        $yearMin = min($allYears);
-        $yearMax = max($allYears);
-
-        $flattenValues = $this->aggregator->computeFlattenAllYears($yearMin, $yearMax, [$this->target], $this->geoname, $this->part);
+        $flattenValues = $this->aggregator->computeFlattenAllYears([$this->target], $this->geoname, $this->part);
 
         $targetValues = [];
         $i = 0;
-        foreach (range($yearMin, $yearMax) as $year) {
-            if (in_array($year, $allYears)) {
+        foreach ($this->aggregator->getCalculator()->getYears() as $year) {
+            if (in_array($year, $yearsWithValue)) {
                 $targetValues[$year] = $flattenValues[0]['data'][$i];
             }
             $i++;

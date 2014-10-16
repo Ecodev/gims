@@ -172,7 +172,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
     {
         $geonamesIds = array_filter(explode(',', $this->params()->fromQuery('geonames')));
         $filtersIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
-        $years = $this->getWantedYears($this->params()->fromQuery('years'));
+        $wantedYears = $this->getWantedYears($this->params()->fromQuery('years'));
 
         $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findById($geonamesIds);
         $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds);
@@ -204,9 +204,9 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         foreach ($geonames as $geoname) {
 
             $allYearsComputed = $this->getAllYearsComputed($parts, $filters, $geoname);
-            $filteredYearsComputed = $this->filterYears($allYearsComputed, $years);
+            $filteredYearsComputed = $this->filterYears($allYearsComputed, $wantedYears);
 
-            foreach ($years as $year) {
+            foreach ($wantedYears as $year) {
 
                 // country info columns
                 $countryData = array(
@@ -288,8 +288,8 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
     }
 
     /**
-     * @param $parts
-     * @param \Application\Model\FilterSet $filterSet
+     * @param \Application\Model\Part[] $parts
+     * @param \Application\Model\Filter[] $filters
      * @param \Application\Model\Geoname $geoname
      * @return array all data ordered by part
      */
@@ -300,7 +300,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
         $dataPerPart = array();
         foreach ($parts as $part) {
-            $dataPerPart[$part->getId()] = $aggregator->computeFlattenAllYears(1980, 2015, $filters, $geoname, $part);
+            $dataPerPart[$part->getId()] = $aggregator->computeFlattenAllYears($filters, $geoname, $part);
         }
 
         return $dataPerPart;
@@ -308,17 +308,17 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     /**
      * @param $fieldParts
-     * @param $years
+     * @param array $wantedYears
      * @return array Filter ordered by part and with only wanted years.
      */
-    private function filterYears($fieldParts, $years)
+    private function filterYears($fieldParts, array $wantedYears)
     {
         $finalFieldsets = array();
         foreach ($fieldParts as $partId => $filters) {
             $finalFieldsets[$partId] = array();
             foreach ($filters as $filter) {
                 $yearsData = array();
-                foreach ($years as $year) {
+                foreach ($wantedYears as $year) {
                     $yearsData[$year] = $filter['data'][$year - 1980];
                 }
                 $tmpFieldset = array(

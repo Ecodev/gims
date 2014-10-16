@@ -17,7 +17,7 @@ class FilterValue extends AbstractToken
         return '/\{F#(\d+|current),P#(\d+|current),Y([+-]?\d+)\}/';
     }
 
-    public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules)
+    public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, ArrayCollection $alreadyUsedRules)
     {
         $filterId = $this->getId($matches[1], $currentFilterId);
         $partId = $this->getId($matches[2], $currentPartId);
@@ -25,8 +25,8 @@ class FilterValue extends AbstractToken
         $year += $yearOffset;
 
         // Only compute thing if in current years, to avoid infinite recursitivy in a very distant future
-        if (in_array($year, $years)) {
-            $value = $calculator->computeFlattenOneYearWithFormula($year, $years, $filterId, $questionnaires, $partId);
+        if (in_array($year, $calculator->getYears())) {
+            $value = $calculator->computeFlattenOneYearWithFormula($year, $filterId, $questionnaires, $partId);
         } else {
             $value = null;
         }

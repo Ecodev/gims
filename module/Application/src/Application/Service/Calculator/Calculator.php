@@ -17,6 +17,11 @@ class Calculator extends AbstractCalculator
     private $cacheComputeFlattenOneYearWithFormula = array();
     private $filterGeonameUsageRepository;
 
+    public function getYears()
+    {
+        return range(1980, 2015); // if changed, modify in js/service/chart.js too
+    }
+
     /**
      * Set the filterGeonameUsage repository
      * @param \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepository
@@ -45,22 +50,20 @@ class Calculator extends AbstractCalculator
     /**
      * Returns an array of all filter data, which includes name and year-regression pairs
      * This is the highest level of computation, the "main" computation method.
-     * @param integer $yearStart
-     * @param integer $yearEnd
      * @param \Application\Model\Filter[] $filters
      * @param array $questionnaires
      * @param \Application\Model\Part $part
      * @return array [[name => filterName, data => [year => flattenedRegression]]]]
      */
-    public function computeFlattenAllYears($yearStart, $yearEnd, $filters, array $questionnaires, Part $part)
+    public function computeFlattenAllYears($filters, array $questionnaires, Part $part)
     {
         $result = array();
-        $years = range($yearStart, $yearEnd);
+        $years = $this->getYears();
         foreach ($filters as $filter) {
 
             $data = array();
             foreach ($years as $year) {
-                $data[] = $this->computeFlattenOneYearWithFormula($year, $years, $filter->getId(), $questionnaires, $part->getId());
+                $data[] = $this->computeFlattenOneYearWithFormula($year, $filter->getId(), $questionnaires, $part->getId());
             }
 
             $result[] = array(
@@ -76,14 +79,13 @@ class Calculator extends AbstractCalculator
     /**
      * Compute the flatten regression value for the given year with optional formulas
      * @param integer $year
-     * @param array $years
      * @param integer $filterId
      * @param array $questionnaires
      * @param integer $partId
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return null|float
      */
-    public function computeFlattenOneYearWithFormula($year, array $years, $filterId, array $questionnaires, $partId, ArrayCollection $alreadyUsedRules = null)
+    public function computeFlattenOneYearWithFormula($year, $filterId, array $questionnaires, $partId, ArrayCollection $alreadyUsedRules = null)
     {
         if (!$alreadyUsedRules) {
             $alreadyUsedRules = new ArrayCollection();
@@ -98,7 +100,7 @@ class Calculator extends AbstractCalculator
         if ($questionnaires) {
             $filterGeonameUsage = $this->getFilterGeonameUsageRepository()->getFirst(reset($questionnaires)->getGeoname()->getId(), $filterId, $partId, $alreadyUsedRules);
             if ($filterGeonameUsage) {
-                $oneYearResult = $this->computeFormulaAfterRegression($filterGeonameUsage->getRule(), $year, $years, $filterId, $questionnaires, $partId, $alreadyUsedRules);
+                $oneYearResult = $this->computeFormulaAfterRegression($filterGeonameUsage->getRule(), $year, $filterId, $questionnaires, $partId, $alreadyUsedRules);
                 $this->cacheComputeFlattenOneYearWithFormula[$key] = $oneYearResult;
 
                 _log()->debug(__METHOD__, array($filterId, $partId, $year, $oneYearResult));
@@ -108,7 +110,7 @@ class Calculator extends AbstractCalculator
         }
 
         // Otherwise fallback to normal computation
-        $allRegressions = $this->computeRegressionForAllYears($years, $filterId, $questionnaires, $partId);
+        $allRegressions = $this->computeRegressionForAllYears($filterId, $questionnaires, $partId);
         $oneYearResult = $this->computeFlattenOneYear($year, $allRegressions);
         $this->cacheComputeFlattenOneYearWithFormula[$key] = $oneYearResult;
 
@@ -196,13 +198,12 @@ class Calculator extends AbstractCalculator
 
     /**
      * Returns regressions for each years specified
-     * @param array $years
      * @param integer $filterId
      * @param array $questionnaires
      * @param integer $partId
      * @return array [year => regresssion]
      */
-    private function computeRegressionForAllYears(array $years, $filterId, array $questionnaires, $partId)
+    private function computeRegressionForAllYears($filterId, array $questionnaires, $partId)
     {
         $key = \Application\Utility::getPersistentCacheKey([func_get_args(), $this->overriddenFilters]);
         if (array_key_exists($key, $this->cacheComputeRegressionForAllYears)) {
@@ -210,7 +211,7 @@ class Calculator extends AbstractCalculator
         }
 
         $allRegressions = array();
-        foreach ($years as $year) {
+        foreach ($this->getYears() as $year) {
             $allRegressions[$year] = $this->computeRegressionOneYear($year, $filterId, $questionnaires, $partId);
         }
 
@@ -333,14 +334,13 @@ class Calculator extends AbstractCalculator
      * For details about syntax, @see \Application\Model\Rule\Rule
      * @param \Application\Model\Rule\Rule $rule
      * @param integer $year
-     * @param array $years
      * @param integer $currentFilterId
      * @param array $questionnaires
      * @param integer $currentPartId
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return null|float
      */
-    public function computeFormulaAfterRegression(Rule $rule, $year, array $years, $currentFilterId, array $questionnaires, $currentPartId, ArrayCollection $alreadyUsedRules = null)
+    public function computeFormulaAfterRegression(Rule $rule, $year, $currentFilterId, array $questionnaires, $currentPartId, ArrayCollection $alreadyUsedRules = null)
     {
         if (!$alreadyUsedRules) {
             $alreadyUsedRules = new ArrayCollection();
@@ -348,7 +348,7 @@ class Calculator extends AbstractCalculator
         $alreadyUsedRules->add($rule);
 
         $originalFormula = $rule->getFormula();
-        $convertedFormula = $this->getParser()->convertAfterRegression($this, $originalFormula, $currentFilterId, $questionnaires, $currentPartId, $year, $years, $alreadyUsedRules);
+        $convertedFormula = $this->getParser()->convertAfterRegression($this, $originalFormula, $currentFilterId, $questionnaires, $currentPartId, $year, $alreadyUsedRules);
         $result = $this->getParser()->computeExcelFormula($convertedFormula);
 
         _log()->debug(__METHOD__, array($currentFilterId, $currentPartId, $year, $rule->getId(), $rule->getName(), $originalFormula, $convertedFormula, $result));

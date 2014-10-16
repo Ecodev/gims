@@ -67,7 +67,7 @@ class AggregatorTest extends AbstractCalculator
 
         $stubCalculator->expects($this->any())
                 ->method('computeFlattenAllYears')
-                ->will($this->returnCallback(function($yearStart, $yearEnd, $filters, array $questionnaires, Part $part) {
+                ->will($this->returnCallback(function($filters, array $questionnaires, Part $part) {
                             $id = count($questionnaires) ? $questionnaires[0]->getId() : null;
                             if ($id == null) {
                                 return [
@@ -173,8 +173,8 @@ class AggregatorTest extends AbstractCalculator
         $calculator = $this->getStubCalculator();
         $aggregator->setCalculator($calculator);
 
-        $notAggregated = $calculator->computeFlattenAllYears(2000, 2005, [123], [$this->questionnaire], $this->part1);
-        $aggregated = $aggregator->computeFlattenAllYears(2000, 2005, [123], $this->geoname, $this->part1);
+        $notAggregated = $calculator->computeFlattenAllYears([123], [$this->questionnaire], $this->part1);
+        $aggregated = $aggregator->computeFlattenAllYears([123], $this->geoname, $this->part1);
         $this->assertEquals($notAggregated, $aggregated, 'geoname without hierarchy should be exactly the same as non-aggregated');
 
         $expectedWithChild = [
@@ -183,7 +183,7 @@ class AggregatorTest extends AbstractCalculator
                 'id' => 789,
                 'data' => [
                     0.175,
-                    0.82,
+                    0.825,
                     0.90,
                 ]
             ]
@@ -201,7 +201,7 @@ class AggregatorTest extends AbstractCalculator
         $parent->getChildren()->add($this->geoname2);
 
         // The same call as before should yield different result, because we now have a child
-        $aggregatedWithChild = $aggregator->computeFlattenAllYears(2000, 2005, [123], $parent, $this->part1);
+        $aggregatedWithChild = $aggregator->computeFlattenAllYears([123], $parent, $this->part1);
         $this->assertEquals($expectedWithChild, $aggregatedWithChild, 'geoname with children should return all of his  and his children\'s values');
     }
 

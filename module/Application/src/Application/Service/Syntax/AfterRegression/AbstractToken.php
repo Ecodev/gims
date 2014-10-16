@@ -31,9 +31,8 @@ abstract class AbstractToken extends \Application\Service\Syntax\AbstractToken
      * @param array $questionnaires
      * @param integer $currentPartId
      * @param integer $year
-     * @param array $years
      * @param \Doctrine\Common\Collections\ArrayCollection $alreadyUsedRules
      * @return float|string
      */
-    abstract public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, array $years, ArrayCollection $alreadyUsedRules);
+    abstract public function replace(Calculator $calculator, array $matches, $currentFilterId, array $questionnaires, $currentPartId, $year, ArrayCollection $alreadyUsedRules);
 }

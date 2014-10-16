@@ -12,9 +12,6 @@ use Application\Service\Hydrator;
 class ChartController extends \Application\Controller\AbstractAngularActionController
 {
 
-    private $startYear = 1980; // if changed, modify in js/service/chart.js too
-    private $endYear = 2012;
-
     /**
      * @var \Application\Service\Calculator\Calculator
      */
@@ -191,7 +188,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         /** @var \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepo */
         $filterGeonameUsageRepo = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
 
-        $lines = $this->getAggregator()->computeFlattenAllYears($this->startYear, $this->endYear, $filters, $geoname, $part);
+        $lines = $this->getAggregator()->computeFlattenAllYears($filters, $geoname, $part);
         foreach ($lines as &$serie) {
             /** @var \Application\Model\Filter $filter */
             $filter = $filters[$serie['id']];

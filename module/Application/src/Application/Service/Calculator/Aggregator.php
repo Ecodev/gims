@@ -39,26 +39,22 @@ class Aggregator
 
     /**
      * Same as Calculator::computeFlattenAllYears but aggregate geoname children
-     * @param integer $yearStart
-     * @param integer $yearEnd
      * @param array $filters
      * @param \Application\Model\Geoname $geoname
      * @param \Application\Model\Part $part
      * @return array
      */
-    public function computeFlattenAllYears($yearStart, $yearEnd, array $filters, Geoname $geoname, Part $part)
+    public function computeFlattenAllYears(array $filters, Geoname $geoname, Part $part)
     {
-        $years = range($yearStart, $yearEnd);
-
         // First, accumulate the parent
         $questionnaires = $this->calculator->getQuestionnaireRepository()->getAllForComputing($geoname);
-        $parentResult = $this->calculator->computeFlattenAllYears($yearStart, $yearEnd, $filters, $questionnaires, $part);
-        $accumulator = $this->accumulate([], $parentResult, $geoname, $years, $part);
+        $parentResult = $this->calculator->computeFlattenAllYears($filters, $questionnaires, $part);
+        $accumulator = $this->accumulate([], $parentResult, $geoname, $part);
 
         // Then, accumulate all children
         foreach ($geoname->getChildren() as $child) {
-            $childResult = $this->computeFlattenAllYears($yearStart, $yearEnd, $filters, $child, $part);
-            $accumulator = $this->accumulate($accumulator, $childResult, $child, $years, $part);
+            $childResult = $this->computeFlattenAllYears($filters, $child, $part);
+            $accumulator = $this->accumulate($accumulator, $childResult, $child, $part);
         }
 
         $result = $this->accumulatorToPercent($accumulator);
@@ -102,12 +98,12 @@ class Aggregator
      * @param array $accumulator
      * @param array $computedValues
      * @param \Application\Model\Geoname $geoname
-     * @param array $years
      * @param \Application\Model\Part $part
      * @return array
      */
-    private function accumulate(array $accumulator, array $computedValues, Geoname $geoname, array $years, Part $part)
+    private function accumulate(array $accumulator, array $computedValues, Geoname $geoname, Part $part)
     {
+        $years = $this->calculator->getYears();
         foreach ($computedValues as $filterIndex => $filter) {
             if (!isset($accumulator[$filterIndex])) {
                 $accumulator[$filterIndex] = [
