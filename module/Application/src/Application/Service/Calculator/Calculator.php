@@ -3,6 +3,7 @@
 namespace Application\Service\Calculator;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Application\Model\Questionnaire;
 use Application\Model\Filter;
 use Application\Model\Part;
 use Application\Model\Rule\Rule;
@@ -263,15 +264,6 @@ class Calculator extends AbstractCalculator
      */
     public function computeFilterForAllQuestionnaires($filterId, array $questionnaires, $partId)
     {
-        $key = 'computeFilterForAllQuestionnaires:' . \Application\Utility::getPersistentCacheKey([func_get_args(), $this->overriddenFilters]);
-
-        if ($this->getCache()->hasItem($key)) {
-            $result = $this->getCache()->getItem($key);
-
-            return $result;
-        }
-        $this->getCache()->startComputing($key);
-
         $result = array(
             'values' => array(),
             'count' => 0,
@@ -282,15 +274,15 @@ class Calculator extends AbstractCalculator
         $yearsWithData = array();
         foreach ($questionnaires as $questionnaire) {
 
-            $year = $questionnaire->getSurvey()->getYear();
-            $years[$questionnaire->getId()] = $year;
-            $surveys[$questionnaire->getId()] = $questionnaire->getSurvey()->getCode();
+            $questionnaireData = $this->computeFilterForSingleQuestionnaire($filterId, $questionnaire, $partId);
 
-            $computed = $this->computeFilter($filterId, $questionnaire->getId(), $partId, true);
-            $result['values'][$questionnaire->getId()] = $computed;
+            $questionnaireId = $questionnaire->getId();
+            $years[$questionnaireId] = $questionnaireData['year'];
+            $surveys[$questionnaireId] = $questionnaireData['code'];
+            $result['values'][$questionnaireId] = $questionnaireData['value'];
 
-            if (!is_null($computed)) {
-                $yearsWithData[] = $year;
+            if (!is_null($questionnaireData['value'])) {
+                $yearsWithData[] = $questionnaireData['year'];
                 $result['count'] ++;
             }
         }
@@ -306,6 +298,33 @@ class Calculator extends AbstractCalculator
                 });
 
         $result['average'] = $result['count'] ? \PHPExcel_Calculation_MathTrig::SUM($result['values']) / $result['count'] : null;
+
+        return $result;
+    }
+
+    /**
+     * Compute a single questionnaire
+     * @param integer $filterId
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @param integer $partId
+     * @return array
+     */
+    public function computeFilterForSingleQuestionnaire($filterId, Questionnaire $questionnaire, $partId)
+    {
+        $questionnaireId = $questionnaire->getId();
+        $key = 'computeFilterForAllQuestionnaires:' . \Application\Utility::getPersistentCacheKey([$filterId, $questionnaireId, $partId, $this->overriddenFilters]);
+
+        if ($this->getCache()->hasItem($key)) {
+            $result = $this->getCache()->getItem($key);
+
+            return $result;
+        }
+        $this->getCache()->startComputing($key);
+
+        $result = [];
+        $result['year'] = $questionnaire->getSurvey()->getYear();
+        $result['code'] = $questionnaire->getSurvey()->getCode();
+        $result['value'] = $this->computeFilter($filterId, $questionnaireId, $partId, true);
 
         $this->getCache()->setItem($key, $result);
 
