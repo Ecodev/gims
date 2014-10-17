@@ -48,6 +48,10 @@ class Version20140703150820 extends AbstractMigration
         $this->addSql("INSERT INTO geoname (id, date_created, name) VALUES (23, NOW(), 'WHO - South-East Asia');");
         $this->addSql("INSERT INTO geoname (id, date_created, name) VALUES (24, NOW(), 'WHO - The Americas');");
         $this->addSql("INSERT INTO geoname (id, date_created, name) VALUES (25, NOW(), 'WHO - Western Pacific');");
+        $this->addSql("INSERT INTO geoname (id, date_created, name) VALUES (26, NOW(), 'World');");
+
+        // Insert world-countries relations
+        $this->addSql("INSERT INTO geoname_children (geoname_id, child_geoname_id) SELECT 26, id FROM geoname WHERE id > 100;");
 
         // Insert regions-countries relations
         $this->addSql("INSERT INTO geoname_children (geoname_id, child_geoname_id) VALUES (1, 174982);");
