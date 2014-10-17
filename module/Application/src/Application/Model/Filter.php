@@ -122,7 +122,6 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
 
     /**
      * @var integer
-     *
      * @ORM\Column(type="smallint", nullable=false, options={"default" = 0})
      */
     private $sorting = 0;
@@ -570,6 +569,25 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @param int $sorting
+     * @return self
+     */
+    public function setSorting($sorting)
+    {
+        $this->sorting = $sorting;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSorting()
+    {
+        return $this->sorting;
     }
 
 }
