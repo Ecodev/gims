@@ -5,8 +5,10 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
     var estimatesCharts = null;
     var cache = null;
 
+    // !! Has to be the same as server side
     var startChartYear = 1980;
-    var estimatesChartDates = ['1990', '2011']; // possible to add dates
+    var endChartYear = 2015;
+
     var ignoredElements = {};
     var globalIndexedFilters = {}; // is used to know if a same filter is ignored or not in all questionnaires (used on globally ignored button)
     var concatenatedIgnoredElements = [];
@@ -103,7 +105,6 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                 animation: false
             },
             xAxis: {
-                categories: estimatesChartDates,
                 title: {
                     enabled: true,
                     text: 'Year'
@@ -123,13 +124,13 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                 max: 100
             },
             tooltip: {
-                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:,.0f} millions)<br/>',
+                pointFormat: '<b>{point.y:.1f}%</b> : <span style="color:{series.color}">{series.name}</span><br/>',
                 shared: true
             },
             credits: {enabled: false},
             plotOptions: {
                 area: {
-                    stacking: 'percent',
+                    stacking: 'normal',
                     lineColor: '#ffffff',
                     lineWidth: 1,
                     marker: {
@@ -236,69 +237,6 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                 }
             });
         }
-    };
-
-    var computeEstimates = function(series, ignoredElements) {
-
-        var arrayData = [];
-        var columns = [];
-        _.forEach(series, function(serie) {
-            if (serie.type == 'line' && (
-                    (_.isUndefined(ignoredElements) || ignoredElements && ignoredElements.length === 0) && _.isUndefined(serie.isIgnored) || ignoredElements && ignoredElements.length > 0 && serie.isIgnored === true)) {
-
-                // create a column by filter on graph
-                columns.push({
-                    field: 'value' + serie.id + '_' + serie.geonameId,
-                    displayName: serie.name,
-                    enableColumnResize: true,
-                    color: serie.color,
-                    headerCellTemplate: '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
-                            '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" popover-placement="top" popover="{{col.displayName}}">' +
-                            '       <i class="fa fa-gims-filter" style="color:{{col.colDef.color}};"></i> {{col.displayName}}' +
-                            '   </div>' +
-                            '</div>',
-                    cellTemplate: '<div class="ngCellText text-right" ng-class="col.colIndex()">' +
-                            '<span ng-cell-text ng-show="{{row.entity.value' + serie.id + '_' + serie.geonameId + '!==null}}">{{row.entity.value' + serie.id + '_' + serie.geonameId + '}} %</span>' +
-                            '</div>'
-                });
-
-                // retrieve data
-                _.forEach(serie.data, function(value, index) {
-                    if (_.isUndefined(arrayData[index])) {
-                        arrayData[index] = {};
-                    }
-                    arrayData[index]['value' + serie.id + '_' + serie.geonameId] = value;
-                });
-
-            }
-        });
-
-        var startYear = chart.plotOptions.line.pointStart;
-
-        // before adding date to row, create and object with same properties but all to null
-        var nullEquivalentData = _.mapValues(arrayData[0], function() {
-            return null;
-        });
-        arrayData = _.map(arrayData, function(row, index) {
-            row.year = startYear + index;
-            return row;
-        });
-
-        // use the equivalent null object to keep all except with null objects
-        arrayData = _.rest(arrayData, nullEquivalentData);
-
-        // remove useless dates
-        var finalData = [];
-        angular.forEach(arrayData, function(row, index) {
-            if ((row.year % 5 === 0 && index < arrayData.length || index == arrayData.length - 1) && row.year > 1985) {
-                finalData.push(arrayData.splice(index, 1)[0]);
-            }
-        });
-
-        return {
-            data: finalData,
-            columns: columns
-        };
     };
 
     var retrieveFiltersAndValuesCanceler = null;
@@ -576,12 +514,23 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                 });
             }
 
-            updatePercentCharts();
+            updateTrendTable();
+            updateTrendBarChart();
             $rootScope.$emit('gims-chart-modified', chart);
         }
     };
 
-    var updatePercentCharts = function() {
+    var getLineSeries = function(series) {
+        var filtred = _.filter(series, function(serie) {
+            if (serie.type == 'line') {
+                return true;
+            }
+        });
+
+        return filtred;
+    };
+
+    var updateTrendBarChart = function() {
 
         var ignoredSeries = getChartSeries(allSeriesWithDuplicates, 'isIgnored');
         var normalSeries = getChartSeries(allSeriesWithDuplicates, null);
@@ -598,42 +547,138 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
 
         updatePercentChart(normalSeries, 'normal');
         updatePercentChart(ignoredSeries, 'ignored');
+
         $rootScope.$emit('gims-estimates-chart-modified', estimatesCharts);
     };
 
     var updatePercentChart = function(series, type) {
 
-        series = _.filter(series, function(serie) {
-            if (serie.name.indexOf('Total') == -1 && serie.type == 'line') {
-                return true;
-            }
-        });
-
-        var reducedSeries = _.map(series, function(serie) {
-
-            var reducedSerieData = [];
-            _.forEach(estimatesChartDates, function(year, index) {
-                var yearIndex = parseInt(year) - startChartYear;
-                reducedSerieData[index] = serie.data[yearIndex];
-            });
-
-            var reducedSerie = {
+        // clean series to remove styling from main chart and group by geoname
+        var barChartSeriesByGeoname = _.groupBy(_.map(getLineSeries(series), function(serie) {
+            return {
                 id: serie.id,
                 name: serie.name,
                 color: serie.color,
                 geonameId: serie.geonameId,
                 isAdjusted: serie.isAdjusted,
-                isIgnored: serie.isIgnored
+                isIgnored: serie.isIgnored,
+                data: serie.data
             };
-            reducedSerie.data = reducedSerieData;
+        }), 'geonameId');
 
-            return reducedSerie;
-        });
+        // for each geoname, computes years and create series with two years
+        _.forEach(barChartSeriesByGeoname, function(series, geonameId) {
+            var years = getYears(series, 1990, true);
+            years = [years[0], years[years.length - 1]];
+            estimatesCharts[geonameId][type].xAxis.categories = years;
 
-        var reducedSeriesByGeoname = _.groupBy(reducedSeries, 'geonameId');
-        _.forEach(reducedSeriesByGeoname, function(series, geonameId) {
+            _.forEach(series, function(serie) {
+                serie.data = [serie.data[years[0] - startChartYear], serie.data[years[1] - startChartYear]];
+            });
+
             estimatesCharts[geonameId][type].series = series;
         });
+    };
+
+    var updateTrendTable = function() {
+
+        var arrayData = [];
+        var columns = [
+            {
+                field: 'year',
+                displayName: 'Year',
+                enableColumnResize: true,
+                width: '100px'
+            }
+        ];
+
+        var series = getLineSeries(chart.series);
+        var years = getYears(series, 1990);
+
+        _.forEach(series, function(serie) {
+
+            if (!serie.isAdjusted) {
+                // create a column by filter on graph
+                columns.push({
+                    field: 'value' + serie.id + '_' + serie.geonameId,
+                    displayName: serie.name,
+                    enableColumnResize: true,
+                    color: serie.color,
+                    headerCellTemplate: '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
+                        '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" popover-placement="top" popover="{{col.displayName}}">' +
+                        '       <i class="fa fa-gims-filter" style="color:{{col.colDef.color}};"></i> {{col.displayName}}' +
+                        '   </div>' +
+                        '</div>',
+                    cellTemplate: '<div class="ngCellText text-right" ng-class="col.colIndex()">' +
+                        '<span ng-cell-text ng-show="{{row.entity.value' + serie.id + '_' + serie.geonameId + '!==null}}">{{row.entity.value' + serie.id + '_' + serie.geonameId + '}} %</span>' +
+                        '</div>'
+                });
+
+                // retrieve data
+                _.forEach(years, function(year, index) {
+                    if (_.isUndefined(arrayData[index])) {
+                        arrayData[index] = {};
+                    }
+                    arrayData[index].year = year;
+                    arrayData[index]['value' + serie.id + '_' + serie.geonameId] = serie.data[year - startChartYear];
+                });
+            }
+        });
+
+        $rootScope.$emit('gims-estimates-table-modified', {data: arrayData, columns: columns});
+    };
+
+    /**
+     * Return array of years multiples of 5 according to data in series
+     * @param series
+     * @param minYear (int) start limit of years
+     * @param allYearsWithValues (bool) If is true, the list consider only years that have value for all series
+     * @returns {Array}
+     */
+    var getYears = function(series, minYear, allYearsWithValues) {
+
+        minYear = _.isUndefined(minYear) ? 0 : minYear;
+
+        var years = [];
+
+        if (series.length) {
+            var minYearOfFirstValue = endChartYear; // earliest year that has a value
+            var maxYearOfFirstValue = 0; // latest year that has a value
+
+            _.forEach(series, function(serie) {
+                // return all data containing null until first value
+                // the emptyYears.length is the number of years that contain Null
+                var emptyYears = _.initial(serie.data, function(data) {
+                    return !_.isNull(data);
+                });
+
+                if (emptyYears.length < minYearOfFirstValue) {
+                    minYearOfFirstValue = emptyYears.length;
+                }
+                if (emptyYears.length > maxYearOfFirstValue) {
+                    maxYearOfFirstValue = emptyYears.length;
+                }
+            });
+
+            // transform index to years
+            minYearOfFirstValue += startChartYear;
+            maxYearOfFirstValue += startChartYear;
+
+            var startLimit = null;
+            if (allYearsWithValues) {
+                startLimit = maxYearOfFirstValue;
+            } else {
+                startLimit = minYearOfFirstValue;
+            }
+
+            for (var i = startLimit; i <= endChartYear; i++) {
+                if (i % 5 === 0 && i >= minYear) {
+                    years.push(i);
+                }
+            }
+        }
+
+        return years;
     };
 
     /**
@@ -693,7 +738,6 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         getChartSeries: getChartSeries,
         resetSeries: resetSeries,
         updateChart: updateChart,
-        computeEstimates: computeEstimates,
         initIgnoredElementsFromUrl: initIgnoredElementsFromUrl,
         removeSeries: removeSeries,
         retrieveFiltersAndValues: retrieveFiltersAndValues,

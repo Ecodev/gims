@@ -184,6 +184,23 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         $scope.estimatesCharts = _.cloneDeep(chart);
     });
 
+    /**
+     * Use chart to compute estimates and configure ng-grid for display
+     * @param ignoredElements
+     */
+    $scope.gridOptions = {
+        columnDefs: 'columnDefs',
+        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 0})],
+        data: 'estimatesData'
+    };
+
+    // update estimates table
+    $rootScope.$on('gims-estimates-table-modified', function(event, data) {
+        $scope.estimatesData = data.data;
+        $scope.columnDefs = data.columns;
+
+    });
+
     /**************************************************************************/
     /* SCOPE FUNCTIONS ********************************************************/
     /**************************************************************************/
@@ -481,7 +498,6 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             alternativeSeriesTimeout = $q.defer();
 
             Chart.refresh(queryParams, $scope.tabs.part, $scope.tabs.geonames, alternativeSeriesTimeout).then(function(data) {
-                computeEstimates(ignoredElements);
                 deferred.resolve(data);
             });
         } else {
@@ -513,35 +529,8 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
                 normalSeriesTimeout.resolve();
             }
             normalSeriesTimeout = $q.defer();
-            Chart.refresh(queryParams, $scope.tabs.part, $scope.tabs.geonames, normalSeriesTimeout).then(function() {
-                computeEstimates([]);
-            });
+            Chart.refresh(queryParams, $scope.tabs.part, $scope.tabs.geonames, normalSeriesTimeout);
         }
-    };
-
-    /**
-     * Use chart to compute estimates and configure ng-grid for display
-     * @param ignoredElements
-     */
-    $scope.gridOptions = {
-        columnDefs: 'columnDefs',
-        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 0})],
-        data: 'estimatesData'
-    };
-
-    var computeEstimates = function(ignoredElements) {
-        $scope.columnDefs = [
-            {
-                field: 'year',
-                displayName: 'Year',
-                enableColumnResize: true,
-                width: '100px'
-            }
-        ];
-
-        var estimatesObject = Chart.computeEstimates($scope.chart.series, ignoredElements);
-        $scope.estimatesData = estimatesObject.data;
-        $scope.columnDefs = $scope.columnDefs.concat(estimatesObject.columns);
     };
 
     /**
