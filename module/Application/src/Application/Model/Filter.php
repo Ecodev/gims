@@ -50,7 +50,7 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
     /**
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="Filter", inversedBy="parents")
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
      * @ORM\JoinTable(name="filter_children",
      *      inverseJoinColumns={@ORM\JoinColumn(name="child_filter_id", onDelete="CASCADE")}
      *      )
@@ -59,6 +59,7 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="Filter", mappedBy="children")
+     * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
      */
     private $parents;
 
@@ -118,6 +119,13 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
      * @ORM\JoinColumn(nullable=true)
      */
     private $thematicFilter;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(type="smallint", nullable=false, options={"default" = 0})
+     */
+    private $sorting = 0;
 
     /**
      * Constructor

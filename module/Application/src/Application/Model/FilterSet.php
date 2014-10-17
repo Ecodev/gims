@@ -21,7 +21,7 @@ class FilterSet extends AbstractModel implements \Application\Service\RoleContex
     /**
      * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="Filter", inversedBy="filterSets")
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
      */
     private $filters;
 
