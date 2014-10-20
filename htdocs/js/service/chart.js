@@ -548,6 +548,13 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         updatePercentChart(normalSeries, 'normal');
         updatePercentChart(ignoredSeries, 'ignored');
 
+        // remove all ignored series only if they are all the same than normal series (avoid to display two identical charts for jmp and ignored data)
+        _.forEach(estimatesCharts, function(chart, geonameId) {
+            if (areAllSameSeries(chart.normal.series, chart.ignored.series)) {
+                estimatesCharts[geonameId].ignored.series = null;
+            }
+        });
+
         $rootScope.$emit('gims-estimates-chart-modified', estimatesCharts);
     };
 
@@ -692,7 +699,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         _.forEach(chart.series, function(serie) {
             var foundSame = false;
             _.forEach(uniqueSeries, function(uniqueSerie, index) {
-                if (serie.id == uniqueSerie.id && _.isEqual(serie.data, uniqueSerie.data)) {
+                if (isSameSerie(serie, uniqueSerie)) {
                     foundSame = {serie: serie, index: index};
                     return false;
                 }
@@ -708,6 +715,40 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
         });
 
         chart.series = uniqueSeries;
+    };
+
+    var isSameSerie = function(serie1, serie2) {
+        return serie1.id == serie2.id && _.isEqual(serie1.data, serie2.data);
+    };
+
+    var areAllSameSeries = function(collection1, collection2) {
+
+        if (!collection1 || !collection2) {
+            return false;
+        }
+
+        // if not same collection, result can't be positive
+        if (collection1.length != collection2.length) {
+            return false;
+        }
+
+        var allSameSeries = true;
+        _.forEach(collection1, function(s1) {
+            var foundSame = false;
+            _.forEach(collection2, function(s2) {
+                if (isSameSerie(s1, s2)) {
+                    foundSame = true;
+                    return false;
+                }
+            });
+
+            if (!foundSame) {
+                allSameSeries = false;
+                return false;
+            }
+        });
+
+        return allSameSeries;
     };
 
     /**
