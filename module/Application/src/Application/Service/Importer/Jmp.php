@@ -1310,6 +1310,7 @@ STRING;
             // .. or create it
             if (!$highFilter) {
                 $highFilter = new Filter($filterName);
+                $highFilter->setSorting($filterData['sorting']);
                 $filterSet->addFilter($highFilter);
                 reset($this->cacheFilters)->addChild($highFilter);
                 $this->getEntityManager()->persist($highFilter);
