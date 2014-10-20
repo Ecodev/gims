@@ -10,6 +10,10 @@ abstract class AbstractImporter
     use \Zend\ServiceManager\ServiceLocatorAwareTrait;
     use \Application\Traits\EntityManagerAware;
 
+    protected $mainFilterBgColor = '';
+    protected $secondaryWaterFiltersBgColor = '';
+    protected $secondarySanitationFiltersBgColor = '';
+
     /**
      * sheet name =>
      *      defintions =>
@@ -123,6 +127,7 @@ abstract class AbstractImporter
                     'children' => array(5, 12, 55, 58, 68),
                     'excludes' => 91,
                     'sorting' => 100,
+                    'color' => "#094aff",
                     'isImproved' => true,
                     'regressionRules' => array(
                         'default' => array(
@@ -150,6 +155,7 @@ abstract class AbstractImporter
                     'children' => array(6),
                     'excludes' => 92,
                     'sorting' => 105,
+                    'color' => "#1270c0",
                     'isImproved' => true,
                     'regressionRules' => array(
                         'default' => array(
@@ -186,6 +192,7 @@ abstract class AbstractImporter
                     'children' => array(60),
                     'excludes' => 93,
                     'sorting' => 102,
+                    'color' => "#e46c0a",
                     'isImproved' => false,
                     'regressionRules' => array(
                         'default' => array(
@@ -234,6 +241,7 @@ abstract class AbstractImporter
                     'children' => array(9, 10, 12, 55, 58, 68),
                     'excludes' => null,
                     'sorting' => 104,
+                    'color' => "#99ccff",
                     'isImproved' => false,
                     'rule' => '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Piped onto premises)), Total improved - Piped onto premises, NULL)',
                     'regressionRules' => array(
@@ -268,6 +276,7 @@ abstract class AbstractImporter
                     'children' => array(56, 59, 71),
                     'excludes' => null,
                     'sorting' => 103,
+                    'color' => "#fdcb0a",
                     'isImproved' => false,
                     'rule' => '=IF(AND(ISNUMBER(Total improved), ISNUMBER(Surface water)), 100% - Total improved - Surface water, NULL)',
                     'regressionRules' => array(
@@ -478,6 +487,7 @@ abstract class AbstractImporter
                     'children' => array(), // based on ratio
                     'excludes' => null,
                     'sorting' => 205,
+                    'color' => "#168000",
                     'isImproved' => true,
                     'regressionRules' => array(
                         'default' => array(
@@ -530,6 +540,7 @@ abstract class AbstractImporter
                     'children' => array(), // based on ratio
                     'excludes' => null,
                     'sorting' => 204,
+                    'color' => "#99cc03",
                     'isImproved' => false,
                     'regressionRules' => array(
                         'default' => array(
@@ -563,6 +574,7 @@ abstract class AbstractImporter
                     'children' => array(80),
                     'excludes' => null,
                     'sorting' => 203,
+                    'color' => "#fdcb00",
                     'isImproved' => false,
                     'rule' => '=IF(AND(ISNUMBER(Improved + shared), ISNUMBER(Open defecation)), 100% - Improved + shared - Open defecation, NULL)',
                     'regressionRules' => array(
@@ -597,6 +609,7 @@ abstract class AbstractImporter
                     'children' => array(79),
                     'excludes' => 98,
                     'sorting' => 202,
+                    'color' => "#e36c0a",
                     'isImproved' => false,
                     'regressionRules' => array(
                         'default' => array(

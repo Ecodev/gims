@@ -1311,6 +1311,7 @@ STRING;
             if (!$highFilter) {
                 $highFilter = new Filter($filterName);
                 $highFilter->setSorting($filterData['sorting']);
+                $highFilter->setColor($filterData['color']);
                 $filterSet->addFilter($highFilter);
                 reset($this->cacheFilters)->addChild($highFilter);
                 $this->getEntityManager()->persist($highFilter);
