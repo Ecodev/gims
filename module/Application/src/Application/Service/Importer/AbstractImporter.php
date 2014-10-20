@@ -312,12 +312,6 @@ abstract class AbstractImporter
                 106 => '[Water] Total population',
             ],
         ),
-
-/*
-    , "#ffff87"
-    , "#c2ffff"
-    , "#c3ffc0"
-*/
         'Tables_S' => array(
             'definitions' => array(
                 3 => array("JMP", null, 0, null),
