@@ -181,4 +181,20 @@ class Redis extends \Zend\Cache\Storage\Adapter\Redis implements CacheInterface
         return $this->namespacePrefix . $key;
     }
 
+    public function clearByNamespace($namespace)
+    {
+        $pattern = $namespace . $this->getOptions()->getNamespaceSeparator() . '*';
+        $it = null; // Initialize our iterator to NULL
+        $this->getRedisResource()->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY); /* retry when we get no keys back */
+        $count = 0;
+        while ($keys = $this->getRedisResource()->scan($it, $pattern)) {
+            foreach ($keys as $key) {
+                $this->getRedisResource()->del($key);
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
 }

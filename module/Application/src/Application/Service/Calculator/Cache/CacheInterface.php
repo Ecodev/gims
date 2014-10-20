@@ -3,8 +3,9 @@
 namespace Application\Service\Calculator\Cache;
 
 use Zend\Cache\Storage\StorageInterface;
+use Zend\Cache\Storage\ClearByNamespaceInterface;
 
-interface CacheInterface extends StorageInterface
+interface CacheInterface extends StorageInterface, ClearByNamespaceInterface
 {
 
     /**

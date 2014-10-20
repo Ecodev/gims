@@ -49,9 +49,11 @@ class ConsoleController extends AbstractActionController
     public function cacheClearAction()
     {
         $cache = $this->getServiceLocator()->get('Cache\Computing');
-        $cache->flush();
 
-        return 'computing cache cleared' . PHP_EOL;
+        $namespace = $cache->getOptions()->getNamespace();
+        $count = $cache->clearByNamespace($namespace);
+
+        return $count . ' keys deleted' . PHP_EOL;
     }
 
     public function cacheWarmUpAction()
