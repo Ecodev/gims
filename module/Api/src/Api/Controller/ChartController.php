@@ -198,6 +198,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
             $baseName = $prefix . $serie['name'];
             $serie['type'] = 'line';
+            $serie['sorting'] = $filter->getSorting();
             $serie['name'] = $baseName . $this->getSuffix($isIgnored, $isAdjusted);
             $serie['geonameId'] = $geoname->getId();
             $serie['color'] = $filter->getGenericColor(100);

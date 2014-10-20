@@ -569,6 +569,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                 geonameId: serie.geonameId,
                 isAdjusted: serie.isAdjusted,
                 isIgnored: serie.isIgnored,
+                sorting: serie.sorting,
                 data: serie.data
             };
         }), 'geonameId');
@@ -583,7 +584,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                 serie.data = [serie.data[years[0] - startChartYear], serie.data[years[1] - startChartYear]];
             });
 
-            estimatesCharts[geonameId][type].series = series;
+            estimatesCharts[geonameId][type].series = _.sortBy(series, 'sorting');
         });
     };
 
