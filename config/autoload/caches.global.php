@@ -1,19 +1,11 @@
 <?php
 
-//return [
-//    'caches' => [
-//        'Cache\Computing' => [
-//            'adapter' => 'Application\Service\Calculator\Cache\Blackhole',
-//        ],
-//    ],
-//];
-
 return [
     'caches' => [
         'Cache\Computing' => [
             'adapter' => 'Application\Service\Calculator\Cache\Redis',
             'options' => [
-                'namespace' => 'gims:prod',
+                'namespace' => 'gims',
                 'server' => [
                     'host' => 'localhost',
                     'port' => '6379',
