@@ -34,6 +34,7 @@
         "ext-json": "*",
         "ext-pgsql": "*",
         "ext-pdo_pgsql": "*",
+        "ext-redis": "*",
         "zendframework/zendframework": "2.*",
         "phing/phing": "dev-master",
         "firephp/firephp-core": "dev-master",

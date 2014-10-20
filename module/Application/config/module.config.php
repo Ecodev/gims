@@ -269,12 +269,22 @@ return array(
                     ),
                 ),
                 'cache-warm-up' => array(
-                    'description' => 'Fill computing cache',
+                    'description' => 'Fill computing cache for all geonames',
                     'options' => array(
                         'route' => 'cache warm-up',
                         'defaults' => array(
                             'controller' => 'Application\Controller\Console',
                             'action' => 'cacheWarmUp'
+                        ),
+                    ),
+                ),
+                'cache-warm-up-one' => array(
+                    'description' => 'Fill computing cache only for the geoname specified by name',
+                    'options' => array(
+                        'route' => 'cache warm-up <geoname>',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Console',
+                            'action' => 'cacheWarmUpOne'
                         ),
                     ),
                 ),

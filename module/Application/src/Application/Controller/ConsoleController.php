@@ -57,10 +57,28 @@ class ConsoleController extends AbstractActionController
     public function cacheWarmUpAction()
     {
         $progress = function($i, $total) {
-            $digits = 4;
+            $digits = 3;
 
             return str_pad($i, $digits, ' ', STR_PAD_LEFT) . '/' . str_pad($total, $digits, ' ', STR_PAD_LEFT);
         };
+
+        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findAll();
+
+        $total = count($geonames);
+
+        $i = 1;
+        foreach ($geonames as $geoname) {
+            echo $progress($i++, $total) . ' ';
+            $cmd = 'php htdocs/index.php cache warm-up "' . $geoname->getName() . '"';
+            system($cmd);
+        }
+
+        return 'done' . PHP_EOL;
+    }
+
+    public function cacheWarmUpOneAction()
+    {
+        $geonameName = $this->getRequest()->getParam('geoname');
 
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
@@ -68,25 +86,14 @@ class ConsoleController extends AbstractActionController
         $aggregator->setCalculator($calculator);
 
         $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
-        $filterSets = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findAll();
-        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findAll();
+        $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findAll();
+        $geoname = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findOneByName($geonameName);
 
-        $total = count($parts) * count($filterSets) * count($geonames);
-
-        $i = 1;
-        foreach ($geonames as $geoname) {
-            echo '          ' . $geoname->getName() . PHP_EOL;
-            foreach ($filterSets as $filterSet) {
-                $filters = $filterSet->getFilters()->toArray();
-                echo '            ' . $filterSet->getName() . PHP_EOL;
-                foreach ($parts as $part) {
-                    echo $progress($i++, $total) . '     ' . $part->getName() . PHP_EOL;
-                    $aggregator->computeFlattenAllYears($filters, $geoname, $part);
-                }
-            }
+        echo $geoname->getName() . PHP_EOL;
+        foreach ($parts as $part) {
+            echo '        ' . $part->getName() . PHP_EOL;
+            $aggregator->computeFlattenAllYears($filters, $geoname, $part);
         }
-
-        return 'done' . PHP_EOL;
     }
 
 }

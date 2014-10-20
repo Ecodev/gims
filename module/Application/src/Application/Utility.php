@@ -75,7 +75,7 @@ abstract class Utility
     }
 
     /**
-     * Execute a GIMS command via CLI
+     * Execute a GIMS command via CLI asynchronously
      * @param string $command
      */
     public static function executeCliCommand($command)
