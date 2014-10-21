@@ -425,12 +425,12 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
 
     public function testCanExtractNonBooleanStartingWithIs()
     {
-        $country = new \Application\Model\Country();
-        $country->setIso3('abc');
+        $geoname = new \Application\Model\Geoname();
+        $geoname->setIso3('abc');
 
-        $actual = $this->hydrator->extract($country, array('iso3'));
+        $actual = $this->hydrator->extract($geoname, array('iso3'));
         $this->assertArrayHasKey('iso3', $actual);
-        $this->assertEquals($country->getIso3(), $actual['iso3']);
+        $this->assertEquals($geoname->getIso3(), $actual['iso3']);
     }
 
     /**

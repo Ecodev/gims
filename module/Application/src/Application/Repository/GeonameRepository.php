@@ -68,11 +68,12 @@ INNER JOIN questionnaire AS q ON questionnaire.geoname_id = q.geoname_id AND q.i
             LEFT JOIN filter_children AS parentrel on parentrel.child_filter_id = f.id
             LEFT JOIN filter_children AS grandparentrel on grandparentrel.child_filter_id = parentrel.filter_id
             LEFT JOIN filter AS grandparent on grandparent.id = grandparentrel.filter_id
-            WHERE s.type = \'nsa\'
+            WHERE s.type = :type
             AND qu.geoname_id = :geoname
         ', $rsm);
 
         $n->setParameter('geoname', $geonameId);
+        $n->setParameter('type', \Application\Model\SurveyType::$NSA);
         $filter = $n->getResult();
         $result = count($filter) ? $filter[0] : null;
 
@@ -86,15 +87,10 @@ INNER JOIN questionnaire AS q ON questionnaire.geoname_id = q.geoname_id AND q.i
      */
     public function getByIdForComputing(array $geonameIds)
     {
-        // Here we have to also include country even if we don't use it, otherwise
-        // Doctrine would issue another SQL query for each geoname to get their countries
         $qb = $this->createQueryBuilder('geoname')
-                ->select('geoname', 'country', 'children', 'childrenCountry', 'grandChildren', 'grandChildrenCountry')
-                ->leftJoin('geoname.country', 'country', Join::WITH)
+                ->select('geoname', 'children', 'grandChildren')
                 ->leftJoin('geoname.children', 'children', Join::WITH)
-                ->leftJoin('children.country', 'childrenCountry', Join::WITH)
                 ->leftJoin('children.children', 'grandChildren', Join::WITH)
-                ->leftJoin('grandChildren.country', 'grandChildrenCountry', Join::WITH)
                 ->where('geoname IN (:geonames)')
                 ->orderBy('geoname.name');
 

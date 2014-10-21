@@ -110,10 +110,10 @@
                         <input id="user.city" type="text" name="city" ng-model="user.city"/>
                     </div>
                 </div>
-                <div class="form-group" ng-class="{'has-error': myForm.country.$invalid}">
-                    <label class="control-label col-sm-1" for="country">Country</label>
+                <div class="form-group" ng-class="{'has-error': myForm.geoname.$invalid}">
+                    <label class="control-label col-sm-1" for="geoname">Country</label>
                     <div class="col-sm-6">
-                        <gims-select id="country" api="country" name="country" model="user.country" style="width:100%"></gims-select>
+                        <gims-select id="geoname" api="geoname" name="geoname" model="user.geoname" style="width:100%"></gims-select>
                     </div>
                 </div>
 

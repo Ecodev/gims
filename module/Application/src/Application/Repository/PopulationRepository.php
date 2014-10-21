@@ -10,7 +10,7 @@ class PopulationRepository extends AbstractChildRepository
     public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
     {
         $qb = $this->createQueryBuilder('population');
-        $qb->join('population.country', 'country', Join::WITH);
+        $qb->join('population.geoname', 'geoname', Join::WITH);
         $qb->join('population.part', 'part', Join::WITH);
         $qb->join('population.questionnaire', 'questionnaire', Join::WITH);
 
@@ -60,7 +60,7 @@ class PopulationRepository extends AbstractChildRepository
             $query = $this->getEntityManager()->createNativeQuery('
                 SELECT population, year, part_id, questionnaire_id
                 FROM population
-                INNER JOIN country ON (population.country_id = country.id AND country.geoname_id = :geoname)', $rsm);
+                WHERE population.geoname_id = :geoname', $rsm);
 
             $query->setParameters(array(
                 'geoname' => $geoname,

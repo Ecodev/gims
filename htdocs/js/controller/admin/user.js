@@ -56,7 +56,7 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
 
     // Load user if possible
     if ($routeParams.id) {
-        Restangular.one('user', $routeParams.id).get({fields: 'metadata,phone,skype,job,ministry,address,zip,city,country'}).then(function(user) {
+        Restangular.one('user', $routeParams.id).get({fields: 'metadata,phone,skype,job,ministry,address,zip,city,geoname'}).then(function(user) {
             $scope.user = user;
         });
     } else {

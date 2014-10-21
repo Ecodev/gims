@@ -14,8 +14,7 @@ class PopulationRepositoryTest extends AbstractRepository
         $survey->setCode('test code');
         $survey->setYear(2000);
 
-        $country = $this->getEntityManager()->getRepository('Application\Model\Country')->findOneBy(['iso3' => 'CHE']);
-        $geoname = $country->getGeoname();
+        $geoname = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findOneBy(['iso3' => 'CHE']);
 
         $questionnaire = new \Application\Model\Questionnaire();
         $questionnaire->setSurvey($survey)->setGeoname($geoname)->setDateObservationStart(new \DateTime())->setDateObservationEnd(new \DateTime());
@@ -23,7 +22,7 @@ class PopulationRepositoryTest extends AbstractRepository
         $part = new \Application\Model\Part('tst part');
         $p1 = new \Application\Model\Population();
         $p1
-                ->setCountry($country)
+                ->setGeoname($geoname)
                 ->setPart($part)
                 ->setPopulation(500)
                 ->setYear(2000)
@@ -31,7 +30,7 @@ class PopulationRepositoryTest extends AbstractRepository
         ;
         $p2 = new \Application\Model\Population();
         $p2
-                ->setCountry($country)
+                ->setGeoname($geoname)
                 ->setPart($part)
                 ->setPopulation(5)
                 ->setYear(2000)

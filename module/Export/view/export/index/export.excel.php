@@ -29,7 +29,7 @@ foreach ($questionnaires as $questionnaire) {
 
     $workbook->getActiveSheet()
         ->setCellValueByColumnAndRow($questionnaireCol, $row - 1, $questionnaire->getGeoname()
-        ->getCountry()->getIso3());
+        ->getIso3());
     $workbook->getActiveSheet()
         ->setCellValueByColumnAndRow($questionnaireCol, $row, $questionnaire->getGeoname()
         ->getName());

@@ -4,7 +4,6 @@ namespace ApiTest\Controller;
 
 use Zend\Http\Request;
 use Application\Model\Answer;
-use Application\Model\Country;
 use Application\Model\Filter;
 use Application\Model\FilterSet;
 use Application\Model\Geoname;
@@ -116,11 +115,6 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
     protected $filterGeonameUsage;
 
     /**
-     * @var Country
-     */
-    protected $country;
-
-    /**
      * @var Population
      */
     protected $population;
@@ -212,11 +206,8 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->filterGeonameUsage = new FilterGeonameUsage();
         $this->filterGeonameUsage->setJustification('tests')->setRule($this->rule)->setPart($this->part)->setGeoname($this->geoname)->setFilter($this->filter);
 
-        $this->country = new Country('tst country');
-        $this->country->setCode('tstctry')->setGeoname($this->geoname);
-
         $this->population = new Population();
-        $this->population->setCountry($this->country)->setPart($this->part)->setYear(2000)->setPopulation(55555)->setQuestionnaire($this->questionnaire);
+        $this->population->setGeoname($this->geoname)->setPart($this->part)->setYear(2000)->setPopulation(55555)->setQuestionnaire($this->questionnaire);
 
         $this->getEntityManager()->persist($this->filterSet);
         $this->getEntityManager()->persist($this->filterSet2);
@@ -238,7 +229,6 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->getEntityManager()->persist($this->questionnaireUsage);
         $this->getEntityManager()->persist($this->filterQuestionnaireUsage);
         $this->getEntityManager()->persist($this->filterGeonameUsage);
-        $this->getEntityManager()->persist($this->country);
         $this->getEntityManager()->persist($this->population);
 
         // Prevent new objects to be created by the current user, otherwise it would bypass all ACL checks if we are the creator

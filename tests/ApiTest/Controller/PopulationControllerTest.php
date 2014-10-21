@@ -45,7 +45,7 @@ class PopulationControllerTest extends AbstractChildRestfulControllerTest
     {
         // Population
         $data = array(
-            'country' => $this->country->getId(),
+            'geoname' => $this->geoname->getId(),
             'part' => $this->part->getId(),
             'year' => 2005,
             'population' => 666666,

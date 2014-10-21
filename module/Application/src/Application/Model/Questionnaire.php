@@ -8,7 +8,7 @@ use Application\Utility;
 /**
  * Questionnaire is a particular "instance" of a Survey for a specific country (or
  * more generally for a geographic location). So a questionnaire links questions to
- * a country and its answers.
+ * a geoname and its answers.
  * @ORM\Entity(repositoryClass="Application\Repository\QuestionnaireRepository")
  * @ORM\HasLifecycleCallbacks
  */

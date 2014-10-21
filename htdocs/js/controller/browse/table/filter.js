@@ -7,7 +7,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
     // params for ajax requests
     $scope.filterFields = {fields: 'color,bgColor,paths,parents,summands'};
-    $scope.countryParams = {fields: 'geoname'};
 
     // Variables initialisations
     $scope.locationPath = $location.$$path;
@@ -126,8 +125,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         }
     });
 
-    $scope.$watch('data.country', function() {
-        if ($scope.data.country) {
+    $scope.$watch('data.geoname', function() {
+        if ($scope.data.geoname) {
             TableFilter.loadGeoname().then(checkSelectionExpand);
         }
     });
@@ -172,7 +171,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
                 })).join(',');
             });
 
-        } else if (($scope.data.country || $scope.data.survey) && _.isEmpty($scope.data.questionnaires)) {
+        } else if (($scope.data.geoname || $scope.data.survey) && _.isEmpty($scope.data.questionnaires)) {
             $scope.addQuestionnaire();
         }
 

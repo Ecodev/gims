@@ -42,23 +42,22 @@ class Population extends AbstractImporter
         $this->partTotal = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Total');
         $this->getEntityManager()->flush(); // Flush to be sure that parts have ID
 
-        $countryRepository = $this->getEntityManager()->getRepository('Application\Model\Country');
+        $geonameRepository = $this->getEntityManager()->getRepository('Application\Model\Geoname');
 
-        $colIso = 1;
+        $colIso3 = 2;
         $rowYear = 1;
         $importedValueCount = 0;
         $row = $rowYear + 1;
-        while ($countryIsoNumeric = $totalSheet->getCellByColumnAndRow($colIso, $row)->getValue()) {
-
-            if (($totalSheet->getCellByColumnAndRow($colIso, $row)->getValue() != $urbanSheet->getCellByColumnAndRow($colIso, $row)->getValue()) ||
-                    ($urbanSheet->getCellByColumnAndRow($colIso, $row)->getValue() != $ruralSheet->getCellByColumnAndRow($colIso, $row)->getValue())) {
-                throw new \Exception("Country ISO number is different in one on the three file at [$colIso, $row]");
+        while ($countryIso3 = $totalSheet->getCellByColumnAndRow($colIso3, $row)->getValue()) {
+            if (($totalSheet->getCellByColumnAndRow($colIso3, $row)->getValue() != $urbanSheet->getCellByColumnAndRow($colIso3, $row)->getValue()) ||
+                    ($urbanSheet->getCellByColumnAndRow($colIso3, $row)->getValue() != $ruralSheet->getCellByColumnAndRow($colIso3, $row)->getValue())) {
+                throw new \Exception("Country ISO3 is different in one on the three file at [$colIso3, $row]");
             }
 
-            $country = $countryRepository->findOneBy(array('isoNumeric' => $countryIsoNumeric));
-            if ($country) {
-                echo 'Country: ' . $country->getName() . PHP_EOL;
-                $col = $colIso + 2;
+            $geoname = $geonameRepository->findOneBy(array('iso3' => $countryIso3));
+            if ($geoname) {
+                echo 'Country: ' . $geoname->getName() . PHP_EOL;
+                $col = $colIso3 + 1;
                 while ($year = $totalSheet->getCellByColumnAndRow($col, $rowYear)->getCalculatedValue()) {
                     if (($totalSheet->getCellByColumnAndRow($col, $rowYear)->getValue() != $urbanSheet->getCellByColumnAndRow($col, $rowYear)->getValue()) ||
                             ($urbanSheet->getCellByColumnAndRow($col, $rowYear)->getValue() != $ruralSheet->getCellByColumnAndRow($col, $rowYear)->getValue())) {
@@ -69,9 +68,9 @@ class Population extends AbstractImporter
                     $rural = $ruralSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
                     $total = $totalSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
 
-                    $this->getPopulation($year, $country, $this->partUrban)->setPopulation((int) ($urban * 1000));
-                    $this->getPopulation($year, $country, $this->partRural)->setPopulation((int) ($rural * 1000));
-                    $this->getPopulation($year, $country, $this->partTotal)->setPopulation((int) ($total * 1000));
+                    $this->getPopulation($year, $geoname, $this->partUrban)->setPopulation((int) ($urban * 1000));
+                    $this->getPopulation($year, $geoname, $this->partRural)->setPopulation((int) ($rural * 1000));
+                    $this->getPopulation($year, $geoname, $this->partTotal)->setPopulation((int) ($total * 1000));
 
                     $col++;
                     $importedValueCount += 3;
@@ -95,15 +94,15 @@ class Population extends AbstractImporter
     /**
      * Returns a Population either from database, or newly created
      * @param integer $year
-     * @param \Application\Model\Country $country
+     * @param \Application\Model\Geoname $geoname
      * @return \Application\Model\Population
      */
-    protected function getPopulation($year, \Application\Model\Country $country, \Application\Model\Part $part)
+    protected function getPopulation($year, \Application\Model\Geoname $geoname, \Application\Model\Part $part)
     {
         $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
         $population = $populationRepository->findOneBy(array(
             'year' => $year,
-            'country' => $country,
+            'geoname' => $geoname,
             'part' => $part,
         ));
 
@@ -112,7 +111,7 @@ class Population extends AbstractImporter
             $population = new \Application\Model\Population();
             $this->getEntityManager()->persist($population);
             $population->setYear($year);
-            $population->setCountry($country);
+            $population->setGeoname($geoname);
             $population->setPart($part);
         }
 

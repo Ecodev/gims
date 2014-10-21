@@ -5,12 +5,12 @@ namespace Application\Model;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Population data for each country-year-part triple.
+ * Population data for each geoname-year-part triple.
  *
  * @ORM\Entity(repositoryClass="Application\Repository\PopulationRepository")
  * @ORM\Table(uniqueConstraints={
- *     @ORM\UniqueConstraint(name="population_unique_official",columns={"year", "country_id", "part_id"}, options={"where": "questionnaire_id IS NULL"}),
- *     @ORM\UniqueConstraint(name="population_unique_non_official",columns={"year", "country_id", "part_id", "questionnaire_id"}, options={"where": "questionnaire_id IS NOT NULL"})
+ *     @ORM\UniqueConstraint(name="population_unique_official",columns={"year", "geoname_id", "part_id"}, options={"where": "questionnaire_id IS NULL"}),
+ *     @ORM\UniqueConstraint(name="population_unique_non_official",columns={"year", "geoname_id", "part_id", "questionnaire_id"}, options={"where": "questionnaire_id IS NOT NULL"})
  * })
  * @ORM\HasLifecycleCallbacks
  */
@@ -26,15 +26,15 @@ class Population extends AbstractModel
     private $year;
 
     /**
-     * The country
-     * @var Country
+     * The geoname
+     * @var Geoname
      *
-     * @ORM\ManyToOne(targetEntity="Country")
+     * @ORM\ManyToOne(targetEntity="Geoname")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
      */
-    private $country;
+    private $geoname;
 
     /**
      * The absolute number of people
@@ -45,7 +45,7 @@ class Population extends AbstractModel
     private $population;
 
     /**
-     * The part of the country
+     * The part of the geoname
      * @var Part
      *
      * @ORM\ManyToOne(targetEntity="Part")
@@ -102,26 +102,26 @@ class Population extends AbstractModel
     }
 
     /**
-     * Set country
+     * Set geoname
      *
-     * @param Country $country
+     * @param Geoname $geoname
      * @return self
      */
-    public function setCountry(Country $country)
+    public function setGeoname(Geoname $geoname)
     {
-        $this->country = $country;
+        $this->geoname = $geoname;
 
         return $this;
     }
 
     /**
-     * Get country
+     * Get geoname
      *
-     * @return Country
+     * @return Geoname
      */
-    public function getCountry()
+    public function getGeoname()
     {
-        return $this->country;
+        return $this->geoname;
     }
 
     /**

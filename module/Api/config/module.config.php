@@ -11,7 +11,6 @@ return array(
             'Api\Controller\Filter' => 'Api\Controller\FilterController',
             'Api\Controller\Survey' => 'Api\Controller\SurveyController',
             'Api\Controller\FilterSet' => 'Api\Controller\FilterSetController',
-            'Api\Controller\Country' => 'Api\Controller\CountryController',
             'Api\Controller\Part' => 'Api\Controller\PartController',
             'Api\Controller\User' => 'Api\Controller\UserController',
             'Api\Controller\UserSurvey' => 'Api\Controller\UserSurveyController',

@@ -56,9 +56,9 @@ angular.module('myApp.services').factory('UserModal', function($modal) {
                     '       <label class="control-label" for="localUser.city">City</label>' +
                     '       <input id="localUser.city" type="text" name="city" ng-model="localUser.city" ng-disabled="localUser.lastLogin" />' +
                     '   </div>' +
-                    '   <div class="form-group" ng-class="{\'has-error\': myForm.country.$invalid}">' +
-                    '       <label class="control-label" for="country">Country</label>' +
-                    '       <gims-select id="country" api="country" name="country" model="localUser.country" style="width:100%" disabled="localUser.lastLogin" ></gims-select>' +
+                    '   <div class="form-group" ng-class="{\'has-error\': myForm.geoname.$invalid}">' +
+                    '       <label class="control-label" for="geoname">Country</label>' +
+                    '       <gims-select id="geoname" api="geoname" name="geoname" model="localUser.geoname" style="width:100%" disabled="localUser.lastLogin" ></gims-select>' +
                     '   </div>' +
                     '</form>' +
                     "</div>" +

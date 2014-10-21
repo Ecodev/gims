@@ -17,7 +17,7 @@
                 <button class="btn btn-primary" ng-if="hasUnsavedElement()" ng-click="saveAll();" ng-disabled="isLoading || !data.filters && !data.questionnaires"><i class="fa fa-save"></i> Save new elements</button>
 
                 <!-- Clear the selection -->
-                <a href class="btn btn-default" ng-click="data.questionnaires = []; data.filters = []; data.filterSet = null; data.country = null; data.filter = null; data.survey = null"><i class="fa fa-eraser"></i> Clear selection</a>
+                <a href class="btn btn-default" ng-click="data.questionnaires = []; data.filters = []; data.filterSet = null; data.geoname = null; data.filter = null; data.survey = null"><i class="fa fa-eraser"></i> Clear selection</a>
 
                 <!-- Hide/Show selection tools and/or children filters -->
                 <button class="btn btn-default" ng-click="expandSelection = !expandSelection;"><i class="fa" ng-class="{'fa-compress':expandSelection,'fa-expand text-primary':!expandSelection}"></i> Selection</button>
@@ -98,9 +98,8 @@
                                 <tabset>
                                     <tab heading="Country">
                                         <gims-select
-                                            model="data.country"
-                                            api="country"
-                                            queryparams="countryParams"
+                                            model="data.geoname"
+                                            api="geoname"
                                             placeholder="Select a country"
                                             change-url="false"
                                             disabled="isLoading"
@@ -246,9 +245,8 @@
                                             <gims-select
                                                     required
                                                     disabled="data.mode.isSector || questionnaire.id || questionnaire.isLoading"
-                                                    api="country"
-                                                    model="questionnaire.geoname.country"
-                                                    queryparams="countryParams"
+                                                    api="geoname"
+                                                    model="questionnaire.geoname"
                                                     placeholder="Country"
                                                     change-url="false"
                                                     style="width: 100%"

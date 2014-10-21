@@ -161,8 +161,7 @@ class AnswerRepository extends AbstractChildRepository
                 FROM questionnaire q
                     JOIN survey s ON (q.survey_id = s.id)
                     JOIN geoname g ON (q.geoname_id = g.id)
-                    JOIN country c ON (c.geoname_id = g.id)
-                    JOIN population p ON (p.country_id = c.id AND s.year = p.year)
+                    JOIN population p ON (p.geoname_id = g.id AND s.year = p.year)
                     JOIN question ON (s.id = question.survey_id)
                 WHERE %s
                     AND answer.part_id = p.part_id

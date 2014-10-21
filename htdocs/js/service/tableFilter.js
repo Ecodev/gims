@@ -12,7 +12,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
      */
     var data;
 
-    var questionnaireWithAnswersFields = {fields: 'status,permissions,comments,geoname.country,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part,filterQuestionnaireUsages.isSecondStep,filterQuestionnaireUsages.sorting'};
+    var questionnaireWithAnswersFields = {fields: 'status,permissions,comments,geoname,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part,filterQuestionnaireUsages.isSecondStep,filterQuestionnaireUsages.sorting'};
     var questionnaireFields = {fields: 'survey.questions.type,survey.questions.filter'};
 
     var lastUnsavedFilterId = 1;
@@ -288,7 +288,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                 _.forEach(data.parts, function(part) {
                     if (_.isUndefined(questionnaire.populations[part.id])) {
                         questionnaire.populations[part.id] = {
-                            part: part.id
+                            part: part
                         };
                     }
                 });
@@ -750,7 +750,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         if (!isValidId(data.filters[0])) {
 
             // first create filter set
-            var newFilterSet = {name: 'Sector : ' + data.country.name};
+            var newFilterSet = {name: 'Sector : ' + data.geoname.name};
             Restangular.all('filterSet').post(newFilterSet).then(function(filterSet) {
                 data.filters[0].filterSets = [filterSet];
 
@@ -791,7 +791,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
 
                         _.forEach(data.questionnaires, function(q2, j) {
                             if (_.isUndefined(q2.id) && i != j) {
-                                if (q1.geoname && q2.geoname && q1.geoname.country && q2.geoname.country && q1.geoname.country.id == q2.geoname.country.id) {
+                                if (q1.geoname && q2.geoname && q1.geoname.id == q2.geoname.id) {
                                     if (q1.survey.code && q2.survey.code && q1.survey.code == q2.survey.code) {
                                         q1.errors.duplicateCountryCode = true;
                                     }
@@ -823,7 +823,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
 
         if (_.isUndefined(questionnaire.survey.id) && !_.isEmpty(questionnaire.survey.code)) {
 
-            Restangular.all('survey').getList({q: questionnaire.survey.code, perPage: 1000, fields: 'questions,questions.filter,questionnaires,questionnaires.geoname,questionnaires.geoname.country'}).then(function(surveys) {
+            Restangular.all('survey').getList({q: questionnaire.survey.code, perPage: 1000, fields: 'questions,questions.filter,questionnaires,questionnaires.geoname'}).then(function(surveys) {
                 if (surveys.length === 0) {
                     deferred.resolve({survey: null, questionnaire: null});
                 } else {
@@ -840,7 +840,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                             var existingQuestionnaire = null;
                             if (!_.isUndefined(questionnaire.geoname)) {
                                 existingQuestionnaire = _.find(existingSurvey.questionnaires, function(q) {
-                                    if (questionnaire.geoname.country.id == q.geoname.country.id) {
+                                    if (questionnaire.geoname.id == q.geoname.id) {
                                         return q;
                                     }
                                 });
@@ -933,7 +933,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             var miniQuestionnaire = {
                 dateObservationStart: questionnaire.survey.year + '-01-01',
                 dateObservationEnd: questionnaire.survey.year + '-12-31',
-                geoname: questionnaire.geoname.country.geoname.id,
+                geoname: questionnaire.geoname.id,
                 survey: questionnaire.survey.id
             };
 
@@ -979,7 +979,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         // Be sure that population data are in sync with other data from questionnaire/survey
         population.questionnaire = questionnaire.id;
         population.year = questionnaire.survey.year;
-        population.country = questionnaire.geoname.country.id;
+        population.geoname = questionnaire.geoname.id;
 
         // If new population with value, create it
         if (_.isUndefined(population.id) && _.isNumber(population.population)) {
@@ -1503,7 +1503,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
      * @returns {boolean}
      */
     function questionnaireCanBeSaved(questionnaire) {
-        return _.isUndefined(questionnaire.id) && !_.isUndefined(questionnaire.geoname) && !_.isUndefined(questionnaire.geoname.country) && !_.isUndefined(questionnaire.survey) && !_.isEmpty(questionnaire.survey.code) && !_.isUndefined(questionnaire.survey.year) && !questionnaireHasErrors(questionnaire);
+        return _.isUndefined(questionnaire.id) && !_.isUndefined(questionnaire.geoname) && !_.isUndefined(questionnaire.survey) && !_.isEmpty(questionnaire.survey.code) && !_.isUndefined(questionnaire.survey.year) && !questionnaireHasErrors(questionnaire);
     }
 
     /**
@@ -1621,7 +1621,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     var addSectorFilterSet = function() {
         data.filter = {
             id: '_' + lastUnsavedFilterId++,
-            name: 'Sector : ' + data.country.name,
+            name: 'Sector : ' + data.geoname.name,
             level: 0,
             color: '#FF0000'
         };
@@ -1636,18 +1636,10 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             data.questionnaires = [];
         }
 
-        var country = null;
-        if ($location.search().usedCountry) {
-            country = $location.search().usedCountry;
-        } else if (data.country) {
-            country = data.country.id;
+        var questionnaire = {};
+        if (data.geoname) {
+            questionnaire.geoname = _.cloneDeep(data.geoname);
         }
-
-        var questionnaire = {
-            geoname: {
-                country: country
-            }
-        };
 
         data.questionnaires.splice(0, 0, questionnaire);
         fillMissingElements();
@@ -1662,15 +1654,15 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             updateUrl('filter');
             updateUrl('filters');
 
-            if (data.country) {
+            if (data.geoname) {
 
                 $http.get('/api/filter/getSectorFiltersForGeoname', {
                     params: {
-                        geoname: data.country.geoname.id
+                        geoname: data.geoname.id
                     }
-                }).success(function(data) {
-                    if (data.id) {
-                        data.filter = data;
+                }).success(function(loadedSectorFilter) {
+                    if (loadedSectorFilter.id) {
+                        data.filter = loadedSectorFilter;
                     } else {
                         addSectorFilterSet();
                     }
@@ -1682,7 +1674,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     function loadGeoname() {
         var deferred = $q.defer();
         data.questionnaires = [];
-        Restangular.one('geoname', data.country.geoname.id).getList('questionnaire', _.merge(questionnaireFields, {surveyType: data.mode.surveyType, perPage: 1000})).then(function(questionnaires) {
+        Restangular.one('geoname', data.geoname.id).getList('questionnaire', _.merge(questionnaireFields, {surveyType: data.mode.surveyType, perPage: 1000})).then(function(questionnaires) {
             data.questionnaires = questionnaires;
             data.survey = null;
             initSector();
@@ -1697,7 +1689,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         data.questionnaires = [];
         Restangular.one('survey', data.survey.id).getList('questionnaire', _.merge(questionnaireFields, {surveyType: data.mode.surveyType, perPage: 1000})).then(function(questionnaires) {
             data.questionnaires = questionnaires;
-            data.country = null;
+            data.geoname = null;
             deferred.resolve();
         });
 

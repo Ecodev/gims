@@ -510,13 +510,12 @@ STRING;
             return null;
         }
 
-        $countryRepository = $this->getEntityManager()->getRepository('Application\Model\Country');
-        $country = $countryRepository->findOneBy(array('name' => $countryName));
-        if (!$country) {
+        $geonameRepository = $this->getEntityManager()->getRepository('Application\Model\Geoname');
+        $geoname = $geonameRepository->findOneBy(array('name' => $countryName));
+        if (!$geoname) {
             throw new \Exception('No country found for name "' . $countryName . '"');
         }
-        $this->isDevelopedCountry = in_array($country->getIso3(), $developedCountries);
-        $geoname = $country->getGeoname();
+        $this->isDevelopedCountry = in_array($geoname->getIso3(), $developedCountries);
 
         $questionnaire = new Questionnaire();
         $questionnaire->setStatus(\Application\Model\QuestionnaireStatus::$PUBLISHED);
@@ -1041,7 +1040,7 @@ STRING;
         foreach ($this->importedQuestionnaires as $questionnaire) {
 
             $formulaGroup = 'default';
-            $countryName = $questionnaire->getGeoname()->getCountry()->getName();
+            $countryName = $questionnaire->getGeoname()->getName();
             if (in_array($countryName, array(
                 'American Samoa',
                 'Antigua and Barbuda',

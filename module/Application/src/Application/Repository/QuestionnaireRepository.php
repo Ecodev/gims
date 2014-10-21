@@ -44,7 +44,7 @@ class QuestionnaireRepository extends AbstractChildRepository
         } else {
             $exceptionDql = null;
         }
-
+//w($qb->getQuery()->getSQL());
         $this->addPermission($qb, ['survey', 'questionnaire'], \Application\Model\Permission::getPermissionName($this, $action), $exceptionDql);
         $this->addSearch($qb, $search, array('survey.code', 'geoname.name'));
 

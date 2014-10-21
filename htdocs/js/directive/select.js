@@ -116,7 +116,6 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 rule: 'ajax',
                 filter: 'ajax',
                 filterSet: 'cached',
-                country: 'cached',
                 geoname: 'cached',
                 part: 'cached'
             };

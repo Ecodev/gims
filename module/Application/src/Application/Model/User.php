@@ -85,10 +85,10 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     private $city;
 
     /**
-     * @var \Application\Model\Country
-     * @ORM\ManyToOne(targetEntity="\Application\Model\Country")
+     * @var \Application\Model\Geoname
+     * @ORM\ManyToOne(targetEntity="\Application\Model\Geoname")
      */
-    private $country;
+    private $geoname;
 
     /**
      * @var integer
@@ -517,20 +517,20 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     }
 
     /**
-     * @return \Application\Model\Country
+     * @return \Application\Model\Geoname
      */
-    public function getCountry()
+    public function getGeoname()
     {
-        return $this->country;
+        return $this->geoname;
     }
 
     /**
-     * @param \Application\Model\Country $country
+     * @param \Application\Model\Geoname $geoname
      * @return self
      */
-    public function setCountry($country)
+    public function setGeoname($geoname)
     {
-        $this->country = $country;
+        $this->geoname = $geoname;
 
         return $this;
     }

@@ -4,7 +4,6 @@ namespace Application\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Application\Model\Country;
 
 /**
  * Geoname. Data are imported from http://www.geonames.org, but only partially for
@@ -138,10 +137,11 @@ class Geoname extends AbstractModel
     private $filterGeonameUsages;
 
     /**
-     * @var Country
-     * @ORM\OneToOne(targetEntity="Country", mappedBy="geoname")
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $country;
+    private $iso3;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -582,21 +582,26 @@ class Geoname extends AbstractModel
     }
 
     /**
-     * @return \Application\Model\Country
+     * Set iso3
+     *
+     * @param string $iso3
+     * @return self
      */
-    public function getCountry()
+    public function setIso3($iso3)
     {
-        return $this->country;
+        $this->iso3 = $iso3;
+
+        return $this;
     }
 
     /**
-     * @param \Application\Model\Country $country
+     * Get iso3
+     *
+     * @return string
      */
-    public function setCountry(Country $country = null)
+    public function getIso3()
     {
-        $this->country = $country;
-
-        return $this;
+        return $this->iso3;
     }
 
     /**

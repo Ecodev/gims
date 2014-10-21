@@ -143,7 +143,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                     if (!isset($result[$questionnaireId])) {
                         $result[$questionnaireId] = array(
                             'country' => $questionnairesById[$questionnaireId]->getGeoname()->getName(),
-                            'iso3' => $questionnairesById[$questionnaireId]->getGeoname()->getCountry()->getIso3(),
+                            'iso3' => $questionnairesById[$questionnaireId]->getGeoname()->getIso3(),
                             'survey' => $data['surveys'][$questionnaireId],
                             'year' => $data['years'][$questionnaireId],
                         );
@@ -211,7 +211,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                 // country info columns
                 $countryData = array(
                     'country' => $geoname->getName(),
-                    'iso3' => $geoname->getCountry() ? $geoname->getCountry()->getIso3() : null,
+                    'iso3' => $geoname->getIso3(),
                     'year' => $year
                 );
 

@@ -9,7 +9,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.panelTabs = {};
     $scope.ignoredElements = null;
     $scope.concatenatedIgnoredElements = [];
-    $scope.geonameParams = {perPage: 500, fields: 'country,questionnaires'};
+    $scope.geonameParams = {perPage: 500, fields: 'questionnaires'};
     $scope.filterSetParams = {fields: 'filters.genericColor,filters.color'};
     $scope.indexedElements = ChartCache.getCache();
     Chart.setCache($scope.indexedElements);
@@ -554,9 +554,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      */
     $scope.getContributeUrl = function(filter, geoname) {
         if (filter.name.match('Sector')) {
-            return '/contribute/nsa?&country=' + geoname.country.id + '&returnUrl=' + $scope.currentUrl;
+            return '/contribute/nsa?&geoname=' + geoname.id + '&returnUrl=' + $scope.currentUrl;
         } else {
-            return '/contribute/jmp?&country=' + geoname.country.id + '&filter=' + filter.id + '&returnUrl=' + $scope.currentUrl;
+            return '/contribute/jmp?&geoname=' + geoname.id + '&filter=' + filter.id + '&returnUrl=' + $scope.currentUrl;
         }
 
     };
