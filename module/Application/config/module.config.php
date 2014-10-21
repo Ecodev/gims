@@ -288,6 +288,16 @@ return array(
                         ),
                     ),
                 ),
+                'compute-population' => array(
+                    'description' => 'Compute population for geoname with children',
+                    'options' => array(
+                        'route' => 'compute population',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Console',
+                            'action' => 'computePopulation'
+                        ),
+                    ),
+                ),
             ),
         ),
     ),

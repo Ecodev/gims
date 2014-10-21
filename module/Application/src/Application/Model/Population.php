@@ -40,7 +40,7 @@ class Population extends AbstractModel
      * The absolute number of people
      * @var integer
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="bigint")
      */
     private $population;
 

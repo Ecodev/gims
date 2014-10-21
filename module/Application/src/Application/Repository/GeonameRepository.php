@@ -99,4 +99,54 @@ INNER JOIN questionnaire AS q ON questionnaire.geoname_id = q.geoname_id AND q.i
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * Compute population for all geonames with children
+     */
+    public function computeAllPopulation()
+    {
+        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+        $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
+        $calculator = new \Application\Service\Calculator\Calculator();
+        $years = $calculator->getYears();
+
+        $qb = $this->createQueryBuilder('geoname')->where('SIZE(geoname.children) > 0');
+        $geonamesWithChildren = $qb->getQuery()->getResult();
+
+        foreach ($geonamesWithChildren as $geoname) {
+            foreach ($parts as $part) {
+                foreach ($years as $year) {
+                    $population = $this->computePopulation($geoname, $part, $year);
+                    $populationRepository->updateOrCreate($geoname, $part, $year, $population);
+                }
+            }
+        }
+        $this->getEntityManager()->flush();
+    }
+
+    /**
+     * Returns the computed population
+     * @param \Application\Model\Geoname $geoname
+     * @param \Application\Model\Part $part
+     * @param integer $year
+     * @return integer
+     */
+    private function computePopulation(\Application\Model\Geoname $geoname, \Application\Model\Part $part, $year)
+    {
+        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+
+        $children = $geoname->getChildren();
+        if (count($children)) {
+            $populationTotal = null;
+            foreach ($children as $child) {
+                $populationTotal += $this->computePopulation($child, $part, $year);
+            }
+
+            return $populationTotal;
+        } else {
+            $population = $populationRepository->getPopulationByGeoname($geoname, $part->getId(), $year);
+
+            return $population;
+        }
+    }
+
 }

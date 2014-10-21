@@ -43,6 +43,7 @@ class Population extends AbstractImporter
         $this->getEntityManager()->flush(); // Flush to be sure that parts have ID
 
         $geonameRepository = $this->getEntityManager()->getRepository('Application\Model\Geoname');
+        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
 
         $colIso3 = 2;
         $rowYear = 1;
@@ -70,9 +71,9 @@ class Population extends AbstractImporter
                         $rural = $ruralSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
                         $total = $totalSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
 
-                        $this->getPopulation($year, $geoname, $this->partUrban)->setPopulation((int) ($urban * 1000));
-                        $this->getPopulation($year, $geoname, $this->partRural)->setPopulation((int) ($rural * 1000));
-                        $this->getPopulation($year, $geoname, $this->partTotal)->setPopulation((int) ($total * 1000));
+                        $populationRepository->updateOrCreate($geoname, $this->partUrban, $year, (int) ($urban * 1000));
+                        $populationRepository->updateOrCreate($geoname, $this->partRural, $year, (int) ($rural * 1000));
+                        $populationRepository->updateOrCreate($geoname, $this->partTotal, $year, (int) ($total * 1000));
                         $importedValueCount += 3;
                     }
                     $col++;
@@ -86,38 +87,14 @@ class Population extends AbstractImporter
 
         $this->getEntityManager()->flush();
 
+        echo "Compute missing population..." . PHP_EOL;
+        $geonameRepository->computeAllPopulation();
+
         echo "Compute absolute value, based on population..." . PHP_EOL;
         $answerRepository = $this->getEntityManager()->getRepository('Application\Model\Answer');
         $answerRepository->completePopulationAnswer();
 
         return "$importedValueCount population data imported" . PHP_EOL;
-    }
-
-    /**
-     * Returns a Population either from database, or newly created
-     * @param integer $year
-     * @param \Application\Model\Geoname $geoname
-     * @return \Application\Model\Population
-     */
-    protected function getPopulation($year, \Application\Model\Geoname $geoname, \Application\Model\Part $part)
-    {
-        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
-        $population = $populationRepository->findOneBy(array(
-            'year' => $year,
-            'geoname' => $geoname,
-            'part' => $part,
-        ));
-
-        if (!$population) {
-
-            $population = new \Application\Model\Population();
-            $this->getEntityManager()->persist($population);
-            $population->setYear($year);
-            $population->setGeoname($geoname);
-            $population->setPart($part);
-        }
-
-        return $population;
     }
 
 }

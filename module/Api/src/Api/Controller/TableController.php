@@ -177,6 +177,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findById($geonamesIds);
         $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds);
         $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
+        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
 
         $result = array();
         $columns = array(
@@ -218,7 +219,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                 // population columns
                 $populationData = array();
                 foreach ($parts as $part) {
-                    $populationData[$populationAcronyms[$part->getId()]] = $this->getPopulation($geoname, $part->getId(), $year);
+                    $populationData[$populationAcronyms[$part->getId()]] = $populationRepository->getPopulationByGeoname($geoname, $part->getId(), $year);
                 }
 
                 $statsData = array();
@@ -240,7 +241,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                         $columnNames['long'] = $columnNames['long'] . ' (absolute value)';
                         $legends[$columnId] = $columnNames;
                         $columns[$columnId] = $columnNames['short'];
-                        $statsData[$columnId] = is_null($value) ? null : (int) ($value * $this->getPopulation($geoname, $partId, $year));
+                        $statsData[$columnId] = is_null($value) ? null : (int) ($value * $populationRepository->getPopulationByGeoname($geoname, $partId, $year));
                         $count++;
                     }
                 }
@@ -260,30 +261,6 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             return new ExcelModel($filename, $finalResult);
         } else {
             return new NumericJsonModel($finalResult);
-        }
-    }
-
-    /**
-     * Returns the population for the geoname or its children total
-     * @param \Application\Model\Geoname $geoname
-     * @param integer $partId
-     * @param integer $year
-     * @return integer
-     */
-    private function getPopulation(\Application\Model\Geoname $geoname, $partId, $year)
-    {
-        $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
-        $population = $populationRepository->getPopulationByGeoname($geoname, $partId, $year);
-
-        if ($population) {
-            return $population;
-        } else {
-            $populationTotal = null;
-            foreach ($geoname->getChildren() as $child) {
-                $populationTotal += $this->getPopulation($child, $partId, $year);
-            }
-
-            return $populationTotal;
         }
     }
 

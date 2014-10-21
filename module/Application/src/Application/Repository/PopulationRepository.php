@@ -83,4 +83,33 @@ class PopulationRepository extends AbstractChildRepository
         }
     }
 
+    /**
+     * Update or create a Population and returns it
+     * @param \Application\Model\Geoname $geoname
+     * @param \Application\Model\Part $part
+     * @param integer $year
+     * @param integer $population
+     * @return \Application\Model\Population
+     */
+    public function updateOrCreate(\Application\Model\Geoname $geoname, \Application\Model\Part $part, $year, $population)
+    {
+        $populationObject = $this->findOneBy(array(
+            'year' => $year,
+            'geoname' => $geoname,
+            'part' => $part,
+        ));
+
+        if (!$populationObject) {
+
+            $populationObject = new \Application\Model\Population();
+            $this->getEntityManager()->persist($populationObject);
+            $populationObject->setYear($year);
+            $populationObject->setGeoname($geoname);
+            $populationObject->setPart($part);
+        }
+        $populationObject->setPopulation($population);
+
+        return $populationObject;
+    }
+
 }

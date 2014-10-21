@@ -33,6 +33,8 @@ class Version20141021132607 extends AbstractMigration
         $this->addSql("ALTER TABLE geoname DROP gtopo30");
         $this->addSql("ALTER TABLE geoname DROP timezone");
         $this->addSql("ALTER TABLE geoname DROP moddate");
+        $this->addSql("ALTER TABLE population ALTER population TYPE BIGINT;");
+        $this->addSql("ALTER TABLE population ALTER population DROP DEFAULT;");
     }
 
     public function down(Schema $schema)
