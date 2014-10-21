@@ -64,16 +64,18 @@ class Population extends AbstractImporter
                         throw new \Exception("Year is different in one on the three file at [$col, $rowYear]");
                     }
 
-                    $urban = $urbanSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
-                    $rural = $ruralSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
-                    $total = $totalSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
+                    // Only import years that are useful for us
+                    if ($year >= 1980 && $year <= 2020) {
+                        $urban = $urbanSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
+                        $rural = $ruralSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
+                        $total = $totalSheet->getCellByColumnAndRow($col, $row)->getCalculatedValue();
 
-                    $this->getPopulation($year, $geoname, $this->partUrban)->setPopulation((int) ($urban * 1000));
-                    $this->getPopulation($year, $geoname, $this->partRural)->setPopulation((int) ($rural * 1000));
-                    $this->getPopulation($year, $geoname, $this->partTotal)->setPopulation((int) ($total * 1000));
-
+                        $this->getPopulation($year, $geoname, $this->partUrban)->setPopulation((int) ($urban * 1000));
+                        $this->getPopulation($year, $geoname, $this->partRural)->setPopulation((int) ($rural * 1000));
+                        $this->getPopulation($year, $geoname, $this->partTotal)->setPopulation((int) ($total * 1000));
+                        $importedValueCount += 3;
+                    }
                     $col++;
-                    $importedValueCount += 3;
                 }
             }
 
