@@ -398,8 +398,13 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
 
         $stubQuestionnaireRepository->expects($this->any())
                 ->method('getAllForComputing')
-                ->will($this->returnCallback(function(\Application\Model\Geoname $geoname) {
-                            return $geoname->getQuestionnaires()->toArray();
+                ->will($this->returnCallback(function(array $geonames) {
+                            $res = [];
+                            foreach ($geonames as $g) {
+                                $res = array_merge($res, $g->getQuestionnaires()->toArray());
+                            }
+
+                            return $res;
                         })
         );
 

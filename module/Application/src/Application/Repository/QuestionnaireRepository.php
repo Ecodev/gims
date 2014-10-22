@@ -44,7 +44,7 @@ class QuestionnaireRepository extends AbstractChildRepository
         } else {
             $exceptionDql = null;
         }
-//w($qb->getQuery()->getSQL());
+
         $this->addPermission($qb, ['survey', 'questionnaire'], \Application\Model\Permission::getPermissionName($this, $action), $exceptionDql);
         $this->addSearch($qb, $search, array('survey.code', 'geoname.name'));
 
@@ -52,34 +52,49 @@ class QuestionnaireRepository extends AbstractChildRepository
     }
 
     /**
-     * Returns all questionnaires for the given geoname (and load their surveys)
-     * @param \Application\Model\Geoname|integer $geonameId
+     * Returns all questionnaires for the given geonames (and load their surveys)
+     * @param \Application\Model\Geoname[] $geonames
      * @return Questionnaires[]
      */
-    public function getAllForComputing($geonameId)
+    public function getAllForComputing(array $geonames)
     {
-        if ($geonameId instanceof \Application\Model\Geoname) {
-            $geonameId = $geonameId->getId();
+        $allInCache = true;
+        foreach ($geonames as $geoname) {
+            if (!isset($this->questionnaireForComputingCache[$geoname->getId()])) {
+                $allInCache = false;
+                break;
+            }
         }
 
-        if (!isset($this->questionnaireForComputingCache[$geonameId])) {
+        if (!$allInCache) {
 
             $questionnairesWithReadAccess = $this->getAllWithPermission();
             $qb = $this->createQueryBuilder('questionnaire');
             $qb->select('questionnaire, survey')
                     ->join('questionnaire.survey', 'survey')
-                    ->where('questionnaire.geoname = :geoname')
+                    ->where('questionnaire.geoname IN (:geonames)')
                     ->andWhere('questionnaire IN (:questionnairesWithReadAccess)')
                     ->orderBy('questionnaire.id');
 
-            $qb->setParameter('geoname', $geonameId);
+            $qb->setParameter('geonames', $geonames);
             $qb->setParameter('questionnairesWithReadAccess', $questionnairesWithReadAccess);
             $questionnaires = $qb->getQuery()->getResult();
 
-            $this->questionnaireForComputingCache[$geonameId] = $questionnaires;
+            foreach ($geonames as $geoname) {
+                $this->questionnaireForComputingCache[$geoname->getId()] = [];
+            }
+
+            foreach ($questionnaires as $questionnaire) {
+                $this->questionnaireForComputingCache[$questionnaire->getGeoname()->getId()][] = $questionnaire;
+            }
         }
 
-        return $this->questionnaireForComputingCache[$geonameId];
+        $result = [];
+        foreach ($geonames as $geoname) {
+            $result = array_merge($result, $this->questionnaireForComputingCache[$geoname->getId()]);
+        }
+
+        return $result;
     }
 
     /**

@@ -22,7 +22,7 @@ class FilterValuesList extends AbstractToken
     {
         $filterId = $this->getFilterId($matches[1], $usage);
 
-        $questionnaires = $calculator->getQuestionnaireRepository()->getAllForComputing($usage->getQuestionnaire()->getGeoname());
+        $questionnaires = $calculator->getQuestionnaireRepository()->getAllForComputing([$usage->getQuestionnaire()->getGeoname()]);
         $data = $calculator->computeFilterForAllQuestionnaires($filterId, $questionnaires, $usage->getPart()->getId());
 
         $values = array();

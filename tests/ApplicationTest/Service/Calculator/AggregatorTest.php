@@ -15,53 +15,29 @@ class AggregatorTest extends AbstractCalculator
      */
     private function getStubCalculator()
     {
-        $stubCalculator = $this->getMock('\Application\Service\Calculator\Calculator', array('computeFilterForAllQuestionnaires', 'computeFlattenAllYears'), array(), '', false);
+        $stubCalculator = $this->getMock('\Application\Service\Calculator\Calculator', array('computeFilterForSingleQuestionnaire', 'computeFlattenAllYears'), array(), '', false);
         $stubCalculator->expects($this->any())
-                ->method('computeFilterForAllQuestionnaires')
-                ->will($this->returnCallback(function($filterId, array $questionnaires, $partId) {
-                            $id = $questionnaires[0]->getId();
-                            if ($id == 1) {
-                                return [
-                                    'values' => [
-                                        1 => 0.5,
-                                    ],
-                                    'count' => 1,
-                                    'years' => [
-                                        1 => 2001,
-                                    ],
-                                    'minYear' => 2001,
-                                    'maxYear' => 2001,
-                                    'period' => 1,
-                                    'slope' => 0.123,
-                                    'average' => 0.456,
-                                    'surveys' => [
-                                        1 => 'MICS01',
-                                    ],
-                                ];
-                            } elseif ($id == 2) {
-                                return [
-                                    'values' => [
-                                        2 => 0.2,
-                                        3 => 0.7,
-                                    ],
-                                    'count' => 2,
-                                    'years' => [
-                                        2 => 2001,
-                                        3 => 1991,
-                                    ],
-                                    'minYear' => 1991,
-                                    'maxYear' => 2001,
-                                    'period' => 10,
-                                    'slope' => 0.123,
-                                    'average' => 0.456,
-                                    'surveys' => [
-                                        2 => 'MICS01',
-                                        3 => 'JMP91',
-                                    ],
-                                ];
-                            } else {
-                                return null;
-                            }
+                ->method('computeFilterForSingleQuestionnaire')
+                ->will($this->returnCallback(function($filterId, $questionnaire, $partId) {
+                            $resultByQuestionnaires = [
+                                1 => [
+                                    'value' => 0.5,
+                                    'year' => 2001,
+                                    'code' => 'MICS01',
+                                ],
+                                2 => [
+                                    'value' => 0.2,
+                                    'year' => 2001,
+                                    'code' => 'MICS01',
+                                ],
+                                3 => [
+                                    'value' => 0.7,
+                                    'year' => 1991,
+                                    'code' => 'JMP91',
+                                ],
+                            ];
+
+                            return $resultByQuestionnaires[$questionnaire->getId()];
                         })
         );
 
@@ -110,6 +86,12 @@ class AggregatorTest extends AbstractCalculator
             'surveys' => [
                 1 => 'MICS01',
             ],
+            'count' => 1,
+            'minYear' => 2001,
+            'maxYear' => 2001,
+            'period' => 1,
+            'slope' => null,
+            'average' => 0.5,
         ];
 
         $aggregator = new \Application\Service\Calculator\Aggregator();
@@ -134,6 +116,12 @@ class AggregatorTest extends AbstractCalculator
                 2 => 'MICS01',
                 3 => 'JMP91',
             ],
+            'count' => 3,
+            'minYear' => 1991,
+            'maxYear' => 2001,
+            'period' => 10,
+            'slope' => -0.035,
+            'average' => 0.46666666666666662,
         ];
 
         // Add a children geoname with two more questionnaires

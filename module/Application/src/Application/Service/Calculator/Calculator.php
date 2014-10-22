@@ -309,7 +309,7 @@ class Calculator extends AbstractCalculator
      * @param integer $partId
      * @return array
      */
-    public function computeFilterForSingleQuestionnaire($filterId, Questionnaire $questionnaire, $partId)
+    protected function computeFilterForSingleQuestionnaire($filterId, Questionnaire $questionnaire, $partId)
     {
         $questionnaireId = $questionnaire->getId();
         $key = 'computeFilterForAllQuestionnaires:' . \Application\Utility::getPersistentCacheKey([$filterId, $questionnaireId, $partId, $this->overriddenFilters]);

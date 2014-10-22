@@ -5,6 +5,7 @@ namespace Application\Service\Calculator;
 use Application\Model\Filter;
 use Application\Model\Geoname;
 use Application\Model\Part;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Aggregate computing results by geonames. If the given Geoname has children, then the
@@ -78,7 +79,7 @@ class Aggregator
         $cache->record('geoname:' . $geoname->getId());
 
         // First, accumulate the parent
-        $questionnaires = $this->calculator->getQuestionnaireRepository()->getAllForComputing($geoname);
+        $questionnaires = $this->calculator->getQuestionnaireRepository()->getAllForComputing([$geoname]);
 
         $computed = $this->calculator->computeFlattenAllYears($filter, $questionnaires, $part);
         $accumulator = $this->computedToAccumulator($computed, $geoname, $part);
@@ -195,38 +196,24 @@ class Aggregator
      */
     public function computeFilterForAllQuestionnaires($filterId, Geoname $geoname, $partId)
     {
-        $questionnaires = $this->calculator->getQuestionnaireRepository()->getAllForComputing($geoname);
-
-        $parent = $this->calculator->computeFilterForAllQuestionnaires($filterId, $questionnaires, $partId);
-        $result = [
-            'values' => $parent['values'],
-            'years' => $parent['years'],
-            'surveys' => $parent['surveys'],
-        ];
-
-        // Aggregate all children
-        foreach ($geoname->getChildren() as $child) {
-            $childResult = $this->computeFilterForAllQuestionnaires($filterId, $child, $partId);
-            $result = $this->aggregateQuestionnaires($result, $childResult);
-        }
+        $allGeonames = $this->cumulateDescendant($geoname);
+        $questionnaires = $this->calculator->getQuestionnaireRepository()->getAllForComputing($allGeonames);
+        $result = $this->calculator->computeFilterForAllQuestionnaires($filterId, $questionnaires, $partId);
 
         return $result;
     }
 
     /**
-     * Return aggregation of questionnaire values.
-     * We only aggregate useful data for end-user, and not everything that is available.
-     * @param array $data1
-     * @param array $data2
-     * @return array
+     * Returns a list of geoname and all their descendants
+     * @param Geoname $geoname
+     * @return Geoname[]
      */
-    private function aggregateQuestionnaires(array $data1, array $data2)
+    private function cumulateDescendant(Geoname $geoname)
     {
-        $result = [
-            'values' => $data1['values'] + $data2['values'],
-            'years' => $data1['years'] + $data2['years'],
-            'surveys' => $data1['surveys'] + $data2['surveys'],
-        ];
+        $result = [$geoname];
+        foreach ($geoname->getChildren() as $child) {
+            $result = array_merge($result, $this->cumulateDescendant($child));
+        }
 
         return $result;
     }

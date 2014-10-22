@@ -25,7 +25,7 @@ class FilterValueAfterRegression extends AbstractToken
         $yearOffset = $matches[3];
         $year = $usage->getQuestionnaire()->getSurvey()->getYear() + $yearOffset;
 
-        $questionnaires = $calculator->getQuestionnaireRepository()->getAllForComputing($usage->getQuestionnaire()->getGeoname());
+        $questionnaires = $calculator->getQuestionnaireRepository()->getAllForComputing([$usage->getQuestionnaire()->getGeoname()]);
 
         // Only compute thing if in current years, to avoid infinite recursitivy in a very distant future
         if (in_array($year, $calculator->getYears())) {
