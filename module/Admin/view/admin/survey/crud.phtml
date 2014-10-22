@@ -23,7 +23,9 @@
         <tabset style="margin-top: 20px">
             <tab heading="General" active="tabs[0]" select="selectTab(0)" >
 
-                <div class="form-group" ng-class="{'has-error':myForm.code.$invalid}">
+                <div class="form-group" ng-class="{
+                        'has-error'
+                        :myForm.code.$invalid}">
                     <label class="control-label col-sm-1" for="survey.code">Code</label>
                     <div class="col-sm-3">
                         <input id="survey.code" type="text" name="code" ng-model="survey.code" required />
@@ -33,7 +35,9 @@
                     </div>
                 </div>
 
-                <div class="form-group" ng-class="{'has-error': myForm.name.$invalid}">
+                <div class="form-group" ng-class="{
+                        'has-error'
+                        : myForm.name.$invalid}">
                     <label class="control-label col-sm-1" for="survey.name">Name</label>
                     <div class="col-sm-6">
                         <input id="survey.name" type="text" name="name" ng-model="survey.name" required/>
@@ -43,7 +47,9 @@
                     </div>
                 </div>
 
-                <div class="form-group" ng-class="{'has-error': myForm.isActive.$invalid}">
+                <div class="form-group" ng-class="{
+                        'has-error'
+                        : myForm.isActive.$invalid}">
                     <label class="control-label col-sm-1" for="survey.isActive">Active</label>
                     <div class="col-sm-2">
                         <select id="survey.isActive" name="active" ng-model="survey.isActive" ng-options="c.value as c.text for c in actives"></select>
@@ -53,7 +59,9 @@
                     </div>
                 </div>
 
-                <div class="form-group" ng-class="{'has-error': myForm.year.$invalid}">
+                <div class="form-group" ng-class="{
+                        'has-error'
+                        : myForm.year.$invalid}">
                     <label class="control-label col-sm-1" for="survey.year">Year</label>
                     <div class="col-sm-2">
                         <input id="survey.year" type="number" name="year" ng-model="survey.year" min="1970" max="2100" required />
@@ -74,14 +82,20 @@
                 <div class="form-group">
                     <label class="control-label col-sm-1" for="survey.dateStart">Date start</label>
                     <div class="col-md-2">
-                        <input id="survey.dateStart" class="input-sm" type="text" ng-model="survey.dateStart" datepicker-popup="dd/MM/yyyy"/>
+                        <span class="input-group">
+                            <input id="survey.dateStart" class="input-sm" type="text" ng-model="survey.dateStart" datepicker-popup is-open="dateStartOpened"/>
+                            <gims-datepicker-button class="input-group-btn"></gims-datepicker-button>
+                        </span>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="control-label col-sm-1" for="survey.dateEnd">Date end</label>
                     <div class="col-md-2">
-                        <input id="survey.dateEnd" class="input-sm" type="text" ng-model="survey.dateEnd" datepicker-popup="dd/MM/yyyy"/>
+                        <span class="input-group">
+                            <input id="survey.dateEnd" class="input-sm" type="text" ng-model="survey.dateEnd" datepicker-popup is-open="dateEndOpened"/>
+                            <gims-datepicker-button class="input-group-btn"></gims-datepicker-button>
+                        </span>
                     </div>
                 </div>
             </tab>

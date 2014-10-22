@@ -39,10 +39,14 @@
                     <label class="control-label col-sm-2" for="questionnaire.dateObservationStart">Observation start</label>
 
                     <div class="col-sm-2">
-                        <input id="questionnaire.dateObservationStart" class="input-sm" type="text" name="dateObservationStart"
-                               ng-model="questionnaire.dateObservationStart"
-                               required
-                               datepicker-popup="dd/MM/yyyy"/>
+                        <span class="input-group">
+                            <input id="questionnaire.dateObservationStart" class="input-sm" type="text" name="dateObservationStart"
+                                   ng-model="questionnaire.dateObservationStart"
+                                   is-open="dateObservationStartOpened"
+                                   required
+                                   datepicker-popup/>
+                            <gims-datepicker-button class="input-group-btn"></gims-datepicker-button>
+                        </span>
                     </div>
                     <div class="col-sm-2">
                         <span ng-show="myForm.dateObservationStart.$error.required" class="help-block">Required</span>
@@ -53,11 +57,14 @@
                     <label class="control-label col-sm-2" for="questionnaire.dateObservationEnd">Observation end</label>
 
                     <div class="col-sm-2">
-
-                        <input id="questionnaire.dateObservationEnd" class="input-sm" type="text" name="dateObservationEnd"
-                               ng-model="questionnaire.dateObservationEnd"
-                               required
-                               datepicker-popup="dd/MM/yyyy"/>
+                        <span class="input-group">
+                            <input id="questionnaire.dateObservationEnd" class="input-sm" type="text" name="dateObservationEnd"
+                                   ng-model="questionnaire.dateObservationEnd"
+                                   is-open="dateObservationEndOpened"
+                                   required
+                                   datepicker-popup/>
+                            <gims-datepicker-button class="input-group-btn"></gims-datepicker-button>
+                        </span>
                     </div>
                     <div class="col-sm-2">
                         <span ng-show="myForm.dateObservationEnd.$error.required" class="help-block">Required</span>

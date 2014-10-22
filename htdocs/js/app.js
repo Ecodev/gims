@@ -19,7 +19,7 @@ angular.module('myApp', [
     'ui.sortable',
     'vs-repeat'
 ]).
-        config(function($routeProvider, $locationProvider, RestangularProvider, $httpProvider, requestNotificationProvider) {
+        config(function($routeProvider, $locationProvider, RestangularProvider, $httpProvider, requestNotificationProvider, datepickerPopupConfig) {
             'use strict';
 
             $routeProvider.when('/home', {templateUrl: '/template/application/index/home'});
@@ -99,6 +99,7 @@ angular.module('myApp', [
                 };
             });
 
+            datepickerPopupConfig.datepickerPopup = 'yyyy-MM-dd';
         });
 
 // Here we declare all our modules, so we can get them back whenever we want
