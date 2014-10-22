@@ -38,7 +38,7 @@ class UserControllerTest extends AbstractRestfulControllerTest
 
     public function subtestMemberCannotDeleteNonExisting()
     {
-        // Actually cannot delete part
+        // Actually cannot delete user
         $this->dispatch($this->getRoute('delete'), Request::METHOD_DELETE);
         $this->assertResponseStatusCode(500);
     }
@@ -73,6 +73,23 @@ class UserControllerTest extends AbstractRestfulControllerTest
         $actual = $this->getJsonResponse();
 
         $this->assertEquals($count, $actual['metadata']['totalCount'], 'result count does not match expectation');
+    }
+
+    public function testCreateUserWithInfo()
+    {
+        $data = [
+            'name' => 'John',
+            'email' => 'john@connor.com',
+            'phone' => '1234',
+            'geoname' => 26,
+        ];
+
+        $this->dispatch($this->getRoute('post') . '?fields=phone,geoname', Request::METHOD_POST, $data);
+        $this->assertResponseStatusCode(201);
+        $actual = $this->getJsonResponse();
+
+        $this->assertEquals($data['phone'], $actual['phone']);
+        $this->assertEquals('World', $actual['geoname']['name']);
     }
 
 }

@@ -56,6 +56,9 @@ class UserController extends AbstractRestfulController
         $user = $this->getUserService()->register($data);
 
         if ($user) {
+            unset($data['password']);
+            $this->hydrator->hydrate($data, $user);
+            $this->getEntityManager()->flush();
             $this->getResponse()->setStatusCode(201);
 
             return new JsonModel($this->hydrator->extract($user, $this->getJsonConfig()));
