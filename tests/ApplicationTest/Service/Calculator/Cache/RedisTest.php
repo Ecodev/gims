@@ -28,7 +28,7 @@ class RedisTest extends \ApplicationTest\Controller\AbstractController
             ],
         ];
         $this->cache = new Redis($options);
-        $this->cache->flush();
+        $this->cache->clearByNamespace($this->cache->getOptions()->getNamespace());
     }
 
     public function testCache()
