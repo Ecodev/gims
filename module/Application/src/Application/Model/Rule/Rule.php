@@ -250,7 +250,7 @@ class Rule extends \Application\Model\AbstractModel implements ReferencableInter
     public function invalidateCache()
     {
         $key = 'rule:' . $this->getId();
-        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
         $cache->removeItem($key);
     }
 

@@ -11,8 +11,10 @@ namespace Application\Service\Calculator\Cache;
  *   $cache->record()        // as many times as needed (usually done by Calculator)
  *   $cache->setItem()
  */
-class Redis extends \Zend\Cache\Storage\Adapter\Redis implements CacheInterface
+class Redis implements CacheInterface
 {
+
+    private $redis;
 
     /**
      * @var array
@@ -24,108 +26,136 @@ class Redis extends \Zend\Cache\Storage\Adapter\Redis implements CacheInterface
      */
     private $dependencies = [];
 
+    public function __construct($namespace)
+    {
+        $this->redis = new \Redis();
+        $success = $this->redis->connect('localhost');
+        $this->redis->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_PHP);
+        $this->redis->setOption(\Redis::OPT_PREFIX, $namespace . ':');
+        $this->redis->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY);
+        if (!$success) {
+            throw new Exception\RuntimeException('Could not estabilish connection with Redis instance');
+        }
+    }
+
     /**
-     * Flush currently set DB
+     * Flush currently set namespace
      *
-     * @return bool
-     * @throws Exception\RuntimeException
+     * @return integer delete keys count
      */
     public function flush()
     {
         $this->volatile = [];
 
-        return parent::flush();
+        $it = null; // Initialize our iterator to NULL
+        $count = 0;
+
+        // Temporarly disable prefix
+        $pattern = $this->redis->_prefix('*');
+        $previousPrefix = $this->redis->getOption(\Redis::OPT_PREFIX);
+        $this->redis->setOption(\Redis::OPT_PREFIX, '');
+
+        while ($keys = $this->redis->scan($it, $pattern)) {
+            foreach ($keys as $key) {
+                $this->redis->del($key);
+                $count++;
+            }
+        }
+
+        // Restore prefix
+        $this->redis->setOption(\Redis::OPT_PREFIX, $previousPrefix);
+
+        return $count;
     }
 
     /**
-     * Override parent to provide a first level cache in memory
-     * @param string $normalizedKey
-     * @param boolean $success
-     * @param string $casToken
+     * Get an item.
+     * @param string $key
      * @return mixed
      */
-    protected function internalGetItem(&$normalizedKey, &$success = null, &$casToken = null)
+    public function getItem($key)
     {
-        $this->record($normalizedKey);
-        if (array_key_exists($normalizedKey, $this->volatile)) {
-            $success = true;
-            $value = $this->volatile[$normalizedKey];
-            $casToken = $value;
-
-            return $value;
+        $this->record($key);
+        if (array_key_exists($key, $this->volatile)) {
+            return $this->volatile[$key];
         }
 
-        $value = parent::internalGetItem($normalizedKey, $success, $casToken);
-        if ($success) {
-            $this->volatile[$normalizedKey] = $value;
-        }
+        $value = $this->redis->get($key);
+        $this->volatile[$key] = $value;
 
         return $value;
     }
 
     /**
-     * Override parent to provide a first level cache in memory
-     * @param string $normalizedKey
+     * Test if an item exists.
+     * @param string $key
      * @return boolean
      */
-    protected function internalHasItem(&$normalizedKey)
+    public function hasItem($key)
     {
-        return array_key_exists($normalizedKey, $this->volatile) || parent::internalHasItem($normalizedKey);
+        return array_key_exists($key, $this->volatile) || $this->redis->exists($key);
     }
 
     /**
-     * Override parent to provide creation of dependencies list
-     * @param type $normalizedKey
-     * @param type $value
-     * @return type
+     * Store an item and create its list of  dependencies
+     * @param string $key
+     * @param mixed $value
+     * @return boolean
      */
-    protected function internalSetItem(&$normalizedKey, &$value)
+    public function setItem($key, $value)
     {
-        $this->volatile[$normalizedKey] = $value;
-        $success = parent::internalSetItem($normalizedKey, $value);
+        $this->volatile[$key] = $value;
+        $success = $this->redis->set($key, $value);
 
         // If what we store gathered dependencies, then store those in cache
         // and stop recording them
-        if (array_key_exists($normalizedKey, $this->dependencies)) {
-            foreach ($this->dependencies[$normalizedKey] as $dependency) {
-                $setKey = $this->getDependencyKey($dependency);
-                $this->getRedisResource()->sAdd($this->getPrefixedKey($setKey), $normalizedKey);
+        if (array_key_exists($key, $this->dependencies)) {
+            foreach ($this->dependencies[$key] as $dependency) {
+                $depKey = $this->getDependencyKey($dependency);
+                $this->redis->sAdd($depKey, $key);
             }
 
-            unset($this->dependencies[$normalizedKey]);
+            unset($this->dependencies[$key]);
         }
-        $this->record($normalizedKey);
+        $this->record($key);
 
         return $success;
     }
 
     /**
      * Remove an item and things depending on it
-     * @param string $normalizedKey
+     * @param string $key
      * @return string
      */
-    public function internalRemoveItem(&$normalizedKey)
+    public function removeItem($key)
     {
-        unset($this->volatile[$normalizedKey]);
-        $result = parent::internalRemoveItem($normalizedKey);
-        $depKey = $this->getDependencyKey($normalizedKey);
+        unset($this->volatile[$key]);
+        $result = $this->redis->del($key);
+        $depKey = $this->getDependencyKey($key);
 
         // If things depends on that key, then also remove depending things
-        if ($this->internalHasItem($depKey)) {
-            $deps = $this->sMembers($depKey);
-            parent::internalRemoveItem($depKey);
+        if ($this->hasItem($depKey)) {
+            $deps = $this->redis->sMembers($depKey);
+            $this->redis->del($depKey);
 
-            $this->internalRemoveItems($deps);
+            $this->removeItems($deps);
         }
 
         return $result;
     }
 
+    public function removeItems(array $keys)
+    {
+        foreach ($keys as $key) {
+            $this->removeItem($key);
+        }
+    }
+
     /**
      * Add the $dependent to the list of things being currently computed.
      *
-     * It will be automatically removed from the list when setItem() is called
-     * with the same key
+     * It will be automatically removed from the list when setItem()
+     * is called with the same key
      * @param string $dependent
      */
     public function startComputing($dependent)
@@ -155,46 +185,6 @@ class Redis extends \Zend\Cache\Storage\Adapter\Redis implements CacheInterface
     private function getDependencyKey($key)
     {
         return $key . ':dep';
-    }
-
-    /**
-     * Return an array of values contained in the set
-     * @param string $key
-     * @return array
-     */
-    private function sMembers($key)
-    {
-        $normalizedKey = $this->getPrefixedKey($key);
-
-        return $this->getRedisResource()->sMembers($normalizedKey);
-    }
-
-    /**
-     * Returned the key prefixed with namespace
-     * @param string $key
-     * @return string $key prefixed with namespace
-     */
-    private function getPrefixedKey($key)
-    {
-        $this->normalizeKey($key);
-
-        return $this->namespacePrefix . $key;
-    }
-
-    public function clearByNamespace($namespace)
-    {
-        $pattern = $namespace . $this->getOptions()->getNamespaceSeparator() . '*';
-        $it = null; // Initialize our iterator to NULL
-        $this->getRedisResource()->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY); /* retry when we get no keys back */
-        $count = 0;
-        while ($keys = $this->getRedisResource()->scan($it, $pattern)) {
-            foreach ($keys as $key) {
-                $this->getRedisResource()->del($key);
-                $count++;
-            }
-        }
-
-        return $count;
     }
 
 }

@@ -21,7 +21,7 @@ class CumulatedPopulation extends AbstractToken
     {
         $partId = $this->getId($matches[1], $currentPartId);
 
-        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
         $population = 0;
         foreach ($questionnaires as $questionnaire) {
             $cache->record('questionnaire:' . $questionnaire->getId());

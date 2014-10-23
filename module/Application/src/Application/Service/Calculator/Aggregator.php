@@ -71,7 +71,7 @@ class Aggregator
         $key = 'computeFlattenAllYearsInternal:' . \Application\Utility::getPersistentCacheKey([func_get_args(), $this->calculator->getOverriddenFilters()]);
 
         /* @var $cache \Application\Service\Calculator\Cache */
-        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
         if ($cache->hasItem($key)) {
             return $cache->getItem($key);
         }

@@ -1,6 +1,10 @@
 <?php
 
 return array(
+    'Calculator\Cache' => [
+        'enabled' => true,
+        'namespace' => 'gims',
+    ],
     'compressJavaScript' => true,
     'bodyCssClass' => null,
     'doctrine' => array(
@@ -159,14 +163,12 @@ return array(
         ),
     ),
     'service_manager' => array(
-        'abstract_factories' => array(
-            'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
-        ),
         'factories' => array(
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
             'ViewExcelRenderer' => 'Application\Service\ViewExcelRendererFactory',
             'ViewExcelStrategy' => 'Application\Service\ViewExcelStrategyFactory',
             'Application\Service\NamingStrategyFactory' => 'Application\Service\NamingStrategyFactory',
+            'Calculator\Cache' => 'Application\Service\Calculator\Cache\Factory',
         ),
     ),
     'translator' => array(

@@ -24,7 +24,7 @@ class PopulationValue extends AbstractToken
         $partId = $this->getPartId($matches[2], $usage);
 
         $questionnaire = $questionnaireId == 'current' ? $usage->getQuestionnaire() : $calculator->getQuestionnaireRepository()->findOneById($questionnaireId);
-        \Application\Module::getServiceManager()->get('Cache\Computing')->record('questionnaire:' . $questionnaire->getId());
+        \Application\Module::getServiceManager()->get('Calculator\Cache')->record('questionnaire:' . $questionnaire->getId());
 
         return $calculator->getPopulationRepository()->getPopulationByQuestionnaire($questionnaire, $partId);
     }

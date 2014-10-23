@@ -11,10 +11,7 @@ return [
     'zfc_rbac' => [
         'identity_provider' => 'ApplicationTest\Service\FakeIdentityProvider'
     ],
-    'caches' => [
-        'Cache\Computing' => [
-            'adapter' => 'Application\Service\Calculator\Cache\Blackhole',
-            'options' => null
-        ],
+    'Calculator\Cache' => [
+        'enabled' => false,
     ],
 ];

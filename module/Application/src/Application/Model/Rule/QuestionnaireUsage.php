@@ -72,7 +72,7 @@ class QuestionnaireUsage extends AbstractQuestionnaireUsage
      */
     public function invalidateCache()
     {
-        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
         $key = $this->getCacheKey();
         $cache->removeItem($key);
     }

@@ -152,7 +152,7 @@ class FilterController extends AbstractChildRestfulController
         $parts = $this->getEntityManager()->getRepository('\Application\Model\Part')->findAll();
 
         /* @var $cache \Application\Service\Calculator\Cache */
-        $cache = $this->getServiceLocator()->get('Cache\Computing');
+        $cache = $this->getServiceLocator()->get('Calculator\Cache');
 
         $result = array();
         foreach ($questionnaireIds as $questionnaireId) {

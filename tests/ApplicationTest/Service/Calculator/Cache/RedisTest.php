@@ -18,17 +18,8 @@ class RedisTest extends \ApplicationTest\Controller\AbstractController
     public function setUp()
     {
         parent::setUp();
-        $options = [
-            'namespace' => 'phpunit',
-            'server' => [
-                'host' => 'localhost',
-            ],
-            'lib_options' => [
-                \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_PHP,
-            ],
-        ];
-        $this->cache = new Redis($options);
-        $this->cache->clearByNamespace($this->cache->getOptions()->getNamespace());
+        $this->cache = new Redis('phpunit');
+        $this->cache->flush();
     }
 
     public function testCache()

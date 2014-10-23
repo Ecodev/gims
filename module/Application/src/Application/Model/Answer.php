@@ -334,7 +334,7 @@ class Answer extends AbstractModel
     public function invalidateCache()
     {
         $key = 'F#' . $this->getQuestion()->getFilter()->getId() . ',Q#' . $this->getQuestionnaire()->getId() . ',P#' . $this->getPart()->getId();
-        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
         $cache->removeItem($key);
     }
 

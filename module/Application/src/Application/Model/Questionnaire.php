@@ -479,7 +479,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function invalidateCache()
     {
         $key = 'questionnaire:' . $this->getId();
-        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
         $cache->removeItem($key);
     }
 

@@ -122,7 +122,7 @@ class FilterGeonameUsage extends AbstractUsage
      */
     public function invalidateCache()
     {
-        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
         $key = 'F#' . $this->getFilter()->getId() . ',G#' . $this->getGeoname()->getId() . ',P#' . $this->getPart()->getId();
         $cache->removeItem($key);
 

@@ -600,7 +600,7 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
     public function invalidateCache()
     {
         $key = 'filter:' . $this->getId();
-        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
         $cache->removeItem($key);
     }
 

@@ -198,7 +198,7 @@ class Geoname extends AbstractModel
     public function invalidateCache()
     {
         $key = 'geoname:' . $this->getId();
-        $cache = \Application\Module::getServiceManager()->get('Cache\Computing');
+        $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
         $cache->removeItem($key);
     }
 

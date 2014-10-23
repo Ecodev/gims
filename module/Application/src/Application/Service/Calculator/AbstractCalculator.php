@@ -37,7 +37,7 @@ use \Application\Traits\EntityManagerAware;
     public function getCache()
     {
         if (!$this->cache) {
-            $this->cache = $this->getServiceLocator()->get('Cache\Computing');
+            $this->cache = $this->getServiceLocator()->get('Calculator\Cache');
         }
 
         return $this->cache;
