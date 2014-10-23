@@ -144,7 +144,9 @@ class Population extends AbstractModel
      */
     public function getPopulation()
     {
-        return $this->population;
+        // Doctrine return string for bigint, but we assume x64 platform,
+        // so can safely convert it to integer
+        return (int) $this->population;
     }
 
     /**

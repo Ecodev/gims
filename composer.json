@@ -28,7 +28,7 @@
         }
     },
     "require": {
-        "php": ">=5.5.0",
+        "php-64bit": ">=5.5.0",
         "ext-bcmath": "*",
         "ext-intl": "*",
         "ext-json": "*",
