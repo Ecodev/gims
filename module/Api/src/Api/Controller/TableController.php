@@ -174,7 +174,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $filtersIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
         $wantedYears = $this->getWantedYears($this->params()->fromQuery('years'));
 
-        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findById($geonamesIds);
+        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findById($geonamesIds, array('name' => 'asc'));
         $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds);
         $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
         $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
