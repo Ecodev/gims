@@ -6,7 +6,7 @@
                 "filter": {
                     "id": 75,
                     "name": "Total improved",
-                    "color": null,
+                    "color": "#094aff",
                     "level": 0
                 },
                 "values": [
@@ -270,7 +270,7 @@
                 "filter": {
                     "id": 76,
                     "name": "Piped onto premises",
-                    "color": null,
+                    "color": "#1270c0",
                     "level": 0
                 },
                 "values": [

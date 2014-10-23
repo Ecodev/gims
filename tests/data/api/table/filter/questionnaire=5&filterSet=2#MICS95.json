@@ -239,62 +239,6 @@
     },
     {
         "filter": {
-            "id": 76,
-            "name": "Piped onto premises",
-            "level": 0
-        },
-        "values": [
-            {
-                "Urban": 25.5,
-                "Rural": 0.1,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 4,
-            "name": "House connections",
-            "level": 1
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 5,
-            "name": "Piped water into dwelling",
-            "level": 2
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 6,
-            "name": "Piped water to yard\/plot",
-            "level": 2
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
             "id": 77,
             "name": "Surface water",
             "level": 0
@@ -409,6 +353,118 @@
         "filter": {
             "id": 65,
             "name": "Other",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 79,
+            "name": "Other Unimproved",
+            "level": 0
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 54,
+            "name": "Uncovered cistern\/tank",
+            "level": 1
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 57,
+            "name": "without other improved",
+            "level": 1
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 69,
+            "name": "Other non-improved",
+            "level": 1
+        },
+        "values": [
+            {
+                "Urban": 0.9,
+                "Rural": 3.6,
+                "Total": 3.3
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 70,
+            "name": "Cart with small tank\/drum",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 71,
+            "name": "Tanker truck provided",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": null,
+                "Rural": null,
+                "Total": null
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 72,
+            "name": "Other 1",
+            "level": 2
+        },
+        "values": [
+            {
+                "Urban": 0.9,
+                "Rural": 3.6,
+                "Total": 3.3
+            }
+        ]
+    },
+    {
+        "filter": {
+            "id": 73,
+            "name": "Other 2",
             "level": 2
         },
         "values": [
@@ -603,22 +659,22 @@
     },
     {
         "filter": {
-            "id": 79,
-            "name": "Other Unimproved",
+            "id": 76,
+            "name": "Piped onto premises",
             "level": 0
         },
         "values": [
             {
-                "Urban": null,
-                "Rural": null,
+                "Urban": 25.5,
+                "Rural": 0.1,
                 "Total": null
             }
         ]
     },
     {
         "filter": {
-            "id": 54,
-            "name": "Uncovered cistern\/tank",
+            "id": 4,
+            "name": "House connections",
             "level": 1
         },
         "values": [
@@ -631,36 +687,8 @@
     },
     {
         "filter": {
-            "id": 57,
-            "name": "without other improved",
-            "level": 1
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 69,
-            "name": "Other non-improved",
-            "level": 1
-        },
-        "values": [
-            {
-                "Urban": 0.9,
-                "Rural": 3.6,
-                "Total": 3.3
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 70,
-            "name": "Cart with small tank\/drum",
+            "id": 5,
+            "name": "Piped water into dwelling",
             "level": 2
         },
         "values": [
@@ -673,36 +701,8 @@
     },
     {
         "filter": {
-            "id": 71,
-            "name": "Tanker truck provided",
-            "level": 2
-        },
-        "values": [
-            {
-                "Urban": null,
-                "Rural": null,
-                "Total": null
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 72,
-            "name": "Other 1",
-            "level": 2
-        },
-        "values": [
-            {
-                "Urban": 0.9,
-                "Rural": 3.6,
-                "Total": 3.3
-            }
-        ]
-    },
-    {
-        "filter": {
-            "id": 73,
-            "name": "Other 2",
+            "id": 6,
+            "name": "Piped water to yard\/plot",
             "level": 2
         },
         "values": [

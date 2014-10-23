@@ -225,28 +225,28 @@
     },
     {
         "filter": {
-            "id": 168,
-            "name": "Improved",
+            "id": 171,
+            "name": "Open defecation",
             "level": 0
         },
         "values": [
             {
-                "Urban": null,
-                "Rural": null,
+                "Urban": 2.6,
+                "Rural": 9.5,
                 "Total": null
             }
         ]
     },
     {
         "filter": {
-            "id": 169,
-            "name": "Shared",
-            "level": 0
+            "id": 155,
+            "name": "No facility, bush, field ",
+            "level": 1
         },
         "values": [
             {
-                "Urban": null,
-                "Rural": null,
+                "Urban": 2.6,
+                "Rural": 9.5,
                 "Total": null
             }
         ]
@@ -309,28 +309,28 @@
     },
     {
         "filter": {
-            "id": 171,
-            "name": "Open defecation",
+            "id": 169,
+            "name": "Shared",
             "level": 0
         },
         "values": [
             {
-                "Urban": 2.6,
-                "Rural": 9.5,
+                "Urban": null,
+                "Rural": null,
                 "Total": null
             }
         ]
     },
     {
         "filter": {
-            "id": 155,
-            "name": "No facility, bush, field ",
-            "level": 1
+            "id": 168,
+            "name": "Improved",
+            "level": 0
         },
         "values": [
             {
-                "Urban": 2.6,
-                "Rural": 9.5,
+                "Urban": null,
+                "Rural": null,
                 "Total": null
             }
         ]

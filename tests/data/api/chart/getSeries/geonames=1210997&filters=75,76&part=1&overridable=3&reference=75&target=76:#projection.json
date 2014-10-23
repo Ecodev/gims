@@ -41,9 +41,10 @@
             86.0
         ],
         "type": "line",
+        "sorting": 100,
         "geonameId": 1210997,
-        "color": "#00D919",
-        "lightColor": "#B8D9BC",
+        "color": "#094aff",
+        "lightColor": "#DAE4FF",
         "marker": {
             "symbol": "diamond"
         },
@@ -91,9 +92,10 @@
             32.3
         ],
         "type": "line",
+        "sorting": 105,
         "geonameId": 1210997,
-        "color": "#D90026",
-        "lightColor": "#D9B8BE",
+        "color": "#1270c0",
+        "lightColor": "#A6B4C0",
         "marker": {
             "symbol": "diamond"
         },
@@ -104,8 +106,8 @@
         "id": 75,
         "name": "Total improved",
         "country": "Bangladesh",
-        "color": "#00D919",
-        "lightColor": "#B8D9BC",
+        "color": "#094aff",
+        "lightColor": "#DAE4FF",
         "marker": {
             "symbol": "circle"
         },
@@ -251,8 +253,8 @@
         "id": 76,
         "name": "Piped onto premises",
         "country": "Bangladesh",
-        "color": "#D90026",
-        "lightColor": "#D9B8BE",
+        "color": "#1270c0",
+        "lightColor": "#A6B4C0",
         "marker": {
             "symbol": "circle"
         },
@@ -435,9 +437,10 @@
             51.4
         ],
         "type": "line",
+        "sorting": 100,
         "geonameId": 1210997,
-        "color": "#00D919",
-        "lightColor": "#B8D9BC",
+        "color": "#094aff",
+        "lightColor": "#DAE4FF",
         "marker": {
             "symbol": "diamond"
         },
@@ -680,9 +683,10 @@
             26.2
         ],
         "type": "line",
+        "sorting": 105,
         "geonameId": 1210997,
-        "color": "#D90026",
-        "lightColor": "#D9B8BE",
+        "color": "#1270c0",
+        "lightColor": "#A6B4C0",
         "marker": {
             "symbol": "diamond"
         },
@@ -694,8 +698,8 @@
         "id": 75,
         "name": "Total improved (adjusted)",
         "country": "Bangladesh",
-        "color": "#00D919",
-        "lightColor": "#B8D9BC",
+        "color": "#094aff",
+        "lightColor": "#DAE4FF",
         "marker": {
             "symbol": "circle"
         },
@@ -842,8 +846,8 @@
         "id": 76,
         "name": "Piped onto premises (adjusted)",
         "country": "Bangladesh",
-        "color": "#D90026",
-        "lightColor": "#D9B8BE",
+        "color": "#1270c0",
+        "lightColor": "#A6B4C0",
         "marker": {
             "symbol": "circle"
         },

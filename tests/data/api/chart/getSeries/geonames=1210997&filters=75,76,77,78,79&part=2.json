@@ -41,9 +41,10 @@
             85.3
         ],
         "type": "line",
+        "sorting": 100,
         "geonameId": 1210997,
-        "color": "#00D919",
-        "lightColor": "#B8D9BC",
+        "color": "#094aff",
+        "lightColor": "#DAE4FF",
         "marker": {
             "symbol": "diamond"
         },
@@ -91,9 +92,10 @@
             1.1
         ],
         "type": "line",
+        "sorting": 105,
         "geonameId": 1210997,
-        "color": "#D90026",
-        "lightColor": "#D9B8BE",
+        "color": "#1270c0",
+        "lightColor": "#A6B4C0",
         "marker": {
             "symbol": "diamond"
         },
@@ -141,9 +143,10 @@
             0.1
         ],
         "type": "line",
+        "sorting": 102,
         "geonameId": 1210997,
-        "color": "#0066D9",
-        "lightColor": "#B8C7D9",
+        "color": "#e46c0a",
+        "lightColor": "#E4D2C3",
         "marker": {
             "symbol": "diamond"
         },
@@ -191,9 +194,10 @@
             84.3
         ],
         "type": "line",
+        "sorting": 104,
         "geonameId": 1210997,
-        "color": "#A5D900",
-        "lightColor": "#D1D9B8",
+        "color": "#99ccff",
+        "lightColor": "#F0F7FF",
         "marker": {
             "symbol": "diamond"
         },
@@ -241,9 +245,10 @@
             14.6
         ],
         "type": "line",
+        "sorting": 103,
         "geonameId": 1210997,
-        "color": "#CE00D9",
-        "lightColor": "#D7B8D9",
+        "color": "#fdcb0a",
+        "lightColor": "#FDF6D9",
         "marker": {
             "symbol": "diamond"
         },
@@ -254,8 +259,8 @@
         "id": 75,
         "name": "Total improved",
         "country": "Bangladesh",
-        "color": "#00D919",
-        "lightColor": "#B8D9BC",
+        "color": "#094aff",
+        "lightColor": "#DAE4FF",
         "marker": {
             "symbol": "circle"
         },
@@ -401,8 +406,8 @@
         "id": 76,
         "name": "Piped onto premises",
         "country": "Bangladesh",
-        "color": "#D90026",
-        "lightColor": "#D9B8BE",
+        "color": "#1270c0",
+        "lightColor": "#A6B4C0",
         "marker": {
             "symbol": "circle"
         },
@@ -541,8 +546,8 @@
         "id": 77,
         "name": "Surface water",
         "country": "Bangladesh",
-        "color": "#0066D9",
-        "lightColor": "#B8C7D9",
+        "color": "#e46c0a",
+        "lightColor": "#E4D2C3",
         "marker": {
             "symbol": "circle"
         },
@@ -660,8 +665,8 @@
         "id": 78,
         "name": "Other Improved",
         "country": "Bangladesh",
-        "color": "#A5D900",
-        "lightColor": "#D1D9B8",
+        "color": "#99ccff",
+        "lightColor": "#F0F7FF",
         "marker": {
             "symbol": "circle"
         },
@@ -800,8 +805,8 @@
         "id": 79,
         "name": "Other Unimproved",
         "country": "Bangladesh",
-        "color": "#CE00D9",
-        "lightColor": "#D7B8D9",
+        "color": "#fdcb0a",
+        "lightColor": "#FDF6D9",
         "marker": {
             "symbol": "circle"
         },

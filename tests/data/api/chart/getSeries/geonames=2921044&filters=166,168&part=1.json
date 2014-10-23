@@ -41,6 +41,7 @@
             100.0
         ],
         "type": "line",
+        "sorting": 200,
         "geonameId": 2921044,
         "color": "#005FD9",
         "lightColor": "#B8C6D9",
@@ -91,9 +92,10 @@
             100.0
         ],
         "type": "line",
+        "sorting": 205,
         "geonameId": 2921044,
-        "color": "#D400D9",
-        "lightColor": "#D8B8D9",
+        "color": "#168000",
+        "lightColor": "#70806D",
         "marker": {
             "symbol": "diamond"
         },
@@ -153,8 +155,8 @@
         "id": 168,
         "name": "Improved",
         "country": "Germany",
-        "color": "#D400D9",
-        "lightColor": "#D8B8D9",
+        "color": "#168000",
+        "lightColor": "#70806D",
         "marker": {
             "symbol": "circle"
         },

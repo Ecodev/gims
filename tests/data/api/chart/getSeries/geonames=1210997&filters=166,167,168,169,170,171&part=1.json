@@ -41,6 +41,7 @@
             85.6
         ],
         "type": "line",
+        "sorting": 200,
         "geonameId": 1210997,
         "color": "#005FD9",
         "lightColor": "#B8C6D9",
@@ -91,6 +92,7 @@
             12.0
         ],
         "type": "line",
+        "sorting": 201,
         "geonameId": 1210997,
         "color": "#9ED900",
         "lightColor": "#D0D9B8",
@@ -141,9 +143,10 @@
             55.6
         ],
         "type": "line",
+        "sorting": 205,
         "geonameId": 1210997,
-        "color": "#D400D9",
-        "lightColor": "#D8B8D9",
+        "color": "#168000",
+        "lightColor": "#70806D",
         "marker": {
             "symbol": "diamond"
         },
@@ -191,9 +194,10 @@
             30.0
         ],
         "type": "line",
+        "sorting": 204,
         "geonameId": 1210997,
-        "color": "#00D995",
-        "lightColor": "#B8D9CF",
+        "color": "#99cc03",
+        "lightColor": "#C4CCAE",
         "marker": {
             "symbol": "diamond"
         },
@@ -241,9 +245,10 @@
             14.4
         ],
         "type": "line",
+        "sorting": 203,
         "geonameId": 1210997,
-        "color": "#D95600",
-        "lightColor": "#D9C5B8",
+        "color": "#fdcb00",
+        "lightColor": "#FDF6D7",
         "marker": {
             "symbol": "diamond"
         },
@@ -291,9 +296,10 @@
             0.0
         ],
         "type": "line",
+        "sorting": 202,
         "geonameId": 1210997,
-        "color": "#1600D9",
-        "lightColor": "#BCB8D9",
+        "color": "#e36c0a",
+        "lightColor": "#E3D1C2",
         "marker": {
             "symbol": "diamond"
         },
@@ -563,8 +569,8 @@
         "id": 168,
         "name": "Improved",
         "country": "Bangladesh",
-        "color": "#D400D9",
-        "lightColor": "#D8B8D9",
+        "color": "#168000",
+        "lightColor": "#70806D",
         "marker": {
             "symbol": "circle"
         },
@@ -598,8 +604,8 @@
         "id": 169,
         "name": "Shared",
         "country": "Bangladesh",
-        "color": "#00D995",
-        "lightColor": "#B8D9CF",
+        "color": "#99cc03",
+        "lightColor": "#C4CCAE",
         "marker": {
             "symbol": "circle"
         },
@@ -633,8 +639,8 @@
         "id": 170,
         "name": "Other unimproved",
         "country": "Bangladesh",
-        "color": "#D95600",
-        "lightColor": "#D9C5B8",
+        "color": "#fdcb00",
+        "lightColor": "#FDF6D7",
         "marker": {
             "symbol": "circle"
         },
@@ -766,8 +772,8 @@
         "id": 171,
         "name": "Open defecation",
         "country": "Bangladesh",
-        "color": "#1600D9",
-        "lightColor": "#BCB8D9",
+        "color": "#e36c0a",
+        "lightColor": "#E3D1C2",
         "marker": {
             "symbol": "circle"
         },

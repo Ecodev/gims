@@ -41,9 +41,10 @@
             68.0
         ],
         "type": "line",
+        "sorting": 100,
         "geonameId": 1149361,
-        "color": "#00D919",
-        "lightColor": "#B8D9BC",
+        "color": "#094aff",
+        "lightColor": "#DAE4FF",
         "marker": {
             "symbol": "diamond"
         },
@@ -54,8 +55,8 @@
         "id": 75,
         "name": "Afghanistan - Total improved",
         "country": "Afghanistan",
-        "color": "#00D919",
-        "lightColor": "#B8D9BC",
+        "color": "#094aff",
+        "lightColor": "#DAE4FF",
         "marker": {
             "symbol": "circle"
         },
@@ -140,9 +141,10 @@
             85.5
         ],
         "type": "line",
+        "sorting": 100,
         "geonameId": 1210997,
-        "color": "#00D919",
-        "lightColor": "#B8D9BC",
+        "color": "#094aff",
+        "lightColor": "#DAE4FF",
         "marker": {
             "symbol": "diamond"
         },
@@ -153,8 +155,8 @@
         "id": 75,
         "name": "Bangladesh - Total improved",
         "country": "Bangladesh",
-        "color": "#00D919",
-        "lightColor": "#B8D9BC",
+        "color": "#094aff",
+        "lightColor": "#DAE4FF",
         "marker": {
             "symbol": "circle"
         },
@@ -337,9 +339,10 @@
             82.6
         ],
         "type": "line",
+        "sorting": 100,
         "geonameId": 7,
-        "color": "#00D919",
-        "lightColor": "#B8D9BC",
+        "color": "#094aff",
+        "lightColor": "#DAE4FF",
         "marker": {
             "symbol": "diamond"
         },
@@ -350,8 +353,8 @@
         "id": 75,
         "name": "MDG - Southern Asia - Total improved",
         "country": "MDG - Southern Asia",
-        "color": "#00D919",
-        "lightColor": "#B8D9BC",
+        "color": "#094aff",
+        "lightColor": "#DAE4FF",
         "marker": {
             "symbol": "circle"
         },
