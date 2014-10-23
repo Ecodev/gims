@@ -392,6 +392,9 @@ use \Application\Traits\EntityManagerAware;
 
         $originalFormula = $usage->getRule()->getFormula();
         $convertedFormula = $this->getParser()->convertBeforeRegression($this, $originalFormula, $usage, $alreadyUsedFormulas, $useSecondStepRules);
+
+        _log()->debug(__METHOD__, array($usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormula));
+
         $result = $this->getParser()->computeExcelFormula($convertedFormula);
 
         _log()->debug(__METHOD__, array($usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormula, $result));
