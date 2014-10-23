@@ -18,7 +18,9 @@ class RedisTest extends \ApplicationTest\Controller\AbstractController
     public function setUp()
     {
         parent::setUp();
-        $this->cache = new Redis('phpunit');
+        $config = $this->getApplicationServiceLocator()->get('config')['Calculator\Cache'];
+
+        $this->cache = new Redis($config['host'], 'phpunit');
         $this->cache->flush();
     }
 

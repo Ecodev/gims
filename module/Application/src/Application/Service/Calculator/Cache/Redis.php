@@ -26,16 +26,24 @@ class Redis implements CacheInterface
      */
     private $dependencies = [];
 
-    public function __construct($namespace)
+    /**
+     * Create and connect to Redis
+     * @param string $host
+     * @param string $namespace
+     * @throws Exception\RuntimeException
+     */
+    public function __construct($host, $namespace)
     {
         $this->redis = new \Redis();
-        $success = $this->redis->connect('localhost');
-        $this->redis->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_PHP);
-        $this->redis->setOption(\Redis::OPT_PREFIX, $namespace . ':');
-        $this->redis->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY);
+        $success = $this->redis->connect($host);
+
         if (!$success) {
             throw new Exception\RuntimeException('Could not estabilish connection with Redis instance');
         }
+
+        $this->redis->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_PHP);
+        $this->redis->setOption(\Redis::OPT_PREFIX, $namespace . ':');
+        $this->redis->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY);
     }
 
     /**

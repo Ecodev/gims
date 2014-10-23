@@ -15,7 +15,7 @@ class Factory implements FactoryInterface
     {
         $config = $serviceLocator->get('config')['Calculator\Cache'];
         if ($config['enabled']) {
-            $cache = new Redis($config['namespace']);
+            $cache = new Redis($config['host'], $config['namespace']);
         } else {
             $cache = new BlackHole();
         }

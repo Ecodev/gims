@@ -4,6 +4,7 @@ return array(
     'Calculator\Cache' => [
         'enabled' => true,
         'namespace' => 'gims',
+        'host' => 'localhost',
     ],
     'compressJavaScript' => true,
     'bodyCssClass' => null,
