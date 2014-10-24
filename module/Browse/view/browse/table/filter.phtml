@@ -198,8 +198,8 @@
                                 </div>
                             </div>
 
-                            <div class="table-filter-row" ng-if="!data.mode.isSector">
-                                <a href class='btn btn-default' ng-click="toggleShowQuestionnaireUsages()">
+                            <div class="table-filter-row header" ng-if="!data.mode.isSector">
+                                <a href class='btn btn-default btn-sm' ng-click="toggleShowQuestionnaireUsages()">
                                     <i class="fa fa-angle-down"></i>
                                     <span ng-if="!data.showQuestionnaireUsages">Show Calculations / Estimations / Ratios</span>
                                     <span ng-if="data.showQuestionnaireUsages">Hide Calculations / Estimations / Ratios</span>
@@ -207,7 +207,7 @@
                             </div>
 
                             <!-- QuestionnaireUsage's rule name column-->
-                            <div class="table-filter-row text-2em" ng-if="data.showQuestionnaireUsages" ng-repeat="rule in data.questionnaireUsages track by $index">
+                            <div class="table-filter-row text-2em" ng-repeat="rule in data.questionnaireUsages track by $index" ng-if="isIncludedInUsedThematics(rule.thematics)">
                                 <i class="fa fa-gims-rule"></i> {{rule.name}}
                             </div>
 
@@ -346,13 +346,9 @@
                                 </div>
 
                                 <!-- QuestionnaireUsage's values -->
-                                <div class="table-filter-row">
-                                    <div ng-if="data.showQuestionnaireUsages">
-                                        <div gims-if="questionnaire.showLabels" class="question-label"></div>
-                                        <div ng-repeat="part in data.parts" class="filter-value text-center text-muted text-3em"><small>{{part.name}}</small></div>
-                                    </div>
-                                </div>
-                                <div class="table-filter-row text-center" ng-if="data.showQuestionnaireUsages" ng-repeat="rule in data.questionnaireUsages track by $index">
+                                <div class="table-filter-row header"></div>
+                                <div class="table-filter-row text-center" ng-repeat="rule in data.questionnaireUsages track by $index" ng-if="isIncludedInUsedThematics(rule.thematics)">
+                                    <div gims-if="questionnaire.showLabels" class="question-label"></div>
                                     <div class="filter-value filter-value-container text-2em" ng-repeat="part in data.parts" gims-select-token part="part" questionnaire="questionnaire" rule="rule.values[questionnaire.id][part.id]">
                                         <span ng-if="rule.values[questionnaire.id][part.id]">
                                             <i class="fa fa-gims-rule text-muted" ng-if="rule.values[questionnaire.id][part.id].value === null"></i>

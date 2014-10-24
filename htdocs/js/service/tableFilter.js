@@ -518,6 +518,14 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                 questionnaires: questionnairesIds
             }
         }).success(function(questionnaireUsages) {
+            _.forEach(questionnaireUsages, function(rule) {
+                rule.thematics = [];
+                _.forEach(rule.values, function(parts) {
+                    rule.thematics = _.uniq(rule.thematics.concat(_.pluck(parts, function(rule) {
+                        return rule.usage.thematicFilter.id;
+                    })));
+                });
+            });
             data.questionnaireUsages = questionnaireUsages;
         });
     }

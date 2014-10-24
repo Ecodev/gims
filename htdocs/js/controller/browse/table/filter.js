@@ -6,7 +6,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /**************************************************************************/
 
     // params for ajax requests
-    $scope.filterFields = {fields: 'color,bgColor,paths,parents,summands'};
+    $scope.filterFields = {fields: 'color,bgColor,paths,parents,summands,thematicFilter'};
 
     // Variables initialisations
     $scope.locationPath = $location.$$path;
@@ -14,6 +14,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.expandSelection = true;
     $scope.surveysTemplate = "[[item.code]] - [[item.name]]";
     $scope.questionnairesStatus = questionnairesStatus;
+    $scope.usedThematics = [];
 
     // Expose functions to scope
     $scope.refresh = TableFilter.refresh;
@@ -140,6 +141,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     var firstLoading = true;
     $q.all([filterSetDeferred, filterDeferred]).then(function() {
         $scope.$watch('data.filters', function(newFilters, oldFilters) {
+            $scope.usedThematics = _.uniq(_.pluck(_.pluck(newFilters, 'thematicFilter'), 'id'));
             TableFilter.loadFilter(newFilters, oldFilters).then(function() {
                 if (firstLoading === true && $scope.data.filters && $scope.data.questionnaires) {
                     checkSelectionExpand();
@@ -183,6 +185,19 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     /**************************************************************************/
     /******************************************************** Scope functions */
     /**************************************************************************/
+
+    $scope.isIncludedInUsedThematics = function(thematics) {
+        var used = false;
+
+        _.forEach(thematics, function(thematicId) {
+            if (_.indexOf($scope.usedThematics, thematicId)) {
+                used = true;
+                return false;
+            }
+        });
+
+        return used;
+    };
 
     $scope.orderQuestionnaires = function(reverse) {
         $scope.data.questionnaires = $filter('orderBy')($scope.data.questionnaires, 'survey.year', reverse);

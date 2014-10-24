@@ -35,7 +35,7 @@ class QuestionnaireUsageController extends AbstractChildRestfulController
 
                 $result[$ruleName]['values'][$usage->getQuestionnaire()->getId()][$usage->getPart()->getId()] = [
                     'id' => $usage->getRule()->getId(),
-                    'usage' => $hydrator->extract($usage),
+                    'usage' => $hydrator->extract($usage, array('thematicFilter')),
                     'value' => $roundedValue,
                 ];
             }
