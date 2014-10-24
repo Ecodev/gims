@@ -1,3 +1,15 @@
+<style ng-if="data.mode.isSector">
+    #filtersSectionHeader, #questionnairesHeaderSection{
+        height:247px; /* 6 * 41 +1 */
+    }
+</style>
+
+<style ng-if="!data.mode.isSector">
+    #filtersSectionHeader, #questionnairesHeaderSection{
+        height:206px; /* 5 * 41 */
+    }
+</style>
+
 <div disable-animate class="container" on-rendered="test()">
     <div id="tools">
 
@@ -6,15 +18,11 @@
             <a class="navbar-brand" href="#">{{data.mode.name}} filters</a>
 
             <form class="navbar-form">
+                <!-- Save all the new questionnaires -->
+                <button class="btn btn-primary" ng-if="hasUnsavedElement()" ng-click="saveAll();" ng-disabled="isLoading || !data.filters && !data.questionnaires"><i class="fa fa-save"></i> Save new elements</button>
 
                 <!-- link to chart -->
                 <a class="btn btn-default" href="/browse/chart?geonames={{data.geonamesIds}}&part=1&filterSet={{data.filterSet.id}}&filters={{data.filtersIds}}"><i class="fa fa-bar-chart-o"></i> View in chart</a>
-
-                <!-- Back button, if return URL is specified -->
-                <button class="btn btn-default" ng-if="returnUrl" ng-click="cancel();"><i class="fa fa-gims-back"></i> Back</button>
-
-                <!-- Save all the new questionnaires -->
-                <button class="btn btn-primary" ng-if="hasUnsavedElement()" ng-click="saveAll();" ng-disabled="isLoading || !data.filters && !data.questionnaires"><i class="fa fa-save"></i> Save new elements</button>
 
                 <!-- Clear the selection -->
                 <a href class="btn btn-default" ng-click="data.questionnaires = []; data.filters = []; data.filterSet = null; data.geoname = null; data.filter = null; data.survey = null"><i class="fa fa-eraser"></i> Clear selection</a>
@@ -163,15 +171,14 @@
                             </div>
                             <div class="table-filter-row header"></div>
                             <div class="table-filter-row header"></div>
-                            <div class="table-filter-row header" ng-if="data.mode.isSector"></div>
                             <div class="table-filter-row header">
                                 <button class="btn btn-default btn-sm pull-right" ng-if="data.questionnaires.length > 1" ng-click="orderQuestionnaires(false)">
                                     <i class="fa fa-sort-amount-asc fa-rotate-270"></i> Sort by year
                                 </button>
                             </div>
                             <div class="table-filter-row header large" ng-if="data.showQuestionnaireComments"></div>
-
                             <div class="table-filter-row"></div>
+                            <div class="table-filter-row" ng-if="data.mode.isSector"></div>
                         </div>
 
                         <div id="filtersSection">
@@ -227,8 +234,8 @@
                                     <a class="btn btn-warning btn-xs" ng-if="questionnaire.errors.surveyExistWithDifferentYear" tooltip="This survey already exists with different year : {{questionnaire.survey.existingYear}}" tooltip-placement="left"><i class="fa fa-warning"></i></a>
 
                                     <!-- mark new questionnaire / is loading -->
-                                    <a class="btn btn-sm" ng-if="!questionnaire.id || questionnaire.isLoading" tooltip="New survey" tooltip-placement="left" ><i class="fa fa-lg" ng-class="{'fa-asterisk':!questionnaire.isLoading, 'fa-gims-loading':questionnaire.isLoading}"></i></a>
                                     <span><gims-questionnaire-menu></gims-questionnaire-menu></span>
+                                    <a class="btn btn-sm pull-right" ng-if="!questionnaire.id || questionnaire.isLoading" tooltip="New survey" tooltip-placement="left" ><i class="fa fa-lg" ng-class="{'fa-asterisk':!questionnaire.isLoading, 'fa-gims-loading':questionnaire.isLoading}"></i></a>
                                 </div>
 
                                 <ng-form name="questionnaireForm">
@@ -271,23 +278,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Population row -->
-                                    <div class="table-filter-row header" ng-if="data.mode.isSector">
-                                        <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.value.$invalid}" tooltip="Leave empty to use official population data">
-                                            <div class="input-group-addon"><i class="fa fa-fw" ng-class="{'fa-gims-population':!questionnaire.populations[data.part.id].isLoading,'fa-gims-loading':questionnaire.populations[data.part.id].isLoading}"></i></div>
-                                            <input  type="number"
-                                                    class="text-center"
-                                                    placeholder="Population"
-                                                    min="0"
-                                                    name="value"
-                                                    ng-focus="setInitialValue(questionnaire.populations[data.part.id], questionnaire.populations[data.part.id].population)"
-                                                    ng-blur="savePopulation(questionnaire, questionnaire.populations[data.part.id])"
-                                                    ng-model="questionnaire.populations[data.part.id].population"
-                                                    ng-disabled="questionnaire.isLoading"
-                                                    />
-                                        </div>
-                                    </div>
-
                                     <!-- Label for questionnaire comments -->
                                     <div class="table-filter-row header large" ng-if="data.showQuestionnaireComments">
                                         <div class="input-group input-group-sm" >
@@ -306,6 +296,27 @@
                                     <div gims-if="questionnaire.showLabels" class="question-label"></div>
                                     <div ng-repeat="part in data.parts" class="filter-value text-center text-muted text-2em"><small>{{part.name}}</small></div>
                                 </div>
+
+                                <!-- Population row -->
+                                <div class="table-filter-row" ng-if="data.mode.isSector">
+                                    <div ng-repeat="part in data.parts" class="filter-value">
+                                        <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.value.$invalid}" tooltip="Leave empty to use official population data">
+                                            <input  type="number"
+                                                    class="text-center"
+                                                    placeholder="Population"
+                                                    min="0"
+                                                    name="value"
+                                                    ng-focus="setInitialValue(questionnaire.populations[part.id], questionnaire.populations[part.id].population)"
+                                                    ng-blur="savePopulation(questionnaire, questionnaire.populations[part.id])"
+                                                    ng-model="questionnaire.populations[part.id].population"
+                                                    ng-disabled="questionnaire.isLoading"
+                                                    />
+                                            <div class="input-group-addon"><i class="fa fa-fw" ng-class="{'fa-gims-population':!questionnaire.populations[data.part.id].isLoading,'fa-gims-loading':questionnaire.populations[data.part.id].isLoading}"></i></div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
