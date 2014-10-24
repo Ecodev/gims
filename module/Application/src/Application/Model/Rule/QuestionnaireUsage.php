@@ -33,6 +33,13 @@ class QuestionnaireUsage extends AbstractQuestionnaireUsage
     protected $questionnaire;
 
     /**
+     * @var thematicFilter
+     * @ORM\ManyToOne(targetEntity="Application\Model\Filter")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $thematicFilter;
+
+    /**
      * Set questionnaire
      * @param \Application\Model\Questionnaire $questionnaire
      * @return self
@@ -82,4 +89,27 @@ class QuestionnaireUsage extends AbstractQuestionnaireUsage
         return 'qu:' . $this->getId();
     }
 
+    /**
+     * return \Application\Model\Filter
+     */
+    public function getThematicFilter()
+    {
+        return $this->thematicFilter;
+    }
+
+    /**
+     * @param \Application\Model\Filter $thematicFilter
+     * @throws InvalidArgumentException
+     * @return self
+     */
+    public function setThematicFilter($thematicFilter)
+    {
+        if ($thematicFilter->isThematic()) {
+            $this->thematicFilter = $thematicFilter;
+        } else {
+            throw new InvalidArgumentException('Filter ' . $thematicFilter->getName() . ' is not a thematic.');
+        }
+
+        return $this;
+    }
 }

@@ -112,9 +112,12 @@ abstract class AbstractImporter
                 21 => 'IF(ISNUMBER(A21), A21, SUM(A41, A53))',
             ),
             'questionnaireUsages' => array(
-                'Calculation' => array(78, 79, 80, 81, 82),
-                'Estimate' => array(83, 84, 85, 86, 87, 88),
-                'Ratio' => array(94, 95, 96, 97, 98, 99, 100, 101, 102, 103),
+                'Thematic' => 4,
+                'Groups' => array(
+                    'Calculation' => array(78, 79, 80, 81, 82),
+                    'Estimate' => array(83, 84, 85, 86, 87, 88),
+                    'Ratio' => array(94, 95, 96, 97, 98, 99, 100, 101, 102, 103)
+                )
             ),
             'filterSet' => array(
                 'improvedName' => 'Water: use of improved sources (JMP data)',
@@ -409,9 +412,12 @@ abstract class AbstractImporter
             // No cell replacements to make for sanitation
             ),
             'questionnaireUsages' => array(
-                'Calculation' => array(85, 86, 87),
-                'Estimate' => array(88, 89, 90, 91, 92, 93),
-                'Ratio' => array(100, 101, 102, 103, 104, 105, 106, 107),
+                'Thematic' => 4,
+                'Groups' => array(
+                    'Calculation' => array(85, 86, 87),
+                    'Estimate' => array(88, 89, 90, 91, 92, 93),
+                    'Ratio' => array(100, 101, 102, 103, 104, 105, 106, 107)
+                )
             ),
             'ratios' => array(
                 'min' => 100,

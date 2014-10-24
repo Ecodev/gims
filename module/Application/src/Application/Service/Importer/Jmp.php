@@ -607,10 +607,11 @@ STRING;
      */
     private function importQuestionnaireUsages($col, Questionnaire $questionnaire)
     {
-        foreach ($this->definitions[$this->sheet->getTitle()]['questionnaireUsages'] as $group) {
+        $thematicFilter = $this->cacheFilters[$this->definitions[$this->sheet->getTitle()]['questionnaireUsages']['Thematic']];
+        foreach ($this->definitions[$this->sheet->getTitle()]['questionnaireUsages']['Groups'] as $group) {
             foreach ($group as $row) {
                 foreach ($this->partOffsets as $offset => $part) {
-                    $this->getQuestionnaireUsage($col, $row, $offset, $questionnaire, $part);
+                    $this->getQuestionnaireUsage($col, $row, $offset, $questionnaire, $part, $thematicFilter);
                 }
             }
         }
@@ -623,9 +624,10 @@ STRING;
      * @param integer $offset
      * @param Questionnaire $questionnaire
      * @param Part $part
+     * @param \Application\Model\Filter $thematicFilter
      * @return QuestionnaireUsage|null
      */
-    private function getQuestionnaireUsage($col, $row, $offset, Questionnaire $questionnaire, Part $part)
+    private function getQuestionnaireUsage($col, $row, $offset, Questionnaire $questionnaire, Part $part, Filter $thematicFilter)
     {
         $name = $this->getCalculatedValueSafely($this->sheet->getCellByColumnAndRow($col + 1, $row));
         $value = $this->getCalculatedValueSafely($this->sheet->getCellByColumnAndRow($col + $offset, $row));
@@ -647,7 +649,7 @@ STRING;
             // If usage doesn't exist yet, create it
             if (!$usage) {
                 $usage = new QuestionnaireUsage();
-                $usage->setJustification($this->defaultJustification)->setQuestionnaire($questionnaire)->setRule($rule)->setPart($part);
+                $usage->setJustification($this->defaultJustification)->setQuestionnaire($questionnaire)->setRule($rule)->setPart($part)->setThematicFilter($thematicFilter);
 
                 $this->getEntityManager()->persist($usage);
                 $this->questionnaireUsageCount++;
@@ -698,7 +700,7 @@ STRING;
 
         // Some formulas, Estimations and Calculation, hardcode values as percent between 0 - 100,
         // we need to convert them to 0.00 - 1.00
-        $ruleRows = $this->definitions[$this->sheet->getTitle()]['questionnaireUsages'];
+        $ruleRows = $this->definitions[$this->sheet->getTitle()]['questionnaireUsages']['Groups'];
         if (in_array($row, $ruleRows['Estimate']) || in_array($row, $ruleRows['Calculation'])) {
 
             // Convert very simple formula with numbers only and -/+ operations. Anything more complex
@@ -727,7 +729,7 @@ STRING;
 
         // Some formulas, Ratios, hardcode values as percent between 0.00 - 1.00,
         // while this is technically correct, we prefer the notation with %, so we convert them here
-        $ruleRows = $this->definitions[$this->sheet->getTitle()]['questionnaireUsages'];
+        $ruleRows = $this->definitions[$this->sheet->getTitle()]['questionnaireUsages']['Groups'];
         if (in_array($row, $ruleRows['Ratio'])) {
 
             // Convert very simple formula with numbers only. Anything more complex
@@ -827,7 +829,8 @@ STRING;
                 // Find the column of the referenced questionnaire
                 $refColQuestionnaire = array_search($refQuestionnaire, $this->importedQuestionnaires);
 
-                $refQuestionnaireUsage = $this->getQuestionnaireUsage($refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart);
+                $thematicFilter = $this->cacheFilters[$this->definitions[$this->sheet->getTitle()]['questionnaireUsages']['Thematic']];
+                $refQuestionnaireUsage = $this->getQuestionnaireUsage($refColQuestionnaire, $refRow, $refCol - $refColQuestionnaire, $refQuestionnaire, $refPart, $thematicFilter);
 
                 if ($refQuestionnaireUsage) {
 
@@ -857,7 +860,7 @@ STRING;
         $convertedFormula = preg_replace($isTextUsageWhichCannotBeText, 'NOT(ISNUMBER($1))', $convertedFormula);
 
         $prefix = '';
-        foreach ($this->definitions[$this->sheet->getTitle()]['questionnaireUsages'] as $label => $rows) {
+        foreach ($this->definitions[$this->sheet->getTitle()]['questionnaireUsages']['Groups'] as $label => $rows) {
             if (in_array($row, $rows)) {
                 $prefix = $label . ': ';
             }
