@@ -620,7 +620,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
      * @param element
      */
     function updateUrl(element) {
-        $location.search(element, _.filter(_.pluck(data[element], 'id'), function(el) {
+        $location.search(element, _.filter(_.pluck(data[element], 'id'),function(el) {
             if (el) {
                 return true;
             }
@@ -1828,17 +1828,28 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     }
 
     function syncScroll() {
-        filtersSection.scroll(function(e) {
+
+        manageScrollListener(filtersSection, function(e) {
             questionnairesSection.scrollTop(e.target.scrollTop);
         });
-        questionnairesSection.scroll(function(e) {
+
+        manageScrollListener(questionnairesSection, function(e) {
             filtersSection.scrollTop(e.target.scrollTop);
             questionnairesHeaderSection.scrollLeft(e.target.scrollLeft);
         });
-        questionnairesHeaderSection.scroll(function(e) {
+
+        manageScrollListener(questionnairesHeaderSection, function(e) {
             questionnairesSection.scrollLeft(e.target.scrollLeft);
         });
     }
+
+    var manageScrollListener = function(element, callback) {
+        element.on('mouseenter',function() {
+            element.on('scroll', callback);
+        }).on('mouseleave', function() {
+            element.off('scroll', callback);
+        });
+    };
 
     // Return public API
     return {
