@@ -174,14 +174,17 @@ class Redis implements CacheInterface
     /**
      * Record the dependence as used during computing.
      *
-     * It will be associated with every single thing that
-     *  is currently being computed.
+     * It will be associated with the last thing that
+     * is currently being computed.
      * @param string $dependence
      */
     public function record($dependence)
     {
-        foreach ($this->dependencies as &$d) {
-            $d[] = $dependence;
+        end($this->dependencies);
+        $lastKey = key($this->dependencies);
+
+        if ($lastKey !== false) {
+            $this->dependencies[$lastKey][] = $dependence;
         }
     }
 
