@@ -30,7 +30,7 @@ class Redis implements CacheInterface
      * Create and connect to Redis
      * @param string $host
      * @param string $namespace
-     * @throws Exception\RuntimeException
+     * @throws \Exception
      */
     public function __construct($host, $namespace)
     {
@@ -38,7 +38,7 @@ class Redis implements CacheInterface
         $success = $this->redis->connect($host);
 
         if (!$success) {
-            throw new Exception\RuntimeException('Could not estabilish connection with Redis instance');
+            throw new \Exception('Could not estabilish connection with Redis instance');
         }
 
         $this->redis->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_PHP);

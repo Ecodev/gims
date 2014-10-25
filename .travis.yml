@@ -6,6 +6,9 @@ php:
 addons:
     postgresql: "9.3"
 
+services:
+  - redis-server
+
 env:
   - TEST_GROUP=ApiComputing
   - TEST_GROUP=Console,Repository
