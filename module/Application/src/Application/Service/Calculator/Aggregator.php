@@ -68,7 +68,7 @@ class Aggregator
      */
     private function computeFlattenAllYearsInternal(Filter $filter, Geoname $geoname, Part $part)
     {
-        $key = 'computeFlattenAllYearsInternal:' . \Application\Utility::getPersistentCacheKey([func_get_args(), $this->calculator->getOverriddenFilters()]);
+        $key = 'computeFlattenAllYearsInternal:' . \Application\Utility::getPersistentCacheKey([$filter->getId(), $geoname->getId(), $part->getId(), $this->calculator->getOverriddenFilters()]);
 
         /* @var $cache \Application\Service\Calculator\Cache */
         $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');

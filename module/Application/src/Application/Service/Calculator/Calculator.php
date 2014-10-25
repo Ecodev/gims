@@ -86,7 +86,7 @@ class Calculator extends AbstractCalculator
             $alreadyUsedRules = new ArrayCollection();
         }
 
-        $key = \Application\Utility::getPersistentCacheKey([func_get_args(), $this->overriddenFilters]);
+        $key = \Application\Utility::getPersistentCacheKey([$year, $filterId, $questionnaires, $partId, $alreadyUsedRules, $this->overriddenFilters]);
         if (array_key_exists($key, $this->cacheComputeFlattenOneYearWithFormula)) {
             return $this->cacheComputeFlattenOneYearWithFormula[$key];
         }
@@ -197,7 +197,7 @@ class Calculator extends AbstractCalculator
      */
     private function computeRegressionForAllYears($filterId, array $questionnaires, $partId)
     {
-        $key = \Application\Utility::getPersistentCacheKey([func_get_args(), $this->overriddenFilters]);
+        $key = \Application\Utility::getPersistentCacheKey([$filterId, $questionnaires, $partId, $this->overriddenFilters]);
         if (array_key_exists($key, $this->cacheComputeRegressionForAllYears)) {
             return $this->cacheComputeRegressionForAllYears[$key];
         }
