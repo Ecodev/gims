@@ -118,26 +118,20 @@ class Calculator extends AbstractCalculator
     /**
      * Compute the flatten regression value for the given year
      * @param integer $year
-     * @param array $allRegressions [year => regression]
+     * @param array $regressions ['all' => [year => regresssion], 'min' => minRegression, 'max' => maxRegression]
      * @param array $usedYears [year] should be empty array for first call, then used for recursivity
      * @return null|float
      */
-    public function computeFlattenOneYear($year, array $allRegressions, array $usedYears = array())
+    public function computeFlattenOneYear($year, array $regressions, array $usedYears = array())
     {
+        $allRegressions = $regressions['all'];
+        $minRegression = $regressions['min'];
+        $maxRegression = $regressions['max'];
+
         if (!array_key_exists($year, $allRegressions)) {
             return null;
         }
 
-        $nonNullRegressions = array_reduce($allRegressions, function($result, $regression) {
-            if (!is_null($regression)) {
-                $result [] = $regression;
-            }
-
-            return $result;
-        }, array());
-
-        $minRegression = $nonNullRegressions ? min($nonNullRegressions) : null;
-        $maxRegression = $nonNullRegressions ? max($nonNullRegressions) : null;
         $regression = $allRegressions[$year];
         array_push($usedYears, $year);
 
@@ -155,7 +149,7 @@ class Calculator extends AbstractCalculator
 
         if (is_null($result)) {
             $yearEarlier = $year - 1;
-            $flattenYearEarlier = !in_array($yearEarlier, $usedYears) ? $this->computeFlattenOneYear($yearEarlier, $allRegressions, $usedYears) : null;
+            $flattenYearEarlier = !in_array($yearEarlier, $usedYears) ? $this->computeFlattenOneYear($yearEarlier, $regressions, $usedYears) : null;
 
             if ($flattenYearEarlier === $minRegression && $flattenYearEarlier < 0.05) {
                 $result = $flattenYearEarlier;
@@ -174,7 +168,7 @@ class Calculator extends AbstractCalculator
 
         if (is_null($result)) {
             $yearLater = $year + 1;
-            $flattenYearLater = !in_array($yearLater, $usedYears) ? $this->computeFlattenOneYear($yearLater, $allRegressions, $usedYears) : null;
+            $flattenYearLater = !in_array($yearLater, $usedYears) ? $this->computeFlattenOneYear($yearLater, $regressions, $usedYears) : null;
 
             if ($flattenYearLater === $minRegression && $flattenYearLater < 0.05) {
                 $result = $flattenYearLater;
@@ -199,7 +193,7 @@ class Calculator extends AbstractCalculator
      * @param integer $filterId
      * @param array $questionnaires
      * @param integer $partId
-     * @return array [year => regresssion]
+     * @return array ['all' => [year => regresssion], 'min' => minRegression, 'max' => maxRegression]
      */
     private function computeRegressionForAllYears($filterId, array $questionnaires, $partId)
     {
@@ -209,13 +203,29 @@ class Calculator extends AbstractCalculator
         }
 
         $allRegressions = array();
+        $min = null;
+        $max = null;
         foreach ($this->getYears() as $year) {
-            $allRegressions[$year] = $this->computeRegressionOneYear($year, $filterId, $questionnaires, $partId);
+            $regression = $this->computeRegressionOneYear($year, $filterId, $questionnaires, $partId);
+            $allRegressions[$year] = $regression;
+            if (is_null($min) || $regression < $min) {
+                $min = $regression;
+            }
+
+            if (is_null($max) || $regression > $max) {
+                $max = $regression;
+            }
         }
 
-        $this->cacheComputeRegressionForAllYears[$key] = $allRegressions;
+        $result = [
+            'all' => $allRegressions,
+            'min' => $min,
+            'max' => $max,
+        ];
 
-        return $allRegressions;
+        $this->cacheComputeRegressionForAllYears[$key] = $result;
+
+        return $result;
     }
 
     /**

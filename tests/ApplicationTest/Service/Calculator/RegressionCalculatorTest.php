@@ -144,65 +144,109 @@ class RegressionCalculatorTest extends AbstractCalculator
         return array(
             // Basic casses
             array(array(2000 => 0, 2001 => 1, 2002 => 0.5, 1950 => null), array(
-                    2000 => -10,
-                    2001 => 10,
-                    2002 => 0.5,
+                    'all' => array(
+                        2000 => -10,
+                        2001 => 10,
+                        2002 => 0.5,
+                    ),
+                    'min' => -10,
+                    'max' => 10,
                 )),
             // Cases with undefined values, based on the year earlier
             array(array(2001 => null, 2004 => 0.04, 2006 => 0.96), array(
-                    2000 => 0.5,
-                    2001 => null,
-                    2002 => 0.5,
-                    2003 => 0.04,
-                    2004 => null,
-                    2005 => 0.96,
-                    2006 => null,
+                    'all' => array(
+                        2000 => 0.5,
+                        2001 => null,
+                        2002 => 0.5,
+                        2003 => 0.04,
+                        2004 => null,
+                        2005 => 0.96,
+                        2006 => null,
+                    ),
+                    'min' => 0.04,
+                    'max' => 0.96,
                 )),
             array(array(2002 => 0.04), array(
-                    2000 => 0.01,
-                    2001 => 0.04,
-                    2002 => null,
+                    'all' => array(
+                        2000 => 0.01,
+                        2001 => 0.04,
+                        2002 => null,
+                    ),
+                    'min' => 0.01,
+                    'max' => 0.04,
                 )),
             array(array(2002 => 0.96), array(
-                    2000 => 0.99,
-                    2001 => 0.96,
-                    2002 => null,
+                    'all' => array(
+                        2000 => 0.99,
+                        2001 => 0.96,
+                        2002 => null,
+                    ),
+                    'min' => 0.96,
+                    'max' => 0.99,
                 )),
             array(array(2001 => 1), array(
-                    2000 => 1,
-                    2001 => null,
+                    'all' => array(
+                        2000 => 1,
+                        2001 => null,
+                    ),
+                    'min' => 1,
+                    'max' => 1,
                 )),
             array(array(2001 => 0), array(
-                    2000 => 0,
-                    2001 => null,
+                    'all' => array(
+                        2000 => 0,
+                        2001 => null,
+                    ),
+                    'min' => 0,
+                    'max' => 0,
                 )),
             // Cases with undefined values, based on the year later
             array(array(2000 => null, 2002 => 0.04, 2005 => 0.96), array(
-                    2000 => null,
-                    2001 => 0.5,
-                    2002 => null,
-                    2003 => 0.04,
-                    // NO 2004 !
-                    2005 => null,
-                    2006 => 0.96,
+                    'all' => array(
+                        2000 => null,
+                        2001 => 0.5,
+                        2002 => null,
+                        2003 => 0.04,
+                        // NO 2004 !
+                        2005 => null,
+                        2006 => 0.96,
+                    ),
+                    'min' => 0.04,
+                    'max' => 0.96,
                 )),
             array(array(2000 => 0.04), array(
-                    2000 => null,
-                    2001 => 0.04,
-                    2002 => 0.01,
+                    'all' => array(
+                        2000 => null,
+                        2001 => 0.04,
+                        2002 => 0.01,
+                    ),
+                    'min' => 0.01,
+                    'max' => 0.04,
                 )),
             array(array(2000 => 0.96), array(
-                    2000 => null,
-                    2001 => 0.96,
-                    2002 => 0.99,
+                    'all' => array(
+                        2000 => null,
+                        2001 => 0.96,
+                        2002 => 0.99,
+                    ),
+                    'min' => 0.96,
+                    'max' => 0.99,
                 )),
             array(array(2000 => 1), array(
-                    2000 => null,
-                    2001 => 1,
+                    'all' => array(
+                        2000 => null,
+                        2001 => 1,
+                    ),
+                    'min' => 1,
+                    'max' => 1,
                 )),
             array(array(2000 => 0), array(
-                    2000 => null,
-                    2001 => 0,
+                    'all' => array(
+                        2000 => null,
+                        2001 => 0,
+                    ),
+                    'min' => 0,
+                    'max' => 0,
                 )),
         );
     }
