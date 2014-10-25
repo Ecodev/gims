@@ -154,7 +154,7 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
     {
         $foo1 = $this->getNewModelWithId('Application\Model\Filter');
         $foo2 = $this->getNewModelWithId('Application\Model\Filter');
-        $collection = new \Doctrine\Common\Collections\ArrayCollection([$foo1, $foo2, 123]);
+        $collection = new \Doctrine\Common\Collections\ArrayCollection([$foo1, $foo2]);
 
         $values = $this->getCommonCacheValues();
         $values[] = [1, '11', [2, $foo1]];

@@ -123,14 +123,18 @@ abstract class Utility
         static $preventGarbageCollectorFromDestroyingObject = [];
 
         $key = '';
-        if (is_null($value)) {
-            $key .= '[NULL]';
+        if (is_array($value)) {
+            $key .= '[ARRAY|';
+            foreach ($value as $i => $modelInCollection) {
+                $key .= $i . '>' . self::getCacheKey($modelInCollection, $isPersistent) . ':';
+            }
+            $key.= ']';
         } elseif (is_object($value)) {
             if ($isPersistent) {
                 if ($value instanceof \Traversable) {
                     $key .= '[COLLECTION|';
-                    foreach ($value as $a) {
-                        $key .= self::getCacheKey($a, $isPersistent) . ':';
+                    foreach ($value as $modelInCollection) {
+                        $key .= $modelInCollection->getId() . ':';
                     }
                     $key.= ']';
                 } else {
@@ -140,14 +144,10 @@ abstract class Utility
                 $preventGarbageCollectorFromDestroyingObject[] = $value;
                 $key .= spl_object_hash($value);
             }
-        } elseif (is_array($value)) {
-            $key .= '[ARRAY|';
-            foreach ($value as $i => $a) {
-                $key .= $i . '>' . self::getCacheKey($a, $isPersistent) . ':';
-            }
-            $key.= ']';
         } elseif (is_bool($value)) {
             $key .= '[BOOL|' . $value . ']';
+        } elseif (is_null($value)) {
+            $key .= '[NULL]';
         } else {
             $key .= $value;
         }
