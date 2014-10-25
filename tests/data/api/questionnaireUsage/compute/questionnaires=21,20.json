@@ -21,6 +21,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 99.5
@@ -43,6 +47,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 97.6
@@ -67,6 +75,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 94.9
@@ -89,6 +101,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 97.1
@@ -118,6 +134,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": -12.9
@@ -140,6 +160,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": -12.7
@@ -164,6 +188,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": -12.3
@@ -186,6 +214,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": -12.6
@@ -215,6 +247,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 38.5
@@ -237,6 +273,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 60.9
@@ -266,6 +306,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": -11.4
@@ -288,6 +332,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": -0.3
@@ -317,6 +365,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": -11.2
@@ -339,6 +391,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": -0.4
@@ -368,6 +424,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 28.9
@@ -390,6 +450,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 1.1
@@ -419,6 +483,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 0.3
@@ -441,6 +509,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 1.7
@@ -463,6 +535,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 1.4
@@ -487,6 +563,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 0.1
@@ -509,6 +589,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 1.4
@@ -531,6 +615,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 1.0
@@ -560,6 +648,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 0.1
@@ -582,6 +674,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 0.7
@@ -611,6 +707,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 3.7
@@ -633,6 +733,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 6.0
@@ -662,6 +766,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 85.8
@@ -684,6 +792,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 81.6
@@ -708,6 +820,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": null
@@ -730,6 +846,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": null
@@ -759,6 +879,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 78.5
@@ -781,6 +905,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 75.0
@@ -805,6 +933,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 81.3
@@ -827,6 +959,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 73.0
@@ -856,6 +992,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 94.3
@@ -878,6 +1018,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 91.5
@@ -900,6 +1044,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": null
@@ -924,6 +1072,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 67.3
@@ -946,6 +1098,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 35.5
@@ -968,6 +1124,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 43.2
@@ -997,6 +1157,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 90.6
@@ -1019,6 +1183,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 85.5
@@ -1041,6 +1209,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 86.0
@@ -1065,6 +1237,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 43.2
@@ -1087,6 +1263,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 17.1
@@ -1109,6 +1289,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 23.4
@@ -1138,6 +1322,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 99.8
@@ -1160,6 +1348,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 99.3
@@ -1184,6 +1376,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 100.0
@@ -1206,6 +1402,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 100.0
@@ -1235,6 +1435,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 33.3
@@ -1259,6 +1463,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": null
@@ -1281,6 +1489,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": null
@@ -1310,6 +1522,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 75.0
@@ -1332,6 +1548,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 54.5
@@ -1356,6 +1576,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": null
@@ -1378,6 +1602,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": null
@@ -1407,6 +1635,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 21.5
@@ -1429,6 +1661,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 25.0
@@ -1453,6 +1689,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": null
@@ -1475,6 +1715,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": null
@@ -1504,6 +1748,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": null
@@ -1526,6 +1774,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": null
@@ -1550,6 +1802,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": null
@@ -1572,6 +1828,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": null
@@ -1601,6 +1861,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 34.4
@@ -1623,6 +1887,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 0.0
@@ -1647,6 +1915,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": null
@@ -1669,6 +1941,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": null
@@ -1698,6 +1974,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": null
@@ -1722,6 +2002,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 24.1
@@ -1744,6 +2028,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 18.4
@@ -1766,6 +2054,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 19.8
@@ -1795,6 +2087,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 99.8
@@ -1817,6 +2113,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 99.5
@@ -1841,6 +2141,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": null
@@ -1863,6 +2167,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": null
@@ -1892,6 +2200,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 99.3
@@ -1914,6 +2226,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 98.8
@@ -1938,6 +2254,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 99.7
@@ -1960,6 +2280,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 2,
+                            "name": "Water"
                         }
                     },
                     "value": 98.7
@@ -1989,6 +2313,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 4.8
@@ -2011,6 +2339,10 @@
                             "id": 20,
                             "name": "MICS09 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": 3.8
@@ -2035,6 +2367,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": null
@@ -2057,6 +2393,10 @@
                             "id": 21,
                             "name": "HIES10 - Bangladesh",
                             "status": "published"
+                        },
+                        "thematicFilter": {
+                            "id": 80,
+                            "name": "Sanitation"
                         }
                     },
                     "value": null
