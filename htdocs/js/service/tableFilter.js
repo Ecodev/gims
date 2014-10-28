@@ -33,14 +33,12 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                 isContribute: false,
                 isSector: false,
                 surveyType: 'jmp,nsa'
-            },
-            {
+            }, {
                 name: 'Contribute JMP',
                 isContribute: true,
                 isSector: false,
                 surveyType: 'jmp'
-            },
-            {
+            }, {
                 name: 'Contribute NSA',
                 isContribute: true,
                 isSector: true,
@@ -437,6 +435,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
      * Init computed filters
      */
     var previousQuery = null;
+
     function getComputedFilters() {
         if (_.isEmpty(data.questionnaires)) {
             return;
@@ -602,7 +601,10 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             }
 
             if (!usagesByFilter[usage.filter.id][usage.part.id]) {
-                usagesByFilter[usage.filter.id][usage.part.id] = {first: [], second: []};
+                usagesByFilter[usage.filter.id][usage.part.id] = {
+                    first: [],
+                    second: []
+                };
             }
             if (usage.isSecondStep) {
                 usagesByFilter[usage.filter.id][usage.part.id].second.push(usage);
@@ -620,7 +622,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
      * @param element
      */
     function updateUrl(element) {
-        $location.search(element, _.filter(_.pluck(data[element], 'id'),function(el) {
+        $location.search(element, _.filter(_.pluck(data[element], 'id'), function(el) {
             if (el) {
                 return true;
             }
@@ -681,7 +683,11 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             filter.oldId = filter.id;
         }
         filter.isLoading = true;
-        Restangular.all('filter').post({name: filter.name, parents: _.pluck(filter.parents, 'id'), filterSets: filter.filterSets}).then(function(newFilter) {
+        Restangular.all('filter').post({
+            name: filter.name,
+            parents: _.pluck(filter.parents, 'id'),
+            filterSets: filter.filterSets
+        }).then(function(newFilter) {
             filter.id = newFilter.id;
             filter.isLoading = false;
             replaceQuestionsIds(filter);
@@ -832,9 +838,16 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
 
         if (_.isUndefined(questionnaire.survey.id) && !_.isEmpty(questionnaire.survey.code)) {
 
-            Restangular.all('survey').getList({q: questionnaire.survey.code, perPage: 1000, fields: 'questions,questions.filter,questionnaires,questionnaires.geoname'}).then(function(surveys) {
+            Restangular.all('survey').getList({
+                q: questionnaire.survey.code,
+                perPage: 1000,
+                fields: 'questions,questions.filter,questionnaires,questionnaires.geoname'
+            }).then(function(surveys) {
                 if (surveys.length === 0) {
-                    deferred.resolve({survey: null, questionnaire: null});
+                    deferred.resolve({
+                        survey: null,
+                        questionnaire: null
+                    });
                 } else {
                     var existingSurvey = _.find(surveys, function(s) {
                         if (s.code.toUpperCase() == questionnaire.survey.code.toUpperCase()) {
@@ -862,18 +875,27 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
 
                             // if wanted survey has a different year, return an error
                         } else if (existingSurvey.year != questionnaire.survey.year) {
-                            deferred.reject({code: 1, year: existingSurvey.year});
+                            deferred.reject({
+                                code: 1,
+                                year: existingSurvey.year
+                            });
                         }
 
                         // else, there is not recoverable survey
                     } else {
-                        deferred.resolve({survey: null, questionnaire: null});
+                        deferred.resolve({
+                            survey: null,
+                            questionnaire: null
+                        });
                     }
                 }
             });
 
         } else {
-            deferred.resolve({survey: questionnaire.survey, questionnaire: questionnaire});
+            deferred.resolve({
+                survey: questionnaire.survey,
+                questionnaire: questionnaire
+            });
         }
 
         return deferred.promise;
@@ -1586,7 +1608,9 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                 return false;
             });
 
-            var sectorChildrenNames = ['Number of facilities', 'Persons per facilities'];
+            var sectorChildrenNames = [
+                'Number of facilities', 'Persons per facilities'
+            ];
 
             _.forEachRight(equipments, function(equipment) {
                 // get equipment children filter
@@ -1698,7 +1722,10 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     function loadGeoname() {
         var deferred = $q.defer();
         data.questionnaires = [];
-        Restangular.one('geoname', data.geoname.id).getList('questionnaire', _.merge(questionnaireFields, {surveyType: data.mode.surveyType, perPage: 1000})).then(function(questionnaires) {
+        Restangular.one('geoname', data.geoname.id).getList('questionnaire', _.merge(questionnaireFields, {
+            surveyType: data.mode.surveyType,
+            perPage: 1000
+        })).then(function(questionnaires) {
             data.questionnaires = questionnaires;
             data.survey = null;
             initSector();
@@ -1711,7 +1738,10 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     function loadSurvey() {
         var deferred = $q.defer();
         data.questionnaires = [];
-        Restangular.one('survey', data.survey.id).getList('questionnaire', _.merge(questionnaireFields, {surveyType: data.mode.surveyType, perPage: 1000})).then(function(questionnaires) {
+        Restangular.one('survey', data.survey.id).getList('questionnaire', _.merge(questionnaireFields, {
+            surveyType: data.mode.surveyType,
+            perPage: 1000
+        })).then(function(questionnaires) {
             data.questionnaires = questionnaires;
             data.geoname = null;
             deferred.resolve();
@@ -1844,7 +1874,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     }
 
     var manageScrollListener = function(element, callback) {
-        element.on('mouseenter',function() {
+        element.on('mouseenter', function() {
             element.on('scroll', callback);
         }).on('mouseleave', function() {
             element.off('scroll', callback);
