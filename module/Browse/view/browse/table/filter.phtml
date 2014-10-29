@@ -324,24 +324,22 @@
                             <div gims-resize-for-labels class="column" ng-repeat="questionnaire in data.questionnaires track by $id(questionnaire)">
 
                                 <!-- Filter values (and question labels) -->
-                                <div class="repeater-container combined column-questionnaire" vs-repeat vs-scroll-parent=".combined-vs">
-                                    <div ng-repeat="filter in data.filters track by $id(filter)" class="table-filter-row" background-color>
-                                        <div gims-if="questionnaire.showLabels" class="question-label">
-                                            <ng-form name="labelForm">
-                                                <div class="input-group input-group-sm">
-                                                    <span class="input-group-addon"><i class="fa" ng-class="{'fa-question':!questionnaire.survey.questions[filter.id].isLoading,'fa-gims-loading':questionnaire.survey.questions[filter.id].isLoading}"></i></span>
-                                                    <input class="form-control"
-                                                           ng-model="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]"
-                                                           ng-blur="saveQuestion(questionnaire.survey.questions[filter.id], questionnaire)"
-                                                           name="label"
-                                                           ng-required="questionnaire.survey.questions[filter.id].answers[part.id][questionnaire.survey.questions[filter.id].value]"
-                                                           ng-class="{'error': labelForm.label.$invalid}"/>
-                                                </div>
-                                            </ng-form>
-                                        </div>
-                                        <div ng-repeat="part in data.parts" class="filter-value" gims-select-token>
-                                            <gims-cell></gims-cell>
-                                        </div>
+                                <div ng-repeat="filter in data.filters track by $id(filter)" class="table-filter-row" background-color>
+                                    <div gims-if="questionnaire.showLabels" class="question-label">
+                                        <ng-form name="labelForm">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><i class="fa" ng-class="{'fa-question':!questionnaire.survey.questions[filter.id].isLoading,'fa-gims-loading':questionnaire.survey.questions[filter.id].isLoading}"></i></span>
+                                                <input class="form-control"
+                                                       ng-model="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]"
+                                                       ng-blur="saveQuestion(questionnaire.survey.questions[filter.id], questionnaire)"
+                                                       name="label"
+                                                       ng-required="questionnaire.survey.questions[filter.id].answers[part.id][questionnaire.survey.questions[filter.id].value]"
+                                                       ng-class="{'error': labelForm.label.$invalid}"/>
+                                            </div>
+                                        </ng-form>
+                                    </div>
+                                    <div ng-repeat="part in data.parts" class="filter-value" gims-select-token>
+                                        <gims-cell></gims-cell>
                                     </div>
                                 </div>
 
