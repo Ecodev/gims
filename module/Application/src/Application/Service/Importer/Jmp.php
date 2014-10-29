@@ -125,6 +125,7 @@ class Jmp extends AbstractImporter
             if ($sheetName == 'Tables_S') {
                 $name = 'Ratio of Shared improved facilities / All improved facilities';
                 $this->filterForRatio = $this->getFilter([$name, 4], $this->cacheFilters);
+                $this->filterForRatio->setThematicFilter($firstFilter);
                 $filterSet->addFilter($this->filterForRatio);
             }
 
