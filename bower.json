@@ -27,6 +27,7 @@
     "impress.js": "~0.5.3",
     "angulartics": "~0.15.19",
     "angular-ui-sortable": "~0.12.10",
-    "angular-vs-repeat": "git://github.com/PowerKiKi/angular-vs-repeat.git#column-resizing"
+    "angular-vs-repeat": "git://github.com/PowerKiKi/angular-vs-repeat.git#column-resizing",
+    "angular-ui-slider": "~0.0.2"
   }
 }

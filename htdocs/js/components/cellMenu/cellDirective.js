@@ -36,6 +36,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
                 '        </button>' +
                 '    </span>' +
                 '    <input' +
+                '        gims-select-token' +
                 '        type="number"' +
                 '        class="form-control text-center"' +
                 '        ng-change="updateValidState()"' +

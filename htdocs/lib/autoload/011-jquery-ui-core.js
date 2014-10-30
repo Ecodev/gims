@@ -1,1 +1,1 @@
-../jquery-ui/ui/core.js
+../jquery-ui/ui/jquery.ui.core.js

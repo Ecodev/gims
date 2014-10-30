@@ -1,1 +1,1 @@
-../jquery-ui/ui/widget.js
+../jquery-ui/ui/jquery.ui.widget.js

@@ -1,1 +1,1 @@
-../jquery-ui/ui/mouse.js
+../jquery-ui/ui/jquery.ui.mouse.js
