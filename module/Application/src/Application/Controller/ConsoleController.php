@@ -62,14 +62,13 @@ class ConsoleController extends AbstractActionController
             return str_pad($i, $digits, ' ', STR_PAD_LEFT) . '/' . str_pad($total, $digits, ' ', STR_PAD_LEFT);
         };
 
-        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findAll();
-
+        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findBy([], ['id' => 'DESC']);
         $total = count($geonames);
 
         $i = 1;
         foreach ($geonames as $geoname) {
             echo $progress($i++, $total) . ' ';
-            $cmd = 'php htdocs/index.php cache warm-up "' . $geoname->getName() . '"';
+            $cmd = 'php htdocs/index.php cache warm-up ' . escapeshellarg($geoname->getName());
             system($cmd);
         }
 
