@@ -43,9 +43,9 @@ class Answer extends AbstractModel
      * Quality of the facilities.
      *
      * @var float
-     * @ORM\Column(type="decimal", precision=3, scale=2, nullable=true)
+     * @ORM\Column(type="decimal", precision=3, scale=2, nullable=false, options={"default" = 1} )
      */
-    private $quality;
+    private $quality = 1;
 
     /**
      * @var \Application\Model\Question\AbstractAnswerableQuestion
@@ -197,7 +197,7 @@ class Answer extends AbstractModel
      */
     public function getQuality()
     {
-        return $this->quality;
+        return (float) $this->quality;
     }
 
     /**
