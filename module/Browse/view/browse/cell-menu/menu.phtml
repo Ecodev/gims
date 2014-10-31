@@ -12,10 +12,13 @@
         </li>
 
         <li ng-if="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]">
-            <a><i class="fa fa-question fa-fw"></i> {{questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]}}</a>
+            <a><i class="fa fa-question fa-fw"></i> {{questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]}} </a>
         </li>
         <li ng-if="isValidNumber(questionnaire.survey.questions[filter.id].answers[part.id][questionnaire.survey.questions[filter.id].value])" >
-            <a><i class="fa fa-crosshairs fa-fw"></i> Exact value: {{questionnaire.survey.questions[filter.id].answers[part.id][questionnaire.survey.questions[filter.id].value]}}</a>
+            <a><i class="fa fa-crosshairs fa-fw"></i> Given answer: {{questionnaire.survey.questions[filter.id].answers[part.id][questionnaire.survey.questions[filter.id].value]}}</a>
+        </li>
+        <li ng-if="isValidNumber(questionnaire.survey.questions[filter.id].answers[part.id][questionnaire.survey.questions[filter.id].value])">
+            <a><i class="fa fa-crosshairs fa-fw"></i> Exact value : {{questionnaire.survey.questions[filter.id].answers[part.id][questionnaire.survey.questions[filter.id].value] * questionnaire.survey.questions[filter.id].answers[part.id].quality}}</a>
         </li>
         <li ng-if="questionnaire.survey.questions[filter.id].answers[part.id].error">
             <a><i class="fa fa-warning text-warning"></i> This answer has not been saved.</a>
@@ -49,6 +52,13 @@
             <a href="/admin/filter/edit/{{summand.id}}"><i class="fa fa-gims-filter fa-fw"></i> {{filter.name}}</a>
         </li>
 
+        <li ng-if="questionnaire.survey.questions[filter.id].answers[part.id].id" class="divider"></li>
+        <li ng-if="questionnaire.survey.questions[filter.id].answers[part.id].id" class="dropdown-header">Quality : {{questionnaire.survey.questions[filter.id].answers[part.id].quality*100}} %</li>
+        <li ng-if="questionnaire.survey.questions[filter.id].answers[part.id].id" style="padding:5px 30px">
+            <div class="qualitySlider" ui-slider="qualitySlider.options" min="0" max="1" step="0.10" use-decimals ng-model="questionnaire.survey.questions[filter.id].answers[part.id].quality"></div>
+        </li>
+
+        <!-- Actions -->
         <li ng-if="questionnairesStatus[questionnaire.status]" class="divider"></li>
         <li ng-if="questionnairesStatus[questionnaire.status]" class="dropdown-header">Actions</li>
         <li ng-if="questionnairesStatus[questionnaire.status]">

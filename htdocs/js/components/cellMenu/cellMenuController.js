@@ -1,4 +1,4 @@
-angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, questionnaire, filter, part, questionnairesStatus, Restangular, TableFilter, Utility, $timeout) {
+angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, questionnaire, filter, part, questionnairesStatus, Restangular, TableFilter, Utility, $timeout, Percent) {
     'use strict';
 
     // My future self will hate me for this, but we hardcode the exclude
@@ -15,6 +15,19 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, question
     $scope.deleteAnswer = TableFilter.deleteAnswer;
     $scope.isValidNumber = Utility.isValidNumber;
     $scope.getCellType = TableFilter.getCellType;
+
+    $scope.qualitySlider = {
+        'options': {
+            stop: function() {
+                var answer = questionnaire.survey.questions[filter.id].answers[part.id];
+                var question = $scope.questionnaire.survey.questions[filter.id];
+                TableFilter.updateAnswer(answer, questionnaire).then(function() {
+                    answer.displayValue = question.isAbsolute ? answer[$scope.question.value] : Percent.fractionToPercent(answer[question.value]);
+                    answer.displayValue *= answer.quality;
+                });
+            }
+        }
+    };
 
     /**
      * Returns whether the special Exclude rule exists in the given usage
