@@ -104,3 +104,30 @@ $border: 1px;
 .is-computing .computable {
     @extend .text-primary;
 }
+
+.qualitySlider .ui-slider-range{
+
+    background: #a4e7a4; /* default green */
+
+    &[style*="80%"],
+    &[style*="90%"] ,
+    &[style*="100%"]
+    {
+        background: #a4e7a4;
+    }
+
+    &[style*="40%"],
+    &[style*="50%"],
+    &[style*="60%"],
+    &[style*="70%"],
+    {
+        background: #e7d8a4;
+    }
+
+    &[style*="10%"],
+    &[style*="20%"],
+    &[style*="30%"],
+    {
+        background: #e7a4a4;
+    }
+}

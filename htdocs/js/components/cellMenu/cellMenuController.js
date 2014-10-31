@@ -18,6 +18,7 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, question
 
     $scope.qualitySlider = {
         'options': {
+            range: 'min',
             stop: function() {
                 var answer = questionnaire.survey.questions[filter.id].answers[part.id];
                 var question = $scope.questionnaire.survey.questions[filter.id];
@@ -25,6 +26,7 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, question
                     answer.displayValue = question.isAbsolute ? answer[$scope.question.value] : Percent.fractionToPercent(answer[question.value]);
                     answer.displayValue *= answer.quality;
                 });
+
             }
         }
     };
