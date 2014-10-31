@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * User
- * @ORM\Table(name="`user`", uniqueConstraints={@ORM\UniqueConstraint(name="user_email",columns={"email"})})
+ * @ORM\Table(name="`user`", uniqueConstraints={@ORM\UniqueConstraint(name="user_email",columns={"email"}), @ORM\UniqueConstraint(name="user_activation_token",columns={"activation_token"})})
  * @ORM\Entity(repositoryClass="Application\Repository\UserRepository")
  */
 class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcRbac\Identity\IdentityInterface
@@ -92,9 +92,9 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * @var integer
-     * @ORM\Column(type="smallint", nullable=true)
+     * @ORM\Column(type="smallint", nullable=false, options={"default" = 0})
      */
-    private $state;
+    private $state = 0;
 
     /**
      * @var \DateTime
@@ -124,6 +124,12 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      * @var \Application\Service\RoleContextInterface
      */
     private $roleContext;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=32, nullable=true)
+     */
+    private $activationToken;
 
     /**
      * Constructor
@@ -216,12 +222,15 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
 
     /**
      * Set state
+     * 0 = new user
+     * 1 = email confirmed
      * @param integer $state
      * @return self
      */
     public function setState($state)
     {
         $this->state = $state;
+        $this->activationToken = null;
 
         return $this;
     }
@@ -550,8 +559,26 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     public function setLastLogin(\DateTime $lastLogin)
     {
         $this->lastLogin = $lastLogin;
+        $this->activationToken = null;
 
         return $this;
+    }
+
+    /**
+     * Returns the activation token if existing
+     * @return string|null
+     */
+    public function getActivationToken()
+    {
+        return $this->activationToken;
+    }
+
+    /**
+     * Generate a new randon activation token
+     */
+    public function generateActivationToken()
+    {
+        $this->activationToken = bin2hex(openssl_random_pseudo_bytes(16));
     }
 
 }

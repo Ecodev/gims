@@ -168,6 +168,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $data = array(
             'id' => 12345,
             'password' => 'foo',
+            'activationToken' => 'foo',
         );
 
         $this->hydrator->hydrate($data, $this->user);
@@ -179,9 +180,11 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     {
         $data = array(
             'password',
+            'activationToken'
         );
 
         $this->assertArrayNotHasKey('password', $this->hydrator->extract($this->user, $data));
+        $this->assertArrayNotHasKey('activationToken', $this->hydrator->extract($this->user, $data));
     }
 
     public function testExtractArray()
@@ -350,8 +353,8 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'custom name' => 'Mr. John Connor',
                 ), $this->hydrator->extract($this->user, array(
                     'custom name' => function(Hydrator $hydrator, \Application\Model\User $user) {
-                return 'Mr. ' . $user->getName() . ' Connor';
-            },
+                        return 'Mr. ' . $user->getName() . ' Connor';
+                    },
                 )), 'should allow custom properties via Closure');
     }
 

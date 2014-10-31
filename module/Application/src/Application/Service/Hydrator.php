@@ -12,6 +12,8 @@ use \Application\Module;
 class Hydrator
 {
 
+    private $sensitiveProperties = ['password', 'activationToken'];
+
     /**
      * Returns an array of array of property values of all given objects
      *
@@ -151,7 +153,7 @@ class Hydrator
         foreach ($properties as $key => $value) {
 
             // Never output sensitive data
-            if ($value == 'password') {
+            if (in_array($value, $this->sensitiveProperties)) {
                 continue;
             }
 
@@ -252,7 +254,9 @@ class Hydrator
     public function hydrate(array $data, \Application\Model\AbstractModel $object)
     {
         // Remove sensitive data
-        unset($data['password']);
+        foreach ($this->sensitiveProperties as $sensitiveProperty) {
+            unset($data[$sensitiveProperty]);
+        }
 
         foreach ($data as $key => $value) {
             // Check what kind of parameter type is taken by the setter as input.

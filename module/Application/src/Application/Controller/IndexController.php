@@ -24,4 +24,9 @@ class IndexController extends AbstractAngularActionController
         return new ViewModel();
     }
 
+    public function loginAction()
+    {
+        return new ViewModel();
+    }
+
 }

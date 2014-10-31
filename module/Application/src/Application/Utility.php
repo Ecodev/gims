@@ -81,6 +81,7 @@ abstract class Utility
     public static function executeCliCommand($command)
     {
         $fullCommand = 'php htdocs/index.php ' . $command . ' > /dev/null 2>&1 &';
+        _log()->debug(__METHOD__, [$fullCommand]);
         exec($fullCommand);
     }
 

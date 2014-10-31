@@ -1,4 +1,4 @@
-angular.module('myApp').controller('UserCtrl', function($scope, $http, authService, $modal, $rootScope, requestNotification, $window, $analytics) {
+angular.module('myApp').controller('UserCtrl', function($scope, $http, $location, authService, $modal, $rootScope, requestNotification, $window, $analytics) {
     'use strict';
     $scope.getRequestCount = requestNotification.getRequestCount;
 
@@ -36,17 +36,31 @@ angular.module('myApp').controller('UserCtrl', function($scope, $http, authServi
     $scope.promptLogin = function() {
 
         var modalInstance = $modal.open({
-            templateUrl: 'loginWindow.html',
+            templateUrl: '/template/application/index/login',
             controller: 'LoginWindowCtrl'
         });
 
         modalInstance.result.then(userLoggedIn);
     };
 
+    if ($location.search().activationToken) {
+        $scope.promptLogin();
+    }
 });
 
-angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $modalInstance, $log, $rootScope) {
+angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $modalInstance, $log, $rootScope, $location) {
     'use strict';
+
+    $scope.state = 'normal';
+    var activationToken = $location.search().activationToken;
+    if (activationToken) {
+        $scope.state = 'activating';
+        $http.get('/api/user/activate', {params: $location.search()}).then(function(data) {
+            $location.search('activationToken', null);
+            $scope.state = 'activated';
+            $scope.login.identity = data.data.email;
+        });
+    }
 
     function resetErrors() {
         $scope.invalidUsernamePassword = false;
@@ -63,10 +77,10 @@ angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $m
     $scope.register = {};
 
     $scope.sendLogin = function() {
-        $scope.signing = true;
+        $scope.state = 'signing';
         resetErrors();
         $http.post('/user/login', $scope.login).success(function(data) {
-            $scope.signing = false;
+            $scope.state = 'normal';
             if (data.status == 'logged')
             {
                 $scope.invalidUsernamePassword = false;
@@ -78,21 +92,19 @@ angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $m
                 $scope.invalidUsernamePassword = true;
             }
         }).error(function(data) {
-            $scope.signing = false;
+            $scope.state = 'normal';
             $log.error('Server error', data);
         });
     };
 
     $scope.sendRegister = function() {
-        $scope.registering = true;
+        $scope.state = 'registering';
         resetErrors();
         $http.post('/user/register', $scope.register).success(function(data) {
-            $scope.registering = false;
-
-            // auto-login with the user we just created
-            $modalInstance.close(data);
+            $scope.state = 'registered';
+            $scope.registeredEmail = data.email;
         }).error(function(data) {
-            $scope.registering = false;
+            $scope.state = 'normal';
 
             if (data.message.email.recordFound) {
                 $scope.userExisting = true;
