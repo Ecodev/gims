@@ -20,7 +20,7 @@ describe("Xdebug tests", function() {
     ];
 
     browser.get('/home');
-    gimsUtility.login(undefined, undefined, browser);
+    gimsUtility.login(browser);
 
     pages.forEach(function(page) {
         it('should not have error on page ' + page, function() {

@@ -11,26 +11,18 @@ module.exports.logout = function() {
     });
 };
 
-module.exports.login = function(user, pass, browser) {
+module.exports.login = function(browser) {
 
     element(by.className('loginButton')).isDisplayed().then(function(isVisible) {
 
         if (isVisible === true) {
 
-            if (!user) {
-                user = browser.params.login.username;
-            }
-
-            if (!pass) {
-                pass = browser.params.login.password;
-            }
-
             element(by.model('login.identity')).isPresent().then(function(inputIsVisible) {
                 if (!inputIsVisible) {
                     element(by.className('loginButton')).click();
                 }
-                element(by.model('login.identity')).sendKeys(user);
-                element(by.model('login.credential')).sendKeys(pass);
+                element(by.model('login.identity')).sendKeys(browser.params.login.username);
+                element(by.model('login.credential')).sendKeys(browser.params.login.password);
                 element(by.css("[name='loginForm'] [name='submit']")).click();
                 expect(element(by.css("a[href='/user/logout']")).isPresent()).toBe(true);
 

@@ -8,7 +8,7 @@ describe('admin/questionnaire/new', function() {
     beforeEach(function() {
         browser.get('/admin/questionnaire/new');
         //browser.get('/home');
-        gimsUtility.login(undefined, undefined, browser);
+        gimsUtility.login(browser);
     });
 
     it('should be displayed tabs', function() {
