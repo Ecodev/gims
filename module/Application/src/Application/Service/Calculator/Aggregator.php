@@ -188,7 +188,7 @@ class Aggregator
     }
 
     /**
-     * Same as Calculator::computeFilterForAllQuestionnaires but aggregate geoname children
+     * Same as Calculator::computeFilterForAllQuestionnaires but accept geoname for convenience
      * @param integer $filterId
      * @param \Application\Model\Geoname $geoname
      * @param integer $partId
@@ -196,24 +196,8 @@ class Aggregator
      */
     public function computeFilterForAllQuestionnaires($filterId, Geoname $geoname, $partId)
     {
-        $allGeonames = $this->cumulateDescendant($geoname);
-        $questionnaires = $this->calculator->getQuestionnaireRepository()->getAllForComputing($allGeonames);
+        $questionnaires = $this->calculator->getQuestionnaireRepository()->getAllForComputing([$geoname]);
         $result = $this->calculator->computeFilterForAllQuestionnaires($filterId, $questionnaires, $partId);
-
-        return $result;
-    }
-
-    /**
-     * Returns a list of geoname and all their descendants
-     * @param Geoname $geoname
-     * @return Geoname[]
-     */
-    private function cumulateDescendant(Geoname $geoname)
-    {
-        $result = [$geoname];
-        foreach ($geoname->getChildren() as $child) {
-            $result = array_merge($result, $this->cumulateDescendant($child));
-        }
 
         return $result;
     }

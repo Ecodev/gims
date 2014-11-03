@@ -100,30 +100,6 @@ class AggregatorTest extends AbstractCalculator
         $aggregated = $aggregator->computeFilterForAllQuestionnaires(123, $this->geoname, 456);
         $this->assertEquals($expectedSingle, $aggregated, 'geoname without hierarchy should return only his values');
 
-        $expectedWithChild = [
-            'values' => [
-                1 => 0.5,
-                2 => 0.2,
-                3 => 0.7,
-            ],
-            'years' => [
-                1 => 2001,
-                2 => 2001,
-                3 => 1991,
-            ],
-            'surveys' => [
-                1 => 'MICS01',
-                2 => 'MICS01',
-                3 => 'JMP91',
-            ],
-            'count' => 3,
-            'minYear' => 1991,
-            'maxYear' => 2001,
-            'period' => 10,
-            'slope' => -0.035,
-            'average' => 0.46666666666666662,
-        ];
-
         // Add a children geoname with two more questionnaires
         $child = $this->getNewModelWithId('\Application\Model\Geoname');
         $this->geoname->getChildren()->add($child);
@@ -134,7 +110,7 @@ class AggregatorTest extends AbstractCalculator
 
         // The same call as before should yield different result, because we now have a child
         $aggregatedWithChild = $aggregator->computeFilterForAllQuestionnaires(123, $this->geoname, 456);
-        $this->assertEquals($expectedWithChild, $aggregatedWithChild, 'geoname with children should return all of his  and his children\'s values');
+        $this->assertEquals($expectedSingle, $aggregatedWithChild, 'geoname with children should return only his and NOT his children\'s values');
     }
 
     public function testComputeFlattenAllYears()
