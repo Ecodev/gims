@@ -347,18 +347,5 @@
             "symbol": "diamond"
         },
         "usages": "(none)"
-    },
-    {
-        "type": "scatter",
-        "id": 75,
-        "name": "MDG - Southern Asia - Total improved",
-        "country": "MDG - Southern Asia",
-        "color": "#094aff",
-        "lightColor": "#DAE4FF",
-        "marker": {
-            "symbol": "circle"
-        },
-        "allowPointSelect": false,
-        "data": []
     }
 ]

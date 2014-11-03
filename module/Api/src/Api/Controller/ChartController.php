@@ -241,6 +241,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         foreach ($filters as $filter) {
             $idFilter = $filter->getId();
             $data = $this->getAggregator()->computeFilterForAllQuestionnaires($filter->getId(), $geoname, $part->getId());
+
+            // If we don't have values at all, skip everything (happens for world or regions)
+            if (!$data['values']) {
+                continue;
+            }
+
             $baseName = $prefix . $filter->getName();
             $scatter = array(
                 'type' => 'scatter',
