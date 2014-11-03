@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class FilterSet extends AbstractModel implements \Application\Service\RoleContextInterface
 {
+
     /**
      * @var string
      * @ORM\Column(type="text", nullable=false)
@@ -24,6 +25,13 @@ class FilterSet extends AbstractModel implements \Application\Service\RoleContex
      * @ORM\OrderBy({"sorting" = "ASC", "id" = "ASC"})
      */
     private $filters;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
+     */
+    private $isPublished = false;
 
     /**
      * Constructor
@@ -109,6 +117,26 @@ class FilterSet extends AbstractModel implements \Application\Service\RoleContex
         foreach ($filters as $filter) {
             $this->addFilter($filter);
         }
+
+        return $this;
+    }
+
+    /**
+     * Returns whether this filter set is published and thus visible to anonymous
+     * @return boolean
+     */
+    public function isPublished()
+    {
+        return $this->isPublished;
+    }
+
+    /**
+     * @param boolean $isPublished
+     * @return self
+     */
+    public function setIsPublished($isPublished)
+    {
+        $this->isPublished = (bool) $isPublished;
 
         return $this;
     }

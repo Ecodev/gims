@@ -5,6 +5,7 @@ namespace Application\Service;
 use Application\Model\AbstractModel;
 use Application\Model\Questionnaire;
 use Application\Model\QuestionnaireStatus;
+use Application\Model\FilterSet;
 use Application\Utility;
 
 /**
@@ -40,6 +41,10 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
         if ($action == 'read' && $object instanceof Questionnaire && $object->getStatus() == QuestionnaireStatus::$PUBLISHED) {
 
             // Anybody can read a published questionnaire
+            $result = true;
+        } elseif ($action == 'read' && $object instanceof FilterSet && $object->isPublished()) {
+
+            // Anybody can read a published filterSet
             $result = true;
         } elseif ($context) {
             $result = $this->isGrantedWithContext($context, $permission);

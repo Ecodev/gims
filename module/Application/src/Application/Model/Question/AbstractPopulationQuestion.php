@@ -15,7 +15,7 @@ abstract class AbstractPopulationQuestion extends AbstractAnswerableQuestion
 {
 
     /**
-     * @var int
+     * @var boolean
      *
      * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
      */
