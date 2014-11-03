@@ -3,9 +3,7 @@
 namespace Application\Repository;
 
 use Doctrine\ORM\Query\Expr\Join;
-use Application\Model\SurveyType;
 use Application\Model\Rule\Rule;
-use Application\Model\Rule\FilterQuestionnaireUsage;
 
 class QuestionnaireRepository extends AbstractChildRepository
 {
@@ -19,9 +17,43 @@ class QuestionnaireRepository extends AbstractChildRepository
      * @param string $parentName
      * @param \Application\Model\AbstractModel $parent
      * @param array $surveyTypes optionnal restriction on survey types
-     * @return array
+     * @return \Application\Model\Questionnaire[]
      */
     public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null, array $surveyTypes = [])
+    {
+        $queryBuilder = $this->getAllWithPermissionQueryBuilder($action, $search, $parentName, $parent, $surveyTypes);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * Returns all questionnaire ID on which we have a permission to read
+     * @return integer[]
+     */
+    private function getAllIdsWithPermission()
+    {
+        $queryBuilder = $this->getAllWithPermissionQueryBuilder();
+
+        $queryBuilder->select('questionnaire.id');
+        $ids = [];
+        $result = $queryBuilder->getQuery()->getScalarResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SCALAR);
+        foreach ($result as $questionnaire) {
+            $ids[] = $questionnaire['id'];
+        }
+
+        return $ids;
+    }
+
+    /**
+     * Returns all items with matching search criteria
+     * @param string $action
+     * @param string $search
+     * @param string $parentName
+     * @param \Application\Model\AbstractModel $parent
+     * @param array $surveyTypes optionnal restriction on survey types
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function getAllWithPermissionQueryBuilder($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null, array $surveyTypes = [])
     {
         $qb = $this->createQueryBuilder('questionnaire');
         $qb->join('questionnaire.survey', 'survey', Join::WITH);
@@ -48,7 +80,7 @@ class QuestionnaireRepository extends AbstractChildRepository
         $this->addPermission($qb, ['survey', 'questionnaire'], \Application\Model\Permission::getPermissionName($this, $action), $exceptionDql);
         $this->addSearch($qb, $search, array('survey.code', 'geoname.name'));
 
-        return $qb->getQuery()->getResult();
+        return $qb;
     }
 
     /**
@@ -68,7 +100,7 @@ class QuestionnaireRepository extends AbstractChildRepository
 
         if (!$allInCache) {
 
-            $questionnairesWithReadAccess = $this->getAllWithPermission();
+            $questionnairesWithReadAccess = $this->getAllIdsWithPermission();
             $qb = $this->createQueryBuilder('questionnaire');
             $qb->select('questionnaire, survey')
                     ->join('questionnaire.survey', 'survey')
