@@ -3,10 +3,10 @@
 namespace Application\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use \Application\Model\Question\AbstractQuestion;
 
 /**
- * User
- * @ORM\Table(name="note")
+ * Note
  * @ORM\Entity(repositoryClass="Application\Repository\NoteRepository")
  */
 class Note extends AbstractModel
@@ -49,16 +49,15 @@ class Note extends AbstractModel
     {
         return array_merge(parent::getJsonConfig(), array(
             'description',
-            'attachmentName'
         ));
     }
 
     /**
-     * Set name
+     * Set description
      *
      * @param string $description
      *
-     * @return User
+     * @return self
      */
     public function setDescription($description)
     {
@@ -68,7 +67,7 @@ class Note extends AbstractModel
     }
 
     /**
-     * Get name
+     * Get description
      *
      * @return string
      */
@@ -80,7 +79,7 @@ class Note extends AbstractModel
     /**
      * Set attachmentName
      *
-     *     * @return User
+     * @return self
      */
     public function setAttachmentName($attachmentName)
     {
@@ -102,9 +101,9 @@ class Note extends AbstractModel
     /**
      * @param \Application\Model\Question\AbstractQuestion $question
      *
-     * @return \Application\Model\Question\AbstractQuestion
+     * @return self
      */
-    public function setQuestion($question)
+    public function setQuestion(AbstractQuestion $question)
     {
         $this->question = $question;
 
@@ -122,9 +121,9 @@ class Note extends AbstractModel
     /**
      * @param \Application\Model\Questionnaire $questionnaire
      *
-     * @return \Application\Model\Questionnaire
+     * @return self
      */
-    public function setQuestionnaire($questionnaire)
+    public function setQuestionnaire(Questionnaire $questionnaire)
     {
         $this->questionnaire = $questionnaire;
 
@@ -142,9 +141,9 @@ class Note extends AbstractModel
     /**
      * @param \Application\Model\Survey $survey
      *
-     * @return \Application\Model\Survey
+     * @return self
      */
-    public function setSurvey($survey)
+    public function setSurvey(Survey $survey)
     {
         $this->survey = $survey;
 
