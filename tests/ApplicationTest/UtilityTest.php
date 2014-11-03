@@ -203,4 +203,27 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
         $this->assertEquals($expected, Utility::indexById($array));
     }
 
+    public function explodeIdsDataProvider()
+    {
+        return [
+            [null, []],
+            ['', []],
+            [' ', []],
+            [' ,', []],
+            ['1,', [1]],
+            [',1', [1]],
+            ['1,2,3', [1, 2, 3]],
+            [',1,2,3,', [1, 2, 3]],
+            [',1:a,2:b,3:3,', ['1:a', '2:b', '3:3']],
+        ];
+    }
+
+    /**
+     * @dataProvider explodeIdsDataProvider
+     */
+    public function testExplodeIds($input, $expected)
+    {
+        $this->assertEquals($expected, Utility::explodeIds($input));
+    }
+
 }

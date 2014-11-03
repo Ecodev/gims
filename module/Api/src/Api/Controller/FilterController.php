@@ -5,6 +5,7 @@ namespace Api\Controller;
 use Zend\View\Model\JsonModel;
 use Application\Model\Rule\FilterQuestionnaireUsage;
 use Application\Model\Rule\Rule;
+use Application\Utility;
 
 class FilterController extends AbstractChildRestfulController
 {
@@ -61,11 +62,10 @@ class FilterController extends AbstractChildRestfulController
                 $filters = $this->getFlatHierarchyWithSingleRootElement($filters, '_parent');
                 array_shift($filters);
                 $filters = array_map(function ($filter) {
-                    $filter['level']--;
+                    $filter['level'] --;
 
                     return $filter;
                 }, $filters);
-
             }
 
             // no parent, get all filters
@@ -144,8 +144,8 @@ class FilterController extends AbstractChildRestfulController
 
     public function getComputedFiltersAction()
     {
-        $filterIds = explode(',', trim($this->params()->fromQuery('filters'), ','));
-        $questionnaireIds = explode(',', trim($this->params()->fromQuery('questionnaires'), ','));
+        $filterIds = Utility::explodeIds($this->params()->fromQuery('filters'));
+        $questionnaireIds = Utility::explodeIds($this->params()->fromQuery('questionnaires'));
 
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
@@ -183,8 +183,8 @@ class FilterController extends AbstractChildRestfulController
 
     public function createUsagesAction()
     {
-        $filters = explode(',', $this->params()->fromQuery('filters'));
-        $questionnaires = explode(',', $this->params()->fromQuery('questionnaires'));
+        $filters = Utility::explodeIds($this->params()->fromQuery('filters'));
+        $questionnaires = Utility::explodeIds($this->params()->fromQuery('questionnaires'));
 
         $parts = $this->getEntityManager()->getRepository('\Application\Model\Part')->findAll();
         $filterRepo = $this->getEntityManager()->getRepository('\Application\Model\Filter');

@@ -5,7 +5,7 @@ namespace Application\Repository;
 class NoteRepository extends AbstractRepository
 {
 
-    public function getAllByParent($surveys, $questionnaires, $questions)
+    public function getAllByParent(array $surveys, array $questionnaires, array $questions)
     {
         $qb = $this->createQueryBuilder('note');
 

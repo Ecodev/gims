@@ -5,7 +5,7 @@ namespace Api\Controller;
 use Application\View\Model\NumericJsonModel;
 use Application\View\Model\ExcelModel;
 use Application\Model\Geoname;
-use Doctrine\Common\Collections\ArrayCollection;
+use Application\Utility;
 
 class TableController extends \Application\Controller\AbstractAngularActionController
 {
@@ -38,8 +38,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $result = array();
         if ($filterSet) {
 
-            $questionnaireParameter = $this->params()->fromQuery('questionnaire');
-            $idQuestionnaires = explode(',', $questionnaireParameter);
+            $idQuestionnaires = Utility::explodeIds($this->params()->fromQuery('questionnaire'));
             $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
             $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
 

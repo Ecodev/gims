@@ -253,7 +253,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $objects = array();
         $notFound = array();
         $notGranted = array();
-        $ids = explode(',', $id);
+        $ids = \Application\Utility::explodeIds($id);
 
         foreach ($ids as $id) {
             $object = $this->getRepository()->findOneById($id);
