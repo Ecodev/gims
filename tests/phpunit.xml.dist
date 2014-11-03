@@ -36,7 +36,11 @@
         </listener>
         <listener class="PHPUnit\Runner\CleverAndSmart\TestListener">
             <arguments>
-                <object class="PHPUnit\Runner\CleverAndSmart\Storage\Sqlite3Storage"/>
+                <object class="PHPUnit\Runner\CleverAndSmart\Storage\Sqlite3Storage">
+                    <arguments>
+                        <string>../data/logs/tests/phpunit-cas.db</string>
+                    </arguments>
+                </object>
             </arguments>
         </listener>
     </listeners>
