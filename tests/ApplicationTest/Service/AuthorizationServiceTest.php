@@ -41,7 +41,7 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
         $filter1->addChild($filter11)->addChild($filter12);
         $filter2->addChild($filter21)->addChild($filter22);
 
-        $filterSet->addFilter($filter1)->addFilter($filter2);
+        $filterSet->addFilter($filter1)->addFilter($filter2)->setIsPublished(true);
         $filterSet2->addFilter($filter1)->addFilter($filter3);
         $filterSet3->addFilter($filter1)->addFilter($filter2);
 
