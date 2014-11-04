@@ -4,7 +4,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Contribute\Controller\Index' => 'Contribute\Controller\IndexController',
-            'Contribute\Controller\Rule' => 'Contribute\Controller\RuleController',
+            'Contribute\Controller\RequestRoles' => 'Contribute\Controller\RequestRolesController'
         ),
     ),
     'view_manager' => array(
@@ -35,13 +35,12 @@ return array(
                     'default' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => '/[:action]',
+                            'route' => '/[:controller[/:action]]',
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                             ),
-                            'defaults' => array(
-                            ),
+                            'defaults' => array(),
                         ),
                     ),
                 ),

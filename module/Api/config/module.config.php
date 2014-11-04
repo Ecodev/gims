@@ -29,6 +29,7 @@ return array(
             'Api\Controller\FilterGeonameUsage' => 'Api\Controller\Rule\FilterGeonameUsageController',
             'Api\Controller\children' => 'Api\Controller\FilterController',
             'Api\Controller\filters' => 'Api\Controller\FilterController',
+            'Api\Controller\RolesRequest' => 'Api\Controller\RolesRequestController',
         ),
     ),
     'router' => array(
