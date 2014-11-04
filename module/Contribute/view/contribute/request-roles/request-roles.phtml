@@ -36,6 +36,7 @@
             <div class="col-sm-7">
                 <gims-select
                     model="roles"
+                    name="roles"
                     api="role"
                     placeholder="Select roles"
                     multiple
@@ -49,15 +50,15 @@
             </div>
         </div>
 
-        <div class="form-group" ng-class="{'has-error':!surveyTypes.length}">
+        <div class="form-group" ng-class="{'has-error':!types.length}">
             <label class="control-label col-sm-3">Select survey type</label>
             <div class="col-sm-7">
-                <select ui-select2 ng-model="surveyTypes" data-placeholder="Select survey types" multiple required style="width: 100%">
+                <select ui-select2 ng-model="types" data-placeholder="Select survey types" multiple required style="width: 100%">
                     <option ng-repeat="surveyType in surveyTypesList" value="{{surveyType.value}}">{{surveyType.display}}</option>
                 </select>
             </div>
             <div class="col-sm-2">
-                <span ng-if="!surveyTypes.length" class="help-block">Required</span>
+                <span ng-if="!types.length" class="help-block">Required</span>
             </div>
         </div>
 

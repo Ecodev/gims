@@ -95,6 +95,28 @@ class EmailController extends AbstractActionController
     }
 
     /**
+     * Notify all users
+     */
+    public function notifyRoleRequestAction()
+    {
+        $usersIds = explode(',', trim($this->getRequest()->getParam('recipientsIds'), ','));
+        $emailLinkQueryString = $this->getRequest()->getParam('emailLinkQueryString');
+
+        $askingUserId = $this->getRequest()->getParam('askingUserId');
+
+        $users = $this->getEntityManager()->getRepository('Application\Model\User')->findById($usersIds);
+        $askingUser = $this->getEntityManager()->getRepository('Application\Model\User')->findOneById($askingUserId);
+
+        $subject = 'GIMS - Role request';
+        $mailParams = array(
+            'askingUser' => $askingUser,
+            'emailLinkQueryString' => $emailLinkQueryString,
+        );
+
+        $this->sendMail($users, $subject, new ViewModel($mailParams));
+    }
+
+    /**
      * Send an activation link to specified user, so he can confirm his email is valid
      */
     public function activationLinkAction()

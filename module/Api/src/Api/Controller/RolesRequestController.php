@@ -4,6 +4,7 @@ namespace Api\Controller;
 
 use Zend\View\Model\JsonModel;
 use Application\Model\User;
+use Application\Utility;
 
 class RolesRequestController extends \Application\Controller\AbstractAngularActionController
 {
@@ -19,7 +20,10 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
         foreach ($this->params()->fromQuery() as $key => $value) {
             $queryString .= $key . '=' . $value . '&';
         }
-//        $emailUrl = "http://" . $this->serviceLocator->get('config')['domain'] . "/admin/roles-requests?" . $queryString . "user=" . User::getCurrentUser()->getId();
+
+        $emailParams = "'" . $queryString . "user=" . User::getCurrentUser()->getId() . "'";
+        Utility::executeCliCommand('email notifyRoleRequest ' . implode(',', array_keys($users)) . ' ' . User::getCurrentUser()->getId() . ' ' . $emailParams);
+
         return new JsonModel($users);
     }
 
@@ -33,7 +37,9 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
         $types = trim($this->params()
                            ->fromQuery('types'), ','); // clean last comma
         $types = explode(',', $types); // transform to table
-        $types = array_map(function ($t) { return "'" . $t . "'";}, $types); // add quotes for sql
+        $types = array_map(function ($t) {
+                return "'" . $t . "'";
+            }, $types); // add quotes for sql
         $types = implode(',', $types); // concat to string
 
         $result = $this->getEntityManager()

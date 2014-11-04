@@ -57,6 +57,7 @@ angular.module('myApp', [
             $routeProvider.when('/contribute/glaas/', {templateUrl: '/template/contribute/glaas', controller: 'Contribute/GlaasCtrl'});
             $routeProvider.when('/contribute/glaas/:id', {templateUrl: '/template/contribute/glaas', controller: 'Contribute/GlaasCtrl'});
             $routeProvider.when('/contribute/request-roles', {templateUrl: '/template/contribute/request-roles/request-roles', controller: 'Contribute/RequestRolesCtrl', reloadOnSearch: false});
+            $routeProvider.when('/admin/roles-requests', {templateUrl: '/template/admin/roles-requests/roles-requests', controller: 'Admin/RolesRequestsCtrl'});
 
             $routeProvider.otherwise({redirectTo: '/home'});
 

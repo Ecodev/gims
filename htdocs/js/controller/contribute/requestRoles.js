@@ -14,16 +14,16 @@ angular.module('myApp').controller('Contribute/RequestRolesCtrl', function($scop
         },
     ];
 
-    $scope.$watch('surveyTypes', function() {
-        if ($scope.surveyTypes && $scope.surveyTypes.length) {
-            $location.search('surveyTypes', $scope.surveyTypes.join(','));
+    $scope.$watch('types', function() {
+        if ($scope.types && $scope.types.length) {
+            $location.search('types', $scope.types.join(','));
         } else {
-            $location.search('surveyTypes', null);
+            $location.search('types', null);
         }
     });
 
-    if ($routeParams.surveyTypes) {
-        $scope.surveyTypes = $routeParams.surveyTypes.split(',');
+    if ($routeParams.types) {
+        $scope.types = $routeParams.types.split(',');
     }
 
     /**
@@ -38,7 +38,7 @@ angular.module('myApp').controller('Contribute/RequestRolesCtrl', function($scop
             params: {
                 geonames: _.pluck($scope.geonames, 'id').join(','),
                 roles: _.pluck($scope.roles, 'id').join(','),
-                types: $scope.surveyTypes.join(',')
+                types: $scope.types.join(',')
             }
         }).success(function() {});
     };
