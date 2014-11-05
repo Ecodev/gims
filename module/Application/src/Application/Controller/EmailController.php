@@ -10,6 +10,7 @@ use Zend\View\Model\ViewModel;
 use Application\Model\Questionnaire;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Part as MimePart;
+use Application\Utility;
 
 class EmailController extends AbstractActionController
 {
@@ -99,13 +100,11 @@ class EmailController extends AbstractActionController
      */
     public function notifyRoleRequestAction()
     {
-        $usersIds = explode(',', trim($this->getRequest()->getParam('recipientsIds'), ','));
+        $users = Utility::explodeIds($this->getRequest()->getParam('recipientsIds'));
+        $users = $this->getEntityManager()->getRepository('Application\Model\User')->findById($users);
+
         $emailLinkQueryString = $this->getRequest()->getParam('emailLinkQueryString');
-
-        $askingUserId = $this->getRequest()->getParam('askingUserId');
-
-        $users = $this->getEntityManager()->getRepository('Application\Model\User')->findById($usersIds);
-        $askingUser = $this->getEntityManager()->getRepository('Application\Model\User')->findOneById($askingUserId);
+        $askingUser = $this->getEntityManager()->getRepository('Application\Model\User')->findOneById($this->getRequest()->getParam('askingUserId'));
 
         $subject = 'GIMS - Role request';
         $mailParams = array(
@@ -183,8 +182,10 @@ class EmailController extends AbstractActionController
             $mail->setFrom('webmaster@gimsinitiative.org', 'Gims project');
 
             $email = $user->getEmail();
+            $overridenBy = "";
             if (isset($config['emailOverride'])) {
                 $email = $config['emailOverride'];
+                $overridenBy = ' overriden by ' . $email;
             }
 
             if ($email) {
@@ -195,10 +196,10 @@ class EmailController extends AbstractActionController
             $dateNow = new \DateTime();
             $dateNow = $dateNow->format('c');
 
-            $log = 'data/logs/emails/' . $dateNow . '_' . str_pad($emailCount++, 3, '0', STR_PAD_LEFT) . '_' . $email . '.html';
+            $log = 'data/logs/emails/' . $dateNow . '_' . str_pad($emailCount++, 3, '0', STR_PAD_LEFT) . '_' . $user->getEmail() . str_replace(' ', '_', $overridenBy) . '.html';
             file_put_contents($log, $mail->getBodyText());
 
-            echo 'email sent to: ' . $user->getName() . "\t" . $email . "\t" . $subject . PHP_EOL;
+            echo 'email sent to: ' . $user->getName() . "\t" . $user->getEmail() . "\t" . $overridenBy . "\t" . $subject . PHP_EOL;
         }
     }
 
