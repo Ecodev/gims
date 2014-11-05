@@ -2,6 +2,7 @@
 
 namespace Application\Repository;
 
+use Application\Model\User;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
 
@@ -13,10 +14,10 @@ class UserRepository extends AbstractRepository
     /**
      * Return statistics for the specified user
      * Currently it's the count questionnaire by status, but it could be more info
-     * @param \Application\Model\User $user
+     * @param User $user
      * @return array
      */
-    public function getStatistics(\Application\Model\User $user)
+    public function getStatistics(User $user)
     {
         $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
         $rsm->addScalarResult('total', 'total');
@@ -93,16 +94,29 @@ class UserRepository extends AbstractRepository
     }
 
     /**
-     * Return all
-     * @param $geonames
-     * @param $roles
-     * @param $types
-     * @internal param $rolesByGeoname
+     * If user param is null, return all users that have at least one of the given roles on questionnaires (or survey by inheritance)
+     * If user params is not null, limit returned objects to those in relation with given user, and add detail : questionnaires and roles by questionnaire
+     * @param integer[] $geonames ids
+     * @param integer[] $roles
+     * @param string[] $types
+     * @param User $user optional, if used, return only data relative to user
      * @return array
      */
-    public function getAllHavingRoles($geonames, $roles, $types)
+    public function getAllHavingRoles(array $geonames, array $roles, array $types, User $user = null)
     {
-        $selectModel = "SELECT distinct u.id as user_id, u.email as user_email, u.name as user_name, q.id as questionnaire_id, g.id as geoname_id, s.id as survey_id, r.id as role_id FROM \"user\" as u ";
+        $selectModel = "SELECT distinct u.id as user_id, u.email as user_email, u.name as user_name";
+
+        if ($user) {
+            $selectModel .= ", q.id as questionnaire_id, ";
+            $selectModel .= "g.id as geoname_id, ";
+            $selectModel .= "g.name as geoname_name, ";
+            $selectModel .= "s.id as survey_id, ";
+            $selectModel .= "s.code as survey_code, ";
+            $selectModel .= "r.id as role_id, ";
+            $selectModel .= "r.name as role_name ";
+        }
+
+        $selectModel .= " FROM \"user\" as u ";
 
         $sql = $selectModel;
         $sql .= "left join user_survey us on us.user_id = u.id ";
@@ -110,31 +124,50 @@ class UserRepository extends AbstractRepository
         $sql .= "left join questionnaire q on q.survey_id = s.id ";
         $sql .= "left join role r on r.id = us.role_id ";
         $sql .= "left join geoname g on q.geoname_id = g.id ";
-        $sql .= "WHERE us.role_id IN (" . $roles . ") AND g.id IN (" . $geonames . ") AND s.type IN (" . $types . ") ";
+        $sql .= "WHERE us.role_id IN (:roles) AND g.id IN (:geonames) AND s.type IN (:types) ";
+        if ($user) {
+            $sql .= " AND u.id = :userId ";
+        }
 
         $sql .= "UNION ";
 
         $sql .= $selectModel;
-        $sql .="left join user_survey us on us.user_id = u.id ";
-        $sql .= "left join survey s on us.survey_id = s.id ";
-        $sql .= "left join questionnaire q on q.survey_id = s.id ";
-        $sql .= "left join role r on r.id = us.role_id ";
+        $sql .= "left join user_questionnaire uq on uq.user_id = u.id ";
+        $sql .= "left join questionnaire q on uq.questionnaire_id = q.id ";
+        $sql .= "left join role r on r.id = uq.role_id ";
         $sql .= "left join geoname g on q.geoname_id = g.id ";
-        $sql .= "WHERE us.role_id in (" . $roles . ")  AND g.id in (" . $geonames . ") AND s.type IN (" . $types . ") ";
+        $sql .= "left join survey s on s.id = q.survey_id ";
+        $sql .= "WHERE uq.role_id IN (:roles) AND g.id IN (:geonames) AND s.type IN (:types) ";
+        if ($user) {
+            $sql .= " AND u.id = :userId ";
+        }
 
         $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
 
         $rsm->addScalarResult('user_id', 'user_id');
         $rsm->addScalarResult('user_email', 'user_email');
         $rsm->addScalarResult('user_name', 'user_name');
-        $rsm->addScalarResult('questionnaire_id', 'questionnaire_id');
-        $rsm->addScalarResult('geoname_id', 'geoname_id');
-        $rsm->addScalarResult('survey_id', 'survey_id');
-        $rsm->addScalarResult('role_id', 'role_id');
 
-        $qb = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+        if ($user) {
+            $rsm->addScalarResult('questionnaire_id', 'questionnaire_id');
+            $rsm->addScalarResult('geoname_id', 'geoname_id');
+            $rsm->addScalarResult('geoname_name', 'geoname_name');
+            $rsm->addScalarResult('survey_id', 'survey_id');
+            $rsm->addScalarResult('survey_code', 'survey_code');
+            $rsm->addScalarResult('role_id', 'role_id');
+            $rsm->addScalarResult('role_name', 'role_name');
+        }
 
-        $result = $qb->getResult();
+        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+
+        $query->setParameter('geonames', $geonames);
+        $query->setParameter('roles', $roles);
+        $query->setParameter('types', $types);
+        if ($user) {
+            $query->setParameter('userId', $user->getId());
+        }
+
+        $result = $query->getResult();
 
         return $result;
     }

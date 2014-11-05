@@ -12,9 +12,12 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
     /**
      * Used by contribute/request-role, send e-mails
      */
-    public function sendAccessDemandAction()
+    public function requestRolesAction()
     {
-        $users = $this->getUsersHavingRoles();
+        $users = array_map(function($user) {
+            return $user['user_id'];
+        }, $this->getUsersHavingRoles());
+
         $queryString = '';
 
         foreach ($this->params()->fromQuery() as $key => $value) {
@@ -22,75 +25,73 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
         }
 
         $emailParams = "'" . $queryString . "user=" . User::getCurrentUser()->getId() . "'";
-        Utility::executeCliCommand('email notifyRoleRequest ' . implode(',', array_keys($users)) . ' ' . User::getCurrentUser()->getId() . ' ' . $emailParams);
+        Utility::executeCliCommand('email notifyRoleRequest ' . implode(',', $users) . ' ' . User::getCurrentUser()->getId() . ' ' . $emailParams);
 
         return new JsonModel($users);
     }
 
     /**
+     * Used by admin/roles-requests to retrieve users
+     */
+    public function getRequestsAction()
+    {
+        $result = $this->getUsersHavingRoles(User::getCurrentUser());
+
+        return new JsonModel($this->groupByGeoname($result));
+    }
+
+    /**
+     * @param User $user
      * @return array
      */
-    private function getUsersHavingRoles()
+    private function getUsersHavingRoles(User $user = null)
     {
-        $geonames = trim($this->params()->fromQuery('geonames'), ',');
-        $roles = trim($this->params()->fromQuery('roles'), ',');
-        $types = trim($this->params()
-                           ->fromQuery('types'), ','); // clean last comma
-        $types = explode(',', $types); // transform to table
-        $types = array_map(function ($t) {
-                return "'" . $t . "'";
-            }, $types); // add quotes for sql
-        $types = implode(',', $types); // concat to string
+        $geonames = Utility::explodeIds($this->params()->fromQuery('geonames'));
+        $roles = Utility::explodeIds($this->params()->fromQuery('roles'));
+        $types = Utility::explodeIds($this->params()->fromQuery('types'));
 
-        $result = $this->getEntityManager()
-                       ->getRepository('\Application\Model\User')
-                       ->getAllHavingRoles($geonames, $roles, $types);
+        $result = $this->getEntityManager()->getRepository('\Application\Model\User')->getAllHavingRoles($geonames, $roles, $types, $user);
 
-        return $this->groupByUsers($result);
+        return $result;
     }
 
     /**
      * @param array $users
      * @return array
      */
-    private function groupByUsers(array $users)
+    private function groupByGeoname(array $data)
     {
-        $groupedUsers = [];
-        foreach ($users as $user) {
-
-            // create index for user
-            if (!isset($groupedUsers[$user['user_id']])) {
-                $groupedUsers[$user['user_id']] = [
-                    'id' => $user['user_id'],
-                    'email' => $user['user_email'],
-                    'name' => $user['user_name'],
-                    'countries' => array(),
-                ];
-            }
+        $geonames = [];
+        foreach ($data as $data) {
 
             // create index for country
-            if (!isset($groupedUsers[$user['user_id']]['countries'][$user['geoname_id']])) {
-                $groupedUsers[$user['user_id']]['countries'][$user['geoname_id']] = [
-                    'id' => $user['geoname_id'],
+            if (!isset($geonames[$data['geoname_id']])) {
+                $geonames[$data['geoname_id']] = [
+                    'name' => $data['geoname_name'],
                     'questionnaires' => []
                 ];
             }
 
             // create index for questionnaire
-            if (!isset($groupedUsers[$user['user_id']]['countries'][$user['geoname_id']]['questionnaires'][$user['questionnaire_id']])) {
-                $groupedUsers[$user['user_id']]['countries'][$user['geoname_id']]['questionnaires'][$user['questionnaire_id']] = [
-                    'id' => $user['questionnaire_id'],
-                    'survey' => $user['survey_id'],
+            if (!isset($geonames[$data['geoname_id']]['questionnaires'][$data['questionnaire_id']])) {
+                $geonames[$data['geoname_id']]['questionnaires'][$data['questionnaire_id']] = [
+                    'survey' => [
+                        'id' => $data['survey_id'],
+                        'code' => $data['survey_code'],
+                    ],
                     'roles' => []
                 ];
             }
 
             // add roles
-            array_push($groupedUsers[$user['user_id']]['countries'][$user['geoname_id']]['questionnaires'][$user['questionnaire_id']]['roles'], $user['role_id']);
-
+            $role = [
+                'id' => $data['role_id'],
+                'name' => $data['role_name']
+            ];
+            array_push($geonames[$data['geoname_id']]['questionnaires'][$data['questionnaire_id']]['roles'], $role);
         }
 
-        return $groupedUsers;
+        return $geonames;
     }
 
 }

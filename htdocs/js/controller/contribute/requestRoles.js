@@ -34,7 +34,7 @@ angular.module('myApp').controller('Contribute/RequestRolesCtrl', function($scop
         //},
 
     $scope.sendRequest = function() {
-        $http.get('/api/roles-request/sendAccessDemand', {
+        $http.get('/api/roles-request/requestRoles', {
             params: {
                 geonames: _.pluck($scope.geonames, 'id').join(','),
                 roles: _.pluck($scope.roles, 'id').join(','),
