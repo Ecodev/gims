@@ -52,7 +52,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             return 123;
         };
 
-        $actual = $this->hydrator->expandDotsToArray(array(
+        $actual = $this->hydrator->initializePropertyStructure(array(
             'name',
             'subobject',
             'subobject.name',
@@ -85,6 +85,25 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             ),
         );
 
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testMetadata()
+    {
+        $in = [
+            'metadata',
+            'creator.gravatar',
+        ];
+        $expected = [
+            'dateCreated',
+            'dateModified',
+            'creator' => [
+                'gravatar',
+            ],
+            3 => 'modifier',
+        ];
+
+        $actual = $this->hydrator->initializePropertyStructure($in);
         $this->assertEquals($expected, $actual);
     }
 

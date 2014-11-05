@@ -57,22 +57,19 @@ class Hydrator
     private function resolveMetadataAliases(array $properties)
     {
         $metadata = array(
-            'dateCreated',
-            'dateModified',
-            'creator',
             'modifier',
+            'creator',
+            'dateModified',
+            'dateCreated',
         );
 
-        $key = array_search('metadata', $properties);
-        if ($key !== false) {
-            unset($properties[$key]);
-            $properties = array_merge($properties, $metadata);
-        }
-
-        // Do it recursively
-        foreach ($properties as &$property) {
-            if (is_array($property)) {
-                $property = $this->resolveMetadataAliases($property);
+        foreach ($properties as $i => $property) {
+            if (is_string($property) && preg_match('/^(.*)metadata/', $property, $matches)) {
+                $prefix = $matches[1];
+                unset($properties[$i]);
+                foreach ($metadata as $m) {
+                    array_unshift($properties, $prefix . $m);
+                }
             }
         }
 
@@ -112,12 +109,12 @@ class Hydrator
      * @param array $properties
      * @return array
      */
-    private function initializePropertyStructure(array $properties)
+    public function initializePropertyStructure(array $properties)
     {
-        $propertiesArray = $this->expandDotsToArray($properties);
-        $properties = $this->resolveMetadataAliases($propertiesArray);
+        $propertiesWithMetaResolved = $this->resolveMetadataAliases($properties);
+        $finalProperties = $this->expandDotsToArray($propertiesWithMetaResolved);
 
-        return $properties;
+        return $finalProperties;
     }
 
     /**
@@ -354,7 +351,7 @@ class Hydrator
      * Eg: ['a', 'b.c'] => ['a', ['b' => 'c']]
      * @param array $properties
      */
-    public function expandDotsToArray(array $properties)
+    private function expandDotsToArray(array $properties)
     {
         $result = array();
         foreach ($properties as $key => $property) {
