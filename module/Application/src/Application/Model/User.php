@@ -359,7 +359,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      * Set roles context to then query getRoles(). This MUST be followed by resetRolesContext() as soon as possible.
      * @param \Application\Service\RoleContextInterface $context
      */
-    public function setRolesContext(\Application\Service\RoleContextInterface $context)
+    public function setRolesContext(\Application\Service\RoleContextInterface $context = null)
     {
         $this->roleContext = $context;
     }

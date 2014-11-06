@@ -89,7 +89,7 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
     {
         $user = $this->getIdentity();
         $roles = 'anonymous';
-        if ($user instanceof \Application\Model\User && $context) {
+        if ($user instanceof \Application\Model\User) {
             $user->setRolesContext($context);
             $roles = implode(', ', $user->getRoles());
             $user->resetRolesContext();
