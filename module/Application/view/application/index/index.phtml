@@ -57,7 +57,7 @@
                                 <p ng-show="user" class="navbar-text loggedInUser">
                                     <a class="text-muted" href="/admin/user/edit/{{user.id}}">
                                         <ng-switch on="user.gravatar==undefined">
-                                            <img ng-switch-when="false" ng-src="{{user.gravatar}}?s=50" />
+                                            <img ng-switch-when="false" ng-src="{{user.gravatar}}&s=50" />
                                         </ng-switch>
                                         <span>{{user.name}}</span>
                                     </a>
