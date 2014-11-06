@@ -50,8 +50,7 @@
 
                                         <a class="btn btn-default btn-sm" href="/admin/questionnaire/edit/{{questionnaireId}}#3" ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.type == 'user_questionnaire'"><i class="fa fa-gims-questionnaire"></i> See</a>
                                         <a class="btn btn-default btn-sm" href="/admin/survey/edit/{{questionnaire.survey.id}}#3" ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.type == 'user_survey'"><i class="fa fa-gims-survey"></i> See</a>
-
-                                        <button class="btn btn-danger btn-sm" ng-click="revokeAccess(questionnaireId, roleId, geonameId)"><i class="fa fa-trash"></i> Revoke access</button>
+                                        <button class="btn btn-danger btn-sm" ng-click="revokeAccess(questionnaireId, roleId, geonameId)" ng-disabled="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.type == 'user_survey'"><i class="fa fa-trash"></i> Revoke access</button>
                                     </div>
                                 </td>
                             </tr>
