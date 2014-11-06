@@ -9,6 +9,7 @@ return array(
             'Browse\Controller\Country' => 'Browse\Controller\TableController',
             'Browse\Controller\Rule' => 'Browse\Controller\RuleController',
             'Browse\Controller\CellMenu' => 'Browse\Controller\CellMenuController',
+            'Browse\Controller\Discussion' => 'Browse\Controller\DiscussionController',
         ),
     ),
     'view_manager' => array(

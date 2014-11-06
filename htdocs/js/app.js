@@ -18,7 +18,8 @@ angular.module('myApp', [
     'angulartics.google.analytics',
     'ui.sortable',
     'vs-repeat',
-    'ui.slider'
+    'ui.slider',
+    'angularMoment'
 ]).
         config(function($routeProvider, $locationProvider, RestangularProvider, $httpProvider, requestNotificationProvider, datepickerPopupConfig) {
             'use strict';

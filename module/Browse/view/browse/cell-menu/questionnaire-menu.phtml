@@ -27,7 +27,7 @@
         <li ng-if="data.mode.isContribute && questionnaire.id" class="dropdown-header">
             Actions
         </li>
-
+        <li><a href ng-click="openDiscussion({questionnaire: questionnaire.id})"><i class="fa fa-comments"></i> View discussion</a></li>
         <li><a href ng-click="removeQuestionnaire(questionnaire)"><i class="fa fa-times fa-fw"></i> Hide this column</a></li>
 
 

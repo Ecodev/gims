@@ -1,4 +1,4 @@
-angular.module('myApp').controller('QuestionnaireMenuCtrl', function($scope, questionnaire, TableFilter, Restangular, $rootScope) {
+angular.module('myApp').controller('QuestionnaireMenuCtrl', function($scope, questionnaire, TableFilter, Restangular, $rootScope, DiscussionModal) {
     'use strict';
 
     $scope.questionnaire = questionnaire;
@@ -6,6 +6,7 @@ angular.module('myApp').controller('QuestionnaireMenuCtrl', function($scope, que
     $scope.saveAll = TableFilter.saveAll;
     $scope.questionnaireCanBeSaved = TableFilter.questionnaireCanBeSaved;
     $scope.toggleShowLabels = TableFilter.toggleShowLabels;
+    $scope.openDiscussion = DiscussionModal.open;
 
     /**
      * Remove column (questionnaire)

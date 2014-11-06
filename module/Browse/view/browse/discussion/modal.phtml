@@ -1,0 +1,30 @@
+<form role="form" name="myForm">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$dismiss()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Discussion on {{discussion.name}}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row" ng-if="!discussion.comments">
+            <div class="col-md-12" style="text-align: center;">
+                <p><i class="fa fa-gims-loading"></i></p>
+            </div>
+        </div>
+
+        <div class="panel panel-default ng-trans ng-trans-fade-up" ng-repeat="comment in discussion.comments track by comment.id">
+            <div class="panel-heading"><img ng-src="{{comment.creator.gravatar}}&s=18" /> {{comment.creator.name}} <small class="text-muted" am-time-ago="comment.dateCreated" tooltip="{{comment.dateCreated| amDateFormat:'YYYY-MM-DD HH:mm:ss'}}"></small></div>
+            <div class="panel-body" style="white-space: pre-line;">{{comment.description}}</div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error':myForm.comment.$invalid}">
+            <label for ="exampleInputEmail1">Reply</label>
+            <textarea maxlength="4096" class="form-control" id="comment" name="comment" rows="4" placeholder="Leave a comment..." ng-model="comment.description" required autofocus="true"></textarea>
+
+            <span ng-show="myForm.comment.$error.required" class="help-block">Required</span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-link" ng-click="loadDiscussion()" ng-if="discussion.id">Refresh</button>
+        <button type="button" class="btn btn-default" ng-click="$dismiss()">Close</button>
+        <button type="submit" class="btn btn-primary pull-right" ng-click="postComment()" ng-disabled="myForm.comment.$invalid">Comment</button>
+    </div>
+</form>

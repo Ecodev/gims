@@ -53,14 +53,18 @@
         </li>
 
         <li ng-if="questionnaire.survey.questions[filter.id].answers[part.id].id" class="divider"></li>
-        <li ng-if="questionnaire.survey.questions[filter.id].answers[part.id].id" class="dropdown-header">Quality : {{questionnaire.survey.questions[filter.id].answers[part.id].quality*100}} %</li>
+        <li ng-if="questionnaire.survey.questions[filter.id].answers[part.id].id" class="dropdown-header">Quality : {{questionnaire.survey.questions[filter.id].answers[part.id].quality * 100}} %</li>
         <li ng-if="questionnaire.survey.questions[filter.id].answers[part.id].id" style="padding:5px 30px">
             <div class="qualitySlider" ui-slider="qualitySlider.options" min="0" max="1" step="0.10" use-decimals ng-model="questionnaire.survey.questions[filter.id].answers[part.id].quality"></div>
         </li>
 
         <!-- Actions -->
-        <li ng-if="questionnairesStatus[questionnaire.status]" class="divider"></li>
-        <li ng-if="questionnairesStatus[questionnaire.status]" class="dropdown-header">Actions</li>
+        <li class="divider"></li>
+        <li class="dropdown-header">Actions</li>
+        <li>
+            <a href ng-click="openDiscussion({questionnaire: questionnaire.id, filter: filter.id})"><i class="fa fa-comments"></i> View discussion</a>
+        </li>
+
         <li ng-if="questionnairesStatus[questionnaire.status]">
             <a href ng-click="toggleExcludeRule(questionnaire, filter.id, part.id)"><i class="fa fa-gims-rule fa-fw"></i> {{excludeRuleExists(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second) ? 'Include in further computing' : 'Exclude from further computing'}}</a>
         </li>

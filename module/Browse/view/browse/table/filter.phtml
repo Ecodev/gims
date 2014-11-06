@@ -15,7 +15,7 @@
 
         <!-- Toolbar -->
         <div class="navbar navbar-default hidden-print">
-            <a class="navbar-brand" href="#">{{data.mode.name}} filters</a>
+            <a class="navbar-brand" href="#">{{data.mode.name}}</a>
 
             <form class="navbar-form">
                 <!-- Save all the new questionnaires -->
@@ -32,6 +32,8 @@
 
                 <!-- Show all original nominations -->
                 <button class="btn btn-default" ng-click="toggleShowLabels()"><i class="fa fa-question"></i> Show/Hide question labels</button>
+
+                <gims-discussion-menu questionnaires="data.questionnaires" filters="data.filters"></gims-discussion-menu>
 
                 <?php echo $this->helpButton(); ?>
             </form>

@@ -1,4 +1,4 @@
-angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, questionnaire, filter, part, questionnairesStatus, Restangular, TableFilter, Utility, $timeout, Percent) {
+angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, questionnaire, filter, part, questionnairesStatus, Restangular, TableFilter, Utility, $timeout, Percent, DiscussionModal) {
     'use strict';
 
     // My future self will hate me for this, but we hardcode the exclude
@@ -15,6 +15,7 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, question
     $scope.deleteAnswer = TableFilter.deleteAnswer;
     $scope.isValidNumber = Utility.isValidNumber;
     $scope.getCellType = TableFilter.getCellType;
+    $scope.openDiscussion = DiscussionModal.open;
 
     $scope.qualitySlider = {
         'options': {
