@@ -14,7 +14,7 @@
 
     <h2>{{user.name}} ({{user.email}}) is asking for permissions :</h2>
     <br/>
-    <div ng-repeat="(geonameId, geoname) in geonames">
+    <div ng-repeat="(geonameId, geoname) in adminRelations">
         <h3><i class="fa fa-globe"></i> {{geoname.name}}</h3>
         <table class="table table-condensed">
             <thead>
@@ -33,15 +33,26 @@
                         <br/>
                         <a href="/admin/survey/edit/{{questionnaire.survey.id}}#3"><i class="fa fa-gims-survey"></i> view survey</a>
                         <br/>
-
-                        <small>{{questionnaire.id}}</small>
                     </td>
                     <td>
                         <table class="table table-discret">
-                            <tr ng-repeat="role in questionnaire.roles">
-                                <td><small>{{role.id}}</small> {{role.name}}</td>
+                            <tr ng-repeat="(roleId, role) in questionnaire.roles">
+                                <td>{{role.name}}</td>
                                 <td class="text-right">
-                                    <button class="btn btn-success btn-sm"><i class="fa fa-check"></i> Grant access</button>
+                                    <button class="btn btn-success btn-sm" ng-if="!applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation" ng-click="createRelation(user.id, questionnaireId, roleId, geonameId)"><i class="fa fa-check"></i> Grant access</button>
+                                    <div ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation" class="text-success">
+                                        <i class="fa fa-check"></i>
+                                        Access granted
+                                        <span ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.modifier">
+                                            by {{applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.modifier.name}}
+                                            <span ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.modifier.email"> - ({{applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.modifier.email}})</span>
+                                        </span>
+
+                                        <a class="btn btn-default btn-sm" href="/admin/questionnaire/edit/{{questionnaireId}}#3" ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.type == 'user_questionnaire'"><i class="fa fa-gims-questionnaire"></i> See</a>
+                                        <a class="btn btn-default btn-sm" href="/admin/survey/edit/{{questionnaire.survey.id}}#3" ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.type == 'user_survey'"><i class="fa fa-gims-survey"></i> See</a>
+
+                                        <button class="btn btn-danger btn-sm" ng-click="revokeAccess(questionnaireId, roleId, geonameId)"><i class="fa fa-trash"></i> Revoke access</button>
+                                    </div>
                                 </td>
                             </tr>
                         </table>

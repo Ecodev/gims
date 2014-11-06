@@ -35,9 +35,21 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
      */
     public function getRequestsAction()
     {
-        $result = $this->getUsersHavingRoles(User::getCurrentUser());
+        $adminPermissions = $this->getUsersHavingRoles(User::getCurrentUser());
+        $adminPermissions = $this->groupByGeoname($adminPermissions);
 
-        return new JsonModel($this->groupByGeoname($result));
+        $applicantUser = $this->getEntityManager()
+                              ->getRepository('\Application\Model\User')
+                              ->findOneById($this->params()->fromQuery('user'));
+        $applicantUserPermissions = $this->getUsersHavingRoles($applicantUser);
+        $applicantUserPermissions = $this->groupByGeoname($applicantUserPermissions);
+
+        $result = array(
+            'applicant' => $applicantUserPermissions,
+            'admin' => $adminPermissions
+        );
+
+        return new JsonModel($result);
     }
 
     /**
@@ -56,7 +68,7 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
     }
 
     /**
-     * @param array $users
+     * @param array $data
      * @return array
      */
     private function groupByGeoname(array $data)
@@ -68,7 +80,6 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
             if (!isset($geonames[$data['geoname_id']])) {
                 $geonames[$data['geoname_id']] = [
                     'name' => $data['geoname_name'],
-                    'questionnaires' => []
                 ];
             }
 
@@ -79,16 +90,32 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
                         'id' => $data['survey_id'],
                         'code' => $data['survey_code'],
                     ],
-                    'roles' => []
                 ];
             }
 
-            // add roles
-            $role = [
-                'id' => $data['role_id'],
-                'name' => $data['role_name']
+            // create relation and assign role
+            // user_survey and user_questionnaire are reported @questionnaire level to simulate inheritance, only questionnaire are affected by application
+            $geonames[$data['geoname_id']]['questionnaires'][$data['questionnaire_id']]['roles'][$data['role_id']] = [
+                'name' => $data['role_name'],
+                'userRelation' => [
+                    'id' => $data['relation_id'],
+                    'type' => $data['relation_type'],
+                ]
             ];
-            array_push($geonames[$data['geoname_id']]['questionnaires'][$data['questionnaire_id']]['roles'], $role);
+
+            // add modifier (modifier or creator have the same name) to relation
+            if ($data['relation_modifier_email']) {
+                $geonames[$data['geoname_id']]['questionnaires'][$data['questionnaire_id']]['roles'][$data['role_id']]['userRelation']['modifier'] = [
+                    'name' => $data['relation_modifier_name'],
+                    'email' => $data['relation_modifier_email']
+                ];
+
+            } elseif ($data['relation_creator_email']) {
+                $geonames[$data['geoname_id']]['questionnaires'][$data['questionnaire_id']]['roles'][$data['role_id']]['userRelation']['modifier'] = [
+                    'name' => $data['relation_creator_name'],
+                    'email' => $data['relation_creator_email']
+                ];
+            }
         }
 
         return $geonames;

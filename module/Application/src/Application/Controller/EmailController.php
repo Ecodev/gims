@@ -104,11 +104,11 @@ class EmailController extends AbstractActionController
         $users = $this->getEntityManager()->getRepository('Application\Model\User')->findById($users);
 
         $emailLinkQueryString = $this->getRequest()->getParam('emailLinkQueryString');
-        $askingUser = $this->getEntityManager()->getRepository('Application\Model\User')->findOneById($this->getRequest()->getParam('askingUserId'));
+        $applicantUser = $this->getEntityManager()->getRepository('Application\Model\User')->findOneById($this->getRequest()->getParam('applicantUserId'));
 
         $subject = 'GIMS - Role request';
         $mailParams = array(
-            'askingUser' => $askingUser,
+            'applicantUser' => $applicantUser,
             'emailLinkQueryString' => $emailLinkQueryString,
         );
 

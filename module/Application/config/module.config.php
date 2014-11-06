@@ -264,9 +264,10 @@ return array(
                 'email-role-request' => array(
                     'description' => 'Send email',
                     'options' => array(
-                        'route' => 'email <action> <recipientsIds> <askingUserId> <emailLinkQueryString>',
+                        'route' => 'email notifyRoleRequest <recipientsIds> <applicantUserId> <emailLinkQueryString>',
                         'defaults' => array(
                             'controller' => 'Application\Controller\Email',
+                            'action' => 'notifyRoleRequest'
                         ),
                     ),
                 ),

@@ -104,7 +104,7 @@ class UserRepository extends AbstractRepository
      */
     public function getAllHavingRoles(array $geonames, array $roles, array $types, User $user = null)
     {
-        $selectModel = "SELECT distinct u.id as user_id, u.email as user_email, u.name as user_name";
+        $selectModel = "SELECT distinct u.id as user_id, u.email as user_email, u.name as user_name ";
 
         if ($user) {
             $selectModel .= ", q.id as questionnaire_id, ";
@@ -113,33 +113,51 @@ class UserRepository extends AbstractRepository
             $selectModel .= "s.id as survey_id, ";
             $selectModel .= "s.code as survey_code, ";
             $selectModel .= "r.id as role_id, ";
-            $selectModel .= "r.name as role_name ";
+            $selectModel .= "r.name as role_name, ";
+            $selectModel .= "relation.id as relation_id, ";
+            $selectModel .= "creator.name as relation_creator_name, ";
+            $selectModel .= "creator.email as relation_creator_email, ";
+            $selectModel .= "modifier.name as relation_modifier_name, ";
+            $selectModel .= "modifier.email as relation_modifier_email, ";
         }
-
-        $selectModel .= " FROM \"user\" as u ";
-
         $sql = $selectModel;
-        $sql .= "left join user_survey us on us.user_id = u.id ";
-        $sql .= "left join survey s on us.survey_id = s.id ";
+        if ($user) {
+            $sql .= "'user_survey' as relation_type ";
+        }
+        $sql .= "FROM \"user\" as u ";
+        $sql .= "left join user_survey relation on relation.user_id = u.id ";
+        $sql .= "left join survey s on relation.survey_id = s.id ";
         $sql .= "left join questionnaire q on q.survey_id = s.id ";
-        $sql .= "left join role r on r.id = us.role_id ";
+        $sql .= "left join role r on r.id = relation.role_id ";
+        $sql .= "left join \"user\" creator on creator.id = relation.creator_id ";
+        $sql .= "left join \"user\" modifier on modifier.id = relation.modifier_id ";
         $sql .= "left join geoname g on q.geoname_id = g.id ";
-        $sql .= "WHERE us.role_id IN (:roles) AND g.id IN (:geonames) AND s.type IN (:types) ";
+        $sql .= "WHERE relation.role_id IN (:roles) AND g.id IN (:geonames) AND s.type IN (:types) ";
         if ($user) {
             $sql .= " AND u.id = :userId ";
+        } else {
+            $sql .= " AND u.id <> :userId ";
         }
 
         $sql .= "UNION ";
 
         $sql .= $selectModel;
-        $sql .= "left join user_questionnaire uq on uq.user_id = u.id ";
-        $sql .= "left join questionnaire q on uq.questionnaire_id = q.id ";
-        $sql .= "left join role r on r.id = uq.role_id ";
+        if ($user) {
+            $sql .= "'user_questionnaire' as relation_type ";
+        }
+        $sql .= "FROM \"user\" as u ";
+        $sql .= "left join user_questionnaire relation on relation.user_id = u.id ";
+        $sql .= "left join questionnaire q on relation.questionnaire_id = q.id ";
+        $sql .= "left join role r on r.id = relation.role_id ";
+        $sql .= "left join \"user\" creator on creator.id = relation.creator_id ";
+        $sql .= "left join \"user\" modifier on modifier.id = relation.modifier_id ";
         $sql .= "left join geoname g on q.geoname_id = g.id ";
         $sql .= "left join survey s on s.id = q.survey_id ";
-        $sql .= "WHERE uq.role_id IN (:roles) AND g.id IN (:geonames) AND s.type IN (:types) ";
+        $sql .= "WHERE relation.role_id IN (:roles) AND g.id IN (:geonames) AND s.type IN (:types) ";
         if ($user) {
             $sql .= " AND u.id = :userId ";
+        } else {
+            $sql .= " AND u.id <> :userId ";
         }
 
         $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
@@ -156,6 +174,13 @@ class UserRepository extends AbstractRepository
             $rsm->addScalarResult('survey_code', 'survey_code');
             $rsm->addScalarResult('role_id', 'role_id');
             $rsm->addScalarResult('role_name', 'role_name');
+            $rsm->addScalarResult('relation_id', 'relation_id');
+            $rsm->addScalarResult('relation_creator', 'relation_creator');
+            $rsm->addScalarResult('relation_type', 'relation_type');
+            $rsm->addScalarResult('relation_creator_name', 'relation_creator_name');
+            $rsm->addScalarResult('relation_creator_email', 'relation_creator_email');
+            $rsm->addScalarResult('relation_modifier_name', 'relation_modifier_name');
+            $rsm->addScalarResult('relation_modifier_email', 'relation_modifier_email');
         }
 
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
@@ -165,6 +190,8 @@ class UserRepository extends AbstractRepository
         $query->setParameter('types', $types);
         if ($user) {
             $query->setParameter('userId', $user->getId());
+        } else {
+            $query->setParameter('userId', User::getCurrentUser()->getId());
         }
 
         $result = $query->getResult();
