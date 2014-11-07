@@ -6,7 +6,7 @@
 DEPLOY_USER="gimsinitiativeorg"
 getent passwd $DEPLOY_USER > /dev/null
 if [ $? -eq 0 ]; then
-    DEPLOY_USER_SUDO="sudo --set-home --user=$DEPLOY_USER"
+    DEPLOY_USER_SUDO="sudo -H -u $DEPLOY_USER"
 else
     DEPLOY_USER_SUDO=""
 fi
