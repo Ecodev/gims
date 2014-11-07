@@ -2,6 +2,15 @@
 
 # This script build all assets for production environment
 
+# If the deploy user exists on the machine, prepare the prefix to sudo that user
+DEPLOY_USER="gimsinitiativeorg"
+getent passwd $DEPLOY_USER > /dev/null
+if [ $? -eq 0 ]; then
+    DEPLOY_USER_SUDO="sudo --set-home --user=$DEPLOY_USER"
+else
+    DEPLOY_USER_SUDO=""
+fi
+
 # Exit script on any error
 set -e
 
@@ -33,7 +42,7 @@ echo "Updating git submodules..."
 git submodule update --init --recursive --force
 
 echo "Updating Node.js packages..."
-npm install
+$DEPLOY_USER_SUDO npm install
 
 echo "Updating Bower packages..."
 ./node_modules/.bin/bower install
