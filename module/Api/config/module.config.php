@@ -20,7 +20,8 @@ return array(
             'Api\Controller\Geoname' => 'Api\Controller\GeonameController',
             'Api\Controller\Chart' => 'Api\Controller\ChartController',
             'Api\Controller\Table' => 'Api\Controller\TableController',
-            'Api\Controller\Note' => 'Api\Controller\NoteController',
+            'Api\Controller\Comment' => 'Api\Controller\CommentController',
+            'Api\Controller\Discussion' => 'Api\Controller\DiscussionController',
             'Api\Controller\Rule' => 'Api\Controller\Rule\RuleController',
             'Api\Controller\Population' => 'Api\Controller\PopulationController',
             'Api\Controller\QuestionnaireUsage' => 'Api\Controller\Rule\QuestionnaireUsageController',
@@ -28,6 +29,7 @@ return array(
             'Api\Controller\FilterGeonameUsage' => 'Api\Controller\Rule\FilterGeonameUsageController',
             'Api\Controller\children' => 'Api\Controller\FilterController',
             'Api\Controller\filters' => 'Api\Controller\FilterController',
+            'Api\Controller\RolesRequest' => 'Api\Controller\RolesRequestController',
         ),
     ),
     'router' => array(

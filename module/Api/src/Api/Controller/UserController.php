@@ -136,4 +136,20 @@ class UserController extends AbstractRestfulController
         throw new \Exception('Not implemtented ! see https://support.ecodev.ch/issues/2042');
     }
 
+    public function activateAction()
+    {
+        $token = $this->getRequest()->getQuery()->get('activationToken');
+        $user = $this->getRepository()->findOneByActivationToken($token);
+        if ($user) {
+            $user->setState(1);
+            $this->getEntityManager()->flush();
+
+            return new JsonModel($this->hydrator->extract($user, $this->getJsonConfig()));
+        } else {
+            $this->getResponse()->setStatusCode(404);
+
+            return new JsonModel(array('message' => 'This activation token is invalid. No user could be found.'));
+        }
+    }
+
 }

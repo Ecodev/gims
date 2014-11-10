@@ -261,6 +261,16 @@ return array(
                         ),
                     ),
                 ),
+                'email-role-request' => array(
+                    'description' => 'Send email',
+                    'options' => array(
+                        'route' => 'email notifyRoleRequest <recipientsIds> <applicantUserId> <emailLinkQueryString>',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Email',
+                            'action' => 'notifyRoleRequest'
+                        ),
+                    ),
+                ),
                 'cache-clear' => array(
                     'description' => 'Clear computing cache',
                     'options' => array(

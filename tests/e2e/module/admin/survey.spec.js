@@ -8,7 +8,7 @@ describe('admin/survey', function() {
 
     beforeEach(function() {
         browser.get('/admin/survey');
-        gimsUtility.login(undefined, undefined, browser);
+        gimsUtility.login(browser);
     });
 
     it('should display a grid containing surveys', function() {
@@ -36,7 +36,7 @@ describe('admin/survey/new', function() {
 
     beforeEach(function() {
         browser.get('/admin/survey/new');
-        gimsUtility.login(undefined, undefined, browser);
+        gimsUtility.login(browser);
     });
 
     var randomCode;
@@ -122,7 +122,7 @@ describe('admin/survey/edit', function() {
 
     beforeEach(function() {
         browser.get('/admin/survey/edit/1');
-        gimsUtility.login(undefined, undefined, browser);
+        gimsUtility.login(browser);
     });
 
     it('should have tabs "General", "question", "questionnaires" and "users"', function() {
@@ -145,7 +145,7 @@ describe('admin/questionnaire/new', function() {
 
     beforeEach(function() {
         browser.get('/admin/questionnaire/new?survey=23');
-        gimsUtility.login(undefined, undefined, browser);
+        gimsUtility.login(browser);
     });
 
     function getSelect2FirstItem(select2Id) {

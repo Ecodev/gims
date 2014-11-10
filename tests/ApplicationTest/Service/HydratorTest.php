@@ -52,7 +52,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             return 123;
         };
 
-        $actual = $this->hydrator->expandDotsToArray(array(
+        $actual = $this->hydrator->initializePropertyStructure(array(
             'name',
             'subobject',
             'subobject.name',
@@ -85,6 +85,25 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             ),
         );
 
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testMetadata()
+    {
+        $in = [
+            'metadata',
+            'creator.gravatar',
+        ];
+        $expected = [
+            'dateCreated',
+            'dateModified',
+            'creator' => [
+                'gravatar',
+            ],
+            3 => 'modifier',
+        ];
+
+        $actual = $this->hydrator->initializePropertyStructure($in);
         $this->assertEquals($expected, $actual);
     }
 
@@ -168,6 +187,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $data = array(
             'id' => 12345,
             'password' => 'foo',
+            'activationToken' => 'foo',
         );
 
         $this->hydrator->hydrate($data, $this->user);
@@ -179,9 +199,11 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     {
         $data = array(
             'password',
+            'activationToken'
         );
 
         $this->assertArrayNotHasKey('password', $this->hydrator->extract($this->user, $data));
+        $this->assertArrayNotHasKey('activationToken', $this->hydrator->extract($this->user, $data));
     }
 
     public function testExtractArray()
@@ -350,8 +372,8 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'custom name' => 'Mr. John Connor',
                 ), $this->hydrator->extract($this->user, array(
                     'custom name' => function(Hydrator $hydrator, \Application\Model\User $user) {
-                return 'Mr. ' . $user->getName() . ' Connor';
-            },
+                        return 'Mr. ' . $user->getName() . ' Connor';
+                    },
                 )), 'should allow custom properties via Closure');
     }
 

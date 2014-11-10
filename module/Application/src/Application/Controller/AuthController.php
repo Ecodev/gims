@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Utility;
 use Zend\Http\Response;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
@@ -122,12 +123,11 @@ class AuthController extends \ZfcUser\Controller\UserController
 
             $user = $this->getUserService()->register($data);
 
-            // If registered successfully, directly login the user
+            // If registered successfully, send email activation
             if ($user) {
-                $data['identity'] = $data['email'];
-                $data['credential'] = $data['password'];
+                Utility::executeCliCommand('email activationLink ' . $user->getId());
 
-                return $this->loginAction($data);
+                return new JsonModel(array('email' => $user->getEmail()));
             } else {
                 $this->getResponse()->setStatusCode(400);
 

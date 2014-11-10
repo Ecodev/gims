@@ -21,4 +21,3 @@ reset.sh
 data/backup/*.gz
 Population_2012_JMP.xls
 population.backup.gz
-tests/.phpunit-cas.db

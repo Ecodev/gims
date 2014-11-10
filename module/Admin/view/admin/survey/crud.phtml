@@ -23,9 +23,7 @@
         <tabset style="margin-top: 20px">
             <tab heading="General" active="tabs[0]" select="selectTab(0)" >
 
-                <div class="form-group" ng-class="{
-                        'has-error'
-                        :myForm.code.$invalid}">
+                <div class="form-group" ng-class="{'has-error':myForm.code.$invalid}">
                     <label class="control-label col-sm-1" for="survey.code">Code</label>
                     <div class="col-sm-3">
                         <input id="survey.code" type="text" name="code" ng-model="survey.code" required />

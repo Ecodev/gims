@@ -34,11 +34,11 @@ function export(array $countries, array $onlyThose = array())
 
         echo $path . PHP_EOL;
 
-        echo `wget -O "actual/questionnaire/$name - Water.csv"      "http://$hostname.lan/api/table/questionnaire/foo.csv?country=$id&filterSet=2"`;
-        echo `wget -O "actual/questionnaire/$name - Sanitation.csv" "http://$hostname.lan/api/table/questionnaire/foo.csv?country=$id&filterSet=5"`;
+//        echo `wget -O "actual/questionnaire/$name - Water.csv"      "http://$hostname.lan/api/table/questionnaire/foo.csv?country=$id&filterSet=2"`;
+//        echo `wget -O "actual/questionnaire/$name - Sanitation.csv" "http://$hostname.lan/api/table/questionnaire/foo.csv?country=$id&filterSet=5"`;
 
-        echo `wget -O "actual/country/$name - Water.csv"      "http://$hostname.lan/api/table/country/foo.csv?years=1980-2012&country=$id&filterSet=2"`;
-        echo `wget -O "actual/country/$name - Sanitation.csv" "http://$hostname.lan/api/table/country/foo.csv?years=1980-2012&country=$id&filterSet=5"`;
+        echo `wget -O "actual/country/$name - Water.csv"      "http://$hostname.lan/api/table/country/foo.csv?filters=75,77,79,78,76&geonames=$id&years=1980-2012"`;
+        echo `wget -O "actual/country/$name - Sanitation.csv" "http://$hostname.lan/api/table/country/foo.csv?filters=166,167,171,170,169,168&geonames=$id&years=1980-2012"`;
     }
 }
 

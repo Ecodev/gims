@@ -8,7 +8,7 @@ describe('contribute', function() {
     beforeEach(function() {
         browser.driver.manage().window().setSize(1280, 1024);
         browser.get('/contribute');
-        gimsUtility.login(undefined, undefined, browser);
+        gimsUtility.login(browser);
     });
 
     it('should render contribute', function() {

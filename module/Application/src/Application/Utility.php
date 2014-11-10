@@ -81,6 +81,7 @@ abstract class Utility
     public static function executeCliCommand($command)
     {
         $fullCommand = 'php htdocs/index.php ' . $command . ' > /dev/null 2>&1 &';
+        _log()->debug(__METHOD__, [$fullCommand]);
         exec($fullCommand);
     }
 
@@ -226,6 +227,20 @@ abstract class Utility
         }
 
         return implode(', ', $names);
+    }
+
+    /**
+     * Explode a string by commas into an array of ID
+     * @param string|null $ids
+     * @return array
+     */
+    public static function explodeIds($ids)
+    {
+        if (!$ids) {
+            return [];
+        }
+
+        return preg_split('/,/', trim($ids), -1, PREG_SPLIT_NO_EMPTY);
     }
 
 }

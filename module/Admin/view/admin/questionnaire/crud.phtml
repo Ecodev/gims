@@ -12,8 +12,8 @@
 
         <?php echo $this->crudButtons('questionnaire'); ?>
 
-        <tabset style="margin-top: 20px" active="panes[0].active">
-            <tab heading="General">
+        <tabset style="margin-top: 20px">
+            <tab heading="General" active="tabs[0]" select="selectTab(0)">
 
                 <div class="form-group" ng-class="{'has-error': myForm.status.$invalid}" ng-show="questionnaire.id">
                     <label class="control-label col-sm-2" for="questionnaire.status">Status</label>
@@ -26,9 +26,14 @@
                 <div class="form-group" ng-class="{'has-error': myForm.geoname.$invalid}">
                     <label class="control-label col-sm-2" for="questionnaire.geoname">Country</label>
                     <div class="col-sm-6">
-                        <gims-select api="geoname" model="questionnaire.geoname" name="geoname"
-                                     placeholder="<?php echo $this->translate('Select a country') ?>" style="width: 100%"
-                                     required></gims-select>
+                        <gims-select api="geoname"
+                                     model="questionnaire.geoname"
+                                     name="geoname"
+                                     placeholder="<?php echo $this->translate('Select a country') ?>"
+                                     style="width: 100%"
+                                     change-url="false"
+                                     required>
+                                 </gims-select>
                     </div>
                     <div class="col-sm-2">
                         <span ng-show="myForm.geoname.$error.required" class="help-block">Required</span>
@@ -80,15 +85,15 @@
 
             </tab>
 
-            <tab heading="Rule - Filter" ng-if="questionnaire.id">
+            <tab heading="Rule - Filter" ng-if="questionnaire.id" active="tabs[1]" select="selectTab(1)">
                 <gims-relations relation="FilterQuestionnaireUsage" properties="['questionnaire', 'rule', 'filter', 'part']" justification="true"></gims-relations>
             </tab>
 
-            <tab heading="Rule" ng-if="questionnaire.id">
+            <tab heading="Rule" ng-if="questionnaire.id" active="tabs[2]" select="selectTab(2)">
                 <gims-relations relation="QuestionnaireUsage" properties="['questionnaire', 'rule', 'part']" justification="true"></gims-relations>
             </tab>
 
-            <tab heading="Users" ng-if="questionnaire.id">
+            <tab heading="Users" ng-if="questionnaire.id" active="tabs[3]" select="selectTab(3)">
                 <gims-relations relation="UserQuestionnaire" properties="['questionnaire', 'user', 'role']"></gims-relations>
             </tab>
         </tabset>

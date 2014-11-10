@@ -1,0 +1,10 @@
+<div>
+    <ul class="gims-dropdown-menu pull-right" role="menu">
+        <li ng-if="!discussions"><a><i class="fa fa-gims-loading"></i></a></li>
+        <li ng-if="discussions && !discussions.length"><a>No discussions</a></li>
+        <li ng-repeat="discussion in discussions" ng-class="{'dropdown-header': discussion.id == -1}">
+            <span ng-if="discussion.id == -1">{{discussion.name}}</span>
+            <a ng-if="discussion.id != -1" href ng-click="open(discussion)"><i class="fa fa-comments fa-fw"></i>{{discussion.name}}</a>
+        </li>
+    </ul>
+</div>

@@ -116,8 +116,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      */
     private function getIgnoredElements(Part $part)
     {
-        $excludeStr = $this->params()->fromQuery('ignoredElements');
-        $overriddenElements = $excludeStr ? explode(',', $excludeStr) : array();
+        $overriddenElements = Utility::explodeIds($this->params()->fromQuery('ignoredElements'));
 
         $overriddenFilters = array();
         foreach ($overriddenElements as $ignoredQuestionnaire) {

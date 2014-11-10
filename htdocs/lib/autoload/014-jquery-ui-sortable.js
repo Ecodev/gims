@@ -1,1 +1,1 @@
-../jquery-ui/ui/sortable.js
+../jquery-ui/ui/jquery.ui.sortable.js

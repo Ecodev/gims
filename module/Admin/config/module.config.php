@@ -11,6 +11,7 @@ return array(
             'Admin\Controller\Survey' => 'Admin\Controller\SurveyController',
             'Admin\Controller\User' => 'Admin\Controller\UserController',
             'Admin\Controller\Rule' => 'Admin\Controller\RuleController',
+            'Admin\Controller\RolesRequests' => 'Admin\Controller\RolesRequestsController',
         ),
     ),
     'view_manager' => array(

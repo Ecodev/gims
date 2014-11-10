@@ -18,7 +18,7 @@ describe('browse/table/filter', function() {
 
 });
 
-describe('browse/table/filter menu', function() {
+ddescribe('browse/table/filter menu', function() {
 
     beforeEach(function() {
         // Always close menu if it was opened, by clicking anywhere

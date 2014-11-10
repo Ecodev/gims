@@ -2,7 +2,7 @@
  * Directive to show a filter value with its menu and everything.
  * Highly optimized for performance, $watch() are avoided at all cost
  */
-angular.module('myApp.directives').directive('gimsCell', function($rootScope, $dropdown, questionnairesStatus, TableFilter) {
+angular.module('myApp.directives').directive('gimsCell', function($rootScope, $dropdown, questionnairesStatus, TableFilter, Percent) {
 
     // A helper function to call $setValidity and return the value / undefined,
     // a pattern that is repeated a lot in the input validation logic.
@@ -36,6 +36,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
                 '        </button>' +
                 '    </span>' +
                 '    <input' +
+                '        gims-select-token' +
                 '        type="number"' +
                 '        class="form-control text-center"' +
                 '        ng-change="updateValidState()"' +
@@ -57,10 +58,13 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
              * When entering the input
              */
             scope.focus = function() {
-                TableFilter.initQuestionAbsolute(scope.questionnaire.survey.questions[scope.filter.id]);
-                TableFilter.getPermissions(scope.questionnaire.survey.questions[scope.filter.id], scope.questionnaire.survey.questions[scope.filter.id].answers[scope.part.id]);
+                var question = scope.questionnaire.survey.questions[scope.filter.id];
+                var answer = question.answers[scope.part.id];
+                TableFilter.initQuestionAbsolute(question);
+                TableFilter.getPermissions(question, answer);
 
-                setAnswerInitialValue(scope.questionnaire.survey.questions[scope.filter.id], scope.questionnaire.survey.questions[scope.filter.id].answers[scope.part.id]);
+                answer.displayValue = question.isAbsolute ? answer[question.value] : Percent.fractionToPercent(answer[question.value]);
+                setAnswerInitialValue(question, question.answers[scope.part.id]);
                 addValidators();
             };
 
@@ -70,6 +74,9 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
             scope.blur = function() {
                 TableFilter.saveAnswer(scope.questionnaire.survey.questions[scope.filter.id].answers[scope.part.id], scope.questionnaire.survey.questions[scope.filter.id], scope.filter, scope.questionnaire, scope.part);
                 removeValidators();
+                if (scope.questionnaire.survey.questions[scope.filter.id].answers[scope.part.id].displayValue) {
+                    scope.questionnaire.survey.questions[scope.filter.id].answers[scope.part.id].displayValue *= scope.questionnaire.survey.questions[scope.filter.id].answers[scope.part.id].quality;
+                }
             };
 
             /**

@@ -40,16 +40,12 @@ class Answer extends AbstractModel
     private $valueText;
 
     /**
+     * Quality of the facilities.
+     *
      * @var float
-     * @ORM\Column(type="decimal", precision=3, scale=2, nullable=true)
+     * @ORM\Column(type="decimal", precision=3, scale=2, nullable=false, options={"default" = 1} )
      */
-    private $quality;
-
-    /**
-     * @var float
-     * @ORM\Column(type="decimal", precision=3, scale=2, nullable=true)
-     */
-    private $relevance;
+    private $quality = 1;
 
     /**
      * @var \Application\Model\Question\AbstractAnswerableQuestion
@@ -201,28 +197,7 @@ class Answer extends AbstractModel
      */
     public function getQuality()
     {
-        return $this->quality;
-    }
-
-    /**
-     * Set relevance (between 0.0 and 1.0)
-     * @param float $relevance
-     * @return self
-     */
-    public function setRelevance($relevance)
-    {
-        $this->relevance = $relevance;
-
-        return $this;
-    }
-
-    /**
-     * Get relevance (between 0.0 and 1.0)
-     * @return float
-     */
-    public function getRelevance()
-    {
-        return $this->relevance;
+        return (float) $this->quality;
     }
 
     /**

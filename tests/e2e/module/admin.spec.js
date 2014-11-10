@@ -8,7 +8,7 @@ describe('admin', function() {
 
     beforeEach(function() {
         browser.get('/admin');
-        gimsUtility.login(undefined, undefined, browser);
+        gimsUtility.login(browser);
     });
 
     it('should render admin', function() {

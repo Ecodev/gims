@@ -17,7 +17,9 @@ angular.module('myApp', [
     'angulartics',
     'angulartics.google.analytics',
     'ui.sortable',
-    'vs-repeat'
+    'vs-repeat',
+    'ui.slider',
+    'angularMoment'
 ]).
         config(function($routeProvider, $locationProvider, RestangularProvider, $httpProvider, requestNotificationProvider, datepickerPopupConfig) {
             'use strict';
@@ -38,7 +40,7 @@ angular.module('myApp', [
             $routeProvider.when('/admin/filter/edit/:id', {templateUrl: '/template/admin/filter/crud', controller: 'Admin/Filter/CrudCtrl'});
             $routeProvider.when('/admin/question/edit/:id', {templateUrl: '/template/admin/question/crud', controller: 'Admin/Question/CrudCtrl'});
             $routeProvider.when('/admin/question/new', {templateUrl: '/template/admin/question/crud', controller: 'Admin/Question/CrudCtrl'});
-            $routeProvider.when('/admin/questionnaire/edit/:id', {templateUrl: '/template/admin/questionnaire/crud', controller: 'Admin/Questionnaire/CrudCtrl'});
+            $routeProvider.when('/admin/questionnaire/edit/:id', {templateUrl: '/template/admin/questionnaire/crud', controller: 'Admin/Questionnaire/CrudCtrl', reloadOnSearch: false});
             $routeProvider.when('/admin/questionnaire/new', {templateUrl: '/template/admin/questionnaire/crud', controller: 'Admin/Questionnaire/CrudCtrl'});
             $routeProvider.when('/admin/survey', {templateUrl: '/template/admin/survey', controller: 'Admin/SurveyCtrl'});
             $routeProvider.when('/admin/survey/edit/:id', {templateUrl: '/template/admin/survey/crud', controller: 'Admin/Survey/CrudCtrl', reloadOnSearch: false});
@@ -52,8 +54,10 @@ angular.module('myApp', [
             $routeProvider.when('/browse/table/filter', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
             $routeProvider.when('/contribute/jmp', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
             $routeProvider.when('/contribute/nsa', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
-            $routeProvider.when('/contribute/glaas/', {templateUrl: '/template/contribute/glaas', controller: 'Contribute/GlaasCtrl'});
-            $routeProvider.when('/contribute/glaas/:id', {templateUrl: '/template/contribute/glaas', controller: 'Contribute/GlaasCtrl'});
+            $routeProvider.when('/contribute/glaas/', {templateUrl: '/template/contribute/index/glaas', controller: 'Contribute/GlaasCtrl'});
+            $routeProvider.when('/contribute/glaas/:id', {templateUrl: '/template/contribute/index/glaas', controller: 'Contribute/GlaasCtrl'});
+            $routeProvider.when('/contribute/request-roles', {templateUrl: '/template/contribute/request-roles/request-roles', controller: 'Contribute/RequestRolesCtrl', reloadOnSearch: false});
+            $routeProvider.when('/admin/roles-requests', {templateUrl: '/template/admin/roles-requests/roles-requests', controller: 'Admin/RolesRequestsCtrl'});
 
             $routeProvider.otherwise({redirectTo: '/home'});
 

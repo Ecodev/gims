@@ -12,7 +12,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
      */
     var data;
 
-    var questionnaireWithAnswersFields = {fields: 'status,permissions,comments,geoname,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part,filterQuestionnaireUsages.isSecondStep,filterQuestionnaireUsages.sorting'};
+    var questionnaireWithAnswersFields = {fields: 'status,permissions,comments,geoname,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.quality,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part,filterQuestionnaireUsages.isSecondStep,filterQuestionnaireUsages.sorting'};
     var questionnaireFields = {fields: 'survey.questions.type,survey.questions.filter'};
 
     var lastUnsavedFilterId = 1;
@@ -136,7 +136,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                     delete(answer.displayValue);
                     delete(answer.edit);
                     answer.isLoading = false;
-                    refresh(false, true);
+                    refresh(false, true, false);
                 });
             }
         });
@@ -239,6 +239,10 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             answer.part = part;
         }
 
+        if (!answer.quality) {
+            answer.quality = 1;
+        }
+
         return answer;
     }
 
@@ -336,6 +340,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                         if (answer.questionnaire && answer.questionnaire.id == questionnaire.id) {
                             answer.initialValue = question.isAbsolute ? answer.valueAbsolute : answer.valuePercent;
                             answer.displayValue = question.isAbsolute ? answer.valueAbsolute : Percent.fractionToPercent(answer.valuePercent);
+                            answer.displayValue *= answer.quality;
                             answers[answer.part.id] = answer;
                         }
                     });
@@ -1091,9 +1096,11 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                 answer.isLoading = false;
                 if (!_.isUndefined(savedAnswer.valuePercent)) {
                     answer.valuePercent = savedAnswer.valuePercent;
+                    answer.displayValue = answer.valuePercent * answer.quality;
                 }
                 if (!_.isUndefined(savedAnswer.valueAbsolute)) {
                     answer.valueAbsolute = savedAnswer.valueAbsolute;
+                    answer.displayValue = answer.valueAbsolute * answer.quality;
                 }
                 deferred.resolve();
                 refresh(false, true, false);
@@ -1207,6 +1214,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                 updateAnswer(answer, questionnaire).then(function() {
                     answer.initialValue = valueToBeSaved;
                     answer.displayValue = question.isAbsolute ? answer[question.value] : Percent.fractionToPercent(answer[question.value]);
+                    answer.displayValue *= answer.quality;
                     deferred.resolve(answer);
                 });
             });
@@ -1221,6 +1229,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                 createAnswer(answer, question, {part: part}).then(function() {
                     answer.initialValue = valueToBeSaved;
                     answer.displayValue = question.isAbsolute ? answer[question.value] : Percent.fractionToPercent(answer[question.value]);
+                    answer.displayValue *= answer.quality;
                     deferred.resolve(answer);
                     refresh(false, true, false);
                 });
@@ -1857,6 +1866,14 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         questionnairesSection.height(contentHeight);
     }
 
+    var manageScrollListener = function(element, callback) {
+        element.on('mouseenter', function() {
+            element.on('scroll', callback);
+        }).on('mouseleave', function() {
+            element.off('scroll', callback);
+        });
+    };
+
     function syncScroll() {
 
         manageScrollListener(filtersSection, function(e) {
@@ -1872,14 +1889,6 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             questionnairesSection.scrollLeft(e.target.scrollLeft);
         });
     }
-
-    var manageScrollListener = function(element, callback) {
-        element.on('mouseenter', function() {
-            element.on('scroll', callback);
-        }).on('mouseleave', function() {
-            element.off('scroll', callback);
-        });
-    };
 
     // Return public API
     return {
@@ -1914,6 +1923,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         updateUrl: updateUrl,
         adjustHeight: adjustHeight,
         syncScroll: syncScroll,
-        resizeContent: resizeContent
+        resizeContent: resizeContent,
+        updateAnswer: updateAnswer
     };
 });

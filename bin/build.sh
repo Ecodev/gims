@@ -2,6 +2,15 @@
 
 # This script build all assets for production environment
 
+# If the deploy user exists on the machine, prepare the prefix to sudo that user
+DEPLOY_USER="gimsinitiativeorg"
+getent passwd $DEPLOY_USER > /dev/null
+if [ $? -eq 0 ]; then
+    DEPLOY_USER_SUDO="sudo -H -u $DEPLOY_USER"
+else
+    DEPLOY_USER_SUDO=""
+fi
+
 # Exit script on any error
 set -e
 
@@ -33,13 +42,13 @@ echo "Updating git submodules..."
 git submodule update --init --recursive --force
 
 echo "Updating Node.js packages..."
-npm install
+$DEPLOY_USER_SUDO npm install
 
 echo "Updating Bower packages..."
 ./node_modules/.bin/bower install
 
 echo "Updating webdriver..."
-./node_modules/.bin/webdriver-manager update
+$DEPLOY_USER_SUDO ./node_modules/.bin/webdriver-manager update
 
 echo "Updating all PHP dependencies via composer..."
 ./composer.phar install --dev --optimize-autoloader

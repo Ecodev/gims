@@ -1,0 +1,64 @@
+<div class="container">
+
+    <!-- Toolbar -->
+    <div class="navbar navbar-default hidden-print">
+        <a class="navbar-brand" href="#">Roles requests</a>
+
+        <form class="navbar-form">
+            <?php echo $this->helpButton(); ?>
+        </form>
+    </div>
+
+    <?php echo $this->helpBox('On this page you\'ll be able to manage the roles requested on the mail you received.'); ?>
+
+
+    <h2>{{user.name}} ({{user.email}}) is asking for permissions :</h2>
+    <br/>
+    <div ng-repeat="(geonameId, geoname) in adminRelations">
+        <h3><i class="fa fa-globe"></i> {{geoname.name}}</h3>
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>Questionnaires</th>
+                    <th>
+                        Roles
+                        <div class="pull-right" style="margin-right:10px">Actions</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(questionnaireId, questionnaire) in geoname.questionnaires">
+                    <td>
+                        <strong><a href="/admin/questionnaire/edit/{{questionnaireId}}#3"><i class="fa fa-gims-questionnaire"></i> {{questionnaire.survey.code}}</a></strong>
+                        <br/>
+                        <a href="/admin/survey/edit/{{questionnaire.survey.id}}#3"><i class="fa fa-gims-survey"></i> view survey</a>
+                        <br/>
+                    </td>
+                    <td>
+                        <table class="table table-discret">
+                            <tr ng-repeat="(roleId, role) in questionnaire.roles">
+                                <td>{{role.name}}</td>
+                                <td class="text-right">
+                                    <button class="btn btn-success btn-sm" ng-if="!applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation" ng-click="createRelation(user.id, questionnaireId, roleId, geonameId)"><i class="fa fa-check"></i> Grant access</button>
+                                    <div ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation" class="text-success">
+                                        <i class="fa fa-check"></i>
+                                        Access granted
+                                        <span ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.modifier">
+                                            by {{applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.modifier.name}}
+                                            <span ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.modifier.email"> - ({{applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.modifier.email}})</span>
+                                        </span>
+
+                                        <a class="btn btn-default btn-sm" href="/admin/questionnaire/edit/{{questionnaireId}}#3" ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.type == 'user_questionnaire'"><i class="fa fa-gims-questionnaire"></i> See</a>
+                                        <a class="btn btn-default btn-sm" href="/admin/survey/edit/{{questionnaire.survey.id}}#3" ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.type == 'user_survey'"><i class="fa fa-gims-survey"></i> See</a>
+                                        <button class="btn btn-danger btn-sm" ng-click="revokeAccess(questionnaireId, roleId, geonameId)" ng-disabled="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.type == 'user_survey'"><i class="fa fa-trash"></i> Revoke access</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

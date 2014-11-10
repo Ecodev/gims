@@ -1,0 +1,77 @@
+<div class="modal-body">
+
+    <div class="row" ng-if="state == 'registered'">
+        <div class="col-md-12">
+            <h3 class="modal-header"><?php echo $this->translate('Email activation'); ?></h3>
+            <p>The account was created and an activation email was sent to <strong>{{registeredEmail}}</strong>. Activate your account by following the link in the email.</p>
+        </div>
+    </div>
+
+    <div class="row" ng-if="state == 'activating'">
+        <div class="col-md-12">
+            <h3 class="modal-header"><?php echo $this->translate('Activating...'); ?></h3>
+            <p>The account is being activated... <i class="fa fa-gims-loading"></i></p>
+        </div>
+    </div>
+    <div class="row" ng-if="state == 'activated'">
+        <div class="col-md-12">
+            <h3 class="modal-header"><?php echo $this->translate('Activated'); ?></h3>
+            <p>The account was successfully activated. You can now sign in with the password you chose.</p>
+        </div>
+    </div>
+    <div class="row" ng-if="state != 'registered' && state != 'activating'">
+        <div ng-class="{'col-md-12': state == 'activated'}" class="col-md-6">
+            <h3 class="modal-header"><?php echo $this->translate('Sign in'); ?></h3>
+            <form class="modal-form" name="loginForm" ng-submit="sendLogin()">
+                <div class="alert alert-danger" ng-show="invalidUsernamePassword">
+                    <span><?php echo $this->translate('Invalid username or password'); ?></span>
+                </div>
+                <div class="form-group" ng-class="{'has-error': loginForm.identity.$dirty && loginForm.identity.$invalid}">
+                    <label class="control-label" for="login-email"><?php echo $this->translate('Email'); ?></label>
+                    <input gims-focus type="email" name="identity" id="login-email" ng-model="login.identity" ng-blur="toLowerCase()" />
+                    <span ng-show="loginForm.identity.$error.email" class="help-block"><?php echo $this->translate('Enter a valid email address'); ?></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="login-password"><?php echo $this->translate('Password'); ?></label>
+                    <input type="password" name="credential" id="login-password" ng-model="login.credential" />
+                </div>
+
+                <button type="submit" name="submit" class="btn btn-primary" value=""> <i ng-show="state == 'signing'" class="fa fa-gims-loading"></i> <?php echo $this->translate('Sign In'); ?></button>
+
+                <input type="hidden" name="redirect" value="{{redirect}}">
+
+            </form>
+        </div>
+        <div class="col-md-6" ng-if="state != 'activated'">
+            <h3 class="modal-header"><?php echo $this->translate('Register'); ?></h3>
+            <form class="modal-form" name="registerForm" ng-submit="sendRegister()">
+                <div class="form-group" ng-class="{'has-error': userExisting || (registerForm.email.$dirty && registerForm.email.$error.email)}">
+                    <label class="control-label" for="register-email"><?php echo $this->translate('Email'); ?></label>
+                    <input type="email" name="email" id="register-email" required ng-model="register.email" ng-blur="toLowerCase()">
+                    <span ng-show="registerForm.email.$error.email" class="help-block"><?php echo $this->translate('Enter a valid email address'); ?></span>
+                    <span ng-show="userExisting" class="help-block"><?php echo $this->translate('There is already an account with this email address'); ?></span>
+                </div>
+                <div class="form-group" ng-class="{'has-error': registerForm.display_name.$dirty && registerForm.display_name.$invalid}">
+                    <label class="control-label" for="register-name"><?php echo $this->translate('Display name'); ?></label>
+                    <input id="register-name" type="text" name="display_name" ng-model="register.name" required ng-minlength="3"/>
+                    <span ng-show="registerForm.display_name.$error.minlength" class="help-block"><?php echo sprintf($this->translate("Minimum %u characters"), 3); ?></span>
+                </div>
+                <div class="form-group" ng-class="{'has-error': registerForm.password.$dirty && registerForm.password.$invalid}">
+                    <label class="control-label" for="register-password"><?php echo $this->translate('Password'); ?></label>
+                    <input type="password" name="password" id="register-password" placeholder="password" ng-model="register.password" required ng-minlength="6"/>
+                    <span ng-show="registerForm.password.$error.minlength" class="help-block"><?php echo sprintf($this->translate("Minimum %u characters"), 6); ?></span>
+                </div>
+                <div class="form-group" ng-class="{'has-error': registerForm.passwordVerify.$dirty && registerForm.passwordVerify.$invalid}">
+                    <input type="password" name="passwordVerify" id="register-password-verify" placeholder="confirm password" required ui-validate=" '$value==register.password' " ui-validate-watch=" 'register.passwordVerify' " ng-model="register.passwordVerify">
+                    <span ng-show="registerForm.passwordVerify.$error.validator" class="help-block"><?php echo $this->translate("Passwords do not match!"); ?></span>
+                </div>
+                <button type="submit" name="submit" class="btn btn-primary" value=""><i ng-show="state == 'registering'" class="fa fa-gims-loading"></i> <?php echo $this->translate('Register') ?></button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <a class="btn btn-default cancel" ng-click="cancelLogin()" ng-if="state != 'registered'"><?php echo $this->translate('Cancel'); ?></a>
+    <a class="btn btn-default cancel" ng-click="cancelLogin()" ng-if="state == 'registered'"><?php echo $this->translate('Close'); ?></a>
+</div>

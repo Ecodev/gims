@@ -31,6 +31,7 @@ input.error {
 @import "icons";
 @import "table-filter";
 @import "cell-menu";
+@import "jquery-ui.scss";
 
 // Force vertical scrollbar
 html {
@@ -383,4 +384,14 @@ input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+.table .table-discret{
+
+    margin-bottom:0;
+
+    td{
+        padding:5px;
+        border:none;
+    }
 }

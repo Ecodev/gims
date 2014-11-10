@@ -102,8 +102,7 @@ $settings = array(
      *
      * Accepted values: boolean true or false
      */
-    //'login_after_registration' => true,
-
+    'login_after_registration' => false,
     /**
      * Registration Form Captcha
      *
@@ -164,60 +163,49 @@ $settings = array(
      * Accepted values: A valid route name within your application
      */
     'logout_redirect_route' => 'home',
-        /**
-         * Password Security
-         *
-         * DO NOT CHANGE THE PASSWORD HASH SETTINGS FROM THEIR DEFAULTS
-         * Unless A) you have done sufficient research and fully understand exactly
-         * what you are changing, AND B) you have a very specific reason to deviate
-         * from the default settings and know what you're doing.
-         *
-         * The password hash settings may be changed at any time without
-         * invalidating existing user accounts. Existing user passwords will be
-         * re-hashed automatically on their next successful login.
-         */
-        /**
-         * Password Cost
-         *
-         * The number represents the base-2 logarithm of the iteration count used for
-         * hashing. Default is 14 (about 10 hashes per second on an i5).
-         *
-         * Accepted values: integer between 4 and 31
-         */
-        //'password_cost' => 14,
+    /**
+     * Password Security
+     *
+     * DO NOT CHANGE THE PASSWORD HASH SETTINGS FROM THEIR DEFAULTS
+     * Unless A) you have done sufficient research and fully understand exactly
+     * what you are changing, AND B) you have a very specific reason to deviate
+     * from the default settings and know what you're doing.
+     *
+     * The password hash settings may be changed at any time without
+     * invalidating existing user accounts. Existing user passwords will be
+     * re-hashed automatically on their next successful login.
+     */
+    /**
+     * Password Cost
+     *
+     * The number represents the base-2 logarithm of the iteration count used for
+     * hashing. Default is 14 (about 10 hashes per second on an i5).
+     *
+     * Accepted values: integer between 4 and 31
+     */
+    //'password_cost' => 14,
 
-        /**
-         * Enable user state usage
-         *
-         * Should user's state be used in the registration/login process?
-         */
-        //'enable_user_state' => true,
-
-        /**
-         * Default user state upon registration
-         *
-         * What state user should have upon registration?
-         * Allowed value type: integer
-         */
-        //'default_user_state' => 1,
-
-        /**
-         * States which are allowing user to login
-         *
-         * When user tries to login, is his/her state one of the following?
-         * Include null if you want user's with no state to login as well.
-         * Allowed value types: null and integer
-         */
-        //'allowed_login_states' => array( null, 1 ),
-
-        /**
-         * User table name
-         */
-        //'table_name' => 'user',
-
-        /**
-         * End of ZfcUser configuration
-         */
+    /**
+     * Enable user state usage
+     *
+     * Should user's state be used in the registration/login process?
+     */
+    'enable_user_state' => true,
+    /**
+     * Default user state upon registration
+     *
+     * What state user should have upon registration?
+     * Allowed value type: integer
+     */
+    'default_user_state' => 0,
+    /**
+     * States which are allowing user to login
+     *
+     * When user tries to login, is his/her state one of the following?
+     * Include null if you want user's with no state to login as well.
+     * Allowed value types: null and integer
+     */
+    'allowed_login_states' => array(1),
 );
 
 /**

@@ -160,7 +160,7 @@ class IndexControllerTest extends AbstractController
             array(
                 'contribute',
                 'index',
-                '/template/contribute/glaas',
+                '/template/contribute/index/glaas',
                 'template_contribute/default'
             ),
         );
@@ -193,7 +193,7 @@ class IndexControllerTest extends AbstractController
         // Template URL for Contribute module
         $this->assertEquals('/template/contribute', $router->assemble(array(), array('name' => 'template_contribute')), 'should return template URL');
         $this->assertEquals('/template/contribute/', $router->assemble(array(), array('name' => 'template_contribute/default')), 'should return template URL');
-        $this->assertEquals('/template/contribute/about', $router->assemble(array(
+        $this->assertEquals('/template/contribute/index/about', $router->assemble(array(
                     'controller' => 'index',
                     'action' => 'about'
                 ), array('name' => 'template_contribute/default')), 'should return template URL to specified controller/action');

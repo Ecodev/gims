@@ -1,0 +1,73 @@
+<div class="container">
+
+    <!-- Toolbar -->
+    <div class="navbar navbar-default hidden-print">
+        <a class="navbar-brand" href="#">Request roles</a>
+
+        <form class="navbar-form">
+            <?php echo $this->helpButton(); ?>
+        </form>
+    </div>
+
+    <?php echo $this->helpBox('On this page, you can ask for the permissions you need.'); ?>
+
+
+    <form name="myForm" class="form-horizontal">
+
+        <div class="form-group" ng-class="{'has-error':!geonames.length}">
+            <label class="control-label col-sm-3">Select countries</label>
+            <div class="col-sm-7">
+                <gims-select
+                    model="geonames"
+                    name="geonames"
+                    api="geoname"
+                    placeholder="Select geonames"
+                    multiple
+                    style="width: 100%">
+                </gims-select>
+            </div>
+            <div class="col-sm-2">
+                <span ng-if="!geonames.length" class="help-block">Required</span>
+            </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error':!roles.length}">
+            <label class="control-label col-sm-3">Select roles</label>
+            <div class="col-sm-7">
+                <gims-select
+                    model="roles"
+                    name="roles"
+                    api="role"
+                    placeholder="Select roles"
+                    multiple
+                    required
+                    style="width: 100%">
+                </gims-select>
+
+            </div>
+            <div class="col-sm-2">
+                <span ng-if="!roles.length" class="help-block">Required</span>
+            </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error':!types.length}">
+            <label class="control-label col-sm-3">Select survey type</label>
+            <div class="col-sm-7">
+                <select ui-select2 ng-model="types" data-placeholder="Select survey types" multiple required style="width: 100%">
+                    <option ng-repeat="surveyType in surveyTypesList" value="{{surveyType.value}}">{{surveyType.display}}</option>
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <span ng-if="!types.length" class="help-block">Required</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-3">&nbsp;</label>
+            <div class="col-sm-7">
+                <button class="btn btn-success" ng-click="sendRequest()" ng-disabled="myForm.$invalid"><i class="fa fa-check-square-o"></i> Send roles request</button>
+            </div>
+        </div>
+    </form>
+
+</div>

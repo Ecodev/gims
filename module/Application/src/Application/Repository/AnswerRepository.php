@@ -30,6 +30,7 @@ class AnswerRepository extends AbstractChildRepository
             $rsm->addScalarResult('questionnaire_id', 'questionnaire_id');
             $rsm->addScalarResult('valuepercent', 'valuePercent');
             $rsm->addScalarResult('valueabsolute', 'valueAbsolute');
+            $rsm->addScalarResult('quality', 'quality');
             $rsm->addScalarResult('part_id', 'part_id');
             $rsm->addScalarResult('filter_id', 'filter_id');
             $rsm->addScalarResult('questionname', 'questionName');
@@ -40,6 +41,7 @@ class AnswerRepository extends AbstractChildRepository
                     q.id AS questionnaire_id,
                     a.value_percent as valuePercent,
                     a.value_absolute as valueAbsolute,
+                    a.quality as quality,
                     p.id AS part_id,
                     f.id AS filter_id,
                     qu.name AS questionName,
@@ -63,6 +65,7 @@ class AnswerRepository extends AbstractChildRepository
                 $valuePercent = is_null($data['valuePercent']) ? null : (float) $data['valuePercent'];
                 $valueAbsolute = is_null($data['valueAbsolute']) ? null : (float) $data['valueAbsolute'];
                 $value = $data['questionIsAbsolute'] === false ? $valuePercent : $valueAbsolute;
+                $value *= $data['quality'];
 
                 $answerData = array(
                     'value' => $value,
