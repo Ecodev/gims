@@ -41,15 +41,16 @@ class Answer extends AbstractModel
 
     /**
      * Quality of the facilities.
-     *
      * @var float
-     * @ORM\Column(type="decimal", precision=3, scale=2, nullable=false, options={"default" = 1} )
+     * @ORM\Column(type="decimal", precision=3, scale=2, nullable=false,
+     *     options={"default" = 1} )
      */
     private $quality = 1;
 
     /**
      * @var \Application\Model\Question\AbstractAnswerableQuestion
-     * @ORM\ManyToOne(targetEntity="Application\Model\Question\AbstractAnswerableQuestion", inversedBy="answers", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Application\Model\Question\AbstractAnswerableQuestion", inversedBy="answers",
+     *     fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * })
@@ -301,16 +302,22 @@ class Answer extends AbstractModel
     }
 
     /**
-     * Automatically called by Doctrine when the object is modified whatsoever to invalid computing cache
+     * Automatically called by Doctrine when the object is modified whatsoever
+     * to invalid computing cache
      * @ORM\PostPersist
      * @ORM\PreUpdate
      * @ORM\PreRemove
      */
     public function invalidateCache()
     {
-        $key = 'F#' . $this->getQuestion()->getFilter()->getId() . ',Q#' . $this->getQuestionnaire()->getId() . ',P#' . $this->getPart()->getId();
-        $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
-        $cache->removeItem($key);
+        if ($this->getQuestion()->getFilter()) {
+            $key = 'F#' . $this->getQuestion()->getFilter()->getId();
+            $key .= ',Q#' . $this->getQuestionnaire()->getId();
+            $key .= ',P#' . $this->getPart()->getId();
+            $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
+            $cache->removeItem($key);
+        }
+
     }
 
 }
