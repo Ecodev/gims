@@ -16,9 +16,9 @@ PHPExcel_Calculation::getInstance()->cyclicFormulaCount = 100;
 function doAllCountries(array $countries)
 {
     foreach ($countries as $country) {
-        $filename = $country['path'];
+        $path = $country['path'];
 
-        if (!$filename) {
+        if (!$path || $path == 'region') {
             "SKIP: mising file for " . $country['name'] . PHP_EOL;
             continue;
         }
@@ -110,11 +110,11 @@ function doOneCountryCountry(array $country, \PHPExcel $wb)
 {
     $defs = array(
         'Water' => array(
-            'rows' => range(6, 38),
+            'rows' => range(6, 41),
             'cols' => range(0, 15),
         ),
         'Sanitation' => array(
-            'rows' => range(6, 38),
+            'rows' => range(6, 41),
             'cols' => array_merge(array(0), range(16, 30)),
         ),
     );

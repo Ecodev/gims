@@ -28,7 +28,7 @@ function export(array $countries, array $onlyThose = array())
             continue;
         }
 
-        if (!$path) {
+        if (!$path || $path == 'region') {
             continue;
         }
 
@@ -37,8 +37,8 @@ function export(array $countries, array $onlyThose = array())
 //        echo `wget -O "actual/questionnaire/$name - Water.csv"      "http://$hostname.lan/api/table/questionnaire/foo.csv?country=$id&filterSet=2"`;
 //        echo `wget -O "actual/questionnaire/$name - Sanitation.csv" "http://$hostname.lan/api/table/questionnaire/foo.csv?country=$id&filterSet=5"`;
 
-        echo `wget -O "actual/country/$name - Water.csv"      "http://$hostname.lan/api/table/country/foo.csv?filters=75,77,79,78,76&geonames=$id&years=1980-2012"`;
-        echo `wget -O "actual/country/$name - Sanitation.csv" "http://$hostname.lan/api/table/country/foo.csv?filters=166,167,171,170,169,168&geonames=$id&years=1980-2012"`;
+        echo `wget -O "actual/country/$name - Water.csv"      "http://$hostname.lan/api/table/country/foo.csv?filters=261,263,265,264,262&geonames=$id&years=1980-2015"`;
+        echo `wget -O "actual/country/$name - Sanitation.csv" "http://$hostname.lan/api/table/country/foo.csv?filters=352,353,357,356,355,354&geonames=$id&years=1980-2015"`;
     }
 }
 
