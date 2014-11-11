@@ -208,12 +208,15 @@ class Calculator extends AbstractCalculator
         foreach ($this->getYears() as $year) {
             $regression = $this->computeRegressionOneYear($year, $filterId, $questionnaires, $partId);
             $allRegressions[$year] = $regression;
-            if (is_null($min) || $regression < $min) {
-                $min = $regression;
-            }
 
-            if (is_null($max) || $regression > $max) {
-                $max = $regression;
+            if (!is_null($regression)) {
+                if (is_null($min) || $regression < $min) {
+                    $min = $regression;
+                }
+
+                if (is_null($max) || $regression > $max) {
+                    $max = $regression;
+                }
             }
         }
 
