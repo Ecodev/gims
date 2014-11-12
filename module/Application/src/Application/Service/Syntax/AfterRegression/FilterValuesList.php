@@ -9,7 +9,7 @@ use Application\Service\Syntax\Parser;
 /**
  * Replace {F#12,Q#all} with a list of Filter values for all questionnaires
  */
-class FilterValuesList extends AbstractToken
+class FilterValuesList extends AbstractToken implements \Application\Service\Syntax\BothContextInterface
 {
 
     public function getPattern()

@@ -44,12 +44,6 @@ class RuleTest extends \ApplicationTest\Controller\AbstractController
         $this->assertFalse($validator->isValid($rule), 'Cannot used both kind of tokens');
         $this->assertArrayHasKey(Rule::MIXED_TOKENS, $validator->getMessages());
 
-        $rule->setFormula('={F#12,Q#34,P#56} + {self}');
-        $this->assertTrue($validator->isValid($rule), 'Self syntax can be used with before regression tokens');
-
-        $rule->setFormula('={self} + {Y}');
-        $this->assertTrue($validator->isValid($rule), 'Self syntax can be used with after regression tokens');
-
         $rule1 = new \Application\Model\Rule\Rule('tst rule');
         $usage1 = new \Application\Model\Rule\FilterGeonameUsage();
         $usage1->setRule($rule1);
@@ -70,6 +64,33 @@ class RuleTest extends \ApplicationTest\Controller\AbstractController
         $rule3->setFormula('={Y}');
         $this->assertFalse($validator->isValid($rule3), 'Regression token cannot be used if Rule is used in non-regression context');
         $this->assertArrayHasKey(Rule::AFTER_WITH_BEFORE_REGRESSION, $validator->getMessages());
+
+        $rule4 = new \Application\Model\Rule\Rule('tst rule');
+        $usage4 = new \Application\Model\Rule\QuestionnaireUsage();
+        $usage4->setRule($rule4);
+        $rule4->setFormula('=COUNT({F#358,Q#all})');
+        $this->assertTrue($validator->isValid($rule4), 'Regression token cannot be used if Rule is used in non-regression context');
+
+        $bothContextSyntax = [
+            '{self}',
+            '{F#358,Q#all}',
+            '{F#12,P#34,Y+0}',
+        ];
+        foreach ($bothContextSyntax as $s) {
+            $rule = new \Application\Model\Rule\Rule('tst rule');
+            $rule->setFormula('={F#12,Q#34,P#56} + ' . $s);
+            $this->assertTrue($validator->isValid($rule), $s . ' syntax must be usable with before regression tokens');
+            $usage = new \Application\Model\Rule\QuestionnaireUsage();
+            $usage->setRule($rule);
+            $this->assertTrue($validator->isValid($rule), $s . ' syntax must be usable when rule is actually used before regression');
+
+            $rule = new \Application\Model\Rule\Rule('tst rule');
+            $rule->setFormula('={Y} + ' . $s);
+            $this->assertTrue($validator->isValid($rule), $s . ' syntax must be usable with after regression tokens');
+            $usage = new \Application\Model\Rule\FilterGeonameUsage();
+            $usage->setRule($rule);
+            $this->assertTrue($validator->isValid($rule), $s . ' syntax must be usable when rule is actually used after regression');
+        }
     }
 
 }

@@ -9,7 +9,7 @@ use Application\Service\Syntax\Parser;
 /**
  * Replace {F#12,P#34,Y+0} with Filter regression value
  */
-class FilterValue extends AbstractToken
+class FilterValue extends AbstractToken implements \Application\Service\Syntax\BothContextInterface
 {
 
     public function getPattern()

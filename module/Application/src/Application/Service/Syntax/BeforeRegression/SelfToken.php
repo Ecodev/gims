@@ -10,7 +10,7 @@ use Application\Service\Syntax\Parser;
 /**
  * Replace {self} with computed value without this formula
  */
-class SelfToken extends AbstractToken
+class SelfToken extends AbstractToken implements \Application\Service\Syntax\BothContextInterface
 {
 
     public function getPattern()
