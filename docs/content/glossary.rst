@@ -3,6 +3,10 @@ Glossary
 
 .. glossary::
 
+    discussion
+        A discussion is a list of comments made by different users, to share
+        opinions. See :doc:`detailed description <discussion>`.
+
     editor
         Person given the access rights to create and edit a survey,
         questionnaire, filter, etc.

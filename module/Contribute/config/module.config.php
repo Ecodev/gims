@@ -4,7 +4,8 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Contribute\Controller\Index' => 'Contribute\Controller\IndexController',
-            'Contribute\Controller\RequestRoles' => 'Contribute\Controller\RequestRolesController'
+            'Contribute\Controller\RequestRoles' => 'Contribute\Controller\RequestRolesController',
+            'Contribute\Controller\Discussion' => 'Contribute\Controller\DiscussionController',
         ),
     ),
     'view_manager' => array(

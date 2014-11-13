@@ -23,6 +23,7 @@ Contents:
     content/filter_set
     content/filter
     content/rule
+    content/discussion
     content/computing
     content/rest
     content/glossary

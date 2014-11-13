@@ -2,6 +2,8 @@
 
 namespace Application\Repository;
 
+use Doctrine\ORM\Query\Expr\Join;
+
 class DiscussionRepository extends AbstractRepository
 {
 
@@ -12,26 +14,31 @@ class DiscussionRepository extends AbstractRepository
      * @param array $filters
      * @return \Application\Model\Discussion[]
      */
-    public function getAllByParent(array $surveys, array $questionnaires, array $filters)
+    public function getAllByParent(array $surveys, array $questionnaires, array $filters, $search)
     {
-        $qb = $this->createQueryBuilder('comment');
+        $qb = $this->createQueryBuilder('discussion');
+        $qb->leftJoin('discussion.survey', 'survey', Join::WITH);
+        $qb->leftJoin('discussion.questionnaire', 'questionnaire', Join::WITH);
+        $qb->leftJoin('questionnaire.geoname', 'geoname', Join::WITH);
+        $qb->leftJoin('questionnaire.survey', 'survey2', Join::WITH);
+        $qb->leftJoin('discussion.filter', 'filter', Join::WITH);
         $or = $qb->expr()->orX();
 
         // retrieve discussion associated to surveys
         if ($surveys) {
-            $or->add('comment.survey IN (:surveys)');
+            $or->add('discussion.survey IN (:surveys)');
             $qb->setParameter('surveys', $surveys);
         }
 
         // retrieve discussion associated to questionnaires
         if ($questionnaires) {
-            $or->add('comment.questionnaire IN (:questionnaires) AND comment.filter IS NULL');
+            $or->add('discussion.questionnaire IN (:questionnaires) AND discussion.filter IS NULL');
             $qb->setParameter('questionnaires', $questionnaires);
         }
 
         // retrieve discussion associated to filters
         if ($filters) {
-            $or->add('comment.questionnaire IN (:questionnaires) AND comment.filter IN (:filters)');
+            $or->add('discussion.questionnaire IN (:questionnaires) AND discussion.filter IN (:filters)');
             $qb->setParameter('questionnaires', $questionnaires);
             $qb->setParameter('filters', $filters);
         }
@@ -40,10 +47,12 @@ class DiscussionRepository extends AbstractRepository
             $qb->where($or);
         }
 
-        $qb->addOrderBy('comment.survey', 'ASC');
-        $qb->addOrderBy('comment.questionnaire', 'ASC');
-        $qb->addOrderBy('comment.filter', 'ASC');
-        $qb->addOrderBy('comment.dateCreated', 'ASC');
+        $this->addSearch($qb, $search, array('survey.code', 'survey2.code', 'geoname.name', 'filter.name'));
+
+        $qb->addOrderBy('discussion.survey', 'ASC');
+        $qb->addOrderBy('discussion.questionnaire', 'ASC');
+        $qb->addOrderBy('discussion.filter', 'ASC');
+        $qb->addOrderBy('discussion.dateCreated', 'ASC');
 
         return $qb->getQuery()->getResult();
     }

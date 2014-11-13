@@ -164,4 +164,13 @@ class Discussion extends AbstractModel
         }
     }
 
+    /**
+     * Returns the last comment if any
+     * @return \Application\Model\Comment|null
+     */
+    public function getLastComment()
+    {
+        return $this->getComments()->last();
+    }
+
 }
