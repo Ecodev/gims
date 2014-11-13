@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <div class="panel panel-default ng-trans ng-trans-fade-up" ng-repeat="comment in discussion.comments track by comment.id">
+        <div class="panel panel-default ng-trans ng-trans-fade-up" ng-repeat="comment in discussion.comments track by comment.id" id="comment-{{comment.id}}">
             <div class="panel-heading"><img ng-src="{{comment.creator.gravatar}}&s=18" /> {{comment.creator.name}} <small class="text-muted" am-time-ago="comment.dateCreated" tooltip="{{comment.dateCreated| amDateFormat:'YYYY-MM-DD HH:mm:ss'}}"></small></div>
             <div class="panel-body" style="white-space: pre-line;">{{comment.description}}</div>
         </div>

@@ -1,7 +1,7 @@
 /**
  * Controller for user editing within a modal
  */
-angular.module('myApp').controller('DiscussionModalCtrl', function($scope, $modalInstance, $q, discussion, Restangular) {
+angular.module('myApp').controller('DiscussionModalCtrl', function($scope, $modalInstance, $q, $anchorScroll, $location, $timeout, discussion, Restangular) {
     'use strict';
     var discussionFields = 'name,comments.metadata,comments.creator.gravatar';
     $scope.discussion = discussion;
@@ -13,9 +13,12 @@ angular.module('myApp').controller('DiscussionModalCtrl', function($scope, $moda
 
         // If the discussion exists a direct load is easy
         if ($scope.discussion.id) {
-            Restangular.one('discussion', $scope.discussion.id).get({fields: discussionFields}).then(function(loadedDiscussion) {
+            var loadById = Restangular.one('discussion', $scope.discussion.id).get({fields: discussionFields});
+            loadById.then(function(loadedDiscussion) {
                 $scope.discussion = loadedDiscussion;
             });
+
+            return loadById;
         } else {
 
             var surveyId = $scope.discussion.survey || null;
@@ -29,7 +32,8 @@ angular.module('myApp').controller('DiscussionModalCtrl', function($scope, $moda
             };
 
             // Make a fuzzy search on server, we may not get anything back
-            Restangular.all('discussion').getList(params).then(function(discussions) {
+            var fuzzyLoad = Restangular.all('discussion').getList(params);
+            fuzzyLoad.then(function(discussions) {
 
                 // We may find several fuzzy matches from server, we need the exact match
                 _.forEach(discussions, function(discussion) {
@@ -41,10 +45,18 @@ angular.module('myApp').controller('DiscussionModalCtrl', function($scope, $moda
                     }
                 });
             });
+
+            return fuzzyLoad;
         }
     };
 
-    $scope.loadDiscussion();
+    $scope.loadDiscussion().then(function() {
+
+        // Scroll to current comment if any
+        $timeout(function() {
+            $anchorScroll();
+        }, 0);
+    });
 
     $scope.comment = {};
     $scope.postComment = function() {

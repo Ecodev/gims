@@ -7,9 +7,10 @@ use Zend\Mail\Transport\Smtp as SmtpTransport;
 use Zend\Mail\Transport\SmtpOptions;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Application\Model\Questionnaire;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Part as MimePart;
+use Application\Model\Questionnaire;
+use Application\Model\User;
 use Application\Utility;
 
 class EmailController extends AbstractActionController
@@ -44,7 +45,7 @@ class EmailController extends AbstractActionController
 
         $users = $this->getUsersByRole($questionnaire, 'Survey editor');
 
-        $subject = 'GIMS - Questionnaire opened : ' . $questionnaire->getName();
+        $subject = 'Questionnaire opened : ' . $questionnaire->getName();
         $mailParams = array(
             'questionnaire' => $questionnaire,
         );
@@ -63,7 +64,7 @@ class EmailController extends AbstractActionController
         //$users = array($questionnaire->getCreator()); // swap with next line to change between selecting the questionnaire creator and the users that have editor role
         $users = $this->getUsersByRole($questionnaire, 'Survey editor');
 
-        $subject = 'GIMS - Questionnaire validated: ' . $questionnaire->getName();
+        $subject = 'Questionnaire validated: ' . $questionnaire->getName();
         $mailParams = array(
             'questionnaire' => $questionnaire,
         );
@@ -87,7 +88,7 @@ class EmailController extends AbstractActionController
         // $userRepository = $this->getEntityManager()->getRepository('Application\Model\User');
         // $users = $userRepository->getAllHavingPermission($questionnaire, \Application\Model\Permission::getPermissionName($questionnaire, 'validate'));
 
-        $subject = 'GIMS - Questionnaire completed : ' . $questionnaire->getName();
+        $subject = 'Questionnaire completed : ' . $questionnaire->getName();
         $mailParams = array(
             'questionnaire' => $questionnaire,
         );
@@ -106,10 +107,30 @@ class EmailController extends AbstractActionController
         $emailLinkQueryString = $this->getRequest()->getParam('emailLinkQueryString');
         $applicantUser = $this->getEntityManager()->getRepository('Application\Model\User')->findOneById($this->getRequest()->getParam('applicantUserId'));
 
-        $subject = 'GIMS - Role request';
+        $subject = 'Role request';
         $mailParams = array(
             'applicantUser' => $applicantUser,
             'emailLinkQueryString' => $emailLinkQueryString,
+        );
+
+        $this->sendMail($users, $subject, new ViewModel($mailParams));
+    }
+
+    /**
+     * Notify new comment on discussion
+     */
+    public function notifyCommentAction()
+    {
+        $commentId = $this->getRequest()->getParam('id');
+        $repository = $this->getEntityManager()->getRepository('Application\Model\Comment');
+        $comment = $repository->findOneById($commentId);
+        $discussion = $comment->getDiscussion();
+        $users = $this->getEntityManager()->getRepository('Application\Model\User')->getAllForCommentNotification($comment);
+
+        $subject = 'Discussion - ' . $discussion->getName();
+        $mailParams = array(
+            'comment' => $comment,
+            'discussion' => $discussion,
         );
 
         $this->sendMail($users, $subject, new ViewModel($mailParams));
@@ -129,7 +150,7 @@ class EmailController extends AbstractActionController
         $user->generateActivationToken();
         $this->getEntityManager()->flush();
 
-        $subject = 'GIMS - Account activation';
+        $subject = 'Account activation';
         $mailParams = array(
             'token' => $user->getActivationToken(),
         );
@@ -137,6 +158,13 @@ class EmailController extends AbstractActionController
         $this->sendMail($user, $subject, new ViewModel($mailParams));
     }
 
+    /**
+     * Send a email to one or several users
+     * @staticvar int $emailCount
+     * @param User|User[] $users
+     * @param string $subject
+     * @param ViewModel $model
+     */
     private function sendMail($users, $subject, ViewModel $model)
     {
         static $emailCount = 0;
@@ -179,7 +207,7 @@ class EmailController extends AbstractActionController
             $mail = new Mail\Message();
             $mail->setSubject($subject);
             $mail->setBody($body);
-            $mail->setFrom('webmaster@gimsinitiative.org', 'Gims project');
+            $mail->setFrom('webmaster@gimsinitiative.org', 'GIMS');
 
             $email = $user->getEmail();
             $overridenBy = "";

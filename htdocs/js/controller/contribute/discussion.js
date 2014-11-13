@@ -8,6 +8,8 @@ angular.module('myApp').controller('Contribute/DiscussionCtrl', function($scope,
     if ($routeParams.id) {
         DiscussionModal.open({id: $routeParams.id}).finally(function() {
             $location.path('/contribute/discussion');
+            $location.hash(null);
+
         });
     }
 

@@ -1,0 +1,5 @@
+<p>In the discussion "<?php echo $this->escapeHtml($this->discussion->getName()) ?>", <?php echo$this->escapeHtml($this->comment->getCreator()->getName()); ?> wrote :</p>
+
+<pre style="border: 1px solid lightgray; padding: 1em;"><?php echo $this->escapeHtml($this->comment->getDescription()); ?></pre>
+
+<small><a href="http://<?php echo $this->domain ?>/contribute/discussion/edit/<?php echo $this->discussion->getId() ?>#comment-<?php echo $this->comment->getId(); ?>">See full discussion and reply here</a></small>

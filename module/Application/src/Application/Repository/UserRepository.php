@@ -3,7 +3,6 @@
 namespace Application\Repository;
 
 use Application\Model\User;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
 
 class UserRepository extends AbstractRepository
@@ -30,7 +29,7 @@ class UserRepository extends AbstractRepository
         }
 
         $questionnaireRepository = $this->getEntityManager()
-                                        ->getRepository('Application\Model\Questionnaire');
+                ->getRepository('Application\Model\Questionnaire');
         $questionnaires = $questionnaireRepository->getAllWithPermission();
 
         $sql = "SELECT " . join(', ', $counts) . " FROM questionnaire WHERE id IN (:questionnaires)";
@@ -197,6 +196,51 @@ class UserRepository extends AbstractRepository
         $result = $query->getResult();
 
         return $result;
+    }
+
+    /**
+     * Returns all users that need to be notified for the given comment
+     * @param \Application\Model\Comment $comment
+     * @return \Application\Model\User[]
+     */
+    public function getAllForCommentNotification(\Application\Model\Comment $comment)
+    {
+
+        $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
+        $rsm->addScalarResult('creator_id', 'creator_id');
+        $query = $this->getEntityManager()->createNativeQuery('
+-- First get all users involved in the discussion
+SELECT creator_id FROM comment WHERE discussion_id = :discussion
+
+UNION
+
+-- Get everyone with access on the survey
+SELECT user_id FROM user_survey
+INNER JOIN discussion ON (user_survey.survey_id = discussion.survey_id)
+WHERE discussion.id = :discussion
+
+UNION
+
+-- Get everyone with access on the questionnaire
+SELECT user_id FROM user_questionnaire
+INNER JOIN discussion ON (user_questionnaire.questionnaire_id = discussion.questionnaire_id)
+WHERE discussion.id = :discussion
+', $rsm);
+        $query->setParameter('discussion', $comment->getDiscussion());
+        $result = $query->getResult();
+        $userIds = array_column($result, 'creator_id');
+
+        // We load all users, except for the user who created the comment,
+        // because he does not need to be notified about he did himself
+        $qb = $this->createQueryBuilder('user')
+                ->where('user IN (:users) AND user != :creator')
+                ->setParameter('users', $userIds)
+                ->setParameter('creator', $comment->getCreator())
+        ;
+
+        $users = $qb->getQuery()->getResult();
+
+        return $users;
     }
 
 }
