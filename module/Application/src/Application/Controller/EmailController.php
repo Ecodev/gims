@@ -189,6 +189,7 @@ class EmailController extends AbstractActionController
             // Then inject it into layout
             $modelLayout = new ViewModel(array($model->captureTo() => $partialContent));
             $modelLayout->setTemplate('application/email/email');
+            $modelLayout->setVariable('subject', $subject);
             $modelLayout->setVariable('user', $user);
             $modelLayout->setVariable('domain', $this->getServiceLocator()->get('Config')['domain']);
             $content = $renderer->render($modelLayout);
