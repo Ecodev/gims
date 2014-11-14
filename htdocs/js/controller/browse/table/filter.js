@@ -102,7 +102,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
             if ($scope.isValidId($scope.data.filter)) {
                 Restangular.one('filter', $scope.data.filter.id).getList('children', _.merge($scope.filterFields, {flatten: true, perPage: 1000})).then(function(filters) {
-
                     if (filters) {
 
                         // Inject parent as first filter, so we are able to see the "main" value
