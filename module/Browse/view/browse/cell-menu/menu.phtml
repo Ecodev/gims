@@ -30,7 +30,7 @@
         <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second.length">
             <ul ui-sortable="sortableOptions" ng-model="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second">
                 <li ng-repeat="usage in questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second" data-questionnaire="{{questionnaire.id}}" data-part="{{part.id}}" data-filter="{{filter.id}}">
-                    <a href gims-select-usage="usage"><i class="fa fa-navicon fa-fw text-muted"></i><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a>
+                    <a href gims-edit-usage="usage"><i class="fa fa-navicon fa-fw text-muted"></i><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a>
                 </li>
             </ul>
         </li>
@@ -40,7 +40,7 @@
         <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first.length">
             <ul ui-sortable="sortableOptions" ng-model="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first">
                 <li ng-repeat="usage in questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first" data-questionnaire="{{questionnaire.id}}" data-part="{{part.id}}" data-filter="{{filter.id}}">
-                    <a href gims-select-usage="usage"><i class="fa fa-navicon fa-fw text-muted"></i><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a>
+                    <a href gims-edit-usage="usage"><i class="fa fa-navicon fa-fw text-muted"></i><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a>
                 </li>
             </ul>
         </li>

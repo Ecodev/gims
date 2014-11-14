@@ -1,4 +1,7 @@
-angular.module('myApp.directives').directive('gimsSelectToken', function($rootScope) {
+/**
+ * This directive is used to insert a reference to the cell in a formula as token
+ */
+angular.module('myApp.directives').directive('gimsInsertToken', function($rootScope) {
     'use strict';
 
     return {
@@ -18,8 +21,10 @@ angular.module('myApp.directives').directive('gimsSelectToken', function($rootSc
                     token += ",Q#" + scope.questionnaire.id + ",P#" + scope.part.id + "}";
 
                     $rootScope.$emit('gims-rule-token-selected', token);
+                    scope.$evalAsync();
                 }
             });
+
         }
     };
 });

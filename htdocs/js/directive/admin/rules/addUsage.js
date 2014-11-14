@@ -1,3 +1,6 @@
+/**
+ * This directive is used to create a new usage (and rule)
+ */
 angular.module('myApp.directives').directive('gimsAddUsage', function($rootScope) {
     'use strict';
 
@@ -27,6 +30,7 @@ angular.module('myApp.directives').directive('gimsAddUsage', function($rootScope
 
                 if (params) {
                     $rootScope.$emit('gims-rule-usage-added', params);
+                    scope.$evalAsync();
                 }
             });
         }

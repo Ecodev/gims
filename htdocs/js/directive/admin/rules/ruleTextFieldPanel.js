@@ -32,11 +32,6 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
                 $scope.usage.rule = {};
                 $scope.showDetails = true;
                 updateUsageType();
-
-                // for some unkown reason, the panel does not appear instantaneously,
-                // especially when clicking on buttons in the very last row
-                // of the table to add questionnaireUsage.
-                $scope.$apply();
             });
 
             $rootScope.$on('gims-rule-usage-selected', function(evt, usage) {
