@@ -77,8 +77,10 @@ function benchmark($repetition)
 
         $stats = [];
         for ($i = 0; $i < $repetition; $i++) {
-            echo `truncate -s 0 data/logs/all.log`;
-            $stats['time'][] = trim(`{ time --format "%e" wget -q -O "/dev/null" "$url"; } 2>&1`);
+            echo `> data/logs/all.log`;
+            $time = trim(`{ time -p wget -q -O "/dev/null" "$url"; } 2>&1`);
+            preg_match('/\d+(.\d+)/', $time, $m);
+            $stats['time'][] = $m[0];
             $stats['sql'][] = trim(`grep -cE "SELECT .*" data/logs/all.log`);
         }
 
