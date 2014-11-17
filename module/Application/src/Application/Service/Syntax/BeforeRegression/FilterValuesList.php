@@ -42,6 +42,7 @@ class FilterValuesList extends AbstractToken implements \Application\Service\Syn
         return [
             'type' => 'regressionFilterValuesList',
             'filter' => $parser->getFilterName($matches[1]),
+            'color' => $parser->getFilterColor($matches[1]),
         ];
     }
 
