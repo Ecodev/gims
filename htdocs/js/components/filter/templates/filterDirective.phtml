@@ -1,0 +1,21 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="well well-sm">
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="gims-badge" ng-repeat="element in elements" href="/admin/element/edit/{{element.id}}" style="background-color:{{element.bgColor}}">
+                        <i class="fa fa-gims-filter" style="color:{{element.color}};"></i>
+                        {{element.name}}
+                        <a href="/admin/filter/edit/{{element.id}}"><i class="fa fa-pencil" ng-click="remove(element)"></i></a>
+                        <a href><i class="fa fa-times" ng-click="remove(element)"></i></a>
+                    </div>
+                    <div ng-if="!elements.length" class="text-2em">Select {{name}}</div>
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-default btn-sm pull-right" ng-click="openModal()"><i class="fa fa-crosshairs fa-lg"></i></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

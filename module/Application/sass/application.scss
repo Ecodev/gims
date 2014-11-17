@@ -32,6 +32,10 @@ input.error {
 @import "table-filter";
 @import "cell-menu";
 @import "jquery-ui.scss";
+@import "tree-control.scss";
+
+
+$brand-primary-light: #d9e8f4;
 
 // Force vertical scrollbar
 html {
@@ -395,3 +399,57 @@ input[type=number]::-webkit-inner-spin-button {
         border:none;
     }
 }
+
+treecontrol {
+    font-size:14px !important;
+}
+treecontrol.tree-classic li {
+    display:flex;
+    flex-flow: row wrap;
+
+    & > i:hover{
+        color:$brand-primary;
+    }
+
+    div {
+        margin-left:3px;
+        padding-right:5px;
+
+        &:hover{
+            color:$brand-primary;
+        }
+        &.selected {
+            color:$brand-primary;
+            background-color: $brand-primary-light;
+        }
+    }
+
+    .tree-selected {
+        font-weight: normal;
+        background: none;
+    }
+}
+
+treecontrol li .tree-label{
+    flex:1;
+}
+treecontrol li treeitem{
+    flex:1 100%;
+}
+
+
+.gims-badge {
+    display: inline-block;
+    vertical-align: top;
+    margin-right:5px;
+    margin-bottom:5px;
+    padding:2px 8px;
+    background:white;
+    border:1px solid $table-border-color;
+    border-radius: $border-radius-large;
+
+    .remove:hover {
+        color:$brand-primary;
+    }
+}
+
