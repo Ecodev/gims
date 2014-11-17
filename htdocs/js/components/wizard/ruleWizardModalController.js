@@ -75,20 +75,6 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
         },
         {
             group: 'After regression',
-            name: 'List of all filter values',
-            description: 'Reference a list of available filter values for all questionnaires. The result use Excel array constant syntax (eg: "{1,2,3}"). This should be used with Excel functions such as COUNT() and AVERAGE().',
-            filter: true,
-            questionnaire: false,
-            part: false,
-            rule: false,
-            step: false,
-            year: false,
-            toString: function(config) {
-                return '{F#' + config.filter.id + ',Q#all}';
-            }
-        },
-        {
-            group: 'After regression',
             name: 'Cumulated population',
             description: 'Reference the cumulated population for all current questionnaires for the specified part.',
             filter: false,
@@ -113,6 +99,20 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             year: false,
             toString: function() {
                 return '{Y}';
+            }
+        },
+        {
+            group: 'Both',
+            name: 'List of all filter values',
+            description: 'Reference a list of available filter values for all questionnaires. The result use Excel array constant syntax (eg: "{1,2,3}"). This should be used with Excel functions such as COUNT() and AVERAGE().',
+            filter: true,
+            questionnaire: false,
+            part: false,
+            rule: false,
+            step: false,
+            year: false,
+            toString: function(config) {
+                return '{F#' + config.filter.id + ',Q#all}';
             }
         },
         {
