@@ -33,8 +33,14 @@ class PopulationValue extends AbstractToken
     {
         return [
             'type' => 'populationValue',
-            'questionnaire' => $parser->getQuestionnaireName($matches[1]),
-            'part' => $parser->getPartName($matches[2]),
+            'questionnaire' => [
+                'id' => $matches[1],
+                'name' => $parser->getQuestionnaireName($matches[1]),
+            ],
+            'part' => [
+                'id' => $matches[2],
+                'name' => $parser->getPartName($matches[2]),
+            ],
         ];
     }
 

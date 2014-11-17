@@ -434,8 +434,8 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
     }
 
     /**
-     * Get color if setted in database
-     * @param Ration|int saturation from 0 to 100
+     * Get color if set in database
+     * @param Ratio|int saturation from 0 to 100
      * @return string
      */
     public function getColor($ratio = 100)

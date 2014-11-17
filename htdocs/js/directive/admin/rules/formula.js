@@ -7,18 +7,18 @@ angular.module('myApp.directives').directive('gimsFormula', function() {
     return {
         restrict: 'E', // Only usage possible is with element
         template:
-                '<div style="overflow-x:auto;color:#737373">' +
-                '<span ng-repeat="s in structure" class="formula">' +
+                '<div class="formula">' +
+                '<span ng-repeat="s in structure">' +
                 '<span ng-switch="s.type">' +
                 '<span class="text"  ng-switch-when="text">{{s.content}}</span>' +
                 '<span class="token" ng-switch-when="self">Ignore this rule</span>' +
-                '<span class="token" ng-switch-when="filterValue" tooltip="Filter: {{s.filter}}, Questionnaire: {{s.questionnaire}}, Part: {{s.part}}"><i class="fa fa-gims-filter" style="color: {{s.color}};"></i> {{s.filter}}<span ng-if="s.questionnaire != \'current\'">, {{s.questionnaire}}</span><span ng-if="s.part != \'current\'">, {{s.part}}</span></span>' +
-                '<span class="token" ng-switch-when="populationValue" tooltip="Questionnaire: {{s.questionnaire}}, Part: {{s.part}}"><i class="fa fa-gims-population"></i> {{s.questionnaire}}<span ng-if="s.part != \'current\'">, {{s.part}}</span></span>' +
-                '<span class="token" ng-switch-when="questionName" tooltip="Filter: {{s.filter}}, Questionnaire: {{s.questionnaire}}"><i class="fa fa-question"></i> {{s.filter}}<span ng-if="s.questionnaire != \'current\'">, {{s.questionnaire}}</span></span>' +
-                '<span class="token" ng-switch-when="ruleValue" tooltip="Rule: {{s.rule}}, Questionnaire: {{s.questionnaire}}, Part: {{s.part}}"><i class="fa fa-gims-rule"></i> {{s.rule}}<span ng-if="s.questionnaire != \'current\'">, {{s.questionnaire}}</span><span ng-if="s.part != \'current\'">, {{s.part}}</span></span>' +
-                '<span class="token" ng-switch-when="regressionFilterValue" tooltip="Filter: {{s.filter}}, Part: {{s.part}}, Year offset: {{s.year}}"><i class="fa fa-gims-filter" style="color: {{s.color}};"></i> {{s.filter}}<span ng-if="s.part != \'current\'">, {{s.part}}</span><span ng-if="s.year != \'0\'">, {{s.year}}</span></span>' +
-                '<span class="token" ng-switch-when="regressionFilterValuesList" tooltip="Filter: {{s.filter}}"><i class="fa fa-gims-filterset" style="color: {{s.color}};"></i> {{s.filter}}</span>' +
-                '<span class="token" ng-switch-when="regressionCumulatedPopulation" tooltip="Part: {{s.part}}"><i class="fa fa-gims-population"></i> {{s.part}}</span>' +
+                '<span class="token highlightColor" style="border-color: {{s.highlightColor}}" ng-switch-when="filterValue" tooltip="Filter: {{s.filter.name}}, Questionnaire: {{s.questionnaire.name}}, Part: {{s.part.name}}"><i class="fa fa-gims-filter"></i> {{s.filter.name}}<span ng-if="s.questionnaire.name != \'current\'">, {{s.questionnaire.name}}</span><span ng-if="s.part.name != \'current\'">, {{s.part.name}}</span></span>' +
+                '<span class="token" ng-switch-when="populationValue" tooltip="Questionnaire: {{s.questionnaire.name}}, Part: {{s.part.name}}"><i class="fa fa-gims-population"></i> {{s.questionnaire.name}}<span ng-if="s.part.name != \'current\'">, {{s.part.name}}</span></span>' +
+                '<span class="token" ng-switch-when="questionName" tooltip="Filter: {{s.filter.name}}, Questionnaire: {{s.questionnaire.name}}"><i class="fa fa-question"></i> {{s.filter.name}}<span ng-if="s.questionnaire.name != \'current\'">, {{s.questionnaire.name}}</span></span>' +
+                '<span class="token highlightColor" style="border-color: {{s.highlightColor}}" ng-switch-when="ruleValue" tooltip="Rule: {{s.rule.name}}, Questionnaire: {{s.questionnaire.name}}, Part: {{s.part.name}}"><i class="fa fa-gims-rule"></i> {{s.rule.name}}<span ng-if="s.questionnaire.name != \'current\'">, {{s.questionnaire.name}}</span><span ng-if="s.part.name != \'current\'">, {{s.part.name}}</span></span>' +
+                '<span class="token" ng-switch-when="regressionFilterValue" tooltip="Filter: {{s.filter.name}}, Part: {{s.part.name}}, Year offset: {{s.year}}"><i class="fa fa-gims-filter"></i> {{s.filter.name}}<span ng-if="s.part.name != \'current\'">, {{s.part.name}}</span><span ng-if="s.year != \'0\'">, {{s.year}}</span></span>' +
+                '<span class="token" ng-switch-when="regressionFilterValuesList" tooltip="Filter: {{s.filter.name}}"><i class="fa fa-gims-filterset"></i> {{s.filter.name}}</span>' +
+                '<span class="token" ng-switch-when="regressionCumulatedPopulation" tooltip="Part: {{s.part.name}}"><i class="fa fa-gims-population"></i> {{s.part.name}}</span>' +
                 '<span class="token" ng-switch-when="regressionYear">Current year</span>' +
                 '</span>' +
                 '</span>' +

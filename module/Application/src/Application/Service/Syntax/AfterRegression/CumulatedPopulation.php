@@ -35,7 +35,10 @@ class CumulatedPopulation extends AbstractToken
     {
         return [
             'type' => 'regressionCumulatedPopulation',
-            'part' => $parser->getPartName($matches[1]),
+            'part' => [
+                'id' => $matches[1],
+                'name' => $parser->getPartName($matches[1]),
+            ],
         ];
     }
 

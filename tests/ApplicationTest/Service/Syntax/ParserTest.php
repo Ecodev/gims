@@ -71,11 +71,20 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
             ],
             [
                 'type' => 'filterValue',
-                'filter' => 'filter 1',
-                'questionnaire' => 'tst - test geoname',
-                'part' => 'current',
+                'filter' => [
+                    'id' => 1,
+                    'name' => 'filter 1',
+                ],
+                'questionnaire' => [
+                    'id' => 1,
+                    'name' => 'tst - test geoname',
+                ],
+                'part' => [
+                    'id' => 'current',
+                    'name' => 'current',
+                ],
                 'isSecondStep' => false,
-                'color' => null,
+                'highlightColor' => 'blue',
             ],
             [
                 'type' => 'text',
@@ -83,11 +92,20 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
             ],
             [
                 'type' => 'filterValue',
-                'filter' => 'filter 2',
-                'questionnaire' => 'current',
-                'part' => 'test part',
+                'filter' => [
+                    'id' => 2,
+                    'name' => 'filter 2',
+                ],
+                'questionnaire' => [
+                    'id' => 'current',
+                    'name' => 'current',
+                ],
+                'part' => [
+                    'id' => 1,
+                    'name' => 'test part',
+                ],
                 'isSecondStep' => true,
-                'color' => null,
+                'highlightColor' => 'red',
             ],
             [
                 'type' => 'text',
@@ -102,8 +120,14 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
             ],
             [
                 'type' => 'populationValue',
-                'questionnaire' => 'tst - test geoname',
-                'part' => 'test part',
+                'questionnaire' => [
+                    'id' => 1,
+                    'name' => 'tst - test geoname',
+                ],
+                'part' => [
+                    'id' => 1,
+                    'name' => 'test part',
+                ],
             ],
             [
                 'type' => 'text',
@@ -111,8 +135,14 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
             ],
             [
                 'type' => 'questionName',
-                'filter' => 'filter 1',
-                'questionnaire' => 'tst - test geoname',
+                'filter' => [
+                    'id' => 1,
+                    'name' => 'filter 1',
+                ],
+                'questionnaire' => [
+                    'id' => 1,
+                    'name' => 'tst - test geoname',
+                ],
             ],
             [
                 'type' => 'text',
@@ -120,9 +150,19 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
             ],
             [
                 'type' => 'ruleValue',
-                'rule' => 'test rule',
-                'questionnaire' => 'current',
-                'part' => 'test part',
+                'rule' => [
+                    'id' => 1,
+                    'name' => 'test rule',
+                ],
+                'questionnaire' => [
+                    'id' => 'current',
+                    'name' => 'current',
+                ],
+                'part' => [
+                    'id' => 1,
+                    'name' => 'test part',
+                ],
+                'highlightColor' => 'green',
             ],
         ];
 
@@ -151,7 +191,10 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
             ],
             [
                 'type' => 'regressionFilterValuesList',
-                'filter' => 'current',
+                'filter' => [
+                    'id' => 'current',
+                    'name' => 'current',
+                ],
             ],
             [
                 'type' => 'text',
@@ -159,10 +202,15 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
             ],
             [
                 'type' => 'regressionFilterValue',
-                'filter' => 'filter 1',
-                'part' => 'current',
+                'filter' => [
+                    'id' => 1,
+                    'name' => 'filter 1',
+                ],
+                'part' => [
+                    'id' => 'current',
+                    'name' => 'current',
+                ],
                 'year' => '+2',
-                'color' => null,
             ],
             [
                 'type' => 'text',
@@ -170,7 +218,10 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
             ],
             [
                 'type' => 'regressionCumulatedPopulation',
-                'part' => 'test part',
+                'part' => [
+                    'id' => 1,
+                    'name' => 'test part',
+                ]
             ],
             [
                 'type' => 'text',
@@ -180,6 +231,12 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
 
         $actual2 = $parser->getStructure($formula2);
         $this->assertEquals($expected2, $actual2);
+
+        $formula = '={F#1,Q#1,P#current} + {F#2,Q#1,P#current} + {F#1,Q#1,P#current}';
+        $actuals = $parser->getStructure($formula);
+        $this->assertEquals('blue', $actuals[1]['highlightColor']);
+        $this->assertEquals('red', $actuals[3]['highlightColor'], 'different tokens must have different colors');
+        $this->assertEquals('blue', $actuals[5]['highlightColor'], 'identical tokens must have identical colors');
     }
 
 }

@@ -16,6 +16,28 @@ class Parser
 
 use \Application\Traits\EntityManagerAware;
 
+    /**
+     * Use pre-defined, very visible, and very distinct
+     * colors to be used as highlight
+     * @var array
+     */
+    private $availableColors = [
+        'blue',
+        'red',
+        'green',
+        'purple',
+        'orange',
+        'magenta',
+        'lime',
+        'cyan',
+        'yellow',
+        'teal',
+        'maroon',
+        'navy',
+        'olive',
+        'tomato',
+    ];
+    private $usedColors = [];
     private $filterRepository;
     private $questionnaireRepository;
     private $partRepository;
@@ -176,26 +198,6 @@ use \Application\Traits\EntityManagerAware;
     }
 
     /**
-     * Returns the color according to 'current' syntax
-     * @param string|integer $filterId
-     * @return string
-     */
-    public function getFilterColor($filterId)
-    {
-        static $cache = [];
-        if ($filterId == 'current') {
-            return null;
-        } else {
-
-            if (!array_key_exists($filterId, $cache)) {
-                $cache[$filterId] = $this->getFilterRepository()->findOneById($filterId)->getColor();
-            }
-
-            return $cache[$filterId];
-        }
-    }
-
-    /**
      * Returns the name according to 'current' syntax
      * @param string|integer $questionnaireId
      * @return string
@@ -321,6 +323,7 @@ use \Application\Traits\EntityManagerAware;
      */
     public function getStructure($formula)
     {
+        $this->resetHighlightColors();
         $splitter = '::SPLITTER::';
         $tokenStructures = [];
 
@@ -330,6 +333,12 @@ use \Application\Traits\EntityManagerAware;
 
                         $key = '::TOKEN_' . count($tokenStructures) . '::';
                         $structure = $token->getStructure($matches, $this);
+
+                        // Inject highlight color if needed
+                        if ($token instanceof NeedHighlightColorInterface) {
+                            $structure['highlightColor'] = $this->getHighlightColor($structure);
+                        }
+
                         $tokenStructures[$key] = $structure;
 
                         return $splitter . $key . $splitter;
@@ -350,6 +359,33 @@ use \Application\Traits\EntityManagerAware;
         }
 
         return $result;
+    }
+
+    /**
+     * Returns one of the pre-defined colors. Will always be same result for same structure
+     * @param array $structure
+     * @return string CSS color value
+     */
+    private function getHighlightColor(array $structure)
+    {
+        $colorKey = serialize($structure);
+        if (array_key_exists($colorKey, $this->usedColors)) {
+            $highlightColor = $this->usedColors[$colorKey];
+        } else {
+            $colorIndex = count($this->usedColors) % count($this->availableColors);
+            $highlightColor = $this->availableColors[$colorIndex];
+            $this->usedColors[$colorKey] = $highlightColor;
+        }
+
+        return $highlightColor;
+    }
+
+    /**
+     * Reset used highlight colors
+     */
+    private function resetHighlightColors()
+    {
+        $this->usedColors = [];
     }
 
 }

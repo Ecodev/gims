@@ -10,7 +10,7 @@ use Application\Service\Syntax\Parser;
 /**
  * Replace {F#12,Q#34,P#56} with Filter value
  */
-class FilterValue extends AbstractToken
+class FilterValue extends AbstractToken implements \Application\Service\Syntax\NeedHighlightColorInterface
 {
 
     public function getPattern()
@@ -34,11 +34,19 @@ class FilterValue extends AbstractToken
     {
         return [
             'type' => 'filterValue',
-            'filter' => $parser->getFilterName($matches[1]),
-            'questionnaire' => $parser->getQuestionnaireName($matches[2]),
-            'part' => $parser->getPartName($matches[3]),
+            'filter' => [
+                'id' => $matches[1],
+                'name' => $parser->getFilterName($matches[1]),
+            ],
+            'questionnaire' => [
+                'id' => $matches[2],
+                'name' => $parser->getQuestionnaireName($matches[2]),
+            ],
+            'part' => [
+                'id' => $matches[3],
+                'name' => $parser->getPartName($matches[3]),
+            ],
             'isSecondStep' => isset($matches[4]) && $matches[4] == ',S#2',
-            'color' => $parser->getFilterColor($matches[1]),
         ];
     }
 

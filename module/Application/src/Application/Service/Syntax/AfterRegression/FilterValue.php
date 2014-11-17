@@ -43,10 +43,15 @@ class FilterValue extends AbstractToken implements \Application\Service\Syntax\B
 
         return [
             'type' => 'regressionFilterValue',
-            'filter' => $parser->getFilterName($matches[1]),
-            'part' => $parser->getPartName($matches[2]),
+            'filter' => [
+                'id' => $matches[1],
+                'name' => $parser->getFilterName($matches[1]),
+            ],
+            'part' => [
+                'id' => $matches[2],
+                'name' => $parser->getPartName($matches[2]),
+            ],
             'year' => (string) $year,
-            'color' => $parser->getFilterColor($matches[1]),
         ];
     }
 

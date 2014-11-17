@@ -36,8 +36,14 @@ class QuestionName extends AbstractToken
     {
         return [
             'type' => 'questionName',
-            'filter' => $parser->getFilterName($matches[1]),
-            'questionnaire' => $parser->getQuestionnaireName($matches[2]),
+            'filter' => [
+                'id' => $matches[1],
+                'name' => $parser->getFilterName($matches[1]),
+            ],
+            'questionnaire' => [
+                'id' => $matches[2],
+                'name' => $parser->getQuestionnaireName($matches[2]),
+            ],
         ];
     }
 

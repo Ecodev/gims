@@ -32,11 +32,13 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
                 $scope.usage.rule = {};
                 $scope.showDetails = true;
                 updateUsageType();
+                opened();
             });
 
             $rootScope.$on('gims-rule-usage-selected', function(evt, usage) {
                 $scope.showDetails = false;
                 $scope.usage = usage;
+                opened();
             });
 
             $scope.$watch('usage', function(usage, oldUsage) {
@@ -59,7 +61,7 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
             }, 300);
 
             var getRuleProperties = _.debounce(function(rule) {
-                Restangular.one('Rule', $scope.usage.rule.id).get(ruleFields).then(function(newRule) {
+                Restangular.one('rule', $scope.usage.rule.id).get(ruleFields).then(function(newRule) {
                     rule.permissions = newRule.permissions;
                     rule.filterQuestionnaireUsages = newRule.filterQuestionnaireUsages;
                     rule.questionnaireUsages = newRule.questionnaireUsages;
@@ -112,6 +114,7 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
                 if ($scope.form) {
                     $scope.form.$setPristine();
                 }
+                opened();
             };
 
             $scope.saveDuplicate = function() {
@@ -152,7 +155,7 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
              */
             var saveRule = function() {
 
-                Restangular.restangularizeElement(null, $scope.usage.rule, 'Rule');
+                Restangular.restangularizeElement(null, $scope.usage.rule, 'rule');
 
                 // update
                 if ($scope.usage.rule.id && $scope.usage.rule.permissions && $scope.usage.rule.permissions.update) {
@@ -160,7 +163,7 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
 
                     // create
                 } else if ($scope.usage.rule && _.isUndefined($scope.usage.rule.id)) {
-                    return Restangular.all('Rule').post($scope.usage.rule, ruleFields);
+                    return Restangular.all('rule').post($scope.usage.rule, ruleFields);
 
                     // do nothing, but return promise to allow script to process .then() function and save usage
                 } else {
@@ -196,7 +199,7 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
                 $scope.isRemoving = true;
 
                 Restangular.restangularizeElement(null, $scope.usage, $scope.usageType);
-                Restangular.restangularizeElement(null, $scope.usage.rule, 'Rule');
+                Restangular.restangularizeElement(null, $scope.usage.rule, 'rule');
 
                 $scope.usage.remove().then(function() {
                     if ($scope.usage.rule.nbOfUsages == 1) { // if current usage is the only one used by rule, delete rule too
@@ -213,8 +216,47 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
                 });
             };
 
+            /**
+             *
+             * @param {object} structure
+             * @param {object} usage
+             * @returns {object} structure
+             */
+            function completeStructureWithUsage(structure/*, usage*/) {
+
+                return structure;
+//                var filterId = usage.filter ? usage.filter.id : null;
+//                var questionnaireId = usage.questionnaire ? usage.questionnaire.id : null;
+//                var partId = usage.part ? usage.part.id : null;
+//
+//                var result = _.cloneDeep(structure);
+//                _.forEach(result, function(s) {
+//                    if (s.type == 'filterValue' && filterId == s.filter.id && questionnaireId == s.questionnaire.id && partId == s.part.id) {
+//                        return true;
+//                    } else if (s.type == 'ruleValue' && questionnaireId == s.questionnaire.id && partId == s.part.id) {
+//                        return true;
+//                    }
+//                });
+//
+//                return result;
+            }
+            $scope.$watch('usage.rule.structure', function(structure) {
+                if (structure) {
+
+                    var a = completeStructureWithUsage(structure, $scope.usage);
+                    $rootScope.$emit('gims-rule-structure-changed', a);
+                }
+            });
+
+            function opened() {
+                $rootScope.$emit('gims-rule-editing-started');
+                $('body').addClass('rule-editing');
+            }
+
             $scope.close = function() {
                 $scope.usage = null;
+                $rootScope.$emit('gims-rule-editing-ended');
+                $('body').removeClass('rule-editing');
             };
         }
     };

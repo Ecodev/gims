@@ -10,7 +10,7 @@ use Application\Service\Syntax\Parser;
 /**
  * Replace {R#12,Q#34,P#56} with QuestionnaireUsage value
  */
-class QuestionnaireUsageValue extends AbstractToken
+class QuestionnaireUsageValue extends AbstractToken implements \Application\Service\Syntax\NeedHighlightColorInterface
 {
 
     public function getPattern()
@@ -41,9 +41,18 @@ class QuestionnaireUsageValue extends AbstractToken
 
         return [
             'type' => 'ruleValue',
-            'rule' => $rule->getName(),
-            'questionnaire' => $parser->getQuestionnaireName($matches[2]),
-            'part' => $parser->getPartName($matches[3]),
+            'rule' => [
+                'id' => $rule->getId(),
+                'name' => $rule->getName(),
+            ],
+            'questionnaire' => [
+                'id' => $matches[2],
+                'name' => $parser->getQuestionnaireName($matches[2]),
+            ],
+            'part' => [
+                'id' => $matches[3],
+                'name' => $parser->getPartName($matches[3]),
+            ],
         ];
     }
 

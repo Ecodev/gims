@@ -365,7 +365,7 @@
                                 <div class="table-filter-row header"></div>
                                 <div class="table-filter-row text-center" ng-repeat="rule in data.questionnaireUsages track by $index" ng-if="isIncludedInUsedThematics(rule.thematics)">
                                     <div gims-if="questionnaire.showLabels" class="question-label"></div>
-                                    <div class="filter-value filter-value-container text-2em" ng-repeat="part in data.parts" gims-insert-token part="part" questionnaire="questionnaire" rule="rule.values[questionnaire.id][part.id]">
+                                    <div class="filter-value filter-value-container text-2em" ng-repeat="part in data.parts" gims-insert-token>
                                         <span ng-if="rule.values[questionnaire.id][part.id]">
                                             <i class="fa fa-gims-rule text-muted" ng-if="rule.values[questionnaire.id][part.id].value === null"></i>
                                             {{rule.values[questionnaire.id][part.id].value}}

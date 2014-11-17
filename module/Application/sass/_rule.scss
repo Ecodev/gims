@@ -1,5 +1,9 @@
 .formula {
     font-family: $font-family-monospace;
+    overflow-x:auto;
+    color:#737373;
+    line-height: 2em;
+
     .token {
         border: 1px solid $gray-light;
         border-radius: $border-radius-base;
@@ -7,8 +11,23 @@
         background: $gray-lighter;
         white-space: nowrap;
         cursor: default;
+
+        &.highlightColor {
+            border-width: 2px; // Thicker border if we need to color them
+        }
     }
     .text {
         white-space: pre;
+    }
+}
+
+// When entering rule editing mode, then all insert-able tokens
+// are slighlty highlighted to show that interaction is possible
+.rule-editing [gims-insert-token] {
+    outline: 1px solid rgba(0, 0, 0, 0.45);
+    cursor: cell;
+    transition: outline 0.5s ease;
+    &:hover {
+        outline-width: 2px;
     }
 }
