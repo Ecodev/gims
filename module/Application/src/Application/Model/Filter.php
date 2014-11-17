@@ -418,28 +418,6 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
     }
 
     /**
-     * Return a list of the ancestors paths until root
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getPaths()
-    {
-        $paths = array();
-        foreach ($this->getParents() as $parent) {
-            $parentPaths = $parent->getPaths();
-
-            if (count($parentPaths) == 0) {
-                $paths[] = $parent->getName() . ' / ';
-            } else {
-                foreach ($parentPaths as $path) {
-                    $paths[] = $path . $parent->getName() . ' / ';
-                }
-            }
-        }
-
-        return $paths;
-    }
-
-    /**
      * Return color with generic replacement if no color in database
      * @param Ration|int saturation from 0 to 100
      * @return string

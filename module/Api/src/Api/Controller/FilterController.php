@@ -13,133 +13,78 @@ class FilterController extends AbstractChildRestfulController
     use \Application\Traits\FlatHierarchic;
 
     /**
-     * @return mixed|JsonModel
+     * @return JsonModel
      */
     public function getList()
     {
-        $jsonData = $this->paginate($this->getFlatList(), false);
+        $allIndexedFilters = Utility::indexById($this->getRepository()->getAllWithPermission('read', $this->params()->fromQuery('q')));
+        $flattenArray = $this->params()->fromQuery('flatten') == 'true' ? true : false;
+
+        $parent = $this->getParent();
+
+        if (!$parent) {
+            $filters = $this->getRepository()->getRootFilters();
+        } elseif ($parent instanceof \Application\Model\FilterSet) {
+            $filters = $parent->getFilters();
+
+        } elseif ($parent instanceof \Application\Model\Filter) {
+            $filters = $parent->getChildren();
+        }
+
+        $items = $this->getChildren($filters, $allIndexedFilters, $flattenArray);
+
+        $jsonData = array(
+            'metadata' => array(
+                'page' => 1,
+                'perPage' => count($items),
+                'totalCount' => count($items),
+            ),
+            'items' => $items,
+        );
 
         return new JsonModel($jsonData);
     }
 
     /**
-     * Return all children recursively.
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    protected function getFlatList()
-    {
-        $parent = $this->getParent();
-        if ($parent) {
-
-            // if parent is FilterSet, get his filters
-            if ($parent instanceof \Application\Model\FilterSet) {
-
-                $filterSetFilters = $parent->getFilters();
-                $filters = array();
-                foreach ($filterSetFilters as $filter) {
-                    $filterChildren = array($filter);
-                    $filterChildren = array_merge($filterChildren, $filter->getAllChildren()->toArray());
-                    $filterChildren = $this->flattenFilters($filterChildren);
-                    unset($filterChildren[0]['_parent']);
-                    for ($i = 1; $i < $filter->getParents()->count(); $i++) {
-                        unset($filterChildren[$i]);
-                    }
-                    $filterChildren = $this->getFlatHierarchyWithSingleRootElement($filterChildren, '_parent');
-                    $filters = array_merge($filters, $filterChildren);
-                }
-
-                // else means parent is filter
-            } else {
-                $filters = $parent->getAllChildren()->toArray();
-                // get unique filters because flattenFilters() already duplicate elements if there are multiple parents
-                $uniqueFilters = [];
-                foreach ($filters as $filter) {
-                    $uniqueFilters[$filter->getId()] = $filter;
-                }
-
-                $filters = $this->flattenFilters($uniqueFilters, false, $parent);
-                array_unshift($filters, ["id" => $parent->getId()]);
-                $filters = $this->getFlatHierarchyWithSingleRootElement($filters, '_parent');
-                array_shift($filters);
-                $filters = array_map(function ($filter) {
-                    $filter['level'] --;
-
-                    return $filter;
-                }, $filters);
-            }
-
-            // no parent, get all filters
-        } else {
-            $itemOnce = $this->params()->fromQuery('itemOnce') == 'true' ? true : false;
-            $filters = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), $this->params()->fromQuery('q'));
-            $filters = $this->flattenFilters($filters, $itemOnce);
-            $filters = $this->getFlatHierarchyWithMultipleRootElements($filters, '_parent');
-        }
-
-        return $filters;
-    }
-
-    /**
-     * This function return a list of filters in assoc array
-     * If a filter has multiple parents, he's added multiple times in the right hierarchic position
-     * The $rootParent argument means to duplicate filters only if the parents are in the given filter list or is the $rootElement.
-     * If $rootParent is null, a filter is duplicated for each parent regardless if the parent is or not in the given filter list.
-     * @param $filters
-     * @param bool $itemOnce avoid to add multiple times the same filter if he has multiple parents
-     * @param \Application\Model\Filter $rootParent originally asked parent
+     * @param $filters array of filters
+     * @param $allIndexedFilters
+     * @param $flattenArray
+     * @param int $level
      * @return array
      */
-    private function flattenFilters($filters, $itemOnce = false, \Application\Model\Filter $rootParent = null)
+    public function getChildren($filters, $allIndexedFilters, $flattenArray, $level = 0)
     {
-
-        $jsonConfig = $this->getJsonConfig();
-        $flatFilters = array();
+        $extractedFilters = [];
+        $nextLevel = $level +1;
         foreach ($filters as $filter) {
-            $flatFilter = $this->hydrator->extract($filter, $jsonConfig);
-            $parents = $this->hydrator->extractArray($filter->getParents(), ['id']);
 
-            if ($parents) {
-                foreach ($parents as $parent) {
+            // extract
+            $extractedFilter = $this->hydrator->extract($filter, $this->getJsonConfig()); // SANS children dans le GET HTTP !
+            $extractedFilter['level'] = $level;
 
-                    if (!$rootParent || ($rootParent && (isset($filters[$parent['id']]) || $parent['id'] == $rootParent->getId()))) {
-                        $flatFilter['_parent'] = $parent;
-                        $flatFilters[] = $flatFilter;
+            $children = [];
+            foreach ($this->getRepository()->getChildrenIds($filter->getId()) as $childId) {
+                array_push($children , $allIndexedFilters[$childId]);
+            }
 
-                        // If we don't want duplicated items for each parents, break the loop
-                        if ($itemOnce) {
-                            break;
-                        }
-                    }
-                }
-            } else {
-                $flatFilters[] = $flatFilter;
+            // recursive call for same operation on children
+            $children = $this->getChildren($children, $allIndexedFilters, $flattenArray, $nextLevel);
+
+            // if not flatten, add children to parent filter
+            if ($children && !$flattenArray) {
+                $extractedFilter['children'] = $children;
+            }
+
+            // add parent filter to collection
+            $extractedFilters[] = $extractedFilter;
+
+            // if flatten, add children to the same collection than parent filter
+            if ($children && $flattenArray) {
+                $extractedFilters = array_merge($extractedFilters, $children);
             }
         }
 
-        return $flatFilters;
-    }
-
-    public function getAutoCompleteListAction()
-    {
-        $filters = $this->getFlatList();
-        $indexedFilters = array();
-        foreach ($filters as &$filter) {
-            $indexedFilters[$filter['id']] = $filter;
-            $filter['name'] = $this->getParentsName($filter, $indexedFilters);
-        }
-
-        return new JsonModel($filters);
-    }
-
-    protected function getParentsName($filter, $index)
-    {
-        if (isset($filter['parents'], $index[$filter['parents']['id']])) {
-            $parent = $index[$filter['parents']['id']];
-            $parentsName = $this->getParentsName($parent, $index);
-            $filter['name'] = $parentsName . ' / ' . $filter['name'];
-        }
-
-        return $filter['name'];
+        return $extractedFilters;
     }
 
     public function getComputedFiltersAction()

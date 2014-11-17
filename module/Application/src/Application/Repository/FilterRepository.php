@@ -14,11 +14,40 @@ class FilterRepository extends AbstractRepository
     public function getAllWithPermission($action = 'read', $search = null)
     {
         $qb = $this->createQueryBuilder('filter')
-                ->orderBy('filter.id');
+                   ->orderBy('filter.sorting')
+                   ->addOrderBy('filter.id');
 
         $this->addSearch($qb, $search);
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Return filters that have no parents
+     * @return array
+     */
+    public function getRootFilters ()
+    {
+        $qb = $this->createQueryBuilder('filter')
+                   ->orderBy('filter.sorting')
+                   ->addOrderBy('filter.id');
+
+        $this->addRootRestriction($qb);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param $qb
+     * @return
+     */
+    private function addRootRestriction($qb)
+    {
+        $qb->leftJoin('filter.parents', 'parents')
+           ->having('COUNT(parents.id) = 0')
+           ->groupBy('filter.id');
+
+        return $qb;
     }
 
     /**
@@ -41,15 +70,13 @@ class FilterRepository extends AbstractRepository
      */
     public function getOneByNames($name, $parentName)
     {
-        $qb = $this->createQueryBuilder('f')->where('f.name = :name');
+        $qb = $this->createQueryBuilder('filter')->where('filter.name = :name');
         $parameters = array('name' => $name);
         if ($parentName) {
             $parameters['parentName'] = $parentName;
-            $qb->join('f.parents', 'p', \Doctrine\ORM\Query\Expr\Join::WITH, 'p.name = :parentName');
+            $qb->join('filter.parents', 'parents', \Doctrine\ORM\Query\Expr\Join::WITH, 'parents.name = :parentName');
         } else {
-            $qb->leftJoin('f.parents', 'p')
-                    ->having('COUNT(p.id) = 0')
-                    ->groupBy('f.id');
+            $this->addRootRestriction($qb);
         }
 
         $q = $qb->getQuery();
