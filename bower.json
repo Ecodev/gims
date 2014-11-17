@@ -29,6 +29,7 @@
     "angular-ui-sortable": "~0.12.10",
     "angular-vs-repeat": "git://github.com/PowerKiKi/angular-vs-repeat.git#column-resizing",
     "angular-ui-slider": "~0.0.2",
-    "angular-moment": "~0.8.2"
+    "angular-moment": "~0.8.2",
+    "angular-tree-control": "~0.2.7"
   }
 }
