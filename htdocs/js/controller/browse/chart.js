@@ -73,7 +73,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             filters = filters.concat(filterSet.filters);
         });
 
-        $scope.tabs.filters = filters;
+        $scope.tabs.filters = _.uniq(filters, 'id');
     });
 
     $scope.$watch('tabs.filters', function(newFilters, oldFilters) {

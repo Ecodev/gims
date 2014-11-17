@@ -30,8 +30,7 @@
                                         api="filterSet"
                                         placeholder="Select filter set"
                                         disabled="isLoading"
-                                        multiple
-                                        change-url="false"
+                                        multiple="true"
                                         style="width: 100%">
                                 </gims-select>
                             </tab>
@@ -39,8 +38,6 @@
                                 <gims-filter
                                         model="tabs.filter"
                                         name="filter"
-                                        show-selection-path="true"
-                                        change-url="false"
                                         disabled="isLoading">
                                 </gims-filter>
                             </tab>
@@ -49,9 +46,8 @@
                                         model="tabs.filters"
                                         name="filters"
                                         query-params="filterFields"
-                                        show-selection-path="true"
                                         disabled="isLoading"
-                                        multiple>
+                                        multiple="true">
                                 </gims-filter>
                             </tab>
                         </tabset>

@@ -85,7 +85,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.$watch('data.filterSet', function() {
         if ($scope.data.filterSet) {
             $scope.data.filters = [];
-            Restangular.one('filterSet', $scope.data.filterSet.id).getList('filters', _.merge($scope.filterFields, {perPage: 1000})).then(function(filters) {
+            Restangular.one('filterSet', $scope.data.filterSet.id).getList('filters', _.merge($scope.filterFields, {flatten: true, perPage: 1000})).then(function(filters) {
                 if (filters) {
                     $scope.data.filters = filters;
                     $scope.data.filter = null;
@@ -101,7 +101,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         if ($scope.data.filter) {
 
             if ($scope.isValidId($scope.data.filter)) {
-                Restangular.one('filter', $scope.data.filter.id).getList('children', _.merge($scope.filterFields, {perPage: 1000})).then(function(filters) {
+                Restangular.one('filter', $scope.data.filter.id).getList('children', _.merge($scope.filterFields, {flatten: true, perPage: 1000})).then(function(filters) {
+
                     if (filters) {
 
                         // Inject parent as first filter, so we are able to see the "main" value
@@ -141,7 +142,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     var firstLoading = true;
     $q.all([filterSetDeferred, filterDeferred]).then(function() {
         $scope.$watch('data.filters', function(newFilters, oldFilters) {
-            $scope.usedThematics = _.uniq(_.pluck(_.pluck(newFilters, 'thematicFilter'), 'id'));
+            $scope.usedThematics = _.uniq(_.pluck(_.filter(newFilters, 'thematicFilter'), 'id'));
             TableFilter.loadFilter(newFilters, oldFilters).then(function() {
                 if (firstLoading === true && $scope.data.filters && $scope.data.questionnaires) {
                     checkSelectionExpand();

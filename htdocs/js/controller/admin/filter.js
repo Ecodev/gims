@@ -3,7 +3,8 @@
 angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $location, $routeParams, Modal, Restangular) {
     "use strict";
 
-    $scope.fields = {fields: 'filterSets,children,children.paths,children.color,parents,parents.paths,parents.color,summands,summands.paths,summands.color,paths,color,bgColor'};
+    //$scope.fields = {fields: 'filterSets,children,children.paths,children.color,parents,parents.paths,parents.color,summands,summands.paths,summands.color,paths,color,bgColor'};
+    $scope.fields = {fields: 'filterSets,children,children.bgColor,children.color,parents,parents.bgColor,parents.color,summands,summands.bgColor,summands.color,color,bgColor'};
 
     var returnUrl = '/admin/filter';
     if ($routeParams.returnUrl) {
@@ -74,7 +75,7 @@ angular.module('myApp').controller('Admin/FilterCtrl', function($scope, $locatio
     });
 
     // Configure gims-grid
-    $scope.queryparams = {fields: 'color'};
+    $scope.queryparams = {fields: 'color',flatten: true};
     $scope.gridOptions = {
         columnDefs: [
             {

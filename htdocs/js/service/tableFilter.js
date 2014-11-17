@@ -1890,6 +1890,27 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         });
     }
 
+    /**
+     * Get Filter tree with params, then cache it and return when asked again
+     * @type {null}
+     */
+    var tree = null;
+    function getTree(params, refresh) {
+
+        if (!tree || refresh) {
+            var promise = Restangular.all('filter').getList(params);
+            promise.then(function(data) {
+                tree = data;
+            });
+            return promise;
+        } else {
+            var defered = $q.defer();
+            defered.resolve(tree);
+            return defered.promise;
+        }
+
+    }
+
     // Return public API
     return {
         init: init,
@@ -1924,6 +1945,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         adjustHeight: adjustHeight,
         syncScroll: syncScroll,
         resizeContent: resizeContent,
-        updateAnswer: updateAnswer
+        updateAnswer: updateAnswer,
+        getTree: getTree
     };
 });

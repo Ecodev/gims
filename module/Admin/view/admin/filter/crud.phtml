@@ -25,9 +25,10 @@
                     <div class="col-md-8">
                         <gims-filter model='filter.parents'
                                      name="parents"
-                                     show-selection-path="true"
                                      show-edit-button="true"
-                                     multiple>
+                                     bgColor="true"
+                                     change-url="false"
+                                     multiple="false">
                         </gims-filter>
                     </div>
                 </div>
@@ -54,7 +55,6 @@
                             </div>
                             <div class="col-md-3">
                                 <div class='btn btn-default' colorpicker colorpicker-with-input="true" ng-model="filter.bgColor" style='background-color:{{filter.bgColor}}'><i class='fa fa-magic'></i></div> Background color
-
                             </div>
                         </div>
                     </div>
@@ -67,9 +67,11 @@
                     <div class="col-md-8">
                         <gims-filter model="filter.children"
                                      name="children"
-                                     show-selection-path="true"
                                      show-edit-button="true"
-                                     multiple>
+                                     bgColor="true"
+                                     genericColor="true"
+                                     change-url="false"
+                                     multiple="true">
                         </gims-filter>
                     </div>
                 </div>
@@ -84,9 +86,10 @@
                     <div class="col-md-8">
                         <gims-filter model="filter.summands"
                                      name="summands"
-                                     show-selection-path="true"
                                      show-edit-button="true"
-                                     multiple>
+                                     bgColor="true"
+                                     change-url="false"
+                                     multiple="true">
                         </gims-filter>
                     </div>
                 </div>
@@ -97,12 +100,13 @@
                 <div class="form-group" ng-hide="isChapter">
                     <h3><small><label class="control-label col-md-2" for="parents">Filter sets</label></small></h3>
                     <div class="col-md-8">
-                        <gims-select    name='parents'
+                        <gims-select    name='filterSets'
                                         api="filterSet"
                                         model="filter.filterSets"
-                                        placeholder="Select parent"
-                                        multiple
-                                        style="width: 100%">
+                                        placeholder="Select filter sets"
+                                        change-url="false"
+                                        multiple="true"
+                                        >
                         </gims-select>
                     </div>
                 </div>
@@ -120,4 +124,5 @@
         </tabset>
 
     </form>
+
 </div>

@@ -10,15 +10,39 @@
 
     <?php echo $this->helpBox('Create new filters or delete them. For further info, see the <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/filter.html">detailed documentation</a>.'); ?>
 
-    <div class="row">
+    <div class="row show-grid">
         <div class="col-md-9">
-            <gims-filter model="selectedFilter" show-edit-button="true"> </gims-filter>
+            <input type="text" class="form-control" name="filterOnName" placeholder="Search..." ng-model="search" style="width: 400px"/>
         </div>
-        <div class="col-md-3 show-grid text-right" >
+        <div class="col-md-3" style="text-align: right">
             <gims-link-new target="filter"></gims-link-new>
         </div>
     </div>
 
-    <gims-grid api="filter" options="gridOptions" queryparams="queryparams"></gims-grid>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <treecontrol class="tree-classic"
+                         tree-model="tree"
+                         options="treeOptions"
+                         expanded-nodes="expandedNodes"
+                         filter-expression="search"
+                         selected-node="selectedNode"
+                         show-edit-buttons="true"
+                         on-selection="showSelected(node)">
+
+                <div ng-class="{'selected':node.selected}">
+                    <i class="fa fa-gims-filter fa-fw" style="color:{{node.color}};"></i>
+                    {{node.name}}
+                <span class="pull-right">
+                    <a href="/admin/filter/edit/{{node.id}}" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i></a>
+                    <button class="btn btn-default btn-xs" ng-click="remove(node)"><i class="fa fa-trash"></i></button>
+                </span>
+                </div>
+            </treecontrol>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
 
 </div> <!-- /container -->

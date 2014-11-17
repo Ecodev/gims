@@ -103,7 +103,7 @@
                 <div class="form-group ng-trans ng-trans-fade-down" ng-hide="isChapter" ng-class="{'has-error': myForm.filter.$invalid}">
                     <label class="control-label col-md-2" for="question.filter">Filter</label>
                     <div class="col-md-6">
-                        <gims-filter model="question.filter"></gims-filter>
+                        <gims-filter model="question.filter" name="filter"></gims-filter>
                     </div>
                     <div class='col-md-1'>
                         <span ng-show="myForm.filter.$error.required" class="col-md-1 help-block">Required</span>
