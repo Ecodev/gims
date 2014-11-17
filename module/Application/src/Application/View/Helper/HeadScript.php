@@ -25,14 +25,16 @@ class HeadScript extends \Zend\View\Helper\HeadScript implements ServiceLocatorA
         return $fileName;
     }
 
-    protected function includeDirectory($directory, $method, $args)
+    protected function includeDirectory($directory, $method, $args, $extensionConstraint = null)
     {
         foreach (glob($directory . '/*') as $file) {
             if (is_dir($file)) {
-                $this->includeDirectory($file, $method, $args);
+                $this->includeDirectory($file, $method, $args, $extensionConstraint);
             } else {
-                $args[0] = $this->addCacheStamp(str_replace('htdocs/', '', $file));
-                parent::__call($method, $args);
+                if (!$extensionConstraint || $extensionConstraint != '' && strpos($file, '.' . $extensionConstraint)) {
+                    $args[0] = $this->addCacheStamp(str_replace('htdocs/', '', $file));
+                    parent::__call($method, $args);
+                }
             }
         }
     }
@@ -55,7 +57,11 @@ class HeadScript extends \Zend\View\Helper\HeadScript implements ServiceLocatorA
                 // If we are in development, actually don't concatenate anything
                 if (!$this->getServiceLocator()->getServiceLocator()->get('Config')['compressJavaScript']) {
                     foreach ($fileName[1] as $f) {
-                        $this->includeDirectory('htdocs' . $f, $method, $args);
+                        if (is_array($f)) {
+                            $this->includeDirectory('htdocs' . $f[0], $method, $args, $f[1]);
+                        } else {
+                            $this->includeDirectory('htdocs' . $f, $method, $args);
+                        }
                     }
 
                     return $this;
