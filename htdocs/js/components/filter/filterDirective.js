@@ -98,7 +98,7 @@ angular.module('myApp.directives').directive('gimsFilter', function(FilterModal,
                     selected = selected.concat(getSelected(filter.children, selectionIds));
                 });
 
-                return selected;
+                return _.uniq(selected, 'id');
             };
 
             // scoped functions
