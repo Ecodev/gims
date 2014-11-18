@@ -85,7 +85,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.$watch('data.filterSet', function() {
         if ($scope.data.filterSet) {
             $scope.data.filters = [];
-            Restangular.one('filterSet', $scope.data.filterSet.id).getList('filters', _.merge($scope.filterFields, {flatten: true, perPage: 1000})).then(function(filters) {
+            Restangular.one('filterSet', $scope.data.filterSet.id).getList('filters', _.merge({flatten: true}, $scope.filterFields)).then(function(filters) {
                 if (filters) {
                     $scope.data.filters = filters;
                     $scope.data.filter = null;
@@ -101,7 +101,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         if ($scope.data.filter) {
 
             if ($scope.isValidId($scope.data.filter)) {
-                Restangular.one('filter', $scope.data.filter.id).getList('children', _.merge($scope.filterFields, {flatten: true, perPage: 1000})).then(function(filters) {
+                Restangular.one('filter', $scope.data.filter.id).getList('children', _.merge({flatten: true}, $scope.filterFields)).then(function(filters) {
                     if (filters) {
 
                         // Inject parent as first filter, so we are able to see the "main" value
@@ -167,7 +167,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
             TableFilter.loadQuestionnaires(newQuestionnaires).then(function() {
                 $scope.orderQuestionnaires(false);
-
                 $scope.data.geonamesIds = _.uniq(_.pluck($scope.data.questionnaires, function(q) {
                     return q.geoname.id;
                 })).join(',');

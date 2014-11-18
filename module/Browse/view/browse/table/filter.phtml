@@ -74,12 +74,6 @@
                                     </gims-select>
                                 </tab>
                                 <tab heading="Filter's children">
-<!--                                    <gims-filter-->
-<!--                                        model="data.filter"-->
-<!--                                        name="filter"-->
-<!--                                        show-selection-path="true"-->
-<!--                                        disabled="isLoading">-->
-<!--                                    </gims-filter>-->
                                     <gims-filter
                                         model="data.filter"
                                         name="filter"
@@ -89,20 +83,13 @@
 
                                 </tab>
                                 <tab heading="Filters ({{data.filters.length}})">
-<!--                                    <gims-filter-->
-<!--                                        model="data.filters"-->
-<!--                                        name="filters"-->
-<!--                                        query-params="filterFields"-->
-<!--                                        show-selection-path="true"-->
-<!--                                        disabled="isLoading"-->
-<!--                                        multiple>-->
-<!--                                    </gims-filter>-->
                                     <gims-filter
                                         model="data.filters"
                                         name="filters"
                                         query-params="filterFields"
                                         disabled="isLoading"
                                         bgColor="true"
+                                        dependencies="filterSet,filter"
                                         multiple="true">
                                     </gims-filter>
                                 </tab>
@@ -201,7 +188,7 @@
 
                         <div id="filtersSection">
                             <div class="table-filter-row filter-label" ng-repeat="filter in data.filters track by $index" ng-class="{'active':data.mode.isSector && filter.level < 2}" style="background-color:{{filter.bgColor}}">
-                                <span ng-if="isValidId(filter) || data.mode.isSector && filter.level != 1" ng-class="{'strong':filter.level == data.filters[0].level && !filter.sectorChild}" class="text-2em" style="margin-left:{{(filter.level - data.filters[0].level) * 2}}em;">
+                                <span ng-if="isValidId(filter) || data.mode.isSector && filter.level != 1" ng-class="{'strong':filter.level == data.filters[0].level && !filter.sectorChild}" class="text-2em" style="margin-left:{{(filter.level - data.filters[0].level + data.filters[0].offsetLevel) * 2}}em;">
                                     <i class="fa" style="color:{{filter.color}};" ng-class="{'fa-gims-filter':!filter.isLoading && isValidId(filter), 'fa-asterisk text-primary':!filter.isLoading && !isValidId(filter), 'fa-gims-loading':filter.isLoading}"></i>
                                     {{filter.name}}
                                     <a class="btn btn-link" href="/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i></a>
@@ -342,7 +329,7 @@
                             <div gims-resize-for-labels class="column" ng-repeat="questionnaire in data.questionnaires track by $id(questionnaire)">
 
                                 <!-- Filter values (and question labels) -->
-                                <div ng-repeat="filter in data.filters track by $id(filter)" class="table-filter-row" background-color>
+                                <div ng-repeat="filter in data.filters track by $index" class="table-filter-row" background-color>
                                     <div gims-if="questionnaire.showLabels" class="question-label">
                                         <ng-form name="labelForm">
                                             <div class="input-group input-group-sm">

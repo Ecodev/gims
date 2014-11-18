@@ -60,10 +60,7 @@ class FilterController extends AbstractChildRestfulController
 
             // extract
             $extractedFilter = $this->hydrator->extract($filter, $this->getJsonConfig()); // SANS children dans le GET HTTP !
-
-            if ($flattenArray) {
-                $extractedFilter['level'] = $level;
-            }
+            $extractedFilter['level'] = $level;
 
             $children = [];
             foreach ($this->getRepository()->getChildrenIds($filter->getId()) as $childId) {

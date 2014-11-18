@@ -30,6 +30,7 @@
                                 <gims-select
                                         model="tabs.filterSets"
                                         api="filterSet"
+                                        name="filterSet"
                                         placeholder="Select filter set"
                                         disabled="isLoading"
                                         multiple="true"
@@ -48,6 +49,7 @@
                                         model="tabs.filters"
                                         name="filters"
                                         query-params="filterFields"
+                                        dependencies="filterSet,filter"
                                         multiple="true">
                                 </gims-filter>
                             </tab>

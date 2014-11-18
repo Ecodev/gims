@@ -4,8 +4,8 @@
  <gims-filter
      model='filters'            -> usual model
      name="filters"             -> optional name (reported on url)
-     generic-color="false"       -> if true, show a color for each filter (genericColor property), if false, show only color property
-     multiple                   -> select2 in tag mode (missing means single selection on select2)
+     generic-color="false"      -> if true, show a color for each filter (genericColor property), if false, show only color property
+     multiple="false"           -> must contain a value "true" or "false", if attribute present but missing value, will be false
      query-params="queryParams" -> params for query. color,genericColor,paths are automatically added depending on above attributes values
      change-url="true"          -> update url with ids on selection change
      show-edit-button="true"    -> show a button that links to /admin/filter/x page
@@ -17,7 +17,6 @@ angular.module('myApp.directives').directive('gimsFilter', function(FilterModal,
 
     return {
         restrict: 'E', // Only usage possible is with element
-        replace: true,
         templateUrl: '/js/components/filter/templates/filterDirective.phtml',
         scope: {
             model: '=model',
@@ -28,7 +27,8 @@ angular.module('myApp.directives').directive('gimsFilter', function(FilterModal,
             changeUrl: '@',
             genericColor: '@',
             bgColor: '@',
-            showEditButton: '@'
+            showEditButton: '@',
+            dependencies: '@'
         },
         link: function(scope) {
 
@@ -95,7 +95,7 @@ angular.module('myApp.directives').directive('gimsFilter', function(FilterModal,
                     if (found) {
                         selected.push(filter);
                     }
-                    selected = selected.concat(getSelected(filter.children, selectionIds));
+                    selected = selected.concat(getSelectedElements(filter.children, selectionIds));
                 });
 
                 return _.uniq(selected, 'id');
@@ -103,12 +103,12 @@ angular.module('myApp.directives').directive('gimsFilter', function(FilterModal,
 
             var getSelected = function(filters, selectionIds) {
                 filters = getSelectedElements(filters, selectionIds);
-
                 var elements = [];
                 _.forEach(selectionIds, function(selectionId) {
-                    elements.push(_.find(filters, {id: selectionId}));
+                    elements.push(_.find(filters, function(f) {
+                        return f.id == selectionId;
+                    }));
                 });
-
                 return elements;
             };
 
@@ -132,12 +132,33 @@ angular.module('myApp.directives').directive('gimsFilter', function(FilterModal,
                 });
             };
 
-            // Url
+            /**
+             * Check if there are dependencies that will affect model (like filter set and filter)
+             * If no dependency exist in url, load filters specified querystring
+             */
+            var dependencies = scope.dependencies ? scope.dependencies.split(',') : [];
+            var hasDependencies = false;
+            _.forEach(dependencies, function(dependency) {
+                if ($location.search()[dependency] && $location.search()[dependency].split(',').length) {
+                    hasDependencies = true;
+                    return false;
+                }
+            });
+
             var ids = $location.search()[scope.name];
-            if (ids) {
-                TableFilter.getTree(scope.queryParams).then(function(filters) {
-                    tree = filters;
-                    scope.model = getSelected(tree, ids.split(','));
+            if (!hasDependencies && ids) {
+                TableFilter.getTree(scope.queryParams).then(function(treeFilters) {
+
+                    // retrieve filters
+                    tree = treeFilters;
+                    var filters = getSelected(tree, ids.split(','));
+
+                    // offset filters to avoid negative positionning
+                    var minLevel = _.min(filters, 'level').level;
+                    filters[0].offsetLevel = _.first(filters).level - minLevel;
+
+                    // update model
+                    scope.model = filters;
                     scope.ready = true;
                 });
             } else {
