@@ -217,34 +217,41 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
             };
 
             /**
-             *
+             * Clone structure and replace all 'current' syntax with given usage
              * @param {object} structure
              * @param {object} usage
              * @returns {object} structure
              */
-            function completeStructureWithUsage(structure/*, usage*/) {
+            function replaceCurrentWithUsage(structure, usage) {
 
-                return structure;
-//                var filterId = usage.filter ? usage.filter.id : null;
-//                var questionnaireId = usage.questionnaire ? usage.questionnaire.id : null;
-//                var partId = usage.part ? usage.part.id : null;
-//
-//                var result = _.cloneDeep(structure);
-//                _.forEach(result, function(s) {
-//                    if (s.type == 'filterValue' && filterId == s.filter.id && questionnaireId == s.questionnaire.id && partId == s.part.id) {
-//                        return true;
-//                    } else if (s.type == 'ruleValue' && questionnaireId == s.questionnaire.id && partId == s.part.id) {
-//                        return true;
-//                    }
-//                });
-//
-//                return result;
+                var filterId = usage.filter ? usage.filter.id : null;
+                var questionnaireId = usage.questionnaire ? usage.questionnaire.id : null;
+                var partId = usage.part ? usage.part.id : null;
+
+                var result = _.cloneDeep(structure);
+                _.forEach(result, function(s) {
+                    if (s.type == 'filterValue' || s.type == 'ruleValue') {
+                        if (filterId && s.filter && s.filter.id == 'current') {
+                            s.filter.id = filterId;
+                        }
+
+                        if (questionnaireId && s.questionnaire && s.questionnaire.id == 'current') {
+                            s.questionnaire.id = questionnaireId;
+                        }
+
+                        if (partId && s.part && s.part.id == 'current') {
+                            s.part.id = partId;
+                        }
+                    }
+                });
+
+                return result;
             }
+
             $scope.$watch('usage.rule.structure', function(structure) {
                 if (structure) {
-
-                    var a = completeStructureWithUsage(structure, $scope.usage);
-                    $rootScope.$emit('gims-rule-structure-changed', a);
+                    var replacedStructure = replaceCurrentWithUsage(structure, $scope.usage);
+                    $rootScope.$emit('gims-rule-structure-changed', replacedStructure);
                 }
             });
 
