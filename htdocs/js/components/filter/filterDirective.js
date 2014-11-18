@@ -85,7 +85,7 @@ angular.module('myApp.directives').directive('gimsFilter', function(FilterModal,
             });
 
             // private functions
-            var getSelected = function(filters, selectionIds) {
+            var getSelectedElements = function(filters, selectionIds) {
                 var selected = [];
                 _.forEach(filters, function(filter) {
                     var found = _.find(selectionIds, function(id) {
@@ -99,6 +99,17 @@ angular.module('myApp.directives').directive('gimsFilter', function(FilterModal,
                 });
 
                 return _.uniq(selected, 'id');
+            };
+
+            var getSelected = function(filters, selectionIds) {
+                filters = getSelectedElements(filters, selectionIds);
+
+                var elements = [];
+                _.forEach(selectionIds, function(selectionId) {
+                    elements.push(_.find(filters, {id: selectionId}));
+                });
+
+                return elements;
             };
 
             // scoped functions
