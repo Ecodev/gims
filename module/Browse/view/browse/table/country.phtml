@@ -4,7 +4,7 @@
         <a class="navbar-brand" href="#">Countries</a>
         <form class="navbar-form">
             <button class="btn btn-default" ng-class="{disabled: !tabs.geonames || !tabs.filters || !tabs.years}" ng-click="refresh()"><i class="fa fa-refresh"></i> Generate table</button>
-            <a href="/api/table/country/gims-countries.xlsx?geonames={{geonamesIds}}&filters={{filtersIds}}" target="_blank" class="btn btn-default" ng-class="{disabled: !tabs.geonames || !tabs.filters}"><i class="fa fa-download"></i> Export</a>
+            <a href="/api/table/country/gims-countries.xlsx?geonames={{geonamesIds}}&filters={{filtersIds}}&years={{tabs.years}}" target="_blank" class="btn btn-default" ng-class="{disabled: !tabs.geonames || !tabs.filters}"><i class="fa fa-download"></i> Export</a>
             <?php echo $this->helpButton(); ?>
         </form>
     </div>
