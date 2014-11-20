@@ -321,13 +321,13 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         foreach ($ranges as $range) {
             $range = trim($range, ' ');
             if (!strpos($range, '-')) {
-                $finalYears[] = $range;
+                $finalYears[] = (int) $range;
             } else {
                 $startAndEndYear = explode('-', $range);
                 $finalYears = array_merge($finalYears, range($startAndEndYear[0], $startAndEndYear[1]));
             }
         }
-        $finalYears = array_unique($finalYears);
+        $finalYears = array_filter(array_unique($finalYears));
         sort($finalYears);
 
         return $finalYears;
