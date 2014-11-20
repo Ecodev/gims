@@ -136,10 +136,10 @@
                         <!-- Chart -->
                         <div ng-show="tabs.filters.length && tabs.geonames.length && tabs.part" class="ng-trans ng-trans-fade-down col-md-12">
                             <tabset class="nav-tabs-centered">
-                                <tab heading="Relative trend lines chart">
+                                <tab heading="Relative trend lines chart" active="activeTab.lines">
                                     <chart value="chart" type="area"/>
                                 </tab>
-                                <tab heading="Relative trends bar chart">
+                                <tab heading="Relative trends bar chart" active="activeTab.bar">
                                     <div ng-repeat="geoname in tabs.geonames" class="row text-center">
                                         <h3>{{geoname.name}} - {{tabs.part.name}}</h3>
                                         <div ng-class="{'col-md-6':estimatesCharts[geoname.id]['ignored'].series,'col-md-12':!estimatesCharts[geoname.id]['ignored'].series}" ng-if="estimatesCharts[geoname.id]['normal'].series">
@@ -150,12 +150,12 @@
                                         </div>
                                     </div>
                                 </tab>
-                                <tab heading="Estimates">
+                                <tab heading="Estimates" active="activeTab.estimates">
                                     <h2>Estimated coverage</h2>
                                     <p>Extract of estimated coverage. Complete data are available <a href="/browse/table/country?geonames={{geonameIds}}">on country table</a>.</p>
                                     <div ng-grid="gridOptions" class="gridStyle"></div>
                                 </tab>
-                                <tab heading="Differences" ng-if="chart.hasAdjustedLines">
+                                <tab heading="Differences" ng-if="chart.hasAdjustedLines" active="activeTab.differences">
                                     <h2>{{findById(panelTabs.referenceChildren, panelTabs.overridable).name}}</h2>
                                     <div ng-repeat="serie in chart.series">
                                         <div ng-if="serie.originalFilters">
@@ -192,7 +192,7 @@
                             </div>
 
                             <tabset id="panelContent" class="nav-tabs-centered">
-                                <tab active="activeTab.filters">
+                                <tab active="panelTabs.activeTab.filters">
                                     <tab-heading><i class="fa fa-gims-filter"></i> Filters</tab-heading>
 
                                     <!-- Panel top part : selected questionnaire and filters -->
@@ -306,7 +306,7 @@
                                     </div>
                                 </tab>
 
-                                <tab active="activeTab.rules">
+                                <tab active="panelTabs.activeTab.rules">
                                     <tab-heading><i class="fa fa-gims-rule"></i> Rules</tab-heading>
                                     <!-- Panel top part : selected questionnaire and filters -->
                                     <div ng-show="pointSelected">
@@ -349,7 +349,7 @@
                                 </tab>
 
                                 <!-- Panel : Ignored elements -->
-                                <tab active="activeTab.ignored">
+                                <tab active="panelTabs.activeTab.ignored">
                                     <tab-heading><i class="fa fa-times-circle-o"></i> Ignored</tab-heading>
 
                                     <div class="col-md-12" ng-if="!ignoredElements">
@@ -404,7 +404,7 @@
                                     </div>
 
                                 </tab>
-                                <tab active="activeTab.actions">
+                                <tab active="panelTabs.activeTab.actions">
                                     <tab-heading><i class="fa fa-arrows-v"></i> Projection</tab-heading>
                                     <div class="col-md-12">
                                         <div class="form-group">

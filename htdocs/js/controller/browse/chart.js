@@ -6,7 +6,9 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     /**************************************************************************/
     $scope.activeTab = {};
     $scope.tabs = {};
-    $scope.panelTabs = {};
+    $scope.panelTabs = {
+        activeTab: {}
+    };
     $scope.ignoredElements = null;
     $scope.concatenatedIgnoredElements = [];
     $scope.geonameParams = {perPage: 500, fields: 'questionnaires'};
@@ -30,17 +32,32 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     var panel = originalUrlParameters.panel;
     if (panel) {
         $scope.panelOpened = true;
-        $scope.activeTab[panel] = true;
+        $scope.panelTabs.activeTab[panel] = true;
     }
 
+    // Reload tab if exists in URL
+    var tab = originalUrlParameters.tab;
+    if (tab) {
+        $scope.activeTab[tab] = true;
+    }
+
+    // When tab is changed, update URL
+    $scope.$watch('activeTab', function() {
+        _.forEach($scope.activeTab, function(isActive, tab) {
+            if (isActive) {
+                $location.search('tab', tab);
+            }
+        });
+    }, true);
+
     // When panel is closed or changed, update URL
-    $scope.$watch('[activeTab, panelOpened]', function() {
+    $scope.$watch('[panelTabs.activeTab, panelOpened]', function() {
         // suppress panel in URL
         $location.search('panel', null);
 
         // select currently active panel
         if ($scope.panelOpened) {
-            _.forEach($scope.activeTab, function(isActive, panel) {
+            _.forEach($scope.panelTabs.activeTab, function(isActive, panel) {
                 if (isActive) {
                     $location.search('panel', panel);
                 }
@@ -139,7 +156,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
         $scope.$apply(function() {
             $scope.setPointSelected(pointSelected.id, pointSelected.questionnaire, pointSelected.name, pointSelected.filter);
             $scope.panelOpened = true;
-            $scope.activeTab.filters = true;
+            $scope.panelTabs.activeTab.filters = true;
         });
     });
 
@@ -215,7 +232,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * }
      */
     var refreshGeonameScopeShortcuts = function() {
-        $scope.questionnairesIds = { all: [] };
+        $scope.questionnairesIds = {all: []};
         angular.forEach($scope.tabs.geonames, function(geoname) {
             $scope.questionnairesIds.all = $scope.questionnairesIds.all.concat(_.pluck(geoname.questionnaires, 'id'));
             $scope.questionnairesIds[geoname.id] = _.pluck(geoname.questionnaires, 'id').join(',');
