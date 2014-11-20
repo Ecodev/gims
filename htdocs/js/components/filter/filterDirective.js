@@ -115,9 +115,14 @@ angular.module('myApp.directives').directive('gimsFilter', function(FilterModal,
             // scoped functions
             scope.remove = function(filter) {
                 filter.selected = false;
-                _.remove(scope.elements, function(f) {
-                    return f.id == filter.id;
+
+                var model = [];
+                _.forEach(scope.model, function(element) {
+                    if (element.id != filter.id) {
+                        model.push(element);
+                    }
                 });
+                scope.model = model;
             };
 
             scope.openModal = function() {
