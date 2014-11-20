@@ -223,6 +223,9 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
              * @returns {object} structure
              */
             function replaceCurrentWithUsage(structure, usage) {
+                if (!structure) {
+                    return [];
+                }
 
                 var filterId = usage.filter ? usage.filter.id : null;
                 var questionnaireId = usage.questionnaire ? usage.questionnaire.id : null;
@@ -248,21 +251,42 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
                 return result;
             }
 
+            var updateTokenCallbacks = [];
+            var structureWithoutCurrentSyntax = [];
+
+            // When structure changes, convert it and update all known tokens
             $scope.$watch('usage.rule.structure', function(structure) {
+                structureWithoutCurrentSyntax = replaceCurrentWithUsage(structure, $scope.usage);
                 if (structure) {
-                    var replacedStructure = replaceCurrentWithUsage(structure, $scope.usage);
-                    $rootScope.$emit('gims-rule-structure-changed', replacedStructure);
+                    _.forEach(updateTokenCallbacks, function(updateTokenCallback) {
+                        updateTokenCallback(structureWithoutCurrentSyntax);
+                    });
                 }
             });
 
+            // When new token appears add it to our list and update him directly
+            $rootScope.$on('gims-rule-token-register', function(evt, updateTokenCallback) {
+                updateTokenCallbacks.push(updateTokenCallback);
+                updateTokenCallback(structureWithoutCurrentSyntax);
+            });
+
+            // When token disappear (eg: because of scroll), remove it from our list
+            $rootScope.$on('gims-rule-token-unregister', function(evt, updateTokenCallback) {
+                _.remove(updateTokenCallbacks, function(callback) {
+                    return callback == updateTokenCallback;
+                });
+            });
+
             function opened() {
-                $rootScope.$emit('gims-rule-editing-started');
                 $('body').addClass('rule-editing');
             }
 
             $scope.close = function() {
                 $scope.usage = null;
-                $rootScope.$emit('gims-rule-editing-ended');
+                structureWithoutCurrentSyntax = [];
+                _.forEach(updateTokenCallbacks, function(updateTokenCallback) {
+                    updateTokenCallback(structureWithoutCurrentSyntax);
+                });
                 $('body').removeClass('rule-editing');
             };
         }

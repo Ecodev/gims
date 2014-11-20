@@ -30,7 +30,12 @@ angular.module('myApp.directives').directive('gimsInsertToken', function($rootSc
                 }
             });
 
-            $rootScope.$on('gims-rule-structure-changed', function(evt, structure) {
+            /**
+             * Apply or reset highlight color if the token match at least one element in structure
+             * @param {array} structure
+             * @returns {undefined}
+             */
+            function updateHighlight(structure) {
                 var match = _.find(structure, function(s) {
                     if (s.type == 'filterValue' && filterId == s.filter.id && questionnaireId == s.questionnaire.id && partId == s.part.id) {
                         return true;
@@ -46,11 +51,14 @@ angular.module('myApp.directives').directive('gimsInsertToken', function($rootSc
                 }
 
                 element.css('outline', cssValue);
-            });
+            }
 
-            // Reset highlight when editing mode end
-            $rootScope.$on('gims-rule-editing-ended', function() {
-                element.css('outline', '');
+            // Upon creation register ourself, to be notified of updates
+            $rootScope.$emit('gims-rule-token-register', updateHighlight);
+
+            // Upon destruction, unregister
+            scope.$on('$destroy', function() {
+                $rootScope.$emit('gims-rule-token-unregister', updateHighlight);
             });
 
         }
