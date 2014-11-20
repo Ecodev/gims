@@ -216,6 +216,10 @@
                                 <i class="fa fa-gims-rule"></i> {{rule.name}}
                             </div>
 
+                            <!-- Button to add QuestionnaireUsage -->
+                            <div class="table-filter-row text-2em" ng-if="data.showQuestionnaireUsages && data.mode.isContribute">
+                            </div>
+
                             <div class="table-filter-row" ng-if="data.mode.isSector">
                                 <a class="btn btn-default btn-sm" ng-click="addEquipment();" ng-class="{'disabled': getFiltersByLevel(0).length != 1}">
                                     <i class="fa fa-gims-add"></i> Add new facility
@@ -357,7 +361,7 @@
                                             <i class="fa fa-gims-rule text-muted" ng-if="rule.values[questionnaire.id][part.id].value === null"></i>
                                             {{rule.values[questionnaire.id][part.id].value}}
                                             <a href gims-edit-usage="rule.values[questionnaire.id][part.id].usage"><i class="fa fa-pencil" tooltip="Edit rule"></i></a>
-                                            </span>
+                                        </span>
                                         &nbsp;
                                     </div>
                                 </div>
