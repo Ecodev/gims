@@ -212,7 +212,7 @@
                             </div>
 
                             <!-- QuestionnaireUsage's rule name column-->
-                            <div class="table-filter-row text-2em" ng-repeat="rule in data.questionnaireUsages track by $index" ng-if="isIncludedInUsedThematics(rule.thematics)">
+                            <div class="table-filter-row text-2em" ng-repeat="rule in data.questionnaireUsages track by $index" ng-if="data.showQuestionnaireUsages && isIncludedInUsedThematics(rule.thematics)">
                                 <i class="fa fa-gims-rule"></i> {{rule.name}}
                             </div>
 
@@ -350,7 +350,7 @@
 
                                 <!-- QuestionnaireUsage's values -->
                                 <div class="table-filter-row header"></div>
-                                <div class="table-filter-row text-center" ng-repeat="rule in data.questionnaireUsages track by $index" ng-if="isIncludedInUsedThematics(rule.thematics)">
+                                <div class="table-filter-row text-center" ng-repeat="rule in data.questionnaireUsages track by $index" ng-if="data.showQuestionnaireUsages && isIncludedInUsedThematics(rule.thematics)">
                                     <div gims-if="questionnaire.showLabels" class="question-label"></div>
                                     <div class="filter-value filter-value-container text-2em" ng-repeat="part in data.parts" gims-insert-token>
                                         <span ng-if="rule.values[questionnaire.id][part.id]">
