@@ -214,6 +214,7 @@ return array(
             'crudButtons' => 'Application\View\Helper\CrudButtons',
             'bodyCssClass' => 'Application\View\Helper\BodyCssClass',
             'version' => 'Application\View\Helper\Version',
+            'excelTable' => 'Application\View\Helper\ExcelTable',
             'googleAnalytics' => 'Application\View\Helper\GoogleAnalytics',
             'helpButton' => 'Application\View\Helper\HelpButton',
             'helpBox' => 'Application\View\Helper\HelpBox',
