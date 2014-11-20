@@ -434,6 +434,7 @@ abstract class AbstractImporter
                     'children' => array(-6, -7, -8, -9, 49, 73, 76),
                     'excludes' => 96,
                     'sorting' => 200,
+                    'color' => '#339966',
                     'isImproved' => true,
                     'regressionRules' => array(
                         'default' => array(
@@ -461,6 +462,7 @@ abstract class AbstractImporter
                     'children' => array(6),
                     'excludes' => 97,
                     'sorting' => 201,
+                    'color' => '#FFFF99',
                     'isImproved' => false,
                     'regressionRules' => array(
                         'default' => array(
