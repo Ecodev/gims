@@ -238,6 +238,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
             $scope.questionnairesIds[geoname.id] = _.pluck(geoname.questionnaires, 'id').join(',');
         });
         $scope.questionnairesIds.all = _.uniq($scope.questionnairesIds.all).join(',');
+        $scope.geonameIds = _.pluck($scope.tabs.geonames, 'id').join(',');
     };
 
     /**
