@@ -263,39 +263,43 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
      * Ensure there is empty objects to grant app to work fine (e.g emptyanswers have to exist before ng-model assigns a value)
      */
     function fillMissingElements() {
-        if (data.questionnaires && data.filters) {
+        if (!data.questionnaires) {
+            return;
+        }
 
-            _.forEach(data.questionnaires, function(questionnaire) {
+        _.forEach(data.questionnaires, function(questionnaire) {
 
-                setQuestionnaireWidth(questionnaire);
-                if (_.isUndefined(questionnaire.survey)) {
-                    questionnaire.survey = {
-                        type: data.mode.surveyType
+            setQuestionnaireWidth(questionnaire);
+            if (_.isUndefined(questionnaire.survey)) {
+                questionnaire.survey = {
+                    type: data.mode.surveyType
+                };
+            }
+
+            if (_.isUndefined(questionnaire.status)) {
+                questionnaire.status = 'new';
+            }
+
+            if (_.isUndefined(questionnaire.survey.questions)) {
+                questionnaire.survey.questions = {};
+            }
+
+            // Create empty population indexed by the part ID
+            if (_.isUndefined(questionnaire.populations)) {
+                questionnaire.populations = {};
+            }
+
+            _.forEach(data.parts, function(part) {
+                if (_.isUndefined(questionnaire.populations[part.id])) {
+                    questionnaire.populations[part.id] = {
+                        part: part
                     };
                 }
+            });
 
-                if (_.isUndefined(questionnaire.status)) {
-                    questionnaire.status = 'new';
-                }
+            // Complete questions
+            if (data.filters) {
 
-                if (_.isUndefined(questionnaire.survey.questions)) {
-                    questionnaire.survey.questions = {};
-                }
-
-                // Create empty population indexed by the part ID
-                if (_.isUndefined(questionnaire.populations)) {
-                    questionnaire.populations = {};
-                }
-
-                _.forEach(data.parts, function(part) {
-                    if (_.isUndefined(questionnaire.populations[part.id])) {
-                        questionnaire.populations[part.id] = {
-                            part: part
-                        };
-                    }
-                });
-
-                // Complete questions
                 _.forEach(data.filters, function(filter) {
                     if (_.isUndefined(questionnaire.survey.questions[filter.id])) {
                         questionnaire.survey.questions[filter.id] = {
@@ -319,9 +323,8 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                         questionnaire.survey.questions[filter.id].answers[part.id] = getEmptyAnswer(questionnaire.survey.questions[filter.id].answers[part.id], questionnaire.id, questionnaire.survey.questions[filter.id].id, part.id);
                     });
                 });
-
-            });
-        }
+            }
+        });
     }
 
     /**
@@ -663,7 +666,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     }
 
     /**
-     * Remplace id related to filters that have temporary id by the new ID returned by DB.
+     * Replace id related to filters that have temporary id by the new ID returned by DB.
      * @param filter
      */
     function replaceIdReferenceOnChildFilters(filter) {
@@ -1947,5 +1950,6 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         resizeContent: resizeContent,
         updateAnswer: updateAnswer,
         getTree: getTree
-    };
+    }
+    ;
 });
