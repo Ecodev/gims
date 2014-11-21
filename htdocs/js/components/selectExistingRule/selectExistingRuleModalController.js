@@ -54,8 +54,10 @@ angular.module('myApp').controller('selectExistingRuleModalCtrl', function($scop
         }
     };
 
+    $scope.opened = true;
+    $scope.selection = {};
     $scope.setRule = function(rule) {
-        $scope.rule = rule;
+        $scope.selection.rule = rule;
     };
 
     $scope.selectRule = function(rule) {
