@@ -5,19 +5,11 @@ angular.module('myApp').controller('FilterModalCtrl', function($scope, $modalIns
     var queryParams = params.queryParams ? params.queryParams : {fields: 'color'};
     $scope.expandedNodes = [];
 
-    var expandFirstLevel = function() {
+    $scope.$watch('tree', function() {
         _.forEach($scope.tree, function(filter) {
             $scope.expandedNodes.push(filter);
         });
-    };
-
-    if ($scope.tree) {
-        expandFirstLevel();
-    } else {
-        $scope.$watch('tree', function() {
-            expandFirstLevel();
-        });
-    }
+    });
 
     $scope.treeOptions = {
         dirSelectable: true,
