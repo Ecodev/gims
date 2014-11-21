@@ -12,7 +12,7 @@
 
     <div class="row show-grid">
         <div class="col-md-9">
-            <input type="text" class="form-control" name="filterOnName" placeholder="Search..." ng-model="search" style="width: 400px"/>
+            <input type="text" class="form-control" name="filterOnName" placeholder="Search..." ng-model="data.search" style="width: 400px"/>
         </div>
         <div class="col-md-3" style="text-align: right">
             <gims-link-new target="filter"></gims-link-new>
@@ -22,13 +22,13 @@
     <div class="row">
         <div class="col-md-8">
             <treecontrol class="tree-classic"
-                         tree-model="tree"
-                         options="treeOptions"
-                         expanded-nodes="expandedNodes"
-                         filter-expression="search"
-                         selected-node="selectedNode"
+                         tree-model="data.tree"
+                         options="data.treeOptions"
+                         expanded-nodes="data.expandedNodes"
+                         filter-expression="data.search"
+                         selected-node="data.selectedNode"
                          show-edit-buttons="true"
-                         on-selection="showSelected(node)">
+                         on-selection="data.showSelected(node)">
 
                 <div ng-class="{'selected':node.selected}">
                     <i class="fa fa-gims-filter fa-fw" style="color:{{node.color}};"></i>
@@ -44,6 +44,5 @@
 
     <br/>
     <br/>
-
 
 </div> <!-- /container -->

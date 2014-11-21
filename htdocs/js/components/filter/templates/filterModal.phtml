@@ -9,7 +9,7 @@
         <div class="form-group">
             <label for="filterOnName" class="col-sm-2 control-label">Search</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" name="filterOnName" ng-model="search" />
+                <input type="text" class="form-control" name="filterOnName" ng-model="data.search" />
             </div>
         </div>
     </form>
@@ -23,12 +23,12 @@
         <div class="row">
             <div class="col-md-12">
                 <treecontrol class="tree-classic"
-                             tree-model="tree"
-                             options="treeOptions"
-                             expanded-nodes="expandedNodes"
-                             filter-expression="search"
-                             selected-node="selectedNode"
-                             on-selection="showSelected(node)">
+                             tree-model="data.tree"
+                             options="data.treeOptions"
+                             expanded-nodes="data.expandedNodes"
+                             filter-expression="data.search"
+                             selected-node="data.selectedNode"
+                             on-selection="data.showSelected(node)">
 
                     <div ng-class="{'selected':node.selected}">
                         <i class="fa fa-gims-filter fa-fw" style="color:{{node.color}};"></i>
@@ -43,5 +43,5 @@
 
 <div class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="$dismiss()">Close</button>
-    <button class="btn btn-primary pull-right" ng-click="selectFilters()" ng-disabled="!selected.length">Select filters</button>
+    <button class="btn btn-primary pull-right" ng-click="data.selectFilters()" ng-disabled="!data.selected.length">Select filters</button>
 </div>

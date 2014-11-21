@@ -1,17 +1,14 @@
 angular.module('myApp').controller('FilterModalCtrl', function($scope, $modalInstance, $timeout, Restangular, params, TableFilter, Modal) {
     'use strict';
 
-    $scope.selected = params.selected ? params.selected : [];
+    $scope.data = {};
+    $scope.data.expandedNodes = [];
+    $scope.data.selected = params.selected ? params.selected : [];
+
     var queryParams = params.queryParams ? params.queryParams : {fields: 'color'};
-    $scope.expandedNodes = [];
+    var flattenedTree = null;
 
-    $scope.$watch('tree', function() {
-        _.forEach($scope.tree, function(filter) {
-            $scope.expandedNodes.push(filter);
-        });
-    });
-
-    $scope.treeOptions = {
+    $scope.data.treeOptions = {
         dirSelectable: true,
         injectClasses: {
             li: "text-2em",
@@ -26,12 +23,55 @@ angular.module('myApp').controller('FilterModalCtrl', function($scope, $modalIns
         }
     };
 
+    $scope.$watch('data.tree', function() {
+        expandRootNodes();
+        flattenedTree = getFlattenedTree($scope.data.tree);
+    });
+
+    /**
+     * Watch for search teams to deploy all hierarchy to show all results instead of just root filters
+     * When deleting search chars, deploy hierarchy according to selected elements in order to show everything that is selected
+     */
+    $scope.$watch('data.search', function() {
+        if ($scope.data.search) {
+            $scope.data.expandedNodes = flattenedTree;
+        } else {
+            if (!_.isEmpty($scope.data.selected)) {
+                $scope.data.expandedNodes = [];
+                searchAndOpenFoldersWithSelectedElements($scope.data.tree);
+            } else {
+                expandRootNodes();
+            }
+        }
+    });
+
+    var expandRootNodes = function() {
+        var rootNodes = [];
+        _.forEach($scope.data.tree, function(filter) {
+            rootNodes.push(filter);
+        });
+
+        $scope.data.expandedNodes = rootNodes;
+    };
+
+    var getFlattenedTree = function(tree) {
+        var elements = [];
+        _.forEach(tree, function(filter) {
+            if (!_.isEmpty(filter.children)) {
+                elements.push(filter);
+                elements = elements.concat(getFlattenedTree(filter.children));
+            }
+        });
+
+        return elements;
+    };
+
     var searchAndOpenFoldersWithSelectedElements = function(elements) {
         var isSelected = false;
         angular.forEach(elements, function(node) {
             if (searchAndOpenFoldersWithSelectedElements(node.children)) {
                 isSelected = true;
-                $scope.expandedNodes.push(node);
+                $scope.data.expandedNodes.push(node);
             }
 
             if (node.selected) {
@@ -46,7 +86,7 @@ angular.module('myApp').controller('FilterModalCtrl', function($scope, $modalIns
         _.forEach(elements, function(node) {
 
             // if node is selected, mark or unmark it
-            var found = _.find($scope.selected, function(el) {
+            var found = _.find($scope.data.selected, function(el) {
                 return node.id == el.id;
             });
 
@@ -74,39 +114,39 @@ angular.module('myApp').controller('FilterModalCtrl', function($scope, $modalIns
     var addToSelected = function(filter) {
 
         if (!params.multiple) {
-            _.forEach($scope.selected, function(el) {
+            _.forEach($scope.data.selected, function(el) {
                 removeFromSelected(el);
             });
         }
 
         filter.selected = true;
-        var found = _.find($scope.selected, function(s) {
+        var found = _.find($scope.data.selected, function(s) {
             return s.id == filter.id;
         });
 
         if (!found) {
-            $scope.selected.push(filter);
+            $scope.data.selected.push(filter);
         }
 
-        tagAllSimilarFilters(filter, $scope.tree);
+        tagAllSimilarFilters(filter, $scope.data.tree);
     };
 
     var removeFromSelected = function(filter) {
         filter.selected = false;
-        _.remove($scope.selected, function(f) {
+        _.remove($scope.data.selected, function(f) {
             return f.id == filter.id;
         });
-        tagAllSimilarFilters(filter, $scope.tree);
+        tagAllSimilarFilters(filter, $scope.data.tree);
     };
 
     TableFilter.getTree(queryParams).then(function(tree) {
-        $scope.tree = tree;
-        initSelected($scope.tree);
-        searchAndOpenFoldersWithSelectedElements($scope.tree);
+        $scope.data.tree = tree;
+        initSelected($scope.data.tree);
+        searchAndOpenFoldersWithSelectedElements($scope.data.tree);
     });
 
     var lastSelected = null;
-    $scope.showSelected = function(selection) {
+    $scope.data.showSelected = function(selection) {
 
         if (selection) {
             lastSelected = selection;
@@ -121,27 +161,27 @@ angular.module('myApp').controller('FilterModalCtrl', function($scope, $modalIns
                 removeFromSelected(selection);
             }
 
-            $scope.selectedNode = selection;
+            $scope.data.selectedNode = selection;
         }
     };
 
-    $scope.selectFilters = function() {
+    $scope.data.selectFilters = function() {
         if (!params.multiple) {
-            $scope.selected = $scope.selected[0];
+            $scope.data.selected = $scope.data.selected[0];
         }
-        $modalInstance.close($scope.selected);
+        $modalInstance.close($scope.data.selected);
     };
 
-    $scope.remove = function(filter) {
+    $scope.data.remove = function(filter) {
         Modal.confirmDelete(filter, {returnUrl: '/admin/filter'}).then(function() {
             TableFilter.getTree(queryParams, true).then(function(tree) {
-                $scope.tree = tree;
+                $scope.data.tree = tree;
             });
         });
 
     };
 
-    $scope.$dismiss = function() {
+    $scope.data.$dismiss = function() {
         $modalInstance.dismiss();
     };
 
