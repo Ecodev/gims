@@ -19,7 +19,8 @@ $border: 1px;
     }
 
     #filtersSection {
-        overflow:auto;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
 
