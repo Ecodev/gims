@@ -22,7 +22,7 @@
                 <button class="btn btn-primary" ng-if="hasUnsavedElement()" ng-click="saveAll();" ng-disabled="isLoading || !data.filters && !data.questionnaires"><i class="fa fa-save"></i> Save new elements</button>
 
                 <!-- link to chart -->
-                <a class="btn btn-default" href="/browse/chart?geonames={{data.geonamesIds}}&part=1&filterSet={{data.filterSet.id}}&filters={{data.filtersIds}}"><i class="fa fa-bar-chart-o"></i> View in chart</a>
+                <a class="btn btn-default" href="/browse/chart?geonames={{data.geonamesIds}}&part=1&filterSet={{data.filterSet.id}}&filters={{data.filtersIds}}"><i class="fa fa-line-chart"></i> View in chart</a>
 
                 <!-- Clear the selection -->
                 <a href class="btn btn-default" ng-click="data.questionnaires = []; data.filters = []; data.filterSet = null; data.geoname = null; data.filter = null; data.survey = null"><i class="fa fa-eraser"></i> Clear selection</a>
