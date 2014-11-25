@@ -274,23 +274,43 @@
                                                             <td style="width:{{lastCol}}" class="text-right">
                                                                 <span ng-if="!indexedElements[pointSelected.questionnaire].filters[key].filter.ignored && indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[tabs.part.name] === undefined">
                                                                     <span ng-if="indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]" class="text-success">
-                                                                        {{indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]}}&nbsp;%
+                                                                        <span ng-if="!indexedElements[pointSelected.questionnaire].filters[key].filter.isAbsolute">
+                                                                            {{indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]|percent}}&nbsp;%
+                                                                        </span>
+                                                                        <span ng-if="indexedElements[pointSelected.questionnaire].filters[key].filter.isAbsolute">
+                                                                            {{indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]}}
+                                                                        </span>
                                                                         <i class="fa fa-check-circle-o fa-fw"></i>
                                                                     </span>
                                                                 </span>
                                                                 <span ng-if="!indexedElements[pointSelected.questionnaire].filters[key].filter.ignored && indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[tabs.part.name] !== undefined">
                                                                     <span ng-if="indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[tabs.part.name]" class="text-warning">
-                                                                        {{indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[tabs.part.name]}}&nbsp;%
+                                                                        <span ng-if="!indexedElements[pointSelected.questionnaire].filters[key].filter.isAbsolute">
+                                                                            {{indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]|percent}}&nbsp;%
+                                                                        </span>
+                                                                        <span ng-if="indexedElements[pointSelected.questionnaire].filters[key].filter.isAbsolute">
+                                                                            {{indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]}}
+                                                                        </span>
                                                                         <i class="fa fa-exclamation-triangle fa-fw"></i>
                                                                     </span>
                                                                     <span ng-if="!indexedElements[pointSelected.questionnaire].filters[key].valuesWithoutIgnored[tabs.part.name]" class="text-danger">
-                                                                        {{indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]}}&nbsp;%
+                                                                        <span ng-if="!indexedElements[pointSelected.questionnaire].filters[key].filter.isAbsolute">
+                                                                            {{indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]|percent}}&nbsp;%
+                                                                        </span>
+                                                                        <span ng-if="indexedElements[pointSelected.questionnaire].filters[key].filter.isAbsolute">
+                                                                            {{indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]}}
+                                                                        </span>
                                                                         <i class="fa fa-times-circle-o fa-fw"></i>
                                                                     </span>
                                                                 </span>
                                                                 <span ng-if="indexedElements[pointSelected.questionnaire].filters[key].filter.ignored">
                                                                     <span ng-if="indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]" class="text-danger">
-                                                                        {{indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]}}&nbsp;%
+                                                                        <span ng-if="!indexedElements[pointSelected.questionnaire].filters[key].filter.isAbsolute">
+                                                                            {{indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]|percent}}&nbsp;%
+                                                                        </span>
+                                                                        <span ng-if="indexedElements[pointSelected.questionnaire].filters[key].filter.isAbsolute">
+                                                                            {{indexedElements[pointSelected.questionnaire].filters[key].values[tabs.part.name]}}
+                                                                        </span>
                                                                         <i class="fa fa-times-circle-o fa-fw"></i>
                                                                     </span>
                                                                 </span>

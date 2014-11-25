@@ -157,6 +157,9 @@ angular.module('myApp.services').factory('ChartCache', function(Utility) {
             if (filter.filter.color) {
                 index[questionnaireId].filters[filter.filter.id].filter.color = filter.filter.color;
             }
+            if (!_.isUndefined(filter.filter.isAbsolute)) {
+                index[questionnaireId].filters[filter.filter.id].filter.isAbsolute = filter.filter.isAbsolute;
+            }
             if (filter.filter.originalDenomination) {
                 index[questionnaireId].filters[filter.filter.id].filter.originalDenomination = filter.filter.originalDenomination;
             }

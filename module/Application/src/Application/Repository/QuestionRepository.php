@@ -176,4 +176,29 @@ class QuestionRepository extends AbstractChildRepository
 
         return $alternateNames;
     }
+
+    /**
+     * Returns alternateNames for the all filters for the given questionnaire
+     * @param array $filterIds
+     * @param \Application\Model\Questionnaire $questionnaire
+     * @return array
+     */
+    public function getAbsoluteByFiltersAndQuestionnaire(array $filterIds, Questionnaire $questionnaire)
+    {
+        $query = $this->getEntityManager()
+            ->createQuery("SELECT q.isAbsolute, filter.id AS filterId FROM Application\Model\Question\NumericQuestion q
+                JOIN q.survey survey
+                JOIN q.filter filter
+                WHERE q.filter IN (:filters) AND :questionnaire MEMBER OF survey.questionnaires");
+
+        $params = array(
+            'filters' => $filterIds,
+            'questionnaire' => $questionnaire,
+        );
+
+        $query->setParameters($params);
+        $questions = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        return $questions;
+    }
 }

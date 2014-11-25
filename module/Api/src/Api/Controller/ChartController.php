@@ -321,7 +321,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $tableController = new TableController();
                 $tableController->setServiceLocator($this->getServiceLocator());
 
-                $flatFilters = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, array(), true);
+                $flatFilters = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, array(), true, false);
                 $flatFiltersWithoutIgnoredFilters = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, [], $overriddenElements, true);
 
                 $flatFilters = $this->addQuestionsToFilters($flatFilters, $questionnaire);
@@ -385,7 +385,13 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             return $flatFilter['filter']['id'];
         }, $flatFilters);
 
-        $alternateNames = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getByFiltersAndQuestionnaire($filterIds, $questionnaire);
+        $alternateNames = $this->getEntityManager()
+                               ->getRepository('Application\Model\Question\AbstractQuestion')
+                               ->getByFiltersAndQuestionnaire($filterIds, $questionnaire);
+
+        $absoluteStatus = $this->getEntityManager()
+                               ->getRepository('Application\Model\Question\AbstractQuestion')
+                               ->getAbsoluteByFiltersAndQuestionnaire($filterIds, $questionnaire);
 
         foreach ($alternateNames as $alternateName) {
             if (isset($alternateName['alternateNames'][$questionnaire->getId()])) {
@@ -394,6 +400,17 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                         $flatFilter['filter']['originalDenomination'] = $alternateName['alternateNames'][$questionnaire->getId()];
                     }
                 }
+            }
+        }
+
+        $absoluteStatusByFilter = [];
+        foreach ($absoluteStatus as $question) {
+            $absoluteStatusByFilter[$question['filterId']] = $question['isAbsolute'];
+        }
+
+        foreach ($flatFilters as &$flatFilter) {
+            if (isset($absoluteStatusByFilter[$flatFilter['filter']['id']])) {
+                $flatFilter['filter']['isAbsolute'] = $absoluteStatusByFilter[$flatFilter['filter']['id']];
             }
         }
 

@@ -45,7 +45,8 @@
                     "name": "Tap water",
                     "color": null,
                     "level": 1,
-                    "originalDenomination": "Tap"
+                    "originalDenomination": "Tap",
+                    "isAbsolute": false
                 },
                 "values": [
                     {
