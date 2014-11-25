@@ -117,6 +117,10 @@ Once the NSA sector data has been created, you can display it on the graph so as
 
 To ensure the comparisons performed are meaningful, it is best that you only display equivalent filters [1]. In the example below, we have displayed the JMP filter "Piped water into dwelling" (in blue) and the sector data "Piped water into houses (SD)" (in red).
 
+
+Projection
+----------
+
 To discover by how many persons per equipment the NSA estimations need to be corrected, click on the "Actions" tab [2] and select the parameters to be used:
 
 * **Filter for the projection** [3]: select the trend line you wish to move. In
