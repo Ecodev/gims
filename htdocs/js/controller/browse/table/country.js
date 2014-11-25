@@ -1,4 +1,4 @@
-angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, $http, $timeout, $location, Restangular, Utility) {
+angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, $http, $location, Restangular, Utility) {
     'use strict';
 
     // Init to empty
@@ -72,8 +72,6 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
 
             // ... then, get table data via Ajax, but only once per 200 milliseconds
             // (this avoid sending several request on page loading)
-            var params = $location.search();
-            params.years = $scope.years;
             $http.get('/api/table/country', {
                 params: {
                     filters: $scope.filtersIds,
