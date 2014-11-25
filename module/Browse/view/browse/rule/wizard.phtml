@@ -138,6 +138,51 @@
         </div>
     </div>
     <div class='form-horizontal'>
+        <div class="form-group" ng-show="token.selected.questionnaireUsage" ng-class="{'has-error': myForm.questionnaire.$invalid}">
+            <label class="control-label col-md-2" for="token.questionnaire"><?php echo $this->translate("Questionnaire"); ?></label>
+            <div class="col-md-8">
+                <div class="radio" ng-repeat="suggestedQuestionnaire in suggestedQuestionnaires">
+                    <label>
+                        <input type="radio" ng-model="token.questionnaire" ng-value="suggestedQuestionnaire" name='wizard-questionnaire' />
+                        {{suggestedQuestionnaire.name}}
+                    </label>
+                </div>
+                <div class="radio">
+                    <label style="width: 100%">
+                        <input type="radio" ng-checked="currentValue != token.questionnaire" name='wizard-questionnaire' />
+                        <gims-select name="questionnaire"
+                                     id="token.questionnaire"
+                                     api="questionnaire"
+                                     model="token.questionnaire"
+                                     change-url="false"
+                                     placeholder="Select a questionnaire"
+                                     style="width: 100%"
+                                >
+                        </gims-select>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='form-horizontal'>
+        <div class="form-group" ng-show="token.selected.questionnaireUsage" ng-class="{'has-error': myForm.questionnaire.$invalid}">
+            <label class="control-label col-md-2" for="token.usage"><?php echo $this->translate("Usage"); ?></label>
+            <div class="col-md-8">
+                <p>
+                    <select name="token"
+                            id="token.usage"
+                            ng-model="token.usage"
+                            ng-options="u.part.name group by u.rule.name for u in suggestedQuestionnaireUsages"
+                            style="width: 100%"
+                            ng-disabled="!suggestedQuestionnaireUsages.length"
+                            >
+                        <option style="display:none" value="">Select a specific usage of rule</option>
+                    </select>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class='form-horizontal'>
         <div class="form-group" ng-show="token.selected.step" ng-class="{'has-error': myForm.step.$invalid}">
             <label class="control-label col-md-2" for="token.step"><?php echo $this->translate("Step 2"); ?></label>
             <div class="col-md-8">

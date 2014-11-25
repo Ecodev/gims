@@ -8,6 +8,7 @@ angular.module('myApp.services').factory('selectExistingRuleModal', function($mo
                 controller: 'selectExistingRuleModalCtrl',
                 templateUrl: '/template/browse/rule/selectExistingRule',
                 windowClass: 'windowHeight',
+                size: 'lg',
                 resolve: {
                     referenceUsage: function() {
                         return usage;

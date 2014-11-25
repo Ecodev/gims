@@ -1,7 +1,7 @@
 /**
- * Controller for user editing within a modal
+ * Controller to compose formula syntax
  */
-angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $modalInstance, $timeout) {
+angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $modalInstance, $timeout, rule, RuleSuggestor) {
     'use strict';
 
     $scope.currentValue = {
@@ -48,15 +48,16 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
         {
             group: 'Before regression',
             name: 'Rule value (Calculations/Estimations/Ratios)',
-            description: 'Reference a rule value. Typically used to reference a Calculation, Estimation or Ratio. WARNING: The referenced rule must exist and be applied to the specified questionnaire and part, otherwise computation will fail.',
+            description: 'Reference a rule value. Typically used to reference a Calculation, Estimation or Ratio.',
             filter: false,
-            questionnaire: true,
-            part: true,
-            rule: true,
+            questionnaire: false,
+            part: false,
+            rule: false,
             step: false,
             year: false,
+            questionnaireUsage: true,
             toString: function(config) {
-                return '{R#' + config.rule.id + ',Q#' + config.questionnaire.id + ',P#' + config.part.id + '}';
+                return '{R#' + config.usage.rule.id + ',Q#' + config.usage.questionnaire.id + ',P#' + config.usage.part.id + '}';
             }
         },
         {
@@ -156,6 +157,10 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
             return false;
         }
 
+        if ($scope.token.selected.questionnaireUsage && !$scope.token.usage) {
+            return false;
+        }
+
         return true;
     };
 
@@ -169,5 +174,23 @@ angular.module('myApp').controller('RuleWizardModalCtrl', function($scope, $moda
     $scope.$dismiss = function() {
         $modalInstance.dismiss();
     };
+
+    // Take care of questionnaireUsages selection
+    $scope.suggestedQuestionnaires = RuleSuggestor.getSuggestedQuestionnaires(rule);
+    $scope.$watch('[token.selected.questionnaireUsage, token.questionnaire]', function() {
+        if ($scope.token.selected && $scope.token.selected.questionnaireUsage) {
+
+            // Prevent selection of current value
+            if ($scope.token.questionnaire == $scope.currentValue) {
+                $scope.token.questionnaire = null;
+            }
+
+            if ($scope.token.questionnaire) {
+                $scope.suggestedQuestionnaireUsages = RuleSuggestor.getSuggestedQuestionnaireUsages(rule, $scope.token.questionnaire);
+            }
+
+            $scope.token.usage = null;
+        }
+    }, true);
 
 });

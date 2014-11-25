@@ -112,7 +112,8 @@ Before regression context
     .. warning::
 
         The referenced rule must exist and be applied to the specified
-        questionnaire and part, otherwise computation will fail.
+        questionnaire and part, otherwise computation will fail. To avoid
+        possible trouble, it is recommended to use the syntax wizard.
 
 
 **Population value**

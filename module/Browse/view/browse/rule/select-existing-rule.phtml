@@ -13,19 +13,18 @@
                          style="width: 100%">
             </gims-select>
         </accordion-group>
-        <accordion-group heading="Suggested rules by same {{type}}" ng-repeat="type in types" ng-if="suggestedUsages[type].length">
+        <accordion-group heading="Suggested rules by same {{type}}" ng-repeat="(type, rules) in suggestedRules" ng-if="suggestedRules[type].length">
             <ul class="list-unstyled">
-                <li ng-repeat="usage in suggestedUsages[type]" ng-click="setRule(usage.rule)">
-                    <a href><i class="fa fa-gims-rule"></i> {{usage.rule.name}}</a>
+                <li ng-repeat="rule in rules" ng-click="setRule(rule)">
+                    <a href><i class="fa fa-gims-rule"></i> {{rule.name}}</a>
                 </li>
             </ul>
         </accordion-group>
     </accordion>
-
-
 </div>
+
 <div class="modal-footer" ng-if="selection.rule" style="text-align:left">
-    <strong>Selected rule : </strong> {{selection.rule.name}}
+    <strong>Selected rule:</strong> {{selection.rule.name}}
     <gims-formula structure="selection.rule.structure" ></gims-formula>
 </div>
 <div class="modal-footer">
