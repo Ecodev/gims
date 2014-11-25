@@ -268,7 +268,7 @@
                                                                 <span tooltip="{{indexedElements[pointSelected.questionnaire].filters[key].filter.originalDenomination}}"
                                                                       tooltip-placement="right">
                                                                     {{indexedElements[pointSelected.questionnaire].filters[key].filter.name}}&nbsp;
-                                                                    <a href="/admin/filter/edit/{{key}}" target="_blank"><i class="fa fa-pencil"></i></a>
+                                                                    <a href="/admin/filter/edit/{{key}}"><i class="fa fa-pencil"></i></a>
                                                                 </span>
                                                             </td>
                                                             <td style="width:{{lastCol}}" class="text-right">
@@ -390,7 +390,7 @@
                                                             <i ng-if="globalIndexedFilters[key] == true" class="fa fa-gims-questionnaire text-muted" ng-click="propagateStatusGlobally(indexedElements[questionnaireId].filters[key], false)" tooltip-placement="right" tooltip="Include filter for all questionnaires"></i>
                                                         </td>
                                                         <td style="padding-left:{{indexedElements[questionnaireId].filters[key].filter.hFilters[hFilterId].level + 1}}em;">
-                                                            {{indexedElements[questionnaireId].filters[key].filter.name}}&nbsp;<a href="/admin/filter/edit/{{key}}" target="_blank"><i class="fa fa-pencil"></i></a>
+                                                            {{indexedElements[questionnaireId].filters[key].filter.name}}&nbsp;<a href="/admin/filter/edit/{{key}}"><i class="fa fa-pencil"></i></a>
                                                         </td>
                                                         <td style="width:{{lastCol}}" class="text-right">
                                                             <span ng-show="indexedElements[questionnaireId].filters[key].values[tabs.part.name]" class="text-danger">

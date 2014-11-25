@@ -27,7 +27,7 @@
         <li ng-if="data.mode.isContribute && questionnaire.id" class="dropdown-header">
             Actions
         </li>
-        <li><a href ng-click="openDiscussion({questionnaire: questionnaire.id})"><i class="fa fa-comments"></i> View discussion</a></li>
+        <li><a href ng-click="openDiscussion({questionnaire: questionnaire.id})"><i class="fa fa-comments"></i> View discussion…</a></li>
         <li><a href ng-click="removeQuestionnaire(questionnaire)"><i class="fa fa-times fa-fw"></i> Hide this column</a></li>
 
 
@@ -53,7 +53,7 @@
 
         <!-- Add questionnaireUsage -->
         <li ng-if="data.mode.isContribute">
-            <a href gims-add-usage questionnaire="questionnaire" part="data.part"><i class="fa fa-gims-rule fa-fw"></i> Add a rule</a>
+            <a href gims-add-usage questionnaire="questionnaire" part="data.part"><i class="fa fa-gims-rule fa-fw"></i> Add a rule…</a>
         </li>
 
         <li ng-if="data.mode.isContribute && questionnaire.id" class="divider"></li>
