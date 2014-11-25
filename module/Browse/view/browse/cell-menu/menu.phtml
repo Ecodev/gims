@@ -54,10 +54,10 @@
 
         <li ng-if="questionnaire.survey.questions[filter.id].answers[part.id].id" class="divider"></li>
         <li ng-if="questionnaire.survey.questions[filter.id].answers[part.id].id" class="dropdown-header">Quality : {{questionnaire.survey.questions[filter.id].answers[part.id].quality * 100}} %</li>
-        <li ng-if="questionnaire.survey.questions[filter.id].answers[part.id].id" style="padding:5px 30px">
+        <li ng-if="questionnaire.survey.questions[filter.id].answers[part.id].id && questionnairesStatus[questionnaire.status] && questionnaire.survey.questions[filter.id].answers[part.id].permissions.update" style="padding:5px 30px">
             <div class="qualitySlider" ui-slider="qualitySlider.options" min="0" max="1" step="0.10" use-decimals ng-model="questionnaire.survey.questions[filter.id].answers[part.id].quality"></div>
         </li>
-
+<!-- && questionnairesStatus[questionnaire.status]-->
         <!-- Actions -->
         <li class="divider"></li>
         <li class="dropdown-header">Actions</li>

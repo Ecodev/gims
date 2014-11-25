@@ -17,6 +17,8 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, question
     $scope.getCellType = TableFilter.getCellType;
     $scope.openDiscussion = DiscussionModal.open;
 
+    TableFilter.getPermissions($scope.questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[part.id], questionnaire);
+
     $scope.qualitySlider = {
         'options': {
             range: 'min',
