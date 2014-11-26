@@ -322,7 +322,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $tableController->setServiceLocator($this->getServiceLocator());
 
                 $flatFilters = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, array(), true, false);
-                $flatFiltersWithoutIgnoredFilters = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, [], $overriddenElements, true);
+                $flatFiltersWithoutIgnoredFilters = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, [], $overriddenElements, true, false);
 
                 $flatFilters = $this->addQuestionsToFilters($flatFilters, $questionnaire);
                 foreach ($flatFilters as $filterId => &$flatFilter) {
