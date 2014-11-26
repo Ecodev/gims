@@ -57,7 +57,7 @@ class Population extends AbstractImporter
 
             $geoname = $geonameRepository->findOneBy(array('iso3' => $countryIso3));
             if ($geoname) {
-                echo 'Country: ' . $geoname->getName() . PHP_EOL;
+                echo $geoname->getName() . PHP_EOL;
                 $col = $colIso3 + 1;
                 while ($year = $totalSheet->getCellByColumnAndRow($col, $rowYear)->getCalculatedValue()) {
                     if (($totalSheet->getCellByColumnAndRow($col, $rowYear)->getValue() != $urbanSheet->getCellByColumnAndRow($col, $rowYear)->getValue()) ||
@@ -78,6 +78,8 @@ class Population extends AbstractImporter
                     }
                     $col++;
                 }
+            } else {
+                echo PHP_EOL . "WARNING: no country found in database for ISO3: $countryIso3" . PHP_EOL . PHP_EOL;
             }
 
             $row++;
@@ -87,7 +89,7 @@ class Population extends AbstractImporter
 
         $this->getEntityManager()->flush();
 
-        echo "Compute missing population..." . PHP_EOL;
+        echo "Compute population for regions..." . PHP_EOL;
         $geonameRepository->computeAllPopulation();
 
         echo "Compute absolute value, based on population..." . PHP_EOL;
