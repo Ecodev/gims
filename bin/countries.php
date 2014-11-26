@@ -18,6 +18,7 @@ function check(array $countries)
     }
     echo count($files) . ' unkown files on disk' . PHP_EOL;
     var_export($files);
+    echo PHP_EOL;
 }
 
 /**
@@ -1156,7 +1157,7 @@ return array(
         'id' => 3370751,
         'iso3' => 'SHN',
         'name' => 'Saint Helena',
-        'path' => '', //'data/cache/country_data/Saint_Helena_15.xlsm',
+        'path' => 'data/cache/country_data/Saint Helena_15.xlsm',
     ),
     array(
         'id' => 3575174,
