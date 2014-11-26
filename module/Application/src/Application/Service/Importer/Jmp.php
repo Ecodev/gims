@@ -419,6 +419,9 @@ STRING;
             'Micronesia' => 'Micronesia (Fed. States of)',
             'Reunion' => 'Réunion',
             'Tanzania' => 'United Republic of Tanzania',
+            'Venezuela' => 'Venezuela (Bolivarian Republic of)',
+            'Djibuti' => 'Djibouti',
+            'Comores' => 'Comoros',
             // Unusual spelling
             'Antigua & Barbuda' => 'Antigua and Barbuda',
             'Afganistan' => 'Afghanistan',
@@ -440,6 +443,7 @@ STRING;
             'Saint lucia' => 'Saint Lucia',
             'SOUTH AFRICA' => 'South Africa',
             'ZIMBABWE' => 'Zimbabwe',
+            'French polynesia' => 'French Polynesia',
         );
 
         $developedCountries = array(
