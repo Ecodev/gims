@@ -312,7 +312,7 @@
                                         <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.value.$invalid}" tooltip="Leave empty to use official population data">
                                             <input  type="number"
                                                     class="text-center"
-                                                    placeholder="Population"
+                                                    placeholder="{{cacheDefaultPopulationsByGeoname[data.geoname.id][questionnaire.survey.year][part.id]}}"
                                                     min="0"
                                                     name="value"
                                                     ng-focus="setInitialValue(questionnaire.populations[part.id], questionnaire.populations[part.id].population)"
@@ -320,6 +320,7 @@
                                                     ng-model="questionnaire.populations[part.id].population"
                                                     ng-disabled="questionnaire.isLoading"
                                                     />
+
                                             <div class="input-group-addon"><i class="fa fa-fw" ng-class="{'fa-gims-population':!questionnaire.populations[data.part.id].isLoading,'fa-gims-loading':questionnaire.populations[data.part.id].isLoading}"></i></div>
 
                                         </div>

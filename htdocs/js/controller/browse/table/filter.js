@@ -15,6 +15,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.surveysTemplate = "[[item.code]] - [[item.name]]";
     $scope.questionnairesStatus = questionnairesStatus;
     $scope.usedThematics = [];
+    $scope.cacheDefaultPopulationsByGeoname = {};
 
     // Expose functions to scope
     $scope.refresh = TableFilter.refresh;
@@ -129,6 +130,11 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.$watch('data.geoname', function() {
         if ($scope.data.geoname) {
             TableFilter.loadGeoname().then(checkSelectionExpand);
+            if ($scope.data.mode.isSector && !$scope.cacheDefaultPopulationsByGeoname[$scope.data.geoname.id]) {
+                TableFilter.getDefaultPopulations($scope.data.geoname).then(function(populations) {
+                    $scope.cacheDefaultPopulationsByGeoname[$scope.data.geoname.id] = populations;
+                });
+            }
         }
     });
 

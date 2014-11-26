@@ -84,6 +84,30 @@ class PopulationRepository extends AbstractChildRepository
     }
 
     /**
+     * Return geoname populations by part for all years
+     * @param \Application\Model\Geoname $geoname
+     * @return array
+     */
+    public function getAllYearsForGeonameByPart(\Application\Model\Geoname $geoname)
+    {
+        $parts = $this->getEntityManager()
+                      ->getRepository('\Application\Model\Part')
+                      ->findAll();
+        $yearStart = 1980;
+        $yearEnd = 2020;
+
+        $populations = [];
+        for ($currentYear = $yearStart; $currentYear <= $yearEnd; $currentYear++) {
+            $populations[$currentYear] = [];
+            foreach ($parts as $part) {
+                $populations[$currentYear][$part->getId()] = $this->getPopulationByGeoname($geoname, $part->getId(), $currentYear);
+            }
+        }
+
+        return $populations;
+    }
+
+    /**
      * Update or create a Population and returns it
      * @param \Application\Model\Geoname $geoname
      * @param \Application\Model\Part $part

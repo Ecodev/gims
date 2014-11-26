@@ -11,10 +11,8 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
      * @type object
      */
     var data;
-
-    var questionnaireWithAnswersFields = {fields: 'status,permissions,comments,geoname,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.quality,survey.questions.answers.questionnaire,survey.questions.answers.part,populations.part,filterQuestionnaireUsages.isSecondStep,filterQuestionnaireUsages.sorting'};
+    var questionnaireWithAnswersFields = {fields: 'status,permissions,comments,geoname,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.quality,survey.questions.answers.questionnaire,survey.questions.answers.part,filterQuestionnaireUsages.isSecondStep,filterQuestionnaireUsages.sorting'};
     var questionnaireFields = {fields: 'survey.questions.type,survey.questions.filter'};
-
     var lastUnsavedFilterId = 1;
 
     /**
@@ -52,6 +50,10 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             data.mode = modes[1];
         } else if (locationPath.indexOf('/browse') >= 0) {
             data.mode = modes[0];
+        }
+
+        if (data.mode.isSector) {
+            questionnaireWithAnswersFields.fields += ',populations.part';
         }
 
         return getData();
@@ -1747,6 +1749,21 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         return deferred.promise;
     }
 
+    function getDefaultPopulations(geoname) {
+        var deferred = $q.defer();
+
+        // get geoname population and cache it
+        $http.get('/api/geoname/getPopulation', {
+            params: {
+                geoname: geoname.id
+            }
+        }).success(function(populations) {
+            deferred.resolve(populations);
+        });
+
+        return deferred.promise;
+    }
+
     function loadSurvey() {
         var deferred = $q.defer();
         data.questionnaires = [];
@@ -1949,7 +1966,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         syncScroll: syncScroll,
         resizeContent: resizeContent,
         updateAnswer: updateAnswer,
-        getTree: getTree
-    }
-    ;
+        getTree: getTree,
+        getDefaultPopulations: getDefaultPopulations
+    };
 });
