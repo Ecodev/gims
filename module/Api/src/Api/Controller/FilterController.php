@@ -150,7 +150,7 @@ class FilterController extends AbstractChildRestfulController
                     $questionnaireForm = '{Q#' . $questionnaire->getId() . ',P#' . $part->getId() . '}';
                     $completeForm = '=(' . $child1Form . '*' . $child2Form . '/' . $questionnaireForm . ')';
 
-                    $rule = new Rule('Sector for "' . $parent->getName() + '"');
+                    $rule = new Rule('Nsa for "' . $parent->getName() + '"');
                     $rule->setFormula($completeForm);
 
                     $fqu = new FilterQuestionnaireUsage();
@@ -158,7 +158,7 @@ class FilterController extends AbstractChildRestfulController
                     $fqu->setFilter($parent);
                     $fqu->setRule($rule);
                     $fqu->setPart($part);
-                    $fqu->setJustification('Sector for "' . $parent->getName() + '"');
+                    $fqu->setJustification('Nsa for "' . $parent->getName() + '"');
 
                     $this->getEntityManager()->persist($rule);
                     $this->getEntityManager()->persist($fqu);
@@ -170,9 +170,9 @@ class FilterController extends AbstractChildRestfulController
         return new JsonModel(array());
     }
 
-    public function getSectorFiltersForGeonameAction()
+    public function getNsaFiltersForGeonameAction()
     {
-        $filter = $this->getEntityManager()->getRepository('\Application\Model\Geoname')->getSectorFilter($this->params()->fromQuery('geoname'));
+        $filter = $this->getEntityManager()->getRepository('\Application\Model\Geoname')->getNsaFilter($this->params()->fromQuery('geoname'));
 
         return new JsonModel($filter);
     }

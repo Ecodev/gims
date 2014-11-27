@@ -571,7 +571,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * @returns {String}
      */
     $scope.getContributeUrl = function(filter, geoname) {
-        if (filter.name.match('Sector')) {
+        if (filter.name.match('NSA')) {
             return '/contribute/nsa?&geoname=' + geoname.id + '&returnUrl=' + $scope.currentUrl;
         } else {
             return '/contribute/jmp?&geoname=' + geoname.id + '&filter=' + filter.id + '&returnUrl=' + $scope.currentUrl;

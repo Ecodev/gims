@@ -231,7 +231,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
             function updatePermissions() {
                 var isReadonly = !data.mode.isContribute ||
                         !questionnairesStatus[scope.questionnaire.status] ||
-                        data.mode.isSector && scope.filter.level <= 1;
+                        data.mode.isNsa && scope.filter.level <= 1;
 
                 // In addition, if we also know permissions for answer, check it
                 var answerPermissions = scope.$eval('questionnaire.survey.questions[filter.id].answers[part.id].permissions.update');

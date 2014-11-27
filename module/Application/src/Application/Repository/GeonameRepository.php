@@ -53,7 +53,7 @@ INNER JOIN questionnaire AS q ON questionnaire.geoname_id = q.geoname_id AND q.i
      * @param $geonameId
      * @return \Application\Model\Filter|null
      */
-    public function getSectorFilter($geonameId)
+    public function getNsaFilter($geonameId)
     {
         $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
         $rsm->addScalarResult('id', 'id');
@@ -75,6 +75,7 @@ INNER JOIN questionnaire AS q ON questionnaire.geoname_id = q.geoname_id AND q.i
         $n->setParameter('geoname', $geonameId);
         $n->setParameter('type', \Application\Model\SurveyType::$NSA);
         $filter = $n->getResult();
+
         $result = count($filter) ? $filter[0] : null;
 
         return $result;

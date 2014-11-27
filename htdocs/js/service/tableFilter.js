@@ -29,17 +29,17 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             {
                 name: 'Browse',
                 isContribute: false,
-                isSector: false,
+                isNsa: false,
                 surveyType: 'jmp,nsa'
             }, {
                 name: 'Contribute JMP',
                 isContribute: true,
-                isSector: false,
+                isNsa: false,
                 surveyType: 'jmp'
             }, {
                 name: 'Contribute NSA',
                 isContribute: true,
-                isSector: true,
+                isNsa: true,
                 surveyType: 'nsa'
             }
         ];
@@ -52,7 +52,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             data.mode = modes[0];
         }
 
-        if (data.mode.isSector) {
+        if (data.mode.isNsa) {
             questionnaireWithAnswersFields.fields += ',populations.part';
         }
 
@@ -197,19 +197,19 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
 
     /**
      * If a question has no value for isAbsolute attribute, set is by percent by default
-     * @todo adapt to sector, default to absolute and replace everywhere where those values are set
+     * @todo adapt to nsa, default to absolute and replace everywhere where those values are set
      * @param question
      */
     function initQuestionAbsolute(question) {
 
-        // if absolute is undefined and we are in contribute view (no sector) -> set question as percent by default
-        if (_.isUndefined(question.isAbsolute) && !data.mode.isSector || question && question.isAbsolute === false) {
+        // if absolute is undefined and we are in contribute view (no nsa) -> set question as percent by default
+        if (_.isUndefined(question.isAbsolute) && !data.mode.isNsa || question && question.isAbsolute === false) {
             question.isAbsolute = false;
             question.value = 'valuePercent';
             question.max = 100;
 
-            // if absolute is undefined and we are in sector view -> set question as absolute by default
-        } else if (_.isUndefined(question.isAbsolute) && data.mode.isSector || question && question.isAbsolute === true) {
+            // if absolute is undefined and we are in nsa view -> set question as absolute by default
+        } else if (_.isUndefined(question.isAbsolute) && data.mode.isNsa || question && question.isAbsolute === true) {
             question.isAbsolute = true;
             question.value = 'valueAbsolute';
             question.max = 100000000000;
@@ -311,7 +311,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                             alternateNames: {}
                         };
                     }
-                    if (filter.sectorChild) {
+                    if (filter.nsaChild) {
                         questionnaire.survey.questions[filter.id].isAbsolute = true;
                     }
 
@@ -1459,13 +1459,13 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     }
 
     /**
-     * Create usages only if we are in sector mode
-     * As we cancel sector mode at
+     * Create usages only if we are in nsa mode
+     * As we cancel nsa mode at
      * @param questionnaire
      * @param filters
      */
     function createQuestionnaireFilterUsages(questionnaire, filters) {
-        if (data.mode.isSector) {
+        if (data.mode.isNsa) {
 
             var deferred = $q.defer();
 
@@ -1489,7 +1489,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     }
 
     /**
-     * Save given questionnaires and create sector rules for given filters (rules only if sector mode)
+     * Save given questionnaires and create nsa rules for given filters (rules only if nsa mode)
      * This method regroup questionnaires by survey, then save first questionnaire of each survey and his questions
      * Then, when questions have been saved, they're propagated to other questionnaires from same survey in client side
      * Then, other questionnaires are saved, without questions
@@ -1624,11 +1624,11 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     }
 
     /**
-     * In case sector parameter is detected in url, this function ensures each filter has
+     * In case nsa parameter is detected in url, this function ensures each filter has
      * sub filters dedicated to filter data (Usually people and equipment but may be anything)
      */
-    function prepareSectorFilters() {
-        if (data.mode.isSector && data.filters) {
+    function prepareNsaFilters() {
+        if (data.mode.isNsa && data.filters) {
 
             var equipments = _.filter(data.filters, function(f) {
                 if (!isValidId(f) && f.level == 1) {
@@ -1637,7 +1637,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                 return false;
             });
 
-            var sectorChildrenNames = [
+            var nsaChildrenNames = [
                 'Number of facilities', 'Persons per facilities'
             ];
 
@@ -1651,10 +1651,10 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
 
                 // if no children added to equipment yet, add it
                 if (equipementData.length === 0) {
-                    var sectorChildFilters = _.map(sectorChildrenNames, function(childSectorName, sectorIndex) {
+                    var nsaChildFilters = _.map(nsaChildrenNames, function(childNsaName, nsaIndex) {
                         return {
-                            id: '_' + equipment.id + "_" + sectorIndex,
-                            name: childSectorName,
+                            id: '_' + equipment.id + "_" + nsaIndex,
+                            name: childNsaName,
                             parents: [
                                 {id: equipment.id}
                             ],
@@ -1664,8 +1664,8 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
 
                     // add children to equipments
                     var index = _.findIndex(data.filters, {id: equipment.id});
-                    _.forEach(sectorChildFilters, function(filter, sectorIndex) {
-                        data.filters.splice(index + sectorIndex + 1, 0, filter);
+                    _.forEach(nsaChildFilters, function(filter, nsaIndex) {
+                        data.filters.splice(index + nsaIndex + 1, 0, filter);
                     });
                 }
             });
@@ -1695,7 +1695,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         }
     }
 
-    var addSectorFilterSet = function() {
+    var addNsaFilterSet = function() {
         data.filter = {
             id: '_' + lastUnsavedFilterId++,
             name: 'NSA : ' + data.geoname.name,
@@ -1723,8 +1723,8 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         updateUrl('questionnaires');
     }
 
-    var initSector = function() {
-        if (data.mode.isSector) {
+    var initNsa = function() {
+        if (data.mode.isNsa) {
             data.filter = undefined;
             data.filters = [];
             updateUrl('questionnaires');
@@ -1733,15 +1733,15 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
 
             if (data.geoname) {
 
-                $http.get('/api/filter/getSectorFiltersForGeoname', {
+                $http.get('/api/filter/getNsaFiltersForGeoname', {
                     params: {
                         geoname: data.geoname.id
                     }
-                }).success(function(loadedSectorFilter) {
-                    if (loadedSectorFilter.id) {
-                        data.filter = loadedSectorFilter;
+                }).success(function(loadedNsaFilter) {
+                    if (loadedNsaFilter.id) {
+                        data.filter = loadedNsaFilter;
                     } else {
-                        addSectorFilterSet();
+                        addNsaFilterSet();
                     }
                 });
             }
@@ -1757,7 +1757,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         })).then(function(questionnaires) {
             data.questionnaires = questionnaires;
             data.survey = null;
-            initSector();
+            initNsa();
             deferred.resolve();
         });
 
@@ -1891,7 +1891,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         var toolsHeight = jQuery("#tools").outerHeight(true);
         var margin = 275;
 
-        if (data.mode.isSector) {
+        if (data.mode.isNsa) {
             margin += 46;
         }
 
@@ -1951,7 +1951,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         init: init,
         addEquipment: addEquipment,
         addQuestionnaire: addQuestionnaire,
-        addSectorFilterSet: addSectorFilterSet,
+        addNsaFilterSet: addNsaFilterSet,
         checkAndCompleteQuestionnaire: checkAndCompleteQuestionnaire,
         getCellType: getCellType,
         getData: getData,
@@ -1964,7 +1964,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         loadGeoname: loadGeoname,
         loadQuestionnaires: loadQuestionnaires,
         loadSurvey: loadSurvey,
-        prepareSectorFilters: prepareSectorFilters,
+        prepareNsaFilters: prepareNsaFilters,
         questionnaireCanBeSaved: questionnaireCanBeSaved,
         refresh: refresh,
         deleteAnswer: deleteAnswer,

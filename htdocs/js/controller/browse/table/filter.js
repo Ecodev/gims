@@ -130,7 +130,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.$watch('data.geoname', function() {
         if ($scope.data.geoname) {
             TableFilter.loadGeoname().then(checkSelectionExpand);
-            if ($scope.data.mode.isSector && !$scope.cacheDefaultPopulationsByGeoname[$scope.data.geoname.id]) {
+            if ($scope.data.mode.isNsa && !$scope.cacheDefaultPopulationsByGeoname[$scope.data.geoname.id]) {
                 TableFilter.getDefaultPopulations($scope.data.geoname).then(function(populations) {
                     $scope.cacheDefaultPopulationsByGeoname[$scope.data.geoname.id] = populations;
                 });
@@ -157,7 +157,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     });
 
     $scope.$watchCollection('data.filters', function() {
-        TableFilter.prepareSectorFilters();
+        TableFilter.prepareNsaFilters();
         $scope.data.filtersIds = _.pluck(_.filter($scope.data.filters, function(f) {
             if (f.level === 0 || _.isUndefined(f.level)) {
                 return true;

@@ -458,7 +458,7 @@
                                                 </div>
                                                 <div class="col-md-12">
                                                     <select ui-select2 ng-model="panelTabs.target" data-placeholder="Select filter to target"  style="width: 100%" >
-                                                        <option ng-repeat="serie in chart.series" value="{{serie.id}}:{{serie.isIgnored}}" ng-if="!serie.isAdjusted && serie.type == 'line' && serie.id != panelTabs.sector">{{serie.name}}</option>
+                                                        <option ng-repeat="serie in chart.series" value="{{serie.id}}:{{serie.isIgnored}}" ng-if="!serie.isAdjusted && serie.type == 'line' && serie.id != panelTabs.nsa">{{serie.name}}</option>
                                                     </select>
                                                 </div>
                                             </div>
