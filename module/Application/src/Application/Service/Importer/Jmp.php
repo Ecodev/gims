@@ -422,6 +422,10 @@ STRING;
             'Venezuela' => 'Venezuela (Bolivarian Republic of)',
             'Djibuti' => 'Djibouti',
             'Comores' => 'Comoros',
+            'Kyrgyz Republic' => 'Kyrgyzstan',
+            'Lituania' => 'Lithuania',
+            'République Démocratique du Congo' => 'Democratic Republic of the Congo',
+            'Moldova' => 'Republic of Moldova',
             // Unusual spelling
             'Antigua & Barbuda' => 'Antigua and Barbuda',
             'Afganistan' => 'Afghanistan',
