@@ -33,7 +33,7 @@ class Redis implements CacheInterface
      * @param string $password
      * @throws \Exception
      */
-    public function __construct($host, $namespace, $password)
+    public function __construct($host, $namespace, $password = null)
     {
         $this->redis = new \Redis();
         $success = $this->redis->connect($host);
