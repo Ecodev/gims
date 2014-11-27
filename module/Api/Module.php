@@ -104,6 +104,16 @@ class Module
                 $event->getResponse()->setStatusCode(403);
                 $json->status = 403;
                 $json->title = 'Denied';
+            } else {
+
+                $messages = [];
+                while ($exception = $exception->getPrevious()) {
+                    $messages[] = 'Previous exception: ' . $exception->getMessage();
+                }
+
+                if ($messages) {
+                    $json->messages = $messages;
+                }
             }
         }
 

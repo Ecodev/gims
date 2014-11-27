@@ -10,7 +10,7 @@ angular.module('myApp.directives').directive('gimsErrors', function(requestNotif
                 '<div ng-repeat="error in errors" class="alert alert-danger ng-trans ng-trans-fade-up">' +
                 '<button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="dismiss($index)">&times;</button>' +
                 '<strong>{{error.data.title || "Oops"}}!</strong> ' +
-                '<span ng-if="error.data.detail && !error.data.messages">{{error.data.detail}}</span>' +
+                '<span ng-if="error.data.detail && error.data.title != \'Object is not valid\'">{{error.data.detail}}</span>' +
                 '<ul ng-if="error.data.messages">' +
                 '<li ng-repeat="message in error.data.messages">{{message}}</li>' +
                 '</ul>' +
