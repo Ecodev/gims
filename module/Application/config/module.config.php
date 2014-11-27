@@ -5,6 +5,7 @@ return array(
         'enabled' => true,
         'namespace' => 'gims',
         'host' => 'localhost',
+        'password' => null,
     ],
     'compressJavaScript' => true,
     'bodyCssClass' => null,

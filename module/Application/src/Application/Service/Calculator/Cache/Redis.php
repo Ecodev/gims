@@ -30,9 +30,10 @@ class Redis implements CacheInterface
      * Create and connect to Redis
      * @param string $host
      * @param string $namespace
+     * @param string $password
      * @throws \Exception
      */
-    public function __construct($host, $namespace)
+    public function __construct($host, $namespace, $password)
     {
         $this->redis = new \Redis();
         $success = $this->redis->connect($host);
@@ -44,6 +45,16 @@ class Redis implements CacheInterface
         $this->redis->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_PHP);
         $this->redis->setOption(\Redis::OPT_PREFIX, $namespace . ':');
         $this->redis->setOption(\Redis::OPT_SCAN, \Redis::SCAN_RETRY);
+
+        if ($password) {
+            if (!$this->redis->auth($password)) {
+                throw new \Exception('Could not authenticate with given password');
+            }
+        } else {
+            if (!$this->redis->info()) {
+                throw new \Exception('Password is required, but was not found in configuration');
+            }
+        }
     }
 
     /**
