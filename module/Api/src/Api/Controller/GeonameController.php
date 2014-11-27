@@ -8,7 +8,7 @@ class GeonameController extends AbstractRestfulController
 {
 
     /**
-     *
+     * Return all populations for a geoname (for all parts)
      */
     public function getPopulationAction()
     {

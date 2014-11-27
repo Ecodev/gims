@@ -177,4 +177,11 @@ class FilterController extends AbstractChildRestfulController
         return new JsonModel($filter);
     }
 
+    public function getNSAContainerAction()
+    {
+        $nsaContainer = $this->getRepository()->findOneBy(array('isNsa' => true));
+
+        return new JsonModel($this->hydrator->extract($nsaContainer, $this->getJsonConfig()));
+    }
+
 }

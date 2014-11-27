@@ -128,6 +128,12 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
     private $sorting = 0;
 
     /**
+     * @var int
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
+     */
+    private $isNsa = false;
+
+    /**
      * Constructor
      * @param string $name
      */
@@ -580,6 +586,25 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
         $key = 'filter:' . $this->getId();
         $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
         $cache->removeItem($key);
+    }
+
+    /**
+     * @return int
+     */
+    public function isNsa()
+    {
+        return $this->isNsa;
+    }
+
+    /**
+     * @param int $isNSA
+     * @return self
+     */
+    public function setIsNSA($isNsa)
+    {
+        $this->isNsa = $isNsa;
+
+        return $this;
     }
 
 }

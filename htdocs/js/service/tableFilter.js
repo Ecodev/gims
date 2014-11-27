@@ -693,11 +693,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             filter.oldId = filter.id;
         }
         filter.isLoading = true;
-        Restangular.all('filter').post({
-            name: filter.name,
-            parents: _.pluck(filter.parents, 'id'),
-            filterSets: filter.filterSets
-        }).then(function(newFilter) {
+        Restangular.all('filter').post(filter).then(function(newFilter) {
             filter.id = newFilter.id;
             filter.isLoading = false;
             replaceQuestionsIds(filter);
@@ -765,6 +761,24 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         return deferred.promise;
     }
 
+    var filterSet = null;
+    var nsaContainer = null;
+
+    function createNsaFilterForGeoname(deferred) {
+        if (nsaContainer && filterSet) {
+            data.filters[0].parents = [nsaContainer];
+            data.filters[0].filterSets = [filterSet];
+
+            // then save first filter
+            saveFiltersCollection([data.filters[0]]).then(function() {
+                updateUrl('filter');
+                saveEquipments().then(function() {
+                    deferred.resolve();
+                });
+            });
+        }
+    }
+
     /**
      * Save all filters, equipment before their children
      * @returns promise
@@ -773,19 +787,20 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         var deferred = $q.defer();
 
         if (!isValidId(data.filters[0])) {
+            filterSet = null;
 
-            // first create filter set
-            var newFilterSet = {name: 'Sector : ' + data.geoname.name};
-            Restangular.all('filterSet').post(newFilterSet).then(function(filterSet) {
-                data.filters[0].filterSets = [filterSet];
-
-                // then save first filter
-                saveFiltersCollection([data.filters[0]]).then(function() {
-                    updateUrl('filter');
-                    saveEquipments().then(function() {
-                        deferred.resolve();
-                    });
+            if (!nsaContainer) {
+                $http.get('/api/filter/getNSAContainer').success(function(filter) {
+                    nsaContainer = filter;
+                    createNsaFilterForGeoname(deferred);
                 });
+            }
+
+            Restangular.all('filterSet').post({
+                name: 'NSA: ' + data.geoname.name
+            }).then(function(newFilterSet) {
+                filterSet = newFilterSet;
+                createNsaFilterForGeoname(deferred);
             });
 
         } else {
@@ -1683,7 +1698,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     var addSectorFilterSet = function() {
         data.filter = {
             id: '_' + lastUnsavedFilterId++,
-            name: 'Sector : ' + data.geoname.name,
+            name: 'NSA : ' + data.geoname.name,
             level: 0,
             color: '#FF0000'
         };
