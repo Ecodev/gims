@@ -147,7 +147,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     var firstLoading = true;
     $q.all([filterSetDeferred, filterDeferred]).then(function() {
         $scope.$watch('data.filters', function(newFilters, oldFilters) {
-            $scope.usedThematics = _.uniq(_.pluck(_.filter(newFilters, 'thematicFilter'), 'id'));
+            $scope.usedThematics = _.uniq(_.pluck(_.pluck(newFilters, 'thematicFilter'), 'id'));
             TableFilter.loadFilter(newFilters, oldFilters).then(function() {
                 if (firstLoading === true && $scope.data.filters && $scope.data.questionnaires) {
                     checkSelectionExpand();
