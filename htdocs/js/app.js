@@ -6,7 +6,8 @@ angular.module('myApp', [
     'ui.utils',
     'ui.select2',
     'ui.bootstrap',
-    'ngGrid',
+    'ui.grid',
+    'ui.grid.autoResize',
     'myApp.filters',
     'myApp.services',
     'myApp.directives',
@@ -26,51 +27,51 @@ angular.module('myApp', [
 ]).config(function($routeProvider, $locationProvider, RestangularProvider, $httpProvider, requestNotificationProvider, datepickerPopupConfig) {
     'use strict';
 
-        $routeProvider.when('/home', {templateUrl: '/template/application/index/home'});
-        $routeProvider.when('/about', {templateUrl: '/template/application/index/about'});
-        $routeProvider.when('/browse', {templateUrl: '/template/browse'});
-        $routeProvider.when('/browse/chart', {templateUrl: '/template/browse/chart', controller: 'Browse/ChartCtrl', reloadOnSearch: false});
-        $routeProvider.when('/browse/table/questionnaire', {templateUrl: '/template/browse/table/questionnaire', controller: 'Browse/Table/QuestionnaireCtrl', reloadOnSearch: false});
-        $routeProvider.when('/browse/table/country', {templateUrl: '/template/browse/table/country', controller: 'Browse/Table/CountryCtrl', reloadOnSearch: false});
-        $routeProvider.when('/contribute', {templateUrl: '/template/contribute', controller: 'ContributeCtrl'});
-        $routeProvider.when('/admin', {templateUrl: '/template/admin'});
-        $routeProvider.when('/admin/filter-set', {templateUrl: '/template/admin/filter-set', controller: 'Admin/FilterSetCtrl'});
-        $routeProvider.when('/admin/filter-set/new', {templateUrl: '/template/admin/filter-set/crud', controller: 'Admin/FilterSet/CrudCtrl'});
-        $routeProvider.when('/admin/filter-set/edit/:id', {templateUrl: '/template/admin/filter-set/crud', controller: 'Admin/FilterSet/CrudCtrl', reloadOnSearch: false});
-        $routeProvider.when('/admin/filter', {templateUrl: '/template/admin/filter',controller: 'FilterModalCtrl',
-            resolve: {
-                $modalInstance: function() {
-                    return null;
-                },
-                params: function() {
-                    return {multiple: false};
-                }
+    $routeProvider.when('/home', {templateUrl: '/template/application/index/home'});
+    $routeProvider.when('/about', {templateUrl: '/template/application/index/about'});
+    $routeProvider.when('/browse', {templateUrl: '/template/browse'});
+    $routeProvider.when('/browse/chart', {templateUrl: '/template/browse/chart', controller: 'Browse/ChartCtrl', reloadOnSearch: false});
+    $routeProvider.when('/browse/table/questionnaire', {templateUrl: '/template/browse/table/questionnaire', controller: 'Browse/Table/QuestionnaireCtrl', reloadOnSearch: false});
+    $routeProvider.when('/browse/table/country', {templateUrl: '/template/browse/table/country', controller: 'Browse/Table/CountryCtrl', reloadOnSearch: false});
+    $routeProvider.when('/contribute', {templateUrl: '/template/contribute', controller: 'ContributeCtrl'});
+    $routeProvider.when('/admin', {templateUrl: '/template/admin'});
+    $routeProvider.when('/admin/filter-set', {templateUrl: '/template/admin/filter-set', controller: 'Admin/FilterSetCtrl'});
+    $routeProvider.when('/admin/filter-set/new', {templateUrl: '/template/admin/filter-set/crud', controller: 'Admin/FilterSet/CrudCtrl'});
+    $routeProvider.when('/admin/filter-set/edit/:id', {templateUrl: '/template/admin/filter-set/crud', controller: 'Admin/FilterSet/CrudCtrl', reloadOnSearch: false});
+    $routeProvider.when('/admin/filter', {templateUrl: '/template/admin/filter', controller: 'FilterModalCtrl',
+        resolve: {
+            $modalInstance: function() {
+                return null;
+            },
+            params: function() {
+                return {multiple: false};
             }
-        });
-        $routeProvider.when('/admin/filter/new', {templateUrl: '/template/admin/filter/crud', controller: 'Admin/Filter/CrudCtrl'});
-        $routeProvider.when('/admin/filter/edit/:id', {templateUrl: '/template/admin/filter/crud', controller: 'Admin/Filter/CrudCtrl'});
-        $routeProvider.when('/admin/question/edit/:id', {templateUrl: '/template/admin/question/crud', controller: 'Admin/Question/CrudCtrl'});
-        $routeProvider.when('/admin/question/new', {templateUrl: '/template/admin/question/crud', controller: 'Admin/Question/CrudCtrl'});
-        $routeProvider.when('/admin/questionnaire/edit/:id', {templateUrl: '/template/admin/questionnaire/crud', controller: 'Admin/Questionnaire/CrudCtrl', reloadOnSearch: false});
-        $routeProvider.when('/admin/questionnaire/new', {templateUrl: '/template/admin/questionnaire/crud', controller: 'Admin/Questionnaire/CrudCtrl'});
-        $routeProvider.when('/admin/survey', {templateUrl: '/template/admin/survey', controller: 'Admin/SurveyCtrl'});
-        $routeProvider.when('/admin/survey/edit/:id', {templateUrl: '/template/admin/survey/crud', controller: 'Admin/Survey/CrudCtrl', reloadOnSearch: false});
-        $routeProvider.when('/admin/survey/new', {templateUrl: '/template/admin/survey/crud', controller: 'Admin/Survey/CrudCtrl'});
-        $routeProvider.when('/admin/user', {templateUrl: '/template/admin/user', controller: 'Admin/UserCtrl'});
-        $routeProvider.when('/admin/user/edit/:id', {templateUrl: '/template/admin/user/crud', controller: 'Admin/User/CrudCtrl'});
-        $routeProvider.when('/admin/user/new', {templateUrl: '/template/admin/user/crud', controller: 'Admin/User/CrudCtrl'});
-        $routeProvider.when('/admin/rule', {templateUrl: '/template/admin/rule', controller: 'Admin/RuleCtrl'});
-        $routeProvider.when('/admin/rule/edit/:id', {templateUrl: '/template/admin/rule/crud', controller: 'Admin/Rule/CrudCtrl'});
-        $routeProvider.when('/admin/rule/new', {templateUrl: '/template/admin/rule/crud', controller: 'Admin/Rule/CrudCtrl'});
-        $routeProvider.when('/browse/table/filter', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
-        $routeProvider.when('/contribute/jmp', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
-        $routeProvider.when('/contribute/nsa', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
-        $routeProvider.when('/contribute/glaas/', {templateUrl: '/template/contribute/index/glaas', controller: 'Contribute/GlaasCtrl'});
-        $routeProvider.when('/contribute/glaas/:id', {templateUrl: '/template/contribute/index/glaas', controller: 'Contribute/GlaasCtrl'});
-        $routeProvider.when('/contribute/request-roles', {templateUrl: '/template/contribute/request-roles/request-roles', controller: 'Contribute/RequestRolesCtrl', reloadOnSearch: false});
-        $routeProvider.when('/admin/roles-requests', {templateUrl: '/template/admin/roles-requests/roles-requests', controller: 'Admin/RolesRequestsCtrl'});
-        $routeProvider.when('/contribute/discussion', {templateUrl: '/template/contribute/discussion', controller: 'Contribute/DiscussionCtrl'});
-        $routeProvider.when('/contribute/discussion/edit/:id', {templateUrl: '/template/contribute/discussion', controller: 'Contribute/DiscussionCtrl'});
+        }
+    });
+    $routeProvider.when('/admin/filter/new', {templateUrl: '/template/admin/filter/crud', controller: 'Admin/Filter/CrudCtrl'});
+    $routeProvider.when('/admin/filter/edit/:id', {templateUrl: '/template/admin/filter/crud', controller: 'Admin/Filter/CrudCtrl'});
+    $routeProvider.when('/admin/question/edit/:id', {templateUrl: '/template/admin/question/crud', controller: 'Admin/Question/CrudCtrl'});
+    $routeProvider.when('/admin/question/new', {templateUrl: '/template/admin/question/crud', controller: 'Admin/Question/CrudCtrl'});
+    $routeProvider.when('/admin/questionnaire/edit/:id', {templateUrl: '/template/admin/questionnaire/crud', controller: 'Admin/Questionnaire/CrudCtrl', reloadOnSearch: false});
+    $routeProvider.when('/admin/questionnaire/new', {templateUrl: '/template/admin/questionnaire/crud', controller: 'Admin/Questionnaire/CrudCtrl'});
+    $routeProvider.when('/admin/survey', {templateUrl: '/template/admin/survey', controller: 'Admin/SurveyCtrl'});
+    $routeProvider.when('/admin/survey/edit/:id', {templateUrl: '/template/admin/survey/crud', controller: 'Admin/Survey/CrudCtrl', reloadOnSearch: false});
+    $routeProvider.when('/admin/survey/new', {templateUrl: '/template/admin/survey/crud', controller: 'Admin/Survey/CrudCtrl'});
+    $routeProvider.when('/admin/user', {templateUrl: '/template/admin/user', controller: 'Admin/UserCtrl'});
+    $routeProvider.when('/admin/user/edit/:id', {templateUrl: '/template/admin/user/crud', controller: 'Admin/User/CrudCtrl'});
+    $routeProvider.when('/admin/user/new', {templateUrl: '/template/admin/user/crud', controller: 'Admin/User/CrudCtrl'});
+    $routeProvider.when('/admin/rule', {templateUrl: '/template/admin/rule', controller: 'Admin/RuleCtrl'});
+    $routeProvider.when('/admin/rule/edit/:id', {templateUrl: '/template/admin/rule/crud', controller: 'Admin/Rule/CrudCtrl'});
+    $routeProvider.when('/admin/rule/new', {templateUrl: '/template/admin/rule/crud', controller: 'Admin/Rule/CrudCtrl'});
+    $routeProvider.when('/browse/table/filter', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
+    $routeProvider.when('/contribute/jmp', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
+    $routeProvider.when('/contribute/nsa', {templateUrl: '/template/browse/table/filter', controller: 'Browse/FilterCtrl', reloadOnSearch: false});
+    $routeProvider.when('/contribute/glaas/', {templateUrl: '/template/contribute/index/glaas', controller: 'Contribute/GlaasCtrl'});
+    $routeProvider.when('/contribute/glaas/:id', {templateUrl: '/template/contribute/index/glaas', controller: 'Contribute/GlaasCtrl'});
+    $routeProvider.when('/contribute/request-roles', {templateUrl: '/template/contribute/request-roles/request-roles', controller: 'Contribute/RequestRolesCtrl', reloadOnSearch: false});
+    $routeProvider.when('/admin/roles-requests', {templateUrl: '/template/admin/roles-requests/roles-requests', controller: 'Admin/RolesRequestsCtrl'});
+    $routeProvider.when('/contribute/discussion', {templateUrl: '/template/contribute/discussion', controller: 'Contribute/DiscussionCtrl'});
+    $routeProvider.when('/contribute/discussion/edit/:id', {templateUrl: '/template/contribute/discussion', controller: 'Contribute/DiscussionCtrl'});
 
     $routeProvider.otherwise({redirectTo: '/home'});
 

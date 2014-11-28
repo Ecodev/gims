@@ -1,8 +1,6 @@
 {
     "predef": [  // Custom globals.
         "angular",
-        "ngGridFlexibleHeightPlugin",
-        "ngGridLayoutPlugin",
         "sprintf",
         "_",
         "ace"

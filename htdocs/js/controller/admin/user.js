@@ -73,9 +73,9 @@ angular.module('myApp').controller('Admin/UserCtrl', function($scope) {
     // Configure gims-grid.
     $scope.gridOptions = {
         columnDefs: [
-            {field: 'name', displayName: 'Name', width: '250px'},
-            {field: 'email', displayName: 'Email', cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()"><a href="mailto:{{row.entity[col.field]}}">{{row.entity[col.field]}}</a></div>'},
-            {displayName: '', width: '70px', cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/user/edit/{{row.entity.id}}" ><i class="fa fa-pencil fa-lg"></i></a><button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
+            {field: 'name', displayName: 'Name', width: 250},
+            {field: 'email', displayName: 'Email', cellTemplate: '<div class="ui-grid-cell-contents" ng-class="col.colIndex()"><a href="mailto:{{row.entity[col.field]}}">{{row.entity[col.field]}}</a></div>'},
+            {name: 'buttons', displayName: '', width: 70, cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/user/edit/{{row.entity.id}}" ><i class="fa fa-pencil fa-lg"></i></a><button type="button" class="btn btn-default btn-xs" ng-click="getExternalScopes().remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
         ]
     };
 

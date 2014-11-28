@@ -75,13 +75,13 @@ angular.module('myApp').controller('Admin/FilterCtrl', function($scope, $locatio
     });
 
     // Configure gims-grid
-    $scope.queryparams = {fields: 'color',flatten: true};
+    $scope.queryparams = {fields: 'color', flatten: true};
     $scope.gridOptions = {
         columnDefs: [
             {
                 field: 'name',
                 displayName: 'Name',
-                cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">' +
+                cellTemplate: '<div class="ui-grid-cell-contents" ng-class="col.colIndex()">' +
                         '   <span style="padding-left: {{row.entity.level * 2}}em;">' +
                         '       <span style="display:inline-block;vertical-align:middle;"><i class="fa fa-gims-filter" style="color:{{row.entity.color}}"></i></span>' +
                         '       <span style="display:inline-block;vertical-align:middle;">{{row.entity.name}}</span>' +
@@ -89,11 +89,12 @@ angular.module('myApp').controller('Admin/FilterCtrl', function($scope, $locatio
                         '</div>'
             },
             {
+                name: 'buttons',
                 displayName: '',
-                width: '70px',
+                width: 70,
                 cellTemplate: '<div class="btn-group" style="margin:4px 0 0 4px;">' +
                         '   <a class="btn btn-default btn-xs" href="/admin/filter/edit/{{row.entity.id}}"><i class="fa fa-pencil fa-lg"></i></a>' +
-                        '   <button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>' +
+                        '   <button type="button" class="btn btn-default btn-xs" ng-click="getExternalScopes().remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>' +
                         '</div>'
             }
         ]

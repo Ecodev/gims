@@ -9,8 +9,7 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
     // Configure ng-grid.
     $scope.gridOptions = {
         data: 'table',
-        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 400})],
-        columnDefs: 'columnDefs'
+        columnDefs: $scope.columnDefs
     };
 
     $scope.$watch('tabs.filterSets', function() {
@@ -85,8 +84,9 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
                 $scope.table = data.data;
 
                 $scope.columnDefs = _.map(data.columns, function(columnName, columnKey) {
-                    return {field: columnKey, displayName: columnName, width: '100px'};
+                    return {field: columnKey, displayName: columnName, width: 100};
                 });
+
                 $scope.legends = data.legends;
             });
         }

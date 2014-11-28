@@ -67,22 +67,23 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function()
                                 '</div>'
                     },
                     {
+                        name: 'buttons',
                         displayName: '',
-                        width: '120px',
+                        width: 120,
                         cellTemplate:
                                 '<div style="margin: 5px 5px 0 5px ">' +
                                 '<i class="fa fa-grid fa-comment" ng-visible="row.entity.comments" title="{{row.entity.comments}}"></i>' +
                                 '<i class="fa fa-grid fa-check-square-o" ng-visible="row.entity.status == \'validated\'" title="Validated"></i>' +
                                 '<div class="btn-group">' +
                                 '<a class="btn btn-default btn-xs btn-edit" href="/admin/questionnaire/edit/{{row.entity.id}}?returnUrl={{options.extra.returnUrl}}" ng-visible="row.entity.permissions.update"><i class="fa fa-pencil fa-lg"></i></a>' +
-                                '<button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ng-visible="row.entity.permissions.delete"><i class="fa fa-trash-o fa-lg"></i></button>' +
+                                '<button type="button" class="btn btn-default btn-xs" ng-click="getExternalScopes().remove(row)" ng-visible="row.entity.permissions.delete"><i class="fa fa-trash-o fa-lg"></i></button>' +
                                 '</div>' +
                                 '</div>'
                     },
                     {
                         field: 'export',
                         displayName: 'Export',
-                        width: '60px',
+                        width: 60,
                         headerCellTemplate:
                                 '<div style="margin: 12px 5px 0 5px;text-align:center">' +
                                 '<input type="checkbox" ng-model="selected" ng-change="options.extra.selectAll(selected)" />' +

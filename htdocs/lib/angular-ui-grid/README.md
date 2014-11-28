@@ -1,52 +1,34 @@
-# packaged angular
+# bower-ui-grid
 
-This repo is for distribution on `npm` and `bower`. The source for this module is in the
-[main AngularJS repo](https://github.com/angular/angular.js).
+This repo is for distribution on `bower`. The source for this module is in the
+[main UI Grid repo](https://github.com/angular-ui/ng-grid).
 Please file issues and pull requests against that repo.
 
 ## Install
 
-You can install this package either with `npm` or with `bower`.
-
-### npm
+Install with `bower`:
 
 ```shell
-npm install angular
+bower install angular-ui-grid
 ```
 
-Then add a `<script>` to your `index.html`:
+Add `<script>` and `<link>` tags to your `index.html`:
 
 ```html
-<script src="/node_modules/angular/angular.js"></script>
-```
-
-Note that this package is not in CommonJS format, so doing `require('angular')` will return `undefined`.
-If you're using [Browserify](https://github.com/substack/node-browserify), you can use
-[exposify](https://github.com/thlorenz/exposify) to have `require('angular')` return the `angular`
-global.
-
-### bower
-
-```shell
-bower install angular
-```
-
-Then add a `<script>` to your `index.html`:
-
-```html
-<script src="/bower_components/angular/angular.js"></script>
+<link rel="stylesheet" href="/bower_components/ui-grid/ui-grid.css" />
+<script src="/bower_components/ui-grid/ui-grid.js"></script>
 ```
 
 ## Documentation
 
 Documentation is available on the
-[AngularJS docs site](http://docs.angularjs.org/).
+[UI Grid site](http://ui-grid.info/).
 
 ## License
 
 The MIT License
 
-Copyright (c) 2010-2012 Google, Inc. http://angularjs.org
+Copyright (c) 2010-2014 the AngularUI Team http://angular-ui.github.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

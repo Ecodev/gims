@@ -596,7 +596,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                 field: 'year',
                 displayName: 'Year',
                 enableColumnResize: true,
-                width: '100px'
+                width: 100
             }
         ];
 
@@ -617,7 +617,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                         '       <i class="fa fa-gims-filter" style="color:{{col.colDef.color}};"></i> {{col.displayName}}' +
                         '   </div>' +
                         '</div>',
-                    cellTemplate: '<div class="ngCellText text-right" ng-class="col.colIndex()">' +
+                    cellTemplate: '<div class="ui-grid-cell-contents text-right" ng-class="col.colIndex()">' +
                         '<span ng-cell-text ng-show="{{row.entity.value' + serie.id + '_' + serie.geonameId + '!==null}}">{{row.entity.value' + serie.id + '_' + serie.geonameId + '}} %</span>' +
                         '</div>'
                 });

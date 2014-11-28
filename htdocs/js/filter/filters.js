@@ -36,5 +36,9 @@ angular.module('myApp.filters').filter('interpolate', function(version) {
 
         return text;
     };
+}).filter('checkmark', function() {
+    return function(input) {
+        return input ? '\u2714' : '\u2718';
+    };
 })
 ;

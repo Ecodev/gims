@@ -32,7 +32,7 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function() {
                         field: 'sorting',
                         displayName: '#',
                         width: '10%',
-                        cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">' +
+                        cellTemplate: '<div class="ui-grid-cell-contents" ng-class="col.colIndex()">' +
                                 '<span style="padding-left: {{row.entity.level}}em;">{{row.entity.sorting}}</span>' +
                                 '</div>'
                     },
@@ -40,18 +40,19 @@ angular.module('myApp.directives').directive('gimsGridQuestion', function() {
                         field: 'name',
                         displayName: 'Question',
                         width: '80%',
-                        cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">' +
+                        cellTemplate: '<div class="ui-grid-cell-contents" ng-class="col.colIndex()">' +
                                 '<span style="padding-left: {{row.entity.level}}em;">{{row.entity.name}}</span>' +
                                 '</div>'
                     },
                     {
+                        name: 'buttons',
                         displayName: '',
                         width: '10%',
                         cellTemplate: '<div class="btn-group" style="margin-top:4px;margin-left:4px">' +
                                 '<a class="btn btn-default btn-xs btn-edit" href="/admin/question/edit/{{row.entity.id}}?returnUrl={{options.extra.returnUrl}}">' +
                                 '<i class="fa fa-pencil fa-lg"></i>' +
                                 '</a>' +
-                                '<button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" >' +
+                                '<button type="button" class="btn btn-default btn-xs" ng-click="getExternalScopes().remove(row)" >' +
                                 '<i class="fa fa-trash-o fa-lg"></i>' +
                                 '</button>' +
                                 '</div>'

@@ -214,8 +214,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * @param ignoredElements
      */
     $scope.gridOptions = {
-        columnDefs: 'columnDefs',
-        plugins: [new ngGridFlexibleHeightPlugin({minHeight: 0})],
+        columnDefs: $scope.columnDefs,
         data: 'estimatesData'
     };
 

@@ -22,7 +22,7 @@ input.error {
     font-size: 80%;
 }
 
-@import "ng-grid";
+@import "ui-grid";
 @import "splash";
 @import "sticky-footer";
 @import "colorpicker";
@@ -34,6 +34,14 @@ input.error {
 @import "jquery-ui.scss";
 @import "tree-control.scss";
 
+// Override ui-grid declaration to accomodate path
+@font-face {
+  font-family: 'ui-grid';
+  src: url('/lib/angular-ui-grid/ui-grid.eot');
+  src: url('/lib/angular-ui-grid/ui-grid.eot#iefix') format('embedded-opentype'), url('/lib/angular-ui-grid/ui-grid.woff') format('woff'), url('/lib/angular-ui-grid/ui-grid.ttf?') format('truetype'), url('/lib/angular-ui-grid/ui-grid.svg?#ui-grid') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
 
 $brand-primary-light: #d9e8f4;
 
@@ -77,9 +85,7 @@ div.browse .col-md-4 {
 }
 
 .gridStyle {
-    height: 1000px; // Use super big height, so the auto-resize works correctly
-    border: 1px solid $table-border-color;
-    margin-bottom: 1em;
+    height: 400px;
 }
 
 .tab-content {

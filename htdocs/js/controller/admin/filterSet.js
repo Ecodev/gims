@@ -79,11 +79,12 @@ angular.module('myApp').controller('Admin/FilterSetCtrl', function($scope) {
         columnDefs: [
             {field: 'name', displayName: 'Name'},
             {
+                name: 'buttons',
                 displayName: '',
-                width: '70px',
+                width: 70,
                 cellTemplate: '<div class="btn-group">' +
                         '   <a class="btn btn-default btn-xs" href="/admin/filter-set/edit/{{row.entity.id}}"><i class="fa fa-pencil fa-lg"></i></a>' +
-                        '   <button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>' +
+                        '   <button type="button" class="btn btn-default btn-xs" ng-click="getExternalScopes().remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>' +
                         '</div>'
             }
         ]

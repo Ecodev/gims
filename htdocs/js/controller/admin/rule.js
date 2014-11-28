@@ -70,9 +70,9 @@ angular.module('myApp').controller('Admin/RuleCtrl', function($scope) {
     // Configure gims-grid.
     $scope.gridOptions = {
         columnDefs: [
-            {field: 'name', displayName: 'Name', width: '450px'},
+            {field: 'name', displayName: 'Name', width: 450},
             {field: 'formula', displayName: 'Formula'},
-            {displayName: '', width: '70px', cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/rule/edit/{{row.entity.id}}" ><i class="fa fa-pencil fa-lg"></i></a><button type="button" class="btn btn-default btn-xs" ng-click="remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
+            {name: 'buttons', displayName: '', width: 70, cellTemplate: '<a class="btn btn-default btn-xs" href="/admin/rule/edit/{{row.entity.id}}" ><i class="fa fa-pencil fa-lg"></i></a><button type="button" class="btn btn-default btn-xs" ng-click="getExternalScopes().remove(row)" ><i class="fa fa-trash-o fa-lg"></i></button>'}
         ]
     };
 

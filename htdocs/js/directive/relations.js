@@ -65,7 +65,7 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
 
                 // If editable objects, make them a link to their admin page
                 if (_.contains(['user', 'survey', 'questionnaire', 'filterSet', 'filter', 'rule'], p)) {
-                    def.cellTemplate = '<div class="ngCellText"><a href="/admin/' + p + '/edit/{{row.entity.' + p + '.id}}">{{row.entity.' + p + '.name}}</a></div>';
+                    def.cellTemplate = '<div class="ui-grid-cell-contents"><a href="/admin/' + p + '/edit/{{row.entity.' + p + '.id}}">{{row.entity.' + p + '.name}}</a></div>';
                 }
 
                 return def;
@@ -75,10 +75,10 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                 columnDefs.push({field: 'justification', displayName: 'Justification'});
             }
 
-            columnDefs.push({width: '70px', cellTemplate: '<button type="button" class="btn btn-default btn-xs" ng-click="options.extra.remove(row)"><i class="fa fa-trash-o fa-lg"></i></button>'});
+            columnDefs.push({name: 'buttons', displayName: '', width: 70, cellTemplate: '<button type="button" class="btn btn-default btn-xs" ng-click="getExternalScopes().remove(row)"><i class="fa fa-trash-o fa-lg"></i></button>'});
 
             $scope.gridOptions = {
-                extra: {
+                scope: {
                     remove: function(row) {
 
                         // Concatenate all properties names
@@ -89,7 +89,6 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                         Modal.confirmDelete(row.entity, {objects: $scope.relations, label: label});
                     }
                 },
-                plugins: [new ngGridFlexibleHeightPlugin({minHeight: 250})],
                 columnDefs: columnDefs
             };
 
