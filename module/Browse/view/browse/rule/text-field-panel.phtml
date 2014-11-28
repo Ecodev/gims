@@ -31,12 +31,11 @@
 
             <div class="form-group" ng-class="{'has-error': form.formula.$error.required}">
                 <label for="Justification" ng-if="showDetails">Formula</label>
-                <gims-rule-text-field rule="usage.rule" messages="errors" ng-disabled="isLoading"></gims-rule-text-field>
+                <gims-rule-text-field rule="usage.rule" messages="errors" ng-disabled="isLoading || readonly"></gims-rule-text-field>
             </div>
 
         </ng-form>
     </form>
-
     <div class='text-right'>
         <span class="text-warning" style="margin-left:10px;" ng-if="usage.rule.nbOfUsages > 1 && (!readonly && usage.rule.permissions.update && !!usage.id)"><i class="fa fa-warning"></i> This rule is used in {{usage.rule.nbOfUsages}} different places.</span>
         <button class="btn btn-default pull-left" ng-click="close();" ><i class="fa fa-times"></i> Close</button>
