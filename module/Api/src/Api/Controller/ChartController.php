@@ -490,8 +490,12 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $adjustedSeries = $this->getSeries($geoname, $filters, $part, $prefix, $overriddenFilters, true);
 
         // Inject extra data about adjustement
-        $adjustedSeries[0]['overriddenFilters'] = $overriddenFilters;
-        $adjustedSeries[0]['originalFilters'] = $originalFilters;
+        foreach ($adjustedSeries as &$adjustedSerie) {
+            if ($adjustedSerie['type'] == 'line') {
+                $adjustedSerie['overriddenFilters'] = $overriddenFilters;
+                $adjustedSerie['originalFilters'] = $originalFilters;
+            }
+        }
 
         return $adjustedSeries;
     }

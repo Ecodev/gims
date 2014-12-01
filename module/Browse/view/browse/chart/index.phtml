@@ -158,31 +158,27 @@
                                     <p>Extract of estimated coverage. Complete data are available <a href="/browse/table/country?filters={{filtersIds}}&geonames={{geonameIds}}&years=1980-2015">on country table</a>.</p>
                                     <div ng-grid="gridOptions" class="gridStyle"></div>
                                 </tab>
-                                <tab heading="Differences" ng-if="chart.hasAdjustedLines" active="activeTab.differences">
+                                <tab heading="Differences" ng-if="chart.differences" active="activeTab.differences">
                                     <h2>{{findById(panelTabs.referenceChildren, panelTabs.overridable).name}}</h2>
-                                    <div ng-repeat="serie in chart.series">
-                                        <div ng-if="serie.originalFilters">
-                                            <p>Differences on <i>{{findById(panelTabs.referenceChildren, panelTabs.overridable).name}}</i> after the projection of <i>{{serie.name}}</i>:</p>
-                                            <table class="table table-striped table-hover table-condensed">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Questionnaire</th>
-                                                        <th>Before projection</th>
-                                                        <th>After projection</th>
-                                                        <th>Difference</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr ng-repeat="(questionnaireId, questionnaire) in serie.overriddenFilters" ng-if="getFirstAttribute(serie.originalFilters[questionnaireId])['content'][tabs.part.id]">
-                                                        <td>{{indexedElements[questionnaireId].name}}</td>
-                                                        <td class="text-warning">{{getFirstAttribute(serie.originalFilters[questionnaireId])['content'][tabs.part.id]}}</td>
-                                                        <td class="text-success">{{getFirstAttribute(questionnaire)['content'][tabs.part.id]}}</td>
-                                                        <td>{{getFirstAttribute(questionnaire)['content'][tabs.part.id] - getFirstAttribute(serie.originalFilters[questionnaireId])['content'][tabs.part.id]}}</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                                    <p>Differences on <i>{{findById(panelTabs.referenceChildren, panelTabs.overridable).name}}</i> after the projection:</p>
+                                    <table class="table table-striped table-hover table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th>Questionnaire</th>
+                                                <th>Before projection</th>
+                                                <th>After projection</th>
+                                                <th>Difference</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="(questionnaireId, questionnaire) in chart.differences.overriddenFilters" ng-if="getFirstAttribute(chart.differences.originalFilters[questionnaireId])['content'][tabs.part.id]">
+                                                <td>{{indexedElements[questionnaireId].name}}</td>
+                                                <td class="text-warning">{{getFirstAttribute(chart.differences.originalFilters[questionnaireId])['content'][tabs.part.id]}}</td>
+                                                <td class="text-success">{{getFirstAttribute(questionnaire)['content'][tabs.part.id]}}</td>
+                                                <td>{{getFirstAttribute(questionnaire)['content'][tabs.part.id] - getFirstAttribute(chart.differences.originalFilters[questionnaireId])['content'][tabs.part.id]}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </tab>
                             </tabset>
                         </div>

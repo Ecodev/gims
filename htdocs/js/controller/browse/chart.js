@@ -161,13 +161,21 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     });
 
     /**
-     * Returns whether the chart has at least one adjusted line
+     * Finds and affect differences, if there is at least one adjusted line
      * @param {chart} chart
      * @returns {boolean}
      */
-    function hasAdjustedLines(chart) {
-        return !!_.find(chart.series, function(serie) {
-            if (serie.isAdjusted) {
+    function findDifferences(chart) {
+        chart.differences = null;
+        _.find(chart.series, function(serie) {
+
+            if (serie.overriddenFilters) {
+
+                chart.differences = {
+                    overriddenFilters: serie.overriddenFilters,
+                    originalFilters: serie.originalFilters
+                };
+
                 return true;
             }
         });
@@ -181,7 +189,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     var firstLoad = true;
     $rootScope.$on('gims-chart-modified', function(event, chart) {
         $scope.chart = _.cloneDeep(chart);
-        $scope.chart.hasAdjustedLines = hasAdjustedLines($scope.chart);
+        findDifferences($scope.chart);
 
         // Reload projection if exists in original URL
         if (firstLoad && $scope.chart.series.length) {
