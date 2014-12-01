@@ -58,14 +58,16 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
              * When entering the input
              */
             scope.focus = function() {
-                var question = scope.questionnaire.survey.questions[scope.filter.id];
-                var answer = question.answers[scope.part.id];
-                TableFilter.initQuestionAbsolute(question);
-                TableFilter.getPermissions(question, answer);
+                if (data.mode.isContribute && questionnairesStatus[scope.questionnaire.status]) {
+                    var question = scope.questionnaire.survey.questions[scope.filter.id];
+                    var answer = question.answers[scope.part.id];
+                    TableFilter.initQuestionAbsolute(question);
+                    TableFilter.getPermissions(question, answer);
 
-                answer.displayValue = question.isAbsolute ? answer[question.value] : Percent.fractionToPercent(answer[question.value]);
-                setAnswerInitialValue(question, question.answers[scope.part.id]);
-                addValidators();
+                    answer.displayValue = question.isAbsolute ? answer[question.value] : Percent.fractionToPercent(answer[question.value]);
+                    setAnswerInitialValue(question, question.answers[scope.part.id]);
+                    addValidators();
+                }
             };
 
             /**

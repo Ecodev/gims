@@ -55,9 +55,7 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
                         $scope.messages = response.data.messages;
                     } else {
                         // If PHPExcel threw fatal errors, we default to generic message
-                        $scope.messages =
-                            ['Formula syntax is invalid and cannot be computed.'
-                            ];
+                        $scope.messages = ['Formula syntax is invalid and cannot be computed.'];
                     }
                 };
 
