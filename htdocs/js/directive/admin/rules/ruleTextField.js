@@ -77,7 +77,7 @@ angular.module('myApp.directives').directive('gimsRuleTextField', function($root
             $scope.$watch('rule.formula', validate);
 
             $rootScope.$on('gims-rule-token-selected', function(event, token) {
-                if ($scope.rule) {
+                if ($scope.rule && !$scope.ngDisabled) {
                     aceEditor.insert(token);
                     aceEditor.focus();
                 }
