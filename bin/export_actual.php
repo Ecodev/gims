@@ -15,7 +15,7 @@ function export(array $countries, array $onlyThose = array())
 {
     $hostname = basename(getcwd());
     @mkdir('actual');
-    @mkdir('actual/questionnaire');
+//    @mkdir('actual/questionnaire');
     @mkdir('actual/country');
 
     foreach ($countries as $country) {

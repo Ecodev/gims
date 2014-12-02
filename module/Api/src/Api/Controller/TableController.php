@@ -110,8 +110,8 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     public function questionnaireAction()
     {
-        $questionnairesIds = array_filter(explode(',', $this->params()->fromQuery('questionnaires')));
-        $filtersIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
+        $questionnairesIds = Utility::explodeIds($this->params()->fromQuery('questionnaires'));
+        $filtersIds = Utility::explodeIds($this->params()->fromQuery('filters'));
 
         $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findById($questionnairesIds);
         $questionnairesById = [];
@@ -172,14 +172,19 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
     public function countryAction()
     {
-        $geonamesIds = array_filter(explode(',', $this->params()->fromQuery('geonames')));
-        $filtersIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
+        $geonamesIds = Utility::explodeIds($this->params()->fromQuery('geonames'));
+        $filtersIds = Utility::explodeIds($this->params()->fromQuery('filters'));
         $wantedYears = $this->getWantedYears($this->params()->fromQuery('years'));
 
         $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findById($geonamesIds, array('name' => 'asc'));
         $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds);
         $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
         $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+
+        // Re-order filters to be the same order as selection in GUI
+        usort($filters, function($f1, $f2) use ($filtersIds) {
+            return array_search($f1->getId(), $filtersIds) > array_search($f2->getId(), $filtersIds);
+        });
 
         $result = array();
         $columns = array(
