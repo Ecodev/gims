@@ -82,6 +82,7 @@ class ExcelRenderer extends \Zend\View\Renderer\PhpRenderer
         $objWriter->save($tempPath);
 
         // Send common headers
+        http_response_code(200);
         header('Content-Description: File Transfer');
         header('Content-Transfer-Encoding: binary');
         header("Content-Disposition: attachment; filename=\"$filename\"");

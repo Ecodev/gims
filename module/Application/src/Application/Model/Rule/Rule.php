@@ -220,13 +220,6 @@ class Rule extends \Application\Model\AbstractModel implements ReferencableInter
      */
     public function validate()
     {
-        // Unfortunately PHPExcel may throw fatal errors that cannot be caught easily
-        // In order to not break the front-end and return a proper 500 status, we
-        // assume it failed before starting validation. Then the status will be corrected
-        // to successful code if it actually succeed without throwing anything
-        // This is typically useful for formulas such as "=123 + abc".
-        http_response_code(500);
-
         $validator = new \Application\Validator\Rule();
         if (!$validator->isValid($this)) {
             throw new \Application\Validator\Exception($validator->getMessages());

@@ -38,6 +38,17 @@ class Module
         // attach a listener to check for errors
         $events = $e->getTarget()->getEventManager();
         $events->attach(MvcEvent::EVENT_RENDER, array($this, 'onRenderError'));
+
+        // In order to not break the front-end and return a proper 500 status, we
+        // assume failure before doing anything. Then the status will be corrected
+        // to successful code (by ZF) if it actually succeed without throwing anything.
+        //
+        // This is useful to catch PHP Fatal error (timeout, infinite recursivity,
+        // parse errors, etc.).
+        //
+        // And more specifically, PHPExcel may throw fatal errors that cannot be caught easily.
+        // This is typically useful for formulas validation such as "=123 + abc".
+        http_response_code(500);
     }
 
     public function onRenderError(MvcEvent $event)
