@@ -29,6 +29,42 @@ angular.module('myApp.directives').directive('gimsIf', function($animate, $rootS
         return $(elements);
     }
 
+    function evalCondition(block, childScope, previousElements,$scope, $element, $attr, ctrl, $transclude) {
+        var value = $scope.$eval($attr.gimsIf);
+
+        if (value) {
+            if (!childScope) {
+                childScope = $scope.$new();
+                $transclude(childScope, function(clone) {
+                    clone[clone.length++] = document.createComment(' end gimsIf: ' + $attr.gimsIf + ' ');
+                    // Note: We only need the first/last node of the cloned nodes.
+                    // However, we need to keep the reference to the jqlite wrapper as it might be changed later
+                    // by a directive with templateUrl when it's template arrives.
+                    block = {
+                        clone: clone
+                    };
+                    $animate.enter(clone, $element.parent(), $element);
+                });
+            }
+        } else {
+            if (previousElements) {
+                previousElements.remove();
+                previousElements = null;
+            }
+            if (childScope) {
+                childScope.$destroy();
+                childScope = null;
+            }
+            if (block) {
+                previousElements = getBlockElements(block.clone);
+                $animate.leave(previousElements, function() {
+                    previousElements = null;
+                });
+                block = null;
+            }
+        }
+    }
+
     return {
         transclude: 'element',
         priority: 600,
@@ -39,40 +75,10 @@ angular.module('myApp.directives').directive('gimsIf', function($animate, $rootS
             var block, childScope, previousElements;
 
             $rootScope.$on('gims-tablefilter-show-labels-toggled', function gimsIfWatchAction() {
-                var value = $scope.$eval($attr.gimsIf);
-
-                if (value) {
-                    if (!childScope) {
-                        childScope = $scope.$new();
-                        $transclude(childScope, function(clone) {
-                            clone[clone.length++] = document.createComment(' end gimsIf: ' + $attr.gimsIf + ' ');
-                            // Note: We only need the first/last node of the cloned nodes.
-                            // However, we need to keep the reference to the jqlite wrapper as it might be changed later
-                            // by a directive with templateUrl when it's template arrives.
-                            block = {
-                                clone: clone
-                            };
-                            $animate.enter(clone, $element.parent(), $element);
-                        });
-                    }
-                } else {
-                    if (previousElements) {
-                        previousElements.remove();
-                        previousElements = null;
-                    }
-                    if (childScope) {
-                        childScope.$destroy();
-                        childScope = null;
-                    }
-                    if (block) {
-                        previousElements = getBlockElements(block.clone);
-                        $animate.leave(previousElements, function() {
-                            previousElements = null;
-                        });
-                        block = null;
-                    }
-                }
+                evalCondition(block, childScope, previousElements,$scope, $element, $attr, ctrl, $transclude);
             });
+
+            evalCondition(block, childScope, previousElements,$scope, $element, $attr, ctrl, $transclude);
         }
     };
 });
