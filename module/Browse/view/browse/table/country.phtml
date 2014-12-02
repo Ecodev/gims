@@ -123,8 +123,8 @@
         </div>
     </form>
 
-    <div class="alert alert-info" ng-hide="columnDefs"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to show table here.') ?></div>
-    <div ui-grid="gridOptions" class="gridStyle" ng-show="columnDefs"></div>
+    <div class="alert alert-info" ng-hide="gridOptions.columnDefs"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to show table here.') ?></div>
+    <div ui-grid="gridOptions" class="gridStyle" ng-show="gridOptions.columnDefs"></div>
 
     <gims-column-legends></gims-column-legends>
 </div>

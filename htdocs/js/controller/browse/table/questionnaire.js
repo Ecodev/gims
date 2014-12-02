@@ -8,8 +8,7 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
 
     // Configure ng-grid.
     $scope.gridOptions = {
-        data: 'table',
-        columnDefs: $scope.columnDefs
+        data: 'table'
     };
 
     $scope.$watch('tabs.filterSets', function() {
@@ -83,8 +82,8 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
             }).success(function(data) {
                 $scope.table = data.data;
 
-                $scope.columnDefs = _.map(data.columns, function(columnName, columnKey) {
-                    return {field: columnKey, displayName: columnName, width: 100};
+                $scope.gridOptions.columnDefs = _.map(data.columns, function(columnName, columnKey) {
+                    return {field: columnKey, displayName: columnName, name: columnName,  width: 100};
                 });
 
                 $scope.legends = data.legends;

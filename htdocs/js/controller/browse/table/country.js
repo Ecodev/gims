@@ -8,8 +8,7 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
 
     // Configure ng-grid.
     $scope.gridOptions = {
-        data: 'table',
-        columnDefs: $scope.columnDefs
+        data: 'table'
     };
 
     $scope.$watch('tabs.years', function() {
@@ -17,9 +16,8 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
             $location.search('years', null);
         } else {
             $location.search('years', $scope.tabs.years);
+            slowRefresh();
         }
-
-        slowRefresh();
     });
 
     $scope.$watch('tabs.filterSets', function() {
@@ -53,12 +51,16 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
 
     $scope.$watch('tabs.filters', function() {
         $scope.filtersIds = _.pluck($scope.tabs.filters, 'id').join(',');
-        refresh();
+        if ($scope.tabs.filters) {
+            refresh();
+        }
     });
 
     $scope.$watch('tabs.geonames', function() {
         $scope.geonamesIds = _.pluck($scope.tabs.geonames, 'id').join(',');
-        refresh();
+        if ($scope.tabs.geonames) {
+            refresh();
+        }
     });
 
     var slowRefresh = _.debounce(function() {
@@ -80,9 +82,10 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
 
             }).success(function(data) {
                 $scope.table = data.data;
-                $scope.columnDefs = _.map(data.columns, function(columnName, columnKey) {
-                    return {field: columnKey, displayName: columnName, width: 100};
+                $scope.gridOptions.columnDefs = _.map(data.columns, function(columnName, columnKey) {
+                    return {field: columnKey, displayName: columnName, name: columnName, width: 100};
                 });
+
                 $scope.legends = data.legends;
             });
         }
