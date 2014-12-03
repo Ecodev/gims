@@ -147,7 +147,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     var firstLoading = true;
     $q.all([filterSetDeferred, filterDeferred]).then(function() {
         $scope.$watch('data.filters', function(newFilters, oldFilters) {
-            $scope.usedThematics = _.uniq(_.pluck(_.pluck(newFilters, 'thematicFilter'), 'id'));
+            $scope.usedThematics = _(newFilters).pluck('thematicFilter').filter().pluck('id').pluck().uniq().value();
             TableFilter.loadFilter(newFilters, oldFilters).then(function() {
                 if (firstLoading === true && $scope.data.filters && $scope.data.questionnaires) {
                     checkSelectionExpand();
@@ -195,7 +195,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         var used = false;
 
         _.forEach(thematics, function(thematicId) {
-            if (_.indexOf($scope.usedThematics, thematicId)) {
+            if (_.indexOf($scope.usedThematics, thematicId) != -1) {
                 used = true;
                 return false;
             }
