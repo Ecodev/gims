@@ -49,7 +49,7 @@
         <li ng-if="filter.summands.length" class="divider"></li>
         <li ng-if="filter.summands.length" class="dropdown-header">Summands used for computation</li>
         <li ng-repeat="summand in filter.summands">
-            <a href="/admin/filter/edit/{{summand.id}}"><i class="fa fa-gims-filter fa-fw"></i> {{filter.name}}</a>
+            <a href="/admin/filter/edit/{{summand.id}}"><i class="fa fa-gims-filter fa-fw"></i> {{summand.name}}</a>
         </li>
 
         <li ng-if="questionnaire.survey.questions[filter.id].answers[part.id].id" class="divider"></li>
