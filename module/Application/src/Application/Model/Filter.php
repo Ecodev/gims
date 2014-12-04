@@ -459,6 +459,19 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
     }
 
     /**
+     * @param int $ratio
+     */
+    public function getTextColor($ratio = 100)
+    {
+        return Utility::getLisibleColor($this->getColor($ratio));
+    }
+
+    public function getGenericTextColor($ratio = 100)
+    {
+        return Utility::getLisibleColor($this->getGenericColor($ratio));
+    }
+
+    /**
      * Set color in database
      * @param $color string hexadecimal
      * @return self

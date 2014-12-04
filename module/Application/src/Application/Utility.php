@@ -3,6 +3,8 @@
 namespace Application;
 
 use \MischiefCollective\ColorJizz\Formats\HSV;
+use \MischiefCollective\ColorJizz\Formats\RGS;
+use \MischiefCollective\ColorJizz\Formats\Hex;
 
 abstract class Utility
 {
@@ -205,6 +207,26 @@ abstract class Utility
         $hex = $rgb->toHex();
 
         return '#' . $hex;
+    }
+
+    public static function getLisibleColor($color)
+    {
+        $color = str_replace('#', '', $color);
+
+        $r = hexdec(substr($color, 0, 2));
+        $g = hexdec(substr($color, 2, 2));
+        $b = hexdec(substr($color, 4, 2));
+
+        $brightness = sqrt($r * $r * 0.241 + $g * $g * 0.691 + $b * $b * 0.068);
+
+        if ($brightness < 150) {
+            $textColor = '#FFFFFF';
+        } else {
+            $textColor = '#000000';
+        }
+
+        return $textColor;
+
     }
 
     /**

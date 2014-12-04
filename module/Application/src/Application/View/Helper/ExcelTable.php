@@ -21,28 +21,18 @@ class ExcelTable extends \Zend\View\Helper\AbstractHtmlElement
         // Header
         foreach ($columns as $column) {
             $rowSorting[] = $column['field'];
+
             if (isset($column['thematic'])) {
                 $sheet->setCellValueByColumnAndRow($col, $row, $column['thematic']);
+                $this->applyFormat($sheet, $col, $row, $column, 'thematic');
             }
+
             if (isset($column['part'])) {
                 $sheet->setCellValueByColumnAndRow($col, $row + 1, $column['part']);
             }
-            $sheet->setCellValueByColumnAndRow($col, $row + 2, isset($column['displayLong']) ? $column['displayLong'] : $column['displayName']);
 
-            if (isset($column['filterColor'])) {
-                $format = array(
-                    'font' => array(
-                        //  'color' => array('rgb' => 'EAEAEA')
-                    ),
-                    'fill' => array(
-                        'type' => \PHPExcel_Style_Fill::FILL_SOLID,
-                        'startcolor' => array(
-                            'rgb' => str_replace('#', '', $column['filterColor']),
-                        ),
-                    ),
-                );
-                $sheet->getStyleByColumnAndRow($col, $row + 2)->applyFromArray($format);
-            }
+            $sheet->setCellValueByColumnAndRow($col, $row + 2, isset($column['displayLong']) ? $column['displayLong'] : $column['displayName']);
+            $this->applyFormat($sheet, $col, $row + 2, $column, 'filter');
 
             $col++;
         }
@@ -56,6 +46,36 @@ class ExcelTable extends \Zend\View\Helper\AbstractHtmlElement
             }
             $row++;
         }
+    }
+
+    private function applyFormat($sheet, $col, $row, $column, $type)
+    {
+        $mainColor = isset($column[$type . 'Color']) ? str_replace('#', '', $column[$type . 'Color']) : null;
+        $textColor = isset($column[$type . 'TextColor']) ? str_replace('#', '', $column[$type . 'TextColor']) : null;
+
+        if (!$mainColor && !$textColor) {
+            return;
+        };
+
+        $format = [];
+        if ($textColor) {
+            $format['font'] = array(
+                'color' => array(
+                    'rgb' => $textColor
+                )
+            );
+        }
+
+        if ($mainColor) {
+            $format['fill'] = array(
+                'type' => \PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array(
+                    'rgb' =>  $mainColor,
+                )
+            );
+        }
+
+        $sheet->getStyleByColumnAndRow($col, $row)->applyFromArray($format);
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace Application\Repository;
 
+use Application\Utility;
+
 class FilterRepository extends AbstractRepository
 {
 
@@ -156,12 +158,13 @@ class FilterRepository extends AbstractRepository
     public function getColumnNames($filters, $parts)
     {
         $query = $this->getEntityManager()->createQuery("SELECT
-                filter.id AS id,
+                filter.id AS filterId,
                 filter.name AS name,
+                filter.color AS filterColor,
                 filter.sorting AS filterSorting,
+                thematicFilter.id AS thematicId,
                 thematicFilter.name AS thematic,
                 thematicFilter.sorting AS thematicSorting,
-                filter.color AS filterColor,
                 thematicFilter.color AS thematicColor
                 FROM Application\Model\Filter filter
                 LEFT JOIN filter.thematicFilter thematicFilter
@@ -186,14 +189,16 @@ class FilterRepository extends AbstractRepository
 
             foreach ($parts as $part) {
                 $result[] = [
-                    'field' => 'f' . $filter['id'] . 'p' . $part->getId(),
+                    'field' => 'f' . $filter['filterId'] . 'p' . $part->getId(),
                     'part' => $part->getName(),
                     'partId' => $part->getId(),
                     'displayName' => $filterAcronym,
                     'displayLong' => $filter['name'],
-                    'filterColor' => $filter['filterColor'],
+                    'filterColor' => isset($filter['filterColor']) ? $filter['filterColor'] : Utility::getColor($filter['filterId'], 100),
+                    'filterTextColor' => Utility::getLisibleColor(isset($filter['filterColor']) ? $filter['filterColor'] : Utility::getColor($filter['filterId'], 100)),
                     'thematic' => $filter['thematic'],
                     'thematicColor' => $filter['thematicColor'],
+                    'thematicTextColor' => Utility::getLisibleColor(isset($filter['thematicColor']) ? $filter['thematicColor'] : Utility::getColor($filter['thematicId'], 100)),
                     'filterSorting' => $filter['filterSorting'],
                     'thematicSorting' => $filter['thematicSorting'],
                     'width' => 80

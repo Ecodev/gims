@@ -14,7 +14,9 @@ angular.module('myApp.services').factory('TableAssistant', function() {
         _.forEach(thematics, function(columns, thematic) {
             template += '<div class="tableHeaderCell" style="width:' +
                         (columns.length * columns[0].width) + 'px;background:' +
-                        columns[0].thematicColor + '">' +
+                        columns[0].thematicColor +
+                        ';color:' + columns[0].thematicTextColor +
+                        '">' +
                         thematic +
                         '</div>';
         });
@@ -49,10 +51,9 @@ angular.module('myApp.services').factory('TableAssistant', function() {
         var template = '<div class="tableHeaderRow filters">';
 
         _.forEach(columns, function(column) {
-            template += '<div class="tableHeaderCell" style="width:' +
-                        column.width +
-                        'px;background:' +
-                        column.filterColor +
+            template += '<div class="tableHeaderCell" style="width:' + column.width +
+                        'px;background:' + column.filterColor +
+                        ';color:' + column.filterTextColor +
                         '" tooltip-position="top" tooltip="' +
                         (column.displayLong ? column.displayLong : column.displayName) +
                         '">' +
