@@ -76,11 +76,17 @@ abstract class Utility
 
     /**
      * Execute a GIMS command via CLI asynchronously
-     * @param string $command
+     * @param array $args any number of arguments
      */
-    public static function executeCliCommand($command)
+    public static function executeCliCommand(/* ...$args */)
     {
-        $fullCommand = 'php htdocs/index.php ' . $command . ' > /dev/null 2>&1 &';
+        $args = func_get_args();
+
+        $escapedArguments = array_reduce($args, function($result, $arg) {
+            return $result . ' ' . escapeshellarg($arg);
+        });
+
+        $fullCommand = 'php htdocs/index.php ' . $escapedArguments . ' > /dev/null 2>&1 &';
         _log()->debug(__METHOD__, [$fullCommand]);
         exec($fullCommand);
     }

@@ -125,7 +125,7 @@ class AuthController extends \ZfcUser\Controller\UserController
 
             // If registered successfully, send email activation
             if ($user) {
-                Utility::executeCliCommand('email activationLink ' . $user->getId());
+                Utility::executeCliCommand('email', 'activationLink', $user->getId());
 
                 return new JsonModel(array('email' => $user->getEmail()));
             } else {

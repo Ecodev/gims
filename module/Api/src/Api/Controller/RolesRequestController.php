@@ -24,8 +24,8 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
             $queryString .= $key . '=' . $value . '&';
         }
 
-        $emailParams = "'" . $queryString . "user=" . User::getCurrentUser()->getId() . "'";
-        Utility::executeCliCommand('email notifyRoleRequest ' . implode(',', $users) . ' ' . User::getCurrentUser()->getId() . ' ' . $emailParams);
+        $emailParams = $queryString . "user=" . User::getCurrentUser()->getId();
+        Utility::executeCliCommand('email', 'notifyRoleRequest', implode(',', $users), User::getCurrentUser()->getId(), $emailParams);
 
         return new JsonModel($users);
     }
@@ -109,7 +109,6 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
                     'name' => $data['relation_modifier_name'],
                     'email' => $data['relation_modifier_email']
                 ];
-
             } elseif ($data['relation_creator_email']) {
                 $geonames[$data['geoname_id']]['questionnaires'][$data['questionnaire_id']]['roles'][$data['role_id']]['userRelation']['modifier'] = [
                     'name' => $data['relation_creator_name'],

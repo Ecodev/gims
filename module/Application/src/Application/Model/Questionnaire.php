@@ -395,7 +395,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     {
         if ($this->originalStatus == QuestionnaireStatus::$VALIDATED &&
                 ($this->originalStatus == QuestionnaireStatus::$VALIDATED || $this->getStatus() == QuestionnaireStatus::$NEW)) {
-            Utility::executeCliCommand('email notifyQuestionnaireReporters ' . $this->getId());
+            Utility::executeCliCommand('email', 'notifyQuestionnaireReporters', $this->getId());
         }
     }
 
@@ -407,7 +407,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     public function notifyValidator()
     {
         if ($this->originalStatus == QuestionnaireStatus::$NEW && $this->getStatus() == QuestionnaireStatus::$COMPLETED) {
-            Utility::executeCliCommand('email notifyQuestionnaireValidator ' . $this->getId());
+            Utility::executeCliCommand('email', 'notifyQuestionnaireValidator', $this->getId());
         }
     }
 
@@ -422,7 +422,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
                 $this->getStatus() == QuestionnaireStatus::$VALIDATED &&
                 $this->getPermissions()['validate']
         ) {
-            Utility::executeCliCommand('email notifyQuestionnaireCreator ' . $this->getId());
+            Utility::executeCliCommand('email', 'notifyQuestionnaireCreator', $this->getId());
         }
     }
 
