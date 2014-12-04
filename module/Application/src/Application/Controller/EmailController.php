@@ -159,6 +159,36 @@ class EmailController extends AbstractActionController
     }
 
     /**
+     * Create .eml on disk to be then send manually
+     */
+    public function generateWelcomeAction()
+    {
+        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->getAllWithJmpSurvey();
+        $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
+        $fakeUser = new User();
+        $fakeUser->setName('and welcome to GIMS');
+        $subject = 'Welcome to GIMS';
+
+        foreach ($geonames as $geoname) {
+            echo $geoname->getName() . PHP_EOL;
+
+            $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findByGeoname($geoname);
+            $questionnaireIds = implode(',', array_map(function($q) {
+                        return $q->getId();
+                    }, $questionnaires));
+
+            $mailParams = array(
+                'geoname' => $geoname,
+                'questionnaireIds' => $questionnaireIds,
+                'parts' => $parts,
+            );
+
+            $message = $this->createMessage($fakeUser, $subject, new ViewModel($mailParams));
+            file_put_contents($geoname->getName() . '.eml', $message->toString());
+        }
+    }
+
+    /**
      * Send a email to one or several users
      * @staticvar int $emailCount
      * @param User|User[] $users
@@ -177,38 +207,7 @@ class EmailController extends AbstractActionController
 
         foreach ($users as $user) {
 
-            $renderer = $this->getServiceLocator()->get('ViewRenderer');
-
-            // First render the view
-            $template = 'application/email/' . $this->getRequest()->getParam('action');
-            $model->setTemplate($template);
-            $model->setVariable('user', $user);
-            $model->setVariable('domain', $this->getServiceLocator()->get('Config')['domain']);
-            $partialContent = $renderer->render($model);
-
-            // Then inject it into layout
-            $modelLayout = new ViewModel(array($model->captureTo() => $partialContent));
-            $modelLayout->setTemplate('application/email/email');
-            $modelLayout->setVariable('subject', $subject);
-            $modelLayout->setVariable('user', $user);
-            $modelLayout->setVariable('domain', $this->getServiceLocator()->get('Config')['domain']);
-            $content = $renderer->render($modelLayout);
-
-            // Setup SMTP transport using LOGIN authentication
-            $transport = new SmtpTransport();
-            $options = new SmtpOptions($config['smtp']);
-            $transport->setOptions($options);
-
-            // set Mime type html
-            $htmlPart = new MimePart($content);
-            $htmlPart->type = "text/html";
-            $body = new MimeMessage();
-            $body->setParts(array($htmlPart));
-
-            $mail = new Mail\Message();
-            $mail->setSubject($subject);
-            $mail->setBody($body);
-            $mail->setFrom('webmaster@gimsinitiative.org', 'GIMS');
+            $message = $this->createMessage($user, $subject, $model);
 
             $email = $user->getEmail();
             $overridenBy = "";
@@ -218,18 +217,63 @@ class EmailController extends AbstractActionController
             }
 
             if ($email) {
-                $mail->addTo($email, $user->getDisplayName());
-                $transport->send($mail);
+                $message->addTo($email, $user->getDisplayName());
+
+                // Setup SMTP transport using LOGIN authentication
+                $transport = new SmtpTransport();
+                $options = new SmtpOptions($config['smtp']);
+                $transport->setOptions($options);
+                $transport->send($message);
             }
 
             $dateNow = new \DateTime();
             $dateNow = $dateNow->format('c');
 
             $log = 'data/logs/emails/' . $dateNow . '_' . str_pad($emailCount++, 3, '0', STR_PAD_LEFT) . '_' . $user->getEmail() . str_replace(' ', '_', $overridenBy) . '.html';
-            file_put_contents($log, $mail->getBodyText());
+            file_put_contents($log, $message->getBodyText());
 
             echo 'email sent to: ' . $user->getName() . "\t" . $user->getEmail() . "\t" . $overridenBy . "\t" . $subject . PHP_EOL;
         }
+    }
+
+    /**
+     * Create a message by rendering the template
+     * @param User $user
+     * @param string $subject
+     * @param ViewModel $model
+     * @return \Zend\Mail\Message
+     */
+    private function createMessage(User $user, $subject, ViewModel $model)
+    {
+        $renderer = $this->getServiceLocator()->get('ViewRenderer');
+
+        // First render the view
+        $template = 'application/email/' . $this->getRequest()->getParam('action');
+        $model->setTemplate($template);
+        $model->setVariable('user', $user);
+        $model->setVariable('domain', $this->getServiceLocator()->get('Config')['domain']);
+        $partialContent = $renderer->render($model);
+
+        // Then inject it into layout
+        $modelLayout = new ViewModel(array($model->captureTo() => $partialContent));
+        $modelLayout->setTemplate('application/email/email');
+        $modelLayout->setVariable('subject', $subject);
+        $modelLayout->setVariable('user', $user);
+        $modelLayout->setVariable('domain', $this->getServiceLocator()->get('Config')['domain']);
+        $content = $renderer->render($modelLayout);
+
+        // set Mime type html
+        $htmlPart = new MimePart($content);
+        $htmlPart->type = "text/html";
+        $body = new MimeMessage();
+        $body->setParts(array($htmlPart));
+
+        $message = new Mail\Message();
+        $message->setSubject($subject);
+        $message->setBody($body);
+        $message->setFrom('webmaster@gimsinitiative.org', 'GIMS');
+
+        return $message;
     }
 
 }

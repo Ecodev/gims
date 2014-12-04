@@ -264,12 +264,22 @@ return array(
                     ),
                 ),
                 'email-role-request' => array(
-                    'description' => 'Send email',
+                    'description' => 'Send email for role request',
                     'options' => array(
                         'route' => 'email notifyRoleRequest <recipientsIds> <applicantUserId> <emailLinkQueryString>',
                         'defaults' => array(
                             'controller' => 'Application\Controller\Email',
                             'action' => 'notifyRoleRequest'
+                        ),
+                    ),
+                ),
+                'generate-welcome-email' => array(
+                    'description' => 'Generate .eml file to welcome countries to GIMS',
+                    'options' => array(
+                        'route' => 'generate welcome',
+                        'defaults' => array(
+                            'controller' => 'Application\Controller\Email',
+                            'action' => 'generateWelcome'
                         ),
                     ),
                 ),

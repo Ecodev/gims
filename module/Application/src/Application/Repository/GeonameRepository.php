@@ -150,4 +150,17 @@ INNER JOIN questionnaire AS q ON questionnaire.geoname_id = q.geoname_id AND q.i
         }
     }
 
+    public function getAllWithJmpSurvey()
+    {
+        $qb = $this->createQueryBuilder('geoname')
+                ->join('geoname.questionnaires', 'questionnaire')
+                ->join('questionnaire.survey', 'survey')
+                ->where('survey.type = :surveyType')
+                ->orderBy('geoname.name');
+
+        $qb->setParameter('surveyType', \Application\Model\SurveyType::$JMP);
+
+        return $qb->getQuery()->getResult();
+    }
+
 }
