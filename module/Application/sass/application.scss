@@ -459,3 +459,29 @@ treecontrol li treeitem{
     }
 }
 
+.tableHeaderRow{
+    border-bottom:1px solid #ccc !important;
+    height:35px;
+
+    &.thematic {
+        font-size:15px;
+    }
+
+    &.parts {
+        font-size:12px;
+    }
+    &.filters {
+        font-size:11px;
+    }
+
+}
+
+.tableHeaderCell {
+    display:inline-block;
+    vertical-align:top;
+    border-right:1px solid #ccc;
+    text-align:center;
+    height:35px;
+    line-height:35px;
+
+}

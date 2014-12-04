@@ -1,4 +1,4 @@
-angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, $http, $location, Restangular, Utility) {
+angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, $http, $location, Restangular, Utility, TableAssistant) {
     'use strict';
 
     // Init to empty
@@ -23,7 +23,7 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
     $scope.$watch('tabs.filterSets', function() {
         if ($scope.tabs.filterSets && $scope.tabs.filterSets.length) {
             $scope.tabs.filters = [];
-            Restangular.one('filterSet').get({id: _.pluck($scope.tabs.filterSets, 'id').join(','), fields: 'filters', perPage: 1000}).then(function(data) {
+            Restangular.one('filterSet').get({id: _.pluck($scope.tabs.filterSets, 'id').join(','), fields: 'filters.color', perPage: 1000}).then(function(data) {
                 $scope.tabs.filters = Utility.getAttribute(data, 'filters', null);
                 $scope.tabs.filter = null;
             });
@@ -32,7 +32,7 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
 
     $scope.$watch('tabs.filter', function() {
         if ($scope.tabs.filter) {
-            Restangular.one('filter', $scope.tabs.filter.id).getList('children', {perPage: 1000}).then(function(filters) {
+            Restangular.one('filter', $scope.tabs.filter.id).getList('children.color', {perPage: 1000}).then(function(filters) {
                 $scope.tabs.filters = filters;
                 $scope.tabs.filterSets = null;
             });
@@ -65,11 +65,12 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
 
     var slowRefresh = _.debounce(function() {
         refresh();
-    }, 2000);
+    }, 500);
 
     var refresh = _.debounce(function() {
 
         if ($scope.tabs.geonames && $scope.tabs.filters && $scope.tabs.years) {
+            $scope.ready = false;
 
             // ... then, get table data via Ajax, but only once per 200 milliseconds
             // (this avoid sending several request on page loading)
@@ -82,13 +83,11 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
 
             }).success(function(data) {
                 $scope.table = data.data;
-                $scope.gridOptions.columnDefs = _.map(data.columns, function(columnName, columnKey) {
-                    return {field: columnKey, displayName: columnName, name: columnName, width: 100};
-                });
-
-                $scope.legends = data.legends;
+                $scope.gridOptions.columnDefs = data.columns;
+                $scope.gridOptions.headerTemplate = TableAssistant.getHeaderTemplate(data.columns);
+                $scope.ready = true;
             });
         }
-    }, 300);
+    }, 1000);
 
 });

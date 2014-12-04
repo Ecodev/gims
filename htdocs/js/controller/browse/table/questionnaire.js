@@ -1,4 +1,4 @@
-angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($scope, $http, $timeout, $location, Restangular, Utility) {
+angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($scope, $http, $timeout, $location, Restangular, Utility, TableAssistant) {
     'use strict';
 
     // Init to empty
@@ -6,7 +6,6 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
     $scope.columnDefs = [];
     $scope.surveysTemplate = "[[item.code]] - [[item.name]]";
 
-    // Configure ng-grid.
     $scope.gridOptions = {
         data: 'table'
     };
@@ -14,7 +13,11 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
     $scope.$watch('tabs.filterSets', function() {
         if ($scope.tabs.filterSets && $scope.tabs.filterSets.length) {
             $scope.tabs.filters = [];
-            Restangular.one('filterSet').get({id: _.pluck($scope.tabs.filterSets, 'id').join(','), fields: 'filters', perPage: 1000}).then(function(data) {
+            Restangular.one('filterSet').get({
+                id: _.pluck($scope.tabs.filterSets, 'id').join(','),
+                fields: 'filters.color',
+                perPage: 1000
+            }).then(function(data) {
                 $scope.tabs.filters = Utility.getAttribute(data, 'filters', null);
                 $scope.tabs.filter = null;
             });
@@ -23,7 +26,7 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
 
     $scope.$watch('tabs.filter', function() {
         if ($scope.tabs.filter) {
-            Restangular.one('filter', $scope.tabs.filter.id).getList('children', {perPage: 1000}).then(function(filters) {
+            Restangular.one('filter', $scope.tabs.filter.id).getList('children.color', {perPage: 1000}).then(function(filters) {
                 $scope.tabs.filters = filters;
                 $scope.tabs.filterSets = null;
             });
@@ -74,6 +77,7 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
     var refresh = _.debounce(function() {
         if ($scope.tabs.questionnaires && $scope.tabs.filters) {
 
+            $scope.ready = false;
             $http.get('/api/table/questionnaire', {
                 params: {
                     questionnaires: $scope.questionnairesIds,
@@ -81,14 +85,12 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
                 }
             }).success(function(data) {
                 $scope.table = data.data;
-
-                $scope.gridOptions.columnDefs = _.map(data.columns, function(columnName, columnKey) {
-                    return {field: columnKey, displayName: columnName, name: columnName,  width: 100};
-                });
-
-                $scope.legends = data.legends;
+                var template = TableAssistant.getHeaderTemplate(data.columns);
+                $scope.gridOptions.columnDefs = data.columns;
+                $scope.gridOptions.headerTemplate = template;
+                $scope.ready = true;
             });
         }
-    }, 300);
+    }, 1000);
 
 });

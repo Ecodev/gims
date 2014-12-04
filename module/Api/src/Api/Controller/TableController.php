@@ -125,20 +125,17 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
         $result = array();
         $columns = array(
-            'country' => 'Country',
-            'iso3' => 'ISO-3',
-            'survey' => 'Survey',
-            'year' => 'Year',
+            ['field' => 'country', 'displayName' => 'Country', 'width' => 120],
+            ['field' => 'iso3', 'displayName' => 'ISO3', 'width' => 60],
+            ['field' => 'survey', 'displayName' => 'Survey', 'width' => 100],
+            ['field' => 'year', 'displayName' => 'Year', 'width' => 60],
         );
-        $legends = [];
 
-        $allColumnNames = $this->getEntityManager()->getRepository('\Application\Model\Filter')->getColumnNames($filters, $parts);
+        $columns = array_merge($columns, $this->getEntityManager()
+                                              ->getRepository('\Application\Model\Filter')
+                                              ->getColumnNames($filters, $parts));
         foreach ($parts as $part) {
             foreach ($filters as $filter) {
-                $columnNames = $allColumnNames[$filter->getId()][$part->getId()];
-                $columnId = 'f' . $filter->getId() . 'p' . $part->getId();
-                $columns[$columnId] = $columnNames['short'];
-                $legends[$columnId] = $columnNames;
 
                 $data = $calculator->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
                 foreach ($data['values'] as $questionnaireId => $value) {
@@ -151,14 +148,13 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                         );
                     }
 
-                    $result[$questionnaireId][$columnId] = \Application\Utility::decimalToRoundedPercent($value);
+                    $result[$questionnaireId]['f' . $filter->getId() . 'p' . $part->getId()] = \Application\Utility::decimalToRoundedPercent($value);
                 }
             }
         }
 
         $finalResult = array(
             'columns' => $columns,
-            'legends' => array_values($legends),
             'data' => array_values($result),
         );
 
@@ -188,29 +184,32 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
         $result = array();
         $columns = array(
-            'country' => 'Country',
-            'iso3' => 'ISO-3',
-            'year' => 'Year',
+            ['field' => 'country', 'displayName' => 'Country', 'width' => 120],
+            ['field' => 'iso3', 'displayName' => 'ISO3', 'width' => 60],
+            ['field' => 'year', 'displayName' => 'Year', 'width' => 60],
         );
-        $legends = [];
 
         // Build population acronyms and add them to columns definition
-        $populationAcronyms = array();
-        $partsById = []; // used for cache
         foreach ($parts as $part) {
-            $partsById[$part->getId()] = $part;
             $acronym = 'P' . strtoupper($part->getName()[0]);
-            $populationAcronyms[$part->getId()] = $acronym;
-            $columns[$acronym] = $acronym;
-            $legends[] = [
-                'short' => $acronym,
-                'long' => 'Population, ' . $part->getName(),
+            $columns[] = [
+                'field' => $acronym,
+                'displayLong' => $part->getName() . ' Population',
+                'displayName' => $acronym,
+                'width' => 80
             ];
         }
 
-        $allColumnNames = $this->getEntityManager()->getRepository('\Application\Model\Filter')->getColumnNames($filters, $parts);
-        foreach ($geonames as $geoname) {
+        $cols = $this->getEntityManager()->getRepository('\Application\Model\Filter')->getColumnNames($filters, $parts);
+        foreach ($cols as $column) {
+            $columns[] = $column;
+            $column['field'] .= 'a';
+            $column['displayName'] .= 'A';
+            $column['displayLong'] .= ' (absolute value)';
+            $columns[] = $column;
+        }
 
+        foreach ($geonames as $geoname) {
             $allYearsComputed = $this->getAllYearsComputed($parts, $filters, $geoname);
             $filteredYearsComputed = $this->filterYears($allYearsComputed, $wantedYears);
 
@@ -226,30 +225,15 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                 // population columns
                 $populationData = array();
                 foreach ($parts as $part) {
-                    $populationData[$populationAcronyms[$part->getId()]] = $populationRepository->getPopulationByGeoname($geoname, $part->getId(), $year);
+                    $populationData['P' . strtoupper($part->getName()[0])] = $populationRepository->getPopulationByGeoname($geoname, $part->getId(), $year);
                 }
 
                 $statsData = array();
-                $count = 1;
                 foreach ($filteredYearsComputed as $partId => $flatFilters) {
-
                     foreach ($flatFilters as $filter) {
-                        $columnId = 'c' . $count;
-                        $columnNames = $allColumnNames[$filter['id']][$partId];
-                        $columns[$columnId] = $columnNames['short'];
-                        $legends[$columnId] = $columnNames;
-
                         $value = $filter['data'][$year];
-                        $statsData[$columnId] = \Application\Utility::decimalToRoundedPercent($value);
-
-                        // Do absolute version
-                        $columnId = $columnId . 'a';
-                        $columnNames['short'] = $columnNames['short'] . 'a';
-                        $columnNames['long'] = $columnNames['long'] . ' (absolute value)';
-                        $legends[$columnId] = $columnNames;
-                        $columns[$columnId] = $columnNames['short'];
-                        $statsData[$columnId] = is_null($value) ? null : (int) ($value * $populationRepository->getPopulationByGeoname($geoname, $partId, $year));
-                        $count++;
+                        $statsData['f' . $filter['id'] . 'p' . $partId] = \Application\Utility::decimalToRoundedPercent($value);
+                        $statsData['f' . $filter['id'] . 'p' . $partId . 'a'] = is_null($value) ? null : (int) ($value * $populationRepository->getPopulationByGeoname($geoname, $partId, $year));
                     }
                 }
 
@@ -259,7 +243,6 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
         $finalResult = array(
             'columns' => $columns,
-            'legends' => array_values($legends),
             'data' => array_values($result)
         );
 

@@ -110,9 +110,9 @@
             </div>
         </div>
     </form>
-
     <div class="alert alert-info" ng-hide="gridOptions.columnDefs"><i class="fa fa-info-circle"></i> <?php echo $this->translate('Select parameters to show table here.') ?></div>
-    <div ui-grid="gridOptions" class="gridStyle" ng-show="gridOptions.columnDefs"></div>
+</div>
 
-    <gims-column-legends></gims-column-legends>
+<div class="container gims-full-width-container">
+    <div ng-if="ready" ui-grid="gridOptions" class="gridStyle"></div>
 </div>

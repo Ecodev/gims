@@ -155,8 +155,14 @@ class FilterRepository extends AbstractRepository
      */
     public function getColumnNames($filters, $parts)
     {
-        $query = $this->getEntityManager()
-                ->createQuery("SELECT filter.id AS id, filter.name AS name, thematicFilter.name AS thematic
+        $query = $this->getEntityManager()->createQuery("SELECT
+                filter.id AS id,
+                filter.name AS name,
+                filter.sorting AS filterSorting,
+                thematicFilter.name AS thematic,
+                thematicFilter.sorting AS thematicSorting,
+                filter.color AS filterColor,
+                thematicFilter.color AS thematicColor
                 FROM Application\Model\Filter filter
                 LEFT JOIN filter.thematicFilter thematicFilter
                 WHERE filter IN (:filters)");
@@ -167,16 +173,9 @@ class FilterRepository extends AbstractRepository
 
         $query->setParameters($params);
         $data = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
         $result = [];
         foreach ($data as $filter) {
-
-            // Thematic
-            $thematicFirstLetter = '';
-            $thematicFirstWord = '';
-            if ($filter['thematic']) {
-                $thematicFirstLetter = substr($filter['thematic'], 0, 1);
-                $thematicFirstWord = preg_split('/\s/', $filter['thematic'], null, PREG_SPLIT_NO_EMPTY)[0] . ', ';
-            }
 
             // Filter first letters of each word
             $filterAcronym = '';
@@ -186,15 +185,38 @@ class FilterRepository extends AbstractRepository
             }
 
             foreach ($parts as $part) {
-                $partFirstLetter = substr($part->getName(), 0, 1);
-                $result[$filter['id']][$part->getId()] = [
-                    'short' => strtoupper($thematicFirstLetter . $partFirstLetter . $filterAcronym),
-                    'long' => $thematicFirstWord . $part->getName() . ', ' . $filter['name'],
+                $result[] = [
+                    'field' => 'f' . $filter['id'] . 'p' . $part->getId(),
+                    'part' => $part->getName(),
+                    'partId' => $part->getId(),
+                    'displayName' => $filterAcronym,
+                    'displayLong' => $filter['name'],
+                    'filterColor' => $filter['filterColor'],
+                    'thematic' => $filter['thematic'],
+                    'thematicColor' => $filter['thematicColor'],
+                    'filterSorting' => $filter['filterSorting'],
+                    'thematicSorting' => $filter['thematicSorting'],
+                    'width' => 80
                 ];
             }
         }
 
+        usort($result, array($this, 'orderColumnsByThematicPartAndFilter'));
+
         return $result;
+    }
+
+    private function orderColumnsByThematicPartAndFilter($c1, $c2)
+    {
+        if ($c1['thematicSorting'] == $c2['thematicSorting']) {
+            if ($c1['partId'] == $c2['partId']) {
+                return $c1['filterSorting'] - $c2['filterSorting'];
+            }
+
+            return strcmp($c1['partId'], $c2['partId']);
+        }
+
+        return $c1['thematicSorting'] - $c2['thematicSorting'];
     }
 
 }
