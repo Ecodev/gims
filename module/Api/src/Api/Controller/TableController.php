@@ -127,8 +127,8 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $result = array();
         $columns = array(
             ['field' => 'country', 'displayName' => 'Country', 'width' => 120],
-            ['field' => 'survey', 'displayName' => 'Survey', 'width' => 100],
-            ['field' => 'surveyName', 'displayName' => 'Source', 'width' => 200],
+            ['field' => 'survey', 'displayName' => 'Code', 'width' => 100],
+            ['field' => 'surveyName', 'displayName' => 'Survey', 'width' => 250],
             ['field' => 'year', 'displayName' => 'Year', 'width' => 60],
         );
 
