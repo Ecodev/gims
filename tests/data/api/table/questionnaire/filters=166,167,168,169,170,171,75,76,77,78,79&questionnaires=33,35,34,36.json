@@ -6,14 +6,14 @@
             "width": 120
         },
         {
-            "field": "iso3",
-            "displayName": "ISO3",
-            "width": 60
-        },
-        {
             "field": "survey",
             "displayName": "Survey",
             "width": 100
+        },
+        {
+            "field": "surveyName",
+            "displayName": "Source",
+            "width": 200
         },
         {
             "field": "year",
@@ -519,8 +519,8 @@
     "data": [
         {
             "country": "Azerbaijan",
-            "iso3": "AZE",
             "survey": "SLC95",
+            "surveyName": "Survey of Living Conditions",
             "year": 1995,
             "f75p1": 85.3,
             "f76p1": 67.9,
@@ -558,8 +558,8 @@
         },
         {
             "country": "Azerbaijan",
-            "iso3": "AZE",
             "survey": "HBS01",
+            "surveyName": "Household Budget Survey (HBS)",
             "year": 2001,
             "f75p1": null,
             "f76p1": null,
@@ -597,8 +597,8 @@
         },
         {
             "country": "Azerbaijan",
-            "iso3": "AZE",
             "survey": "MICS00",
+            "surveyName": "Multiple Indicator Cluster Survey",
             "year": 2000,
             "f75p1": 92.5,
             "f76p1": 73.6,
@@ -636,8 +636,8 @@
         },
         {
             "country": "Azerbaijan",
-            "iso3": "AZE",
             "survey": "DHS06",
+            "surveyName": "Demographic and Health Survey",
             "year": 2006,
             "f75p1": 86.3,
             "f76p1": 75.6,

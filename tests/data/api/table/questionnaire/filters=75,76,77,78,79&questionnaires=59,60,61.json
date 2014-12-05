@@ -6,14 +6,14 @@
             "width": 120
         },
         {
-            "field": "iso3",
-            "displayName": "ISO3",
-            "width": 60
-        },
-        {
             "field": "survey",
             "displayName": "Survey",
             "width": 100
+        },
+        {
+            "field": "surveyName",
+            "displayName": "Source",
+            "width": 200
         },
         {
             "field": "year",
@@ -249,8 +249,8 @@
     "data": [
         {
             "country": "Saudi Arabia",
-            "iso3": "SAU",
             "survey": "CEN93",
+            "surveyName": "Census",
             "year": 1993,
             "f75p1": null,
             "f76p1": null,
@@ -270,8 +270,8 @@
         },
         {
             "country": "Saudi Arabia",
-            "iso3": "SAU",
             "survey": "FHS96",
+            "surveyName": "Family Health Survey",
             "year": 1996,
             "f75p1": null,
             "f76p1": null,
@@ -291,8 +291,8 @@
         },
         {
             "country": "Saudi Arabia",
-            "iso3": "SAU",
             "survey": "CEN04",
+            "surveyName": "Census",
             "year": 2004,
             "f75p1": null,
             "f76p1": null,

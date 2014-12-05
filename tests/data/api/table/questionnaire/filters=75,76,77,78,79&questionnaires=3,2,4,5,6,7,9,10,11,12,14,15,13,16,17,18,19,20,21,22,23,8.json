@@ -6,14 +6,14 @@
             "width": 120
         },
         {
-            "field": "iso3",
-            "displayName": "ISO3",
-            "width": 60
-        },
-        {
             "field": "survey",
             "displayName": "Survey",
             "width": 100
+        },
+        {
+            "field": "surveyName",
+            "displayName": "Source",
+            "width": 200
         },
         {
             "field": "year",
@@ -249,8 +249,8 @@
     "data": [
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "DHS94",
+            "surveyName": "Demographic and Health Survey",
             "year": 1994,
             "f75p1": 83.6,
             "f76p1": 26.7,
@@ -270,8 +270,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "CEN91",
+            "surveyName": "Census",
             "year": 1991,
             "f75p1": 75.9,
             "f76p1": 24.3,
@@ -291,8 +291,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "MICS94",
+            "surveyName": "Multiple Indicator Cluster Survey",
             "year": 1994,
             "f75p1": 84.0,
             "f76p1": 26.0,
@@ -312,8 +312,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "MICS95",
+            "surveyName": "Multiple Indicator Cluster Survey",
             "year": 1995,
             "f75p1": 83.2,
             "f76p1": 25.5,
@@ -333,8 +333,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "MICS96",
+            "surveyName": "Multiple Indicator Cluster Survey",
             "year": 1996,
             "f75p1": 84.8,
             "f76p1": 29.6,
@@ -354,8 +354,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "DHS97",
+            "surveyName": "Demographic and Health Survey",
             "year": 1997,
             "f75p1": 84.3,
             "f76p1": 32.1,
@@ -375,8 +375,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "MICS99",
+            "surveyName": "Multiple Indicator Cluster Survey",
             "year": 1999,
             "f75p1": null,
             "f76p1": null,
@@ -396,8 +396,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "PP00",
+            "surveyName": "Progotir Pathey",
             "year": 2000,
             "f75p1": null,
             "f76p1": null,
@@ -417,8 +417,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "DHS00",
+            "surveyName": "Demographic and Health Survey",
             "year": 2000,
             "f75p1": 82.2,
             "f76p1": 24.2,
@@ -438,8 +438,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "HIES00",
+            "surveyName": "Household Income Expenditure Survey ",
             "year": 2000,
             "f75p1": 82.6,
             "f76p1": 25.3,
@@ -459,8 +459,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "MHS01",
+            "surveyName": "Maternal health services and Maternal Mortality survey",
             "year": 2001,
             "f75p1": null,
             "f76p1": null,
@@ -480,8 +480,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "WHS03",
+            "surveyName": "World Health Survey",
             "year": 2003,
             "f75p1": 83.0,
             "f76p1": 25.3,
@@ -501,8 +501,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "CEN01",
+            "surveyName": "Census",
             "year": 2001,
             "f75p1": 78.2,
             "f76p1": 26.3,
@@ -522,8 +522,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "DHS04",
+            "surveyName": "Demographic and Health Survey",
             "year": 2004,
             "f75p1": 85.5,
             "f76p1": 23.3,
@@ -543,8 +543,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "HIES05",
+            "surveyName": "Household Income Expenditure Survey ",
             "year": 2005,
             "f75p1": 85.4,
             "f76p1": 22.4,
@@ -564,8 +564,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "MICS06",
+            "surveyName": "Multiple Cluster Indicator Survey",
             "year": 2006,
             "f75p1": 84.7,
             "f76p1": 22.4,
@@ -585,8 +585,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "DHS07",
+            "surveyName": "Demographic and Health Survey",
             "year": 2007,
             "f75p1": 85.3,
             "f76p1": 26.2,
@@ -606,8 +606,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "MICS09",
+            "surveyName": "Multiple Indicator Cluster Survey",
             "year": 2009,
             "f75p1": 86.6,
             "f76p1": 32.5,
@@ -627,8 +627,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "HIES10",
+            "surveyName": "Household Income and Expenditure Survey: Report",
             "year": 2010,
             "f75p1": 82.5,
             "f76p1": 28.9,
@@ -648,8 +648,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "CEN11",
+            "surveyName": "Census and population survey",
             "year": 2011,
             "f75p1": 85.2,
             "f76p1": 44.3,
@@ -669,8 +669,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "DHS11",
+            "surveyName": "Demographic and Health Survey",
             "year": 2011,
             "f75p1": 86.5,
             "f76p1": 37.2,
@@ -690,8 +690,8 @@
         },
         {
             "country": "Bangladesh",
-            "iso3": "BGD",
             "survey": "SVRS98",
+            "surveyName": "SVRS98",
             "year": 1998,
             "f75p1": 84.9,
             "f76p1": 25.9,

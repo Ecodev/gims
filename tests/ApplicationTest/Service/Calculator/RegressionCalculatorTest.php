@@ -90,8 +90,14 @@ class RegressionCalculatorTest extends AbstractCalculator
             'slope' => -0.00222,
             'average' => 0.10555,
             'surveys' => array(
-                1 => 'tst 1',
-                2 => 'tst 2',
+                1 => [
+                    'code' => 'tst 1',
+                    'name' => 'Test survey 1'
+                    ],
+                2 => [
+                    'code' => 'tst 2',
+                    'name' => 'Test survey 2'
+                ],
             ),
                 ), $this->service->computeFilterForAllQuestionnaires($this->highFilter1->getId(), $this->questionnaires, $this->part1->getId()));
 
@@ -483,8 +489,14 @@ class RegressionCalculatorTest extends AbstractCalculator
             'slope' => null,
             'average' => 0.1,
             'surveys' => array(
-                1 => 'tst 1',
-                2 => 'tst 2',
+                1 => [
+                    'code' => 'tst 1',
+                    'name' => 'Test survey 1'
+                ],
+                2 => [
+                    'code' => 'tst 2',
+                    'name' => 'Test survey 2'
+                ],
             ),
                 ), $this->service->computeFilterForAllQuestionnaires($this->filter1->getId(), $this->questionnaires, $this->part1->getId()));
     }

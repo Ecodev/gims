@@ -6,14 +6,14 @@
             "width": 120
         },
         {
-            "field": "iso3",
-            "displayName": "ISO3",
-            "width": 60
-        },
-        {
             "field": "survey",
             "displayName": "Survey",
             "width": 100
+        },
+        {
+            "field": "surveyName",
+            "displayName": "Source",
+            "width": 200
         },
         {
             "field": "year",
@@ -249,8 +249,8 @@
     "data": [
         {
             "country": "Afghanistan",
-            "iso3": "AFG",
             "survey": "MICS97",
+            "surveyName": "Multiple Indicator Cluster Survey",
             "year": 1997,
             "f75p1": 16.9,
             "f76p1": 7.7,
@@ -270,8 +270,8 @@
         },
         {
             "country": "Afghanistan",
-            "iso3": "AFG",
             "survey": "MICS00",
+            "surveyName": "Multiple Indicator Cluster Survey",
             "year": 2000,
             "f75p1": null,
             "f76p1": null,
@@ -291,8 +291,8 @@
         },
         {
             "country": "Afghanistan",
-            "iso3": "AFG",
             "survey": "MICS03",
+            "surveyName": "Multiple Indicator Cluster Survey",
             "year": 2003,
             "f75p1": 56.7,
             "f76p1": 14.0,
@@ -312,8 +312,8 @@
         },
         {
             "country": "Afghanistan",
-            "iso3": "AFG",
             "survey": "NRVA03",
+            "surveyName": "National Risk & Vulnerability Assessment",
             "year": 2003,
             "f75p1": null,
             "f76p1": null,
@@ -333,8 +333,8 @@
         },
         {
             "country": "Afghanistan",
-            "iso3": "AFG",
             "survey": "NRVS05",
+            "surveyName": "National Risk & Vulnerability Survey",
             "year": 2005,
             "f75p1": 63.7,
             "f76p1": 15.4,
@@ -354,8 +354,8 @@
         },
         {
             "country": "Afghanistan",
-            "iso3": "AFG",
             "survey": "NVRA08",
+            "surveyName": "National Risk & Vulnerability Survey 2007-2008",
             "year": 2008,
             "f75p1": null,
             "f76p1": null,
@@ -375,8 +375,8 @@
         },
         {
             "country": "Afghanistan",
-            "iso3": "AFG",
             "survey": "MIS09",
+            "surveyName": "MIS",
             "year": 2009,
             "f75p1": null,
             "f76p1": null,
@@ -396,8 +396,8 @@
         },
         {
             "country": "Afghanistan",
-            "iso3": "AFG",
             "survey": "MS10",
+            "surveyName": "Mortality Survey",
             "year": 2010,
             "f75p1": 77.9,
             "f76p1": 21.8,
@@ -417,8 +417,8 @@
         },
         {
             "country": "Afghanistan",
-            "iso3": "AFG",
             "survey": "MICS11",
+            "surveyName": "Multiple Indicator Cluster Survey",
             "year": 2011,
             "f75p1": 82.3,
             "f76p1": 31.2,

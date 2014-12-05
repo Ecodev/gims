@@ -24,16 +24,19 @@ class AggregatorTest extends AbstractCalculator
                                     'value' => 0.5,
                                     'year' => 2001,
                                     'code' => 'MICS01',
+                                    'name' => 'MICS01 - Name',
                                 ],
                                 2 => [
                                     'value' => 0.2,
                                     'year' => 2001,
                                     'code' => 'MICS01',
+                                    'name' => 'MICS01 - Name',
                                 ],
                                 3 => [
                                     'value' => 0.7,
                                     'year' => 1991,
                                     'code' => 'JMP91',
+                                    'name' => 'MICS01 - Name',
                                 ],
                             ];
 
@@ -84,7 +87,10 @@ class AggregatorTest extends AbstractCalculator
                 1 => 2001,
             ],
             'surveys' => [
-                1 => 'MICS01',
+                1 => [
+                    'code' => 'MICS01',
+                    'name' => 'MICS01 - Name',
+                ]
             ],
             'count' => 1,
             'minYear' => 2001,
