@@ -263,7 +263,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
                 if (!is_null($value)) {
                     $scatterData = array(
-                        'name' => $data['surveys'][$questionnaireId],
+                        'name' => $data['surveys'][$questionnaireId]['code'],
                         'id' => $idFilter . ':' . $questionnaireId,
                         'questionnaire' => $questionnaireId,
                         'x' => $data['years'][$questionnaireId],

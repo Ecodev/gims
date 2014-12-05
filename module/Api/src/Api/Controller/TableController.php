@@ -126,8 +126,8 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $result = array();
         $columns = array(
             ['field' => 'country', 'displayName' => 'Country', 'width' => 120],
-            ['field' => 'iso3', 'displayName' => 'ISO3', 'width' => 60],
             ['field' => 'survey', 'displayName' => 'Survey', 'width' => 100],
+            ['field' => 'surveyName', 'displayName' => 'Source', 'width' => 200],
             ['field' => 'year', 'displayName' => 'Year', 'width' => 60],
         );
 
@@ -142,8 +142,8 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                     if (!isset($result[$questionnaireId])) {
                         $result[$questionnaireId] = array(
                             'country' => $questionnairesById[$questionnaireId]->getGeoname()->getName(),
-                            'iso3' => $questionnairesById[$questionnaireId]->getGeoname()->getIso3(),
-                            'survey' => $data['surveys'][$questionnaireId],
+                            'survey' => $data['surveys'][$questionnaireId]['code'],
+                            'surveyName' => $data['surveys'][$questionnaireId]['name'],
                             'year' => $data['years'][$questionnaireId],
                         );
                     }

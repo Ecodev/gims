@@ -291,7 +291,10 @@ class Calculator extends AbstractCalculator
 
             $questionnaireId = $questionnaire->getId();
             $years[$questionnaireId] = $questionnaireData['year'];
-            $surveys[$questionnaireId] = $questionnaireData['code'];
+            $surveys[$questionnaireId] = [
+                'code' => $questionnaireData['code'],
+                'name' => $questionnaireData['name']
+            ];
             $result['values'][$questionnaireId] = $questionnaireData['value'];
 
             if (!is_null($questionnaireData['value'])) {
@@ -337,6 +340,7 @@ class Calculator extends AbstractCalculator
         $result = [];
         $result['year'] = $questionnaire->getSurvey()->getYear();
         $result['code'] = $questionnaire->getSurvey()->getCode();
+        $result['name'] = $questionnaire->getSurvey()->getName();
         $result['value'] = $this->computeFilter($filterId, $questionnaireId, $partId, true);
 
         $this->getCache()->setItem($key, $result);
