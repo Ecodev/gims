@@ -234,7 +234,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                     foreach ($flatFilters as $filter) {
                         $value = $filter['data'][$year];
                         $statsData['f' . $filter['id'] . 'p' . $partId] = \Application\Utility::decimalToRoundedPercent($value);
-                        $statsData['f' . $filter['id'] . 'p' . $partId . 'a'] = is_null($value) ? null : (int) ($value * $populationRepository->getPopulationByGeoname($geoname, $partId, $year));
+                        $statsData['f' . $filter['id'] . 'p' . $partId . 'a'] = is_null($value) ? null : number_format($value * $populationRepository->getPopulationByGeoname($geoname, $partId, $year), 0, ".", " ");
                     }
                 }
 
