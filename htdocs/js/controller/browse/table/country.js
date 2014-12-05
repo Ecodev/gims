@@ -83,6 +83,13 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
 
             }).success(function(data) {
                 $scope.table = data.data;
+
+                _.forEach(data.columns, function(column) {
+                    if (!_.isUndefined(column.thematic)) {
+                        column.cellTemplate = "<div class='text-right ui-grid-cell-contents'>{{row.entity[col.field]}}</div>";
+                    }
+                });
+
                 $scope.gridOptions.columnDefs = data.columns;
                 $scope.gridOptions.headerTemplate = TableAssistant.getHeaderTemplate(data.columns);
                 $scope.ready = true;

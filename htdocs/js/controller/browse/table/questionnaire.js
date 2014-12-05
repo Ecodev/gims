@@ -85,9 +85,15 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
                 }
             }).success(function(data) {
                 $scope.table = data.data;
-                var template = TableAssistant.getHeaderTemplate(data.columns);
+
+                _.forEach(data.columns, function(column) {
+                    if (!_.isUndefined(column.thematic)) {
+                        column.cellTemplate = "<div class='text-right ui-grid-cell-contents'>{{row.entity[col.field]}}</div>";
+                    }
+                });
+
                 $scope.gridOptions.columnDefs = data.columns;
-                $scope.gridOptions.headerTemplate = template;
+                $scope.gridOptions.headerTemplate = TableAssistant.getHeaderTemplate(data.columns);
                 $scope.ready = true;
             });
         }
