@@ -1,4 +1,4 @@
-angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function($rootScope, Restangular, $q, requestNotification) {
+angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function($rootScope, Restangular, $q, requestNotification, TableFilter) {
     'use strict';
 
     return {
@@ -279,6 +279,7 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
 
             function opened() {
                 $('body').addClass('rule-editing');
+                TableFilter.panelOpened();
             }
 
             $scope.close = function() {
@@ -288,6 +289,7 @@ angular.module('myApp.directives').directive('gimsRuleTextFieldPanel', function(
                     updateTokenCallback(structureWithoutCurrentSyntax);
                 });
                 $('body').removeClass('rule-editing');
+                TableFilter.panelClosed();
             };
         }
     };

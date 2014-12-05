@@ -1901,6 +1901,16 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         questionnairesSection.height(contentHeight);
     }
 
+    var panelHeight = 150;
+    function panelOpened() {
+        filtersSection.height(filtersSection.height() - panelHeight);
+        questionnairesSection.height(questionnairesSection.height() - panelHeight);
+    }
+    function panelClosed() {
+        filtersSection.height(filtersSection.height() + panelHeight);
+        questionnairesSection.height(questionnairesSection.height() + panelHeight);
+    }
+
     var manageScrollListener = function(element, callback) {
         element.on('mouseenter', function() {
             element.on('scroll', callback);
@@ -1982,6 +1992,8 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         resizeContent: resizeContent,
         updateAnswer: updateAnswer,
         getTree: getTree,
-        getDefaultPopulations: getDefaultPopulations
+        getDefaultPopulations: getDefaultPopulations,
+        panelOpened: panelOpened,
+        panelClosed: panelClosed
     };
 });
