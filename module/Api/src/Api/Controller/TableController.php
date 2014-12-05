@@ -3,6 +3,7 @@
 namespace Api\Controller;
 
 use Application\View\Model\NumericJsonModel;
+use Zend\View\Model\JsonModel;
 use Application\View\Model\ExcelModel;
 use Application\Model\Geoname;
 use Application\Utility;
@@ -162,7 +163,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         if ($filename) {
             return new ExcelModel($filename, $finalResult);
         } else {
-            return new NumericJsonModel($finalResult);
+            return new JsonModel($finalResult);
         }
     }
 
@@ -250,7 +251,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         if ($filename) {
             return new ExcelModel($filename, $finalResult);
         } else {
-            return new NumericJsonModel($finalResult);
+            return new JsonModel($finalResult);
         }
     }
 
