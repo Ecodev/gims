@@ -7,13 +7,13 @@
         },
         {
             "field": "survey",
-            "displayName": "Survey",
+            "displayName": "Code",
             "width": 100
         },
         {
             "field": "surveyName",
-            "displayName": "Source",
-            "width": 200
+            "displayName": "Survey",
+            "width": 250
         },
         {
             "field": "year",
