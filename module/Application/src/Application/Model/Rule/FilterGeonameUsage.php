@@ -135,4 +135,21 @@ class FilterGeonameUsage extends AbstractUsage
         return 'fgu:' . $this->getId();
     }
 
+    public function getActivityData()
+    {
+        $data = parent::getActivityData();
+
+        $data['filter'] = [
+            'id' => $this->getFilter()->getId(),
+            'name' => $this->getFilter()->getName(),
+        ];
+
+        $data['geoname'] = [
+            'id' => $this->getGeoname()->getId(),
+            'name' => $this->getGeoname()->getName(),
+        ];
+
+        return $data;
+    }
+
 }

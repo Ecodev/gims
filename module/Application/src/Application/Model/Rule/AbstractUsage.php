@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Common properties to "apply" a rule to something
  * @ORM\MappedSuperclass
  */
-abstract class AbstractUsage extends \Application\Model\AbstractModel
+abstract class AbstractUsage extends \Application\Model\AbstractRecordableActivity
 {
 
     /**
@@ -149,4 +149,20 @@ abstract class AbstractUsage extends \Application\Model\AbstractModel
      * Return the key used to record in cache
      */
     abstract public function getCacheKey();
+
+    public function getActivityData()
+    {
+        return [
+            'justification' => $this->getJustification(),
+            'rule' => [
+                'id' => $this->getRule()->getId(),
+                'name' => $this->getRule()->getName(),
+            ],
+            'part' => [
+                'id' => $this->getPart()->getId(),
+                'name' => $this->getPart()->getName(),
+            ],
+        ];
+    }
+
 }

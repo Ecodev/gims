@@ -17,7 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity(repositoryClass="Application\Repository\Rule\RuleRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Rule extends \Application\Model\AbstractModel implements ReferencableInterface
+class Rule extends \Application\Model\AbstractRecordableActivity implements ReferencableInterface
 {
 
     /**
@@ -245,6 +245,13 @@ class Rule extends \Application\Model\AbstractModel implements ReferencableInter
         $key = 'rule:' . $this->getId();
         $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
         $cache->removeItem($key);
+    }
+
+    public function getActivityData()
+    {
+        return [
+            'name' => $this->getName(),
+        ];
     }
 
 }

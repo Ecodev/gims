@@ -141,4 +141,21 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
         return 'fqu:' . $this->getId();
     }
 
+    public function getActivityData()
+    {
+        $data = parent::getActivityData();
+
+        $data['filter'] = [
+            'id' => $this->getFilter()->getId(),
+            'name' => $this->getFilter()->getName(),
+        ];
+
+        $data['questionnaire'] = [
+            'id' => $this->getQuestionnaire()->getId(),
+            'name' => $this->getQuestionnaire()->getName(),
+        ];
+
+        return $data;
+    }
+
 }

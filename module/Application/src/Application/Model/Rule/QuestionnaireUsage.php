@@ -112,4 +112,17 @@ class QuestionnaireUsage extends AbstractQuestionnaireUsage
 
         return $this;
     }
+
+    public function getActivityData()
+    {
+        $data = parent::getActivityData();
+
+        $data['questionnaire'] = [
+            'id' => $this->getQuestionnaire()->getId(),
+            'name' => $this->getQuestionnaire()->getName(),
+        ];
+
+        return $data;
+    }
+
 }

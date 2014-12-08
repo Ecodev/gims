@@ -67,6 +67,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
         $t->getEventManager()->attach(
                 $t->getServiceManager()->get('ZfcRbac\View\Strategy\UnauthorizedStrategy')
         );
+
+        self::getEntityManager()->getEventManager()->addEventSubscriber(new Service\ActivityRecorder());
     }
 
     /**

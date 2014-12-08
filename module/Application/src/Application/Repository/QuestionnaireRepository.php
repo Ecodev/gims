@@ -71,7 +71,7 @@ class QuestionnaireRepository extends AbstractChildRepository
             $qb->setParameter('surveyTypes', $surveyTypes);
         }
 
-        if ($action == 'read') {
+        if ($action == 'read' || $action == 'update') {
             $exceptionDql = "questionnaire.status = 'published'";
         } else {
             $exceptionDql = null;

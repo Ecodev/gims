@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="Application\Repository\AnswerRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class Answer extends AbstractModel
+class Answer extends AbstractRecordableActivity
 {
 
     /**
@@ -317,7 +317,26 @@ class Answer extends AbstractModel
             $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
             $cache->removeItem($key);
         }
+    }
 
+    public function getActivityData()
+    {
+        $data = [
+            'questionnaire' => [
+                'id' => $this->getQuestionnaire()->getId(),
+                'name' => $this->getQuestionnaire()->getName(),
+            ],
+        ];
+
+        $filter = $this->getQuestion()->getFilter();
+        if ($filter) {
+            $data['filter'] = [
+                'id' => $filter->getId(),
+                'name' => $filter->getName(),
+            ];
+        }
+
+        return $data;
     }
 
 }
