@@ -77,17 +77,19 @@
             <div ng-view></div>
         </div>
 
-        <footer class="navbar navbar-default navbar-fixed-bottom" id="footer">
-            <p class="col-md-4 text-muted">
-                <small>A project by <a href="http://www.who.int/phe/en/" target="_blank">WHO - Public Health and Environment</a></small>
-            </p>
+        <footer class="footer">
+            <div class="container">
+                <p class="col-lg-4 col-md-6 text-muted">
+                    <small>A project by <a href="http://www.who.int/phe/en/" target="_blank">WHO - Public Health and Environment</a></small>
+                </p>
 
-            <p class="col-md-4 text-muted">
-                <img src="/img/who-logo-black.png" alt="" style="height: 30px"/>
-            </p>
-            <p class="col-md-4 text-muted">
-                <small><?php echo $this->translate('Designed and built by <a href="http://www.ecodev.ch" target="_blank">Ecodev</a>') ?>, v<?php echo $this->version(); ?></small>
-            </p>
+                <p class="col-lg-4 text-muted hidden-xs hidden-sm hidden-md">
+                    <img src="/img/who-logo-black.png" alt="" style="height: 30px"/>
+                </p>
+                <p class="col-lg-4 col-md-6 text-muted hidden-xs">
+                    <small><?php echo $this->translate('Designed and built by <a href="http://www.ecodev.ch" target="_blank">Ecodev</a>') ?>, v<?php echo $this->version(); ?></small>
+                </p>
+            </div>
         </footer>
         <?php echo $this->inlineScript() ?>
     </body>
