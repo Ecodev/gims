@@ -2,7 +2,31 @@
 
 namespace Application\Repository;
 
-class ActivityRepository extends AbstractRepository
+use Doctrine\ORM\Query\Expr\Join;
+
+class ActivityRepository extends AbstractChildRepository
 {
+
+    /**
+     * {@inheritdoc}
+     * @param string $action
+     * @param string $search
+     * @param string $parentName
+     * @param \Application\Model\AbstractModel $parent
+     * @return Activity[]
+     */
+    public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
+    {
+        $qb = $this->createQueryBuilder('activity');
+        $qb->join('activity.creator', 'creator', Join::WITH);
+        $qb->orderBy('activity.id', 'ASC');
+
+        if ($parentName == 'user') {
+            $qb->where('activity.creator = :parent');
+            $qb->setParameter('parent', $parent);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 
 }

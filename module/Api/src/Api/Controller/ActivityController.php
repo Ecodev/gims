@@ -2,8 +2,20 @@
 
 namespace Api\Controller;
 
-class ActivityController extends AbstractRestfulController
+use Zend\View\Model\JsonModel;
+
+class ActivityController extends AbstractChildRestfulController
 {
+
+    public function getList()
+    {
+        $parent = $this->getParent();
+
+        $objects = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), $this->params()->fromQuery('q'), $this->params('parent'), $parent);
+        $jsonData = $this->paginate($objects);
+
+        return new JsonModel($jsonData);
+    }
 
     public function create($data)
     {
