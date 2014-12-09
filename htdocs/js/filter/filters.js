@@ -36,9 +36,38 @@ angular.module('myApp.filters').filter('interpolate', function(version) {
 
         return text;
     };
+}).filter('prettifyCamelCase', function() {
+    'use strict';
+
+    return function(value) {
+
+        var output = "";
+        var len = value.length;
+        var char;
+
+        for (var i = 0; i < len; i++) {
+            char = value.charAt(i);
+
+            if (i === 0) {
+                output += char.toUpperCase();
+            } else if (char !== char.toLowerCase() && char === char.toUpperCase()) {
+                output += " " + char.toLowerCase();
+            } else if (char == "-" || char == "_") {
+                output += " ";
+            } else {
+                output += char;
+            }
+        }
+
+        return output;
+    };
 }).filter('checkmark', function() {
     return function(input) {
         return input ? '\u2714' : '\u2718';
+    };
+}).filter('toString', function() {
+    return function(input) {
+        return String(input);
     };
 })
 ;

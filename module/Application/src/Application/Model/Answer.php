@@ -322,6 +322,10 @@ class Answer extends AbstractRecordableActivity
     public function getActivityData()
     {
         $data = [
+            'part' => [
+                'id' => $this->getPart()->getId(),
+                'name' => $this->getPart()->getName()
+            ],
             'questionnaire' => [
                 'id' => $this->getQuestionnaire()->getId(),
                 'name' => $this->getQuestionnaire()->getName(),

@@ -59,6 +59,15 @@ angular.module('myApp').controller('Admin/Rule/CrudCtrl', function($scope, $rout
     } else {
         $scope.rule = {formula: '='};
     }
+
+    $scope.tabs = [false, false, false, false];
+    $scope.selectTab = function(tab) {
+        $scope.tabs[tab] = true;
+        $location.hash(tab);
+    };
+
+    // Set the tab from URL hash if any
+    $scope.selectTab(parseInt($location.hash()));
 });
 
 /**

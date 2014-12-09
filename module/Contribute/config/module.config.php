@@ -6,6 +6,7 @@ return array(
             'Contribute\Controller\Index' => 'Contribute\Controller\IndexController',
             'Contribute\Controller\RequestRoles' => 'Contribute\Controller\RequestRolesController',
             'Contribute\Controller\Discussion' => 'Contribute\Controller\DiscussionController',
+            'Contribute\Controller\Activity' => 'Contribute\Controller\ActivityController',
         ),
     ),
     'view_manager' => array(

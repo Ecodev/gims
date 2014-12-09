@@ -14,7 +14,7 @@
         <?php echo $this->crudButtons('rule'); ?>
 
         <tabset style="margin-top: 20px">
-            <tab heading="General">
+            <tab heading="General" active="tabs[0]" select="selectTab(0)">
 
                 <div class="form-group" ng-class="{'has-error': myForm.name.$invalid}">
                     <label class="control-label col-sm-1" for="rule.name"><?php echo $this->translate("Name"); ?></label>
@@ -36,15 +36,15 @@
 
             </tab>
 
-            <tab heading="Filter - Questionnaire" ng-if="rule.id">
+            <tab heading="Filter - Questionnaire" ng-if="rule.id"  active="tabs[1]" select="selectTab(1)">
                 <gims-relations relation="FilterQuestionnaireUsage" properties="['rule', 'filter', 'questionnaire', 'part']" justification="true"></gims-relations>
             </tab>
 
-            <tab heading="Questionnaire" ng-if="rule.id">
+            <tab heading="Questionnaire" ng-if="rule.id"  active="tabs[2]" select="selectTab(2)">
                 <gims-relations relation="QuestionnaireUsage" properties="['rule', 'questionnaire', 'part']" justification="true"></gims-relations>
             </tab>
 
-            <tab heading="Filter - Country" ng-if="rule.id">
+            <tab heading="Filter - Country" ng-if="rule.id"  active="tabs[3]" select="selectTab(3)">
                 <gims-relations relation="FilterGeonameUsage" properties="['rule', 'filter', 'geoname', 'part']" justification="true"></gims-relations>
             </tab>
         </tabset>

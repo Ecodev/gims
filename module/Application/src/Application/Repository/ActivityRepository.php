@@ -19,7 +19,7 @@ class ActivityRepository extends AbstractChildRepository
     {
         $qb = $this->createQueryBuilder('activity');
         $qb->join('activity.creator', 'creator', Join::WITH);
-        $qb->orderBy('activity.id', 'ASC');
+        $qb->orderBy('activity.dateCreated', 'desc');
 
         if ($parentName == 'user') {
             $qb->where('activity.creator = :parent');
