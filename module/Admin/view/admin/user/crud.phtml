@@ -16,7 +16,7 @@
         <?php echo $this->crudButtons('user'); ?>
 
         <tabset style="margin-top: 20px">
-            <tab heading="General">
+            <tab heading="General" active="tabs[0]" select="selectTab(0)">
 
                 <div class="form-group" ng-class="{'has-error': myForm.name.$invalid}">
                     <label class="control-label col-sm-1" for="user.name"><?php echo $this->translate("Name"); ?></label>
@@ -119,16 +119,20 @@
 
             </tab>
 
-            <tab heading="Surveys" ng-if="user.id">
+            <tab heading="Surveys" ng-if="user.id" active="tabs[1]" select="selectTab(1)">
                 <gims-relations relation="UserSurvey" properties="['user', 'survey', 'role']"></gims-relations>
             </tab>
 
-            <tab heading="Questionnaires" ng-if="user.id">
+            <tab heading="Questionnaires" ng-if="user.id" active="tabs[2]" select="selectTab(2)">
                 <gims-relations relation="UserQuestionnaire" properties="['user', 'questionnaire', 'role']"></gims-relations>
             </tab>
 
-            <tab heading="Filter Sets" ng-if="user.id">
+            <tab heading="Filter Sets" ng-if="user.id" active="tabs[3]" select="selectTab(3)">
                 <gims-relations relation="UserFilterSet" properties="['user', 'filterSet', 'role']"></gims-relations>
+            </tab>
+
+            <tab heading="Activity" ng-if="user.id" active="tabs[4]" select="selectTab(4)">
+                <gims-activity user="user"></gims-activity>
             </tab>
         </tabset>
     </form>

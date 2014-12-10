@@ -58,7 +58,7 @@ angular.module('myApp', [
     $routeProvider.when('/admin/survey/edit/:id', {templateUrl: '/template/admin/survey/crud', controller: 'Admin/Survey/CrudCtrl', reloadOnSearch: false});
     $routeProvider.when('/admin/survey/new', {templateUrl: '/template/admin/survey/crud', controller: 'Admin/Survey/CrudCtrl'});
     $routeProvider.when('/admin/user', {templateUrl: '/template/admin/user', controller: 'Admin/UserCtrl'});
-    $routeProvider.when('/admin/user/edit/:id', {templateUrl: '/template/admin/user/crud', controller: 'Admin/User/CrudCtrl'});
+    $routeProvider.when('/admin/user/edit/:id', {templateUrl: '/template/admin/user/crud', controller: 'Admin/User/CrudCtrl', reloadOnSearch: false});
     $routeProvider.when('/admin/user/new', {templateUrl: '/template/admin/user/crud', controller: 'Admin/User/CrudCtrl'});
     $routeProvider.when('/admin/rule', {templateUrl: '/template/admin/rule', controller: 'Admin/RuleCtrl'});
     $routeProvider.when('/admin/rule/edit/:id', {templateUrl: '/template/admin/rule/crud', controller: 'Admin/Rule/CrudCtrl', reloadOnSearch: false});
@@ -73,7 +73,6 @@ angular.module('myApp', [
     $routeProvider.when('/contribute/discussion', {templateUrl: '/template/contribute/discussion', controller: 'Contribute/DiscussionCtrl'});
     $routeProvider.when('/contribute/discussion/edit/:id', {templateUrl: '/template/contribute/discussion', controller: 'Contribute/DiscussionCtrl'});
     $routeProvider.when('/contribute/activity', {templateUrl: '/template/contribute/activity', controller: 'Contribute/ActivityCtrl'});
-    $routeProvider.when('/contribute/activity/user/:id', {templateUrl: '/template/contribute/activity', controller: 'Contribute/ActivityCtrl'});
 
     $routeProvider.otherwise({redirectTo: '/home'});
 

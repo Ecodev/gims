@@ -6,73 +6,10 @@
             <?php echo $this->helpButton(); ?>
             <span class="active pull-right"><i class="fa fa-fw fa-history"></i></span>
             <li class="active"><a href="/contribute/activity">Activity</a></li>
-            <li>
-                <a class="btn btn-default" ng-click="toggleAllDetails()"><i class="fa fa-eye"></i> Show all details</a>
-            </li>
         </ul>
     </h2>
 
-    <?php echo $this->helpBox(''); ?>
-
-    <div class="row" ng-repeat="activity in activities">
-
-        <div class="col-md-12">
-            <hr style="border-top-width:5px;"/>
-
-            <div ng-switch="activity.recordType">
-                <div ng-switch-when="answer">
-                    <gims-activity-answer activity="activity"></gims-activity-answer>
-                </div>
-                <div ng-switch-when="filterQuestionnaireUsage">
-                    <gims-activity-usage activity="activity"></gims-activity-usage>
-                </div>
-                <div ng-switch-when="questionnaireUsage">
-                    <gims-activity-usage activity="activity"></gims-activity-usage>
-                </div>
-                <div ng-switch-when="filterGeonameUsage">
-                    <gims-activity-usage activity="activity"></gims-activity-usage>
-                </div>
-                <div ng-switch-when="rule">
-                    <gims-activity-rule activity="activity"></gims-activity-rule>
-                </div>
-            </div>
-
-            <div class="col-md-11 col-md-offset-1">
-                <hr/>
-                <p>
-                    <a href="/contribute/activity/user/{{activity.creator.id}}"
-                       style="display:inline-block;vertical-align:middle;margin-right:10px;">
-                        <img ng-src="{{activity.creator.gravatar}}&s=25"
-                             style="display:inline-block;vertical-align:middle;margin-right:10px;"/>
-                        <strong style="display:inline-block;vertical-align:middle;font-size:1.2em">{{activity.creator.name}}</strong>
-                    </a>
-                    <span style="display:inline-block;vertical-align:middle;"
-                          class="text-muted"
-                          am-time-ago="activity.dateCreated"
-                          tooltip="{{activity.dateCreated| amDateFormat:'YYYY-MM-DD HH:mm:ss'}}">
-                    </span>
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <hr style="border-top-width:10px;"/>
-
-
-    <nav>
-        <ul class="pager" style="margin: 0px;">
-            <li><a href ng-click="previous()">Previous</a></li>
-            <li><input type="number"
-                       ng-model="page"
-                       min="1"
-                       step="1"
-                       style="display: inline-block; width: 3em;"></li>
-            <li><a href ng-click="next()">Next</a></li>
-        </ul>
-    </nav>
+    <?php echo $this->helpBox('See who did what recently. Click on a user to see his personal activity.'); ?>
+    <gims-activity></gims-activity>
 
 </div> <!-- /container -->
-<br/>
-<br/>
-<br/>
-<br/>

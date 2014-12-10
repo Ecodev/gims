@@ -1,0 +1,56 @@
+<a class="btn btn-default" ng-click="toggleAllDetails()"><i class="fa fa-eye"></i> Show all details</a>
+<div class="row" ng-repeat="activity in activities">
+
+    <div class="col-md-12">
+        <hr style="border-top-width:5px;"/>
+
+        <div ng-switch="activity.recordType">
+            <div ng-switch-when="answer">
+                <gims-activity-answer activity="activity"></gims-activity-answer>
+            </div>
+            <div ng-switch-when="filterQuestionnaireUsage">
+                <gims-activity-usage activity="activity"></gims-activity-usage>
+            </div>
+            <div ng-switch-when="questionnaireUsage">
+                <gims-activity-usage activity="activity"></gims-activity-usage>
+            </div>
+            <div ng-switch-when="filterGeonameUsage">
+                <gims-activity-usage activity="activity"></gims-activity-usage>
+            </div>
+            <div ng-switch-when="rule">
+                <gims-activity-rule activity="activity"></gims-activity-rule>
+            </div>
+        </div>
+
+        <div class="col-md-11 col-md-offset-1">
+            <hr/>
+            <p>
+                <a href="/admin/user/edit/{{activity.creator.id}}#4"
+                   style="display:inline-block;vertical-align:middle;margin-right:10px;">
+                    <img ng-src="{{activity.creator.gravatar}}&s=25"
+                         style="display:inline-block;vertical-align:middle;margin-right:10px;"
+                         /><span style="display:inline-block;vertical-align:middle;font-size:1.2em">{{activity.creator.name}}</span>
+                </a>
+                <span style="display:inline-block;vertical-align:middle;"
+                      class="text-muted"
+                      am-time-ago="activity.dateCreated"
+                      tooltip="{{activity.dateCreated| amDateFormat:'YYYY-MM-DD HH:mm:ss'}}">
+                </span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<hr style="border-top-width:5px;"/>
+
+<nav>
+    <ul class="pager" style="margin: 0px;">
+        <li><a href ng-click="previous()">Previous</a></li>
+        <li><input type="number"
+                   ng-model="page"
+                   min="1"
+                   step="1"
+                   style="display: inline-block; width: 3em;"></li>
+        <li><a href ng-click="next()">Next</a></li>
+    </ul>
+</nav>
