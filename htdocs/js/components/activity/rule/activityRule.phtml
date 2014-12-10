@@ -1,0 +1,22 @@
+<div class="col-md-1">
+    <span class="fa-stack fa-lg" ng-class="{'text-primary': activity.action == 'update', 'text-success':activity.action == 'create', 'text-danger': activity.action == 'delete'}">
+        <i class="fa fa-gims-rule fa-stack-2x"></i>
+    </span>
+</div>
+
+<div class="col-md-11">
+    <h3 style="margin-top:5px;" ng-class="{'text-primary': activity.action == 'update', 'text-success':activity.action == 'create', 'text-danger': activity.action == 'delete'}">
+        <span ng-switch="activity.action">
+            <span ng-switch-when="update">Rule updated</span>
+            <span ng-switch-when="create">Rule created</span>
+            <span ng-switch-when="delete">Rule deleted</span>
+        </span>
+
+        <a href="" class="btn btn-default btn-xs" ng-click="activity.showDetails = !activity.showDetails"><i class="fa fa-eye"></i> View details</a>
+        <a href="/admin/rule/edit/{{activity.data.rule.id}}" class="btn btn-default btn-xs"><i class="fa fa-gims-rule"></i> View in admin</a>
+    </h3>
+
+    <gims-activity-changes></gims-activity-changes>
+    <gims-activity-data ng-show="activity.showDetails"></gims-activity-data>
+</div>
+

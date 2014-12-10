@@ -1,0 +1,13 @@
+<div class="text-2em">
+    <hr ng-if="activity.data"/>
+    <div ng-repeat="(attribute, data) in activity.data" class="row">
+        <strong class="col-md-2">{{attribute|prettifyCamelCase}}</strong>
+        <span class="col-md-10" style="overflow-x:auto">
+            <span ng-if="data.id">
+                <a ng-if="apiable[attribute]" href="/admin/{{attribute}}/edit/{{data.id}}"><i class="fa fa-gims-{{attribute}}"></i> {{data.name}}</a>
+                <span ng-if="!apiable[attribute]">{{data.name}}</span>
+            </span>
+            <span ng-if="!data.id">{{data}}</span>
+        </span>
+    </div>
+</div>

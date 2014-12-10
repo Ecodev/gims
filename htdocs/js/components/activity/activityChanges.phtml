@@ -1,0 +1,9 @@
+<div class="text-2em">
+    <hr ng-if="activity.changes"/>
+    <div ng-repeat="(attribute, changes) in activity.changes" class="row">
+        <strong class="col-sm-2">{{attribute|prettifyCamelCase}}</strong>
+        <span class="col-sm-10" style="overflow-x:auto">
+            <span ng-if="activity.action != 'create'"><span class="badge badge-danger">{{changes[0]|toString}}</span> <span ng-if="attribute != 'formula'">&#8594;</span> </span><span class="badge badge-success">{{changes[1]}}</span>
+        </span>
+    </div>
+</div>
