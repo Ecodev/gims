@@ -22,8 +22,8 @@ angular.module('myApp.services')
          * Defines what questionnaire status are read-only
          */
         .value('questionnairesStatus', {
-            validated: true,
-            published: true,
+            validated: false,
+            published: false,
             completed: true,
             rejected: true,
             'new': true

@@ -3,7 +3,6 @@
 namespace Application\Assertion;
 
 use ZfcRbac\Service\AuthorizationService;
-use Application\Model\SurveyType;
 
 class CanAnswerQuestionnaire extends AbstractAssertion
 {
@@ -29,16 +28,12 @@ class CanAnswerQuestionnaire extends AbstractAssertion
 
     protected function internalAssert(AuthorizationService $authorizationService)
     {
-        $statusForbiddingModification = [];
-        $statusForbiddingModification[(string) SurveyType::$GLAAS . ''] = [
+        $statusForbiddingModification = [
             \Application\Model\QuestionnaireStatus::$VALIDATED,
-            \Application\Model\QuestionnaireStatus::$PUBLISHED
+            \Application\Model\QuestionnaireStatus::$PUBLISHED,
         ];
 
-        $surveyType = (string) $this->answer->getQuestionnaire()->getSurvey()->getType();
-        $searchArray = isset($statusForbiddingModification[$surveyType]) ? $statusForbiddingModification[$surveyType] : [];
-
-        return !in_array($this->answer->getQuestionnaire()->getStatus(), $searchArray);
+        return !in_array($this->answer->getQuestionnaire()->getStatus(), $statusForbiddingModification);
     }
 
 }

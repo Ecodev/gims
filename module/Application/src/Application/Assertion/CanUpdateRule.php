@@ -45,7 +45,7 @@ class CanUpdateRule extends AbstractAssertion
     {
         if ($this->context instanceof \Application\Service\MultipleRoleContext) {
             foreach ($this->context as $questionnaire) {
-                if ($questionnaire->getSurvey()->getType() == \Application\Model\SurveyType::$GLAAS && $questionnaire->getStatus() == \Application\Model\QuestionnaireStatus::$PUBLISHED) {
+                if ($questionnaire->getStatus() == \Application\Model\QuestionnaireStatus::$PUBLISHED) {
                     $this->publishedQuestionnaires[] = $questionnaire;
                 }
             }

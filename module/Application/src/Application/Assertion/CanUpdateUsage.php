@@ -40,7 +40,7 @@ class CanUpdateUsage extends AbstractAssertion
     {
         $isPublished = false;
 
-        if ($this->context->getSurvey()->getType() == \Application\Model\SurveyType::$GLAAS && $this->context->getStatus() == \Application\Model\QuestionnaireStatus::$PUBLISHED) {
+        if ($this->context->getStatus() == \Application\Model\QuestionnaireStatus::$PUBLISHED) {
             $isPublished = true;
         }
 

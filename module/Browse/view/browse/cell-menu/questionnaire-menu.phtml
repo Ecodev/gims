@@ -4,14 +4,14 @@
 
         <li class="dropdown-header">Information</li>
         <li><a><i class="fa fa-fw fa-flag"></i> Status: {{questionnaire.status|capital}}</a></li>
-<!--        <li ng-if="questionnaire.permissions.publish">-->
-<!--            <a href ng-click="toggleQuestionnaireCompletedPublished(questionnaire)" ng-if="questionnaire.status == 'published'">-->
-<!--                <i class="fa fa-fw fa-flag-o"></i> Unpublish-->
-<!--            </a>-->
-<!--            <a href ng-click="toggleQuestionnaireCompletedPublished(questionnaire)" ng-if="questionnaire.status == 'completed'">-->
-<!--                <i class="fa fa-fw fa-flag-checkered"></i> Publish-->
-<!--            </a>-->
-<!--        </li>-->
+        <li ng-if="questionnaire.permissions.publish">
+            <a href ng-click="toggleQuestionnaireCompletedPublished(questionnaire)" ng-if="questionnaire.status == 'published'">
+                <i class="fa fa-fw fa-flag-o"></i> Unpublish
+            </a>
+            <a href ng-click="toggleQuestionnaireCompletedPublished(questionnaire)" ng-if="questionnaire.status == 'completed'">
+                <i class="fa fa-fw fa-flag-checkered"></i> Publish
+            </a>
+        </li>
 
         <li class="divider"></li>
 
