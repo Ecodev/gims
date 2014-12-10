@@ -2,7 +2,12 @@
 $filterWater = '188,189,190,191,192,193,194,195,196,198,199,200,201,197,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262';
 $filterSanitation = '266,267,268,269,270,271,272,346,347,348,349,350,351,273,274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,331,332,333,334,335,336,337,338,339,340,341,342,343,344,345,352,353';
 ?><p>
-    <a href="http://<?php echo $this->domain ?>/">GIMS</a> is the new online platform to consolidate JMP data.
+    <a href="http://<?php echo $this->domain ?>">GIMS</a> is the new online platform to consolidate JMP data.
+    To view or edit data, you will need to <a href="http://<?php echo $this->domain ?>/contribute">create an account</a>, and then
+    <a href="http://<?php echo $this->domain ?>/contribute/request-roles?geonames=<?php echo $this->geoname->getId(); ?>&amp;roles=3,5&amp;types=jmp"> ask for permission for <?php echo $this->geoname->getName(); ?></a>.
+    Meanwhile you can still make your voice heard by <a href="http://gims.readthedocs.org/en/develop/content/discussion.html">contributing to discussions</a>.
+</p>
+<p>
     To get you started, here are a few direct links to <?php echo $this->geoname->getName(); ?> data:
 </p>
 
@@ -48,7 +53,7 @@ $filterSanitation = '266,267,268,269,270,271,272,346,347,348,349,350,351,273,274
     <ul>
         <li>
             Water:
-<?php foreach ($this->parts as $part): ?>
+            <?php foreach ($this->parts as $part): ?>
                 <a href="http://<?php echo $this->domain ?>/browse/chart?tab=lines&amp;geonames=<?php echo $this->geoname->getId(); ?>&amp;part=<?php echo $part->getId(); ?>&amp;filterSet=3"><?php echo strtolower($part->getName()); ?></a><?php
                 if (!$part->isTotal()) {
                     echo ', ';
@@ -58,7 +63,7 @@ $filterSanitation = '266,267,268,269,270,271,272,346,347,348,349,350,351,273,274
         </li>
         <li>
             Sanitation:
-<?php foreach ($this->parts as $part): ?>
+            <?php foreach ($this->parts as $part): ?>
                 <a href="http://<?php echo $this->domain ?>/browse/chart?tab=lines&amp;geonames=<?php echo $this->geoname->getId(); ?>&amp;part=<?php echo $part->getId(); ?>&amp;filterSet=6"><?php echo strtolower($part->getName()); ?></a><?php
                 if (!$part->isTotal()) {
                     echo ', ';
@@ -73,7 +78,7 @@ $filterSanitation = '266,267,268,269,270,271,272,346,347,348,349,350,351,273,274
     <ul>
         <li>
             Water:
-<?php foreach ($this->parts as $part): ?>
+            <?php foreach ($this->parts as $part): ?>
                 <a href="http://<?php echo $this->domain ?>/browse/chart?tab=bar&amp;geonames=<?php echo $this->geoname->getId(); ?>&amp;part=<?php echo $part->getId(); ?>&amp;filters=263,265,264,262"><?php echo strtolower($part->getName()); ?></a><?php
                 if (!$part->isTotal()) {
                     echo ', ';
@@ -83,7 +88,7 @@ $filterSanitation = '266,267,268,269,270,271,272,346,347,348,349,350,351,273,274
         </li>
         <li>
             Sanitation:
-<?php foreach ($this->parts as $part): ?>
+            <?php foreach ($this->parts as $part): ?>
                 <a href="http://<?php echo $this->domain ?>/browse/chart?tab=bar&amp;geonames=<?php echo $this->geoname->getId(); ?>&amp;part=<?php echo $part->getId(); ?>&amp;filters=353,357,356,355,354"><?php echo strtolower($part->getName()); ?></a><?php
                 if (!$part->isTotal()) {
                     echo ', ';
@@ -98,7 +103,7 @@ $filterSanitation = '266,267,268,269,270,271,272,346,347,348,349,350,351,273,274
     <ul>
         <li>
             Water:
-<?php foreach ($this->parts as $part): ?>
+            <?php foreach ($this->parts as $part): ?>
                 <a href="http://<?php echo $this->domain ?>/browse/chart?tab=estimates&amp;geonames=<?php echo $this->geoname->getId(); ?>&amp;part=<?php echo $part->getId(); ?>&amp;filterSet=2"><?php echo strtolower($part->getName()); ?></a><?php
                 if (!$part->isTotal()) {
                     echo ', ';
@@ -108,7 +113,7 @@ $filterSanitation = '266,267,268,269,270,271,272,346,347,348,349,350,351,273,274
         </li>
         <li>
             Sanitation:
-<?php foreach ($this->parts as $part): ?>
+            <?php foreach ($this->parts as $part): ?>
                 <a href="http://<?php echo $this->domain ?>/browse/chart?tab=estimates&amp;geonames=<?php echo $this->geoname->getId(); ?>&amp;part=<?php echo $part->getId(); ?>&amp;filterSet=5"><?php echo strtolower($part->getName()); ?></a><?php
                 if (!$part->isTotal()) {
                     echo ', ';
@@ -119,11 +124,6 @@ $filterSanitation = '266,267,268,269,270,271,272,346,347,348,349,350,351,273,274
     </ul>
 </ul>
 
-<p>
-    To edit data, you will need to <a href="http://<?php echo $this->domain ?>/contribute">create an account</a>, and then
-    <a href="http://<?php echo $this->domain ?>/contribute/request-roles?geonames=<?php echo $this->geoname->getId(); ?>&amp;roles=3,5&amp;types=jmp"> ask for permission to edit <?php echo $this->geoname->getName(); ?></a>.
-    Meanwhile you can still make your voice heard by <a href="http://gims.readthedocs.org/en/develop/content/discussion.html">contributing to discussions</a>.
-</p>
 <p>
     Learn more about GIMS by reading the <a href="http://gims.readthedocs.org/en/latest/">documentation</a>.</div>
 </p>
