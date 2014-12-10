@@ -22,7 +22,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
 
     /**
      * Extremely dirty way to retrieve ServiceManger. Highly discouraged to use it.
-     * @return \Zend\ServiceManager\ServiceLocatorInterface
+     * @return \Zend\ServiceManager\ServiceManager
      */
     public static function getServiceManager()
     {

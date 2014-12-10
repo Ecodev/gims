@@ -1,11 +1,11 @@
 <?php
 
-namespace ApplicationTest\Service;
+namespace Application\Service;
 
 use \Application\Model\User;
 
 /**
- * @group Service
+ * Used to impersonate user. This should only be used for test or CLI usage
  */
 class FakeIdentityProvider implements \ZfcRbac\Identity\IdentityProviderInterface
 {

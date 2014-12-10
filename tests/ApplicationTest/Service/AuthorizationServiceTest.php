@@ -119,7 +119,7 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
         /* @var \ZfcRbac\Service\RoleService $roleService */
         $roleService = $this->getApplicationServiceLocator()->get('ZfcRbac\Service\RoleService');
 
-        $identityProvider = $this->getApplicationServiceLocator()->get('ApplicationTest\Service\FakeIdentityProvider');
+        $identityProvider = $this->getApplicationServiceLocator()->get('Application\Service\FakeIdentityProvider');
         $identityProvider->setIdentity(null);
 
         $this->assertTrue($roleService->matchIdentityRoles(['anonymous']), 'Not logged in users have builtin anonymous role');

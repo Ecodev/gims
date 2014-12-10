@@ -3,6 +3,7 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Application\Model\User;
 
 class ConsoleController extends AbstractActionController
 {
@@ -54,8 +55,45 @@ class ConsoleController extends AbstractActionController
         return $count . ' keys deleted' . PHP_EOL;
     }
 
+    /**
+     * Simulate a user.
+     * Should be used with caution because DB modification will be stamped with that user
+     * @param User $user
+     */
+    private function impersonateUser(User $user)
+    {
+        $sm = \Application\Module::getServiceManager();
+
+        // Override option and re-create roleService with new options
+        $sm->setFactory('Application\Service\FakeIdentityProvider', function() {
+            return new \Application\Service\FakeIdentityProvider();
+        });
+        $options = $sm->get('ZfcRbac\Options\ModuleOptions');
+        $options->setIdentityProvider('Application\Service\FakeIdentityProvider');
+        $factory = new \ZfcRbac\Factory\RoleServiceFactory();
+        $roleService = $factory->createService($sm);
+
+        // Override services with our new one
+        $sm->setAllowOverride(true);
+        $sm->setService('ZfcRbac\Service\RoleService', $roleService);
+        $sm->setAllowOverride(false);
+
+        $fakeIdentityProvider = $sm->get('Application\Service\FakeIdentityProvider');
+        $fakeIdentityProvider->setIdentity($user);
+    }
+
     public function cacheWarmUpAction()
     {
+        $userId = $this->getRequest()->getParam('userId');
+        if ($userId != 'anonymous') {
+            $user = $this->getEntityManager()->getRepository('Application\Model\User')->findOneById($userId);
+            $userName = $user->getName();
+        } else {
+            $userName = $userId;
+        }
+
+        echo 'Warming up cache for user: ' . $userName . PHP_EOL;
+
         $progress = function($i, $total) {
             $digits = 3;
 
@@ -68,7 +106,7 @@ class ConsoleController extends AbstractActionController
         $i = 1;
         foreach ($geonames as $geoname) {
             echo $progress($i++, $total) . ' ';
-            $cmd = 'php htdocs/index.php cache warm-up ' . escapeshellarg($geoname->getName());
+            $cmd = 'php htdocs/index.php cache warm-up ' . escapeshellarg($userId) . ' ' . escapeshellarg($geoname->getName());
             system($cmd);
         }
 
@@ -77,6 +115,13 @@ class ConsoleController extends AbstractActionController
 
     public function cacheWarmUpOneAction()
     {
+        $userId = $this->getRequest()->getParam('userId');
+
+        if ($userId != 'anonymous') {
+            $user = $this->getEntityManager()->getRepository('Application\Model\User')->findOneById($userId);
+            $this->impersonateUser($user);
+        }
+
         $geonameName = $this->getRequest()->getParam('geoname');
 
         $calculator = new \Application\Service\Calculator\Calculator();

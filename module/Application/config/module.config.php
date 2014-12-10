@@ -294,9 +294,9 @@ return array(
                     ),
                 ),
                 'cache-warm-up' => array(
-                    'description' => 'Fill computing cache for all geonames',
+                    'description' => 'Fill computing cache for all geonames for the given user (id or "anonymous")',
                     'options' => array(
-                        'route' => 'cache warm-up',
+                        'route' => 'cache warm-up <userId>',
                         'defaults' => array(
                             'controller' => 'Application\Controller\Console',
                             'action' => 'cacheWarmUp'
@@ -304,9 +304,9 @@ return array(
                     ),
                 ),
                 'cache-warm-up-one' => array(
-                    'description' => 'Fill computing cache only for the geoname specified by name',
+                    'description' => 'Fill computing cache only for the geoname specified by name for the given user (id or "anonymous")',
                     'options' => array(
-                        'route' => 'cache warm-up <geoname>',
+                        'route' => 'cache warm-up <userId> <geoname>',
                         'defaults' => array(
                             'controller' => 'Application\Controller\Console',
                             'action' => 'cacheWarmUpOne'
