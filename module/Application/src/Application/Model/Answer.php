@@ -293,7 +293,7 @@ class Answer extends AbstractRecordableActivity
      */
     public function getRoleContext($action)
     {
-        return $this->getQuestionnaire();
+        return $this->getQuestionnaire()->getRoleContext(null);
     }
 
     public function getName()
