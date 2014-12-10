@@ -527,7 +527,7 @@ STRING;
         $this->isDevelopedCountry = in_array($geoname->getIso3(), $developedCountries);
 
         $questionnaire = new Questionnaire();
-        $questionnaire->setStatus(\Application\Model\QuestionnaireStatus::$PUBLISHED);
+        $questionnaire->setStatus(\Application\Model\QuestionnaireStatus::$NEW);
         $questionnaire->setSurvey($survey);
         $questionnaire->setDateObservationStart(new \DateTime($survey->getYear() . '-01-01'));
         $questionnaire->setDateObservationEnd(new \DateTime($survey->getYear() . '-12-31T23:59:59'));
