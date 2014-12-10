@@ -11,7 +11,7 @@ use ApiTest\Controller\AbstractChildRestfulControllerTest;
 abstract class AbstractQuestionnaireUsageControllerTest extends AbstractChildRestfulControllerTest
 {
 
-    public function testCanUpdateRuleWithPublishedQuestionnaire()
+    public function testCannotUpdateRuleWithPublishedQuestionnaire()
     {
         $data = array('justification' => 'foo');
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
@@ -26,7 +26,7 @@ abstract class AbstractQuestionnaireUsageControllerTest extends AbstractChildRes
 
         // Now, the same operation should be forbidden, because the questionnaire is published
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
-        $this->assertResponseStatusCode(201);
+        $this->assertResponseStatusCode(403);
     }
 
 }

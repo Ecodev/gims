@@ -40,7 +40,7 @@ class RuleControllerTest extends AbstractRestfulControllerTest
         $this->assertResponseStatusCode(403);
     }
 
-    public function testCanUpdateRuleWithPublishedQuestionnaire()
+    public function testCannotUpdateRuleWithPublishedQuestionnaire()
     {
         $data = array('name' => 'foo');
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
@@ -55,7 +55,7 @@ class RuleControllerTest extends AbstractRestfulControllerTest
 
         // Now, the same operation should be forbidden, because the questionnaire is published
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
-        $this->assertResponseStatusCode(201);
+        $this->assertResponseStatusCode(403);
     }
 
     public function testCannotUpdateRuleWithAnotherQuestionnaireUsage()
