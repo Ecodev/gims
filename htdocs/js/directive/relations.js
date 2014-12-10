@@ -29,15 +29,22 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                 '    </div>' +
                 '    <gims-grid api="{{relation}}" parent="{{first}}" objects="relations" options="gridOptions" class="row"></gims-grid>' +
                 '    <div class="well form-group" ng-class="{\'has-error\': exists}" ng-hide="isReadOnly">' +
-                '        <span ng-repeat="prop in otherProperties" class="col-md-4">' +
-                '            <gims-select api="{{prop}}" model="values[$index]" placeholder="Select a {{prop}}" style="width:100%;"></gims-select>' +
-                '        </span>' +
-                '        <span class="col-md-4" ng-show="justification">' +
-                '            <input type="text" ng-model="justificationValue" placeholder="Justification..." />' +
-                '        </span>' +
-                '        <span class="col-md-1">' +
-                '            <button class="btn btn-default" ng-click="add()" ng-class="{disabled: !canAdd}">Add</button> <i class="fa fa-gims-loading" ng-show="isLoading"></i>' +
-                '        </span><span class="help-block" ng-show="exists">This relation already exists</span>' +
+                '        <div class="row">' +
+                '           <span ng-repeat="prop in otherProperties" class="col-md-4">' +
+                '              <gims-filter ng-if="prop == \'filter\'" model="values[$index]" name="filter"></gims-filter>' +
+                '              <gims-select ng-if="prop != \'filter\'" api="{{prop}}" model="values[$index]" placeholder="Select a {{prop}}" style="width:100%;"></gims-select>' +
+                '           </span>' +
+                '        </div><div class="row">' +
+                '           <span class="col-md-4" ng-show="justification">' +
+                '               <input type="text" ng-model="justificationValue" placeholder="Justification..." />' +
+                '           </span>' +
+                '           <span class="col-md-1">' +
+                '               <button class="btn btn-default" ng-click="add()" ng-class="{disabled: !canAdd}"><i class="fa fa-gims-add"></i> Add</button>' +
+                '           </span><span class="help-block" ng-show="exists">This relation already exists</span>' +
+                '           <span class="col-md-1">' +
+                '               <i class="fa fa-gims-loading fa-2x" ng-if="isLoading"></i>' +
+                '           </span><span class="help-block" ng-show="exists">This relation already exists</span>' +
+                '        </div>' +
                 '    </div>' +
                 '</div>',
         // The linking function will add behavior to the template
