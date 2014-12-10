@@ -11,12 +11,12 @@ angular.module('myApp').controller('Admin/RolesRequestsCtrl', function($scope, $
         }, {
             value: 'nsa',
             display: 'Nsa'
-        },
+        }
     ];
 
     if ($routeParams.geonames && $routeParams.roles && $routeParams.types && $routeParams.user) {
 
-        $scope.user = Restangular.one('user', $routeParams.user).get().$object;
+        $scope.user = Restangular.one('user', $routeParams.user).get({fields: 'gravatar'}).$object;
 
         // /api/roles-request/getRequests filter results by current user
         $http.get('/api/roles-request/getRequests', {

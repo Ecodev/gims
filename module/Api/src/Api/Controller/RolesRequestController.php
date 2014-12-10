@@ -39,8 +39,8 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
         $adminPermissions = $this->groupByGeoname($adminPermissions);
 
         $applicantUser = $this->getEntityManager()
-                              ->getRepository('\Application\Model\User')
-                              ->findOneById($this->params()->fromQuery('user'));
+                ->getRepository('\Application\Model\User')
+                ->findOneById($this->params()->fromQuery('user'));
         $applicantUserPermissions = $this->getUsersHavingRoles($applicantUser);
         $applicantUserPermissions = $this->groupByGeoname($applicantUserPermissions);
 
@@ -106,13 +106,15 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
             // add modifier (modifier or creator have the same name) to relation
             if ($data['relation_modifier_email']) {
                 $geonames[$data['geoname_id']]['questionnaires'][$data['questionnaire_id']]['roles'][$data['role_id']]['userRelation']['modifier'] = [
+                    'id' => $data['relation_modifier_id'],
                     'name' => $data['relation_modifier_name'],
-                    'email' => $data['relation_modifier_email']
+                    'gravatar' => Utility::getGravatar($data['relation_modifier_email']),
                 ];
             } elseif ($data['relation_creator_email']) {
                 $geonames[$data['geoname_id']]['questionnaires'][$data['questionnaire_id']]['roles'][$data['role_id']]['userRelation']['modifier'] = [
+                    'id' => $data['relation_creator_id'],
                     'name' => $data['relation_creator_name'],
-                    'email' => $data['relation_creator_email']
+                    'gravatar' => Utility::getGravatar($data['relation_creator_email']),
                 ];
             }
         }

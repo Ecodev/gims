@@ -12,7 +12,7 @@
     <?php echo $this->helpBox('On this page you\'ll be able to manage the roles requested on the mail you received.'); ?>
 
 
-    <h2>{{user.name}} ({{user.email}}) is asking for permissions :</h2>
+    <h2><a href="/admin/user/edit/{{user.id}}"><img ng-src="{{user.gravatar}}&s=32"/> {{user.name}}</a> is asking for permissions</h2>
     <br/>
     <div ng-repeat="(geonameId, geoname) in adminRelations">
         <h3><i class="fa fa-globe"></i> {{geoname.name}}</h3>
@@ -22,9 +22,9 @@
                     <th>Questionnaires</th>
                     <th>
                         Roles
-                        <div class="pull-right" style="margin-right:10px">Actions</div>
-                    </th>
-                </tr>
+            <div class="pull-right" style="margin-right:10px">Actions</div>
+            </th>
+            </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="(questionnaireId, questionnaire) in geoname.questionnaires">
@@ -44,8 +44,9 @@
                                         <i class="fa fa-check"></i>
                                         Access granted
                                         <span ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.modifier">
-                                            by {{applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.modifier.name}}
-                                            <span ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.modifier.email"> - ({{applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.modifier.email}})</span>
+                                            by <a href="/admin/user/edit/{{user.id}}">
+                                                <img ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.modifier.gravatar" ng-src="{{applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.modifier.gravatar}}&s=25"/>
+                                                {{applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.modifier.name}}</a>
                                         </span>
 
                                         <a class="btn btn-default btn-sm" href="/admin/questionnaire/edit/{{questionnaireId}}#3" ng-if="applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation.type == 'user_questionnaire'"><i class="fa fa-gims-questionnaire"></i> See</a>

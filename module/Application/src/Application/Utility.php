@@ -226,7 +226,6 @@ abstract class Utility
         }
 
         return $textColor;
-
     }
 
     /**
@@ -269,6 +268,16 @@ abstract class Utility
         }
 
         return preg_split('/,/', trim($ids), -1, PREG_SPLIT_NO_EMPTY);
+    }
+
+    /**
+     * Return Gravatar URL
+     * @param string $email
+     * @return string Gravatar URL
+     */
+    public static function getGravatar($email)
+    {
+        return 'https://secure.gravatar.com/avatar/' . md5(strtolower(trim($email))) . '?d=identicon';
     }
 
 }

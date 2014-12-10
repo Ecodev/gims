@@ -114,8 +114,10 @@ class UserRepository extends AbstractRepository
             $selectModel .= "r.id as role_id, ";
             $selectModel .= "r.name as role_name, ";
             $selectModel .= "relation.id as relation_id, ";
+            $selectModel .= "creator.id as relation_creator_id, ";
             $selectModel .= "creator.name as relation_creator_name, ";
             $selectModel .= "creator.email as relation_creator_email, ";
+            $selectModel .= "modifier.id as relation_modifier_id, ";
             $selectModel .= "modifier.name as relation_modifier_name, ";
             $selectModel .= "modifier.email as relation_modifier_email, ";
         }
@@ -176,8 +178,10 @@ class UserRepository extends AbstractRepository
             $rsm->addScalarResult('relation_id', 'relation_id');
             $rsm->addScalarResult('relation_creator', 'relation_creator');
             $rsm->addScalarResult('relation_type', 'relation_type');
+            $rsm->addScalarResult('relation_creator_id', 'relation_creator_id');
             $rsm->addScalarResult('relation_creator_name', 'relation_creator_name');
             $rsm->addScalarResult('relation_creator_email', 'relation_creator_email');
+            $rsm->addScalarResult('relation_modifier_id', 'relation_modifier_id');
             $rsm->addScalarResult('relation_modifier_name', 'relation_modifier_name');
             $rsm->addScalarResult('relation_modifier_email', 'relation_modifier_email');
         }

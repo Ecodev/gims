@@ -389,7 +389,7 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      */
     public function getGravatar()
     {
-        return 'https://secure.gravatar.com/avatar/' . md5(strtolower(trim($this->getEmail()))) . '?d=identicon';
+        return \Application\Utility::getGravatar($this->getEmail());
     }
 
     /**
