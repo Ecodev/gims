@@ -214,15 +214,13 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      * @param ignoredElements
      */
     $scope.gridOptions = {
-        columnDefs: $scope.columnDefs,
         data: 'estimatesData'
     };
 
     // update estimates table
     $rootScope.$on('gims-estimates-table-modified', function(event, data) {
         $scope.estimatesData = data.data;
-        $scope.columnDefs = data.columns;
-
+        $scope.gridOptions.columnDefs = data.columns;
     });
 
     /**************************************************************************/

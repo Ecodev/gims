@@ -595,6 +595,7 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
             {
                 field: 'year',
                 displayName: 'Year',
+                name: 'Year',
                 enableColumnResize: true,
                 width: 100
             }
@@ -610,13 +611,14 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                 columns.push({
                     field: 'value' + serie.id + '_' + serie.geonameId,
                     displayName: serie.name,
+                    name: serie.name,
                     enableColumnResize: true,
                     color: serie.color,
-                    headerCellTemplate: '<div class="ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
+                    headerCellTemplate: '<div class="ui-grid-header-cell "></div><div class="ui-grid-cell-contents ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
                         '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" popover-placement="top" popover="{{col.displayName}}">' +
                         '       <i class="fa fa-gims-filter" style="color:{{col.colDef.color}};"></i> {{col.displayName}}' +
                         '   </div>' +
-                        '</div>',
+                        '</div></div>',
                     cellTemplate: '<div class="ui-grid-cell-contents text-right" ng-class="col.colIndex()">' +
                         '<span ng-cell-text ng-show="{{row.entity.value' + serie.id + '_' + serie.geonameId + '!==null}}">{{row.entity.value' + serie.id + '_' + serie.geonameId + '}} %</span>' +
                         '</div>'
