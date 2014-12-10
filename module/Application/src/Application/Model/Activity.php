@@ -28,7 +28,7 @@ class Activity extends AbstractModel
 
     /**
      * @var integer
-     * @ORM\Column(type="smallint", nullable=false)
+     * @ORM\Column(type="integer", nullable=false)
      */
     private $recordId;
 
