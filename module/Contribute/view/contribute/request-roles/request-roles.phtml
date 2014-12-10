@@ -65,9 +65,12 @@
         <div class="form-group">
             <label class="control-label col-sm-3">&nbsp;</label>
             <div class="col-sm-7">
-                <button class="btn btn-success" ng-click="sendRequest()" ng-disabled="myForm.$invalid"><i class="fa fa-check-square-o"></i> Send roles request</button>
+                <button class="btn btn-success" ng-click="sendRequest()" ng-disabled="myForm.$invalid || sending">Send roles request</button>
             </div>
         </div>
     </form>
+    <div>
+        <alert class="ng-trans ng-trans-fade-up" ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
+    </div>
 </div>

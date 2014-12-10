@@ -11,7 +11,7 @@ angular.module('myApp').controller('Contribute/RequestRolesCtrl', function($scop
         }, {
             value: 'nsa',
             display: 'Nsa'
-        },
+        }
     ];
 
     $scope.$watch('types', function() {
@@ -25,22 +25,30 @@ angular.module('myApp').controller('Contribute/RequestRolesCtrl', function($scop
     if ($routeParams.types) {
         $scope.types = $routeParams.types.split(',');
     }
-
-    /**
-     * @todo : implement confirm action modal
-     */
-        //$scope.confirmSendRequest = function() {
-        //    Modal.confirmAction(???);
-        //},
-
+    $scope.sending = false;
+    $scope.alerts = [];
     $scope.sendRequest = function() {
+        $scope.sending = true;
         $http.get('/api/roles-request/requestRoles', {
             params: {
                 geonames: _.pluck($scope.geonames, 'id').join(','),
                 roles: _.pluck($scope.roles, 'id').join(','),
                 types: $scope.types.join(',')
             }
-        }).success(function() {});
+        }).success(function() {
+            $scope.geonames = [];
+            $scope.roles = [];
+            $scope.alerts.push({
+                type: 'success',
+                msg: 'The request was successfully sent. Come back later when your request was approved or request for more permission.'
+            });
+        }).finally(function() {
+            $scope.sending = false;
+        });
+    };
+
+    $scope.closeAlert = function(index) {
+        $scope.alerts.splice(index, 1);
     };
 
 });
