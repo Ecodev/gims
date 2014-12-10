@@ -68,7 +68,8 @@ class Aggregator
      */
     private function computeFlattenAllYearsInternal(Filter $filter, Geoname $geoname, Part $part)
     {
-        $key = 'computeFlattenAllYearsInternal:' . \Application\Utility::getPersistentCacheKey([$filter->getId(), $geoname->getId(), $part->getId(), $this->calculator->getOverriddenFilters()]);
+        $questionnaires = $this->calculator->getQuestionnaireRepository()->getAllForComputing([$geoname]);
+        $key = 'computeFlattenAllYearsInternal:' . \Application\Utility::getPersistentCacheKey([$filter->getId(), $geoname->getId(), $part->getId(), $this->calculator->getOverriddenFilters(), $questionnaires]);
 
         /* @var $cache \Application\Service\Calculator\Cache */
         $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
@@ -79,8 +80,6 @@ class Aggregator
         $cache->record('geoname:' . $geoname->getId());
 
         // First, accumulate the parent
-        $questionnaires = $this->calculator->getQuestionnaireRepository()->getAllForComputing([$geoname]);
-
         $computed = $this->calculator->computeFlattenAllYears($filter, $questionnaires, $part);
         $accumulator = $this->computedToAccumulator($computed, $geoname, $part);
 
