@@ -14,6 +14,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.geonameParams = {perPage: 500, fields: 'questionnaires'};
     $scope.filterSetParams = {fields: 'filters.genericColor,filters.color'};
     $scope.indexedElements = ChartCache.getCache();
+    Chart.resetSeries();
     Chart.setCache($scope.indexedElements);
 
     /**************************************************************************/
