@@ -1,6 +1,5 @@
 {
   "name": "angular-ui-slider",
-  "version": "0.0.2",
   "description": "This directive allows you to add a slider to your form elements.",
   "author": "https://github.com/angular-ui/ui-slider/graphs/contributors",
   "license": "MIT",
@@ -22,14 +21,12 @@
     "jquery-ui": "~1.10.x",
     "jquery": ">= 1.9"
   },
-  "_release": "0.0.2",
+  "_release": "a33728d237",
   "_resolution": {
-    "type": "version",
-    "tag": "v0.0.2",
-    "commit": "34f175cbc2ab3bc93b8b2286667f83c076c0847b"
+    "type": "commit",
+    "commit": "a33728d237b37828063d95c0398e191d663fd503"
   },
   "_source": "git://github.com/angular-ui/ui-slider.git",
-  "_target": "~0.0.2",
-  "_originalSource": "angular-ui-slider",
-  "_direct": true
+  "_target": "a33728d237b37828063d95c0398e191d663fd503",
+  "_originalSource": "angular-ui-slider"
 }

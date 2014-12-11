@@ -6,14 +6,13 @@
     "ace-builds": "~1.1.1"
   },
   "homepage": "https://github.com/angular-ui/ui-ace",
-  "_release": "c7528c8cda",
+  "_release": "b1753143a6",
   "_resolution": {
     "type": "branch",
     "branch": "bower",
-    "commit": "c7528c8cdad84ab1e9e31fa2bf87c52e8579964e"
+    "commit": "b1753143a632f2900b05e6445e88feff6c17ca2c"
   },
   "_source": "git://github.com/angular-ui/ui-ace.git",
   "_target": "bower",
-  "_originalSource": "angular-ui-ace",
-  "_direct": true
+  "_originalSource": "angular-ui-ace"
 }

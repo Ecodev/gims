@@ -23,6 +23,5 @@
   },
   "_source": "git://github.com/tbosch/autofill-event.git",
   "_target": "~1.0.0",
-  "_originalSource": "autofill-event",
-  "_direct": true
+  "_originalSource": "autofill-event"
 }

@@ -30,6 +30,5 @@
   },
   "_source": "git://github.com/wix/angular-tree-control.git",
   "_target": "~0.2.7",
-  "_originalSource": "angular-tree-control",
-  "_direct": true
+  "_originalSource": "angular-tree-control"
 }
