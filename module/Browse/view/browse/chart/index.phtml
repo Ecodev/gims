@@ -22,18 +22,35 @@
                 </ul>
             </div>
 
-            <!-- Contribute -->
-            <a ng-if="tabs.geonames.length == 1" class="btn btn-default" href="/contribute/jmp?questionnaires={{questionnairesIds.all}}&filterSet={{tabs.filterSets[0].id}}&filters={{filtersIds}}""><i class="fa fa-gims-questionnaire"></i> Edit in JMP questionnaires</a>
+            <!-- Contribute JMP -->
+            <a ng-if="tabs.geonames.length == 1" class="btn btn-default" href="/contribute/jmp?questionnaires={{jmpQuestionnairesIds.all}}&filterSet={{jmpFilterSetsIds[0]}}&filters={{jmpFilterIds}}"">
+                <i class="fa fa-gims-questionnaire"></i> Edit JMP questionnaires
+            </a>
             <div class="btn-group dropdown"  ng-if="tabs.geonames.length > 1">
                 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-                    <i class="fa fa-gims-questionnaire"></i> Edit in JMP questionnaires <span class="caret"></span>
+                    <i class="fa fa-gims-questionnaire"></i> Edit JMP questionnaires <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li ng-if="tabs.geonames.length > 1">
-                        <a href="/contribute/jmp?questionnaires={{questionnairesIds.all}}&filterSet={{tabs.filterSets[0].id}}&filters={{filtersIds}}">All countries </a>
+                        <a href="/contribute/jmp?questionnaires={{jmpQuestionnairesIds.all}}&filterSet={{jmpFilterSetsIds[0]}}&filters={{jmpFilterIds}}">All countries </a>
                     </li>
                     <li ng-repeat="geoname in tabs.geonames">
-                        <a href="/contribute/jmp?questionnaires={{questionnairesIds[geoname.id]}}&filterSet={{tabs.filterSets[0].id}}&filters={{filtersIds}}">{{geoname.name}}</a>
+                        <a href="/contribute/jmp?questionnaires={{jmpQuestionnairesIds[geoname.id]}}&filterSet={{jmpFilterSetsIds[0]}}&filters={{jmpFilterIds}}">{{geoname.name}}</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contribute NSA -->
+            <a ng-if="tabs.geonames.length == 1" class="btn btn-default" href="/contribute/nsa?geoname={{tabs.geonames[0].id}}"">
+                <i class="fa fa-gims-questionnaire"></i> Edit NSA questionnaires
+            </a>
+            <div class="btn-group dropdown"  ng-if="tabs.geonames.length > 1">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                    <i class="fa fa-gims-questionnaire"></i> Edit NSA questionnaires <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-repeat="geoname in tabs.geonames">
+                        <a href="/contribute/nsa?geoname={{geoname.id}}">{{geoname.name}}</a>
                     </li>
                 </ul>
             </div>
@@ -109,6 +126,7 @@
                                                     <gims-filter model='tabs.filters'
                                                                  name="filters"
                                                                  generic-color="true"
+                                                                 query-params="filtersParams"
                                                                  current-url="{{currentUrl}}"
                                                                  dependencies="filterSet"
                                                                  multiple="true">

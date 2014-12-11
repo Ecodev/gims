@@ -11,8 +11,12 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     };
     $scope.ignoredElements = null;
     $scope.concatenatedIgnoredElements = [];
-    $scope.geonameParams = {perPage: 500, fields: 'questionnaires'};
-    $scope.filterSetParams = {fields: 'filters.genericColor,filters.color'};
+    $scope.filtersParams = {fields: 'isNsa,parents.isNsa,filterSets'};
+    $scope.geonameParams = {
+        perPage: 500,
+        fields: 'questionnaires,questionnaires.survey.type'
+    };
+    $scope.filterSetParams = {fields: 'filters.genericColor,filters.color,filters.parents,filters.parents.isNsa,filters.filterSets'};
     $scope.indexedElements = ChartCache.getCache();
     Chart.resetSeries();
     Chart.setCache($scope.indexedElements);
@@ -104,7 +108,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
 
         ChartCache.removeFilters(removedFilters);
 
-        $scope.filtersIds = _.pluck($scope.tabs.filters, 'id').join(',');
+        refreshFiltersScopeShortcuts();
 
         // filter series that are no more used in chart
         Chart.removeSeries(removedFilters);
@@ -237,14 +241,85 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
      *   28 : '4,5'
      * }
      */
-    var refreshGeonameScopeShortcuts = function() {
-        $scope.questionnairesIds = {all: []};
+    var getQuestionnairesByType = function(type) {
+
+        var questionnaires = {all: []};
+
         angular.forEach($scope.tabs.geonames, function(geoname) {
-            $scope.questionnairesIds.all = $scope.questionnairesIds.all.concat(_.pluck(geoname.questionnaires, 'id'));
-            $scope.questionnairesIds[geoname.id] = _.pluck(geoname.questionnaires, 'id').join(',');
+            var filteredQuestionnaires = _.filter(geoname.questionnaires, function(q) {
+                if (q.survey.type == type) {
+                    return true;
+                }
+            });
+            questionnaires.all = questionnaires.all.concat(_.pluck(filteredQuestionnaires, 'id'));
+            questionnaires[geoname.id] = _.pluck(filteredQuestionnaires, 'id').join(',');
         });
-        $scope.questionnairesIds.all = _.uniq($scope.questionnairesIds.all).join(',');
+
+        questionnaires.all = _.uniq(questionnaires.all).join(',');
+
+        return questionnaires;
+    };
+
+    var refreshGeonameScopeShortcuts = function() {
+        $scope.jmpQuestionnairesIds = getQuestionnairesByType('jmp');
+        $scope.nsaQuestionnairesIds = getQuestionnairesByType('nsa');
+
+        $scope.questionnairesIds = {};
+        _.forEach($scope.jmpQuestionnairesIds, function(q, key) {
+            $scope.questionnairesIds[key] = $scope.jmpQuestionnairesIds[key] + ',' + $scope.nsaQuestionnairesIds[key];
+        });
+
         $scope.geonameIds = _.pluck($scope.tabs.geonames, 'id').join(',');
+    };
+
+    /**
+     * Return filters comparing if they belong to NSA root filter
+     * Only root country NSA filter is considered as true eg :  "NSA : Bangladesh".
+     * Facilities are excluded
+     * @param isNsa
+     * @returns {*}
+     */
+    var getFiltersByType = function(isNsa) {
+        var filters = [];
+
+        _.forEach($scope.tabs.filters, function(f) {
+
+            var filterIsNsa = false;
+            _.forEach(f.parents, function(p) {
+                if (p.isNsa) {
+                    filterIsNsa = true;
+                    return false;
+                }
+            });
+
+            if (filterIsNsa == isNsa) {
+                filters.push(f);
+            }
+        });
+
+        return filters;
+    };
+
+    var getFilterSetsIds = function(filters) {
+        var allFilterSets = [];
+
+        _.forEach(filters, function(filter) {
+            allFilterSets = allFilterSets.concat(_.pluck(filter.filterSets, 'id'));
+        });
+        var usedFiltersSets = _($scope.tabs.filterSets).pluck('id').value();
+
+        return _.intersection(usedFiltersSets, allFilterSets);
+    };
+
+    var refreshFiltersScopeShortcuts = function() {
+        var jmpFilterIds = getFiltersByType(false);
+        var nsaFilterIds = getFiltersByType(true);
+
+        $scope.jmpFilterIds = _.pluck(jmpFilterIds, 'id').join(',');
+        $scope.nsaFilterIds = _.pluck(nsaFilterIds, 'id').join(',');
+
+        $scope.jmpFilterSetsIds = getFilterSetsIds(jmpFilterIds);
+        $scope.nsaFilterSetsIds = getFilterSetsIds(nsaFilterIds);
     };
 
     /**

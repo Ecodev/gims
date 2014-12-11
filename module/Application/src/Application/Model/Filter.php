@@ -128,6 +128,7 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
     private $sorting = 0;
 
     /**
+     * Specifies if the filter is THE NSA container
      * @var int
      * @ORM\Column(type="boolean", nullable=false, options={"default" = 0})
      */
