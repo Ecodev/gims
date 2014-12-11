@@ -19,19 +19,19 @@
             "field": "PU",
             "displayLong": "Urban Population",
             "displayName": "PU",
-            "width": 80
+            "width": 90
         },
         {
             "field": "PR",
             "displayLong": "Rural Population",
             "displayName": "PR",
-            "width": 80
+            "width": 90
         },
         {
             "field": "PT",
             "displayLong": "Total Population",
             "displayName": "PT",
-            "width": 80
+            "width": 90
         },
         {
             "field": "f166p1",
@@ -129,9 +129,9 @@
             "country": "MDG - Western Asia",
             "iso3": null,
             "year": 2000,
-            "PU": 102159641,
-            "PR": 58448799,
-            "PT": 160608446,
+            "PU": "102 159 641",
+            "PR": "58 448 799",
+            "PT": "160 608 446",
             "f166p1": 96.8,
             "f166p1a": "98 844 679",
             "f166p2": 96.8,
