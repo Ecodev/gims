@@ -26,6 +26,8 @@ The **General** tab contains basic contact and function information.
     :width: 100%
     :alt: User account general info
 
+.. _user-roles:
+
 In the **Surveys**, **Questionnaires** and **Filter sets** tabs you can see
 which data the user can access and with which access rights as well as give
 the user access to extra surveys, questionnaires, etc.

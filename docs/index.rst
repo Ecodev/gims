@@ -24,6 +24,7 @@ Contents:
     content/filter
     content/rule
     content/discussion
+    content/roles_and_permissions
     content/computing
     content/rest
     content/glossary
