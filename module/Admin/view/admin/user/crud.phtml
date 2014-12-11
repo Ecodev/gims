@@ -19,7 +19,7 @@
             <tab heading="General" active="tabs[0]" select="selectTab(0)">
 
                 <div class="form-group" ng-class="{'has-error': myForm.name.$invalid}"  style="position: relative;">
-                    <img ng-src="{{user.gravatar}}&s=128" style="position: absolute; right: 40px"/>
+                    <img ng-src="{{user.gravatar}}&s=128" style="position: absolute; right: 40px" class="hidden-xs"/>
                     <label class="control-label col-sm-1" for="user.name"><?php echo $this->translate("Name"); ?></label>
                     <div class="col-sm-6">
                         <input id="user.name" type="text" name="name" ng-model="user.name" required ng-minlength="3"/>
