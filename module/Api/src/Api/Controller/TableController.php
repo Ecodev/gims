@@ -197,7 +197,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                 'field' => $acronym,
                 'displayLong' => $part->getName() . ' Population',
                 'displayName' => $acronym,
-                'width' => 80
+                'width' => 90
             ];
         }
 
@@ -226,7 +226,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                 // population columns
                 $populationData = array();
                 foreach ($parts as $part) {
-                    $populationData['P' . strtoupper($part->getName()[0])] = $populationRepository->getPopulationByGeoname($geoname, $part->getId(), $year);
+                    $populationData['P' . strtoupper($part->getName()[0])] = number_format($populationRepository->getPopulationByGeoname($geoname, $part->getId(), $year), 0, ".", " ");
                 }
 
                 $statsData = array();
