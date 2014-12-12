@@ -133,8 +133,8 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         );
 
         $columns = array_merge($columns, $this->getEntityManager()
-                                              ->getRepository('\Application\Model\Filter')
-                                              ->getColumnNames($filters, $parts));
+                        ->getRepository('\Application\Model\Filter')
+                        ->getColumnNames($filters, $parts));
         foreach ($parts as $part) {
             foreach ($filters as $filter) {
 
@@ -172,6 +172,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $geonamesIds = Utility::explodeIds($this->params()->fromQuery('geonames'));
         $filtersIds = Utility::explodeIds($this->params()->fromQuery('filters'));
         $wantedYears = $this->getWantedYears($this->params()->fromQuery('years'));
+        $excelFileName = $this->params('filename');
 
         $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findById($geonamesIds, array('name' => 'asc'));
         $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds);
@@ -226,7 +227,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                 // population columns
                 $populationData = array();
                 foreach ($parts as $part) {
-                    $populationData['P' . strtoupper($part->getName()[0])] = number_format($populationRepository->getPopulationByGeoname($geoname, $part->getId(), $year), 0, ".", " ");
+                    $populationData['P' . strtoupper($part->getName()[0])] = $this->formatThousand($populationRepository->getPopulationByGeoname($geoname, $part->getId(), $year), $excelFileName);
                 }
 
                 $statsData = array();
@@ -234,7 +235,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                     foreach ($flatFilters as $filter) {
                         $value = $filter['data'][$year];
                         $statsData['f' . $filter['id'] . 'p' . $partId] = \Application\Utility::decimalToRoundedPercent($value);
-                        $statsData['f' . $filter['id'] . 'p' . $partId . 'a'] = is_null($value) ? null : number_format($value * $populationRepository->getPopulationByGeoname($geoname, $partId, $year), 0, ".", " ");
+                        $statsData['f' . $filter['id'] . 'p' . $partId . 'a'] = is_null($value) ? null : $this->formatThousand($value * $populationRepository->getPopulationByGeoname($geoname, $partId, $year), $excelFileName);
                     }
                 }
 
@@ -247,11 +248,25 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             'data' => array_values($result)
         );
 
-        $filename = $this->params('filename');
-        if ($filename) {
-            return new ExcelModel($filename, $finalResult);
+        if ($excelFileName) {
+            return new ExcelModel($excelFileName, $finalResult);
         } else {
             return new JsonModel($finalResult);
+        }
+    }
+
+    /**
+     * Format number with thousand separator, but only for non-Excel ouput
+     * @param float $number
+     * @param boolean $isExcel
+     * @return integer|string
+     */
+    private function formatThousand($number, $isExcel)
+    {
+        if ($isExcel) {
+            return round($number);
+        } else {
+            return number_format($number, 0, ".", " ");
         }
     }
 
