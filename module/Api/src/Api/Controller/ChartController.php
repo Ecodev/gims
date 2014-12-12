@@ -213,11 +213,17 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
             $serie['usages'] = $usageList;
 
+            $allEmpty = true;
             foreach ($serie['data'] as &$value) {
                 $value = Utility::decimalToRoundedPercent($value);
+                if ($value) {
+                    $allEmpty = false;
+                }
             }
 
-            $series[] = $serie;
+            if (!$allEmpty) {
+                $series[] = $serie;
+            }
         }
 
         return $series;
