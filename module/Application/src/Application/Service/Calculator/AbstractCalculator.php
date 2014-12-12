@@ -263,13 +263,13 @@ use \Application\Traits\EntityManagerAware;
      */
     public function computeFilter($filterId, $questionnaireId, $partId, $useSecondStepRules = false, ArrayCollection $alreadyUsedFormulas = null)
     {
-        $key = \Application\Utility::getPersistentCacheKey([$filterId, $questionnaireId, $partId, $useSecondStepRules, $this->overriddenFilters]);
-        if (array_key_exists($key, $this->cacheComputeFilter)) {
-            return $this->cacheComputeFilter[$key];
-        }
-
         if (!$alreadyUsedFormulas) {
             $alreadyUsedFormulas = new ArrayCollection();
+        }
+
+        $key = \Application\Utility::getPersistentCacheKey([$filterId, $questionnaireId, $partId, $useSecondStepRules, $this->overriddenFilters, $alreadyUsedFormulas]);
+        if (array_key_exists($key, $this->cacheComputeFilter)) {
+            return $this->cacheComputeFilter[$key];
         }
 
         $result = $this->computeFilterInternal($filterId, $questionnaireId, $partId, $useSecondStepRules, $alreadyUsedFormulas, new ArrayCollection());
