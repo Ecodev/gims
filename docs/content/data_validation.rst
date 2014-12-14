@@ -1,6 +1,11 @@
 Data validation
 ===============
 
+.. note::
+
+    The normal validation steps explained below are exceptionally not applicable
+    for the December 2014 - January 2015 JMP country consultation !
+
 The standard data flow goes as follows with the corresponding status of
 the questionnaire:
 
@@ -41,9 +46,9 @@ Changing the status of a questionnaire can be done directly from the Contribute
 In the following administration panel, click on the "Status" drop-down menu
 and perform the necessary modification.
 
-.. image:: img/contribute_jmp9.png
+.. image:: img/data_validation1.png
     :width: 100%
-    :alt: Delete a questionnaire
+    :alt: Change questionnaire status
 
 .. warning::
 
@@ -51,5 +56,5 @@ and perform the necessary modification.
     able to edit it's content, don't forget to set it back to the "published"
     status once you have finished performing the desired modifications !
 
-You can also edit the survey via
+It is also possible to edit the survey via
 :menuselection:`Admin --> Surveys --> Survey --> Questionnaire`…

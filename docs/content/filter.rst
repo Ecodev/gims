@@ -30,8 +30,7 @@ above [2] and child filters, below [3].
     :alt: edit a filter
 
 If you wish to change the color of the filter used in the graph, click on
-the color selection icon. If changes have been performed and you want to
-keep them, don't forget to click on the blue :guilabel:`Save` button.
+the Color icon. The same applies for the background color which is used for table headers. If changes have been performed and you want to keep them, don't forget to click on the blue :guilabel:`Save` button at the top !
 
 .. image:: img/filters3.png
     :width: 100%
@@ -42,7 +41,7 @@ keep them, don't forget to click on the blue :guilabel:`Save` button.
 Summands
 ^^^^^^^^
 
-If in most cases the filter structure provides a logical view of how elements add-up (a parent is typically the sum of it's children), some filters can be the sum of several other filters dispatched within the filter tree. Such calculations are defined in the "Summands" field by simply inserting the filter elements you wish to add-up.
+If in most cases the filter structure provides a logical view of how elements add-up (a parent is typically the sum of it's children), some filters can be the sum of several other filters dispatched within the filter tree. Such calculations are defined in the "Summands and organisation" tab by simply inserting the filter elements you wish to add-up.
 
 .. image:: img/filters4.png
     :width: 100%

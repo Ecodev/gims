@@ -7,8 +7,8 @@ access rights.
 * If you already have a user account, simply sign in.
 
 * If you don't have a user account yet, create one (see :ref:`sign-in`)
-  and ask the author of the survey to provide you with the access rights
-  (see :ref:`DI questionnaires users`).
+  and :ref:`ask-permissions` or if you know the author of the survey, he can
+  grant you the access rights directly (see :ref:`DI questionnaires users`).
 
 Once you have signed in, go to the "Contribute" section.
 
@@ -49,16 +49,22 @@ very close to the former Excel country files.
 
 .. image:: img/contribute_jmp2.png
     :width: 100%
-    :alt: Edit the JMP questionnaire of one country
+    :alt: Display JMP questionnaires of a country
 
 .. note::
 
-    This interface also enables you to select a Survey and get the
-    corresponding questionnaires or via the "Questionnaires" tab choose several
-    questionnaires from different countries to display them side by side…
+    This interface also enables you to select a Survey [1] and get the
+    corresponding questionnaires or via the "Questionnaires" tab [2] choose
+    several questionnaires from different countries to display them side by
+    side…
 
-From here, actions can be performed at different levels depending on your access rights. The first is at the level of the questionnaire by clicking on the drop-down arrow at the top (see screen copy below).
-You can "Hide this column" (the equivalent of hiding a column in Excel).
+.. image:: img/contribute_jmp2b.png
+    :width: 100%
+    :alt: Display a survey or questionnaires
+
+From here, **actions** can be performed at different levels depending on your
+access rights. The first is at the level of the questionnaire by clicking on the
+drop-down arrow at the top. You can "View discussion…" (to see and/or make comments about the questionnaire), "Hide this column" (the equivalent of hiding a column in Excel), display question labels, etc.
 
 .. image:: img/contribute_jmp3.png
     :width: 100%
@@ -66,7 +72,7 @@ You can "Hide this column" (the equivalent of hiding a column in Excel).
 
 .. note::
 
-    If you wish to hide several columns (questionnaires) rapidly, the simplest is to go to the "Questionnaires" tab and there, click on the ones you wish to dismiss.
+    If you wish to hide several columns (questionnaires) rapidly, the simplest is to go to the "Questionnaires" tab and there, click on the ones you wish to ignore temporarily.
 
 .. image:: img/contribute_jmp3b.png
     :width: 100%
@@ -77,27 +83,50 @@ You can "Hide this column" (the equivalent of hiding a column in Excel).
 Editing a questionnaire
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-If you are granted the access rights, you can edit the **question labels** (so called "original denomination" in the Excel country files), the **survey comments** as well as the **survey** and **questionnaire**.
+If you are granted the access rights, you can edit the *question labels* [1] (so
+called "original denomination" in the Excel country files) and the *data values* [2]. You may also be able to edit the *survey* and *questionnaire* [3].
 
 .. image:: img/contribute_jmp4.png
     :width: 100%
     :alt: Edition of the questionnaire labels
 
-Data that has a cogged wheel [1] results from a :term:`rule`, that you can
+Data that has a **cogged wheel** results from a :term:`rule`, that you can
 override with a manually entered value: the symbol will then change to a
 question mark. If you erase the value you entered, the initial :term:`rule`
-will automatically apply again.
+will automatically apply again. To see the rule, click on the icon [1] and then on the rule [2].
 
-Data with a folder icon [2] results from the sum of the filter's children. You can also override this total with a manually entered value: the symbol will then change to a question mark. If you erase the value you entered, the initial computation will automatically apply again.
-
-Data that has a question mark [3] has been entered manually and can be edited
-if needed.
-
-Data that has a plus (+) icon [4] results from the sum of a number of other filter elements as defined in the :ref:`Summands`.
-
-.. image:: img/contribute_jmp5.png
+.. image:: img/contribute_jmp4b.png
     :width: 100%
-    :alt: Edition of the questionnaire data
+    :alt: Show rule details
+
+This will display at the bottom of the page the rule formula [1] as well as an easier to read version [2]. As in Excel, the cells used in the formula are highlighted with different colors [3]. To close this panel, click on the corresponding button [4]. See the rule chapter for :doc:`further details <rule>`. 
+
+.. image:: img/contribute_jmp4c.png
+    :width: 100%
+    :alt: Edit rule formula
+
+Data with a **folder** icon results from the sum of the filter's children.
+
+Data that has a **plus** (+) icon results from the sum of a number of other filter elements as defined in the :ref:`Summands`.
+
+For both these cases, you can override these totals with a manually entered value: the symbol will then change to a question mark. If you erase the value you entered, the initial computation will automatically apply again.
+
+Data that has a **question mark** has been entered manually and can be edited if needed. When modifications are performed to existing data, it is *strongly* recommended that a remark is inserted by clicking on the "View discussions…"
+
+.. image:: img/contribute_jmp4d.png
+    :width: 100%
+    :alt: Manually entered data
+
+In the text field, insert as precise and relevant information as possible to help users understand why the data has been changed. When ready, click on the blue "Comment" button.
+
+.. image:: img/contribute_jmp4e.png
+    :width: 100%
+    :alt: Entering justification information in the discussions
+
+.. note::
+
+    The warning below is exceptionally not applicable for the December 2014
+    - January 2015 country consultation !
 
 .. warning::
 
@@ -105,7 +134,7 @@ Data that has a plus (+) icon [4] results from the sum of a number of other filt
     published data, all existing questionnaires are "locked" (data in the cells
     with a grey background can't be edited). If modifications must really be
     made, you must first "Edit the questionnaire" and change the Status from
-    "Published" to "New" [1]… and then click on "Save and close" [2]
+    "Published" to "New" [1]… and then click on "Save and close" [2].
 
 .. image:: img/contribute_jmp6.png
     :width: 100%
@@ -137,14 +166,14 @@ blue :guilabel:`Save new elements` button at the top.
 Delete a questionnaire
 ^^^^^^^^^^^^^^^^^^^^^^
 
-To delete a questionnaire and it's linked answers, simply select "Edit
-questionnaire".
+To delete a questionnaire and it's linked answers, select "Edit
+questionnaire"…
 
 .. image:: img/contribute_jmp8.png
     :width: 100%
     :alt: Edit questionnaire
 
-In the following administration panel, click on the red :guilabel:`Delete`
+…and in the following administration panel, click on the red :guilabel:`Delete`
 button. A confirmation message appears, click again on :guilabel:`Delete`.
 
 .. image:: img/contribute_jmp9.png
@@ -153,7 +182,7 @@ button. A confirmation message appears, click again on :guilabel:`Delete`.
 
 .. warning::
 
-    Once you delete a questionnaire, it is really erased as well as all the
+    Once you delete a questionnaire, it is really erased as well as all
     linked answers. There is no :guilabel:`undo` button !
 
 
@@ -162,9 +191,7 @@ button. A confirmation message appears, click again on :guilabel:`Delete`.
 NSA questionnaires
 ------------------
 
-Once you have clicked on the :guilabel:`NSA questionnaire` button, you will be
-directed to an interface that enables you to manage both *existing* data as well
-as *new info*. You must first select the country you wish to work on.
+Once you have clicked on the :guilabel:`NSA questionnaire` button in the contribute section, you will be directed to an interface that enables you to manage both *existing* data as well as *new info*. You must first select the country you wish to work on.
 
 .. image:: img/contribute_nsa1.png
     :width: 100%
@@ -182,16 +209,17 @@ numbers… and then click on the blue :guilabel:`Save new elements` button at th
 
 If, for your country, **sector data already exists**, GIMS will automatically
 recall the existing data enabling you to modify existing data or add one or
-several new questionnaires [1] as well as one or several new equipments
-(facilities) for each questionnaire [2]. Don't forget to enter corresponding
-numbers for each part (urban, rural and total) [3] ! Once the data has been
-entered, click on the blue :guilabel:`Save new elements` button at the top: the
-percentages are automatically (re)calculated.
+several new questionnaires [1] for which you should enter a code and year [2]
+as well as the values [3]. If needed, you can add one or several new equipments
+(facilities) [4]. Once all data has been entered, click on the blue
+:guilabel:`Save new elements` button at the top: the percentages are
+automatically (re)calculated.
 
 .. note::
 
-    If your population numbers differ from the official statistics, you can
-    enter under the "Population" cell [4] your own values.
+     If your population numbers differ from the official statistics that are
+     displayed, you can enter under the "Population" cell [5] your own values.
+     Percentages will be recalculated according to these new numbers !
 
 .. image:: img/contribute_nsa3.png
     :width: 100%

@@ -23,7 +23,7 @@ bar. Once it appears in the list, click on the pencil icon to edit the record.
     :alt: search a filter set
 
 The **General** tab contains the label of the filter set as well as it's
-child filters. These can be directly edited by clicking on the pencil icon.
+child filters. These can be directly edited by clicking on the pencil icon [1]. It is also possible to add filters, if needed, by clicking on the button [2].
 
 .. image:: img/filterset2.png
     :width: 100%

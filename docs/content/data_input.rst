@@ -23,10 +23,9 @@ You can now go to the **Admin** section and click on the **Surveys** icon.
     :width: 100%
     :alt: Administration section
 
-If you have access to an existing survey, it will be listed. To edit it,
-click on the pencil icon.
+Surveys you can access are listed. If there are many, you can find a specific survey by using the search field [1]. To edit it, click on the pencil icon [2].
 
-To create a new survey, click on the corresponding button.
+To create a new survey, click on the corresponding button [3].
 
 .. image:: img/surveys.png
     :width: 100%

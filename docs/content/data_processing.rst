@@ -34,19 +34,23 @@ button. The file you will obtain is already *processed* data through the
 .. note::
 
     The "Questionnaires table" provides an output of the filtered data per
-    survey for the selected countries.
+    survey for the selected country(ies).
 
-.. image:: img/data_export_questionnaire.png
+.. image:: img/data_export_questionnaire1.png
     :width: 100%
     :alt: Exporting questionnaire filtered data
 
+If you wish to get specific information, you can select it via the "Filters" tab [1]. To select a filter, click on the button [2] and in the following interface, choose the filter(s) you would like to display.
+
+.. image:: img/data_export_questionnaire2.png
+    :width: 100%
+    :alt: Selecting filters
+
 .. note::
 
-    The "Countries table" provides an output of computed data, in absolute (a)
-    and relative numbers, per year for the selected countries. The acronyms
-    in the header of the table follow a simple logic: P = population; U =
-    urban; R = rural; T = total; W = water; S= sanitation; I = improved;
-    U = unimproved… (ex. WUTI = water urban total improved).
+    The "Countries table" provides an output of computed data, in absolute (A)
+    and relative numbers, per year for the selected countries. To know what the
+    acronyms mean, hover over the label.
 
 .. image:: img/data_export_countries.png
     :width: 100%
@@ -66,10 +70,10 @@ interface is accessible via  Browse / Charts.
     :width: 100%
     :alt: Browse
 
-Select a country, part (urban, rural or total) and filter set. The
-corresponding data points and trends lines are calculated and
+Select a country [1], part (urban, rural or total) [2] and filter set [3].
+The corresponding data points and trends lines are calculated and
 displayed. Pointing anywhere along the trend line provides a feedback
-regarding the corresponding coverage percentage.
+regarding the corresponding coverage percentage [4].
 
 .. image:: img/chart_1.png
     :width: 100%
@@ -81,6 +85,13 @@ Estimates can also be seen in the form of a table by clicking on the
 .. image:: img/chart_2.png
     :width: 100%
     :alt: Estimated coverage
+
+Relative trend bars can also be obtained and will display the selected filters. By hovering over the graph, detailed percentage will show up for the start and
+end years (1990 and 2015).
+
+.. image:: img/chart_3.png
+    :width: 100%
+    :alt: Relative trend bars
 
 To get detailed information regarding a specific data point (questionnaire),
 you must simply click on the point. Since data points can overlap, you can
@@ -94,17 +105,17 @@ and drag in diagonal).
 Once you have zoomed in, you can select more easily the data point you are
 interested in [1].
 
-.. note::
-
-    To view again the entire graph, click on the :guilabel:`Reset the zoom` button [2].
-
 .. image:: img/chart_zoomed.png
     :width: 100%
     :alt: Zoom of the chart
 
+.. note::
+
+    To view again the entire graph, click on the :guilabel:`Reset zoom` button [2].
+
 The panel on the right opens up and displays detailed information pertaining
-to this data point. The first tab (Filters) shows the details of what makes
-up this data point.
+to the data point selected. The first tab (Filters) shows the details of what
+makes up this data point.
 
 .. image:: img/chart_panel1.png
     :width: 100%
@@ -119,15 +130,14 @@ To see the impact of ignoring a specific filter either just for the current
 questionnaire [1] or for all questionnaires displayed [2], click on the
 corresponding icon. The data points (questionnaires) are recalculated
 without this filter element and a new trend line calculated and drawn. The
-initial data points are now in a lighter shade of the initial colour and the
-trend lines are dashed (as shown in the legend). Furthermore, the percentage
+initial data points and trend lines are now in a lighter shade of the initial colour (as shown in the legend). Furthermore, the percentage
 ignored is highlighted in red [3] and the (sub)total(s) adjusted accordingly
 [4]. It is possible to ignore several elements by simply clicking on the
 appropriate icons of the filter elements you wish to ignore.
 
 .. note::
 
-    By clicking on the labels in the legend, you can hide elements you don't
+    By clicking on the labels in the legend [5], you can hide elements you don't
     want to display on the graph.
 
 .. image:: img/chart_panel2.png
@@ -135,7 +145,7 @@ appropriate icons of the filter elements you wish to ignore.
     :alt: Ignoring a specific filter for a graph
 
 The ignored data can be seen in the "Ignored" tab and reintegrated by simply
-clicking on the appropriate icon.
+clicking on the appropriate icon, depending on what you wish to take into account.
 
 .. image:: img/chart_panel3.png
     :width: 100%
@@ -143,7 +153,7 @@ clicking on the appropriate icon.
 
 It is also possible to ignore an entire questionnaire by clicking on the
 icon to the left of the questionnaire code [1]. The data point of the
-questionnaire is shaded on the chart as well as the label in the panel and
+questionnaire is shaded on the chart [2] as well as the label in the panel and
 the trend line recalculated accordingly. To reintegrating a questionnaire,
 click again on the same icon.
 
@@ -156,9 +166,9 @@ of calculations. This is shown by the presence of the cogged-wheel icon [1].
 
 .. note::
 
-    Details of the calculations will be made available soon. In the mean
-    time, the list of all the calculations, ratios and estimates used at
-    some stage can be found in the "Rules" tab [2].
+    It is possible to access the details of the calculations by clicking on
+    the rule label [2]. This will forward you to the :ref:`rule-edition`
+    section.
 
 .. image:: img/chart_panel5.png
     :width: 100%

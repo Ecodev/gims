@@ -203,6 +203,7 @@ Or the more re-usable version:
     =IF(ISTEXT({F#12,Q#current}), SUM({F#12,Q#current,P#current},
     {R#2,Q#current,P#current}), {R#2,Q#current,P#current})
 
+.. _rule-edition:
 
 Edit and create a rule
 ----------------------
@@ -214,8 +215,13 @@ To edit or create a rule, go to the Administration section and click on the
     :width: 100%
     :alt: Admin section
 
-The name of a rule should be as explicit as possible [1]. The formula is
-"translated" into a more comprehensible form [2] below the "Formula" field [3].
+Filter the list of rules by using the search field and click on the pencil icon to edit it.
+
+.. image:: img/rule0.png
+    :width: 100%
+    :alt: Selecting a rule in list
+
+The name of a rule should be as explicit as possible [1]. The formula [2] that can be edited is "translated" into a more comprehensible form below [3].
 
 .. image:: img/rule1.png
     :width: 100%

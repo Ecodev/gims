@@ -14,11 +14,11 @@ Glossary
     filter
         Filters are a way to categorize data, and also to organize them,
         more generally. They may be used in combination with rules to
-        compute things.
+        compute things. See :doc:`detailed description <filter>`.
 
     filter set
         Filter sets are a way to group a series of filters together and
-        facilitate their selection. You can see it as a "folder".
+        facilitate their selection. You can see it as a "folder". See :doc:`detailed description <filter_set>`.
 
     geoname
         A geographical region, typically a country. It can also be a smaller
@@ -74,6 +74,10 @@ Glossary
     summand
         Summands are a user-defined list of filters which are summed to compute
         the value of a specific filter
+        
+    user
+        Person that has a GIMS account with different access rights (editor,
+        reporter, validator) per survey, questionnaire, etc. See :doc:`detailed description <user>`.
 
     validator
         Person given the access rights to validate the answers filled in
