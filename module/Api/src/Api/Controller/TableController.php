@@ -261,7 +261,12 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         if ($isExcel) {
             return round($number);
         } else {
-            return number_format($number, 0, ".", " ");
+            $formatted = number_format($number, 0, ".", " ");
+            if ($formatted == '-0') {
+                $formatted = '0';
+            }
+
+            return $formatted;
         }
     }
 
