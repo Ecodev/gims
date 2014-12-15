@@ -25,9 +25,28 @@ class FilterValue extends AbstractToken implements \Application\Service\Syntax\N
         $partId = $this->getPartId($matches[3], $usage);
 
         $useSecondStepRules = isset($matches[4]) && $matches[4] == ',S#2';
-        $value = $calculator->computeFilter($filterId, $questionnaireId, $partId, $useSecondStepRules, $alreadyUsedFormulas);
+        $alreadyUsedFormulasForFilter = $this->keepOnlyFilter($alreadyUsedFormulas, $filterId);
+        $value = $calculator->computeFilter($filterId, $questionnaireId, $partId, $useSecondStepRules, $alreadyUsedFormulasForFilter);
 
         return is_null($value) ? 'NULL' : $value;
+    }
+
+    /**
+     * Keep only the usages that relate to the filter we are going to compute
+     * @param ArrayCollection $alreadyUsedFormulas
+     * @param integer $filterId
+     * @return ArrayCollection
+     */
+    private function keepOnlyFilter(ArrayCollection $alreadyUsedFormulas, $filterId)
+    {
+        $alreadyUsedFormulasForFilter = new ArrayCollection();
+        foreach ($alreadyUsedFormulas as $u) {
+            if ($u->getFilter() && $u->getFilter()->getId() == $filterId) {
+                $alreadyUsedFormulasForFilter->add($u);
+            }
+        }
+
+        return $alreadyUsedFormulasForFilter;
     }
 
     public function getStructure(array $matches, Parser $parser)

@@ -263,7 +263,7 @@ use \Application\Traits\EntityManagerAware;
      */
     public function computeFilter($filterId, $questionnaireId, $partId, $useSecondStepRules = false, ArrayCollection $alreadyUsedFormulas = null)
     {
-        if (!$alreadyUsedFormulas) {
+        if (is_null($alreadyUsedFormulas)) {
             $alreadyUsedFormulas = new ArrayCollection();
         }
 
@@ -383,7 +383,7 @@ use \Application\Traits\EntityManagerAware;
      */
     public function computeFormulaBeforeRegression(AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas = null, $useSecondStepRules = false)
     {
-        if (!$alreadyUsedFormulas) {
+        if (is_null($alreadyUsedFormulas)) {
             $alreadyUsedFormulas = new ArrayCollection();
         }
         $alreadyUsedFormulas->add($usage);
