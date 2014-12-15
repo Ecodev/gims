@@ -9,7 +9,8 @@ Glossary
 
     editor
         Person given the access rights to create and edit a survey,
-        questionnaire, filter, etc.
+        questionnaire, filter, etc. See :doc:`detailed description
+        <roles_and_permissions>`.
 
     filter
         Filters are a way to categorize data, and also to organize them,
@@ -18,7 +19,8 @@ Glossary
 
     filter set
         Filter sets are a way to group a series of filters together and
-        facilitate their selection. You can see it as a "folder". See :doc:`detailed description <filter_set>`.
+        facilitate their selection. You can see it as a "folder". See
+        :doc:`detailed description <filter_set>`.
 
     geoname
         A geographical region, typically a country. It can also be a smaller
@@ -61,7 +63,7 @@ Glossary
 
     reporter
         Person given the access rights to answer questions for a specific
-        questionnaire.
+        questionnaire. See :doc:`detailed description <roles_and_permissions>`.
 
     rule
         A rule is a way to customize computing with handcrafted formulas. See
@@ -73,12 +75,14 @@ Glossary
 
     summand
         Summands are a user-defined list of filters which are summed to compute
-        the value of a specific filter
+        the value of a specific filter.
         
     user
         Person that has a GIMS account with different access rights (editor,
-        reporter, validator) per survey, questionnaire, etc. See :doc:`detailed description <user>`.
+        reporter, validator) per survey, questionnaire, etc. See :doc:`detailed
+        description <user>`.
 
     validator
         Person given the access rights to validate the answers filled in
-        for a specific questionnaire.
+        for a specific questionnaire. See :doc:`detailed description
+        <roles_and_permissions>`.

@@ -53,4 +53,8 @@ He can also revoke an access that has been granted, if necessary…
     :width: 100%
     :alt: Permission request email
 
-.. add info about how to add a "viewer" role to enable other people to see new questionnaires you have added…
+.. note::
+
+    Need further help? Send an email to who@gimsinitiative.org
+
+.. add info about how to add a "viewer" role to enable other people to see new questionnaires you have added (when implemented)…

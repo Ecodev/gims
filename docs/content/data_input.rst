@@ -213,3 +213,7 @@ To add a new user, select the person [1] and define his role [2].
 **Rule - Filter** and **Rule** tabs are only used when specific calculations
 are linked to the questionnaire which is typically the case for JMP data. See
 the :doc:`Rule section <rule>`.
+
+.. note::
+
+    Need further help? Send an email to who@gimsinitiative.org

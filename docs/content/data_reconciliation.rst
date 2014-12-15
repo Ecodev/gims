@@ -158,3 +158,7 @@ By clicking on the :guilabel:`View in chart` button we can see that the trend li
     As in most situations, the explanation is probably a mix of both a certain
     percentage of equipments not in use / out of order as well as an error in
     the estimation of the number of people served per equipment.
+
+.. note::
+
+    Need further help? Send an email to who@gimsinitiative.org

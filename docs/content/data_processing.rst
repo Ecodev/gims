@@ -176,3 +176,7 @@ of calculations. This is shown by the presence of the cogged-wheel icon [1].
 
 For further analysis, see the :doc:`JMP data reconciliation process
 <data_reconciliation>`.
+
+.. note::
+
+    Need further help? Send an email to who@gimsinitiative.org

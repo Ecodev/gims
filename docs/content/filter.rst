@@ -54,3 +54,7 @@ If in most cases the filter structure provides a logical view of how elements ad
 
 The **Rule - Questionnaire** and the **Rule - Country** tabs contain the
 list of rules linked to this filter in different questionnaires.
+
+.. note::
+
+    Need further help? Send an email to who@gimsinitiative.org

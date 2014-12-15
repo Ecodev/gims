@@ -104,3 +104,6 @@ This will send an automatic email to the owner(s) of the corresponding data who 
     :width: 100%
     :alt: GIMS error messages and data display
 
+.. note::
+
+    Need further help? Send an email to who@gimsinitiative.org

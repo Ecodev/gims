@@ -15,3 +15,6 @@ Exporting of charts and maps as svg or pdf files as well as being able to
 send an URL the reproduces the exact chart, maps or table generated will
 also be implemented.
 
+.. note::
+
+    Need further help? Send an email to who@gimsinitiative.org

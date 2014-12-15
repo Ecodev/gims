@@ -298,3 +298,7 @@ according to the status. It will be:
 
 Now that the data has been entered by a "reporter", the next step will be
 :doc:`data validation <data_validation>`.
+
+.. note::
+
+    Need further help? Send an email to who@gimsinitiative.org
