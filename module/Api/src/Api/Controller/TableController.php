@@ -114,12 +114,9 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $questionnairesIds = Utility::explodeIds($this->params()->fromQuery('questionnaires'));
         $filtersIds = Utility::explodeIds($this->params()->fromQuery('filters'));
 
-        $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findById($questionnairesIds);
-        $questionnairesById = [];
-        foreach ($questionnaires as $questionnaire) {
-            $questionnairesById[$questionnaire->getId()] = $questionnaire;
-        }
-        $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds);
+        $questionnaires = Utility::orderByIds($this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findById($questionnairesIds), $questionnairesIds);
+        $questionnairesById = Utility::indexById($questionnaires);
+        $filters = Utility::orderByIds($this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds), $filtersIds);
         $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
@@ -180,9 +177,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
 
         // Re-order filters to be the same order as selection in GUI
-        usort($filters, function($f1, $f2) use ($filtersIds) {
-            return array_search($f1->getId(), $filtersIds) > array_search($f2->getId(), $filtersIds);
-        });
+        $filters = Utility::orderByIds($filters, $filtersIds);
 
         $result = array();
         $columns = array(

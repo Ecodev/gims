@@ -1,10 +1,10 @@
 {
     "name": "CEN11 - Bangladesh",
     "filters": {
-        "75": [
+        "76": [
             {
                 "filter": {
-                    "id": 75,
+                    "id": 76,
                     "name": "Total improved",
                     "color": "#094aff",
                     "level": 0
@@ -19,16 +19,16 @@
                         "id": 106,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 74,
+                            "id": 75,
                             "name": "Total improved (CEN11 - Bangladesh, Urban)",
-                            "formula": "=IF(OR(ISNUMBER({F#3,Q#current,P#current}),ISNUMBER({F#10,Q#current,P#current}),ISNUMBER({F#53,Q#current,P#current}),ISNUMBER({F#56,Q#current,P#current}),ISNUMBER({F#66,Q#current,P#current})),SUM({F#3,Q#current,P#current},{F#10,Q#current,P#current},{F#53,Q#current,P#current},{F#56,Q#current,P#current},{F#66,Q#current,P#current},{{R#3,Q#current,P#current},{R#51,Q#current,P#current},NULL,NULL}),\"\")"
+                            "formula": "=IF(OR(ISNUMBER({F#4,Q#current,P#current}),ISNUMBER({F#11,Q#current,P#current}),ISNUMBER({F#54,Q#current,P#current}),ISNUMBER({F#57,Q#current,P#current}),ISNUMBER({F#67,Q#current,P#current})),SUM({F#4,Q#current,P#current},{F#11,Q#current,P#current},{F#54,Q#current,P#current},{F#57,Q#current,P#current},{F#67,Q#current,P#current},{{R#3,Q#current,P#current},{R#51,Q#current,P#current},NULL,NULL}),\"\")"
                         },
                         "part": {
                             "id": 1,
                             "name": "Urban"
                         },
                         "filter": {
-                            "id": 75,
+                            "id": 76,
                             "name": "Total improved"
                         },
                         "questionnaire": {
@@ -41,7 +41,7 @@
             },
             {
                 "filter": {
-                    "id": 3,
+                    "id": 4,
                     "name": "Tap water",
                     "color": null,
                     "level": 1,
@@ -57,7 +57,7 @@
             },
             {
                 "filter": {
-                    "id": 4,
+                    "id": 5,
                     "name": "House connections",
                     "color": null,
                     "level": 2
@@ -71,22 +71,8 @@
             },
             {
                 "filter": {
-                    "id": 5,
-                    "name": "Piped water into dwelling",
-                    "color": null,
-                    "level": 3
-                },
-                "values": [
-                    {
-                        "Urban": null
-                    }
-                ],
-                "usages": []
-            },
-            {
-                "filter": {
                     "id": 6,
-                    "name": "Piped water to yard\/plot",
+                    "name": "Piped water into dwelling",
                     "color": null,
                     "level": 3
                 },
@@ -100,6 +86,20 @@
             {
                 "filter": {
                     "id": 7,
+                    "name": "Piped water to yard\/plot",
+                    "color": null,
+                    "level": 3
+                },
+                "values": [
+                    {
+                        "Urban": null
+                    }
+                ],
+                "usages": []
+            },
+            {
+                "filter": {
+                    "id": 8,
                     "name": "Public tap, standpipe",
                     "color": null,
                     "level": 2
@@ -113,7 +113,7 @@
             },
             {
                 "filter": {
-                    "id": 8,
+                    "id": 9,
                     "name": "Other",
                     "color": null,
                     "level": 2
@@ -127,7 +127,7 @@
             },
             {
                 "filter": {
-                    "id": 10,
+                    "id": 11,
                     "name": "Protected ground water (all protected wells or springs)",
                     "color": null,
                     "level": 1
@@ -141,7 +141,7 @@
             },
             {
                 "filter": {
-                    "id": 12,
+                    "id": 13,
                     "name": "Undefined protected wells or springs",
                     "color": null,
                     "level": 2
@@ -155,7 +155,7 @@
             },
             {
                 "filter": {
-                    "id": 13,
+                    "id": 14,
                     "name": "Private",
                     "color": null,
                     "level": 3
@@ -169,7 +169,7 @@
             },
             {
                 "filter": {
-                    "id": 14,
+                    "id": 15,
                     "name": "Public",
                     "color": null,
                     "level": 3
@@ -183,7 +183,7 @@
             },
             {
                 "filter": {
-                    "id": 15,
+                    "id": 16,
                     "name": "Other",
                     "color": null,
                     "level": 3
@@ -197,7 +197,7 @@
             },
             {
                 "filter": {
-                    "id": 53,
+                    "id": 54,
                     "name": "Rainwater into covered cistern\/tank",
                     "color": null,
                     "level": 1
@@ -211,7 +211,7 @@
             },
             {
                 "filter": {
-                    "id": 56,
+                    "id": 57,
                     "name": "Bottled water with other improved",
                     "color": null,
                     "level": 1
@@ -225,7 +225,7 @@
             },
             {
                 "filter": {
-                    "id": 66,
+                    "id": 67,
                     "name": "Other improved sources",
                     "color": null,
                     "level": 1
@@ -239,7 +239,7 @@
             },
             {
                 "filter": {
-                    "id": 67,
+                    "id": 68,
                     "name": "Other 1",
                     "color": null,
                     "level": 2
@@ -253,7 +253,7 @@
             },
             {
                 "filter": {
-                    "id": 68,
+                    "id": 69,
                     "name": "Other 2",
                     "color": null,
                     "level": 2
@@ -266,10 +266,10 @@
                 "usages": []
             }
         ],
-        "76": [
+        "77": [
             {
                 "filter": {
-                    "id": 76,
+                    "id": 77,
                     "name": "Piped onto premises",
                     "color": "#1270c0",
                     "level": 0
@@ -281,19 +281,19 @@
                 ],
                 "usages": [
                     {
-                        "id": 222,
+                        "id": 227,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 83,
+                            "id": 85,
                             "name": "Piped onto premises (CEN11 - Bangladesh, Urban)",
-                            "formula": "=IF(AND(ISNUMBER({F#4,Q#current,P#current}),ISNUMBER({R#52,Q#current,P#current})),SUM({F#4,Q#current,P#current},{R#52,Q#current,P#current}),IF(ISNUMBER({F#4,Q#current,P#current}),{F#4,Q#current,P#current},IF(ISNUMBER({R#52,Q#current,P#current}),{R#52,Q#current,P#current},\"\")))"
+                            "formula": "=IF(AND(ISNUMBER({F#5,Q#current,P#current}),ISNUMBER({R#52,Q#current,P#current})),SUM({F#5,Q#current,P#current},{R#52,Q#current,P#current}),IF(ISNUMBER({F#5,Q#current,P#current}),{F#5,Q#current,P#current},IF(ISNUMBER({R#52,Q#current,P#current}),{R#52,Q#current,P#current},\"\")))"
                         },
                         "part": {
                             "id": 1,
                             "name": "Urban"
                         },
                         "filter": {
-                            "id": 76,
+                            "id": 77,
                             "name": "Piped onto premises"
                         },
                         "questionnaire": {
@@ -306,7 +306,7 @@
             },
             {
                 "filter": {
-                    "id": 4,
+                    "id": 5,
                     "name": "House connections",
                     "color": null,
                     "level": 1
@@ -320,7 +320,7 @@
             },
             {
                 "filter": {
-                    "id": 5,
+                    "id": 6,
                     "name": "Piped water into dwelling",
                     "color": null,
                     "level": 2
@@ -334,7 +334,7 @@
             },
             {
                 "filter": {
-                    "id": 6,
+                    "id": 7,
                     "name": "Piped water to yard\/plot",
                     "color": null,
                     "level": 2
@@ -355,7 +355,7 @@
             "rule": {
                 "id": 3,
                 "name": "Estimate: Traditional wells improved based on MICS09",
-                "formula": "={R#2,Q#20,P#current}*{F#28,Q#current,P#current}"
+                "formula": "={R#2,Q#20,P#current}*{F#29,Q#current,P#current}"
             },
             "part": {
                 "id": 1,
@@ -374,7 +374,7 @@
             "rule": {
                 "id": 50,
                 "name": "Calculation: Improved water sources",
-                "formula": "=+{F#3,Q#current,P#current}+{F#24,Q#current,P#current}+{R#3,Q#current,P#current}"
+                "formula": "=+{F#4,Q#current,P#current}+{F#25,Q#current,P#current}+{R#3,Q#current,P#current}"
             },
             "part": {
                 "id": 1,
@@ -412,7 +412,7 @@
             "rule": {
                 "id": 5,
                 "name": "Estimate: Surface water",
-                "formula": "={F#58,Q#current,P#current}"
+                "formula": "={F#59,Q#current,P#current}"
             },
             "part": {
                 "id": 1,
@@ -431,7 +431,7 @@
             "rule": {
                 "id": 52,
                 "name": "Estimate: Piped into premises of tap water, based on DHS11",
-                "formula": "={R#7,Q#23,P#current}*{F#3,Q#current,P#current}"
+                "formula": "={R#7,Q#23,P#current}*{F#4,Q#current,P#current}"
             },
             "part": {
                 "id": 1,
@@ -450,7 +450,7 @@
             "rule": {
                 "id": 7,
                 "name": "Ratio: HC \/ Tap water",
-                "formula": "=IF(AND(ISNUMBER({F#4,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#4,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+                "formula": "=IF(AND(ISNUMBER({F#5,Q#current,P#current}),ISNUMBER({F#4,Q#current,P#current})),{F#5,Q#current,P#current}\/{F#4,Q#current,P#current},\"\")"
             },
             "part": {
                 "id": 1,
@@ -469,7 +469,7 @@
             "rule": {
                 "id": 8,
                 "name": "Ratio: Public tap \/ Tap water",
-                "formula": "=IF(AND(ISNUMBER({F#7,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#7,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+                "formula": "=IF(AND(ISNUMBER({F#8,Q#current,P#current}),ISNUMBER({F#4,Q#current,P#current})),{F#8,Q#current,P#current}\/{F#4,Q#current,P#current},\"\")"
             },
             "part": {
                 "id": 1,
@@ -488,7 +488,7 @@
             "rule": {
                 "id": 9,
                 "name": "Ratio: Tubewell + protected well \/ All wells",
-                "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),({F#24,Q#current,P#current}+{F#32,Q#current,P#current})\/{F#20,Q#current,P#current},\"\")"
+                "formula": "=IF(AND(ISNUMBER({F#25,Q#current,P#current}),ISNUMBER({F#33,Q#current,P#current})),({F#25,Q#current,P#current}+{F#33,Q#current,P#current})\/{F#21,Q#current,P#current},\"\")"
             },
             "part": {
                 "id": 1,
@@ -507,7 +507,7 @@
             "rule": {
                 "id": 2,
                 "name": "Ratio: Protected wells \/ Traditional wells",
-                "formula": "=IF(AND(ISNUMBER({F#28,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),{F#32,Q#current,P#current}\/({F#28,Q#current,P#current}),\"\")"
+                "formula": "=IF(AND(ISNUMBER({F#29,Q#current,P#current}),ISNUMBER({F#33,Q#current,P#current})),{F#33,Q#current,P#current}\/({F#29,Q#current,P#current}),\"\")"
             },
             "part": {
                 "id": 1,
@@ -526,7 +526,7 @@
             "rule": {
                 "id": 10,
                 "name": "Ratio: Tubewell \/ All wells",
-                "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#20,Q#current,P#current})),{F#24,Q#current,P#current}\/{F#20,Q#current,P#current},\"\")"
+                "formula": "=IF(AND(ISNUMBER({F#25,Q#current,P#current}),ISNUMBER({F#21,Q#current,P#current})),{F#25,Q#current,P#current}\/{F#21,Q#current,P#current},\"\")"
             },
             "part": {
                 "id": 1,
@@ -545,7 +545,7 @@
             "rule": {
                 "id": 11,
                 "name": "Ratio: Protected springs \/ All springs",
-                "formula": "=IF(AND(ISNUMBER({F#44,Q#current,P#current}),ISNUMBER({F#40,Q#current,P#current})),{F#44,Q#current,P#current}\/{F#40,Q#current,P#current},\"\")"
+                "formula": "=IF(AND(ISNUMBER({F#45,Q#current,P#current}),ISNUMBER({F#41,Q#current,P#current})),{F#45,Q#current,P#current}\/{F#41,Q#current,P#current},\"\")"
             },
             "part": {
                 "id": 1,
@@ -564,7 +564,7 @@
             "rule": {
                 "id": 12,
                 "name": "Ratio: Protect. well & spring \/ well & spring",
-                "formula": "=IF(ISERR((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current})))))"
+                "formula": "=IF(ISERR((IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))\/((IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))+(IF(ISNUMBER({F#17,Q#current,P#current}), {F#17,Q#current,P#current}, SUM({F#37,Q#current,P#current}, {F#49,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))\/((IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))+(IF(ISNUMBER({F#17,Q#current,P#current}), {F#17,Q#current,P#current}, SUM({F#37,Q#current,P#current}, {F#49,Q#current,P#current})))))"
             },
             "part": {
                 "id": 1,
@@ -578,12 +578,12 @@
             "value": 100.0
         },
         {
-            "id": 918,
+            "id": 946,
             "justification": "Imported from country files",
             "rule": {
-                "id": 130,
+                "id": 136,
                 "name": "Estimate: Estimated improved pit latrines based onDHS11",
-                "formula": "={F#124,Q#current,P#current}*(1-{R#94,Q#23,P#current})"
+                "formula": "={F#125,Q#current,P#current}*(1-{R#96,Q#23,P#current})"
             },
             "part": {
                 "id": 1,
@@ -597,12 +597,12 @@
             "value": 47.7
         },
         {
-            "id": 920,
+            "id": 948,
             "justification": "Imported from country files",
             "rule": {
-                "id": 131,
+                "id": 137,
                 "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS11",
-                "formula": "=-({R#92,Q#23,P#current}*{F#81,Q#current,P#current})"
+                "formula": "=-({R#94,Q#23,P#current}*{F#82,Q#current,P#current})"
             },
             "part": {
                 "id": 1,
@@ -616,50 +616,12 @@
             "value": -9.2
         },
         {
-            "id": 922,
-            "justification": "Imported from country files",
-            "rule": {
-                "id": 106,
-                "name": "Ratio: Improved latrine \/ All latrines",
-                "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
-            },
-            "part": {
-                "id": 1,
-                "name": "Urban"
-            },
-            "questionnaire": {
-                "id": 22,
-                "name": "CEN11 - Bangladesh",
-                "status": "published"
-            },
-            "value": null
-        },
-        {
-            "id": 925,
-            "justification": "Imported from country files",
-            "rule": {
-                "id": 107,
-                "name": "Ratio: Covered dry latrines \/ All dry latrines",
-                "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
-            },
-            "part": {
-                "id": 1,
-                "name": "Urban"
-            },
-            "questionnaire": {
-                "id": 22,
-                "name": "CEN11 - Bangladesh",
-                "status": "published"
-            },
-            "value": null
-        },
-        {
-            "id": 927,
+            "id": 950,
             "justification": "Imported from country files",
             "rule": {
                 "id": 108,
-                "name": "Ratio: VIP \/ All latrines",
-                "formula": "=IF(ISNUMBER({F#126,Q#current,P#current}),{F#126,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                "name": "Ratio: Improved latrine \/ All latrines",
+                "formula": "=IF(AND(ISNUMBER({F#107,Q#current,P#current}),ISNUMBER({F#126,Q#current,P#current})),({F#107,Q#current,P#current}+{F#126,Q#current,P#current})\/{F#106,Q#current,P#current},IF(AND(ISNUMBER({F#107,Q#current,P#current}),NOT(ISNUMBER({F#126,Q#current,P#current}))),{F#107,Q#current,P#current}\/{F#106,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#107,Q#current,P#current})),ISNUMBER({F#126,Q#current,P#current})),{F#126,Q#current,P#current}\/{F#106,Q#current,P#current},\"\")))"
             },
             "part": {
                 "id": 1,
@@ -673,12 +635,50 @@
             "value": null
         },
         {
-            "id": 929,
+            "id": 953,
             "justification": "Imported from country files",
             "rule": {
                 "id": 109,
+                "name": "Ratio: Covered dry latrines \/ All dry latrines",
+                "formula": "=IF(ISNUMBER({F#128,Q#current,P#current}),{F#128,Q#current,P#current}\/{F#125,Q#current,P#current},\"\")"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": null
+        },
+        {
+            "id": 955,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 110,
+                "name": "Ratio: VIP \/ All latrines",
+                "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#125,Q#current,P#current},\"\")"
+            },
+            "part": {
+                "id": 1,
+                "name": "Urban"
+            },
+            "questionnaire": {
+                "id": 22,
+                "name": "CEN11 - Bangladesh",
+                "status": "published"
+            },
+            "value": null
+        },
+        {
+            "id": 957,
+            "justification": "Imported from country files",
+            "rule": {
+                "id": 111,
                 "name": "Ratio: Traditional latrines \/ All latrines",
-                "formula": "=IF(ISNUMBER({F#128,Q#current,P#current}),{F#128,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")"
+                "formula": "=IF(ISNUMBER({F#129,Q#current,P#current}),{F#129,Q#current,P#current}\/{F#106,Q#current,P#current},\"\")"
             },
             "part": {
                 "id": 1,
@@ -692,12 +692,12 @@
             "value": 67.4
         },
         {
-            "id": 932,
+            "id": 960,
             "justification": "Imported from country files",
             "rule": {
-                "id": 110,
+                "id": 112,
                 "name": "Ratio: Improved + traditional latrines \/ All latrines",
-                "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#109,Q#current,P#current})),({R#106,Q#current,P#current}+{R#109,Q#current,P#current}),\"\")"
+                "formula": "=IF(AND(ISNUMBER({R#108,Q#current,P#current}),ISNUMBER({R#111,Q#current,P#current})),({R#108,Q#current,P#current}+{R#111,Q#current,P#current}),\"\")"
             },
             "part": {
                 "id": 1,
@@ -711,12 +711,12 @@
             "value": null
         },
         {
-            "id": 935,
+            "id": 963,
             "justification": "Imported from country files",
             "rule": {
-                "id": 104,
+                "id": 106,
                 "name": "Ratio: Sewerage connection among flush\/pour flush",
-                "formula": "=IF(ISNUMBER({F#82,Q#current,P#current}),{F#82,Q#current,P#current}\/{F#81,Q#current,P#current},\"\")"
+                "formula": "=IF(ISNUMBER({F#83,Q#current,P#current}),{F#83,Q#current,P#current}\/{F#82,Q#current,P#current},\"\")"
             },
             "part": {
                 "id": 1,
@@ -730,12 +730,12 @@
             "value": null
         },
         {
-            "id": 937,
+            "id": 965,
             "justification": "Imported from country files",
             "rule": {
-                "id": 111,
+                "id": 113,
                 "name": "Ratio: Sewerage connection among flush",
-                "formula": "=IF(ISNUMBER({F#88,Q#current,P#current}),{F#88,Q#current,P#current}\/{F#87,Q#current,P#current},\"\")"
+                "formula": "=IF(ISNUMBER({F#89,Q#current,P#current}),{F#89,Q#current,P#current}\/{F#88,Q#current,P#current},\"\")"
             },
             "part": {
                 "id": 1,

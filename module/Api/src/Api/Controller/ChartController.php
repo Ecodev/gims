@@ -56,7 +56,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $filtersIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
 
         $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->getByIdForComputing($geonameIds);
-        $filters = Utility::indexById($this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds));
+        $filters = Utility::indexById(Utility::orderByIds($this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds), $filtersIds));
         $part = $this->getEntityManager()->getRepository('Application\Model\Part')->findOneById($this->params()->fromQuery('part'));
 
         $series = [];

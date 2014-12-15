@@ -11,7 +11,7 @@
                         "rule": {
                             "id": 44,
                             "name": "Calculation: Improved water sources",
-                            "formula": "=+{F#3,Q#current,P#current}+{F#24,Q#current,P#current}+{F#32,Q#current,P#current}+{F#44,Q#current,P#current}+{F#53,Q#current,P#current}+{F#56,Q#current,P#current}+{F#66,Q#current,P#current}"
+                            "formula": "=+{F#4,Q#current,P#current}+{F#25,Q#current,P#current}+{F#33,Q#current,P#current}+{F#45,Q#current,P#current}+{F#54,Q#current,P#current}+{F#57,Q#current,P#current}+{F#67,Q#current,P#current}"
                         },
                         "part": {
                             "id": 1,
@@ -23,7 +23,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -37,7 +37,7 @@
                         "rule": {
                             "id": 44,
                             "name": "Calculation: Improved water sources",
-                            "formula": "=+{F#3,Q#current,P#current}+{F#24,Q#current,P#current}+{F#32,Q#current,P#current}+{F#44,Q#current,P#current}+{F#53,Q#current,P#current}+{F#56,Q#current,P#current}+{F#66,Q#current,P#current}"
+                            "formula": "=+{F#4,Q#current,P#current}+{F#25,Q#current,P#current}+{F#33,Q#current,P#current}+{F#45,Q#current,P#current}+{F#54,Q#current,P#current}+{F#57,Q#current,P#current}+{F#67,Q#current,P#current}"
                         },
                         "part": {
                             "id": 2,
@@ -49,7 +49,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -65,7 +65,7 @@
                         "rule": {
                             "id": 46,
                             "name": "Calculation: Improved water sources",
-                            "formula": "=SUM({F#24,Q#current,P#current},{F#3,Q#current,P#current},{R#3,Q#current,P#current})"
+                            "formula": "=SUM({F#25,Q#current,P#current},{F#4,Q#current,P#current},{R#3,Q#current,P#current})"
                         },
                         "part": {
                             "id": 1,
@@ -77,7 +77,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -91,7 +91,7 @@
                         "rule": {
                             "id": 46,
                             "name": "Calculation: Improved water sources",
-                            "formula": "=SUM({F#24,Q#current,P#current},{F#3,Q#current,P#current},{R#3,Q#current,P#current})"
+                            "formula": "=SUM({F#25,Q#current,P#current},{F#4,Q#current,P#current},{R#3,Q#current,P#current})"
                         },
                         "part": {
                             "id": 2,
@@ -103,7 +103,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -136,7 +136,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -162,7 +162,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -190,7 +190,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -216,7 +216,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -230,14 +230,14 @@
         "values": {
             "21": {
                 "1": {
-                    "id": 130,
+                    "id": 136,
                     "usage": {
-                        "id": 894,
+                        "id": 922,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 130,
+                            "id": 136,
                             "name": "Estimate: Estimated improved pit latrines based onDHS11",
-                            "formula": "={F#124,Q#current,P#current}*(1-{R#94,Q#23,P#current})"
+                            "formula": "={F#125,Q#current,P#current}*(1-{R#96,Q#23,P#current})"
                         },
                         "part": {
                             "id": 1,
@@ -249,21 +249,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": 38.5
                 },
                 "2": {
-                    "id": 130,
+                    "id": 136,
                     "usage": {
-                        "id": 896,
+                        "id": 924,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 130,
+                            "id": 136,
                             "name": "Estimate: Estimated improved pit latrines based onDHS11",
-                            "formula": "={F#124,Q#current,P#current}*(1-{R#94,Q#23,P#current})"
+                            "formula": "={F#125,Q#current,P#current}*(1-{R#96,Q#23,P#current})"
                         },
                         "part": {
                             "id": 2,
@@ -275,7 +275,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -289,14 +289,14 @@
         "values": {
             "20": {
                 "1": {
-                    "id": 128,
+                    "id": 134,
                     "usage": {
-                        "id": 874,
+                        "id": 902,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 128,
+                            "id": 134,
                             "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS07",
-                            "formula": "=-({R#92,Q#19,P#current}*{F#81,Q#current,P#current})"
+                            "formula": "=-({R#94,Q#19,P#current}*{F#82,Q#current,P#current})"
                         },
                         "part": {
                             "id": 1,
@@ -308,21 +308,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": -11.4
                 },
                 "2": {
-                    "id": 128,
+                    "id": 134,
                     "usage": {
-                        "id": 875,
+                        "id": 903,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 128,
+                            "id": 134,
                             "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS07",
-                            "formula": "=-({R#92,Q#19,P#current}*{F#81,Q#current,P#current})"
+                            "formula": "=-({R#94,Q#19,P#current}*{F#82,Q#current,P#current})"
                         },
                         "part": {
                             "id": 2,
@@ -334,7 +334,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -348,14 +348,14 @@
         "values": {
             "21": {
                 "1": {
-                    "id": 131,
+                    "id": 137,
                     "usage": {
-                        "id": 898,
+                        "id": 926,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 131,
+                            "id": 137,
                             "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS11",
-                            "formula": "=-({R#92,Q#23,P#current}*{F#81,Q#current,P#current})"
+                            "formula": "=-({R#94,Q#23,P#current}*{F#82,Q#current,P#current})"
                         },
                         "part": {
                             "id": 1,
@@ -367,21 +367,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": -11.2
                 },
                 "2": {
-                    "id": 131,
+                    "id": 137,
                     "usage": {
-                        "id": 900,
+                        "id": 928,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 131,
+                            "id": 137,
                             "name": "Estimate: Flush corrected for flush to somewhere else, based on DHS11",
-                            "formula": "=-({R#92,Q#23,P#current}*{F#81,Q#current,P#current})"
+                            "formula": "=-({R#94,Q#23,P#current}*{F#82,Q#current,P#current})"
                         },
                         "part": {
                             "id": 2,
@@ -393,7 +393,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -414,7 +414,7 @@
                         "rule": {
                             "id": 49,
                             "name": "Estimate: Piped into premises of tap water, based on MICS09&DHS11",
-                            "formula": "={R#48,Q#current,P#current}*{F#3,Q#current,P#current}"
+                            "formula": "={R#48,Q#current,P#current}*{F#4,Q#current,P#current}"
                         },
                         "part": {
                             "id": 1,
@@ -426,7 +426,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -440,7 +440,7 @@
                         "rule": {
                             "id": 49,
                             "name": "Estimate: Piped into premises of tap water, based on MICS09&DHS11",
-                            "formula": "={R#48,Q#current,P#current}*{F#3,Q#current,P#current}"
+                            "formula": "={R#48,Q#current,P#current}*{F#4,Q#current,P#current}"
                         },
                         "part": {
                             "id": 2,
@@ -452,7 +452,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -473,7 +473,7 @@
                         "rule": {
                             "id": 5,
                             "name": "Estimate: Surface water",
-                            "formula": "={F#58,Q#current,P#current}"
+                            "formula": "={F#59,Q#current,P#current}"
                         },
                         "part": {
                             "id": 1,
@@ -485,7 +485,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -499,7 +499,7 @@
                         "rule": {
                             "id": 5,
                             "name": "Estimate: Surface water",
-                            "formula": "={F#58,Q#current,P#current}"
+                            "formula": "={F#59,Q#current,P#current}"
                         },
                         "part": {
                             "id": 2,
@@ -511,7 +511,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -525,7 +525,7 @@
                         "rule": {
                             "id": 5,
                             "name": "Estimate: Surface water",
-                            "formula": "={F#58,Q#current,P#current}"
+                            "formula": "={F#59,Q#current,P#current}"
                         },
                         "part": {
                             "id": 3,
@@ -537,7 +537,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -553,7 +553,7 @@
                         "rule": {
                             "id": 5,
                             "name": "Estimate: Surface water",
-                            "formula": "={F#58,Q#current,P#current}"
+                            "formula": "={F#59,Q#current,P#current}"
                         },
                         "part": {
                             "id": 1,
@@ -565,7 +565,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -579,7 +579,7 @@
                         "rule": {
                             "id": 5,
                             "name": "Estimate: Surface water",
-                            "formula": "={F#58,Q#current,P#current}"
+                            "formula": "={F#59,Q#current,P#current}"
                         },
                         "part": {
                             "id": 2,
@@ -591,7 +591,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -605,7 +605,7 @@
                         "rule": {
                             "id": 5,
                             "name": "Estimate: Surface water",
-                            "formula": "={F#58,Q#current,P#current}"
+                            "formula": "={F#59,Q#current,P#current}"
                         },
                         "part": {
                             "id": 3,
@@ -617,7 +617,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -638,7 +638,7 @@
                         "rule": {
                             "id": 3,
                             "name": "Estimate: Traditional wells improved based on MICS09",
-                            "formula": "={R#2,Q#20,P#current}*{F#28,Q#current,P#current}"
+                            "formula": "={R#2,Q#20,P#current}*{F#29,Q#current,P#current}"
                         },
                         "part": {
                             "id": 1,
@@ -650,7 +650,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -664,7 +664,7 @@
                         "rule": {
                             "id": 3,
                             "name": "Estimate: Traditional wells improved based on MICS09",
-                            "formula": "={R#2,Q#20,P#current}*{F#28,Q#current,P#current}"
+                            "formula": "={R#2,Q#20,P#current}*{F#29,Q#current,P#current}"
                         },
                         "part": {
                             "id": 2,
@@ -676,7 +676,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -690,14 +690,14 @@
         "values": {
             "20": {
                 "1": {
-                    "id": 94,
+                    "id": 96,
                     "usage": {
-                        "id": 883,
+                        "id": 911,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 94,
+                            "id": 96,
                             "name": "Ratio: \"Hanging\" and \"Bucket\" among Dry Latrines",
-                            "formula": "=SUM({{F#130,Q#current,P#current},{F#131,Q#current,P#current}})\/SUM({F#124,Q#current,P#current})"
+                            "formula": "=SUM({{F#131,Q#current,P#current},{F#132,Q#current,P#current}})\/SUM({F#125,Q#current,P#current})"
                         },
                         "part": {
                             "id": 1,
@@ -709,21 +709,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": 3.7
                 },
                 "2": {
-                    "id": 94,
+                    "id": 96,
                     "usage": {
-                        "id": 884,
+                        "id": 912,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 94,
+                            "id": 96,
                             "name": "Ratio: \"Hanging\" and \"Bucket\" among Dry Latrines",
-                            "formula": "=SUM({{F#130,Q#current,P#current},{F#131,Q#current,P#current}})\/SUM({F#124,Q#current,P#current})"
+                            "formula": "=SUM({{F#131,Q#current,P#current},{F#132,Q#current,P#current}})\/SUM({F#125,Q#current,P#current})"
                         },
                         "part": {
                             "id": 2,
@@ -735,7 +735,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -749,14 +749,14 @@
         "values": {
             "20": {
                 "1": {
-                    "id": 107,
+                    "id": 109,
                     "usage": {
-                        "id": 879,
+                        "id": 907,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 107,
+                            "id": 109,
                             "name": "Ratio: Covered dry latrines \/ All dry latrines",
-                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#128,Q#current,P#current}),{F#128,Q#current,P#current}\/{F#125,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -768,21 +768,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": 85.8
                 },
                 "2": {
-                    "id": 107,
+                    "id": 109,
                     "usage": {
-                        "id": 880,
+                        "id": 908,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 107,
+                            "id": 109,
                             "name": "Ratio: Covered dry latrines \/ All dry latrines",
-                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#128,Q#current,P#current}),{F#128,Q#current,P#current}\/{F#125,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -794,7 +794,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -803,14 +803,14 @@
             },
             "21": {
                 "1": {
-                    "id": 107,
+                    "id": 109,
                     "usage": {
-                        "id": 904,
+                        "id": 932,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 107,
+                            "id": 109,
                             "name": "Ratio: Covered dry latrines \/ All dry latrines",
-                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#128,Q#current,P#current}),{F#128,Q#current,P#current}\/{F#125,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -822,21 +822,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": null
                 },
                 "2": {
-                    "id": 107,
+                    "id": 109,
                     "usage": {
-                        "id": 905,
+                        "id": 933,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 107,
+                            "id": 109,
                             "name": "Ratio: Covered dry latrines \/ All dry latrines",
-                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#128,Q#current,P#current}),{F#128,Q#current,P#current}\/{F#125,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -848,7 +848,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -869,7 +869,7 @@
                         "rule": {
                             "id": 7,
                             "name": "Ratio: HC \/ Tap water",
-                            "formula": "=IF(AND(ISNUMBER({F#4,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#4,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#5,Q#current,P#current}),ISNUMBER({F#4,Q#current,P#current})),{F#5,Q#current,P#current}\/{F#4,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -881,7 +881,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -895,7 +895,7 @@
                         "rule": {
                             "id": 7,
                             "name": "Ratio: HC \/ Tap water",
-                            "formula": "=IF(AND(ISNUMBER({F#4,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#4,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#5,Q#current,P#current}),ISNUMBER({F#4,Q#current,P#current})),{F#5,Q#current,P#current}\/{F#4,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -907,7 +907,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -935,7 +935,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -961,7 +961,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -975,14 +975,14 @@
         "values": {
             "20": {
                 "1": {
-                    "id": 129,
+                    "id": 135,
                     "usage": {
-                        "id": 886,
+                        "id": 914,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 129,
+                            "id": 135,
                             "name": "Ratio: Improved + traditional latrines \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#94,Q#current,P#current})),({R#106,Q#current,P#current}+{R#94,Q#current,P#current}),\"\")"
+                            "formula": "=IF(AND(ISNUMBER({R#108,Q#current,P#current}),ISNUMBER({R#96,Q#current,P#current})),({R#108,Q#current,P#current}+{R#96,Q#current,P#current}),\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -994,21 +994,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": 94.3
                 },
                 "2": {
-                    "id": 129,
+                    "id": 135,
                     "usage": {
-                        "id": 887,
+                        "id": 915,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 129,
+                            "id": 135,
                             "name": "Ratio: Improved + traditional latrines \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#94,Q#current,P#current})),({R#106,Q#current,P#current}+{R#94,Q#current,P#current}),\"\")"
+                            "formula": "=IF(AND(ISNUMBER({R#108,Q#current,P#current}),ISNUMBER({R#96,Q#current,P#current})),({R#108,Q#current,P#current}+{R#96,Q#current,P#current}),\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -1020,21 +1020,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": 91.5
                 },
                 "3": {
-                    "id": 110,
+                    "id": 112,
                     "usage": {
-                        "id": 888,
+                        "id": 916,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 110,
+                            "id": 112,
                             "name": "Ratio: Improved + traditional latrines \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#109,Q#current,P#current})),({R#106,Q#current,P#current}+{R#109,Q#current,P#current}),\"\")"
+                            "formula": "=IF(AND(ISNUMBER({R#108,Q#current,P#current}),ISNUMBER({R#111,Q#current,P#current})),({R#108,Q#current,P#current}+{R#111,Q#current,P#current}),\"\")"
                         },
                         "part": {
                             "id": 3,
@@ -1046,7 +1046,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -1055,14 +1055,14 @@
             },
             "21": {
                 "1": {
-                    "id": 110,
+                    "id": 112,
                     "usage": {
-                        "id": 911,
+                        "id": 939,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 110,
+                            "id": 112,
                             "name": "Ratio: Improved + traditional latrines \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#109,Q#current,P#current})),({R#106,Q#current,P#current}+{R#109,Q#current,P#current}),\"\")"
+                            "formula": "=IF(AND(ISNUMBER({R#108,Q#current,P#current}),ISNUMBER({R#111,Q#current,P#current})),({R#108,Q#current,P#current}+{R#111,Q#current,P#current}),\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -1074,21 +1074,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": 67.3
                 },
                 "2": {
-                    "id": 110,
+                    "id": 112,
                     "usage": {
-                        "id": 912,
+                        "id": 940,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 110,
+                            "id": 112,
                             "name": "Ratio: Improved + traditional latrines \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#109,Q#current,P#current})),({R#106,Q#current,P#current}+{R#109,Q#current,P#current}),\"\")"
+                            "formula": "=IF(AND(ISNUMBER({R#108,Q#current,P#current}),ISNUMBER({R#111,Q#current,P#current})),({R#108,Q#current,P#current}+{R#111,Q#current,P#current}),\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -1100,21 +1100,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": 35.5
                 },
                 "3": {
-                    "id": 110,
+                    "id": 112,
                     "usage": {
-                        "id": 913,
+                        "id": 941,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 110,
+                            "id": 112,
                             "name": "Ratio: Improved + traditional latrines \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({R#106,Q#current,P#current}),ISNUMBER({R#109,Q#current,P#current})),({R#106,Q#current,P#current}+{R#109,Q#current,P#current}),\"\")"
+                            "formula": "=IF(AND(ISNUMBER({R#108,Q#current,P#current}),ISNUMBER({R#111,Q#current,P#current})),({R#108,Q#current,P#current}+{R#111,Q#current,P#current}),\"\")"
                         },
                         "part": {
                             "id": 3,
@@ -1126,7 +1126,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -1140,14 +1140,14 @@
         "values": {
             "20": {
                 "1": {
-                    "id": 106,
+                    "id": 108,
                     "usage": {
-                        "id": 876,
+                        "id": 904,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 106,
+                            "id": 108,
                             "name": "Ratio: Improved latrine \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
+                            "formula": "=IF(AND(ISNUMBER({F#107,Q#current,P#current}),ISNUMBER({F#126,Q#current,P#current})),({F#107,Q#current,P#current}+{F#126,Q#current,P#current})\/{F#106,Q#current,P#current},IF(AND(ISNUMBER({F#107,Q#current,P#current}),NOT(ISNUMBER({F#126,Q#current,P#current}))),{F#107,Q#current,P#current}\/{F#106,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#107,Q#current,P#current})),ISNUMBER({F#126,Q#current,P#current})),{F#126,Q#current,P#current}\/{F#106,Q#current,P#current},\"\")))"
                         },
                         "part": {
                             "id": 1,
@@ -1159,21 +1159,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": 90.6
                 },
                 "2": {
-                    "id": 106,
+                    "id": 108,
                     "usage": {
-                        "id": 877,
+                        "id": 905,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 106,
+                            "id": 108,
                             "name": "Ratio: Improved latrine \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
+                            "formula": "=IF(AND(ISNUMBER({F#107,Q#current,P#current}),ISNUMBER({F#126,Q#current,P#current})),({F#107,Q#current,P#current}+{F#126,Q#current,P#current})\/{F#106,Q#current,P#current},IF(AND(ISNUMBER({F#107,Q#current,P#current}),NOT(ISNUMBER({F#126,Q#current,P#current}))),{F#107,Q#current,P#current}\/{F#106,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#107,Q#current,P#current})),ISNUMBER({F#126,Q#current,P#current})),{F#126,Q#current,P#current}\/{F#106,Q#current,P#current},\"\")))"
                         },
                         "part": {
                             "id": 2,
@@ -1185,21 +1185,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": 85.5
                 },
                 "3": {
-                    "id": 106,
+                    "id": 108,
                     "usage": {
-                        "id": 878,
+                        "id": 906,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 106,
+                            "id": 108,
                             "name": "Ratio: Improved latrine \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
+                            "formula": "=IF(AND(ISNUMBER({F#107,Q#current,P#current}),ISNUMBER({F#126,Q#current,P#current})),({F#107,Q#current,P#current}+{F#126,Q#current,P#current})\/{F#106,Q#current,P#current},IF(AND(ISNUMBER({F#107,Q#current,P#current}),NOT(ISNUMBER({F#126,Q#current,P#current}))),{F#107,Q#current,P#current}\/{F#106,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#107,Q#current,P#current})),ISNUMBER({F#126,Q#current,P#current})),{F#126,Q#current,P#current}\/{F#106,Q#current,P#current},\"\")))"
                         },
                         "part": {
                             "id": 3,
@@ -1211,7 +1211,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -1220,14 +1220,14 @@
             },
             "21": {
                 "1": {
-                    "id": 106,
+                    "id": 108,
                     "usage": {
-                        "id": 901,
+                        "id": 929,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 106,
+                            "id": 108,
                             "name": "Ratio: Improved latrine \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
+                            "formula": "=IF(AND(ISNUMBER({F#107,Q#current,P#current}),ISNUMBER({F#126,Q#current,P#current})),({F#107,Q#current,P#current}+{F#126,Q#current,P#current})\/{F#106,Q#current,P#current},IF(AND(ISNUMBER({F#107,Q#current,P#current}),NOT(ISNUMBER({F#126,Q#current,P#current}))),{F#107,Q#current,P#current}\/{F#106,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#107,Q#current,P#current})),ISNUMBER({F#126,Q#current,P#current})),{F#126,Q#current,P#current}\/{F#106,Q#current,P#current},\"\")))"
                         },
                         "part": {
                             "id": 1,
@@ -1239,21 +1239,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": 43.2
                 },
                 "2": {
-                    "id": 106,
+                    "id": 108,
                     "usage": {
-                        "id": 902,
+                        "id": 930,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 106,
+                            "id": 108,
                             "name": "Ratio: Improved latrine \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
+                            "formula": "=IF(AND(ISNUMBER({F#107,Q#current,P#current}),ISNUMBER({F#126,Q#current,P#current})),({F#107,Q#current,P#current}+{F#126,Q#current,P#current})\/{F#106,Q#current,P#current},IF(AND(ISNUMBER({F#107,Q#current,P#current}),NOT(ISNUMBER({F#126,Q#current,P#current}))),{F#107,Q#current,P#current}\/{F#106,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#107,Q#current,P#current})),ISNUMBER({F#126,Q#current,P#current})),{F#126,Q#current,P#current}\/{F#106,Q#current,P#current},\"\")))"
                         },
                         "part": {
                             "id": 2,
@@ -1265,21 +1265,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": 17.1
                 },
                 "3": {
-                    "id": 106,
+                    "id": 108,
                     "usage": {
-                        "id": 903,
+                        "id": 931,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 106,
+                            "id": 108,
                             "name": "Ratio: Improved latrine \/ All latrines",
-                            "formula": "=IF(AND(ISNUMBER({F#106,Q#current,P#current}),ISNUMBER({F#125,Q#current,P#current})),({F#106,Q#current,P#current}+{F#125,Q#current,P#current})\/{F#105,Q#current,P#current},IF(AND(ISNUMBER({F#106,Q#current,P#current}),NOT(ISNUMBER({F#125,Q#current,P#current}))),{F#106,Q#current,P#current}\/{F#105,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#106,Q#current,P#current})),ISNUMBER({F#125,Q#current,P#current})),{F#125,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")))"
+                            "formula": "=IF(AND(ISNUMBER({F#107,Q#current,P#current}),ISNUMBER({F#126,Q#current,P#current})),({F#107,Q#current,P#current}+{F#126,Q#current,P#current})\/{F#106,Q#current,P#current},IF(AND(ISNUMBER({F#107,Q#current,P#current}),NOT(ISNUMBER({F#126,Q#current,P#current}))),{F#107,Q#current,P#current}\/{F#106,Q#current,P#current},IF(AND(NOT(ISNUMBER({F#107,Q#current,P#current})),ISNUMBER({F#126,Q#current,P#current})),{F#126,Q#current,P#current}\/{F#106,Q#current,P#current},\"\")))"
                         },
                         "part": {
                             "id": 3,
@@ -1291,7 +1291,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -1312,7 +1312,7 @@
                         "rule": {
                             "id": 12,
                             "name": "Ratio: Protect. well & spring \/ well & spring",
-                            "formula": "=IF(ISERR((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current})))))"
+                            "formula": "=IF(ISERR((IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))\/((IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))+(IF(ISNUMBER({F#17,Q#current,P#current}), {F#17,Q#current,P#current}, SUM({F#37,Q#current,P#current}, {F#49,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))\/((IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))+(IF(ISNUMBER({F#17,Q#current,P#current}), {F#17,Q#current,P#current}, SUM({F#37,Q#current,P#current}, {F#49,Q#current,P#current})))))"
                         },
                         "part": {
                             "id": 1,
@@ -1324,7 +1324,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -1338,7 +1338,7 @@
                         "rule": {
                             "id": 12,
                             "name": "Ratio: Protect. well & spring \/ well & spring",
-                            "formula": "=IF(ISERR((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current})))))"
+                            "formula": "=IF(ISERR((IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))\/((IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))+(IF(ISNUMBER({F#17,Q#current,P#current}), {F#17,Q#current,P#current}, SUM({F#37,Q#current,P#current}, {F#49,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))\/((IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))+(IF(ISNUMBER({F#17,Q#current,P#current}), {F#17,Q#current,P#current}, SUM({F#37,Q#current,P#current}, {F#49,Q#current,P#current})))))"
                         },
                         "part": {
                             "id": 2,
@@ -1350,7 +1350,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -1366,7 +1366,7 @@
                         "rule": {
                             "id": 12,
                             "name": "Ratio: Protect. well & spring \/ well & spring",
-                            "formula": "=IF(ISERR((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current})))))"
+                            "formula": "=IF(ISERR((IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))\/((IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))+(IF(ISNUMBER({F#17,Q#current,P#current}), {F#17,Q#current,P#current}, SUM({F#37,Q#current,P#current}, {F#49,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))\/((IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))+(IF(ISNUMBER({F#17,Q#current,P#current}), {F#17,Q#current,P#current}, SUM({F#37,Q#current,P#current}, {F#49,Q#current,P#current})))))"
                         },
                         "part": {
                             "id": 1,
@@ -1378,7 +1378,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -1392,7 +1392,7 @@
                         "rule": {
                             "id": 12,
                             "name": "Ratio: Protect. well & spring \/ well & spring",
-                            "formula": "=IF(ISERR((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))\/((IF(ISNUMBER({F#12,Q#current,P#current}), {F#12,Q#current,P#current}, SUM({F#24,Q#current,P#current}, {F#32,Q#current,P#current}, {F#44,Q#current,P#current})))+(IF(ISNUMBER({F#16,Q#current,P#current}), {F#16,Q#current,P#current}, SUM({F#36,Q#current,P#current}, {F#48,Q#current,P#current})))))"
+                            "formula": "=IF(ISERR((IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))\/((IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))+(IF(ISNUMBER({F#17,Q#current,P#current}), {F#17,Q#current,P#current}, SUM({F#37,Q#current,P#current}, {F#49,Q#current,P#current}))))),\"\",(IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))\/((IF(ISNUMBER({F#13,Q#current,P#current}), {F#13,Q#current,P#current}, SUM({F#25,Q#current,P#current}, {F#33,Q#current,P#current}, {F#45,Q#current,P#current})))+(IF(ISNUMBER({F#17,Q#current,P#current}), {F#17,Q#current,P#current}, SUM({F#37,Q#current,P#current}, {F#49,Q#current,P#current})))))"
                         },
                         "part": {
                             "id": 2,
@@ -1404,7 +1404,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -1425,7 +1425,7 @@
                         "rule": {
                             "id": 11,
                             "name": "Ratio: Protected springs \/ All springs",
-                            "formula": "=IF(AND(ISNUMBER({F#44,Q#current,P#current}),ISNUMBER({F#40,Q#current,P#current})),{F#44,Q#current,P#current}\/{F#40,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#45,Q#current,P#current}),ISNUMBER({F#41,Q#current,P#current})),{F#45,Q#current,P#current}\/{F#41,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -1437,7 +1437,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -1453,7 +1453,7 @@
                         "rule": {
                             "id": 11,
                             "name": "Ratio: Protected springs \/ All springs",
-                            "formula": "=IF(AND(ISNUMBER({F#44,Q#current,P#current}),ISNUMBER({F#40,Q#current,P#current})),{F#44,Q#current,P#current}\/{F#40,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#45,Q#current,P#current}),ISNUMBER({F#41,Q#current,P#current})),{F#45,Q#current,P#current}\/{F#41,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -1465,7 +1465,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -1479,7 +1479,7 @@
                         "rule": {
                             "id": 11,
                             "name": "Ratio: Protected springs \/ All springs",
-                            "formula": "=IF(AND(ISNUMBER({F#44,Q#current,P#current}),ISNUMBER({F#40,Q#current,P#current})),{F#44,Q#current,P#current}\/{F#40,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#45,Q#current,P#current}),ISNUMBER({F#41,Q#current,P#current})),{F#45,Q#current,P#current}\/{F#41,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -1491,7 +1491,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -1512,7 +1512,7 @@
                         "rule": {
                             "id": 2,
                             "name": "Ratio: Protected wells \/ Traditional wells",
-                            "formula": "=IF(AND(ISNUMBER({F#28,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),{F#32,Q#current,P#current}\/({F#28,Q#current,P#current}),\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#29,Q#current,P#current}),ISNUMBER({F#33,Q#current,P#current})),{F#33,Q#current,P#current}\/({F#29,Q#current,P#current}),\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -1524,7 +1524,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -1538,7 +1538,7 @@
                         "rule": {
                             "id": 2,
                             "name": "Ratio: Protected wells \/ Traditional wells",
-                            "formula": "=IF(AND(ISNUMBER({F#28,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),{F#32,Q#current,P#current}\/({F#28,Q#current,P#current}),\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#29,Q#current,P#current}),ISNUMBER({F#33,Q#current,P#current})),{F#33,Q#current,P#current}\/({F#29,Q#current,P#current}),\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -1550,7 +1550,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -1566,7 +1566,7 @@
                         "rule": {
                             "id": 2,
                             "name": "Ratio: Protected wells \/ Traditional wells",
-                            "formula": "=IF(AND(ISNUMBER({F#28,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),{F#32,Q#current,P#current}\/({F#28,Q#current,P#current}),\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#29,Q#current,P#current}),ISNUMBER({F#33,Q#current,P#current})),{F#33,Q#current,P#current}\/({F#29,Q#current,P#current}),\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -1578,7 +1578,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -1592,7 +1592,7 @@
                         "rule": {
                             "id": 2,
                             "name": "Ratio: Protected wells \/ Traditional wells",
-                            "formula": "=IF(AND(ISNUMBER({F#28,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),{F#32,Q#current,P#current}\/({F#28,Q#current,P#current}),\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#29,Q#current,P#current}),ISNUMBER({F#33,Q#current,P#current})),{F#33,Q#current,P#current}\/({F#29,Q#current,P#current}),\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -1604,7 +1604,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -1625,7 +1625,7 @@
                         "rule": {
                             "id": 8,
                             "name": "Ratio: Public tap \/ Tap water",
-                            "formula": "=IF(AND(ISNUMBER({F#7,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#7,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#8,Q#current,P#current}),ISNUMBER({F#4,Q#current,P#current})),{F#8,Q#current,P#current}\/{F#4,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -1637,7 +1637,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -1651,7 +1651,7 @@
                         "rule": {
                             "id": 8,
                             "name": "Ratio: Public tap \/ Tap water",
-                            "formula": "=IF(AND(ISNUMBER({F#7,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#7,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#8,Q#current,P#current}),ISNUMBER({F#4,Q#current,P#current})),{F#8,Q#current,P#current}\/{F#4,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -1663,7 +1663,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -1679,7 +1679,7 @@
                         "rule": {
                             "id": 8,
                             "name": "Ratio: Public tap \/ Tap water",
-                            "formula": "=IF(AND(ISNUMBER({F#7,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#7,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#8,Q#current,P#current}),ISNUMBER({F#4,Q#current,P#current})),{F#8,Q#current,P#current}\/{F#4,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -1691,7 +1691,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -1705,7 +1705,7 @@
                         "rule": {
                             "id": 8,
                             "name": "Ratio: Public tap \/ Tap water",
-                            "formula": "=IF(AND(ISNUMBER({F#7,Q#current,P#current}),ISNUMBER({F#3,Q#current,P#current})),{F#7,Q#current,P#current}\/{F#3,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#8,Q#current,P#current}),ISNUMBER({F#4,Q#current,P#current})),{F#8,Q#current,P#current}\/{F#4,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -1717,7 +1717,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -1731,14 +1731,14 @@
         "values": {
             "20": {
                 "1": {
-                    "id": 111,
+                    "id": 113,
                     "usage": {
-                        "id": 891,
+                        "id": 919,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 111,
+                            "id": 113,
                             "name": "Ratio: Sewerage connection among flush",
-                            "formula": "=IF(ISNUMBER({F#88,Q#current,P#current}),{F#88,Q#current,P#current}\/{F#87,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#89,Q#current,P#current}),{F#89,Q#current,P#current}\/{F#88,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -1750,21 +1750,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": null
                 },
                 "2": {
-                    "id": 111,
+                    "id": 113,
                     "usage": {
-                        "id": 892,
+                        "id": 920,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 111,
+                            "id": 113,
                             "name": "Ratio: Sewerage connection among flush",
-                            "formula": "=IF(ISNUMBER({F#88,Q#current,P#current}),{F#88,Q#current,P#current}\/{F#87,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#89,Q#current,P#current}),{F#89,Q#current,P#current}\/{F#88,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -1776,7 +1776,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -1785,14 +1785,14 @@
             },
             "21": {
                 "1": {
-                    "id": 111,
+                    "id": 113,
                     "usage": {
-                        "id": 916,
+                        "id": 944,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 111,
+                            "id": 113,
                             "name": "Ratio: Sewerage connection among flush",
-                            "formula": "=IF(ISNUMBER({F#88,Q#current,P#current}),{F#88,Q#current,P#current}\/{F#87,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#89,Q#current,P#current}),{F#89,Q#current,P#current}\/{F#88,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -1804,21 +1804,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": null
                 },
                 "2": {
-                    "id": 111,
+                    "id": 113,
                     "usage": {
-                        "id": 917,
+                        "id": 945,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 111,
+                            "id": 113,
                             "name": "Ratio: Sewerage connection among flush",
-                            "formula": "=IF(ISNUMBER({F#88,Q#current,P#current}),{F#88,Q#current,P#current}\/{F#87,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#89,Q#current,P#current}),{F#89,Q#current,P#current}\/{F#88,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -1830,7 +1830,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -1844,14 +1844,14 @@
         "values": {
             "20": {
                 "1": {
-                    "id": 104,
+                    "id": 106,
                     "usage": {
-                        "id": 889,
+                        "id": 917,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 104,
+                            "id": 106,
                             "name": "Ratio: Sewerage connection among flush\/pour flush",
-                            "formula": "=IF(ISNUMBER({F#82,Q#current,P#current}),{F#82,Q#current,P#current}\/{F#81,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#83,Q#current,P#current}),{F#83,Q#current,P#current}\/{F#82,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -1863,21 +1863,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": 34.4
                 },
                 "2": {
-                    "id": 104,
+                    "id": 106,
                     "usage": {
-                        "id": 890,
+                        "id": 918,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 104,
+                            "id": 106,
                             "name": "Ratio: Sewerage connection among flush\/pour flush",
-                            "formula": "=IF(ISNUMBER({F#82,Q#current,P#current}),{F#82,Q#current,P#current}\/{F#81,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#83,Q#current,P#current}),{F#83,Q#current,P#current}\/{F#82,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -1889,7 +1889,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -1898,14 +1898,14 @@
             },
             "21": {
                 "1": {
-                    "id": 104,
+                    "id": 106,
                     "usage": {
-                        "id": 914,
+                        "id": 942,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 104,
+                            "id": 106,
                             "name": "Ratio: Sewerage connection among flush\/pour flush",
-                            "formula": "=IF(ISNUMBER({F#82,Q#current,P#current}),{F#82,Q#current,P#current}\/{F#81,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#83,Q#current,P#current}),{F#83,Q#current,P#current}\/{F#82,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -1917,21 +1917,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": null
                 },
                 "2": {
-                    "id": 104,
+                    "id": 106,
                     "usage": {
-                        "id": 915,
+                        "id": 943,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 104,
+                            "id": 106,
                             "name": "Ratio: Sewerage connection among flush\/pour flush",
-                            "formula": "=IF(ISNUMBER({F#82,Q#current,P#current}),{F#82,Q#current,P#current}\/{F#81,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#83,Q#current,P#current}),{F#83,Q#current,P#current}\/{F#82,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -1943,7 +1943,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -1957,14 +1957,14 @@
         "values": {
             "20": {
                 "3": {
-                    "id": 109,
+                    "id": 111,
                     "usage": {
-                        "id": 885,
+                        "id": 913,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 109,
+                            "id": 111,
                             "name": "Ratio: Traditional latrines \/ All latrines",
-                            "formula": "=IF(ISNUMBER({F#128,Q#current,P#current}),{F#128,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#129,Q#current,P#current}),{F#129,Q#current,P#current}\/{F#106,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 3,
@@ -1976,7 +1976,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -1985,14 +1985,14 @@
             },
             "21": {
                 "1": {
-                    "id": 109,
+                    "id": 111,
                     "usage": {
-                        "id": 908,
+                        "id": 936,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 109,
+                            "id": 111,
                             "name": "Ratio: Traditional latrines \/ All latrines",
-                            "formula": "=IF(ISNUMBER({F#128,Q#current,P#current}),{F#128,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#129,Q#current,P#current}),{F#129,Q#current,P#current}\/{F#106,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -2004,21 +2004,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": 24.1
                 },
                 "2": {
-                    "id": 109,
+                    "id": 111,
                     "usage": {
-                        "id": 909,
+                        "id": 937,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 109,
+                            "id": 111,
                             "name": "Ratio: Traditional latrines \/ All latrines",
-                            "formula": "=IF(ISNUMBER({F#128,Q#current,P#current}),{F#128,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#129,Q#current,P#current}),{F#129,Q#current,P#current}\/{F#106,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -2030,21 +2030,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": 18.4
                 },
                 "3": {
-                    "id": 109,
+                    "id": 111,
                     "usage": {
-                        "id": 910,
+                        "id": 938,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 109,
+                            "id": 111,
                             "name": "Ratio: Traditional latrines \/ All latrines",
-                            "formula": "=IF(ISNUMBER({F#128,Q#current,P#current}),{F#128,Q#current,P#current}\/{F#105,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#129,Q#current,P#current}),{F#129,Q#current,P#current}\/{F#106,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 3,
@@ -2056,7 +2056,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -2077,7 +2077,7 @@
                         "rule": {
                             "id": 9,
                             "name": "Ratio: Tubewell + protected well \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),({F#24,Q#current,P#current}+{F#32,Q#current,P#current})\/{F#20,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#25,Q#current,P#current}),ISNUMBER({F#33,Q#current,P#current})),({F#25,Q#current,P#current}+{F#33,Q#current,P#current})\/{F#21,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -2089,7 +2089,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -2103,7 +2103,7 @@
                         "rule": {
                             "id": 9,
                             "name": "Ratio: Tubewell + protected well \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),({F#24,Q#current,P#current}+{F#32,Q#current,P#current})\/{F#20,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#25,Q#current,P#current}),ISNUMBER({F#33,Q#current,P#current})),({F#25,Q#current,P#current}+{F#33,Q#current,P#current})\/{F#21,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -2115,7 +2115,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -2131,7 +2131,7 @@
                         "rule": {
                             "id": 9,
                             "name": "Ratio: Tubewell + protected well \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),({F#24,Q#current,P#current}+{F#32,Q#current,P#current})\/{F#20,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#25,Q#current,P#current}),ISNUMBER({F#33,Q#current,P#current})),({F#25,Q#current,P#current}+{F#33,Q#current,P#current})\/{F#21,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -2143,7 +2143,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -2157,7 +2157,7 @@
                         "rule": {
                             "id": 9,
                             "name": "Ratio: Tubewell + protected well \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#32,Q#current,P#current})),({F#24,Q#current,P#current}+{F#32,Q#current,P#current})\/{F#20,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#25,Q#current,P#current}),ISNUMBER({F#33,Q#current,P#current})),({F#25,Q#current,P#current}+{F#33,Q#current,P#current})\/{F#21,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -2169,7 +2169,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -2190,7 +2190,7 @@
                         "rule": {
                             "id": 10,
                             "name": "Ratio: Tubewell \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#20,Q#current,P#current})),{F#24,Q#current,P#current}\/{F#20,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#25,Q#current,P#current}),ISNUMBER({F#21,Q#current,P#current})),{F#25,Q#current,P#current}\/{F#21,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -2202,7 +2202,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -2216,7 +2216,7 @@
                         "rule": {
                             "id": 10,
                             "name": "Ratio: Tubewell \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#20,Q#current,P#current})),{F#24,Q#current,P#current}\/{F#20,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#25,Q#current,P#current}),ISNUMBER({F#21,Q#current,P#current})),{F#25,Q#current,P#current}\/{F#21,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -2228,7 +2228,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -2244,7 +2244,7 @@
                         "rule": {
                             "id": 10,
                             "name": "Ratio: Tubewell \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#20,Q#current,P#current})),{F#24,Q#current,P#current}\/{F#20,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#25,Q#current,P#current}),ISNUMBER({F#21,Q#current,P#current})),{F#25,Q#current,P#current}\/{F#21,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -2256,7 +2256,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -2270,7 +2270,7 @@
                         "rule": {
                             "id": 10,
                             "name": "Ratio: Tubewell \/ All wells",
-                            "formula": "=IF(AND(ISNUMBER({F#24,Q#current,P#current}),ISNUMBER({F#20,Q#current,P#current})),{F#24,Q#current,P#current}\/{F#20,Q#current,P#current},\"\")"
+                            "formula": "=IF(AND(ISNUMBER({F#25,Q#current,P#current}),ISNUMBER({F#21,Q#current,P#current})),{F#25,Q#current,P#current}\/{F#21,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -2282,7 +2282,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 2,
+                            "id": 3,
                             "name": "Water"
                         }
                     },
@@ -2296,14 +2296,14 @@
         "values": {
             "20": {
                 "1": {
-                    "id": 108,
+                    "id": 110,
                     "usage": {
-                        "id": 881,
+                        "id": 909,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 108,
+                            "id": 110,
                             "name": "Ratio: VIP \/ All latrines",
-                            "formula": "=IF(ISNUMBER({F#126,Q#current,P#current}),{F#126,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#125,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -2315,21 +2315,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": 4.8
                 },
                 "2": {
-                    "id": 108,
+                    "id": 110,
                     "usage": {
-                        "id": 882,
+                        "id": 910,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 108,
+                            "id": 110,
                             "name": "Ratio: VIP \/ All latrines",
-                            "formula": "=IF(ISNUMBER({F#126,Q#current,P#current}),{F#126,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#125,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -2341,7 +2341,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
@@ -2350,14 +2350,14 @@
             },
             "21": {
                 "1": {
-                    "id": 108,
+                    "id": 110,
                     "usage": {
-                        "id": 906,
+                        "id": 934,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 108,
+                            "id": 110,
                             "name": "Ratio: VIP \/ All latrines",
-                            "formula": "=IF(ISNUMBER({F#126,Q#current,P#current}),{F#126,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#125,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 1,
@@ -2369,21 +2369,21 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },
                     "value": null
                 },
                 "2": {
-                    "id": 108,
+                    "id": 110,
                     "usage": {
-                        "id": 907,
+                        "id": 935,
                         "justification": "Imported from country files",
                         "rule": {
-                            "id": 108,
+                            "id": 110,
                             "name": "Ratio: VIP \/ All latrines",
-                            "formula": "=IF(ISNUMBER({F#126,Q#current,P#current}),{F#126,Q#current,P#current}\/{F#124,Q#current,P#current},\"\")"
+                            "formula": "=IF(ISNUMBER({F#127,Q#current,P#current}),{F#127,Q#current,P#current}\/{F#125,Q#current,P#current},\"\")"
                         },
                         "part": {
                             "id": 2,
@@ -2395,7 +2395,7 @@
                             "status": "published"
                         },
                         "thematicFilter": {
-                            "id": 80,
+                            "id": 81,
                             "name": "Sanitation"
                         }
                     },

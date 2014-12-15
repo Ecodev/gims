@@ -60,6 +60,21 @@ abstract class Utility
     }
 
     /**
+     * Re-order objects to be the same order as given ID
+     * @param \Application\Model\AbstractModel[] $objects
+     * @param integer[] $ids
+     * @return Model\AbstractModel[] $objects sorted the same as given IDs
+     */
+    public static function orderByIds(array $objects, array $ids)
+    {
+        usort($objects, function($o1, $o2) use ($ids) {
+            return array_search($o1->getId(), $ids) > array_search($o2->getId(), $ids);
+        });
+
+        return $objects;
+    }
+
+    /**
      * This round a number with arbitrary precision
      *
      * Once rounded, the number *MUST NOT* be converted to float anymore.

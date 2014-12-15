@@ -226,4 +226,19 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
         $this->assertEquals($expected, Utility::explodeIds($input));
     }
 
+    public function testOrderByIds()
+    {
+        $objects = [];
+        $objects[] = $this->getNewModelWithId('Application\Model\Filter');
+        $objects[] = $this->getNewModelWithId('Application\Model\Filter');
+        $objects[] = $this->getNewModelWithId('Application\Model\Filter');
+
+        $ids = [3, 1, 2];
+        $ordered = Utility::orderByIds($objects, $ids);
+
+        foreach ($ids as $index => $id) {
+            $this->assertEquals($id, $ordered[$index]->getId());
+        }
+    }
+
 }
