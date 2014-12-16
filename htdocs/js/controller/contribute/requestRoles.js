@@ -40,7 +40,7 @@ angular.module('myApp').controller('Contribute/RequestRolesCtrl', function($scop
             $scope.roles = [];
             $scope.alerts.push({
                 type: 'success',
-                msg: 'The request was successfully sent. Come back later when your request was approved or request for more permission.'
+                msg: 'The request was successfully sent. Come back later when your request has been approved, or request additional roles now.'
             });
         }).finally(function() {
             $scope.sending = false;

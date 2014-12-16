@@ -39,6 +39,24 @@ angular.module('myApp').controller('Admin/RolesRequestsCtrl', function($scope, $
         });
     }
 
+    $scope.createAllRelations = function(geonameId, geoname) {
+        _.forEach(geoname.questionnaires, function(questionnaire, questionnaireId) {
+            _.forEach(questionnaire.roles, function(role, roleId) {
+
+                // If does not exist yet, create relation
+                if (!$scope.applicantRelations[geonameId] ||
+                        !$scope.applicantRelations[geonameId].questionnaires[questionnaireId] ||
+                        !$scope.applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId] ||
+                        !$scope.applicantRelations[geonameId].questionnaires[questionnaireId].roles[roleId].userRelation
+                        )
+                {
+                    $scope.createRelation($scope.user.id, questionnaireId, roleId, geonameId);
+                }
+
+            });
+        });
+    };
+
     $scope.createRelation = function(userId, questionnaireId, roleId, geonameId) {
 
         var userQuestionnaire = {
