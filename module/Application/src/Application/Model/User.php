@@ -159,7 +159,8 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
             'name',
             'email',
             'state',
-            'lastLogin'
+            'lastLogin',
+            'firstLogin'
         ));
     }
 

@@ -8,6 +8,10 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
         returnUrl = $routeParams.returnUrl;
     }
 
+    if ($routeParams.firstLogin) {
+        $scope.firstLogin = true;
+    }
+
     $scope.cancel = function() {
         $location.path(returnUrl).search('returnUrl', null);
     };

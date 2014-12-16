@@ -104,8 +104,26 @@ angular.module('myApp', [
         requestNotificationProvider.fireRequestEnded();
         return data;
     });
-    $httpProvider.interceptors.push(function($q) {
+    $httpProvider.interceptors.push(function($q, $location) {
         return {
+            // test if first login, and redirect to account
+            response: function(response) {
+                var queryString = 'firstLogin';
+                var delay = 10000; // redirect if connexion in next 10 sec after first login
+
+                // if result comes from login request and we have not already been redirected,
+                // test if user has just logged in for first time and redirect to user page.
+                if (response.config.url == '/user/login' && !$location.search()[queryString]) {
+                    var dateNow = new Date();
+                    var firstLogin = new Date(response.data.firstLogin);
+
+                    if ((dateNow - firstLogin
+                        ) < delay) {
+                        $location.url('/admin/user/edit/' + response.data.id + '?' + queryString);
+                    }
+                }
+                return response;
+            },
             responseError: function(rejection) {
 
                 // If there error did not happen because we specifically asked for validation, then fire the event
