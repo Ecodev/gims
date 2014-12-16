@@ -114,6 +114,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'email' => 'john.connor@skynet.net',
             'state' => null,
             'lastLogin' => '1997-08-29T01:02:03+0000',
+            'firstLogin' => '1997-08-29T01:02:03+0000',
         );
 
         $this->hydrator->hydrate($data, $this->user);
@@ -212,24 +213,23 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $user2->setName('Bob');
 
         $this->assertEquals(array(
-            0 =>
-            array(
+            0 => array(
                 'id' => null,
                 'name' => 'John',
                 'email' => null,
                 'state' => null,
                 'lastLogin' => null,
+                'firstLogin' => null,
             ),
-            1 =>
-            array(
+            1 => array(
                 'id' => null,
                 'name' => 'Bob',
                 'email' => null,
                 'state' => null,
                 'lastLogin' => null,
+                'firstLogin' => null,
             ),
-                )
-                , $this->hydrator->extractArray(array($this->user, $user2), array('name')));
+        ), $this->hydrator->extractArray(array($this->user, $user2), array('name')));
     }
 
     public function testCanHydrateCollectionExistingInDatabase()
@@ -369,6 +369,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'email' => null,
             'state' => null,
             'lastLogin' => null,
+            'firstLogin' => null,
             'custom name' => 'Mr. John Connor',
                 ), $this->hydrator->extract($this->user, array(
                     'custom name' => function(Hydrator $hydrator, \Application\Model\User $user) {
@@ -385,6 +386,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'email' => null,
             'state' => null,
             'lastLogin' => null,
+            'firstLogin' => null,
             'dateCreated' => $this->user->getDateCreated()->format(\DateTime::ISO8601),
             'name' => 'John',
                 ), $this->hydrator->extract($this->user, array(
