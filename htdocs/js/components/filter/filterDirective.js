@@ -37,7 +37,7 @@ angular.module('myApp.directives').directive('gimsFilter', function(FilterModal,
             scope.disabled = !_.isUndefined(scope.disabled) ? (scope.disabled === 'true' ? true : false) : false;
             scope.showEditButton = !_.isUndefined(scope.showEditButton) ? (scope.showEditButton === 'true' ? true : false) : false;
             scope.showDeleteButton = !_.isUndefined(scope.showDeleteButton) ? (scope.showDeleteButton === 'true' ? true : false) : false;
-            scope.multiple = !_.isUndefined(scope.multiple) ?(scope.multiple === 'true' ? true : false): false;
+            scope.multiple = !_.isUndefined(scope.multiple) ? (scope.multiple === 'true' ? true : false) : false;
 
             var tree = null;
             var genericColor = !_.isUndefined(scope.genericColor) ? (scope.genericColor === 'true' ? true : false) : false;
@@ -163,7 +163,11 @@ angular.module('myApp.directives').directive('gimsFilter', function(FilterModal,
                     filters[0].offsetLevel = _.first(filters).level - minLevel;
 
                     // update model
-                    scope.model = filters;
+                    if (scope.multiple) {
+                        scope.model = filters;
+                    } else {
+                        scope.model = filters[0];
+                    }
                     scope.ready = true;
                 });
             } else {
