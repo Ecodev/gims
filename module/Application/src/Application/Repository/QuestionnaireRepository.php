@@ -106,10 +106,12 @@ class QuestionnaireRepository extends AbstractChildRepository
                     ->join('questionnaire.survey', 'survey')
                     ->where('questionnaire.geoname IN (:geonames)')
                     ->andWhere('questionnaire IN (:questionnairesWithReadAccess)')
+                    ->andWhere('questionnaire.status != :rejected')
                     ->orderBy('questionnaire.id');
 
             $qb->setParameter('geonames', $geonames);
             $qb->setParameter('questionnairesWithReadAccess', $questionnairesWithReadAccess);
+            $qb->setParameter('rejected', \Application\Model\QuestionnaireStatus::$REJECTED);
             $questionnaires = $qb->getQuery()->getResult();
 
             foreach ($geonames as $geoname) {
