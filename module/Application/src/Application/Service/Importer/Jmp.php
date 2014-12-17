@@ -1075,6 +1075,8 @@ STRING;
                 'Turks and Caicos Islands',
                 'United States Virgin Islands',
                 'Lebanon',
+                'Qatar',
+                'Trinidad and Tobago',
             ))
             ) {
                 $formulaGroup = 'onlyTotal';
