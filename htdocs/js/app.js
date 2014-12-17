@@ -77,7 +77,10 @@ angular.module('myApp', [
     $routeProvider.otherwise({redirectTo: '/home'});
 
     // general config
-    $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+    });
     RestangularProvider.setBaseUrl('/api');
 
     // Configure Restangular for our pagination structure
