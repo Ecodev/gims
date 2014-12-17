@@ -103,6 +103,12 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     private $lastLogin;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(type="datetimetz", nullable=true)
+     */
+    private $firstLogin;
+
+    /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="UserSurvey", mappedBy="user")
      */
@@ -153,7 +159,8 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
             'name',
             'email',
             'state',
-            'lastLogin'
+            'lastLogin',
+            'firstLogin'
         ));
     }
 
@@ -579,6 +586,25 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     public function generateActivationToken()
     {
         $this->activationToken = bin2hex(openssl_random_pseudo_bytes(16));
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getFirstLogin()
+    {
+        return $this->firstLogin;
+    }
+
+    /**
+     * @param \DateTime $firstLogin
+     * @return self
+     */
+    public function setFirstLogin(\DateTime $firstLogin)
+    {
+        $this->firstLogin = $firstLogin;
+
+        return $this;
     }
 
 }

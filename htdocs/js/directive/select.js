@@ -296,10 +296,9 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
             // Required to be able to clear the selected value (used in directive gimsRelation)
             $scope.options.initSelection = function(element, callback) {
                 var controller = $(element).data('$ngModelController');
-                var selectedId = controller ? controller.$modelValue : null;
-
+                var selected = controller ? controller.$modelValue : null;
                 var selectedItem = _.find(items, function(item) {
-                    return item.id == selectedId;
+                    return item.id == _.isObject(selected) ? selected.id : selected;
                 });
 
                 callback(selectedItem);

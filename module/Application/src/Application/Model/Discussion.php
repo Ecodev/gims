@@ -158,7 +158,7 @@ class Discussion extends AbstractModel
         if ($this->getSurvey()) {
             return $this->getSurvey()->getName();
         } elseif ($this->getFilter()) {
-            return $this->getQuestionnaire()->getSurvey()->getCode() . ' - ' . $this->getFilter()->getName();
+            return $this->getQuestionnaire()->getName() . ' - ' . $this->getFilter()->getName();
         } else {
             return $this->getQuestionnaire()->getName();
         }

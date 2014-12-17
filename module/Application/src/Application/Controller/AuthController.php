@@ -35,11 +35,15 @@ class AuthController extends \ZfcUser\Controller\UserController
         return false;
     }
 
-    protected function updateLastLoginDate()
+    protected function updateFirstAndLastLoginDate()
     {
         /* @var \Application\Model\User $user */
         $user = $this->zfcUserAuthentication()->getIdentity();
-        $user->setLastLogin(new \DateTime());
+        $date = new \DateTime();
+        if (!$user->getFirstLogin()) {
+            $user->setFirstLogin($date);
+        }
+        $user->setLastLogin($date);
         $this->getEntityManager()->flush();
     }
 
@@ -103,7 +107,7 @@ class AuthController extends \ZfcUser\Controller\UserController
                 'messages' => 'Invalid username or password'
             ));
         } else {
-            $this->updateLastLoginDate();
+            $this->updateFirstAndLastLoginDate();
 
             return new JsonModel($this->getUserInfo());
         }

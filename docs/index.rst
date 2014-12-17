@@ -6,6 +6,12 @@
 Welcome to GIMS's documentation!
 ================================
 
+.. note::
+
+    The present documentation is comprehensive and should enable to answer most
+    questions. If you are really stuck and need assistance, send an email to
+    who@gimsinitiative.org
+
 Contents:
 
 .. toctree::
@@ -20,12 +26,13 @@ Contents:
     content/data_reconciliation
     content/data_output
     content/user
+    content/roles_and_permissions
     content/filter_set
     content/filter
     content/rule
     content/discussion
-    content/roles_and_permissions
+    content/activity
     content/computing
     content/rest
-    content/glossary
     content/technical_presentation
+    content/glossary

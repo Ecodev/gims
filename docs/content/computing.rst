@@ -106,3 +106,7 @@ left of the *Estimates* sheet in the former Excel country files. In GIMS, it can
     In this section we mentioned two kinds of application for rules: for filters
     (step 1 and 2) and for countries. There is a third kind, for questionnaires,
     that may be useful. See the :doc:`full explanation<rule>`.
+
+.. note::
+
+    Need further help? Send an email to who@gimsinitiative.org

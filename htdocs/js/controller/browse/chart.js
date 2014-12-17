@@ -18,8 +18,10 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     };
     $scope.filterSetParams = {fields: 'filters.genericColor,filters.color,filters.parents,filters.parents.isNsa,filters.filterSets'};
     $scope.indexedElements = ChartCache.getCache();
-    Chart.resetSeries();
     Chart.setCache($scope.indexedElements);
+
+    ChartCache.reset();
+    Chart.resetSeries();
 
     /**************************************************************************/
     /* WATCHERS ***************************************************************/

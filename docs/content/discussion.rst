@@ -43,3 +43,7 @@ click on the pencil icon [1], enter your comment [2] and click on the blue
 .. image:: img/discussion3.png
     :width: 100%
     :alt: Discussion thread
+
+.. note::
+
+    Need further help? Send an email to who@gimsinitiative.org

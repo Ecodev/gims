@@ -229,5 +229,4 @@ The name of a rule should be as explicit as possible [1]. The formula [2] that c
 
 .. note::
 
-    Since a more user-friendly interface to edit rules will be implemented
-    in the near future, no further details will be provided for the moment.
+    Need further help? Send an email to who@gimsinitiative.org

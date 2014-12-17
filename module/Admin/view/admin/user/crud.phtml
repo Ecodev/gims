@@ -10,6 +10,7 @@
     </h2>
 
     <?php echo $this->helpBox('Edit the user\'s account and his access rights. For further info, see the <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/user.html">detailed documentation</a>.'); ?>
+    <div ng-if="firstLogin" class="alert alert-warning"><i class="fa fa-warning"></i> Please take a moment to complete your profile.</div>
 
     <form name="myForm" class="form-horizontal">
 
@@ -114,7 +115,7 @@
                 <div class="form-group" ng-class="{'has-error': myForm.geoname.$invalid}">
                     <label class="control-label col-sm-1" for="geoname">Country</label>
                     <div class="col-sm-6">
-                        <gims-select id="geoname" api="geoname" name="geoname" model="user.geoname" style="width:100%"></gims-select>
+                        <gims-select id="geoname" api="geoname" name="geoname" model="user.geoname" change-url="false" style="width:100%"></gims-select>
                     </div>
                 </div>
 

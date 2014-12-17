@@ -29,6 +29,8 @@ child filters. These can be directly edited by clicking on the pencil icon [1]. 
     :width: 100%
     :alt: edit a filter set
 
+.. _filterset-roles:
+
 The **Users** tab contains the list of people that can modify this filter
 set. For filter sets you have created in other places of the system, you
 are by default the only user. You can add other people if you wish.
@@ -36,3 +38,7 @@ are by default the only user. You can add other people if you wish.
 .. image:: img/filterset3.png
     :width: 100%
     :alt: add a new user to manage the filter set
+
+.. note::
+
+    Need further help? Send an email to who@gimsinitiative.org
