@@ -154,4 +154,12 @@ class QuestionnaireController extends AbstractChildRestfulController
         $this->getEntityManager()->flush();
     }
 
+    public function structureAction()
+    {
+        $ids = \Application\Utility::explodeIds($this->params()->fromQuery('id'));
+        $jsonData = $this->getRepository()->getCompleteStructure($ids, (bool) $this->params()->fromQuery('withPopulations'));
+
+        return new JsonModel($jsonData);
+    }
+
 }

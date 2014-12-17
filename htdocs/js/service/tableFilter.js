@@ -11,7 +11,6 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
      * @type object
      */
     var data;
-    var questionnaireWithAnswersFields = {fields: 'status,permissions,comments,geoname,survey.questions,survey.questions.isAbsolute,survey.questions.filter,survey.questions.alternateNames,survey.questions.answers.quality,survey.questions.answers.questionnaire,survey.questions.answers.part,filterQuestionnaireUsages.isSecondStep,filterQuestionnaireUsages.sorting'};
     var questionnaireFields = {fields: 'survey.questions.type,survey.questions.filter'};
     var lastUnsavedFilterId = 1;
 
@@ -50,10 +49,6 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             data.mode = modes[1];
         } else if (locationPath.indexOf('/browse') >= 0) {
             data.mode = modes[0];
-        }
-
-        if (data.mode.isNsa) {
-            questionnaireWithAnswersFields.fields += ',populations.part';
         }
 
         return getData();
@@ -138,7 +133,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                     delete(answer.displayValue);
                     delete(answer.edit);
                     answer.isLoading = false;
-                    refresh(false, true, false);
+                    refresh(true, false);
                 });
             }
         });
@@ -163,34 +158,33 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     }
 
     /**
-     * Call questionnaires asking for passed fields and executing callback function passing received questionnaires
-     * @param questionnaires
-     * @param fields
+     * Get questionnaires from server and return a promise when they are loaded
+     * @param {Array} questionnaireIds
      */
-    function getQuestionnaires(questionnaires, fields) {
+    function getQuestionnaires(questionnaireIds) {
         var deferred = new $q.defer();
 
-        if (questionnaires.length === 1 && !_.isUndefined(questionnaires[0])) {
-            Restangular.one('questionnaire', questionnaires[0]).get(fields).then(function(questionnaire) {
-                deferred.resolve([questionnaire]);
-            });
-        } else if (questionnaires.length > 1) {
-            Restangular.all('questionnaire').getList(_.merge({id: questionnaires.join(',')}, fields)).then(function(questionnaires) {
+        $http.get('/api/questionnaire/structure', {
+            params: {
+                id: questionnaireIds.join(','),
+                withPopulations: data.mode.isNsa
+            }
+        }).success(function(questionnaires) {
 
-                // when retrieve questionnaire with read permissions, remove pré-selected questionnaires from list if they're not received
-                var removedQuestionnaires = _.difference(_.pluck(data.questionnaires, 'id'), _.pluck(questionnaires, 'id'));
-                _.forEach(removedQuestionnaires, function(questionnaireId) {
-                    var index = _.findIndex(data.questionnaires, {id: questionnaireId});
-                    if (index >= 0) {
-                        data.questionnaires.splice(index, 1);
-                    }
-                });
-
-                deferred.resolve(questionnaires);
-            }, function() {
-                data.questionnaires = [];
+            // when retrieve questionnaire with read permissions, remove pré-selected questionnaires from list if they're not received
+            var removedQuestionnaires = _.difference(_.pluck(data.questionnaires, 'id'), _.pluck(questionnaires, 'id'));
+            _.forEach(removedQuestionnaires, function(questionnaireId) {
+                var index = _.findIndex(data.questionnaires, {id: questionnaireId});
+                if (index >= 0) {
+                    data.questionnaires.splice(index, 1);
+                }
             });
-        }
+
+            deferred.resolve(questionnaires);
+        }).error(function() {
+            data.questionnaires = [];
+            deferred.reject('could not load questionnaires');
+        });
 
         return deferred.promise;
     }
@@ -366,8 +360,6 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                 return q.filter.id;
             });
 
-            indexFilterQuestionnaireUsages(questionnaire);
-
             // update data with modified questionnaire
             data.questionnaires[_.findIndex(data.questionnaires, {id: questionnaire.id})] = questionnaire;
         });
@@ -383,23 +375,12 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     function loadQuestionnaires(newQuestionnaires) {
         var deferred = new $q.defer();
 
-        getQuestionnaires(newQuestionnaires, questionnaireWithAnswersFields).then(function(questionnaires) {
+        getQuestionnaires(newQuestionnaires).then(function(questionnaires) {
             prepareDataQuestionnaires(questionnaires);
             deferred.resolve(questionnaires);
         });
 
         return deferred.promise;
-    }
-
-    /**
-     * Update questionnaires permissions from new one to old one
-     * @param {type} oldQuestionnaires
-     * @param {type} newQuestionnaires
-     */
-    function updateQuestionnairePermissions(oldQuestionnaires, newQuestionnaires) {
-        _.forEach(oldQuestionnaires, function(questionnaire) {
-            questionnaire.permissions = _.find(newQuestionnaires, {id: questionnaire.id}).permissions;
-        });
     }
 
     /**
@@ -409,33 +390,28 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
      */
     function updateFilterQuestionnaireUsages(oldQuestionnaires, newQuestionnaires) {
         _.forEach(oldQuestionnaires, function(questionnaire) {
-            questionnaire.filterQuestionnaireUsages = _.find(newQuestionnaires, {id: questionnaire.id}).filterQuestionnaireUsages;
-            indexFilterQuestionnaireUsages(questionnaire);
+            questionnaire.hasFilterQuestionnaireUsages = _.find(newQuestionnaires, {id: questionnaire.id}).hasFilterQuestionnaireUsages;
         });
+
+        // Emit event, so cell icon can be updated accordingly
+        $rootScope.$emit('gims-tablefilter-computed');
     }
 
     /**
      * Refreshing page means :
-     *  - Recover all questionnaires permissions (in case user switch from browse to contribute/full view and need to be logged in)
      *  - Recompute filters, after some changes on answers. Can be done automatically after each answer change, but is heavy.
-     * @param {bool} questionnairesPermissions
+     *  - Reload filterQuestionnaireUsage existence
      * @param {bool} filtersComputing
-     * @param {bool} questionnairesUsages
+     * @param {bool} filterQuestionnairesUsages
      */
-    function refresh(questionnairesPermissions, filtersComputing, questionnairesUsages) {
-
-        if (questionnairesPermissions && !_.isUndefined(data) && !_.isUndefined(data.questionnaires)) {
-            getQuestionnaires(_.pluck(data.questionnaires, 'id'), {fields: 'permissions'}).then(function(questionnaires) {
-                updateQuestionnairePermissions(data.questionnaires, questionnaires);
-            });
-        }
+    function refresh(filtersComputing, filterQuestionnairesUsages) {
 
         if (filtersComputing) {
             getComputedFilters();
         }
 
-        if (questionnairesUsages && !_.isUndefined(data) && !_.isUndefined(data.questionnaires)) {
-            getQuestionnaires(_.pluck(data.questionnaires, 'id'), {fields: 'filterQuestionnaireUsages.isSecondStep,filterQuestionnaireUsages.sorting'}).then(function(questionnaires) {
+        if (filterQuestionnairesUsages && !_.isUndefined(data) && !_.isUndefined(data.questionnaires)) {
+            getQuestionnaires(_.pluck(data.questionnaires, 'id')).then(function(questionnaires) {
                 updateFilterQuestionnaireUsages(data.questionnaires, questionnaires);
             });
         }
@@ -509,8 +485,6 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             if (data.showQuestionnaireUsages) {
                 loadQuestionnaireUsages();
             }
-
-            refresh(false, false, true);
         }
     }
 
@@ -577,15 +551,15 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             }
 
             var usages = {};
-            if (questionnaire.filterQuestionnaireUsagesByFilterAndPart && questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id]) {
-                usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][partId] || {};
+            if (questionnaire.hasFilterQuestionnaireUsages && questionnaire.hasFilterQuestionnaireUsages[filter.id]) {
+                usages = questionnaire.hasFilterQuestionnaireUsages[filter.id][partId] || {};
             }
 
             if (answer && answer.error) {
                 return 'error';
             } else if (answer && Utility.isValidNumber(answer[question.value])) {
                 return 'answer';
-            } else if (usages && ((usages.first && usages.first.length) || (usages.second && usages.second.length))) {
+            } else if (usages && (usages.first || usages.second)) {
                 return 'rule';
             } else if (filter.summands && filter.summands.length && Utility.isValidNumber(firstValue)) {
                 return 'summand';
@@ -595,36 +569,6 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         }
 
         return 'nothing';
-    }
-
-    /**
-     * Index FilterQuestionnaireUsages by filter and part
-     * @param questionnaire
-     */
-    function indexFilterQuestionnaireUsages(questionnaire) {
-        // Indexes usages by filter and part
-        var usagesByFilter = {};
-        _.forEach(questionnaire.filterQuestionnaireUsages, function(usage) {
-
-            if (!usagesByFilter[usage.filter.id]) {
-                usagesByFilter[usage.filter.id] = {};
-            }
-
-            if (!usagesByFilter[usage.filter.id][usage.part.id]) {
-                usagesByFilter[usage.filter.id][usage.part.id] = {
-                    first: [],
-                    second: []
-                };
-            }
-            if (usage.isSecondStep) {
-                usagesByFilter[usage.filter.id][usage.part.id].second.push(usage);
-            } else {
-                usagesByFilter[usage.filter.id][usage.part.id].first.push(usage);
-            }
-        });
-
-        questionnaire.filterQuestionnaireUsagesByFilterAndPart = usagesByFilter;
-        $rootScope.$emit('gims-tablefilter-computed');
     }
 
     /**
@@ -1060,7 +1004,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
             });
         }
 
-        refresh(false, true, false);
+        refresh(true, false);
     }
 
     /**
@@ -1123,7 +1067,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                     answer.displayValue = answer.valueAbsolute * answer.quality;
                 }
                 deferred.resolve();
-                refresh(false, true, false);
+                refresh(true, false);
             }, function(data) {
                 answer.error = data;
                 deferred.reject();
@@ -1251,7 +1195,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                     answer.displayValue = question.isAbsolute ? answer[question.value] : Percent.fractionToPercent(answer[question.value]);
                     answer.displayValue *= answer.quality;
                     deferred.resolve(answer);
-                    refresh(false, true, false);
+                    refresh(true, false);
                 });
             });
         }
@@ -1516,7 +1460,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                 createQuestionnaireFilterUsages(questionnaire, savedFacilities).then(function() {
                     savedQuestionnaires++;
                     if (savedQuestionnaires == questionnairesToSave.length) {
-                        refresh(false, true, true);
+                        refresh(true, true);
                     }
                 });
             }, function() {
@@ -1531,7 +1475,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                         createQuestionnaireFilterUsages(questionnaire, savedFacilities).then(function() {
                             savedQuestionnaires++;
                             if (savedQuestionnaires == questionnairesToSave.length) {
-                                refresh(false, true, true);
+                                refresh(true, true);
                             }
                         });
                     });
@@ -1596,7 +1540,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
                 if (data.questionnaire && data.questionnaire.id) {
                     questionnaire.id = data.questionnaire.id;
                     questionnaire.survey.id = data.survey.id;
-                    getQuestionnaires([data.questionnaire.id], questionnaireWithAnswersFields).then(function(questionnaires) {
+                    getQuestionnaires([data.questionnaire.id]).then(function(questionnaires) {
                         prepareDataQuestionnaires(questionnaires);
                         updateUrl('questionnaires');
                     });

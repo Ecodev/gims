@@ -148,7 +148,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
              * Apply custom visual style
              */
             function updateVisualStyle() {
-                // Update absolute/percent icon$
+                // Update absolute/percent icon
                 if (scope.filter && scope.questionnaire) {
 
                     if (scope.questionnaire.survey && scope.questionnaire.survey.questions[scope.filter.id]) {

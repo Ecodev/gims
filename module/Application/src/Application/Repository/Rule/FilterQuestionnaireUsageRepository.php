@@ -12,11 +12,10 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
      * {@inheritdoc}
      * @param string $action
      * @param string $search
-     * @param string $parentName
-     * @param \Application\Model\AbstractModel $parent
+     * @param array $parents
      * @return FilterQuestionnaireUsage[]
      */
-    public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
+    public function getAllWithPermission($action = 'read', $search = null, array $parents = [])
     {
         $qb = $this->createQueryBuilder('fqu');
         $qb->join('fqu.rule', 'rule', Join::WITH);
@@ -24,9 +23,14 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
         $qb->join('fqu.questionnaire', 'questionnaire', Join::WITH);
         $qb->join('fqu.part', 'part', Join::WITH);
         $qb->join('questionnaire.survey', 'survey');
+        $qb->addOrderBy('fqu.isSecondStep', 'DESC');
+        $qb->addOrderBy('fqu.sorting', 'ASC');
+        $qb->addOrderBy('fqu.id', 'ASC');
 
-        $qb->where('fqu.' . $parentName . ' = :parent');
-        $qb->setParameter('parent', $parent);
+        foreach ($parents as $parentName => $parent) {
+            $qb->andWhere('fqu.' . $parentName . ' = :' . $parentName);
+            $qb->setParameter($parentName, $parent);
+        }
 
         $this->addSearch($qb, $search, array('filter.name', 'rule.name', 'rule.formula', 'survey.code', 'survey.name', 'part.name'));
 

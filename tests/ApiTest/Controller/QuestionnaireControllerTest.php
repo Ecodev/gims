@@ -193,4 +193,20 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
         $this->assertEquals($data['status'], $actual['status'], 'status should have been modified');
     }
 
+    public function getValidDataFilterProvider()
+    {
+        return new \ApiTest\JsonFileIterator('data/api/questionnaire/structure');
+    }
+
+    /**
+     * @dataProvider getValidDataFilterProvider
+     * @group LongTest
+     */
+    public function testGetValidDataFilter($params, $expectedJson, $message, $logFile)
+    {
+        $this->dispatch('/api/questionnaire/structure?' . $params, Request::METHOD_GET);
+
+        $this->assertResponseStatusCode(200);
+        $this->assertNumericJson($expectedJson, $this->getResponse()->getContent(), $message, $logFile);
+    }
 }

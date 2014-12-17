@@ -25,21 +25,21 @@
         </li>
 
         <!-- Rules -->
-        <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second.length" class="divider"></li>
-        <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second.length" class="dropdown-header">Rules used in 2nd step of computation</li>
-        <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second.length">
-            <ul ui-sortable="sortableOptions" ng-model="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second">
-                <li ng-repeat="usage in questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second" data-questionnaire="{{questionnaire.id}}" data-part="{{part.id}}" data-filter="{{filter.id}}">
+        <li ng-if="usages.second.length" class="divider"></li>
+        <li ng-if="usages.second.length" class="dropdown-header">Rules used in 2nd step of computation</li>
+        <li ng-if="usages.second.length">
+            <ul ui-sortable="sortableOptions" ng-model="usages.second">
+                <li ng-repeat="usage in usages.second" data-questionnaire="{{questionnaire.id}}" data-part="{{part.id}}" data-filter="{{filter.id}}">
                     <a href gims-edit-usage="usage"><i class="fa fa-navicon fa-fw text-muted"></i><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a>
                 </li>
             </ul>
         </li>
 
-        <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first.length" class="divider"></li>
-        <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first.length" class="dropdown-header">Rules used in 1st step of computation</li>
-        <li ng-if="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first.length">
-            <ul ui-sortable="sortableOptions" ng-model="questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first">
-                <li ng-repeat="usage in questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].first" data-questionnaire="{{questionnaire.id}}" data-part="{{part.id}}" data-filter="{{filter.id}}">
+        <li ng-if="usages.first.length" class="divider"></li>
+        <li ng-if="usages.first.length" class="dropdown-header">Rules used in 1st step of computation</li>
+        <li ng-if="usages.first.length">
+            <ul ui-sortable="sortableOptions" ng-model="usages.first">
+                <li ng-repeat="usage in usages.first" data-questionnaire="{{questionnaire.id}}" data-part="{{part.id}}" data-filter="{{filter.id}}">
                     <a href gims-edit-usage="usage"><i class="fa fa-navicon fa-fw text-muted"></i><i class="fa fa-gims-rule fa-fw"></i> {{usage.rule.name}}</a>
                 </li>
             </ul>
@@ -66,7 +66,7 @@
         </li>
 
         <li ng-if="questionnairesStatus[questionnaire.status]">
-            <a href ng-click="toggleExcludeRule(questionnaire, filter.id, part.id)"><i class="fa fa-gims-rule fa-fw"></i> {{excludeRuleExists(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filter.id][part.id].second) ? 'Include in further computing' : 'Exclude from further computing'}}</a>
+            <a href ng-click="toggleExcludeRule(questionnaire, filter.id, part.id)"><i class="fa fa-gims-rule fa-fw"></i> {{excludeRuleExists(usages.second) ? 'Include in further computing' : 'Exclude from further computing'}}</a>
         </li>
         <li ng-if="data.mode.isContribute && questionnairesStatus[questionnaire.status]">
             <a href gims-add-usage questionnaire="questionnaire" filter="filter" part="part"><i class="fa fa-gims-rule fa-fw"></i> Add a rule…</a>

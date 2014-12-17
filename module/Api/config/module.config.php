@@ -89,6 +89,24 @@ return array(
                             'defaults' => array(),
                         ),
                     ),
+                    // This route allow to ask for sub-sub-subobjects of an object
+                    'subsubsubobject' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/:parent1/:idParent1/:parent2/:idParent2/:parent3/:idParent3/:controller[/:id]',
+                            'constraints' => array(
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'parent1' => '(questionnaire)',
+                                'parent2' => '(filter)',
+                                'parent3' => '(part)',
+                                'idParent1' => '[0-9]+',
+                                'idParent2' => '[0-9]+',
+                                'idParent3' => '[0-9]+',
+                                'id' => '[0-9]+',
+                            ),
+                            'defaults' => array(),
+                        ),
+                    ),
                     // This route is same as default, but only for users
                     // Creating a specific rule dedicated to /api/users  allow to restrict access to members only
                     // see /config/autoload/zfcrbac.global.php

@@ -17,6 +17,22 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, question
     $scope.getCellType = TableFilter.getCellType;
     $scope.openDiscussion = DiscussionModal.open;
 
+    // Load filterQuestionnaireUsages
+    Restangular.one('questionnaire', $scope.questionnaire.id).one('filter', $scope.filter.id).one('part', $scope.part.id).getList('filterQuestionnaireUsage', {fields: 'isSecondStep,sorting'}).then(function(usages) {
+        $scope.usages = {
+            first: [],
+            second: []
+        };
+
+        _.forEach(usages, function(usage) {
+            if (usage.isSecondStep) {
+                $scope.usages.second.push(usage);
+            } else {
+                $scope.usages.first.push(usage);
+            }
+        });
+    });
+
     if ($scope.data.mode.isContribute && questionnairesStatus[$scope.questionnaire.status]) {
         TableFilter.getPermissions($scope.questionnaire.survey.questions[filter.id], questionnaire.survey.questions[filter.id].answers[part.id], questionnaire);
     }
@@ -55,22 +71,14 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, question
      */
     $scope.toggleExcludeRule = function(questionnaire, filterId, partId) {
 
-        // Ensure that we have indeed some usages
-        if (!questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId]) {
-            questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId] = {};
-        }
-        if (!questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId]) {
-            questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId] = {second: []};
-        }
-
-        var usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId].second;
+        var usages = $scope.usages.second;
         if ($scope.excludeRuleExists(usages)) {
             _.forEach(usages, function(usage) {
                 if (usage.rule.id == excludeRuleId) {
                     Restangular.restangularizeElement(null, usage, 'filterQuestionnaireUsage');
                     usage.remove().then(function() {
-                        questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId].second = _.without(usages, usage);
-                        TableFilter.refresh(false, true);
+                        $scope.usages.second = _.without(usages, usage);
+                        TableFilter.refresh(true);
                     });
                 }
             });
@@ -87,7 +95,7 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, question
 
             Restangular.all('filterQuestionnaireUsage').post(usage).then(function(newUsage) {
                 usages.push(newUsage);
-                TableFilter.refresh(false, true, true);
+                TableFilter.refresh(true, true);
             });
         }
     };
@@ -117,7 +125,7 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, question
                 question.value = value;
                 question.max = max;
                 updateQuestion(questionnaire, question).then(function() {
-                    TableFilter.refresh(false, true);
+                    TableFilter.refresh(true);
                 });
 
             }, 0);
@@ -147,12 +155,8 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, question
     };
 
     $scope.sortableOptions = {
-        stop: function(e, ui) {
-            var questionnaireId = ui.item[0].dataset.questionnaire;
-            var filterId = ui.item[0].dataset.filter;
-            var partId = ui.item[0].dataset.part;
-            var questionnaire = _.find($scope.data.questionnaires, {id: parseInt(questionnaireId)});
-            var usages = questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId].second.concat(questionnaire.filterQuestionnaireUsagesByFilterAndPart[filterId][partId].first);
+        stop: function() {
+            var usages = $scope.usages.second.concat($scope.usages.first);
 
             var miniUsages = [];
             // update sorting and create mini usages to avoid sending mass data to server
@@ -171,7 +175,7 @@ angular.module('myApp').controller('CellMenuCtrl', function($scope, $q, question
             });
 
             $q.all(usagesPromisses).then(function() {
-                TableFilter.refresh(false, true, true);
+                TableFilter.refresh(true, true);
             });
 
         }
