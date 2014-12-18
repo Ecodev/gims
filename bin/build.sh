@@ -42,7 +42,7 @@ echo "Updating git submodules..."
 git submodule update --init --recursive --force
 
 echo "Updating Node.js packages..."
-$DEPLOY_USER_SUDO npm install
+$DEPLOY_USER_SUDO npm install --cache /tmp/.npm
 
 echo "Updating Bower packages..."
 ./node_modules/.bin/bower install
