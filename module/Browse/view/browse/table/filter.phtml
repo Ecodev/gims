@@ -15,7 +15,7 @@
 
         <!-- Toolbar -->
         <div class="navbar navbar-default hidden-print">
-            <a class="navbar-brand" href="#">{{data.mode.name}}</a>
+            <a class="navbar-brand" href="#">{{::data.mode.name}}</a>
 
             <form class="navbar-form">
                 <!-- Save all the new questionnaires -->
@@ -39,7 +39,7 @@
             </form>
         </div>
 
-        <div ng-switch="data.mode.name">
+        <div ng-switch="::data.mode.name">
             <div ng-switch-when="Browse">
                 <?php echo $this->helpBox('Select a country and filter set and view the corresponding data. For further info, see the <a target="_blank" href="http://gims.readthedocs.org/en/develop/content/data_processing.html">detailed documentation</a>.'); ?>
             </div>
@@ -104,7 +104,7 @@
 
                         <div>
                             <div class="col-md-12">
-                                <h3 class="control-label" ng-if="!data.mode.isNsa">Questionnaires (columns) <small ng-if="!data.questionnaires.length && !data.mode.isContribute">(Required)</small></h3>
+                                <h3 class="control-label" ng-if="::!data.mode.isNsa">Questionnaires (columns) <small ng-if="!data.questionnaires.length && !data.mode.isContribute">(Required)</small></h3>
                             </div>
 
                             <div class="col-md-12">
@@ -114,26 +114,26 @@
                                             model="data.geoname"
                                             api="geoname"
                                             placeholder="Select a country"
-                                            change-url="data.mode.isNsa"
+                                            change-url="::data.mode.isNsa"
                                             disabled="isLoading"
                                             style="width: 100%">
                                         </gims-select>
                                     </tab>
-                                    <tab heading="Survey" ng-if="!data.mode.isNsa">
+                                    <tab heading="Survey" ng-if="::!data.mode.isNsa">
                                         <gims-select
                                             model="data.survey"
                                             api="survey"
                                             queryparams="surveyParams"
                                             placeholder="Select survey"
                                             search-attributes="code,name"
-                                            custom-selection-template="{{surveysTemplate}}"
-                                            custom-result-template="{{surveysTemplate}}"
+                                            custom-selection-template="{{::surveysTemplate}}"
+                                            custom-result-template="{{::surveysTemplate}}"
                                             change-url="false"
                                             disabled="isLoading"
                                             style="width: 100%">
                                         </gims-select>
                                     </tab>
-                                    <tab heading="Questionnaires ({{data.questionnaires.length}})" ng-if="!data.mode.isNsa">
+                                    <tab heading="Questionnaires ({{data.questionnaires.length}})" ng-if="::!data.mode.isNsa">
                                         <gims-select
                                             model="data.questionnaires"
                                             name="questionnaires"
@@ -183,17 +183,17 @@
                             </div>
                             <div class="table-filter-row header large" ng-if="data.showQuestionnaireComments"></div>
                             <div class="table-filter-row"></div>
-                            <div class="table-filter-row" ng-if="data.mode.isNsa"></div>
+                            <div class="table-filter-row" ng-if="::data.mode.isNsa"></div>
                         </div>
 
                         <div id="filtersSection">
-                            <div class="table-filter-row filter-label" ng-repeat="filter in data.filters track by $index" ng-class="{'active':data.mode.isNsa && filter.level < 2}" style="background-color:{{filter.bgColor}}">
-                                <span ng-if="isValidId(filter) || data.mode.isNsa && filter.level != 1" ng-class="{'strong':filter.level == data.filters[0].level && !filter.nsaChild}" class="text-2em" style="margin-left:{{(filter.level - data.filters[0].level + data.filters[0].offsetLevel) * 2}}em;">
-                                    <i class="fa" style="color:{{filter.color}};" ng-class="{'fa-gims-filter':!filter.isLoading && isValidId(filter), 'fa-asterisk text-primary':!filter.isLoading && !isValidId(filter), 'fa-gims-loading':filter.isLoading}"></i>
-                                    {{filter.name}}
-                                    <a class="btn btn-link" href="/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i></a>
+                            <div class="table-filter-row filter-label" ng-repeat="filter in data.filters track by $index" ng-class="{'active':data.mode.isNsa && filter.level < 2}" style="background-color:{{::filter.bgColor}}">
+                                <span ng-if="isValidId(filter) || data.mode.isNsa && filter.level != 1" ng-class="::{'strong':filter.level == data.filters[0].level && !filter.nsaChild}" class="text-2em" style="margin-left:{{::(filter.level - data.filters[0].level + data.filters[0].offsetLevel) * 2}}em;">
+                                    <i class="fa" style="color:{{::filter.color}};" ng-class="{'fa-gims-filter':!filter.isLoading && isValidId(filter), 'fa-asterisk text-primary':!filter.isLoading && !isValidId(filter), 'fa-gims-loading':filter.isLoading}"></i>
+                                    {{::filter.name}}
+                                    <a class="btn btn-link" href="/admin/filter/edit/{{::filter.id}}?returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i></a>
                                 </span>
-                                <div ng-if="!isValidId(filter) && data.mode.isNsa && filter.level == 1" style="display:inline-block;vertical-align:top;width:80%;margin-left:{{(filter.level - data.filters[0].level) * 2}}em;">
+                                <div ng-if="!isValidId(filter) && data.mode.isNsa && filter.level == 1" style="display:inline-block;vertical-align:top;width:80%;margin-left:{{::(filter.level - data.filters[0].level) * 2}}em;">
                                     <ng-form name="filterName" class="input-group" ng-class="{'has-error':filterName.$invalid}">
                                         <span class="input-group-addon"><i class="fa" ng-class="{'fa-asterisk':!filter.isLoading,'fa-gims-loading':filter.isLoading,'text-primary':!filterName.$invalid}"></i></span>
                                         <input type="text" name="name" ng-model="filter.name" placeholder="Facility name" required />
@@ -201,7 +201,7 @@
                                 </div>
                             </div>
 
-                            <div class="table-filter-row header" ng-if="!data.mode.isNsa">
+                            <div class="table-filter-row header" ng-if="::!data.mode.isNsa">
                                 <a href class='btn btn-default btn-sm' ng-click="toggleShowQuestionnaireUsages()">
                                     <i class="fa fa-angle-down"></i>
                                     <span ng-if="!data.showQuestionnaireUsages">Show Calculations / Estimations / Ratios</span>
@@ -211,14 +211,14 @@
 
                             <!-- QuestionnaireUsage's rule name column-->
                             <div class="table-filter-row text-2em" ng-repeat="rule in data.questionnaireUsages track by $index" ng-if="data.showQuestionnaireUsages && isIncludedInUsedThematics(rule.thematics)">
-                                <i class="fa fa-gims-rule"></i> {{rule.name}}
+                                <i class="fa fa-gims-rule"></i> {{::rule.name}}
                             </div>
 
                             <!-- Button to add QuestionnaireUsage -->
                             <div class="table-filter-row text-2em" ng-if="data.showQuestionnaireUsages && data.mode.isContribute">
                             </div>
 
-                            <div class="table-filter-row" ng-if="data.mode.isNsa">
+                            <div class="table-filter-row" ng-if="::data.mode.isNsa">
                                 <a class="btn btn-default btn-sm" ng-click="addEquipment();" ng-class="{'disabled': getFiltersByLevel(0).length != 1}">
                                     <i class="fa fa-gims-add"></i> Add new facility
                                 </a>
@@ -305,7 +305,7 @@
                                 </div>
 
                                 <!-- Population row -->
-                                <div class="table-filter-row" ng-if="data.mode.isNsa">
+                                <div class="table-filter-row" ng-if="::data.mode.isNsa">
                                     <div ng-repeat="part in data.parts" class="filter-value">
                                         <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.value.$invalid}" tooltip="Leave empty to use official population data">
                                             <input  type="number"
