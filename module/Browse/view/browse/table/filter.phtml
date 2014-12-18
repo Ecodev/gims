@@ -192,8 +192,6 @@
                                     <i class="fa" style="color:{{filter.color}};" ng-class="{'fa-gims-filter':!filter.isLoading && isValidId(filter), 'fa-asterisk text-primary':!filter.isLoading && !isValidId(filter), 'fa-gims-loading':filter.isLoading}"></i>
                                     {{filter.name}}
                                     <a class="btn btn-link" href="/admin/filter/edit/{{filter.id}}?returnUrl={{currentUrl}}"><i class="fa fa-pencil"></i></a>
-                                    <span class="btn btn-link removeButton" style="vertical-align:top;" ng-click="removeFilter(filter)" tooltip="Hide this row and its children" tooltip-placement="right"><i class="fa fa-times"></i></span>
-
                                 </span>
                                 <div ng-if="!isValidId(filter) && data.mode.isNsa && filter.level == 1" style="display:inline-block;vertical-align:top;width:80%;margin-left:{{(filter.level - data.filters[0].level) * 2}}em;">
                                     <ng-form name="filterName" class="input-group" ng-class="{'has-error':filterName.$invalid}">

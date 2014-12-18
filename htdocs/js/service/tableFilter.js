@@ -1369,25 +1369,6 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     }
 
     /**
-     * Get all children and children's children, by searching in parents references
-     * @param filter
-     * @returns {Array}
-     */
-    function getChildrenRecursively(filter) {
-        var children = _.filter(data.filters, function(f) {
-            if (_.find(f.parents, {id: filter.id})) {
-                return true;
-            }
-        });
-
-        _.forEach(children, function(f) {
-            children = children.concat(getChildrenRecursively(f));
-        });
-
-        return children;
-    }
-
-    /**
      * Get immediate children, by searching in parents references
      * @param filter
      * @returns {Array}
@@ -1763,29 +1744,6 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         });
     }
 
-    /**
-     * Remove row (filter)
-     * @param filter
-     */
-    function removeFilter(filter) {
-
-        var filters = _.uniq(_.pluck([filter].concat(getChildrenRecursively(filter)), 'id'));
-
-        // remove filter if it's in list of
-        data.filters = _.filter(data.filters, function(f) {
-            if (!_.contains(filters, f.id)) {
-                return true;
-            }
-            return false;
-        });
-
-        updateUrl('filters');
-
-        _.forEach(filters, function(f) {
-            removeQuestionsForFilter(f.id, false);
-        });
-    }
-
     function loadFilter(newFilters, oldFilters) {
         var deferred = $q.defer();
         removeUnUsedQuestions(newFilters, oldFilters);
@@ -1922,7 +1880,6 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         questionnaireCanBeSaved: questionnaireCanBeSaved,
         refresh: refresh,
         deleteAnswer: deleteAnswer,
-        removeFilter: removeFilter,
         saveAll: saveAll,
         saveAnswer: saveAnswer,
         savePopulation: savePopulation,

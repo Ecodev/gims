@@ -28,7 +28,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.getFiltersByLevel = TableFilter.getFiltersByLevel;
     $scope.addEquipment = TableFilter.addEquipment;
     $scope.addQuestionnaire = TableFilter.addQuestionnaire;
-    $scope.removeFilter = TableFilter.removeFilter;
     $scope.saveQuestion = TableFilter.saveQuestion;
     $scope.toggleShowLabels = TableFilter.toggleShowLabels;
 
