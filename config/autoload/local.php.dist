@@ -11,20 +11,22 @@
  * in ZendSkeletonApplication. This is a good practice, as it prevents sensitive
  * credentials from accidentally being committed into version control.
  */
+$host = 'localhost';
 $database = 'gims';
 $username = 'postgres';
 $password = '';
 
-return array(
-    'db' => array(
-        'dsn' => "pgsql:dbname=$database;host=localhost",
+return [
+    'db' => [
+        'dsn' => "pgsql:dbname=$database;host=$host",
         'username' => $username,
         'password' => $password,
     ),
-    'doctrine' => array(
-        'connection' => array(
-            'orm_default' => array(
-                'params' => array(
+    'doctrine' => [
+        'connection' => [
+            'orm_default' => [
+                'params' => [
+                    'host' => $host,
                     'dbname' => $database,
                     'user' => $username,
                     'password' => $password,
@@ -32,18 +34,18 @@ return array(
             ),
         ),
     ),
-    'rsync' => array(
+    'rsync' => [
         'host' => '',
         'module' => '',
         'username' => '',
         'password' => '',
     ),
-    'smtp' => array(
+    'smtp' => [
         'name'              => 'mail.ecodev.ch',
         'host'              => 'mail.ecodev.ch',
         'port'              => 587,
         //'connection_class'  => 'login',
-        //'connection_config' => array(
+        //'connection_config' => [
         //    'username' => '@ecodev.ch',
         //    'password' => '',
         //    'ssl'      => 'tls',
