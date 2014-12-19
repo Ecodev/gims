@@ -105,13 +105,14 @@ This will display at the bottom of the page the rule formula [1] as well as an e
     :width: 100%
     :alt: Edit rule formula
 
-Data with a **folder** icon results from the sum of the filter's children.
+Data with a **folder** icon results from the sum of the filter's children (ex.
+House connections = Piped water into dwelling + piped water to yard/plot)
 
 Data that has a **plus** (+) icon results from the sum of a number of other filter elements as defined in the :ref:`Summands`.
 
 For both these cases, you can override these totals with a manually entered value: the symbol will then change to a question mark. If you erase the value you entered, the initial computation will automatically apply again.
 
-Data that has a **question mark** has been entered manually and can be edited if needed. When modifications are performed to existing data, it is *strongly* recommended that a remark is inserted by clicking on the "View discussions…"
+Data that has a **question mark** (?) has been entered manually and can be edited if needed. When modifications are performed to existing data, it is *strongly* recommended that a remark is inserted by clicking on "View :doc:`discussions <discussion>`…"
 
 .. image:: img/contribute_jmp4d.png
     :width: 100%
@@ -126,7 +127,7 @@ In the text field, insert as precise and relevant information as possible to hel
 .. note::
 
     The warning below is exceptionally not applicable for the December 2014
-    - January 2015 country consultation !
+    - January 2015 country consultation since all data has been set to "New" !
 
 .. warning::
 
