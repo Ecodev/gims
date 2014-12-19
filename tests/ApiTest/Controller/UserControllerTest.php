@@ -12,7 +12,7 @@ class UserControllerTest extends AbstractRestfulControllerTest
 
     protected function getAllowedFields()
     {
-        return array('id', 'name', 'email', 'state', 'lastLogin');
+        return array('id', 'name', 'email', 'state', 'lastLogin', 'firstLogin');
     }
 
     protected function getTestedObject()

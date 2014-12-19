@@ -8,27 +8,27 @@ namespace ApplicationTest\Model;
 class UserTest extends AbstractModel
 {
 
-    public function testActivationToken()
+    public function testToken()
     {
         $user = new \Application\Model\User();
-        $this->assertNull($user->getActivationToken(), 'new user have no token');
+        $this->assertNull($user->getToken(), 'new user have no token');
 
-        $user->generateActivationToken();
-        $token = $user->getActivationToken();
+        $user->generateToken();
+        $token = $user->getToken();
         $this->assertNotNull($token, 'once generated, it must not be NULL anymore');
         $this->assertEquals(32, strlen($token), 'must be exactly the length of DB field');
 
-        $user->generateActivationToken();
-        $token2 = $user->getActivationToken();
+        $user->generateToken();
+        $token2 = $user->getToken();
         $this->assertNotEquals($token2, $token, 'two tokens for same user must be different');
 
         $user->setLastLogin(new \DateTime());
-        $this->assertNull($user->getActivationToken(), 'once user is logged in toekn must expire');
+        $this->assertNull($user->getToken(), 'once user is logged in toekn must expire');
 
-        $user->generateActivationToken();
+        $user->generateToken();
         $this->assertNotNull($token, 'once generated, it must not be NULL anymore');
         $user->setState(1);
-        $this->assertNull($user->getActivationToken(), 'once user is activated, cannot activate again');
+        $this->assertNull($user->getToken(), 'once user is activated, cannot activate again');
     }
 
 }
