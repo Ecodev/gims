@@ -24,10 +24,10 @@
         <mkdir dir="data/logs" />
         <mkdir dir="htdocs/tmp" />
         <mkdir dir="htdocs/css" />
-        <echo msg="setfacl default r/o for www-data" />
-        <exec command="sudo setfacl -R -m u:www-data:r-x -m d:u:www-data:r-x ./" />
-        <echo msg="setfacl r/w on cache,logs for www-data" />
-        <exec command="sudo setfacl -R -m u:www-data:rwx -m d:u:www-data:rwx data/logs data/cache" />
+        <echo msg="setfacl default r/o for gimsinitiativeorg-www" />
+        <exec command="sudo setfacl -R -m u:gimsinitiativeorg-www:r-x -m d:u:gimsinitiativeorg-www:r-x ./" />
+        <echo msg="setfacl r/w on cache,logs for gimsinitiativeorg-www" />
+        <exec command="sudo setfacl -R -m u:gimsinitiativeorg-www:rwx -m d:u:gimsinitiativeorg-www:rwx data/logs data/cache data/session/" />
         <exec command="sudo chmod 0770 ./" />
     </target>
 
