@@ -138,17 +138,91 @@ class UserController extends AbstractRestfulController
 
     public function activateAction()
     {
-        $token = $this->getRequest()->getQuery()->get('activationToken');
-        $user = $this->getRepository()->findOneByActivationToken($token);
+        $token = $this->getRequest()->getQuery()->get('token');
+        $user = $this->getRepository()->findOneByToken($token);
         if ($user) {
-            $user->setState(1);
-            $this->getEntityManager()->flush();
 
-            return new JsonModel($this->hydrator->extract($user, $this->getJsonConfig()));
+            if ($this->checkTokenValidity($user)) {
+                $user->setState(1);
+                $this->getEntityManager()->flush();
+
+                return new JsonModel($this->hydrator->extract($user, $this->getJsonConfig()));
+            } else {
+                $this->getResponse()->setStatusCode(403);
+
+                return new JsonModel(array('message' => 'Activation delay timed out.'));
+            }
         } else {
             $this->getResponse()->setStatusCode(404);
 
             return new JsonModel(array('message' => 'This activation token is invalid. No user could be found.'));
+        }
+    }
+
+    public function changePasswordAction()
+    {
+        $token = $this->getRequest()->getQuery()->get('token');
+        $pass1 = $this->getRequest()->getQuery()->get('pass1');
+        $pass2 = $this->getRequest()->getQuery()->get('pass2');
+        $user = $this->getRepository()->findOneByToken($token);
+
+        if ($user) {
+            if ($pass1 == $pass2) {
+                $user->setState(1);
+                $user->setPassword($pass1);
+                $this->getEntityManager()->flush();
+
+                return new JsonModel($this->hydrator->extract($user, $this->getJsonConfig()));
+            } else {
+                return new JsonModel(array('message' => "Passwords don't match."));
+            }
+        } else {
+            $this->getResponse()->setStatusCode(404);
+
+            return new JsonModel(array('message' => 'User has not been found'));
+        }
+    }
+
+    /**
+     * Check if token is younger than 15 min.
+     * @return JsonModel
+     */
+    public function checkTokenValidityAction()
+    {
+        $token = $this->getRequest()->getQuery()->get('token');
+        $user = $this->getRepository()->findOneByToken($token);
+
+        if (!$user) {
+            $this->getResponse()->setStatusCode(404);
+
+            return new JsonModel(array('message' => 'No user has been found'));
+        }
+
+        if ($this->checkTokenValidity($user)) {
+            return new JsonModel($this->hydrator->extract($user, $this->getJsonConfig()));
+
+        } else {
+            $this->getResponse()->setStatusCode(403);
+
+            return new JsonModel(array('message' => 'Link validity timed out.'));
+        }
+    }
+
+    /**
+     * Check if token is younger than 15 min.
+     * @param \Application\Model\User $user
+     * @return bool
+     */
+    public function checkTokenValidity(\Application\Model\User $user)
+    {
+        $dateNow = new \DateTime();
+        $dateTokenGenerated = $user->getDateTokenGenerated();
+        $delay = 15 * 60;
+
+        if (($dateNow->getTimestamp() - $dateTokenGenerated->getTimestamp()) < $delay) {
+            return true;
+        } else {
+            return false;
         }
     }
 

@@ -43,7 +43,7 @@ angular.module('myApp').controller('UserCtrl', function($scope, $http, $location
         modalInstance.result.then(userLoggedIn);
     };
 
-    if ($location.search().activationToken) {
+    if ($location.search().token) {
         $scope.promptLogin();
     }
 });
@@ -52,15 +52,41 @@ angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $m
     'use strict';
 
     $scope.state = 'normal';
-    var activationToken = $location.search().activationToken;
-    if (activationToken) {
-        $scope.state = 'activating';
-        $http.get('/api/user/activate', {params: $location.search()}).then(function(data) {
-            $location.search('activationToken', null);
-            $scope.state = 'activated';
-            $scope.login.identity = data.data.email;
-        });
+    var token = $location.search().token;
+
+    if (token) {
+        var action = $location.search().action;
+
+        if (action == 'activate') {
+            $scope.state = 'activating';
+            $http.get('/api/user/activate', {params: $location.search()}).then(function(data) {
+                $location.search('token', null);
+                $scope.state = 'activated';
+                $scope.login.identity = data.data.email;
+            }, function() {
+                $scope.state = 'invalidToken';
+            });
+
+        } else if (action == 'changePassword') {
+            $scope.state = 'changingPassword';
+            $http.get('/api/user/checkTokenValidity', {params: $location.search()}).then(function() {
+                $scope.state = 'changePassword';
+            }, function() {
+                $scope.state = 'invalidToken';
+            });
+        }
     }
+
+    $scope.changePassword = function() {
+        $http.put('/user/change-password', {
+            password: $scope.register.password,
+            token: token
+        }).success(function(data) {
+            $location.search('token', null);
+            $scope.state = 'passwordChanged';
+            $scope.login.identity = data.email;
+        });
+    };
 
     function resetErrors() {
         $scope.invalidUsernamePassword = false;
@@ -108,6 +134,21 @@ angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $m
 
             if (data.message.email.recordFound) {
                 $scope.userExisting = true;
+            }
+        });
+    };
+
+    $scope.sendChangePassword = function() {
+        $scope.state = 'reseting';
+
+        $http.get('/user/change-password', {params: {email: $scope.login.identity}}).success(function(data) {
+            $scope.state = 'resetSent';
+            $scope.resetPasswordForEmail = data.email;
+        }).error(function(data) {
+            $scope.state = 'normal';
+
+            if (data.message) {
+                $scope.userNotFound = true;
             }
         });
     };

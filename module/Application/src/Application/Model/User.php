@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * User
- * @ORM\Table(name="`user`", uniqueConstraints={@ORM\UniqueConstraint(name="user_email",columns={"email"}), @ORM\UniqueConstraint(name="user_activation_token",columns={"activation_token"})})
+ * @ORM\Table(name="`user`", uniqueConstraints={@ORM\UniqueConstraint(name="user_email",columns={"email"}), @ORM\UniqueConstraint(name="user_token",columns={"token"})})
  * @ORM\Entity(repositoryClass="Application\Repository\UserRepository")
  */
 class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcRbac\Identity\IdentityInterface
@@ -135,7 +135,14 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      * @var string
      * @ORM\Column(type="string", length=32, nullable=true)
      */
-    private $activationToken;
+    private $token;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetimetz", nullable=true)
+     */
+    private $dateTokenGenerated;
 
     /**
      * Constructor
@@ -214,6 +221,8 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     public function setPassword($password)
     {
         $this->password = $password;
+        $this->dateTokenGenerated = null;
+        $this->token = null;
 
         return $this;
     }
@@ -237,7 +246,8 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     public function setState($state)
     {
         $this->state = $state;
-        $this->activationToken = null;
+        $this->token = null;
+        $this->dateTokenGenerated = null;
 
         return $this;
     }
@@ -566,26 +576,27 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     public function setLastLogin(\DateTime $lastLogin)
     {
         $this->lastLogin = $lastLogin;
-        $this->activationToken = null;
+        $this->token = null;
 
         return $this;
     }
 
     /**
-     * Returns the activation token if existing
+     * Returns the token if existing
      * @return string|null
      */
-    public function getActivationToken()
+    public function getToken()
     {
-        return $this->activationToken;
+        return $this->token;
     }
 
     /**
-     * Generate a new randon activation token
+     * Generate a new random token
      */
-    public function generateActivationToken()
+    public function generateToken()
     {
-        $this->activationToken = bin2hex(openssl_random_pseudo_bytes(16));
+        $this->token = bin2hex(openssl_random_pseudo_bytes(16));
+        $this->dateTokenGenerated = new \DateTime();
     }
 
     /**
@@ -605,6 +616,14 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
         $this->firstLogin = $firstLogin;
 
         return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateTokenGenerated()
+    {
+        return $this->dateTokenGenerated;
     }
 
 }

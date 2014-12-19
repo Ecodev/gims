@@ -1,12 +1,16 @@
 <div class="modal-body">
-
+    <div class="row" ng-if="state == 'invalidToken'">
+        <div class="col-md-12">
+            <h3 class="modal-header"><?php echo $this->translate('Invalid link'); ?></h3>
+            <p>Your link has expired. Request a new link by clicking on "Forgot password" for both : changing password or activate your account.</p>
+        </div>
+    </div>
     <div class="row" ng-if="state == 'registered'">
         <div class="col-md-12">
             <h3 class="modal-header"><?php echo $this->translate('Email activation'); ?></h3>
             <p>The account was created and an activation email was sent to <strong>{{registeredEmail}}</strong>. Activate your account by following the link in the email.</p>
         </div>
     </div>
-
     <div class="row" ng-if="state == 'activating'">
         <div class="col-md-12">
             <h3 class="modal-header"><?php echo $this->translate('Activating...'); ?></h3>
@@ -19,17 +23,54 @@
             <p>The account was successfully activated. You can now sign in with the password you chose.</p>
         </div>
     </div>
-    <div class="row" ng-if="state != 'registered' && state != 'activating'">
-        <div ng-class="{'col-md-12': state == 'activated'}" class="col-md-6">
+    <div class="row" ng-if="state == 'resetSent'">
+        <div class="col-md-12">
+            <h3 class="modal-header"><?php echo $this->translate('Reset password'); ?></h3>
+            <p>A reset link has been sent to <strong>{{resetPasswordForEmail}}</strong>. Follow the link and set a new password.</p>
+        </div>
+    </div>
+    <div class="row" ng-if="state == 'changingPassword'">
+        <div class="col-md-12">
+            <h3 class="modal-header"><?php echo $this->translate('Change password'); ?></h3>
+            <p>Verifying link validity... <i class="fa fa-gims-loading"></i></p>
+        </div>
+    </div>
+    <div class="row" ng-if="state == 'changePassword'">
+        <div class="col-md-12">
+            <h3 class="modal-header"><?php echo $this->translate('Change password'); ?></h3>
+            <form class="modal-form" name="changePasswordForm" ng-submit="changePassword()">
+                <div class="form-group" ng-class="{'has-error': changePasswordForm.password.$dirty && changePasswordForm.password.$invalid}">
+                    <label class="control-label" for="register-password"><?php echo $this->translate('Password'); ?></label>
+                    <input type="password" name="password" id="register-password" placeholder="password" ng-model="register.password" required ng-minlength="6"/>
+                    <span ng-show="changePasswordForm.password.$error.minlength" class="help-block"><?php echo sprintf($this->translate("Minimum %u characters"), 6); ?></span>
+                </div>
+                <div class="form-group" ng-class="{'has-error': changePasswordForm.passwordVerify.$dirty && changePasswordForm.passwordVerify.$invalid}">
+                    <input type="password" name="passwordVerify" id="register-password-verify" placeholder="confirm password" required ui-validate=" '$value==register.password' " ui-validate-watch=" 'register.passwordVerify' " ng-model="register.passwordVerify">
+                    <span ng-show="changePasswordForm.passwordVerify.$error.validator" class="help-block"><?php echo $this->translate("Passwords do not match!"); ?></span>
+                </div>
+                <button type="submit" name="submit" class="btn btn-primary" value="" ng-disabled="!register.password || register.password != register.passwordVerify"><?php echo $this->translate('Change password') ?> <i ng-show="state == 'registering'" class="fa fa-gims-loading"></i></button>
+            </form>
+        </div>
+    </div>
+    <div class="row" ng-if="state == 'passwordChanged'">
+        <div class="col-md-12">
+            <h3 class="modal-header"><?php echo $this->translate('Password changed'); ?></h3>
+            <p>The password has successfully been changed. You can now sign in with the new one.</p>
+        </div>
+    </div>
+
+    <div class="row" ng-if="state != 'registered' && state != 'activating' && state != 'resetSent' && state != 'changePassword' && state != 'invalidToken'">
+        <div ng-class="{'col-md-12': state == 'activated' || state == 'passwordChanged'}" class="col-md-6">
             <h3 class="modal-header"><?php echo $this->translate('Sign in'); ?></h3>
             <form class="modal-form" name="loginForm" ng-submit="sendLogin()">
                 <div class="alert alert-danger" ng-show="invalidUsernamePassword">
                     <span><?php echo $this->translate('Invalid username or password'); ?></span>
                 </div>
-                <div class="form-group" ng-class="{'has-error': loginForm.identity.$dirty && loginForm.identity.$invalid}">
+                <div class="form-group" ng-class="{'has-error': userNotFound || loginForm.identity.$dirty && loginForm.identity.$invalid}">
                     <label class="control-label" for="login-email"><?php echo $this->translate('Email'); ?></label>
                     <input gims-focus type="email" name="identity" id="login-email" ng-model="login.identity" ng-blur="toLowerCase()" />
                     <span ng-show="loginForm.identity.$error.email" class="help-block"><?php echo $this->translate('Enter a valid email address'); ?></span>
+                    <span ng-show="userNotFound" class="help-block"><?php echo $this->translate('No user has been found with this email address'); ?></span>
                 </div>
 
                 <div class="form-group">
@@ -37,13 +78,16 @@
                     <input type="password" name="credential" id="login-password" ng-model="login.credential" />
                 </div>
 
-                <button type="submit" name="submit" class="btn btn-primary" value=""> <i ng-show="state == 'signing'" class="fa fa-gims-loading"></i> <?php echo $this->translate('Sign In'); ?></button>
+                <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Sign In'); ?> <i ng-show="state == 'signing'" class="fa fa-gims-loading"></i></button>
+
+                <a class='btn text-muted' tooltip="Enter a valid e-mail" ng-if="!login.identity || loginForm.identity.$invalid">Forgot password</a>
+                <a class='btn btn-link' ng-click="sendChangePassword()" ng-if="login.identity && !loginForm.identity.$invalid">Forgot password <i ng-show="state == 'reseting'" class="fa fa-gims-loading"></i></a>
 
                 <input type="hidden" name="redirect" value="{{redirect}}">
-
             </form>
         </div>
-        <div class="col-md-6" ng-if="state != 'activated'">
+
+        <div class="col-md-6" ng-if="state != 'activated' && state != 'passwordChanged'">
             <h3 class="modal-header"><?php echo $this->translate('Register'); ?></h3>
             <form class="modal-form" name="registerForm" ng-submit="sendRegister()">
                 <div class="form-group" ng-class="{'has-error': userExisting || (registerForm.email.$dirty && registerForm.email.$error.email)}">
@@ -66,9 +110,10 @@
                     <input type="password" name="passwordVerify" id="register-password-verify" placeholder="confirm password" required ui-validate=" '$value==register.password' " ui-validate-watch=" 'register.passwordVerify' " ng-model="register.passwordVerify">
                     <span ng-show="registerForm.passwordVerify.$error.validator" class="help-block"><?php echo $this->translate("Passwords do not match!"); ?></span>
                 </div>
-                <button type="submit" name="submit" class="btn btn-primary" value=""><i ng-show="state == 'registering'" class="fa fa-gims-loading"></i> <?php echo $this->translate('Register') ?></button>
+                <button type="submit" name="submit" class="btn btn-primary" value=""><?php echo $this->translate('Register') ?> <i ng-show="state == 'registering'" class="fa fa-gims-loading"></i></button>
             </form>
         </div>
+
     </div>
 </div>
 <div class="modal-footer">

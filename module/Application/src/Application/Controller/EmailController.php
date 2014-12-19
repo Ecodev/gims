@@ -147,12 +147,34 @@ class EmailController extends AbstractActionController
             return;
         }
 
-        $user->generateActivationToken();
+        $user->generateToken();
         $this->getEntityManager()->flush();
 
         $subject = 'Account activation';
         $mailParams = array(
-            'token' => $user->getActivationToken(),
+            'token' => $user->getToken(),
+        );
+
+        $this->sendMail($user, $subject, new ViewModel($mailParams));
+    }
+
+    /**
+     * Send an reset password link to specified user
+     */
+    public function changePasswordLinkAction()
+    {
+        $userId = $this->getRequest()->getParam('id');
+        $user = $this->getEntityManager()->getRepository('Application\Model\User')->findOneById($userId);
+        if (!$user) {
+            return;
+        }
+
+        $user->generateToken();
+        $this->getEntityManager()->flush();
+
+        $subject = 'Reset password';
+        $mailParams = array(
+            'token' => $user->getToken(),
         );
 
         $this->sendMail($user, $subject, new ViewModel($mailParams));

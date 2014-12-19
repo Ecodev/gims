@@ -6,6 +6,7 @@ use Application\Utility;
 use Zend\Http\Response;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
+use Zend\Crypt\Password\Bcrypt;
 
 class AuthController extends \ZfcUser\Controller\UserController
 {
@@ -138,6 +139,72 @@ class AuthController extends \ZfcUser\Controller\UserController
                 return new JsonModel(array('message' => $this->getUserService()->getRegisterForm()->getMessages()));
             }
         }
+    }
+
+    /**
+     * If GET request, send link to change password
+     * If PUT request, update password.
+     *
+     * @return JsonModel
+     */
+    public function changepasswordAction()
+    {
+        $request = $this->getRequest();
+
+        if ($request->isGet()) {
+            return $this->sendResetPasswordLink($request);
+
+        } elseif ($request->isPut()) {
+            return $this->changePassword($request);
+        }
+    }
+
+    /**
+     * Send mail with link to reset password
+     * @return JsonModel
+     */
+    private function sendResetPasswordLink()
+    {
+        $user = $this->getEntityManager()->getRepository('\Application\Model\User')->findOneByEmail(strtolower($this->params()->fromQuery('email')));
+
+        // If registered successfully, send change password link
+        if ($user) {
+            Utility::executeCliCommand('email', 'changePasswordLink', $user->getId());
+
+            return new JsonModel(array('email' => $user->getEmail()));
+        } else {
+            $this->getResponse()->setStatusCode(400);
+
+            return new JsonModel(array('message' => 'No user has been found'));
+        }
+    }
+
+    /**
+     * Save the new password
+     * @param $request
+     * @return JsonModel
+     */
+    private function changePassword($request)
+    {
+        $data = Json::decode($request->getContent(), Json::TYPE_ARRAY);
+        $user = $this->getEntityManager()->getRepository('\Application\Model\User')->findOneByToken($data['token']);
+
+        if ($user) {
+            $bcrypt = new Bcrypt();
+            $bcrypt->setCost($this->getOptions()->getPasswordCost());
+            $pass = $bcrypt->create($data['password']);
+            $user->setPassword($pass);
+            $this->getEntityManager()->flush();
+
+            $hydrator = new \Application\Service\Hydrator();
+
+            return new JsonModel($hydrator->extract($user));
+        } else {
+            $this->getResponse()->setStatusCode(400);
+
+            return new JsonModel(array('message' => 'No user has been found'));
+        }
+
     }
 
 }
