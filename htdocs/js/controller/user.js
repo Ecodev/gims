@@ -69,7 +69,9 @@ angular.module('myApp').controller('LoginWindowCtrl', function($scope, $http, $m
 
         } else if (action == 'changePassword') {
             $scope.state = 'changingPassword';
-            $http.get('/api/user/checkTokenValidity', {params: $location.search()}).then(function() {
+            $http.get('/api/user/checkTokenValidity', {params: $location.search()}).then(function(data) {
+                $scope.login.name = data.data.name;
+                $scope.login.identity = data.data.email;
                 $scope.state = 'changePassword';
             }, function() {
                 $scope.state = 'invalidToken';

@@ -1,5 +1,5 @@
 /* Controllers */
-angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $routeParams, $location, Modal, Restangular) {
+angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $routeParams, $location, Modal, Restangular, $http) {
     'use strict';
 
     // Default redirect
@@ -66,6 +66,17 @@ angular.module('myApp').controller('Admin/User/CrudCtrl', function($scope, $rout
     } else {
         $scope.user = {};
     }
+
+    $scope.sendChangePassword = function() {
+        $scope.changePasswordSent = false;
+        $scope.changePasswordNotSent = false;
+
+        $http.get('/user/change-password', {params: {email: $scope.user.email}}).success(function() {
+            $scope.changePasswordSent = true;
+        }).error(function() {
+            $scope.changePasswordNotSent = true;
+        });
+    };
 
     $scope.tabs = [false, false, false, false];
     $scope.selectTab = function(tab) {
