@@ -9,6 +9,7 @@ angular.module('myApp', [
     'ui.bootstrap',
     'ui.grid',
     'ui.grid.autoResize',
+    'ui.grid.pinning',
     'myApp.filters',
     'myApp.services',
     'myApp.directives',

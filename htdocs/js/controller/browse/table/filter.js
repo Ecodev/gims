@@ -273,4 +273,47 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $rootScope.$on('gims-tablefilter-show-labels-toggled', function() {
         $scope.$broadcast('vsRepeatTrigger');
     });
+
+    var filterColumn = {
+        name: 'shite',
+        displayName: '',
+        width: 400,
+        cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.name}}</div>',
+        pinnedLeft: true
+    };
+
+    $scope.gridOptions = {
+        enableSorting: false,
+        data: 'data.filters'
+    };
+    $scope.gridScope = {
+        data: $scope.data
+    };
+
+    $scope.grid = function() {
+
+        var defs = [filterColumn];
+
+        _.forEach($scope.data.questionnaires, function(questionnaire) {
+            defs.push({
+                name: 'questionnaire_' + questionnaire.id,
+                width: 470,
+                cellTemplate:
+                        '<div class="ui-grid-cell-contents">' +
+                        '    <span ng-repeat="part in getExternalScopes().data.parts" class="filter-value">' +
+                        '        <gims-cell></gims-cell>' +
+                        '    </span>' +
+                        '</div>',
+                questionnaire: questionnaire
+
+            });
+        });
+
+        // Configure ng-grid.
+        $scope.gridOptions = {
+            enableSorting: false,
+            data: 'data.filters',
+            columnDefs: defs
+        };
+    };
 });

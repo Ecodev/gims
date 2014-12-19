@@ -48,7 +48,13 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
                 '</div>',
         link: function(scope, element) {
 
-            var input = element.find('input');
+            if (!scope.questionnaire) {
+                scope.questionnaire = scope.col.colDef.questionnaire;
+                scope.filter = scope.row.entity;
+//                scope.questionnaire = scope.col.colDef.questionnaire;
+            }
+
+            var input = element.find('input'); input.val('123');
             var unitIcon = element.find('.unit-icon');
             var typeIcon = element.find('.type-icon').get(0);
             var inputController = input.controller('ngModel');
