@@ -1,5 +1,8 @@
 angular.module('myApp').controller('Contribute/RequestRolesCtrl', function($scope, $http, $location, $routeParams) {
     'use strict';
+    $scope.types = {
+        selected: []
+    };
 
     $scope.surveyTypesList = [
         {
@@ -14,16 +17,16 @@ angular.module('myApp').controller('Contribute/RequestRolesCtrl', function($scop
         }
     ];
 
-    $scope.$watch('types', function() {
-        if ($scope.types && $scope.types.length) {
-            $location.search('types', $scope.types.join(','));
+    $scope.$watch('types.selected', function() {
+        if ($scope.types.selected && $scope.types.selected.length) {
+            $location.search('types', $scope.types.selected.join(','));
         } else {
             $location.search('types', null);
         }
     });
 
     if ($routeParams.types) {
-        $scope.types = $routeParams.types.split(',');
+        $scope.types.selected = $routeParams.types.split(',');
     }
     $scope.sending = false;
     $scope.alerts = [];
@@ -33,7 +36,7 @@ angular.module('myApp').controller('Contribute/RequestRolesCtrl', function($scop
             params: {
                 geonames: _.pluck($scope.geonames, 'id').join(','),
                 roles: _.pluck($scope.roles, 'id').join(','),
-                types: $scope.types.join(',')
+                types: $scope.types.selected.join(',')
             }
         }).success(function() {
             $scope.geonames = [];

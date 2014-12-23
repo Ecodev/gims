@@ -146,8 +146,8 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
 
     var updateChartTitle = function(geonames, part) {
 
+        chart.title = {};
         if (!_.isEmpty(geonames)) {
-            chart.title = {};
             chart.title.text = _.pluck(geonames, 'name').join(', ');
         }
 
@@ -459,6 +459,9 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
 
             initCacheWithQuestionnairesName(series, part);
             updateChartTitle(geonames, part);
+            _.forEach(series, function(serie) {
+                serie.idWithIgnored = serie.id + ':' + (serie.isIgnored ? 'true' : '');
+            });
 
             if (!chart.series) {
                 chart.series = series;
@@ -615,13 +618,13 @@ angular.module('myApp.services').factory('Chart', function($location, $q, $http,
                     enableColumnResize: true,
                     color: serie.color,
                     headerCellTemplate: '<div class="ui-grid-header-cell "></div><div class="ui-grid-cell-contents ngHeaderSortColumn {{col.headerClass}}" ng-style="{\'cursor\': col.cursor}" ng-class="{ \'ngSorted\': !noSortVisible }">' +
-                        '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" popover-placement="top" popover="{{col.displayName}}">' +
-                        '       <i class="fa fa-gims-filter" style="color:{{col.colDef.color}};"></i> {{col.displayName}}' +
-                        '   </div>' +
-                        '</div></div>',
+                            '   <div ng-class="\'colt\' + col.index" class="ngHeaderText" popover-placement="top" popover="{{col.displayName}}">' +
+                            '       <i class="fa fa-gims-filter" style="color:{{col.colDef.color}};"></i> {{col.displayName}}' +
+                            '   </div>' +
+                            '</div></div>',
                     cellTemplate: '<div class="ui-grid-cell-contents text-right" ng-class="col.colIndex()">' +
-                        '<span ng-cell-text ng-show="{{row.entity.value' + serie.id + '_' + serie.geonameId + '!==null}}">{{row.entity.value' + serie.id + '_' + serie.geonameId + '}} %</span>' +
-                        '</div>'
+                            '<span ng-cell-text ng-show="{{row.entity.value' + serie.id + '_' + serie.geonameId + '!==null}}">{{row.entity.value' + serie.id + '_' + serie.geonameId + '}} %</span>' +
+                            '</div>'
                 });
 
                 // retrieve data

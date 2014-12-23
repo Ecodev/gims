@@ -26,7 +26,7 @@
                 <div class="form-group" ng-class="{'has-error':myForm.code.$invalid}">
                     <label class="control-label col-sm-1" for="survey.code">Code</label>
                     <div class="col-sm-3">
-                        <input id="survey.code" type="text" name="code" ng-model="survey.code" required />
+                        <input id="survey.code" class="form-control" type="text" name="code" ng-model="survey.code" required />
                     </div>
                     <div class="col-sm-3">
                         <span ng-show="myForm.code.$error.required" class="help-block">Required</span>
@@ -38,7 +38,7 @@
                         : myForm.name.$invalid}">
                     <label class="control-label col-sm-1" for="survey.name">Name</label>
                     <div class="col-sm-6">
-                        <input id="survey.name" type="text" name="name" ng-model="survey.name" required/>
+                        <input id="survey.name" class="form-control" type="text" name="name" ng-model="survey.name" required/>
                     </div>
                     <div class="col-sm-3">
                         <span ng-show="myForm.name.$error.required" class="help-block">Required</span>
@@ -50,7 +50,7 @@
                         : myForm.isActive.$invalid}">
                     <label class="control-label col-sm-1" for="survey.isActive">Active</label>
                     <div class="col-sm-2">
-                        <select id="survey.isActive" name="active" ng-model="survey.isActive" ng-options="c.value as c.text for c in actives"></select>
+                        <select class="form-control" id="survey.isActive" name="active" ng-model="survey.isActive" ng-options="c.value as c.text for c in actives"></select>
                     </div>
                     <div class="col-sm-3">
                         <span ng-show="myForm.isActive.$error.required" class="help-block">Required</span>
@@ -62,7 +62,7 @@
                         : myForm.year.$invalid}">
                     <label class="control-label col-sm-1" for="survey.year">Year</label>
                     <div class="col-sm-2">
-                        <input id="survey.year" type="number" name="year" ng-model="survey.year" min="1970" max="2100" required />
+                        <input id="survey.year" type="number" class="form-control" name="year" ng-model="survey.year" min="1970" max="2100" required />
                     </div>
                     <div class="col-sm-3">
                         <span ng-show="myForm.year.$error.number" class="help-block">Not a valid year</span>
@@ -73,7 +73,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-1" for="survey.comments">Comments</label>
                     <div class="col-sm-6">
-                        <textarea id="survey.comments" type="text" name="comments" ng-model="survey.comments"></textarea>
+                        <textarea class="form-control" id="survey.comments" name="comments" ng-model="survey.comments"></textarea>
                     </div>
                 </div>
 
@@ -81,7 +81,7 @@
                     <label class="control-label col-sm-1" for="survey.dateStart">Date start</label>
                     <div class="col-md-2">
                         <span class="input-group">
-                            <input id="survey.dateStart" class="input-sm" type="text" ng-model="survey.dateStart" datepicker-popup is-open="dateStartOpened"/>
+                            <input id="survey.dateStart" class="form-control" type="text" ng-model="survey.dateStart" datepicker-popup is-open="dateStartOpened"/>
                             <gims-datepicker-button class="input-group-btn"></gims-datepicker-button>
                         </span>
                     </div>
@@ -91,7 +91,7 @@
                     <label class="control-label col-sm-1" for="survey.dateEnd">Date end</label>
                     <div class="col-md-2">
                         <span class="input-group">
-                            <input id="survey.dateEnd" class="input-sm" type="text" ng-model="survey.dateEnd" datepicker-popup is-open="dateEndOpened"/>
+                            <input id="survey.dateEnd" class="form-control" type="text" ng-model="survey.dateEnd" datepicker-popup is-open="dateEndOpened"/>
                             <gims-datepicker-button class="input-group-btn"></gims-datepicker-button>
                         </span>
                     </div>

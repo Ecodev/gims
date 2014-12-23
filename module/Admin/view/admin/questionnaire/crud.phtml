@@ -18,7 +18,7 @@
                 <div class="form-group" ng-class="{'has-error': myForm.status.$invalid}" ng-show="questionnaire.id">
                     <label class="control-label col-sm-2" for="questionnaire.status">Status</label>
                     <div class="col-sm-2">
-                        <select id="questionnaire.status" name="state" ng-model="questionnaire.status"
+                        <select class="form-control" id="questionnaire.status" name="state" ng-model="questionnaire.status"
                                 ng-options="c.value as c.text for c in status" ng-disabled="statusDisabled"></select>
                     </div>
                 </div>
@@ -43,9 +43,9 @@
                 <div class="form-group" ng-class="{'has-error': myForm.dateObservationStart.$invalid}">
                     <label class="control-label col-sm-2" for="questionnaire.dateObservationStart">Observation start</label>
 
-                    <div class="col-sm-2">
+                    <div class="col-sm-3 col-md-2">
                         <span class="input-group">
-                            <input id="questionnaire.dateObservationStart" class="input-sm" type="text" name="dateObservationStart"
+                            <input id="questionnaire.dateObservationStart" class="form-control" type="text" name="dateObservationStart"
                                    ng-model="questionnaire.dateObservationStart"
                                    is-open="dateObservationStartOpened"
                                    required
@@ -61,9 +61,9 @@
                 <div class="form-group" ng-class="{'has-error': myForm.dateObservationEnd.$invalid}">
                     <label class="control-label col-sm-2" for="questionnaire.dateObservationEnd">Observation end</label>
 
-                    <div class="col-sm-2">
+                    <div class="col-sm-3 col-md-2">
                         <span class="input-group">
-                            <input id="questionnaire.dateObservationEnd" class="input-sm" type="text" name="dateObservationEnd"
+                            <input id="questionnaire.dateObservationEnd" class="form-control" type="text" name="dateObservationEnd"
                                    ng-model="questionnaire.dateObservationEnd"
                                    is-open="dateObservationEndOpened"
                                    required
@@ -79,7 +79,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="questionnaire.comments">Comments</label>
                     <div class="col-sm-6">
-                        <textarea id="questionnaire.comments" type="text" name="comments" ng-model="questionnaire.comments"></textarea>
+                        <textarea class="form-control" id="questionnaire.comments" name="comments" ng-model="questionnaire.comments"></textarea>
                     </div>
                 </div>
 

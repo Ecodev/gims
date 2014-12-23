@@ -19,7 +19,7 @@
                 <div class="form-group"  ng-class="{'has-error': myForm.name.$invalid}">
                     <label class="control-label col-md-2" for="question.name">Label</label>
                     <div class="col-md-6">
-                        <input type="text" name="name" ng-model="question.name" required/>
+                        <input type="text" class="form-control" name="name" ng-model="question.name" required/>
                     </div>
                     <div class="col-md-2">
                         <span ng-show="myForm.name.$error.required" class="help-block">Required</span>
@@ -30,6 +30,7 @@
                     <label class="control-label col-md-2" for="type">Type</label>
                     <div class="col-md-6">
                         <select required
+                                class="form-control"
                                 name="type"
                                 ng-model="question.type"
                                 ng-change="initChoices()"
@@ -71,7 +72,7 @@
                 <div class="form-group ng-trans ng-trans-fade-down" ng-show="isChapter">
                     <label class="control-label col-md-2" for="question.description">Description</label>
                     <div class='col-md-6'>
-                        <textarea type="text" name="name" ng-model="question.description"></textarea>
+                        <textarea class="form-control" name="name" ng-model="question.description"></textarea>
                     </div>
                 </div>
                 <br/><br/>
@@ -80,7 +81,7 @@
                 <div class="form-group">
                     <label class="control-label col-md-2" for="question.chapter">Belongs to chapter</label>
                     <div class='col-md-6'>
-                        <select class='col-md-12'
+                        <select class="form-control col-md-12"
                                 name="chapter"
                                 ng-model="question.chapter.id"
                                 ng-options="p.id as p.name for p in chapterList">
@@ -132,11 +133,11 @@
                     <div ng-form name='myInnerForm' class="form-group" ng-class="{'has-error': myInnerForm.choiceName.$invalid || myInnerForm.choiceValue.$invalid}">
                         <label class="control-label col-md-2" for="choiceLabel">Choice {{$index + 1}}</label>
                         <div class='col-md-6'>
-                            <input id="choiceLabel" type="text" name="choiceName" ng-model="choice.name" ng-required="isChoices"/>
+                            <input id="choiceLabel" type="text" class="form-control" name="choiceName" ng-model="choice.name" ng-required="isChoices"/>
                         </div>
                         <div class='col-md-1 ng-trans ng-trans-fade-down' ng-hide='question.isMultiple'>
                             <select ng-required="isChoices && question.isMultiple==0"
-                                    class="input-sm col-md-12"
+                                    class="input-sm col-md-12 form-control"
                                     name="choiceValue"
                                     ng-model="choice.value"
                                     ng-options="p.value as p.text for p in percentages">
@@ -166,12 +167,12 @@
                 <div class="form-group form-horizontal ng-trans ng-trans-fade-down" ng-class="{'has-error': myForm.sorting.$invalid}" ng-show="question.id">
                     <label class="control-label col-md-2" for="question.sorting">Sorting</label>
                     <div class="col-md-1">
-                        <input type="number" name="sorting" ng-model="question.sorting"/>
+                        <input type="number" class="form-control" name="sorting" ng-model="question.sorting"/>
                     </div>
                 </div>
 
 
-                <!-- @todo : correct embeded ng-grid
+                <!-- @todo : correct embeded ui-grid
                         <div class="form-group form-horizontal" ng-show="isChapter" >
                             <label class="control-label col-md-2" for="question.sorting">Included questions</label>
                             <div class='col-md-8'>
@@ -190,7 +191,7 @@
 
                         <label class="control-label col-md-2" for="alternateName">{{questionnaires[questionnaireId].name}}</label>
                         <div class="col-md-6">
-                            <input type="text" name="alternateName" ng-model="question.alternateNames[questionnaireId]" required/>
+                            <input type="text" class="form-control" name="alternateName" ng-model="question.alternateNames[questionnaireId]" required/>
                         </div>
                         <div class='col-md-1'>
                             <button class="btn btn-danger" ng-click="deleteAlternate(questionnaireId)" ><i class="fa fa-trash-o"></i></button>
@@ -203,6 +204,7 @@
                     </div>
                     <div class="col-md-4">
                         <select
+                            class="form-control"
                             name="questionnaire"
                             ng-model="question.questionnaireForAlternateNames"
                             ng-options="q.name for q in notUsedQuestionnaires">

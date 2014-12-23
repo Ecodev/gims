@@ -1,0 +1,8 @@
+
+.ui-select-bootstrap > .ui-select-match {
+    .btn {
+        // this should work according follwing https://github.com/angular-ui/ui-select/commit/7320f9d63156f3986d40f0cd86661498069326bd
+        // but it doesn't for some because of mising '.btn' in original code
+        text-align: left;
+    }
+}

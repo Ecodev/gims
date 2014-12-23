@@ -39,7 +39,7 @@
                 <div class="form-group"  ng-class="{'has-error': myForm.name.$invalid}">
                     <h4 class="control-label col-md-2" for="filter.name" style="background:{{filter.bgColor}};margin-top:0px;padding-bottom:7px;"><i class='fa fa-gims-filter' style='color:{{filter.color}}'></i> Filter Label</h4>
                     <div class="col-md-8">
-                        <input type="text" name="name" ng-model="filter.name" required/>
+                        <input type="text" class="form-control" name="name" ng-model="filter.name" required/>
                     </div>
                     <div class="col-md-2">
                         <span ng-show="myForm.name.$error.required" class="help-block">Required</span>

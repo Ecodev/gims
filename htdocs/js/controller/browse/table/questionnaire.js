@@ -4,7 +4,6 @@ angular.module('myApp').controller('Browse/Table/QuestionnaireCtrl', function($s
     // Init to empty
     $scope.tabs = {};
     $scope.columnDefs = [];
-    $scope.surveysTemplate = "[[item.code]] - [[item.name]]";
 
     $scope.gridOptions = {
         data: 'table'

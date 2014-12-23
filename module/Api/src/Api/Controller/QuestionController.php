@@ -35,7 +35,7 @@ class QuestionController extends AbstractChildRestfulController
         if (is_callable(array($question, 'getAnswers'))) {
             $answers = $question->getAnswers($questionnaire);
 
-            // special case for question, reorganize keys for the needs of NgGrid:
+            // special case for question, reorganize keys for the needs of ui-grid:
             // Numerical key must correspond to the id of the part.
             $output = array();
             foreach ($answers as $answer) {

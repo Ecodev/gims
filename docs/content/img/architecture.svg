@@ -210,7 +210,7 @@
        <path fill="none" stroke="rgb(52,101,175)" d="M 25811,3905 C 25811,3736 26005,3568 26199,3568 L 28725,3568 C 28919,3568 29114,3736 29114,3905 L 29114,6096 C 29114,6265 28919,6434 28725,6434 L 26199,6434 C 26005,6434 25811,6265 25811,6096 L 25811,3905 Z"/>
        <path fill="none" stroke="rgb(52,101,175)" d="M 25811,3568 L 25811,3568 Z"/>
        <path fill="none" stroke="rgb(52,101,175)" d="M 29114,6434 L 29114,6434 Z"/>
-       <text class="TextShape"><tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="26518" y="4430"><tspan fill="rgb(0,0,0)" stroke="none">AngularUI</tspan></tspan></tspan><tspan ooo:numbering-type="bullet-style" class="ListItem" font-family="Arial, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="26099" y="5300"><tspan id="id45.bp" class="BulletPlaceholder"/></tspan><tspan class="TextPosition" x="26699" y="5386"><tspan fill="rgb(0,0,0)" stroke="none">ui-boostrap</tspan></tspan></tspan><tspan ooo:numbering-type="bullet-style" class="ListItem" font-family="Arial, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="26099" y="5778"><tspan id="id46.bp" class="BulletPlaceholder"/></tspan><tspan class="TextPosition" x="26699" y="5864"><tspan fill="rgb(0,0,0)" stroke="none">ng-grid</tspan></tspan></tspan></text>
+       <text class="TextShape"><tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="26518" y="4430"><tspan fill="rgb(0,0,0)" stroke="none">AngularUI</tspan></tspan></tspan><tspan ooo:numbering-type="bullet-style" class="ListItem" font-family="Arial, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="26099" y="5300"><tspan id="id45.bp" class="BulletPlaceholder"/></tspan><tspan class="TextPosition" x="26699" y="5386"><tspan fill="rgb(0,0,0)" stroke="none">ui-boostrap</tspan></tspan></tspan><tspan ooo:numbering-type="bullet-style" class="ListItem" font-family="Arial, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="26099" y="5778"><tspan id="id46.bp" class="BulletPlaceholder"/></tspan><tspan class="TextPosition" x="26699" y="5864"><tspan fill="rgb(0,0,0)" stroke="none">ui-grid</tspan></tspan></tspan></text>
        <g class="BulletChars">
         <g id="bullet-char(id46.bp)" class="BulletChar">
          <g transform="translate(26099,5778)" fill="rgb(0,0,0)" stroke="none">
@@ -405,7 +405,7 @@
        <path fill="none" stroke="rgb(52,101,175)" d="M 25781,9518 C 25781,9372 25975,9227 26169,9227 L 28695,9227 C 28889,9227 29084,9372 29084,9518 L 29084,11415 C 29084,11561 28889,11707 28695,11707 L 26169,11707 C 25975,11707 25781,11561 25781,11415 L 25781,9518 Z"/>
        <path fill="none" stroke="rgb(52,101,175)" d="M 25781,9227 L 25781,9227 Z"/>
        <path fill="none" stroke="rgb(52,101,175)" d="M 29084,11707 L 29084,11707 Z"/>
-       <text class="TextShape"><tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="26723" y="10613"><tspan fill="rgb(0,0,0)" stroke="none">Select2</tspan></tspan></tspan></text>
+       <text class="TextShape"><tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="423px" font-weight="400"><tspan class="TextPosition" x="26723" y="10613"><tspan fill="rgb(0,0,0)" stroke="none">ui-select</tspan></tspan></tspan></text>
       </g>
      </g>
      <g class="com.sun.star.drawing.CustomShape">

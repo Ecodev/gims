@@ -94,6 +94,8 @@
                                         <p>
                                         <tabset>
                                             <tab heading="Part">
+                                                <div class="container-fluid">
+                                                    <div class="row">
                                                 <gims-select
                                                     model="tabs.part"
                                                     api="part"
@@ -101,6 +103,8 @@
                                                     disabled="isLoading"
                                                     style="width: 100%">
                                                 </gims-select>
+                                                        </div>
+                                                    </div>
                                             </tab>
                                         </tabset>
                                         </p>
@@ -458,9 +462,12 @@
                                                     </label>
                                                 </div>
                                                 <div class="col-md-12">
-                                                    <select ui-select2 ng-model="panelTabs.reference" name="reference" style="width: 100%" >
-                                                        <option ng-repeat="serie in chart.series" value="{{serie.id}}" ng-if="!serie.isAdjusted && !serie.isIgnored && serie.type == 'line'">{{serie.name}}</option>
-                                                    </select>
+                                                    <ui-select ng-model="panelTabs.reference" style="width: 100%;">
+                                                        <ui-select-match>{{$select.selected.name}}</ui-select-match>
+                                                        <ui-select-choices repeat="serie.id as serie in chart.series | filter:isNormalLineSerie">
+                                                            <div ng-bind-html="serie.name | highlight: $select.search"></div>
+                                                        </ui-select-choices>
+                                                    </ui-select>
                                                 </div>
                                             </div>
 
@@ -471,9 +478,12 @@
                                                     </label>
                                                 </div>
                                                 <div class="col-md-12">
-                                                    <select ui-select2 ng-model="panelTabs.target" data-placeholder="Select filter to target"  style="width: 100%" >
-                                                        <option ng-repeat="serie in chart.series" value="{{serie.id}}:{{serie.isIgnored}}" ng-if="!serie.isAdjusted && serie.type == 'line' && serie.id != panelTabs.nsa">{{serie.name}}</option>
-                                                    </select>
+                                                    <ui-select ng-model="panelTabs.target" style="width: 100%;">
+                                                        <ui-select-match>{{$select.selected.name}}</ui-select-match>
+                                                        <ui-select-choices repeat="serie.idWithIgnored as serie in chart.series | filter:isNormalOrIgnoredLineSerie">
+                                                            <div ng-bind-html="serie.name | highlight: $select.search"></div>
+                                                        </ui-select-choices>
+                                                    </ui-select>
                                                 </div>
                                             </div>
 
@@ -484,9 +494,12 @@
                                                     </label>
                                                 </div>
                                                 <div class="col-md-12">
-                                                    <select ui-select2 ng-model="panelTabs.overridable" data-placeholder="Select filter to be modified"  style="width: 100%">
-                                                        <option ng-repeat="filter in panelTabs.referenceChildren" value="{{filter.id}}">{{filter.name}}</option>
-                                                    </select>
+                                                    <ui-select ng-model="panelTabs.overridable" style="width: 100%;">
+                                                        <ui-select-match>{{$select.selected.name}}</ui-select-match>
+                                                        <ui-select-choices repeat="filter.id as filter in panelTabs.referenceChildren">
+                                                            <div ng-bind-html="filter.name | highlight: $select.search"></div>
+                                                        </ui-select-choices>
+                                                    </ui-select>
                                                 </div>
                                             </div>
 

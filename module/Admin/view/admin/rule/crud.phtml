@@ -19,7 +19,7 @@
                 <div class="form-group" ng-class="{'has-error': myForm.name.$invalid}">
                     <label class="control-label col-sm-1" for="rule.name"><?php echo $this->translate("Name"); ?></label>
                     <div class="col-sm-6">
-                        <input id="rule.name" type="text" name="name" ng-model="rule.name" required ng-minlength="3"/>
+                        <input id="rule.name" type="text" class="form-control" name="name" ng-model="rule.name" required ng-minlength="3"/>
                     </div>
                     <div class="col-sm-3">
                         <span ng-show="myForm.name.$error.required" class="help-block"><?php echo $this->translate("Required"); ?></span>

@@ -1,5 +1,5 @@
 /**
- * ng-grid wrapper for easier use within GIMS
+ * ui-grid wrapper for easier use within GIMS
  *
  */
 angular.module('myApp.directives').directive('gimsGrid', function() {
@@ -17,13 +17,13 @@ angular.module('myApp.directives').directive('gimsGrid', function() {
                 '        <nav>' +
                 '            <ul class="pager" style="margin: 0px;"> ' +
                 '                <li><a href ng-click="previous()">Previous</a></li>' +
-                '                <li><input type="number" ng-model="paging.page" min="1" step="1" style="display: inline-block; width: 3em;"></li>' +
+                '                <li><input type="number" class="form-control" ng-model="paging.page" min="1" step="1" style="display: inline-block; width: 3em;"></li>' +
                 '                <li><a href ng-click="next()">Next</a></li>' +
                 '            </ul>' +
                 '        </nav>' +
                 '    </div>' +
                 '    <div class="col-md-3" style="text-align: right">Per page: ' +
-                '        <select ng-model="paging.perPage" style="display: inline-block; width: 6em;">' +
+                '        <select class="form-control" ng-model="paging.perPage" style="display: inline-block; width: 6em;">' +
                 '            <option>25</option>' +
                 '            <option>50</option>' +
                 '            <option>100</option>' +

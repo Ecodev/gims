@@ -10,7 +10,7 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function()
                 '<div>' +
                 '    <div class="row show-grid">' +
                 '        <div class="col-md-6">' +
-                '            <input type="text" ng-model="gridOptions.filterOptions.filterText" placeholder="Search..." class="search" style="width: 400px"/>' +
+                '            <input type="text" ng-model="gridOptions.filterOptions.filterText" placeholder="Search..." class="search form-control" style="width: 400px"/>' +
                 '        </div>' +
                 '        <div class="col-md-6" style="text-align: right">' +
                 '            <gims-link-new origin="survey" target="questionnaire" return-tab="2" ></gims-link-new>' +
@@ -44,7 +44,7 @@ angular.module('myApp.directives').directive('gimsGridQuestionnaire', function()
                 }
             });
 
-            // Configure ng-grid.
+            // Configure ui-grid.
             $scope.queryparams = {fields: 'permissions,dateLastAnswerModification,reporterNames,validatorNames,completed,spatial,comments,status'};
             $scope.gridOptions = {
                 extra: {

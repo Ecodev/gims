@@ -13,19 +13,21 @@ describe('browse/table/filter', function() {
     });
 
     it('should render select for questionnaires selection', function() {
-        expect(element.all(by.css('[ng-view] .select2-container')).count()).toBe(3);
+        expect(element.all(by.css('[ng-view] .ui-select-container')).count()).toBe(3);
     });
 
 });
 
-ddescribe('browse/table/filter menu', function() {
+describe('browse/table/filter menu', function() {
 
     beforeEach(function() {
         // Always close menu if it was opened, by clicking anywhere
         element(by.css('footer')).click();
     });
 
-    browser.get('/browse/table/filter?questionnaires=2&filters=3,75,27,9,10');
+    browser.get('/browse/table/filter?questionnaires=2&filters=4,76,28,10,11');
+    browser.waitForAngular();
+    browser.driver.sleep(3000);
 
     it('should render filter table', function() {
         expect(element.all(by.css('[ng-view] .table-filter')).count()).toBe(1);
@@ -67,9 +69,9 @@ ddescribe('browse/table/filter menu', function() {
         element(by.css('.input-group-btn .fa-gims-summand')).click();
         expect(element(by.css('.gims-dropdown-menu li:nth-child(2)')).getText()).toContain("Computed with summands");
         expect(element(by.css('.gims-dropdown-menu li:nth-child(4)')).getText()).toContain("Summands used for computation");
-        expect(element(by.css('.gims-dropdown-menu li:nth-child(5)')).getText()).toContain("Protected ground water (all protected wells or springs)");
-        expect(element(by.css('.gims-dropdown-menu li:nth-child(6)')).getText()).toContain("Protected ground water (all protected wells or springs)");
-        expect(element(by.css('.gims-dropdown-menu li:nth-child(7)')).getText()).toContain("Protected ground water (all protected wells or springs)");
-        expect(element(by.css('.gims-dropdown-menu li:nth-child(8)')).getText()).toContain("Protected ground water (all protected wells or springs)");
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(5)')).getText()).toContain("Undefined protected wells or springs");
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(6)')).getText()).toContain("Tubewell, borehole");
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(7)')).getText()).toContain("Protected well");
+        expect(element(by.css('.gims-dropdown-menu li:nth-child(8)')).getText()).toContain("Protected spring");
     });
 });

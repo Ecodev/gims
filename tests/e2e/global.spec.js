@@ -25,7 +25,7 @@ describe("Xdebug tests", function() {
     pages.forEach(function(page) {
         it('should not have error on page ' + page, function() {
             browser.get(page);
-            expect(browser.getCurrentUrl()).toBe(browser.baseUrl + page);
+            expect(browser.getCurrentUrl()).toContain(browser.baseUrl + page);
             expect(element.all(by.css('.xdebug-error')).count()).toBe(0);
         });
     });

@@ -18,43 +18,43 @@ angular.module('myApp.services').factory('UserModal', function($modal) {
                     '<form name="myForm">' +
                     '   <div class="form-group" ng-class="{\'has-error\': myForm.name.$invalid}">' +
                     '       <label class="control-label" for="localUser.name">Name (first name and last name)</label>' +
-                    '       <input id="localUser.name" type="text" name="name" ng-model="localUser.name" required ng-minlength="3" ng-disabled="localUser.lastLogin" />' +
+                    '       <input id="localUser.name" type="text" class="form-control" name="name" ng-model="localUser.name" required ng-minlength="3" ng-disabled="localUser.lastLogin" />' +
                     '       <span ng-show="myForm.name.$error.required" class="help-block">Required</span>' +
                     '       <span ng-show="myForm.name.$error.minlength" class="help-block">It must be at least 3 characters long</span>' +
                     '   </div>' +
                     '   <div class="form-group" ng-class="{\'has-error\': myForm.email.$invalid}">' +
                     '       <label class="control-label" for="localUser.email">Email</label>' +
-                    '       <input id="localUser.email" type="email" name="email" ng-model="localUser.email" required ng-disabled="localUser.lastLogin" />' +
+                    '       <input id="localUser.email" type="email" class="form-control" name="email" ng-model="localUser.email" required ng-disabled="localUser.lastLogin" />' +
                     '       <span ng-show="myForm.email.$error.required" class="help-block">Required</span>' +
                     '       <span ng-show="myForm.email.$error.email" class="help-block">Enter a valid email address</span>' +
                     '   </div>' +
                     '   <div class="form-group" ng-class="{\'has-error\': myForm.phone.$invalid}">' +
                     '       <label class="control-label" for="localUser.phone">Phone</label>' +
-                    '       <input id="localUser.phone" type="text" name="phone" ng-model="localUser.phone" ng-disabled="localUser.lastLogin" />' +
+                    '       <input id="localUser.phone" type="text" class="form-control" name="phone" ng-model="localUser.phone" ng-disabled="localUser.lastLogin" />' +
                     '   </div>' +
                     '   <div class="form-group" ng-class="{\'has-error\': myForm.skype.$invalid}">' +
                     '       <label class="control-label" for="localUser.skype">Skype</label>' +
-                    '       <input id="localUser.skype" type="text" name="skype" ng-model="localUser.skype" ng-disabled="localUser.lastLogin" />' +
+                    '       <input id="localUser.skype" type="text" class="form-control" name="skype" ng-model="localUser.skype" ng-disabled="localUser.lastLogin" />' +
                     '   </div>' +
                     '   <div class="form-group" ng-class="{\'has-error\': myForm.job.$invalid}">' +
                     '       <label class="control-label" for="localUser.job">Job title</label>' +
-                    '       <input id="localUser.job" type="text" name="job" ng-model="localUser.job" ng-disabled="localUser.lastLogin" />' +
+                    '       <input id="localUser.job" type="text" class="form-control" name="job" ng-model="localUser.job" ng-disabled="localUser.lastLogin" />' +
                     '   </div>' +
                     '   <div class="form-group" ng-class="{\'has-error\': myForm.ministry.$invalid}">' +
                     '       <label class="control-label" for="localUser.ministry">Ministry / Departement</label>' +
-                    '       <input id="localUser.ministry" type="text" name="ministry" ng-model="localUser.ministry" ng-disabled="localUser.lastLogin" />' +
+                    '       <input id="localUser.ministry" type="text" class="form-control" name="ministry" ng-model="localUser.ministry" ng-disabled="localUser.lastLogin" />' +
                     '   </div>' +
                     '   <div class="form-group" ng-class="{\'has-error\': myForm.address.$invalid}">' +
                     '       <label class="control-label" for="localUser.address">Address</label>' +
-                    '       <textarea id="localUser.address" type="text" name="address" ng-model="localUser.address" ng-disabled="localUser.lastLogin" ></textarea>' +
+                    '       <textarea id="localUser.address" type="text" class="form-control" name="address" ng-model="localUser.address" ng-disabled="localUser.lastLogin" ></textarea>' +
                     '   </div>' +
                     '   <div class="form-group" ng-class="{\'has-error\': myForm.zip.$invalid}">' +
                     '       <label class="control-label" for="localUser.zip">ZIP</label>' +
-                    '       <input id="localUser.zip" type="text" name="zip" ng-model="localUser.zip" ng-disabled="localUser.lastLogin" />' +
+                    '       <input id="localUser.zip" type="text" class="form-control" name="zip" ng-model="localUser.zip" ng-disabled="localUser.lastLogin" />' +
                     '   </div>' +
                     '   <div class="form-group" ng-class="{\'has-error\': myForm.city.$invalid}">' +
                     '       <label class="control-label" for="localUser.city">City</label>' +
-                    '       <input id="localUser.city" type="text" name="city" ng-model="localUser.city" ng-disabled="localUser.lastLogin" />' +
+                    '       <input id="localUser.city" type="text" class="form-control" name="city" ng-model="localUser.city" ng-disabled="localUser.lastLogin" />' +
                     '   </div>' +
                     '   <div class="form-group" ng-class="{\'has-error\': myForm.geoname.$invalid}">' +
                     '       <label class="control-label" for="geoname">Country</label>' +

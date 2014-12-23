@@ -28,29 +28,29 @@
                         <tabset>
                             <tab heading="Filter sets">
                                 <gims-select
-                                        model="tabs.filterSets"
-                                        api="filterSet"
-                                        name="filterSet"
-                                        placeholder="Select filter set"
-                                        disabled="isLoading"
-                                        multiple="true"
-                                        style="width: 100%">
+                                    model="tabs.filterSets"
+                                    api="filterSet"
+                                    name="filterSet"
+                                    placeholder="Select filter set"
+                                    disabled="isLoading"
+                                    multiple="true"
+                                    style="width: 100%">
                                 </gims-select>
                             </tab>
                             <tab heading="Filter's children">
                                 <gims-filter
-                                        model="tabs.filter"
-                                        name="filter"
-                                        disabled="isLoading">
+                                    model="tabs.filter"
+                                    name="filter"
+                                    disabled="isLoading">
                                 </gims-filter>
                             </tab>
                             <tab heading="Filters ({{tabs.filters.length}})">
                                 <gims-filter
-                                        model="tabs.filters"
-                                        name="filters"
-                                        query-params="filterFields"
-                                        dependencies="filterSet,filter"
-                                        multiple="true">
+                                    model="tabs.filters"
+                                    name="filters"
+                                    query-params="filterFields"
+                                    dependencies="filterSet,filter"
+                                    multiple="true">
                                 </gims-filter>
                             </tab>
                         </tabset>
@@ -71,36 +71,33 @@
                             <tabset>
                                 <tab heading="Regions / Countries">
                                     <gims-select
-                                            model="tabs.geonames"
-                                            api="geoname"
-                                            placeholder="Select an area"
-                                            change-url="false"
-                                            multiple
-                                            style="width: 100%">
+                                        model="tabs.geonames"
+                                        api="geoname"
+                                        placeholder="Select an area"
+                                        change-url="false"
+                                        multiple
+                                        style="width: 100%">
                                     </gims-select>
                                 </tab>
                                 <tab heading="Surveys">
                                     <gims-select
-                                            model="tabs.surveys"
-                                            api="survey"
-                                            placeholder="Select surveys"
-                                            search-attributes="code,name"
-                                            custom-selection-template="{{surveysTemplate}}"
-                                            custom-result-template="{{surveysTemplate}}"
-                                            change-url="false"
-                                            multiple
-                                            style="width: 100%">
+                                        model="tabs.surveys"
+                                        api="survey"
+                                        placeholder="Select surveys"
+                                        change-url="false"
+                                        multiple
+                                        style="width: 100%">
                                     </gims-select>
                                 </tab>
                                 <tab heading="Questionnaires ({{tabs.questionnaires.length}})">
                                     <gims-select
-                                            model="tabs.questionnaires"
-                                            name="questionnaires"
-                                            api="questionnaire"
-                                            placeholder="Select questionnaires"
-                                            disabled="isLoading"
-                                            multiple
-                                            style="width: 100%">
+                                        model="tabs.questionnaires"
+                                        name="questionnaires"
+                                        api="questionnaire"
+                                        placeholder="Select questionnaires"
+                                        disabled="isLoading"
+                                        multiple="true"
+                                        style="width: 100%">
                                     </gims-select>
                                 </tab>
                             </tabset>

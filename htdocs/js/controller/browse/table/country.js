@@ -6,7 +6,7 @@ angular.module('myApp').controller('Browse/Table/CountryCtrl', function($scope, 
     $scope.tabs = {};
     $scope.tabs.years = $location.search().years;
 
-    // Configure ng-grid.
+    // Configure ui-grid.
     $scope.gridOptions = {
         data: 'table'
     };

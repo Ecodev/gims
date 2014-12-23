@@ -7,6 +7,7 @@ angular.module('myApp').controller('Admin/Question/CrudCtrl', function($scope, $
     var returnUrl = '/';
 
     $scope.sending = false;
+    $scope.question = {};
 
     // @TODO : manage value null and integer value
     $scope.percentages = [

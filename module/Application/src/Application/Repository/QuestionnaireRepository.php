@@ -185,6 +185,7 @@ class QuestionnaireRepository extends AbstractChildRepository
         // Combine all data together
         foreach ($questionnaires as &$questionnaire) {
             $questionnaire['survey']['year'] = (int) $questionnaire['survey']['year'];
+            $questionnaire['name'] = $questionnaire['survey']['code'] . ' - ' . $questionnaire['geoname']['name'];
 
             // Inject answers into their questions
             foreach ($questionnaire['survey']['questions'] as &$question) {

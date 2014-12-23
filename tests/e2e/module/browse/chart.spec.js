@@ -12,7 +12,7 @@ describe('browse/chart', function() {
     });
 
     it('should render select for geoname, filter, filterSets, parts and projection', function() {
-        expect(element.all(by.css('[ng-view] .select2-container')).count()).toBe(5);
+        expect(element.all(by.css('[ng-view] .ui-select-container')).count()).toBe(4);
     });
 
 });

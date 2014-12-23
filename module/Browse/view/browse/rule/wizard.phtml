@@ -10,7 +10,7 @@
             <label class="control-label col-md-2" for="token.selected"><?php echo $this->translate("Syntax"); ?></label>
             <div class="col-md-8">
                 <p>
-                    <select name="token"
+                    <select name="token" class="form-control"
                             id="token.selected"
                             ng-model="token.selected"
                             ng-options="t.name group by t.group for t in availableTokens"
@@ -169,7 +169,7 @@
             <label class="control-label col-md-2" for="token.usage"><?php echo $this->translate("Usage"); ?></label>
             <div class="col-md-8">
                 <p>
-                    <select name="token"
+                    <select name="token" class="form-control"
                             id="token.usage"
                             ng-model="token.usage"
                             ng-options="u.part.name group by u.rule.name for u in suggestedQuestionnaireUsages"

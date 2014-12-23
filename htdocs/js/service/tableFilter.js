@@ -172,7 +172,7 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
         }).success(function(questionnaires) {
 
             // when retrieve questionnaire with read permissions, remove pré-selected questionnaires from list if they're not received
-            var removedQuestionnaires = _.difference(_.pluck(data.questionnaires, 'id'), _.pluck(questionnaires, 'id'));
+            var removedQuestionnaires = _.difference(questionnaireIds, _.pluck(questionnaires, 'id'));
             _.forEach(removedQuestionnaires, function(questionnaireId) {
                 var index = _.findIndex(data.questionnaires, {id: questionnaireId});
                 if (index >= 0) {

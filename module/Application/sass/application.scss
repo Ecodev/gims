@@ -33,14 +33,16 @@ input.error {
 @import "cell-menu";
 @import "jquery-ui.scss";
 @import "tree-control.scss";
+@import "angular-ui-select.scss";
+@import "angular-ui-select-customization.scss";
 
 // Override ui-grid declaration to accomodate path
 @font-face {
-  font-family: 'ui-grid';
-  src: url('/lib/angular-ui-grid/ui-grid.eot');
-  src: url('/lib/angular-ui-grid/ui-grid.eot#iefix') format('embedded-opentype'), url('/lib/angular-ui-grid/ui-grid.woff') format('woff'), url('/lib/angular-ui-grid/ui-grid.ttf?') format('truetype'), url('/lib/angular-ui-grid/ui-grid.svg?#ui-grid') format('svg');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'ui-grid';
+    src: url('/lib/angular-ui-grid/ui-grid.eot');
+    src: url('/lib/angular-ui-grid/ui-grid.eot#iefix') format('embedded-opentype'), url('/lib/angular-ui-grid/ui-grid.woff') format('woff'), url('/lib/angular-ui-grid/ui-grid.ttf?') format('truetype'), url('/lib/angular-ui-grid/ui-grid.svg?#ui-grid') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
 
 $brand-primary-light: #d9e8f4;
@@ -235,30 +237,6 @@ table.table {
 #panelContent{
     overflow-y: scroll;
     height:100%;
-}
-
-/* Extend select 2 advanced template */
-.select2list .select2-search-choice {
-    display:block !important;
-    float:none !important;
-    margin-right:5px !important;
-    margin-bottom:5px !important;
-    background:none !important;
-    border:none !important;
-    border-radius:0 !important;
-}
-
-.select2-results .hide-in-results{
-    display:none ;
-}
-
-.select-label{
-    line-height:1.75em;
-}
-
-.select-label-with-icon{
-    padding-left: 2em !important;
-    text-indent: -0.6em !important;
 }
 
 .popover-word-break + .popover .popover-content{

@@ -2,9 +2,10 @@
 // Declare app level module which depends on filters, and services
 angular.module('myApp', [
     'ngRoute',
+    'ngSanitize',
     'restangular',
     'ui.utils',
-    'ui.select2',
+    'ui.select',
     'ui.bootstrap',
     'ui.grid',
     'ui.grid.autoResize',
@@ -121,7 +122,7 @@ angular.module('myApp', [
                     var firstLogin = new Date(response.data.firstLogin);
 
                     if ((dateNow - firstLogin
-                        ) < delay) {
+                            ) < delay) {
                         $location.url('/admin/user/edit/' + response.data.id + '?' + queryString);
                     }
                 }
@@ -146,3 +147,10 @@ angular.module('myApp', [
 angular.module('myApp.filters', []);
 angular.module('myApp.services', []);
 angular.module('myApp.directives', []);
+
+// Overwrite ui-select template, to use flexbox model instead of buggy bootstrap grid model
+angular.module("ui.select").run([
+    "$templateCache",
+    function($templateCache) {
+        $templateCache.put("bootstrap/match.tpl.html", "<div style=\"display: flex\" class=\"btn-group ui-select-match btn-block\" ng-hide=\"$select.open\" ng-disabled=\"$select.disabled\" ng-class=\"{\'btn-default-focus\':$select.focus}\"><button style=\"flex-grow: 1;\" type=\"button\" class=\"btn btn-default\" tabindex=\"-1\" ng-click=\"$select.activate()\"><span ng-show=\"$select.isEmpty()\" class=\"text-muted\">{{$select.placeholder}}</span> <span ng-hide=\"$select.isEmpty()\" ng-transclude=\"\"></span></button> <button class=\"btn btn-default\" ng-if=\"$select.allowClear && !$select.isEmpty()\" ng-click=\"$select.select(undefined)\"><span class=\"glyphicon glyphicon-remove ui-select-toggle\"></span></button> <button class=\"btn btn-default\" ng-click=\"$select.activate()\"><span class=\"caret ui-select-toggle\" ng-click=\"$select.toggle($event)\"></span></button></div>");
+    }]);

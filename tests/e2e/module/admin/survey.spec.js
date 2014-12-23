@@ -12,11 +12,11 @@ describe('admin/survey', function() {
     });
 
     it('should display a grid containing surveys', function() {
-        expect(element.all(by.css('[ng-view] [ng-grid]')).count()).toBe(1);
+        expect(element.all(by.css('[ng-view] [ui-grid]')).count()).toBe(1);
     });
 
     it('should contains a grid with more than 0 element', function() {
-        expect(element.all(by.css('[ng-view] [ng-grid] .ngCanvas')).count()).toBeGreaterThan(0);
+        expect(element.all(by.css('[ng-view] [ui-grid] .ui-grid-cell-contents')).count()).toBeGreaterThan(0);
     });
 
     it('should contains a link for creating new survey', function() {
@@ -49,8 +49,8 @@ describe('admin/survey/new', function() {
         element(by.model('survey.isActive')).element(by.css("[value='0']")).click();
         element(by.model('survey.year')).sendKeys('2013');
         element(by.model('survey.comments')).sendKeys('foo bar');
-        element(by.model('survey.dateStart')).sendKeys('08/05/2013');
-        element(by.model('survey.dateEnd')).sendKeys('08/05/2014');
+        element(by.model('survey.dateStart')).sendKeys('2013-05-08');
+        element(by.model('survey.dateEnd')).sendKeys('2014-05-08');
     }
 
     it('should have tab "General" visible but *not* tabs "question", "questionnaires" and "users"', function() {
@@ -109,7 +109,7 @@ describe('admin/survey/new', function() {
         expect(browser.getCurrentUrl()).toBe(browser.baseUrl + '/admin/survey#3');
 
         // The deleted survey shouldn't be in the list anymore
-        element(by.css('[ng-view] [ng-grid]')).all(by.xpath('span[text() = "' + randomCode + '"]')).then(function(elements) {
+        element(by.css('[ng-view] [ui-grid]')).all(by.xpath('span[text() = "' + randomCode + '"]')).then(function(elements) {
             expect(elements.length).toBe(0);
         });
     });
@@ -148,23 +148,16 @@ describe('admin/questionnaire/new', function() {
         gimsUtility.login(browser);
     });
 
-    function getSelect2FirstItem(select2Id) {
-        element(by.css('div#s2id_' + select2Id)).click();
-        var item = element(by.css('.select2-result-selectable:first-child'));
-
-        return item;
+    function selectFirstItemUiSelect() {
+        element(by.css('.ui-select-container')).click();
+        element(by.css('.ui-select-choices-row-inner:first-child')).click();
     }
 
     var selectedCountry;
     function fillQuestionnaireForm() {
-        getSelect2FirstItem('autogen1').then(function(country) {
-            country.getText().then(function(countryName) {
-                selectedCountry = countryName;
-                country.click();
-            });
-        });
-        element(by.model('questionnaire.dateObservationStart')).sendKeys('08/05/2013');
-        element(by.model('questionnaire.dateObservationEnd')).sendKeys('08/05/2014');
+        selectFirstItemUiSelect();
+        element(by.model('questionnaire.dateObservationStart')).sendKeys('2013-05-08');
+        element(by.model('questionnaire.dateObservationEnd')).sendKeys('2014-05-08');
         element(by.model('questionnaire.comments')).sendKeys('foo bar');
     }
 
@@ -221,7 +214,7 @@ describe('admin/questionnaire/new', function() {
         element(by.xpath("//*[@ng-view]//*[contains(@class, 'nav-tabs')]//li//a[text()='Questionnaires']")).click();
 
         // The deleted questionnaire shouldn't be in the list anymore
-        element(by.css('[gims-grid-questionnaire] [ng-grid]')).all(by.xpath('span[text() = "' + selectedCountry + '"]')).then(function(elements) {
+        element(by.css('[gims-grid-questionnaire] [ui-grid]')).all(by.xpath('span[text() = "' + selectedCountry + '"]')).then(function(elements) {
             expect(elements.length).toBe(0);
         });
     });

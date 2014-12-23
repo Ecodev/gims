@@ -19,13 +19,11 @@ angular.module('myApp').controller('Admin/Filter/CrudCtrl', function($scope, $lo
         $location.url(returnUrl);
     };
 
+    $scope.filter = {};
     if ($routeParams.id) {
         Restangular.one('filter', $routeParams.id).get($scope.fields).then(function(filter) {
             $scope.filter = filter;
         });
-
-    } else {
-        $scope.filter = {};
     }
 
     $scope.save = function(redirectTo) {

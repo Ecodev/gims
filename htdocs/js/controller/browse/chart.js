@@ -1,6 +1,13 @@
 angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $location, $http, $timeout, Restangular, $q, Chart, ChartCache, $rootScope) {
     'use strict';
 
+    $scope.isNormalLineSerie = function(serie) {
+        return !serie.isAdjusted && !serie.isIgnored && serie.type == 'line';
+    };
+    $scope.isNormalOrIgnoredLineSerie = function(serie) {
+        return !serie.isAdjusted && serie.type == 'line' && serie.id != $scope.panelTabs.nsa;
+    };
+
     /**************************************************************************/
     /* VARIABLE INITIALISATION ************************************************/
     /**************************************************************************/
@@ -12,10 +19,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     $scope.ignoredElements = null;
     $scope.concatenatedIgnoredElements = [];
     $scope.filtersParams = {fields: 'isNsa,parents.isNsa,filterSets'};
-    $scope.geonameParams = {
-        perPage: 500,
-        fields: 'questionnaires,questionnaires.survey.type'
-    };
+    $scope.geonameParams = {fields: 'questionnaires,questionnaires.survey.type'};
     $scope.filterSetParams = {fields: 'filters.genericColor,filters.color,filters.parents,filters.parents.isNsa,filters.filterSets'};
     $scope.indexedElements = ChartCache.getCache();
     Chart.setCache($scope.indexedElements);
@@ -217,7 +221,7 @@ angular.module('myApp').controller('Browse/ChartCtrl', function($scope, $locatio
     });
 
     /**
-     * Use chart to compute estimates and configure ng-grid for display
+     * Use chart to compute estimates and configure ui-grid for display
      * @param ignoredElements
      */
     $scope.gridOptions = {

@@ -105,14 +105,15 @@
                             <tabset>
                                 <tab>
                                     <tab-heading>
-                                        Years
-                                        <i class="fa fa-gims-help"
-                                           popover="You can chain multiple years requests by commas. If separated by a dash, all years contained in the range will be selected. E.g : 1980,1990-2000,2005-2010,2013,2015"
-                                           popover-trigger="mouseenter"
-                                           popover-placement="right"
-                                                ></i>
+                                        <span
+                                            popover="Use comma to separate years. And use a dash to specify a range of years. e.g.: 1995,2000,2005-2010"
+                                            popover-trigger="mouseenter"
+                                            popover-placement="right">
+                                            Years
+                                            <i class="fa fa-gims-help"></i>
+                                        </span>
                                     </tab-heading>
-                                    <input type="text" name="years" ng-model="tabs.years" placeholder="E.g : 1980,1990-2000,2005-2010,2013,2015" required />
+                                    <input type="text" class="form-control" name="years" ng-model="tabs.years" placeholder="1995,2000,2005-2010" required />
 
                                 </tab>
                             </tabset>

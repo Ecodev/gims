@@ -125,9 +125,6 @@
                                             api="survey"
                                             queryparams="surveyParams"
                                             placeholder="Select survey"
-                                            search-attributes="code,name"
-                                            custom-selection-template="{{::surveysTemplate}}"
-                                            custom-result-template="{{::surveysTemplate}}"
                                             change-url="false"
                                             disabled="isLoading"
                                             style="width: 100%">
@@ -196,7 +193,7 @@
                                 <div ng-if="!isValidId(filter) && data.mode.isNsa && filter.level == 1" style="display:inline-block;vertical-align:top;width:80%;margin-left:{{::(filter.level - data.filters[0].level) * 2}}em;">
                                     <ng-form name="filterName" class="input-group" ng-class="{'has-error':filterName.$invalid}">
                                         <span class="input-group-addon"><i class="fa" ng-class="{'fa-asterisk':!filter.isLoading,'fa-gims-loading':filter.isLoading,'text-primary':!filterName.$invalid}"></i></span>
-                                        <input type="text" name="name" ng-model="filter.name" placeholder="Facility name" required />
+                                        <input type="text" class="form-control" name="name" ng-model="filter.name" placeholder="Facility name" required />
                                     </ng-form>
                                 </div>
                             </div>
@@ -252,7 +249,7 @@
                                         <div ng-switch-when="true" class="text-center">
                                             <div class="input-group input-group-sm">
                                                 <div class="input-group-addon"><i class="fa fa-fw fa-gims-questionnaire"></i></div>
-                                                <input ng-disabled="true" type="text" class="text-center" placeholder="Country" ng-model="questionnaire.geoname.name" name="country" />
+                                                <input ng-disabled="true" type="text" class="text-center form-control" placeholder="Country" ng-model="questionnaire.geoname.name" name="country" />
                                             </div>
                                         </div>
                                         <div ng-switch-when="false" class="has-error">
@@ -264,7 +261,7 @@
                                                     placeholder="Country"
                                                     change-url="false"
                                                     style="width: 100%"
-                                                    ng-change="checkAndCompleteQuestionnaire(questionnaire)">
+                                                    ng-blur="checkAndCompleteQuestionnaire(questionnaire)">
                                             </gims-select>
                                         </div>
                                     </div>
@@ -273,7 +270,7 @@
                                     <div class="table-filter-row header">
                                         <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.code.$invalid}">
                                             <div class="input-group-addon"><i class="fa fa-fw fa-gims-survey"></i></div>
-                                            <input ng-disabled="questionnaire.survey.id || questionnaire.isLoading" type="text" class="text-center" placeholder="Code" ng-model="questionnaire.survey.code" name="code" required ng-class="{'error':questionnaire.errors.duplicateCountryCode || questionnaire.errors.codeAndYearDifferent || questionnaireForm.code.$invalid}" ng-blur="checkAndCompleteQuestionnaire(questionnaire)"/>
+                                            <input ng-disabled="questionnaire.survey.id || questionnaire.isLoading" type="text" class="text-center form-control" placeholder="Code" ng-model="questionnaire.survey.code" name="code" required ng-class="{'error':questionnaire.errors.duplicateCountryCode || questionnaire.errors.codeAndYearDifferent || questionnaireForm.code.$invalid}" ng-blur="checkAndCompleteQuestionnaire(questionnaire)"/>
                                         </div>
                                     </div>
 
@@ -281,7 +278,7 @@
                                     <div class="table-filter-row header">
                                         <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.year.$invalid}">
                                             <div class="input-group-addon"><i class="fa fa-fw fa-gims-survey"></i></div>
-                                            <input ng-disabled="questionnaire.survey.id || questionnaire.isLoading" type="number" class="text-center" placeholder="Year" ng-model="questionnaire.survey.year" name="year" min="1980" max="2015" size="4" required ng-class="{'error': questionnaire.errors.codeAndYearDifferent || questionnaireForm.year.$invalid}" ng-blur="checkAndCompleteQuestionnaire(questionnaire)"/>
+                                            <input ng-disabled="questionnaire.survey.id || questionnaire.isLoading" type="number" class="text-center form-control" placeholder="Year" ng-model="questionnaire.survey.year" name="year" min="1980" max="2015" size="4" required ng-class="{'error': questionnaire.errors.codeAndYearDifferent || questionnaireForm.year.$invalid}" ng-blur="checkAndCompleteQuestionnaire(questionnaire)"/>
                                         </div>
                                     </div>
 
@@ -309,7 +306,7 @@
                                     <div ng-repeat="part in data.parts" class="filter-value">
                                         <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.value.$invalid}" tooltip="Leave empty to use official population data">
                                             <input  type="number"
-                                                    class="text-center"
+                                                    class="text-center form-control"
                                                     placeholder="{{cacheDefaultPopulationsByGeoname[data.geoname.id][questionnaire.survey.year][part.id]}}"
                                                     min="0"
                                                     name="value"

@@ -23,7 +23,7 @@
                 <div class="form-group"  ng-class="{'has-error': myForm.name.$invalid}">
                     <label class="control-label col-md-2" for="filterSet.name">Label</label>
                     <div class="col-md-6">
-                        <input type="text" name="name" ng-model="filterSet.name" required/>
+                        <input type="text" class="form-control" name="name" ng-model="filterSet.name" required/>
                     </div>
                     <div class="col-md-2">
                         <span ng-show="myForm.name.$error.required" class="help-block">Required</span>

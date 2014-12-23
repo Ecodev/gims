@@ -24,7 +24,7 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                 '<div class="container-fluid">' +
                 '    <div class="row">' +
                 '        <div class="col-md-9">' +
-                '            <input type="text" ng-model="gridOptions.filterOptions.filterText" placeholder="Search..." class="search" style="width: 400px"/>' +
+                '            <input type="text" ng-model="gridOptions.filterOptions.filterText" placeholder="Search..." class="search form-control" style="width: 400px"/>' +
                 '        </div>' +
                 '    </div>' +
                 '    <gims-grid api="{{relation}}" parent="{{first}}" objects="relations" options="gridOptions" class="row"></gims-grid>' +
@@ -36,14 +36,14 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                 '           </span>' +
                 '        </div><div class="row">' +
                 '           <span class="col-md-4" ng-show="justification">' +
-                '               <input type="text" ng-model="justificationValue" placeholder="Justification..." />' +
+                '               <input type="text" ng-model="justificationValue" placeholder="Justification..." class="form-control" />' +
                 '           </span>' +
                 '           <span class="col-md-1">' +
                 '               <button class="btn btn-default" ng-click="add()" ng-class="{disabled: !canAdd}"><i class="fa fa-gims-add"></i> Add</button>' +
                 '           </span><span class="help-block" ng-show="exists">This relation already exists</span>' +
                 '           <span class="col-md-1">' +
-                '               <i class="fa fa-gims-loading fa-2x" ng-if="isLoading"></i>' +
-                '           </span><span class="help-block" ng-show="exists">This relation already exists</span>' +
+                '               <i class="fa fa-gims-loading" ng-if="isLoading"></i>' +
+                '           </span>' +
                 '        </div>' +
                 '    </div>' +
                 '</div>',
@@ -120,7 +120,7 @@ angular.module('myApp.directives').directive('gimsRelations', function() {
                     $scope.relations.push(newRelation);
                     $scope.isLoading = false;
 
-                    // Reset last select2 option
+                    // Reset last ui-select option
                     _.last($scope.otherProperties, function(p, index) {
                         $scope.values[index] = null;
                     });

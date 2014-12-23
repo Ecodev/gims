@@ -12,7 +12,6 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
     $scope.locationPath = $location.$$path;
     $scope.data = TableFilter.init($scope.locationPath);
     $scope.expandSelection = true;
-    $scope.surveysTemplate = "[[item.code]] - [[item.name]]";
     $scope.questionnairesStatus = questionnairesStatus;
     $scope.usedThematics = [];
     $scope.cacheDefaultPopulationsByGeoname = {};

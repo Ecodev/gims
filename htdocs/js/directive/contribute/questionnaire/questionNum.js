@@ -9,7 +9,7 @@ angular.module('myApp.directives').directive('gimsNumQuestion', function(Questio
                 "           <div ng-switch-when='Urban'>Urban</div>" +
                 "           <div ng-switch-when='Rural'>Rural</div>" +
                 "     </div>" +
-                "     <input class='col-md-12' ng-disabled='saving' type='text' ng-required='question.isCompulsory' ng-model='index[question.id+\"-\"+part.id].valueAbsolute' ng-blur='save(question,part)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'/>" +
+                "     <input class='col-md-12 form-control' ng-disabled='saving' type='text' ng-required='question.isCompulsory' ng-model='index[question.id+\"-\"+part.id].valueAbsolute' ng-blur='save(question,part)' name='numerical-{{question.id}}-{{part.id}}' id='numerical-{{question.id}}-{{part.id}}'/>" +
                 "</div>" +
                 "</div>" +
                 "<div class='col-md-12'>" +
