@@ -27,6 +27,7 @@ class AuthController extends \ZfcUser\Controller\UserController
                 'name',
                 'email',
                 'gravatar',
+                'firstLogin',
             ));
             $result['status'] = 'logged';
 
