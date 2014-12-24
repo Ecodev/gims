@@ -21,7 +21,7 @@ return [
         'dsn' => "pgsql:dbname=$database;host=$host",
         'username' => $username,
         'password' => $password,
-    ),
+    ],
     'doctrine' => [
         'connection' => [
             'orm_default' => [
@@ -30,16 +30,16 @@ return [
                     'dbname' => $database,
                     'user' => $username,
                     'password' => $password,
-                ),
-            ),
-        ),
-    ),
+                ],
+            ],
+        ],
+    ],
     'rsync' => [
         'host' => '',
         'module' => '',
         'username' => '',
         'password' => '',
-    ),
+    ],
     'smtp' => [
         'name'              => 'mail.ecodev.ch',
         'host'              => 'mail.ecodev.ch',
@@ -49,9 +49,9 @@ return [
         //    'username' => '@ecodev.ch',
         //    'password' => '',
         //    'ssl'      => 'tls',
-        //),
-    ),
+        //],
+    ],
 
     'emailOverride' => 'your@email.com',
     'domain' => 'gims.lan',
-);
+];
