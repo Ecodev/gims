@@ -120,20 +120,34 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
 
             var isFirstLoad = true;
             $scope.loadChoices = function(search) {
+                if (!reSelectFromUrlAjax()) {
+                    load(search);
+                }
+
+                isFirstLoad = false;
+            };
+
+            /**
+             * Load items from server, with optionnal search.
+             * This will be called to pre-load data when directive initialize, and
+             * then everytime the user search for something
+             * @param {string} search
+             * @returns {undefined}
+             */
+            function load(search) {
                 var params = _.merge({q: search}, $scope.queryparams);
                 myRestangular.all(api).getList(params).then(function(choices) {
                     $scope.data.items = choices;
                     reSelectFromUrlCached(choices);
-                    isFirstLoad = false;
                 });
-            };
+            }
 
             /**
              * Reload a single or multiple items if we have its ID from URL
              */
             function reSelectFromUrlAjax() {
-                if (config[api] != 'ajax') {
-                    return;
+                if (config[api] != 'ajax' || !isFirstLoad) {
+                    return false;
                 }
 
                 if (idsFromUrl.length == 1) {
@@ -146,13 +160,17 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
 
                         $scope.data.selected = item;
                     });
+                    return true;
                 } else if (idsFromUrl.length > 1) {
                     myRestangular.all(api).getList(_.merge({id: fromUrl}, $scope.queryparams)).then(function(items) {
                         $scope.data.selected = items;
                     });
+                    return true;
                 }
+
+                // If reaches here, means we did not find any ID and could not load anything
+                return false;
             }
-            reSelectFromUrlAjax();
 
             /**
              * Re-select items based on URL params, if any and in cached mode
