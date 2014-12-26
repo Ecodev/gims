@@ -243,18 +243,6 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     }
 
     /**
-     * Define the width needed to display the questionnaire column
-     * @param {type} questionnaire
-     */
-    function setQuestionnaireWidth(questionnaire) {
-        if (questionnaire.showLabels) {
-            questionnaire.width = 775;
-        } else {
-            questionnaire.width = 470;
-        }
-    }
-
-    /**
      * Called when a new questionnaire is added or filters are changed.
      * Ensure there is empty objects to grant app to work fine (e.g emptyanswers have to exist before ng-model assigns a value)
      */
@@ -265,7 +253,6 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
 
         _.forEach(data.questionnaires, function(questionnaire) {
 
-            setQuestionnaireWidth(questionnaire);
             if (_.isUndefined(questionnaire.survey)) {
                 questionnaire.survey = {
                     type: data.mode.surveyType
@@ -1762,16 +1749,13 @@ angular.module('myApp.services').factory('TableFilter', function($rootScope, $ht
     function toggleShowLabels(questionnaire) {
         if (questionnaire) {
             questionnaire.showLabels = !questionnaire.showLabels;
-            setQuestionnaireWidth(questionnaire);
         } else {
             var firstQuestionnaireStatus = !data.questionnaires[0].showLabels;
             _.forEach(data.questionnaires, function(questionnaire) {
                 questionnaire.showLabels = firstQuestionnaireStatus;
-                setQuestionnaireWidth(questionnaire);
             });
         }
 
-        $rootScope.$broadcast('vsRepeatTriggering');
         $rootScope.$emit('gims-tablefilter-show-labels-toggled');
     }
 

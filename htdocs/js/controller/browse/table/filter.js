@@ -1,6 +1,77 @@
 angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $location, $http, Restangular, $q, $rootScope, requestNotification, $filter, questionnairesStatus, TableFilter) {
     'use strict';
 
+    function configureGrid() {
+
+        $scope.gridScope = {
+            data: $scope.data
+        };
+
+        var rowTemplate;
+        rowTemplate = '<div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div>';
+        rowTemplate = '<div style="background-color: aquamarine" ng-repeat="col in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ui-grid-cell></div>';
+
+        rowTemplate = '<div background-color ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{ \'ui-grid-row-header-cell\': col.isRowHeader }" ui-grid-cell></div>';
+
+        var columnDefs = [{
+                name: 'filter',
+                displayName: '',
+                width: 400,
+                cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.name}}</div>',
+                pinnedLeft: true
+            }];
+
+        _.forEach($scope.data.questionnaires, function(questionnaire) {
+            var width = questionnaire.showLabels ? 775 : 470;
+            columnDefs.push({
+                name: 'questionnaire_' + questionnaire.id + '_' + width,
+                width: width,
+                cellTemplate:
+                        '<div class="ui-grid-cell-contents">' +
+                        '    <div gims-if="col.colDef.questionnaire.showLabels" class="question-label">' +
+                        '        <ng-form name="labelForm">' +
+                        '            <div class="input-group input-group-sm">' +
+                        '                <span class="input-group-addon"><i class="fa" ng-class="{\'fa-question\':!questionnaire.survey.questions[filter.id].isLoading,\'fa-gims-loading\':questionnaire.survey.questions[filter.id].isLoading}"></i></span>' +
+                        '                <input class="form-control"' +
+                        '                       ng-model="questionnaire.survey.questions[filter.id].alternateNames[questionnaire.id]"' +
+                        '                       ng-blur="saveQuestion(questionnaire.survey.questions[filter.id], questionnaire)"' +
+                        '                       name="label"' +
+                        '                       ng-required="questionnaire.survey.questions[filter.id].answers[part.id][questionnaire.survey.questions[filter.id].value]"' +
+                        '                       ng-class="{error: labelForm.label.$invalid}"/>' +
+                        '            </div>' +
+                        '        </ng-form>' +
+                        '    </div>' +
+                        '    <span ng-repeat="part in ::getExternalScopes().data.parts" class="filter-value">' +
+                        '        <gims-cell></gims-cell>' +
+                        '    </span>' +
+                        '</div>',
+                questionnaire: questionnaire
+
+            });
+        });
+
+        // Configure ng-grid.
+        $scope.gridOptions = {
+            enableSorting: false,
+            data: 'data.filters',
+            rowTemplate: rowTemplate,
+            columnDefs: columnDefs,
+            headerTemplatse:
+                    '<div class="ui-grid-header">' +
+                    '  <div class="ui-grid-top-panel">' +
+                    '    <div class="ui-grid-header-viewport">' +
+                    '      <div class="ui-grid-header-canvas">' +
+                    '          <div class="ui-grid-header-cell clearfix" ng-repeat="col in colContainer.renderedColumns track by col.colDef.name" qqqqui-grid-header-cell col="col" render-index="$index" ng-style="$index === 0 && colContainer.columnStyle($index)">' +
+                    '{{col.colDef.questionnaire.name|json}}          </div>' +
+                    '      </div>' +
+                    '    </div>' +
+                    '    <div ui-grid-menu></div>' +
+                    '  </div>' +
+                    '</div>',
+            headerTemplate: '/js/components/cell/questionnaire-header.html'
+        };
+    }
+
     /**************************************************************************/
     /*********************************************** Variables initialisation */
     /**************************************************************************/
@@ -170,6 +241,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         if (!_.isEmpty(newQuestionnaires)) {
 
             TableFilter.loadQuestionnaires(newQuestionnaires).then(function() {
+                configureGrid();
                 $scope.orderQuestionnaires(false);
                 $scope.data.geonamesIds = _.uniq(_.pluck($scope.data.questionnaires, function(q) {
                     return q.geoname.id;
@@ -178,6 +250,7 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
 
         } else if (($scope.data.geoname || $scope.data.survey) && _.isEmpty($scope.data.questionnaires)) {
             $scope.addQuestionnaire();
+            configureGrid();
         }
 
         if (firstLoading === true && $scope.data.filters && $scope.data.questionnaires) {
@@ -270,50 +343,8 @@ angular.module('myApp').controller('Browse/FilterCtrl', function($scope, $locati
         $location.url($location.search().returnUrl);
     };
 
-    $rootScope.$on('gims-tablefilter-show-labels-toggled', function() {
-        $scope.$broadcast('vsRepeatTrigger');
-    });
+    $rootScope.$on('gims-tablefilter-show-labels-toggled', configureGrid);
 
-    var filterColumn = {
-        name: 'shite',
-        displayName: '',
-        width: 400,
-        cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.name}}</div>',
-        pinnedLeft: true
-    };
-
-    $scope.gridOptions = {
-        enableSorting: false,
-        data: 'data.filters'
-    };
-    $scope.gridScope = {
-        data: $scope.data
-    };
-
-    $scope.grid = function() {
-
-        var defs = [filterColumn];
-
-        _.forEach($scope.data.questionnaires, function(questionnaire) {
-            defs.push({
-                name: 'questionnaire_' + questionnaire.id,
-                width: 470,
-                cellTemplate:
-                        '<div class="ui-grid-cell-contents">' +
-                        '    <span ng-repeat="part in getExternalScopes().data.parts" class="filter-value">' +
-                        '        <gims-cell></gims-cell>' +
-                        '    </span>' +
-                        '</div>',
-                questionnaire: questionnaire
-
-            });
-        });
-
-        // Configure ng-grid.
-        $scope.gridOptions = {
-            enableSorting: false,
-            data: 'data.filters',
-            columnDefs: defs
-        };
-    };
+    configureGrid();
+    $scope.grid = configureGrid;
 });

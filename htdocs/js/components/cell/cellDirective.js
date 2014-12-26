@@ -54,7 +54,8 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
 //                scope.questionnaire = scope.col.colDef.questionnaire;
             }
 
-            var input = element.find('input'); input.val('123');
+            var input = element.find('input');
+            input.val('123');
             var unitIcon = element.find('.unit-icon');
             var typeIcon = element.find('.type-icon').get(0);
             var inputController = input.controller('ngModel');
@@ -231,7 +232,7 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
             });
 
             // When we get all data, apply custom visual style
-            $rootScope.$on('gims-tablefilter-computed', updateVisualStyle);
+            var unregisterEventComputed = $rootScope.$on('gims-tablefilter-computed', updateVisualStyle);
 
             /**
              * Apply the readonly attribute according to current permissions and mode
@@ -256,7 +257,13 @@ angular.module('myApp.directives').directive('gimsCell', function($rootScope, $d
 
             // Initialize immediately, and react to permissions change if any
             updatePermissions();
-            $rootScope.$on('gims-tablefilter-permissions-changed', updatePermissions);
+            var unregisterEventChanged = $rootScope.$on('gims-tablefilter-permissions-changed', updatePermissions);
+
+            // Don't forget to clean up events
+            scope.$on('$destroy', function() {
+                unregisterEventComputed();
+                unregisterEventChanged();
+            });
         }
     };
 });

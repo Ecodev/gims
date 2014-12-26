@@ -1,0 +1,107 @@
+<div class="ui-grid-top-panel"   style="min-height: 210px;">
+    <div class="ui-grid-header-viewport">
+        <div class="ui-grid-header-canvas">
+            <div  ng-repeat="col in colContainer.renderedColumns track by col.colDef.name" style="width: {{col.colDef.width}}px; display: inline-block ">
+                <div ng-switch="!col.colDef.questionnaire"  >
+                    <div ng-switch-when="true">
+                        Filters
+                    </div>
+                    <div ng-switch-when="false">
+                        <div class="table-filter-row">
+                            <!-- Display errors on questionnaires / surveys integrity data structure (like two different years for the same survey or two countries for the same survey -->
+                            <a class="btn btn-warning btn-xs" ng-if="col.colDef.questionnaire.errors.duplicateCountryCode" tooltip="Surveys may not have the same country more than once" tooltip-placement="left"><i class="fa fa-warning"></i></a>
+                            <a class="btn btn-warning btn-xs" ng-if="col.colDef.questionnaire.errors.codeAndYearDifferent" tooltip="Surveys with the same code may have the same year" tooltip-placement="left"><i class="fa fa-warning"></i></a>
+                            <a class="btn btn-warning btn-xs" ng-if="col.colDef.questionnaire.errors.countryAlreadyUsedForExistingSurvey" tooltip="This country is already assigned to a survey with the same code" tooltip-placement="left"><i class="fa fa-warning"></i></a>
+                            <a class="btn btn-warning btn-xs" ng-if="col.colDef.questionnaire.errors.surveyExistWithDifferentYear" tooltip="This survey already exists with different year : {{col.colDef.questionnaire.survey.existingYear}}" tooltip-placement="left"><i class="fa fa-warning"></i></a>
+
+                            <!-- mark new questionnaire / is loading -->
+                            <span><gims-questionnaire-menu></gims-questionnaire-menu></span>
+                            <a class="btn btn-sm pull-right" ng-if="!col.colDef.questionnaire.id || col.colDef.questionnaire.isLoading" tooltip="New survey" tooltip-placement="left" ><i class="fa fa-lg" ng-class="{'fa-asterisk':!col.colDef.questionnaire.isLoading, 'fa-gims-loading':col.colDef.questionnaire.isLoading}"></i></a>
+                        </div>
+
+                        <ng-form name="questionnaireForm">
+
+                            <!-- Questionnaire's geoname row-->
+                            <div class="table-filter-row header" ng-switch="!!col.colDef.questionnaire.id">
+                                <div ng-switch-when="true" class="text-center">
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-addon"><i class="fa fa-fw fa-gims-questionnaire"></i></div>
+                                        <input ng-disabled="true" type="text" class="text-center" placeholder="Country" ng-model="col.colDef.questionnaire.geoname.name" name="country" />
+                                    </div>
+                                </div>
+                                <div ng-switch-when="false" class="has-error">
+                                    <gims-select
+                                        required
+                                        disabled="data.mode.isNsa || col.colDef.questionnaire.id || col.colDef.questionnaire.isLoading"
+                                        api="geoname"
+                                        model="col.colDef.questionnaire.geoname"
+                                        placeholder="Country"
+                                        change-url="false"
+                                        style="width: 100%"
+                                        >
+                                    </gims-select>
+                                </div>
+                            </div>
+
+                            <!-- Survey's code row -->
+                            <div class="table-filter-row header">
+                                <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.code.$invalid}">
+                                    <div class="input-group-addon"><i class="fa fa-fw fa-gims-survey"></i></div>
+                                    <input ng-disabled="col.colDef.questionnaire.survey.id || col.colDef.questionnaire.isLoading" type="text" class="text-center" placeholder="Code" ng-model="col.colDef.questionnaire.survey.code" name="code" required ng-class="{'error':col.colDef.questionnaire.errors.duplicateCountryCode || col.colDef.questionnaire.errors.codeAndYearDifferent || questionnaireForm.code.$invalid}" ng-blur="checkAndCompleteQuestionnaire(col.colDef.questionnaire)"/>
+                                </div>
+                            </div>
+
+                            <!-- Survey's year row -->
+                            <div class="table-filter-row header">
+                                <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.year.$invalid}">
+                                    <div class="input-group-addon"><i class="fa fa-fw fa-gims-survey"></i></div>
+                                    <input ng-disabled="col.colDef.questionnaire.survey.id || col.colDef.questionnaire.isLoading" type="number" class="text-center" placeholder="Year" ng-model="col.colDef.questionnaire.survey.year" name="year" min="1980" max="2015" size="4" required ng-class="{'error': col.colDef.questionnaire.errors.codeAndYearDifferent || questionnaireForm.year.$invalid}" ng-blur="checkAndCompleteQuestionnaire(col.colDef.questionnaire)"/>
+                                </div>
+                            </div>
+
+                            <!-- Label for questionnaire comments -->
+                            <div class="table-filter-row header large" ng-if="data.showQuestionnaireComments">
+                                <div class="input-group input-group-sm" >
+                                    <span class="input-group-addon"><i class="fa fa-comment"></i></span>
+                                    <textarea class="form-control"
+                                              ng-model="col.colDef.questionnaire.comments"
+                                              ng-focus="col.colDef.questionnaire.initialComments = col.colDef.questionnaire.comments"
+                                              ng-blur="saveComment(col.colDef.questionnaire)"
+                                              name="label">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </ng-form>
+
+                        <div class="table-filter-row">
+                            <div gims-if="col.colDef.questionnaire.showLabels" class="question-label"></div>
+                            <div ng-repeat="part in ::getExternalScopes().data.parts" class="filter-value text-center text-muted text-2em"><small>{{part.name}}</small></div>
+                        </div>
+
+                        <!-- Population row -->
+                        <div class="table-filter-row" ng-if="::data.mode.isNsa">
+                            <div ng-repeat="part in ::getExternalScopes().data.parts" class="filter-value">
+                                <div class="input-group input-group-sm" ng-class="{'has-error':questionnaireForm.value.$invalid}" tooltip="Leave empty to use official population data">
+                                    <input  type="number"
+                                            class="text-center"
+                                            placeholder="{{cacheDefaultPopulationsByGeoname[data.geoname.id][col.colDef.questionnaire.survey.year][part.id]}}"
+                                            min="0"
+                                            name="value"
+                                            ng-focus="setInitialValue(col.colDef.questionnaire.populations[part.id], col.colDef.questionnaire.populations[part.id].population)"
+                                            ng-blur="savePopulation(col.colDef.questionnaire, col.colDef.questionnaire.populations[part.id])"
+                                            ng-model="col.colDef.questionnaire.populations[part.id].population"
+                                            ng-disabled="col.colDef.questionnaire.isLoading"
+                                            />
+
+                                    <div class="input-group-addon"><i class="fa fa-fw" ng-class="{'fa-gims-population':!col.colDef.questionnaire.populations[data.part.id].isLoading,'fa-gims-loading':col.colDef.questionnaire.populations[data.part.id].isLoading}"></i></div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

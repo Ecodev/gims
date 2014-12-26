@@ -11,7 +11,6 @@
 </style>
 
 <div disable-animate class="container">
-    <button ng-click="grid()">GRID ME !</button>
     <div id="tools">
 
         <!-- Toolbar -->
@@ -161,8 +160,7 @@
         <div class="col-md-12">
             <form name="answersForm" novalidate>
 
-
-
+                <div ui-grid="gridOptions" class="gridStyle table-filter" ui-grid-pinning external-scopes="gridScope" style="height: 520px"></div>
             </form>
         </div>
     </div>

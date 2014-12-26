@@ -29,7 +29,7 @@ angular.module('myApp.directives').directive('gimsIf', function($animate, $rootS
         return $(elements);
     }
 
-    function evalCondition(block, childScope, previousElements,$scope, $element, $attr, ctrl, $transclude) {
+    function evalCondition(block, childScope, previousElements, $scope, $element, $attr, $transclude) {
         var value = $scope.$eval($attr.gimsIf);
 
         if (value) {
@@ -74,11 +74,16 @@ angular.module('myApp.directives').directive('gimsIf', function($animate, $rootS
         link: function($scope, $element, $attr, ctrl, $transclude) {
             var block, childScope, previousElements;
 
-            $rootScope.$on('gims-tablefilter-show-labels-toggled', function gimsIfWatchAction() {
-                evalCondition(block, childScope, previousElements,$scope, $element, $attr, ctrl, $transclude);
+            var unregisterEvent = $rootScope.$on('gims-tablefilter-show-labels-toggled', function gimsIfWatchAction() {
+                evalCondition(block, childScope, previousElements, $scope, $element, $attr, $transclude);
             });
 
-            evalCondition(block, childScope, previousElements,$scope, $element, $attr, ctrl, $transclude);
+            // Don't forget to clean up events
+            $scope.$on('$destroy', function() {
+                unregisterEvent();
+            });
+
+            evalCondition(block, childScope, previousElements, $scope, $element, $attr, $transclude);
         }
     };
 });
