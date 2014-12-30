@@ -120,7 +120,7 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
 
             var isFirstLoad = true;
             $scope.loadChoices = function(search) {
-                if (!reSelectFromUrlAjax()) {
+                if (!reSelectFromUrl()) {
                     load(search);
                 }
 
@@ -138,15 +138,14 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 var params = _.merge({q: search}, $scope.queryparams);
                 myRestangular.all(api).getList(params).then(function(choices) {
                     $scope.data.items = choices;
-                    reSelectFromUrlCached(choices);
                 });
             }
 
             /**
              * Reload a single or multiple items if we have its ID from URL
              */
-            function reSelectFromUrlAjax() {
-                if (config[api] != 'ajax' || !isFirstLoad) {
+            function reSelectFromUrl() {
+                if (!isFirstLoad) {
                     return false;
                 }
 
@@ -171,35 +170,6 @@ angular.module('myApp.directives').directive('gimsSelect', function() {
                 // If reaches here, means we did not find any ID and could not load anything
                 return false;
             }
-
-            /**
-             * Re-select items based on URL params, if any and in cached mode
-             * @param {Array} items loaded items
-             */
-            function reSelectFromUrlCached(items) {
-                if (config[api] != 'cached' || !isFirstLoad) {
-                    return;
-                }
-
-                if (idsFromUrl.length) {
-                    var selectedItems = [];
-                    _.forEach(idsFromUrl, function(idFromUrl) {
-                        _.forEach(items, function(item) {
-                            if (item.id == idFromUrl) {
-                                selectedItems.push(item);
-                            }
-                        });
-                    });
-
-                    // If we are not multiple, we need to return an object, not an array of objects
-                    if (!$scope.multiple) {
-                        selectedItems = _.first(selectedItems);
-                    }
-                    $scope.data.selected = selectedItems;
-                }
-            }
-
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             // in case we don't want url to be affected, we don't want neither to display received info, so remove it after retrieve it above
             if (!changeUrl) {
