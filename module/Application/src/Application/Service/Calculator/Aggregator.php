@@ -109,7 +109,7 @@ class Aggregator
             foreach ($filter['absoluteData'] as $i => $absoluteValue) {
                 $population = $filter['population'][$i];
 
-                if (is_null($absoluteValue) || is_null($population)) {
+                if (is_null($absoluteValue) || !$population) {
                     $value = null;
                 } else {
                     $value = $absoluteValue / $population;
