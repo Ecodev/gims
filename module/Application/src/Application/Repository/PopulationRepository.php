@@ -51,28 +51,7 @@ class PopulationRepository extends AbstractChildRepository
     public function getPopulationByGeoname(\Application\Model\Geoname $geoname, $partId, $year, $questionnaireId = null)
     {
         if (!isset($this->cache[$geoname->getId()])) {
-            $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
-            $rsm->addScalarResult('population', 'population');
-            $rsm->addScalarResult('year', 'year');
-            $rsm->addScalarResult('part_id', 'part_id');
-            $rsm->addScalarResult('questionnaire_id', 'questionnaire_id');
-
-            $query = $this->getEntityManager()->createNativeQuery('
-                SELECT population, year, part_id, questionnaire_id
-                FROM population
-                WHERE population.geoname_id = :geoname', $rsm);
-
-            $query->setParameters(array(
-                'geoname' => $geoname,
-            ));
-            $data = $query->getResult();
-
-            // Ensure that we hit the cache next time, even if we have no results at all
-            $this->cache[$geoname->getId()] = array();
-
-            foreach ($data as $p) {
-                $this->cache[$geoname->getId()][$p['year']][$p['part_id']][$p['questionnaire_id']] = $p['population'];
-            }
+            $this->fillPopulationCache([$geoname]);
         }
 
         // Try to return population specific for this questionnaire, or else default to official population
@@ -84,6 +63,42 @@ class PopulationRepository extends AbstractChildRepository
     }
 
     /**
+     * Fill the cache of population for given geonames.
+     *
+     * Useful if we know in advance we will need to access population from
+     * several geonames, then we can load all of them in a single query
+     * @param \Application\Model\Geoname[] $geonames
+     */
+    public function fillPopulationCache(array $geonames)
+    {
+        $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
+        $rsm->addScalarResult('geoname_id', 'geoname_id');
+        $rsm->addScalarResult('population', 'population');
+        $rsm->addScalarResult('year', 'year');
+        $rsm->addScalarResult('part_id', 'part_id');
+        $rsm->addScalarResult('questionnaire_id', 'questionnaire_id');
+
+        $query = $this->getEntityManager()->createNativeQuery('
+                SELECT geoname_id, population, year, part_id, questionnaire_id
+                FROM population
+                WHERE population.geoname_id IN (:geonames)', $rsm);
+
+        $query->setParameters(array(
+            'geonames' => $geonames,
+        ));
+        $data = $query->getResult();
+
+        // Ensure that we hit the cache next time, even if we have no results at all
+        foreach ($geonames as $geoname) {
+            $this->cache[$geoname->getId()] = array();
+        }
+
+        foreach ($data as $p) {
+            $this->cache[$p['geoname_id']][$p['year']][$p['part_id']][$p['questionnaire_id']] = $p['population'];
+        }
+    }
+
+    /**
      * Return geoname populations by part for all years
      * @param \Application\Model\Geoname $geoname
      * @return array
@@ -91,8 +106,8 @@ class PopulationRepository extends AbstractChildRepository
     public function getAllYearsForGeonameByPart(\Application\Model\Geoname $geoname)
     {
         $parts = $this->getEntityManager()
-                      ->getRepository('\Application\Model\Part')
-                      ->findAll();
+                ->getRepository('\Application\Model\Part')
+                ->findAll();
         $yearStart = 1980;
         $yearEnd = 2020;
 

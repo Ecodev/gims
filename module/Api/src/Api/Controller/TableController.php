@@ -175,6 +175,11 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds);
         $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
         $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
+        $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
+
+        // Pre-fill cache for things we know that we will need very soon
+        $populationRepository->fillPopulationCache($geonames);
+        $questionnaireRepository->fillCacheForComputing($geonames);
 
         // Re-order filters to be the same order as selection in GUI
         $filters = Utility::orderByIds($filters, $filtersIds);

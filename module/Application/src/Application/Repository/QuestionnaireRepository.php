@@ -32,16 +32,21 @@ class QuestionnaireRepository extends AbstractChildRepository
      */
     private function getAllIdsWithPermission()
     {
-        $queryBuilder = $this->getAllWithPermissionQueryBuilder();
+        static $cache = null;
 
-        $queryBuilder->select('questionnaire.id');
-        $ids = [];
-        $result = $queryBuilder->getQuery()->getScalarResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SCALAR);
-        foreach ($result as $questionnaire) {
-            $ids[] = $questionnaire['id'];
+        if (!$cache) {
+            $queryBuilder = $this->getAllWithPermissionQueryBuilder();
+
+            $queryBuilder->select('questionnaire.id');
+            $ids = [];
+            $result = $queryBuilder->getQuery()->getScalarResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SCALAR);
+            foreach ($result as $questionnaire) {
+                $ids[] = $questionnaire['id'];
+            }
+            $cache = $ids;
         }
 
-        return $ids;
+        return $cache;
     }
 
     /**
@@ -84,6 +89,38 @@ class QuestionnaireRepository extends AbstractChildRepository
     }
 
     /**
+     * Fill the cache of questionnaires for given geonames.
+     *
+     * Useful if we know in advance we will need to access questionnaires from
+     * several geonames, then we can load all of them in a single query
+     * @param \Application\Model\Geoname[] $geonames
+     */
+    public function fillCacheForComputing(array $geonames)
+    {
+        $questionnairesWithReadAccess = $this->getAllIdsWithPermission();
+        $qb = $this->createQueryBuilder('questionnaire');
+        $qb->select('questionnaire, survey')
+                ->join('questionnaire.survey', 'survey')
+                ->where('questionnaire.geoname IN (:geonames)')
+                ->andWhere('questionnaire IN (:questionnairesWithReadAccess)')
+                ->andWhere('questionnaire.status != :rejected')
+                ->orderBy('questionnaire.id');
+
+        $qb->setParameter('geonames', $geonames);
+        $qb->setParameter('questionnairesWithReadAccess', $questionnairesWithReadAccess);
+        $qb->setParameter('rejected', \Application\Model\QuestionnaireStatus::$REJECTED);
+        $questionnaires = $qb->getQuery()->getResult();
+
+        foreach ($geonames as $geoname) {
+            $this->questionnaireForComputingCache[$geoname->getId()] = [];
+        }
+
+        foreach ($questionnaires as $questionnaire) {
+            $this->questionnaireForComputingCache[$questionnaire->getGeoname()->getId()][] = $questionnaire;
+        }
+    }
+
+    /**
      * Returns all questionnaires for the given geonames (and load their surveys)
      * @param \Application\Model\Geoname[] $geonames
      * @return Questionnaires[]
@@ -99,28 +136,7 @@ class QuestionnaireRepository extends AbstractChildRepository
         }
 
         if (!$allInCache) {
-
-            $questionnairesWithReadAccess = $this->getAllIdsWithPermission();
-            $qb = $this->createQueryBuilder('questionnaire');
-            $qb->select('questionnaire, survey')
-                    ->join('questionnaire.survey', 'survey')
-                    ->where('questionnaire.geoname IN (:geonames)')
-                    ->andWhere('questionnaire IN (:questionnairesWithReadAccess)')
-                    ->andWhere('questionnaire.status != :rejected')
-                    ->orderBy('questionnaire.id');
-
-            $qb->setParameter('geonames', $geonames);
-            $qb->setParameter('questionnairesWithReadAccess', $questionnairesWithReadAccess);
-            $qb->setParameter('rejected', \Application\Model\QuestionnaireStatus::$REJECTED);
-            $questionnaires = $qb->getQuery()->getResult();
-
-            foreach ($geonames as $geoname) {
-                $this->questionnaireForComputingCache[$geoname->getId()] = [];
-            }
-
-            foreach ($questionnaires as $questionnaire) {
-                $this->questionnaireForComputingCache[$questionnaire->getGeoname()->getId()][] = $questionnaire;
-            }
+            $this->fillCacheForComputing($geonames);
         }
 
         $result = [];
