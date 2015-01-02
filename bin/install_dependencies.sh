@@ -16,7 +16,7 @@ sudo apt-get install -qq software-properties-common # to get next command: add-a
 sudo add-apt-repository --yes ppa:ubuntugis/ubuntugis-unstable
 sudo add-apt-repository --yes ppa:chris-lea/node.js
 sudo apt-get -qq update
-sudo apt-get -qq install postgresql-9.3-postgis-2.1 rubygems nodejs apache2 php5-pgsql php5-cli php5-gd php5-mcrypt php5-intl php5-json redis-server
+sudo apt-get -qq install postgresql-9.3-postgis-2.1 rubygems nodejs apache2 php5-pgsql php5-cli php5-gd php5-mcrypt php5-intl php5-json
 
 echo "Installing php-cs-fixer..."
 sudo wget http://cs.sensiolabs.org/get/php-cs-fixer.phar -O /usr/local/bin/php-cs-fixer
@@ -27,6 +27,8 @@ if [[ ! -z $TRAVIS ]]; then
     # Configure xdebug with a higher max_nesting_level
     for file in `find /home/vagrant/.phpenv -name 'xdebug.ini'`; do echo "xdebug.max_nesting_level=5000" >> $file; done;
     phpenv config-add config/travis-php.ini
+else
+    sudo apt-get -qq install redis-server
 fi
 
 # For Travis CI, or full local install, we need more configuration (Apache and database)
