@@ -13,7 +13,7 @@ of all the access rights for a given person (see :ref:`specific user page
 questionnaires and :guilabel:`Filter Sets` all users who have an access to these
 elements are listed.
 
-There are five different roles, the first three are standard and the last two are special and given to a very limited number of "super-admin" users.
+There are six different roles, the first four are standard and the last two are special and given to a very limited number of "super-admin" users.
 
 Standard roles
 --------------
@@ -29,6 +29,9 @@ Standard roles
     Can review a completed questionnaire and mark it as "Validated". From this
     point, data can't be modified anymore (unless the status is reverted to
     "New").
+    
+**Questionnaire observer**
+    Can only see non-validated data without being able to edit the content.
 
 .. _special_roles:
 

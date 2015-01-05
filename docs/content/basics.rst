@@ -41,12 +41,14 @@ On most pages you will find question marks [1] that provide an initial reminder 
 
 .. _sign-in:
 
-Register or Sign in
--------------------
+Register, sign in, reset your password
+--------------------------------------
 
-If you already have a user account, simply **sign in** with your email and password [2].
+If you already have a user account, simply **sign in** with your email and password [1].
 
-If you have no user account yet, fill in all the fields in the **Register** column [1] and click on the blue "Register" button.
+If you **forgot your password**, enter your email and click on "Forgot password" [2]. You will then receive an email with a link to reset it.
+
+If you have no user account yet, fill in all the fields in the **Register** column [3] and click on the blue "Register" button.
 
 .. image:: img/register_signin.png
     :width: 100%
@@ -66,7 +68,9 @@ Your GIMS account will only be active once you will have clicked on the link in 
 
 .. note::
 
-    You will be able to complete your :doc:`users account <user>` in a second stage.
+    Upon first login, you will be invited to complete your :doc:`users account
+    <user>`. This can be done at any moment by clicking on your name at the top
+    right of the screen.
 
 
 .. _ask-permissions:
