@@ -25,7 +25,7 @@ class PopulationRepository extends AbstractChildRepository
     /**
      * @var array $cache [geonameId => [year => [partId => [questionnaireId => population]]]]
      */
-    private $cache = array();
+    private $cache = [];
 
     /**
      * Returns the population value for given questionnaire and part.
@@ -83,14 +83,14 @@ class PopulationRepository extends AbstractChildRepository
                 FROM population
                 WHERE population.geoname_id IN (:geonames)', $rsm);
 
-        $query->setParameters(array(
+        $query->setParameters([
             'geonames' => $geonames,
-        ));
+        ]);
         $data = $query->getResult();
 
         // Ensure that we hit the cache next time, even if we have no results at all
         foreach ($geonames as $geoname) {
-            $this->cache[$geoname->getId()] = array();
+            $this->cache[$geoname->getId()] = [];
         }
 
         foreach ($data as $p) {
@@ -132,11 +132,11 @@ class PopulationRepository extends AbstractChildRepository
      */
     public function updateOrCreate(\Application\Model\Geoname $geoname, \Application\Model\Part $part, $year, $population)
     {
-        $populationObject = $this->findOneBy(array(
+        $populationObject = $this->findOneBy([
             'year' => $year,
             'geoname' => $geoname,
             'part' => $part,
-        ));
+        ]);
 
         if (!$populationObject) {
 

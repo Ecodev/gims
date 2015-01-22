@@ -2,10 +2,10 @@
 
 namespace Application\Service\Calculator;
 
-use Application\Model\Questionnaire;
+use Application\Model\Filter;
 use Application\Model\Geoname;
 use Application\Model\Part;
-use Application\Model\Filter;
+use Application\Model\Questionnaire;
 
 /**
  * Class used to "adjust" a trend line over another one by overriding some values.
@@ -108,7 +108,7 @@ class Adjustator
             return $originalValues;
         }
 
-        $this->aggregator->getCalculator()->setOverriddenFilters(array());
+        $this->aggregator->getCalculator()->setOverriddenFilters([]);
         foreach ($yearsWithValue as $questionnaireId => $year) {
             $originalValue = $this->aggregator->getCalculator()->computeFilter($this->overridable->getId(), $questionnaireId, $this->part->getId());
             $originalValues[$questionnaireId][$this->overridable->getId()][$this->part->getId()] = $originalValue;
@@ -165,7 +165,7 @@ class Adjustator
      */
     private function findBestOverrideValue($questionnaireId, $targetValue)
     {
-        $this->aggregator->getCalculator()->setOverriddenFilters(array());
+        $this->aggregator->getCalculator()->setOverriddenFilters([]);
         $margin = 0.01 * $targetValue; // Give us a margin of +/-1% around the target
         $lowerLimit = 0;
         $currentValue = $this->aggregator->getCalculator()->computeFilter($this->reference->getId(), $questionnaireId, $this->part->getId());

@@ -7,7 +7,7 @@ use Application\Utility;
 class FilterRepository extends AbstractRepository
 {
 
-    private $cacheDescendants = array();
+    private $cacheDescendants = [];
 
     /**
      * Returns all items with read access
@@ -28,7 +28,7 @@ class FilterRepository extends AbstractRepository
      * Return filters that have no parents
      * @return array
      */
-    public function getRootFilters ()
+    public function getRootFilters()
     {
         $qb = $this->createQueryBuilder('filter')
                    ->orderBy('filter.sorting')
@@ -57,9 +57,9 @@ class FilterRepository extends AbstractRepository
      * @param array $orderBy
      * @return array
      */
-    public function findAll($orderBy = array('id' => 'ASC'))
+    public function findAll($orderBy = ['id' => 'ASC'])
     {
-        return $this->findBy(array(), $orderBy);
+        return $this->findBy([], $orderBy);
     }
 
     /**
@@ -73,7 +73,7 @@ class FilterRepository extends AbstractRepository
     public function getOneByNames($name, $parentName)
     {
         $qb = $this->createQueryBuilder('filter')->where('filter.name = :name');
-        $parameters = array('name' => $name);
+        $parameters = ['name' => $name];
         if ($parentName) {
             $parameters['parentName'] = $parentName;
             $qb->join('filter.parents', 'parents', \Doctrine\ORM\Query\Expr\Join::WITH, 'parents.name = :parentName');
@@ -122,17 +122,16 @@ class FilterRepository extends AbstractRepository
             $qb = $this->createQueryBuilder('filter')
                     ->select('filter, summands, children')
                     ->leftJoin('filter.summands', 'summands')
-                    ->leftJoin('filter.children', 'children')
-            ;
+                    ->leftJoin('filter.children', 'children');
 
             // Restructure cache to be [questionnaireId => [filterId => [partId => value]]]
             $res = $qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
             foreach ($res as $filter) {
 
-                $descendants = array(
-                    'summands' => array(),
-                    'children' => array(),
-                );
+                $descendants = [
+                    'summands' => [],
+                    'children' => [],
+                ];
                 foreach (array_keys($descendants) as $type) {
                     foreach ($filter[$type] as $descendant) {
                         $descendants[$type][] = $descendant['id'];
@@ -145,7 +144,7 @@ class FilterRepository extends AbstractRepository
         if (isset($this->cacheDescendants[$filterId][$descendantType])) {
             return $this->cacheDescendants[$filterId][$descendantType];
         } else {
-            return array();
+            return [];
         }
     }
 
@@ -170,9 +169,9 @@ class FilterRepository extends AbstractRepository
                 LEFT JOIN filter.thematicFilter thematicFilter
                 WHERE filter IN (:filters)");
 
-        $params = array(
+        $params = [
             'filters' => $filters,
-        );
+        ];
 
         $query->setParameters($params);
         $data = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -201,12 +200,12 @@ class FilterRepository extends AbstractRepository
                     'thematicTextColor' => Utility::getLisibleColor(isset($filter['thematicColor']) ? $filter['thematicColor'] : Utility::getColor($filter['thematicId'], 100)),
                     'filterSorting' => $filter['filterSorting'],
                     'thematicSorting' => $filter['thematicSorting'],
-                    'width' => 80
+                    'width' => 80,
                 ];
             }
         }
 
-        usort($result, array($this, 'orderColumnsByThematicPartAndFilter'));
+        usort($result, [$this, 'orderColumnsByThematicPartAndFilter']);
 
         return $result;
     }

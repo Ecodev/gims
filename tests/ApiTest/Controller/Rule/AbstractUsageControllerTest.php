@@ -2,8 +2,8 @@
 
 namespace ApiTest\Controller\Rule;
 
-use Zend\Http\Request;
 use ApiTest\Controller\AbstractChildRestfulControllerTest;
+use Zend\Http\Request;
 
 /**
  * @group Rest
@@ -13,7 +13,7 @@ abstract class AbstractUsageControllerTest extends AbstractChildRestfulControlle
 
     public function testCanUpdateUsage()
     {
-        $data = array('justification' => 'foo');
+        $data = ['justification' => 'foo'];
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(201);
         $actual = $this->getJsonResponse();
@@ -31,7 +31,7 @@ abstract class AbstractUsageControllerTest extends AbstractChildRestfulControlle
 
         // Update should be forbidden, because there is another questionnaire on
         // which we don't have acces and which is concerned by this usage
-        $data = array('questionnaire' => $questionnaire->getId());
+        $data = ['questionnaire' => $questionnaire->getId()];
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(403);
 

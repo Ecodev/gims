@@ -203,9 +203,9 @@ abstract class AbstractModel
      */
     public function getJsonConfig()
     {
-        return array(
+        return [
             'id',
-        );
+        ];
     }
 
     /**
@@ -230,8 +230,8 @@ abstract class AbstractModel
     public function getPermissions()
     {
         $auth = Module::getServiceManager()->get('ZfcRbac\Service\AuthorizationService');
-        $result = array();
-        foreach (array('create', 'read', 'update', 'delete') as $action) {
+        $result = [];
+        foreach (['create', 'read', 'update', 'delete'] as $action) {
             $result[$action] = $auth->isActionGranted($this, $action);
         }
 

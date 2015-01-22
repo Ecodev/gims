@@ -2,9 +2,9 @@
 
 namespace Application\Model\Question;
 
-use Doctrine\ORM\Mapping as ORM;
-use Application\Model\Survey;
 use Application\Model\Questionnaire;
+use Application\Model\Survey;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Question defines a Survey (and NOT a questionnaire).
@@ -33,7 +33,7 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
      * @var array
      * @ORM\Column(type="json_array", nullable=false, options={"default" = "[]"})
      */
-    private $alternateNames = array();
+    private $alternateNames = [];
 
     /**
      * @var Chapter
@@ -67,10 +67,10 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
+        return array_merge(parent::getJsonConfig(), [
             'name',
             'sorting',
-        ));
+        ]);
     }
 
     /**

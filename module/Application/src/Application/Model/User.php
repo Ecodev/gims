@@ -162,12 +162,12 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
+        return array_merge(parent::getJsonConfig(), [
             'name',
             'email',
             'state',
             'lastLogin'
-        ));
+        ]);
     }
 
     /**

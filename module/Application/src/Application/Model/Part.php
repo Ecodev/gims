@@ -42,9 +42,9 @@ class Part extends AbstractModel implements Rule\ReferencableInterface
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
+        return array_merge(parent::getJsonConfig(), [
             'name',
-        ));
+        ]);
     }
 
     /**

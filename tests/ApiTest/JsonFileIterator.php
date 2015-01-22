@@ -32,12 +32,12 @@ class JsonFileIterator extends \GlobIterator
         @mkdir($fullpath, 0777, true);
 
         $json = file_get_contents($file->getPathname());
-        $result = array(
+        $result = [
             $params,
             $json,
             $message,
             $fullpath . $file->getFilename(),
-        );
+        ];
 
         return $result;
     }

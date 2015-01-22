@@ -2,11 +2,11 @@
 
 namespace ApiTest\Controller\Rule;
 
-use Zend\Http\Request;
 use ApiTest\Controller\AbstractRestfulControllerTest;
+use Application\Model\Rule\FilterGeonameUsage;
 use Application\Model\Rule\FilterQuestionnaireUsage;
 use Application\Model\Rule\QuestionnaireUsage;
-use Application\Model\Rule\FilterGeonameUsage;
+use Zend\Http\Request;
 
 /**
  * @group Rest
@@ -18,7 +18,7 @@ class RuleControllerTest extends AbstractRestfulControllerTest
 
     protected function getAllowedFields()
     {
-        return array('id', 'name', 'formula');
+        return ['id', 'name', 'formula'];
     }
 
     protected function getTestedObject()
@@ -28,7 +28,7 @@ class RuleControllerTest extends AbstractRestfulControllerTest
 
     public function testCanUpdateRule()
     {
-        $data = array('name' => 'foo');
+        $data = ['name' => 'foo'];
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(201);
         $actual = $this->getJsonResponse();
@@ -42,7 +42,7 @@ class RuleControllerTest extends AbstractRestfulControllerTest
 
     public function testCannotUpdateRuleWithPublishedQuestionnaire()
     {
-        $data = array('name' => 'foo');
+        $data = ['name' => 'foo'];
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(201);
         $actual = $this->getJsonResponse();
@@ -65,7 +65,7 @@ class RuleControllerTest extends AbstractRestfulControllerTest
         $usage->setRule($this->rule)->setQuestionnaire($questionnaire2)->setPart($this->part)->setJustification('unit tests');
 
         // Update should be forbidden, because rule is used in another questionnaire
-        $data = array('name' => 'foo');
+        $data = ['name' => 'foo'];
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(403);
 
@@ -85,7 +85,7 @@ class RuleControllerTest extends AbstractRestfulControllerTest
         $usage->setRule($this->rule)->setQuestionnaire($questionnaire2)->setPart($this->part)->setJustification('unit tests');
 
         // Update should be forbidden, because rule is used in another questionnaire
-        $data = array('name' => 'foo');
+        $data = ['name' => 'foo'];
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(403);
 
@@ -105,7 +105,7 @@ class RuleControllerTest extends AbstractRestfulControllerTest
         $usage->setRule($this->rule)->setGeoname($this->geoname)->setPart($this->part)->setJustification('unit tests');
 
         // Update should be forbidden, because rule is used in another questionnaire
-        $data = array('name' => 'foo');
+        $data = ['name' => 'foo'];
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(403);
 
@@ -121,9 +121,9 @@ class RuleControllerTest extends AbstractRestfulControllerTest
     public function testCanCreateRule()
     {
         // Rule
-        $data = array(
+        $data = [
             'name' => 'new-rule A',
-        );
+        ];
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(201);
@@ -139,9 +139,9 @@ class RuleControllerTest extends AbstractRestfulControllerTest
     public function testCanValidateRuleOnCreation()
     {
         // Rule
-        $validData = array(
+        $validData = [
             'name' => 'new-rule A',
-        );
+        ];
         $expected = [
             'id' => null,
             'name' => 'new-rule A',
@@ -153,10 +153,10 @@ class RuleControllerTest extends AbstractRestfulControllerTest
         $actual = $this->getJsonResponse();
         $this->assertEquals($expected, $actual, 'new object should not be created, but still returned');
 
-        $invalidData = array(
+        $invalidData = [
             'name' => 'new-rule A',
             'formula' => 'invalid syntax',
-        );
+        ];
 
         $this->dispatch($this->getRoute('post') . '?validate', Request::METHOD_POST, $invalidData);
         $this->assertResponseStatusCode(403);
@@ -168,10 +168,10 @@ class RuleControllerTest extends AbstractRestfulControllerTest
     public function testCanValidateRuleOnUpdate()
     {
         // Rule
-        $validData = array(
+        $validData = [
             'name' => 'new-rule A',
             'formula' => '= 1 * 2 * 3',
-        );
+        ];
 
         $expected = array_merge(['id' => $this->rule->getId()], $validData);
 
@@ -180,10 +180,10 @@ class RuleControllerTest extends AbstractRestfulControllerTest
         $actual = $this->getJsonResponse();
         $this->assertEquals($expected, $actual, 'returned object must be the modified but non-persisted version');
 
-        $invalidData = array(
+        $invalidData = [
             'name' => 'new-rule A',
             'formula' => 'invalid syntax',
-        );
+        ];
 
         $this->dispatch($this->getRoute('put') . '?validate', Request::METHOD_PUT, $invalidData);
         $this->assertResponseStatusCode(403);

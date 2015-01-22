@@ -34,14 +34,14 @@ class MetaModel
     private function getMandatoryPropertiesInternal($modelName)
     {
 
-        $properties = array();
+        $properties = [];
         $reflectionClass = new \ReflectionClass($modelName);
         $defaultValues = $reflectionClass->getDefaultProperties();
         foreach ($reflectionClass->getProperties() as $property) {
             $reflectionProperty = new \ReflectionProperty($modelName, $property->getName());
 
             $doc = $reflectionProperty->getDocComment();
-            if ($property->getName() != 'id' &&  preg_match('/ORM\\\.+nullable=false/isU', $doc, $annotations) && $defaultValues[$property->getName()] === NULL) {
+            if ($property->getName() != 'id' &&  preg_match('/ORM\\\.+nullable=false/isU', $doc, $annotations) && $defaultValues[$property->getName()] === null) {
                 $properties[] = $property->getName();
             }
         }

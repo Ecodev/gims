@@ -6,35 +6,61 @@ $finder = Symfony\CS\Finder\DefaultFinder::create()
         ->exclude('node_modules')
         ->exclude('nbproject')
         ->exclude('htdocs/lib')
-        ->in(__DIR__)
-;
+        ->in(__DIR__);
 
 return Symfony\CS\Config\Config::create()
-                ->fixers(array(
-                    'encoding',
-                    'linefeed',
-                    'trailing_spaces',
-                    'php_closing_tag',
-//                    'unused_use', // This breaks usage of traits in parent class, specifically in Application\Service\Calculator\Calculator, see https://github.com/fabpot/PHP-CS-Fixer/issues/217
-                    'include',
-                    'visibility',
-                    'indentation',
-                    'lowercase_constants',
-                    'braces',
-                    'standardize_not_equal',
-                    'lowercase_keywords',
-                    'extra_empty_lines',
-                    'object_operator',
-                    'return',
-//                    'function_declaration', // This does not recognize javascript function in PHP string, and mis-format PHP closures
-                    'short_tag',
-                    'new_with_braces',
-                    'spaces_cast',
-//                    'phpdoc_params', // Waste of time
-                    'psr0',
-                    'controls_spaces',
+                ->level(Symfony\CS\FixerInterface::NONE_LEVEL)
+                ->fixers([
+                    // 'align_double_arrow', // Waste of time
+                    // 'align_equals', // Waste of time
+                    // 'braces', // Currently also remove newline after classes' braces, which is not consistent with NetBeans... not sure what is best... also see https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/567
+                    // 'concat_without_spaces', // This make it less readable
+                    'concat_with_spaces',
+                    'double_arrow_multiline_whitespaces',
+                    'duplicate_semicolon',
                     'elseif',
+                    // 'empty_return', // even if technically useless, we prefer to be explicit with our intent to return null
+                    'encoding',
                     'eof_ending',
-                ))
-                ->finder($finder)
-;
+                    'extra_empty_lines',
+                    'function_call_space',
+                    'function_declaration',
+                    'include',
+                    'indentation',
+                    'join_function',
+                    'line_after_namespace',
+                    'linefeed',
+                    'lowercase_constants',
+                    'lowercase_keywords',
+                    'method_argument_space',
+                    'multiline_array_trailing_comma',
+                    'multiline_spaces_before_semicolon',
+                    'multiple_use',
+                    'namespace_no_leading_whitespace',
+                    'new_with_braces',
+                    'object_operator',
+                    'operators_spaces',
+                    'ordered_use',
+                    'parenthesis',
+                    'php_closing_tag',
+                    'phpdoc_indent',
+                    // 'phpdoc_params', // Waste of time
+                    'psr0',
+                    'remove_leading_slash_use',
+                    'remove_lines_between_uses',
+                    'return',
+                    'short_array_syntax',
+                    'short_tag',
+                    'single_array_no_trailing_comma',
+                    'spaces_before_semicolon',
+                    'spaces_cast',
+                    'standardize_not_equal',
+                    // 'strict', // No, too dangerous to change that
+                    // 'strict_param', // No, too dangerous to change that
+                    // 'ternary_spaces', // That would be nice, but NetBeans does not cooperate :-(
+                    'trailing_spaces',
+                    'unused_use',
+                    'visibility',
+                    'whitespacy_lines',
+                ])
+                ->finder($finder);

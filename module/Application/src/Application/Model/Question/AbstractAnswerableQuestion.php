@@ -2,10 +2,10 @@
 
 namespace Application\Model\Question;
 
-use Doctrine\ORM\Mapping as ORM;
 use Application\Model\Answer;
 use Application\Model\Filter;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * A question which can be answered by end-user, and thus may be specific to parts.

@@ -12,7 +12,7 @@ class AnswerControllerTest extends AbstractChildRestfulControllerTest
 
     protected function getAllowedFields()
     {
-        return array('id', 'valuePercent', 'valueAbsolute', 'valueText', 'isCheckboxChecked', 'valueChoice', 'part', 'question', 'valueUser');
+        return ['id', 'valuePercent', 'valueAbsolute', 'valueText', 'isCheckboxChecked', 'valueChoice', 'part', 'question', 'valueUser'];
     }
 
     protected function getTestedObject()
@@ -30,18 +30,18 @@ class AnswerControllerTest extends AbstractChildRestfulControllerTest
     public function testPostANewAnswerWithNestedObjectWillCreateIt()
     {
         // Question
-        $data = array(
+        $data = [
             'valuePercent' => 0.6,
-            'question' => array(
-                'id' => $this->question->getId()
-            ),
-            'questionnaire' => array(
-                'id' => $this->questionnaire->getId()
-            ),
-            'part' => array(
-                'id' => $this->part3->getId()
-            ),
-        );
+            'question' => [
+                'id' => $this->question->getId(),
+            ],
+            'questionnaire' => [
+                'id' => $this->questionnaire->getId(),
+            ],
+            'part' => [
+                'id' => $this->part3->getId(),
+            ],
+        ];
 
         $this->dispatch($this->getRoute('post') . '?fields=questionnaire', Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(201);
@@ -53,12 +53,12 @@ class AnswerControllerTest extends AbstractChildRestfulControllerTest
     public function testPostANewAnswerWithFlatObjectWillCreateIt()
     {
         // Question
-        $data = array(
+        $data = [
             'valuePercent' => 0.6,
             'question' => $this->question->getId(),
             'questionnaire' => $this->questionnaire->getId(),
             'part' => $this->part3->getId(),
-        );
+        ];
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(201);
@@ -69,18 +69,18 @@ class AnswerControllerTest extends AbstractChildRestfulControllerTest
     public function testPostANewAnswerReturnsStatusCode403ForUserWithRoleAnonymous()
     {
         // Question
-        $data = array(
+        $data = [
             'valuePercent' => 0.6,
-            'question' => array(
-                'id' => $this->question->getId()
-            ),
-            'questionnaire' => array(
-                'id' => $this->questionnaire->getId()
-            ),
-            'part' => array(
-                'id' => $this->part->getId()
-            ),
-        );
+            'question' => [
+                'id' => $this->question->getId(),
+            ],
+            'questionnaire' => [
+                'id' => $this->questionnaire->getId(),
+            ],
+            'part' => [
+                'id' => $this->part->getId(),
+            ],
+        ];
 
         $this->identityProvider->setIdentity(null);
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
@@ -90,9 +90,9 @@ class AnswerControllerTest extends AbstractChildRestfulControllerTest
     public function testCanUpdateValuePercentOfAnswer()
     {
         $expected = $this->answer->getValuePercent() + 0.2;
-        $data = array(
+        $data = [
             'valuePercent' => $expected,
-        );
+        ];
 
         $this->dispatch($this->getRoute('put') . '?fields=questionnaire', Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(201);

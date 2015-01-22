@@ -10,7 +10,7 @@ class FilterGeonameUsageControllerTest extends AbstractUsageControllerTest
 
     protected function getAllowedFields()
     {
-        return array('id', 'rule', 'filter', 'part', 'geoname', 'justification');
+        return ['id', 'rule', 'filter', 'part', 'geoname', 'justification'];
     }
 
     protected function getTestedObject()
@@ -20,11 +20,11 @@ class FilterGeonameUsageControllerTest extends AbstractUsageControllerTest
 
     protected function getPossibleParents()
     {
-        return array(
+        return [
             $this->filterGeonameUsage->getRule(),
             $this->filterGeonameUsage->getFilter(),
             $this->filterGeonameUsage->getGeoname(),
-        );
+        ];
     }
 
 }

@@ -3,10 +3,10 @@
 namespace Api\Controller\Rule;
 
 use Api\Controller\AbstractChildRestfulController;
-use Application\View\Model\NumericJsonModel;
-use Application\Utility;
 use Application\Service\Calculator\Calculator;
 use Application\Service\Hydrator;
+use Application\Utility;
+use Application\View\Model\NumericJsonModel;
 
 class QuestionnaireUsageController extends AbstractChildRestfulController
 {
@@ -35,7 +35,7 @@ class QuestionnaireUsageController extends AbstractChildRestfulController
 
                 $result[$ruleName]['values'][$usage->getQuestionnaire()->getId()][$usage->getPart()->getId()] = [
                     'id' => $usage->getRule()->getId(),
-                    'usage' => $hydrator->extract($usage, array('thematicFilter')),
+                    'usage' => $hydrator->extract($usage, ['thematicFilter']),
                     'value' => $roundedValue,
                 ];
             }

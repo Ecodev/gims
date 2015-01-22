@@ -2,8 +2,8 @@
 
 namespace ApplicationTest\Model;
 
-use Application\Model\Discussion;
 use Application\Model\Comment;
+use Application\Model\Discussion;
 
 /**
  * @group Model

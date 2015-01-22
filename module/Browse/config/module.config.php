@@ -1,8 +1,8 @@
 <?php
 
-return array(
-    'controllers' => array(
-        'invokables' => array(
+return [
+    'controllers' => [
+        'invokables' => [
             'Browse\Controller\Index' => 'Browse\Controller\IndexController',
             'Browse\Controller\Chart' => 'Browse\Controller\ChartController',
             'Browse\Controller\Table' => 'Browse\Controller\TableController',
@@ -10,48 +10,48 @@ return array(
             'Browse\Controller\Rule' => 'Browse\Controller\RuleController',
             'Browse\Controller\CellMenu' => 'Browse\Controller\CellMenuController',
             'Browse\Controller\Discussion' => 'Browse\Controller\DiscussionController',
-        ),
-    ),
-    'view_manager' => array(
+        ],
+    ],
+    'view_manager' => [
         'display_not_found_reason' => true,
         'display_exceptions' => true,
         'doctype' => 'HTML5',
-        'template_path_stack' => array(
+        'template_path_stack' => [
             __DIR__ . '/../view',
-        ),
-    ),
-    'router' => array(
-        'routes' => array(
+        ],
+    ],
+    'router' => [
+        'routes' => [
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
             // using the path /browse/:controller/:action
-            'template_browse' => array(
+            'template_browse' => [
                 'type' => 'Literal',
-                'options' => array(
+                'options' => [
                     'route' => '/template/browse',
-                    'defaults' => array(
+                    'defaults' => [
                         '__NAMESPACE__' => 'Browse\Controller',
                         'controller' => 'Index',
                         'action' => 'index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
+                'child_routes' => [
+                    'default' => [
                         'type' => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '[/:controller][/:action]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 'action' => 'index',
-                            ),
-                        ),
-                    ),
-                ),
-            )
-        ),
-    ),
-);
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+];

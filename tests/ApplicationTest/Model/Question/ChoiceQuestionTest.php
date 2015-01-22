@@ -2,8 +2,8 @@
 
 namespace ApplicationTest\Model\Question;
 
-use Application\Model\Question\ChoiceQuestion;
 use Application\Model\Question\Choice;
+use Application\Model\Question\ChoiceQuestion;
 
 /**
  * @group Model

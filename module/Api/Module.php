@@ -2,8 +2,8 @@
 
 namespace Api;
 
-use Zend\Mvc\MvcEvent;
 use Zend\Http\Request as HttpRequest;
+use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ModelInterface;
 
@@ -17,13 +17,13 @@ class Module
 
     public function getAutoloaderConfig()
     {
-        return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
+        return [
+            'Zend\Loader\StandardAutoloader' => [
+                'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     public function onBootstrap(MvcEvent $e)
@@ -37,7 +37,7 @@ class Module
 
         // attach a listener to check for errors
         $events = $e->getTarget()->getEventManager();
-        $events->attach(MvcEvent::EVENT_RENDER, array($this, 'onRenderError'));
+        $events->attach(MvcEvent::EVENT_RENDER, [$this, 'onRenderError']);
 
         // In order to not break the front-end and return a proper 500 status, we
         // assume failure before doing anything. Then the status will be corrected
@@ -72,10 +72,10 @@ class Module
 
         // create a new JsonModel - use application/api-problem+json fields.
         $response = $event->getResponse();
-        $json = new JsonModel(array(
+        $json = new JsonModel([
             'status' => $response->getStatusCode(),
             'title' => $response->getReasonPhrase(),
-        ));
+        ]);
 
         // Detect common errors
         if ($currentModel instanceof ModelInterface && $currentModel->reason) {

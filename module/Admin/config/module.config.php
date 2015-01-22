@@ -1,8 +1,8 @@
 <?php
 
-return array(
-    'controllers' => array(
-        'invokables' => array(
+return [
+    'controllers' => [
+        'invokables' => [
             'Admin\Controller\Index' => 'Admin\Controller\IndexController',
             'Admin\Controller\FilterSet' => 'Admin\Controller\FilterSetController',
             'Admin\Controller\Filter' => 'Admin\Controller\FilterController',
@@ -12,50 +12,50 @@ return array(
             'Admin\Controller\User' => 'Admin\Controller\UserController',
             'Admin\Controller\Rule' => 'Admin\Controller\RuleController',
             'Admin\Controller\RolesRequests' => 'Admin\Controller\RolesRequestsController',
-        ),
-    ),
-    'view_manager' => array(
+        ],
+    ],
+    'view_manager' => [
         'display_not_found_reason' => true,
         'display_exceptions' => true,
         'doctype' => 'HTML5',
-        'template_path_stack' => array(
+        'template_path_stack' => [
             __DIR__ . '/../view',
-        ),
-    ),
-    'router' => array(
-        'routes' => array(
+        ],
+    ],
+    'router' => [
+        'routes' => [
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
             // using the path /admin/:controller/:action
-            'template_admin' => array(
+            'template_admin' => [
                 'type' => 'Literal',
-                'options' => array(
+                'options' => [
                     'route' => '/template/admin',
-                    'defaults' => array(
+                    'defaults' => [
                         '__NAMESPACE__' => 'Admin\Controller',
                         'controller' => 'Index',
                         'action' => 'index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
+                'child_routes' => [
+                    'default' => [
                         'type' => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/[:controller[/:action]]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                             #'__NAMESPACE__' => 'Admin\Controller',
                             #'controller'    => 'Survey',
                             #'action'        => 'index',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-);
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+];

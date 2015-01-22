@@ -12,7 +12,7 @@ class UserFilterSetControllerTest extends AbstractChildRestfulControllerTest
 
     protected function getAllowedFields()
     {
-        return array('id', 'user', 'role', 'filterSet');
+        return ['id', 'user', 'role', 'filterSet'];
     }
 
     protected function getTestedObject()
@@ -32,11 +32,11 @@ class UserFilterSetControllerTest extends AbstractChildRestfulControllerTest
     {
         $anotherUser = $this->createAnotherUser();
 
-        $data = array(
+        $data = [
             'user' => $anotherUser->getId(),
             'role' => $this->filterEditor->getId(),
             'filterSet' => $this->filterSet->getId(),
-        );
+        ];
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(403);

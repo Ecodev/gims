@@ -19,7 +19,7 @@ class FilterGeonameUsageRepository extends \Application\Repository\AbstractRepos
         $qb->where('fgu.' . $parentName . ' = :parent');
         $qb->setParameter('parent', $parent);
 
-        $this->addSearch($qb, $search, array('filter.name', 'rule.name', 'rule.formula', 'geoname.name', 'part.name'));
+        $this->addSearch($qb, $search, ['filter.name', 'rule.name', 'rule.formula', 'geoname.name', 'part.name']);
 
         return $qb->getQuery()->getResult();
     }
@@ -27,7 +27,7 @@ class FilterGeonameUsageRepository extends \Application\Repository\AbstractRepos
     /**
      * @var array $cache [geonameId => [filterId => [partId => value]]]
      */
-    private $cache = array();
+    private $cache = [];
 
     /**
      * Initates cache
@@ -46,14 +46,14 @@ class FilterGeonameUsageRepository extends \Application\Repository\AbstractRepos
                     ->andWhere('filterGeonameUsage.geoname = :geoname')
                     ->orderBy('filterGeonameUsage.sorting, filterGeonameUsage.id');
 
-            $qb->setParameters(array(
+            $qb->setParameters([
                 'geoname' => $geonameId,
-            ));
+            ]);
 
             $res = $qb->getQuery()->getResult();
 
             // Ensure that we hit the cache next time, even if we have no results at all
-            $this->cache[$geonameId] = array();
+            $this->cache[$geonameId] = [];
 
             // Restructure cache to be [geonameId => [filterId => [partId => value]]]
             foreach ($res as $filterGeonameUsage) {
@@ -91,7 +91,7 @@ class FilterGeonameUsageRepository extends \Application\Repository\AbstractRepos
         if (isset($this->cache[$geonameId][$filterId][$partId])) {
             $possible = $this->cache[$geonameId][$filterId][$partId];
         } else {
-            $possible = array();
+            $possible = [];
         }
 
         // Returns the first non-excluded

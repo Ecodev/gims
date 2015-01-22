@@ -1,52 +1,52 @@
 <?php
 
-return array(
-    'controllers' => array(
-        'invokables' => array(
+return [
+    'controllers' => [
+        'invokables' => [
             'Contribute\Controller\Index' => 'Contribute\Controller\IndexController',
             'Contribute\Controller\RequestRoles' => 'Contribute\Controller\RequestRolesController',
             'Contribute\Controller\Discussion' => 'Contribute\Controller\DiscussionController',
             'Contribute\Controller\Activity' => 'Contribute\Controller\ActivityController',
-        ),
-    ),
-    'view_manager' => array(
+        ],
+    ],
+    'view_manager' => [
         'display_not_found_reason' => true,
         'display_exceptions' => true,
         'doctype' => 'HTML5',
-        'template_path_stack' => array(
+        'template_path_stack' => [
             __DIR__ . '/../view',
-        ),
-    ),
-    'router' => array(
-        'routes' => array(
+        ],
+    ],
+    'router' => [
+        'routes' => [
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
             // using the path /contribute/:controller/:action
-            'template_contribute' => array(
+            'template_contribute' => [
                 'type' => 'Literal',
-                'options' => array(
+                'options' => [
                     'route' => '/template/contribute',
-                    'defaults' => array(
+                    'defaults' => [
                         '__NAMESPACE__' => 'Contribute\Controller',
                         'controller' => 'Index',
                         'action' => 'index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
+                'child_routes' => [
+                    'default' => [
                         'type' => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/[:controller[/:action]]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-);
+                            ],
+                            'defaults' => [],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+];

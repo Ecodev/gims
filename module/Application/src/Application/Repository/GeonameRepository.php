@@ -7,7 +7,7 @@ use Doctrine\ORM\Query\Expr\Join;
 class GeonameRepository extends AbstractRepository
 {
 
-    private $cache = array();
+    private $cache = [];
 
     public function getAllWithPermission($action = 'read', $search = null)
     {

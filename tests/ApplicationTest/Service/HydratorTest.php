@@ -37,13 +37,13 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->choice2 = new \Application\Model\Question\Choice();
 
         // Create a stub for the Hydrator class with predetermined values, so we don't have to mess with database
-        $this->hydrator = $this->getMock('\Application\Service\Hydrator', array('getObject'), array(), '', false);
+        $this->hydrator = $this->getMock('\Application\Service\Hydrator', ['getObject'], [], '', false);
         $this->hydrator->expects($this->any())
                 ->method('getObject')
-                ->will($this->returnValueMap(array(
-                            array('Application\Model\Question\Choice', 1, $this->choice1),
-                            array('Application\Model\Question\Choice', 2, $this->choice2),
-        )));
+                ->will($this->returnValueMap([
+                            ['Application\Model\Question\Choice', 1, $this->choice1],
+                            ['Application\Model\Question\Choice', 2, $this->choice2],
+        ]));
     }
 
     public function testDot()
@@ -52,7 +52,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             return 123;
         };
 
-        $actual = $this->hydrator->initializePropertyStructure(array(
+        $actual = $this->hydrator->initializePropertyStructure([
             'name',
             'subobject',
             'subobject.name',
@@ -61,29 +61,29 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
             'closure' => $closure,
             'children.__recursive',
             'new1.new2.new3.new4', // new object, not referenced before, should not have any issue
-        ));
+        ]);
 
-        $expected = array(
+        $expected = [
             'name',
-            'subobject' => array(
+            'subobject' => [
                 'name',
-                'subsubobject' => array(
-                    'name'
-                )
-            ),
-            'othersub' => array(
-                'name'
-            ),
+                'subsubobject' => [
+                    'name',
+                ],
+            ],
+            'othersub' => [
+                'name',
+            ],
             'closure' => $closure,
             'children' => '__recursive',
-            'new1' => array(
-                'new2' => array(
-                    'new3' => array(
+            'new1' => [
+                'new2' => [
+                    'new3' => [
                         'new4',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->assertEquals($expected, $actual);
     }
@@ -109,19 +109,19 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
 
     public function testCanHydrateAndExtract()
     {
-        $data = array(
+        $data = [
             'name' => 'John Connor',
             'email' => 'john.connor@skynet.net',
             'state' => null,
             'lastLogin' => '1997-08-29T01:02:03+0000',
-        );
+        ];
 
         $this->hydrator->hydrate($data, $this->user);
 
         $this->assertEquals($data['name'], $this->user->getName());
         $this->assertEquals($data['email'], $this->user->getEmail());
 
-        $actual = $this->hydrator->extract($this->user, array('name', 'email'));
+        $actual = $this->hydrator->extract($this->user, ['name', 'email']);
         unset($actual['id']);
         $this->assertEquals($data, $actual, 'it must be exactly same as input, except the id');
     }
@@ -141,7 +141,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $this->hydrator->hydrate($data, $question);
         $this->assertEquals($data['alternateNames'], $question->getAlternateNames());
 
-        $actual = $this->hydrator->extract($question, array('alternateNames'));
+        $actual = $this->hydrator->extract($question, ['alternateNames']);
         $this->assertEquals($data['alternateNames'], $actual['alternateNames'], 'it must be exactly same as input');
     }
 
@@ -151,16 +151,16 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $questionnaire = new \Application\Model\Questionnaire();
         $questionnaire->setSurvey($survey);
 
-        $data = array(
+        $data = [
             'comments' => 'some comments',
-            'survey' => array(
+            'survey' => [
                 'id' => 12345,
                 'name' => 'this should not overwrite the original name',
-            ),
-        );
+            ],
+        ];
 
         // Create a stub for the \Application\Service\Hydrator class, so we don't have to mess with database
-        $mockHydrator = $this->getMock('\Application\Service\Hydrator', array('getObject'), array(), '', false);
+        $mockHydrator = $this->getMock('\Application\Service\Hydrator', ['getObject'], [], '', false);
         $mockHydrator->expects($this->any())
                 ->method('getObject')
                 ->will($this->returnValue($survey));
@@ -172,23 +172,23 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     public function testHydrateUnknownPropertiesFailSilently()
     {
 
-        $data = array(
+        $data = [
             'foo' => 'bar',
             'name' => 'John Connor',
-        );
+        ];
 
         $this->hydrator->hydrate($data, $this->user);
         $this->assertEquals($data['name'], $this->user->getName());
-        $this->assertArrayNotHasKey('foo', $this->hydrator->extract($this->user, array('foo')));
+        $this->assertArrayNotHasKey('foo', $this->hydrator->extract($this->user, ['foo']));
     }
 
     public function testSensitivePropertiesCannotBeHydrated()
     {
-        $data = array(
+        $data = [
             'id' => 12345,
             'password' => 'foo',
             'activationToken' => 'foo',
-        );
+        ];
 
         $this->hydrator->hydrate($data, $this->user);
         $this->assertNull($this->user->getId());
@@ -197,10 +197,10 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
 
     public function testSensitivePropertiesCannotBeExtracted()
     {
-        $data = array(
+        $data = [
             'password',
-            'activationToken'
-        );
+            'activationToken',
+        ];
 
         $this->assertArrayNotHasKey('password', $this->hydrator->extract($this->user, $data));
         $this->assertArrayNotHasKey('activationToken', $this->hydrator->extract($this->user, $data));
@@ -211,22 +211,22 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $user2 = clone $this->user;
         $user2->setName('Bob');
 
-        $this->assertEquals(array(
-            0 => array(
+        $this->assertEquals([
+            0 => [
                 'id' => null,
                 'name' => 'John',
                 'email' => null,
                 'state' => 0,
                 'lastLogin' => null,
-            ),
-            1 => array(
+            ],
+            1 => [
                 'id' => null,
                 'name' => 'Bob',
                 'email' => null,
                 'state' => 0,
                 'lastLogin' => null,
-            ),
-        ), $this->hydrator->extractArray(array($this->user, $user2), array('name')));
+            ],
+        ], $this->hydrator->extractArray([$this->user, $user2], ['name']));
     }
 
     public function testCanHydrateCollectionExistingInDatabase()
@@ -236,13 +236,13 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $choices->add($this->choice2);
         $question = new \Application\Model\Question\ChoiceQuestion();
 
-        $data = array(
+        $data = [
             'name' => 'What is your name ?',
-            'choices' => array(
+            'choices' => [
                 1,
                 2,
-            )
-        );
+            ],
+        ];
         $this->hydrator->hydrate($data, $question);
 
         $this->assertEquals($choices, $question->getChoices(), 'question should have the two new choices');
@@ -257,12 +257,12 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $questionnaire->setSurvey($survey);
         $questionnaire->setGeoname(new Geoname('test geoname'));
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'id' => null,
             'name' => 'tst - test geoname',
             'comments' => 'test comments',
             'status' => 'new',
-            'survey' => array(
+            'survey' => [
                 'id' => null,
                 'name' => 'test survey',
                 'code' => 'tst',
@@ -270,12 +270,12 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
                 'year' => null,
                 'dateStart' => null,
                 'dateEnd' => null,
-            ),
-                ), $this->hydrator->extract($questionnaire, array(
+            ],
+                ], $this->hydrator->extract($questionnaire, [
                     'comments',
-                    'survey' => array('name'),
-                    'unkown properties' => array('foo', 'bar')
-                )), 'should return subobject, but only known one');
+                    'survey' => ['name'],
+                    'unkown properties' => ['foo', 'bar']
+                ]), 'should return subobject, but only known one');
     }
 
     /**
@@ -283,7 +283,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     public function extractSurveyWithPropertyQuestionnairesAndCheckResultContainsKeyQuestionnaires()
     {
-        $actual = $this->hydrator->extract($this->getFakeSurvey(), array('name', 'questionnaires'));
+        $actual = $this->hydrator->extract($this->getFakeSurvey(), ['name', 'questionnaires']);
         $this->assertArrayHasKey('questionnaires', $actual);
     }
 
@@ -292,7 +292,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
      */
     public function extractSurveyWithPropertyQuestionnairesAndQuestionnairesNameAndCheckResultContainsKeyQuestionnairesName()
     {
-        $actual = $this->hydrator->extract($this->getFakeSurvey(), array('name', 'questionnaires', 'questionnaires.name'));
+        $actual = $this->hydrator->extract($this->getFakeSurvey(), ['name', 'questionnaires', 'questionnaires.name']);
         $this->assertInternalType('array', $actual['questionnaires']);
         $this->assertNotEmpty($actual['questionnaires']);
     }
@@ -303,19 +303,19 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $filter2 = new \Application\Model\Filter('filter 2');
         $filter1->addChild($filter2);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'id' => null,
             'name' => 'filter 1',
-            'children' => array(
-                array(
+            'children' => [
+                [
                     'id' => null,
                     'name' => 'filter 2',
-                ),
-            ),
-                ), $this->hydrator->extract($filter1, array(
+                ],
+            ],
+                ], $this->hydrator->extract($filter1, [
                     'name',
-                    'children' => array('name'),
-                )), 'should return array of subobjects, but only known ones');
+                    'children' => ['name'],
+                ]), 'should return array of subobjects, but only known ones');
     }
 
     public function testExtractSubObjectWithRecursiveConfiguration()
@@ -324,24 +324,24 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $filter2 = new \Application\Model\Filter('filter 2');
         $filter1->addChild($filter2);
 
-        $expected = array(
+        $expected = [
             'id' => null,
             'name' => 'filter 1',
             'color' => $filter1->getColor(),
-            'children' => array(
-                array(
+            'children' => [
+                [
                     'id' => null,
                     'name' => 'filter 2',
                     'color' => $filter2->getColor(),
-                    'children' => array(),
-                ),
-            ),
-        );
+                    'children' => [],
+                ],
+            ],
+        ];
 
-        $this->assertEquals($expected, $this->hydrator->extract($filter1, array(
+        $this->assertEquals($expected, $this->hydrator->extract($filter1, [
                     'color',
                     'children' => '__recursive',
-                )), 'should return same properties for children and parent');
+                ]), 'should return same properties for children and parent');
     }
 
     public function testExtractBooleanProperty()
@@ -349,44 +349,44 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $filter1 = new \Application\Model\Filter('filter 1');
         $filter1->setColor('c0ffee');
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'id' => null,
             'name' => 'filter 1',
             'color' => 'c0ffee',
-                ), $this->hydrator->extract($filter1, array(
+                ], $this->hydrator->extract($filter1, [
                     'color',
-                )), 'should use correct getter for boolean properties');
+                ]), 'should use correct getter for boolean properties');
     }
 
     public function testExtractWithClosure()
     {
-        $this->assertEquals(array(
+        $this->assertEquals([
             'id' => null,
             'name' => 'John',
             'email' => null,
             'state' => 0,
             'lastLogin' => null,
             'custom name' => 'Mr. John Connor',
-                ), $this->hydrator->extract($this->user, array(
-                    'custom name' => function(Hydrator $hydrator, \Application\Model\User $user) {
+                ], $this->hydrator->extract($this->user, [
+                    'custom name' => function (Hydrator $hydrator, \Application\Model\User $user) {
                         return 'Mr. ' . $user->getName() . ' Connor';
                     },
-                )), 'should allow custom properties via Closure');
+                ]), 'should allow custom properties via Closure');
     }
 
     public function testExtractDateTimeAsString()
     {
         $this->user->timestampCreation();
-        $this->assertEquals(array(
+        $this->assertEquals([
             'id' => null,
             'email' => null,
             'state' => 0,
             'lastLogin' => null,
             'dateCreated' => $this->user->getDateCreated()->format(\DateTime::ISO8601),
             'name' => 'John',
-                ), $this->hydrator->extract($this->user, array(
+                ], $this->hydrator->extract($this->user, [
                     'dateCreated',
-                )), 'should serialize DateTime');
+                ]), 'should serialize DateTime');
     }
 
     public function testHydrateAssociationWithSuboject()
@@ -395,22 +395,22 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $survey = new \Application\Model\Survey('test survey');
 
         // Create a stub for the \Application\Service\Hydrator class, so we don't have to mess with database
-        $mockHydrator = $this->getMock('\Application\Service\Hydrator', array('getObject'), array(), '', false);
+        $mockHydrator = $this->getMock('\Application\Service\Hydrator', ['getObject'], [], '', false);
         $mockHydrator->expects($this->any())
                 ->method('getObject')
                 ->will($this->returnValue($survey));
 
-        $mockHydrator->hydrate(array(
-            'survey' => array(
+        $mockHydrator->hydrate([
+            'survey' => [
                 'id' => 12345,
-                'name' => 'name that should not be hydrated'
-            ),
-                ), $questionnaire);
+                'name' => 'name that should not be hydrated',
+            ],
+                ], $questionnaire);
         $this->assertEquals($survey, $questionnaire->getSurvey(), 'can set subobject');
 
         $questionnaire = new \Application\Model\Questionnaire();
         $this->assertNull($questionnaire->getSurvey());
-        $mockHydrator->hydrate(array('survey' => 12345), $questionnaire);
+        $mockHydrator->hydrate(['survey' => 12345], $questionnaire);
         $this->assertEquals($survey, $questionnaire->getSurvey(), 'can also use short syntax with only ID');
         $this->assertEquals('test survey', $questionnaire->getSurvey()->getName(), 'properties of subobject should never be modified');
     }
@@ -420,16 +420,16 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $chapter = new \Application\Model\Question\Chapter();
         $this->assertFalse($chapter->isFinal(), 'default is false');
 
-        $this->hydrator->hydrate(array('isFinal' => true), $chapter);
+        $this->hydrator->hydrate(['isFinal' => true], $chapter);
         $this->assertTrue($chapter->isFinal(), 'can set to true');
 
-        $this->hydrator->hydrate(array('isFinal' => false), $chapter);
+        $this->hydrator->hydrate(['isFinal' => false], $chapter);
         $this->assertFalse($chapter->isFinal(), 'can set to true');
 
-        $this->hydrator->hydrate(array('isFinal' => '1'), $chapter);
+        $this->hydrator->hydrate(['isFinal' => '1'], $chapter);
         $this->assertTrue($chapter->isFinal(), 'can set to 1');
 
-        $this->hydrator->hydrate(array('isFinal' => '0'), $chapter);
+        $this->hydrator->hydrate(['isFinal' => '0'], $chapter);
         $this->assertFalse($chapter->isFinal(), 'can set to 0');
     }
 
@@ -437,7 +437,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
     {
         $chapter = new \Application\Model\Question\Chapter();
 
-        $actual = $this->hydrator->extract($chapter, array('isFinal'));
+        $actual = $this->hydrator->extract($chapter, ['isFinal']);
         $this->assertArrayHasKey('isFinal', $actual);
         $this->assertFalse($actual['isFinal']);
     }
@@ -447,7 +447,7 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
         $geoname = new \Application\Model\Geoname();
         $geoname->setIso3('abc');
 
-        $actual = $this->hydrator->extract($geoname, array('iso3'));
+        $actual = $this->hydrator->extract($geoname, ['iso3']);
         $this->assertArrayHasKey('iso3', $actual);
         $this->assertEquals($geoname->getIso3(), $actual['iso3']);
     }

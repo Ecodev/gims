@@ -2,7 +2,7 @@
 
 namespace ApplicationTest\Validator;
 
-use \Application\Validator\Rule;
+use Application\Validator\Rule;
 
 /**
  * @group Service

@@ -2,7 +2,6 @@
 
 namespace ApiTest\Controller;
 
-use Zend\Http\Request;
 use Application\Model\Answer;
 use Application\Model\Filter;
 use Application\Model\FilterSet;
@@ -11,15 +10,16 @@ use Application\Model\Part;
 use Application\Model\Population;
 use Application\Model\Question\NumericQuestion;
 use Application\Model\Questionnaire;
+use Application\Model\Role;
+use Application\Model\Rule\FilterGeonameUsage;
+use Application\Model\Rule\FilterQuestionnaireUsage;
+use Application\Model\Rule\QuestionnaireUsage;
+use Application\Model\Rule\Rule;
 use Application\Model\Survey;
 use Application\Model\User;
-use Application\Model\UserSurvey;
 use Application\Model\UserQuestionnaire;
-use Application\Model\Role;
-use Application\Model\Rule\Rule;
-use Application\Model\Rule\QuestionnaireUsage;
-use Application\Model\Rule\FilterQuestionnaireUsage;
-use Application\Model\Rule\FilterGeonameUsage;
+use Application\Model\UserSurvey;
+use Zend\Http\Request;
 
 abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller\AbstractController
 {
@@ -317,12 +317,12 @@ abstract class AbstractRestfulControllerTest extends \ApplicationTest\Controller
         $this->assertSame($this->getTestedObject()->getId(), $actual['id'], 'should be the same ID that what we asked');
         $this->assertArrayNotHasKey('nonExistingField', $actual, 'unknown fields should be silently ignored');
 
-        $metadata = array(
+        $metadata = [
             'dateCreated',
             'dateModified',
             'creator',
             'modifier',
-        );
+        ];
 
         foreach ($metadata as $key => $val) {
             $metadata = is_string($key) ? $key : $val;

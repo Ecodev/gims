@@ -2,8 +2,8 @@
 
 namespace Export\Controller;
 
-use Application\View\Model\ExcelModel;
 use Application\Traits\FlatHierarchic;
+use Application\View\Model\ExcelModel;
 
 class IndexController extends \Application\Controller\AbstractAngularActionController
 {
@@ -19,13 +19,13 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
         $permission = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService')->isActionGranted($questionnaire, 'read');
 
         if ($permission) {
-            $flatQuestions = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getAllWithPermissionWithAnswers('read', $questionnaire->getSurvey(), array($questionnaire->getId()));
+            $flatQuestions = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getAllWithPermissionWithAnswers('read', $questionnaire->getSurvey(), [$questionnaire->getId()]);
             $questions = $this->getFlatHierarchyWithSingleRootElement($flatQuestions, 'chapter', 0);
 
-            $view = new ExcelModel($this->params('filename'), array(
+            $view = new ExcelModel($this->params('filename'), [
                 'questions' => $questions,
-                'questionnaires' => array($questionnaire)
-            ));
+                'questionnaires' => [$questionnaire]
+            ]);
             $view->setTemplate('export/index/export.excel.php');
 
             return $view;
@@ -51,7 +51,7 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
             usort($questionnaires, function ($a, $b) {
                 return strcmp($a->getName(), $b->getName());
             });
-            $questionnaireList = array();
+            $questionnaireList = [];
             if (count($askedQuestionnaires) > 1 || (count($askedQuestionnaires) == 1 && ($askedQuestionnaires[0]) > 0)) {
                 foreach ($questionnaires as $questionnaire) {
                     if (in_array($questionnaire->getId(), $askedQuestionnaires)) {
@@ -62,15 +62,15 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
                 $questionnaireList = $questionnaires;
             }
 
-            $questionnairesIds = array_map(function($q){return $q->getId();}, $questionnaireList);
+            $questionnairesIds = array_map(function ($q) {return $q->getId();}, $questionnaireList);
             $flatQuestions = $this->getEntityManager()->getRepository('Application\Model\Question\AbstractQuestion')->getAllWithPermissionWithAnswers('read', $survey, $questionnairesIds);
             $questions = $this->getFlatHierarchyWithSingleRootElement($flatQuestions, 'chapter', 0);
 
             if ($questions) {
-                $view = new ExcelModel($this->params('filename'), array(
+                $view = new ExcelModel($this->params('filename'), [
                     'questions' => $questions,
                     'questionnaires' => $questionnaireList
-                ));
+                ]);
 
                 $view->setTemplate('export/index/export.excel.php');
 

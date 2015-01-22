@@ -16,13 +16,13 @@ class Rule extends \Zend\Validator\AbstractValidator
      *
      * @var array
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::START_EQUAL => 'Formula must start with an equal sign "=".',
         self::MIXED_TOKENS => 'Both kind of tokens cannot be mixed. Use either only Before Regression or only After Regression tokens.',
         self::BEFORE_WITH_AFTER_REGRESSION => 'Before Regression tokens cannot be used because the Rule is already in use in After Regression context (applied to a filter-country).',
         self::AFTER_WITH_BEFORE_REGRESSION => 'After Regression tokens cannot be used because the Rule is already in use in Before Regression context (applied to a filter-questionnaire, or a questionnaire).',
         self::INVALID_SYNTAX => 'Formula syntax is invalid and cannot be computed.',
-    );
+    ];
 
     /**
      * @var \Application\Service\Syntax\Parser
@@ -101,7 +101,7 @@ class Rule extends \Zend\Validator\AbstractValidator
         $this->beforeRegressionTokenUsed = false;
 
         foreach ($this->parser->getBeforeRegressionTokens() as $token) {
-            $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token) {
+            $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function ($matches) use ($token) {
 
                         if (!$token instanceof \Application\Service\Syntax\BothContextInterface) {
                             $this->beforeRegressionTokenUsed = true;
@@ -112,7 +112,7 @@ class Rule extends \Zend\Validator\AbstractValidator
         }
 
         foreach ($this->parser->getAfterRegressionTokens() as $token) {
-            $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token) {
+            $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function ($matches) use ($token) {
 
                         if (!$token instanceof \Application\Service\Syntax\BothContextInterface) {
                             $this->afterRegressionTokenUsed = true;

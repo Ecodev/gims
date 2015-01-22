@@ -8,7 +8,7 @@ class AnswerRepository extends AbstractChildRepository
     /**
      * @var array $cache [questionnaireId => [filterId => [partId => ['value' => value, 'questionName' => question]]]]
      */
-    private $cache = array();
+    private $cache = [];
 
     /**
      * Fill the cache for answer's valuePercent and questionName
@@ -53,11 +53,11 @@ class AnswerRepository extends AbstractChildRepository
                 LEFT JOIN filter AS f on qu.filter_id = f.id
                 WHERE q.geoname_id = :geonameId', $rsm);
 
-            $qb->setParameters(array('geonameId' => $geonameId));
+            $qb->setParameters(['geonameId' => $geonameId]);
             $res = $qb->getResult();
 
             // Ensure that we hit the cache next time, even if we have no results at all
-            $this->cache[$questionnaireId] = array();
+            $this->cache[$questionnaireId] = [];
 
             // Restructure cache
             foreach ($res as $data) {
@@ -67,10 +67,10 @@ class AnswerRepository extends AbstractChildRepository
                 $value = $data['questionIsAbsolute'] === false ? $valuePercent : $valueAbsolute;
                 $value *= $data['quality'];
 
-                $answerData = array(
+                $answerData = [
                     'value' => $value,
-                    'questionName' => $data['questionName']
-                );
+                    'questionName' => $data['questionName'],
+                ];
 
                 $this->cache[$data['questionnaire_id']][$data['filter_id']][$data['part_id']] = $answerData;
             }

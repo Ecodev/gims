@@ -2,10 +2,10 @@
 
 namespace ApiTest\Controller\Traits;
 
-use Zend\Http\Request;
+use Application\Model\Geoname;
 use Application\Model\Rule\QuestionnaireUsage;
 use Application\Model\Rule\Rule;
-use Application\Model\Geoname;
+use Zend\Http\Request;
 
 trait ReferenceableInRule
 {

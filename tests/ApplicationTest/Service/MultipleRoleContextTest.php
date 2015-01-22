@@ -2,8 +2,8 @@
 
 namespace ApplicationTest\Service;
 
-use Application\Service\MultipleRoleContext;
 use Application\Model\Survey;
+use Application\Service\MultipleRoleContext;
 
 /**
  * @group Service

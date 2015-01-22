@@ -2,10 +2,10 @@
 
 namespace Application\Service\Syntax\BeforeRegression;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Application\Service\Calculator\Calculator;
 use Application\Model\Rule\AbstractQuestionnaireUsage;
+use Application\Service\Calculator\Calculator;
 use Application\Service\Syntax\Parser;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Replace {F#12,Q#all} with a list of Filter values for all questionnaires
@@ -25,7 +25,7 @@ class FilterValuesList extends AbstractToken implements \Application\Service\Syn
         $questionnaires = $calculator->getQuestionnaireRepository()->getAllForComputing([$usage->getQuestionnaire()->getGeoname()]);
         $data = $calculator->computeFilterForAllQuestionnaires($filterId, $questionnaires, $usage->getPart()->getId());
 
-        $values = array();
+        $values = [];
         foreach ($data['values'] as $v) {
             if (!is_null($v)) {
                 $values[] = $v;

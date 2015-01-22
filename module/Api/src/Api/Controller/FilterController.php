@@ -2,10 +2,10 @@
 
 namespace Api\Controller;
 
-use Zend\View\Model\JsonModel;
 use Application\Model\Rule\FilterQuestionnaireUsage;
 use Application\Model\Rule\Rule;
 use Application\Utility;
+use Zend\View\Model\JsonModel;
 
 class FilterController extends AbstractChildRestfulController
 {
@@ -33,14 +33,14 @@ class FilterController extends AbstractChildRestfulController
 
         $items = $this->getChildren($filters, $allIndexedFilters, $flattenArray);
 
-        $jsonData = array(
-            'metadata' => array(
+        $jsonData = [
+            'metadata' => [
                 'page' => 1,
                 'perPage' => count($items),
                 'totalCount' => count($items),
-            ),
+            ],
             'items' => $items,
-        );
+        ];
 
         return new JsonModel($jsonData);
     }
@@ -64,7 +64,7 @@ class FilterController extends AbstractChildRestfulController
 
             $children = [];
             foreach ($this->getRepository()->getChildrenIds($filter->getId()) as $childId) {
-                array_push($children , $allIndexedFilters[$childId]);
+                array_push($children, $allIndexedFilters[$childId]);
             }
 
             // recursive call for same operation on children
@@ -99,11 +99,11 @@ class FilterController extends AbstractChildRestfulController
         /* @var $cache \Application\Service\Calculator\Cache */
         $cache = $this->getServiceLocator()->get('Calculator\Cache');
 
-        $result = array();
+        $result = [];
         foreach ($questionnaireIds as $questionnaireId) {
-            $result[$questionnaireId] = array();
+            $result[$questionnaireId] = [];
             foreach ($filterIds as $filterId) {
-                $result[$questionnaireId][$filterId] = array();
+                $result[$questionnaireId][$filterId] = [];
 
                 $key = "getComputedFiltersAction:$questionnaireId:$filterId";
                 if ($cache->hasItem($key)) {
@@ -112,7 +112,7 @@ class FilterController extends AbstractChildRestfulController
                     $cache->startComputing($key);
                     $valuesByPart = [];
                     foreach ($parts as $part) {
-                        $value = array();
+                        $value = [];
                         $value['first'] = $calculator->computeFilter($filterId, $questionnaireId, $part->getId(), false);
                         $value['second'] = $calculator->computeFilter($filterId, $questionnaireId, $part->getId(), true);
                         $valuesByPart[$part->getId()] = $value;
@@ -167,7 +167,7 @@ class FilterController extends AbstractChildRestfulController
         }
         $this->getEntityManager()->flush();
 
-        return new JsonModel(array());
+        return new JsonModel([]);
     }
 
     public function getNsaFiltersForGeonameAction()
@@ -179,7 +179,7 @@ class FilterController extends AbstractChildRestfulController
 
     public function getNSAContainerAction()
     {
-        $nsaContainer = $this->getRepository()->findOneBy(array('isNsa' => true));
+        $nsaContainer = $this->getRepository()->findOneBy(['isNsa' => true]);
 
         return new JsonModel($this->hydrator->extract($nsaContainer, $this->getJsonConfig()));
     }

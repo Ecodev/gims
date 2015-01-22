@@ -2,8 +2,8 @@
 
 namespace Api\Controller;
 
-use Zend\View\Model\JsonModel;
 use Application\Model\AbstractModel;
+use Zend\View\Model\JsonModel;
 
 class AnswerController extends AbstractChildRestfulController
 {

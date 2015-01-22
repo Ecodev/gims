@@ -11,7 +11,7 @@ $countries = require __DIR__ . '/countries.php';
  * @param array $countries
  * @param array $onlyThose
  */
-function export(array $countries, array $onlyThose = array())
+function export(array $countries, array $onlyThose = [])
 {
     $hostname = basename(getcwd());
     @mkdir('actual');

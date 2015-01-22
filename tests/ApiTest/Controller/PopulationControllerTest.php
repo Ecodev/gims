@@ -12,7 +12,7 @@ class PopulationControllerTest extends AbstractChildRestfulControllerTest
 
     protected function getAllowedFields()
     {
-        return array('id', 'year', 'population');
+        return ['id', 'year', 'population'];
     }
 
     protected function getTestedObject()
@@ -29,7 +29,7 @@ class PopulationControllerTest extends AbstractChildRestfulControllerTest
 
     public function testCanUpdatePopulation()
     {
-        $data = array('population' => '666666');
+        $data = ['population' => '666666'];
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(201);
         $actual = $this->getJsonResponse();
@@ -44,12 +44,12 @@ class PopulationControllerTest extends AbstractChildRestfulControllerTest
     public function testCanCreatePopulation()
     {
         // Population
-        $data = array(
+        $data = [
             'geoname' => $this->geoname->getId(),
             'part' => $this->part->getId(),
             'year' => 2005,
             'population' => 666666,
-        );
+        ];
 
         // Should fail without a questionnaire
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);

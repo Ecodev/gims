@@ -16,8 +16,7 @@ class SurveyRepository extends AbstractRepository
     {
         $qb = $this->createQueryBuilder('survey')
                 ->addOrderBy('survey.year', 'DESC')
-                ->addOrderBy('survey.name', 'ASC')
-        ;
+                ->addOrderBy('survey.name', 'ASC');
 
         if ($surveyTypes) {
             $qb->andWhere('survey.type IN (:surveyTypes)');

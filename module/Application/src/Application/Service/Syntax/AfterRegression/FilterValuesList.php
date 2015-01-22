@@ -2,9 +2,9 @@
 
 namespace Application\Service\Syntax\AfterRegression;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Application\Service\Calculator\Calculator;
 use Application\Service\Syntax\Parser;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Replace {F#12,Q#all} with a list of Filter values for all questionnaires
@@ -23,7 +23,7 @@ class FilterValuesList extends AbstractToken implements \Application\Service\Syn
 
         $data = $calculator->computeFilterForAllQuestionnaires($filterId, $questionnaires, $currentPartId);
 
-        $values = array();
+        $values = [];
         foreach ($data['values'] as $v) {
             if (!is_null($v)) {
                 $values[] = $v;

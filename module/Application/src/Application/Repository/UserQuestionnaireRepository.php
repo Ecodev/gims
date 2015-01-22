@@ -27,7 +27,7 @@ class UserQuestionnaireRepository extends AbstractChildRepository
         $qb->where('uq.' . $parentName . ' = :parent');
         $qb->setParameter('parent', $parent);
 
-        $this->addSearch($qb, $search, array('survey.code', 'geoname.name', 'user.name', 'role.name'));
+        $this->addSearch($qb, $search, ['survey.code', 'geoname.name', 'user.name', 'role.name']);
 
         return $qb->getQuery()->getResult();
     }

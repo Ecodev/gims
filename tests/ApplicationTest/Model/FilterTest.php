@@ -2,9 +2,9 @@
 
 namespace ApplicationTest\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Application\Model\Filter;
 use Application\Model\FilterSet;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @group Model
@@ -59,12 +59,12 @@ class FilterTest extends AbstractModel
         // add filters
         $filterSet->addFilter($f3)->addFilter($f4);
         $this->assertCount(4, $filterSet->getFilters(), 'should contain 2 filters');
-        $this->assertEquals(new ArrayCollection(array(
+        $this->assertEquals(new ArrayCollection([
             $f1,
             $f2,
             $f3,
-            $f4
-        )), $filterSet->getFilters(), 'should contain 2 filters');
+            $f4,
+        ]), $filterSet->getFilters(), 'should contain 2 filters');
         $this->assertContains($filterSet, $f1->getFilterSets(), 'first filter should not contain the filterset (supposed to be replaced)');
         $this->assertContains($filterSet, $f4->getFilterSets(), 'first filter should not contain the filterset (supposed to be replaced)');
 

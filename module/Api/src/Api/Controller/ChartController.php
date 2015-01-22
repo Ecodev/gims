@@ -2,12 +2,12 @@
 
 namespace Api\Controller;
 
-use Application\View\Model\NumericJsonModel;
-use Application\Model\Part;
 use Application\Model\Geoname;
+use Application\Model\Part;
 use Application\Model\Questionnaire;
-use Application\Utility;
 use Application\Service\Hydrator;
+use Application\Utility;
+use Application\View\Model\NumericJsonModel;
 
 class ChartController extends \Application\Controller\AbstractAngularActionController
 {
@@ -118,10 +118,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     {
         $overriddenElements = Utility::explodeIds($this->params()->fromQuery('ignoredElements'));
 
-        $overriddenFilters = array();
+        $overriddenFilters = [];
         foreach ($overriddenElements as $ignoredQuestionnaire) {
             @list($questionnaireId, $filters) = explode(':', $ignoredQuestionnaire);
-            $filters = $filters ? explode('-', $filters) : $filters = array();
+            $filters = $filters ? explode('-', $filters) : $filters = [];
             if (count($filters) == 0) {
                 $overriddenFilters[$questionnaireId] = null;
             } else {
@@ -144,7 +144,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      * @param boolean $isAdjusted
      * @return array
      */
-    private function getSeries(Geoname $geoname, array $filters, Part $part, $prefix = null, array $overriddenFilters = array(), $isAdjusted = false)
+    private function getSeries(Geoname $geoname, array $filters, Part $part, $prefix = null, array $overriddenFilters = [], $isAdjusted = false)
     {
         $this->getCalculator()->setOverriddenFilters($overriddenFilters);
 
@@ -182,7 +182,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      */
     private function getLinedSeries(Geoname $geoname, array $filters, Part $part, $prefix = null, $isIgnored = false, $isAdjusted = false)
     {
-        $series = array();
+        $series = [];
 
         /** @var \Application\Repository\Rule\FilterGeonameUsageRepository $filterGeonameUsageRepo */
         $filterGeonameUsageRepo = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
@@ -202,7 +202,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $serie['geonameId'] = $geoname->getId();
             $serie['color'] = $filter->getGenericColor(100);
             $serie['lightColor'] = $filter->getGenericColor(15);
-            $serie['marker'] = array('symbol' => 'diamond');
+            $serie['marker'] = ['symbol' => 'diamond'];
 
             if (count($usages) > 0) {
                 $usageList = implode(',<br/>', array_map(function ($usage) {
@@ -240,7 +240,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
      */
     private function getScatteredSeries(Geoname $geoname, array $filters, Part $part, $prefix, $isIgnored = false, $isAdjusted = false)
     {
-        $series = array();
+        $series = [];
 
         // Then add scatter points which are each questionnaire values
         foreach ($filters as $filter) {
@@ -253,28 +253,28 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             }
 
             $baseName = $prefix . $filter->getName();
-            $scatter = array(
+            $scatter = [
                 'type' => 'scatter',
                 'id' => $filter->getId(),
                 'name' => $baseName . $this->getSuffix($isIgnored, $isAdjusted),
                 'country' => $geoname->getName(),
                 'color' => $filter->getGenericColor(100),
                 'lightColor' => $filter->getGenericColor(15),
-                'marker' => array('symbol' => 'circle'),
+                'marker' => ['symbol' => 'circle'],
                 'allowPointSelect' => false,
-                'data' => array(), // because we will use our own click handler
-            );
+                'data' => [], // because we will use our own click handler
+            ];
 
             foreach ($data['values'] as $questionnaireId => $value) {
 
                 if (!is_null($value)) {
-                    $scatterData = array(
+                    $scatterData = [
                         'name' => $data['surveys'][$questionnaireId]['code'],
                         'id' => $idFilter . ':' . $questionnaireId,
                         'questionnaire' => $questionnaireId,
                         'x' => $data['years'][$questionnaireId],
                         'y' => Utility::decimalToRoundedPercent($value),
-                    );
+                    ];
 
                     $scatter['data'][] = $scatterData;
                 }
@@ -303,10 +303,10 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             $filterIds = array_filter(explode(',', $this->params()->fromQuery('filters')));
             $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filterIds);
 
-            $result = array(
+            $result = [
                 'name' => $questionnaire->getName(),
-                'filters' => array(),
-            );
+                'filters' => [],
+            ];
 
             if ($this->params()->fromQuery('getQuestionnaireUsages') === 'true') {
                 $usages = $this->extractUsages($questionnaire->getQuestionnaireUsages(), $part);
@@ -327,8 +327,8 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
                 $tableController = new TableController();
                 $tableController->setServiceLocator($this->getServiceLocator());
 
-                $flatFilters = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, $fields, array(), true, false);
-                $flatFiltersWithoutIgnoredFilters = $tableController->computeWithChildren($questionnaire, $filter, array($part), 0, [], $overriddenElements, true, false);
+                $flatFilters = $tableController->computeWithChildren($questionnaire, $filter, [$part], 0, $fields, [], true, false);
+                $flatFiltersWithoutIgnoredFilters = $tableController->computeWithChildren($questionnaire, $filter, [$part], 0, [], $overriddenElements, true, false);
 
                 $flatFilters = $this->addQuestionsToFilters($flatFilters, $questionnaire);
                 foreach ($flatFilters as $filterId => &$flatFilter) {
@@ -343,7 +343,7 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         } else {
             $this->getResponse()->setStatusCode(404);
 
-            return new NumericJsonModel(array('message' => 'questionnaire not found'));
+            return new NumericJsonModel(['message' => 'questionnaire not found']);
         }
     }
 
@@ -434,11 +434,11 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
         $extractedUsages = [];
         foreach ($usages as $usage) {
             if ($usage->getPart() === $part) {
-                $extractedUsage = $hydrator->extract($usage, array(
+                $extractedUsage = $hydrator->extract($usage, [
                     'part',
                     'rule',
                     'rule.name',
-                ));
+                ]);
 
                 if ($usage instanceof \Application\Model\Rule\QuestionnaireUsage) {
                     $value = $this->getCalculator()->computeFormulaBeforeRegression($usage);

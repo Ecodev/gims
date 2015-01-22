@@ -11,24 +11,24 @@
  * control, so do not include passwords or other sensitive information in this
  * file.
  */
-return array(
+return [
     // Because Google Analytics is set up to filter by hostname,
     // we can share the same tracking code for all version of the site.
     // However it can still be overriden locally if needed (to disable it)
     'googleAnalyticsTrackingCode' => 'UA-52338137-1',
-    'db' => array(
+    'db' => [
         'driver' => 'Pdo',
-    ),
-    'service_manager' => array(
-        'factories' => array(
+    ],
+    'service_manager' => [
+        'factories' => [
             'Zend\Db\Adapter\Adapter' => 'Zend\Db\Adapter\AdapterServiceFactory',
             'Zend\Log' => 'Application\Service\LogFactory',
             'Application\DBAL\Logging\ForwardSQLLogger' => 'Application\Service\ForwardSQLLoggerFactory',
-        ),
-    ),
-    'session' => array(
+        ],
+    ],
+    'session' => [
         'name' => 'gimscookie',
         'save_path' => __DIR__ . '/../../data/session',
-        'cookie_httponly' => true
-    ),
-);
+        'cookie_httponly' => true,
+    ],
+];

@@ -17,10 +17,10 @@ class QuestionRepositoryTest extends AbstractRepository
         $question = new \Application\Model\Question\NumericQuestion('tst question');
         $question->setSurvey($survey);
         $question->setFilter($filter);
-        $alternateNames = array(
+        $alternateNames = [
             2 => 'alternate name 2',
             6 => 'alternate name 6',
-        );
+        ];
         $question->setAlternateNames($alternateNames);
 
         $this->getEntityManager()->persist($survey);

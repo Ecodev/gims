@@ -2,8 +2,8 @@
 
 namespace Application\Repository;
 
-use Doctrine\ORM\Query\Expr\Join;
 use Application\Model\Rule\Rule;
+use Doctrine\ORM\Query\Expr\Join;
 
 class QuestionnaireRepository extends AbstractChildRepository
 {
@@ -83,7 +83,7 @@ class QuestionnaireRepository extends AbstractChildRepository
         }
 
         $this->addPermission($qb, ['survey', 'questionnaire'], \Application\Model\Permission::getPermissionName($this, $action), $exceptionDql);
-        $this->addSearch($qb, $search, array('survey.code', 'geoname.name'));
+        $this->addSearch($qb, $search, ['survey.code', 'geoname.name']);
 
         return $qb;
     }
@@ -271,7 +271,7 @@ class QuestionnaireRepository extends AbstractChildRepository
             WHERE questionnaire.id IN (:questionnaires)
             ', $rsm);
 
-        $qb1->setParameters(array('questionnaires' => $questionnaireIds));
+        $qb1->setParameters(['questionnaires' => $questionnaireIds]);
         $res = $qb1->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         // Convert Enum into string
@@ -304,7 +304,7 @@ class QuestionnaireRepository extends AbstractChildRepository
             WHERE answer.questionnaire_id IN (:questionnaires)
             ', $rsm);
 
-        $qb->setParameters(array('questionnaires' => $questionnaireIds));
+        $qb->setParameters(['questionnaires' => $questionnaireIds]);
         $answers = $qb->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         foreach ($answers as &$answer) {
@@ -336,7 +336,7 @@ class QuestionnaireRepository extends AbstractChildRepository
             GROUP BY questionnaire_id, filter_id, part_id, is_second_step
         ', $rsm);
 
-        $qb->setParameters(array('questionnaires' => $questionnaireIds));
+        $qb->setParameters(['questionnaires' => $questionnaireIds]);
         $res = $qb->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         $usages = [];
@@ -368,7 +368,7 @@ class QuestionnaireRepository extends AbstractChildRepository
             WHERE questionnaire_id IN (:questionnaires)
         ', $rsm);
 
-        $qb->setParameters(array('questionnaires' => $questionnaireIds));
+        $qb->setParameters(['questionnaires' => $questionnaireIds]);
         $populations = $qb->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         foreach ($populations as &$population) {
@@ -388,7 +388,7 @@ class QuestionnaireRepository extends AbstractChildRepository
         $newProperty = str_replace('_id', '', $property);
         if ($object[$property]) {
             $object[$newProperty] = [
-                'id' => $object[$property]
+                'id' => $object[$property],
             ];
         } else {
             $object[$newProperty] = null;

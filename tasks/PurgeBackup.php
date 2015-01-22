@@ -22,7 +22,7 @@ class PurgeBackup extends AbstractDatabase
     public function main()
     {
         $handle = opendir($this->backupDir);
-        $files = array();
+        $files = [];
         while (($file = readdir($handle)) !== false) {
             $filePath = $this->backupDir . '/' . $file;
             if ($file == '.' || $file == '..') {

@@ -2,9 +2,9 @@
 
 namespace ApplicationTest\Controller;
 
+use Application\Model\User;
+use ApplicationTest\Traits\TestWithTransaction;
 use Zend\Json\Json;
-use \Application\Model\User;
-use \ApplicationTest\Traits\TestWithTransaction;
 
 abstract class AbstractController extends \Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase
 {
@@ -22,7 +22,7 @@ abstract class AbstractController extends \Zend\Test\PHPUnit\Controller\Abstract
     /**
      * @var array [classname => [id => object]]
      */
-    private $identity = array();
+    private $identity = [];
 
     use TestWithTransaction {
         TestWithTransaction::setUp as setUpTransaction;
@@ -113,10 +113,10 @@ abstract class AbstractController extends \Zend\Test\PHPUnit\Controller\Abstract
      * @param string $classname
      * @return AbstractModel
      */
-    protected function getNewModelWithId($classname, $mockedMethods = array())
+    protected function getNewModelWithId($classname, $mockedMethods = [])
     {
         if (!isset($this->identity[$classname])) {
-            $this->identity[$classname] = array();
+            $this->identity[$classname] = [];
         }
 
         $id = count($this->identity[$classname]) + 1;

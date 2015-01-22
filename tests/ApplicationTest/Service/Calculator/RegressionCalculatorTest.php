@@ -47,7 +47,7 @@ class RegressionCalculatorTest extends AbstractCalculator
         $answer131->setPart($this->part1)->setQuestionnaire($questionnaire2)->setQuestion($question131)->setValuePercent(0.1);
         $answer32->setPart($this->part1)->setQuestionnaire($questionnaire2)->setQuestion($question32)->setValuePercent(0.000001);
 
-        $this->questionnaires = array($this->questionnaire, $questionnaire2);
+        $this->questionnaires = [$this->questionnaire, $questionnaire2];
 
         $this->filterSet = new \Application\Model\FilterSet('water');
         $this->filterSet->addFilter($this->highFilter1)
@@ -72,46 +72,44 @@ class RegressionCalculatorTest extends AbstractCalculator
 
     public function testComputeFilterForAllQuestionnaires()
     {
-        $this->assertEquals(array(
-            'values' =>
-            array(
+        $this->assertEquals([
+            'values' => [
                 1 => 0.1111,
                 2 => 0.1,
-            ),
+            ],
             'count' => 2,
-            'years' =>
-            array(
+            'years' => [
                 1 => 2000,
                 2 => 2005,
-            ),
+            ],
             'minYear' => 2000,
             'maxYear' => 2005,
             'period' => 5,
             'slope' => -0.00222,
             'average' => 0.10555,
-            'surveys' => array(
+            'surveys' => [
                 1 => [
                     'code' => 'tst 1',
-                    'name' => 'Test survey 1'
+                    'name' => 'Test survey 1',
                     ],
                 2 => [
                     'code' => 'tst 2',
-                    'name' => 'Test survey 2'
+                    'name' => 'Test survey 2',
                 ],
-            ),
-                ), $this->service->computeFilterForAllQuestionnaires($this->highFilter1->getId(), $this->questionnaires, $this->part1->getId()));
+            ],
+                ], $this->service->computeFilterForAllQuestionnaires($this->highFilter1->getId(), $this->questionnaires, $this->part1->getId()));
 
-        $this->assertEquals(array(
-            'values' => array(),
+        $this->assertEquals([
+            'values' => [],
             'count' => 0,
-            'years' => array(),
+            'years' => [],
             'minYear' => null,
             'maxYear' => null,
             'period' => 1,
             'slope' => null,
             'average' => null,
-            'surveys' => array(),
-                ), $this->service->computeFilterForAllQuestionnaires($this->highFilter1->getId(), array(), $this->part1->getId()), 'no questionnaires should still return valid structure');
+            'surveys' => [],
+                ], $this->service->computeFilterForAllQuestionnaires($this->highFilter1->getId(), [], $this->part1->getId()), 'no questionnaires should still return valid structure');
     }
 
     /**
@@ -120,14 +118,14 @@ class RegressionCalculatorTest extends AbstractCalculator
      */
     public function regressionProvider()
     {
-        return array(
-            array(2000, 0.1111),
-            array(2001, 0.10888),
-            array(2002, 0.10666),
-            array(2003, 0.10444),
-            array(2004, 0.10222),
-            array(2005, 0.1),
-        );
+        return [
+            [2000, 0.1111],
+            [2001, 0.10888],
+            [2002, 0.10666],
+            [2003, 0.10444],
+            [2004, 0.10222],
+            [2005, 0.1],
+        ];
     }
 
     /**
@@ -136,7 +134,7 @@ class RegressionCalculatorTest extends AbstractCalculator
     public function testComputeRegressionForUnknownYears($year, $expected)
     {
         $this->assertEquals($expected, $this->service->computeRegressionOneYear($year, $this->highFilter1->getId(), $this->questionnaires, $this->part1->getId()), 'regression between known years according');
-        $this->assertNull($this->service->computeRegressionOneYear($year, $this->highFilter1->getId(), array(), $this->part1->getId()), 'no questionnaires should still return valid structure');
+        $this->assertNull($this->service->computeRegressionOneYear($year, $this->highFilter1->getId(), [], $this->part1->getId()), 'no questionnaires should still return valid structure');
     }
 
     public function testComputeRegressionForShortPeriod()
@@ -147,20 +145,20 @@ class RegressionCalculatorTest extends AbstractCalculator
 
     public function computeFlattenOneYearProvider()
     {
-        return array(
+        return [
             // Basic casses
-            array(array(2000 => 0, 2001 => 1, 2002 => 0.5, 1950 => null), array(
-                    'all' => array(
+            [[2000 => 0, 2001 => 1, 2002 => 0.5, 1950 => null], [
+                    'all' => [
                         2000 => -10,
                         2001 => 10,
                         2002 => 0.5,
-                    ),
+                    ],
                     'min' => -10,
                     'max' => 10,
-                )),
+                ]],
             // Cases with undefined values, based on the year earlier
-            array(array(2001 => null, 2004 => 0.04, 2006 => 0.96), array(
-                    'all' => array(
+            [[2001 => null, 2004 => 0.04, 2006 => 0.96], [
+                    'all' => [
                         2000 => 0.5,
                         2001 => null,
                         2002 => 0.5,
@@ -168,47 +166,47 @@ class RegressionCalculatorTest extends AbstractCalculator
                         2004 => null,
                         2005 => 0.96,
                         2006 => null,
-                    ),
+                    ],
                     'min' => 0.04,
                     'max' => 0.96,
-                )),
-            array(array(2002 => 0.04), array(
-                    'all' => array(
+                ]],
+            [[2002 => 0.04], [
+                    'all' => [
                         2000 => 0.01,
                         2001 => 0.04,
                         2002 => null,
-                    ),
+                    ],
                     'min' => 0.01,
                     'max' => 0.04,
-                )),
-            array(array(2002 => 0.96), array(
-                    'all' => array(
+                ]],
+            [[2002 => 0.96], [
+                    'all' => [
                         2000 => 0.99,
                         2001 => 0.96,
                         2002 => null,
-                    ),
+                    ],
                     'min' => 0.96,
                     'max' => 0.99,
-                )),
-            array(array(2001 => 1), array(
-                    'all' => array(
+                ]],
+            [[2001 => 1], [
+                    'all' => [
                         2000 => 1,
                         2001 => null,
-                    ),
+                    ],
                     'min' => 1,
                     'max' => 1,
-                )),
-            array(array(2001 => 0), array(
-                    'all' => array(
+                ]],
+            [[2001 => 0], [
+                    'all' => [
                         2000 => 0,
                         2001 => null,
-                    ),
+                    ],
                     'min' => 0,
                     'max' => 0,
-                )),
+                ]],
             // Cases with undefined values, based on the year later
-            array(array(2000 => null, 2002 => 0.04, 2005 => 0.96), array(
-                    'all' => array(
+            [[2000 => null, 2002 => 0.04, 2005 => 0.96], [
+                    'all' => [
                         2000 => null,
                         2001 => 0.5,
                         2002 => null,
@@ -216,45 +214,45 @@ class RegressionCalculatorTest extends AbstractCalculator
                         // NO 2004 !
                         2005 => null,
                         2006 => 0.96,
-                    ),
+                    ],
                     'min' => 0.04,
                     'max' => 0.96,
-                )),
-            array(array(2000 => 0.04), array(
-                    'all' => array(
+                ]],
+            [[2000 => 0.04], [
+                    'all' => [
                         2000 => null,
                         2001 => 0.04,
                         2002 => 0.01,
-                    ),
+                    ],
                     'min' => 0.01,
                     'max' => 0.04,
-                )),
-            array(array(2000 => 0.96), array(
-                    'all' => array(
+                ]],
+            [[2000 => 0.96], [
+                    'all' => [
                         2000 => null,
                         2001 => 0.96,
                         2002 => 0.99,
-                    ),
+                    ],
                     'min' => 0.96,
                     'max' => 0.99,
-                )),
-            array(array(2000 => 1), array(
-                    'all' => array(
+                ]],
+            [[2000 => 1], [
+                    'all' => [
                         2000 => null,
                         2001 => 1,
-                    ),
+                    ],
                     'min' => 1,
                     'max' => 1,
-                )),
-            array(array(2000 => 0), array(
-                    'all' => array(
+                ]],
+            [[2000 => 0], [
+                    'all' => [
                         2000 => null,
                         2001 => 0,
-                    ),
+                    ],
                     'min' => 0,
                     'max' => 0,
-                )),
-        );
+                ]],
+        ];
     }
 
     /**
@@ -269,42 +267,42 @@ class RegressionCalculatorTest extends AbstractCalculator
 
     public function flattenProvider()
     {
-        return array(
-            array(true, array(
-                    0 => array(
+        return [
+            [true, [
+                    0 => [
                         26 => 0.09778,
                         27 => 0.095560000000001,
-                    ),
-                    1 => array(
-                        26 => NULL,
-                        27 => NULL,
-                    ),
-                    2 => array(
+                    ],
+                    1 => [
+                        26 => null,
+                        27 => null,
+                    ],
+                    2 => [
                         26 => 0.097779,
                         27 => 0.095557,
-                    ),
-                )),
+                    ],
+                ]],
             // No questionnaires at all, to assert that structure returned is still valid
-            array(false, array(
-                    0 => array(
-                        26 => NULL,
-                        27 => NULL,
-                    ),
-                    1 => array(
-                        26 => NULL,
-                        27 => NULL,
-                    ),
-                    2 => array(
-                        26 => NULL,
-                        27 => NULL,
-                    ),
-                )),
-            array(true, array(
-                    0 => array(
-                        10 => NULL,
-                        11 => NULL,
-                        12 => NULL,
-                        13 => NULL,
+            [false, [
+                    0 => [
+                        26 => null,
+                        27 => null,
+                    ],
+                    1 => [
+                        26 => null,
+                        27 => null,
+                    ],
+                    2 => [
+                        26 => null,
+                        27 => null,
+                    ],
+                ]],
+            [true, [
+                    0 => [
+                        10 => null,
+                        11 => null,
+                        12 => null,
+                        13 => null,
                         14 => 0.11554,
                         15 => 0.11554,
                         16 => 0.11554,
@@ -327,39 +325,39 @@ class RegressionCalculatorTest extends AbstractCalculator
                         33 => null,
                         34 => null,
                         35 => null,
-                    ),
-                    1 => array(
-                        10 => NULL,
-                        11 => NULL,
-                        12 => NULL,
-                        13 => NULL,
-                        14 => NULL,
-                        15 => NULL,
-                        16 => NULL,
-                        17 => NULL,
-                        18 => NULL,
-                        19 => NULL,
-                        20 => NULL,
-                        21 => NULL,
-                        22 => NULL,
-                        23 => NULL,
-                        24 => NULL,
-                        25 => NULL,
-                        26 => NULL,
-                        27 => NULL,
-                        28 => NULL,
-                        29 => NULL,
-                        30 => NULL,
-                        31 => NULL,
-                        32 => NULL,
-                        33 => NULL,
-                        34 => NULL,
-                        35 => NULL,
-                    ),
-                    2 => array(
-                        10 => NULL,
-                        11 => NULL,
-                        12 => NULL,
+                    ],
+                    1 => [
+                        10 => null,
+                        11 => null,
+                        12 => null,
+                        13 => null,
+                        14 => null,
+                        15 => null,
+                        16 => null,
+                        17 => null,
+                        18 => null,
+                        19 => null,
+                        20 => null,
+                        21 => null,
+                        22 => null,
+                        23 => null,
+                        24 => null,
+                        25 => null,
+                        26 => null,
+                        27 => null,
+                        28 => null,
+                        29 => null,
+                        30 => null,
+                        31 => null,
+                        32 => null,
+                        33 => null,
+                        34 => null,
+                        35 => null,
+                    ],
+                    2 => [
+                        10 => null,
+                        11 => null,
+                        12 => null,
                         13 => null,
                         14 => 0.115555,
                         15 => 0.115555,
@@ -383,10 +381,10 @@ class RegressionCalculatorTest extends AbstractCalculator
                         33 => null,
                         34 => null,
                         35 => null,
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -395,7 +393,7 @@ class RegressionCalculatorTest extends AbstractCalculator
     public function testComputeFlatten($useQuestionnaires, $partialExpecteds)
     {
         foreach ($this->filterSet->getFilters() as $i => $filter) {
-            $actual = $this->service->computeFlattenAllYears($filter, $useQuestionnaires ? $this->questionnaires : array(), $this->part1);
+            $actual = $this->service->computeFlattenAllYears($filter, $useQuestionnaires ? $this->questionnaires : [], $this->part1);
             $partialExpected = $partialExpecteds[$i];
             $partialActual = $this->removeExtraData($partialExpected, $actual);
 
@@ -433,20 +431,20 @@ class RegressionCalculatorTest extends AbstractCalculator
         $this->assertEquals($res1, $res2, 'result should be cached and therefore be the same');
         $this->assertNotEquals($res1, $res3, 'after clearing cache, result differs');
 
-        $partialExpected = array(
-            0 => array(
+        $partialExpected = [
+            0 => [
                 26 => 0.077779999999997,
                 27 => 0.05556,
-            ),
-            1 => array(
-                26 => NULL,
-                27 => NULL,
-            ),
-            2 => array(
+            ],
+            1 => [
+                26 => null,
+                27 => null,
+            ],
+            2 => [
                 26 => 0.077778999999992,
                 27 => 0.055556999999993,
-            ),
-        );
+            ],
+        ];
 
         foreach ($res3 as $i => $actual) {
             $partialActual = $this->removeExtraData($partialExpected[$i], $actual);
@@ -471,34 +469,32 @@ class RegressionCalculatorTest extends AbstractCalculator
         $filterQuestionnaireUsage = new \Application\Model\Rule\FilterQuestionnaireUsage();
         $filterQuestionnaireUsage->setPart($this->part1)->setQuestionnaire($this->questionnaire)->setRule($exclude)->setFilter($this->filter1);
 
-        $this->assertEquals(array(
-            'values' =>
-            array(
+        $this->assertEquals([
+            'values' => [
                 1 => null,
                 2 => 0.1,
-            ),
+            ],
             'count' => 1,
-            'years' =>
-            array(
+            'years' => [
                 1 => 2000,
                 2 => 2005,
-            ),
+            ],
             'minYear' => 2005,
             'maxYear' => 2005,
             'period' => 1,
             'slope' => null,
             'average' => 0.1,
-            'surveys' => array(
+            'surveys' => [
                 1 => [
                     'code' => 'tst 1',
-                    'name' => 'Test survey 1'
+                    'name' => 'Test survey 1',
                 ],
                 2 => [
                     'code' => 'tst 2',
-                    'name' => 'Test survey 2'
+                    'name' => 'Test survey 2',
                 ],
-            ),
-                ), $this->service->computeFilterForAllQuestionnaires($this->filter1->getId(), $this->questionnaires, $this->part1->getId()));
+            ],
+                ], $this->service->computeFilterForAllQuestionnaires($this->filter1->getId(), $this->questionnaires, $this->part1->getId()));
     }
 
     public function testAllZeroValueShouldNotDivideByZero()
@@ -541,7 +537,7 @@ class RegressionCalculatorTest extends AbstractCalculator
         $partId = 4;
 
         // Test that we the custom syntax is correctly interpreted and submethods are correctly called
-        $mockedCalculator = $this->getMock('\Application\Service\Calculator\Calculator', array('computeFlattenOneYearWithFormula', 'computeFilterForAllQuestionnaires'));
+        $mockedCalculator = $this->getMock('\Application\Service\Calculator\Calculator', ['computeFlattenOneYearWithFormula', 'computeFilterForAllQuestionnaires']);
         $mockedCalculator->setServiceLocator($this->getApplicationServiceLocator());
         $configurator($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId);
 
@@ -568,47 +564,47 @@ class RegressionCalculatorTest extends AbstractCalculator
      */
     public function computeFormulaAfterRegressionProvider()
     {
-        return array(
-            array('={F#345,P#current,Y0}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
+        return [
+            ['={F#345,P#current,Y0}', function ($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
                     $mockedCalculator->expects($this->once())
                             ->method('computeFlattenOneYearWithFormula')
                             ->with($this->equalTo($year), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo($partId));
-                }),
-            array('={F#345,P#current,Y+2}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
+                }],
+            ['={F#345,P#current,Y+2}', function ($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
                     $mockedCalculator->expects($this->once())
                             ->method('computeFlattenOneYearWithFormula')
                             ->with($this->equalTo($year + 2), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo($partId));
-                }),
-            array('={F#345,P#678,Y-1}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
+                }],
+            ['={F#345,P#678,Y-1}', function ($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
                     $mockedCalculator->expects($this->once())
                             ->method('computeFlattenOneYearWithFormula')
                             ->with($this->equalTo($year - 1), $this->equalTo(345), $this->equalTo($questionnaires), $this->equalTo(678));
-                }),
-            array('={F#current,P#current,Y0}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
+                }],
+            ['={F#current,P#current,Y0}', function ($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
                     $mockedCalculator->expects($this->once())
                             ->method('computeFlattenOneYearWithFormula')
                             ->with($this->equalTo($year), $this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId));
-                }),
-            array('={self}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
+                }],
+            ['={self}', function ($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
                     $mockedCalculator->expects($this->once())
                             ->method('computeFlattenOneYearWithFormula')
                             ->with($this->equalTo($year), $this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId));
-                }),
-            array('={F#12,Q#all}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
+                }],
+            ['={F#12,Q#all}', function ($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
                     $mockedCalculator->expects($this->once())
                             ->method('computeFilterForAllQuestionnaires')
                             ->with($this->equalTo(12), $this->equalTo($questionnaires), $this->equalTo($partId))
-                            ->will($this->returnValue(array('values' => array(1))));
-                }),
-            array('={F#current,Q#all}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
+                            ->will($this->returnValue(['values' => [1]]));
+                }],
+            ['={F#current,Q#all}', function ($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
                     $mockedCalculator->expects($this->once())
                             ->method('computeFilterForAllQuestionnaires')
                             ->with($this->equalTo($currentFilterId), $this->equalTo($questionnaires), $this->equalTo($partId))
-                            ->will($this->returnValue(array('values' => array(1))));
-                }),
-            array('={Q#all,P#2}', function($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
+                            ->will($this->returnValue(['values' => [1]]));
+                }],
+            ['={Q#all,P#2}', function ($mockedCalculator, $year, $currentFilterId, $questionnaires, $partId) {
 
-                    $mockedPop = $this->getMock('\Application\Repository\PopulationRepository', array('getPopulationByGeoname'), array(), '', false);
+                    $mockedPop = $this->getMock('\Application\Repository\PopulationRepository', ['getPopulationByGeoname'], [], '', false);
 
                     $mockedCalculator->setPopulationRepository($mockedPop);
 
@@ -618,8 +614,8 @@ class RegressionCalculatorTest extends AbstractCalculator
                                 ->with($this->anything(), $this->equalTo(2), $year)
                                 ->will($this->returnValue(null));
                     }
-                }),
-        );
+                }],
+        ];
     }
 
 }

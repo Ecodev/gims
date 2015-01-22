@@ -36,11 +36,11 @@ class UserSurvey extends AbstractUserRole
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
+        return array_merge(parent::getJsonConfig(), [
             'user',
             'role',
             'survey',
-        ));
+        ]);
     }
 
     /**

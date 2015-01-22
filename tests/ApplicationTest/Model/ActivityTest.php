@@ -3,12 +3,12 @@
 namespace ApplicationTest\Model;
 
 use Application\Model\Answer;
+use Application\Model\Filter;
 use Application\Model\Geoname;
 use Application\Model\Part;
 use Application\Model\Question\NumericQuestion;
 use Application\Model\Questionnaire;
 use Application\Model\Survey;
-use Application\Model\Filter;
 
 /**
  * @group Model

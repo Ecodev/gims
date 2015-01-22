@@ -12,7 +12,7 @@ class QuestionnaireUsageControllerTest extends AbstractQuestionnaireUsageControl
 
     protected function getAllowedFields()
     {
-        return array('id', 'rule', 'questionnaire', 'part', 'justification');
+        return ['id', 'rule', 'questionnaire', 'part', 'justification'];
     }
 
     protected function getTestedObject()
@@ -22,10 +22,10 @@ class QuestionnaireUsageControllerTest extends AbstractQuestionnaireUsageControl
 
     protected function getPossibleParents()
     {
-        return array(
+        return [
             $this->questionnaireUsage->getRule(),
             $this->questionnaireUsage->getQuestionnaire(),
-        );
+        ];
     }
 
     public function getComputedQuestionnaireUsageProvider()

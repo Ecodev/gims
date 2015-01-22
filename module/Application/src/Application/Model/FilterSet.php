@@ -48,9 +48,9 @@ class FilterSet extends AbstractModel implements \Application\Service\RoleContex
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
+        return array_merge(parent::getJsonConfig(), [
             'name',
-        ));
+        ]);
     }
 
     /**

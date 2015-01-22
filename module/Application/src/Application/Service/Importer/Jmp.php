@@ -4,31 +4,31 @@ namespace Application\Service\Importer;
 
 use Application\Model\Answer;
 use Application\Model\Filter;
+use Application\Model\Geoname;
 use Application\Model\Part;
 use Application\Model\Question\NumericQuestion;
 use Application\Model\Questionnaire;
-use Application\Model\Rule\Rule;
-use Application\Model\Rule\FilterQuestionnaireUsage;
 use Application\Model\Rule\FilterGeonameUsage;
+use Application\Model\Rule\FilterQuestionnaireUsage;
 use Application\Model\Rule\QuestionnaireUsage;
+use Application\Model\Rule\Rule;
 use Application\Model\Survey;
-use Application\Model\Geoname;
 
 class Jmp extends AbstractImporter
 {
 
     private $defaultJustification = 'Imported from country files';
-    private $partOffsets = array();
-    private $cacheSurvey = array();
-    private $cacheFilters = array();
-    private $cacheQuestionnaireUsages = array();
-    private $cacheFilterQuestionnaireUsages = array();
-    private $cacheFilterGeonameUsages = array();
-    private $cacheFormulas = array();
-    private $cacheQuestions = array();
-    private $cacheHighFilters = array();
-    private $importedQuestionnaires = array();
-    private $colToParts = array();
+    private $partOffsets = [];
+    private $cacheSurvey = [];
+    private $cacheFilters = [];
+    private $cacheQuestionnaireUsages = [];
+    private $cacheFilterQuestionnaireUsages = [];
+    private $cacheFilterGeonameUsages = [];
+    private $cacheFormulas = [];
+    private $cacheQuestions = [];
+    private $cacheHighFilters = [];
+    private $importedQuestionnaires = [];
+    private $colToParts = [];
     private $surveyCount = 0;
     private $questionnaireCount = 0;
     private $answerCount = 0;
@@ -37,11 +37,11 @@ class Jmp extends AbstractImporter
     private $questionnaireUsageCount = 0;
     private $filterQuestionnaireUsageCount = 0;
     private $filterGeonameUsageCount = 0;
-    private $ratioSynonyms = array(
+    private $ratioSynonyms = [
         'Facilités améliorées partagées / Facilités améliorées',
         'Shared facilities / All improved facilities',
         'Shared improved facilities/all improved facilities',
-    );
+    ];
 
     /**
      * @var \PHPExcel_Worksheet
@@ -99,15 +99,15 @@ class Jmp extends AbstractImporter
         $this->partRural = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Rural');
         $this->partTotal = $this->getEntityManager()->getRepository('Application\Model\Part')->getOrCreate('Total');
 
-        $this->partOffsets = array(
+        $this->partOffsets = [
             3 => $this->partUrban,
             4 => $this->partRural,
             5 => $this->partTotal,
-        );
+        ];
 
         foreach ($sheetNamesToImport as $i => $sheetName) {
 
-            $this->cacheQuestions = array();
+            $this->cacheQuestions = [];
             $this->importFilters($this->definitions[$sheetName]);
 
             // Also create a filterSet with same name for the first filter
@@ -134,7 +134,7 @@ class Jmp extends AbstractImporter
 
             // Try to import the first 50 questionnaires if data found
             // According to tab GraphData_W, maximum should be 40, but better safe than sorry
-            $this->colToParts = array();
+            $this->colToParts = [];
             for ($col = 0; $col < 50 * 6; $col += 6) {
                 $this->importQuestionnaire($col);
             }
@@ -193,14 +193,14 @@ STRING;
         $twoDigitsYear = substr($year, -2);
         $code = str_replace($year, $twoDigitsYear, $code);
 
-        $codeMapping = array(
+        $codeMapping = [
             'ENHOGAR09-10' => 'ENHGR09-10', // Dominican Republic
             'CEN00-02' => 'CEN02', // French Polynesia
             'EMP10' => 'EPM10', // Madagascar
             'CEN2006/08' => 'CEN06/08', // Martinique
             'Census' => 'CEN09', // New Caledonia
             'CEN' => 'CEN99', //
-        );
+        ];
 
         // Replace special cases
         $code = trim($code);
@@ -241,7 +241,7 @@ STRING;
         if (array_key_exists($code, $this->cacheSurvey)) {
             $survey = $this->cacheSurvey[$code];
         } else {
-            $survey = $surveyRepository->findOneBy(array('code' => $code));
+            $survey = $surveyRepository->findOneBy(['code' => $code]);
         }
 
         if (!$survey) {
@@ -405,7 +405,7 @@ STRING;
         }
 
         // Mapping JMP country names to Geoname country names
-        $countryNameMapping = array(
+        $countryNameMapping = [
             'Occupied Palestinian Territory' => 'West Bank and Gaza Strip',
             'Palestine' => 'West Bank and Gaza Strip',
             'Palestinian Territory' => 'West Bank and Gaza Strip',
@@ -448,9 +448,9 @@ STRING;
             'SOUTH AFRICA' => 'South Africa',
             'ZIMBABWE' => 'Zimbabwe',
             'French polynesia' => 'French Polynesia',
-        );
+        ];
 
-        $developedCountries = array(
+        $developedCountries = [
             'ALB',
             'AND',
             'AUS',
@@ -506,7 +506,7 @@ STRING;
             'SWE',
             'UKR',
             'USA',
-        );
+        ];
 
         // Some files have a buggy self-referencing formula, so we need to fallback on cached result of formula
         $countryName = $this->getCalculatedValueSafely($countryCell);
@@ -520,7 +520,7 @@ STRING;
         }
 
         $geonameRepository = $this->getEntityManager()->getRepository('Application\Model\Geoname');
-        $geoname = $geonameRepository->findOneBy(array('name' => $countryName));
+        $geoname = $geonameRepository->findOneBy(['name' => $countryName]);
         if (!$geoname) {
             throw new \Exception('No country found for name "' . $countryName . '"');
         }
@@ -582,7 +582,7 @@ STRING;
         if (array_key_exists($key, $this->cacheQuestions)) {
             $question = $this->cacheQuestions[$key];
         } elseif ($survey->getId() && $filter->getId()) {
-            $question = $questionRepository->findOneBy(array('survey' => $survey, 'filter' => $filter));
+            $question = $questionRepository->findOneBy(['survey' => $survey, 'filter' => $filter]);
         }
 
         if (!$question) {
@@ -592,7 +592,7 @@ STRING;
             $question->setSurvey($survey);
             $question->setFilter($filter);
             $question->setSorting($survey->getQuestions()->count());
-            $question->setParts(new \Doctrine\Common\Collections\ArrayCollection(array($this->partRural, $this->partUrban, $this->partTotal)));
+            $question->setParts(new \Doctrine\Common\Collections\ArrayCollection([$this->partRural, $this->partUrban, $this->partTotal]));
             $question->setIsPopulation(true);
             $this->getEntityManager()->persist($question);
         }
@@ -699,7 +699,7 @@ STRING;
         // useless conversion done in formula, but only if there is at least one cell reference
         // in the formula ("=15/100" should be kept intact, as seen in Afghanistan, Table_S, AZ100)
         $cellPattern = '\$?(([[:alpha:]]+)\$?(\\d+))';
-        if (preg_match("/$cellPattern/", $originalFormula)) $replacedFormula = str_replace(array('*100', '/100'), '', $originalFormula); else {
+        if (preg_match("/$cellPattern/", $originalFormula)) $replacedFormula = str_replace(['*100', '/100'], '', $originalFormula); else {
             $replacedFormula = $originalFormula;
         }
 
@@ -760,12 +760,12 @@ STRING;
                 throw new \Exception('Horizontal range are not supported: ' . $matches[0] . ' found in ' . $this->sheet->getTitle() . ', cell ' . $cell->getCoordinate());
             }
 
-            $expanded = array();
+            $expanded = [];
             for ($i = $matches[3]; $i <= $matches[6]; $i++) {
                 $expanded[] = $matches[2] . $i;
             }
 
-            return '{' . join(',', $expanded) . '}';
+            return '{' . implode(',', $expanded) . '}';
         }, $replacedFormula);
 
         // Replace special cell reference with some hardcoded formulas
@@ -860,12 +860,12 @@ STRING;
         // In some case ISTEXT() is used to check if a number does not exist. But GIMS
         // always returns either a number or NULL, never empty string. So we adapt formula
         // to use a more semantic way to check absence of number
-        $isTextUsageWhichCannotBeText = array(
+        $isTextUsageWhichCannotBeText = [
             '/ISTEXT\((\{F#(\d+|current),Q#(\d+|current),P#(\d+|current)\})\)/',
             '/ISTEXT\((\{R#(\d+),Q#(\d+|current),P#(\d+|current)\})\)/',
             '/ISTEXT\((\{Q#(\d+|current),P#(\d+|current)\})\)/',
             '/ISTEXT\((\{F#(\d+|current)})\)/',
-        );
+        ];
         $convertedFormula = preg_replace($isTextUsageWhichCannotBeText, 'NOT(ISNUMBER($1))', $convertedFormula);
 
         $prefix = '';
@@ -901,7 +901,7 @@ STRING;
         $onlyNumbers = preg_match('/^=[\d\.%+-]+$/', $formula);
 
         $rule = null;
-        $key = \Application\Utility::getVolatileCacheKey(array($formula));
+        $key = \Application\Utility::getVolatileCacheKey([$formula]);
         if (!$onlyNumbers) {
             if (array_key_exists($key, $this->cacheFormulas)) {
                 return $this->cacheFormulas[$key];
@@ -1021,12 +1021,12 @@ STRING;
             $filterGeonameUsage = $this->cacheFilterGeonameUsages[$key];
         } elseif ($rule->getId() && $part->getId() && $filter->getId() && $geoname->getId()) {
             $repository = $this->getEntityManager()->getRepository('Application\Model\Rule\FilterGeonameUsage');
-            $filterGeonameUsage = $repository->findOneBy(array(
+            $filterGeonameUsage = $repository->findOneBy([
                 'rule' => $rule,
                 'part' => $part,
                 'filter' => $filter,
                 'geoname' => $geoname,
-            ));
+            ]);
         }
 
         if (!$filterGeonameUsage) {
@@ -1053,7 +1053,7 @@ STRING;
 
             $formulaGroup = 'default';
             $countryName = $questionnaire->getGeoname()->getName();
-            if (in_array($countryName, array(
+            if (in_array($countryName, [
                 'American Samoa',
                 'Antigua and Barbuda',
                 'Aruba',
@@ -1077,24 +1077,24 @@ STRING;
                 'Lebanon',
                 'Qatar',
                 'Trinidad and Tobago',
-            ))
+            ])
             ) {
                 $formulaGroup = 'onlyTotal';
-            } elseif (in_array($countryName, array(
+            } elseif (in_array($countryName, [
                 'Tokelau',
-            ))
+            ])
             ) {
                 $formulaGroup = 'onlyRural';
-            } elseif (in_array($countryName, array(
+            } elseif (in_array($countryName, [
                 'Anguilla',
                 'Cayman Islands',
                 'Monaco',
                 'Nauru',
                 'Singapore',
-            ))
+            ])
             ) {
                 $formulaGroup = 'onlyUrban';
-            } elseif (in_array($countryName, array(
+            } elseif (in_array($countryName, [
                 'Argentina',
                 'Chile',
                 'Costa Rica',
@@ -1106,16 +1106,16 @@ STRING;
                 'Portugal',
                 'Tuvalu',
                 'Uruguay',
-            ))
+            ])
             ) {
                 $formulaGroup = 'popHigherThanTotal';
-            } elseif (in_array($countryName, array(
+            } elseif (in_array($countryName, [
                 'Belarus',
                 'TFYR Macedonia',
                 'United States of America',
                 'Saudi Arabia',
                 'Tunisia',
-            ))
+            ])
             ) {
 
                 // Here each country has its own set of rules, so we use country name as formulaGroup name
@@ -1240,7 +1240,7 @@ STRING;
 
         echo 'Finishing special cases of Ratios for Sanitation';
 
-        $regexp = '-(' . join('|', $this->ratioSynonyms) . ')-i';
+        $regexp = '-(' . implode('|', $this->ratioSynonyms) . ')-i';
 
         // Create unique rules for everybody
         $formulaImproved = $this->replaceHighFilterNamesWithIdForBeforeRegression($filters, '=Improved + sharedREGRESSION * (100% - AVERAGE({F#' . $this->filterForRatio->getId() . ',Q#all}))');
@@ -1359,7 +1359,7 @@ STRING;
     private function importFilters(array $filters)
     {
         // Import filters
-        $this->cacheFilters = array();
+        $this->cacheFilters = [];
         foreach ($filters['definitions'] as $row => $definition) {
             $filter = $this->getFilter($definition, $this->cacheFilters);
             $this->cacheFilters[$row] = $filter;

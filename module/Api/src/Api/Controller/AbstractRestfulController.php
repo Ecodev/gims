@@ -2,8 +2,8 @@
 
 namespace Api\Controller;
 
-use Application\Model\AbstractModel;
 use Api\Service\MetaModel;
+use Application\Model\AbstractModel;
 use Application\Traits\EntityManagerAware;
 use Zend\View\Model\JsonModel;
 
@@ -107,7 +107,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      */
     protected function getJsonConfig()
     {
-        $result = array();
+        $result = [];
         $fieldList = $this->params()->fromQuery('fields');
         if (!empty($fieldList)) {
             $result = explode(',', $fieldList);
@@ -131,7 +131,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      */
     protected function getClosures()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -227,7 +227,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         if (!$object) {
             $this->getResponse()->setStatusCode(404);
 
-            return new JsonModel(array('message' => 'No object found'));
+            return new JsonModel(['message' => 'No object found']);
         }
 
         // If not allowed to delete object, cancel everything
@@ -237,7 +237,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         $this->getEntityManager()->flush();
         $this->getResponse()->setStatusCode(204);
 
-        return new JsonModel(array('message' => 'Deleted successfully'));
+        return new JsonModel(['message' => 'Deleted successfully']);
     }
 
     /**
@@ -250,9 +250,9 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
      */
     public function get($id)
     {
-        $objects = array();
-        $notFound = array();
-        $notGranted = array();
+        $objects = [];
+        $notFound = [];
+        $notGranted = [];
         $ids = \Application\Utility::explodeIds($id);
 
         foreach ($ids as $id) {
@@ -276,7 +276,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         if (count($notFound) == count($ids)) {
             $this->getResponse()->setStatusCode(404);
 
-            return new JsonModel(array('message' => 'No object found'));
+            return new JsonModel(['message' => 'No object found']);
         } elseif (count($notGranted) == count($ids)) {
             $this->checkActionGranted($this->getRepository()->findOneById($ids[0]), 'read');
         } else {
@@ -325,14 +325,14 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
 
         $paginatedObjects = array_slice($objects, ($page - 1) * $perPage, $perPage);
 
-        $jsonData = array(
-            'metadata' => array(
+        $jsonData = [
+            'metadata' => [
                 'page' => $page,
                 'perPage' => $perPage,
                 'totalCount' => count($objects),
-            ),
+            ],
             'items' => $dehydrate ? $this->hydrator->extractArray($paginatedObjects, $this->getJsonConfig()) : $paginatedObjects,
-        );
+        ];
 
         return $jsonData;
     }
@@ -360,7 +360,7 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
         if (!$object) {
             $this->getResponse()->setStatusCode(404);
 
-            return new JsonModel(array('message' => 'No object found'));
+            return new JsonModel(['message' => 'No object found']);
         }
 
         // First, hydrate the object in case the hydration changes the context used for ACL evaluation

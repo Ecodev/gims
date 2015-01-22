@@ -3,10 +3,10 @@
 namespace Application\Controller;
 
 use Application\Utility;
-use Zend\Http\Response;
-use Zend\View\Model\JsonModel;
-use Zend\Json\Json;
 use Zend\Crypt\Password\Bcrypt;
+use Zend\Http\Response;
+use Zend\Json\Json;
+use Zend\View\Model\JsonModel;
 
 class AuthController extends \ZfcUser\Controller\UserController
 {
@@ -23,12 +23,12 @@ class AuthController extends \ZfcUser\Controller\UserController
 
         if ($user) {
             $hydrator = new \Application\Service\Hydrator();
-            $result = $hydrator->extract($user, array(
+            $result = $hydrator->extract($user, [
                 'name',
                 'email',
                 'gravatar',
                 'firstLogin',
-            ));
+            ]);
             $result['status'] = 'logged';
 
             return $result;
@@ -72,10 +72,10 @@ class AuthController extends \ZfcUser\Controller\UserController
             $form->setData($data);
 
             if (!$form->isValid()) {
-                return new JsonModel(array(
+                return new JsonModel([
                     'status' => 'failed',
-                    'messages' => $form->getMessages()
-                ));
+                    'messages' => $form->getMessages(),
+                ]);
             }
         }
 
@@ -95,19 +95,19 @@ class AuthController extends \ZfcUser\Controller\UserController
 
         // Return early if an adapter returned a response
         if ($result instanceof Response) {
-            return new JsonModel(array(
+            return new JsonModel([
                 'status' => 'failed',
-                'messages' => 'Server DB adapter error'
-            ));
+                'messages' => 'Server DB adapter error',
+            ]);
         }
 
         $auth = $this->zfcUserAuthentication()->getAuthService()->authenticate($adapter);
 
         if (!$auth->isValid()) {
-            return new JsonModel(array(
+            return new JsonModel([
                 'status' => 'failed',
-                'messages' => 'Invalid username or password'
-            ));
+                'messages' => 'Invalid username or password',
+            ]);
         } else {
             $this->updateFirstAndLastLoginDate();
 
@@ -133,11 +133,11 @@ class AuthController extends \ZfcUser\Controller\UserController
             if ($user) {
                 Utility::executeCliCommand('email', 'activationLink', $user->getId());
 
-                return new JsonModel(array('email' => $user->getEmail()));
+                return new JsonModel(['email' => $user->getEmail()]);
             } else {
                 $this->getResponse()->setStatusCode(400);
 
-                return new JsonModel(array('message' => $this->getUserService()->getRegisterForm()->getMessages()));
+                return new JsonModel(['message' => $this->getUserService()->getRegisterForm()->getMessages()]);
             }
         }
     }
@@ -172,11 +172,11 @@ class AuthController extends \ZfcUser\Controller\UserController
         if ($user) {
             Utility::executeCliCommand('email', 'changePasswordLink', $user->getId());
 
-            return new JsonModel(array('email' => $user->getEmail()));
+            return new JsonModel(['email' => $user->getEmail()]);
         } else {
             $this->getResponse()->setStatusCode(400);
 
-            return new JsonModel(array('message' => 'No user has been found'));
+            return new JsonModel(['message' => 'No user has been found']);
         }
     }
 
@@ -203,7 +203,7 @@ class AuthController extends \ZfcUser\Controller\UserController
         } else {
             $this->getResponse()->setStatusCode(400);
 
-            return new JsonModel(array('message' => 'No user has been found'));
+            return new JsonModel(['message' => 'No user has been found']);
         }
 
     }

@@ -11,12 +11,12 @@ class QuestionTypeController extends AbstractRestfulController
     public function getList()
     {
         $properties = QuestionType::getValues();
-        $arrayValues = array();
+        $arrayValues = [];
         foreach ($properties as $property) {
-            array_push($arrayValues, array(
+            array_push($arrayValues, [
                 'text' => $property->__toString(),
                 'value' => $property->__toString()
-            ));
+            ]);
         }
 
         $jsonData = $this->paginate($arrayValues, false);

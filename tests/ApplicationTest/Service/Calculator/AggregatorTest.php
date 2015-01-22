@@ -15,10 +15,10 @@ class AggregatorTest extends AbstractCalculator
      */
     private function getStubCalculator()
     {
-        $stubCalculator = $this->getMock('\Application\Service\Calculator\Calculator', array('computeFilterForSingleQuestionnaire', 'computeFlattenAllYears'), array(), '', false);
+        $stubCalculator = $this->getMock('\Application\Service\Calculator\Calculator', ['computeFilterForSingleQuestionnaire', 'computeFlattenAllYears'], [], '', false);
         $stubCalculator->expects($this->any())
                 ->method('computeFilterForSingleQuestionnaire')
-                ->will($this->returnCallback(function($filterId, $questionnaire, $partId) {
+                ->will($this->returnCallback(function ($filterId, $questionnaire, $partId) {
                             $resultByQuestionnaires = [
                                 1 => [
                                     'value' => 0.5,
@@ -46,7 +46,7 @@ class AggregatorTest extends AbstractCalculator
 
         $stubCalculator->expects($this->any())
                 ->method('computeFlattenAllYears')
-                ->will($this->returnCallback(function(\Application\Model\Filter $filter, array $questionnaires, Part $part) {
+                ->will($this->returnCallback(function (\Application\Model\Filter $filter, array $questionnaires, Part $part) {
                             $id = count($questionnaires) ? $questionnaires[0]->getId() : null;
                             if ($id == null) {
                                 return [
@@ -90,7 +90,7 @@ class AggregatorTest extends AbstractCalculator
                 1 => [
                     'code' => 'MICS01',
                     'name' => 'MICS01 - Name',
-                ]
+                ],
             ],
             'count' => 1,
             'minYear' => 2001,
@@ -137,8 +137,8 @@ class AggregatorTest extends AbstractCalculator
                     0.175,
                     0.825,
                     0.90,
-                ]
-            ]
+                ],
+            ],
         ];
 
         // Second geoname has two more questionnaire

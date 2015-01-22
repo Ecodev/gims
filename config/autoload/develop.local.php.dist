@@ -8,18 +8,18 @@
  *
  * It basically deactivates all caches, and activates all logs.
  */
-return array(
-    'doctrine' => array(
-        'configuration' => array(
-            'orm_default' => array(
+return [
+    'doctrine' => [
+        'configuration' => [
+            'orm_default' => [
                 // Log all SQL queries from Doctrine (to data/logs/all.log and FirePHP/FirePHP4Chrome)
                 'sqlLogger' => 'Application\DBAL\Logging\ForwardSQLLogger',
                 'generate_proxies' => true,
-            ),
-        ),
-    ),
+            ],
+        ],
+    ],
     // Use uncompressed JS for development
     'compressJavaScript' => false,
     'bodyCssClass' => 'local',
         //'emailOverride' => 'example@test.com'
-);
+];

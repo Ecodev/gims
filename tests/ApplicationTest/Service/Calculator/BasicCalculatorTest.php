@@ -103,21 +103,21 @@ class BasicCalculatorTest extends AbstractCalculator
         $nullFilter = $this->getNewModelWithId('\Application\Model\Filter');
 
         // Create a stub for the QuestionnaireRepository class with predetermined values, so we don't have to mess with database
-        $stubQuestionnaireRepository = $this->getMock('\Application\Repository\QuestionnaireRepository', array('findOneById'), array(), '', false);
+        $stubQuestionnaireRepository = $this->getMock('\Application\Repository\QuestionnaireRepository', ['findOneById'], [], '', false);
         $stubQuestionnaireRepository->expects($this->any())
                 ->method('findOneById')
-                ->will($this->returnValueMap(array(
-                            array('34', $this->questionnaire),
-        )));
+                ->will($this->returnValueMap([
+                            ['34', $this->questionnaire],
+        ]));
         $service->setQuestionnaireRepository($stubQuestionnaireRepository);
 
         // Create a stub for the PartRepository class with predetermined values, so we don't have to mess with database
-        $stubPartRepository = $this->getMock('\Application\Repository\PartRepository', array('findOneById'), array(), '', false);
+        $stubPartRepository = $this->getMock('\Application\Repository\PartRepository', ['findOneById'], [], '', false);
         $stubPartRepository->expects($this->any())
                 ->method('findOneById')
-                ->will($this->returnValueMap(array(
-                            array('56', $this->part1),
-        )));
+                ->will($this->returnValueMap([
+                            ['56', $this->part1],
+        ]));
         $service->setPartRepository($stubPartRepository);
 
         // Create a stub for the QuestionnaireUsageRepository class with predetermined values, so we don't have to mess with database
@@ -125,7 +125,7 @@ class BasicCalculatorTest extends AbstractCalculator
         $questionnaireUsage->setRule((new \Application\Model\Rule\Rule())->setFormula('=2+3'))
                 ->setQuestionnaire($this->questionnaire)
                 ->setPart($this->part1);
-        $stubQuestionnaireUsageRepository = $this->getMock('\Application\Repository\Rule\QuestionnaireUsageRepository', array('getOneByQuestionnaire'), array(), '', false);
+        $stubQuestionnaireUsageRepository = $this->getMock('\Application\Repository\Rule\QuestionnaireUsageRepository', ['getOneByQuestionnaire'], [], '', false);
         $stubQuestionnaireUsageRepository->expects($this->any())
                 ->method('getOneByQuestionnaire')
                 ->will($this->returnValue($questionnaireUsage)

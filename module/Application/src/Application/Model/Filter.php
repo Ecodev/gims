@@ -2,11 +2,11 @@
 
 namespace Application\Model;
 
+use Application\Service\MultipleRoleContext;
+use Application\Utility;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Application\Utility;
 use MischiefCollective\ColorJizz\Formats\Hex;
-use Application\Service\MultipleRoleContext;
 
 /**
  * A Filter is used to organise things. They are usually defined by the answer
@@ -154,9 +154,9 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
+        return array_merge(parent::getJsonConfig(), [
             'name',
-        ));
+        ]);
     }
 
     /**

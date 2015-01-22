@@ -12,7 +12,7 @@ class UserControllerTest extends AbstractRestfulControllerTest
 
     protected function getAllowedFields()
     {
-        return array('id', 'name', 'email', 'state', 'lastLogin');
+        return ['id', 'name', 'email', 'state', 'lastLogin'];
     }
 
     protected function getTestedObject()
@@ -56,12 +56,12 @@ class UserControllerTest extends AbstractRestfulControllerTest
 
     public function testSearchProvider()
     {
-        return array(
-            array('?q=test user unit tests', 1),
-            array('?q=impossible thing to find', 0), // repetition doesn't matter
-            array('?q=" AND SQL injection', 0), // cannot inject SQL
-            array('?q=\' AND SQL injection', 0), // cannot inject SQL
-        );
+        return [
+            ['?q=test user unit tests', 1],
+            ['?q=impossible thing to find', 0], // repetition doesn't matter
+            ['?q=" AND SQL injection', 0], // cannot inject SQL
+            ['?q=\' AND SQL injection', 0], // cannot inject SQL
+        ];
     }
 
     /**

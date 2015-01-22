@@ -12,7 +12,7 @@ class SurveyControllerTest extends AbstractRestfulControllerTest
 
     protected function getAllowedFields()
     {
-        return array('id', 'name', 'code', 'isActive', 'year', 'dateStart', 'dateEnd', 'questions', 'questionnaires');
+        return ['id', 'name', 'code', 'isActive', 'year', 'dateStart', 'dateEnd', 'questions', 'questionnaires'];
     }
 
     protected function getTestedObject()
@@ -22,9 +22,9 @@ class SurveyControllerTest extends AbstractRestfulControllerTest
 
     public function testCanUpdateSurvey()
     {
-        $data = array(
+        $data = [
             'name' => $this->survey->getName() . 'foo',
-        );
+        ];
 
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(201);
@@ -40,11 +40,11 @@ class SurveyControllerTest extends AbstractRestfulControllerTest
     public function testPostANewSurveyAndCheckResponseReturnsIt()
     {
         // Survey
-        $data = array(
+        $data = [
             'name' => 'new-survey',
             'code' => 100,
             'year' => 2013,
-        );
+        ];
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(201);

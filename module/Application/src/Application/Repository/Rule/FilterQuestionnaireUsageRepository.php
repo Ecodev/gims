@@ -32,7 +32,7 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
             $qb->setParameter($parentName, $parent);
         }
 
-        $this->addSearch($qb, $search, array('filter.name', 'rule.name', 'rule.formula', 'survey.code', 'survey.name', 'part.name'));
+        $this->addSearch($qb, $search, ['filter.name', 'rule.name', 'rule.formula', 'survey.code', 'survey.name', 'part.name']);
 
         return $qb->getQuery()->getResult();
     }
@@ -40,7 +40,7 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
     /**
      * @var array $cache [questionnaireId => [filterId => [partId => value]]]
      */
-    private $cache = array();
+    private $cache = [];
 
     /**
      * Return the first FilterQuestionUsage
@@ -101,17 +101,16 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
                     ->join('filterQuestionnaireUsage.filter', 'filter')
                     ->join('filterQuestionnaireUsage.rule', 'rule')
                     ->andWhere('questionnaire.geoname = :geoname')
-                    ->orderBy('filterQuestionnaireUsage.isSecondStep DESC, filterQuestionnaireUsage.sorting, filterQuestionnaireUsage.id')
-            ;
+                    ->orderBy('filterQuestionnaireUsage.isSecondStep DESC, filterQuestionnaireUsage.sorting, filterQuestionnaireUsage.id');
 
-            $qb->setParameters(array(
+            $qb->setParameters([
                 'geoname' => $geonameId,
-            ));
+            ]);
 
             $res = $qb->getQuery()->getResult();
 
             // Ensure that we hit the cache next time, even if we have no results at all
-            $this->cache[$questionnaireId] = array();
+            $this->cache[$questionnaireId] = [];
 
             // Restructure cache to be [questionnaireId => [filterId => [partId => value]]]
             foreach ($res as $filterQuestionnaireUsage) {

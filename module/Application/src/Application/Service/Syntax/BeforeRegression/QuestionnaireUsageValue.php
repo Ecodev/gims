@@ -2,10 +2,10 @@
 
 namespace Application\Service\Syntax\BeforeRegression;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Application\Service\Calculator\Calculator;
 use Application\Model\Rule\AbstractQuestionnaireUsage;
+use Application\Service\Calculator\Calculator;
 use Application\Service\Syntax\Parser;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Replace {R#12,Q#34,P#56} with QuestionnaireUsage value

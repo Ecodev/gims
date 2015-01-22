@@ -99,14 +99,14 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
+        return array_merge(parent::getJsonConfig(), [
             'name',
             'code',
             'isActive',
             'year',
             'dateStart',
             'dateEnd',
-        ));
+        ]);
     }
 
     /**

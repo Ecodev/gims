@@ -36,7 +36,7 @@ function doAllCountries(array $countries)
 function doOneCountry(array $country)
 {
     $filename = $country['path'];
-    $sheetNamesToImport = array_merge(array('Estimates', 'GraphData_W', 'GraphData_S', 'Tables_W', 'Tables_S', 'Population'));
+    $sheetNamesToImport = array_merge(['Estimates', 'GraphData_W', 'GraphData_S', 'Tables_W', 'Tables_S', 'Population']);
 
     echo $filename . PHP_EOL;
     $reader = \PHPExcel_IOFactory::createReaderForFile($filename);
@@ -50,23 +50,23 @@ function doOneCountry(array $country)
 
 function doOneCountryQuestionnaire(array $country, \PHPExcel $wb)
 {
-    $def = array(
-        'GraphData_W' => array(
+    $def = [
+        'GraphData_W' => [
             'suffix' => 'Water',
             'rows' => range(5, 44),
             'cols' => range(1, 20),
-        ),
-        'GraphData_S' => array(
+        ],
+        'GraphData_S' => [
             'suffix' => 'Sanitation',
             'rows' => range(5, 44),
             'cols' => range(1, 26),
-        ),
-    );
+        ],
+    ];
 
-    $superdata = array(
-        'Water' => array(),
-        'Sanitation' => array(),
-    );
+    $superdata = [
+        'Water' => [],
+        'Sanitation' => [],
+    ];
 
     foreach (array_keys($def) as $sheetName) {
 
@@ -108,21 +108,21 @@ function doOneCountryQuestionnaire(array $country, \PHPExcel $wb)
 
 function doOneCountryCountry(array $country, \PHPExcel $wb)
 {
-    $defs = array(
-        'Water' => array(
+    $defs = [
+        'Water' => [
             'rows' => range(6, 41),
             'cols' => range(0, 15),
-        ),
-        'Sanitation' => array(
+        ],
+        'Sanitation' => [
             'rows' => range(6, 41),
-            'cols' => array_merge(array(0), range(16, 30)),
-        ),
-    );
+            'cols' => array_merge([0], range(16, 30)),
+        ],
+    ];
 
-    $superdata = array(
-        'Water' => array(),
-        'Sanitation' => array(),
-    );
+    $superdata = [
+        'Water' => [],
+        'Sanitation' => [],
+    ];
 
     $sheet = $wb->getSheetByName('Estimates');
     foreach ($defs as $type => $def) {
@@ -173,7 +173,7 @@ function sanitizeQuestionnaires(array $superdata)
     // Ensure that questionnaires are liste both in Water and Sanitation
     foreach ($superdata as $name => &$originalRows) {
 
-        $newRows = array();
+        $newRows = [];
 
         $i = 0;
         $j = 0;
@@ -185,12 +185,12 @@ function sanitizeQuestionnaires(array $superdata)
             } elseif (@$exhaustiveList[$i]) {
 
                 // If questionnaire is not in the list, inject empty entry
-                $newRows[] = array(
+                $newRows[] = [
                     $exhaustiveList[$i][0],
                     $exhaustiveList[$i][1],
                     $exhaustiveList[$i][2],
                     $exhaustiveList[$i][3],
-                );
+                ];
                 $i++;
             } elseif (@$originalRows[$j]) {
                 $newRows[] = $originalRows[$j];

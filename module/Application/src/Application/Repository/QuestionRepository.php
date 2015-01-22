@@ -2,8 +2,8 @@
 
 namespace Application\Repository;
 
-use Doctrine\ORM\Query\Expr\Join;
 use Application\Model\Questionnaire;
+use Doctrine\ORM\Query\Expr\Join;
 
 class QuestionRepository extends AbstractChildRepository
 {
@@ -50,7 +50,7 @@ class QuestionRepository extends AbstractChildRepository
      */
     public function getAllWithPermissionWithAnswers($action = 'read', \Application\Model\Survey $survey = null, array $questionnairesIds = null)
     {
-        /** @var \Doctrine\ORM\QueryBuilder $qb */
+/** @var \Doctrine\ORM\QueryBuilder $qb */
 
         // Answerable questions with parts
         $qb = $this->getEntityManager()->createQueryBuilder()
@@ -62,8 +62,7 @@ class QuestionRepository extends AbstractChildRepository
             ->where('question.survey = :survey')
             ->setParameter('survey', $survey)
             ->orderBy('question.sorting', 'ASC')
-            ->addOrderBy('parts.id', 'ASC')
-        ;
+            ->addOrderBy('parts.id', 'ASC');
         $this->addPermission($qb, 'survey', \Application\Model\Permission::getPermissionName($this, $action));
         $questions = $qb->getQuery()->getArrayResult();
 
@@ -75,8 +74,7 @@ class QuestionRepository extends AbstractChildRepository
             ->leftJoin('question.chapter', 'chapter')
             ->where('question.survey = :survey')
             ->setParameter('survey', $survey)
-            ->orderBy('question.sorting')
-        ;
+            ->orderBy('question.sorting');
         $this->addPermission($qb, 'survey', \Application\Model\Permission::getPermissionName($this, $action));
         $chapters = $qb->getQuery()->getArrayResult();
 
@@ -84,10 +82,10 @@ class QuestionRepository extends AbstractChildRepository
         $questions = array_merge($chapters, $questions);
 
         // create question index
-        $questionsIndexed = array();
+        $questionsIndexed = [];
         foreach ($questions as $question) {
             $questionsIndexed[$question['id']] = $question;
-            $questionsIndexed[$question['id']]['answers'] = array('1' => array(), '2' => array(), '3' => array());
+            $questionsIndexed[$question['id']]['answers'] = ['1' => [], '2' => [], '3' => []];
         }
 
         // ChoiceQuestions with parts, isMultiple and choices
@@ -101,8 +99,7 @@ class QuestionRepository extends AbstractChildRepository
             ->where('question.survey = :survey')
             ->setParameter('survey', $survey)
             ->orderBy('question.sorting')
-            ->addOrderBy('choices.sorting')
-        ;
+            ->addOrderBy('choices.sorting');
 
         // add choices to questions
         $this->addPermission($qb, 'survey', \Application\Model\Permission::getPermissionName($this, $action));
@@ -123,7 +120,7 @@ class QuestionRepository extends AbstractChildRepository
             $answerPartId = $answer['part']['id'];
             $answerQuestionnaireId = $answer['questionnaire']['id'];
             if (!isset($questionsIndexed[$answerQuestionId]['answers'][$answerPartId][$answerQuestionnaireId])) {
-                $questionsIndexed[$answerQuestionId]['answers'][$answerPartId][$answerQuestionnaireId] = array($answer);
+                $questionsIndexed[$answerQuestionId]['answers'][$answerPartId][$answerQuestionnaireId] = [$answer];
             } else {
                 array_push($questionsIndexed[$answerQuestionId]['answers'][$answerPartId][$answerQuestionnaireId], $answer);
             }
@@ -142,9 +139,9 @@ class QuestionRepository extends AbstractChildRepository
         $query = $this->getEntityManager()
             ->createQuery("SELECT q FROM Application\Model\Question\AbstractQuestion q WHERE q.id = :id");
 
-        $params = array(
+        $params = [
             'id' => $id,
-        );
+        ];
 
         $query->setParameters($params);
         $question = $query->getOneOrNullResult();
@@ -166,10 +163,10 @@ class QuestionRepository extends AbstractChildRepository
                 JOIN q.filter filter
                 WHERE q.filter IN (:filters) AND :questionnaire MEMBER OF survey.questionnaires");
 
-        $params = array(
+        $params = [
             'filters' => $filterIds,
             'questionnaire' => $questionnaire,
-        );
+        ];
 
         $query->setParameters($params);
         $alternateNames = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -191,10 +188,10 @@ class QuestionRepository extends AbstractChildRepository
                 JOIN q.filter filter
                 WHERE q.filter IN (:filters) AND :questionnaire MEMBER OF survey.questionnaires");
 
-        $params = array(
+        $params = [
             'filters' => $filterIds,
             'questionnaire' => $questionnaire,
-        );
+        ];
 
         $query->setParameters($params);
         $questions = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);

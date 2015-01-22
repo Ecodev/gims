@@ -19,8 +19,8 @@ class debug
     protected static function parseObject($obj, $values = true)
     {
         $obj_dump = print_r($obj, 1);
-        $ret_list = array();
-        $ret_map = array();
+        $ret_list = [];
+        $ret_map = [];
         $ret_name = '';
         $dump_lines = preg_split('/[\r\n]+/', $obj_dump);
         $ARR_NAME = 'arr_name';
@@ -28,7 +28,7 @@ class debug
         $arr_index = -1;
 
         // get the object type...
-        $matches = array();
+        $matches = [];
         preg_match('/^\s*(\S+)\s+\bObject\b/i', $obj_dump, $matches);
         if (isset($matches[1])) {
             $ret_name = $matches[1];
@@ -36,16 +36,16 @@ class debug
 
         foreach ($dump_lines as &$line) {
 
-            $matches = array();
+            $matches = [];
 
             //load up var and values...
             if (preg_match('/^\s*\[\s*(\S+)\s*\]\s+=>\s+(.*)$/', $line, $matches)) {
 
                 if (mb_stripos($matches[2], 'array') !== false) {
 
-                    $arr_map = array();
+                    $arr_map = [];
                     $arr_map[$ARR_NAME] = $matches[1];
-                    $arr_map[$ARR_LIST] = array();
+                    $arr_map[$ARR_LIST] = [];
                     $arr_list[++$arr_index] = $arr_map;
                 } else {
 

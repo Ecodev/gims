@@ -43,7 +43,7 @@ class Activity extends AbstractModel
      * @var array
      * @ORM\Column(type="json_array", nullable=false, options={"default" = "{}"})
      */
-    private $changes = array();
+    private $changes = [];
 
     /**
      * @var AbstractRecordableActivity
@@ -63,11 +63,11 @@ class Activity extends AbstractModel
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
+        return array_merge(parent::getJsonConfig(), [
             'action',
             'data',
             'changes',
-        ));
+        ]);
     }
 
     /**

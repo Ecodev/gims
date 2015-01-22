@@ -30,11 +30,11 @@ class MetaModelTest extends \ApplicationTest\Controller\AbstractController
      */
     public function modelProvider()
     {
-        return array(
-            array('Application\Model\Question\NumericQuestion', array('name', 'survey')),
-            array('Application\Model\Survey', array('name', 'code')),
+        return [
+            ['Application\Model\Question\NumericQuestion', ['name', 'survey']],
+            ['Application\Model\Survey', ['name', 'code']],
                 // more models to add here...
-        );
+        ];
     }
 
 }

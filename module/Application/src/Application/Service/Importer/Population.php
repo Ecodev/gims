@@ -55,7 +55,7 @@ class Population extends AbstractImporter
                 throw new \Exception("Country ISO3 is different in one on the three file at [$colIso3, $row]");
             }
 
-            $geoname = $geonameRepository->findOneBy(array('iso3' => $countryIso3));
+            $geoname = $geonameRepository->findOneBy(['iso3' => $countryIso3]);
             if ($geoname) {
                 echo $geoname->getName() . PHP_EOL;
                 $col = $colIso3 + 1;

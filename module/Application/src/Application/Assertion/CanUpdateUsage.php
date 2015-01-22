@@ -2,9 +2,9 @@
 
 namespace Application\Assertion;
 
-use ZfcRbac\Service\AuthorizationService;
 use Application\Service\RoleContextInterface;
 use Application\Utility;
+use ZfcRbac\Service\AuthorizationService;
 
 class CanUpdateUsage extends AbstractAssertion
 {

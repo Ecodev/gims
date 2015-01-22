@@ -7,7 +7,7 @@ return [
             'ZfcRbac\View\Strategy\UnauthorizedStrategy' => 'Application\Service\UnauthorizedStrategyFactory',
         ],
         'aliases' => [
-            'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service'
+            'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
         ],
     ],
     'zfc_rbac' => [

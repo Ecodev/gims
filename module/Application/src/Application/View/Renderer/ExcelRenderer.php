@@ -19,7 +19,7 @@ class ExcelRenderer extends \Zend\View\Renderer\PhpRenderer
      * @todo handle passing resolver object, options
      * @param array $config Configuration key-value pairs.
      */
-    public function __construct($config = array())
+    public function __construct($config = [])
     {
         parent::__construct($config);
     }
@@ -45,7 +45,7 @@ class ExcelRenderer extends \Zend\View\Renderer\PhpRenderer
     {
         $askedFilename = $nameOrModel->getFilename();
 
-        $allowedExtensions = array('xlsx', 'csv');
+        $allowedExtensions = ['xlsx', 'csv'];
         $filename = pathinfo($askedFilename, PATHINFO_FILENAME);
         $extension = strtolower(pathinfo($askedFilename, PATHINFO_EXTENSION));
         if (!in_array($extension, $allowedExtensions)) {

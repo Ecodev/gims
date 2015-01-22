@@ -2,7 +2,7 @@
 
 namespace ApplicationTest\Controller;
 
-use \ApplicationTest\Traits\TestWithTransaction;
+use ApplicationTest\Traits\TestWithTransaction;
 
 /**
  * @group Console

@@ -18,7 +18,7 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
         $stubPopulationRepository = $this->getMock('\Application\Repository\\' . $shortModel . 'Repository', ['findOneById'], [], '', false);
         $stubPopulationRepository->expects($this->any())
                 ->method('findOneById')
-                ->will($this->returnCallback(function($id) use ($shortModel) {
+                ->will($this->returnCallback(function ($id) use ($shortModel) {
                             return $this->getModel('\Application\Model\\' . $shortModel, $id);
                         }));
 
@@ -67,7 +67,7 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
         $expected = [
             [
                 'type' => 'text',
-                'content' => '=IF(FOO(), SUM('
+                'content' => '=IF(FOO(), SUM(',
             ],
             [
                 'type' => 'filterValue',

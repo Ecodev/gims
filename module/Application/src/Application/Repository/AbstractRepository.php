@@ -3,8 +3,8 @@
 namespace Application\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 
 abstract class AbstractRepository extends EntityRepository
 {
@@ -109,30 +109,30 @@ abstract class AbstractRepository extends EntityRepository
             $alias = reset($aliases);
 
             $existingFields = $this->getClassMetadata()->getFieldNames();
-            $fields = array_intersect($existingFields, array('code', 'name'));
+            $fields = array_intersect($existingFields, ['code', 'name']);
             $fields = array_map(function ($field) use ($alias) {
                 return $alias . '.' . $field;
             }, $fields);
         }
 
         // Build the WHERE clause
-        $wordWheres = array();
+        $wordWheres = [];
         foreach (preg_split('/[[:space:]]+/', $search, -1, PREG_SPLIT_NO_EMPTY) as $i => $word) {
             $parameterName = 'searchWord' . $i;
 
-            $fieldWheres = array();
+            $fieldWheres = [];
             foreach ($fields as $field) {
                 $fieldWheres[] = 'LOWER(CAST(' . $field . ' AS text)) LIKE LOWER(:' . $parameterName . ')';
             }
 
             if ($fieldWheres) {
-                $wordWheres[] = '(' . join(' OR ', $fieldWheres) . ')';
+                $wordWheres[] = '(' . implode(' OR ', $fieldWheres) . ')';
                 $qb->setParameter($parameterName, '%' . $word . '%');
             }
         }
 
         if ($wordWheres) {
-            $qb->andWhere('(' . join(' AND ', $wordWheres) . ')');
+            $qb->andWhere('(' . implode(' AND ', $wordWheres) . ')');
         }
     }
 

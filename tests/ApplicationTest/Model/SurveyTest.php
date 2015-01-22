@@ -2,8 +2,8 @@
 
 namespace ApplicationTest\Model;
 
-use Application\Model\Survey;
 use Application\Model\Question\NumericQuestion;
+use Application\Model\Survey;
 
 /**
  * @group Model
@@ -43,14 +43,14 @@ class SurveyTest extends AbstractModel
     public function getJsonConfigReturnsSpecificFieldsForSurvey()
     {
         $survey = new Survey();
-        $fields = array(
+        $fields = [
             'name',
             'code',
             'isActive',
             'year',
             'dateStart',
             'dateEnd',
-        );
+        ];
         $actual = $survey->getJsonConfig();
         foreach ($fields as $field) {
             $this->assertContains($field, $actual);

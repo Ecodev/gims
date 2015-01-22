@@ -3,17 +3,17 @@
 namespace Application;
 
 use Locale;
+use Zend\EventManager\EventInterface;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\ModuleManager\Feature\BootstrapListenerInterface;
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
+use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Zend\EventManager\EventInterface;
-use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\ModuleManager\Feature\ServiceProviderInterface;
-use Zend\ModuleManager\Feature\BootstrapListenerInterface;
-use Zend\Session\SessionManager;
 use Zend\Session\Config\SessionConfig;
 use Zend\Session\Container;
+use Zend\Session\SessionManager;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ConsoleUsageProviderInterface, ServiceProviderInterface, BootstrapListenerInterface
 {
@@ -41,8 +41,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
 
     public function getServiceConfig()
     {
-        return array(
-        );
+        return [
+        ];
     }
 
     public function onBootstrap(EventInterface $e)
@@ -78,7 +78,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
     protected function deactivateLayout(MvcEvent $e)
     {
         $sharedEvents = $e->getApplication()->getEventManager()->getSharedManager();
-        $sharedEvents->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', function($e) {
+        $sharedEvents->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', function ($e) {
             $result = $e->getResult();
             if ($result instanceof \Zend\View\Model\ViewModel) {
                 $result->setTerminal(true);
@@ -93,7 +93,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
     protected function detectBrowserLocale(MvcEvent $e)
     {
         $default = 'en';
-        $supported = array('en', 'fr');
+        $supported = ['en', 'fr'];
 
         if ($e->getApplication()->getRequest() instanceof \Zend\Http\Request)
             $requested = $e->getApplication()->getRequest()->getQuery('lang');
@@ -128,13 +128,13 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
 
     public function getAutoloaderConfig()
     {
-        return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
+        return [
+            'Zend\Loader\StandardAutoloader' => [
+                'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     public function getConsoleUsage(\Zend\Console\Adapter\AdapterInterface $console)

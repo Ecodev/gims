@@ -64,8 +64,7 @@ class AdjustatorTest extends AbstractCalculator
                     $usage->setFilter($this->filterReference)
                             ->setQuestionnaire($questionnaire)
                             ->setPart($this->part1)
-                            ->setRule($rule)
-                    ;
+                            ->setRule($rule);
                 } else {
                     $answer = new \Application\Model\Answer();
                     $answer->setPart($this->part1)->setQuestionnaire($questionnaire)->setQuestion($question)->setValuePercent($value);

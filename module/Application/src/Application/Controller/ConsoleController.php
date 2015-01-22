@@ -2,8 +2,8 @@
 
 namespace Application\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
 use Application\Model\User;
+use Zend\Mvc\Controller\AbstractActionController;
 
 class ConsoleController extends AbstractActionController
 {
@@ -65,7 +65,7 @@ class ConsoleController extends AbstractActionController
         $sm = \Application\Module::getServiceManager();
 
         // Override option and re-create roleService with new options
-        $sm->setFactory('Application\Service\FakeIdentityProvider', function() {
+        $sm->setFactory('Application\Service\FakeIdentityProvider', function () {
             return new \Application\Service\FakeIdentityProvider();
         });
         $options = $sm->get('ZfcRbac\Options\ModuleOptions');
@@ -94,7 +94,7 @@ class ConsoleController extends AbstractActionController
 
         echo 'Warming up cache for user: ' . $userName . PHP_EOL;
 
-        $progress = function($i, $total) {
+        $progress = function ($i, $total) {
             $digits = 3;
 
             return str_pad($i, $digits, ' ', STR_PAD_LEFT) . '/' . str_pad($total, $digits, ' ', STR_PAD_LEFT);

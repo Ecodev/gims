@@ -47,7 +47,7 @@ class DiscussionRepository extends AbstractRepository
             $qb->where($or);
         }
 
-        $this->addSearch($qb, $search, array('survey.code', 'survey2.code', 'geoname.name', 'filter.name'));
+        $this->addSearch($qb, $search, ['survey.code', 'survey2.code', 'geoname.name', 'filter.name']);
 
         $qb->addOrderBy('discussion.survey', 'ASC');
         $qb->addOrderBy('discussion.questionnaire', 'ASC');

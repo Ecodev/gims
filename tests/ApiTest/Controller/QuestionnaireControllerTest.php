@@ -2,9 +2,9 @@
 
 namespace ApiTest\Controller;
 
-use Zend\Http\Request;
 use Application\Model\Geoname;
 use Application\Model\UserQuestionnaire;
+use Zend\Http\Request;
 
 /**
  * @group Rest
@@ -16,7 +16,7 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
 
     protected function getAllowedFields()
     {
-        return array('id', 'dateObservationStart', 'dateObservationEnd', 'survey', 'name', 'geoname', 'completed', 'spatial', 'dateLastAnswerModification', 'reporterNames', 'validatorNames', 'comments', 'status', 'permission');
+        return ['id', 'dateObservationStart', 'dateObservationEnd', 'survey', 'name', 'geoname', 'completed', 'spatial', 'dateLastAnswerModification', 'reporterNames', 'validatorNames', 'comments', 'status', 'permission'];
     }
 
     protected function getTestedObject()
@@ -55,9 +55,9 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
         $this->getEntityManager()->flush();
         $expected = $this->questionnaire->getGeoname()->getId();
 
-        $data = array(
+        $data = [
             'geoname' => $geoname->getId(),
-        );
+        ];
 
         $this->dispatch($this->getRoute('put') . '?fields=geoname', Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(201);
@@ -68,13 +68,13 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
     public function testCanCreateQuestionnaire()
     {
         // Questionnaire
-        $data = array(
+        $data = [
             'dateObservationStart' => '2013-05-22T00:00:00.000Z',
             'dateObservationEnd' => '2014-05-22T00:00:00.000Z',
             'geoname' => $this->geoname->getId(),
             'survey' => $this->survey->getId(),
             'status' => 'new',
-        );
+        ];
 
         $this->dispatch($this->getRoute('post') . '?fields=survey', Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(201);
@@ -84,11 +84,11 @@ class QuestionnaireControllerTest extends AbstractChildRestfulControllerTest
 
     public function testSearchProvider()
     {
-        return array(
-            array('?q=test geoname', 1), // can search by geoname
-            array('?q=code test survey', 1), // can search by survey code
-            array('?q=code test survey test geoname', 1), // can search by both
-        );
+        return [
+            ['?q=test geoname', 1], // can search by geoname
+            ['?q=code test survey', 1], // can search by survey code
+            ['?q=code test survey test geoname', 1], // can search by both
+        ];
     }
 
     /**

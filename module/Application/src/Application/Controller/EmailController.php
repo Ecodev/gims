@@ -2,16 +2,16 @@
 
 namespace Application\Controller;
 
-use Zend\Mail;
-use Zend\Mail\Transport\Smtp as SmtpTransport;
-use Zend\Mail\Transport\SmtpOptions;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\Mime\Message as MimeMessage;
-use Zend\Mime\Part as MimePart;
 use Application\Model\Questionnaire;
 use Application\Model\User;
 use Application\Utility;
+use Zend\Mail;
+use Zend\Mail\Transport\Smtp as SmtpTransport;
+use Zend\Mail\Transport\SmtpOptions;
+use Zend\Mime\Message as MimeMessage;
+use Zend\Mime\Part as MimePart;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 class EmailController extends AbstractActionController
 {
@@ -25,7 +25,7 @@ class EmailController extends AbstractActionController
     {
         $users = $this->getEntityManager()->getRepository('Application\Model\UserQuestionnaire')->getAllWithPermission('read', null, 'questionnaire', $questionnaire);
 
-        $selectedUsers = array();
+        $selectedUsers = [];
         foreach ($users as $user) {
             if ($user->getRole()->getName() == $wantedRole) {
                 array_push($selectedUsers, $user->getUser());
@@ -46,9 +46,9 @@ class EmailController extends AbstractActionController
         $users = $this->getUsersByRole($questionnaire, 'Survey editor');
 
         $subject = 'Questionnaire opened : ' . $questionnaire->getName();
-        $mailParams = array(
+        $mailParams = [
             'questionnaire' => $questionnaire,
-        );
+        ];
         $this->sendMail($users, $subject, new ViewModel($mailParams));
     }
 
@@ -65,9 +65,9 @@ class EmailController extends AbstractActionController
         $users = $this->getUsersByRole($questionnaire, 'Survey editor');
 
         $subject = 'Questionnaire validated: ' . $questionnaire->getName();
-        $mailParams = array(
+        $mailParams = [
             'questionnaire' => $questionnaire,
-        );
+        ];
         $this->sendMail($users, $subject, new ViewModel($mailParams));
     }
 
@@ -89,9 +89,9 @@ class EmailController extends AbstractActionController
         // $users = $userRepository->getAllHavingPermission($questionnaire, \Application\Model\Permission::getPermissionName($questionnaire, 'validate'));
 
         $subject = 'Questionnaire completed : ' . $questionnaire->getName();
-        $mailParams = array(
+        $mailParams = [
             'questionnaire' => $questionnaire,
-        );
+        ];
 
         $this->sendMail($users, $subject, new ViewModel($mailParams));
     }
@@ -108,10 +108,10 @@ class EmailController extends AbstractActionController
         $applicantUser = $this->getEntityManager()->getRepository('Application\Model\User')->findOneById($this->getRequest()->getParam('applicantUserId'));
 
         $subject = 'Role request';
-        $mailParams = array(
+        $mailParams = [
             'applicantUser' => $applicantUser,
             'emailLinkQueryString' => $emailLinkQueryString,
-        );
+        ];
 
         $this->sendMail($users, $subject, new ViewModel($mailParams));
     }
@@ -128,10 +128,10 @@ class EmailController extends AbstractActionController
         $users = $this->getEntityManager()->getRepository('Application\Model\User')->getAllForCommentNotification($comment);
 
         $subject = 'Discussion - ' . $discussion->getName();
-        $mailParams = array(
+        $mailParams = [
             'comment' => $comment,
             'discussion' => $discussion,
-        );
+        ];
 
         $this->sendMail($users, $subject, new ViewModel($mailParams));
     }
@@ -151,9 +151,9 @@ class EmailController extends AbstractActionController
         $this->getEntityManager()->flush();
 
         $subject = 'Account activation';
-        $mailParams = array(
+        $mailParams = [
             'token' => $user->getToken(),
-        );
+        ];
 
         $this->sendMail($user, $subject, new ViewModel($mailParams));
     }
@@ -173,9 +173,9 @@ class EmailController extends AbstractActionController
         $this->getEntityManager()->flush();
 
         $subject = 'Reset password';
-        $mailParams = array(
+        $mailParams = [
             'token' => $user->getToken(),
-        );
+        ];
 
         $this->sendMail($user, $subject, new ViewModel($mailParams));
     }
@@ -195,15 +195,15 @@ class EmailController extends AbstractActionController
             echo $geoname->getName() . PHP_EOL;
 
             $questionnaires = $this->getEntityManager()->getRepository('Application\Model\Questionnaire')->findByGeoname($geoname);
-            $questionnaireIds = implode(',', array_map(function($q) {
+            $questionnaireIds = implode(',', array_map(function ($q) {
                         return $q->getId();
                     }, $questionnaires));
 
-            $mailParams = array(
+            $mailParams = [
                 'geoname' => $geoname,
                 'questionnaireIds' => $questionnaireIds,
                 'parts' => $parts,
-            );
+            ];
 
             $message = $this->createMessage($fakeUser, $subject, new ViewModel($mailParams));
             file_put_contents($geoname->getName() . '.eml', $message->toString());
@@ -277,7 +277,7 @@ class EmailController extends AbstractActionController
         $partialContent = $renderer->render($model);
 
         // Then inject it into layout
-        $modelLayout = new ViewModel(array($model->captureTo() => $partialContent));
+        $modelLayout = new ViewModel([$model->captureTo() => $partialContent]);
         $modelLayout->setTemplate('application/email/email');
         $modelLayout->setVariable('subject', $subject);
         $modelLayout->setVariable('user', $user);
@@ -288,7 +288,7 @@ class EmailController extends AbstractActionController
         $htmlPart = new MimePart($content);
         $htmlPart->type = "text/html";
         $body = new MimeMessage();
-        $body->setParts(array($htmlPart));
+        $body->setParts([$htmlPart]);
 
         $message = new Mail\Message();
         $message->setSubject($subject);

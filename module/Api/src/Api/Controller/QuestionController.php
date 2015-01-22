@@ -2,12 +2,12 @@
 
 namespace Api\Controller;
 
-use Zend\Json\Json;
-use Zend\View\Model\JsonModel;
 use Application\Model\AbstractModel;
-use Application\Model\Survey;
 use Application\Model\Question\AbstractQuestion;
 use Application\Model\Question\Choice;
+use Application\Model\Survey;
+use Zend\Json\Json;
+use Zend\View\Model\JsonModel;
 
 class QuestionController extends AbstractChildRestfulController
 {
@@ -18,13 +18,13 @@ class QuestionController extends AbstractChildRestfulController
      * The new choices to be added to the newly created question
      * @var array|null
      */
-    private $tempChoices = array();
+    private $tempChoices = [];
 
     protected function getClosures()
     {
         $questionnaire = $this->getParent();
         $controller = $this;
-        $config = array(
+        $config = [
             // @todo remove it has been proven to work
             // Here we use a closure to get the questions' answers, but only for the current questionnaire
 
@@ -32,12 +32,12 @@ class QuestionController extends AbstractChildRestfulController
             $questionnaire, $controller
             ) {
         $output = null;
-        if (is_callable(array($question, 'getAnswers'))) {
+        if (is_callable([$question, 'getAnswers'])) {
             $answers = $question->getAnswers($questionnaire);
 
             // special case for question, reorganize keys for the needs of ui-grid:
             // Numerical key must correspond to the id of the part.
-            $output = array();
+            $output = [];
             foreach ($answers as $answer) {
 
                 // If does not have access to answer, skip silently
@@ -45,14 +45,14 @@ class QuestionController extends AbstractChildRestfulController
                     continue;
                 }
 
-                $answerData = $hydrator->extract($answer, array('part'));
+                $answerData = $hydrator->extract($answer, ['part']);
                 array_push($output, $answerData);
             }
         }
 
         return $output;
     },
-        );
+        ];
 
         return $config;
     }
@@ -97,11 +97,11 @@ class QuestionController extends AbstractChildRestfulController
         } else {
             $this->getResponse()->setStatusCode(400);
 
-            return new JsonModel(array('message' => 'Cannot list all items without a valid parent. Use URL similar to: /api/parent/1/question'));
+            return new JsonModel(['message' => 'Cannot list all items without a valid parent. Use URL similar to: /api/parent/1/question']);
         }
 
         // prepare flat array of questions for then be reordered by Parent > childrens > childrens
-        $flatQuestions = array();
+        $flatQuestions = [];
         foreach ($questions as $question) {
             $flatQuestion = $this->hydrator->extract($question, $this->getJsonConfig());
             $flatQuestion['_chapter'] = $question->getChapter() ? $this->hydrator->extract($question->getChapter(), ['id']) : null;

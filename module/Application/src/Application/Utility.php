@@ -2,9 +2,8 @@
 
 namespace Application;
 
-use \MischiefCollective\ColorJizz\Formats\HSV;
-use \MischiefCollective\ColorJizz\Formats\RGS;
-use \MischiefCollective\ColorJizz\Formats\Hex;
+use MischiefCollective\ColorJizz\Formats\Hex;
+use MischiefCollective\ColorJizz\Formats\HSV;
 
 abstract class Utility
 {
@@ -67,7 +66,7 @@ abstract class Utility
      */
     public static function orderByIds(array $objects, array $ids)
     {
-        usort($objects, function($o1, $o2) use ($ids) {
+        usort($objects, function ($o1, $o2) use ($ids) {
             return array_search($o1->getId(), $ids) > array_search($o2->getId(), $ids);
         });
 
@@ -99,7 +98,7 @@ abstract class Utility
     {
         $args = func_get_args();
 
-        $escapedArguments = array_reduce($args, function($result, $arg) {
+        $escapedArguments = array_reduce($args, function ($result, $arg) {
             return $result . ' ' . escapeshellarg($arg);
         });
 
@@ -152,7 +151,7 @@ abstract class Utility
             foreach ($value as $i => $modelInCollection) {
                 $key .= $i . '>' . self::getCacheKey($modelInCollection, $isPersistent) . ':';
             }
-            $key.= ']';
+            $key .= ']';
         } elseif (is_object($value)) {
             if ($isPersistent) {
                 if ($value instanceof \Traversable) {
@@ -160,7 +159,7 @@ abstract class Utility
                     foreach ($value as $modelInCollection) {
                         $key .= $modelInCollection->getId() . ':';
                     }
-                    $key.= ']';
+                    $key .= ']';
                 } else {
                     $key .= $value->getId();
                 }
@@ -188,9 +187,9 @@ abstract class Utility
      */
     public static function pregReplaceUniqueCallback($pattern, \Closure $callback, $subject)
     {
-        $replacements = array();
+        $replacements = [];
 
-        return preg_replace_callback($pattern, function($matches) use ($callback, &$replacements) {
+        return preg_replace_callback($pattern, function ($matches) use ($callback, &$replacements) {
             $key = $matches[0];
 
             if (!isset($replacements[$key])) {

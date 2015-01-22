@@ -2,8 +2,8 @@
 
 namespace Application\Service\Calculator;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Application\Model\Rule\AbstractQuestionnaireUsage;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Common base class for various computation. It includes a local instance cache.
@@ -19,8 +19,8 @@ abstract class AbstractCalculator
 use \Application\Traits\EntityManagerAware;
 
     private $cache;
-    private $cacheComputeFilter = array();
-    protected $overriddenFilters = array();
+    private $cacheComputeFilter = [];
+    protected $overriddenFilters = [];
     private $populationRepository;
     private $questionnaireUsageRepository;
     private $filterRepository;
@@ -393,11 +393,11 @@ use \Application\Traits\EntityManagerAware;
         $originalFormula = $usage->getRule()->getFormula();
         $convertedFormula = $this->getParser()->convertBeforeRegression($this, $originalFormula, $usage, $alreadyUsedFormulas, $useSecondStepRules);
 
-        _log()->debug(__METHOD__, array($usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormula));
+        _log()->debug(__METHOD__, [$usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormula]);
 
         $result = $this->getParser()->computeExcelFormula($convertedFormula);
 
-        _log()->debug(__METHOD__, array($usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormula, $result));
+        _log()->debug(__METHOD__, [$usage->getId(), $usage->getRule()->getName(), $originalFormula, $convertedFormula, $result]);
 
         return $result;
     }

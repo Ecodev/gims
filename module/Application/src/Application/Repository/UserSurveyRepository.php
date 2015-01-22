@@ -17,7 +17,7 @@ class UserSurveyRepository extends AbstractChildRepository
         $qb->where('us.' . $parentName . ' = :parent');
         $qb->setParameter('parent', $parent);
 
-        $this->addSearch($qb, $search, array('survey.code', 'survey.name', 'user.name', 'role.name'));
+        $this->addSearch($qb, $search, ['survey.code', 'survey.name', 'user.name', 'role.name']);
 
         return $qb->getQuery()->getResult();
     }

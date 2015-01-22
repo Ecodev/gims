@@ -3,9 +3,9 @@
 // Enable cached configuration on production or testing only
 $enableCache = isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], '.org') !== false;
 
-return array(
+return [
     // This should be an array of module namespaces used in the application.
-    'modules' => array(
+    'modules' => [
         'DoctrineModule',
         'DoctrineORMModule',
         'ZfcUser',
@@ -18,24 +18,24 @@ return array(
         'Contribute',
         'Export',
         'ZendDeveloperTools',
-    ),
+    ],
     // These are various options for the listeners attached to the ModuleManager
-    'module_listener_options' => array(
+    'module_listener_options' => [
         // This should be an array of paths in which modules reside.
         // If a string key is provided, the listener will consider that a module
         // namespace, the value of that key the specific path to that module's
         // Module class.
-        'module_paths' => array(
+        'module_paths' => [
             './module',
             './vendor',
-        ),
+        ],
         // An array of paths from which to glob configuration files after
         // modules are loaded. These effectively overide configuration
         // provided by modules themselves. Paths may use GLOB_BRACE notation.
-        'config_glob_paths' => array(
+        'config_glob_paths' => [
             'config/autoload/{,*.}{global}.php',
             'config/autoload/{,*.}{local}.php',
-        ),
+        ],
         // Whether or not to enable a configuration cache.
         // If enabled, the merged configuration will be cached and used in
         // subsequent requests.
@@ -54,7 +54,7 @@ return array(
     // Enabled by default, prevents usage of modules that depend on other modules
     // that weren't loaded.
     // 'check_dependencies' => true,
-    ),
+    ],
         // Used to create an own service manager. May contain one or more child arrays.
         //'service_listener_options' => array(
         //     array(
@@ -67,4 +67,4 @@ return array(
         // Initial configuration with which to seed the ServiceManager.
         // Should be compatible with Zend\ServiceManager\Config.
         // 'service_manager' => array(),
-);
+];

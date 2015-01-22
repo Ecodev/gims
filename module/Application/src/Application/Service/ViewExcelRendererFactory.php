@@ -2,9 +2,9 @@
 
 namespace Application\Service;
 
+use Application\View\Renderer\ExcelRenderer;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Application\View\Renderer\ExcelRenderer;
 
 class ViewExcelRendererFactory implements FactoryInterface
 {

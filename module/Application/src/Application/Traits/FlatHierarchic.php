@@ -2,8 +2,6 @@
 
 namespace Application\Traits;
 
-use \Application\Utility;
-
 trait FlatHierarchic
 {
 
@@ -16,7 +14,7 @@ trait FlatHierarchic
      */
     public function getFlatHierarchyWithSingleRootElement(array $objects, $referenceObject, $rootElementId = 0)
     {
-        $objectsByParent = array();
+        $objectsByParent = [];
         foreach ($objects as $object) {
             // if there is no parent or if object has parent, but the parent is not in collection : set object as root
             if (!isset($object[$referenceObject]['id']) || empty($object[$referenceObject]['id'])) {
@@ -32,7 +30,7 @@ trait FlatHierarchic
         if ($objects) {
             $elements = $this->createTree($objectsByParent, $objectsByParent[$rootElementId], 0);
         } else {
-            $elements = array();
+            $elements = [];
         }
 
         return $elements;
@@ -47,9 +45,9 @@ trait FlatHierarchic
      */
     public function getFlatHierarchyWithMultipleRootElements(array $objects, $referenceObject)
     {
-        $rootElements = array();
-        $objectsByParent = array();
-        $knownIds = array();
+        $rootElements = [];
+        $objectsByParent = [];
+        $knownIds = [];
 
         foreach ($objects as $object) {
             $knownIds[] = $object['id'];
@@ -68,7 +66,7 @@ trait FlatHierarchic
         }
 
         if ($objects) {
-            $elements = array();
+            $elements = [];
             foreach ($rootElements as $rootId => $rootElement) {
                 $rootElement['level'] = 0;
                 array_push($elements, $rootElement);
@@ -77,7 +75,7 @@ trait FlatHierarchic
                 }
             }
         } else {
-            $elements = array();
+            $elements = [];
         }
 
         return $elements;
@@ -92,7 +90,7 @@ trait FlatHierarchic
      */
     private function createTree(array &$objectsByParent, array $parent, $deep)
     {
-        $tree = array();
+        $tree = [];
         foreach ($parent as $child) {
             $child['level'] = $deep;
             $tree[] = $child;

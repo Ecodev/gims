@@ -2,9 +2,8 @@
 
 namespace Application\Model;
 
-use Doctrine\ORM\Mapping as ORM;
-use Application\Model\AbstractModel;
 use Application\Repository\AbstractRepository;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Permission is as defined in RBAC system: http://en.wikipedia.org/wiki/Role-based_access_control
@@ -57,9 +56,9 @@ class Permission extends AbstractModel
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
+        return array_merge(parent::getJsonConfig(), [
             'name',
-        ));
+        ]);
     }
 
     /**

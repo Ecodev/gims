@@ -65,14 +65,14 @@ class UserController extends AbstractRestfulController
         } else {
             $this->getResponse()->setStatusCode(400);
 
-            return new JsonModel(array('message' => $this->getUserService()->getRegisterForm()->getMessages()));
+            return new JsonModel(['message' => $this->getUserService()->getRegisterForm()->getMessages()]);
         }
     }
 
     private function generateRandomPassword()
     {
         $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
-        $pass = array(); //remember to declare $pass as an array
+        $pass = []; //remember to declare $pass as an array
         $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
         for ($i = 0; $i < 8; $i++) {
             $n = rand(0, $alphaLength);
@@ -89,7 +89,7 @@ class UserController extends AbstractRestfulController
         if (!$user) {
             $this->getResponse()->setStatusCode(404);
 
-            return new JsonModel(array('message' => 'No object found'));
+            return new JsonModel(['message' => 'No object found']);
         }
 
         $stats = $this->getRepository()->getStatistics($user);
@@ -109,11 +109,11 @@ class UserController extends AbstractRestfulController
         }
 
         if (!$request->isPost()) {
-            return array(
+            return [
                 'loginForm' => $form,
                 'redirect' => $redirect,
                 'enableRegistration' => $this->getOptions()->getEnableRegistration(),
-            );
+            ];
         }
 
         $form->setData($request->getPost());
@@ -128,7 +128,7 @@ class UserController extends AbstractRestfulController
         $this->zfcUserAuthentication()->getAuthAdapter()->resetAdapters();
         $this->zfcUserAuthentication()->getAuthService()->clearIdentity();
 
-        return $this->forward()->dispatch(static::CONTROLLER_NAME, array('action' => 'authenticate'));
+        return $this->forward()->dispatch(static::CONTROLLER_NAME, ['action' => 'authenticate']);
     }
 
     public function delete($id)
@@ -150,12 +150,12 @@ class UserController extends AbstractRestfulController
             } else {
                 $this->getResponse()->setStatusCode(403);
 
-                return new JsonModel(array('message' => 'Activation delay timed out.'));
+                return new JsonModel(['message' => 'Activation delay timed out.']);
             }
         } else {
             $this->getResponse()->setStatusCode(404);
 
-            return new JsonModel(array('message' => 'This activation token is invalid. No user could be found.'));
+            return new JsonModel(['message' => 'This activation token is invalid. No user could be found.']);
         }
     }
 
@@ -174,12 +174,12 @@ class UserController extends AbstractRestfulController
 
                 return new JsonModel($this->hydrator->extract($user, $this->getJsonConfig()));
             } else {
-                return new JsonModel(array('message' => "Passwords don't match."));
+                return new JsonModel(['message' => "Passwords don't match."]);
             }
         } else {
             $this->getResponse()->setStatusCode(404);
 
-            return new JsonModel(array('message' => 'User has not been found'));
+            return new JsonModel(['message' => 'User has not been found']);
         }
     }
 
@@ -195,7 +195,7 @@ class UserController extends AbstractRestfulController
         if (!$user) {
             $this->getResponse()->setStatusCode(404);
 
-            return new JsonModel(array('message' => 'No user has been found'));
+            return new JsonModel(['message' => 'No user has been found']);
         }
 
         if ($this->checkTokenValidity($user)) {
@@ -204,7 +204,7 @@ class UserController extends AbstractRestfulController
         } else {
             $this->getResponse()->setStatusCode(403);
 
-            return new JsonModel(array('message' => 'Link validity timed out.'));
+            return new JsonModel(['message' => 'Link validity timed out.']);
         }
     }
 

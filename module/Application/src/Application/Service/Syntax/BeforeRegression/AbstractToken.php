@@ -2,9 +2,9 @@
 
 namespace Application\Service\Syntax\BeforeRegression;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Application\Service\Calculator\Calculator;
 use Application\Model\Rule\AbstractQuestionnaireUsage;
+use Application\Service\Calculator\Calculator;
+use Doctrine\Common\Collections\ArrayCollection;
 
 abstract class AbstractToken extends \Application\Service\Syntax\AbstractToken
 {

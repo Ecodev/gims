@@ -2,7 +2,6 @@
 
 namespace Api\Controller;
 
-use Zend\View\Model\JsonModel;
 use Application\Model\AbstractModel;
 
 class FilterSetController extends AbstractRestfulController

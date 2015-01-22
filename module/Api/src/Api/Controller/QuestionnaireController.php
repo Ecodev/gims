@@ -2,11 +2,11 @@
 
 namespace Api\Controller;
 
-use Application\Model\Questionnaire;
-use Application\Model\Survey;
-use \Application\Model\QuestionnaireStatus;
-use Zend\View\Model\JsonModel;
 use Application\Model\AbstractModel;
+use Application\Model\Questionnaire;
+use Application\Model\QuestionnaireStatus;
+use Application\Model\Survey;
+use Zend\View\Model\JsonModel;
 
 class QuestionnaireController extends AbstractChildRestfulController
 {
@@ -20,7 +20,7 @@ class QuestionnaireController extends AbstractChildRestfulController
     {
         $controller = $this;
 
-        $config = array();
+        $config = [];
         $config['dateLastAnswerModification'] = function (
                 \Application\Service\Hydrator $hydrator,
                 Questionnaire $questionnaire
@@ -28,12 +28,12 @@ class QuestionnaireController extends AbstractChildRestfulController
             $result = null;
 
             $answerRepository = $controller->getEntityManager()->getRepository('Application\Model\Answer');
-            $criteria = array(
+            $criteria = [
                 'questionnaire' => $questionnaire->getId(),
-            );
-            $order = array(
+            ];
+            $order = [
                 'dateModified' => 'DESC',
-            );
+            ];
             /** @var \Application\Model\Answer $answer */
             $answer = $answerRepository->findOneBy($criteria, $order);
             if ($answer) {
@@ -57,12 +57,12 @@ class QuestionnaireController extends AbstractChildRestfulController
             $userQuestionnaireRepository = $controller->getEntityManager()->getRepository(
                     'Application\Model\UserQuestionnaire'
             );
-            $criteria = array(
+            $criteria = [
                 'questionnaire' => $questionnaire,
                 'role' => $role,
-            );
+            ];
 
-            $results = array();
+            $results = [];
 
             /** @var \Application\Model\UserQuestionnaire $userQuestionnaire */
             foreach ($userQuestionnaireRepository->findBy($criteria) as $userQuestionnaire) {
@@ -82,12 +82,12 @@ class QuestionnaireController extends AbstractChildRestfulController
             $role = $roleRepository->findOneByName('Questionnaire validator');
 
             $userQuestionnaireRepository = $controller->getEntityManager()->getRepository('Application\Model\UserQuestionnaire');
-            $criteria = array(
+            $criteria = [
                 'questionnaire' => $questionnaire,
                 'role' => $role,
-            );
+            ];
 
-            $results = array();
+            $results = [];
             /** @var \Application\Model\UserQuestionnaire $userQuestionnaire */
             foreach ($userQuestionnaireRepository->findBy($criteria) as $userQuestionnaire) {
                 $results[] = $userQuestionnaire->getUser()->getName();

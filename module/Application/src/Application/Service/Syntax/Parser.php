@@ -2,9 +2,9 @@
 
 namespace Application\Service\Syntax;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Application\Service\Calculator\Calculator;
 use Application\Model\Rule\AbstractQuestionnaireUsage;
+use Application\Service\Calculator\Calculator;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Parser used to convert GIMS formula syntax into pure Excel formula syntax.
@@ -267,7 +267,7 @@ use \Application\Traits\EntityManagerAware;
     public function convertBeforeRegression(Calculator $calculator, $formula, AbstractQuestionnaireUsage $usage, ArrayCollection $alreadyUsedFormulas, $useSecondStepRules)
     {
         foreach ($this->getBeforeRegressionTokens() as $token) {
-            $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token, $calculator, $usage, $alreadyUsedFormulas, $useSecondStepRules) {
+            $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function ($matches) use ($token, $calculator, $usage, $alreadyUsedFormulas, $useSecondStepRules) {
                         return $token->replace($calculator, $matches, $usage, $alreadyUsedFormulas, $useSecondStepRules);
                     }, $formula);
         }
@@ -289,7 +289,7 @@ use \Application\Traits\EntityManagerAware;
     public function convertAfterRegression(Calculator $calculator, $formula, $currentFilterId, array $questionnaires, $currentPartId, $year, ArrayCollection $alreadyUsedRules)
     {
         foreach ($this->getAfterRegressionTokens() as $token) {
-            $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token, $calculator, $currentFilterId, $questionnaires, $currentPartId, $year, $alreadyUsedRules) {
+            $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function ($matches) use ($token, $calculator, $currentFilterId, $questionnaires, $currentPartId, $year, $alreadyUsedRules) {
                         return $token->replace($calculator, $matches, $currentFilterId, $questionnaires, $currentPartId, $year, $alreadyUsedRules);
                     }, $formula);
         }
@@ -329,7 +329,7 @@ use \Application\Traits\EntityManagerAware;
 
         // First gather all token structures and replace the token with a reference to its structure
         foreach (array_merge($this->getBeforeRegressionTokens(), $this->getAfterRegressionTokens()) as $token) {
-            $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function($matches) use ($token, &$tokenStructures, $splitter) {
+            $formula = \Application\Utility::pregReplaceUniqueCallback($token->getPattern(), function ($matches) use ($token, &$tokenStructures, $splitter) {
 
                         $key = '::TOKEN_' . count($tokenStructures) . '::';
                         $structure = $token->getStructure($matches, $this);

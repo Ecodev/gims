@@ -2,8 +2,8 @@
 
 namespace Application\Model;
 
-use Doctrine\ORM\Mapping as ORM;
 use Application\Utility;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Questionnaire is a particular "instance" of a Survey for a specific country (or
@@ -107,10 +107,10 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
+        return array_merge(parent::getJsonConfig(), [
             'name',
             'status'
-        ));
+        ]);
     }
 
     /**
@@ -379,7 +379,7 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         $auth = \Application\Module::getServiceManager()->get('ZfcRbac\Service\AuthorizationService');
 
         $result = parent::getPermissions();
-        foreach (array('validate', 'publish') as $action) {
+        foreach (['validate', 'publish'] as $action) {
             $result[$action] = $auth->isActionGranted($this, $action);
         }
 

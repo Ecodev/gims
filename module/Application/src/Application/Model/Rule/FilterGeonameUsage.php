@@ -2,9 +2,9 @@
 
 namespace Application\Model\Rule;
 
-use Doctrine\ORM\Mapping as ORM;
 use Application\Model\Filter;
 use Application\Model\Geoname;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * FilterGeonameUsage allows us to "apply" a formula to a filter-part couple, to be used for regression computation.
@@ -50,10 +50,10 @@ class FilterGeonameUsage extends AbstractUsage
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
+        return array_merge(parent::getJsonConfig(), [
             'filter',
             'geoname',
-        ));
+        ]);
     }
 
     /**

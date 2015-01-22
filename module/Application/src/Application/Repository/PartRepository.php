@@ -11,7 +11,7 @@ class PartRepository extends AbstractRepository
      */
     public function findAll()
     {
-        return $this->findBy(array(), array('id' => 'ASC'));
+        return $this->findBy([], ['id' => 'ASC']);
     }
 
     /**

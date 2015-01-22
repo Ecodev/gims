@@ -2,9 +2,9 @@
 
 namespace Application\Service;
 
-use \Application\Model\AbstractModel;
-use \Zend\Code\Reflection\MethodReflection;
-use \Application\Module;
+use Application\Model\AbstractModel;
+use Application\Module;
+use Zend\Code\Reflection\MethodReflection;
 
 /**
  * Used to extract object properties into an array or to hydrate an object from an array.
@@ -22,7 +22,7 @@ class Hydrator
      *
      * @return array
      */
-    public function extractArray($objects, array $properties = array())
+    public function extractArray($objects, array $properties = [])
     {
         $properties = $this->initializePropertyStructure($properties);
 
@@ -37,9 +37,9 @@ class Hydrator
      *
      * @return array
      */
-    private function internalExtractArray($objects, array $properties = array())
+    private function internalExtractArray($objects, array $properties = [])
     {
-        $result = array();
+        $result = [];
         foreach ($objects as $object) {
             $result[] = $this->internalExtract($object, $properties);
         }
@@ -56,12 +56,12 @@ class Hydrator
      */
     private function resolveMetadataAliases(array $properties)
     {
-        $metadata = array(
+        $metadata = [
             'modifier',
             'creator',
             'dateModified',
             'dateCreated',
-        );
+        ];
 
         foreach ($properties as $i => $property) {
             if (is_string($property) && preg_match('/^(.*)metadata/', $property, $matches)) {
@@ -91,7 +91,7 @@ class Hydrator
 
         // Avoid duplicate keys.
         // Function "array_unique" can not be used since loop can contains closure.
-        $_properties = array();
+        $_properties = [];
         foreach ($properties as $key => $property) {
             if (is_string($property) && !in_array($property, $_properties) && $property != '__recursive') {
                 $_properties[] = $property;
@@ -126,7 +126,7 @@ class Hydrator
      * @throws \InvalidArgumentException
      * @return array
      */
-    public function extract(AbstractModel $object, array $properties = array())
+    public function extract(AbstractModel $object, array $properties = [])
     {
         $properties = $this->initializePropertyStructure($properties);
 
@@ -142,9 +142,9 @@ class Hydrator
      * @throws \InvalidArgumentException
      * @return array
      */
-    private function internalExtract(AbstractModel $object, array $properties = array())
+    private function internalExtract(AbstractModel $object, array $properties = [])
     {
-        $result = array();
+        $result = [];
         $properties = $this->mergeWithDefaultProperties($object, $properties);
 
         foreach ($properties as $key => $value) {
@@ -165,7 +165,7 @@ class Hydrator
                 $getter = $this->formatGetter($key);
 
                 // If method does not exist, skip it
-                if (!is_callable(array($object, $getter))) {
+                if (!is_callable([$object, $getter])) {
                     continue;
                 }
 
@@ -184,7 +184,7 @@ class Hydrator
                 $getter = $this->formatGetter($value);
 
                 // If method does not exist, skip it
-                if (!is_callable(array($object, $getter))) {
+                if (!is_callable([$object, $getter])) {
                     continue;
                 }
 
@@ -266,7 +266,7 @@ class Hydrator
             }
             // If model is an AbstractEnum, built it
             elseif (is_subclass_of($parameterType, 'Application\Model\AbstractEnum')) {
-                $value = call_user_func_array(array($parameterType, 'get'), array($value));
+                $value = call_user_func_array([$parameterType, 'get'], [$value]);
             }
             // If parameter is an object, get it from database, it can be either an ID, or an array with the key 'id'
             elseif (is_subclass_of($parameterType, 'Application\Model\AbstractModel') && !is_null($value)) {
@@ -285,8 +285,8 @@ class Hydrator
                 $value = $collection;
             }
 
-            if (is_callable(array($object, $setter))) {
-                call_user_func_array(array($object, $setter), array($value));
+            if (is_callable([$object, $setter])) {
+                call_user_func_array([$object, $setter], [$value]);
             }
         }
 
@@ -353,7 +353,7 @@ class Hydrator
      */
     private function expandDotsToArray(array $properties)
     {
-        $result = array();
+        $result = [];
         foreach ($properties as $key => $property) {
             if (!is_string($key) && is_string($property)) {
                 $keys = explode('.', $property);

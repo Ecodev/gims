@@ -2,8 +2,8 @@
 
 namespace Application\Model\Rule;
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Rule is a way to define a value as a custom formula.
@@ -145,10 +145,10 @@ class Rule extends \Application\Model\AbstractRecordableActivity implements Refe
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
+        return array_merge(parent::getJsonConfig(), [
             'name',
             'formula',
-        ));
+        ]);
     }
 
     /**

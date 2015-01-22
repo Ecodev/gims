@@ -59,20 +59,20 @@ class ExcelTable extends \Zend\View\Helper\AbstractHtmlElement
 
         $format = [];
         if ($textColor) {
-            $format['font'] = array(
-                'color' => array(
-                    'rgb' => $textColor
-                )
-            );
+            $format['font'] = [
+                'color' => [
+                    'rgb' => $textColor,
+                ],
+            ];
         }
 
         if ($mainColor) {
-            $format['fill'] = array(
+            $format['fill'] = [
                 'type' => \PHPExcel_Style_Fill::FILL_SOLID,
-                'startcolor' => array(
+                'startcolor' => [
                     'rgb' =>  $mainColor,
-                )
-            );
+                ],
+            ];
         }
 
         $sheet->getStyleByColumnAndRow($col, $row)->applyFromArray($format);

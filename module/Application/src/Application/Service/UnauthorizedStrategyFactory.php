@@ -2,9 +2,9 @@
 
 namespace Application\Service;
 
+use Application\View\UnauthorizedStrategy;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Application\View\UnauthorizedStrategy;
 
 class UnauthorizedStrategyFactory implements FactoryInterface
 {

@@ -2,8 +2,6 @@
 
 namespace ApiTest\Controller\Rule;
 
-use Zend\Http\Request;
-
 /**
  * @group Rest
  */
@@ -12,14 +10,14 @@ class FilterQuestionnaireUsageControllerTest extends AbstractQuestionnaireUsageC
 
     protected function getAllowedFields()
     {
-        return array(
+        return [
             'id',
             'rule',
             'questionnaire',
             'part',
             'filter',
             'justification'
-        );
+        ];
     }
 
     protected function getTestedObject()
@@ -29,11 +27,11 @@ class FilterQuestionnaireUsageControllerTest extends AbstractQuestionnaireUsageC
 
     protected function getPossibleParents()
     {
-        return array(
+        return [
             $this->filterQuestionnaireUsage->getRule(),
             $this->filterQuestionnaireUsage->getQuestionnaire(),
             $this->filterQuestionnaireUsage->getFilter(),
-        );
+        ];
     }
 
 }

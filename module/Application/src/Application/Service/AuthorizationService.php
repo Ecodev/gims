@@ -3,9 +3,9 @@
 namespace Application\Service;
 
 use Application\Model\AbstractModel;
+use Application\Model\FilterSet;
 use Application\Model\Questionnaire;
 use Application\Model\QuestionnaireStatus;
-use Application\Model\FilterSet;
 use Application\Utility;
 
 /**
@@ -97,7 +97,7 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
 
         $contextMessages = $this->getContextMessages($context);
 
-        $name = is_callable(array($object, 'getName')) ? ' (' . $object->getName() . ')' : '';
+        $name = is_callable([$object, 'getName']) ? ' (' . $object->getName() . ')' : '';
         $this->message = 'Insufficient access rights for permission "' . $permission . '" on "' . Utility::getShortClassName($object) . '#' . $object->getId() . $name . '" with your current roles [' . $roles . '] ' . $contextMessages;
     }
 

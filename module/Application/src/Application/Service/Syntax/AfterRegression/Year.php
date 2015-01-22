@@ -2,9 +2,9 @@
 
 namespace Application\Service\Syntax\AfterRegression;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Application\Service\Calculator\Calculator;
 use Application\Service\Syntax\Parser;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Replace {Y} with current year

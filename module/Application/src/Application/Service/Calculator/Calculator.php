@@ -2,11 +2,11 @@
 
 namespace Application\Service\Calculator;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Application\Model\Questionnaire;
 use Application\Model\Filter;
 use Application\Model\Part;
+use Application\Model\Questionnaire;
 use Application\Model\Rule\Rule;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Additional computing capabilities related to regressions
@@ -14,8 +14,8 @@ use Application\Model\Rule\Rule;
 class Calculator extends AbstractCalculator
 {
 
-    private $cacheComputeRegressionForAllYears = array();
-    private $cacheComputeFlattenOneYearWithFormula = array();
+    private $cacheComputeRegressionForAllYears = [];
+    private $cacheComputeFlattenOneYearWithFormula = [];
     private $filterGeonameUsageRepository;
 
     /**
@@ -63,7 +63,7 @@ class Calculator extends AbstractCalculator
     public function computeFlattenAllYears(Filter $filter, array $questionnaires, Part $part)
     {
         $years = $this->getYears();
-        $result = array();
+        $result = [];
         foreach ($years as $year) {
             $result[] = $this->computeFlattenOneYearWithFormula($year, $filter->getId(), $questionnaires, $part->getId());
         }
@@ -101,7 +101,7 @@ class Calculator extends AbstractCalculator
                 $oneYearResult = $this->computeFormulaAfterRegression($filterGeonameUsage->getRule(), $year, $filterId, $questionnaires, $partId, $alreadyUsedRules);
                 $this->cacheComputeFlattenOneYearWithFormula[$key] = $oneYearResult;
 
-                _log()->debug(__METHOD__, array($filterId, $partId, $year, $oneYearResult));
+                _log()->debug(__METHOD__, [$filterId, $partId, $year, $oneYearResult]);
 
                 return $oneYearResult;
             }
@@ -122,7 +122,7 @@ class Calculator extends AbstractCalculator
      * @param array $usedYears [year] should be empty array for first call, then used for recursivity
      * @return null|float
      */
-    public function computeFlattenOneYear($year, array $regressions, array $usedYears = array())
+    public function computeFlattenOneYear($year, array $regressions, array $usedYears = [])
     {
         $allRegressions = $regressions['all'];
         $minRegression = $regressions['min'];
@@ -202,7 +202,7 @@ class Calculator extends AbstractCalculator
             return $this->cacheComputeRegressionForAllYears[$key];
         }
 
-        $allRegressions = array();
+        $allRegressions = [];
         $min = null;
         $max = null;
         foreach ($this->getYears() as $year) {
@@ -248,17 +248,17 @@ class Calculator extends AbstractCalculator
         } elseif ($year == $d['minYear'] - 6) {
             $result = $this->computeRegressionOneYear($year + 4, $filterId, $questionnaires, $partId);
         } elseif ($year < $d['maxYear'] + 3 && $year > $d['minYear'] - 3 && $d['count'] > 1 && $d['period'] > 4) {
-            $result = $this->ifNonZeroValue($d['values'], function() use ($year, $d) {
+            $result = $this->ifNonZeroValue($d['values'], function () use ($year, $d) {
                 return \PHPExcel_Calculation_Statistical::FORECAST($year, $d['values'], $d['years']);
             });
         } elseif ($year < $d['maxYear'] + 7 && $year > $d['minYear'] - 7 && ($d['count'] < 2 || $d['period'] < 5)) {
             $result = \PHPExcel_Calculation_Statistical::AVERAGE($d['values']);
         } elseif ($year > $d['minYear'] - 7 && $year < $d['minYear'] - 1) {
-            $result = $this->ifNonZeroValue($d['values'], function() use ($d) {
+            $result = $this->ifNonZeroValue($d['values'], function () use ($d) {
                 return \PHPExcel_Calculation_Statistical::FORECAST($d['minYear'] - 2, $d['values'], $d['years']);
             });
         } elseif ($year > $d['maxYear'] + 1 && $year < $d['maxYear'] + 7) {
-            $result = $this->ifNonZeroValue($d['values'], function() use ($d) {
+            $result = $this->ifNonZeroValue($d['values'], function () use ($d) {
                 return \PHPExcel_Calculation_Statistical::FORECAST($d['maxYear'] + 2, $d['values'], $d['years']);
             });
         } else {
@@ -277,14 +277,14 @@ class Calculator extends AbstractCalculator
      */
     public function computeFilterForAllQuestionnaires($filterId, array $questionnaires, $partId)
     {
-        $result = array(
-            'values' => array(),
+        $result = [
+            'values' => [],
             'count' => 0,
-        );
+        ];
 
-        $years = array();
-        $surveys = array();
-        $yearsWithData = array();
+        $years = [];
+        $surveys = [];
+        $yearsWithData = [];
         foreach ($questionnaires as $questionnaire) {
 
             $questionnaireData = $this->computeFilterForSingleQuestionnaire($filterId, $questionnaire, $partId);
@@ -293,7 +293,7 @@ class Calculator extends AbstractCalculator
             $years[$questionnaireId] = $questionnaireData['year'];
             $surveys[$questionnaireId] = [
                 'code' => $questionnaireData['code'],
-                'name' => $questionnaireData['name']
+                'name' => $questionnaireData['name'],
             ];
             $result['values'][$questionnaireId] = $questionnaireData['value'];
 
@@ -309,7 +309,7 @@ class Calculator extends AbstractCalculator
         $result['maxYear'] = $yearsWithData ? max($yearsWithData) : null;
         $result['period'] = $result['maxYear'] - $result['minYear'] ? : 1;
 
-        $result['slope'] = $result['count'] < 2 ? null : $this->ifNonZeroValue($result['values'], function() use ($result, $years) {
+        $result['slope'] = $result['count'] < 2 ? null : $this->ifNonZeroValue($result['values'], function () use ($result, $years) {
                     return \PHPExcel_Calculation_Statistical::SLOPE($result['values'], $years);
                 });
 
@@ -388,7 +388,7 @@ class Calculator extends AbstractCalculator
         $convertedFormula = $this->getParser()->convertAfterRegression($this, $originalFormula, $currentFilterId, $questionnaires, $currentPartId, $year, $alreadyUsedRules);
         $result = $this->getParser()->computeExcelFormula($convertedFormula);
 
-        _log()->debug(__METHOD__, array($currentFilterId, $currentPartId, $year, $rule->getId(), $rule->getName(), $originalFormula, $convertedFormula, $result));
+        _log()->debug(__METHOD__, [$currentFilterId, $currentPartId, $year, $rule->getId(), $rule->getName(), $originalFormula, $convertedFormula, $result]);
 
         return $result;
     }

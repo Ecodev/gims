@@ -2,9 +2,9 @@
 
 namespace Api\Controller;
 
-use Zend\View\Model\JsonModel;
 use Application\Model\User;
 use Application\Utility;
+use Zend\View\Model\JsonModel;
 
 class RolesRequestController extends \Application\Controller\AbstractAngularActionController
 {
@@ -14,7 +14,7 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
      */
     public function requestRolesAction()
     {
-        $users = array_map(function($user) {
+        $users = array_map(function ($user) {
             return $user['user_id'];
         }, $this->getUsersHavingRoles());
 
@@ -44,10 +44,10 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
         $applicantUserPermissions = $this->getUsersHavingRoles($applicantUser);
         $applicantUserPermissions = $this->groupByGeoname($applicantUserPermissions);
 
-        $result = array(
+        $result = [
             'applicant' => $applicantUserPermissions,
-            'admin' => $adminPermissions
-        );
+            'admin' => $adminPermissions,
+        ];
 
         return new JsonModel($result);
     }
@@ -100,7 +100,7 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
                 'userRelation' => [
                     'id' => $data['relation_id'],
                     'type' => $data['relation_type'],
-                ]
+                ],
             ];
 
             // add modifier (modifier or creator have the same name) to relation

@@ -2,7 +2,7 @@
 
 namespace ApplicationTest\Repository;
 
-use \Application\Model\QuestionnaireStatus;
+use Application\Model\QuestionnaireStatus;
 
 /**
  * @group Repository

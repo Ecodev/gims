@@ -2,10 +2,10 @@
 
 namespace Application\Service;
 
-use Doctrine\ORM\Events;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
+use Doctrine\ORM\Events;
 
 /**
  * Automatically records activity for all object which are recordable

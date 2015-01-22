@@ -241,7 +241,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
         // Create a stub for the Part class
         $this->part1 = $this->getNewModelWithId('\Application\Model\Part')->setName('tst part 1');
         $this->part2 = $this->getNewModelWithId('\Application\Model\Part')->setName('tst part 2');
-        $this->partTotal = $this->getNewModelWithId('\Application\Model\Part', array('isTotal' => $this->returnValue(true)))->setName('tst part total');
+        $this->partTotal = $this->getNewModelWithId('\Application\Model\Part', ['isTotal' => $this->returnValue(true)])->setName('tst part total');
 
         $this->answer131 = new \Application\Model\Answer();
         $this->answer132 = new \Application\Model\Answer();
@@ -269,89 +269,89 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     protected function getStubPopulationRepository()
     {
         // Create a stub for the PopulationRepository class with predetermined values, so we don't have to mess with database
-        $stubPopulationRepository = $this->getMock('\Application\Repository\PopulationRepository', array('getPopulationByGeoname'), array(), '', false);
+        $stubPopulationRepository = $this->getMock('\Application\Repository\PopulationRepository', ['getPopulationByGeoname'], [], '', false);
         $stubPopulationRepository->expects($this->any())
                 ->method('getPopulationByGeoname')
-                ->will($this->returnValueMap(array(
-                            array($this->geoname, $this->part1->getId(), 1980, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1981, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1982, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1983, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1984, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1985, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1986, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1987, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1988, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1989, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1990, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1991, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1992, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1993, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1994, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1995, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1996, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1997, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1998, null, 10),
-                            array($this->geoname, $this->part1->getId(), 1999, null, 10),
-                            array($this->geoname, $this->part1->getId(), 2000, null, 10),
-                            array($this->geoname, $this->part1->getId(), 2001, null, 10),
-                            array($this->geoname, $this->part1->getId(), 2002, null, 12),
-                            array($this->geoname, $this->part1->getId(), 2003, null, 13),
-                            array($this->geoname, $this->part1->getId(), 2004, null, 14),
-                            array($this->geoname, $this->part1->getId(), 2005, null, 15),
-                            array($this->geoname, $this->part1->getId(), 2006, null, 15),
-                            array($this->geoname, $this->part1->getId(), 2007, null, 15),
-                            array($this->geoname, $this->part1->getId(), 2008, null, 15),
-                            array($this->geoname, $this->part1->getId(), 2009, null, 15),
-                            array($this->geoname, $this->part1->getId(), 2010, null, 15),
-                            array($this->geoname, $this->part1->getId(), 2011, null, 15),
-                            array($this->geoname, $this->part1->getId(), 2012, null, 15),
-                            array($this->geoname, $this->part1->getId(), 2013, null, 15),
-                            array($this->geoname, $this->part1->getId(), 2014, null, 15),
-                            array($this->geoname, $this->part1->getId(), 2015, null, 15),
-                            array($this->geoname, $this->part2->getId(), 2000, null, 3),
-                            array($this->geoname, $this->part2->getId(), 2001, null, 3),
-                            array($this->geoname, $this->part2->getId(), 2005, null, 3),
-                            array($this->geoname, $this->partTotal->getId(), 2000, null, 7),
-                            array($this->geoname, $this->partTotal->getId(), 2001, null, 7),
-                            array($this->geoname, $this->partTotal->getId(), 2005, null, 12),
-                            array($this->geoname2, $this->part1->getId(), 1980, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1981, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1982, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1983, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1984, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1985, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1986, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1987, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1988, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1989, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1990, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1991, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1992, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1993, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1994, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1995, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1996, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1997, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1998, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 1999, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 2000, null, 30),
-                            array($this->geoname2, $this->part1->getId(), 2001, null, 40),
-                            array($this->geoname2, $this->part1->getId(), 2002, null, 50),
-                            array($this->geoname2, $this->part1->getId(), 2003, null, 50),
-                            array($this->geoname2, $this->part1->getId(), 2004, null, 50),
-                            array($this->geoname2, $this->part1->getId(), 2005, null, 50),
-                            array($this->geoname2, $this->part1->getId(), 2006, null, 50),
-                            array($this->geoname2, $this->part1->getId(), 2007, null, 50),
-                            array($this->geoname2, $this->part1->getId(), 2008, null, 50),
-                            array($this->geoname2, $this->part1->getId(), 2009, null, 50),
-                            array($this->geoname2, $this->part1->getId(), 2010, null, 50),
-                            array($this->geoname2, $this->part1->getId(), 2011, null, 50),
-                            array($this->geoname2, $this->part1->getId(), 2012, null, 50),
-                            array($this->geoname2, $this->part1->getId(), 2013, null, 50),
-                            array($this->geoname2, $this->part1->getId(), 2014, null, 50),
-                            array($this->geoname2, $this->part1->getId(), 2015, null, 50),
-        )));
+                ->will($this->returnValueMap([
+                            [$this->geoname, $this->part1->getId(), 1980, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1981, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1982, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1983, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1984, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1985, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1986, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1987, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1988, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1989, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1990, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1991, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1992, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1993, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1994, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1995, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1996, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1997, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1998, null, 10],
+                            [$this->geoname, $this->part1->getId(), 1999, null, 10],
+                            [$this->geoname, $this->part1->getId(), 2000, null, 10],
+                            [$this->geoname, $this->part1->getId(), 2001, null, 10],
+                            [$this->geoname, $this->part1->getId(), 2002, null, 12],
+                            [$this->geoname, $this->part1->getId(), 2003, null, 13],
+                            [$this->geoname, $this->part1->getId(), 2004, null, 14],
+                            [$this->geoname, $this->part1->getId(), 2005, null, 15],
+                            [$this->geoname, $this->part1->getId(), 2006, null, 15],
+                            [$this->geoname, $this->part1->getId(), 2007, null, 15],
+                            [$this->geoname, $this->part1->getId(), 2008, null, 15],
+                            [$this->geoname, $this->part1->getId(), 2009, null, 15],
+                            [$this->geoname, $this->part1->getId(), 2010, null, 15],
+                            [$this->geoname, $this->part1->getId(), 2011, null, 15],
+                            [$this->geoname, $this->part1->getId(), 2012, null, 15],
+                            [$this->geoname, $this->part1->getId(), 2013, null, 15],
+                            [$this->geoname, $this->part1->getId(), 2014, null, 15],
+                            [$this->geoname, $this->part1->getId(), 2015, null, 15],
+                            [$this->geoname, $this->part2->getId(), 2000, null, 3],
+                            [$this->geoname, $this->part2->getId(), 2001, null, 3],
+                            [$this->geoname, $this->part2->getId(), 2005, null, 3],
+                            [$this->geoname, $this->partTotal->getId(), 2000, null, 7],
+                            [$this->geoname, $this->partTotal->getId(), 2001, null, 7],
+                            [$this->geoname, $this->partTotal->getId(), 2005, null, 12],
+                            [$this->geoname2, $this->part1->getId(), 1980, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1981, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1982, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1983, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1984, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1985, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1986, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1987, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1988, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1989, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1990, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1991, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1992, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1993, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1994, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1995, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1996, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1997, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1998, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 1999, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 2000, null, 30],
+                            [$this->geoname2, $this->part1->getId(), 2001, null, 40],
+                            [$this->geoname2, $this->part1->getId(), 2002, null, 50],
+                            [$this->geoname2, $this->part1->getId(), 2003, null, 50],
+                            [$this->geoname2, $this->part1->getId(), 2004, null, 50],
+                            [$this->geoname2, $this->part1->getId(), 2005, null, 50],
+                            [$this->geoname2, $this->part1->getId(), 2006, null, 50],
+                            [$this->geoname2, $this->part1->getId(), 2007, null, 50],
+                            [$this->geoname2, $this->part1->getId(), 2008, null, 50],
+                            [$this->geoname2, $this->part1->getId(), 2009, null, 50],
+                            [$this->geoname2, $this->part1->getId(), 2010, null, 50],
+                            [$this->geoname2, $this->part1->getId(), 2011, null, 50],
+                            [$this->geoname2, $this->part1->getId(), 2012, null, 50],
+                            [$this->geoname2, $this->part1->getId(), 2013, null, 50],
+                            [$this->geoname2, $this->part1->getId(), 2014, null, 50],
+                            [$this->geoname2, $this->part1->getId(), 2015, null, 50],
+        ]));
 
         return $stubPopulationRepository;
     }
@@ -359,10 +359,10 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     protected function getStubAnswerRepository()
     {
         // Create a stub for the AnswerRepository class with predetermined values, so we don't have to mess with database
-        $stubAnswerRepository = $this->getMock('\Application\Repository\AnswerRepository', array('getValue', 'getQuestionNameIfNonNullAnswer'), array(), '', false);
+        $stubAnswerRepository = $this->getMock('\Application\Repository\AnswerRepository', ['getValue', 'getQuestionNameIfNonNullAnswer'], [], '', false);
         $stubAnswerRepository->expects($this->any())
                 ->method('getValue')
-                ->will($this->returnCallback(function($questionnaireId, $filterId, $partId) {
+                ->will($this->returnCallback(function ($questionnaireId, $filterId, $partId) {
                             $questionnaire = $this->getModel('\Application\Model\Questionnaire', $questionnaireId);
                             foreach ($questionnaire->getAnswers() as $answer) {
                                 $answerFilter = $answer->getQuestion()->getFilter();
@@ -377,7 +377,7 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
 
         $stubAnswerRepository->expects($this->any())
                 ->method('getQuestionNameIfNonNullAnswer')
-                ->will($this->returnCallback(function($questionnaireId, $filterId) {
+                ->will($this->returnCallback(function ($questionnaireId, $filterId) {
 
                             $questionnaire = $this->getModel('\Application\Model\Questionnaire', $questionnaireId);
                             foreach ($questionnaire->getAnswers() as $answer) {
@@ -394,11 +394,11 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
 
     protected function getStubQuestionnaireRepository()
     {
-        $stubQuestionnaireRepository = $this->getMock('\Application\Repository\QuestionnaireRepository', array('getAllForComputing'), array(), '', false);
+        $stubQuestionnaireRepository = $this->getMock('\Application\Repository\QuestionnaireRepository', ['getAllForComputing'], [], '', false);
 
         $stubQuestionnaireRepository->expects($this->any())
                 ->method('getAllForComputing')
-                ->will($this->returnCallback(function(array $geonames) {
+                ->will($this->returnCallback(function (array $geonames) {
                             $res = [];
                             foreach ($geonames as $g) {
                                 $res = array_merge($res, $g->getQuestionnaires()->toArray());
@@ -414,10 +414,10 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     protected function getStubFilterQuestionnaireUsageRepository()
     {
         // Create a stub for the FilterQuestionnaireUsageRepository class with predetermined values, so we don't have to mess with database
-        $stubFilterQuestionnaireUsageRepository = $this->getMock('\Application\Repository\Rule\FilterQuestionnaireUsageRepository', array('getFirst'), array(), '', false);
+        $stubFilterQuestionnaireUsageRepository = $this->getMock('\Application\Repository\Rule\FilterQuestionnaireUsageRepository', ['getFirst'], [], '', false);
         $stubFilterQuestionnaireUsageRepository->expects($this->any())
                 ->method('getFirst')
-                ->will($this->returnCallback(function($questionnaireId, $filterId, $partId, $useSecondStepRules, ArrayCollection $alreadyUsedFormulas) {
+                ->will($this->returnCallback(function ($questionnaireId, $filterId, $partId, $useSecondStepRules, ArrayCollection $alreadyUsedFormulas) {
 
                             $filter = $this->getModel('\Application\Model\Filter', $filterId);
                             foreach ($filter->getFilterQuestionnaireUsages() as $filterQuestionnaireUsage) {
@@ -436,10 +436,10 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
     protected function getStubFilterGeonameUsageRepository()
     {
         // Create a stub for the FilterQuestionnaireUsageRepository class with predetermined values, so we don't have to mess with database
-        $stubFilterQuestionnaireUsageRepository = $this->getMock('\Application\Repository\Rule\FilterGeonameUsageRepository', array('getFirst'), array(), '', false);
+        $stubFilterQuestionnaireUsageRepository = $this->getMock('\Application\Repository\Rule\FilterGeonameUsageRepository', ['getFirst'], [], '', false);
         $stubFilterQuestionnaireUsageRepository->expects($this->any())
                 ->method('getFirst')
-                ->will($this->returnCallback(function($geonameId, $filterId, $partId, ArrayCollection $alreadyUsedFormulas) {
+                ->will($this->returnCallback(function ($geonameId, $filterId, $partId, ArrayCollection $alreadyUsedFormulas) {
 
                             $geoname = $this->getModel('\Application\Model\Geoname', $geonameId);
                             foreach ($geoname->getFilterGeonameUsages() as $filterGeonameUsage) {
@@ -457,29 +457,29 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
 
     protected function getStubFilterRepository()
     {
-        $stubFilterRepository = $this->getMock('\Application\Repository\FilterRepository', array('findOneById', 'getSummandIds', 'getChildrenIds'), array(), '', false);
+        $stubFilterRepository = $this->getMock('\Application\Repository\FilterRepository', ['findOneById', 'getSummandIds', 'getChildrenIds'], [], '', false);
 
         $stubFilterRepository->expects($this->any())->method('getSummandIds')
-                ->will($this->returnCallback(function($filterId) {
+                ->will($this->returnCallback(function ($filterId) {
                             $filter = $this->getModel('\Application\Model\Filter', $filterId);
 
-                            return $filter->getSummands()->map(function($f) {
+                            return $filter->getSummands()->map(function ($f) {
                                         return $f->getId();
                                     })->toArray();
                         }));
 
         $stubFilterRepository->expects($this->any())->method('getChildrenIds')
-                ->will($this->returnCallback(function($filterId) {
+                ->will($this->returnCallback(function ($filterId) {
                             $filter = $this->getModel('\Application\Model\Filter', $filterId);
 
-                            return $filter->getChildren()->map(function($f) {
+                            return $filter->getChildren()->map(function ($f) {
                                         return $f->getId();
                                     })->toArray();
                         }));
 
         $stubFilterRepository->expects($this->any())
                 ->method('findOneById')
-                ->will($this->returnCallback(function($filterId) {
+                ->will($this->returnCallback(function ($filterId) {
                             return $this->getModel('\Application\Model\Filter', $filterId);
                         }));
 

@@ -13,7 +13,7 @@ class QuestionControllerTest extends AbstractChildRestfulControllerTest
 
     protected function getAllowedFields()
     {
-        return array('id', 'name', 'filter', 'answers', 'sorting');
+        return ['id', 'name', 'filter', 'answers', 'sorting'];
     }
 
     protected function getTestedObject()
@@ -53,10 +53,10 @@ class QuestionControllerTest extends AbstractChildRestfulControllerTest
 
     public function testCanUpdateQuestionType()
     {
-        $data = array(
+        $data = [
             'name' => 'bar',
             'type' => \Application\Model\QuestionType::$CHAPTER,
-        );
+        ];
 
         $this->dispatch($this->getRoute('put') . '?fields=type', Request::METHOD_PUT, $data);
         $actual = $this->getJsonResponse();
@@ -69,7 +69,7 @@ class QuestionControllerTest extends AbstractChildRestfulControllerTest
         // create four additional questions next to the one created in the abstract
         // -> they will be five questions connected to a survey
         $questions[1] = $this->getEntityManager()->merge($this->question);
-        foreach (array(2, 3, 4, 5) as $value) {
+        foreach ([2, 3, 4, 5] as $value) {
 
             $filter = new \Application\Model\Filter('tst filter ' . $value);
             $question = new NumericQuestion('bar');
@@ -92,14 +92,14 @@ class QuestionControllerTest extends AbstractChildRestfulControllerTest
     {
         $questions = $this->getMockQuestions();
         $route = sprintf('/api/question?id=%s', $questions[5]->getId());
-        $data = array(
+        $data = [
             'sorting' => 1,
-        );
+        ];
 
         $this->dispatch($route, Request::METHOD_PUT, $data);
 
-        $expectedSorting = array(2, 3, 4, 5, 1);
-        $actualSorting = array();
+        $expectedSorting = [2, 3, 4, 5, 1];
+        $actualSorting = [];
         foreach ($questions as $question) {
             $actualSorting [] = $question->getSorting();
         }
@@ -111,14 +111,14 @@ class QuestionControllerTest extends AbstractChildRestfulControllerTest
     {
         $questions = $this->getMockQuestions();
         $route = sprintf('/api/question?id=%s', $questions[1]->getId());
-        $data = array(
+        $data = [
             'sorting' => 5,
-        );
+        ];
 
         $this->dispatch($route, Request::METHOD_PUT, $data);
 
-        $expectedSorting = array(5, 1, 2, 3, 4);
-        $actualSorting = array();
+        $expectedSorting = [5, 1, 2, 3, 4];
+        $actualSorting = [];
         foreach ($questions as $question) {
             $actualSorting [] = $question->getSorting();
         }
@@ -133,19 +133,19 @@ class QuestionControllerTest extends AbstractChildRestfulControllerTest
         $this->getEntityManager()->flush();
 
         // Question
-        $data = array(
+        $data = [
             'name' => 'Question with choices',
             'type' => \Application\Model\QuestionType::$CHOICE,
             'survey' => $this->survey->getId(),
             'filter' => $filter->getId(),
-            'choices' => array(
-                array(
+            'choices' => [
+                [
                     'name' => 'choice 1',
                     'value' => 0.9,
-                ),
-                array() // This is an empty choice, which must be ignored
-            )
-        );
+                ],
+                [], // This is an empty choice, which must be ignored
+            ],
+        ];
 
         $this->dispatch($this->getRoute('post') . '?fields=type,choices', Request::METHOD_POST, $data);
         $actual = $this->getJsonResponse();

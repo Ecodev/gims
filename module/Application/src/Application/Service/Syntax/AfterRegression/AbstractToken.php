@@ -2,8 +2,8 @@
 
 namespace Application\Service\Syntax\AfterRegression;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Application\Service\Calculator\Calculator;
+use Doctrine\Common\Collections\ArrayCollection;
 
 abstract class AbstractToken extends \Application\Service\Syntax\AbstractToken
 {

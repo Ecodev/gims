@@ -26,15 +26,13 @@ class PopulationRepositoryTest extends AbstractRepository
                 ->setPart($part)
                 ->setPopulation(500)
                 ->setYear(2000)
-                ->setQuestionnaire($questionnaire)
-        ;
+                ->setQuestionnaire($questionnaire);
         $p2 = new \Application\Model\Population();
         $p2
                 ->setGeoname($geoname)
                 ->setPart($part)
                 ->setPopulation(5)
-                ->setYear(2000)
-        ;
+                ->setYear(2000);
 
         $this->getEntityManager()->persist($part);
         $this->getEntityManager()->persist($p1);

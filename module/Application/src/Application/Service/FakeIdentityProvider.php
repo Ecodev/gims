@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use \Application\Model\User;
+use Application\Model\User;
 
 /**
  * Used to impersonate user. This should only be used for test or CLI usage

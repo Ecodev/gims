@@ -2,11 +2,11 @@
 
 namespace Api\Controller;
 
-use Application\View\Model\NumericJsonModel;
-use Zend\View\Model\JsonModel;
-use Application\View\Model\ExcelModel;
 use Application\Model\Geoname;
 use Application\Utility;
+use Application\View\Model\ExcelModel;
+use Application\View\Model\NumericJsonModel;
+use Zend\View\Model\JsonModel;
 
 class TableController extends \Application\Controller\AbstractAngularActionController
 {
@@ -36,7 +36,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
     {
         $filterSet = $this->getEntityManager()->getRepository('Application\Model\FilterSet')->findOneById($this->params()->fromQuery('filterSet'));
 
-        $result = array();
+        $result = [];
         if ($filterSet) {
 
             $idQuestionnaires = Utility::explodeIds($this->params()->fromQuery('questionnaire'));
@@ -48,9 +48,9 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                 if ($questionnaire) {
 
                     // Do the actual computing for all filters
-                    $resultOneQuestionnaire = array();
+                    $resultOneQuestionnaire = [];
                     foreach ($filterSet->getFilters() as $filter) {
-                        $resultOneQuestionnaire = array_merge($resultOneQuestionnaire, $this->computeWithChildren($questionnaire, $filter, $parts, 0, array('name')));
+                        $resultOneQuestionnaire = array_merge($resultOneQuestionnaire, $this->computeWithChildren($questionnaire, $filter, $parts, 0, ['name']));
                     }
 
                     // Merge this questionnaire results with other questionnaire results
@@ -80,14 +80,14 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
      * @param bool $roundValues
      * @return array a list (not tree) of all filters with their values and tree level
      */
-    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0, $fields = array(), $overridenFilters = array(), $useSecondStepRules = false, $roundValues = true)
+    public function computeWithChildren(\Application\Model\Questionnaire $questionnaire, \Application\Model\Filter $filter, array $parts, $level = 0, $fields = [], $overridenFilters = [], $useSecondStepRules = false, $roundValues = true)
     {
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
         $calculator->setOverriddenFilters($overridenFilters);
         $hydrator = new \Application\Service\Hydrator();
 
-        $current = array();
+        $current = [];
         $current['filter'] = $hydrator->extract($filter, $fields);
         $current['filter']['level'] = $level;
 
@@ -101,7 +101,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         }
 
         // Compute children
-        $result = array($current);
+        $result = [$current];
         foreach ($filter->getChildren() as $child) {
             $result = array_merge($result, $this->computeWithChildren($questionnaire, $child, $parts, $level + 1, $fields, $overridenFilters, $useSecondStepRules, $roundValues));
         }
@@ -121,13 +121,13 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $calculator = new \Application\Service\Calculator\Calculator();
         $calculator->setServiceLocator($this->getServiceLocator());
 
-        $result = array();
-        $columns = array(
+        $result = [];
+        $columns = [
             ['field' => 'country', 'displayName' => 'Country', 'width' => 120],
             ['field' => 'survey', 'displayName' => 'Code', 'width' => 100],
             ['field' => 'surveyName', 'displayName' => 'Survey', 'width' => 250],
             ['field' => 'year', 'displayName' => 'Year', 'width' => 60],
-        );
+        ];
 
         $columns = array_merge($columns, $this->getEntityManager()
                         ->getRepository('\Application\Model\Filter')
@@ -138,12 +138,12 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                 $data = $calculator->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
                 foreach ($data['values'] as $questionnaireId => $value) {
                     if (!isset($result[$questionnaireId])) {
-                        $result[$questionnaireId] = array(
+                        $result[$questionnaireId] = [
                             'country' => $questionnairesById[$questionnaireId]->getGeoname()->getName(),
                             'survey' => $data['surveys'][$questionnaireId]['code'],
                             'surveyName' => $data['surveys'][$questionnaireId]['name'],
                             'year' => $data['years'][$questionnaireId],
-                        );
+                        ];
                     }
 
                     $result[$questionnaireId]['f' . $filter->getId() . 'p' . $part->getId()] = \Application\Utility::decimalToRoundedPercent($value);
@@ -151,10 +151,10 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             }
         }
 
-        $finalResult = array(
+        $finalResult = [
             'columns' => $columns,
             'data' => array_values($result),
-        );
+        ];
 
         $filename = $this->params('filename');
         if ($filename) {
@@ -171,7 +171,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $wantedYears = $this->getWantedYears($this->params()->fromQuery('years'));
         $excelFileName = $this->params('filename');
 
-        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findById($geonamesIds, array('name' => 'asc'));
+        $geonames = $this->getEntityManager()->getRepository('Application\Model\Geoname')->findById($geonamesIds, ['name' => 'asc']);
         $filters = $this->getEntityManager()->getRepository('Application\Model\Filter')->findById($filtersIds);
         $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
         $populationRepository = $this->getEntityManager()->getRepository('Application\Model\Population');
@@ -184,12 +184,12 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         // Re-order filters to be the same order as selection in GUI
         $filters = Utility::orderByIds($filters, $filtersIds);
 
-        $result = array();
-        $columns = array(
+        $result = [];
+        $columns = [
             ['field' => 'country', 'displayName' => 'Country', 'width' => 120],
             ['field' => 'iso3', 'displayName' => 'ISO3', 'width' => 60],
             ['field' => 'year', 'displayName' => 'Year', 'width' => 60],
-        );
+        ];
 
         // Build population acronyms and add them to columns definition
         foreach ($parts as $part) {
@@ -198,7 +198,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                 'field' => $acronym,
                 'displayLong' => $part->getName() . ' Population',
                 'displayName' => $acronym,
-                'width' => 90
+                'width' => 90,
             ];
         }
 
@@ -218,19 +218,19 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             foreach ($wantedYears as $year) {
 
                 // country info columns
-                $countryData = array(
+                $countryData = [
                     'country' => $geoname->getName(),
                     'iso3' => $geoname->getIso3(),
-                    'year' => $year
-                );
+                    'year' => $year,
+                ];
 
                 // population columns
-                $populationData = array();
+                $populationData = [];
                 foreach ($parts as $part) {
                     $populationData['P' . strtoupper($part->getName()[0])] = $this->formatThousand($populationRepository->getPopulationByGeoname($geoname, $part->getId(), $year), $excelFileName);
                 }
 
-                $statsData = array();
+                $statsData = [];
                 foreach ($filteredYearsComputed as $partId => $flatFilters) {
                     foreach ($flatFilters as $filter) {
                         $value = $filter['data'][$year];
@@ -243,10 +243,10 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
             }
         }
 
-        $finalResult = array(
+        $finalResult = [
             'columns' => $columns,
-            'data' => array_values($result)
-        );
+            'data' => array_values($result),
+        ];
 
         if ($excelFileName) {
             return new ExcelModel($excelFileName, $finalResult);
@@ -286,7 +286,7 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
         $aggregator = new \Application\Service\Calculator\Aggregator();
         $aggregator->setCalculator($this->getCalculator());
 
-        $dataPerPart = array();
+        $dataPerPart = [];
         foreach ($parts as $part) {
             $dataPerPart[$part->getId()] = $aggregator->computeFlattenAllYears($filters, $geoname, $part);
         }
@@ -301,19 +301,19 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
      */
     private function filterYears($fieldParts, array $wantedYears)
     {
-        $finalFieldsets = array();
+        $finalFieldsets = [];
         foreach ($fieldParts as $partId => $filters) {
-            $finalFieldsets[$partId] = array();
+            $finalFieldsets[$partId] = [];
             foreach ($filters as $filter) {
-                $yearsData = array();
+                $yearsData = [];
                 foreach ($wantedYears as $year) {
                     $yearsData[$year] = $filter['data'][$year - 1980];
                 }
-                $tmpFieldset = array(
+                $tmpFieldset = [
                     'name' => $filter['name'],
                     'id' => $filter['id'],
-                    'data' => $yearsData
-                );
+                    'data' => $yearsData,
+                ];
                 $finalFieldsets[$partId][] = $tmpFieldset;
             }
         }

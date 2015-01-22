@@ -2,8 +2,8 @@
 
 namespace ApiTest\Controller\Rule;
 
-use Zend\Http\Request;
 use ApiTest\Controller\AbstractChildRestfulControllerTest;
+use Zend\Http\Request;
 
 /**
  * @group Rest
@@ -13,7 +13,7 @@ abstract class AbstractQuestionnaireUsageControllerTest extends AbstractChildRes
 
     public function testCannotUpdateRuleWithPublishedQuestionnaire()
     {
-        $data = array('justification' => 'foo');
+        $data = ['justification' => 'foo'];
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(201);
         $actual = $this->getJsonResponse();

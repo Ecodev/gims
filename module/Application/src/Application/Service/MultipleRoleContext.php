@@ -15,7 +15,7 @@ class MultipleRoleContext extends \Doctrine\Common\Collections\ArrayCollection i
      * @param array $contexts
      * @param boolean $grantOnlyIfGrantedByAllContexts
      */
-    public function __construct($contexts = array(), $grantOnlyIfGrantedByAllContexts = true)
+    public function __construct($contexts = [], $grantOnlyIfGrantedByAllContexts = true)
     {
         parent::__construct();
 

@@ -5,7 +5,6 @@ namespace Application\Service\Calculator;
 use Application\Model\Filter;
 use Application\Model\Geoname;
 use Application\Model\Part;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Aggregate computing results by geonames. If the given Geoname has children, then the

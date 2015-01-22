@@ -21,7 +21,7 @@ class UserRepository extends AbstractRepository
         $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
         $rsm->addScalarResult('total', 'total');
 
-        $counts = array('COUNT(*) AS total');
+        $counts = ['COUNT(*) AS total'];
         foreach (\Application\Model\QuestionnaireStatus::getValues() as $status) {
             $status = (string) $status;
             $rsm->addScalarResult($status, $status);
@@ -32,7 +32,7 @@ class UserRepository extends AbstractRepository
                 ->getRepository('Application\Model\Questionnaire');
         $questionnaires = $questionnaireRepository->getAllWithPermission();
 
-        $sql = "SELECT " . join(', ', $counts) . " FROM questionnaire WHERE id IN (:questionnaires)";
+        $sql = "SELECT " . implode(', ', $counts) . " FROM questionnaire WHERE id IN (:questionnaires)";
 
         $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
         $query->setParameter('questionnaires', $questionnaires);
@@ -239,8 +239,7 @@ WHERE discussion.id = :discussion
         $qb = $this->createQueryBuilder('user')
                 ->where('user IN (:users) AND user != :creator')
                 ->setParameter('users', $userIds)
-                ->setParameter('creator', $comment->getCreator())
-        ;
+                ->setParameter('creator', $comment->getCreator());
 
         $users = $qb->getQuery()->getResult();
 

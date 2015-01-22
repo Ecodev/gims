@@ -12,7 +12,7 @@ class RoleControllerTest extends AbstractRestfulControllerTest
 
     protected function getAllowedFields()
     {
-        return array('id', 'name');
+        return ['id', 'name'];
     }
 
     protected function getTestedObject()

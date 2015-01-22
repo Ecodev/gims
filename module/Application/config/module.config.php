@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     'Calculator\Cache' => [
         'enabled' => true,
         'namespace' => 'gims',
@@ -9,206 +9,206 @@ return array(
     ],
     'compressJavaScript' => true,
     'bodyCssClass' => null,
-    'doctrine' => array(
-        'connection' => array(
-            'orm_default' => array(
+    'doctrine' => [
+        'connection' => [
+            'orm_default' => [
                 'driverClass' => 'Doctrine\DBAL\Driver\PDOPgSql\Driver',
-                'params' => array(
+                'params' => [
                     'host' => 'localhost',
                     'user' => 'postgres',
                     'dbname' => 'gims',
                     'port' => 5432,
-                ),
-                'doctrine_type_mappings' => array(
+                ],
+                'doctrine_type_mappings' => [
                     'geometry' => 'geometry',
                     'point' => 'point',
                     'polygon' => 'polygon',
                     'linestring' => 'linestring',
                     'questionnaire_status' => 'questionnaire_status',
                     'survey_type' => 'survey_type',
-                ),
-            ),
-        ),
-        'driver' => array(
-            'application_entities' => array(
+                ],
+            ],
+        ],
+        'driver' => [
+            'application_entities' => [
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
-                'paths' => array(__DIR__ . '/../src/Application/Model')
-            ),
-            'orm_default' => array(
-                'drivers' => array(
-                    'Application\Model' => 'application_entities'
-                ),
-            ),
-        ),
-        'configuration' => array(
-            'orm_default' => array(
+                'paths' => [__DIR__ . '/../src/Application/Model'],
+            ],
+            'orm_default' => [
+                'drivers' => [
+                    'Application\Model' => 'application_entities',
+                ],
+            ],
+        ],
+        'configuration' => [
+            'orm_default' => [
                 'naming_strategy' => 'Application\Service\NamingStrategyFactory',
-                'types' => array(
+                'types' => [
                     'geometry' => 'CrEOF\Spatial\DBAL\Types\GeometryType',
                     'point' => 'CrEOF\Spatial\DBAL\Types\Geometry\PointType',
                     'polygon' => 'CrEOF\Spatial\DBAL\Types\Geometry\PolygonType',
                     'linestring' => 'CrEOF\Spatial\DBAL\Types\Geometry\LineStringType',
                     'questionnaire_status' => 'Application\DBAL\Types\QuestionnaireStatusType',
                     'survey_type' => 'Application\DBAL\Types\SurveyTypeType',
-                ),
+                ],
                 'proxy_dir' => 'data/cache/DoctrineORMModule/Proxy',
                 'generate_proxies' => false,
-                'datetime_functions' => array(
+                'datetime_functions' => [
                     'CAST' => 'Application\ORM\AST\Functions\CastFunction',
-                ),
-                'string_functions' => array(
+                ],
+                'string_functions' => [
                     'CAST' => 'Application\ORM\AST\Functions\CastFunction',
-                ),
-                'numeric_functions' => array(
+                ],
+                'numeric_functions' => [
                     'CAST' => 'Application\ORM\AST\Functions\CastFunction',
-                ),
-            ),
-        ),
+                ],
+            ],
+        ],
         // migrations configuration
-        'migrations_configuration' => array(
-            'orm_default' => array(
+        'migrations_configuration' => [
+            'orm_default' => [
                 'directory' => 'data/migrations',
                 'name' => 'GIMS Migrations',
                 'namespace' => 'DoctrineMigrations',
                 'table' => 'version',
-            ),
-        ),
-    ),
-    'router' => array(
-        'routes' => array(
-            'home' => array(
+            ],
+        ],
+    ],
+    'router' => [
+        'routes' => [
+            'home' => [
                 'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
+                'options' => [
                     'route' => '/',
-                    'defaults' => array(
+                    'defaults' => [
                         'controller' => 'Application\Controller\Index',
                         'action' => 'index',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
             // using the path /application/:controller/:action
             //
             // It will never be matched for incoming URL, but it will be used to assemble URL
-            'application' => array(
+            'application' => [
                 'type' => 'Literal',
-                'options' => array(
+                'options' => [
                     'route' => '/application',
-                    'defaults' => array(
+                    'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller' => 'Index',
                         'action' => 'index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
+                'child_routes' => [
+                    'default' => [
                         'type' => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/[:controller[/:action]]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
-                            ),
-                        ),
-                    ),
-                ),
-            ),
+                            ],
+                            'defaults' => [
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             // Anything which is not API, export or template are redirected to Application\Controller\Index::indexAction()
-            'angularjs_layout' => array(
+            'angularjs_layout' => [
                 'type' => 'Regex',
-                'options' => array(
+                'options' => [
                     'regex' => '^(?!(/api|/export|/template|/ocra_service_manager_yuml))(?<anything>.*)',
-                    'defaults' => array(
+                    'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller' => 'Index',
                         'action' => 'index',
-                    ),
+                    ],
                     'spec' => '/%anything%',
-                ),
-            ),
+                ],
+            ],
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
             // using the path /application/:controller/:action
-            'template_application' => array(
+            'template_application' => [
                 'type' => 'Literal',
-                'options' => array(
+                'options' => [
                     'route' => '/template/application',
-                    'defaults' => array(
+                    'defaults' => [
                         '__NAMESPACE__' => 'Application\Controller',
                         'controller' => 'Index',
                         'action' => 'index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
+                'child_routes' => [
+                    'default' => [
                         'type' => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/[:controller[/:action]]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'service_manager' => array(
-        'factories' => array(
+                            ],
+                            'defaults' => [
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'service_manager' => [
+        'factories' => [
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
             'ViewExcelRenderer' => 'Application\Service\ViewExcelRendererFactory',
             'ViewExcelStrategy' => 'Application\Service\ViewExcelStrategyFactory',
             'Application\Service\NamingStrategyFactory' => 'Application\Service\NamingStrategyFactory',
             'Calculator\Cache' => 'Application\Service\Calculator\Cache\Factory',
-        ),
-    ),
-    'translator' => array(
+        ],
+    ],
+    'translator' => [
         'locale' => 'en',
-        'translation_file_patterns' => array(
-            array(
+        'translation_file_patterns' => [
+            [
                 'type' => 'gettext',
                 'base_dir' => __DIR__ . '/../language',
                 'pattern' => '%s.mo',
-            ),
-        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
+            ],
+        ],
+    ],
+    'controllers' => [
+        'invokables' => [
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Console' => 'Application\Controller\ConsoleController',
             'Application\Controller\Email' => 'Application\Controller\EmailController',
             'zfcuser' => 'Application\Controller\AuthController',
-        ),
-    ),
-    'view_manager' => array(
+        ],
+    ],
+    'view_manager' => [
         'display_not_found_reason' => true,
         'display_exceptions' => true,
         'doctype' => 'HTML5',
         'not_found_template' => 'error/404',
         'exception_template' => 'error/index',
-        'template_map' => array(
+        'template_map' => [
             'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
             'error/404' => __DIR__ . '/../view/error/404.phtml',
             'error/index' => __DIR__ . '/../view/error/index.phtml',
-        ),
-        'template_path_stack' => array(
+        ],
+        'template_path_stack' => [
             __DIR__ . '/../view',
-        ),
-    ),
-    'view_helpers' => array(
-        'invokables' => array(
+        ],
+    ],
+    'view_helpers' => [
+        'invokables' => [
             'headLink' => 'Application\View\Helper\HeadLink',
             'headScript' => 'Application\View\Helper\HeadScript',
             'metadata' => 'Application\View\Helper\Metadata',
@@ -219,111 +219,111 @@ return array(
             'googleAnalytics' => 'Application\View\Helper\GoogleAnalytics',
             'helpButton' => 'Application\View\Helper\HelpButton',
             'helpBox' => 'Application\View\Helper\HelpBox',
-        ),
-    ),
-    'console' => array(
-        'router' => array(
-            'routes' => array(
-                'import-jmp' => array(
+        ],
+    ],
+    'console' => [
+        'router' => [
+            'routes' => [
+                'import-jmp' => [
                     'description' => 'Import individual country file in JMP format',
-                    'options' => array(
+                    'options' => [
                         'route' => 'import jmp <file>',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'Application\Controller\Console',
-                            'action' => 'importJmp'
-                        ),
-                    ),
-                ),
-                'import-glass' => array(
+                            'action' => 'importJmp',
+                        ],
+                    ],
+                ],
+                'import-glass' => [
                     'description' => 'Import filters for GLASS and affect them to existing question',
-                    'options' => array(
+                    'options' => [
                         'route' => 'import glass',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'Application\Controller\Console',
-                            'action' => 'importGlass'
-                        ),
-                    ),
-                ),
-                'import-population' => array(
+                            'action' => 'importGlass',
+                        ],
+                    ],
+                ],
+                'import-population' => [
                     'description' => 'Import population data',
-                    'options' => array(
+                    'options' => [
                         'route' => 'import population <file>',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'Application\Controller\Console',
-                            'action' => 'importPopulation'
-                        ),
-                    ),
-                ),
-                'email' => array(
+                            'action' => 'importPopulation',
+                        ],
+                    ],
+                ],
+                'email' => [
                     'description' => 'Send email',
-                    'options' => array(
+                    'options' => [
                         'route' => 'email <action> <id>',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'Application\Controller\Email',
-                        ),
-                    ),
-                ),
-                'email-role-request' => array(
+                        ],
+                    ],
+                ],
+                'email-role-request' => [
                     'description' => 'Send email for role request',
-                    'options' => array(
+                    'options' => [
                         'route' => 'email notifyRoleRequest <recipientsIds> <applicantUserId> <emailLinkQueryString>',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'Application\Controller\Email',
-                            'action' => 'notifyRoleRequest'
-                        ),
-                    ),
-                ),
-                'generate-welcome-email' => array(
+                            'action' => 'notifyRoleRequest',
+                        ],
+                    ],
+                ],
+                'generate-welcome-email' => [
                     'description' => 'Generate .eml file to welcome countries to GIMS',
-                    'options' => array(
+                    'options' => [
                         'route' => 'generate welcome',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'Application\Controller\Email',
-                            'action' => 'generateWelcome'
-                        ),
-                    ),
-                ),
-                'cache-clear' => array(
+                            'action' => 'generateWelcome',
+                        ],
+                    ],
+                ],
+                'cache-clear' => [
                     'description' => 'Clear computing cache',
-                    'options' => array(
+                    'options' => [
                         'route' => 'cache clear',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'Application\Controller\Console',
-                            'action' => 'cacheClear'
-                        ),
-                    ),
-                ),
-                'cache-warm-up' => array(
+                            'action' => 'cacheClear',
+                        ],
+                    ],
+                ],
+                'cache-warm-up' => [
                     'description' => 'Fill computing cache for all geonames for the given user (id or "anonymous")',
-                    'options' => array(
+                    'options' => [
                         'route' => 'cache warm-up <userId>',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'Application\Controller\Console',
-                            'action' => 'cacheWarmUp'
-                        ),
-                    ),
-                ),
-                'cache-warm-up-one' => array(
+                            'action' => 'cacheWarmUp',
+                        ],
+                    ],
+                ],
+                'cache-warm-up-one' => [
                     'description' => 'Fill computing cache only for the geoname specified by name for the given user (id or "anonymous")',
-                    'options' => array(
+                    'options' => [
                         'route' => 'cache warm-up <userId> <geoname>',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'Application\Controller\Console',
-                            'action' => 'cacheWarmUpOne'
-                        ),
-                    ),
-                ),
-                'compute-population' => array(
+                            'action' => 'cacheWarmUpOne',
+                        ],
+                    ],
+                ],
+                'compute-population' => [
                     'description' => 'Compute population for geoname with children',
-                    'options' => array(
+                    'options' => [
                         'route' => 'compute population',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'Application\Controller\Console',
-                            'action' => 'computePopulation'
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-);
+                            'action' => 'computePopulation',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+];

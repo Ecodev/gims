@@ -12,7 +12,7 @@ class FilterSetControllerTest extends AbstractRestfulControllerTest
 
     protected function getAllowedFields()
     {
-        return array('id', 'name');
+        return ['id', 'name'];
     }
 
     protected function getTestedObject()
@@ -22,7 +22,7 @@ class FilterSetControllerTest extends AbstractRestfulControllerTest
 
     public function testCanUpdateFilterSet()
     {
-        $data = array('name' => 'foo');
+        $data = ['name' => 'foo'];
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(201);
         $actual = $this->getJsonResponse();
@@ -37,9 +37,9 @@ class FilterSetControllerTest extends AbstractRestfulControllerTest
     public function testCanCreateFilterSet()
     {
         // FilterSet
-        $data = array(
+        $data = [
             'name' => 'new-filterSet',
-        );
+        ];
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(201);

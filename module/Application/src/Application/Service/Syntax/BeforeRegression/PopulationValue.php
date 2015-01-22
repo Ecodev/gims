@@ -2,10 +2,10 @@
 
 namespace Application\Service\Syntax\BeforeRegression;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Application\Service\Calculator\Calculator;
 use Application\Model\Rule\AbstractQuestionnaireUsage;
+use Application\Service\Calculator\Calculator;
 use Application\Service\Syntax\Parser;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Replace {Q#34,P#56} with population data

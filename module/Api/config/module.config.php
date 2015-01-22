@@ -1,8 +1,8 @@
 <?php
 
-return array(
-    'controllers' => array(
-        'invokables' => array(
+return [
+    'controllers' => [
+        'invokables' => [
             'Api\Controller\QuestionType' => 'Api\Controller\QuestionTypeController',
             'Api\Controller\Choice' => 'Api\Controller\ChoiceController',
             'Api\Controller\Questionnaire' => 'Api\Controller\QuestionnaireController',
@@ -31,70 +31,70 @@ return array(
             'Api\Controller\Filters' => 'Api\Controller\FilterController',
             'Api\Controller\Activity' => 'Api\Controller\ActivityController',
             'Api\Controller\RolesRequest' => 'Api\Controller\RolesRequestController',
-        ),
-    ),
-    'router' => array(
-        'routes' => array(
-            'api' => array(
+        ],
+    ],
+    'router' => [
+        'routes' => [
+            'api' => [
                 'type' => 'Literal',
-                'options' => array(
+                'options' => [
                     'route' => '/api',
-                    'defaults' => array(
+                    'defaults' => [
                         '__NAMESPACE__' => 'Api\Controller',
-                    ),
-                ),
-                'child_routes' => array(
+                    ],
+                ],
+                'child_routes' => [
                     // The following is a route to simplify getting started creating
                     // new controllers and actions without needing to create a new
                     // module. Simply drop new controllers in, and you can access them
                     // using the path /api/:controller/:id
-                    'default' => array(
+                    'default' => [
                         'type' => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/[:controller[/:id]]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'id' => '[0-9]+',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 '__NAMESPACE__' => 'Api\Controller',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     // This route allow to execute non-restfull actions on controllers
-                    'controller_actions' => array(
+                    'controller_actions' => [
                         'type' => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/:controller/:action',
-                            'constraints' => array(
+                            'constraints' => [
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 '__NAMESPACE__' => 'Api\Controller',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     // This route allow to ask for subobjects of an object
-                    'subobject' => array(
+                    'subobject' => [
                         'type' => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/:parent/:idParent/:controller[/:id]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'parent' => '(chapter|user|survey|role|questionnaire|filterSet|rule|filter|geoname)',
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'idParent' => '[0-9]+',
                                 'id' => '[0-9]+',
-                            ),
-                            'defaults' => array(),
-                        ),
-                    ),
+                            ],
+                            'defaults' => [],
+                        ],
+                    ],
                     // This route allow to ask for sub-sub-subobjects of an object
-                    'subsubsubobject' => array(
+                    'subsubsubobject' => [
                         'type' => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/:parent1/:idParent1/:parent2/:idParent2/:parent3/:idParent3/:controller[/:id]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'parent1' => '(questionnaire)',
                                 'parent2' => '(filter)',
@@ -103,64 +103,64 @@ return array(
                                 'idParent2' => '[0-9]+',
                                 'idParent3' => '[0-9]+',
                                 'id' => '[0-9]+',
-                            ),
-                            'defaults' => array(),
-                        ),
-                    ),
+                            ],
+                            'defaults' => [],
+                        ],
+                    ],
                     // This route is same as default, but only for users
                     // Creating a specific rule dedicated to /api/users  allow to restrict access to members only
                     // see /config/autoload/zfcrbac.global.php
-                    'users' => array(
+                    'users' => [
                         'type' => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/user',
-                            'constraints' => array(),
-                            'defaults' => array(
+                            'constraints' => [],
+                            'defaults' => [
                                 '__NAMESPACE__' => 'Api\Controller',
                                 'controller' => 'user',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     // This route allow to execute something on a user (eg:computing stats)
-                    'user_actions' => array(
+                    'user_actions' => [
                         'type' => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/user/:idUser/[:action]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'action' => '(statistics)', // Define here allowed actions: (action1|action2|action3)
                                 'idUser' => '[0-9]+',
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 '__NAMESPACE__' => 'Api\Controller',
                                 'controller' => 'user',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     // This route allow to call a non REST controller with action
-                    'non_rest_controller' => array(
+                    'non_rest_controller' => [
                         'type' => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route' => '/:controller[/:action][/:filename]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'controller' => '(chart|table)', // Define here allowed controllers: (controller1|controller2|controller3)
-                            ),
-                            'defaults' => array(
+                            ],
+                            'defaults' => [
                                 '__NAMESPACE__' => 'Api\Controller',
                                 'action' => 'index',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'view_manager' => array(
-        'strategies' => array(
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'view_manager' => [
+        'strategies' => [
             'ViewExcelStrategy',
             'ViewJsonStrategy',
-        ),
-        'template_path_stack' => array(
+        ],
+        'template_path_stack' => [
             __DIR__ . '/../view',
-        ),
-    ),
-);
+        ],
+    ],
+];

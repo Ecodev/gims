@@ -45,7 +45,7 @@ abstract class AbstractChildRestfulController extends AbstractRestfulController
         if (!$parent) {
             $this->getResponse()->setStatusCode(400);
 
-            return new JsonModel(array('message' => 'Cannot list all items without a valid parent. Use URL similar to: /api/parent/1/child'));
+            return new JsonModel(['message' => 'Cannot list all items without a valid parent. Use URL similar to: /api/parent/1/child']);
         }
 
         $objects = $this->getRepository()->getAllWithPermission($this->params()->fromQuery('permission', 'read'), $this->params()->fromQuery('q'), $this->params('parent'), $parent);

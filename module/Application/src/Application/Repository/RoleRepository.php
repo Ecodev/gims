@@ -42,7 +42,7 @@ class RoleRepository extends AbstractRepository
     {
         // If we are here, it means there is at least a logged in user,
         // which means he has, at the very least, the hardcoded role of member
-        $roleNames = array('member');
+        $roleNames = ['member'];
 
         // If the user is not persisted yet, there is no way to have any other roles than member
         if (!$user->getId()) {

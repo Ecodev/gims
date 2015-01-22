@@ -2,8 +2,8 @@
 
 namespace Api\Controller;
 
-use Zend\View\Model\JsonModel;
 use Application\Utility;
+use Zend\View\Model\JsonModel;
 
 class DiscussionController extends AbstractRestfulController
 {

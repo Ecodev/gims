@@ -86,14 +86,14 @@ class Answer extends AbstractRecordableActivity
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
+        return array_merge(parent::getJsonConfig(), [
             'valuePercent',
             'valueAbsolute',
             'valueText',
             'isCheckboxChecked',
             'valueChoice',
             'valueUser'
-        ));
+        ]);
     }
 
     /**
@@ -324,7 +324,7 @@ class Answer extends AbstractRecordableActivity
         $data = [
             'part' => [
                 'id' => $this->getPart()->getId(),
-                'name' => $this->getPart()->getName()
+                'name' => $this->getPart()->getName(),
             ],
             'questionnaire' => [
                 'id' => $this->getQuestionnaire()->getId(),

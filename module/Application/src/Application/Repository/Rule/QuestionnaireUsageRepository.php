@@ -18,7 +18,7 @@ class QuestionnaireUsageRepository extends \Application\Repository\AbstractRepos
         $qb->where('qu.' . $parentName . ' = :parent');
         $qb->setParameter('parent', $parent);
 
-        $this->addSearch($qb, $search, array('rule.name', 'rule.formula', 'survey.code', 'survey.name', 'part.name'));
+        $this->addSearch($qb, $search, ['rule.name', 'rule.formula', 'survey.code', 'survey.name', 'part.name']);
 
         return $qb->getQuery()->getResult();
     }
@@ -26,7 +26,7 @@ class QuestionnaireUsageRepository extends \Application\Repository\AbstractRepos
     /**
      * @var array $cache [questionnaireId => [ruleId => [partId => value]]]
      */
-    private $cache = array();
+    private $cache = [];
 
     /**
      * Returns a QuestionnaireUsage for the given triplet
@@ -48,17 +48,16 @@ class QuestionnaireUsageRepository extends \Application\Repository\AbstractRepos
                     ->select('questionnaireUsage, questionnaire, rule')
                     ->join('questionnaireUsage.questionnaire', 'questionnaire')
                     ->join('questionnaireUsage.rule', 'rule')
-                    ->andWhere('questionnaire.geoname = :geoname')
-            ;
+                    ->andWhere('questionnaire.geoname = :geoname');
 
-            $qb->setParameters(array(
+            $qb->setParameters([
                 'geoname' => $geonameId,
-            ));
+            ]);
 
             $res = $qb->getQuery()->getResult();
 
             // Ensure that we hit the cache next time, even if we have no results at all
-            $this->cache[$questionnaireId] = array();
+            $this->cache[$questionnaireId] = [];
 
             // Restructure cache to be [questionnaireId => [ruleId => [partId => value]]]
             foreach ($res as $questionnaireUsage) {

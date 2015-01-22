@@ -2,9 +2,9 @@
 
 namespace Application\Service;
 
+use Application\View\Strategy\ExcelStrategy;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Application\View\Strategy\ExcelStrategy;
 
 class ViewExcelStrategyFactory implements FactoryInterface
 {

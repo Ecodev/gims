@@ -12,15 +12,15 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
 
     public function pregReplaceUniqueCallbackDataProvider()
     {
-        return array(
-            array('/a(.)/', '', 0),
-            array('/a(.)/', 'a', 0),
-            array('/a(.)/', 'ab', 1),
-            array('/a(.)/', 'abab', 1),
-            array('/a(.)/', 'ababacac', 2),
-            array('/a(.)/', 'ababacababac', 2),
-            array('/A(\d+)/', 'A1,A11', 2),
-        );
+        return [
+            ['/a(.)/', '', 0],
+            ['/a(.)/', 'a', 0],
+            ['/a(.)/', 'ab', 1],
+            ['/a(.)/', 'abab', 1],
+            ['/a(.)/', 'ababacac', 2],
+            ['/a(.)/', 'ababacababac', 2],
+            ['/A(\d+)/', 'A1,A11', 2],
+        ];
     }
 
     /**
@@ -46,19 +46,19 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
 
     public function bcroundDataProvider()
     {
-        return array(
-            array(0, '0.000'),
-            array(1, '1.000'),
-            array('1.0000000', '1.000'),
-            array(1.23456, '1.235'),
-            array(1.99999, '2.000'),
-            array(-0, '0.000'),
-            array('-0', '0.000'),
-            array(-1, '-1.000'),
-            array('-1.0000000', '-1.000'),
-            array(-1.23456, '-1.235'),
-            array(-1.99999, '-2.000'),
-        );
+        return [
+            [0, '0.000'],
+            [1, '1.000'],
+            ['1.0000000', '1.000'],
+            [1.23456, '1.235'],
+            [1.99999, '2.000'],
+            [-0, '0.000'],
+            ['-0', '0.000'],
+            [-1, '-1.000'],
+            ['-1.0000000', '-1.000'],
+            [-1.23456, '-1.235'],
+            [-1.99999, '-2.000'],
+        ];
     }
 
     /**
@@ -71,22 +71,22 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
 
     public function decimalToRoundedPercentDataProvider()
     {
-        return array(
-            array(null, null),
-            array(1, '100.0'),
-            array('1.0000000', '100.0'),
-            array(1.23456, '123.5'),
-            array(1.99999, '200.0'),
-            array(-0, '0.0'),
-            array('-0', '0.0'),
-            array(-1, '-100.0'),
-            array('-1.0000000', '-100.0'),
-            array(-1.23456, '-123.5'),
-            array(-1.99999, '-200.0'),
-            array(0.255, '25.5'),
-            array(0.9535, '95.4'),
-            array('0.9634999999999999', '96.3'), // This is actually an edge case which gives wrong result, but we tolerate this wrong result, because fixing it would only introduce other edge cases
-        );
+        return [
+            [null, null],
+            [1, '100.0'],
+            ['1.0000000', '100.0'],
+            [1.23456, '123.5'],
+            [1.99999, '200.0'],
+            [-0, '0.0'],
+            ['-0', '0.0'],
+            [-1, '-100.0'],
+            ['-1.0000000', '-100.0'],
+            [-1.23456, '-123.5'],
+            [-1.99999, '-200.0'],
+            [0.255, '25.5'],
+            [0.9535, '95.4'],
+            ['0.9634999999999999', '96.3'], // This is actually an edge case which gives wrong result, but we tolerate this wrong result, because fixing it would only introduce other edge cases
+        ];
     }
 
     /**
@@ -111,10 +111,10 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
             [1, 1, null],
             [1, 1],
             [1, 1, ''],
-            [1, array(1)],
+            [1, [1]],
             ['11', 1],
             [1, '11'],
-            [1, '11', array(2)],
+            [1, '11', [2]],
             1,
             [0 => 1],
             [2 => 1],
@@ -128,11 +128,11 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
         $foo3 = clone $foo2;
 
         $values = $this->getCommonCacheValues();
-        $values[] = [1, '11', array(2, $foo1)];
-        $values[] = [1, '11', array(2, $foo2)];
-        $values[] = [1, '11', array(2, $foo3)];
+        $values[] = [1, '11', [2, $foo1]];
+        $values[] = [1, '11', [2, $foo2]];
+        $values[] = [1, '11', [2, $foo3]];
 
-        $allKeys = array();
+        $allKeys = [];
         foreach ($values as $value) {
             $allKeys[] = Utility::getVolatileCacheKey($value);
         }
@@ -145,8 +145,8 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
         }
 
         // Get key and immediately destroy objects
-        $firstKey = Utility::getVolatileCacheKey(array(new \stdClass()));
-        $secondKey = Utility::getVolatileCacheKey(array(new \stdClass()));
+        $firstKey = Utility::getVolatileCacheKey([new \stdClass()]);
+        $secondKey = Utility::getVolatileCacheKey([new \stdClass()]);
         $this->assertNotEquals($secondKey, $firstKey, 'we should never recycle key from garbage collected objects');
     }
 
@@ -161,7 +161,7 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
         $values[] = [1, '11', [2, $foo2]];
         $values[] = $collection;
 
-        $allKeys = array();
+        $allKeys = [];
         foreach ($values as $value) {
             $allKeys[] = Utility::getPersistentCacheKey($value);
         }

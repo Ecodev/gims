@@ -12,7 +12,7 @@ class UserSurveyControllerTest extends AbstractChildRestfulControllerTest
 
     protected function getAllowedFields()
     {
-        return array('id', 'user', 'role', 'survey');
+        return ['id', 'user', 'role', 'survey'];
     }
 
     protected function getTestedObject()
@@ -32,11 +32,11 @@ class UserSurveyControllerTest extends AbstractChildRestfulControllerTest
     {
         $anotherUser = $this->createAnotherUser();
 
-        $data = array(
+        $data = [
             'user' => $anotherUser->getId(),
             'role' => $this->surveyEditor->getId(),
             'survey' => $this->survey->getId(),
-        );
+        ];
 
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(403);

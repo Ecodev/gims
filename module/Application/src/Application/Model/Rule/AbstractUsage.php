@@ -45,11 +45,11 @@ abstract class AbstractUsage extends \Application\Model\AbstractRecordableActivi
      */
     public function getJsonConfig()
     {
-        return array_merge(parent::getJsonConfig(), array(
+        return array_merge(parent::getJsonConfig(), [
             'justification',
             'rule',
             'part',
-        ));
+        ]);
     }
 
     /**

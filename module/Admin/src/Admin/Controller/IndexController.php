@@ -9,9 +9,9 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
 
     public function indexAction()
     {
-        return new ViewModel(array(
+        return new ViewModel([
             'registerForm' => $this->getServiceLocator()->get('zfcuser_register_form'),
-        ));
+        ]);
     }
 
 }
