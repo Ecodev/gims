@@ -1,6 +1,5 @@
 language: php
 php:
-  - 5.5
   - 5.6
 
 addons:
@@ -31,7 +30,3 @@ script: ./vendor/bin/phing travis
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover data/logs/tests/coverage-clover.xml
-
-matrix:
-  allow_failures:
-    - php: 5.6

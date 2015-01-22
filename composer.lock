@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "16719a6c2ba0694d553c09ee08a47245",
+    "hash": "ae513c455fcf4e3f7172e39738c4927e",
     "packages": [
         {
             "name": "creof/doctrine2-spatial",
@@ -2450,7 +2450,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php-64bit": ">=5.5.0",
+        "php-64bit": ">=5.6.0",
         "ext-bcmath": "*",
         "ext-intl": "*",
         "ext-json": "*",
