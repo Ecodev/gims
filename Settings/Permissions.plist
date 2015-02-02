@@ -29,12 +29,6 @@
   <!-- Make the CLI tools executable -->
 	<dict>
 		<key>path</key>
-		<string>composer.phar</string>
-		<key>permissions</key>
-		<string>0750</string>
-	</dict>
-	<dict>
-		<key>path</key>
 		<string>vendor/zendframework/zendframework/bin/classmap_generator.php</string>
 		<key>permissions</key>
 		<string>0750</string>
