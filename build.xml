@@ -51,10 +51,7 @@
 
     <!-- Install all PHP dependencies via composer -->
     <target name="composer-install">
-        <composer command="install">
-            <arg value="--dev" />
-            <arg value="--prefer-source" />
-        </composer>
+        <exec command="composer install --dev --prefer-source" checkreturn="true" logoutput="/dev/stdout" passthru="true" />
     </target>
 
     <!-- ============================================  -->
