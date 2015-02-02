@@ -73,5 +73,4 @@ class ExcelStrategy extends \Zend\View\Strategy\PhpRendererStrategy
         }
         $response->setContent($result);
     }
-
 }

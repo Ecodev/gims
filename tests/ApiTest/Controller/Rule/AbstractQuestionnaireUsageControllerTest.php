@@ -28,5 +28,4 @@ abstract class AbstractQuestionnaireUsageControllerTest extends AbstractChildRes
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(403);
     }
-
 }

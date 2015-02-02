@@ -66,5 +66,4 @@ abstract class AbstractUserRole extends AbstractModel
     {
         return $this->role;
     }
-
 }

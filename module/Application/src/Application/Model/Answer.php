@@ -342,5 +342,4 @@ class Answer extends AbstractRecordableActivity
 
         return $data;
     }
-
 }

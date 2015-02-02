@@ -624,5 +624,4 @@ class User extends AbstractModel implements \ZfcUser\Entity\UserInterface, \ZfcR
     {
         return $this->dateTokenGenerated;
     }
-
 }

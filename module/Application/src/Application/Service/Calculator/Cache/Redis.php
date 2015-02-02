@@ -208,5 +208,4 @@ class Redis implements CacheInterface
     {
         return $key . ':dep';
     }
-
 }

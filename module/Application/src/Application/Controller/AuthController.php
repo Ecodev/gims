@@ -154,7 +154,6 @@ class AuthController extends \ZfcUser\Controller\UserController
 
         if ($request->isGet()) {
             return $this->sendResetPasswordLink($request);
-
         } elseif ($request->isPut()) {
             return $this->changePassword($request);
         }
@@ -205,7 +204,5 @@ class AuthController extends \ZfcUser\Controller\UserController
 
             return new JsonModel(['message' => 'No user has been found']);
         }
-
     }
-
 }

@@ -25,5 +25,4 @@ class NamingStrategyFactory implements FactoryInterface
 
         return $this->strategy;
     }
-
 }

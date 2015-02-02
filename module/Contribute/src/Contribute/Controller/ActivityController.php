@@ -11,5 +11,4 @@ class ActivityController extends \Application\Controller\AbstractAngularActionCo
     {
         return new ViewModel();
     }
-
 }

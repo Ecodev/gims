@@ -38,7 +38,6 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
         $result = [];
         if ($filterSet) {
-
             $idQuestionnaires = Utility::explodeIds($this->params()->fromQuery('questionnaire'));
             $questionnaireRepository = $this->getEntityManager()->getRepository('Application\Model\Questionnaire');
             $parts = $this->getEntityManager()->getRepository('Application\Model\Part')->findAll();
@@ -134,7 +133,6 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
                         ->getColumnNames($filters, $parts));
         foreach ($parts as $part) {
             foreach ($filters as $filter) {
-
                 $data = $calculator->computeFilterForAllQuestionnaires($filter->getId(), $questionnaires, $part->getId());
                 foreach ($data['values'] as $questionnaireId => $value) {
                     if (!isset($result[$questionnaireId])) {
@@ -344,5 +342,4 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
 
         return $finalYears;
     }
-
 }

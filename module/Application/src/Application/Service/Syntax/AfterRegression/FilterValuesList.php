@@ -45,5 +45,4 @@ class FilterValuesList extends AbstractToken implements \Application\Service\Syn
             ],
         ];
     }
-
 }

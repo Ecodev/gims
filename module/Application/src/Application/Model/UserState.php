@@ -17,7 +17,6 @@ class UserState extends AbstractEnum
      * Questionnaire was fully answered and need to be validated by someone else
      */
     public static $EMAIL_CONFIRMED = 1;
-
 }
 
 UserState::initialize();

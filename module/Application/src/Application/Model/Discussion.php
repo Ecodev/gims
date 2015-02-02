@@ -172,5 +172,4 @@ class Discussion extends AbstractModel
     {
         return $this->getComments()->last();
     }
-
 }

@@ -56,5 +56,4 @@ class NumericJsonModel extends JsonModel
         // everything as strings, and modify the final string
         return self::stringToNumeric($json);
     }
-
 }

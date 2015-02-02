@@ -99,5 +99,4 @@ class RedisTest extends \ApplicationTest\Controller\AbstractController
         $this->assertSame(456, $this->cache->getItem('questionnaire:2'));
         $this->assertFalse($this->cache->hasItem('chart'));
     }
-
 }

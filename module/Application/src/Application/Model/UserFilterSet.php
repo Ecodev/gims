@@ -84,5 +84,4 @@ class UserFilterSet extends AbstractUserRole
     {
         return $this->getFilterSet();
     }
-
 }

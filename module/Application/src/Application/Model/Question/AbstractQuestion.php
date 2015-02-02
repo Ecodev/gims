@@ -252,5 +252,4 @@ abstract class AbstractQuestion extends \Application\Model\AbstractModel
     {
         $this->getSurvey()->invalidateCache();
     }
-
 }

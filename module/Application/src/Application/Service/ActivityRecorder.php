@@ -84,5 +84,4 @@ class ActivityRecorder implements EventSubscriber
             $eventArgs->getEntityManager()->flush();
         }
     }
-
 }

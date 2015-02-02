@@ -39,5 +39,4 @@ class AnswerController extends AbstractChildRestfulController
 
         return new JsonModel($result);
     }
-
 }

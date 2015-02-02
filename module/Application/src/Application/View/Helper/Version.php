@@ -23,5 +23,4 @@ class Version extends \Zend\View\Helper\AbstractHtmlElement implements ServiceLo
             return '';
         }
     }
-
 }

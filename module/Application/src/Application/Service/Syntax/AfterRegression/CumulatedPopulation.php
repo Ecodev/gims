@@ -41,5 +41,4 @@ class CumulatedPopulation extends AbstractToken
             ],
         ];
     }
-
 }

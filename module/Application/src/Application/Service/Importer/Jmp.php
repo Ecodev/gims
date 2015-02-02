@@ -106,7 +106,6 @@ class Jmp extends AbstractImporter
         ];
 
         foreach ($sheetNamesToImport as $i => $sheetName) {
-
             $this->cacheQuestions = [];
             $this->importFilters($this->definitions[$sheetName]);
 
@@ -297,7 +296,6 @@ STRING;
     private function importExtras($col, Questionnaire $questionnaire)
     {
         foreach ($this->definitions[$this->sheet->getTitle()]['extras'] as $row => $title) {
-
             $comment = $title . ':' . PHP_EOL;
             $shouldAppend = false;
 
@@ -343,7 +341,6 @@ STRING;
 
         $answerCount = 0;
         foreach ($knownRows as $row) {
-
             $filter = $this->cacheFilters[$row];
 
             // Get alternate question name, if any
@@ -642,7 +639,6 @@ STRING;
         $value = $this->getCalculatedValueSafely($this->sheet->getCellByColumnAndRow($col + $offset, $row));
 
         if ($name && !is_null($value) || $value != 0) {
-
             $rule = $this->getRuleFromCell($col, $row, $offset, $questionnaire, $part);
 
             // If formula was non-existing, or invalid, cannot do anything more
@@ -699,7 +695,9 @@ STRING;
         // useless conversion done in formula, but only if there is at least one cell reference
         // in the formula ("=15/100" should be kept intact, as seen in Afghanistan, Table_S, AZ100)
         $cellPattern = '\$?(([[:alpha:]]+)\$?(\\d+))';
-        if (preg_match("/$cellPattern/", $originalFormula)) $replacedFormula = str_replace(['*100', '/100'], '', $originalFormula); else {
+        if (preg_match("/$cellPattern/", $originalFormula)) {
+            $replacedFormula = str_replace(['*100', '/100'], '', $originalFormula);
+        } else {
             $replacedFormula = $originalFormula;
         }
 
@@ -818,8 +816,11 @@ STRING;
             }
 
             $refQuestionnaire = $refData['questionnaire'];
-            if ($refQuestionnaire === $questionnaire) $refQuestionnaireId = 'current'; else
+            if ($refQuestionnaire === $questionnaire) {
+                $refQuestionnaireId = 'current';
+            } else {
                 $refQuestionnaireId = $refQuestionnaire->getId();
+            }
 
             // Find out referenced Part
             $refPart = $refData['part'];
@@ -935,12 +936,10 @@ STRING;
         // Get or create all filter
         echo 'Importing uses of Rule for Filter-Questionnaire';
         foreach ($filters as $filterName => $filterData) {
-
             $highFilter = $this->cacheHighFilters[$filterName];
 
             // Import high filters' formulas
             foreach ($this->importedQuestionnaires as $col => $questionnaire) {
-
                 foreach ($this->partOffsets as $offset => $part) {
 
                     // If we are total part, we first add the complementory formula which is hardcoded
@@ -1050,7 +1049,6 @@ STRING;
     {
         echo 'Importing uses of Rule for Filter-Geoname';
         foreach ($this->importedQuestionnaires as $questionnaire) {
-
             $formulaGroup = 'default';
             $countryName = $questionnaire->getGeoname()->getName();
             if (in_array($countryName, [
@@ -1127,7 +1125,6 @@ STRING;
 
                 $actualFormulaGroup = isset($filterData['regressionRules'][$formulaGroup]) ? $formulaGroup : 'default';
                 foreach ($filterData['regressionRules'][$actualFormulaGroup] as $formulaData) {
-
                     $part = $this->partOffsets[$formulaData[0]];
                     $formula = $formulaData[1];
                     $isDevelopedFormula = @$formulaData[2];
@@ -1250,7 +1247,6 @@ STRING;
 
         $questionnairesWithExcludedImported = [];
         foreach ($this->cacheQuestionnaireUsages as $usage) {
-
             if (!preg_match($regexp, $usage->getRule()->getName())) {
                 continue;
             }
@@ -1446,5 +1442,4 @@ $a ratio references switched to filter references
 $b unused rules deleted
 ";
     }
-
 }

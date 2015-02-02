@@ -70,7 +70,6 @@ class QuestionControllerTest extends AbstractChildRestfulControllerTest
         // -> they will be five questions connected to a survey
         $questions[1] = $this->getEntityManager()->merge($this->question);
         foreach ([2, 3, 4, 5] as $value) {
-
             $filter = new \Application\Model\Filter('tst filter ' . $value);
             $question = new NumericQuestion('bar');
             $question->setSurvey($this->getEntityManager()->merge($this->survey))
@@ -156,5 +155,4 @@ class QuestionControllerTest extends AbstractChildRestfulControllerTest
         $this->assertEquals($data['choices'][0]['name'], $actual['choices'][0]['name']);
         $this->assertEquals($data['choices'][0]['value'], $actual['choices'][0]['value']);
     }
-
 }

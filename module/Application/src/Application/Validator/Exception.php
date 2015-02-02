@@ -23,5 +23,4 @@ class Exception extends \Exception
     {
         return $this->messages;
     }
-
 }

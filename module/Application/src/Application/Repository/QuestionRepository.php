@@ -50,7 +50,7 @@ class QuestionRepository extends AbstractChildRepository
      */
     public function getAllWithPermissionWithAnswers($action = 'read', \Application\Model\Survey $survey = null, array $questionnairesIds = null)
     {
-/** @var \Doctrine\ORM\QueryBuilder $qb */
+        /** @var \Doctrine\ORM\QueryBuilder $qb */
 
         // Answerable questions with parts
         $qb = $this->getEntityManager()->createQueryBuilder()
@@ -135,7 +135,6 @@ class QuestionRepository extends AbstractChildRepository
      */
     public function getOneById($id)
     {
-
         $query = $this->getEntityManager()
             ->createQuery("SELECT q FROM Application\Model\Question\AbstractQuestion q WHERE q.id = :id");
 

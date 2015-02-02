@@ -20,5 +20,4 @@ class FilterSetController extends AbstractRestfulController
         $this->getEntityManager()->persist($userFilterSet);
         $this->getEntityManager()->flush();
     }
-
 }

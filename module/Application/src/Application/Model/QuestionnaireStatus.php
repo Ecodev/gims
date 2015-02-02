@@ -32,7 +32,6 @@ class QuestionnaireStatus extends AbstractEnum
      * Questionnaire was not validated, but rejected.
      */
     public static $REJECTED = 'rejected';
-
 }
 
 QuestionnaireStatus::initialize();

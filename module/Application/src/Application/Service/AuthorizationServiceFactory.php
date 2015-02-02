@@ -36,5 +36,4 @@ class AuthorizationServiceFactory implements FactoryInterface
 
         return $authorizationService;
     }
-
 }

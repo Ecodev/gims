@@ -14,7 +14,6 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
      */
     protected function getStubFilterRepository($shortModel)
     {
-
         $stubPopulationRepository = $this->getMock('\Application\Repository\\' . $shortModel . 'Repository', ['findOneById'], [], '', false);
         $stubPopulationRepository->expects($this->any())
                 ->method('findOneById')
@@ -238,5 +237,4 @@ class ParserTest extends \ApplicationTest\Controller\AbstractController
         $this->assertEquals('red', $actuals[3]['highlightColor'], 'different tokens must have different colors');
         $this->assertEquals('blue', $actuals[5]['highlightColor'], 'identical tokens must have identical colors');
     }
-
 }

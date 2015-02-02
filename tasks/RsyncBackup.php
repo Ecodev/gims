@@ -10,7 +10,6 @@ class RsyncBackup extends AbstractDatabase
 
     public function setBackupDir($backupDir)
     {
-
         $this->siteLocal = __DIR__ . '/../';
         $this->backupDir = realpath($this->siteLocal . $backupDir);
     }
@@ -28,5 +27,4 @@ class RsyncBackup extends AbstractDatabase
             echo "Error: " . PHP_EOL . implode(PHP_EOL, $output) . PHP_EOL;
         }
     }
-
 }

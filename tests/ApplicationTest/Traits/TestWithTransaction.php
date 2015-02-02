@@ -34,5 +34,4 @@ trait TestWithTransaction
         $this->getEntityManager()->clear();
         $this->getEntityManager()->getConnection()->close();
     }
-
 }

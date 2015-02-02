@@ -16,5 +16,4 @@ class SurveyController extends \Application\Controller\AbstractAngularActionCont
     {
         return new ViewModel();
     }
-
 }

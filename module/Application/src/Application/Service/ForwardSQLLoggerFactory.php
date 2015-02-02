@@ -26,5 +26,4 @@ class ForwardSQLLoggerFactory implements FactoryInterface
 
         return $this->logger;
     }
-
 }

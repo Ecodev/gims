@@ -16,7 +16,7 @@ class FilterQuestionnaireUsageControllerTest extends AbstractQuestionnaireUsageC
             'questionnaire',
             'part',
             'filter',
-            'justification'
+            'justification',
         ];
     }
 
@@ -33,5 +33,4 @@ class FilterQuestionnaireUsageControllerTest extends AbstractQuestionnaireUsageC
             $this->filterQuestionnaireUsage->getFilter(),
         ];
     }
-
 }

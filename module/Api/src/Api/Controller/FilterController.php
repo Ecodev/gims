@@ -26,7 +26,6 @@ class FilterController extends AbstractChildRestfulController
             $filters = $this->getRepository()->getRootFilters();
         } elseif ($parent instanceof \Application\Model\FilterSet) {
             $filters = $parent->getFilters();
-
         } elseif ($parent instanceof \Application\Model\Filter) {
             $filters = $parent->getChildren();
         }
@@ -183,5 +182,4 @@ class FilterController extends AbstractChildRestfulController
 
         return new JsonModel($this->hydrator->extract($nsaContainer, $this->getJsonConfig()));
     }
-
 }

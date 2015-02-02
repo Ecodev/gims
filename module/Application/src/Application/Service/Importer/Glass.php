@@ -791,5 +791,4 @@ FilterSets linked            : $this->linkedFilterSetCount
             $this->linkedQuestionCount++;
         }
     }
-
 }

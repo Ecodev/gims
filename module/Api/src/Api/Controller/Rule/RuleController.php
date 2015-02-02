@@ -15,5 +15,4 @@ class RuleController extends AbstractRestfulController
     {
         return '\Application\Model\Rule\Rule';
     }
-
 }

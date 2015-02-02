@@ -47,5 +47,4 @@ class RoleControllerTest extends AbstractRestfulControllerTest
             $this->assertNotEquals('member', $role['name'], 'member should never appear in role list');
         }
     }
-
 }

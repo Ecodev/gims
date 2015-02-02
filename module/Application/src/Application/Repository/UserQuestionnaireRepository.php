@@ -31,5 +31,4 @@ class UserQuestionnaireRepository extends AbstractChildRepository
 
         return $qb->getQuery()->getResult();
     }
-
 }

@@ -22,7 +22,6 @@ class SurveyType extends AbstractEnum
      * Same as JMP but specific for NSA people, that means equipement count and people per equipement questions
      */
     public static $NSA = 'nsa';
-
 }
 
 SurveyType::initialize();

@@ -6,7 +6,6 @@
  */
 function check(array $countries)
 {
-
     $files = explode("\n", trim(`find data/cache/country_data -type f`));
     echo count($files) . ' files found on disk' . PHP_EOL;
     echo count($countries) . ' countries known in PHP array' . PHP_EOL;

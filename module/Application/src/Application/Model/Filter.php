@@ -620,5 +620,4 @@ class Filter extends AbstractModel implements Rule\ReferencableInterface
 
         return $this;
     }
-
 }

@@ -38,5 +38,4 @@ class RoleController extends AbstractRestfulController
     {
         throw new \Exception('Not implemented');
     }
-
 }

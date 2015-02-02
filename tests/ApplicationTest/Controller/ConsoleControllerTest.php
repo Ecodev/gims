@@ -67,5 +67,4 @@ STRING;
         $this->dispatch('import population ' . __DIR__ . '/../../data/import_population.xlsx');
         $this->assertConsoleOutputContains('36 population data imported');
     }
-
 }

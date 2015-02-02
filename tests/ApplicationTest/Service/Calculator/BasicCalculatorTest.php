@@ -221,5 +221,4 @@ class BasicCalculatorTest extends AbstractCalculator
         $calculator->setOverriddenFilters([]);
         $this->assertEquals($this->answer32->getValuePercent(), $calculator->computeFilter($this->filter32->getId(), $this->questionnaire->getId(), $this->part1->getId()), 'after reseting overrides, should return original value, from cache');
     }
-
 }

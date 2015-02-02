@@ -57,5 +57,4 @@ class QuestionnaireTest extends AbstractModel
         $this->assertCount(1, $survey->getQuestionnaires(), 'survey must be notified when questionnaire is added');
         $this->assertSame($questionnaire, $survey->getQuestionnaires()->first(), 'original questionnaire can be retrieved from survey');
     }
-
 }

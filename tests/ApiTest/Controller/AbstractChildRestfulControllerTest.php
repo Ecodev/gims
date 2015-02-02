@@ -10,7 +10,6 @@ abstract class AbstractChildRestfulControllerTest extends AbstractRestfulControl
     public function testCanGetViaAllParents()
     {
         foreach ($this->getPossibleParents() as $parentPropertyName => $parent) {
-
             $reflectParent = new \ReflectionClass($parent);
             $parentName = lcfirst($reflectParent->getShortName());
             if (!is_string($parentPropertyName)) {

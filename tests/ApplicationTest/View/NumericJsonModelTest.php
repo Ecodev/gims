@@ -34,5 +34,4 @@ class NumericJsonModelTest extends \ApplicationTest\Controller\AbstractControlle
         $convertedBack = \Application\View\Model\NumericJsonModel::stringToNumeric($converted);
         $this->assertSame($json, $convertedBack, 'should be able to convert back to original JSON');
     }
-
 }

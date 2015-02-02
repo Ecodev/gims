@@ -126,7 +126,6 @@ class QuestionnaireController extends AbstractChildRestfulController
         $oldStatus = $questionnaire->getStatus();
         $newStatus = isset($data['status']) ? $data['status'] : null;
         if (!is_null($newStatus) && $oldStatus != $newStatus) {
-
             if ($oldStatus == QuestionnaireStatus::$PUBLISHED || $newStatus == QuestionnaireStatus::$PUBLISHED) {
                 $this->checkActionGranted($questionnaire, 'publish');
             }
@@ -161,5 +160,4 @@ class QuestionnaireController extends AbstractChildRestfulController
 
         return new JsonModel($jsonData);
     }
-
 }

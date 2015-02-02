@@ -81,5 +81,4 @@ abstract class AbstractEnum
     {
         return (string) $this->value;
     }
-
 }

@@ -25,9 +25,7 @@ class GeonameRepository extends AbstractRepository
      */
     public function getIdByQuestionnaireId($questionnaireId)
     {
-
         if (!isset($this->cache[$questionnaireId])) {
-
             $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
             $rsm->addScalarResult('questionnaire_id', 'questionnaire_id');
             $rsm->addScalarResult('geoname_id', 'geoname_id');
@@ -162,5 +160,4 @@ INNER JOIN questionnaire AS q ON questionnaire.geoname_id = q.geoname_id AND q.i
 
         return $qb->getQuery()->getResult();
     }
-
 }

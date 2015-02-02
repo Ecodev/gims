@@ -7,5 +7,4 @@ namespace Application\Service;
  */
 class PermissionDeniedException extends \Exception
 {
-
 }

@@ -19,5 +19,4 @@ class GeonameController extends AbstractRestfulController
 
         return new JsonModel($populations);
     }
-
 }

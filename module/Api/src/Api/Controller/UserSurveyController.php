@@ -17,5 +17,4 @@ class UserSurveyController extends AbstractChildRestfulController
     {
         throw new \Exception('Not implemented');
     }
-
 }

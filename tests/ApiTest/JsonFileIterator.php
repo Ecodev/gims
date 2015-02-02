@@ -41,5 +41,4 @@ class JsonFileIterator extends \GlobIterator
 
         return $result;
     }
-
 }

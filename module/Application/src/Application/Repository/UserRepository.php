@@ -209,7 +209,6 @@ class UserRepository extends AbstractRepository
      */
     public function getAllForCommentNotification(\Application\Model\Comment $comment)
     {
-
         $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
         $rsm->addScalarResult('creator_id', 'creator_id');
         $query = $this->getEntityManager()->createNativeQuery('
@@ -245,5 +244,4 @@ WHERE discussion.id = :discussion
 
         return $users;
     }
-
 }

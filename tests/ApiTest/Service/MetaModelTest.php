@@ -36,5 +36,4 @@ class MetaModelTest extends \ApplicationTest\Controller\AbstractController
                 // more models to add here...
         ];
     }
-
 }

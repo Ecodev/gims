@@ -103,5 +103,4 @@ class FilterGeonameUsageRepository extends \Application\Repository\AbstractRepos
 
         return null;
     }
-
 }

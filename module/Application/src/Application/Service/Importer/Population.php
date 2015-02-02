@@ -98,5 +98,4 @@ class Population extends AbstractImporter
 
         return "$importedValueCount population data imported" . PHP_EOL;
     }
-
 }

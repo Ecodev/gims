@@ -15,5 +15,4 @@ class ChoiceRepository extends AbstractRepository
             $answerRepository->updatePercentValueFromChoiceValue($answer);
         }
     }
-
 }

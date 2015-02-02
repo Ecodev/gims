@@ -259,5 +259,4 @@ class AuthorizationServiceTest extends \ApplicationTest\Controller\AbstractContr
         sort($expected);
         $this->assertEquals($expected, $actual, 'should have both roles for a single context');
     }
-
 }

@@ -150,5 +150,4 @@ abstract class AbstractAnswerableQuestion extends AbstractQuestion
 
         return $this;
     }
-
 }

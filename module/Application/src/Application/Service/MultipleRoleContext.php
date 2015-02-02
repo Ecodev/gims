@@ -79,5 +79,4 @@ class MultipleRoleContext extends \Doctrine\Common\Collections\ArrayCollection i
 
         return true;
     }
-
 }

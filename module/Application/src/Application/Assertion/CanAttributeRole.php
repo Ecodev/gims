@@ -28,7 +28,6 @@ class CanAttributeRole extends AbstractAssertion
 
     protected function internalAssert(AuthorizationService $authorizationService)
     {
-
         $sensiblePermission = 'Questionnaire-publish';
         $authorizationService->getIdentity()->resetRolesContext();
         if ($this->userRole->getRole()->hasPermission($sensiblePermission)) {
@@ -37,5 +36,4 @@ class CanAttributeRole extends AbstractAssertion
 
         return true;
     }
-
 }

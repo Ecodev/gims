@@ -53,5 +53,4 @@ class CanUpdateRule extends AbstractAssertion
 
         return !$this->publishedQuestionnaires;
     }
-
 }

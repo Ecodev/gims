@@ -199,5 +199,4 @@ class Aggregator
 
         return $result;
     }
-
 }

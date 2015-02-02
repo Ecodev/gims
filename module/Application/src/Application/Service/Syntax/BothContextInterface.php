@@ -10,5 +10,4 @@ namespace Application\Service\Syntax;
  */
 interface BothContextInterface
 {
-
 }

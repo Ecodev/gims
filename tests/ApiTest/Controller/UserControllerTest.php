@@ -91,5 +91,4 @@ class UserControllerTest extends AbstractRestfulControllerTest
         $this->assertEquals($data['phone'], $actual['phone']);
         $this->assertEquals('World', $actual['geoname']['name']);
     }
-
 }

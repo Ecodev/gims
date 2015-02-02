@@ -17,5 +17,4 @@ class UserFilterSetController extends AbstractChildRestfulController
     {
         throw new \Exception('Not implemented');
     }
-
 }

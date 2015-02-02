@@ -71,5 +71,4 @@ class QuestionnaireUsageRepository extends \Application\Repository\AbstractRepos
             return null;
         }
     }
-
 }

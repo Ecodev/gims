@@ -27,5 +27,4 @@ class ViewExcelStrategyFactory implements FactoryInterface
 
         return $excelStrategy;
     }
-
 }

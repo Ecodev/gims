@@ -54,5 +54,4 @@ class PopulationRepositoryTest extends AbstractRepository
         $pop = $populationRepository->getPopulationByQuestionnaire($questionnaire, $part->getId(), 2000);
         $this->assertEquals(500, $pop, 'should return non-official population specific the questionnaire');
     }
-
 }

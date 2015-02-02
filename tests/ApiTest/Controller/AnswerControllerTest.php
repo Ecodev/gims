@@ -105,5 +105,4 @@ class AnswerControllerTest extends AbstractChildRestfulControllerTest
         $this->dispatch($this->getRoute('put'), Request::METHOD_PUT, $data);
         $this->assertResponseStatusCode(403);
     }
-
 }

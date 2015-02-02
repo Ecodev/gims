@@ -28,5 +28,4 @@ class IndexController extends AbstractAngularActionController
     {
         return new ViewModel();
     }
-
 }

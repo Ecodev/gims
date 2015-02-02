@@ -30,5 +30,4 @@ class UserTest extends AbstractModel
         $user->setState(1);
         $this->assertNull($user->getToken(), 'once user is activated, cannot activate again');
     }
-
 }

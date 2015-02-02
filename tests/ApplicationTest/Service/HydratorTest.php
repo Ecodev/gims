@@ -171,7 +171,6 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
 
     public function testHydrateUnknownPropertiesFailSilently()
     {
-
         $data = [
             'foo' => 'bar',
             'name' => 'John Connor',
@@ -474,5 +473,4 @@ class HydratorTest extends \ApplicationTest\Controller\AbstractController
 
         return $survey;
     }
-
 }

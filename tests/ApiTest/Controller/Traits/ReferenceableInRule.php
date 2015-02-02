@@ -60,5 +60,4 @@ trait ReferenceableInRule
         $this->dispatch($route, Request::METHOD_DELETE);
         $this->assertResponseStatusCode(403);
     }
-
 }

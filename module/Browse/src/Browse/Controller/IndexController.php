@@ -14,5 +14,4 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
     {
         return new ViewModel();
     }
-
 }

@@ -40,5 +40,4 @@ abstract class AbstractPopulationQuestion extends AbstractAnswerableQuestion
 
         return $this;
     }
-
 }

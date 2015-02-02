@@ -228,7 +228,6 @@ class EmailController extends AbstractActionController
         $config = $this->getServiceLocator()->get('Config');
 
         foreach ($users as $user) {
-
             $message = $this->createMessage($user, $subject, $model);
 
             $email = $user->getEmail();
@@ -297,5 +296,4 @@ class EmailController extends AbstractActionController
 
         return $message;
     }
-
 }

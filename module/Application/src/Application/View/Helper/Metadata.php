@@ -35,5 +35,4 @@ STRING;
 
         return $result;
     }
-
 }

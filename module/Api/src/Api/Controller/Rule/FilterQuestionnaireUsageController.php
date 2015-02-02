@@ -14,7 +14,6 @@ class FilterQuestionnaireUsageController extends AbstractChildRestfulController
      */
     protected function getAllParents()
     {
-
         if ($this->params('parent')) {
             return [
                 $this->params('parent') => $this->params('idParent'),
@@ -43,5 +42,4 @@ class FilterQuestionnaireUsageController extends AbstractChildRestfulController
 
         return new JsonModel($jsonData);
     }
-
 }

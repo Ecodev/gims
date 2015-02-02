@@ -98,5 +98,4 @@ class ExcelRenderer extends \Zend\View\Renderer\PhpRenderer
 
         unlink($tempPath);
     }
-
 }

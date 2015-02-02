@@ -191,5 +191,4 @@ class RuleControllerTest extends AbstractRestfulControllerTest
         $this->assertEquals('Object is not valid', $actual['title'], 'error should be returned');
         $this->assertArrayHasKey('messages', $actual, 'messages should be present to detail what is invalid');
     }
-
 }

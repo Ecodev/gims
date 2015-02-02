@@ -150,5 +150,4 @@ class Role extends AbstractModel implements \Rbac\Role\RoleInterface
 
         return false;
     }
-
 }

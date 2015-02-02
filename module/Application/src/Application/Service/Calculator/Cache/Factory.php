@@ -22,5 +22,4 @@ class Factory implements FactoryInterface
 
         return $cache;
     }
-
 }

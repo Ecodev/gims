@@ -11,5 +11,4 @@ class RolesRequestsController extends \Application\Controller\AbstractAngularAct
     {
         return new ViewModel();
     }
-
 }

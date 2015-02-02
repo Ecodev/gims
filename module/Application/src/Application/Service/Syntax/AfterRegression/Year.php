@@ -28,5 +28,4 @@ class Year extends AbstractToken
             'type' => 'regressionYear',
         ];
     }
-
 }

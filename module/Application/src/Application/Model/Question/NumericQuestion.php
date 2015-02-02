@@ -37,5 +37,4 @@ class NumericQuestion extends AbstractPopulationQuestion
 
         return $this;
     }
-
 }

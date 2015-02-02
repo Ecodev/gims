@@ -12,5 +12,4 @@ trait OrderedByName
     {
         return $this->findBy([], ['name' => 'ASC']);
     }
-
 }

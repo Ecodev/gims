@@ -45,5 +45,4 @@ class QuestionnaireUsageControllerTest extends AbstractQuestionnaireUsageControl
         $this->assertResponseStatusCode(200);
         $this->assertNumericJson($expectedJson, $this->getResponse()->getContent(), $message, $logFile);
     }
-
 }

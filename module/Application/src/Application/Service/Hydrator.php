@@ -304,7 +304,6 @@ class Hydrator
      */
     protected function getObject($modelName, $id)
     {
-
         $repository = Module::getEntityManager()->getRepository($modelName);
         $record = $repository->findOneById($id);
 
@@ -385,5 +384,4 @@ class Hydrator
 
         return $result;
     }
-
 }

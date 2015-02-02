@@ -34,5 +34,4 @@ class SurveyController extends AbstractRestfulController
 
         return new JsonModel($jsonData);
     }
-
 }

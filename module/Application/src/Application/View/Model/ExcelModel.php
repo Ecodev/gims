@@ -19,5 +19,4 @@ class ExcelModel extends ViewModel
     {
         return $this->filename;
     }
-
 }

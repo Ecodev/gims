@@ -22,7 +22,6 @@ class QuestionnaireUsageController extends AbstractChildRestfulController
         $result = [];
         foreach ($questionnaires as $questionnaire) {
             foreach ($questionnaire->getQuestionnaireUsages() as $usage) {
-
                 $ruleName = $usage->getRule()->getName();
                 if (!isset($result[$ruleName])) {
                     $result[$ruleName]['name'] = $ruleName;
@@ -55,5 +54,4 @@ class QuestionnaireUsageController extends AbstractChildRestfulController
 
         return new NumericJsonModel($finalResult);
     }
-
 }

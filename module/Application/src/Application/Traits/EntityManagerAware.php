@@ -13,5 +13,4 @@ trait EntityManagerAware
     {
         return $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
     }
-
 }

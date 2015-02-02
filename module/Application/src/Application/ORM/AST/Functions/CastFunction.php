@@ -35,5 +35,4 @@ class CastFunction extends FunctionNode
     {
         return sprintf('CAST(%s AS %s)', $this->propertyName->dispatch($sqlWalker), $this->type);
     }
-
 }

@@ -42,5 +42,4 @@ class BlackHole implements CacheInterface
     {
         // nothing to do
     }
-
 }

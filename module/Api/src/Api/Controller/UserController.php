@@ -141,7 +141,6 @@ class UserController extends AbstractRestfulController
         $token = $this->getRequest()->getQuery()->get('token');
         $user = $this->getRepository()->findOneByToken($token);
         if ($user) {
-
             if ($this->checkTokenValidity($user)) {
                 $user->setState(1);
                 $this->getEntityManager()->flush();
@@ -200,7 +199,6 @@ class UserController extends AbstractRestfulController
 
         if ($this->checkTokenValidity($user)) {
             return new JsonModel($this->hydrator->extract($user, $this->getJsonConfig()));
-
         } else {
             $this->getResponse()->setStatusCode(403);
 
@@ -225,5 +223,4 @@ class UserController extends AbstractRestfulController
             return false;
         }
     }
-
 }

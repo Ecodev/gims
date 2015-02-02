@@ -124,5 +124,4 @@ class QuestionnaireUsage extends AbstractQuestionnaireUsage
 
         return $data;
     }
-
 }

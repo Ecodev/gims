@@ -253,5 +253,4 @@ class Rule extends \Application\Model\AbstractRecordableActivity implements Refe
             'name' => $this->getName(),
         ];
     }
-
 }

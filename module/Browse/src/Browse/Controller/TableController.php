@@ -30,5 +30,4 @@ class TableController extends \Application\Controller\AbstractAngularActionContr
     {
         return new ViewModel();
     }
-
 }

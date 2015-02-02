@@ -9,5 +9,4 @@ abstract class AbstractModel extends \ApplicationTest\Controller\AbstractControl
     {
         // @TODO: find something useful to test
     }
-
 }

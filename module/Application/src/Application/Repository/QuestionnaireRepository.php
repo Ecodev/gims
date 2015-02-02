@@ -395,5 +395,4 @@ class QuestionnaireRepository extends AbstractChildRepository
         }
         unset($object[$property]);
     }
-
 }

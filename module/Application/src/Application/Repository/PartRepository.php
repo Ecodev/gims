@@ -30,5 +30,4 @@ class PartRepository extends AbstractRepository
 
         return $part;
     }
-
 }

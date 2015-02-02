@@ -69,5 +69,4 @@ class SurveyTest extends AbstractModel
         $survey->setYear(null);
         $this->assertSame(null, $survey->getYear(), 'should be able to re-set NULL');
     }
-
 }

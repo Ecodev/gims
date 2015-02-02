@@ -154,5 +154,4 @@ class FilterSet extends AbstractModel implements \Application\Service\RoleContex
             return null;
         }
     }
-
 }

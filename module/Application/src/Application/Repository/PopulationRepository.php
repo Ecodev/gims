@@ -139,7 +139,6 @@ class PopulationRepository extends AbstractChildRepository
         ]);
 
         if (!$populationObject) {
-
             $populationObject = new \Application\Model\Population();
             $this->getEntityManager()->persist($populationObject);
             $populationObject->setYear($year);
@@ -150,5 +149,4 @@ class PopulationRepository extends AbstractChildRepository
 
         return $populationObject;
     }
-
 }

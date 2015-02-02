@@ -14,5 +14,4 @@ trait SupressDataSetOutput
     {
         return parent::getDataSetAsString(false);
     }
-
 }

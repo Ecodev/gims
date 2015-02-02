@@ -103,5 +103,4 @@ class ChoiceQuestion extends AbstractPopulationQuestion
     {
         $this->isMultiple = (bool) $isMultiple;
     }
-
 }

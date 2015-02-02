@@ -89,7 +89,6 @@ class FilterTest extends AbstractModel
         $this->assertContains($f1, $filterSet->getFilters(), 'should contain first filter');
         $this->assertContains($f1, $filterSet2->getFilters(), 'should contain filter filter');
         $this->assertEquals($filterSets, $f1->getFilterSets(), 'should contain same filters that the filtersets collection');
-
     }
 
     public function testQuestionsRelatedToFilters()
@@ -152,5 +151,4 @@ class FilterTest extends AbstractModel
         $this->assertEquals($allQuestions, $filter->getQuestions(), 'questions do not correspond');
         $this->assertEquals($questionsSurvey1->first(), $filter->getQuestions($survey1)->first(), 'questions do not correspond to the ones of the 1st survey');
     }
-
 }

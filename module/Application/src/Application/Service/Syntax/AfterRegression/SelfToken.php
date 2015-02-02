@@ -30,5 +30,4 @@ class SelfToken extends AbstractToken implements \Application\Service\Syntax\Bot
             'type' => 'self',
         ];
     }
-
 }

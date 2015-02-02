@@ -57,5 +57,4 @@ class QuestionTypeController extends AbstractRestfulController
     {
         throw new \Exception('Not implemented');
     }
-
 }

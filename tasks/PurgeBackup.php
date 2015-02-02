@@ -36,5 +36,4 @@ class PurgeBackup extends AbstractDatabase
             unlink(array_shift($files));
         }
     }
-
 }

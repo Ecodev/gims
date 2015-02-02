@@ -156,5 +156,4 @@ class AggregatorTest extends AbstractCalculator
         $aggregatedWithChild = $aggregator->computeFlattenAllYears([$this->filter1], $parent, $this->part1);
         $this->assertEquals($expectedWithChild, $aggregatedWithChild, 'geoname with children should return all of his  and his children\'s values');
     }
-
 }

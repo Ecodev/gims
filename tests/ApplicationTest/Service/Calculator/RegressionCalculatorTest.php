@@ -617,5 +617,4 @@ class RegressionCalculatorTest extends AbstractCalculator
                 }],
         ];
     }
-
 }

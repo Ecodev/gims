@@ -266,7 +266,6 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
             ];
 
             foreach ($data['values'] as $questionnaireId => $value) {
-
                 if (!is_null($value)) {
                     $scatterData = [
                         'name' => $data['surveys'][$questionnaireId]['code'],
@@ -505,5 +504,4 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
 
         return $adjustedSeries;
     }
-
 }

@@ -57,5 +57,4 @@ class FilterValueAfterRegression extends AbstractToken implements \Application\S
             'year' => (string) $year,
         ];
     }
-
 }

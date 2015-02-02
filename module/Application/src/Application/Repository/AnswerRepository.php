@@ -61,7 +61,6 @@ class AnswerRepository extends AbstractChildRepository
 
             // Restructure cache
             foreach ($res as $data) {
-
                 $valuePercent = is_null($data['valuePercent']) ? null : (float) $data['valuePercent'];
                 $valueAbsolute = is_null($data['valueAbsolute']) ? null : (float) $data['valueAbsolute'];
                 $value = $data['questionIsAbsolute'] === false ? $valuePercent : $valueAbsolute;
@@ -108,7 +107,6 @@ class AnswerRepository extends AbstractChildRepository
         $this->fillCache($questionnaireId);
 
         if (isset($this->cache[$questionnaireId][$filterId])) {
-
             foreach ($this->cache[$questionnaireId][$filterId] as $answerData) {
                 if (!is_null($answerData['value'])) {
                     return $answerData['questionName'];
@@ -215,5 +213,4 @@ class AnswerRepository extends AbstractChildRepository
 
         return $qb->getQuery()->getArrayResult();
     }
-
 }

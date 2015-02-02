@@ -144,5 +144,4 @@ class ConsoleController extends AbstractActionController
     {
         $this->getEntityManager()->getRepository('Application\Model\Geoname')->computeAllPopulation();
     }
-
 }

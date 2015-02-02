@@ -120,7 +120,6 @@ abstract class AbstractController extends \Zend\Test\PHPUnit\Controller\Abstract
         // Create a stub for the class with fake ID, so we don't have to mess with database
         $stub = $this->getMock($classname, array_keys($mockedMethods));
         foreach ($mockedMethods as $methodName => $methodReturnValue) {
-
             $stub->expects($this->any())
                     ->method($methodName)
                     ->will($methodReturnValue);
@@ -152,5 +151,4 @@ abstract class AbstractController extends \Zend\Test\PHPUnit\Controller\Abstract
             return $this->identity[$classname][$id];
         }
     }
-
 }

@@ -19,7 +19,6 @@ function export(array $countries, array $onlyThose = [])
     @mkdir('actual/country');
 
     foreach ($countries as $country) {
-
         $id = $country['id'];
         $name = $country['name'];
         $path = $country['path'];

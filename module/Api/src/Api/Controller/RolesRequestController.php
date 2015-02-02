@@ -121,5 +121,4 @@ class RolesRequestController extends \Application\Controller\AbstractAngularActi
 
         return $geonames;
     }
-
 }

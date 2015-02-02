@@ -15,5 +15,4 @@ class HelpButton extends \Zend\View\Helper\AbstractHtmlElement
 
         return $result;
     }
-
 }

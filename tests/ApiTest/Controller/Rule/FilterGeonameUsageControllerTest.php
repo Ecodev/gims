@@ -26,5 +26,4 @@ class FilterGeonameUsageControllerTest extends AbstractUsageControllerTest
             $this->filterGeonameUsage->getGeoname(),
         ];
     }
-
 }

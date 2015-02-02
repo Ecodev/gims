@@ -14,5 +14,4 @@ class ChartController extends \Application\Controller\AbstractAngularActionContr
     {
         return new ViewModel();
     }
-
 }

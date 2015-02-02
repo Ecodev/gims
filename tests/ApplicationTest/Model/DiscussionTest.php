@@ -22,5 +22,4 @@ class DiscussionTest extends AbstractModel
         $this->assertCount(1, $discussion->getComments(), 'discussion must be notified when comment is added');
         $this->assertSame($comment, $discussion->getComments()->first(), 'original comment can be retrieved from discussion');
     }
-
 }

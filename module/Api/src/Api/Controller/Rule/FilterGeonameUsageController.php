@@ -6,5 +6,4 @@ use Api\Controller\AbstractChildRestfulController;
 
 class FilterGeonameUsageController extends AbstractChildRestfulController
 {
-
 }

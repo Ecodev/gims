@@ -23,5 +23,4 @@ class BodyCssClass extends \Zend\View\Helper\AbstractHtmlElement implements Serv
             return '';
         }
     }
-
 }

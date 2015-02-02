@@ -55,5 +55,4 @@ class QuestionnaireUsageValue extends AbstractToken implements \Application\Serv
             ],
         ];
     }
-
 }

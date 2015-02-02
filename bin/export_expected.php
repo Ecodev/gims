@@ -69,7 +69,6 @@ function doOneCountryQuestionnaire(array $country, \PHPExcel $wb)
     ];
 
     foreach (array_keys($def) as $sheetName) {
-
         $sheet = $wb->getSheetByName($sheetName);
 
         foreach ($def[$sheetName]['rows'] as $row) {
@@ -85,7 +84,6 @@ function doOneCountryQuestionnaire(array $country, \PHPExcel $wb)
 
             $data = [$country['name'], $country['iso3']];
             foreach ($def[$sheetName]['cols'] as $col) {
-
                 $cell = $sheet->getCellByColumnAndRow($col, $row);
                 $data[] = getCalculatedValueSafely($cell);
             }
@@ -127,10 +125,8 @@ function doOneCountryCountry(array $country, \PHPExcel $wb)
     $sheet = $wb->getSheetByName('Estimates');
     foreach ($defs as $type => $def) {
         foreach ($def['rows'] as $row) {
-
             $data = [$country['name'], $country['iso3']];
             foreach ($def['cols'] as $col) {
-
                 $cell = $sheet->getCellByColumnAndRow($col, $row);
                 $value = getCalculatedValueSafely($cell);
                 if ($col != 0 && $cell->getDataType() != \PHPExcel_Cell_DataType::TYPE_FORMULA) {
@@ -172,7 +168,6 @@ function sanitizeQuestionnaires(array $superdata)
 
     // Ensure that questionnaires are liste both in Water and Sanitation
     foreach ($superdata as $name => &$originalRows) {
-
         $newRows = [];
 
         $i = 0;

@@ -504,5 +504,4 @@ abstract class AbstractCalculator extends \ApplicationTest\Controller\AbstractCo
 
         return $calculator;
     }
-
 }

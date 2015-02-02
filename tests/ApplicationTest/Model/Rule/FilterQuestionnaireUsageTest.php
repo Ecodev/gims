@@ -33,5 +33,4 @@ class FilterQuestionnaireUsageTest extends \ApplicationTest\Model\AbstractModel
         $this->assertCount(1, $questionnaire->getFilterQuestionnaireUsages(), 'questionnaire must be notified when usage is added');
         $this->assertSame($usage, $questionnaire->getFilterQuestionnaireUsages()->first(), 'original usage can be retrieved from questionnaire');
     }
-
 }

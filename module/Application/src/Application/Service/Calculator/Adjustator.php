@@ -206,5 +206,4 @@ class Adjustator
 
         return $overrideValue;
     }
-
 }

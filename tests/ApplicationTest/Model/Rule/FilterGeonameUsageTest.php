@@ -26,5 +26,4 @@ class FilterGeonameUsageTest extends \ApplicationTest\Model\AbstractModel
         $this->assertCount(1, $geoname->getFilterGeonameUsages(), 'geoname must be notified when usage is added');
         $this->assertSame($usage, $geoname->getFilterGeonameUsages()->first(), 'original usage can be retrieved from geoname');
     }
-
 }

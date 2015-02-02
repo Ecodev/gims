@@ -53,5 +53,4 @@ abstract class AbstractChildRestfulController extends AbstractRestfulController
 
         return new JsonModel($jsonData);
     }
-
 }

@@ -151,5 +151,4 @@ class FilterGeonameUsage extends AbstractUsage
 
         return $data;
     }
-
 }

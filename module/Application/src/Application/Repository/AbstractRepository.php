@@ -135,5 +135,4 @@ abstract class AbstractRepository extends EntityRepository
             $qb->andWhere('(' . implode(' AND ', $wordWheres) . ')');
         }
     }
-
 }

@@ -35,5 +35,4 @@ class FakeIdentityProvider implements \ZfcRbac\Identity\IdentityProviderInterfac
     {
         return $this->identity;
     }
-
 }

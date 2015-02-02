@@ -28,5 +28,4 @@ class ActivityRepository extends AbstractChildRepository
 
         return $qb->getQuery()->getResult();
     }
-
 }

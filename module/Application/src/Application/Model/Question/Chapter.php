@@ -113,5 +113,4 @@ class Chapter extends AbstractQuestion
     {
         return $this->isFinal;
     }
-
 }

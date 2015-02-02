@@ -48,14 +48,12 @@ class AdjustatorTest extends AbstractCalculator
 
         // Create Surveys and Questionnaires based on data above
         foreach ($data as $year => $values) {
-
             $survey = new \Application\Model\Survey('Test survey ' . $year);
             $survey->setCode('tst ' . $year)->setYear($year);
             $questionnaire = $this->getNewModelWithId('\Application\Model\Questionnaire');
             $questionnaire->setSurvey($survey)->setGeoname($this->geoname);
 
             foreach ($values as $filterName => $value) {
-
                 $question = new \Application\Model\Question\NumericQuestion();
                 $question->setFilter($this->$filterName);
 
@@ -179,5 +177,4 @@ class AdjustatorTest extends AbstractCalculator
 
         $this->assertEquals($expected, $overridenFilters, $description);
     }
-
 }

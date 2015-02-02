@@ -46,5 +46,4 @@ class CanUpdateUsage extends AbstractAssertion
 
         return !$isPublished;
     }
-
 }

@@ -16,7 +16,7 @@ abstract class AbstractCalculator
 
     use \Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-use \Application\Traits\EntityManagerAware;
+    use \Application\Traits\EntityManagerAware;
 
     private $cache;
     private $cacheComputeFilter = [];
@@ -304,7 +304,6 @@ use \Application\Traits\EntityManagerAware;
         // If the questionnaire has some overriding values
         // use array_key_exists() function cause overridden value may contain null that return false with isset()
         if (array_key_exists($questionnaireId, $this->overriddenFilters)) {
-
             if (!is_array($this->overriddenFilters[$questionnaireId])) {
                 return $this->overriddenFilters[$questionnaireId];
             }
@@ -401,5 +400,4 @@ use \Application\Traits\EntityManagerAware;
 
         return $result;
     }
-
 }

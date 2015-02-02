@@ -118,7 +118,6 @@ class FilterRepository extends AbstractRepository
     protected function getDescendantIds($filterId, $descendantType)
     {
         if (!$this->cacheDescendants) {
-
             $qb = $this->createQueryBuilder('filter')
                     ->select('filter, summands, children')
                     ->leftJoin('filter.summands', 'summands')
@@ -127,7 +126,6 @@ class FilterRepository extends AbstractRepository
             // Restructure cache to be [questionnaireId => [filterId => [partId => value]]]
             $res = $qb->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
             foreach ($res as $filter) {
-
                 $descendants = [
                     'summands' => [],
                     'children' => [],
@@ -222,5 +220,4 @@ class FilterRepository extends AbstractRepository
 
         return $c1['thematicSorting'] - $c2['thematicSorting'];
     }
-
 }

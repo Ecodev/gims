@@ -18,5 +18,4 @@ class UserSurveyTest extends AbstractModel
         $this->assertCount(1, $user->getUserSurveys(), 'user must be notified when userSurvey is added');
         $this->assertSame($userSurvey, $user->getUserSurveys()->first(), 'original userSurvey can be retrieved from user');
     }
-
 }

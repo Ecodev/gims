@@ -95,10 +95,11 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
         $default = 'en';
         $supported = ['en', 'fr'];
 
-        if ($e->getApplication()->getRequest() instanceof \Zend\Http\Request)
+        if ($e->getApplication()->getRequest() instanceof \Zend\Http\Request) {
             $requested = $e->getApplication()->getRequest()->getQuery('lang');
-        else
+        } else {
             $requested = null;
+        }
 
         // Language switch by user
         if ($requested) {
@@ -148,5 +149,4 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Co
 
         return $result;
     }
-
 }

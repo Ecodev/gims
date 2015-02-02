@@ -66,7 +66,6 @@ class RoleRepository extends AbstractRepository
 
         // Picks the roles from cache according to context
         foreach ($contexts as $context) {
-
             if ($context instanceof \Application\Model\Survey) {
                 $type = 'survey';
             } elseif ($context instanceof \Application\Model\Questionnaire) {
@@ -126,5 +125,4 @@ class RoleRepository extends AbstractRepository
 
         $this->cache[$user->getId()]['all'] = array_unique($all);
     }
-
 }

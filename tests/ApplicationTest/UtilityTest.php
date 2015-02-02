@@ -240,5 +240,4 @@ class UtilityTest extends \ApplicationTest\Controller\AbstractController
             $this->assertEquals($id, $ordered[$index]->getId());
         }
     }
-
 }

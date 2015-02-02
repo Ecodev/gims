@@ -27,5 +27,4 @@ class ViewExcelRendererFactory implements FactoryInterface
 
         return $excelRenderer;
     }
-
 }

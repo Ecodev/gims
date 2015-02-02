@@ -30,5 +30,4 @@ class FilterRepositoryTest extends AbstractRepository
         $this->assertNull($repository->getOneByNames($c2->getName(), null), 'return null if no parent given');
         $this->assertNull($repository->getOneByNames($c2->getName(), 'non existing parent filter'), 'return null if parent does not match');
     }
-
 }

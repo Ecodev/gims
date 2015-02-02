@@ -54,5 +54,4 @@ class FilterValue extends AbstractToken implements \Application\Service\Syntax\B
             'year' => (string) $year,
         ];
     }
-
 }

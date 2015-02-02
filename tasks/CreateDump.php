@@ -17,5 +17,4 @@ class CreateDump extends AbstractDatabase
         $siteLocal = __DIR__ . '/../';
         self::dumpData($siteLocal, $this->dumpFile);
     }
-
 }

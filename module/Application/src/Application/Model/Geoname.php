@@ -201,5 +201,4 @@ class Geoname extends AbstractModel
         $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
         $cache->removeItem($key);
     }
-
 }

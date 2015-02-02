@@ -16,5 +16,4 @@ class PartController extends AbstractRestfulController
     {
         throw new \Application\Service\PermissionDeniedException('Nobody can delete part');
     }
-
 }

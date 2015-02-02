@@ -270,7 +270,6 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
     {
         $result = 0;
         if (!$this->getAnswers()->isEmpty()) {
-
             $questionCount = 0;
             foreach ($this->getSurvey()->getQuestions() as $q) {
                 if ($q instanceof Question\AbstractAnswerableQuestion) {
@@ -482,5 +481,4 @@ class Questionnaire extends AbstractModel implements \Application\Service\RoleCo
         $cache = \Application\Module::getServiceManager()->get('Calculator\Cache');
         $cache->removeItem($key);
     }
-
 }

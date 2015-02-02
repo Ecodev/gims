@@ -13,5 +13,4 @@ class IndexController extends \Application\Controller\AbstractAngularActionContr
             'registerForm' => $this->getServiceLocator()->get('zfcuser_register_form'),
         ]);
     }
-
 }

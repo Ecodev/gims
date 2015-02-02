@@ -104,5 +104,4 @@ trait FlatHierarchic
 
         return $tree;
     }
-
 }

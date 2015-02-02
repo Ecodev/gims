@@ -16,5 +16,4 @@ class UserController extends \Application\Controller\AbstractAngularActionContro
     {
         return new ViewModel();
     }
-
 }

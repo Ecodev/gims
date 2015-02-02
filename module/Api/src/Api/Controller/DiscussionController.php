@@ -19,5 +19,4 @@ class DiscussionController extends AbstractRestfulController
 
         return new JsonModel($jsonData);
     }
-
 }

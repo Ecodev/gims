@@ -157,5 +157,4 @@ class FilterQuestionnaireUsage extends AbstractQuestionnaireUsage
 
         return $data;
     }
-
 }

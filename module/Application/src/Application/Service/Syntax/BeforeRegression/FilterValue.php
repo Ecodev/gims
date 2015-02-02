@@ -68,5 +68,4 @@ class FilterValue extends AbstractToken implements \Application\Service\Syntax\N
             'isSecondStep' => isset($matches[4]) && $matches[4] == ',S#2',
         ];
     }
-
 }

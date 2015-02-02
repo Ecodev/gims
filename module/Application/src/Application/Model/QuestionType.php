@@ -78,7 +78,6 @@ class QuestionType extends AbstractEnum
 
         throw new \Exception('Unsupported QuestionType for class name: ' . $className);
     }
-
 }
 
 QuestionType::initialize();

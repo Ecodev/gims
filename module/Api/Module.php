@@ -116,7 +116,6 @@ class Module
                 $json->status = 403;
                 $json->title = 'Denied';
             } else {
-
                 $messages = [];
                 while ($exception = $exception->getPrevious()) {
                     $messages[] = 'Previous exception: ' . $exception->getMessage();
@@ -134,5 +133,4 @@ class Module
         $event->setViewModel($json);
         $event->setError(false);
     }
-
 }

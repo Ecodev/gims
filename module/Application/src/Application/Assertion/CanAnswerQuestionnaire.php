@@ -35,5 +35,4 @@ class CanAnswerQuestionnaire extends AbstractAssertion
 
         return !in_array($this->answer->getQuestionnaire()->getStatus(), $statusForbiddingModification);
     }
-
 }

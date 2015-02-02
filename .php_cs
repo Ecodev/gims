@@ -13,7 +13,7 @@ return Symfony\CS\Config\Config::create()
                 ->fixers([
                     // 'align_double_arrow', // Waste of time
                     // 'align_equals', // Waste of time
-                    // 'braces', // Currently also remove newline after classes' braces, which is not consistent with NetBeans... not sure what is best... also see https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/567
+                    'braces',
                     // 'concat_without_spaces', // This make it less readable
                     'concat_with_spaces',
                     'double_arrow_multiline_whitespaces',

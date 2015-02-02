@@ -22,5 +22,4 @@ class AnswerTest extends AbstractModel
         $answer->setValuePercent(null);
         $this->assertSame(null, $answer->getValuePercent(), 'should be able to re-set NULL');
     }
-
 }

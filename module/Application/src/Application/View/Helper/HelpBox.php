@@ -20,5 +20,4 @@ STRING;
 
         return $result;
     }
-
 }

@@ -33,5 +33,4 @@ abstract class AbstractEnumType extends Type
 
         return $typeName;
     }
-
 }

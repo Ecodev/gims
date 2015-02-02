@@ -56,5 +56,4 @@ class DiscussionRepository extends AbstractRepository
 
         return $qb->getQuery()->getResult();
     }
-
 }

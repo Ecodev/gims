@@ -33,7 +33,6 @@ class MetaModel
 
     private function getMandatoryPropertiesInternal($modelName)
     {
-
         $properties = [];
         $reflectionClass = new \ReflectionClass($modelName);
         $defaultValues = $reflectionClass->getDefaultProperties();
@@ -54,5 +53,4 @@ class MetaModel
 
         return $properties;
     }
-
 }

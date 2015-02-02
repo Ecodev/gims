@@ -43,5 +43,4 @@ abstract class AbstractUsageControllerTest extends AbstractChildRestfulControlle
         $this->dispatch($this->getRoute('get'), Request::METHOD_GET);
         $this->assertResponseStatusCode(200);
     }
-
 }

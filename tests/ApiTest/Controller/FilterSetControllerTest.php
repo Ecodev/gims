@@ -76,5 +76,4 @@ class FilterSetControllerTest extends AbstractRestfulControllerTest
         $actual = $this->getJsonResponse();
         $this->assertEquals(7, $actual['metadata']['totalCount'], 'should be able to be listed');
     }
-
 }

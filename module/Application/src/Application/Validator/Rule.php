@@ -124,5 +124,4 @@ class Rule extends \Zend\Validator\AbstractValidator
 
         return $formula;
     }
-
 }

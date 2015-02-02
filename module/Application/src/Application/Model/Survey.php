@@ -387,5 +387,4 @@ class Survey extends AbstractModel implements \Application\Service\RoleContextIn
             $questionnaire->invalidateCache();
         }
     }
-
 }

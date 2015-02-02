@@ -23,5 +23,4 @@ class Headers implements \Zend\Log\Filter\FilterInterface
     {
         return $this->count++ < 150 && !headers_sent();
     }
-
 }

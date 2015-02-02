@@ -67,5 +67,4 @@ class PopulationControllerTest extends AbstractChildRestfulControllerTest
         $this->dispatch($this->getRoute('post'), Request::METHOD_POST, $data);
         $this->assertResponseStatusCode(403);
     }
-
 }

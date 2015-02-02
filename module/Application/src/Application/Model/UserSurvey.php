@@ -84,5 +84,4 @@ class UserSurvey extends AbstractUserRole
     {
         return $this->getSurvey();
     }
-
 }

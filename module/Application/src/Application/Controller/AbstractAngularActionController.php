@@ -23,5 +23,4 @@ class AbstractAngularActionController extends \Zend\Mvc\Controller\AbstractActio
 
         return $actionResponse;
     }
-
 }

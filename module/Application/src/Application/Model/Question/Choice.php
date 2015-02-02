@@ -180,5 +180,4 @@ class Choice extends \Application\Model\AbstractModel
     {
         $this->getQuestion()->invalidateCache();
     }
-
 }

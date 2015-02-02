@@ -46,5 +46,4 @@ class QuestionName extends AbstractToken
             ],
         ];
     }
-
 }

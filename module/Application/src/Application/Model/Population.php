@@ -218,5 +218,4 @@ class Population extends AbstractModel
             $questionnaire->invalidateCache();
         }
     }
-
 }

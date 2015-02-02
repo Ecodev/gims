@@ -46,5 +46,4 @@ class FilterSetRepository extends AbstractRepository
 
         return $filterSet;
     }
-
 }

@@ -43,5 +43,4 @@ class FilterQuestionnaireUsageRepositoryTest extends AbstractRepository
         $this->assertNotSame($rule, $loadedRule, 'should not be same object, since we entirely cleared Doctrine and reloaded a new object');
         $this->assertSame($rule->getId(), $loadedRule->getId(), 'should be same ID');
     }
-
 }

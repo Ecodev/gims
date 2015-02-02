@@ -293,5 +293,4 @@ abstract class Utility
     {
         return 'https://secure.gravatar.com/avatar/' . md5(strtolower(trim($email))) . '?d=identicon';
     }
-
 }

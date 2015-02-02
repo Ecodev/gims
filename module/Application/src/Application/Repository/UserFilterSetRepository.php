@@ -24,7 +24,6 @@ class UserFilterSetRepository extends AbstractChildRepository
 
     public function getAll()
     {
-
         $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
         $rsm->addScalarResult('filter_set_id', 'filter_set_id');
         $rsm->addScalarResult('user_id', 'user_id');
@@ -33,5 +32,4 @@ class UserFilterSetRepository extends AbstractChildRepository
         $n = $this->getEntityManager()->createNativeQuery('SELECT * FROM user_filter_set', $rsm);
         $res = $n->getResult();
     }
-
 }

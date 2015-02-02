@@ -131,7 +131,7 @@ class IndexControllerTest extends AbstractController
                 'application',
                 'index',
                 '/template/application/index/home',
-                'template_application/default'
+                'template_application/default',
             ],
             [
                 'admin',
@@ -206,5 +206,4 @@ class IndexControllerTest extends AbstractController
                     'action' => 'filter',
                 ], ['name' => 'template_browse/default']), 'should return template URL to specified controller/action');
     }
-
 }

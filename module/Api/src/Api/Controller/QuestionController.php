@@ -271,7 +271,6 @@ class QuestionController extends AbstractChildRestfulController
         if ($chapter && $lastQuestion = $chapter->getQuestions()->last()) {
             $data['sorting'] = $lastQuestion->getSorting() + 1;
         } else {
-
             if ($lastQuestion = $survey->getQuestions()->last()) {
                 $data['sorting'] = $lastQuestion->getSorting() + 1;
             } else {
@@ -287,5 +286,4 @@ class QuestionController extends AbstractChildRestfulController
 
         return parent::create($data);
     }
-
 }

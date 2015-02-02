@@ -28,5 +28,4 @@ class SurveyRepository extends AbstractRepository
 
         return $qb->getQuery()->getResult();
     }
-
 }

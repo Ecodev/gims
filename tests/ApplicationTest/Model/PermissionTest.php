@@ -27,5 +27,4 @@ class PermissionTest extends AbstractModel
     {
         $this->assertSame($expected, \Application\Model\Permission::getPermissionName($object, $action));
     }
-
 }

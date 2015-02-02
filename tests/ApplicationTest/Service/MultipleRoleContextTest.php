@@ -41,5 +41,4 @@ class MultipleRoleContextTest extends \ApplicationTest\Controller\AbstractContro
         $context->merge($otherContext);
         $this->assertEquals(6, $context->count(), 'multiple context can be merged');
     }
-
 }

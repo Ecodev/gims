@@ -16,5 +16,4 @@ class QuestionnaireController extends \Application\Controller\AbstractAngularAct
     {
         return new ViewModel();
     }
-
 }

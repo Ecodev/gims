@@ -48,7 +48,6 @@ class HeadScript extends \Zend\View\Helper\HeadScript implements ServiceLocatorA
      */
     public function __call($method, $args)
     {
-
         if (strpos($method, 'File')) {
             $fileName = $args[0];
 
@@ -77,5 +76,4 @@ class HeadScript extends \Zend\View\Helper\HeadScript implements ServiceLocatorA
 
         return parent::__call($method, $args);
     }
-
 }

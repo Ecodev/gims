@@ -11,5 +11,4 @@ class CommentController extends AbstractRestfulController
     {
         Utility::executeCliCommand('email', 'notifyComment', $comment->getId());
     }
-
 }

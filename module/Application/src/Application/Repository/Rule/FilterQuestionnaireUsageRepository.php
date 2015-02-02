@@ -118,5 +118,4 @@ class FilterQuestionnaireUsageRepository extends \Application\Repository\Abstrac
             }
         }
     }
-
 }

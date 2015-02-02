@@ -36,5 +36,4 @@ class LogFactory implements FactoryInterface
 
         return $this->logger;
     }
-
 }

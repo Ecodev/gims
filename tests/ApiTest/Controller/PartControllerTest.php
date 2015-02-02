@@ -104,5 +104,4 @@ class PartControllerTest extends AbstractRestfulControllerTest
 
         $this->assertEquals($count, $actual['metadata']['totalCount'], 'result count does not match expectation');
     }
-
 }

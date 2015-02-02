@@ -16,5 +16,4 @@ class QuestionController extends \Application\Controller\AbstractAngularActionCo
     {
         return new ViewModel();
     }
-
 }

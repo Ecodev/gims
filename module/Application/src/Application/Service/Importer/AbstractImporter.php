@@ -664,7 +664,6 @@ abstract class AbstractImporter
         $filterRepository = $this->getEntityManager()->getRepository('Application\Model\Filter');
         $filter = $filterRepository->getOneByNames($name, $parentName);
         if (!$filter) {
-
             $filter = new Filter($name);
             $filter->setBgColor(@$definition[5]);
 
@@ -682,5 +681,4 @@ abstract class AbstractImporter
 
         return $filter;
     }
-
 }

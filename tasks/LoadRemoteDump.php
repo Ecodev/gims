@@ -16,5 +16,4 @@ class LoadRemoteDump extends AbstractDatabase
     {
         self::loadRemoteDump($this->remote);
     }
-
 }

@@ -37,5 +37,4 @@ STRING;
             return '';
         }
     }
-
 }

@@ -222,5 +222,4 @@ class AuthorizationService extends \ZfcRbac\Service\AuthorizationService
 
         $this->setAssertion($permission, $assertion);
     }
-
 }

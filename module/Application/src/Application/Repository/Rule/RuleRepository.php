@@ -60,5 +60,4 @@ class RuleRepository extends \Application\Repository\AbstractRepository
 
         return $native->getResult();
     }
-
 }

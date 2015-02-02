@@ -75,5 +75,4 @@ class ChoiceQuestionTest extends \ApplicationTest\Model\AbstractModel
         $this->assertTrue($question->getChoices()->contains($alreadyExistingChoice), 'common question choice must be kept');
         $this->assertTrue($question->getChoices()->contains($choice2), 'new question choice must be added');
     }
-
 }

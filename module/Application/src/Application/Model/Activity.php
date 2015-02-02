@@ -55,7 +55,6 @@ class Activity extends AbstractModel
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -171,7 +170,6 @@ class Activity extends AbstractModel
         // Filter out common properties and objects
         $clean = [];
         foreach ($changes as $key => $change) {
-
             if (in_array($key, $forbidden)) {
                 continue;
             }
@@ -229,5 +227,4 @@ class Activity extends AbstractModel
 
         return $this;
     }
-
 }

@@ -78,5 +78,4 @@ class Part extends AbstractModel implements Rule\ReferencableInterface
     {
         return $this->isTotal;
     }
-
 }

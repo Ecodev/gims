@@ -14,7 +14,7 @@ class Parser
 
     use \Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-use \Application\Traits\EntityManagerAware;
+    use \Application\Traits\EntityManagerAware;
 
     /**
      * Use pre-defined, very visible, and very distinct
@@ -208,7 +208,6 @@ use \Application\Traits\EntityManagerAware;
         if ($questionnaireId == 'current') {
             return $questionnaireId;
         } else {
-
             if (!array_key_exists($questionnaireId, $cache)) {
                 $cache[$questionnaireId] = $this->getQuestionnaireRepository()->findOneById($questionnaireId)->getName();
             }
@@ -228,7 +227,6 @@ use \Application\Traits\EntityManagerAware;
         if ($partId == 'current') {
             return $partId;
         } else {
-
             if (!array_key_exists($partId, $cache)) {
                 $cache[$partId] = $this->getPartRepository()->findOneById($partId)->getName();
             }
@@ -387,5 +385,4 @@ use \Application\Traits\EntityManagerAware;
     {
         $this->usedColors = [];
     }
-
 }

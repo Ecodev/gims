@@ -101,5 +101,4 @@ class ActivityTest extends AbstractModel
         $this->assertArrayHasKey('questionnaire', $activity->getData(), 'should have some data to link to questionnaire');
         $this->assertArrayHasKey('filter', $activity->getData(), 'should have some data to link to filter');
     }
-
 }

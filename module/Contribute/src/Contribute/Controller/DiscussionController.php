@@ -16,5 +16,4 @@ class DiscussionController extends \Application\Controller\AbstractAngularAction
     {
         return new ViewModel();
     }
-
 }

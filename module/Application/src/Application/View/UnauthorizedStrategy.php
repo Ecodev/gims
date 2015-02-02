@@ -37,5 +37,4 @@ class UnauthorizedStrategy extends \ZfcRbac\View\Strategy\UnauthorizedStrategy
             $result->setVariable('statusCode', $response->getStatusCode());
         }
     }
-
 }

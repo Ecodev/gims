@@ -112,5 +112,4 @@ class Comment extends AbstractModel
     {
         return $this->attachmentName;
     }
-
 }

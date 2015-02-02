@@ -43,5 +43,4 @@ class PopulationValue extends AbstractToken
             ],
         ];
     }
-
 }

@@ -286,7 +286,6 @@ class Calculator extends AbstractCalculator
         $surveys = [];
         $yearsWithData = [];
         foreach ($questionnaires as $questionnaire) {
-
             $questionnaireData = $this->computeFilterForSingleQuestionnaire($filterId, $questionnaire, $partId);
 
             $questionnaireId = $questionnaire->getId();
@@ -392,5 +391,4 @@ class Calculator extends AbstractCalculator
 
         return $result;
     }
-
 }

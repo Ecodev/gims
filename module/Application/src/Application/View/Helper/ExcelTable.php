@@ -85,7 +85,5 @@ class ExcelTable extends \Zend\View\Helper\AbstractHtmlElement
     {
         $dataSheet = $workbook->getActiveSheet();
         $this->writeData($dataSheet, $columns, $data);
-
     }
-
 }

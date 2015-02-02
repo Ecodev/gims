@@ -35,14 +35,11 @@ class debug
         }//if
 
         foreach ($dump_lines as &$line) {
-
             $matches = [];
 
             //load up var and values...
             if (preg_match('/^\s*\[\s*(\S+)\s*\]\s+=>\s+(.*)$/', $line, $matches)) {
-
                 if (mb_stripos($matches[2], 'array') !== false) {
-
                     $arr_map = [];
                     $arr_map[$ARR_NAME] = $matches[1];
                     $arr_map[$ARR_LIST] = [];
@@ -60,9 +57,7 @@ class debug
 
                 // save the current array to the return list...
                 if (mb_stripos($line, ')') !== false) {
-
                     if ($arr_index >= 0) {
-
                         $arr_map = array_pop($arr_list);
 
                         // if there is more than one array then this array belongs to the earlier array...
@@ -98,11 +93,13 @@ class debug
 
             return;
         }
-        if (ini_get('xdebug.overload_var_dump'))
+        if (ini_get('xdebug.overload_var_dump')) {
             return var_dump($data);
+        }
 
-        if ($firstLevel && count($data) == 1)
+        if ($firstLevel && count($data) == 1) {
             $data = $data[0];
+        }
 
         if (is_object($data)) {
             return self::dump(self::parseObject($data), false);
@@ -126,7 +123,6 @@ class debug
             return;
         }
     }
-
 }
 
 function v()

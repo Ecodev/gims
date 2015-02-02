@@ -51,5 +51,4 @@ abstract class AbstractQuestionnaireUsage extends AbstractUsage
     {
         return $this->getQuestionnaire();
     }
-
 }

@@ -28,5 +28,4 @@ class MissingRequiredRoleContext implements \Application\Service\RoleContextInte
     {
         return 'The following context is required but is missing: ' . $this->missingRoleContext;
     }
-
 }

@@ -395,5 +395,4 @@ abstract class AbstractRestfulController extends \Zend\Mvc\Controller\AbstractRe
 
         return $result;
     }
-
 }

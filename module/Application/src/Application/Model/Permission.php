@@ -83,5 +83,4 @@ class Permission extends AbstractModel
     {
         return $this->name;
     }
-
 }

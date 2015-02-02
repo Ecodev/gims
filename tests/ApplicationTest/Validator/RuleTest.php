@@ -92,5 +92,4 @@ class RuleTest extends \ApplicationTest\Controller\AbstractController
             $this->assertTrue($validator->isValid($rule), $s . ' syntax must be usable when rule is actually used after regression');
         }
     }
-
 }

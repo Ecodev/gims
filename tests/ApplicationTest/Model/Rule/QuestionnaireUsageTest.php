@@ -26,5 +26,4 @@ class QuestionnaireUsageTest extends \ApplicationTest\Model\AbstractModel
         $this->assertCount(1, $questionnaire->getQuestionnaireUsages(), 'questionnaire must be notified when usage is added');
         $this->assertSame($usage, $questionnaire->getQuestionnaireUsages()->first(), 'original usage can be retrieved from questionnaire');
     }
-
 }

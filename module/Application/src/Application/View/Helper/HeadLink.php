@@ -25,5 +25,4 @@ class HeadLink extends \Zend\View\Helper\HeadLink
 
         return parent::__call($method, $args);
     }
-
 }

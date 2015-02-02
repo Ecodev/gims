@@ -22,5 +22,4 @@ class ChapterTest extends \ApplicationTest\Model\AbstractModel
         $this->assertCount(1, $chapter->getQuestions(), 'chapter must be notified when question is added');
         $this->assertSame($question, $chapter->getQuestions()->first(), 'original question can be retrieved from chapter');
     }
-
 }

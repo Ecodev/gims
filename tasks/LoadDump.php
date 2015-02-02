@@ -17,5 +17,4 @@ class LoadDump extends AbstractDatabase
         $siteLocal = __DIR__ . '/../';
         self::loadDump($siteLocal, $this->dumpFile);
     }
-
 }

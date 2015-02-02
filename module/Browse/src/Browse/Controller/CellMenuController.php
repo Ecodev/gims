@@ -16,5 +16,4 @@ class CellMenuController extends \Application\Controller\AbstractAngularActionCo
     {
         return new ViewModel();
     }
-
 }

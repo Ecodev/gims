@@ -68,5 +68,4 @@ class TableControllerTest extends \ApplicationTest\Controller\AbstractController
         $this->assertResponseStatusCode(200);
         $this->assertNumericJson($expectedJson, $this->getResponse()->getContent(), $message, $logFile);
     }
-
 }

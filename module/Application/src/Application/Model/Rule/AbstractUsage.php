@@ -164,5 +164,4 @@ abstract class AbstractUsage extends \Application\Model\AbstractRecordableActivi
             ],
         ];
     }
-
 }

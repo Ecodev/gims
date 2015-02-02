@@ -31,5 +31,4 @@ class ActivityController extends AbstractChildRestfulController
     {
         throw new \Application\Service\PermissionDeniedException('activity cannot be deleted');
     }
-
 }
