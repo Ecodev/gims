@@ -18,7 +18,7 @@ class ActivityRepository extends AbstractChildRepository
     public function getAllWithPermission($action = 'read', $search = null, $parentName = null, \Application\Model\AbstractModel $parent = null)
     {
         $qb = $this->createQueryBuilder('activity');
-        $qb->join('activity.creator', 'creator', Join::WITH);
+        $qb->leftJoin('activity.creator', 'creator', Join::WITH);
         $qb->orderBy('activity.dateCreated', 'desc');
 
         if ($parentName == 'user') {
