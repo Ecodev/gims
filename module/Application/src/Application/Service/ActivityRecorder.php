@@ -70,7 +70,7 @@ class ActivityRecorder implements EventSubscriber
     }
 
     /**
-     * When everything is finished, we save our activies if any
+     * When everything is finished, we save our activies, if any
      * @param PostFlushEventArgs $eventArgs
      */
     public function postFlush(PostFlushEventArgs $eventArgs)

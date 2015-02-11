@@ -25,7 +25,7 @@ the questionnaire:
 
 .. _change questionnaire status:
 
-How to change de status of a questionnaire?
+How to change the status of a questionnaire?
 -------------------------------------------
 
 If your have the necessary access rights, you can change the status of a
